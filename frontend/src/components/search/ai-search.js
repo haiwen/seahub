@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
+import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -9,12 +10,19 @@ import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
 import Switch from '../common/switch';
-import { SEARCH_DELAY_TIME } from './constant';
+import { SEARCH_DELAY_TIME, getValueLength } from './constant';
+import AISearchAsk from './ai-search-ask';
+import AISearchRobot from './ai-search-widgets/ai-search-robot';
 
 const INDEX_STATE = {
   RUNNING: 'running',
   UNCREATED: 'uncreated',
   FINISHED: 'finished'
+};
+
+const SEARCH_MODE = {
+  QA: 'question-answering',
+  COMBINED: 'combined-search',
 };
 
 const PER_PAGE = 10;
@@ -47,6 +55,7 @@ export default class AISearch extends Component {
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
+      searchMode: SEARCH_MODE.COMBINED,
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -84,22 +93,23 @@ export default class AISearch extends Component {
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
     this.isChineseInput = false;
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
+    this.clearTimer();
     if (this.indexStateTimer) {
       clearInterval(this.indexStateTimer);
       this.indexStateTimer = null;
     }
   }
 
-  onCompositionStart = () => {
-    this.isChineseInput = true;
+  clearTimer = () => {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
     }
+  };
+
+  onCompositionStart = () => {
+    this.isChineseInput = true;
+    this.clearTimer();
   };
 
   onCompositionEnd = () => {
@@ -107,10 +117,7 @@ export default class AISearch extends Component {
     // chrome：compositionstart -> onChange -> compositionend
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
+    this.clearTimer();
     this.timer = setTimeout(() => {
       this.onSearch();
     }, SEARCH_DELAY_TIME);
@@ -199,10 +206,7 @@ export default class AISearch extends Component {
       if (this.inputValue === newValue.trim()) return;
       this.inputValue = newValue.trim();
       if (!this.isChineseInput) {
-        if (this.timer) {
-          clearTimeout(this.timer);
-          this.timer = null;
-        }
+        this.clearTimer();
         this.timer = setTimeout(() => {
           this.onSearch();
         }, SEARCH_DELAY_TIME);
@@ -219,7 +223,7 @@ export default class AISearch extends Component {
   onSearch = () => {
     const { value } = this.state;
     const { repoID } = this.props;
-    if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
+    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         highlightIndex: 0,
         resultItems: [],
@@ -329,6 +333,9 @@ export default class AISearch extends Component {
           hasMore: false,
         });
       }).catch(error => {
+        if (error && error.message === "prev request is cancelled") {
+          return;
+        }
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
         this.setState({ isLoading: false });
@@ -360,23 +367,6 @@ export default class AISearch extends Component {
       params += key + '=' + encodeURIComponent(queryData[key]) + '&';
     }
     this.setState({searchPageUrl: `${this.baseSearchPageURL}?${params.substring(0, params.length - 1)}`});
-  }
-
-  getValueLength(str) {
-    var i = 0, code, len = 0;
-    for (; i < str.length; i++) {
-      code = str.charCodeAt(i);
-      if (code == 10) { //solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
   }
 
   formatResultItems(data) {
@@ -429,26 +419,55 @@ export default class AISearch extends Component {
     });
   }
 
+  openAsk = () => {
+    this.clearTimer();
+    this.setState({ searchMode: SEARCH_MODE.QA });
+  }
+
+  closeAsk = () => {
+    this.clearTimer();
+    this.setState({ searchMode: SEARCH_MODE.COMBINED });
+  }
+
   renderSearchResult() {
-    const { resultItems, highlightIndex, width } = this.state;
+    const { resultItems, highlightIndex, width, searchMode, answeringResult } = this.state;
     if (!width || width === 'default') return null;
 
     if (!this.state.isResultShow) return null;
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );
     }
     if (!resultItems.length) {
       return (
-        <div className="search-result-none">{gettext('No results matching.')}</div>
+        <>
+          <li className='search-result-item align-items-center' onClick={this.openAsk}>
+            <AISearchRobot />
+            <div className="item-content">
+              <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
+            </div>
+          </li>
+          <div className="search-result-none">{gettext('No results matching.')}</div>
+        </>
       );
     }
 
     const results = (
       <ul className="search-result-list" ref={this.searchResultListRef}>
+        <li
+          className={classnames('search-result-item align-items-center py-3', {'search-result-item-highlight': highlightIndex === 0 })}
+          onClick={this.openAsk}
+        >
+          <AISearchRobot style={{width: 36}}/>
+          <div className="item-content">
+            <div className="item-name ellipsis">
+            {gettext('Ask AI')}{': '}{this.state.value.trim()}
+            </div>
+          </div>
+        </li>
         {resultItems.map((item, index) => {
-          const isHighlight = index === highlightIndex;
+          const isHighlight = (index + 1) === highlightIndex;
           return (
             <SearchResultItem
               key={index}
@@ -545,8 +564,22 @@ export default class AISearch extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow, isCloseShow } = this.state;
+    const { isMaskShow, isCloseShow, searchMode, answeringResult, resultItems } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
+
+    if (searchMode === SEARCH_MODE.QA) {
+      return (
+        <AISearchAsk
+          token={this.source ? this.source.token : null}
+          indexState={this.state.indexState}
+          repoID={this.props.repoID}
+          value={this.state.value.trim()}
+          closeAsk={this.closeAsk}
+          onItemClickHandler={this.onItemClickHandler}
+        />
+      );
+    }
+
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">

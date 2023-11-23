@@ -104,10 +104,6 @@
   flex: 1;
 }
 
-.search-result-list .item-content .item-name {
-  color: #eb8205!important;
-}
-
 .search-result-container .search-result-item {
   display: flex;
   padding: 10px 0 10px 8px;

@@ -68,6 +68,11 @@ def similarity_search_in_library(params):
     resp = requests.post(url, json=params, headers=headers)
     return resp
 
+def question_answering_search_in_library(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/question-answering-search-in-library/')
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
 
 def update_library_sdoc_index(params):
     headers = gen_headers()

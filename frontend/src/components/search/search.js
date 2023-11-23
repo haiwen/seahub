@@ -8,7 +8,7 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
-import { SEARCH_DELAY_TIME } from './constant';
+import { SEARCH_DELAY_TIME, getValueLength } from './constant';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -305,23 +305,6 @@ class Search extends Component {
     this.setState({searchPageUrl: `${this.baseSearchPageURL}?${params.substring(0, params.length - 1)}`});
   }
 
-  getValueLength(str) {
-    var i = 0, code, len = 0;
-    for (; i < str.length; i++) {
-      code = str.charCodeAt(i);
-      if (code == 10) { //solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
-  }
-
   formatResultItems(data) {
     let items = [];
     for (let i = 0; i < data.length; i++) {
@@ -359,7 +342,7 @@ class Search extends Component {
     if (!width || width === 'default') return null;
 
     if (!this.state.isResultShow) return null;
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );
