@@ -34,6 +34,7 @@ from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
+from seahub.repo_auto_delete.models import RepoAutoDelete
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -86,8 +87,11 @@ ANONYMOUS_EMAIL = 'Anonymous'
 
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
+
 def default_ldap_role_mapping(role):
     return role
+
+
 ldap_role_mapping = default_ldap_role_mapping
 if ENABLE_LDAP:
     try:
@@ -593,6 +597,8 @@ class User(object):
 
         for r in owned_repos:
             seafile_api.remove_repo(r.id)
+
+        RepoAutoDelete.objects.filter(repo_id__in=[r.id for r in owned_repos]).delete()
 
         # remove shared in repos
         shared_in_repos = []

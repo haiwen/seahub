@@ -32,10 +32,7 @@ def iterate_and_del_files_recursively(repo_id, path, days):
             if cur_time - time_delta > mtime:
                 del_dirents.append(dirent.obj_name)
     if del_dirents:
-        try:
-            seafile_api.del_file(repo_id, path, json.dumps(del_dirents), 'seafevents')
-        except Exception as e:
-            logger.error('Failed to delete files in repo: %s, path: %s, error: %s' % (repo_id, path, e))
+        seafile_api.del_file(repo_id, path, json.dumps(del_dirents), 'seafevents')
 
 
 class Command(BaseCommand):
@@ -57,4 +54,8 @@ class Command(BaseCommand):
     def do_action(self, *args, **options):
         repo_auto_deletes = RepoAutoDelete.objects.filter(days__gt=0)
         for auto_del in repo_auto_deletes:
-            iterate_and_del_files_recursively(auto_del.repo_id, '/', auto_del.days)
+            try:
+                iterate_and_del_files_recursively(auto_del.repo_id, '/', auto_del.days)
+            except Exception as e:
+                logger.error(f'Failed to delete files in repo {auto_del.repo_id}, error: {e}')
+                continue
