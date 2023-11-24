@@ -192,7 +192,7 @@ class Search extends Component {
   onSearch = () => {
     const { value } = this.state;
     const { repoID } = this.props;
-    if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
+    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         highlightIndex: 0,
         resultItems: [],
