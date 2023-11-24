@@ -36,6 +36,10 @@
   content: "\e65b";
 }
 
+.sdoc-notification:before {
+  content: "\e65a";
+}
+
 .sdoc-add:before {
   content: "\e658";
 }
@@ -387,4 +391,3 @@
 .sdoc-user:before {
   content: "\e629";
 }
-
