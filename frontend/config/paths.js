@@ -21,12 +21,13 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 //   process.env.PUBLIC_URL
 // );
 
+// reset by custom
 const HOST = process.env.HOST || '0.0.0.0';
 const PORT = process.env.PORT || '3000';
 const publicPath = process.env.PUBLIC_PATH || '/assets/bundles/';
 const publicUrlOrPath = `http://${HOST}:${PORT}${publicPath}`;
 
-const buildPath = process.env.BUILD_PATH || 'build';
+const buildPath = process.env.BUILD_PATH || 'build/frontend';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -59,7 +60,7 @@ const resolveModule = (resolveFn, filePath) => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build/frontend'), // seafile custom defined
+  appBuild: resolveApp(buildPath),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),

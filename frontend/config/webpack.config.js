@@ -16,12 +16,12 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const webpackBundleTracker = require('webpack-bundle-tracker');
+const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const modules = require('./modules');
-const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const webpackBundleTracker = require('webpack-bundle-tracker');
 
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
@@ -221,7 +221,7 @@ module.exports = function (webpackEnv) {
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
-      ...(isEnvDevelopment && {publicPath: paths.publicUrlOrPath}), // The deployment environment does not require this parameter
+      publicPath: paths.publicUrlOrPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
@@ -231,19 +231,19 @@ module.exports = function (webpackEnv) {
         : isEnvDevelopment &&
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
-    cache: {
-      type: 'filesystem',
-      version: createEnvironmentHash(env.raw),
-      cacheDirectory: paths.appWebpackCache,
-      store: 'pack',
-      buildDependencies: {
-        defaultWebpack: ['webpack/lib/'],
-        config: [__filename],
-        tsconfig: [paths.appTsConfig, paths.appJsConfig].filter(f =>
-          fs.existsSync(f)
-        ),
-      },
-    },
+    // cache: {
+    //   type: 'filesystem',
+    //   version: createEnvironmentHash(env.raw),
+    //   cacheDirectory: paths.appWebpackCache,
+    //   store: 'pack',
+    //   buildDependencies: {
+    //     defaultWebpack: ['webpack/lib/'],
+    //     config: [__filename],
+    //     tsconfig: [paths.appTsConfig, paths.appJsConfig].filter(f =>
+    //       fs.existsSync(f)
+    //     ),
+    //   },
+    // },
     infrastructureLogging: {
       level: 'none',
     },
@@ -677,8 +677,8 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'static/css/[name].css',
-          chunkFilename: 'static/css/[name].chunk.css',
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
           ignoreOrder: true,
         }),
       // Generate an asset manifest file with the following content:
@@ -802,7 +802,10 @@ module.exports = function (webpackEnv) {
           },
         }),
       // integrated into python
-      new webpackBundleTracker({filename: isEnvProduction ? './webpack-stats.pro.json' : './webpack-stats.dev.json'}),
+      new webpackBundleTracker({
+        filename: isEnvProduction ? './webpack-stats.pro.json' : './webpack-stats.dev.json',
+        publicPath: isEnvProduction ? '' : paths.publicUrlOrPath
+      }),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

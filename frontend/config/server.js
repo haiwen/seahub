@@ -1,8 +1,4 @@
 'use strict';
-// https://github.com/webpack/webpack-dev-server/blob/master/examples/api/simple/server.js
-const dotenv = require('dotenv');
-
-dotenv.config();
 
 process.env.NODE_ENV = 'development';
 process.env.BABEL_ENV = 'development';
@@ -10,7 +6,7 @@ process.env.BABEL_ENV = 'development';
 const Webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
-const configFactory = require('./webpack.config')
+const configFactory = require('./webpack.config');
 const paths = require('./paths');
 const getHttpsConfig = require('./getHttpsConfig');
 
@@ -47,8 +43,22 @@ console.log('Dev server options:', devServerOptions);
 
 const config = configFactory('development');
 const compiler = Webpack(config);
-const server = new WebpackDevServer(devServerOptions, compiler);
+try {
+  const server = new WebpackDevServer(devServerOptions, compiler);
 
-server.startCallback(() => {
-  console.log(`Listening at http://${HOST}:${PORT}${publicPath}`);
-});
+  server.startCallback(() => {
+    console.log(`Listening at http://${HOST}:${PORT}${publicPath}`);
+  });
+
+  ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+    process.on(sig, function () {
+      server.close();
+      process.exit();
+    });
+  });
+} catch(err) {
+  if (err && err.message) {
+    console.log(err.message);
+  }
+  process.exit(1);
+}
