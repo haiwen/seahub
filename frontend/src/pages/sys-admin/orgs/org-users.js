@@ -9,7 +9,6 @@ import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Selector from '../../../components/single-selector';
-import SysAdminUserMembershipEditor from '../../../components/select-editor/sysadmin-user-membership-editor';
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
@@ -163,8 +162,8 @@ class Item extends Component {
     this.props.updateStatus(this.props.item.email, statusOption.value);
   };
 
-  updateMembership= (membershipValue) => {
-    this.props.updateMembership(this.props.item.email, membershipValue);
+  updateMembership= (membershipOption) => {
+    this.props.updateMembership(this.props.item.email, membershipOption.value);
   };
 
   deleteUser = () => {
@@ -204,6 +203,15 @@ class Item extends Component {
     }
   };
 
+  translateMembership = (membership) => {
+    switch (membership) {
+      case 'Admin':
+        return gettext('Admin');
+      case 'Member':
+        return gettext('Member');
+    }
+  };
+
   render() {
     const { item } = this.props;
     const { highlight, isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
@@ -223,6 +231,17 @@ class Item extends Component {
     });
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
 
+    // for 'user membership'
+    const curMembership = item.is_org_staff? 'Admin' : 'Member';
+    this.membershipOptions = ['Admin', 'Member'].map(item => {
+      return {
+        value: item,
+        text: this.translateMembership(item),
+        isSelected: item == curMembership
+      };
+    });
+    const currentSelectedMembershipOption = this.membershipOptions.filter(item => item.isSelected)[0];
+
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
@@ -237,12 +256,12 @@ class Item extends Component {
             />
           </td>
           <td>
-            <SysAdminUserMembershipEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentStatus={item.is_org_staff ? 'is_org_staff' : 'not_is_org_staff'}
-              statusOptions={['is_org_staff', 'not_is_org_staff']}
-              onStatusChanged={this.updateMembership}
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedMembershipOption}
+              options={this.membershipOptions}
+              selectOption={this.updateMembership}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
@@ -373,7 +392,7 @@ class OrgUsers extends Component {
   };
 
   updateMembership = (email, membershipValue) => {
-    const isOrgStaff = membershipValue == 'is_org_staff';
+    const isOrgStaff = membershipValue == 'Admin';
     seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
