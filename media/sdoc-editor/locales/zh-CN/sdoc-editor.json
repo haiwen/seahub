@@ -414,5 +414,8 @@
   "New": "新",
   "Table_template": "表格模版",
   "Jump_to_original_doc": "跳转到源文档",
-  "Freezed": "已冻结"
+  "Freezed": "已冻结",
+  "Callout": "高亮块",
+  "The_current_location_does_not_support_pasting": "当前位置不支持粘贴",
+  "Please_enter...": "请输入..."
 }

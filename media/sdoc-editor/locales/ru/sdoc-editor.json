@@ -414,5 +414,8 @@
   "New": "Новый",
   "Table_template": "Шаблон таблицы",
   "Jump_to_original_doc": "Перейти к исходному документу",
-  "Freezed": "Заморожено"
+  "Freezed": "Заморожено",
+  "Callout": "Callout",
+  "The_current_location_does_not_support_pasting": "The current location does not support pasting ",
+  "Please_enter...": "Please enter..."
 }

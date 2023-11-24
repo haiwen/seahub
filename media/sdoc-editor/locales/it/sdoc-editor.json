@@ -414,5 +414,8 @@
   "New": "Nuovo",
   "Table_template": "Table template",
   "Jump_to_original_doc": "Jump to the original document",
-  "Freezed": "Freezed"
+  "Freezed": "Freezed",
+  "Callout": "Callout",
+  "The_current_location_does_not_support_pasting": "The current location does not support pasting ",
+  "Please_enter...": "Please enter..."
 }
