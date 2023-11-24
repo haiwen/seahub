@@ -8,7 +8,7 @@ import { gettext, username } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
+import Selector from '../../../components/single-selector';
 import SysAdminUserMembershipEditor from '../../../components/select-editor/sysadmin-user-membership-editor';
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
@@ -25,6 +25,10 @@ class Content extends Component {
       isItemFreezed: false
     };
   }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
@@ -67,6 +71,7 @@ class Content extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                   updateStatus={this.props.updateStatus}
                   updateMembership={this.props.updateMembership}
                   deleteUser={this.props.deleteUser}
@@ -154,8 +159,8 @@ class Item extends Component {
     this.setState({isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen});
   };
 
-  updateStatus= (statusValue) => {
-    this.props.updateStatus(this.props.item.email, statusValue);
+  updateStatus= (statusOption) => {
+    this.props.updateStatus(this.props.item.email, statusOption.value);
   };
 
   updateMembership= (membershipValue) => {
@@ -190,25 +195,45 @@ class Item extends Component {
     return translateResult;
   };
 
+  translateStatus = (status) => {
+    switch (status) {
+      case 'active':
+        return gettext('Active');
+      case 'inactive':
+        return gettext('Inactive');
+    }
+  };
+
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
+    const { highlight, isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     let resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
+
+    // for 'user status'
+    const curStatus = item.active ? 'active' : 'inactive';
+    this.statusOptions = ['active', 'inactive'].map(item => {
+      return {
+        value: item,
+        text: this.translateStatus(item),
+        isSelected: item == curStatus
+      };
+    });
+    const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
 
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><UserLink email={item.email} name={item.name} /></td>
           <td>
-            <SysAdminUserStatusEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentStatus={item.active ? 'active' : 'inactive'}
-              statusOptions={['active', 'inactive']}
-              onStatusChanged={this.updateStatus}
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedStatusOption}
+              options={this.statusOptions}
+              selectOption={this.updateStatus}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           <td>
@@ -264,6 +289,7 @@ Item.propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired,
   updateStatus: PropTypes.func.isRequired,
   updateMembership: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,

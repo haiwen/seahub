@@ -10,7 +10,7 @@ import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminGroupAddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog';
-import SysAdminGroupRoleEditor from '../../../components/select-editor/sysadmin-group-role-editor';
+import RoleSelector from '../../../components/single-selector';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
@@ -19,7 +19,14 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemFreezed: false
+    };
   }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
@@ -43,7 +50,7 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
                 <th width="5%">{/* icon */}</th>
@@ -57,6 +64,8 @@ class Content extends Component {
                 return (<Item
                   key={index}
                   item={item}
+                  isItemFreezed={this.state.isItemFreezed}
+                  toggleItemFreezed={this.toggleItemFreezed}
                   removeMember={this.props.removeMember}
                   updateMemberRole={this.props.updateMemberRole}
                 />);
@@ -96,18 +105,24 @@ class Item extends Component {
 
   constructor(props) {
     super(props);
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
     this.state = {
-      isOpIconShown: false,
+      highlighted: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: true});
   };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: false});
   };
 
   toggleDeleteDialog = (e) => {
@@ -123,37 +138,44 @@ class Item extends Component {
     this.toggleDeleteDialog();
   };
 
-  updateMemberRole = (role) => {
-    this.props.updateMemberRole(this.props.item.email, role);
+  updateMemberRole = (roleOption) => {
+    this.props.updateMemberRole(this.props.item.email, roleOption.value);
   };
 
   render() {
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    let { highlighted, isDeleteDialogOpen } = this.state;
     let { item } = this.props;
 
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?').replace('{placeholder}', itemName);
 
+    const { role: curRole } = item;
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == curRole;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><img src={item.avatar_url} alt="" className="rounded-circle" width="24" /></td>
           <td><UserLink email={item.email} name={item.name} /></td>
           <td>
             {item.role == 'Owner' ?
               gettext('Owner') :
-              <SysAdminGroupRoleEditor
-                isTextMode={true}
-                isEditIconShow={isOpIconShown}
-                roleOptions={['Member', 'Admin']}
-                currentRole={item.role}
-                onRoleChanged={this.updateMemberRole}
+              <RoleSelector
+                isDropdownToggleShown={highlighted}
+                currentSelectedOption={currentSelectedOption}
+                options={this.roleOptions}
+                selectOption={this.updateMemberRole}
+                toggleItemFreezed={this.props.toggleItemFreezed}
               />
             }
           </td>
           <td>
             {item.role != 'Owner' &&
-            <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf2-icon-x3 ${highlighted ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.toggleDeleteDialog}></a>
             }
           </td>
         </tr>
@@ -175,6 +197,8 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
   removeMember: PropTypes.func.isRequired,
   updateMemberRole: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired
 };
 
 class GroupMembers extends Component {

@@ -4,7 +4,6 @@ import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import toaster from '../toast';
 import { isPro, gettext } from '../../utils/constants';
-import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
@@ -105,15 +104,7 @@ class LinkItem extends React.Component {
             {this.cutLink(link)}
           </td>
           <td>
-            {(isPro && permissions) && (
-              <ShareLinkPermissionEditor
-                isTextMode={true}
-                isEditIconShow={false}
-                currentPermission={currentPermission}
-                permissionOptions={permissionOptions}
-                onPermissionChanged={() => {}}
-              />
-            )}
+            {(isPro && permissions) && Utils.getShareLinkPermissionObject(currentPermission).text}
           </td>
           <td>
             {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
