@@ -7,7 +7,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
 import ShareLink from '../../models/share-link';
-import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
@@ -16,6 +15,7 @@ import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import TopToolbar from '../../components/toolbar/top-toolbar';
+import Selector from '../../components/single-selector';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -28,6 +28,17 @@ const contentPropTypes = {
 };
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   sortByName = (e) => {
     e.preventDefault();
@@ -67,7 +78,7 @@ class Content extends Component {
       // only for some columns
       const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
       const table = (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`${isDesktop ? '': 'table-thead-hidden'}`}>
           <thead>
             {isDesktop ? (
               <tr>
@@ -89,7 +100,15 @@ class Content extends Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} />);
+              return (<Item
+                key={index}
+                isDesktop={isDesktop}
+                item={item}
+                onRemoveLink={this.props.onRemoveLink}
+                isItemFreezed={this.state.isItemFreezed}
+                toggleItemFreezed={this.toggleItemFreezed}
+              />
+              );
             })}
           </tbody>
         </table>
@@ -105,7 +124,9 @@ Content.propTypes = contentPropTypes;
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
-  onRemoveLink: PropTypes.func.isRequired
+  onRemoveLink: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired
 };
 
 class Item extends Component {
@@ -114,6 +135,7 @@ class Item extends Component {
     super(props);
 
     this.state = {
+      highlight: false,
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
@@ -159,12 +181,22 @@ class Item extends Component {
     });
   };
 
-  handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+  handleMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
   };
 
-  handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+  handleMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
   };
 
   viewLink = (e) => {
@@ -187,6 +219,11 @@ class Item extends Component {
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
   };
 
+  // for 'selector' in desktop
+  changePermission = (permOption) => {
+    this.changePerm(permOption.value);
+  };
+
   changePerm = (permission) => {
     const item = this.props.item;
     const permissionDetails = Utils.getShareLinkPermissionObject(permission).permissionDetails;
@@ -205,6 +242,14 @@ class Item extends Component {
   render() {
     const item = this.props.item;
     const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    this.permOptions = permissionOptions.map(item => {
+      return {
+        value: item,
+        text: Utils.getShareLinkPermissionObject(item).text,
+        isSelected: item == currentPermission
+      };
+    });
+    const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0] || {};
 
     let iconUrl, objUrl;
     if (item.is_dir) {
@@ -218,7 +263,7 @@ class Item extends Component {
 
     const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
-      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onFocus={this.handleMouseEnter}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
@@ -229,15 +274,15 @@ class Item extends Component {
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
         {isPro &&
-        <td>
-          <ShareLinkPermissionEditor
-            isTextMode={true}
-            isEditIconShow={isOpIconShown && !item.is_expired}
-            currentPermission={currentPermission}
-            permissionOptions={permissionOptions}
-            onPermissionChanged={this.changePerm}
-          />
-        </td>
+          <td>
+            <Selector
+              isDropdownToggleShown={isOpIconShown && !item.is_expired}
+              currentSelectedOption={currentSelectedPermOption}
+              options={this.permOptions}
+              selectOption={this.changePermission}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+            />
+          </td>
         }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>

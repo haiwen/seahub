@@ -39,7 +39,9 @@ class Selector extends Component {
     this.setState({
       isPopoverOpen: !this.state.isPopoverOpen
     }, () => {
-      this.props.toggleItemFreezed(this.state.isPopoverOpen);
+      if (this.props.toggleItemFreezed) {
+        this.props.toggleItemFreezed(this.state.isPopoverOpen);
+      }
     });
   };
 
@@ -69,8 +71,8 @@ class Selector extends Component {
               {options.map((item, index) => {
                 return (
                   <li key={index} className="option-item h-6 p-1 rounded d-flex justify-content-between align-items-center" onClick={(e) => {this.selectItem(e, item);}}>
-                    <span className="option-item-text">{item.text}</span>
-                    {item.isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+                    <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
+                    <i className={`sf2-icon-tick text-gray font-weight-bold ${item.isSelected ? '' : 'invisible'}`}></i>
                   </li>
                 );
               })}

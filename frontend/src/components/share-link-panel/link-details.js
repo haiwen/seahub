@@ -4,7 +4,7 @@ import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button } from 'reactstrap';
 import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
-import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
+import Selector from '../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -119,9 +119,9 @@ class LinkDetails extends React.Component {
     this.setState({isOpIconShown: false});
   };
 
-  changePerm = (permission) => {
+  changePerm = (permOption) => {
     const { sharedLinkInfo } = this.props;
-    const { permissionDetails } = Utils.getShareLinkPermissionObject(permission);
+    const { permissionDetails } = Utils.getShareLinkPermissionObject(permOption.value);
     seafileAPI.updateShareLink(sharedLinkInfo.token, JSON.stringify(permissionDetails)).then((res) => {
       this.props.updateLink(new ShareLink(res.data));
     }).catch((error) => {
@@ -152,6 +152,15 @@ class LinkDetails extends React.Component {
     const { sharedLinkInfo, permissionOptions } = this.props;
     const { isOpIconShown } = this.state;
     const currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
+    this.permOptions = permissionOptions.map(item => {
+      return {
+        value: item,
+        text: Utils.getShareLinkPermissionObject(item).text,
+        isSelected: item == currentPermission
+      };
+    });
+    const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0];
+
     return (
       <div>
         <button className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
@@ -231,12 +240,11 @@ class LinkDetails extends React.Component {
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
               <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-                <ShareLinkPermissionEditor
-                  isTextMode={true}
-                  isEditIconShow={isOpIconShown && !sharedLinkInfo.is_expired}
-                  currentPermission={currentPermission}
-                  permissionOptions={permissionOptions}
-                  onPermissionChanged={this.changePerm}
+                <Selector
+                  isDropdownToggleShown={isOpIconShown && !sharedLinkInfo.is_expired}
+                  currentSelectedOption={currentSelectedPermOption}
+                  options={this.permOptions}
+                  selectOption={this.changePerm}
                 />
               </dd>
             </>
