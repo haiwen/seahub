@@ -62,7 +62,7 @@ class Search extends Component {
     }
     this.inputValue = newValue.trim();
 
-    if (this.inputValue === '' || _this.getValueLength(this.inputValue) < 3) {
+    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         isResultShow: false,
         isResultGetted: false
