@@ -229,7 +229,7 @@ class WOPIFilesView(APIView):
             dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
             if dirent:
                 last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
-                result['LastModifiedTime'] = last_modified.isoformat()
+                result['LastModifiedTime'] = last_modified.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
@@ -244,14 +244,16 @@ class WOPIFilesView(APIView):
 
         absolute_uri = request.build_absolute_uri('/')
         result['PostMessageOrigin'] = urllib.parse.urljoin(absolute_uri, SITE_ROOT).strip('/')
-        result['HideSaveOption'] = True
-        result['HideExportOption'] = True
+        result['HideSaveOption'] = True if not can_edit else False
+        result['HideExportOption'] = True if not can_download else False
         result['EnableOwnerTermination'] = True
         result['SupportsLocks'] = True
         result['SupportsGetLock'] = True
 
         result['DisablePrint'] = True if not can_download else False
         result['HidePrintOption'] = True if not can_download else False
+        result['DisableCopy'] = True if not can_download else False
+        result['DisableExport'] = True if not can_download else False
 
         result['SupportsUpdate'] = True if can_edit else False
         result['UserCanWrite'] = True if can_edit else False
@@ -445,14 +447,22 @@ class WOPIFilesContentsView(APIView):
             resp = requests.post(update_url, files=files, data=data)
             if resp.status_code != 200:
                 logger.error('update_url: {}'.format(update_url))
-                logger.error('parameter file: {}'.format(files['file'][:100]))
-                logger.error('parameter file_name: {}'.format(files['file_name']))
-                logger.error('parameter target_file: {}'.format(files['target_file']))
+                logger.error('parameter file: {}'.format(files['file'][1][:100]))
+                logger.error('parameter file_name: {}'.format(files['file'][0]))
+                logger.error('parameter target_file: {}'.format(data['target_file']))
                 logger.error('response: {}'.format(resp.__dict__))
+                return HttpResponse(json.dumps({}), status=500, content_type=json_content_type)
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
                                 content_type=json_content_type)
 
-        return HttpResponse(json.dumps({}), status=200,
-                            content_type=json_content_type)
+        result = dict()
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
+            if dirent:
+                last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
+                result['LastModifiedTime'] = last_modified.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        except Exception as e:
+            logger.error(e)
+        return HttpResponse(json.dumps(result), status=200, content_type=json_content_type)
