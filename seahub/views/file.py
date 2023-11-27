@@ -1186,12 +1186,12 @@ def view_shared_file(request, fileshare):
     path = normalize_file_path(fileshare.path)
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
-        return render_error(request, _('File does not exist'))
+        return render_error(request, _('File does not exist'), status=404)
 
     # permission check
     shared_by = fileshare.username
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
-        return render_error(request, _('Permission denied'))
+        return render_permission_error(request, _('Permission denied'))
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
@@ -1232,7 +1232,7 @@ def view_shared_file(request, fileshare):
             obj_id, 'view', '', use_onetime=False)
 
     if not access_token:
-        return render_error(request, _('Unable to view file'))
+        return render_permission_error(request, _('Unable to view file'))
 
     filename = os.path.basename(path)
     raw_path = gen_file_get_url(access_token, filename)
@@ -1427,12 +1427,12 @@ def view_file_via_shared_dir(request, fileshare):
     real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
     obj_id = seafile_api.get_file_id_by_path(repo_id, real_path)
     if not obj_id:
-        return render_error(request, _('File does not exist'))
+        return render_error(request, _('File does not exist'), status=404)
 
     # permission check
     shared_by = fileshare.username
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
-        return render_error(request, _('Permission denied'))
+        return render_permission_error(request, _('Permission denied'))
 
     if not request.user.is_authenticated:
         username = ANONYMOUS_EMAIL
@@ -1468,7 +1468,7 @@ def view_file_via_shared_dir(request, fileshare):
     access_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'view', '', use_onetime=False)
     if not access_token:
-        return render_error(request, _('Unable to view file'))
+        return render_permission_error(request, _('Unable to view file'))
 
     filename = os.path.basename(req_path)
     raw_path = gen_file_get_url(access_token, filename)
