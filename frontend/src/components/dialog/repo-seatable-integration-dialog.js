@@ -25,7 +25,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 'Seatable',
+      activeTab: 'SeaTable',
       seatableSettings: [],
       baseApiToken: '',
       isPasswordVisible: false,
@@ -166,7 +166,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
             <div className="account-dialog-side">
               <Nav pills vertical className="w-100">
                 <NavItem>
-                  <NavLink className={activeTab === 'Seatable' ? 'active' : ''} onClick={this.changeTab.bind(this, 'Seatable')}>
+                  <NavLink className={activeTab === 'SeaTable' ? 'active' : ''} onClick={this.changeTab.bind(this, 'SeaTable')}>
                     {'SeaTable'}
                   </NavLink>
                 </NavItem>
@@ -174,7 +174,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
             </div>
             <div className="account-dialog-main">
               <TabContent activeTab={activeTab}>
-                <TabPane tabId="Seatable">
+                <TabPane tabId="SeaTable">
                   <div className="h-100">
                     {status === STATUS.SEATABLE_ACCOUNT_MANAGE &&
                     <SeatableAccountSettingList

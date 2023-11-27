@@ -21,7 +21,7 @@ class SeatableAccountSettingList extends Component {
     if (!Array.isArray(seatableSettings) || seatableSettings.length === 0) {
       return (
         <div className="no-accounts d-flex flex-column align-items-center justify-content-center">
-          <img src={`${mediaUrl}img/no-items-tip.png`} alt={t('No Seatable libraries')} />
+          <img src={`${mediaUrl}img/no-items-tip.png`} alt={t('No SeaTable libraries')} />
           <p>{t('No Seafile libraries')}</p>
         </div>
       );
@@ -32,7 +32,7 @@ class SeatableAccountSettingList extends Component {
           <thead>
             <tr>
               <th width='20%'>{t('Base name')}</th>
-              <th width='60%'>{t('Seatable server URL')}</th>
+              <th width='60%'>{t('SeaTable server URL')}</th>
               <th width='20%'>{t('Operation')}</th>
             </tr>
           </thead>
@@ -64,10 +64,10 @@ class SeatableAccountSettingList extends Component {
     return (
       <div className="accounts-manage">
         <div className="accounts-manage-header d-flex align-items-center justify-content-between">
-          <span>{t('Seatable')}</span>
+          <span>{t('SeaTable')}</span>
           {seatableSettings && seatableSettings.length === 0 &&
             <div>
-              <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{t('Add Seatable integration')}</Button>
+              <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{t('Add SeaTable integration')}</Button>
             </div>
           }
         </div>

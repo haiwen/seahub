@@ -79,7 +79,7 @@ class AddSeatableAccountSetting extends Component {
       errMessage = t('URL is required');
     }
     else if (!seatable_api_token) {
-      errMessage = t('Seatable API token is required');
+      errMessage = t('SeaTable API token is required');
     }
 
     this.setState({errMessage});
@@ -105,7 +105,7 @@ class AddSeatableAccountSetting extends Component {
     }
     if (err) {
       this.setState({
-        errMessage: t('URL or Seatable API token is invalid'),
+        errMessage: t('URL or SeaTable API token is invalid'),
       });
     }
   };
@@ -128,7 +128,7 @@ class AddSeatableAccountSetting extends Component {
             <span className="back-btn d-inline-flex align-items-center justify-content-center" onClick={this.props.changeStatus}>
               <i className="link-icon icon-left sf3-font sf3-font-arrow" style={{transform: 'rotate(180deg)', color: '#999'}}></i>
             </span>
-            <span className="add-account-header-text">{t('Add Seatable Integration')}</span>
+            <span className="add-account-header-text">{t('Add SeaTable Integration')}</span>
           </span>
           <button
             onClick={stage === 'toCheck'? this.testSeatableAPIToken : this.addSeatableAccountSetting}
@@ -143,11 +143,11 @@ class AddSeatableAccountSetting extends Component {
               <Input value={base_name} onChange={this.onChangeBaseName}/>
             </FormGroup>
             <FormGroup>
-              <Label>{t('Seatable server URL')}</Label>
+              <Label>{t('SeaTable server URL')}</Label>
               <Input value={seatable_url} onChange={this.onChangeSeatableUrl}/>
             </FormGroup>
             <FormGroup className="base-account-password">
-              <Label>{t('Seatable API token')}</Label>
+              <Label>{t('SeaTable API token')}</Label>
               <InputGroup>
                 <Input value={seatable_api_token} type={passwordType} onChange={this.onChangeSeatableApiToken}/>
                 <InputGroupText>
@@ -159,7 +159,7 @@ class AddSeatableAccountSetting extends Component {
           {errMessage && <Alert color="danger">{errMessage}</Alert>}
           {successMessage && <Alert color="success">
             <span className="dtable-font dtable-icon-check-circle mr-2"></span>
-            {t('Successfully connected to Seatable')}
+            {t('Successfully connected to SeaTable')}
           </Alert>}
         </div>
       </div>

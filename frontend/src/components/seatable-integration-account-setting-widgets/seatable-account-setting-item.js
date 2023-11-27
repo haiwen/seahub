@@ -30,7 +30,7 @@ class SeatableAccountItem extends Component {
 
   onDeleteSeatables = () => {
     const { setting } = this.props;
-    this.props.deleteStableAccountSetting(setting, 'seatable_account_manage');
+    this.props.deleteStableAccountSetting(setting, 'SeaTable_account_manage');
     this.closeDialog();
   };
 
