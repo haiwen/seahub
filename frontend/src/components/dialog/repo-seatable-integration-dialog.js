@@ -167,7 +167,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
               <Nav pills vertical className="w-100">
                 <NavItem>
                   <NavLink className={activeTab === 'Seatable' ? 'active' : ''} onClick={this.changeTab.bind(this, 'Seatable')}>
-                    {'Seatable'}
+                    {'SeaTable'}
                   </NavLink>
                 </NavItem>
               </Nav>
