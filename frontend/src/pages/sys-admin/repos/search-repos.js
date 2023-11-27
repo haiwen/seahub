@@ -38,6 +38,10 @@ class SearchRepos extends Component {
 
   getRepos = (page) => {
     const { name, perPage } = this.state;
+    if (this.getValueLength(name) < 3) {
+      toaster.notify(gettext('Required at least three letters.'));
+      return;
+    }
     seafileAPI.sysAdminSearchRepos(name, page, perPage).then((res) => {
       this.setState({
         loading: false,
@@ -92,12 +96,8 @@ class SearchRepos extends Component {
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      const { isSubmitBtnActive, name } = this.state;
+      const { isSubmitBtnActive } = this.state;
       if (isSubmitBtnActive) {
-        if (this.getValueLength(name) < 3) {
-          toaster.notify(gettext('Required at least three letters.'));
-          return;
-        }
         this.searchRepos();
       }
     }
