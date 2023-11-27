@@ -417,5 +417,11 @@
   "Freezed": "Freezed",
   "Callout": "Callout",
   "The_current_location_does_not_support_pasting": "The current location does not support pasting ",
-  "Please_enter...": "Please enter..."
+  "Please_enter...": "Please enter...",
+  "Combine_cell": "Combine cells",
+  "Split_cell": "Split cell",
+  "Row_number": "Row number",
+  "Column_number": "Column number",
+  "The_maximum_row_number_is_{number}": "The maximum row number is {number}",
+  "The_maximum_column_number_is_{number}": "The maximum column number is {number}"
 }

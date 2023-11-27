@@ -417,5 +417,11 @@
   "Freezed": "Заморожено",
   "Callout": "Выноска",
   "The_current_location_does_not_support_pasting": "Текущее местоположение не поддерживает вставку ",
-  "Please_enter...": "Пожалуйста, введите..."
+  "Please_enter...": "Пожалуйста, введите...",
+  "Combine_cell": "Combine cells",
+  "Split_cell": "Split cell",
+  "Row_number": "Row number",
+  "Column_number": "Column number",
+  "The_maximum_row_number_is_{number}": "The maximum row number is {number}",
+  "The_maximum_column_number_is_{number}": "The maximum column number is {number}"
 }
