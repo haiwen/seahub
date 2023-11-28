@@ -110,7 +110,7 @@ def work_weixin_oauth_callback(request):
             request, _('Error, new user registration is not allowed, please contact administrator.'))
 
     if is_new_user:
-        SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
+        SocialAuthUser.objects.add(user.username, WORK_WEIXIN_PROVIDER, uid)
 
     # update user info
     if is_new_user or WORK_WEIXIN_USER_INFO_AUTO_UPDATE:

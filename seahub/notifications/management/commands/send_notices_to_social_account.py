@@ -15,8 +15,11 @@ from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.utils import get_site_scheme_and_netloc, get_site_name
 from seahub.auth.models import SocialAuthUser
+from seahub.seadoc.models import SeadocNotification
+from seahub.tags.models import FileUUIDMap
+from seahub.notifications.utils import format_sdoc_notice
 
-from seahub.dingtalk.utils import dingtalk_get_access_token, dingtalk_get_userid_by_unionid
+from seahub.dingtalk.utils import dingtalk_get_orgapp_token, dingtalk_get_userid_by_unionid_new
 from seahub.dingtalk.settings import DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL, \
         DINGTALK_AGENT_ID, ENABLE_DINGTALK
 
@@ -77,6 +80,7 @@ class Command(BaseCommand, CommandLogMixin):
 
     help = "Send notices to user's social account if he/she has unseen notices every period of time."
     label = "notifications_send_notices_to_social_account"
+    sdoc_label = "notifications_send_sdoc_notices_to_social_account"
 
     def handle(self, *args, **options):
 
@@ -144,7 +148,7 @@ class Command(BaseCommand, CommandLogMixin):
 
         if ENABLE_DINGTALK:
 
-            dingtalk_access_token = dingtalk_get_access_token()
+            dingtalk_access_token = dingtalk_get_orgapp_token()
             if not dingtalk_access_token:
                 self.log_error('can not get access token for dingtalk')
             else:
@@ -188,20 +192,41 @@ class Command(BaseCommand, CommandLogMixin):
             self.log_debug('Create new last check time: %s' % now)
             CommandsLastCheck(command_type=self.label, last_check=now).save()
 
+        # sdoc
+        try:
+            sdoc_cmd_last_check = CommandsLastCheck.objects.get(command_type=self.sdoc_label)
+            self.log_debug('Last sdoc check time is %s' % sdoc_cmd_last_check.last_check)
+
+            sdoc_last_check_dt = sdoc_cmd_last_check.last_check
+
+            sdoc_cmd_last_check.last_check = now
+            sdoc_cmd_last_check.save()
+        except CommandsLastCheck.DoesNotExist:
+            sdoc_last_check_dt = today
+            self.log_debug('Create new sodc last check time: %s' % now)
+            CommandsLastCheck(command_type=self.sdoc_label, last_check=now).save()
+
         # 2. get all unseen notices
         user_notifications = UserNotification.objects.filter(timestamp__gt=last_check_dt).filter(seen=False)
         self.log_info('Found %d notices' % user_notifications.count())
-        if user_notifications.count() == 0:
+
+        sdoc_notifications = SeadocNotification.objects.filter(created_at__gt=sdoc_last_check_dt).filter(seen=False)
+        self.log_info('Found %d sdoc notices' % sdoc_notifications.count())
+        sdoc_queryset = FileUUIDMap.objects.filter(uuid__in=[item.doc_uuid for item in sdoc_notifications])
+
+        if user_notifications.count() == 0 and sdoc_notifications.count() == 0:
             return
 
         # 3. get all users should send notice to
-        user_email_list = list(set([item.to_user for item in user_notifications]))
+        user_email_set = set([item.to_user for item in user_notifications])
+        sdoc_user_email_set = set([item.username for item in sdoc_notifications])
+        user_email_list = list(user_email_set | sdoc_user_email_set)
 
         dingtail_socials = SocialAuthUser.objects.filter(provider='dingtalk').filter(username__in=user_email_list)
         dingtalk_email_list = [item.username for item in dingtail_socials]
         dingtalk_email_uid_dict = {}
         for item in dingtail_socials:
-            dingtalk_email_uid_dict[item.username] = dingtalk_get_userid_by_unionid(item.uid)
+            dingtalk_email_uid_dict[item.username] = dingtalk_get_userid_by_unionid_new(item.uid)
 
         work_weixin_socials = SocialAuthUser.objects.filter(provider=WORK_WEIXIN_PROVIDER, \
                 uid__contains=WORK_WEIXIN_UID_PREFIX).filter(username__in=user_email_list)
@@ -220,18 +245,27 @@ class Command(BaseCommand, CommandLogMixin):
                 if email == notification.to_user:
                     should_send.append(notification)
 
+            sdoc_should_send = []
+            for sdoc_notification in sdoc_notifications:
+                if email == sdoc_notification.username:
+                    sdoc_should_send.append(sdoc_notification)
+
             title = _("You've got %(num)s new notices on %(site_name)s:\n") % \
-                    {'num': len(should_send), 'site_name': site_name, }
+                    {'num': len(should_send) + len(sdoc_should_send), 'site_name': site_name, }
 
             has_sent = False
 
             if not has_sent and email in dingtalk_email_list and ENABLE_DINGTALK:
                 content = '  \n  '.join([remove_html_a_element_for_dingtalk(x.format_msg()) for x in should_send])
+                sdoc_content = '  \n  '.join([remove_html_a_element_for_dingtalk(format_sdoc_notice(sdoc_queryset, item)) for item in sdoc_should_send])
+                content = '  \n  '.join([content, sdoc_content])
                 self.send_dingtalk_msg(dingtalk_email_uid_dict[email], title, content)
                 has_sent = True
 
             if not has_sent and email in work_weixin_email_list and ENABLE_WORK_WEIXIN:
                 content = ''.join([wrap_div_for_work_weixin(x.format_msg()) for x in should_send])
+                sdoc_content = ''.join([wrap_div_for_work_weixin(format_sdoc_notice(sdoc_queryset, item)) for item in sdoc_should_send])
+                content = ''.join([content, sdoc_content])
                 self.send_work_weixin_msg(work_weixin_email_uid_dict[email], title, content)
                 has_sent = True
 
