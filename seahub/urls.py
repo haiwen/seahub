@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 
 from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
+from seahub.views.mobile import mobile_login
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.views.sso import *
@@ -206,6 +207,7 @@ from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, Librar
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
+    path('mobile-login/', mobile_login, name="mobile_login"),
 
     path('sso/', sso, name='sso'),
     path('multi_adfs_sso/', multi_adfs_sso, name='multi_adfs_sso'),
