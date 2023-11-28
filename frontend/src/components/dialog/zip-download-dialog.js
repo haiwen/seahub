@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { gettext, fileServerRoot } from '../../utils/constants';
+import { mediaUrl, gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
@@ -64,9 +64,20 @@ class ZipDownloadDialog extends React.Component {
       const data = res.data;
       if (data.failed == 1) {
         clearInterval(interval);
+        let errorMsg;
+        switch (data.failed_reason) { // returned from seaserv
+          case 'size too large':
+            errorMsg = gettext('Failed to download. The total size of the files exceeded the limit.');
+            break;
+          case 'internal error':
+            errorMsg = gettext('Internal Server Error');
+            break;
+          default:
+            errorMsg = gettext('Error');
+        }
         this.setState({
           isLoading: false,
-          errorMsg: data.failed_reason
+          errorMsg: errorMsg
         });
       } else {
         this.setState({
@@ -128,7 +139,12 @@ class Content extends React.Component {
     }
 
     if (errorMsg) {
-      return <p className="error mt-4 text-center">{errorMsg}</p>;
+      return (
+        <div className="text-center mt-7 mb-8">
+          <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+          <p className="mt-3">{errorMsg}</p>
+        </div>
+      );
     }
 
     return <p className="mt-4 text-center">{`${gettext('Packaging...')} ${zipProgress}`}</p>;
