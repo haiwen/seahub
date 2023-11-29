@@ -712,7 +712,7 @@ class DirentListItem extends React.Component {
     trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
     trClass += dirent.isSelected? 'tr-active' : '';
 
-    let lockedInfo = dirent.is_freezed ? gettext('Freezed by {name}'): gettext('locked by {name}');
+    let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}'): gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
     const isDesktop = Utils.isDesktop();
