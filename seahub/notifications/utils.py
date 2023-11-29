@@ -295,7 +295,7 @@ def format_sdoc_notice(sdoc_queryset, sdoc_notice, include_detail_link=False):
     author = detail.get('author')
 
     if msg_type == 'comment':
-        message = _("%(author)s added a new comment in SDoc %(sdoc_name)s") % {
+        message = _("%(author)s added a new comment in document %(sdoc_name)s") % {
             'author': escape(email2nickname(author)),
             'sdoc_name': sdoc_name,
         }
@@ -305,7 +305,7 @@ def format_sdoc_notice(sdoc_queryset, sdoc_notice, include_detail_link=False):
             message = '%s %s' % (message, add_a_element(_('Details'), sdoc_file_url))
 
     if msg_type == 'reply':
-        message = _("%(author)s added a new reply in SDoc %(sdoc_name)s") % {
+        message = _("%(author)s added a new reply in document %(sdoc_name)s") % {
             'author': escape(email2nickname(author)),
             'sdoc_name': sdoc_name,
         }

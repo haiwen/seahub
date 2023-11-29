@@ -266,7 +266,7 @@ class Command(BaseCommand):
         notice.to_user = sdoc_notice.username
         notice.timestamp = sdoc_notice.created_at
         notice.file_url = gen_sdoc_smart_link(sdoc_notice.doc_uuid, with_service_url=False)
-        notice.file_name = 'SDoc ' + str(sdoc_obj.filename)[:-5]
+        notice.file_name = str(sdoc_obj.filename)[:-5]
         detail = json.loads(sdoc_notice.detail)
         author = email2nickname(detail.get('author'))
         notice.author = author
