@@ -207,7 +207,7 @@ class DirentGridItem extends React.Component {
     gridClass += this.state.isGridSelected ? ' grid-selected-active' : ' ';
     gridClass += this.state.isGridDropTipShow ? ' grid-drop-show' : ' ';
 
-    let lockedInfo = dirent.is_freezed ? gettext('locked by {name}') : gettext('Freezed by {name}');
+    let lockedInfo = dirent.is_freezed ? gettext('Freezed by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
