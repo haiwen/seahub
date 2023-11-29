@@ -376,6 +376,7 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.lockfile(repoID, filePath, -1).then(() => {
+      this.props.updateDirent(this.props.dirent, 'is_freezed', true);
       this.props.updateDirent(this.props.dirent, 'is_locked', true);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
       let lockName = username.split('@');
@@ -711,7 +712,9 @@ class DirentListItem extends React.Component {
     trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
     trClass += dirent.isSelected? 'tr-active' : '';
 
-    let lockedInfo = gettext('locked by {name}').replace('{name}', dirent.lock_owner_name);
+    let lockedInfo = dirent.is_freezed ? gettext('locked by {name}') : gettext('Freezed by {name}');
+    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
+
     const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
