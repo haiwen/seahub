@@ -592,15 +592,18 @@ export const Utils = {
             list.push(UNLOCK);
           }
         } else {
-          if (dirent.name.endsWith('.sdoc')) {
-            list.push(FREEZE_DOCUMENT);
-          } else {
+          if (!dirent.name.endsWith('.sdoc')) {
             list.push(LOCK);
           }
         }
       }
 
       list.push('Divider');
+
+      if (isPro && !dirent.is_locked && dirent.name.endsWith('.sdoc')) {
+        list.push(FREEZE_DOCUMENT);
+      }
+
     }
 
     if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {

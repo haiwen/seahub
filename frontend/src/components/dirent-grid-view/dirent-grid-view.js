@@ -144,6 +144,9 @@ class DirentGridView extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Freeze Document':
+        this.onFreezeDocument(currentObject);
+        break;
       case 'Convert to Markdown':
         this.onItemConvert(currentObject, event, 'markdown');
         break;
@@ -272,6 +275,21 @@ class DirentGridView extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     seafileAPI.lockfile(repoID, filePath).then(() => {
+      this.props.updateDirent(currentObject, 'is_locked', true);
+      this.props.updateDirent(currentObject, 'locked_by_me', true);
+      let lockName = username.split('@');
+      this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onFreezeDocument = (currentObject) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(currentObject);
+    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
+      this.props.updateDirent(currentObject, 'is_freezed', true);
       this.props.updateDirent(currentObject, 'is_locked', true);
       this.props.updateDirent(currentObject, 'locked_by_me', true);
       let lockName = username.split('@');
