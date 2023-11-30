@@ -96,7 +96,7 @@ class ChangeRepoPasswordDialog extends React.Component {
     const { repoName, toggleDialog } = this.props;
 
     return (
-      <Modal isOpen={true} centered={true} style={{height: 'auto'}}>
+      <Modal isOpen={true} style={{height: 'auto'}} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>
           <span>
             {Utils.generateDialogTitle(gettext('Change Password of Library {placeholder}'), repoName)}

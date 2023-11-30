@@ -27,7 +27,7 @@ class InviteUserDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Invite user')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Send the invitation link to the others, and they will be able to join the organization via scanning the QR code.')}</p>

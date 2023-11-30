@@ -108,7 +108,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
   render() {
     const itemName = this.props.itemName;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           <span className="op-target" title={itemName}>{itemName}</span>{' '}
           {gettext('History Setting')}

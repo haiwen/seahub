@@ -19,7 +19,7 @@ class ListCreatedFileDialog extends React.Component {
   render() {
     let activity = this.props.activity;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Created Files')}</ModalHeader>
         <ModalBody>
           <Table>

@@ -117,7 +117,7 @@ class ShareRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Select libraries to share')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>

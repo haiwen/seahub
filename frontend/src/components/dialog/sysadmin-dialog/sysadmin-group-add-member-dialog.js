@@ -35,7 +35,7 @@ class SysAdminGroupAddMemberDialog extends React.Component {
   render() {
     const { isSubmitBtnDisabled } = this.state;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect

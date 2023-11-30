@@ -34,7 +34,7 @@ class SysAdminRepoTransferDialog extends React.Component {
     let msg = gettext('Transfer Library {library_name}');
     let message = msg.replace('{library_name}', innerSpan);
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>
           <div dangerouslySetInnerHTML={{__html:message}} />
         </ModalHeader>

@@ -50,7 +50,7 @@ class NewWikiDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} autoFocus={false}>
+      <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
         <ModalBody>
           <label className="form-label">{gettext('Name')}</label>
