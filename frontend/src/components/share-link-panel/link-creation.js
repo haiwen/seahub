@@ -335,7 +335,7 @@ class LinkCreation extends React.Component {
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
-          <Button onClick={this.generateShareLink} className="mt-3 ml-1 mb-1">{gettext('Generate')}</Button>
+          <Button onClick={this.generateShareLink} className="mt-2 ml-1 mb-1">{gettext('Generate')}</Button>
         </Form>
       </Fragment>
     );
