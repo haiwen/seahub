@@ -3,12 +3,15 @@ import os
 import json
 import logging
 from django.core.cache import cache
+from django.utils.html import escape
+from django.utils.translation import gettext as _
 
 from seaserv import ccnet_api, seafile_api
 from seahub.notifications.models import Notification
 from seahub.notifications.settings import NOTIFICATION_CACHE_TIMEOUT
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.utils import get_service_url
 
 logger = logging.getLogger(__name__)
 
@@ -266,3 +269,49 @@ def update_notice_detail(request, notices):
                 logger.error(e)
 
     return notices
+
+
+def gen_sdoc_smart_link(doc_uuid, with_service_url=True):
+    service_url = get_service_url()
+    service_url = service_url.rstrip('/')
+    if with_service_url:
+        return '%s/smart-link/%s/' % (service_url, doc_uuid)
+    else:
+        return '/smart-link/%s/' % (doc_uuid,)
+
+
+def add_a_element(con, href='#', style=''):
+    return '<a href="%s" style="%s">%s</a>' % (href, style, escape(con))
+
+
+def format_sdoc_notice(sdoc_queryset, sdoc_notice, include_detail_link=False):
+    message = ''
+    sdoc_obj = sdoc_queryset.filter(uuid=sdoc_notice.doc_uuid).first()
+    if not sdoc_obj:
+        return ''
+    sdoc_name = str(sdoc_obj.filename)[:-5]
+    detail = json.loads(sdoc_notice.detail)
+    msg_type = sdoc_notice.msg_type
+    author = detail.get('author')
+
+    if msg_type == 'comment':
+        message = _("%(author)s added a new comment in document %(sdoc_name)s") % {
+            'author': escape(email2nickname(author)),
+            'sdoc_name': sdoc_name,
+        }
+        message = '%s "%s"' % (message, detail.get('comment', ''))
+        if include_detail_link:
+            sdoc_file_url = gen_sdoc_smart_link(sdoc_notice.doc_uuid)
+            message = '%s %s' % (message, add_a_element(_('Details'), sdoc_file_url))
+
+    if msg_type == 'reply':
+        message = _("%(author)s added a new reply in document %(sdoc_name)s") % {
+            'author': escape(email2nickname(author)),
+            'sdoc_name': sdoc_name,
+        }
+        message = '%s "%s"' % (message, detail.get('reply', ''))
+        if include_detail_link:
+            sdoc_file_url = gen_sdoc_smart_link(sdoc_notice.doc_uuid)
+            message = '%s %s' % (message, add_a_element(_('Details'), sdoc_file_url))
+
+    return message
