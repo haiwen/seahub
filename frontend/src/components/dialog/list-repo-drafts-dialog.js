@@ -57,7 +57,7 @@ class ListRepoDraftsDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Drafts')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>

@@ -51,7 +51,7 @@ class SaveSharedDirDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} className="sf-save-file">
+      <Modal isOpen={true} className="sf-save-file" toggle={this.props.toggleCancel}>
         <ModalHeader toggle={this.props.toggleCancel}>{gettext('Save to:')}</ModalHeader>
         <ModalBody>
           <FileChooser

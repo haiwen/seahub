@@ -66,7 +66,7 @@ class TransferDialog extends React.Component {
       canTransferToDept = this.props.canTransferToDept;
     }
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           <span>{gettext('Transfer Library {library_name}').replace('{library_name}', itemName)}</span>
         </ModalHeader>
