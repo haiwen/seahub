@@ -69,15 +69,6 @@ def is_no_quota(repo_id):
     return True if seaserv.check_quota(repo_id) < 0 else False
 
 
-def get_fileshare(repo_id, username, path):
-    if path == '/':    # no shared link for root dir
-        return None
-
-    share_list = FileShare.objects.filter(repo_id=repo_id).filter(
-        username=username).filter(path=path)
-    return share_list[0] if len(share_list) > 0 else None
-
-
 def get_dir_share_link(fileshare):
     # dir shared link
     if fileshare:

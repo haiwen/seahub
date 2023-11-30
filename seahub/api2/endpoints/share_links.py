@@ -178,6 +178,15 @@ class ShareLinks(APIView):
         1. default(NOT guest) user;
         """
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        offset = per_page * (current_page - 1)
+
         username = request.user.username
 
         repo_id = request.GET.get('repo_id', '')
@@ -186,7 +195,7 @@ class ShareLinks(APIView):
         fileshares = []
         # get all share links of current user
         if not repo_id and not path:
-            fileshares = FileShare.objects.filter(username=username)
+            fileshares = FileShare.objects.filter(username=username)[offset:offset + per_page]
 
         # share links in repo
         if repo_id and not path:
@@ -196,7 +205,7 @@ class ShareLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             fileshares = FileShare.objects.filter(username=username) \
-                                          .filter(repo_id=repo_id)
+                                          .filter(repo_id=repo_id)[offset:offset + per_page]
 
         # share links by repo and path
         if repo_id and path:
@@ -218,7 +227,7 @@ class ShareLinks(APIView):
 
             fileshares = FileShare.objects.filter(username=username) \
                                           .filter(repo_id=repo_id) \
-                                          .filter(path=path)
+                                          .filter(path=path)[offset:offset + per_page]
 
         repo_object_dict = {}
         repo_folder_permission_dict = {}
@@ -1456,7 +1465,7 @@ class ShareLinksCleanInvalid(APIView):
         username = request.user.username
         share_links = FileShare.objects.filter(username=username)
 
-        for share_link in share_links:
+        for share_link in share_links.iterator(chunk_size=1000):
 
             if share_link.is_expired():
                 share_link.delete()
