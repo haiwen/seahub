@@ -52,7 +52,7 @@ class LinkList extends React.Component {
 
     return (
       <Fragment>
-        <div className="d-flex justify-content-between align-items-center pb-2 border-bottom">
+        <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
           <h6 className="font-weight-normal m-0">{gettext('Share Link')}</h6>
           <div className="d-flex">
             {selectedLinks.length == 0 ? (
