@@ -74,7 +74,7 @@ class LinkList extends React.Component {
             <p className="text-secondary">{gettext('No share links')}</p>
           </EmptyTip>
         ) : (
-          <table className="table-hover">
+          <table className="table-hover share-link-tab-table">
             <thead>
               <tr>
                 <th width="5%" className="text-center">

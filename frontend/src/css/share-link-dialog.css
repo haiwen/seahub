@@ -163,3 +163,60 @@ input.expire-input {
     max-height: 350px;
     overflow-y: scroll;
   }
+
+.share-link-tab-table table,thead,tbody {
+    display: block;
+}
+
+.share-link-tab-table thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+.share-link-tab-table thead {
+    width: calc( 100% - 1em )
+}
+
+.share-link-tab-table thead {
+    width: calc( 100% - 1em )
+}
+
+.share-link-tab-table table,thead,tbody {
+    display: block;
+}
+
+.share-link-tab-table thead,tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.share-link-tab-table th:nth-child(1),td:nth-child(1)  {
+    width: 5%;
+}
+
+.share-link-tab-table th:nth-child(2),td:nth-child(2)  {
+    width: 26%;
+}
+
+.share-link-tab-table th:nth-child(3),td:nth-child(3)  {
+    width: 30%;
+}
+
+.share-link-tab-table th:nth-child(4),td:nth-child(4)  {
+    width: 25%;
+}
+
+.share-link-tab-table th:nth-child(5),td:nth-child(5)  {
+    width: 14%;
+}
+
+.share-link-tab-table thead {
+    width: calc(100% - 1em)
+}
+
+.share-link-tab-table tbody {
+    height: 450px;
+    overflow: auto;
+}
