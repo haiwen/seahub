@@ -21,7 +21,7 @@ class CreateRepoDialog extends React.Component {
       password2: '',
       errMessage: '',
       permission: 'rw',
-      storage_id: storages.length ? storages[0].id : '',
+      storage_id: storages.length ? storages[0].storage_id : '',
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
@@ -30,8 +30,9 @@ class CreateRepoDialog extends React.Component {
     if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
       this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
     }
+    // storages = [{ 'storage_id': xxx, 'storage_name': 'xxx', 'is_default': boolean }];
     if (Array.isArray(storages) && storages.length) {
-      this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+      this.storageOptions = storages.map((item) => { return {value: item.storage_id, label: item.storage_name}; });
     }
   }
 
