@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
 }
+
 @media (min-width: 768px) {
   .share-dialog .share-dialog-content {
     flex-direction: row;
@@ -27,14 +28,14 @@
     border: 0;
     border-right: 1px solid #eee;
   }
-  .share-dialog-side .nav {
-    flex-direction: column;
-  }
-  .share-dialog-side .nav-pills .nav-item .nav-link {
-    width: 100%;
-    padding: 0.3125rem 0.5rem;
-    margin: 0;
-  }
+   .share-dialog-side .nav {
+     flex-direction: column;
+   }
+   .share-dialog-side .nav-pills .nav-item .nav-link {
+     width: 100%;
+     padding: 0.3125rem 0.5rem;
+     margin: 0;
+   }
 }
 
 .share-dialog-content .share-dialog-main {
@@ -144,11 +145,10 @@ input.expire-input {
 .custom-permission .permission-name-desc {
     margin-top: .375rem;
 }
-  
 .custom-permission .permission-name-desc label {
     font-size: 14px;
     color: #999;
-}   
+}
 
 .custom-permission .permission-name-desc .permission-name,
 .custom-permission .permission-name-desc .permission-desc {
@@ -162,4 +162,4 @@ input.expire-input {
 .custom-permission .permissions-list-body {
     max-height: 350px;
     overflow-y: scroll;
-  }
+}
