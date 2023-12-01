@@ -127,21 +127,9 @@ class QuestionAnsweringSearchInLibrary(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
-        parent_dir = '/'
-        username = request.user.username
-
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
         params = {
             'query': query,
-            'associate_id': repo_id,
-            'sdoc_files_info': sdoc_files_info,
+            'repo_id': repo_id,
             'count': count,
         }
 
