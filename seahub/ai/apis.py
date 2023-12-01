@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -14,8 +13,9 @@ from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import create_library_sdoc_index, get_sdoc_info_recursively, similarity_search_in_library, \
-    update_library_sdoc_index, delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library
+from seahub.ai.utils import create_library_sdoc_index, similarity_search_in_library, update_library_sdoc_index, \
+    delete_library_index, query_task_status, query_library_index_state, \
+    ZERO_OBJ_ID, get_library_diff_files, query_library_commit_info, get_latest_commit_id, question_answering_search_in_library
 
 from seaserv import seafile_api
 
@@ -46,17 +46,13 @@ class LibrarySdocIndexes(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        commit_id = get_latest_commit_id(repo_id)
+        added_files, deleted_files, modified_files = get_library_diff_files(repo_id, ZERO_OBJ_ID, commit_id, username)
 
         params = {
             'repo_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list
+            'added_files': added_files,
+            'commit_id': commit_id
         }
 
         try:
@@ -92,21 +88,9 @@ class SimilaritySearchInLibrary(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
-        parent_dir = '/'
-        username = request.user.username
-
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
         params = {
             'query': query,
-            'associate_id': repo_id,
-            'sdoc_files_info': sdoc_files_info,
+            'repo_id': repo_id,
             'count': count,
         }
 
@@ -198,16 +182,34 @@ class LibrarySdocIndex(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
+            resp = query_library_commit_info(repo_id)
+            if resp.status_code == 500:
+                logger.error('get commit info error status: %s body: %s', resp.status_code, resp.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            resp_json = resp.json()
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        old_commit_id = resp_json['commit_id']
+        updatingto = resp_json['updatingto']
+
+        new_commit_id = get_latest_commit_id(repo_id)
+
+        if old_commit_id == new_commit_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Index is latest.')
+
+        commit_id = new_commit_id
+        if updatingto:
+            commit_id = updatingto
+
+        added_files, deleted_files, modified_files = get_library_diff_files(repo_id, old_commit_id, commit_id, username)
 
         params = {
-            'associate_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list,
+            'repo_id': repo_id,
+            'added_files': added_files,
+            'deleted_files': deleted_files,
+            'modified_files': modified_files,
+            'new_commit_id': new_commit_id,
         }
 
         try:
@@ -292,28 +294,32 @@ class RepoFiles(APIView):
 
     def get(self, request):
         repo_id = request.GET.get('repo_id')
+        from_commit_id = request.GET.get('from_commit')
+        to_commit_id = request.GET.get('to_commit')
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+
+        if not from_commit_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'commit_id invalid')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = '/'
         username = request.user.username
 
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        new_commit_id = get_latest_commit_id(repo_id)
+        if not to_commit_id:
+            to_commit_id = new_commit_id
+
+        added_files, deleted_files, modified_files = get_library_diff_files(repo_id, from_commit_id, to_commit_id, username)
 
         library_files_info = {
-            'associate_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list,
+            'added_files': added_files,
+            'deleted_files': deleted_files,
+            'modified_files': modified_files,
+            'commit_id': new_commit_id
         }
 
         return Response(library_files_info, status.HTTP_200_OK)
