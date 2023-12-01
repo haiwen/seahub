@@ -426,7 +426,11 @@ class Item extends Component {
           isSelected: item == curRole
         };
       });
-      currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0];
+      currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || { // `|| {...}`: to be compatible with old data(roles not in the present `availableRoles`
+        value: curRole,
+        text: this.translateRole(curRole),
+        isSelected: true
+      };
     }
 
     let currentSelectedInstOption;
