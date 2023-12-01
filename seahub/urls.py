@@ -946,11 +946,9 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_AD
     ]
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):
-    from seahub.onlyoffice.views import onlyoffice_editor_callback
-    from seahub.onlyoffice.views import OnlyofficeConvert
     urlpatterns += [
-        path('onlyoffice/editor-callback/', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
-        path('onlyoffice-api/convert/', OnlyofficeConvert.as_view(), name='onlyoffice_api_convert'),
+        path('onlyoffice/', include('seahub.onlyoffice.urls')),
+        path('onlyoffice-api/', include('seahub.onlyoffice.api_urls')),
     ]
 
 if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):

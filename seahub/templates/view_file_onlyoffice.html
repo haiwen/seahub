@@ -20,7 +20,66 @@ html, body { padding:0; margin:0; height:100%; }
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
 <script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
 <script type="text/javascript">
+    {% if onlyoffice_jwt_token %}
+    var onRequestHistory = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-new-file-history-view" repo_id %}' + '?path={{path|urlencode}}',
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            success: function(resp) {
+                var history = [];
+                resp.data.reverse().forEach (function (item) {
+                    history.push({
+                        "created": item.ctime,
+                        "key": item.rev_file_id,
+                        "user": {
+                            "id": item.creator_email,
+                            "name": item.creator_name
+                        },
+                        "version": item.rev_file_id
+                    });
+                });
+                docEditor.refreshHistory({
+                    "currentVersion": history.at(-1).version,
+                    "history": history
+                });
+            }
+        });
+    };
+    var onRequestHistoryData = function(event) {
+        var version = event.data;
+        var payload = {
+            "key": version,
+            "url": "{{service_url}}" + "{% url 'onlyoffice_api_file_history' %}" + "?repo_id={{repo_id}}&path={{path|urlencode}}" + "&obj_id=" + version,
+            "version": version
+        };
+
+        $.ajax({
+            url: '{% url "onlyoffice_api_gen_jwt_token" %}',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            data: payload,
+            success: function(resp) {
+                payload['token'] = resp.token;
+                docEditor.setHistoryData(payload);
+            }
+        });
+    };
+    var onRequestHistoryClose = function () {
+        document.location.reload();
+    };
+    {% endif %}
     var config = {
+        {% if onlyoffice_jwt_token %}
+        "events": {
+            "onRequestHistory": onRequestHistory,
+            "onRequestHistoryData": onRequestHistoryData,
+            "onRequestHistoryClose": onRequestHistoryClose,
+        },
+        {% endif %}
         "type": window.screen.width < 992 ? 'mobile' : 'desktop',
         "document": {
             "fileType": "{{ file_type }}",

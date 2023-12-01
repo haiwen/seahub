@@ -1,15 +1,18 @@
 # Copyright (c) 2012-2017 Seafile Ltd.
 import os
+import jwt
 import json
 import logging
 import requests
 import posixpath
 import email.utils
+import urllib.parse
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -21,14 +24,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
 from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
         get_file_ext, get_file_type, get_internal_extension
 from seahub.onlyoffice.converter import get_converter_uri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
-        normalize_file_path, check_filename_with_rename
+        normalize_file_path, check_filename_with_rename, gen_inner_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
 
 
@@ -40,7 +43,9 @@ logger = logging.getLogger('onlyoffice')
 def onlyoffice_editor_callback(request):
     """ Callback func of OnlyOffice.
 
-    The document editing service informs the document storage service about status of the document editing using the callbackUrl from JavaScript API. The document editing service use the POST request with the information in body.
+    The document editing service informs the document storage service
+    about status of the document editing using the callbackUrl from JavaScript API.
+    The document editing service use the POST request with the information in body.
 
     https://api.onlyoffice.com/editors/callback
     """
@@ -85,7 +90,9 @@ def onlyoffice_editor_callback(request):
 
     # Status 1 is received every user connection to or disconnection from document co-editing.
     #
-    # Status 2 (3) is received 10 seconds after the document is closed for editing with the identifier of the user who was the last to send the changes to the document editing service.
+    # Status 2 (3) is received 10 seconds after the document is closed
+    #              for editing with the identifier of the user who was the last to
+    #              send the changes to the document editing service.
     #
     # Status 4 is received after the document is closed for editing with no changes by the last user.
     #
@@ -295,3 +302,111 @@ class OnlyofficeConvert(APIView):
         result['file_path'] = posixpath.join(parent_dir, file_name)
 
         return Response(result)
+
+
+class OnlyofficeFileHistory(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+
+        if not ONLYOFFICE_JWT_SECRET:
+            error_msg = 'feature is not enabled.'
+            return api_error(501, error_msg)
+
+        bearer_string = request.headers.get('authorization', '')
+        if not bearer_string:
+            logger.error('No authentication header.')
+            error_msg = 'No authentication header.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        bearer_list = bearer_string.split()
+        if len(bearer_list) != 2 or bearer_list[0].lower() != 'bearer':
+            logger.error(f'Bearer {bearer_string} invalid')
+            error_msg = 'Bearer invalid.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        token = bearer_list[1]
+        try:
+            payload = jwt.decode(token, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+        except Exception as e:
+            logger.error(e)
+            logger.error(token)
+            error_msg = 'Encode bearer failed.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        payload = payload.get('payload')
+        if not payload:
+            logger.error(payload)
+            error_msg = 'Payload invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        url = payload.get('url')
+        if not url:
+            logger.error(payload)
+            error_msg = 'No url in payload.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        query_string = request.META.get('QUERY_STRING', '')
+        if request.path not in url or query_string not in url:
+            error_msg = 'Bearer invalid.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        parsed_url = urllib.parse.urlparse(url)
+        query_parameters = urllib.parse.parse_qs(parsed_url.query)
+        repo_id = query_parameters.get('repo_id')[0]
+        file_path = query_parameters.get('path')[0]
+        obj_id = query_parameters.get('obj_id')[0]
+
+        if not repo_id or not file_path or not obj_id:
+            logger.error(url)
+            error_msg = 'url invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_name = os.path.basename(file_path)
+        fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                   obj_id,
+                                                                   'view',
+                                                                   '',
+                                                                   use_onetime=False)
+
+        inner_path = gen_inner_file_get_url(fileserver_token, file_name)
+        file_content = urllib.request.urlopen(inner_path).read()
+        return HttpResponse(file_content, content_type="application/octet-stream")
+
+
+class OnlyofficeGenJwtToken(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+
+        if not ONLYOFFICE_JWT_SECRET:
+            error_msg = 'feature is not enabled.'
+            return api_error(501, error_msg)
+
+        key = request.data.get('key')
+        if not key:
+            error_msg = 'key invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        url = request.data.get('url')
+        if not url:
+            error_msg = 'url invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        version = request.data.get('version')
+        if not version:
+            error_msg = 'version invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        payload = {}
+        payload['key'] = key
+        payload['url'] = url
+        payload['version'] = version
+
+        jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
+
+        return Response({"token": jwt_token})
