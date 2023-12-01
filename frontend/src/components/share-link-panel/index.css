@@ -33,27 +33,27 @@ tbody tr {
 }
 
 .sdoc-share-link-tab-table th:nth-child(1),
-td:nth-child(1) {
+.sdoc-share-link-tab-table td:nth-child(1) {
   width: 5%;
 }
 
 .sdoc-share-link-tab-table th:nth-child(2),
-td:nth-child(2) {
+.sdoc-share-link-tab-table td:nth-child(2) {
   width: 26%;
 }
 
 .sdoc-share-link-tab-table th:nth-child(3),
-td:nth-child(3) {
+.sdoc-share-link-tab-table td:nth-child(3) {
   width: 30%;
 }
 
 .sdoc-share-link-tab-table th:nth-child(4),
-td:nth-child(4) {
+.sdoc-share-link-tab-table td:nth-child(4) {
   width: 25%;
 }
 
 .sdoc-share-link-tab-table th:nth-child(5),
-td:nth-child(5) {
+.sdoc-share-link-tab-table td:nth-child(5) {
   width: 14%;
 }
 
