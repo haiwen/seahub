@@ -311,3 +311,24 @@ class RepoFiles(APIView):
         }
 
         return Response(library_files_info, status.HTTP_200_OK)
+
+
+class FileDownloadToken(APIView):
+    authentication_classes = (SeafileAiAuthentication, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        repo_id = request.GET.get('repo_id')
+        path = request.GET.get('path')
+
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+
+        from seahub.ai.utils import get_file_download_token
+        username = request.user.username
+        download_token = get_file_download_token(repo_id, file_id, username)
+
+        library_files_info = {
+            'download_token': download_token
+        }
+
+        return Response(library_files_info, status.HTTP_200_OK)
