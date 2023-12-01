@@ -73,10 +73,12 @@ class UserSelector extends Component {
     return (
       <div className="mt-4 position-relative">
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
-          {gettext('Modified by:')}
-          {currentSelectedUsers.length > 0 && (
-            <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
-          )}
+          {currentSelectedUsers.length > 0 ? (
+            <>
+              <span>{gettext('Modified by:')}</span>
+              <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
+            </>
+          ) : gettext('Modified by')}
           <i className="fas fa-caret-down ml-2 toggle-icon"></i>
         </span>
         {isPopoverOpen && (
