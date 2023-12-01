@@ -28,6 +28,7 @@ from seahub.options.models import UserOptions, KEY_COLLABORATE_EMAIL_INTERVAL, \
 from seahub.seadoc.models import SeadocNotification
 from seahub.tags.models import FileUUIDMap
 from seahub.notifications.utils import gen_sdoc_smart_link
+from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -347,6 +348,10 @@ class Command(BaseCommand):
             if not user_active_dict[to_user]:
                 continue
 
+            contact_email = Profile.objects.get_contact_email_by_user(to_user)
+            if not contact_email or VIRTUAL_ID_EMAIL_DOMAIN in contact_email:
+                continue
+
             # get last_emailed_time if any, defaults to today 00:00:00.0
             last_emailed_time = user_last_emailed_time_dict.get(to_user, None)
             now = datetime.datetime.now().replace(microsecond=0)
@@ -433,7 +438,6 @@ class Command(BaseCommand):
                 continue
 
             user_name = email2nickname(to_user)
-            contact_email = Profile.objects.get_contact_email_by_user(to_user)
             c = {
                 'to_user': contact_email,
                 'notice_count': len(notices),
