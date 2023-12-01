@@ -5,6 +5,8 @@ import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
+import './index.css';
+
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
   permissionOptions: PropTypes.array.isRequired,
@@ -74,7 +76,7 @@ class LinkList extends React.Component {
             <p className="text-secondary">{gettext('No share links')}</p>
           </EmptyTip>
         ) : (
-          <table className="table-hover share-link-tab-table">
+          <table className="table-hover sdoc-share-link-tab-table">
             <thead>
               <tr>
                 <th width="5%" className="text-center">
