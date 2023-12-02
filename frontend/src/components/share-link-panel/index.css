@@ -1,11 +1,11 @@
 .sdoc-share-link-tab-table table,
-thead,
-tbody {
+.sdoc-share-link-tab-table thead,
+.sdoc-share-link-tab-table tbody {
   display: block;
 }
 
 .sdoc-share-link-tab-table thead,
-tbody tr {
+.sdoc-share-link-tab-table tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
@@ -20,13 +20,13 @@ tbody tr {
 }
 
 .sdoc-share-link-tab-table table,
-thead,
-tbody {
+.sdoc-share-link-tab-table thead,
+.sdoc-share-link-tab-table tbody {
   display: block;
 }
 
 .sdoc-share-link-tab-table thead,
-tbody tr {
+.sdoc-share-link-tab-table tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
