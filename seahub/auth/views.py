@@ -142,7 +142,7 @@ def login(request, template_name='registration/login.html',
                 try:
                     user = User.objects.get(email)
                     if user.is_active:
-                        user.freeze_user(notify_admins=True)
+                        user.freeze_user(notify_admins=True, notify_org_admins=True)
                         logger.warn('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
                                     (login, ip, failed_attempt))
                 except User.DoesNotExist:
