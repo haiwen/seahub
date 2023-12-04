@@ -280,7 +280,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                   ref="userSelect"
                   isMulti={true}
                   className="reviewer-select"
-                  placeholder={gettext('Search users...')}
+                  placeholder={gettext('Search users')}
                   onSelectChange={this.handleUserSelectChange}
                   value={this.state.selectedUsers}
                 />

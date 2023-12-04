@@ -55,7 +55,7 @@ class AddMemberDialog extends React.Component {
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             ref="orgSelect"
             isMulti={false}

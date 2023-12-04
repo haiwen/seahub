@@ -228,7 +228,7 @@ class ShareToOtherServer extends React.Component {
             <tr>
               <td>
                 <SeahubSelect
-                  placeholder={gettext('Select a server...')}
+                  placeholder={gettext('Select a server')}
                   value={selectedServer}
                   options={ocmRemoteServers}
                   onChange={this.handleServerChange}

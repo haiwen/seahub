@@ -56,7 +56,7 @@ class AddOrgAdminDialog extends React.Component {
             ref="userSelect"
             isMulti={false}
             className="reviewer-select"
-            placeholder={gettext('Select a user as admin...')}
+            placeholder={gettext('Select a user as admin')}
             onSelectChange={this.handleSelectChange}
           />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
