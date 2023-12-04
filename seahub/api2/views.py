@@ -71,7 +71,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, get_next_file_history
+    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, get_last_file_history
 
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -3366,7 +3366,7 @@ class FileRevision(APIView):
         return get_repo_file(request, repo_id, obj_id, file_name, 'download')
 
 
-class FileNextRevision(APIView):
+class FileLastRevision(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -3377,7 +3377,7 @@ class FileNextRevision(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
         
         try:
-            next_file_history = get_next_file_history(repo_id, path, current_revision_id)
+            next_file_history = get_last_file_history(repo_id, path, current_revision_id)
         except Exception as e:
             next_file_history = {}
 

@@ -645,11 +645,11 @@ if EVENTS_CONFIG_FILE:
             res = seafevents_api.get_file_daily_history_detail(session, repo_id, path, start_time, end_time, to_tz)
         return res
     
-    def get_next_file_history(repo_id, path, current_revision_id):
+    def get_last_file_history(repo_id, path, current_revision_id):
         """Return next file history
         """
         with _get_seafevents_session() as session:
-            res = seafevents_api.get_next_file_history(session, repo_id, path, current_revision_id)
+            res = seafevents_api.get_last_file_history(session, repo_id, path, current_revision_id)
         return res
 
     def get_log_events_by_time(log_type, tstart, tend):
@@ -840,7 +840,7 @@ else:
         pass
     def get_file_daily_history_detail():
         pass
-    def get_next_file_history():
+    def get_last_file_history():
         pass
     def generate_file_audit_event_type():
         pass
