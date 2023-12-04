@@ -468,13 +468,44 @@ class User(object):
         "Sends an e-mail to this User."
         send_mail(subject, message, from_email, [self.email])
 
-    def freeze_user(self, notify_admins=False):
+    def freeze_user(self, notify_admins=False, notify_org_admins=False):
         self.is_active = False
         self.save()
 
         if notify_admins:
             admins = get_system_admins()
             for u in admins:
+                # save current language
+                cur_language = translation.get_language()
+
+                # get and active user language
+                user_language = Profile.objects.get_user_language(u.email)
+                translation.activate(user_language)
+
+                send_html_email_with_dj_template(u.email,
+                                                 subject=_('Account %(account)s froze on %(site)s.') % {
+                                                     "account": self.email,
+                                                     "site": get_site_name()},
+                                                 dj_template='sysadmin/user_freeze_email.html',
+                                                 context={'user': self.email})
+
+                # restore current language
+                translation.activate(cur_language)
+
+        if notify_org_admins:
+            org = None
+            if is_pro_version():
+                orgs = ccnet_api.get_orgs_by_user(self.username)
+                if orgs:
+                    org = orgs[0]
+
+            org_members = list()
+            if org:
+                org_members = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+            for u in org_members:
+                if not (ccnet_api.is_org_staff(org.org_id, u.email) == 1):
+                    continue
+
                 # save current language
                 cur_language = translation.get_language()
 
