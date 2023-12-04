@@ -329,7 +329,7 @@ class ShareToGroup extends React.Component {
                 <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.state.options}
-                  placeholder={gettext('Select groups...')}
+                  placeholder={gettext('Select groups')}
                   maxMenuHeight={200}
                   value={this.state.selectedOption}
                   components={{ NoOptionsMessage: NoGroupMessage }}

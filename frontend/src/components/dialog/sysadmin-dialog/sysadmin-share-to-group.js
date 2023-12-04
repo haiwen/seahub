@@ -250,7 +250,7 @@ class SysAdminShareToGroup extends React.Component {
                 <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.options}
-                  placeholder={gettext('Select groups...')}
+                  placeholder={gettext('Select groups')}
                   maxMenuHeight={200}
                   value={this.state.selectedOption}
                   components={{ NoOptionsMessage: NoGroupMessage }}

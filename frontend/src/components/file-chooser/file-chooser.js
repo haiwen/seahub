@@ -476,7 +476,7 @@ class FileChooser extends React.Component {
       <Fragment>
         {isPro && (
           <div className="file-chooser-search-input">
-            <Input className="search-input mb-2" placeholder={gettext('Search...')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            <Input className="search-input mb-2" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {this.state.searchInfo.length !== 0 && (
               <span className="search-control attr-action-icon fas fa-times" onClick={this.onCloseSearching}></span>
             )}

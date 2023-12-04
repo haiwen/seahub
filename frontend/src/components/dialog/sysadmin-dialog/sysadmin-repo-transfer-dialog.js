@@ -43,7 +43,7 @@ class SysAdminRepoTransferDialog extends React.Component {
             ref="userSelect"
             isMulti={false}
             className="reviewer-select"
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
           />
         </ModalBody>

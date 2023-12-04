@@ -97,7 +97,7 @@ class UserSelector extends Component {
             <div className="px-3 pt-3">
               <Input
                 type="text"
-                placeholder={gettext('Search users...')}
+                placeholder={gettext('Search users')}
                 value={query}
                 onChange={this.onQueryChange}
               />
