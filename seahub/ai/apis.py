@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -14,8 +13,9 @@ from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import create_library_sdoc_index, get_sdoc_info_recursively, similarity_search_in_library, \
-    update_library_sdoc_index, delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library
+from seahub.ai.utils import create_library_sdoc_index, similarity_search_in_library, update_library_sdoc_index, \
+    delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
+    get_file_download_token
 
 from seaserv import seafile_api
 
@@ -39,24 +39,14 @@ class LibrarySdocIndexes(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         parent_dir = '/'
-        username = request.user.username
 
         # permission check
         if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         params = {
             'repo_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list
         }
 
         try:
@@ -92,21 +82,9 @@ class SimilaritySearchInLibrary(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
-        parent_dir = '/'
-        username = request.user.username
-
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
         params = {
             'query': query,
-            'associate_id': repo_id,
-            'sdoc_files_info': sdoc_files_info,
+            'repo_id': repo_id,
             'count': count,
         }
 
@@ -122,8 +100,8 @@ class SimilaritySearchInLibrary(APIView):
 
         return Response(resp_json, resp.status_code)
 
-class QuestionAnsweringSearchInLibrary(APIView):
 
+class QuestionAnsweringSearchInLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
@@ -143,21 +121,9 @@ class QuestionAnsweringSearchInLibrary(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
-        parent_dir = '/'
-        username = request.user.username
-
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
         params = {
             'query': query,
-            'associate_id': repo_id,
-            'sdoc_files_info': sdoc_files_info,
+            'repo_id': repo_id,
             'count': count,
         }
 
@@ -172,6 +138,7 @@ class QuestionAnsweringSearchInLibrary(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response(resp_json, resp.status_code)
+
 
 class LibrarySdocIndex(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -190,24 +157,14 @@ class LibrarySdocIndex(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         parent_dir = '/'
-        username = request.user.username
 
         # permission check
         if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         params = {
-            'associate_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list,
+            'repo_id': repo_id
         }
 
         try:
@@ -286,34 +243,44 @@ class LibraryIndexState(APIView):
         return Response(resp_json, resp.status_code)
 
 
-class RepoFiles(APIView):
+class FileDownloadToken(APIView):
     authentication_classes = (SeafileAiAuthentication, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
         repo_id = request.GET.get('repo_id')
+        path = request.GET.get('path')
+
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
 
-        parent_dir = '/'
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
         username = request.user.username
-
-        try:
-            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        download_token = get_file_download_token(repo_id, file_id, username)
 
         library_files_info = {
-            'associate_id': repo_id,
-            'last_modify': repo.last_modify,
-            'sdoc_info_list': sdoc_info_list,
+            'download_token': download_token
         }
 
         return Response(library_files_info, status.HTTP_200_OK)
+
+
+# class RepoCommit(APIView):
+#     authentication_classes = (SeafileAiAuthentication, )
+#     throttle_classes = (UserRateThrottle, )
+#
+#     def get(self, request):
+#         repo_id = request.GET.get('repo_id')
+#         if not repo_id:
+#             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+#
+#         commit_id = get_latest_commit_id(repo_id)
+#
+#         repo_info = {
+#             'commit_id': commit_id
+#         }
+#
+#         return Response(repo_info, status.HTTP_200_OK)

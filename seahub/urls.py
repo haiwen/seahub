@@ -202,7 +202,7 @@ from seahub.seadoc.views import sdoc_revision, sdoc_revisions
 
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, LibrarySdocIndex, RepoFiles, TaskStatus, \
+from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary
 
 urlpatterns = [
@@ -968,7 +968,6 @@ if settings.ENABLE_SEAFILE_AI:
         re_path(r'^api/v2.1/ai/similarity-search-in-library/$', SimilaritySearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
         re_path(r'^api/v2.1/ai/question-answering-search-in-library/$', QuestionAnsweringSearchInLibrary.as_view(), name='api-v2.1-ai-question-answering-search-in-library'),
         re_path(r'^api/v2.1/ai/library-sdoc-index/$', LibrarySdocIndex.as_view(), name='api-v2.1-ai-library-sdoc-index'),
-        re_path(r'^api/v2.1/ai/repo/files/$', RepoFiles.as_view(), name='api-v2.1-ai-repo-files'),
         re_path(r'^api/v2.1/ai/task-status/$', TaskStatus.as_view(), name='api-v2.1-ai-task-status'),
         re_path(r'^api/v2.1/ai/library-index-state/$', LibraryIndexState.as_view(), name='api-v2.1-ai-library-index-state'),
     ]
