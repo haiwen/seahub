@@ -14,8 +14,8 @@ from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import create_library_sdoc_index, similarity_search_in_library, update_library_sdoc_index, \
-    delete_library_index, query_task_status, query_library_index_state, get_latest_commit_id, \
-    question_answering_search_in_library, get_file_download_token
+    delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
+    get_file_download_token
 
 from seaserv import seafile_api
 
@@ -45,11 +45,8 @@ class LibrarySdocIndexes(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        commit_id = get_latest_commit_id(repo_id)
-
         params = {
             'repo_id': repo_id,
-            'commit_id': commit_id
         }
 
         try:
@@ -166,11 +163,8 @@ class LibrarySdocIndex(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        new_commit_id = get_latest_commit_id(repo_id)
-
         params = {
-            'repo_id': repo_id,
-            'commit_id': new_commit_id,
+            'repo_id': repo_id
         }
 
         try:
@@ -274,19 +268,19 @@ class FileDownloadToken(APIView):
         return Response(library_files_info, status.HTTP_200_OK)
 
 
-class RepoCommit(APIView):
-    authentication_classes = (SeafileAiAuthentication, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request):
-        repo_id = request.GET.get('repo_id')
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
-
-        commit_id = get_latest_commit_id(repo_id)
-
-        repo_info = {
-            'commit_id': commit_id
-        }
-
-        return Response(repo_info, status.HTTP_200_OK)
+# class RepoCommit(APIView):
+#     authentication_classes = (SeafileAiAuthentication, )
+#     throttle_classes = (UserRateThrottle, )
+#
+#     def get(self, request):
+#         repo_id = request.GET.get('repo_id')
+#         if not repo_id:
+#             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+#
+#         commit_id = get_latest_commit_id(repo_id)
+#
+#         repo_info = {
+#             'commit_id': commit_id
+#         }
+#
+#         return Response(repo_info, status.HTTP_200_OK)

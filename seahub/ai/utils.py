@@ -68,8 +68,3 @@ def query_library_index_state(repo_id):
 
 def get_file_download_token(repo_id, file_id, username):
     return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
-
-
-def get_latest_commit_id(repo_id):
-    commit = seafile_api.get_commit_list(repo_id, 0, 1)
-    return commit[0].id
