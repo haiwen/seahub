@@ -297,7 +297,7 @@ class ShareToInvitePeople extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.shareAndInvite} disabled={isSubmitting}
+                <Button onClick={this.shareAndInvite} className="submit-btn" disabled={isSubmitting}
                 >{isSubmitting ? <Loading /> : gettext('Submit')}</Button>
               </td>
             </tr>

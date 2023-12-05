@@ -126,7 +126,7 @@ class CustomPermissionEditor extends React.Component {
             <span>{title}</span>
           </div>
           <div className="operation">
-            <button type="button" className="btn btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
+            <button type="button" className="btn btn-sm btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
           </div>
         </div>
         <div className="permission-main mt-4">
