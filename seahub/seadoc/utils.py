@@ -147,7 +147,7 @@ def gen_seadoc_image_parent_path(file_uuid, repo_id, username):
 def get_seadoc_asset_upload_link(repo_id, parent_path, username):
     obj_id = json.dumps({'parent_dir': parent_path})
     token = seafile_api.get_fileserver_access_token(
-        repo_id, obj_id, 'upload-link', username, use_onetime=True)
+        repo_id, obj_id, 'upload-link', username, use_onetime=False)
     if not token:
         return None
     upload_link = gen_file_upload_url(token, 'upload-api')
