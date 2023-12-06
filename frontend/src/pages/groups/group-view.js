@@ -75,7 +75,7 @@ class GroupView extends React.Component {
     this.loadGroup(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.groupID !== this.props.groupID) {
       this.loadGroup(nextProps.groupID);
     }

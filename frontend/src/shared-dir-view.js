@@ -683,18 +683,18 @@ class Content extends React.Component {
 }
 
 Content.propTypes = {
-  isDesktop: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  isAllItemsSelected: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  sortItems: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  toggleAllSelected: PropTypes.func.isRequired,
-  toggleItemSelected: PropTypes.func.isRequired,
-  zipDownloadFolder: PropTypes.func.isRequired,
-  showImagePopup: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isAllItemsSelected: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  items: PropTypes.array,
+  sortItems: PropTypes.func,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  toggleAllSelected: PropTypes.func,
+  toggleItemSelected: PropTypes.func,
+  zipDownloadFolder: PropTypes.func,
+  showImagePopup: PropTypes.func,
 };
 
 class Item extends React.Component {
@@ -884,15 +884,15 @@ class Item extends React.Component {
 }
 
 Item.propTypes = {
-  isDesktop: PropTypes.bool.isRequired,
-  item: PropTypes.object.isRequired,
-  sortItems: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  toggleAllSelected: PropTypes.func.isRequired,
-  toggleItemSelected: PropTypes.func.isRequired,
-  zipDownloadFolder: PropTypes.func.isRequired,
-  showImagePopup: PropTypes.func.isRequired,
+  isDesktop: PropTypes.bool,
+  item: PropTypes.object,
+  sortItems: PropTypes.func,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  toggleAllSelected: PropTypes.func,
+  toggleItemSelected: PropTypes.func,
+  zipDownloadFolder: PropTypes.func,
+  showImagePopup: PropTypes.func,
 };
 
 class GridItem extends React.Component {
@@ -968,9 +968,9 @@ class GridItem extends React.Component {
 }
 
 GridItem.propTypes = {
-  item: PropTypes.object.isRequired,
-  zipDownloadFolder: PropTypes.func.isRequired,
-  showImagePopup: PropTypes.func.isRequired,
+  item: PropTypes.object,
+  zipDownloadFolder: PropTypes.func,
+  showImagePopup: PropTypes.func,
 };
 
 ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));

@@ -90,7 +90,7 @@ class StatisticChart extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let data = {
       labels: nextProps.labels,
       datasets: nextProps.filesData

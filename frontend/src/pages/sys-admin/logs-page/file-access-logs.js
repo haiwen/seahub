@@ -125,20 +125,20 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  items: PropTypes.array,
   getLogsByPage: PropTypes.func,
   resetPerPage: PropTypes.func,
   currentPage: PropTypes.number,
   perPage: PropTypes.number,
   pageInfo: PropTypes.object,
   hasNextPage: PropTypes.bool,
-  toggleFreezeItem: PropTypes.func.isRequired,
-  userFilteredBy: PropTypes.string.isRequired,
-  repoFilteredBy: PropTypes.string.isRequired,
-  filterByUser: PropTypes.func.isRequired,
-  filterByRepo: PropTypes.func.isRequired,
+  toggleFreezeItem: PropTypes.func,
+  userFilteredBy: PropTypes.string,
+  repoFilteredBy: PropTypes.string,
+  filterByUser: PropTypes.func,
+  filterByRepo: PropTypes.func,
 };
 
 
@@ -226,13 +226,13 @@ class Item extends Component {
 
 
 Item.propTypes = {
-  item: PropTypes.object.isRequired,
-  isFreezed: PropTypes.bool.isRequired,
-  toggleFreezeItem: PropTypes.func.isRequired,
-  userFilteredBy: PropTypes.string.isRequired,
-  repoFilteredBy: PropTypes.string.isRequired,
-  filterByUser: PropTypes.func.isRequired,
-  filterByRepo: PropTypes.func.isRequired,
+  item: PropTypes.object,
+  isFreezed: PropTypes.bool,
+  toggleFreezeItem: PropTypes.func,
+  userFilteredBy: PropTypes.string,
+  repoFilteredBy: PropTypes.string,
+  filterByUser: PropTypes.func,
+  filterByRepo: PropTypes.func,
 };
 
 class FileAccessLogs extends Component {

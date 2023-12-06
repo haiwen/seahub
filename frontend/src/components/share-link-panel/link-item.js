@@ -9,7 +9,6 @@ import CommonOperationConfirmationDialog from '../../components/dialog/common-op
 
 const propTypes = {
   item: PropTypes.object.isRequired,
-  permissionOptions: PropTypes.array,
   showLinkDetails : PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
   deleteLink: PropTypes.func.isRequired
@@ -80,7 +79,7 @@ class LinkItem extends React.Component {
 
   render() {
     const { isItemOpVisible } = this.state;
-    const { item, permissionOptions } = this.props;
+    const { item } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     return (

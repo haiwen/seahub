@@ -23,7 +23,7 @@ class Rename extends React.Component {
     this.newInput = React.createRef();
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({newName: this.props.dirent.name});
   }
 
@@ -32,7 +32,7 @@ class Rename extends React.Component {
     this.changeState(dirent);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.changeState(nextProps.dirent);
   }
 

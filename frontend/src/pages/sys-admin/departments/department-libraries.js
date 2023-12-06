@@ -33,7 +33,7 @@ class DepartmentDetail extends React.Component {
     this.listGroupRepo(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listGroupRepo(nextProps.groupID);
     }

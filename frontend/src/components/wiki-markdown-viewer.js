@@ -43,7 +43,7 @@ class WikiMarkdownViewer extends React.Component {
     this.getTitlesInfo();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.markdownContent === nextProps.markdownContent) {
       return;
     }

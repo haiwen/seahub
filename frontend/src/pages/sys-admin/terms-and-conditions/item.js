@@ -32,7 +32,7 @@ class Item extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.item.text !== this.props.item.text) {
       let mdFile = nextProps.item.text;
       processor.process(mdFile).then((result) => {

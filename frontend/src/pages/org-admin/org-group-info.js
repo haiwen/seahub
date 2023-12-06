@@ -87,7 +87,7 @@ Content.propTypes = {
 };
 
 OrgGroupInfo.propTypes = {
-  groupID: PropTypes.object.isRequired,
+  groupID: PropTypes.string,
 };
 
 export default OrgGroupInfo;

@@ -95,7 +95,7 @@ class DirentListItem extends React.Component {
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
       this.setState({
         highlight: false,

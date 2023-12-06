@@ -42,7 +42,7 @@ class IndexContentViewer extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getRootNode();
   }
 
@@ -50,7 +50,7 @@ class IndexContentViewer extends React.Component {
     this.bindClickEvent();
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.removeClickEvent();
   }
 

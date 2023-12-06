@@ -46,7 +46,7 @@ class FilterMenu extends React.Component {
 
 FilterMenu.propTypes = {
   toggleFreezeItem: PropTypes.func.isRequired,
-  filterItems: PropTypes.array.isRequired,
+  filterItems: PropTypes.func.isRequired,
   filterBy: PropTypes.string.isRequired,
 };
 

@@ -72,7 +72,7 @@ class App extends Component {
     }
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
       this.setState({
         isSidePanelClosed: true

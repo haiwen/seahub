@@ -54,7 +54,7 @@ class OrgDepartmentItem extends React.Component {
     this.listOrgMembers(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listOrgGroupRepo(nextProps.groupID);
       this.listOrgMembers(nextProps.groupID);

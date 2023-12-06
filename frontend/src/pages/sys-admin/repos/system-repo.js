@@ -42,7 +42,6 @@ class Content extends Component {
 
 Content.propTypes = {
   resetPerPage: PropTypes.func,
-  getListByPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,

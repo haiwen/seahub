@@ -38,7 +38,7 @@ class SearchInput extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
       this.setState({searchValue: nextProps.value});
     }

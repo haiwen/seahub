@@ -40,7 +40,7 @@ class ItemDropdownMenu extends React.Component {
     this.setState({menuList: menuList});
   }
 
-  componentWillReceiveProps(nextProps) {  // for toolbar item operation
+  UNSAFE_componentWillReceiveProps(nextProps) {  // for toolbar item operation
     let { item } = nextProps;
     if (item.name !== this.props.item.name) {
       let menuList = this.props.getMenuList(item);

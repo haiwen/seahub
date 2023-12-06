@@ -173,7 +173,7 @@ class DevicesByPlatform extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      devicesData: {},
+      devicesData: [],
       pageInfo: {},
       perPage: 25
     };

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from '@uiw/react-codemirror';
-import { EditorView } from "@codemirror/view"
+import { EditorView } from '@codemirror/view';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { Utils } from '../../utils/utils';
 
