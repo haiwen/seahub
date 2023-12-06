@@ -54,7 +54,7 @@ class DirColumnNav extends React.Component {
     this.isNodeMenuShow = true;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({opNode: nextProps.currentNode});
   }
 

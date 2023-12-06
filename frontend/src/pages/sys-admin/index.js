@@ -161,7 +161,7 @@ class SysAdmin extends React.Component {
     this.setState({currentTab: currentTab});
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
       this.setState({
         isSidePanelClosed: true

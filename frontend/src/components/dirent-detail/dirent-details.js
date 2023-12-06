@@ -36,7 +36,7 @@ class DirentDetail extends React.Component {
     this.loadDirentInfo(dirent, path, repoID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let { dirent, path, repoID } = nextProps;
     if (this.props.dirent !== nextProps.dirent) {
       this.loadDirentInfo(dirent, path, repoID);

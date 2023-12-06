@@ -48,7 +48,7 @@ class Wiki extends Component {
     this.pythonWrapper = null;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
       this.setState({ closeSideBar: true });
     }

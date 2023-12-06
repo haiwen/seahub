@@ -57,7 +57,7 @@ class SeafileEditor extends React.Component {
     window.seafileEditor = this;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.editorMode === 'rich') {
       const document = this.state.richValue;
       const firstNode = document[0];

@@ -139,7 +139,7 @@ Item.propTypes = {
 };
 
 OrgGroupMembers.propTypes = {
-  groupID: PropTypes.object.isRequired,
+  groupID: PropTypes.string,
 };
 
 export default OrgGroupMembers;

@@ -23,7 +23,7 @@ class UploadListItem extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let { resumableFile } = nextProps;
     let uploadState = UPLOAD_UPLOADING;
 

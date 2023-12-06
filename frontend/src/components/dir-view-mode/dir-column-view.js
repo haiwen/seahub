@@ -135,7 +135,7 @@ class DirColumnView extends React.Component {
     return '';
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let rate = this.getCookie('navRate');
     if (rate) {
       this.setState({

@@ -42,7 +42,7 @@ class DirentGridItem extends React.Component {
 
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({isGridSelected: false}, () => {
       if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
         this.setState({isGridSelected: true});

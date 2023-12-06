@@ -50,7 +50,7 @@ class WikiOutline extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let _this = this;
     let activeId = nextProps.activeId;
     let navItems = nextProps.navItems;

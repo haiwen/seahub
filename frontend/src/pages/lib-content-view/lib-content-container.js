@@ -101,7 +101,7 @@ class LibContentContainer extends React.Component {
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }

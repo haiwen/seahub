@@ -4,7 +4,7 @@ import Account from '../../components/common/account';
 
 const propTypes = {
   children: PropTypes.object,
-  search: PropTypes.string,
+  search: PropTypes.any,
 };
 
 class MainPanelTopbar extends Component {

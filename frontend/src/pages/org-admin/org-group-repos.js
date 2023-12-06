@@ -192,7 +192,7 @@ Item.propTypes = {
 };
 
 OrgGroupRepos.propTypes = {
-  groupID: PropTypes.object.isRequired,
+  groupID: PropTypes.string,
 };
 
 export default OrgGroupRepos;

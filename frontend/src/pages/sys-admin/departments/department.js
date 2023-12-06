@@ -51,7 +51,7 @@ class Department extends React.Component {
     this.getDepartmentInfo(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.getDepartmentInfo(nextProps.groupID);
     }

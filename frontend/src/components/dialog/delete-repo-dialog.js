@@ -23,7 +23,7 @@ class DeleteRepoDialog extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.isRepoDeleted) {
       this.setState({isRequestSended: false});
     }

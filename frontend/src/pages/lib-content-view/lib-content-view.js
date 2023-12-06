@@ -119,7 +119,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const hash = window.location.hash;
     if (hash.slice(0, 1) === '#') {
       this.setState({hash: hash});

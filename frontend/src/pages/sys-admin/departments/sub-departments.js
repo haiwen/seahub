@@ -30,7 +30,7 @@ class SubDepartments extends React.Component {
     this.listSubDepartments(this.props.groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listSubDepartments(nextProps.groupID);
     }

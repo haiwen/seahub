@@ -46,7 +46,7 @@ class DepartmentMembers extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listMembers(nextProps.groupID, this.state.currentPage, this.state.perPage);
     }
