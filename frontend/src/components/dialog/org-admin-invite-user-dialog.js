@@ -1,46 +1,82 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import toaster from '../toast';
-import copy from '../copy-to-clipboard';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  invitationLink: PropTypes.string.isRequired
+  handleSubmit: PropTypes.func.isRequired,
 };
 
-class InviteUserDialog extends React.Component {
+class OrgAdminInviteUserDialog extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      email: '',
+      errMessage: '',
+      isAddingUser: false,
+    };
   }
 
-  copyLink = () => {
-    copy(this.props.invitationLink);
-    this.props.toggle();
-    const message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message, {
-      duration: 2
-    });
+  handleSubmit = () => {
+    let isValid = this.validateInputParams();
+    if (isValid) {
+      let { email } = this.state;
+      this.setState({isAddingUser: true});
+      this.props.handleSubmit(email.trim());
+    }
+  }
+
+  handleKeyPress = (e) => {
+    e.preventDefault();
+    if (e.key == 'Enter') {
+      this.handleSubmit(e);
+    }
   };
+
+  inputEmail = (e) => {
+    let email = e.target.value.trim();
+    this.setState({email: email});
+  }
+
+  toggle = () => {
+    this.props.toggle();
+  }
+
+  validateInputParams() {
+    let errMessage;
+    let email = this.state.email.trim();
+    if (!email.length) {
+      errMessage = gettext('email is required');
+      this.setState({errMessage: errMessage});
+      return false;
+    }
+    return true;
+  }
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Invite user')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>{gettext('Invite users')}</ModalHeader>
         <ModalBody>
-          <p>{gettext('Send the invitation link to the others, and they will be able to join the organization via scanning the QR code.')}</p>
-          <p>{this.props.invitationLink}</p>
+          <p>{gettext('You can enter multiple emails, separated by commas. An invitation link will be sent to each user.')}</p>
+          <Form>
+            <FormGroup>
+              <Label for="userEmail">{gettext('Email')}</Label>
+              <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} />
+            </FormGroup>
+          </Form>
+          {this.state.errMessage && <Label className="err-message">{this.state.errMessage}</Label>}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.copyLink}>{gettext('Copy')}</Button>
+          <Button color="primary" disabled={this.state.isAddingUser} onClick={this.handleSubmit} className={this.state.isAddingUser ? 'btn-loading' : ''}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
 
-InviteUserDialog.propTypes = propTypes;
+OrgAdminInviteUserDialog.propTypes = propTypes;
 
-export default InviteUserDialog;
+export default OrgAdminInviteUserDialog;

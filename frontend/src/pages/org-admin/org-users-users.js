@@ -8,10 +8,11 @@ import ModalPortal from '../../components/modal-portal';
 import ImportOrgUsersDialog from '../../components/dialog/org-import-users-dialog';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
 import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
+import InviteUserViaWeiXinDialog from '../../components/dialog/org-admin-invite-user-via-weixin-dialog';
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
-import { gettext, invitationLink, orgID, siteRoot } from '../../utils/constants';
+import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 class Search extends React.Component {
@@ -80,7 +81,8 @@ class OrgUsers extends Component {
       sortOrder: 'asc',
       isShowAddOrgUserDialog: false,
       isImportOrgUsersDialogOpen: false,
-      isInviteUserDialogOpen: false
+      isInviteUserDialogOpen: false,
+      isInviteUserViaWeiXinDialogOpen: false
     };
   }
 
@@ -129,6 +131,10 @@ class OrgUsers extends Component {
   toggleInviteUserDialog = () => {
     this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
   };
+
+  toggleInviteUserViaWeiXinDialog = () => {
+    this.setState({isInviteUserViaWeiXinDialogOpen: !this.state.isInviteUserViaWeiXinDialogOpen});
+  }
 
   initOrgUsersData = (page) => {
     const { sortBy, sortOrder } = this.state;
@@ -202,6 +208,33 @@ class OrgUsers extends Component {
     });
   };
 
+  inviteOrgUser = (emails) => {
+    seafileAPI.orgAdminInviteOrgUsers(orgID, emails.split(',')).then(res => {
+      this.toggleInviteUserDialog();
+      let users = res.data.success.map(user => {
+        return new OrgUserInfo(user);
+      });
+      this.setState({
+        orgUsers: users.concat(this.state.orgUsers)
+      });
+
+      res.data.success.map(item => {
+        let msg = gettext('successfully sent email to %s.');
+        msg = msg.replace('%s', item.email);
+        toaster.success(msg);
+      });
+
+      res.data.failed.map(item => {
+        const msg = `${item.email}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
+    }).catch(error => {
+      this.toggleInviteUserDialog();
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   changeStatus= (email, isActive) => {
     seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgUsers.map(item => {
@@ -234,12 +267,16 @@ class OrgUsers extends Component {
     let topbarChildren;
     topbarChildren = (
       <Fragment>
-        <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import Users')}</button>
-        <button className={topBtn} title={gettext('Add User')} onClick={this.toggleAddOrgUser}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add User')}</button>
+        <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import users')}</button>
+        <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add user')}</button>
+        {orgEnableAdminInviteUser &&
+        <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite users')}</button>
+        }
         {invitationLink &&
-        <button className={topBtn} title={gettext('Invite user')} onClick={this.toggleInviteUserDialog}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite user')}</button>
+        <button className={topBtn} title={'通过微信邀请用户'} onClick={this.toggleInviteUserViaWeiXinDialog}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{'通过微信邀请用户'}</button>
         }
         {this.state.isImportOrgUsersDialogOpen &&
         <ModalPortal>
@@ -253,7 +290,12 @@ class OrgUsers extends Component {
         }
         {this.state.isInviteUserDialogOpen &&
         <ModalPortal>
-          <InviteUserDialog invitationLink={invitationLink} toggle={this.toggleInviteUserDialog}/>
+          <InviteUserDialog handleSubmit={this.inviteOrgUser} toggle={this.toggleInviteUserDialog}/>
+        </ModalPortal>
+        }
+        {this.state.isInviteUserViaWeiXinDialogOpen &&
+        <ModalPortal>
+          <InviteUserViaWeiXinDialog invitationLink={invitationLink} toggle={this.toggleInviteUserViaWeiXinDialog}/>
         </ModalPortal>
         }
       </Fragment>
