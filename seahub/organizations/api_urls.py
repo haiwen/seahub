@@ -11,7 +11,7 @@ from .api.group_owned_libraries import (
 )
 from .api.group_members import AdminGroupMembers, AdminGroupMember
 from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
-        OrgAdminImportUsers
+        OrgAdminImportUsers, OrgAdminInviteUser
 from .api.admin.user_set_password import OrgAdminUserSetPassword
 from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
@@ -87,6 +87,7 @@ urlpatterns = [
     path('<int:org_id>/admin/groups/<int:group_id>/members/<str:email>/', AdminGroupMember.as_view(), name='api-admin-group-member'),
     path('<int:org_id>/admin/users/', OrgAdminUsers.as_view(), name='api-v2.1-org-admin-users'),
     path('<int:org_id>/admin/import-users/', OrgAdminImportUsers.as_view(), name='api-v2.1-org-admin-import-users'),
+    path('<int:org_id>/admin/invite-users/', OrgAdminInviteUser.as_view(), name='api-v2.1-org-admin-invite-users'),
     path('<int:org_id>/admin/search-user/', OrgAdminSearchUser.as_view(), name='api-v2.1-org-admin-search-user'),
     path('<int:org_id>/admin/users/<str:email>/', OrgAdminUser.as_view(), name='api-v2.1-org-admin-user'),
     re_path(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/set-password/', OrgAdminUserSetPassword.as_view(), name='api-v2.1-org-admin-user-reset-password'),
@@ -102,3 +103,4 @@ urlpatterns = [
     path('admin/logs/file-update/', OrgAdminLogsFileUpdate.as_view(), name='api-v2.1-org-admin-logs-file-update'),
     path('admin/logs/repo-permission/', OrgAdminLogsPermAudit.as_view(), name='api-v2.1-org-admin-logs-repo-permission'),
 ]
+
