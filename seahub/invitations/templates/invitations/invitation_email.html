@@ -9,7 +9,11 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans with inviter_name=inviter|email2nickname %}{{ inviter_name }} invited you to join {{ site_name }}. Please click the link below:{% endblocktrans %}
+{% if org_name %}
+{% blocktrans with org_name=org_name|escape %}You are invited to join team {{ org_name }}. Please click the link below:{% endblocktrans %}
+{% else %}
+{% blocktrans with inviter_name=inviter|email2nickname|escape %}{{ inviter_name }} invited you to join {{ site_name }}. Please click the link below:{% endblocktrans %}
+{% endif %}
 </p>
 
 <a href="{{ url_base }}{% url 'invitations:token_view' token %}" target="_blank">{{ url_base }}{% url 'invitations:token_view' token %}</a>
