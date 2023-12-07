@@ -9,14 +9,13 @@ const { fileContent } = window.app.pageOptions;
 class FileContent extends React.Component {
   render() {
     return (
-      <div className="file-view-content flex-1 o-auto">
-        <div className="md-content">
-          <MarkdownViewer
-            markdownContent={fileContent}
-            showTOC={false}
-            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-          />
-        </div>
+      <div className="file-view-content md-content">
+        <MarkdownViewer
+          isFetching={false}
+          value={fileContent}
+          isShowOutline={false}
+          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+        />
       </div>
     );
   }
