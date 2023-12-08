@@ -90,7 +90,7 @@
 
 /* custom */
 .account-dialog {
-  max-width: 800px;
+  max-width: 600px;
   height: calc(100% - 56px);
 }
 
@@ -114,8 +114,7 @@
 }
 
 .account-dialog-content .account-dialog-main {
-  display: flex;
-  flex: 0 0 75%;
+  flex: 1;
   padding: 0.5rem 1.5rem 2rem;
 }
 
@@ -156,6 +155,7 @@
 .accounts-manage .accounts-list-body {
   max-height: 400px;
   overflow-y: auto;
+  cursor: pointer;
 }
 
 .accounts-manage th,
@@ -173,11 +173,6 @@
 }
 
 .accounts-manage .accounts-list-body .account-operation-btn {
-  display: none;
-  margin-right: .2rem;
-}
-
-.accounts-manage .accounts-list-body tr:hover .account-operation-btn {
   display: inline-flex;
   width: 24px;
   height: 24px;

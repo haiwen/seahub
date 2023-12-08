@@ -16,7 +16,7 @@ class DeleteSeatablesDialog extends Component {
     const { t, accountName, closeDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={closeDialog}>
-        <ModalHeader toggle={closeDialog}>{t('Delete SeaTable')}</ModalHeader>
+        <ModalHeader toggle={closeDialog}>{t('Delete SeaTable base')}</ModalHeader>
         <ModalBody>
           <div className="pb-6">{t(`Are you sure to delete SeaTable_${accountName}`)}</div>
         </ModalBody>

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import SeatableAccountSettingList from '../seatable-integration-account-setting-widgets/seatable-account-setting-list.js';
 import AddSeatableAccountSetting from '../../components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js';
 import toaster from '../toast';
@@ -146,7 +146,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
   };
 
   render() {
-    const { activeTab, seatableSettings, status, currentDtableInfo } = this.state;
+    const { seatableSettings, status, currentDtableInfo } = this.state;
     const { onSeaTableIntegrationToggle } = this.props;
     let repo = this.repo;
     const itemName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
@@ -163,43 +163,30 @@ class RepoSeaTableIntegrationDialog extends React.Component {
         </ModalHeader>
         <ModalBody className="account-dialog-content">
           <Fragment>
-            <div className="account-dialog-side">
-              <Nav pills vertical className="w-100">
-                <NavItem>
-                  <NavLink className={activeTab === 'SeaTable' ? 'active' : ''} onClick={this.changeTab.bind(this, 'SeaTable')}>
-                    {'SeaTable'}
-                  </NavLink>
-                </NavItem>
-              </Nav>
-            </div>
             <div className="account-dialog-main">
-              <TabContent activeTab={activeTab}>
-                <TabPane tabId="SeaTable">
-                  <div className="h-100">
-                    {status === STATUS.SEATABLE_ACCOUNT_MANAGE &&
-                    <SeatableAccountSettingList
-                      seatableSettings={seatableSettings}
-                      changeStatus={() => this.changeStatus(STATUS.ADD_SETABLE_ACCOUNT)}
-                      editSeatableSettingAccount={this.editSeatableSettingAccount}
-                      deleteStableAccountSetting={this.deleteStableAccountSetting}
-                    />
-                    }
-                    {status === STATUS.ADD_SETABLE_ACCOUNT &&
-                    <AddSeatableAccountSetting
-                      changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
-                      onSubmit={this.onSubmit}
-                    />
-                    }
-                    {status === STATUS.UPDATE_SEATABLE_ACCOUNT &&
-                    <AddSeatableAccountSetting
-                      currentDtableInfo={currentDtableInfo}
-                      changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
-                      onSubmit={this.onSubmit}
-                    />
-                    }
-                  </div>
-                </TabPane>
-              </TabContent>
+              <div className="h-100">
+                {status === STATUS.SEATABLE_ACCOUNT_MANAGE &&
+                <SeatableAccountSettingList
+                  seatableSettings={seatableSettings}
+                  changeStatus={() => this.changeStatus(STATUS.ADD_SETABLE_ACCOUNT)}
+                  editSeatableSettingAccount={this.editSeatableSettingAccount}
+                  deleteStableAccountSetting={this.deleteStableAccountSetting}
+                />
+                }
+                {status === STATUS.ADD_SETABLE_ACCOUNT &&
+                <AddSeatableAccountSetting
+                  changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
+                  onSubmit={this.onSubmit}
+                />
+                }
+                {status === STATUS.UPDATE_SEATABLE_ACCOUNT &&
+                <AddSeatableAccountSetting
+                  currentDtableInfo={currentDtableInfo}
+                  changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
+                  onSubmit={this.onSubmit}
+                />
+                }
+              </div>
             </div>
           </Fragment>
         </ModalBody>

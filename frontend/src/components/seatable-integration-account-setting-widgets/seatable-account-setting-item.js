@@ -36,13 +36,15 @@ class SeatableAccountItem extends Component {
 
   render() {
     const { isShowDialog } = this.state;
-    const { setting, t } = this.props;
+    const { setting, t, index } = this.props;
     const { base_api_token, base_name, seatable_server_url } = setting;
     return (
       <tr key={`account-${base_api_token}`}>
-        <td width='20%' className="text-truncate" title={base_name} aria-label={base_name}>{base_name}</td>
-        <td width='60%' className="text-truncate" title={seatable_server_url} aria-label={seatable_server_url}>{seatable_server_url}</td>
-        <td width='20%'>
+        <td width='30%' className="text-truncate" title={base_name} aria-label={base_name}>{base_name}</td>
+        <td id={`abc-${index}`} width='55%' className="text-truncate" title={seatable_server_url} aria-label={seatable_server_url}>
+          {seatable_server_url}
+        </td>
+        <td width='15%'>
           <span
             className="account-operation-btn"
             onClick={this.props.editSeatableSettingAccount.bind(this, base_api_token)}

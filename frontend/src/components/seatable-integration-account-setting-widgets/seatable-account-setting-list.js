@@ -31,9 +31,9 @@ class SeatableAccountSettingList extends Component {
         <table className="accounts-list-header">
           <thead>
             <tr>
-              <th width='20%'>{t('Base name')}</th>
-              <th width='60%'>{t('SeaTable server URL')}</th>
-              <th width='20%'>{t('Operation')}</th>
+              <th width='30%'>{t('Base name')}</th>
+              <th width='55%'>{t('SeaTable server URL')}</th>
+              <th width='15%'>{t('Operation')}</th>
             </tr>
           </thead>
         </table>
@@ -60,16 +60,12 @@ class SeatableAccountSettingList extends Component {
   };
 
   render() {
-    const { t, seatableSettings } = this.props;
+    const { t } = this.props;
     return (
       <div className="accounts-manage">
         <div className="accounts-manage-header d-flex align-items-center justify-content-between">
           <span>{t('SeaTable')}</span>
-          {seatableSettings && seatableSettings.length === 0 &&
-            <div>
-              <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{t('Add SeaTable integration')}</Button>
-            </div>
-          }
+          <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{t('Add')}</Button>
         </div>
         <div className="accounts-list mt-2">
           {this.renderContent()}
