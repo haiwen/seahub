@@ -31,27 +31,13 @@ class FileHistory extends React.Component {
 
   onHistoryItemClick = (item, preItem)=> {
     this.setState({renderingContent: true});
-    if (preItem) {
+    seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path).then((res) => {
       axios.all([
-        seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path),
-        seafileAPI.getFileRevision(historyRepoID, preItem.commit_id, preItem.path)
-      ]).then(axios.spread((res, res1) => {
-        axios.all([
-          seafileAPI.getFileContent(res.data),
-          seafileAPI.getFileContent(res1.data)
-        ]).then(axios.spread((content1, content2) => {
-          this.setDiffContent(content1.data, content2.data);
-        }));
+        seafileAPI.getFileContent(res.data),
+      ]).then(axios.spread((content1) => {
+        this.setDiffContent(content1.data, '');
       }));
-    } else {
-      seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path).then((res) => {
-        axios.all([
-          seafileAPI.getFileContent(res.data),
-        ]).then(axios.spread((content1) => {
-          this.setDiffContent(content1.data, '');
-        }));
-      });
-    }
+    });
   };
 
   onBackClick = (event) => {
