@@ -173,6 +173,11 @@
 }
 
 .accounts-manage .accounts-list-body .account-operation-btn {
+  display: none;
+  margin-right: .2rem;
+}
+
+.accounts-manage .accounts-list-body tr:hover .account-operation-btn {
   display: inline-flex;
   width: 24px;
   height: 24px;

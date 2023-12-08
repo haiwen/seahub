@@ -33,7 +33,7 @@ class SeatableAccountSettingList extends Component {
             <tr>
               <th width='30%'>{t('Base name')}</th>
               <th width='55%'>{t('SeaTable server URL')}</th>
-              <th width='15%'>{t('Operation')}</th>
+              <th width='15%'> </th>
             </tr>
           </thead>
         </table>
