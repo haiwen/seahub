@@ -45,7 +45,7 @@ class SidePanel extends Component {
         historyGroups: this.formatHistories(result.histories),
         hasMore: resultCount >= PER_PAGE,
         isLoading: false,
-        fileOwner: result.histories[0].creator_email,
+        fileOwner: result.histories[0]?.creator_email,
       });
       if (result.histories[0]) {
         this.props.onSelectHistoryVersion(result.histories[0], result.histories[1]);
