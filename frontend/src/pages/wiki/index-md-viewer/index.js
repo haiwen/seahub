@@ -72,6 +72,9 @@ class IndexMdViewer extends React.Component {
 
         // Solving relative paths
         if (!re.test(url)) {
+          if (url.startsWith('./')) {
+            url = url.slice(2);
+          }
           item.url = serviceURL + '/published/' + slug + '/' + url;
         }
         // change file url
