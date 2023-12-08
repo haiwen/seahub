@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import { gettext, canGenerateShareLink } from '../../../utils/constants';
 
@@ -32,7 +33,12 @@ class MoreMenu extends React.PureComponent {
   };
 
   dropdownToggle = () => {
-    this.setState({ dropdownOpen:!this.state.dropdownOpen });
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
+  onHelpModuleToggle = (event) => {
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, true);
   };
 
   downloadFile = () => {
@@ -51,18 +57,18 @@ class MoreMenu extends React.PureComponent {
         </DropdownToggle>
         <DropdownMenu className="drop-list" right={true}>
           {(!this.props.readOnly && editorMode === 'rich') &&
-            <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
+            <DropdownItem onClick={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
           {(!this.props.readOnly && editorMode === 'plain') &&
-            <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
+            <DropdownItem onClick={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
           {!isSmall && this.props.showFileHistory &&
-            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>}
+            <DropdownItem onClick={this.props.toggleHistory}>{gettext('History')}</DropdownItem>}
           {(this.props.openDialogs && editorMode === 'rich') &&
-            <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
+            <DropdownItem onClick={this.onHelpModuleToggle}>{gettext('Help')}</DropdownItem>
           }
-          {isSmall && <DropdownItem onMouseDown={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
-          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
+          {isSmall && <DropdownItem onClick={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
+          {isSmall && canGenerateShareLink && <DropdownItem onClick={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {(isSmall && this.props.showFileHistory) &&
-            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>
+            <DropdownItem onClick={this.props.toggleHistory}>{gettext('History')}</DropdownItem>
           }
           {isSmall && canDownloadFile &&
             <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>

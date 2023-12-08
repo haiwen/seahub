@@ -23,3 +23,7 @@
 .collab-users-dropdown.dropdown {
   margin-right: 6px;
 }
+
+.btn-active[data-active=true] {
+  color: #eb8205;
+}
