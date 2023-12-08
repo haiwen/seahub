@@ -38,7 +38,7 @@ class TermsEditorDialog extends React.Component {
     this.props.onCloseEditorDialog();
   };
 
-  onValueChanged = () => {
+  onContentChanged = () => {
     return this.setState({isValueChanged: true});
   };
 
@@ -68,7 +68,7 @@ class TermsEditorDialog extends React.Component {
           <SimpleEditor
             ref={this.editorRef}
             value={content || ''}
-            onValueChanged={this.onValueChanged}
+            onContentChanged={this.onContentChanged}
           />
         </ModalBody>
       </Modal>
