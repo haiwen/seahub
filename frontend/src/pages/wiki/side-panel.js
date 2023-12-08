@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, repoID, slug, username, permission } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view/tree-view';
-import IndexContentViewer from '../../components/index-viewer';
+import IndexMdViewer from './index-md-viewer';
 
 const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
@@ -29,34 +29,30 @@ class SidePanel extends Component {
 
   renderIndexView = () => {
     return (
-      <Fragment>
-        <div className="wiki-pages-container">
-          <div style={{marginTop: '2px'}}></div>
-          <IndexContentViewer
-            indexContent={this.props.indexContent}
-            onLinkClick={this.props.onLinkClick}
-          />
-        </div>
-      </Fragment>
+      <div className="wiki-pages-container">
+        <div style={{marginTop: '2px'}}></div>
+        <IndexMdViewer
+          indexContent={this.props.indexContent}
+          onLinkClick={this.props.onLinkClick}
+        />
+      </div>
     );
   };
 
   renderTreeView = () => {
     return (
-      <Fragment>
-        <div className="wiki-pages-container">
-          {this.props.treeData && (
-            <TreeView
-              treeData={this.props.treeData}
-              currentPath={this.props.currentPath}
-              isNodeMenuShow={this.isNodeMenuShow}
-              onNodeClick={this.props.onNodeClick}
-              onNodeCollapse={this.props.onNodeCollapse}
-              onNodeExpanded={this.props.onNodeExpanded}
-            />
-          )}
-        </div>
-      </Fragment>
+      <div className="wiki-pages-container">
+        {this.props.treeData && (
+          <TreeView
+            treeData={this.props.treeData}
+            currentPath={this.props.currentPath}
+            isNodeMenuShow={this.isNodeMenuShow}
+            onNodeClick={this.props.onNodeClick}
+            onNodeCollapse={this.props.onNodeCollapse}
+            onNodeExpanded={this.props.onNodeExpanded}
+          />
+        )}
+      </div>
     );
   };
 

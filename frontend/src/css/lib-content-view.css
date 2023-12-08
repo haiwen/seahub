@@ -205,8 +205,17 @@
   background-color: #f6f6f6;
 }
 
+.wiki-page-content .sf-slate-viewer-scroll-container {
+  padding: 0;
+  background-color: #fff;
+  border: none;
+  overflow: inherit;
+}
+
 .dir-content-main .wiki-page-content .article {
+  margin: 0;
   padding: 0 10px;
+  border: none;
 }
 
 .wiki-page-content a {
