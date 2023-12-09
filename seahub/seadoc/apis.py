@@ -306,15 +306,18 @@ class SeadocUploadImage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        file = request.FILES.get('file')
-        if not file:
+        file_list = request.FILES.getlist('file')
+        if not file_list or not isinstance(file_list, list):
             error_msg = 'Image can not be found.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # max 10 images
+        file_list = file_list[:10]
 
-        file_type, ext = get_file_type_and_ext(file.name)
-        if file_type != IMAGE:
-            error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get('Image'))
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        for file in file_list:
+            file_type, ext = get_file_type_and_ext(file.name)
+            if file_type != IMAGE:
+                error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get('Image'))
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
@@ -329,22 +332,26 @@ class SeadocUploadImage(APIView):
         repo_id = uuid_map.repo_id
         username = payload.get('username', '')
         parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
-        file_path = posixpath.join(parent_path, file.name)
 
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
-        files = {
-            'file': file,
-            'file_name': file.name,
-            'target_file': file_path,
-        }
-        data = {'parent_dir': parent_path}
-        resp = requests.post(upload_link, files=files, data=data)
-        if not resp.ok:
-            logger.error(resp.text)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        image_url = '/' + file.name
-        return Response({'relative_path': image_url})
+
+        relative_path = []
+        for file in file_list:
+            file_path = posixpath.join(parent_path, file.name)
+            files = {
+                'file': file,
+                'file_name': file.name,
+                'target_file': file_path,
+            }
+            data = {'parent_dir': parent_path}
+            resp = requests.post(upload_link, files=files, data=data)
+            if not resp.ok:
+                logger.error(resp.text)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            image_url = '/' + file.name
+            relative_path.append(image_url)
+        return Response({'relative_path': relative_path})
 
 
 class SeadocDownloadImage(APIView):
