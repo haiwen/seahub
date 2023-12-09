@@ -146,8 +146,23 @@ class SidePanel extends Component {
   onSelectHistoryVersion = (path) => {
     const { isShowChanges } = this.props;
     const { historyGroups } = this.state;
-    const historyVersion = historyGroups[path[0]].children[path[1]].children[path[2]];
-    this.props.onSelectHistoryVersion(historyVersion, isShowChanges);
+    const [monthIndex, dayIndex, dailyIndex] = path;
+    const monthHistoryGroup = historyGroups[monthIndex];
+    const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
+    const currentVersion = dayHistoryGroup.children[dailyIndex];
+    let lastVersion = '';
+    if (isShowChanges) {
+      if (dayHistoryGroup.showDaily) {
+        lastVersion = dayHistoryGroup.children[dailyIndex + 1];
+      }
+      if (!lastVersion) {
+        lastVersion = monthHistoryGroup.children[dayIndex + 1]?.children[0];
+      }
+      if (!lastVersion) {
+        lastVersion = historyGroups[monthIndex + 1]?.children[0]?.children[0];
+      }
+    }
+    this.props.onSelectHistoryVersion(currentVersion, lastVersion);
   };
 
   copyHistoryFile = (historyVersion) => {

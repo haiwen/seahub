@@ -48,14 +48,14 @@ class SdocFileHistory extends React.Component {
     };
   }
 
-  onSelectHistoryVersion = (currentVersion, isShowChanges) => {
+  onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
       const currentVersionContent = res.data;
-      if (isShowChanges) {
-        seafileAPI.getLastFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
+      if (lastVersion) {
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
           return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
         }).then(res => {
           const lastVersionContent = res.data;
