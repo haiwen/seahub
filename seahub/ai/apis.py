@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -13,7 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import create_library_sdoc_index, similarity_search_in_library, update_library_sdoc_index, \
+from seahub.ai.utils import create_library_sdoc_index, search, update_library_sdoc_index, \
     delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
     get_file_download_token
 
@@ -62,7 +63,7 @@ class LibrarySdocIndexes(APIView):
         return Response(resp_json, resp.status_code)
 
 
-class SimilaritySearchInLibrary(APIView):
+class Search(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
@@ -89,7 +90,7 @@ class SimilaritySearchInLibrary(APIView):
         }
 
         try:
-            resp = similarity_search_in_library(params)
+            resp = search(params)
             if resp.status_code == 500:
                 logger.error('search in library error status: %s body: %s', resp.status_code, resp.text)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -266,21 +267,3 @@ class FileDownloadToken(APIView):
         }
 
         return Response(library_files_info, status.HTTP_200_OK)
-
-
-# class RepoCommit(APIView):
-#     authentication_classes = (SeafileAiAuthentication, )
-#     throttle_classes = (UserRateThrottle, )
-#
-#     def get(self, request):
-#         repo_id = request.GET.get('repo_id')
-#         if not repo_id:
-#             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
-#
-#         commit_id = get_latest_commit_id(repo_id)
-#
-#         repo_info = {
-#             'commit_id': commit_id
-#         }
-#
-#         return Response(repo_info, status.HTTP_200_OK)

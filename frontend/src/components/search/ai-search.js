@@ -259,87 +259,21 @@ export default class AISearch extends Component {
     this.updateSearchPageURL(queryData);
     queryData['per_page'] = PER_PAGE;
     queryData['page'] = page;
-    queryData['search_filename_only'] = true;
-    if (this.state.indexState === INDEX_STATE.FINISHED) {
-      this.onCombinedSearch(queryData, cancelToken, page);
-    } else {
-      this.onNormalSearch(queryData, cancelToken, page);
-    }
+     this.onAiSearch(queryData, cancelToken, page);
   };
 
-  onNormalSearch = (queryData, cancelToken, page) => {
-    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-      this.source = null;
-      if (res.data.total > 0) {
-        this.setState({
-          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-          isResultGetted: true,
-          isLoading: false,
-          page: page + 1,
-          hasMore: res.data.has_more,
-        });
-        return;
-      }
-      this.setState({
-        highlightIndex: 0,
-        resultItems: [],
-        isLoading: false,
-        isResultGetted: true,
-        hasMore: res.data.has_more,
-      });
-    }).catch(error => {
-      /* eslint-disable */
-      console.log(error);
-      this.setState({ isLoading: false });
-    });
-  };
-
-  onCombinedSearch = (queryData, cancelToken, page) => {
-    const { indexState } = this.state;
-    if (indexState === INDEX_STATE.UNCREATED) {
-      toaster.warning(gettext('Please create index first.'));
-      return;
-    }
-    if (indexState === INDEX_STATE.RUNNING) {
-      toaster.warning(gettext('Indexing, please try again later.'));
-      return;
-    }
-
+  onAiSearch = (queryData, cancelToken, page) => {
     let results = [];
-    let normalSearchQueryData = Object.assign({}, queryData, {'search_filename_only': true});
-    seafileAPI.searchFiles(normalSearchQueryData, cancelToken).then(res => {
-      if (res.data.total > 0) {
-        results = [...results, ...this.formatResultItems(res.data.results)];
-      }
-      seafileAPI.similaritySearchFiles(queryData, cancelToken).then(res => {
-        this.source = null;
-        if (res.data && res.data.children_list) {
-          results = [...results, ...this.formatSimilarityItems(res.data.children_list)];
-        }
-
-        let tempPathObj = {};
-        let searchResults = [];
-        results.forEach(item => {
-          if (!tempPathObj[item.path]) {
-            tempPathObj[item.path] = true;
-            searchResults.push(item);
-          }
-        });
-        this.setState({
-          resultItems: searchResults,
+    seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
+      console.log(res.data)
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+          resultItems: results,
           isResultGetted: true,
           isLoading: false,
           page: page + 1,
           hasMore: false,
         });
-      }).catch(error => {
-        if (error && error.message === "prev request is cancelled") {
-          return;
-        }
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-        this.setState({ isLoading: false });
-      });
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
@@ -377,29 +311,8 @@ export default class AISearch extends Component {
       items[i]['name'] = data[i].name;
       items[i]['path'] = data[i].fullpath;
       items[i]['repo_id'] = data[i].repo_id;
-      items[i]['repo_name'] = data[i].repo_name;
       items[i]['is_dir'] = data[i].is_dir;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
-      items[i]['content'] = data[i].content_highlight;
-      items[i]['thumbnail_url'] = data[i].thumbnail_url;
-    }
-    return items;
-  }
-
-  formatSimilarityItems(data) {
-    let items = [];
-    let repo_id = this.props.repoID;
-    for (let i = 0; i < data.length; i++) {
-      items[i] = {};
-      items[i]['index'] = [i];
-      items[i]['name'] = data[i].path.substring(data[i].path.lastIndexOf('/')+1);
-      items[i]['path'] = data[i].path;
-      items[i]['repo_id'] = repo_id;
-      items[i]['repo_name'] = this.props.repoName;
-      items[i]['is_dir'] = false;
-      items[i]['link_content'] = decodeURI(data[i].path).substring(1);
-      items[i]['content'] = data[i].sentence;
-      items[i]['thumbnail_url'] = '';
     }
     return items;
   }

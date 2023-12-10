@@ -25,9 +25,9 @@ def create_library_sdoc_index(params):
     return resp
 
 
-def similarity_search_in_library(params):
+def search(params):
     headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/similarity-search-in-library/')
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search/')
     resp = requests.post(url, json=params, headers=headers)
     return resp
 

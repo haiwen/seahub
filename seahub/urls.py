@@ -202,8 +202,8 @@ from seahub.seadoc.views import sdoc_revision, sdoc_revisions
 
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, LibrarySdocIndex, TaskStatus, \
-    LibraryIndexState, QuestionAnsweringSearchInLibrary
+from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
+    LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -965,9 +965,10 @@ if getattr(settings, 'ENABLE_SEADOC', False):
 if settings.ENABLE_SEAFILE_AI:
     urlpatterns += [
         re_path(r'^api/v2.1/ai/library-sdoc-indexes/$', LibrarySdocIndexes.as_view(), name='api-v2.1-ai-library-sdoc-indexes'),
-        re_path(r'^api/v2.1/ai/similarity-search-in-library/$', SimilaritySearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
+        re_path(r'^api/v2.1/ai/search/$', Search.as_view(), name='api-v2.1-ai-search'),
         re_path(r'^api/v2.1/ai/question-answering-search-in-library/$', QuestionAnsweringSearchInLibrary.as_view(), name='api-v2.1-ai-question-answering-search-in-library'),
         re_path(r'^api/v2.1/ai/library-sdoc-index/$', LibrarySdocIndex.as_view(), name='api-v2.1-ai-library-sdoc-index'),
         re_path(r'^api/v2.1/ai/task-status/$', TaskStatus.as_view(), name='api-v2.1-ai-task-status'),
         re_path(r'^api/v2.1/ai/library-index-state/$', LibraryIndexState.as_view(), name='api-v2.1-ai-library-index-state'),
+        re_path(r'^api/v2.1/ai/repo/file-download-token/$', FileDownloadToken.as_view(), name='api-v2.1-ai-repo-file-download-token'),
     ]
