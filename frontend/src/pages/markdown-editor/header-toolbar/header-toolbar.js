@@ -203,7 +203,7 @@ class HeaderToolbar extends React.Component {
                     <i className={'fa fa-spin fa-spinner'}/>
                   </button>
                   :
-                  <ButtonItem id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} disabled={!contentChanged} isActive={contentChanged} />
+                  <ButtonItem id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={this.props.onSaveEditorContent} disabled={!contentChanged} isActive={contentChanged} />
                 }
               </ButtonGroup>
               <MoreMenu
