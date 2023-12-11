@@ -23,7 +23,6 @@ const propTypes = {
   onEdit: PropTypes.func.isRequired,
   toggleNewDraft: PropTypes.func.isRequired,
   toggleStar: PropTypes.func.isRequired,
-  openParentDirectory: PropTypes.func.isRequired,
   openDialogs: PropTypes.func.isRequired,
   showFileHistory: PropTypes.bool.isRequired,
   toggleHistory: PropTypes.func.isRequired,
@@ -31,6 +30,7 @@ const propTypes = {
   readOnly: PropTypes.bool.isRequired,
   contentChanged: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
+  onSaveEditorContent: PropTypes.func.isRequired,
   showDraftSaved: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
@@ -52,10 +52,13 @@ class HeaderToolbar extends React.Component {
     location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(path)}`;
   };
 
+  openParentDirectory = () => {
+    const { editorApi } = this.props;
+    window.location.href = editorApi.getParentDictionaryUrl();
+  };
+
   render() {
     let { contentChanged, saving, isLocked, lockedByMe } = this.props;
-    let canPublishDraft = this.props.fileInfo.permission == 'rw';
-    let canCreateDraft = canPublishDraft && (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs);
 
     if (this.props.editorMode === 'rich') {
       return (
@@ -71,27 +74,7 @@ class HeaderToolbar extends React.Component {
               mediaUrl={mediaUrl}
               isStarred={this.props.fileInfo.isStarred}
             />
-            {(this.props.hasDraft && !this.props.isDraft) &&
-              <div className='seafile-btn-view-review'>
-                <div className='tag tag-green'>{gettext('This file is in draft stage.')}
-                  <a className="ml-2" onMouseDown={this.props.editorApi.goDraftPage}>{gettext('View Draft')}</a></div>
-              </div>
-            }
             <div className="topbar-btn-container">
-              {canCreateDraft &&
-                <button onMouseDown={this.props.toggleNewDraft} className="btn btn-success btn-new-draft">
-                  {gettext('New Draft')}</button>
-              }
-              {this.props.isDraft &&
-                <div>
-                  <button type="button" className="btn btn-success seafile-btn-add-review"
-                    onMouseDown={this.props.editorApi.goDraftPage}>{gettext('Start review')}</button>
-                  {canPublishDraft &&
-                    <button type="button" className="btn btn-success seafile-btn-add-review"
-                      onMouseDown={this.props.editorApi.publishDraftFile}>{gettext('Publish')}</button>
-                  }
-                </div>
-              }
               {(seafileCollabServer && this.props.collabUsers.length > 0) &&
                 <CollabUsersButton
                   className="collab-users-dropdown"
@@ -100,24 +83,43 @@ class HeaderToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <ButtonItem text={gettext('Open parent directory')} id={'parentDirectory'}
-                  icon={'fa fa-folder-open'} onMouseDown={this.props.openParentDirectory}/>
-                {(canLockUnlockFile && !isLocked) &&
-                  <ButtonItem id="lock-unlock-file" icon='fa fa-lock' text={gettext('Lock')} onMouseDown={this.props.toggleLockFile}/>
-                }
-                {(canLockUnlockFile && lockedByMe) &&
-                  <ButtonItem id="lock-unlock-file" icon='fa fa-unlock' text={gettext('Unlock')} onMouseDown={this.props.toggleLockFile}/>
-                }
-                {canGenerateShareLink &&
-                  <ButtonItem id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
-                    onMouseDown={this.props.toggleShareLinkDialog}/>
-                }
+                <ButtonItem
+                  text={gettext('Open parent directory')}
+                  id={'parentDirectory'}
+                  icon={'fa fa-folder-open'}
+                  onMouseDown={this.openParentDirectory}
+                />
+                {(canLockUnlockFile && !isLocked) && (
+                  <ButtonItem
+                    id="lock-unlock-file"
+                    icon='fa fa-lock'
+                    text={gettext('Lock')}
+                    onMouseDown={this.props.toggleLockFile}
+                  />
+                )}
+                {(canLockUnlockFile && lockedByMe) && (
+                  <ButtonItem
+                    id="lock-unlock-file"
+                    icon='fa fa-unlock'
+                    text={gettext('Unlock')}
+                    onMouseDown={this.props.toggleLockFile}
+                  />
+                )}
+                {canGenerateShareLink && (
+                  <ButtonItem
+                    id={'shareBtn'}
+                    text={gettext('Share')}
+                    icon={'fa fa-share-alt'}
+                    onMouseDown={this.props.toggleShareLinkDialog}
+                  />
+                )}
                 {saving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/></button>
+                    <i className={'fa fa-spin fa-spinner'}/>
+                  </button>
                   :
                   <ButtonItem text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'} disabled={!contentChanged}
-                    onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
+                    onMouseDown={this.props.onSaveEditorContent} isActive={contentChanged}/>
                 }
                 {canDownloadFile && (
                   <ButtonItem
@@ -127,14 +129,14 @@ class HeaderToolbar extends React.Component {
                     onClick={this.downloadFile}
                   />
                 )}
-                {this.props.fileInfo.permission == 'rw' &&
-                <ButtonItem
-                  id="open-via-client"
-                  icon="sf3-font sf3-font-desktop"
-                  text={gettext('Open via Client')}
-                  onClick={this.openFileViaClient}
-                />
-                }
+                {this.props.fileInfo.permission == 'rw' && (
+                  <ButtonItem
+                    id="open-via-client"
+                    icon="sf3-font sf3-font-desktop"
+                    text={gettext('Open via Client')}
+                    onClick={this.openFileViaClient}
+                  />
+                )}
               </ButtonGroup>
               <MoreMenu
                 readOnly={this.props.readOnly}
@@ -170,7 +172,7 @@ class HeaderToolbar extends React.Component {
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
                 toggleShareLinkDialog={this.props.toggleShareLinkDialog}
-                openParentDirectory={this.props.openParentDirectory}
+                openParentDirectory={this.openParentDirectory}
                 showFileHistory={this.props.showFileHistory}
                 toggleHistory={this.props.toggleHistory}
                 isSmallScreen={true}
@@ -179,7 +181,9 @@ class HeaderToolbar extends React.Component {
           </div>
         </div>
       );
-    } else if (this.props.editorMode === 'plain') {
+    }
+
+    if (this.props.editorMode === 'plain') {
       return (
         <div className="sf-md-viewer-topbar">
           <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
@@ -194,9 +198,10 @@ class HeaderToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                { saving ?
+                {saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/></button>
+                    <i className={'fa fa-spin fa-spinner'}/>
+                  </button>
                   :
                   <ButtonItem id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} disabled={!contentChanged} isActive={contentChanged} />
                 }
@@ -238,10 +243,11 @@ class HeaderToolbar extends React.Component {
               />
             </div>
           </div>
-
         </div>
       );
     }
+
+    return null;
   }
 }
 

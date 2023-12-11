@@ -1,7 +1,13 @@
 .wiki-nav-content {
   margin-top: 18px;
 }
-.wiki-nav-content a, .wiki-nav-content span {
+
+.wiki-nav-content.no-children {
+  margin-left: 1rem;
+}
+
+.wiki-nav-content a, 
+.wiki-nav-content span {
   color: #4d5156;
   font-size: 14px;
   text-overflow: ellipsis;
@@ -9,14 +15,17 @@
   overflow: hidden;
   display: block;
 }
-.wiki-nav-content-highlight a {
-  text-decoration: none;
-  color: #eb8205;
-}
+
 .wiki-nav-content a:hover {
   text-decoration: none;
   color: #eb8205;
 }
+
+.wiki-nav-content-highlight a {
+  text-decoration: none;
+  color: #eb8205;
+}
+
 .switch-btn {
   position: absolute;
   left: 0;

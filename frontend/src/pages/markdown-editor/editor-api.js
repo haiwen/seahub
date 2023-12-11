@@ -45,7 +45,7 @@ class EditorApi {
     );
   }
 
-  getParentDectionaryUrl() {
+  getParentDictionaryUrl() {
     let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
     let libName = encodeURIComponent(repoName);
     let path = Utils.encodePath(parentPath);

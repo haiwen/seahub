@@ -3,8 +3,10 @@ import ReactDom from 'react-dom';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
+import { I18nextProvider } from 'react-i18next';
 import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import i18n from '../../_i18n/i18n-seafile-editor';
 
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
@@ -292,4 +294,9 @@ class SysAdmin extends React.Component {
   }
 }
 
-ReactDom.render(<SysAdmin />, document.getElementById('wrapper'));
+ReactDom.render(
+  <I18nextProvider value={i18n}>
+    <SysAdmin />
+  </I18nextProvider>,
+  document.getElementById('wrapper')
+);

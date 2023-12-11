@@ -65,13 +65,6 @@ class FileContent extends React.Component {
     return Utils.changeMarkdownNodes(value, this.changeImageURL);
   };
 
-  updateForNoOutline = () => {
-    const $outline = document.querySelector('.md-view .seafile-markdown-outline');
-    const $main = document.querySelector('.md-view .article');
-    $outline.className += ' d-none';
-    $main.className += ' article-no-outline';
-  };
-
   render() {
     if (err) {
       return <SharedFileViewTip />;
@@ -82,20 +75,13 @@ class FileContent extends React.Component {
     }
 
     return (
-      <div className="shared-file-view-body">
-        <div className="md-view">
-          <MarkdownViewer
-            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-            markdownContent={this.state.markdownContent}
-            showTOC={true}
-            updateForNoOutline={this.updateForNoOutline}
-            activeTitleIndex={''}
-            serviceURL={serviceURL}
-            sharedToken={sharedToken}
-            repoID={repoID}
-            modifyValueBeforeRender={this.modifyValueBeforeRender}
-          />
-        </div>
+      <div className="shared-file-view-body md-view">
+        <MarkdownViewer
+          value={this.state.markdownContent}
+          isShowOutline={true}
+          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          beforeRenderCallback={this.modifyValueBeforeRender}
+        />
       </div>
     );
   }

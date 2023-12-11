@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
-import { DiffViewer } from '@seafile/seafile-editor';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import Loading from '../../components/loading';
 import { mediaUrl } from '../../utils/constants';
 
-const contentClass = 'markdown-viewer-render-content';
 const propTypes = {
   renderingContent: PropTypes.bool.isRequired,
   content: PropTypes.string,
@@ -24,19 +23,18 @@ class MainPanel extends React.Component {
   };
 
   render() {
+    const { renderingContent, newMarkdownContent } = this.props;
     return (
       <div className="content-viewer flex-fill">
-        <div className={contentClass}>
-          {this.props.renderingContent ?
-            (<Loading />) :
-            (<div className="diff-view article">
-              <DiffViewer
-                scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-                newMarkdownContent={this.props.newMarkdownContent}
-                oldMarkdownContent={this.props.oldMarkdownContent}
-              />
-            </div>)}
-        </div>
+        {renderingContent && <Loading />}
+        {!renderingContent && (
+          <MarkdownViewer
+            isFetching={renderingContent}
+            value={newMarkdownContent}
+            isShowOutline={false}
+            mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          />
+        )}
       </div>
     );
   }
