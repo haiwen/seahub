@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import Icon from '../icon';
-import { gettext } from '../../utils/constants';
+import { gettext, canSetExProps } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
@@ -84,7 +84,7 @@ class DetailListView extends React.Component {
           <tbody>
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-            {direntDetail.permission === 'rw' && (
+            {direntDetail.permission === 'rw' && canSetExProps && (
               <Fragment>
                 <tr className="file-extra-attributes">
                   <th colSpan={2}>
@@ -126,7 +126,7 @@ class DetailListView extends React.Component {
               <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
             </td>
           </tr>
-          {direntDetail.permission === 'rw' && (
+          {direntDetail.permission === 'rw' && canSetExProps && (
             <tr className="file-extra-attributes">
               <th colSpan={2}>
                 <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
