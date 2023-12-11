@@ -88,34 +88,38 @@ class SdocFileHistory extends React.Component {
     };
   };
 
+  updateLastVersionContent = (currentVersionContent, currentVersion, lastVersion) => {
+    if (!lastVersion) {
+      this.setContent(currentVersionContent, '');
+      return;
+    }
+    if (lastVersion === 'init') {
+      const lastVersionContent = currentVersionContent ? this.getInitContent(currentVersionContent.children[0]) : this.getInitContentByPath(currentVersion.path);
+      const validCurrentVersionContent = currentVersionContent || this.getInitContentByPath(currentVersion.path);
+      this.setContent(validCurrentVersionContent, lastVersionContent);
+      return;
+    }
+    seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
+      return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
+    }).then(res => {
+      const lastVersionContent = res.data;
+      const firstChildren = currentVersionContent.children[0];
+      const validLastVersionContent = lastVersion && !lastVersionContent ? this.getInitContent(firstChildren) : lastVersionContent;
+      this.setContent(currentVersionContent, validLastVersionContent);
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      toaster.danger(gettext(errorMessage));
+      this.setContent(currentVersionContent, '');
+    });
+  };
+
   onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
       const currentVersionContent = res.data;
-      if (lastVersion) {
-        if (lastVersion === 'init') {
-          const lastVersionContent = currentVersionContent ? this.getInitContent(currentVersionContent.children[0]) : this.getInitContentByPath(currentVersion.path);
-          const validCurrentVersionContent = currentVersionContent || this.getInitContentByPath(currentVersion.path);
-          this.setContent(validCurrentVersionContent, lastVersionContent);
-          return;
-        }
-        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
-          return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
-        }).then(res => {
-          const lastVersionContent = res.data;
-          const firstChildren = currentVersionContent.children[0];
-          const validLastVersionContent = lastVersion && !lastVersionContent ? this.getInitContent(firstChildren) : lastVersionContent;
-          this.setContent(currentVersionContent, validLastVersionContent);
-        }).catch(error => {
-          const errorMessage = Utils.getErrorMsg(error, true);
-          toaster.danger(gettext(errorMessage));
-          this.setContent(currentVersionContent, '');
-        });
-      } else {
-        this.setContent(currentVersionContent, '');
-      }
+      this.updateLastVersionContent(currentVersionContent, currentVersion, lastVersion);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);
       toaster.danger(gettext(errorMessage));
@@ -127,21 +131,12 @@ class SdocFileHistory extends React.Component {
     this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
   };
 
-  onShowChanges = (isShowChanges) => {
+  onShowChanges = (isShowChanges, lastVersion) => {
     if (isShowChanges) {
       const { currentVersionContent, currentVersion } = this.state;
       this.setState({ isLoading: true, isShowChanges }, () => {
         localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
-        seafileAPI.getNextFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
-          return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
-        }).then(res => {
-          const lastVersionContent = res.data;
-          this.setContent(currentVersionContent, lastVersionContent);
-        }).catch(error => {
-          const errorMessage = Utils.getErrorMsg(error, true);
-          toaster.danger(gettext(errorMessage));
-          this.setContent(currentVersionContent, '');
-        });
+        this.updateLastVersionContent(currentVersionContent, currentVersion, lastVersion);
       });
       return;
     }
