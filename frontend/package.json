@@ -9,7 +9,7 @@
     "@seafile/resumablejs": "1.1.16",
     "@seafile/sdoc-editor": "0.3.23",
     "@seafile/seafile-calendar": "0.0.12",
-    "@seafile/seafile-editor": "1.0.7",
+    "@seafile/seafile-editor": "1.0.8",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/react-codemirror": "^4.19.4",
     "classnames": "^2.2.6",
