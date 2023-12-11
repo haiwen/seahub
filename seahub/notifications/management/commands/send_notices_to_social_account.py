@@ -17,7 +17,7 @@ from seahub.utils import get_site_scheme_and_netloc, get_site_name
 from seahub.auth.models import SocialAuthUser
 from seahub.seadoc.models import SeadocNotification
 from seahub.tags.models import FileUUIDMap
-from seahub.notifications.utils import format_sdoc_notice
+from seahub.notifications.utils import format_sdoc_notice, gen_sdoc_smart_link
 
 from seahub.dingtalk.utils import dingtalk_get_orgapp_token, dingtalk_get_userid_by_unionid_new
 from seahub.dingtalk.settings import DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL, \
@@ -115,7 +115,7 @@ class Command(BaseCommand, CommandLogMixin):
         if resp_json.get('errcode') != 0:
             self.log_info(resp_json)
 
-    def send_work_weixin_msg(self, uid, title, content):
+    def send_work_weixin_msg(self, uid, title, content, detail_url=''):
 
         self.log_info('Send wechat msg to user: %s, msg: %s' % (uid, content))
 
@@ -126,7 +126,7 @@ class Command(BaseCommand, CommandLogMixin):
             'textcard': {
                 'title': title,
                 'description': content,
-                'url': self.detail_url,
+                'url': detail_url or self.detail_url,
             },
         }
 
@@ -266,7 +266,10 @@ class Command(BaseCommand, CommandLogMixin):
                 content = ''.join([wrap_div_for_work_weixin(x.format_msg()) for x in should_send])
                 sdoc_content = ''.join([wrap_div_for_work_weixin(format_sdoc_notice(sdoc_queryset, item)) for item in sdoc_should_send])
                 content = ''.join([content, sdoc_content])
-                self.send_work_weixin_msg(work_weixin_email_uid_dict[email], title, content)
+                detail_url = ''
+                if sdoc_should_send:
+                    detail_url = gen_sdoc_smart_link(sdoc_should_send[0].doc_uuid)
+                self.send_work_weixin_msg(work_weixin_email_uid_dict[email], title, content, detail_url)
                 has_sent = True
 
         translation.activate(cur_language)
