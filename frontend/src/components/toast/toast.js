@@ -67,7 +67,7 @@ export default class Toast extends React.PureComponent {
     /**
      * The type of the alert.
      */
-    intent: PropTypes.oneOf(['none', 'success', 'warning', 'danger']).isRequired,
+    intent: PropTypes.oneOf(['none', 'notify-in-progress', 'success', 'warning', 'danger']).isRequired,
 
     /**
      * The title of the alert.
