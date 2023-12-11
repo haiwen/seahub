@@ -78,7 +78,9 @@ class HistoryVersion extends React.Component {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     const { path } = this.props;
-    this.props.showDailyHistory(path);
+    this.props.showDailyHistory(path, () => {
+      this.props.onSelectHistoryVersion(path);
+    });
   };
 
   render() {

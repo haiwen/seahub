@@ -48,18 +48,66 @@ class SdocFileHistory extends React.Component {
     };
   }
 
-  onSelectHistoryVersion = (currentVersion, isShowChanges) => {
+  getInitContent = (firstChildren) => {
+    if (firstChildren) {
+      return {
+        version: -1,
+        children: [
+          {
+            id: firstChildren.id,
+            type: 'title',
+            children: [
+              {
+                id: firstChildren.children[0].id,
+                text: ''
+              }
+            ]
+          }
+        ]
+      };
+    }
+    return this.getInitContentByPath();
+  };
+
+  getInitContentByPath = (path) => {
+    const name = path ? path.split('/')?.pop()?.slice(0, -5) : '';
+    return {
+      version: -1,
+      children: [
+        {
+          id: '1',
+          type: 'title',
+          children: [
+            {
+              id: '2',
+              text: name
+            }
+          ]
+        }
+      ]
+    };
+  };
+
+  onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
       const currentVersionContent = res.data;
-      if (isShowChanges) {
-        seafileAPI.getNextFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
+      if (lastVersion) {
+        if (lastVersion === 'init') {
+          const lastVersionContent = currentVersionContent ? this.getInitContent(currentVersionContent.children[0]) : this.getInitContentByPath(currentVersion.path);
+          const validCurrentVersionContent = currentVersionContent || this.getInitContentByPath(currentVersion.path);
+          this.setContent(validCurrentVersionContent, lastVersionContent);
+          return;
+        }
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
           return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
         }).then(res => {
           const lastVersionContent = res.data;
-          this.setContent(currentVersionContent, lastVersionContent);
+          const firstChildren = currentVersionContent.children[0];
+          const validLastVersionContent = lastVersion && !lastVersionContent ? this.getInitContent(firstChildren) : lastVersionContent;
+          this.setContent(currentVersionContent, validLastVersionContent);
         }).catch(error => {
           const errorMessage = Utils.getErrorMsg(error, true);
           toaster.danger(gettext(errorMessage));

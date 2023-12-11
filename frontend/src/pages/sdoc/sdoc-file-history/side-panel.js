@@ -24,7 +24,6 @@ class SidePanel extends Component {
       historyGroups: [],
       errorMessage: '',
       hasMore: false,
-      fileOwner: '',
       isReloadingData: false,
     };
     this.currentPage = 1;
@@ -41,15 +40,16 @@ class SidePanel extends Component {
     seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
       const result = res.data;
       const resultCount = result.histories.length;
+      const historyGroups = this.formatHistories(result.histories);
       this.setState({
         historyGroups: this.formatHistories(result.histories),
         hasMore: resultCount >= PER_PAGE,
         isLoading: false,
-        fileOwner: result.histories[0].creator_email,
+      }, () => {
+        if (historyGroups.length > 0) {
+          this.onSelectHistoryVersion([0, 0, 0]);
+        }
       });
-      if (result.histories[0]) {
-        this.props.onSelectHistoryVersion(result.histories[0], result.histories[1]);
-      }
     }).catch((error) => {
       this.setState({isLoading: false});
       throw Error('there has an error in server');
@@ -85,7 +85,6 @@ class SidePanel extends Component {
       historyGroups: this.formatHistories(result.histories),
       hasMore: resultCount >= PER_PAGE,
       isLoading: false,
-      fileOwner: result.histories[0].creator_email,
     });
   }
 
@@ -146,8 +145,26 @@ class SidePanel extends Component {
   onSelectHistoryVersion = (path) => {
     const { isShowChanges } = this.props;
     const { historyGroups } = this.state;
-    const historyVersion = historyGroups[path[0]].children[path[1]].children[path[2]];
-    this.props.onSelectHistoryVersion(historyVersion, isShowChanges);
+    const [monthIndex, dayIndex, dailyIndex] = path;
+    const monthHistoryGroup = historyGroups[monthIndex];
+    const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
+    const currentVersion = dayHistoryGroup.children[dailyIndex];
+    let lastVersion = '';
+    if (isShowChanges) {
+      if (dayHistoryGroup.showDaily) {
+        lastVersion = dayHistoryGroup.children[dailyIndex + 1];
+      }
+      if (!lastVersion) {
+        lastVersion = monthHistoryGroup.children[dayIndex + 1]?.children[0];
+      }
+      if (!lastVersion) {
+        lastVersion = historyGroups[monthIndex + 1]?.children[0]?.children[0];
+      }
+      if (monthIndex === 0 && !lastVersion) {
+        lastVersion = 'init';
+      }
+    }
+    this.props.onSelectHistoryVersion(currentVersion, lastVersion);
   };
 
   copyHistoryFile = (historyVersion) => {
