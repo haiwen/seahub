@@ -57,7 +57,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER
+    DTABLE_WEB_SERVER, EX_PROPS_TABLE, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_EDITABLE_COLUMNS
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
@@ -1245,4 +1245,5 @@ def react_fake_view(request, **kwargs):
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
+        'can_set_ex_props': DTABLE_WEB_SERVER and SEATABLE_EX_PROPS_BASE_API_TOKEN and EX_PROPS_TABLE and EX_EDITABLE_COLUMNS
     })

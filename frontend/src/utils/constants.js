@@ -94,6 +94,8 @@ export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
+export const canSetExProps = window.app.pageOptions.canSetExProps || false;
+
 // seafile_ai
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI || false;
 
