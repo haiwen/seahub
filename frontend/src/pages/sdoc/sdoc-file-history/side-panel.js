@@ -142,13 +142,11 @@ class SidePanel extends Component {
     });
   };
 
-  onSelectHistoryVersion = (path) => {
-    const { isShowChanges } = this.props;
+  getLastVersion = (path, isShowChanges) => {
     const { historyGroups } = this.state;
     const [monthIndex, dayIndex, dailyIndex] = path;
     const monthHistoryGroup = historyGroups[monthIndex];
     const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
-    const currentVersion = dayHistoryGroup.children[dailyIndex];
     let lastVersion = '';
     if (isShowChanges) {
       if (dayHistoryGroup.showDaily) {
@@ -164,6 +162,17 @@ class SidePanel extends Component {
         lastVersion = 'init';
       }
     }
+    return lastVersion;
+  };
+
+  onSelectHistoryVersion = (path) => {
+    const { historyGroups } = this.state;
+    const { isShowChanges } = this.props;
+    const [monthIndex, dayIndex, dailyIndex] = path;
+    const monthHistoryGroup = historyGroups[monthIndex];
+    const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
+    const currentVersion = dayHistoryGroup.children[dailyIndex];
+    const lastVersion = this.getLastVersion(path, isShowChanges);
     this.props.onSelectHistoryVersion(currentVersion, lastVersion);
   };
 
@@ -275,8 +284,22 @@ class SidePanel extends Component {
   };
 
   onShowChanges = () => {
-    const { isShowChanges } = this.props;
-    this.props.onShowChanges(!isShowChanges);
+    const { isShowChanges, currentVersion } = this.props;
+    const { historyGroups } = this.state;
+    const nextShowChanges = !isShowChanges;
+    let lastVersion;
+    if (nextShowChanges) {
+      const { date } = currentVersion;
+      const momentDate = moment(date);
+      const month = momentDate.format('YYYY-MM');
+      const day = momentDate.format('YYYY-MM-DD');
+      const monthIndex = historyGroups.findIndex(item => item.month === month);
+      const dayIndex = historyGroups[monthIndex].children.findIndex(item => item.day === day);
+      const dailyIndex = historyGroups[monthIndex].children[dayIndex].children.findIndex(item => item.date === date);
+      const path = [monthIndex, dayIndex, dailyIndex];
+      lastVersion = this.getLastVersion(path, nextShowChanges);
+    }
+    this.props.onShowChanges(nextShowChanges, lastVersion);
   };
 
   render() {
