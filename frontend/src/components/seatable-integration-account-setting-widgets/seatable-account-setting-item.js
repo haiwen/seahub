@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import DeleteSeatablesDialog from './delete-seatables-dialog';
+import { gettext } from '../../utils/constants';
 
 class SeatableAccountItem extends Component {
 
@@ -48,16 +48,16 @@ class SeatableAccountItem extends Component {
           <span
             className="account-operation-btn"
             onClick={this.props.editSeatableSettingAccount.bind(this, base_api_token)}
-            title={t('Edit')}
-            aria-label={t('Edit')}
+            title={gettext('Edit')}
+            aria-label={gettext('Edit')}
           >
             <i className="sf2-icon-edit" style={{color: '#999'}}></i>
           </span>
           <span
             className="account-operation-btn"
             onClick={this.openDialog}
-            title={t('Delete')}
-            aria-label={t('Delete')}
+            title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
             <i className="sf2-icon-delete" style={{color: '#999'}}></i>
           </span>
@@ -75,4 +75,4 @@ class SeatableAccountItem extends Component {
   }
 }
 
-export default withTranslation('dtable')(SeatableAccountItem);
+export default SeatableAccountItem;

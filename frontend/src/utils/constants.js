@@ -107,6 +107,7 @@ export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
 export const additionalShareDialogNote = window.app.pageOptions.additionalShareDialogNote;
 export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
 export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
+export const enableSeaTableIntegration = window.app.pageOptions.enableSeaTableIntegration;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

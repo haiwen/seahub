@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import { Button } from 'reactstrap';
-import { mediaUrl } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import SeatableAccountItem from './seatable-account-setting-item';
 
 class SeatableAccountSettingList extends Component {
@@ -13,16 +12,15 @@ class SeatableAccountSettingList extends Component {
     editSeatableSettingAccount: PropTypes.func,
     seatableSettings: PropTypes.array,
     deleteStableAccountSetting: PropTypes.func,
-    t: PropTypes.func,
   };
 
   renderContent = () => {
-    const { t, seatableSettings } = this.props;
+    const { seatableSettings } = this.props;
     if (!Array.isArray(seatableSettings) || seatableSettings.length === 0) {
       return (
         <div className="no-accounts d-flex flex-column align-items-center justify-content-center">
-          <img src={`${mediaUrl}img/no-items-tip.png`} alt={t('No SeaTable libraries')} />
-          <p>{t('No Seafile libraries')}</p>
+          <img src={`${mediaUrl}img/no-items-tip.png`} alt={gettext('No SeaTable libraries')} />
+          <p>{gettext('No Seafile libraries')}</p>
         </div>
       );
     }
@@ -31,8 +29,8 @@ class SeatableAccountSettingList extends Component {
         <table className="accounts-list-header">
           <thead>
             <tr>
-              <th width='30%'>{t('Base name')}</th>
-              <th width='55%'>{t('SeaTable server URL')}</th>
+              <th width='30%'>{gettext('Base name')}</th>
+              <th width='55%'>{gettext('SeaTable server URL')}</th>
               <th width='15%'> </th>
             </tr>
           </thead>
@@ -43,12 +41,11 @@ class SeatableAccountSettingList extends Component {
               {seatableSettings.map((setting, index) => {
                 return (
                   <SeatableAccountItem
+                    key={setting.base_api_token}
+                    index={index}
                     setting={setting}
                     editSeatableSettingAccount={this.props.editSeatableSettingAccount}
                     deleteStableAccountSetting={this.props.deleteStableAccountSetting}
-                    t={t}
-                    index={index}
-                    key={setting.base_api_token}
                   />
                 );
               })}
@@ -60,12 +57,11 @@ class SeatableAccountSettingList extends Component {
   };
 
   render() {
-    const { t } = this.props;
     return (
       <div className="accounts-manage">
         <div className="accounts-manage-header d-flex align-items-center justify-content-between">
-          <span>{t('SeaTable')}</span>
-          <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{t('Add')}</Button>
+          <span>{gettext('SeaTable')}</span>
+          <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{gettext('Add')}</Button>
         </div>
         <div className="accounts-list mt-2">
           {this.renderContent()}
@@ -75,4 +71,4 @@ class SeatableAccountSettingList extends Component {
   }
 }
 
-export default withTranslation('dtable')(SeatableAccountSettingList);
+export default SeatableAccountSettingList;

@@ -153,42 +153,34 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     const title = gettext('{placeholder} SeaTable integration').replace('{placeholder}', itemName);
 
     return (
-      <Modal
-        isOpen={true}
-        toggle={onSeaTableIntegrationToggle}
-        className="account-dialog"
-      >
+      <Modal isOpen={true} toggle={onSeaTableIntegrationToggle} className="account-dialog">
         <ModalHeader toggle={onSeaTableIntegrationToggle}>
           <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
         </ModalHeader>
         <ModalBody className="account-dialog-content">
-          <Fragment>
-            <div className="account-dialog-main">
-              <div className="h-100">
-                {status === STATUS.SEATABLE_ACCOUNT_MANAGE &&
-                <SeatableAccountSettingList
-                  seatableSettings={seatableSettings}
-                  changeStatus={() => this.changeStatus(STATUS.ADD_SETABLE_ACCOUNT)}
-                  editSeatableSettingAccount={this.editSeatableSettingAccount}
-                  deleteStableAccountSetting={this.deleteStableAccountSetting}
-                />
-                }
-                {status === STATUS.ADD_SETABLE_ACCOUNT &&
-                <AddSeatableAccountSetting
-                  changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
-                  onSubmit={this.onSubmit}
-                />
-                }
-                {status === STATUS.UPDATE_SEATABLE_ACCOUNT &&
-                <AddSeatableAccountSetting
-                  currentDtableInfo={currentDtableInfo}
-                  changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
-                  onSubmit={this.onSubmit}
-                />
-                }
-              </div>
-            </div>
-          </Fragment>
+          <div className="account-dialog-main">
+            {status === STATUS.SEATABLE_ACCOUNT_MANAGE && (
+              <SeatableAccountSettingList
+                seatableSettings={seatableSettings}
+                changeStatus={() => this.changeStatus(STATUS.ADD_SETABLE_ACCOUNT)}
+                editSeatableSettingAccount={this.editSeatableSettingAccount}
+                deleteStableAccountSetting={this.deleteStableAccountSetting}
+              />
+            )}
+            {status === STATUS.ADD_SETABLE_ACCOUNT && (
+              <AddSeatableAccountSetting
+                changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
+                onSubmit={this.onSubmit}
+              />
+            )}
+            {status === STATUS.UPDATE_SEATABLE_ACCOUNT && (
+              <AddSeatableAccountSetting
+                currentDtableInfo={currentDtableInfo}
+                changeStatus={() => this.changeStatus(STATUS.SEATABLE_ACCOUNT_MANAGE)}
+                onSubmit={this.onSubmit}
+              />
+            )}
+          </div>
         </ModalBody>
       </Modal>
     );

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Alert, Input, FormGroup, Label, InputGroup, InputGroupText } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import { seafileAPI } from '../../utils/seafile-api';
+import { gettext } from '../../utils/constants';
 
 class AddSeatableAccountSetting extends Component {
 
@@ -73,13 +73,13 @@ class AddSeatableAccountSetting extends Component {
     seatable_api_token = seatable_api_token.trim();
     let errMessage = '';
     if (!base_name) {
-      errMessage = t('Base name is required');
+      errMessage = gettext('Base name is required');
     }
     else if (!seatable_url) {
-      errMessage = t('URL is required');
+      errMessage = gettext('URL is required');
     }
     else if (!seatable_api_token) {
-      errMessage = t('SeaTable API token is required');
+      errMessage = gettext('SeaTable API token is required');
     }
 
     this.setState({errMessage});
@@ -93,7 +93,6 @@ class AddSeatableAccountSetting extends Component {
   };
 
   testSeatableAPIToken = async () => {
-    const { t } = this.props;
     const { seatable_url, seatable_api_token } = this.state;
     seafileAPI.req.defaults.headers.Authorization = `Token ${seatable_api_token}`;
     const [res, err] = await seafileAPI.req.get(`${seatable_url}api/v2.1/dtable/app-access-token/`).then(res => [res, null]).catch((err) => [null, err]);
@@ -105,7 +104,7 @@ class AddSeatableAccountSetting extends Component {
     }
     if (err) {
       this.setState({
-        errMessage: t('URL or SeaTable API token is invalid'),
+        errMessage: gettext('URL or SeaTable API token is invalid'),
       });
     }
   };
@@ -119,7 +118,6 @@ class AddSeatableAccountSetting extends Component {
   };
 
   render() {
-    const { t } = this.props;
     const { errMessage, stage, successMessage, base_name, seatable_url, seatable_api_token, passwordType } = this.state;
     return (
       <div className="add-account">
@@ -128,26 +126,26 @@ class AddSeatableAccountSetting extends Component {
             <span className="back-btn d-inline-flex align-items-center justify-content-center" onClick={this.props.changeStatus}>
               <i className="link-icon icon-left sf3-font sf3-font-arrow" style={{transform: 'rotate(180deg)', color: '#999'}}></i>
             </span>
-            <span className="add-account-header-text">{t('Add SeaTable Integration')}</span>
+            <span className="add-account-header-text">{gettext('Add SeaTable Integration')}</span>
           </span>
           <button
             onClick={stage === 'toCheck'? this.testSeatableAPIToken : this.addSeatableAccountSetting}
             type="button"
             className="btn btn-secondary add-account-btn"
-          >{stage === 'toCheck' ? t('Check') : t('Submit')}</button>
+          >{stage === 'toCheck' ? gettext('Check') : gettext('Submit')}</button>
         </div>
         <div className="base-account">
           <div className="account-name-desc">
             <FormGroup>
-              <Label>{t('Base name')}</Label>
+              <Label>{gettext('Base name')}</Label>
               <Input value={base_name} onChange={this.onChangeBaseName}/>
             </FormGroup>
             <FormGroup>
-              <Label>{t('SeaTable server URL')}</Label>
+              <Label>{gettext('SeaTable server URL')}</Label>
               <Input value={seatable_url} onChange={this.onChangeSeatableUrl}/>
             </FormGroup>
             <FormGroup className="base-account-password">
-              <Label>{t('SeaTable API token')}</Label>
+              <Label>{gettext('SeaTable API token')}</Label>
               <InputGroup>
                 <Input value={seatable_api_token} type={passwordType} onChange={this.onChangeSeatableApiToken}/>
                 <InputGroupText>
@@ -157,14 +155,16 @@ class AddSeatableAccountSetting extends Component {
             </FormGroup>
           </div>
           {errMessage && <Alert color="danger">{errMessage}</Alert>}
-          {successMessage && <Alert color="success">
-            <span className="dtable-font dtable-icon-check-circle mr-2"></span>
-            {t('Successfully connected to SeaTable')}
-          </Alert>}
+          {successMessage && (
+            <Alert color="success">
+              <span className="dtable-font dtable-icon-check-circle mr-2"></span>
+              {gettext('Successfully connected to SeaTable')}
+            </Alert>
+          )}
         </div>
       </div>
     );
   }
 }
 
-export default withTranslation('dtable')(AddSeatableAccountSetting);
+export default AddSeatableAccountSetting;

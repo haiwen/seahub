@@ -37,6 +37,11 @@
   table-layout: fixed;
 }
 
+.account-dialog .accounts-list {
+  max-height: 400px;
+  overflow: auto;
+}
+
 .account-dialog .accounts-list table thead tr {
   border-bottom: 1px solid #efefef;
   height: 2.1875rem;
@@ -92,10 +97,6 @@
 .account-dialog {
   max-width: 600px;
   height: calc(100% - 56px);
-}
-
-.account-dialog .modal-content {
-  height: 100%;
 }
 
 .account-dialog .account-dialog-content {
