@@ -658,10 +658,6 @@ class FileView(APIView):
 
         if operation == 'lock':
 
-            if is_locked:
-                error_msg = _("File is locked")
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             # expire < 0, freeze document
             # expire = 0, use default lock duration
             # expire > 0, specify lock duration
@@ -672,17 +668,26 @@ class FileView(APIView):
                 error_msg = 'expire invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # lock file
-            try:
-                if expire > 0:
-                    seafile_api.lock_file(repo_id, path, username,
-                                          int(time.time()) + expire)
-                else:
-                    seafile_api.lock_file(repo_id, path, username, expire)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            if expire < 0 and locked_by_online_office:
+                # freeze document
+                seafile_api.unlock_file(repo_id, path)
+                seafile_api.lock_file(repo_id, path, username, expire)
+            else:
+                if is_locked:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                # lock file
+                try:
+                    if expire > 0:
+                        seafile_api.lock_file(repo_id, path, username,
+                                              int(time.time()) + expire)
+                    else:
+                        seafile_api.lock_file(repo_id, path, username, expire)
+                except SearpcError as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if operation == 'unlock':
 
