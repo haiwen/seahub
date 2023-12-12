@@ -197,7 +197,34 @@ export default class AISearch extends Component {
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
+    this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
+  };
+
+  keepVisitedItem = (targetItem) => {
+    const { repoID } = this.props;
+    let targetIndex;
+    let storeKey = 'sfVisitedAISearchItems';
+    if (repoID) {
+      storeKey += repoID;
+    }
+    const items = JSON.parse(localStorage.getItem(storeKey)) || [];
+    for (let i = 0, len = items.length; i < len; i++) {
+      const { repo_id, path } = items[i];
+      const { repo_id: targetRepoID, path: targetPath } = targetItem;
+      if (repo_id == targetRepoID && path == targetPath) {
+        targetIndex = i;
+        break;
+      }
+    }
+    if (targetIndex != undefined) {
+      items.splice(targetIndex, 1);
+    }
+    items.unshift(targetItem);
+    if (items.length > 50) { // keep 50 items at most
+      items.pop();
+    }
+    localStorage.setItem(storeKey, JSON.stringify(items));
   };
 
   onChangeHandler = (event) => {
@@ -429,11 +456,54 @@ export default class AISearch extends Component {
     this.setState({ searchMode: SEARCH_MODE.COMBINED });
   }
 
+  renderVisitedItems = (items) => {
+    const { highlightIndex } = this.state;
+    const results = (
+      <>
+        <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>
+        <ul className="search-result-list" ref={this.searchResultListRef}>
+          {items.map((item, index) => {
+            const isHighlight = index === highlightIndex;
+            return (
+              <SearchResultItem
+              key={index}
+              item={item}
+              onItemClickHandler={this.onItemClickHandler}
+              isHighlight={isHighlight}
+              setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
+              />
+            );
+          })}
+        </ul>
+      </>
+    );
+
+    return (
+      <>
+        <MediaQuery query="(min-width: 768px)">
+          <div className="search-result-list-container">{results}</div>
+        </MediaQuery>
+        <MediaQuery query="(max-width: 767.8px)">
+          {results}
+        </MediaQuery>
+      </>
+    );
+  }
+
   renderSearchResult() {
     const { resultItems, highlightIndex, width, searchMode, answeringResult } = this.state;
     if (!width || width === 'default') return null;
 
-    if (!this.state.isResultShow) return null;
+    if (!this.state.isResultShow) {
+      const { repoID } = this.props;
+      let storeKey = 'sfVisitedAISearchItems';
+      if (repoID) {
+        storeKey += repoID;
+      }
+      const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+      return visitedItems.length ? this.renderVisitedItems(visitedItems) : null;
+    }
+
     if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
