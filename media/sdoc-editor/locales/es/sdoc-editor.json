@@ -54,6 +54,7 @@
   "Edit": "Editar",
   "Copy": "Copiar",
   "Copied": "Copiado",
+  "Cut": "Cut",
   "Internal_link": "Enlace interno",
   "Copy_internal_link": "El enlace interno ha sido copiado al portapapeles",
   "Internal_link_desc": "Un enlace interno es un enlace a un archivo o carpeta que puede ser accedido por usuarios con permiso de lectura al archivo o carpeta. ",

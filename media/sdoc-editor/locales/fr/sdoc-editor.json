@@ -54,6 +54,7 @@
   "Edit": "Modifier",
   "Copy": "Copier",
   "Copied": "Copié",
+  "Cut": "Cut",
   "Internal_link": "Lien interne",
   "Copy_internal_link": "Le lien interne a été copié dans le presse-papiers.",
   "Internal_link_desc": "Un lien interne est un lien vers un fichier ou un dossier accessible en lecture par un utilisateur.",

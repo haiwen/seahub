@@ -54,6 +54,7 @@
   "Edit": "Edit",
   "Copy": "Copy",
   "Copied": "Copied",
+  "Cut": "Cut",
   "Internal_link": "Internal link",
   "Copy_internal_link": "Internal link has been copied to clipboard",
   "Internal_link_desc": "An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.",
