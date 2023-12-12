@@ -24,7 +24,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, ENABLE_SEAFILE_AI
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, ENABLE_SEAFILE_AI, \
+    ENABLE_SEATABLE_INTEGRATION
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -170,6 +171,7 @@ def base(request):
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_seadoc': ENABLE_SEADOC,
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
+        'enable_seatable_integration': ENABLE_SEATABLE_INTEGRATION
     }
 
     if request.user.is_staff:

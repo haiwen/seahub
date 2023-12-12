@@ -6,6 +6,8 @@ export const defaultContentForSDoc = {
 export const dirPath = '/';
 export const gettext = window.gettext;
 
+export const internalFilePath = '/_Internal/seatable-integration.json';
+
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
 export const avatarInfo = window.app.config.avatarInfo;
@@ -105,6 +107,7 @@ export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
 export const additionalShareDialogNote = window.app.pageOptions.additionalShareDialogNote;
 export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
 export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
+export const enableSeaTableIntegration = window.app.pageOptions.enableSeaTableIntegration;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
