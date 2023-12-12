@@ -225,6 +225,7 @@
   margin: 0;
   padding: 0 10px;
   border: none;
+  max-width: fit-content;
 }
 
 .wiki-page-content a {
