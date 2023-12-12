@@ -1,3 +1,7 @@
+.main-panel {
+  overflow: hidden;
+}
+
 .cur-view-content.lib-content-container {
   padding: 0;
 }
@@ -210,6 +214,11 @@
   background-color: #fff;
   border: none;
   overflow: inherit;
+}
+
+.wiki-page-content .sf-slate-viewer-article-container {
+  display: block;
+  width: 100%;
 }
 
 .dir-content-main .wiki-page-content .article {
