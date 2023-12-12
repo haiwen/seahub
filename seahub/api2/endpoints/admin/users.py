@@ -113,6 +113,9 @@ def get_user_objs_from_ccnet(email_list):
         logger.error(error_msg)
         return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
+    if not email_list:
+        return list(), None
+
     sql = """SELECT e.email, is_staff, is_active, ctime, role FROM `%s`.`EmailUser` e
              LEFT JOIN `%s`.`UserRole` r ON e.email=r.email WHERE e.email IN %%s""" % (db_name, db_name)
     try:
