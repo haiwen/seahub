@@ -346,3 +346,10 @@
 .search-result-container .search-mode-similarity-index-status.index-status-uncreated {
   cursor: pointer;
 }
+
+.visited-search-results-title {
+  color: #999;
+  font-size: .875rem;
+  font-weight: normal;
+  margin: 7px 0 10px;
+}

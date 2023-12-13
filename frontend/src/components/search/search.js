@@ -163,7 +163,34 @@ class Search extends Component {
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
+    this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
+  };
+
+  keepVisitedItem = (targetItem) => {
+    const { repoID } = this.props;
+    let targetIndex;
+    let storeKey = 'sfVisitedSearchItems';
+    if (repoID) {
+      storeKey += repoID;
+    }
+    const items = JSON.parse(localStorage.getItem(storeKey)) || [];
+    for (let i = 0, len = items.length; i < len; i++) {
+      const { repo_id, path } = items[i];
+      const { repo_id: targetRepoID, path: targetPath } = targetItem;
+      if (repo_id == targetRepoID && path == targetPath) {
+        targetIndex = i;
+        break;
+      }
+    }
+    if (targetIndex != undefined) {
+      items.splice(targetIndex, 1);
+    }
+    items.unshift(targetItem);
+    if (items.length > 50) { // keep 50 items at most
+      items.pop();
+    }
+    localStorage.setItem(storeKey, JSON.stringify(items));
   };
 
   onChangeHandler = (event) => {
@@ -341,7 +368,16 @@ class Search extends Component {
     const { resultItems, highlightIndex, width } = this.state;
     if (!width || width === 'default') return null;
 
-    if (!this.state.isResultShow) return null;
+    if (!this.state.isResultShow) {
+      const { repoID } = this.props;
+      let storeKey = 'sfVisitedSearchItems';
+      if (repoID) {
+        storeKey += repoID;
+      }
+      const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+      return visitedItems.length ? this.renderResults(visitedItems, true) : null;
+    }
+
     if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
@@ -353,7 +389,14 @@ class Search extends Component {
       );
     }
 
+    return this.renderResults(resultItems);
+  }
+
+  renderResults = (resultItems, isVisited) => {
+    const { highlightIndex } = this.state;
     const results = (
+      <>
+      {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
       <ul className="search-result-list" ref={this.searchResultListRef}>
         {resultItems.map((item, index) => {
           const isHighlight = index === highlightIndex;
@@ -368,6 +411,7 @@ class Search extends Component {
           );
         })}
       </ul>
+      </>
     );
 
     return (
