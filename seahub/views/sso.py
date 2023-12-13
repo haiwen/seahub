@@ -19,7 +19,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.auth.decorators import login_required
 from seahub.utils import render_permission_error, render_error
 from seahub.api2.utils import get_token_v1, get_token_v2
-from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_TOKEN_EXPIRATION
+from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_TOKEN_EXPIRATION, LOGIN_URL
 from seahub.base.models import ClientSSOToken
 
 # Get an instance of a logger
@@ -143,7 +143,7 @@ def client_sso(request, token):
         logger.error('%s is not safe url.' % next_page)
         next_page = reverse('client_sso_complete', args=[token, ])
 
-    redirect_url = reverse('sso') + '?next=' + quote(next_page)
+    redirect_url = LOGIN_URL + '?next=' + quote(next_page)
     return HttpResponseRedirect(redirect_url)
 
 
