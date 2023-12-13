@@ -123,7 +123,6 @@ class MylibRepoMenu extends React.Component {
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
     }
-    console.log(enableSeaTableIntegration);
     if (enableSeaTableIntegration) {
       operations.push('SeaTable integration');
     }

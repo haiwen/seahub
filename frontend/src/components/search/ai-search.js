@@ -292,7 +292,6 @@ export default class AISearch extends Component {
   onAiSearch = (queryData, cancelToken, page) => {
     let results = [];
     seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
-      console.log(res.data)
       results = [...results, ...this.formatResultItems(res.data.results)];
       this.setState({
           resultItems: results,
