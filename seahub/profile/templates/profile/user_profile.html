@@ -9,21 +9,6 @@
 {% if user %}
     {% avatar user.username 64 %}
     <p title="{{ nickname }}" class="user-profile-nickname ellipsis">{{ nickname }}</p>
-    <ul>
-        {% if d_profile %}
-        {% if d_profile.telephone %}
-        <li title="{{ d_profile.telephone }}" class="user-profile-info ellipsis">
-            <span class="user-profile-info-icon icon-phone fa-1x vam"></span>
-            <span class="vam">{{ d_profile.telephone }}</span>
-        </li>
-        {% endif %}
-        {% endif %}
-        <li title="{{ contact_email }}" class="user-profile-info ellipsis">
-            <span class="user-profile-info-icon icon-envelope fa-1x vam"></span>
-            <span class="vam">{{ contact_email }}</span>
-        </li>
-    </ul>
-
 {% else %}
     {% avatar "" 64 %}
 {% endif %}
