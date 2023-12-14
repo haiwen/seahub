@@ -33,6 +33,8 @@ class ExternalOperations extends React.Component {
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
     this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
+    this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
+    this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
   }
 
   componentWillUnmount() {
@@ -77,6 +79,28 @@ class ExternalOperations extends React.Component {
 
   onShareToggle = () => {
     this.setState({isShowShareDialog: !this.state.isShowShareDialog});
+  };
+
+  onFreezeDocument = () => {
+    const { repoID, docPath } = this.props;
+    seafileAPI.lockfile(repoID, docPath, -1).then((res) => {
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.REFRESH_DOCUMENT);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  unFreeze = () => {
+    const { repoID, docPath } = this.props;
+    seafileAPI.unlockfile(repoID, docPath).then((res) => {
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.REFRESH_DOCUMENT);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   render() {
