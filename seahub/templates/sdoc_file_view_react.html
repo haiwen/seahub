@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block extra_data %}
+isPro: '{{ is_pro }}',
 docPath: '{{ path|escapejs }}',
 docName: '{{ filename|escapejs }}',
 docUuid: '{{ file_uuid }}',

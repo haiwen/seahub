@@ -6,7 +6,7 @@ import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import SdocEditor from './pages/sdoc/sdoc-editor';
 
-const { serviceURL, avatarURL, siteRoot, lang, mediaUrl } = window.app.config;
+const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, parentDir, filePerm,
@@ -45,6 +45,7 @@ window.seafile = {
   revisionId,
   mediaUrl,
   isFreezed,
+  isPro: isPro === 'True' ? true : false,
 };
 
 ReactDom.render(

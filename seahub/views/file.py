@@ -2229,6 +2229,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
 
     return_dict['can_share_file'] = False
     return_dict['filetype'] = 'SDoc'
+    return_dict['is_pro'] = is_pro_version()
 
     file_uuid = revision.doc_uuid
     return_dict['file_uuid'] = file_uuid
