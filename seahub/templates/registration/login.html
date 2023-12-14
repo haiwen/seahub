@@ -69,15 +69,15 @@ html, body, #wrapper { height:100%; }
         <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal forgot-passwd">{% trans "Forgot password?" %}</a>
 	{% endif %}
 
-        <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
+        <button type="submit" class="submit btn btn-primary btn-block h-auto">{% trans "Log In" %}</button>
     </form>
 
     {% if enable_sso %}
-    <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
+    <button id="sso" class="btn btn-secondary btn-block">{% trans "Single Sign-On" %}</button>
     {% endif %}
 
     {% if enable_multi_adfs %}
-    <a id="multi_adfs_sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
+    <button id="multi_adfs_sso" class="btn btn-secondary btn-block">{% trans "Single Sign-On" %}</button>
     {% endif %}
 
     {% if enable_weixin %}

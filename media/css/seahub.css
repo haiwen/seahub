@@ -269,9 +269,11 @@ input.submit,
 .fileinput-button,
 select {
     padding:5px 6px;
+    /*
     background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
     background:-moz-linear-gradient(top, #fafafb, #eeeeee);
     background:linear-gradient(top, #fafafb, #eeeeee);
+    */
     border: 1px solid #c5c5c5;
     border-radius: 2px;
 }
