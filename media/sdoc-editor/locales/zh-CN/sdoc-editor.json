@@ -424,5 +424,6 @@
   "Row_number": "行数",
   "Column_number": "列数",
   "The_maximum_row_number_is_{number}": "最大行数为 {number}",
-  "The_maximum_column_number_is_{number}": "最大列数为 {number}"
+  "Freeze_Document": "冻结文档",
+  "Unfreeze": "取消冻结"
 }

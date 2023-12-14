@@ -424,5 +424,6 @@
   "Row_number": "Row number",
   "Column_number": "Column number",
   "The_maximum_row_number_is_{number}": "The maximum row number is {number}",
-  "The_maximum_column_number_is_{number}": "The maximum column number is {number}"
+  "Freeze_Document": "Freeze Document",
+  "Unfreeze": "Unfreeze"
 }
