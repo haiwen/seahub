@@ -35,12 +35,12 @@
   "Remove_table": "Удалить таблицу",
   "Column": "Столбец",
   "Row": "Строка",
-  "Insert_row_before": "Insert row before",
-  "Insert_row_after": "Insert row after",
-  "Insert_column_before": "Insert column before",
-  "Insert_column_after": "Insert column after",
-  "Remove_row": "Remove row",
-  "Remove_column": "Remove column",
+  "Insert_row_before": "Вставить строку перед",
+  "Insert_row_after": "Вставить строку после",
+  "Insert_column_before": "Вставить столбец перед",
+  "Insert_column_after": "Вставить столбец после",
+  "Remove_row": "Удалить строку",
+  "Remove_column": "Удалить столбец",
   "Insert_row": "Вставить строку",
   "Insert_column": "Вставить столбец",
   "Set_align": "Установить выравнивание",
@@ -135,12 +135,12 @@
   "Tags": "Метки",
   "Add_participants": "Добавить участников",
   "Clear_format": "Очистить формат",
-  "Image_address_invalid": "Image address invalid",
+  "Image_address_invalid": "Адрес изображения недействителен",
   "Shortcut_help": "Справка по горячим клавишам",
-  "Link_address_required": "Link address required",
-  "Link_address_invalid": "Link address invalid",
-  "Link_title_required": "Link title required",
-  "Blank_title_not_allowed": "Blank title not allowed",
+  "Link_address_required": "Требуется адрес ссылки",
+  "Link_address_invalid": "Адрес ссылки недействителен",
+  "Link_title_required": "Требуется название ссылки",
+  "Blank_title_not_allowed": "Пустой заголовок недопустим",
   "userHelp": {
     "title": "Горячие клавиши",
     "userHelpData": [
@@ -177,14 +177,14 @@
       {
         "shortcutType": "Горячие клавиши для блока цитаты",
         "shortcutData": {
-          "Make_block_quote": "Make block quote",
-          "Escape_block_quote": "Escape block quote"
+          "Make_block_quote": "Создать блок цитаты",
+          "Escape_block_quote": "Выделить блок цитаты"
         }
       },
       {
         "shortcutType": "Горячие клавиши для таблицы",
         "shortcutData": {
-          "Insert_table_row": "Insert table tow",
+          "Insert_table_row": "Вставить строку таблицы",
           "Escape_table": "Выделить таблицу"
         }
       },
@@ -199,7 +199,7 @@
         "shortcutData": {
           "Bold": "Полужирный",
           "Italic": "Курсив",
-          "Italic_bold": "Italic bold",
+          "Italic_bold": "Курсив полужирный",
           "Inline_code": "Встроенный код"
         }
       },
@@ -218,6 +218,6 @@
       }
     ]
   },
-  "Select_field": "Select field",
-  "Font_style": "Font style"
+  "Select_field": "Выбрать поле",
+  "Font_style": "Стиль шрифта"
 }
