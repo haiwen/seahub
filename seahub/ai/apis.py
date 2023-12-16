@@ -13,10 +13,11 @@ from seahub.api2.authentication import TokenAuthentication, SeafileAiAuthenticat
 from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, is_valid_repo_id_format
 from seahub.ai.utils import create_library_sdoc_index, search, update_library_sdoc_index, \
     delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
-    get_file_download_token
+    get_file_download_token, get_search_repos
+from seahub.utils import is_org_context
 
 from seaserv import seafile_api
 
@@ -70,7 +71,7 @@ class Search(APIView):
 
     def post(self, request):
         query = request.data.get('query')
-        repo_id = request.data.get('repo_id')
+        search_repo = request.data.get('search_repo', 'all')
 
         try:
             count = int(request.data.get('count'))
@@ -80,13 +81,23 @@ class Search(APIView):
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
 
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not is_valid_repo_id_format(search_repo) and search_repo != 'all':
+            error_msg = 'search_repo invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if search_repo == 'all':
+            org_id = request.user.org.org_id if is_org_context(request) else None
+            repo_id_list = get_search_repos(request.user.username, org_id)
+            is_all_repo = True
+        else:
+            repo_id_list = [search_repo]
+            is_all_repo = False
 
         params = {
             'query': query,
-            'repo_id': repo_id,
+            'repo_id_list': repo_id_list,
             'count': count,
+            'is_all_repo': is_all_repo,
         }
 
         try:

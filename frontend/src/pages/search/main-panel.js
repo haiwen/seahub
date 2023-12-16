@@ -1,6 +1,6 @@
 import React from 'react';
 import deepCopy from 'deep-copy';
-import { gettext } from '../../utils/constants';
+import { gettext, enableSeafileAI } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
 import AdvancedSearch from './advanced-search';
@@ -49,6 +49,15 @@ class SearchViewPanel extends React.Component {
       isLoading: true,
       isResultGot: false,
     });
+
+    if (enableSeafileAI) {
+      this.onAiSearch(params)
+    } else {
+      this.onNormalSearch(params);
+    }
+  }
+
+  onNormalSearch = (params) => {
     const stateHistory = deepCopy(this.state);
     seafileAPI.searchFiles(params, null).then(res => {
       const { results, has_more, total } = res.data;
@@ -74,6 +83,24 @@ class SearchViewPanel extends React.Component {
       }
     });
   }
+
+  onAiSearch = (params) => {
+    let results = [];
+    seafileAPI.aiSearchFiles(params, null).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+          resultItems: results,
+          isResultGetted: true,
+          isLoading: false,
+          hasMore: false,
+        });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  };
+
 
   handleSearchParams = (page) => {
     let params = { q: this.state.q.trim(), page: page };

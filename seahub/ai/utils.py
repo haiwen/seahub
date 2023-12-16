@@ -5,6 +5,7 @@ import time
 from urllib.parse import urljoin
 
 from seahub.settings import SEAFILE_AI_SERVER_URL, SEAFILE_AI_SECRET_KEY
+from seahub.utils import get_user_repos
 
 from seaserv import seafile_api
 
@@ -68,3 +69,14 @@ def query_library_index_state(repo_id):
 
 def get_file_download_token(repo_id, file_id, username):
     return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
+
+
+def get_search_repos(username, org_id):
+    repo_id_list = []
+    owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
+    repo_list = owned_repos + shared_repos + group_repos + public_repos
+
+    for repo in repo_list:
+        repo_id_list.append(repo.id)
+
+    return repo_id_list
