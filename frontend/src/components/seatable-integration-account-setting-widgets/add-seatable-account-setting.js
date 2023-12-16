@@ -20,7 +20,7 @@ class AddSeatableAccountSetting extends Component {
     this.state = {
       errMessage: '',
       base_name: currentDtableInfo?.base_name || '',
-      seatable_url: currentDtableInfo?.seatable_url || 'https://dev.seatable.cn/',
+      seatable_url: currentDtableInfo?.seatable_url || '',
       seatable_api_token: currentDtableInfo?.base_api_token || '',
       successMessage: null,
       stage: 'toCheck',  // toCheck: need to check -> toSubmit: need to submit
