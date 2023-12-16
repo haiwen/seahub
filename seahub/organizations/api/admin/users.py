@@ -780,8 +780,7 @@ class OrgAdminInviteUser(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not IS_EMAIL_CONFIGURED:
-            error_msg = _('Failed to send email, email service is not properly configured, \
-                           please contact administrator.')
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # parameter check
