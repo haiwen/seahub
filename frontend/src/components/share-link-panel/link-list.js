@@ -5,8 +5,6 @@ import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
-import './index.css';
-
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
   permissionOptions: PropTypes.array.isRequired,
@@ -76,33 +74,48 @@ class LinkList extends React.Component {
             <p className="text-secondary">{gettext('No share links')}</p>
           </EmptyTip>
         ) : (
-          <table className="table-hover sdoc-share-link-tab-table">
-            <thead>
-              <tr>
-                <th width="5%" className="text-center">
-                  <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />
-                </th>
-                <th width="26%">{gettext('Link')}</th>
-                <th width="30%">{gettext('Permission')}</th>
-                <th width="25%">{gettext('Expiration')}</th>
-                <th width="14%"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {shareLinks.map((item, index) => {
-                return (
-                  <LinkItem
-                    key={index}
-                    item={item}
-                    permissionOptions={permissionOptions}
-                    showLinkDetails={this.props.showLinkDetails}
-                    toggleSelectLink={this.props.toggleSelectLink}
-                    deleteLink={this.props.deleteLink}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          <div className='share-list-container share-link'>
+            <table className="table-place-header">
+              <thead>
+                <tr>
+                  <th width="5%" className="text-center">
+                    <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />
+                  </th>
+                  <th width="26%">{gettext('Link')}</th>
+                  <th width="30%">{gettext('Permission')}</th>
+                  <th width="25%">{gettext('Expiration')}</th>
+                  <th width="14%"></th>
+                </tr>
+              </thead>
+            </table>
+            <div className='table-real-container'>
+              <table className="table-real-content table-thead-hidden">
+                <thead>
+                  <tr>
+                    <th width="5%" className="text-center"></th>
+                    <th width="26%">{gettext('Link')}</th>
+                    <th width="30%">{gettext('Permission')}</th>
+                    <th width="25%">{gettext('Expiration')}</th>
+                    <th width="14%"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shareLinks.map((item, index) => {
+                    return (
+                      <LinkItem
+                        key={index}
+                        item={item}
+                        permissionOptions={permissionOptions}
+                        showLinkDetails={this.props.showLinkDetails}
+                        toggleSelectLink={this.props.toggleSelectLink}
+                        deleteLink={this.props.deleteLink}
+                      />
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
         {this.state.isDeleteShareLinksDialogOpen && (
           <CommonOperationConfirmationDialog
