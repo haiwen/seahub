@@ -19,8 +19,8 @@ class SeatableAccountSettingList extends Component {
     if (!Array.isArray(seatableSettings) || seatableSettings.length === 0) {
       return (
         <div className="no-accounts d-flex flex-column align-items-center justify-content-center">
-          <img src={`${mediaUrl}img/no-items-tip.png`} alt={gettext('No SeaTable libraries')} />
-          <p>{gettext('No Seafile libraries')}</p>
+          <img src={`${mediaUrl}img/no-items-tip.png`} alt={gettext('No SeaTable bases')} />
+          <p>{gettext('No SeaTable bases')}</p>
         </div>
       );
     }
@@ -29,7 +29,7 @@ class SeatableAccountSettingList extends Component {
         <table className="accounts-list-header">
           <thead>
             <tr>
-              <th width='30%'>{gettext('Base name')}</th>
+              <th width='30%'>{gettext('SeaTable base name')}</th>
               <th width='55%'>{gettext('SeaTable server URL')}</th>
               <th width='15%'> </th>
             </tr>
@@ -60,7 +60,7 @@ class SeatableAccountSettingList extends Component {
     return (
       <div className="accounts-manage">
         <div className="accounts-manage-header d-flex align-items-center justify-content-between">
-          <span>{gettext('SeaTable')}</span>
+          <span>{'SeaTable'}</span>
           <Button color="primary" size="sm" outline={true} onClick={this.props.changeStatus}>{gettext('Add')}</Button>
         </div>
         <div className="accounts-list mt-2">

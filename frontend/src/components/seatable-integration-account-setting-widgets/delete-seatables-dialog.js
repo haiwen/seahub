@@ -18,7 +18,7 @@ class DeleteSeatablesDialog extends Component {
       <Modal isOpen={true} toggle={closeDialog}>
         <ModalHeader toggle={closeDialog}>{gettext('Delete SeaTable base')}</ModalHeader>
         <ModalBody>
-          <div className="pb-6">{gettext('Are you sure to delete SeaTable')}{' '}{accountName}?</div>
+          <p className="pb-6">{gettext('Are you sure to delete SeaTable {accountName}?').replace('{accountName}', accountName)}</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={closeDialog}>{gettext('Cancel')}</Button>

@@ -60,7 +60,7 @@ class OrgAdminInviteUserDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Invite users')}</ModalHeader>
         <ModalBody>
-          <p>{gettext('You can enter multiple emails, separated by commas. An invitation link will be sent to each user.')}</p>
+          <p>{gettext('You can enter multiple emails. An invitation link will be sent to each of them.')}</p>
           <Form>
             <FormGroup>
               <Label for="emails">{gettext('Emails')}</Label>

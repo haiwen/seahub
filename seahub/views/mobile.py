@@ -16,7 +16,7 @@ def mobile_login(request):
 
     auth = request.headers.get('authorization', '').split()
     if not auth or auth[0].lower() != 'token':
-        return render_error(request, 'token invalid.')
+        return render_error(request, 'token invalid')
 
     key = auth[1]
     try:
@@ -25,16 +25,16 @@ def mobile_login(request):
         try:
             token = TokenV2.objects.get(key=key)
         except TokenV2.DoesNotExist:
-            return render_error(request, 'token invalid.')
+            return render_error(request, 'token invalid')
 
     try:
         user = User.objects.get(email=token.user)
     except User.DoesNotExist:
-        error_msg = _(f'User {token.user} not found.')
+        error_msg = _(f'User {token.user} not found')
         return render_error(request, error_msg)
 
     if not user.is_active:
-        error_msg = _(f'User {token.user} inactive.')
+        error_msg = _(f'User {token.user} inactive')
         return render_error(request, error_msg)
 
     user.backend = AuthBackend.__module__ + ".AuthBackend"

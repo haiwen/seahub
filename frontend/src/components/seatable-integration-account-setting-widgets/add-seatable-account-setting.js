@@ -73,10 +73,10 @@ class AddSeatableAccountSetting extends Component {
     seatable_api_token = seatable_api_token.trim();
     let errMessage = '';
     if (!base_name) {
-      errMessage = gettext('Base name is required');
+      errMessage = gettext('SeaTable base name is required');
     }
     else if (!seatable_url) {
-      errMessage = gettext('URL is required');
+      errMessage = gettext('SeaTable server URL is required');
     }
     else if (!seatable_api_token) {
       errMessage = gettext('SeaTable API token is required');
@@ -137,7 +137,7 @@ class AddSeatableAccountSetting extends Component {
         <div className="base-account">
           <div className="account-name-desc">
             <FormGroup>
-              <Label>{gettext('Base name')}</Label>
+              <Label>{gettext('SeaTable base name')}</Label>
               <Input value={base_name} onChange={this.onChangeBaseName}/>
             </FormGroup>
             <FormGroup>
