@@ -134,7 +134,7 @@ class OrgUsers extends Component {
 
   toggleInviteUserViaWeiXinDialog = () => {
     this.setState({isInviteUserViaWeiXinDialogOpen: !this.state.isInviteUserViaWeiXinDialogOpen});
-  }
+  };
 
   initOrgUsersData = (page) => {
     const { sortBy, sortOrder } = this.state;
@@ -218,13 +218,13 @@ class OrgUsers extends Component {
         orgUsers: users.concat(this.state.orgUsers)
       });
 
-      res.data.success.map(item => {
+      res.data.success.forEach(item => {
         let msg = gettext('successfully sent email to %s.');
         msg = msg.replace('%s', item.email);
         toaster.success(msg);
       });
 
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });

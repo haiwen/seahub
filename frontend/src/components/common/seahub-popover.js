@@ -23,12 +23,12 @@ class SeahubPopover extends React.Component {
   isSelectOpen = false;
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.onMouseDown, true);
+    document.addEventListener('mousedown', this.onMouseDown);
     document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.onMouseDown, true);
+    document.removeEventListener('mousedown', this.onMouseDown);
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
