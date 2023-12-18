@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { enableSeafileAI, gettext, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
@@ -280,10 +280,19 @@ class Search extends Component {
         this.setState({ isLoading: false });
       });
     } else {
-      this.updateSearchPageURL(queryData);
-      queryData['per_page'] = PER_PAGE;
-      queryData['page'] = page;
-      seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+      if (enableSeafileAI) {
+        this.onAiSearch(queryData, cancelToken)
+      } else {
+        this.onNormalSearch(queryData, cancelToken, page)
+      }
+    }
+  };
+
+  onNormalSearch = (queryData, cancelToken, page) => {
+    this.updateSearchPageURL(queryData);
+    queryData['per_page'] = PER_PAGE;
+    queryData['page'] = page;
+    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
@@ -307,7 +316,23 @@ class Search extends Component {
         console.log(error);
         this.setState({ isLoading: false });
       });
-    }
+  }
+
+  onAiSearch = (params, cancelToken) => {
+    let results = [];
+    seafileAPI.aiSearchFiles(params, cancelToken).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+          resultItems: results,
+          isResultGetted: true,
+          isLoading: false,
+          hasMore: false,
+        });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
   };
 
   onResultListScroll = (e) => {
