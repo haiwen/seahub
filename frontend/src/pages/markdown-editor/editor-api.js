@@ -129,10 +129,6 @@ class EditorApi {
     return seafileAPI.getInternalLink(repoID, filePath);
   }
 
-  getShareLink() {
-    return seafileAPI.getShareLink(repoID, filePath);
-  }
-
   createShareLink (repoID, filePath, userPassword, userValidDays, permissions) {
     return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays, permissions);
   }

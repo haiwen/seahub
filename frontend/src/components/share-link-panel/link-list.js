@@ -4,6 +4,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import Loading from '../../components/loading';
 
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
@@ -13,7 +14,9 @@ const propTypes = {
   toggleSelectAllLinks: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
   deleteLink: PropTypes.func.isRequired,
-  deleteShareLinks: PropTypes.func.isRequired
+  deleteShareLinks: PropTypes.func.isRequired,
+  isLoadingMore: PropTypes.bool.isRequired,
+  handleScroll: PropTypes.func.isRequired
 };
 
 class LinkList extends React.Component {
@@ -46,7 +49,7 @@ class LinkList extends React.Component {
   };
 
   render() {
-    const { shareLinks, permissionOptions } = this.props;
+    const { shareLinks, permissionOptions, isLoadingMore, handleScroll } = this.props;
     const selectedLinks = shareLinks.filter(item => item.isSelected);
     const isAllLinksSelected = shareLinks.length == selectedLinks.length;
 
@@ -88,7 +91,7 @@ class LinkList extends React.Component {
                 </tr>
               </thead>
             </table>
-            <div className='table-real-container'>
+            <div className='table-real-container' onScroll={handleScroll}>
               <table className="table-real-content table-thead-hidden">
                 <thead>
                   <tr>
@@ -114,6 +117,7 @@ class LinkList extends React.Component {
                   })}
                 </tbody>
               </table>
+              {isLoadingMore && <Loading />}
             </div>
           </div>
         )}
