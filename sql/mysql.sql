@@ -1023,7 +1023,7 @@ CREATE TABLE `social_auth_usersocialauth` (
   `username` varchar(255) NOT NULL,
   `provider` varchar(32) NOT NULL,
   `uid` varchar(255) NOT NULL,
-  `extra_data` longtext NOT NULL,
+  `extra_data` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `social_auth_usersocialauth_provider_uid_e6b5e668_uniq` (`provider`,`uid`),
   KEY `social_auth_usersocialauth_username_3f06b5cf` (`username`)

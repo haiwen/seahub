@@ -38,3 +38,11 @@ CREATE INDEX IF NOT EXISTS "org_saml_config_domain_verified_398065b9" ON "org_sa
 INSERT INTO "org_saml_config" ("org_id", "metadata_url", "domain") SELECT "org_id", "metadata_url", "domain" FROM "org_saml_config_old";
 UPDATE `org_saml_config` SET domain_verified=1 WHERE domain_verified=0;
 DROP TABLE "org_saml_config_old";
+
+DROP TABLE IF EXISTS "social_auth_usersocialauth_old";
+ALTER TABLE "social_auth_usersocialauth" RENAME TO "social_auth_usersocialauth_old";
+CREATE TABLE "social_auth_usersocialauth" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "provider" varchar(32) NOT NULL, "uid" varchar(255) NOT NULL, "extra_data" text NULL);
+CREATE INDEX "social_auth_usersocialauth_username_3f06b5cf" ON "social_auth_usersocialauth" ("username");
+CREATE UNIQUE INDEX "social_auth_usersocialauth_provider_uid_e6b5e668_uniq" ON "social_auth_usersocialauth" ("provider", "uid");
+INSERT INTO "social_auth_usersocialauth" ("username", "provider", "uid", "extra_data") SELECT "username", "provider", "uid", "extra_data" FROM "social_auth_usersocialauth_old";
+DROP TABLE "social_auth_usersocialauth_old";
