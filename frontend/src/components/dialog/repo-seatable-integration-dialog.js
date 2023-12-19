@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import SeatableAccountSettingList from '../seatable-integration-account-setting-widgets/seatable-account-setting-list.js';

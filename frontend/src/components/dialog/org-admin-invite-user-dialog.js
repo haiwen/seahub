@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, InputGroup, InputGroupAddon, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalHeader, ModalBody, ModalFooter, Label, Form, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -26,7 +26,7 @@ class OrgAdminInviteUserDialog extends React.Component {
       this.setState({isAddingUser: true});
       this.props.handleSubmit(email.trim());
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     e.preventDefault();
@@ -38,11 +38,11 @@ class OrgAdminInviteUserDialog extends React.Component {
   inputEmail = (e) => {
     let email = e.target.value.trim();
     this.setState({email: email});
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   validateInputParams() {
     let errMessage;

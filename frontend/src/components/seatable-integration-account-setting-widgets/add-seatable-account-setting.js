@@ -66,7 +66,6 @@ class AddSeatableAccountSetting extends Component {
   };
 
   addSeatableAccountSetting = () => {
-    const { t } = this.props;
     let { base_name, seatable_url, seatable_api_token } = this.state;
     base_name = base_name.trim();
     seatable_url = seatable_url.trim();

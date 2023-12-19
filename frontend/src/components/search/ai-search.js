@@ -286,7 +286,7 @@ export default class AISearch extends Component {
     this.updateSearchPageURL(queryData);
     queryData['per_page'] = PER_PAGE;
     queryData['page'] = page;
-     this.onAiSearch(queryData, cancelToken, page);
+    this.onAiSearch(queryData, cancelToken, page);
   };
 
   onAiSearch = (queryData, cancelToken, page) => {
@@ -294,12 +294,12 @@ export default class AISearch extends Component {
     seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
       results = [...results, ...this.formatResultItems(res.data.results)];
       this.setState({
-          resultItems: results,
-          isResultGetted: true,
-          isLoading: false,
-          page: page + 1,
-          hasMore: false,
-        });
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        page: page + 1,
+        hasMore: false,
+      });
     }).catch(error => {
       /* eslint-disable */
       console.log(error);

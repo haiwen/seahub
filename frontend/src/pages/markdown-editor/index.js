@@ -16,7 +16,7 @@ import '../../css/markdown-viewer/markdown-editor.css';
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
-const { repoID, filePath, fileName, draftID, isDraft, hasDraft, isLocked, lockedByMe } = window.app.pageOptions;
+const { repoID, filePath, fileName, isDraft, hasDraft, isLocked, lockedByMe } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];

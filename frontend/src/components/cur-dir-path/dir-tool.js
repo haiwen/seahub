@@ -24,8 +24,13 @@ class DirTool extends React.Component {
     this.tagsIconID = `tags-icon-${uuidv4()}`;
   }
 
-  onShowListRepoTag = (e) => {
-    this.setState({ isListRepoTagShow: true });
+  onMouseDown = (e) => {
+    e.stopPropagation();
+  };
+
+  toggleRepoTag = (e) => {
+    e.stopPropagation();
+    this.setState({ isListRepoTagShow: !this.state.isListRepoTagShow });
   };
 
   hidePopover = (e) => {
@@ -61,7 +66,16 @@ class DirTool extends React.Component {
       toolbarDom = (
         <ul className="path-toolbar">
           <li className="toolbar-item">
-            <a className="op-link sf2-icon-tag" href="#" id={this.tagsIconID} role="button" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a>
+            <a
+              className="op-link sf2-icon-tag"
+              href="#"
+              id={this.tagsIconID}
+              role="button"
+              onClick={this.toggleRepoTag}
+              onMouseDown={this.onMouseDown}
+              title={gettext('Tags')}
+              aria-label={gettext('Tags')}
+            ></a>
           </li>
           <li className="toolbar-item">
             <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
@@ -74,7 +88,16 @@ class DirTool extends React.Component {
       toolbarDom = (
         <ul className="path-toolbar">
           <li className="toolbar-item">
-            <a className="op-link sf2-icon-tag" href="#" id={this.tagsIconID} role="button" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a>
+            <a
+              className="op-link sf2-icon-tag"
+              href="#"
+              id={this.tagsIconID}
+              role="button"
+              onClick={this.toggleRepoTag}
+              onMouseDown={this.onMouseDown}
+              title={gettext('Tags')}
+              aria-label={gettext('Tags')}
+            ></a>
           </li>
           <li className="toolbar-item">
             <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
