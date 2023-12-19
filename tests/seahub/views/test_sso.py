@@ -35,7 +35,7 @@ class SSOTest(BaseTestCase):
 
         t = ClientSSOToken.objects.new()
         assert t.api_key is None
-        assert t.email is None
+        assert t.username is None
 
         t.accessed()
         resp = self.client.post('/client-sso/%s/complete/' % t.token)
@@ -43,4 +43,4 @@ class SSOTest(BaseTestCase):
 
         t2 = ClientSSOToken.objects.get(token=t.token)
         assert t2.api_key is not None
-        assert t2.email == self.user.username
+        assert t2.username == self.user.username

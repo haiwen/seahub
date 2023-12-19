@@ -191,7 +191,7 @@ def client_sso_complete(request, token):
             elif all(['shib_' + key not in request.GET for key in keys]):
                 api_token = get_token_v1(username)
 
-            t.completed(email=username, api_key=api_token.key)
+            t.completed(username=username, api_key=api_token.key)
             logger.info('Client SSO success, token: %s, user: %s' % (token, username))
         else:
             logger.warning('Client SSO token is not waiting, skip.')

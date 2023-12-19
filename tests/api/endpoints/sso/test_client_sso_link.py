@@ -39,10 +39,10 @@ class ClientSSOLinkTest(TransactionTestCase, Fixtures):
         assert json_resp['status'] == 'waiting'
 
         t.accessed()
-        t.completed(email=self.user.username, api_key='xxx')
+        t.completed(username=self.user.username, api_key='xxx')
 
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
         assert json_resp['status'] == 'success'
-        assert json_resp['email'] == self.user.username
+        assert json_resp['username'] == self.user.username
         assert json_resp['apiToken'] == 'xxx'

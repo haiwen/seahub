@@ -417,7 +417,7 @@ class ClientSSOToken(models.Model):
     )
 
     token = models.CharField(max_length=100, unique=True)
-    email = LowerCaseCharField(max_length=255, db_index=True, blank=True, null=True)
+    username = LowerCaseCharField(max_length=255, db_index=True, blank=True, null=True)
     status = models.CharField(max_length=10, default=STATUS_WAITING, choices=STATUS_CHOICES)
     api_key = models.CharField(max_length=40, blank=True, null=True)
     created_at = models.DateTimeField(db_index=True, auto_now_add=True)
@@ -434,10 +434,10 @@ class ClientSSOToken(models.Model):
     def is_success(self):
         return self.status == STATUS_SUCCESS
 
-    def completed(self, email, api_key):
+    def completed(self, username, api_key):
         assert self.is_waiting() is True
 
-        self.email = email
+        self.username = username
         self.api_key = api_key
         self.status = STATUS_SUCCESS
         self.updated_at = timezone.now()

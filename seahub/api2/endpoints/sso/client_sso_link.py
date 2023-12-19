@@ -38,7 +38,7 @@ class ClientSSOLink(APIView):
 
         return Response({
             'status': t.status,
-            'email': t.email,
+            'username': t.username,
             'apiToken': t.api_key
         })
 
