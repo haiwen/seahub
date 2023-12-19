@@ -1210,7 +1210,6 @@ def react_fake_view(request, **kwargs):
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-        'dtable_web_server': DTABLE_WEB_SERVER,
         'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
