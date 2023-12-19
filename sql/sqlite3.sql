@@ -642,4 +642,9 @@ CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_deleted_time" ON "deleted_fil
 CREATE TABLE IF NOT EXISTS "sdoc_notification" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "doc_uuid" varchar(36) NOT NULL UNIQUE, "username" varchar(255) NOT NULL, "msg_type" varchar(36) NOT NULL, "created_at" datetime NOT NULL, "detail" text NOT NULL, "seen" integer NOT NULL DEFAULT 0);
 CREATE INDEX IF NOT EXISTS "sdoc_notification_doc_uuid_username" ON "sdoc_notification" ("doc_uuid", "username");
 CREATE INDEX IF NOT EXISTS "sdoc_notification_created_at" ON "sdoc_notification" ("created_at");
+CREATE TABLE IF NOT EXISTS "base_clientssotoken" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(100) NOT NULL UNIQUE, "username" varchar(255) NULL, "status" varchar(10) NOT NULL, "api_key" varchar(40) NULL, "created_at" datetime NOT NULL, "updated_at" datetime NULL, "accessed_at" datetime NULL);
+CREATE INDEX IF NOT EXISTS "base_clientssotoken_username_651ec6b5" ON "base_clientssotoken" ("username");
+CREATE INDEX IF NOT EXISTS "base_clientssotoken_created_at_d185d3e0" ON "base_clientssotoken" ("created_at");
+CREATE INDEX IF NOT EXISTS "base_clientssotoken_updated_at_591fc2cd" ON "base_clientssotoken" ("updated_at");
+CREATE INDEX IF NOT EXISTS "base_clientssotoken_accessed_at_cdc66bf3" ON "base_clientssotoken" ("accessed_at");
 COMMIT;
