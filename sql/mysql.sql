@@ -1461,3 +1461,20 @@ CREATE TABLE `sdoc_notification` (
   KEY `sdoc_notification_doc_uuid_username` (`doc_uuid`, `username`),
   KEY `sdoc_notification_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `base_clientssotoken` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(100) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `status` varchar(10) NOT NULL,
+  `api_key` varchar(40) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `accessed_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`),
+  KEY `base_clientssotoken_username_651ec6b5` (`username`),
+  KEY `base_clientssotoken_created_at_d185d3e0` (`created_at`),
+  KEY `base_clientssotoken_updated_at_591fc2cd` (`updated_at`),
+  KEY `base_clientssotoken_accessed_at_cdc66bf3` (`accessed_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
