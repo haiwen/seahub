@@ -500,3 +500,69 @@ class ViaRepoBatchMove(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class ViaRepoBatchCopy(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi copy files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        # argument check
+        src_parent_dir = request.data.get('src_parent_dir', None)
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_dirents = request.data.get('src_dirents', None)
+        if not src_dirents:
+            error_msg = 'src_dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir', None)
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
+            error_msg = 'Folder %s not found.' % src_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+
+        try:
+            seafile_api.copy_file(repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
+                                  username=username, need_progress=0,
+                                  synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
