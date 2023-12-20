@@ -449,21 +449,14 @@ class ViaRepoBatchMove(APIView):
 
         Parameter:
         {
-            "src_repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
             "src_parent_dir":"/a/b/c/",
             "src_dirents":["1.md", "2.md"],
 
-            "dst_repo_id":"a3fa768d-0f00-4343-8b8d-07b4077881db",
             "dst_parent_dir":"/x/y/",
         }
         """
-
+        repo_id = request.repo_api_token_obj.repo_id
         # argument check
-        src_repo_id = request.data.get('src_repo_id', None)
-        if not src_repo_id:
-            error_msg = 'src_repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         src_parent_dir = request.data.get('src_parent_dir', None)
         if not src_parent_dir:
             error_msg = 'src_parent_dir invalid.'
@@ -474,50 +467,30 @@ class ViaRepoBatchMove(APIView):
             error_msg = 'src_dirents invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        dst_repo_id = request.data.get('dst_repo_id', None)
-        if not dst_repo_id:
-            error_msg = 'dst_repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         dst_parent_dir = request.data.get('dst_parent_dir', None)
         if not dst_parent_dir:
             error_msg = 'dst_parent_dir invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        if not seafile_api.get_repo(src_repo_id):
-            error_msg = 'Library %s not found.' % src_repo_id
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_dir_id_by_path(src_repo_id, src_parent_dir):
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
             error_msg = 'Folder %s not found.' % src_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_repo(dst_repo_id):
-            error_msg = 'Library %s not found.' % dst_repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not seafile_api.get_dir_id_by_path(dst_repo_id, dst_parent_dir):
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
             error_msg = 'Folder %s not found.' % dst_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = check_folder_permission_by_repo_api(request, src_repo_id, src_parent_dir)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        permission = check_folder_permission_by_repo_api(request, dst_repo_id, dst_parent_dir)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         username = request.user.username
 
-        result = {}
         try:
-            seafile_api.move_file(src_repo_id, src_parent_dir,
+            seafile_api.move_file(repo_id, src_parent_dir,
                                   json.dumps(src_dirents),
-                                  dst_repo_id, dst_parent_dir,
+                                  repo_id, dst_parent_dir,
                                   json.dumps(src_dirents),
                                   replace=False, username=username,
                                   need_progress=0, synchronous=1)
@@ -526,23 +499,4 @@ class ViaRepoBatchMove(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = {}
-        result['success'] = True
-
-        # sdoc image
-        try:
-            sdoc_dirents = []
-            if src_repo_id != dst_repo_id:
-                for dirent in src_dirents:
-                    filetype, fileext = get_file_type_and_ext(dirent)
-                    if filetype == SEADOC:
-                        sdoc_dirents.append(dirent)
-            for sdoc_dirent in sdoc_dirents:
-                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
-                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
-                move_sdoc_images_to_different_repo(
-                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
-        except Exception as e:
-            logger.error(e)
-
-        return Response(result)
+        return Response({'success': True})
