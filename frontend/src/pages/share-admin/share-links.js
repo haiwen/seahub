@@ -19,6 +19,7 @@ import Selector from '../../components/single-selector';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
+  isLoadingMore: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   sortBy: PropTypes.string.isRequired,
@@ -114,7 +115,12 @@ class Content extends Component {
         </table>
       );
 
-      return items.length ? table : emptyTip;
+      return items.length ? (
+        <>
+          {table}
+          {this.props.isLoadingMore && <div className="flex-shrink-0"><Loading /></div>}
+        </>
+      ) : emptyTip;
     }
   }
 }
@@ -360,6 +366,8 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired
 };
 
+const PER_PAGE = 25;
+
 class ShareAdminShareLinks extends Component {
 
   constructor(props) {
@@ -367,6 +375,9 @@ class ShareAdminShareLinks extends Component {
     this.state = {
       isCleanInvalidShareLinksDialogOpen: false,
       loading: true,
+      hasMore: false,
+      isLoadingMore: false,
+      page: 1,
       errorMsg: '',
       items: [],
       sortBy: 'name', // 'name' or 'time'
@@ -437,12 +448,14 @@ class ShareAdminShareLinks extends Component {
   }
 
   listUserShareLinks() {
-    seafileAPI.listUserShareLinks().then((res) => {
+    const { page } = this.state;
+    seafileAPI.listShareLinks({ page }).then((res) => {
       let items = res.data.map(item => {
         return new ShareLink(item);
       });
       this.setState({
         loading: false,
+        hasMore: res.data.length == PER_PAGE,
         items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
@@ -452,6 +465,40 @@ class ShareAdminShareLinks extends Component {
       });
     });
   }
+
+  handleScroll = (event) => {
+    if (!this.state.isLoadingMore && this.state.hasMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({isLoadingMore: true}, () => {
+          this.getMore();
+        });
+      }
+    }
+  };
+
+  getMore = () => {
+    const { page } = this.state;
+    seafileAPI.listShareLinks({ page: page + 1 }).then((res) => {
+      let moreItems = res.data.map(item => {
+        return new ShareLink(item);
+      });
+      this.setState({
+        isLoadingMore: false,
+        hasMore: res.data.length == PER_PAGE,
+        page: page + 1,
+        items: this._sortItems(this.state.items.concat(moreItems), this.state.sortBy, this.state.sortOrder)
+      });
+    }).catch((error) => {
+      this.setState({
+        isLoadingMore: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  };
 
   onRemoveLink = (item) => {
     seafileAPI.deleteShareLink(item.token).then(() => {
@@ -511,9 +558,10 @@ class ShareAdminShareLinks extends Component {
               </ul>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content" onScroll={this.handleScroll}>
               <Content
                 loading={this.state.loading}
+                isLoadingMore={this.state.isLoadingMore}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
                 sortBy={this.state.sortBy}
