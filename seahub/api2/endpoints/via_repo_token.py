@@ -15,6 +15,8 @@ from rest_framework.views import APIView
 from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
+from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, get_file_draft
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
@@ -24,14 +26,16 @@ from pysearpc import SearpcError
 
 import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
-from seahub.constants import PERMISSION_READ
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.seadoc.utils import move_sdoc_images_to_different_repo
-from seahub.utils.file_types import SEADOC
+from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_types import SEADOC, MARKDOWN, TEXT
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
     normalize_file_path, render_error, gen_file_get_url, is_pro_version, get_file_type_and_ext
 from seahub.utils.repo import get_sub_folder_permission_by_dir, parse_repo_perm, get_locked_files_by_dir
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
+from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -646,3 +650,197 @@ class ViaRepoBatchDelete(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class ViaRepoTokenFile(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get_file_info(self, username, repo_id, file_path):
+
+        repo = seafile_api.get_repo(repo_id)
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        if file_obj:
+            file_name = file_obj.obj_name
+            file_size = file_obj.size
+            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+            can_edit, error_msg = can_edit_file(file_name, file_size, repo)
+        else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+            file_size = ''
+            can_preview = False
+            can_edit = False
+
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
+        except Exception as e:
+            logger.error(e)
+            is_locked = False
+
+        file_info = {
+            'type': 'file',
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(file_path),
+            'obj_name': file_name,
+            'obj_id': file_obj.obj_id if file_obj else '',
+            'size': file_size,
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
+            'is_locked': is_locked,
+            'can_preview': can_preview,
+            'can_edit': can_edit,
+        }
+
+        return file_info
+
+    def post(self, request, format=None):
+        """ Create, rename, move, copy, revert file
+
+        Permission checking:
+        2. rename: user with 'rw' permission for current file;
+        4. revert: user with 'rw' permission for current file's parent dir;
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        # argument check
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+
+        operation = request.data.get('operation', None)
+        if not operation:
+            error_msg = 'operation invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        operation = operation.lower()
+        if operation not in ('rename', 'revert'):
+            error_msg = "operation can only be 'create', 'rename', 'move', 'copy', 'convert' or 'revert'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        parent_dir = os.path.dirname(path)
+
+        is_draft = request.POST.get('is_draft', '')
+
+        if operation == 'rename':
+            # argument check
+            new_file_name = request.data.get('newname', None)
+            if not new_file_name:
+                error_msg = 'newname invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
+            if len(new_file_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+                error_msg = 'newname is too long.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            oldname = os.path.basename(path)
+            if oldname == new_file_name:
+                error_msg = 'The new name is the same to the old'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # resource check
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not file_id:
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            # if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+            #     error_msg = _("Permission denied.")
+            #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check file lock
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_locked and not locked_by_me:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # rename file
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+            try:
+                seafile_api.rename_file(repo_id, parent_dir, oldname, new_file_name, username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+
+            # rename draft file
+            filetype, fileext = get_file_type_and_ext(new_file_name)
+            if filetype == MARKDOWN or filetype == TEXT:
+                is_draft = is_draft_file(repo.id, path)
+                review = get_file_draft(repo.id, path, is_draft)
+                draft_id = review['draft_id']
+                if is_draft:
+                    try:
+                        draft = Draft.objects.get(pk=draft_id)
+                        draft.draft_file_path = new_file_path
+                        draft.save()
+                    except Draft.DoesNotExist:
+                        pass
+
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            return Response(file_info)
+
+        if operation == 'revert':
+            commit_id = request.data.get('commit_id', None)
+            if not commit_id:
+                error_msg = 'commit_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if seafile_api.get_file_id_by_path(repo_id, path):
+                # file exists in repo
+                if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                # check file lock
+                try:
+                    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if is_locked and not locked_by_me:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            else:
+                # file NOT exists in repo
+                if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            try:
+                seafile_api.revert_file(repo_id, commit_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
