@@ -577,7 +577,7 @@ class ViaRepoBatchDelete(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
-    def post(self, request):
+    def delete(self, request):
         """ Multi delete files/folders.
         Permission checking:
         1. User must has `rw` permission for parent folder.
@@ -613,30 +613,6 @@ class ViaRepoBatchDelete(APIView):
         if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        # User must has `rw` permission for parent dir.
-        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # check locked files
-        username = request.user.username
-        locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
-        for dirent in dirents:
-            # file is locked and lock owner is not current user
-            if dirent in list(locked_files.keys()) and \
-                    locked_files[dirent] != username:
-                error_msg = _('File %s is locked.') % dirent
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # check sub folder permission
-        folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
-        for dirent in dirents:
-            if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] not in ('rw', 'cloud-edit'):
-                error_msg = _("Can't delete folder %s, please check its permission.") % dirent
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
 
