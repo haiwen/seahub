@@ -597,21 +597,6 @@ def view_lib_file(request, repo_id, path):
     return_dict['locked_by_me'] = locked_by_me
     return_dict['can_lock_unlock_file'] = can_lock_unlock_file
 
-    # file shared link
-    l = FileShare.objects.filter(repo_id=repo_id).filter(
-        username=username).filter(path=path)
-    fileshare = l[0] if len(l) > 0 else None
-    file_shared_link = gen_file_share_link(fileshare.token) if fileshare else ''
-
-    return_dict['fileshare'] = fileshare,
-    return_dict['file_shared_link'] = file_shared_link
-
-    if parse_repo_perm(permission).can_download and \
-       request.user.permissions.can_generate_share_link():
-        return_dict['can_share_file'] = True
-    else:
-        return_dict['can_share_file'] = False
-
     # fetch file contributors and latest contributor
     try:
         # get real path for sub repo
