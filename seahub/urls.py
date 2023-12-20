@@ -107,7 +107,7 @@ from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
 from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPITokenView
 from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView, \
-    ViaRepoDownloadLinkView, ViaRepoBatchMove, ViaRepoBatchCopy
+    ViaRepoDownloadLinkView, ViaRepoBatchMove, ViaRepoBatchCopy, ViaRepoBatchDelete
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView

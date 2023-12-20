@@ -444,7 +444,7 @@ class ViaRepoBatchMove(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
-        """ Asynchronous multi copy files/folders.
+        """ Asynchronous multi move files/folders.
         Permission checking:
         1. User must has `r/rw` permission for src folder.
         2. User must has `rw` permission for dst folder.
@@ -574,17 +574,14 @@ class ViaRepoBatchDelete(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
-        """ Asynchronous multi copy files/folders.
+        """ Multi delete files/folders.
         Permission checking:
-        1. User must has `r/rw` permission for src folder.
-        2. User must has `rw` permission for dst folder.
-
+        1. User must has `rw` permission for parent folder.
         Parameter:
         {
-            "src_parent_dir":"/a/b/c/",
-            "src_dirents":["1.md", "2.md"],
-
-            "dst_parent_dir":"/x/y/",
+            "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+            "parent_dir":"/a/b/c/",
+            "dirents":["1.md", "2.md"],
         }
         """
         repo_id = request.repo_api_token_obj.repo_id
