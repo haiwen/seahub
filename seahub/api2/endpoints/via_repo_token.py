@@ -29,7 +29,9 @@ from seahub.seadoc.utils import move_sdoc_images_to_different_repo
 from seahub.utils.file_types import SEADOC
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
     normalize_file_path, render_error, gen_file_get_url, is_pro_version, get_file_type_and_ext
+from seahub.utils.repo import get_sub_folder_permission_by_dir, parse_repo_perm, get_locked_files_by_dir
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -566,3 +568,84 @@ class ViaRepoBatchCopy(APIView):
 
         return Response({'success': True})
 
+
+class ViaRepoBatchDelete(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi copy files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        # argument check
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        parent_dir = request.data.get('parent_dir', None)
+        if not parent_dir:
+            error_msg = 'parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dirents = request.data.get('dirents', None)
+        if not dirents:
+            error_msg = 'dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        # User must has `rw` permission for parent dir.
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check locked files
+        username = request.user.username
+        locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+        for dirent in dirents:
+            # file is locked and lock owner is not current user
+            if dirent in list(locked_files.keys()) and \
+                    locked_files[dirent] != username:
+                error_msg = _('File %s is locked.') % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check sub folder permission
+        folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
+        for dirent in dirents:
+            if dirent in list(folder_permission_dict.keys()) and \
+                    folder_permission_dict[dirent] not in ('rw', 'cloud-edit'):
+                error_msg = _("Can't delete folder %s, please check its permission.") % dirent
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps(dirents),
+                                 username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

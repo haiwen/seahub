@@ -455,6 +455,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/via-repo-token/repo-info/$', RepoInfoView.as_view(), name='via-fetch-repo'),
     re_path(r'^api/v2.1/via-repo-token/sync-batch-move-item/$', ViaRepoBatchMove.as_view(), name='via-fetch-repo'),
     re_path(r'^api/v2.1/via-repo-token/sync-batch-copy-item/$', ViaRepoBatchCopy.as_view(), name='via-fetch-repo'),
+    re_path(r'^api/v2.1/via-repo-token/batch-delete-item/$', ViaRepoBatchDelete.as_view(), name='via-fetch-repo'),
 
     # user::related-files
     re_path(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
