@@ -32,7 +32,6 @@ export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
 
 //pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
-export const dtableWebServer = window.app.pageOptions.dtableWebServer;
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
 export const contactEmail = window.app.pageOptions.contactEmail;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM, enableOCMViaWebdav } from '../utils/constants';
+import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM, enableOCMViaWebdav } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -74,11 +74,6 @@ class MainSideNav extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.tabItemClick(param, id);
-  };
-
-  onDTableClick = () => {
-    let url = dtableWebServer;
-    window.open(url);
   };
 
   getActiveClass = (tab) => {
@@ -290,14 +285,6 @@ class MainSideNav extends React.Component {
             {customNavItems && this.renderCustomNavItems()}
           </ul>
         </div>
-
-        {dtableWebServer &&
-          <div className="side-nav-link" onClick={this.onDTableClick}>
-            <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
-            <span className="link-text">SeaTable</span>
-            <span className="link-icon icon-right sf3-font sf3-font-arrow"></span>
-          </div>
-        }
       </div>
     );
   }
