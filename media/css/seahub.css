@@ -1449,6 +1449,7 @@ a.sf-popover-item {
     display:block;
     padding:1px 5px;
     font-weight:normal;
+    line-height: 1.5;
 }
 #lang-context-selector a:hover {
     background:#eee;
@@ -1491,6 +1492,10 @@ a.sf-popover-item {
     margin:0 auto;
     box-shadow:0 0 8px #a7a6a9;
 }
+#log-in-panel {
+    padding: 30px 25px 15px;
+    width: 336px;
+}
 @media (max-width:389px) {
     .login-panel {
         width:100%;
@@ -1500,7 +1505,7 @@ a.sf-popover-item {
 }
 .login-panel-logo {
     display:block;
-    margin:0 auto 20px;
+    margin:0 auto 32px;
 }
 .login-panel-hd {
     font-size:18px;
@@ -1515,6 +1520,25 @@ a.sf-popover-item {
     height:36px;
     width:248px;
     font-size:14px;
+}
+#log-in-panel .input {
+    width: 264px;
+    height: 34px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+#toggle-show-password {
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    cursor: pointer;
+    color: #999;
+}
+#toggle-show-password:hover {
+    color: #666;
+}
+#log-in-panel .remember-me {
+    font-size: 12px;
 }
 .login-panel .name-input {
     border-radius: 3px 3px 0 0;
@@ -1538,6 +1562,14 @@ a.sf-popover-item {
 .login-panel-bottom-container {
     margin-top:10px;
     text-align:right;
+}
+#login-bottom {
+  font-size: 12px;
+  line-height: 1;
+  margin-top: 20px;
+}
+#login-bottom .bottom-item {
+  border-right: 1px solid #eb8205;
 }
 #signup-form .input {
     margin-bottom:5px;

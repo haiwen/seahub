@@ -6,6 +6,7 @@
 {% block header_css_class %}hide{% endblock %}
 
 {% block extra_base_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 {% endblock %}
 
@@ -31,14 +32,17 @@ html, body, #wrapper { height:100%; }
 
 {% block main_content %}
 <div class="login-panel-outer-container vh">
-<div class="login-panel">
+<div class="login-panel" id="log-in-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
     <form action="" method="post" id="login-form">{% csrf_token %}
-        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input name-input" /><br />
-        <input type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input passwd-input" autocomplete="off" />
+        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" />
+        <div class="position-relative">
+          <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
+          <i id="toggle-show-password" class="fas fa-eye-slash"></i>
+        </div>
 
         {% if form.captcha %}
-        <div class="ovhd">
+        <div class="ovhd mt-3">
             <span id="refresh-captcha" title="{% trans "Refresh" %}" class="icon-refresh op-icon fright"></span>
             {{ form.captcha }}
         </div>
@@ -49,27 +53,24 @@ html, body, #wrapper { height:100%; }
         {% if form.captcha.errors %}
         {{ form.captcha.errors}}
         {% elif form.errors.freeze_account %}
-        <p class="error">{{ form.errors.freeze_account }}</p>
+        <p class="error mt-2">{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
-        <p class="error">{{ form.errors.inactive }}</p>
+        <p class="error mt-2">{{ form.errors.inactive }}</p>
         {% elif form.errors.not_found %}
-        <p class="error">{{ form.errors.not_found }}</p>
+        <p class="error mt-2">{{ form.errors.not_found }}</p>
         {% else %}
-        <p class="error">{% trans "Incorrect email or password" %}</p>
+        <p class="error mt-2">{% trans "Incorrect email or password" %}</p>
         {% endif %}
         {% else %}
-        <p class="error hide"></p>
+        <p class="error mt-2 hide"></p>
         {% endif %}
 
-        <label class="checkbox-label remember">
+        <label class="checkbox-label mt-3 mb-0 remember-me">
             <input type="checkbox" name="remember_me" class="vam remember-input" />
             <span class="vam">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
         </label>
-	{% if enable_change_password %}
-        <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal forgot-passwd">{% trans "Forgot password?" %}</a>
-	{% endif %}
 
-        <button type="submit" class="submit btn btn-primary btn-block h-auto">{% trans "Log In" %}</button>
+        <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Log In" %}</button>
     </form>
 
     {% if enable_sso %}
@@ -89,9 +90,12 @@ html, body, #wrapper { height:100%; }
     </div>
     {% endif %}
 
-    <div class="login-panel-bottom-container">
+    <div class="login-panel-bottom-container d-flex justify-content-center" id="login-bottom">
+        {% if enable_change_password %}
+        <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal px-2 bottom-item">{% trans "Forgot password?" %}</a>
+        {% endif %}
         {% if enable_signup %}
-        <a href="{{ signup_url }}" class="normal fleft" id="sign-up">{% trans "Signup" %}</a>
+        <a href="{{ signup_url }}" class="normal px-2 bottom-item" id="sign-up">{% trans "Signup" %}</a>
         {% endif %}
     </div>
 </div>
@@ -102,7 +106,16 @@ html, body, #wrapper { height:100%; }
 {% block extra_script %}
 <script type="text/javascript">
 $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
-$('.login-panel-bottom-container').append($('#lang').removeClass('fright'));
+$('.login-panel-bottom-container').append($('#lang').removeClass('fright').addClass('px-2'));
+
+$('#toggle-show-password').click(function() {
+  $(this).toggleClass('fa-eye-slash fa-eye');
+  if ($(this).hasClass('fa-eye-slash')) {
+    $('#password-input').attr('type', 'password');
+  } else {
+    $('#password-input').attr('type', 'text');
+  }
+});
 
 var $el = $('.login-panel-outer-container');
 var elHeight = $el.outerHeight();
@@ -110,7 +123,6 @@ var wdHeight = $(window).height();
 if (wdHeight > elHeight) {
     $el.css({'margin-top': (wdHeight - elHeight)/2});
 }
-$('#lang').css({'margin-left': $('#sign-up').outerWidth() + 10});
 $el.removeClass('vh');
 
 $('#lang-context').on('click', function() {
