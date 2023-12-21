@@ -87,15 +87,22 @@ class Search(APIView):
 
         if search_repo == 'all':
             org_id = request.user.org.org_id if is_org_context(request) else None
-            repo_id_list = get_search_repos(request.user.username, org_id)
+            repos = get_search_repos(request.user.username, org_id)
             is_all_repo = True
         else:
-            repo_id_list = [search_repo]
+            try:
+                repo = seafile_api.get_repo(search_repo)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Library %s not found.' % search_repo
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            repos = [(repo.id, repo.origin_repo_id, repo.origin_path)]
             is_all_repo = False
 
         params = {
             'query': query,
-            'repo_id_list': repo_id_list,
+            'repos': repos,
             'count': count,
             'is_all_repo': is_all_repo,
         }
