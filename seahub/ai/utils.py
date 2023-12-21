@@ -72,11 +72,11 @@ def get_file_download_token(repo_id, file_id, username):
 
 
 def get_search_repos(username, org_id):
-    repo_id_list = []
+    repos = []
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
     repo_list = owned_repos + shared_repos + group_repos + public_repos
 
     for repo in repo_list:
-        repo_id_list.append(repo.id)
+        repos.append((repo.id, repo.origin_repo_id, repo.origin_path))
 
-    return repo_id_list
+    return repos
