@@ -82,11 +82,15 @@ html, body, #wrapper { height:100%; }
     {% endif %}
 
     {% if enable_weixin %}
-    <div>
-    {% trans "Login with: " %}
-    <a href="{% url "weixin_oauth_login" %}">
+    <div class="text-center">
+      <div class="mt-5 mb-4 d-flex align-items-center">
+        <span class="login-with-wechat-deco flex-fill"></span>
+        <span id="login-with-wechat" class="mx-2">{% trans "Login with" %}</span>
+        <span class="login-with-wechat-deco flex-fill"></span>
+      </div>
+      <a href="{% url "weixin_oauth_login" %}">
         <img src="{{MEDIA_URL}}img/weixin.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}微信{% else %}WeChat{% endif %}" />
-    </a>
+      </a>
     </div>
     {% endif %}
 

@@ -1563,6 +1563,12 @@ a.sf-popover-item {
     margin-top:10px;
     text-align:right;
 }
+#login-with-wechat {
+  color: #a6a6a6;
+}
+.login-with-wechat-deco {
+  border-bottom: 1px solid #a6a6a6;
+}
 #login-bottom {
   font-size: 12px;
   line-height: 1;
