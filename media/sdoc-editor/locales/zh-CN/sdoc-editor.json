@@ -376,7 +376,7 @@
   "Link_sdoc": "链接 sdoc",
   "Link_file": "文件链接",
   "Keep_my_modification": "保留我的更改",
-  "Keep_other_modification": "保留其他的更改",
+  "Keep_other_modification": "保留他人的更改",
   "Keep_both_modification": "保留两者更改",
   "Tip": "提示",
   "Rebase_delete_no_change_revision_tip": "修订改没有更改，是否删除修订稿？",
