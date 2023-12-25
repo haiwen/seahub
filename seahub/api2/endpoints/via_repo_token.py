@@ -28,11 +28,10 @@ import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.seadoc.utils import move_sdoc_images_to_different_repo
-from seahub.utils.file_op import check_file_lock
-from seahub.utils.file_types import SEADOC, MARKDOWN, TEXT
+
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
-    normalize_file_path, render_error, gen_file_get_url, is_pro_version, get_file_type_and_ext
-from seahub.utils.repo import get_sub_folder_permission_by_dir, parse_repo_perm, get_locked_files_by_dir
+    normalize_file_path, render_error, gen_file_get_url, is_pro_version
+
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.views.file import can_preview_file, can_edit_file
@@ -736,20 +735,6 @@ class ViaRepoTokenFile(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
-
-            # rename draft file
-            filetype, fileext = get_file_type_and_ext(new_file_name)
-            if filetype == MARKDOWN or filetype == TEXT:
-                is_draft = is_draft_file(repo.id, path)
-                review = get_file_draft(repo.id, path, is_draft)
-                draft_id = review['draft_id']
-                if is_draft:
-                    try:
-                        draft = Draft.objects.get(pk=draft_id)
-                        draft.draft_file_path = new_file_path
-                        draft.save()
-                    except Draft.DoesNotExist:
-                        pass
 
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)
