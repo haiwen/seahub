@@ -24,6 +24,7 @@ class ExternalOperations extends React.Component {
     this.state = {
       isShowInternalLinkDialog: false,
       isShowShareDialog: false,
+      internalLink: '',
     };
   }
 
@@ -44,7 +45,10 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare();
   }
 
-  onInternalLinkToggle = () => {
+  onInternalLinkToggle = ({internalLink}) => {
+    if (internalLink) {
+      this.setState({internalLink});
+    }
     this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
   };
 
@@ -105,13 +109,14 @@ class ExternalOperations extends React.Component {
 
   render() {
     const { repoID, docPath, docName, docPerm } = this.props;
-    const { isShowInternalLinkDialog, isShowShareDialog } = this.state;
+    const { isShowInternalLinkDialog, isShowShareDialog, internalLink } = this.state;
     return (
       <>
         {isShowInternalLinkDialog && (
           <InternalLinkDialog
             repoID={repoID}
             path={docPath}
+            internalLink={internalLink}
             onInternalLinkDialogToggle={this.onInternalLinkToggle}
           />
         )}
