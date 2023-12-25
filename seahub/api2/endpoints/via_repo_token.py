@@ -27,13 +27,11 @@ from pysearpc import SearpcError
 import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
-from seahub.seadoc.utils import move_sdoc_images_to_different_repo
 
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
     normalize_file_path, render_error, gen_file_get_url, is_pro_version
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.views import check_folder_permission
 from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
