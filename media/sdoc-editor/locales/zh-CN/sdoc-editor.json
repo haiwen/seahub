@@ -425,5 +425,8 @@
   "Column_number": "列数",
   "The_maximum_row_number_is_{number}": "最大行数为 {number}",
   "Freeze_Document": "冻结文档",
-  "Unfreeze": "取消冻结"
+  "Unfreeze": "取消冻结",
+  "Other_modification": "他人更改",
+  "My_modification": "我的更改",
+  "Document_history": "文档历史"
 }

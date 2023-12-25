@@ -425,5 +425,8 @@
   "Column_number": "Номер столбца",
   "The_maximum_row_number_is_{number}": "Максимальное количество строк - {number}",
   "Freeze_Document": "Заморозить документ",
-  "Unfreeze": "Разморозить"
+  "Unfreeze": "Разморозить",
+  "Other_modification": "Other's modification",
+  "My_modification": "My modification",
+  "Document_history": "Document history"
 }

@@ -425,5 +425,8 @@
   "Column_number": "Column number",
   "The_maximum_row_number_is_{number}": "The maximum row number is {number}",
   "Freeze_Document": "Freeze Document",
-  "Unfreeze": "Unfreeze"
+  "Unfreeze": "Unfreeze",
+  "Other_modification": "Other's modification",
+  "My_modification": "My modification",
+  "Document_history": "Document history"
 }
