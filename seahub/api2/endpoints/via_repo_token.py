@@ -794,18 +794,6 @@ class ViaRepoTokenFile(APIView):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                # check file lock
-                try:
-                    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-                if is_locked and not locked_by_me:
-                    error_msg = _("File is locked")
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             try:
                 seafile_api.revert_file(repo_id, commit_id, path, username)
             except Exception as e:
