@@ -69,7 +69,7 @@ class UserSelector extends Component {
     const { isPopoverOpen, query } = this.state;
     const { currentSelectedUsers, availableUsers } = this.props;
     const selectedUsers = availableUsers.filter(item => item.isSelected);
-    const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.email.indexOf(query.trim()) != -1) : availableUsers;
+    const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1) : availableUsers;
     return (
       <div className="mt-4 position-relative">
         <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
@@ -97,7 +97,7 @@ class UserSelector extends Component {
             <div className="px-3 pt-3">
               <Input
                 type="text"
-                placeholder={gettext('Search users')}
+                placeholder={gettext('Find modifiers')}
                 value={query}
                 onChange={this.onQueryChange}
               />

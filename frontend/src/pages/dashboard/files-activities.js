@@ -51,6 +51,7 @@ class FilesActivities extends Component {
           availableUsers.push({
             email: item.author_email,
             name: item.author_name,
+            contact_email: item.author_contact_email,
             avatar_url: item.avatar_url,
             isSelected: false
           });
@@ -147,6 +148,7 @@ class FilesActivities extends Component {
           availableUsers.push({
             email: item.author_email,
             name: item.author_name,
+            contact_email: item.author_contact_email,
             avatar_url: item.avatar_url,
             isSelected: false
           });
