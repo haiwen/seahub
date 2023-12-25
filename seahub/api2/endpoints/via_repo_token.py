@@ -700,7 +700,7 @@ class ViaRepoTokenFile(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
+        username = ''
         parent_dir = os.path.dirname(path)
 
         is_draft = request.POST.get('is_draft', '')
