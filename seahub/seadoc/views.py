@@ -1,16 +1,19 @@
 import os
-from django.shortcuts import render
-from django.utils.translation import gettext as _
-from seaserv import get_repo
-from urllib.parse import quote
 import json
+from urllib.parse import quote
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.utils.translation import gettext as _
+
+from seaserv import get_repo, seafile_api
 
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error
+from seahub.utils import render_error, normalize_file_path
 from seahub.views import check_folder_permission, validate_owner, get_seadoc_file_uuid
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
 
+from seahub.api2.endpoints.utils import sdoc_export_to_docx
 from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
 
 
@@ -137,3 +140,48 @@ def sdoc_revisions(request, repo_id):
         'per_page': per_page,
         'page_next': page_next,
     })
+
+
+@login_required
+def sdoc_to_docx(request, repo_id):
+
+    # argument check
+    file_path = request.GET.get('file_path')
+    file_path = normalize_file_path(file_path)
+    if not file_path:
+        error_msg = _("File path invalid.")
+        return render_error(request, error_msg)
+
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        error_msg = _("Library does not exist")
+        return render_error(request, error_msg)
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        error_msg = 'File %s not found.' % file_path
+        return render_error(request, error_msg)
+
+    # permission check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _("Permission denied.")
+        return render_error(request, error_msg)
+
+    username = request.user.username
+    filename = os.path.basename(file_path)
+    doc_uuid = get_seadoc_file_uuid(repo, file_path)
+    download_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
+                                                             'download', username)
+
+    src_type = 'sdoc'
+    dst_type = 'docx'
+    resp_with_docx_file = sdoc_export_to_docx(file_path, username, doc_uuid,
+                                              download_token, src_type, dst_type)
+
+    docx_mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    response = HttpResponse(content_type=docx_mime_type)
+    new_file_name = quote(f'{filename[:-5]}.docx')
+    response['Content-Disposition'] = f'attachment; filename={new_file_name}'
+    response.write(resp_with_docx_file.content)
+    return response

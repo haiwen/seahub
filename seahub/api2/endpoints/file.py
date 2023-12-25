@@ -33,7 +33,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
-from seahub.api2.endpoints.utils import convert_file
+from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
 from seahub.seadoc.utils import get_seadoc_file_uuid
 
 from seahub.drafts.models import Draft
@@ -572,13 +572,16 @@ class FileView(APIView):
 
             if extension == '.md':
                 src_type = 'markdown'
-                filename = filename[:-2] + 'sdoc'
+                new_filename = filename[:-2] + 'sdoc'
             elif extension == '.sdoc':
                 src_type = 'sdoc'
-                filename = filename[:-4] + 'md'
+                if dst_type == 'markdown':
+                    new_filename = filename[:-4] + 'md'
+                if dst_type == 'docx':
+                    new_filename = filename[:-4] + 'docx'
 
-            new_file_name = check_filename_or_rename(repo_id, parent_dir, filename)
-            new_file_path = posixpath.join(parent_dir, new_file_name)
+            new_filename = check_filename_or_rename(repo_id, parent_dir, new_filename)
+            new_file_path = posixpath.join(parent_dir, new_filename)
 
             download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
 
@@ -587,15 +590,37 @@ class FileView(APIView):
                                                                    use_onetime=True)
             doc_uuid = get_seadoc_file_uuid(repo, path)
 
-            try:
-                resp = convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type)
+            if dst_type != 'docx':
+                try:
+                    resp = convert_file(path, username, doc_uuid,
+                                        download_token, upload_token,
+                                        src_type, dst_type)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
                 if resp.status_code == 500:
-                    logger.error('convert file error status: %s body: %s', resp.status_code, resp.text)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+                    logger.error('convert file error status: %s body: %s',
+                                 resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                     'Internal Server Error')
+            else:
+
+                try:
+                    resp = sdoc_convert_to_docx(path, username, doc_uuid,
+                                                download_token, upload_token,
+                                                src_type, dst_type)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if resp.status_code != 200:
+                    logger.error('convert file error status: %s body: %s',
+                                 resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                     'Internal Server Error')
 
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)

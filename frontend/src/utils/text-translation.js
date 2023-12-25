@@ -25,6 +25,8 @@ const TextTranslation = {
   'UNLOCK' : {key : 'Unlock', value : gettext('Unlock')},
   'CONVERT_TO_MARKDOWN' : {key : 'Convert to Markdown', value : gettext('Convert to Markdown')},
   'CONVERT_TO_SDOC' : {key : 'Convert to sdoc', value : gettext('Convert to sdoc')},
+  'CONVERT_TO_DOCX' : {key : 'Convert to docx', value : gettext('Convert to docx')},
+  'EXPORT_DOCX' : {key : 'Export docx', value : gettext('Export docx')},
   'MARK_AS_DRAFT' : {key : 'Mark as draft', value : gettext('Mark as draft')},
   'UNMARK_AS_DRAFT' : {key : 'Unmark as draft', value : gettext('Unmark as draft')},
   'HISTORY' : {key : 'History', value : gettext('History')},

@@ -198,8 +198,7 @@ from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, 
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
-from seahub.seadoc.views import sdoc_revision, sdoc_revisions
-
+from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
 
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
@@ -231,6 +230,7 @@ urlpatterns = [
     re_path(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
     re_path(r'^repo/sdoc_revision/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revision, name='sdoc_revision'),
     re_path(r'^repo/sdoc_revisions/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revisions, name='sdoc_revisions'),
+    re_path(r'^repo/sdoc_export_to_docx/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_to_docx, name='sdoc_export_to_docx'),
     re_path(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
     re_path(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     re_path(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
