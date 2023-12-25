@@ -691,7 +691,7 @@ class ViaRepoTokenFile(APIView):
 
         operation = operation.lower()
         if operation not in ('rename', 'revert'):
-            error_msg = "operation can only be 'create', 'rename', 'move', 'copy', 'convert' or 'revert'."
+            error_msg = "operation can only be 'rename', 'revert'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
