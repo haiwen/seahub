@@ -589,10 +589,6 @@ class ViaRepoBatchDelete(APIView):
         }
         """
         repo_id = request.repo_api_token_obj.repo_id
-        # argument check
-        if not repo_id:
-            error_msg = 'repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         parent_dir = request.data.get('parent_dir', None)
         if not parent_dir:
