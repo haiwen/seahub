@@ -459,6 +459,11 @@ class ViaRepoBatchMove(APIView):
         }
         """
         repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # argument check
         src_parent_dir = request.data.get('src_parent_dir', None)
         if not src_parent_dir:
@@ -524,6 +529,10 @@ class ViaRepoBatchCopy(APIView):
         }
         """
         repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         # argument check
         src_parent_dir = request.data.get('src_parent_dir', None)
         if not src_parent_dir:
@@ -586,6 +595,10 @@ class ViaRepoBatchDelete(APIView):
         }
         """
         repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         parent_dir = request.data.get('parent_dir', None)
         if not parent_dir:
@@ -662,6 +675,11 @@ class ViaRepoTokenFile(APIView):
         4. revert: user with 'rw' permission for current file's parent dir;
         """
         repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # argument check
         path = request.GET.get('path', None)
         if not path:
