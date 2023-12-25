@@ -614,7 +614,7 @@ class ViaRepoBatchDelete(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
+        username = ''
 
         try:
             seafile_api.del_file(repo_id, parent_dir,
