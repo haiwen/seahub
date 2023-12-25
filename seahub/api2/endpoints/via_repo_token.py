@@ -647,12 +647,6 @@ class ViaRepoTokenFile(APIView):
             can_preview = False
             can_edit = False
 
-        try:
-            is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
-        except Exception as e:
-            logger.error(e)
-            is_locked = False
-
         file_info = {
             'type': 'file',
             'repo_id': repo_id,
@@ -661,7 +655,6 @@ class ViaRepoTokenFile(APIView):
             'obj_id': file_obj.obj_id if file_obj else '',
             'size': file_size,
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
-            'is_locked': is_locked,
             'can_preview': can_preview,
             'can_edit': can_edit,
         }
