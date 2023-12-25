@@ -556,7 +556,7 @@ class ViaRepoBatchCopy(APIView):
             error_msg = 'Folder %s not found.' % dst_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
+        username = ''
 
         try:
             seafile_api.copy_file(repo_id, src_parent_dir,
