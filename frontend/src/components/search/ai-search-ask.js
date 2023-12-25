@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
@@ -173,7 +174,16 @@ export default class AISearchAsk extends Component {
               <AISearchRobot/>
             </div>
             <div className="ai-search-ask-body-right">
-              <div>{this.state.answeringResult}</div>
+              {/* <div>{this.state.answeringResult}</div>s */}
+
+              {/* markdown viewer */}
+              <div className="ai-search-ask-body-markdown">
+              <MarkdownViewer
+                value={this.state.answeringResult}
+                isShowOutline={false}
+              />
+              </div>
+
               <AISearchHelp />
               {this.state.hitFiles.length > 0 &&
                 <AISearchRefrences
