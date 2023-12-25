@@ -26,7 +26,7 @@ from pysearpc import SearpcError
 
 import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_READ
 from seahub.seadoc.utils import move_sdoc_images_to_different_repo
 
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
@@ -744,12 +744,6 @@ class ViaRepoTokenFile(APIView):
             if not commit_id:
                 error_msg = 'commit_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if seafile_api.get_file_id_by_path(repo_id, path):
-                # file exists in repo
-                if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
-                    error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             try:
                 seafile_api.revert_file(repo_id, commit_id, path, username)
