@@ -13,6 +13,11 @@ from seaserv import seafile_api
 logger = logging.getLogger(__name__)
 
 
+SEARCH_REPOS_LIMIT = 200
+RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
+RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
+
 def gen_headers():
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
@@ -74,9 +79,26 @@ def get_file_download_token(repo_id, file_id, username):
 def get_search_repos(username, org_id):
     repos = []
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
-    repo_list = owned_repos + shared_repos + group_repos + public_repos
+    repo_list = owned_repos + public_repos + shared_repos + group_repos
 
     for repo in repo_list:
-        repos.append((repo.id, repo.origin_repo_id, repo.origin_path))
+        repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
 
     return repos
+
+
+def format_repos(repos):
+    searched_repos = []
+    repos_map = {}
+    for repo in repos:
+        real_repo_id = repo[0]
+        origin_repo_id = repo[1]
+        origin_path = repo[2]
+        repo_name = repo[3]
+        searched_repos.append((real_repo_id, origin_repo_id, origin_path))
+
+        if origin_repo_id:
+            repos_map[origin_repo_id] = (real_repo_id, origin_path, repo_name)
+            continue
+        repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
+    return searched_repos, repos_map

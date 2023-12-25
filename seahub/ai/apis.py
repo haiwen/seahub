@@ -2,6 +2,8 @@
 import os
 import logging
 
+from django.core.cache import cache
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,8 +18,9 @@ from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm, is_valid_repo_id_format
 from seahub.ai.utils import create_library_sdoc_index, search, update_library_sdoc_index, \
     delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
-    get_file_download_token, get_search_repos
-from seahub.utils import is_org_context
+    get_file_download_token, get_search_repos, RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
+    format_repos
+from seahub.utils import is_org_context, normalize_cache_key
 
 from seaserv import seafile_api
 
@@ -87,7 +90,15 @@ class Search(APIView):
 
         if search_repo == 'all':
             org_id = request.user.org.org_id if is_org_context(request) else None
-            repos = get_search_repos(request.user.username, org_id)
+
+            username = request.user.username
+            key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
+
+            repos = cache.get(key, [])
+            if not repos:
+                repos = get_search_repos(username, org_id)[:SEARCH_REPOS_LIMIT]
+                cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
+
             is_all_repo = True
         else:
             try:
@@ -97,8 +108,10 @@ class Search(APIView):
                 error_msg = 'Library %s not found.' % search_repo
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            repos = [(repo.id, repo.origin_repo_id, repo.origin_path)]
+            repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
             is_all_repo = False
+
+        searched_repos, repos_map = format_repos(repos)
 
         params = {
             'query': query,
@@ -116,6 +129,24 @@ class Search(APIView):
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        for f in resp_json.get('results'):
+            repo_id = f['repo_id']
+            repo = repos_map.get(repo_id, None)
+            real_repo_id = repo[0]
+            origin_path = repo[1]
+            repo_name = repo[2]
+            f['repo_name'] = repo_name
+            if not repo:
+                continue
+
+            if origin_path:
+                if not f['fullpath'].startswith(origin_path):
+                    # this operation will reduce the result items, but it will not happen now
+                    continue
+                else:
+                    f['repo_id'] = real_repo_id
+                    f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
         return Response(resp_json, resp.status_code)
 
