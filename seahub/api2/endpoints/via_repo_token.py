@@ -806,12 +806,6 @@ class ViaRepoTokenFile(APIView):
                     error_msg = _("File is locked")
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            else:
-                # file NOT exists in repo
-                if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
-                    error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             try:
                 seafile_api.revert_file(repo_id, commit_id, path, username)
             except Exception as e:

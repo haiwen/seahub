@@ -453,10 +453,10 @@ urlpatterns = [
     re_path(r'^api/v2.1/via-repo-token/upload-link/$', ViaRepoUploadLinkView.as_view(), name='via-upload-link'),
     re_path(r'^api/v2.1/via-repo-token/download-link/$', ViaRepoDownloadLinkView.as_view(), name='via-download-link'),
     re_path(r'^api/v2.1/via-repo-token/repo-info/$', RepoInfoView.as_view(), name='via-fetch-repo'),
-    re_path(r'^api/v2.1/via-repo-token/sync-batch-move-item/$', ViaRepoBatchMove.as_view(), name='via-fetch-repo'),
-    re_path(r'^api/v2.1/via-repo-token/sync-batch-copy-item/$', ViaRepoBatchCopy.as_view(), name='via-fetch-repo'),
-    re_path(r'^api/v2.1/via-repo-token/batch-delete-item/$', ViaRepoBatchDelete.as_view(), name='via-fetch-repo'),
-    re_path(r'^api/v2.1/via-repo-token/file/$', ViaRepoTokenFile.as_view(), name='via-fetch-repo'),
+    re_path(r'^api/v2.1/via-repo-token/sync-batch-move-item/$', ViaRepoBatchMove.as_view(), name='via-repo-token-move'),
+    re_path(r'^api/v2.1/via-repo-token/sync-batch-copy-item/$', ViaRepoBatchCopy.as_view(), name='via-repo-token-copy'),
+    re_path(r'^api/v2.1/via-repo-token/batch-delete-item/$', ViaRepoBatchDelete.as_view(), name='via-repo-token-delete'),
+    re_path(r'^api/v2.1/via-repo-token/file/$', ViaRepoTokenFile.as_view(), name='via-repo-token-file'),
 
     # user::related-files
     re_path(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
