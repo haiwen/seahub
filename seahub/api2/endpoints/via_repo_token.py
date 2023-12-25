@@ -737,23 +737,6 @@ class ViaRepoTokenFile(APIView):
                 error_msg = 'File %s not found.' % path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            # permission check
-            # if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
-            #     error_msg = _("Permission denied.")
-            #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            # check file lock
-            try:
-                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            if is_locked and not locked_by_me:
-                error_msg = _("File is locked")
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             # rename file
             new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
             try:
