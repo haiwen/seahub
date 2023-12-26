@@ -123,6 +123,14 @@ class DirentGridView extends React.Component {
     this.props.onItemConvert(currentObject, dstType);
   };
 
+  exportDocx = () => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
+    window.location.href = exportToDocxUrl;
+  };
+
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
     switch(operation) {
@@ -149,6 +157,12 @@ class DirentGridView extends React.Component {
         break;
       case 'Convert to Markdown':
         this.onItemConvert(currentObject, event, 'markdown');
+        break;
+      case 'Convert to docx':
+        this.onItemConvert(currentObject, event, 'docx');
+        break;
+      case 'Export docx':
+        this.exportDocx();
         break;
       case 'Convert to sdoc':
         this.onItemConvert(currentObject, event, 'sdoc');

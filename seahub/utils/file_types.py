@@ -13,4 +13,4 @@ SEADOC = 'SDoc'
 
 
 MARKDOWN_SUPPORT_CONVERT_TYPES = ['sdoc']
-SDOC_SUPPORT_CONVERT_TYPES = ['markdown']
+SDOC_SUPPORT_CONVERT_TYPES = ['markdown', 'docx']

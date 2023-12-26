@@ -36,14 +36,14 @@ from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, \
-        normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
-        gen_inner_file_get_url, gen_inner_file_upload_url, \
-        get_service_url, is_valid_username, is_pro_version, get_file_history_by_day, get_file_daily_history_detail
+        normalize_dir_path, PREVIEW_FILEEXT, \
+        gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
+        get_service_url, is_valid_username, is_pro_version, \
+        get_file_history_by_day, get_file_daily_history_detail
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision, SeadocCommentReply, SeadocNotification
-from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -240,6 +240,44 @@ class SeadocDownloadLink(APIView):
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        return Response({'download_link': download_link})
+
+
+class SeadocImageDownloadLink(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # argument check
+        image_name = request.GET.get('image_name')
+        if not image_name:
+            error_msg = 'image_name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # recource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        image_path = f'{SDOC_IMAGES_DIR}{file_uuid}/{image_name}'
+
+        file_id = seafile_api.get_file_id_by_path(repo_id, image_path)
+        if not file_id:
+            error_msg = f'image {image_path} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', "")
+        download_link = gen_file_get_url(token, image_name)
         return Response({'download_link': download_link})
 
 
