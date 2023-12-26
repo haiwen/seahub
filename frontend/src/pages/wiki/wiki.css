@@ -97,6 +97,7 @@ img[src=""] {
 .wiki-page-container .article {
   margin: 0;
   padding: 0 10px;
+  max-width: none;
 }
 
 .wiki-page-container .article h1 {

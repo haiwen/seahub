@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
-import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
+import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
@@ -121,14 +121,15 @@ class MainPanel extends Component {
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && (
-              <WikiMarkdownViewer
+              <SeafileMarkdownViewer
+                isWiki={true}
+                path={this.props.path}
+                repoID={repoID}
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
                 lastModified = {this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
-                isWiki={true}
-                path={this.props.path}
               />
             )}
             {(!this.props.isDataLoading && !this.props.isViewFile) && (

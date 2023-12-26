@@ -4,7 +4,7 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
-import WikiMarkdownViewer from '../wiki-markdown-viewer';
+import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -70,7 +70,7 @@ class DirColumnFile extends React.Component {
       );
     }
     return (
-      <WikiMarkdownViewer
+      <SeafileMarkdownViewer
         isTOCShow={false}
         isFileLoading={this.props.isFileLoading}
         markdownContent={this.props.content}
@@ -93,7 +93,7 @@ class DirColumnFile extends React.Component {
             </div>
           }
         </Fragment>
-      </WikiMarkdownViewer>
+      </SeafileMarkdownViewer>
     );
   }
 }

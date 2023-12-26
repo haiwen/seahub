@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus, MarkdownViewer } from '@seafile/seafile-editor';
-import { gettext, isPublicWiki, mediaUrl, repoID, serviceURL, sharedToken, slug } from '../utils/constants';
-import Loading from './loading';
-import { Utils } from '../utils/utils';
+import { gettext, mediaUrl, serviceURL, sharedToken, slug } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import Loading from '../loading';
 
 const propTypes = {
   children: PropTypes.object,
@@ -14,14 +14,13 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   isWiki: PropTypes.bool,
   isTOCShow: PropTypes.bool,
-  // for dir-column-file component(import repoID is undefined)
   repoID: PropTypes.string,
   path: PropTypes.string,
 };
 
 const contentClass = 'wiki-page-content';
 
-class WikiMarkdownViewer extends React.Component {
+class SeafileMarkdownViewer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -32,6 +31,7 @@ class WikiMarkdownViewer extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeLinkClick = eventBus.subscribe(EXTERNAL_EVENTS.ON_LINK_CLICK, this.onLinkClick);
   }
+
   componentWillUnmount() {
     this.unsubscribeLinkClick();
   }
@@ -50,9 +50,10 @@ class WikiMarkdownViewer extends React.Component {
   };
 
   changeInlineNode = (item) => {
+    const { repoID } = this.props;
     let url, imagePath;
-
-    if (item.type == 'image' && isPublicWiki) { // change image url
+    // isPublicWiki: in the old version, only public wiki need replace image url
+    if (item.type == 'image') { // change image url
       url = item.data.src;
       const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
       // different repo
@@ -113,8 +114,9 @@ class WikiMarkdownViewer extends React.Component {
     if (this.props.isFileLoading) {
       return <Loading />;
     }
-    // In dir-column-file repoID is one of props, width is 100%; In wiki-viewer repoID is not props, width isn't 100%
-    let contentClassName = `${this.props.repoID ? contentClass + ' w-100' : contentClass}`;
+    // In dir-column-file width is 100%;
+    // In wiki-viewer width isn't 100%
+    const contentClassName = `${!this.props.isWiki ? contentClass + ' w-100' : contentClass}`;
     return (
       <div ref={this.scrollRef} className="wiki-page-container">
         <div className={contentClassName}>
@@ -131,7 +133,7 @@ const defaultProps = {
   isWiki: false,
 };
 
-WikiMarkdownViewer.propTypes = propTypes;
-MarkdownViewer.defaultProps = defaultProps;
+SeafileMarkdownViewer.propTypes = propTypes;
+SeafileMarkdownViewer.defaultProps = defaultProps;
 
-export default WikiMarkdownViewer;
+export default SeafileMarkdownViewer;
