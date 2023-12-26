@@ -13,9 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-import re
 import logging
+from urllib.parse import unquote, parse_qs, urlparse
 
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -29,21 +28,28 @@ from saml2.metadata import entity_descriptor
 from djangosaml2.cache import IdentityCache, OutstandingQueriesCache
 from djangosaml2.conf import get_config
 from djangosaml2.signals import post_authenticated
-from djangosaml2.utils import get_custom_setting
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
 from seahub import auth
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub import settings
+from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
+from seahub.profile.models import Profile, DetailedProfile
+from seahub.utils.licenseparse import user_number_over_limit
+from seahub.utils.file_size import get_quota_from_string
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
-from seahub.utils.licenseparse import user_number_over_limit
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
 except ImportError:
     ORG_MEMBER_QUOTA_ENABLED = False
+
+SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
+SAML_ATTRIBUTE_MAPPING = getattr(settings, 'SAML_ATTRIBUTE_MAPPING', {})
 
 
 logger = logging.getLogger('djangosaml2')
@@ -51,6 +57,56 @@ logger = logging.getLogger('djangosaml2')
 
 def _set_subject_id(session, subject_id):
     session['_saml2_subject_id'] = code(subject_id)
+
+
+def update_user_profile(user, attribute_mapping, attributes):
+    parse_result = {}
+    for saml_attr, django_attrs in list(attribute_mapping.items()):
+        try:
+            for attr in django_attrs:
+                parse_result[attr] = attributes[saml_attr][0]
+        except KeyError:
+            pass
+
+    display_name = parse_result.get('display_name', '')
+    contact_email = parse_result.get('contact_email', '')
+    telephone = parse_result.get('telephone', '')
+    department = parse_result.get('department', '')
+
+    # update profile
+    p = Profile.objects.get_profile_by_user(user.username)
+    if not p:
+        p = Profile.objects.add_or_update(user.username, '')
+
+    if display_name:
+        p.nickname = display_name
+    if contact_email:
+        p.contact_email = contact_email
+
+    p.save()
+
+    # update detail_profile
+    d_p = DetailedProfile.objects.get_detailed_profile_by_user(user.username)
+    if not d_p:
+        d_p = DetailedProfile.objects.add_detailed_profile(user.username, '', '')
+
+    if department:
+        d_p.department = department
+    if telephone:
+        d_p.telephone = telephone
+
+    d_p.save()
+
+    # update user role
+    role = parse_result.get('role', '')
+    if role:
+        User.objects.update_role(user.username, role)
+
+        # update user role quota
+        role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
+        if role_quota:
+            quota = get_quota_from_string(role_quota)
+            seafile_api.set_role_quota(role, quota)
 
 
 def login(request, org_id=None):
@@ -114,8 +170,6 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
     else:
         org_id = -1
 
-    attribute_mapping = attribute_mapping or get_custom_setting('SAML_ATTRIBUTE_MAPPING', None)
-
     try:
         conf = get_config(None, request)
     except Exception as e:
@@ -141,9 +195,43 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
 
     session_id = response.session_id()
     oq_cache.delete(session_id)
-
-    # authenticate the remote user
     session_info = response.session_info()
+    attribute_mapping = attribute_mapping or SAML_ATTRIBUTE_MAPPING
+
+    # saml2 connect
+    relay_state = request.POST.get('RelayState', '/saml/complete/')
+    is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
+    if is_saml2_connect == 'true':
+        if not request.user.is_authenticated:
+            return HttpResponseBadRequest('Failed to bind SAML, please login first.')
+
+        # get uid and other attrs from session_info
+        name_id = session_info.get('name_id', '')
+        if not name_id:
+            logger.error('The name_id is not available. Could not determine user identifier.')
+            return HttpResponseBadRequest('Failed to bind SAML, please contact admin.')
+
+        name_id = name_id.text
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
+        if saml_user:
+            return HttpResponseBadRequest('The SAML user has already been bound to another account.')
+
+        # bind saml user
+        username = request.user.username
+        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, name_id)
+
+        # update user's profile
+        attributes = session_info.get('ava', {})
+        if attributes:
+            try:
+                update_user_profile(request.user, attribute_mapping, attributes)
+            except Exception as e:
+                logger.warning('Failed to update user\'s profile, error: %s' % e)
+
+        # set subject_id, saml single logout need this
+        _set_subject_id(request.saml_session, session_info['name_id'])
+
+        return HttpResponseRedirect(relay_state)
 
     # check user number limit by license
     if user_number_over_limit():
@@ -158,6 +246,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
             if org_members_quota is not None and org_members >= org_members_quota:
                 return HttpResponseForbidden('The number of users exceeds the organization quota.')
 
+    # authenticate the remote user
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(session_info=session_info,
                              attribute_mapping=attribute_mapping,
@@ -204,6 +293,75 @@ def metadata(request, org_id=None):
         content=str(sp_metadata).encode("utf-8"),
         content_type="text/xml; charset=utf-8",
     )
+
+
+@login_required
+def saml2_connect(request, org_id=None):
+    if org_id and int(org_id) > 0:
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.error('Cannot find an organization related to org_id %s.' % org_id)
+            return HttpResponseBadRequest('Cannot find an organization related to org_id %s.' % org_id)
+
+        if request.user.org.org_id != org_id:
+            logger.error('User %s does not belong to this organization: %s.' % (request.user.username, org.org_id))
+            return HttpResponseBadRequest('Failed to bind SAML, please contact admin.')
+
+    next_url = settings.LOGIN_REDIRECT_URL
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+    elif 'RelayState' in request.GET:
+        next_url = request.GET['RelayState']
+
+    if not url_has_allowed_host_and_scheme(next_url, None):
+        next_url = settings.LOGIN_REDIRECT_URL
+    next_url = next_url + '?is_saml2_connect=true'
+
+    try:
+        sp_config = get_config(None, request)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('Failed to get ADFS/SAML config, please check your ADFS/SAML service.')
+
+    saml_client = Saml2Client(sp_config)
+    session_id, info = saml_client.prepare_for_authenticate(relay_state=next_url)
+    oq_cache = OutstandingQueriesCache(request.saml_session)
+    oq_cache.set(session_id, next_url)
+    try:
+        headers = dict(info['headers'])
+        redirect_url = headers['Location']
+    except KeyError:
+        redirect_url = info['url']
+    except Exception as e:
+        logger.warning(e)
+        redirect_url = None
+
+    return HttpResponseRedirect(redirect_url)
+
+
+@login_required
+def saml2_disconnect(request, org_id=None):
+    if org_id and int(org_id) > 0:
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            return HttpResponseBadRequest('Cannot find an organization related to org_id %s.' % org_id)
+
+        if request.user.org.org_id != org_id:
+            logger.error('User %s does not belong to this organization: %s.' % (request.user.username, org.org_id))
+            return HttpResponseBadRequest('Failed to disbind SAML, please contact admin.')
+
+    username = request.user.username
+    if request.user.enc_password == '!':
+        return HttpResponseBadRequest('Failed to disbind SAML, please set a password first.')
+    profile = Profile.objects.get_profile_by_user(username)
+    if not profile or not (profile.contact_email or profile.phone):
+        return HttpResponseBadRequest('Failed to disbind SAML, please set a contact email first.')
+
+    SocialAuthUser.objects.delete_by_username_and_provider(username, SAML_PROVIDER_IDENTIFIER)
+    next_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
+    return HttpResponseRedirect(next_url)
 
 
 @login_required

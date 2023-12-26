@@ -918,6 +918,8 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/login/$', login, name='org_saml2_login'),
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/acs/$', assertion_consumer_service, name='org_saml2_acs'),
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/metadata/$', metadata, name='org_saml2_metadata'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/connect/$', saml2_connect, name='org_saml2_connect'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/disconnect/$', saml2_disconnect, name='org_saml2_disconnect'),
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/', include(('djangosaml2.urls', 'djangosaml2'), namespace='org')),
     ]
 
@@ -927,6 +929,8 @@ if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
         path('saml2/login/', login, name='saml2_login'),
         path('saml2/acs/', assertion_consumer_service, name='saml2_acs'),
         path('saml2/metadata/', metadata, name='saml2_metadata'),
+        path('saml2/connect/', saml2_connect, name='saml2_connect'),
+        path('saml2/disconnect/', saml2_disconnect, name='saml2_disconnect'),
         path('saml2/', include('djangosaml2.urls')),
     ]
 
