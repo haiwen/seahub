@@ -33,7 +33,7 @@ from registration.models import notify_admins_on_activate_request, notify_admins
 logger = logging.getLogger(__name__)
 
 SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
-SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', False)
+SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', {})
 
 
 class Saml2Backend(ModelBackend):
@@ -44,7 +44,7 @@ class Saml2Backend(ModelBackend):
             user = None
         return user
 
-    def authenticate(self, session_info=None, attribute_mapping=None, create_unknown_user=True, **kwargs):
+    def authenticate(self, session_info=None, attribute_mapping=None, create_unknown_user=True, org_id=None, **kwargs):
         if session_info is None or attribute_mapping is None:
             logger.error('Session info or attribute mapping are None')
             return None
@@ -88,12 +88,8 @@ class Saml2Backend(ModelBackend):
                 return None
 
             # create org user
-            url_prefix = kwargs.get('url_prefix', None)
-            if url_prefix:
-                org = ccnet_api.get_org_by_url_prefix(url_prefix)
-                if org:
-                    org_id = org.org_id
-                    ccnet_api.add_org_user(org_id, user.username, 0)
+            if org_id and org_id > 0:
+                ccnet_api.add_org_user(org_id, user.username, 0)
 
             if not activate_after_creation:
                 notify_admins_on_activate_request(user.username)

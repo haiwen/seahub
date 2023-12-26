@@ -115,6 +115,7 @@ class OrgSAMLConfig(models.Model):
     domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
     dns_txt = models.CharField(max_length=64, null=True, blank=True)
     domain_verified = models.BooleanField(default=False, db_index=True)
+    idp_certificate = models.TextField(null=True, blank=True)
 
     objects = OrgSAMLConfigManager()
 
@@ -129,6 +130,7 @@ class OrgSAMLConfig(models.Model):
             'domain': self.domain,
             'dns_txt': self.dns_txt,
             'domain_verified': self.domain_verified,
+            'idp_certificate': self.idp_certificate,
         }
 
 

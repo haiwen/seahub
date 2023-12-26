@@ -90,7 +90,6 @@ def get_org_detailed_info(org):
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if org_saml_config:
             org_info['enable_saml_login'] = True
-            org_info['url_prefix'] = org.url_prefix
             org_info['metadata_url'] = org_saml_config.metadata_url
             org_info['domain'] = org_saml_config.domain
 

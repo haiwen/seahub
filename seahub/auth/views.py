@@ -264,8 +264,7 @@ def logout(request, next_page=None,
             saml_subject_id = None
         if saml_subject_id and is_org_context(request):
             org_id = request.user.org.org_id
-            org = ccnet_api.get_org_by_id(org_id)
-            return HttpResponseRedirect('/org/custom/%s/saml2/logout/' % org.url_prefix)
+            return HttpResponseRedirect('/org/custom/%s/saml2/logout/' % str(org_id))
 
     from seahub.auth import logout
     logout(request)
@@ -487,13 +486,12 @@ def multi_adfs_sso(request):
             if not org:
                 render_data['error_msg'] = 'Cannot find an organization related to domain %s.' % domain
                 return render(request, template_name, render_data)
-            url_prefix = org.url_prefix
         except Exception as e:
             logger.error(e)
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
-        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % url_prefix)
+        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % str(org_id))
 
     if request.method == "GET":
         return render(request, template_name, render_data)

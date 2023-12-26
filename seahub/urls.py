@@ -209,7 +209,6 @@ urlpatterns = [
     path('mobile-login/', mobile_login, name="mobile_login"),
 
     path('sso/', sso, name='sso'),
-    path('multi_adfs_sso/', multi_adfs_sso, name='multi_adfs_sso'),
     path('jwt-sso/', jwt_sso, name='jwt_sso'),
     re_path(r'^shib-login/', shib_login, name="shib_login"),
     path('oauth/', include('seahub.oauth.urls')),
@@ -915,11 +914,11 @@ if HAS_OFFICE_CONVERTER:
 if getattr(settings, 'ENABLE_MULTI_ADFS', False):
     from seahub.adfs_auth.views import *
     urlpatterns += [
-        re_path(r'^org/custom/[a-z_0-9-]+/$', multi_adfs_login, name="multi_adfs_login"),
-        re_path(r'^org/custom/[a-z_0-9-]+/saml2/login/$', login, name='org_saml2_login'),
-        re_path(r'^org/custom/[a-z_0-9-]+/saml2/acs/$', assertion_consumer_service, name='org_saml2_acs'),
-        re_path(r'^org/custom/[a-z_0-9-]+/saml2/metadata/$', metadata, name='org_saml2_metadata'),
-        re_path(r'^org/custom/[a-z_0-9-]+/saml2/', include(('djangosaml2.urls', 'djangosaml2'), namespace='org')),
+        re_path(r'^multi_adfs_sso/$', multi_adfs_sso, name='multi_adfs_sso'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/login/$', login, name='org_saml2_login'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/acs/$', assertion_consumer_service, name='org_saml2_acs'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/metadata/$', metadata, name='org_saml2_metadata'),
+        re_path(r'^org/custom/(?P<org_id>\d+)/saml2/', include(('djangosaml2.urls', 'djangosaml2'), namespace='org')),
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):

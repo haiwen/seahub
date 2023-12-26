@@ -53,7 +53,14 @@ def _set_subject_id(session, subject_id):
     session['_saml2_subject_id'] = code(subject_id)
 
 
-def login(request):
+def login(request, org_id=None):
+    if org_id and int(org_id) > 0:
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.error('Cannot find an organization related to org_id %s.' % org_id)
+            return HttpResponseBadRequest('Cannot find an organization related to org_id %s.' % org_id)
+
     next_url = settings.LOGIN_REDIRECT_URL
     if 'next' in request.GET:
         next_url = request.GET['next']
@@ -87,7 +94,7 @@ def login(request):
 
 @require_POST
 @csrf_exempt
-def assertion_consumer_service(request, attribute_mapping=None, create_unknown_user=True):
+def assertion_consumer_service(request, org_id=None, attribute_mapping=None, create_unknown_user=True):
     """SAML Authorization Response endpoint.
     The IdP will send its response to this view, which will process it using pysaml2 and
     log the user in using whatever SAML authentication backend has been enabled in
@@ -96,6 +103,17 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     """
     if 'SAMLResponse' not in request.POST:
         return HttpResponseBadRequest('Missing "SAMLResponse" parameter in POST data.')
+
+    org = None
+    if org_id and int(org_id) > 0:
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.error('Cannot find an organization related to org_id %s.' % org_id)
+            return HttpResponseBadRequest('Cannot find an organization related to org_id %s.' % org_id)
+    else:
+        org_id = -1
+
     attribute_mapping = attribute_mapping or get_custom_setting('SAML_ATTRIBUTE_MAPPING', None)
 
     try:
@@ -131,27 +149,20 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     if user_number_over_limit():
         return HttpResponseForbidden('The number of users exceeds the license limit.')
 
-    # get url_prefix
-    url_prefix = ''
-    reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
-    if reg:
-        url_prefix = reg.group(1)
-        org = ccnet_api.get_org_by_url_prefix(url_prefix)
-        if org:
-            # check user number limit by org member quota
-            org_id = org.org_id
-            org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
-            if ORG_MEMBER_QUOTA_ENABLED:
-                from seahub.organizations.models import OrgMemberQuota
-                org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-                if org_members_quota is not None and org_members >= org_members_quota:
-                    return HttpResponseForbidden('The number of users exceeds the organization quota.')
+    # check user number limit by org member quota
+    if org:
+        org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
+        if ORG_MEMBER_QUOTA_ENABLED:
+            from seahub.organizations.models import OrgMemberQuota
+            org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+            if org_members_quota is not None and org_members >= org_members_quota:
+                return HttpResponseForbidden('The number of users exceeds the organization quota.')
 
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(session_info=session_info,
                              attribute_mapping=attribute_mapping,
                              create_unknown_user=create_unknown_user,
-                             url_prefix=url_prefix)
+                             org_id=org_id)
     if user is None:
         logger.error('The user is None')
         return HttpResponseForbidden("Permission denied")
@@ -175,7 +186,14 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     return HttpResponseRedirect(relay_state)
 
 
-def metadata(request):
+def metadata(request, org_id=None):
+    if org_id and int(org_id) > 0:
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.error('Cannot find an organization related to org_id %s.' % org_id)
+            return HttpResponseBadRequest('Cannot find an organization related to org_id %s.' % org_id)
+
     try:
         sp_config = get_config(None, request)
     except Exception as e:
@@ -229,8 +247,3 @@ def auth_complete(request):
             update_sudo_mode_ts(request)
 
     return resp
-
-
-def multi_adfs_login(request):
-    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        return HttpResponseRedirect(request.path.rstrip('/') + '/saml2/login/')
