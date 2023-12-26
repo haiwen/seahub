@@ -1,0 +1,84 @@
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.sf-md-viewer-topbar-first,
+.sf-md-viewer-topbar-first-narrow {
+  padding: 4px 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
+  flex-shrink:0;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .sf-md-viewer-topbar-first {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .sf-md-viewer-topbar-first-narrow {
+    display: none !important;
+  }
+}
+
+/* toolbar */
+.topbar-file-info {
+  display: inline-block;
+  margin-left: 8px;
+  /*
+    only select file info text
+  */
+  user-select: text;
+}
+.topbar-file-info .file-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.topbar-file-info .file-title .iconfont {
+  font-size: 0.875rem;
+}
+
+.topbar-file-info .file-title .file-star {
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  vertical-align: text-bottom;
+  color: #999;
+}
+
+.topbar-file-info .file-title .file-star .star {
+  color: #999;
+}
+
+.topbar-file-info .file-state {
+  font-size: 0.8125rem;
+}
+
+.topbar-file-info .file-state .file-modifier-name {
+  margin-right: 0.5rem;
+}
+
+.topbar-file-info .file-state .file-modifier-savedraft {
+  margin-left: 0.5rem;
+  color: #888;
+}
+
+.sf-md-viewer-content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+}
