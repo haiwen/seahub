@@ -5,20 +5,21 @@ import { gettext, mediaUrl, serviceURL, sharedToken, slug } from '../../utils/co
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
+import './style.css';
+
 const propTypes = {
+  isWiki: PropTypes.bool,
+  path: PropTypes.string,
+  repoID: PropTypes.string,
+  isTOCShow: PropTypes.bool,
   children: PropTypes.object,
   isFileLoading: PropTypes.bool.isRequired,
+  containerClassName: PropTypes.string,
   markdownContent: PropTypes.string.isRequired,
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  isWiki: PropTypes.bool,
-  isTOCShow: PropTypes.bool,
-  repoID: PropTypes.string,
-  path: PropTypes.string,
 };
-
-const contentClass = 'wiki-page-content';
 
 class SeafileMarkdownViewer extends React.Component {
 
@@ -114,11 +115,13 @@ class SeafileMarkdownViewer extends React.Component {
     if (this.props.isFileLoading) {
       return <Loading />;
     }
+    const { isWiki, containerClassName = '' } = this.props;
+    const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
-    const contentClassName = `${!this.props.isWiki ? contentClass + ' w-100' : contentClass}`;
+    const contentClassName = `wiki-page-content ${!isWiki ?  + 'w-100' : ''}`;
     return (
-      <div ref={this.scrollRef} className="wiki-page-container">
+      <div ref={this.scrollRef} className={containerClass}>
         <div className={contentClassName}>
           {this.props.children}
           {this.renderMarkdown()}
