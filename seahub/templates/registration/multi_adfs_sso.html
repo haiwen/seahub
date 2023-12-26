@@ -6,6 +6,7 @@
 {% block header_css_class %}hide{% endblock %}
 
 {% block extra_base_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 {% endblock %}
 
@@ -43,9 +44,9 @@ html, body, #wrapper { height:100%; }
         <p class="error hide"></p>
         {% endif %}
 
-        <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
+        <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Log In" %}</button>
     </form>
-    <div class="login-panel-bottom-container"></div>
+    <div class="login-panel-bottom-container d-flex justify-content-center" id="login-bottom"></div>
 </div>
 </div>
 {% include "snippets/policy_service_link.html" %}
@@ -54,7 +55,7 @@ html, body, #wrapper { height:100%; }
 {% block extra_script %}
 <script type="text/javascript">
 $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
-$('.login-panel-bottom-container').append($('#lang').removeClass('fright'));
+$('.login-panel-bottom-container').append($('#lang').removeClass('fright').addClass('px-2'));
 
 var $el = $('.login-panel-outer-container');
 var elHeight = $el.outerHeight();
@@ -62,7 +63,6 @@ var wdHeight = $(window).height();
 if (wdHeight > elHeight) {
     $el.css({'margin-top': (wdHeight - elHeight)/2});
 }
-$('#lang').css({'margin-left': $('#sign-up').outerWidth() + 10});
 $el.removeClass('vh');
 
 $('#lang-context').on('click', function() {
@@ -97,7 +97,6 @@ $(function() {
         $(this).attr('tabindex', index + 1);
     });
 });
-
 
 </script>
 {% endblock %}

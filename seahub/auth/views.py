@@ -476,15 +476,16 @@ def multi_adfs_sso(request):
         try:
             org_saml_config = OrgSAMLConfig.objects.get_config_by_domain(domain)
             if not org_saml_config:
-                render_data['error_msg'] = "Cannot find a SAML/ADFS config for the organization related to domain %s." % domain
+                render_data['error_msg'] = "Cannot find a SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
             if not org_saml_config.domain_verified:
-                render_data['error_msg'] = "The domain %s has not been verified ownership, please login after verification." % domain
+                render_data['error_msg'] = "The ownership of domain %s has not been verified. " \
+                                           "Please ask your team admin to verify it." % domain
                 return render(request, template_name, render_data)
             org_id = org_saml_config.org_id
             org = ccnet_api.get_org_by_id(org_id)
             if not org:
-                render_data['error_msg'] = 'Cannot find an organization related to domain %s.' % domain
+                render_data['error_msg'] = "Cannot find a SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
         except Exception as e:
             logger.error(e)
