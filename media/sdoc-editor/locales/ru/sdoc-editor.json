@@ -426,7 +426,7 @@
   "The_maximum_row_number_is_{number}": "Максимальное количество строк - {number}",
   "Freeze_Document": "Заморозить документ",
   "Unfreeze": "Разморозить",
-  "Other_modification": "Other's modification",
-  "My_modification": "My modification",
-  "Document_history": "Document history"
+  "Other_modification": "Другая модификация",
+  "My_modification": "Моя модификация",
+  "Document_history": "История документа"
 }
