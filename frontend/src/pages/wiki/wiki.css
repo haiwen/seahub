@@ -94,26 +94,10 @@ img[src=""] {
   }
 }
 
-.wiki-page-container .article {
-  margin: 0;
-  padding: 0 10px;
-}
 
-.wiki-page-container .article h1 {
+/* reset article h1 */
+.wiki-main-panel .article h1 {
   margin-top: 0;
-}
-
-.wiki-page-container .article span[data-url] {
-  cursor: pointer;
-}
-
-.wiki-page-container .article .ml-2 {
-  text-decoration: underline;
-}
-
-.wiki-page-container .article .ml-2:hover {
-  text-decoration: underline;
-  color:#eb8205;
 }
 
 .wiki-page-container .outline-h2,
@@ -138,10 +122,6 @@ img[src=""] {
   margin: 0 !important;
 }
 
-.wiki-page-container .article {
-  border: none;
-}
-
 .wiki-page-container .sf-slate-viewer-outline {
   top: 79px;
   width: 200px;
@@ -151,10 +131,4 @@ img[src=""] {
   .wiki-page-container .article {
     padding: 0 !important;
   }
-}
-
-#wiki-page-last-modified {
-  padding: 40px 10px;
-  font-size:12px;
-  color: #666;
 }

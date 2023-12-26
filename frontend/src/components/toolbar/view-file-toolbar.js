@@ -22,7 +22,7 @@ const propTypes = {
   fileTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
-  dirent: PropTypes.object.isRequired,
+  dirent: PropTypes.object,
 };
 
 class ViewFileToolbar extends React.Component {

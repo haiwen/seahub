@@ -1,27 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus, MarkdownViewer } from '@seafile/seafile-editor';
-import { gettext, isPublicWiki, mediaUrl, repoID, serviceURL, sharedToken, slug } from '../utils/constants';
-import Loading from './loading';
-import { Utils } from '../utils/utils';
+import { gettext, mediaUrl, serviceURL, sharedToken, slug } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import Loading from '../loading';
+
+import './style.css';
 
 const propTypes = {
+  isWiki: PropTypes.bool,
+  path: PropTypes.string,
+  repoID: PropTypes.string,
+  isTOCShow: PropTypes.bool,
   children: PropTypes.object,
   isFileLoading: PropTypes.bool.isRequired,
+  containerClassName: PropTypes.string,
   markdownContent: PropTypes.string.isRequired,
   latestContributor: PropTypes.string.isRequired,
   lastModified: PropTypes.string.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  isWiki: PropTypes.bool,
-  isTOCShow: PropTypes.bool,
-  // for dir-column-file component(import repoID is undefined)
-  repoID: PropTypes.string,
-  path: PropTypes.string,
 };
 
-const contentClass = 'wiki-page-content';
-
-class WikiMarkdownViewer extends React.Component {
+class SeafileMarkdownViewer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -32,6 +32,7 @@ class WikiMarkdownViewer extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeLinkClick = eventBus.subscribe(EXTERNAL_EVENTS.ON_LINK_CLICK, this.onLinkClick);
   }
+
   componentWillUnmount() {
     this.unsubscribeLinkClick();
   }
@@ -50,9 +51,10 @@ class WikiMarkdownViewer extends React.Component {
   };
 
   changeInlineNode = (item) => {
+    const { repoID } = this.props;
     let url, imagePath;
-
-    if (item.type == 'image' && isPublicWiki) { // change image url
+    // isPublicWiki: in the old version, only public wiki need replace image url
+    if (item.type == 'image') { // change image url
       url = item.data.src;
       const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
       // different repo
@@ -113,10 +115,13 @@ class WikiMarkdownViewer extends React.Component {
     if (this.props.isFileLoading) {
       return <Loading />;
     }
-    // In dir-column-file repoID is one of props, width is 100%; In wiki-viewer repoID is not props, width isn't 100%
-    let contentClassName = `${this.props.repoID ? contentClass + ' w-100' : contentClass}`;
+    const { isWiki, containerClassName = '' } = this.props;
+    const containerClass = `wiki-page-container ${containerClassName}`;
+    // In dir-column-file width is 100%;
+    // In wiki-viewer width isn't 100%
+    const contentClassName = `wiki-page-content ${!isWiki ?  + 'w-100' : ''}`;
     return (
-      <div ref={this.scrollRef} className="wiki-page-container">
+      <div ref={this.scrollRef} className={containerClass}>
         <div className={contentClassName}>
           {this.props.children}
           {this.renderMarkdown()}
@@ -131,7 +136,7 @@ const defaultProps = {
   isWiki: false,
 };
 
-WikiMarkdownViewer.propTypes = propTypes;
-MarkdownViewer.defaultProps = defaultProps;
+SeafileMarkdownViewer.propTypes = propTypes;
+SeafileMarkdownViewer.defaultProps = defaultProps;
 
-export default WikiMarkdownViewer;
+export default SeafileMarkdownViewer;

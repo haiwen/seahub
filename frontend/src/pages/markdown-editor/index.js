@@ -11,7 +11,7 @@ import HeaderToolbar from './header-toolbar';
 import editorApi from './editor-api';
 import DetailListView from './detail-list-view';
 
-import '../../css/markdown-viewer/markdown-editor.css';
+import './css/markdown-editor.css';
 
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
