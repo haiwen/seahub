@@ -62,7 +62,7 @@ from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
-from seahub.settings import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM
+from seahub.settings import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, ENABLE_SSO_USER_CHANGE_PASSWORD
 
 try:
     from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR
@@ -1466,6 +1466,17 @@ class AdminUserResetPassword(APIView):
         if not is_valid_username2(email):
             error_msg = 'email invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        has_bind_social_auth = False
+        if SocialAuthUser.objects.filter(username=email).exists():
+            has_bind_social_auth = True
+
+        can_reset_password = True
+        if has_bind_social_auth and (not ENABLE_SSO_USER_CHANGE_PASSWORD):
+            can_reset_password = False
+
+        if not can_reset_password:
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 
         try:
             user = User.objects.get(email=email)

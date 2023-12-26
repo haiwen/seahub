@@ -13,6 +13,7 @@ from seaserv import seafile_api
 
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
+from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
@@ -86,8 +87,6 @@ def edit_profile(request):
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
-
-        from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
         social_connected = SocialAuthUser.objects.filter(
             username=request.user.username, provider=WORK_WEIXIN_PROVIDER).count() > 0
@@ -97,12 +96,19 @@ def edit_profile(request):
 
     if ENABLE_DINGTALK:
         enable_dingtalk = True
-        from seahub.auth.models import SocialAuthUser
         social_connected_dingtalk = SocialAuthUser.objects.filter(
             username=request.user.username, provider='dingtalk').count() > 0
     else:
         enable_dingtalk = False
         social_connected_dingtalk = False
+
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_update_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_update_password = False
 
     WEBDAV_SECRET_SETTED = False
     if settings.ENABLE_WEBDAV_SECRET and \
@@ -121,7 +127,7 @@ def edit_profile(request):
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': show_two_factor_auth,
-            'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_CHANGE_PASSWORD': can_update_password if has_bind_social_auth else settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
