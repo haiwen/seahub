@@ -15,6 +15,8 @@ from rest_framework.views import APIView
 from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
+from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, get_file_draft
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
@@ -25,9 +27,12 @@ from pysearpc import SearpcError
 import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
+
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
     normalize_file_path, render_error, gen_file_get_url, is_pro_version
+
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -433,3 +438,334 @@ class RepoInfoView(APIView):
             'repo_name': repo.name,
         }
         return Response(data)
+
+
+class ViaRepoBatchMove(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi move files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # argument check
+        src_parent_dir = request.data.get('src_parent_dir', None)
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_dirents = request.data.get('src_dirents', None)
+        if not src_dirents:
+            error_msg = 'src_dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir', None)
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
+            error_msg = 'Folder %s not found.' % src_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+
+        try:
+            seafile_api.move_file(repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
+                                  replace=False, username=username,
+                                  need_progress=0, synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoBatchCopy(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi copy files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # argument check
+        src_parent_dir = request.data.get('src_parent_dir', None)
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_dirents = request.data.get('src_dirents', None)
+        if not src_dirents:
+            error_msg = 'src_dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir', None)
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
+            error_msg = 'Folder %s not found.' % src_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+
+        try:
+            seafile_api.copy_file(repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
+                                  username=username, need_progress=0,
+                                  synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoBatchDelete(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request):
+        """ Multi delete files/folders.
+        Permission checking:
+        1. User must has `rw` permission for parent folder.
+        Parameter:
+        {
+            "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+            "parent_dir":"/a/b/c/",
+            "dirents":["1.md", "2.md"],
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        parent_dir = request.data.get('parent_dir', None)
+        if not parent_dir:
+            error_msg = 'parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dirents = request.data.get('dirents', None)
+        if not dirents:
+            error_msg = 'dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps(dirents),
+                                 username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoTokenFile(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get_file_info(self, username, repo_id, file_path):
+
+        repo = seafile_api.get_repo(repo_id)
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        if file_obj:
+            file_name = file_obj.obj_name
+            file_size = file_obj.size
+            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+            can_edit, error_msg = can_edit_file(file_name, file_size, repo)
+        else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+            file_size = ''
+            can_preview = False
+            can_edit = False
+
+        file_info = {
+            'type': 'file',
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(file_path),
+            'obj_name': file_name,
+            'obj_id': file_obj.obj_id if file_obj else '',
+            'size': file_size,
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
+            'can_preview': can_preview,
+            'can_edit': can_edit,
+        }
+
+        return file_info
+
+    def post(self, request, format=None):
+        """ Create, rename, move, copy, revert file
+
+        Permission checking:
+        2. rename: user with 'rw' permission for current file;
+        4. revert: user with 'rw' permission for current file's parent dir;
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # argument check
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+
+        operation = request.data.get('operation', None)
+        if not operation:
+            error_msg = 'operation invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        operation = operation.lower()
+        if operation not in ('rename', 'revert'):
+            error_msg = "operation can only be 'rename', 'revert'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+        parent_dir = os.path.dirname(path)
+
+        is_draft = request.POST.get('is_draft', '')
+
+        if operation == 'rename':
+            # argument check
+            new_file_name = request.data.get('newname', None)
+            if not new_file_name:
+                error_msg = 'newname invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
+            if len(new_file_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+                error_msg = 'newname is too long.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            oldname = os.path.basename(path)
+            if oldname == new_file_name:
+                error_msg = 'The new name is the same to the old'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # resource check
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not file_id:
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # rename file
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+            try:
+                seafile_api.rename_file(repo_id, parent_dir, oldname, new_file_name, username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            return Response(file_info)
+
+        if operation == 'revert':
+            commit_id = request.data.get('commit_id', None)
+            if not commit_id:
+                error_msg = 'commit_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                seafile_api.revert_file(repo_id, commit_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
