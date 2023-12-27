@@ -12,6 +12,7 @@
     "@seafile/seafile-editor": "1.0.15",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/react-codemirror": "^4.19.4",
+    "chart.js": "2.9.4",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
     "crypto-js": "4.2.0",
