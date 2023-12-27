@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
+from django.conf import settings as django_settings
 
 from seahub.utils import render_error
 from seahub.settings import SITE_ROOT
@@ -41,4 +42,6 @@ def mobile_login(request):
     login(request, user)
 
     redirect_to = request.GET.get(REDIRECT_FIELD_NAME, SITE_ROOT)
-    return HttpResponseRedirect(redirect_to)
+    response = HttpResponseRedirect(redirect_to)
+    response['Session-Cookie-Name'] = django_settings.SESSION_COOKIE_NAME
+    return response
