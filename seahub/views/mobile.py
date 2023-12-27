@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 from django.conf import settings as django_settings
 
 from seahub.utils import render_error
+from seahub.utils.auth import AUTHORIZATION_PREFIX
 from seahub.settings import SITE_ROOT
 from seahub.api2.models import Token, TokenV2
 from seahub.auth import REDIRECT_FIELD_NAME, login
@@ -16,7 +17,7 @@ def mobile_login(request):
     """
 
     auth = request.headers.get('authorization', '').split()
-    if not auth or auth[0].lower() != 'token':
+    if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
         return render_error(request, 'token invalid')
 
     key = auth[1]
