@@ -4,6 +4,11 @@ from seahub.utils import gen_token
 
 VIRTUAL_ID_EMAIL_DOMAIN = '@auth.local'
 
+AUTHORIZATION_PREFIX = [
+    'token',
+    'bearer'
+]
+
 
 def get_login_bg_image_path():
     """ Return custom background image path if it exists, otherwise return default background image path.

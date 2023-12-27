@@ -14,6 +14,7 @@ from seahub.api2.utils import get_client_ip
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.ocm.models import OCMShare
 from seahub.utils import within_time_range
+from seahub.utils.auth import AUTHORIZATION_PREFIX
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -52,7 +53,7 @@ class TokenAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         auth = request.headers.get('authorization', '').split()
-        if not auth or auth[0].lower() != 'token':
+        if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:
@@ -165,7 +166,7 @@ class RepoAPITokenAuthentication(BaseAuthentication):
         :return: AnonymousUser, repo_api_token
         """
         auth = request.headers.get('authorization', '').split()
-        if not auth or auth[0].lower() != 'token':
+        if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:

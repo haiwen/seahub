@@ -11,6 +11,7 @@ from seaserv import seafile_api
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
+from seahub.utils.auth import AUTHORIZATION_PREFIX
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -57,7 +58,7 @@ def is_valid_seadoc_access_token(auth, file_uuid, return_payload=False):
     can decode a valid jwt payload
     """
     is_valid, payload = False, None
-    if not auth or auth[0].lower() != 'token' or len(auth) != 2:
+    if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX or len(auth) != 2:
         return (is_valid, payload) if return_payload else is_valid
 
     token = auth[1]
