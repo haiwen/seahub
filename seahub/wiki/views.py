@@ -230,7 +230,7 @@ def slug(request, slug, file_path="home.md"):
         except Exception as e:
             logger.warning(e)
 
-        last_modified = datetime.fromtimestamp(last_modified)
+    last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
