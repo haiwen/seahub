@@ -115,7 +115,7 @@ class Search(APIView):
 
         params = {
             'query': query,
-            'repos': repos,
+            'repos': searched_repos,
             'count': count,
             'is_all_repo': is_all_repo,
         }
@@ -171,9 +171,18 @@ class QuestionAnsweringSearchInLibrary(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+
         params = {
             'query': query,
-            'repo_id': repo_id,
+            'repo': repo,
             'count': count,
         }
 
