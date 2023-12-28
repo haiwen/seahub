@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MarkdownViewer } from '@seafile/sdoc-editor';
-import { avatarInfo, gettext, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../utils/constants';
+import { appAvatarURL, assetsUrl, gettext, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
@@ -112,10 +112,11 @@ class SdocMarkdownViewer extends React.Component {
       window.seafile = {
         serviceUrl: serviceURL,
         username: username,
-        name: username,
-        avatarURL: avatarInfo,
+        name: name,
+        avatarURL: appAvatarURL,
         repoID: repoID,
         siteRoot: siteRoot,
+        assetsUrl: assetsUrl,
       };
     }
 
