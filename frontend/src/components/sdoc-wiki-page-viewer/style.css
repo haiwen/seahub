@@ -30,6 +30,9 @@
       padding: 0 10px;
       width: 100%;
   }
+  .wiki-page-container .sdoc-wiki-outline-container{
+    display: none;
+}
 }
 
 @media (max-width: 767px) {
