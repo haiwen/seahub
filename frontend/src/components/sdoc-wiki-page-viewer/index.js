@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MarkdownViewer } from '@seafile/sdoc-editor';
+import { WikiViewer } from '@seafile/sdoc-editor';
 import { appAvatarURL, assetsUrl, gettext, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
@@ -21,7 +21,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
 };
 
-class SdocMarkdownViewer extends React.Component {
+class SdocWikiPageViewer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -126,7 +126,7 @@ class SdocMarkdownViewer extends React.Component {
       scrollRef: this.scrollRef,
     };
 
-    return <MarkdownViewer {...props} />;
+    return <WikiViewer {...props} />;
   };
 
   render() {
@@ -156,7 +156,7 @@ const defaultProps = {
   isTOCShow: true,
 };
 
-SdocMarkdownViewer.propTypes = propTypes;
-SdocMarkdownViewer.defaultProps = defaultProps;
+SdocWikiPageViewer.propTypes = propTypes;
+SdocWikiPageViewer.defaultProps = defaultProps;
 
-export default SdocMarkdownViewer;
+export default SdocWikiPageViewer;

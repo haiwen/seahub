@@ -1,10 +1,10 @@
-.wiki-page-container .sdoc-md-scroll-container {
+.wiki-page-container .sdoc-wiki-scroll-container {
   background-color: #fff !important;
   padding: 0px !important;
   overflow: inherit;
 }
 
-.wiki-page-container .sdoc-md-scroll-container .sdoc-article-container {
+.wiki-page-container .sdoc-wiki-scroll-container .sdoc-article-container {
   margin: 0 auto !important;
 }
 
@@ -19,7 +19,7 @@
   border: none;
 }
 
-.wiki-page-container .sdoc-md-outline-container {
+.wiki-page-container .sdoc-wiki-outline-container {
   top: 79px;
   width: 200px !important;
 }

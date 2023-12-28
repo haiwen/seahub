@@ -8,7 +8,7 @@ import { Utils } from '../../utils/utils';
 import Search from '../../components/search/search';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
-import SdocMarkdownViewer from '../../components/sdoc-markdown-viewer';
+import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -134,7 +134,7 @@ class MainPanel extends Component {
               />
             )}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <SdocMarkdownViewer
+              <SdocWikiPageViewer
                 isWiki={true}
                 path={this.props.path}
                 repoID={repoID}
