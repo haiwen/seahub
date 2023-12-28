@@ -281,9 +281,9 @@ class Search extends Component {
       });
     } else {
       if (enableSeafileAI) {
-        this.onAiSearch(queryData, cancelToken)
+        this.onAiSearch(queryData, cancelToken);
       } else {
-        this.onNormalSearch(queryData, cancelToken, page)
+        this.onNormalSearch(queryData, cancelToken, page);
       }
     }
   };
@@ -293,29 +293,29 @@ class Search extends Component {
     queryData['per_page'] = PER_PAGE;
     queryData['page'] = page;
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-        this.source = null;
-        if (res.data.total > 0) {
-          this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
-            isLoading: false,
-            page: page + 1,
-            hasMore: res.data.has_more,
-          });
-          return;
-        }
+      this.source = null;
+      if (res.data.total > 0) {
         this.setState({
-          highlightIndex: 0,
-          resultItems: [],
-          isLoading: false,
+          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
           isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
           hasMore: res.data.has_more,
         });
-      }).catch(error => {
-        /* eslint-disable */
-        console.log(error);
-        this.setState({ isLoading: false });
+        return;
+      }
+      this.setState({
+        highlightIndex: 0,
+        resultItems: [],
+        isLoading: false,
+        isResultGetted: true,
+        hasMore: res.data.has_more,
       });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
   }
 
   onAiSearch = (params, cancelToken) => {
