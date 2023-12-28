@@ -17,6 +17,7 @@ import EmailNotice from './components/user-settings/email-notice';
 import TwoFactorAuthentication from './components/user-settings/two-factor-auth';
 import SocialLogin from './components/user-settings/social-login';
 import SocialLoginDingtalk from './components/user-settings/social-login-dingtalk';
+import SocialLoginSAML from './components/user-settings/social-login-saml';
 import DeleteAccount from './components/user-settings/delete-account';
 
 import './css/toolbar.css';
@@ -32,6 +33,9 @@ const {
   twoFactorAuthEnabled,
   enableWechatWork,
   enableDingtalk,
+  isOrgContext,
+  enableADFS,
+  enableMultiADFS,
   enableDeleteAccount
 } = window.app.pageOptions;
 
@@ -48,8 +52,7 @@ class Settings extends React.Component {
       {show: true, href: '#lang-setting', text: gettext('Language')},
       {show: isPro, href: '#email-notice', text: gettext('Email Notification')},
       {show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication')},
-      {show: enableWechatWork, href: '#social-auth', text: gettext('Social Login')},
-      {show: enableDingtalk, href: '#social-auth', text: gettext('Social Login')},
+      {show: (enableWechatWork || enableDingtalk || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login')},
       {show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account')},
     ];
 
@@ -142,6 +145,7 @@ class Settings extends React.Component {
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
+                {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
                 {enableDeleteAccount && <DeleteAccount />}
               </div>
             </div>

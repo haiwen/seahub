@@ -24,8 +24,12 @@ from seahub.utils import is_ldap_user, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
-from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+try:
+    from seahub.settings import SAML_PROVIDER_IDENTIFIER
+except ImportError as e:
+    SAML_PROVIDER_IDENTIFIER = 'saml'
 
 
 @login_required
@@ -102,6 +106,22 @@ def edit_profile(request):
         enable_dingtalk = False
         social_connected_dingtalk = False
 
+    if ENABLE_ADFS_LOGIN:
+        enable_adfs = True
+        saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_adfs = False
+        saml_connected = False
+
+    if ENABLE_MULTI_ADFS and is_org_context(request):
+        enable_multi_adfs = True
+        org_saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_multi_adfs = False
+        org_saml_connected = False
+
     has_bind_social_auth = False
     if SocialAuthUser.objects.filter(username=request.user.username).exists():
         has_bind_social_auth = True
@@ -145,6 +165,11 @@ def edit_profile(request):
             'social_connected_dingtalk': social_connected_dingtalk,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
+            'enable_adfs': enable_adfs,
+            'saml_connected': saml_connected,
+            'enable_multi_adfs': enable_multi_adfs,
+            'org_saml_connected': org_saml_connected,
+            'org_id': request.user.org and request.user.org.org_id or None,
     }
 
     if show_two_factor_auth:
