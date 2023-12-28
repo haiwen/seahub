@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import { Router } from '@gatsbyjs/reach-router';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import SidePanel from './side-panel';
 
 import OrgStatisticFile from './statistic/statistic-file';
@@ -117,7 +117,9 @@ class Org extends React.Component {
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
             </OrgLogs>
-            <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
+            {enableMultiADFS &&
+              <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
+            }
           </Router>
         </div>
       </div>

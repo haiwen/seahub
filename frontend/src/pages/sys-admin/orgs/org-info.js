@@ -52,7 +52,7 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, url_prefix, metadata_url, domain } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain } = this.props.orgInfo;
       const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
         <Fragment>
@@ -89,13 +89,19 @@ class Content extends Component {
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
                 <dd className="info-item-content">
                   <Row className="my-4">
-                    <Col md="3">{gettext('Custom SAML Login URL')}</Col>
-                    <Col md="6">{`${serviceURL}/org/custom/${url_prefix}`}</Col>
+                    <Col md="3">Identifier (Entity ID)</Col>
+                    <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/metadata/`}</Col>
                   </Row>
                 </dd>
                 <dd className="info-item-content">
                   <Row className="my-4">
-                    <Col md="3">{gettext('App Federation Metadata URL')}</Col>
+                    <Col md="3">Reply URL (Assertion Consumer Service URL)</Col>
+                    <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/acs/`}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="4">SAML App Federation Metadata URL</Col>
                     <Col md="6">{metadata_url}</Col>
                   </Row>
                 </dd>
