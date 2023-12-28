@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  internalLink: PropTypes.string,
   onInternalLinkDialogToggle: PropTypes.func.isRequired,
 };
 
@@ -24,6 +25,10 @@ class InternalLinkDialog extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.internalLink) {
+      this.setState({smartLink: this.props.internalLink});
+      return;
+    }
     this.getInternalLink();
   }
 
@@ -51,7 +56,7 @@ class InternalLinkDialog extends React.Component {
   };
 
   toggle = () => {
-    this.props.onInternalLinkDialogToggle();
+    this.props.onInternalLinkDialogToggle({internalLink: ''});
   };
 
   render() {
