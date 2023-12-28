@@ -45,9 +45,9 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare();
   }
 
-  onInternalLinkToggle = ({internalLink}) => {
-    if (internalLink) {
-      this.setState({internalLink});
+  onInternalLinkToggle = (options) => {
+    if (options && options.internalLink) {
+      this.setState({internalLink: options.internalLink});
     }
     this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
   };
