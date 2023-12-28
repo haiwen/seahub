@@ -71,12 +71,17 @@ class Wiki extends Component {
     }
 
     // load dir list
-    initialPath = isDir === 'None' ? '/' : initialPath;
+    initialPath = (isDir === 'None' || Utils.isSdocFile(initialPath)) ? '/' : initialPath;
     this.loadNodeAndParentsByPath(initialPath);
   };
 
   loadWikiData = (initialPath) => {
     this.pythonWrapper = document.getElementById('wiki-file-content');
+    if (isDir === 'False' && Utils.isSdocFile(initialPath)) {
+      this.showDir('/');
+      return;
+    }
+
     if (isDir === 'False') {
       // this.showFile(initialPath);
       this.setState({path: initialPath});
@@ -400,7 +405,7 @@ class Wiki extends Component {
     if (node.object.isDir()) {  // isDir
       this.showDir(node.path);
     } else {
-      if (Utils.isMarkdownFile(node.path)) {
+      if (Utils.isMarkdownFile(node.path) || Utils.isSdocFile(node.path)) {
         if (node.path !== this.state.path) {
           this.showFile(node.path);
         }

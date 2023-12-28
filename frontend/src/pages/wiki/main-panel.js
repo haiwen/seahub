@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import Search from '../../components/search/search';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
+import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -120,8 +121,20 @@ class MainPanel extends Component {
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
-            {isViewingFile && (
+            {isViewingFile && Utils.isMarkdownFile(this.props.path) && (
               <SeafileMarkdownViewer
+                isWiki={true}
+                path={this.props.path}
+                repoID={repoID}
+                markdownContent={this.props.content}
+                isFileLoading={this.props.isDataLoading}
+                lastModified = {this.props.lastModified}
+                latestContributor={this.props.latestContributor}
+                onLinkClick={this.props.onLinkClick}
+              />
+            )}
+            {isViewingFile && Utils.isSdocFile(this.props.path) && (
+              <SdocWikiPageViewer
                 isWiki={true}
                 path={this.props.path}
                 repoID={repoID}

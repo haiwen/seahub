@@ -25,7 +25,8 @@ from seahub.views import check_folder_permission
 from seahub.utils import get_file_type_and_ext, render_permission_error, \
      gen_inner_file_get_url, render_error, get_service_url
 from seahub.views.file import send_file_access_msg
-from seahub.utils.file_types import IMAGE, MARKDOWN
+from seahub.utils.file_types import IMAGE, MARKDOWN, SEADOC
+from seahub.seadoc.utils import get_seadoc_file_uuid
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -197,6 +198,7 @@ def slug(request, slug, file_path="home.md"):
     outlines = []
     latest_contributor = ''
     last_modified = 0
+    assets_url = ''
 
     if is_dir is False and file_type == MARKDOWN:
         send_file_access_msg(request, repo, file_path, 'web')
@@ -230,6 +232,10 @@ def slug(request, slug, file_path="home.md"):
         except Exception as e:
             logger.warning(e)
 
+    if is_dir is False and file_type == SEADOC:
+        file_uuid = get_seadoc_file_uuid(repo, file_path)
+        assets_url = '/api/v2.1/seadoc/download-image/' + file_uuid
+
     last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki.html", {
@@ -252,6 +258,7 @@ def slug(request, slug, file_path="home.md"):
         "is_public_wiki": is_public_wiki,
         "is_dir": is_dir,
         "has_index": has_index,
+        "assets_url": assets_url,
     })
 
 
