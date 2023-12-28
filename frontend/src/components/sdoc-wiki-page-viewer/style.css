@@ -23,3 +23,17 @@
   top: 79px;
   width: 200px !important;
 }
+
+@media (max-width: 991.98px) {
+  .wiki-page-container .sdoc-article-container {
+      margin: 0!important;
+      padding: 0 10px;
+      width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .wiki-page-container .sdoc-wiki-outline-container{
+      display: none;
+  }
+}
