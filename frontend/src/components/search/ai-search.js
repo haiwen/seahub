@@ -49,7 +49,7 @@ export default class AISearch extends Component {
       isLoading: false,
       hasMore: true,
       isMaskShow: false,
-      isResultShow: false,
+      showRecent: true,
       isResultGetted: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
@@ -228,6 +228,9 @@ export default class AISearch extends Component {
   };
 
   onChangeHandler = (event) => {
+    if (this.state.showRecent) {
+      this.setState({ showRecent: false });
+    }
     const newValue = event.target.value;
     this.setState({ value: newValue }, () => {
       if (this.inputValue === newValue.trim()) return;
@@ -254,7 +257,6 @@ export default class AISearch extends Component {
       this.setState({
         highlightIndex: 0,
         resultItems: [],
-        isResultShow: false,
         isResultGetted: false
       });
       return;
@@ -272,7 +274,6 @@ export default class AISearch extends Component {
       this.source.cancel('prev request is cancelled');
     }
     this.setState({
-      isResultShow: true,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -350,11 +351,11 @@ export default class AISearch extends Component {
       value: '',
       isMaskShow: false,
       isCloseShow: false,
-      isResultShow: false,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
+      showRecent: true,
     });
   }
 
@@ -403,25 +404,33 @@ export default class AISearch extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, width, searchMode, answeringResult } = this.state;
+    const { resultItems, highlightIndex, width, isResultGetted } = this.state;
     if (!width || width === 'default') return null;
 
-    if (!this.state.isResultShow) {
+    if (this.state.showRecent) {
       const { repoID } = this.props;
       let storeKey = 'sfVisitedAISearchItems';
       if (repoID) {
         storeKey += repoID;
       }
       const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
-      return visitedItems.length ? this.renderVisitedItems(visitedItems) : null;
+      if (visitedItems.length) {
+        return this.renderVisitedItems(visitedItems);
+      }
     }
 
-    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
-      return (
-        <span className="loading-icon loading-tip"></span>
-      );
+    const searchStrLength = getValueLength(this.inputValue);
+
+    if (searchStrLength === 0) {
+      return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
-    if (!resultItems.length) {
+    else if (searchStrLength < 3) {
+      return <div className="search-result-none">{gettext('Type more characters to start search')}</div>;
+    }
+    else if (!isResultGetted) {
+      return <span className="loading-icon loading-tip"></span>;
+    }
+    else if (!resultItems.length) {
       return (
         <>
           <li className='search-result-item align-items-center' onClick={this.openAsk}>
@@ -546,7 +555,7 @@ export default class AISearch extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow, isCloseShow, searchMode, answeringResult, resultItems } = this.state;
+    const { isMaskShow, isCloseShow, searchMode } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
 
     if (searchMode === SEARCH_MODE.QA) {
