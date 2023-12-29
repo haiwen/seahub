@@ -89,13 +89,13 @@ class Content extends Component {
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
                 <dd className="info-item-content">
                   <Row className="my-4">
-                    <Col md="3">Identifier (Entity ID)</Col>
+                    <Col md="4">Identifier (Entity ID)</Col>
                     <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/metadata/`}</Col>
                   </Row>
                 </dd>
                 <dd className="info-item-content">
                   <Row className="my-4">
-                    <Col md="3">Reply URL (Assertion Consumer Service URL)</Col>
+                    <Col md="4">Reply URL (Assertion Consumer Service URL)</Col>
                     <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/acs/`}</Col>
                   </Row>
                 </dd>
@@ -107,7 +107,7 @@ class Content extends Component {
                 </dd>
                 <dd className="info-item-content">
                   <Row className="my-4">
-                    <Col md="3">{gettext('Email Domain')}</Col>
+                    <Col md="4">{gettext('Email Domain')}</Col>
                     <Col md="6">{domain}</Col>
                   </Row>
                 </dd>
@@ -147,6 +147,7 @@ Content.propTypes = {
   getDeviceErrorsListByPage: PropTypes.func,
   resetPerPage: PropTypes.func,
   curPerPage: PropTypes.number,
+  orgID: PropTypes.string,
   orgInfo: PropTypes.object,
   updateQuota: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,

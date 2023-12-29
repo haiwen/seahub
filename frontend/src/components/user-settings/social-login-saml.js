@@ -1,4 +1,5 @@
 import React from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 

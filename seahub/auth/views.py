@@ -447,10 +447,10 @@ def password_change(request, template_name='registration/password_change_form.ht
             password_change_form = SetContactEmailPasswordForm
             template_name = 'registration/password_set_form.html'
 
-        elif request.user.enc_password == UNUSABLE_PASSWORD:
-            # set password only
-            password_change_form = SetPasswordForm
-            template_name = 'registration/password_set_form.html'
+    if request.user.enc_password == UNUSABLE_PASSWORD:
+        # set password only
+        password_change_form = SetPasswordForm
+        template_name = 'registration/password_set_form.html'
 
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
