@@ -81,7 +81,15 @@ def get_search_repos(username, org_id):
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
     repo_list = owned_repos + public_repos + shared_repos + group_repos
 
+    repo_id_set = set()
     for repo in repo_list:
+        repo_id = repo.id
+        if repo.origin_repo_id:
+            repo_id = repo.origin_repo_id
+
+        if repo_id in repo_id_set:
+            continue
+        repo_id_set.add(repo_id)
         repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
 
     return repos
