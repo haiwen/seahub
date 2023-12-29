@@ -28,6 +28,7 @@ import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
+import Libraries from './pages/libraries';
 import MainContentWrapper from './components/main-content-wrapper';
 
 import './css/layout.css';
@@ -201,10 +202,6 @@ class App extends Component {
   render() {
     let { currentTab, isSidePanelClosed } = this.state;
 
-    const home = canAddRepo ?
-      <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} /> :
-      <SharedLibrariesWrapper path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />;
-
     return (
       <React.Fragment>
         <SystemNotification />
@@ -212,7 +209,8 @@ class App extends Component {
           <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
           <MainPanel>
             <Router className="reach-router">
-              {home}
+              <Libraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <Libraries path={ siteRoot + 'libraries' } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyFileActivitiesWrapper path={siteRoot + 'my-activities'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />

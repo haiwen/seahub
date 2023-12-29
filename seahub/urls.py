@@ -287,6 +287,7 @@ urlpatterns = [
     path('share-admin-upload-links/', react_fake_view, name="share_admin_upload_links"),
     path('shared-libs/', react_fake_view, name="shared_libs"),
     path('shared-with-ocm/', react_fake_view, name="shared_with_ocm"),
+    path('libraries/', react_fake_view, name="libs"),
     path('my-libs/', react_fake_view, name="my_libs"),
     path('groups/', react_fake_view, name="groups"),
     path('group/<int:group_id>/', react_fake_view, name="group"),

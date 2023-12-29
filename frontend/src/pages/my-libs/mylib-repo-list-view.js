@@ -15,6 +15,7 @@ const propTypes = {
   onTransferRepo: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
+  theadHidden : PropTypes.bool, // for 'my libraries' in 'Files' page
 };
 
 class MylibRepoListView extends React.Component {
@@ -79,10 +80,11 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
+    const { theadHidden } = this.props;
     const showStorageBackend = storages.length > 0;
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
     return (
-      <table>
+      <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
             <th width="4%"></th>

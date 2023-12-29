@@ -2,17 +2,18 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, canAddRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import RepoViewToolbar from '../../components/toolbar/repo-view-toolbar';
+import AllLibsToolbar from '../../components/toolbar/all-libs-toolbar';
 import LibDetail from '../../components/dirent-detail/lib-details';
-import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
+import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -28,6 +29,7 @@ class MyLibraries extends Component {
       repoList: [],
       isShowDetails: false,
       isSortOptionsDialogOpen: false,
+      isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -144,38 +146,54 @@ class MyLibraries extends Component {
     this.setState({isShowDetails: !this.state.isShowDetails});
   };
 
+  toggleGuideForNewDialog = () => {
+    window.app.pageOptions.guideEnabled = false;
+    this.setState({
+      isGuideForNewDialogOpen: false
+    });
+  };
+
   render() {
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
-          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'}/>
+          <AllLibsToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'} />
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
-              {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
             <div className="cur-view-content">
-              {this.state.isLoading && <Loading />}
-              {!this.state.isLoading && this.state.errorMsg && <p className="error text-center mt-8">{this.state.errorMsg}</p>}
-              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyTip}
-              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length > 0 &&
-                <MylibRepoListView
-                  sortBy={this.state.sortBy}
-                  sortOrder={this.state.sortOrder}
-                  repoList={this.state.repoList}
-                  onRenameRepo={this.onRenameRepo}
-                  onDeleteRepo={this.onDeleteRepo}
-                  onTransferRepo={this.onTransferRepo}
-                  onMonitorRepo={this.onMonitorRepo}
-                  onRepoClick={this.onRepoClick}
-                  sortRepoList={this.sortRepoList}
-                />
-              }
+              {canAddRepo && (<div className="pb-4">
+                <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+                  <h4 className="sf-heading m-0">{gettext('My Libraries')}</h4>
+                  {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                </div>
+                {this.state.isLoading ? <Loading /> : (this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
+                  this.state.repoList.length === 0 ? this.emptyTip : (
+                    <MylibRepoListView
+                      sortBy={this.state.sortBy}
+                      sortOrder={this.state.sortOrder}
+                      repoList={this.state.repoList}
+                      onRenameRepo={this.onRenameRepo}
+                      onDeleteRepo={this.onDeleteRepo}
+                      onTransferRepo={this.onTransferRepo}
+                      onMonitorRepo={this.onMonitorRepo}
+                      onRepoClick={this.onRepoClick}
+                      sortRepoList={this.sortRepoList}
+                      theadHidden={true}
+                    />)
+                ))}
+              </div>)}
             </div>
           </div>
+          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
+            <GuideForNewDialog
+              toggleDialog={this.toggleGuideForNewDialog}
+            />
+          }
           {this.state.isSortOptionsDialogOpen &&
             <SortOptionsDialog
               toggleDialog={this.toggleSortOptionsDialog}

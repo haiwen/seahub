@@ -173,7 +173,9 @@ class MainSideNav extends React.Component {
     );
   }
 
-  toggleFilesNav = () => {
+  toggleFilesNav = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     this.setState({
       FilesNavUnfolded: !this.state.FilesNavUnfolded
     });
@@ -187,11 +189,11 @@ class MainSideNav extends React.Component {
         <div className="side-nav-con">
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item flex-column" id="files">
-              <a className="nav-link ellipsis" title={gettext('Files')} onClick={this.toggleFilesNav}>
+              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                 <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Files')}</span>
-                <span className={`toggle-icon fas ${FilesNavUnfolded ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
-              </a>
+                <span className={`toggle-icon fas ${FilesNavUnfolded ? 'fa-caret-down':'fa-caret-left'} ${this.getActiveClass('libraries') ? 'text-white' : ''}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
+              </Link>
               <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${FilesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`}>
                 {canAddRepo && (
                   <li className="nav-item">
@@ -205,7 +207,7 @@ class MainSideNav extends React.Component {
                     <span className="nav-text">{gettext('Shared with me')}</span>
                   </Link>
                 </li>
-                { canViewOrg &&
+                {canViewOrg &&
                 <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'org')}>
                   <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
                     <span className="nav-text">{gettext('Shared with all')}</span>
