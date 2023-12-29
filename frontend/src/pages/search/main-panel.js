@@ -51,7 +51,7 @@ class SearchViewPanel extends React.Component {
     });
 
     if (enableSeafileAI) {
-      this.onAiSearch(params)
+      this.onAiSearch(params);
     } else {
       this.onNormalSearch(params);
     }
@@ -82,18 +82,18 @@ class SearchViewPanel extends React.Component {
         toaster.danger(gettext('Please check the network.'), {duration: 3});
       }
     });
-  }
+  };
 
   onAiSearch = (params) => {
     let results = [];
     seafileAPI.aiSearchFiles(params, null).then(res => {
       results = [...results, ...this.formatResultItems(res.data.results)];
       this.setState({
-          resultItems: results,
-          isResultGetted: true,
-          isLoading: false,
-          hasMore: false,
-        });
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        hasMore: false,
+      });
     }).catch(error => {
       /* eslint-disable */
       console.log(error);

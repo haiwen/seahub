@@ -50,6 +50,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   posX: PropTypes.number,
   posY: PropTypes.number,
+  dirent: PropTypes.object,
 };
 
 class DirentGridView extends React.Component {

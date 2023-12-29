@@ -34,7 +34,7 @@ class Search extends Component {
       isLoading: false,
       hasMore: true,
       isMaskShow: false,
-      isResultShow: false,
+      showRecent: true,
       isResultGetted: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
@@ -194,6 +194,9 @@ class Search extends Component {
   };
 
   onChangeHandler = (event) => {
+    if (this.state.showRecent) {
+      this.setState({ showRecent: false });
+    }
     const newValue = event.target.value;
     this.setState({ value: newValue }, () => {
       if (this.inputValue === newValue.trim()) return;
@@ -223,7 +226,6 @@ class Search extends Component {
       this.setState({
         highlightIndex: 0,
         resultItems: [],
-        isResultShow: false,
         isResultGetted: false
       });
       return;
@@ -241,7 +243,6 @@ class Search extends Component {
       this.source.cancel('prev request is cancelled');
     }
     this.setState({
-      isResultShow: true,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -281,9 +282,9 @@ class Search extends Component {
       });
     } else {
       if (enableSeafileAI) {
-        this.onAiSearch(queryData, cancelToken)
+        this.onAiSearch(queryData, cancelToken);
       } else {
-        this.onNormalSearch(queryData, cancelToken, page)
+        this.onNormalSearch(queryData, cancelToken, page);
       }
     }
   };
@@ -293,29 +294,29 @@ class Search extends Component {
     queryData['per_page'] = PER_PAGE;
     queryData['page'] = page;
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-        this.source = null;
-        if (res.data.total > 0) {
-          this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
-            isLoading: false,
-            page: page + 1,
-            hasMore: res.data.has_more,
-          });
-          return;
-        }
+      this.source = null;
+      if (res.data.total > 0) {
         this.setState({
-          highlightIndex: 0,
-          resultItems: [],
-          isLoading: false,
+          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
           isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
           hasMore: res.data.has_more,
         });
-      }).catch(error => {
-        /* eslint-disable */
-        console.log(error);
-        this.setState({ isLoading: false });
+        return;
+      }
+      this.setState({
+        highlightIndex: 0,
+        resultItems: [],
+        isLoading: false,
+        isResultGetted: true,
+        hasMore: res.data.has_more,
       });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
   }
 
   onAiSearch = (params, cancelToken) => {
@@ -381,40 +382,47 @@ class Search extends Component {
       value: '',
       isMaskShow: false,
       isCloseShow: false,
-      isResultShow: false,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
+      showRecent: true,
     });
   }
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, width } = this.state;
+    const { resultItems, width, showRecent, isResultGetted } = this.state;
     if (!width || width === 'default') return null;
 
-    if (!this.state.isResultShow) {
+    if (showRecent) {
       const { repoID } = this.props;
       let storeKey = 'sfVisitedSearchItems';
       if (repoID) {
         storeKey += repoID;
       }
       const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
-      return visitedItems.length ? this.renderResults(visitedItems, true) : null;
+      if (visitedItems.length > 0) {
+        return this.renderResults(visitedItems, true);
+      }
     }
 
-    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
-      return (
-        <span className="loading-icon loading-tip"></span>
-      );
-    }
-    if (!resultItems.length) {
-      return (
-        <div className="search-result-none">{gettext('No results matching.')}</div>
-      );
-    }
+    const searchStrLength = getValueLength(this.inputValue);
 
-    return this.renderResults(resultItems);
+    if (searchStrLength === 0) {
+      return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
+    }
+    else if (searchStrLength < 3) {
+      return <div className="search-result-none">{gettext('Type more characters to start search')}</div>;
+    }
+    else if (!isResultGetted) {
+      return <span className="loading-icon loading-tip"></span>;
+    }
+    else if (resultItems.length > 0) {
+      return this.renderResults(resultItems);
+    }
+    else {
+      return <div className="search-result-none">{gettext('No results matching.')}</div>;
+    }
   }
 
   renderResults = (resultItems, isVisited) => {
