@@ -17,7 +17,8 @@ import logging
 from urllib.parse import unquote, parse_qs, urlparse
 
 from django.urls import reverse
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, \
+     HttpResponsePermanentRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -405,3 +406,19 @@ def auth_complete(request):
             update_sudo_mode_ts(request)
 
     return resp
+
+
+# For compatibility with 10.0 version of URLs, replace url_prefix with org_id.
+def adfs_compatible_view(request, url_prefix):
+    try:
+        org = ccnet_api.get_org_by_url_prefix(url_prefix)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('login failed, please contact admin')
+
+    if not org:
+        logger.error('Cannot find an organization related to url_prefix %s.' % url_prefix)
+        return HttpResponseBadRequest('Cannot find an organization related to url_prefix %s.' % url_prefix)
+
+    org_id = str(org.org_id)
+    return HttpResponsePermanentRedirect(request.path.replace(url_prefix, org_id))

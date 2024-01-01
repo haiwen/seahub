@@ -921,6 +921,11 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/connect/$', saml2_connect, name='org_saml2_connect'),
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/disconnect/$', saml2_disconnect, name='org_saml2_disconnect'),
         re_path(r'^org/custom/(?P<org_id>\d+)/saml2/', include(('djangosaml2.urls', 'djangosaml2'), namespace='org')),
+        re_path(r'^org/custom/(?P<url_prefix>[a-z_0-9-]+)/saml2/login/$', adfs_compatible_view, name='login_compatible_view'),
+        re_path(r'^org/custom/(?P<url_prefix>[a-z_0-9-]+)/saml2/acs/$', adfs_compatible_view, name='acs_compatible_view'),
+        re_path(r'^org/custom/(?P<url_prefix>[a-z_0-9-]+)/saml2/metadata/$', adfs_compatible_view, name='metadate_compatible_view'),
+        re_path(r'^org/custom/(?P<url_prefix>[a-z_0-9-]+)/saml2/ls/$', adfs_compatible_view, name='ls_compatible_view'),
+        re_path(r'^org/custom/(?P<url_prefix>[a-z_0-9-]+)/saml2/ls/post/$', adfs_compatible_view, name='ls_post_compatible_view'),
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
