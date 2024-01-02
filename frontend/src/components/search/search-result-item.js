@@ -25,6 +25,9 @@ class SearchResultItem extends React.Component {
     let item = this.props.item;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
+    let showName = item.repo_name + '/' + item.link_content;
+    showName = showName.endsWith('/') ? showName.slice(0, showName.length - 1) : showName;
+
 
     if (item.thumbnail_url) {
       fileIconUrl = item.thumbnail_url;
@@ -39,7 +42,7 @@ class SearchResultItem extends React.Component {
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
           <div className="item-name ellipsis">{item.name}</div>
-          <div className="item-link ellipsis">{item.repo_name}/{item.link_content}</div>
+          <div className="item-link ellipsis">{showName}</div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></div>
         </div>
       </li>

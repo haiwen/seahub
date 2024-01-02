@@ -334,10 +334,12 @@ export default class AISearch extends Component {
     let items = [];
     for (let i = 0; i < data.length; i++) {
       items[i] = {};
+      let name = data[i].is_dir ? data[i].name : data[i].fullpath.split('/').pop();
       items[i]['index'] = [i];
-      items[i]['name'] = data[i].fullpath.split('/').pop();
+      items[i]['name'] = name;
       items[i]['path'] = data[i].fullpath;
       items[i]['repo_id'] = data[i].repo_id;
+      items[i]['repo_name'] = data[i].repo_name;
       items[i]['is_dir'] = data[i].is_dir;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
     }
