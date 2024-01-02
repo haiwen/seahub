@@ -404,7 +404,7 @@ class SharedRepoListItem extends React.Component {
     let operations = [];
     if (isPro) {
       if (repo.owner_email.indexOf('@seafile_group') != -1) {
-	// is group admin
+        // is group admin
         if (isStaff) {
           if (repo.owner_email == currentGroup.id + '@seafile_group') {
             this.isDeparementOnwerGroupMember = true;

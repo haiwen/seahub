@@ -96,7 +96,7 @@ class DeletedRepoTable extends Component {
           </tr>
         </thead>
         <tbody>
-          { deletedRepos && deletedRepos.map((item) => {
+          {deletedRepos && deletedRepos.map((item) => {
             return (
               <DeletedRepoItem
                 key={item.repo_id}
@@ -126,21 +126,17 @@ class DeletedRepoItem extends Component {
   }
 
   onMouseEnter = () => {
-    if (!this.props.isItemFreezed) {
-      this.setState({
-        hideRestoreMenu: false,
-        highlight: true,
-      });
-    }
+    this.setState({
+      hideRestoreMenu: false,
+      highlight: true,
+    });
   };
 
   onMouseLeave = () => {
-    if (!this.props.isItemFreezed) {
-      this.setState({
-        hideRestoreMenu: true,
-        highlight: false,
-      });
-    }
+    this.setState({
+      hideRestoreMenu: true,
+      highlight: false,
+    });
   };
 
   restoreDeletedRepo = (e) => {
@@ -187,7 +183,6 @@ class DeletedRepoItem extends Component {
 }
 
 DeletedRepoItem.propTypes = {
-  isItemFreezed: PropTypes.bool.isRequired,
   repo: PropTypes.object.isRequired,
   refreshDeletedRepoList: PropTypes.func.isRequired,
 };

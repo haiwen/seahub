@@ -12,7 +12,7 @@
   margin-top: 0;
 }
 
-.wiki-page-container .sdoc-article-container .article  {
+.wiki-page-container .sdoc-article-container .article {
   margin: 0;
   padding: 0 10px;
   max-width: none;
@@ -30,13 +30,13 @@
       padding: 0 10px;
       width: 100%;
   }
-  .wiki-page-container .sdoc-wiki-outline-container{
+  .wiki-page-container .sdoc-wiki-outline-container {
     display: none;
-}
+  }
 }
 
 @media (max-width: 767px) {
-  .wiki-page-container .sdoc-wiki-outline-container{
+  .wiki-page-container .sdoc-wiki-outline-container {
       display: none;
   }
 }

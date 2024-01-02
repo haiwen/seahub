@@ -498,7 +498,7 @@ a, a:hover { color: #ec8000; }
     padding: 0 0.75rem;
 }
 
-.department-usage .department-quota-bar  {
+.department-usage .department-quota-bar {
     flex: 1;
     margin-right: 0.5rem !important;
     height: 0.75rem !important;

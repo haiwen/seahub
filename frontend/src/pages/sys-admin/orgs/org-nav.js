@@ -5,7 +5,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 
 const propTypes = {
   orgID: PropTypes.string,
-  orgName: PropTypes.string.isRequired,
+  orgName: PropTypes.string,
   currentItem: PropTypes.string.isRequired
 };
 
