@@ -14,13 +14,14 @@ import LibDetail from '../../components/dirent-detail/lib-details';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
+import SharedLibs from '../../pages/shared-libs/shared-libs.js';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
 };
 
-class MyLibraries extends Component {
+class Libraries extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -166,27 +167,34 @@ class MyLibraries extends Component {
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
             <div className="cur-view-content">
-              {canAddRepo && (<div className="pb-4">
-                <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
-                  <h4 className="sf-heading m-0">{gettext('My Libraries')}</h4>
-                  {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              {canAddRepo && (
+                <div className="pb-4">
+                  <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+                    <h4 className="sf-heading m-0">{gettext('My Libraries')}</h4>
+                    {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                  </div>
+                  {this.state.isLoading ? <Loading /> : (this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
+                    this.state.repoList.length === 0 ? this.emptyTip : (
+                      <MylibRepoListView
+                        sortBy={this.state.sortBy}
+                        sortOrder={this.state.sortOrder}
+                        repoList={this.state.repoList}
+                        onRenameRepo={this.onRenameRepo}
+                        onDeleteRepo={this.onDeleteRepo}
+                        onTransferRepo={this.onTransferRepo}
+                        onMonitorRepo={this.onMonitorRepo}
+                        onRepoClick={this.onRepoClick}
+                        sortRepoList={this.sortRepoList}
+                        theadHidden={true}
+                      />)
+                  ))}
                 </div>
-                {this.state.isLoading ? <Loading /> : (this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
-                  this.state.repoList.length === 0 ? this.emptyTip : (
-                    <MylibRepoListView
-                      sortBy={this.state.sortBy}
-                      sortOrder={this.state.sortOrder}
-                      repoList={this.state.repoList}
-                      onRenameRepo={this.onRenameRepo}
-                      onDeleteRepo={this.onDeleteRepo}
-                      onTransferRepo={this.onTransferRepo}
-                      onMonitorRepo={this.onMonitorRepo}
-                      onRepoClick={this.onRepoClick}
-                      sortRepoList={this.sortRepoList}
-                      theadHidden={true}
-                    />)
-                ))}
-              </div>)}
+              )}
+
+              <div className="pb-4">
+                <SharedLibs inAllLibs={true} />
+              </div>
+
             </div>
           </div>
           {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
@@ -216,6 +224,6 @@ class MyLibraries extends Component {
   }
 }
 
-MyLibraries.propTypes = propTypes;
+Libraries.propTypes = propTypes;
 
-export default MyLibraries;
+export default Libraries;
