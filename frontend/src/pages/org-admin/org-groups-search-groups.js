@@ -105,7 +105,8 @@ class GroupItem extends React.Component {
               <DropdownToggle
                 tag="a"
                 className="attr-action-icon fas fa-ellipsis-v"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}

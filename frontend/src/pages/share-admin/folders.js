@@ -264,7 +264,8 @@ class Item extends Component {
               <DropdownToggle
                 tag="i"
                 className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />

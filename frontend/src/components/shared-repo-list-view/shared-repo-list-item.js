@@ -478,7 +478,8 @@ class SharedRepoListItem extends React.Component {
         <DropdownToggle
           tag="i"
           className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-          title={gettext('More Operations')}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           onClick={this.clickOperationMenuToggle}
@@ -520,7 +521,8 @@ class SharedRepoListItem extends React.Component {
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
               className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
-              title={gettext('More Operations')}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
               aria-haspopup={true}
@@ -579,7 +581,8 @@ class SharedRepoListItem extends React.Component {
                   <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
                     <DropdownToggle
                       className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
-                      title={gettext('More Operations')}
+                      title={gettext('More operations')}
+                      aria-label={gettext('More operations')}
                       data-toggle="dropdown"
                       aria-expanded={this.state.isItemMenuShow}
                       aria-haspopup={true}

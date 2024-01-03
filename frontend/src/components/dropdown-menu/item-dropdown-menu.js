@@ -120,8 +120,8 @@ class ItemDropdownMenu extends React.Component {
           <DropdownToggle
             className={toggleClass}
             data-toggle="dropdown"
-            title={gettext('More Operations')}
-            aria-label={gettext('More Operations')}
+            title={gettext('More operations')}
+            aria-label={gettext('More operations')}
             aria-expanded={this.state.isItemMenuShow}
             onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
@@ -149,10 +149,10 @@ class ItemDropdownMenu extends React.Component {
           role="button"
           tabIndex="0"
           className={toggleClass}
-          title={gettext('More Operations')}
+          title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
-          aria-label={gettext('More Operations')}
+          aria-label={gettext('More operations')}
           onKeyDown={this.onDropdownToggleKeyDown}
           // onClick={this.onDropdownToggleClick}
         />

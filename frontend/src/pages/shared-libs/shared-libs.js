@@ -295,8 +295,8 @@ class Item extends Component {
                 role="button"
                 tabIndex="0"
                 className={`sf-dropdown-toggle sf2-icon-caret-down${iconVisibility}`}
-                title={gettext('More Operations')}
-                aria-label={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />
@@ -345,7 +345,7 @@ class Item extends Component {
               <DropdownToggle
                 tag="i"
                 className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />

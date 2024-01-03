@@ -189,7 +189,7 @@ class FileToolbar extends React.Component {
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle aria-label={gettext('More Operations')}>
+            <DropdownToggle aria-label={gettext('More operations')}>
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
@@ -225,7 +225,7 @@ class FileToolbar extends React.Component {
                 )}
           </ButtonGroup>
 
-          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More Operations')}></DropdownToggle>
+          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More operations')}></DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
