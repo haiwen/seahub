@@ -96,7 +96,8 @@ class HistoryListItem extends React.Component {
               className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
               data-toggle="dropdown"
               aria-expanded={this.state.isMenuShow}
-              alt={gettext('More Operations')}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
             />
             <DropdownMenu>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}

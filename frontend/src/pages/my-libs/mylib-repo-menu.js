@@ -206,8 +206,8 @@ class MylibRepoMenu extends React.Component {
             role="button"
             tabIndex="0"
             className="sf-dropdown-toggle sf2-icon-caret-down"
-            title={gettext('More Operations')}
-            aria-label={gettext('More Operations')}
+            title={gettext('More operations')}
+            aria-label={gettext('More operations')}
             onClick={this.onDropdownToggleClick}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
@@ -260,8 +260,8 @@ class MylibRepoMenu extends React.Component {
         <DropdownToggle
           tag="i"
           className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-          title={gettext('More Operations')}
-          // onClick={this.clickOperationMenuToggle}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
         />

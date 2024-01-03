@@ -116,7 +116,8 @@ class MoreMenu extends React.PureComponent {
         <DropdownToggle
           tag='i'
           className='fa fa-ellipsis-v'
-          title={gettext('More Operations')}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.dropdownOpen}
         >
