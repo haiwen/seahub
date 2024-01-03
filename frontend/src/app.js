@@ -22,7 +22,7 @@ import OCMViaWebdav from './pages/ocm-via-webdav/ocm-via-webdav';
 import OCMRepoDir from './pages/share-with-ocm/remote-dir-view';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
-import PublicSharedView from './pages/shared-with-all/public-shared-view';
+import PublicSharedView from './pages/shared-with-all';
 import LibContentView from './pages/lib-content-view/lib-content-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';

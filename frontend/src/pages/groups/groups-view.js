@@ -96,7 +96,7 @@ class RepoListViewPanel extends React.Component {
         {this.state.repoList.length === 0 ?
           emptyTip :
           <SharedRepoListView
-            isShowTableThread={false}
+            theadHidden={true}
             isShowRepoOwner={false}
             currentGroup={this.props.group}
             repoList={this.state.repoList}

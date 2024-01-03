@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddRepo } from '../../utils/constants';
+import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
@@ -15,6 +15,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibs from '../../pages/shared-libs/shared-libs.js';
+import SharedWithAll from '../../pages/shared-with-all';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -194,6 +195,12 @@ class Libraries extends Component {
               <div className="pb-4">
                 <SharedLibs inAllLibs={true} />
               </div>
+
+              {canViewOrg && (
+                <div className="pb-4">
+                  <SharedWithAll inAllLibs={true} />
+                </div>
+              )}
 
             </div>
           </div>

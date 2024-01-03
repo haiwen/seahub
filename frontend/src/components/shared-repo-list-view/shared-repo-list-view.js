@@ -109,12 +109,11 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
-
+    const { theadHidden = false } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     return (
-      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
+      <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
             <th width="4%"></th>
