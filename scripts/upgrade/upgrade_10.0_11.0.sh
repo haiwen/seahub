@@ -203,7 +203,7 @@ function generate_seafevents_conf() {
         DB_NAME=$(echo $DB_NAME | sed "s/'//g" | sed "s/,//g")
 
         PRO_PY=${INSTALLPATH}/pro/pro.py
-        $PYTHON ${PRO_PY} setup --mysql --mysql_host ${DB_HOST} --mysql_port ${DB_PORT} --mysql_user ${DB_USER} --mysql_password ${DB_PASSWORD} --mysql_db ${DB_NAME}
+        $PYTHON ${PRO_PY} setup --mysql --mysql_host "${DB_HOST}" --mysql_port "${DB_PORT}" --mysql_user "${DB_USER}" --mysql_password "${DB_PASSWORD}" --mysql_db "${DB_NAME}"
     fi
 }
 
