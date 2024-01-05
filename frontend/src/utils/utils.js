@@ -106,6 +106,7 @@ export const Utils = {
     // default
     'default' : 'file.png',
     'sdoc': 'sdoc.png',
+    'sdoc_notification': 'sdoc_notification.ico'
   },
 
   // check if a file is an image

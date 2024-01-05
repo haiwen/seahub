@@ -14,7 +14,8 @@ const propTypes = {
   docPerm: PropTypes.string.isRequired,
   isStarred: PropTypes.bool.isRequired,
   toggleStar: PropTypes.func.isRequired,
-  unmarkDraft: PropTypes.func.isRequired
+  unmarkDraft: PropTypes.func.isRequired,
+  onNewNotification: PropTypes.func.isRequired
 };
 
 class ExternalOperations extends React.Component {
@@ -33,8 +34,9 @@ class ExternalOperations extends React.Component {
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
     this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
-    this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
-    this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
+    this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
+    this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
+    this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
   }
 
   componentWillUnmount() {
@@ -42,6 +44,9 @@ class ExternalOperations extends React.Component {
     this.unsubscribeStar();
     this.unsubscribeUnmark();
     this.unsubscribeShare();
+    this.unsubscribeFreezeDocument();
+    this.unsubscribeUnfreeze();
+    this.unsubscribeNewNotification();
   }
 
   onInternalLinkToggle = () => {
@@ -101,6 +106,10 @@ class ExternalOperations extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  };
+
+  onNewNotification = () => {
+    this.props.onNewNotification();
   };
 
   render() {

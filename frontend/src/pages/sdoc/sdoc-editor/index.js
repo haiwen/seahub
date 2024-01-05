@@ -15,9 +15,7 @@ export default class SdocEditor extends React.Component {
   }
 
   componentDidMount() {
-    const { docName } = window.seafile;
-    const fileIcon = Utils.getFileIconUrl(docName, 192);
-    document.getElementById('favicon').href = fileIcon;
+    this.onSetFavicon();
   }
 
   toggleStar = (isStarred) => {
@@ -26,6 +24,19 @@ export default class SdocEditor extends React.Component {
 
   unmarkDraft = () => {
     this.setState({isDraft: false});
+  };
+
+  onSetFavicon = (suffix) => {
+    let { docName } = window.seafile;
+    if (suffix) {
+      docName = docName + suffix;
+    }
+    const fileIcon = Utils.getFileIconUrl(docName, 192);
+    document.getElementById('favicon').href = fileIcon;
+  };
+
+  onNewNotification = () => {
+    this.onSetFavicon('_notification');
   };
 
   render() {
@@ -42,6 +53,7 @@ export default class SdocEditor extends React.Component {
           isStarred={isStarred}
           toggleStar={this.toggleStar}
           unmarkDraft={this.unmarkDraft}
+          onNewNotification={this.onNewNotification}
         />
       </Fragment>
     );
