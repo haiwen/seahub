@@ -32,7 +32,6 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onRepoClick: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
 };
 
@@ -146,10 +145,6 @@ class MylibRepoListItem extends React.Component {
     if (!this.state.isRenaming && this.props.repo.repo_name) {
       navigate(this.repoURL);
     }
-  };
-
-  onRepoClick = () => {
-    this.props.onRepoClick(this.props.repo);
   };
 
   onToggleStarRepo = (e) => {
@@ -328,7 +323,7 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick} onFocus={this.onFocus}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus}>
         <td className="text-center">
           <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
             <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
@@ -382,7 +377,7 @@ class MylibRepoListItem extends React.Component {
     let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td onClick={this.visitRepo}>
           {this.state.isRenaming && (

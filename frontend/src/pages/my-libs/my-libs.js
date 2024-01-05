@@ -8,9 +8,8 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import RepoViewToolbar from '../../components/toolbar/repo-view-toolbar';
-import LibDetail from '../../components/dirent-detail/lib-details';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+import MyLibsToolbar from '../../components/toolbar/my-libs-toolbar';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 
@@ -26,7 +25,6 @@ class MyLibraries extends Component {
       errorMsg: '',
       isLoading: true,
       repoList: [],
-      isShowDetails: false,
       isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
@@ -127,30 +125,15 @@ class MyLibraries extends Component {
     this.setState({repoList: repoList});
   };
 
-  onRepoClick = (repo) => {
-    if (this.state.isShowDetails) {
-      this.onRepoDetails(repo);
-    }
-  };
-
-  onRepoDetails = (repo) => {
-    this.setState({
-      currentRepo: repo,
-      isShowDetails: true,
-    });
-  };
-
-  closeDetails = () => {
-    this.setState({isShowDetails: !this.state.isShowDetails});
-  };
-
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'}/>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+          <MyLibsToolbar onCreateRepo={this.onCreateRepo} moreShown={true} />
+        </TopToolbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -170,7 +153,6 @@ class MyLibraries extends Component {
                   onDeleteRepo={this.onDeleteRepo}
                   onTransferRepo={this.onTransferRepo}
                   onMonitorRepo={this.onMonitorRepo}
-                  onRepoClick={this.onRepoClick}
                   sortRepoList={this.sortRepoList}
                 />
               }
@@ -184,14 +166,6 @@ class MyLibraries extends Component {
               sortItems={this.sortRepoList}
             />
           }
-          {this.state.isShowDetails && (
-            <div className="cur-view-detail">
-              <LibDetail
-                currentRepo={this.state.currentRepo}
-                closeDetails={this.closeDetails}
-              />
-            </div>
-          )}
         </div>
       </Fragment>
     );

@@ -13,9 +13,8 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onRepoClick: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
-  theadHidden : PropTypes.bool, // for 'my libraries' in 'Files' page
+  theadHidden : PropTypes.bool, // for 'My Libraries' in 'Files' page
 };
 
 class MylibRepoListView extends React.Component {
@@ -71,7 +70,6 @@ class MylibRepoListView extends React.Component {
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
               onMonitorRepo={this.props.onMonitorRepo}
-              onRepoClick={this.props.onRepoClick}
             />
           );
         })}
