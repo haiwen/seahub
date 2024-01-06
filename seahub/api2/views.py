@@ -1174,7 +1174,7 @@ class PubRepos(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
-        permission = request.data.get("permission", 'r')
+        permission = request.data.get("permission", 'rw')
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
@@ -1238,7 +1238,7 @@ class PubRepos(APIView):
             "mtime": repo.last_modify,
             "mtime_relative": translate_seahub_time(repo.last_modify),
             "encrypted": repo.encrypted,
-            "permission": 'rw',  # Always have read-write permission to owned repo
+            "permission": permission,
             "owner": username,
             "owner_nickname": email2nickname(username),
             "owner_name": email2nickname(username),
