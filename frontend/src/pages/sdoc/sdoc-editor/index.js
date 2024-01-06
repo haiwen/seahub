@@ -20,6 +20,7 @@ export default class SdocEditor extends React.Component {
   componentDidMount() {
     this.onSetFavicon();
     this.getDirentList();
+    this.cacheHistoryfiles();
   }
 
   toggleStar = (isStarred) => {
@@ -41,6 +42,25 @@ export default class SdocEditor extends React.Component {
 
   onNewNotification = () => {
     this.onSetFavicon('_notification');
+  };
+
+  cacheHistoryfiles = () => {
+    const { docName, docUuid } = window.seafile;
+    const rencentFiles = localStorage.getItem('sdoc-recent-files') ? JSON.parse(localStorage.getItem('sdoc-recent-files')) : [];
+    let arr = [];
+    const newFile = { file_uuid: docUuid, file_name: docName };
+    if (rencentFiles.length > 0) {
+      const isExist = rencentFiles.find((item) => item.file_uuid === docUuid);
+      if (isExist) return;
+      if (!isExist) {
+        let newRencentFiles = rencentFiles.slice(0);
+        if (rencentFiles.length === 10) {newRencentFiles.shift();}
+        arr = [newFile, ...newRencentFiles];
+      }
+    } else {
+      arr.push(newFile);
+    }
+    localStorage.setItem('sdoc-recent-files', JSON.stringify(arr));
   };
 
   getDirPath = () => {
