@@ -526,9 +526,19 @@ export default class AISearch extends Component {
     });
   };
 
+  onDeleteIndex = () => {
+    seafileAPI.deleteLibraryIndex(this.props.repoID).then(res => {
+      toaster.notify(gettext('Successfully turned off'))
+      this.setState({ indexState: INDEX_STATE.UNCREATED })
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   renderSwitch = () => {
     const { indexState } = this.state;
-    if (indexState === INDEX_STATE.FINISHED || indexState === INDEX_STATE.RUNNING) {
+    if (indexState === INDEX_STATE.RUNNING) {
       return (
         <Switch
           checked={true}
@@ -537,6 +547,17 @@ export default class AISearch extends Component {
           size="small"
           textPosition='right'
           disabled
+        />
+      );
+    } else if (indexState === INDEX_STATE.FINISHED) {
+      return (
+        <Switch
+          checked={true}
+          placeholder={gettext('Turn off semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          onChange={this.onDeleteIndex}
+          textPosition='right'
         />
       );
     } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {

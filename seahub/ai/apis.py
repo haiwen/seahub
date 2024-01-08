@@ -243,6 +243,12 @@ class LibrarySdocIndex(APIView):
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
 
+        parent_dir = '/'
+        # permission check
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
             resp = delete_library_index(repo_id)
             if resp.status_code == 500:
