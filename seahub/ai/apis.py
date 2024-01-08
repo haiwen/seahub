@@ -133,12 +133,13 @@ class Search(APIView):
         for f in resp_json.get('results'):
             repo_id = f['repo_id']
             repo = repos_map.get(repo_id, None)
+            if not repo:
+                continue
             real_repo_id = repo[0]
             origin_path = repo[1]
             repo_name = repo[2]
             f['repo_name'] = repo_name
-            if not repo:
-                continue
+            f.pop('_id', None)
 
             if origin_path:
                 if not f['fullpath'].startswith(origin_path):
