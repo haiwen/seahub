@@ -2548,7 +2548,7 @@ dialog :link {
   }
   /* wrapper around (scaled) print canvas elements */
   #printContainer > .printedPage {
-    page-break-after: always;
+    page-break-after: auto;
     page-break-inside: avoid;
 
     /* The wrapper always cover the whole page. */
