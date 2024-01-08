@@ -30,6 +30,7 @@ class ExternalOperations extends React.Component {
       isShowShareDialog: false,
       internalLink: '',
       isShowCreateFileDialog: false,
+      fileType: '.sdoc',
     };
   }
 
@@ -122,7 +123,10 @@ class ExternalOperations extends React.Component {
     this.props.onNewNotification();
   };
 
-  onCreateSdocFile = () => {
+  onCreateSdocFile = (params) => {
+    if (params?.newFileName) {
+      this.setState({fileType: `${params.newFileName}.sdoc`});
+    }
     this.setState({
       isShowCreateFileDialog: !this.state.isShowCreateFileDialog
     });
@@ -146,7 +150,7 @@ class ExternalOperations extends React.Component {
 
   render() {
     const { repoID, docPath, docName, docPerm, dirPath } = this.props;
-    const { isShowInternalLinkDialog, isShowShareDialog, internalLink, isShowCreateFileDialog } = this.state;
+    const { isShowInternalLinkDialog, isShowShareDialog, internalLink, isShowCreateFileDialog, fileType } = this.state;
     return (
       <>
         {isShowInternalLinkDialog && (
@@ -170,7 +174,7 @@ class ExternalOperations extends React.Component {
         {isShowCreateFileDialog && (
           <CreateFile
             parentPath={dirPath}
-            fileType='.sdoc'
+            fileType={fileType}
             onAddFile={this.onAddFile}
             checkDuplicatedName={this.checkDuplicatedName}
             toggleDialog={this.onCreateSdocFile}

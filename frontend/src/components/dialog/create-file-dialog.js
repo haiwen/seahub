@@ -21,7 +21,7 @@ class CreateFile extends React.Component {
       isMarkdownDraft: false,
       isSdocDraft: false,
       errMessage: '',
-      isSubmitBtnActive: false,
+      isSubmitBtnActive: props.fileType.slice(0, -5) ? true : false,
     };
     this.newInput = React.createRef();
   }
