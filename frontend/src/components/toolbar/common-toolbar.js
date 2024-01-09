@@ -13,7 +13,8 @@ const propTypes = {
   repoName: PropTypes.string,
   isLibView: PropTypes.bool,
   onSearchedClick: PropTypes.func.isRequired,
-  searchPlaceholder: PropTypes.string
+  searchPlaceholder: PropTypes.string,
+  currentRepoInfo: PropTypes.object,
 };
 
 class CommonToolbar extends React.Component {
@@ -30,6 +31,7 @@ class CommonToolbar extends React.Component {
             placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
             repoName={repoName}
+            currentRepoInfo={this.props.currentRepoInfo}
           />
         );
       } else {
