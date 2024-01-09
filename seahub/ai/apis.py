@@ -14,8 +14,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SeafileAiAuthentication
 from seahub.api2.utils import api_error
 
-from seahub.views import check_folder_permission
-from seahub.utils.repo import parse_repo_perm, is_valid_repo_id_format
+from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
 from seahub.ai.utils import create_library_sdoc_index, search, update_library_sdoc_index, \
     delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
     get_file_download_token, get_search_repos, RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
@@ -43,10 +42,7 @@ class LibrarySdocIndexes(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = '/'
-
-        # permission check
-        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -216,10 +212,7 @@ class LibrarySdocIndex(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = '/'
-
-        # permission check
-        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -243,6 +236,10 @@ class LibrarySdocIndex(APIView):
         repo_id = request.data.get('repo_id')
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             resp = delete_library_index(repo_id)

@@ -4,7 +4,7 @@ import isHotkey from 'is-hotkey';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
@@ -35,6 +35,7 @@ export default class AISearch extends Component {
     placeholder: PropTypes.string,
     onSearchedClick: PropTypes.func.isRequired,
     repoName: PropTypes.string,
+    currentRepoInfo: PropTypes.object,
   };
 
   constructor(props) {
@@ -66,6 +67,8 @@ export default class AISearch extends Component {
     this.indexStateTimer = null;
     this.timer = null;
     this.isChineseInput = false;
+    this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+    this.isAdmin = props.currentRepoInfo.is_admin;
   }
 
   componentDidMount() {
@@ -517,7 +520,7 @@ export default class AISearch extends Component {
     this.setState({ indexState: INDEX_STATE.RUNNING });
     seafileAPI.createLibraryIndex(this.props.repoID).then(res => {
       const taskId = res.data.task_id;
-      toaster.notify(gettext('Indexing the library. Semantic search will be available within a few minutes.'))
+      toaster.notify(gettext('Indexing the library. Semantic search will be available within a few minutes.'));
       this.queryIndexTaskStatus(taskId);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -526,9 +529,19 @@ export default class AISearch extends Component {
     });
   };
 
+  onDeleteIndex = () => {
+    seafileAPI.deleteLibraryIndex(this.props.repoID).then(res => {
+      toaster.notify(gettext('Successfully turned off'));
+      this.setState({ indexState: INDEX_STATE.UNCREATED });
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   renderSwitch = () => {
     const { indexState } = this.state;
-    if (indexState === INDEX_STATE.FINISHED || indexState === INDEX_STATE.RUNNING) {
+    if (indexState === INDEX_STATE.RUNNING) {
       return (
         <Switch
           checked={true}
@@ -537,6 +550,17 @@ export default class AISearch extends Component {
           size="small"
           textPosition='right'
           disabled
+        />
+      );
+    } else if (indexState === INDEX_STATE.FINISHED) {
+      return (
+        <Switch
+          checked={true}
+          placeholder={gettext('Turn off semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          onChange={this.onDeleteIndex}
+          textPosition='right'
         />
       );
     } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {
@@ -603,7 +627,7 @@ export default class AISearch extends Component {
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
-                {isCloseShow && this.renderSwitch()}
+                {isCloseShow && (this.isRepoOwner || this.isAdmin) && this.renderSwitch()}
                 {this.renderSearchResult()}
               </div>
             </div>

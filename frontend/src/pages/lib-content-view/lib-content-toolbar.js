@@ -142,6 +142,7 @@ class LibContentToolbar extends React.Component {
           isLibView={true}
           repoID={this.props.repoID}
           repoName={this.props.repoName}
+          currentRepoInfo={this.props.currentRepoInfo}
           onSearchedClick={this.props.onSearchedClick}
           searchPlaceholder={gettext('Search files')}
         />
