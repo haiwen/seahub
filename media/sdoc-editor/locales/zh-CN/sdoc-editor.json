@@ -440,5 +440,9 @@
   "Replace_all": "替换全部",
   "Are_you_sure_to_replace_all_number_xxx_in_this_document_with_yyy": "确定要将此文档内的 {{number}} 处 \"{{originalWord}} \" 替换为 \"{{replacedWord}} \" 吗？",
   "Are_you_sure_to_clear_all_number_xxx_in_this_document": "确定将此文档内的 {{number}} 处 \"{{originalWord}}\" 全部清除吗?",
-  "Search_not_found": "未找到"
+  "Search_not_found": "未找到",
+  "Recent_previews": "最近浏览",
+  "The_document_does_not_exist": "不存在该文档",
+  "Create_a_new_sdoc_file": "新建 sdoc 文件",
+  "Create": "创建"
 }

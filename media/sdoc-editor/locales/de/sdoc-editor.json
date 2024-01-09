@@ -440,5 +440,9 @@
   "Replace_all": "Replace all",
   "Are_you_sure_to_replace_all_number_xxx_in_this_document_with_yyy": "Are you sure to replace all {{number}} '{{originalWord}}' in this document with '{{replacedWord}}'?",
   "Are_you_sure_to_clear_all_number_xxx_in_this_document": "Are you sure to clear all {{number}} '{{originalWord}}' in this document?",
-  "Search_not_found": "Not found"
+  "Search_not_found": "Not found",
+  "Recent_previews": "Recent previews",
+  "The_document_does_not_exist": "The document does not exist",
+  "Create_a_new_sdoc_file": "Create a new sdoc file",
+  "Create": "Erstellen"
 }
