@@ -140,9 +140,12 @@ class ExternalOperations extends React.Component {
     return isDuplicated;
   };
 
-  onAddFile = (filePath, isMarkdownDraft, isSdocDraft) => {
+  onAddFile = (filePath, isMarkdownDraft) => {
     let repoID = this.props.repoID;
-    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).catch((error) => {
+    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then((res) => {
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, {data: res.data});
+    }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
