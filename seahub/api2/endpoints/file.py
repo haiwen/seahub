@@ -256,6 +256,10 @@ class FileView(APIView):
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
             file_info = self.get_file_info(username, repo_id, new_file_path)
+            # gen doc_uuid
+            if new_file_name.endswith('.sdoc'):
+                doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
+                file_info['doc_uuid'] = doc_uuid
             return Response(file_info)
 
         if operation == 'rename':
