@@ -36,7 +36,7 @@ export default class AISearchAsk extends Component {
     super(props);
     this.state = {
       value: props.value,
-      isLoading: false,
+      isLoading: true,
       answeringResult: '',
       hitFiles: [],
     };
@@ -101,11 +101,12 @@ export default class AISearchAsk extends Component {
   };
 
   formatQuestionAnsweringItems(data) {
+    if (!Array.isArray(data)) return [];
     let items = [];
     for (let i = 0; i < data.length; i++) {
       items[i] = {};
       items[i]['index'] = [i];
-      items[i]['name'] = data[i].substring(data[i].lastIndexOf('/')+1);
+      items[i]['name'] = data[i].substring(data[i].lastIndexOf('/') + 1);
       items[i]['path'] = data[i];
       items[i]['repo_id'] = this.props.repoID;
       items[i]['is_dir'] = false;
@@ -135,11 +136,10 @@ export default class AISearchAsk extends Component {
       search_repo: repoID || 'all',
     };
     seafileAPI.questionAnsweringFiles(searchParams, token).then(res => {
-      const { answering_result } = res.data || {};
-      const hit_files = answering_result !== 'false' ? res.data.hit_files : [];
+      let { answering_result, hit_files } = res.data || {};
       this.setState({
         isLoading: false,
-        answeringResult: answering_result === 'false' ? 'No result' : answering_result,
+        answeringResult: answering_result === 'false' ? '' : answering_result.trim(),
         hitFiles: this.formatQuestionAnsweringItems(hit_files),
       });
     }).catch(error => {
@@ -152,6 +152,7 @@ export default class AISearchAsk extends Component {
   };
 
   render() {
+    const { isLoading, answeringResult, hitFiles } = this.state;
     return (
       <div className="search">
         <div className="search-mask show" onClick={this.props.closeAsk}></div>
@@ -164,7 +165,7 @@ export default class AISearchAsk extends Component {
             {gettext('Return')}
           </div>        
 
-          {this.state.isLoading ?
+          {isLoading ?
             <div className="d-flex align-items-center my-8">
               <Loading />
             </div>
@@ -174,20 +175,17 @@ export default class AISearchAsk extends Component {
               <AISearchRobot/>
             </div>
             <div className="ai-search-ask-body-right">
-              {/* <div>{this.state.answeringResult}</div>s */}
-
-              {/* markdown viewer */}
-              <div className="ai-search-ask-body-markdown">
-              <MarkdownViewer
-                value={this.state.answeringResult}
-                isShowOutline={false}
-              />
-              </div>
-
+              {answeringResult.length > 0 ?
+                <div className="ai-search-ask-body-markdown">
+                  <MarkdownViewer value={answeringResult} isShowOutline={false}/>
+                </div>
+                :
+                <p>{gettext('No result')}</p>
+              }
               <AISearchHelp />
-              {this.state.hitFiles.length > 0 &&
+              {hitFiles.length > 0 &&
                 <AISearchRefrences
-                  hitFiles={this.state.hitFiles}
+                  hitFiles={hitFiles}
                   onItemClickHandler={this.props.onItemClickHandler}
                 />
               }
@@ -196,7 +194,7 @@ export default class AISearchAsk extends Component {
           }
 
           <div className="ai-search-ask-footer">
-            <div className={`input-icon mb-1`}>
+            <div className="input-icon mb-1">
               <input
                 type="text"
                 className="form-control search-input w-100"
