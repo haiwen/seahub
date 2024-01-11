@@ -25,7 +25,7 @@ class OrgUsersSearchUsersResult extends React.Component {
   }
 
   render() {
-    let { orgUsers } = this.props;
+    let { orgUsers, changeStatus } = this.props;
     return (
       <div className="cur-view-content">
         <table>
@@ -51,6 +51,7 @@ class OrgUsersSearchUsersResult extends React.Component {
                   toggleDelete={this.props.toggleDelete}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  changeStatus={changeStatus}
                 />
               );})}
           </tbody>
@@ -151,6 +152,22 @@ class OrgUsersSearchUsers extends Component {
     }
   }
 
+  changeStatus= (email, isActive) => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+      let users = this.state.orgUsers.map(item => {
+        if (item.email == email) {
+          item['is_active']= res.data['is_active'];
+        }
+        return item;
+      });
+      this.setState({orgUsers: users});
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
 
@@ -181,6 +198,7 @@ class OrgUsersSearchUsers extends Component {
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Result')}</h4>
                 <OrgUsersSearchUsersResult
                   toggleDelete={this.deleteUser}
+                  changeStatus={this.changeStatus}
                   orgUsers={this.state.orgUsers}
                 />
               </div>
