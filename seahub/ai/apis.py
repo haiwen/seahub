@@ -75,6 +75,7 @@ class Search(APIView):
     def post(self, request):
         query = request.data.get('query')
         search_repo = request.data.get('search_repo', 'all')
+        suffixes = request.data.get('suffixes', '')
 
         try:
             count = int(request.data.get('count'))
@@ -99,7 +100,7 @@ class Search(APIView):
                 repos = get_search_repos(username, org_id)[:SEARCH_REPOS_LIMIT]
                 cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
 
-            is_all_repo = True
+            search_filename_only = True
         else:
             try:
                 repo = seafile_api.get_repo(search_repo)
@@ -109,15 +110,17 @@ class Search(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
-            is_all_repo = False
+            search_filename_only = False
 
         searched_repos, repos_map = format_repos(repos)
 
+        suffixes = [suffix.strip() for suffix in suffixes.split(',') if suffix.strip()]
         params = {
             'query': query,
             'repos': searched_repos,
             'count': count,
-            'is_all_repo': is_all_repo,
+            'suffixes': suffixes,
+            'search_filename_only': search_filename_only,
         }
 
         try:
