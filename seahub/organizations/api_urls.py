@@ -27,7 +27,7 @@ from .api.admin.logo import OrgAdminLogo
 from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
         OrgUserTrafficExcelView, OrgUserStorageExcelView
-from .api.admin.saml_config import OrgUpdateIdPCertificateView, OrgSAMLConfigView, OrgVerifyDomain
+from .api.admin.saml_config import OrgSAMLConfigView, OrgVerifyDomain
 
 
 urlpatterns = [
@@ -53,9 +53,6 @@ urlpatterns = [
         OrgUserStorageExcelView.as_view(),
         name='api-v2.1-org-admin-statistics-user-storage-excel'),
 
-    path('<int:org_id>/admin/saml-idp-certificate/',
-        OrgUpdateIdPCertificateView.as_view(),
-        name='api-v2.1-org-admin-saml-idp-certificate'),
     path('<int:org_id>/admin/saml-config/',
         OrgSAMLConfigView.as_view(),
         name='api-v2.1-org-admin-saml-config'),

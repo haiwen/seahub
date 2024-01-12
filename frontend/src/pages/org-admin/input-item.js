@@ -7,6 +7,7 @@ const propTypes = {
   value: PropTypes.string,
   domainVerified: PropTypes.bool,
   isCertificate: PropTypes.bool,
+  changeType: PropTypes.string.isRequired,
   changeValue: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
 };
@@ -44,9 +45,10 @@ class OrgSamlConfigInput extends Component {
   };
 
   onSubmit = () => {
+    const changeType = this.props.changeType;
     const value = this.state.value.trim();
     if (value != this.props.value) {
-      this.props.changeValue(value);
+      this.props.changeValue(changeType, value);
     }
     this.toggleBtns();
   };

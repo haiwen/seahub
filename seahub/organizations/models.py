@@ -84,16 +84,6 @@ class OrgSettings(models.Model):
 
 
 class OrgSAMLConfigManager(models.Manager):
-    def add_or_update_saml_config(self, org_id, metadata_url):
-        try:
-            saml_config = self.get(org_id=org_id)
-        except OrgSAMLConfig.DoesNotExist:
-            saml_config = self.model(org_id=org_id)
-
-        saml_config.metadata_url = metadata_url
-        saml_config.save(using=self._db)
-        return saml_config
-
     def get_config_by_org_id(self, org_id):
         try:
             config = self.get(org_id=org_id)

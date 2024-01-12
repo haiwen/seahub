@@ -8,7 +8,7 @@ import { gettext, orgID, serviceURL } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Section from './section';
-import InputItem from './input-item';
+import OrgSamlConfigInput from './input-item';
 
 class OrgSAMLConfig extends Component {
 
@@ -20,9 +20,9 @@ class OrgSAMLConfig extends Component {
       samlConfigID: '',
       metadataUrl: '',
       domain: '',
-      dns_txt: '',
-      domain_verified: false,
-      idp_certificate: '',
+      dnsTxt: '',
+      domainVerified: false,
+      idpCertificate: '',
     };
   }
 
@@ -33,9 +33,9 @@ class OrgSAMLConfig extends Component {
         samlConfigID: res.data.saml_config.id,
         metadataUrl: res.data.saml_config.metadata_url || '',
         domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-        idp_certificate: res.data.saml_config.idp_certificate || '',
+        dnsTxt: res.data.saml_config.dns_txt || '',
+        domainVerified: res.data.saml_config.domain_verified || false,
+        idpCertificate: res.data.saml_config.idp_certificate || '',
       });
     }).catch(error => {
       this.setState({
@@ -45,49 +45,22 @@ class OrgSAMLConfig extends Component {
     });
   }
 
-  updateIdpCertificate = (idp_certificate) => {
-    seafileAPI.orgAdminUpdateIdpCertificate(orgID, idp_certificate).then((res) => {
+  updateSamlConfig = (changeType, value) => {
+    let metadataUrl = null;
+    let domain = null;
+    let idpCertificate = null;
+    if (changeType === 'metadataUrl') metadataUrl = value;
+    if (changeType === 'domain') domain = value;
+    if (changeType === 'idpCertificate') idpCertificate = value;
+
+    seafileAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl, domain, idpCertificate).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
         metadataUrl: res.data.saml_config.metadata_url,
         domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-        idp_certificate: res.data.saml_config.idp_certificate || '',
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  updateSamlMetadataUrl = (metadataUrl) => {
-    seafileAPI.orgAdminUpdateSamlMetadataUrl(orgID, metadataUrl).then((res) => {
-      this.setState({
-        samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url || '',
-        domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-        idp_certificate: res.data.saml_config.idp_certificate || '',
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  updateSamlDomain = (domain) => {
-    seafileAPI.orgAdminUpdateSamlDomain(orgID, domain).then((res) => {
-      this.setState({
-        samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url || '',
-        domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-        idp_certificate: res.data.saml_config.idp_certificate || '',
+        dnsTxt: res.data.saml_config.dns_txt || '',
+        domainVerified: res.data.saml_config.domain_verified || false,
+        idpCertificate: res.data.saml_config.idp_certificate || '',
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -99,17 +72,7 @@ class OrgSAMLConfig extends Component {
   verifyDomain = () => {
     const {domain} = this.state;
     seafileAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
-      this.setState({domain_verified: res.data.domain_verified});
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  generateDnsTxt = () => {
-    seafileAPI.orgAdminCreateDnsTxt(orgID).then((res) => {
-      this.setState({dns_txt: res.data.dns_txt});
+      this.setState({domainVerified: res.data.domain_verified});
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -123,7 +86,7 @@ class OrgSAMLConfig extends Component {
   };
 
   render() {
-    const { loading, errorMsg, metadataUrl, domain, dns_txt, domain_verified, idp_certificate } = this.state;
+    const { loading, errorMsg, metadataUrl, domain, dnsTxt, domainVerified, idpCertificate } = this.state;
     let entityID = `${serviceURL}/org/custom/${orgID}/saml2/metadata/`;
     let acsURL = `${serviceURL}/org/custom/${orgID}/saml2/acs/`;
     let logoutURL = `${serviceURL}/org/custom/${orgID}/saml2/ls/`;
@@ -205,15 +168,17 @@ class OrgSAMLConfig extends Component {
                   <Section headingText={gettext('Configure Seafile')}>
                     <p className="text-secondary mt-1">{gettext('Use information from your Identity Provider to configure Seafile')}</p>
                     <Fragment>
-                      <InputItem
+                      <OrgSamlConfigInput
                         value={metadataUrl}
-                        changeValue={this.updateSamlMetadataUrl}
+                        changeType={'metadataUrl'}
+                        changeValue={this.updateSamlConfig}
                         displayName={'SAML App Federation Metadata URL'}
                       />
 
-                      <InputItem
-                        value={idp_certificate}
-                        changeValue={this.updateIdpCertificate}
+                      <OrgSamlConfigInput
+                        value={idpCertificate}
+                        changeType={'idpCertificate'}
+                        changeValue={this.updateSamlConfig}
                         displayName={gettext('Certificate')}
                         isCertificate={true}
                       />
@@ -223,11 +188,12 @@ class OrgSAMLConfig extends Component {
                   <Section headingText={gettext('Verify Domain')}>
                     <p className="text-secondary mt-1">{gettext('Create a DNS TXT record to confirm the ownership of your Email Domain.')}</p>
                     <Fragment>
-                      <InputItem
+                      <OrgSamlConfigInput
                         value={domain}
-                        changeValue={this.updateSamlDomain}
+                        changeType={'domain'}
+                        changeValue={this.updateSamlConfig}
                         displayName={gettext('Email Domain')}
-                        domainVerified={domain_verified}
+                        domainVerified={domainVerified}
                       />
 
                       <Row className="my-4">
@@ -236,29 +202,21 @@ class OrgSAMLConfig extends Component {
                         </Col>
                         <Col md="5">
                           <InputGroup>
-                            <Input type="text" readOnly={true} value={dns_txt}/>
-                            {(dns_txt && !domain_verified) &&
+                            <Input type="text" readOnly={true} value={dnsTxt}/>
+                            {(dnsTxt && !domainVerified) &&
                               <InputGroupAddon addonType="append">
-                                <Button color="primary" onClick={this.onCopyValue.bind(this, dns_txt)} className="border-0">{gettext('Copy')}</Button>
+                                <Button color="primary" onClick={this.onCopyValue.bind(this, dnsTxt)} className="border-0">{gettext('Copy')}</Button>
                               </InputGroupAddon>
                             }
                           </InputGroup>
-                          {(!dns_txt && !domain_verified) &&
+                          {(dnsTxt && !domainVerified) &&
                             <p className="small text-secondary mt-1">
-                              {gettext('Generate a domain DNS TXT, then copy it and add it to your domain\'s DNS records, then click the button to verify domain ownership.')}
-                            </p>
-                          }
-                          {(dns_txt && !domain_verified) &&
-                            <p className="small text-secondary mt-1">
-                              {gettext('You must verify the ownership of domain before Single Sign-On.')}
+                              {gettext('Copy the domain DNS TXT and add it to your domain\'s DNS records, then click the button to verify domain ownership. You must verify the ownership of domain before Single Sign-On.')}
                             </p>
                           }
                         </Col>
                         <Col md="4">
-                          {(domain && !dns_txt && !domain_verified) &&
-                            <Button color="secondary" onClick={this.generateDnsTxt}>{gettext('Generate DNS TXT')}</Button>
-                          }
-                          {(domain && dns_txt && !domain_verified) &&
+                          {(domain && dnsTxt && !domainVerified) &&
                             <Button color="secondary" onClick={this.verifyDomain}>{gettext('Verify')}</Button>
                           }
                         </Col>
