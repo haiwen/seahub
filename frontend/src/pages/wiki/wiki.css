@@ -1,6 +1,7 @@
 .wiki-side-panel .panel-top {
   background: #fff;
 }
+
 .wiki-side-nav {
   flex:auto;
   display:flex;
@@ -20,21 +21,25 @@
   background-color: #f9f9f9;
   margin-bottom: 0;
 }
+
 .heading-icon {
   position: absolute;
   right: 1rem;
   top: 25%;
-  color: #888;  
+  color: #888;
   font-size: 0.8125rem;
 }
+
 .wiki-pages-container {
   flex: 1;
   overflow: hidden;
   padding-bottom: 10px;
 }
+
 .wiki-pages-container:hover {
   overflow: auto;
 }
+
 .wiki-pages-container .tree-view {
   margin-left: -10px;
   margin-top: 14px;

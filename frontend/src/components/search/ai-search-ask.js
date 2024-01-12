@@ -36,7 +36,7 @@ export default class AISearchAsk extends Component {
     super(props);
     this.state = {
       value: props.value,
-      isLoading: true,
+      isLoading: false,
       answeringResult: '',
       hitFiles: [],
     };
