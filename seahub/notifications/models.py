@@ -76,6 +76,7 @@ MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
+MSG_TYPE_ADFS_ERROR = 'adfs_error'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -308,6 +309,11 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(
             to_user, MSG_TYPE_REPO_TRANSFER, detail)
+
+    def add_adfs_error_msg(self, to_user, detail):
+        """Notify ``to_user`` that adfs sso occurred an error
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_ADFS_ERROR, detail)
 
 
 class UserNotification(models.Model):

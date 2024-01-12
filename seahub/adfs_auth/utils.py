@@ -35,18 +35,18 @@ def settings_check(func):
             error = True
         else:
             if not XMLSEC_BINARY_PATH or not CERTS_DIR or not SAML_ATTRIBUTE_MAPPING or not SAML_PROVIDER_IDENTIFIER:
-                logger.error('ADFS login relevant settings invalid.')
+                logger.error('ADFS/SAML login relevant settings invalid.')
                 logger.error('SAML_XMLSEC_BINARY_PATH: %s' % XMLSEC_BINARY_PATH)
                 logger.error('SAML_CERTS_DIR: %s' % CERTS_DIR)
                 logger.error('SAML_ATTRIBUTE_MAPPING: %s' % SAML_ATTRIBUTE_MAPPING)
                 logger.error('SAML_PROVIDER_IDENTIFIER: %s' % SAML_PROVIDER_IDENTIFIER)
                 error = True
             if ENABLE_ADFS_LOGIN and not REMOTE_METADATA_URL:
-                logger.error('SAML relevant settings invalid.')
+                logger.error('ADFS/SAML login relevant settings invalid.')
                 logger.error('SAML_REMOTE_METADATA_URL: %s' % REMOTE_METADATA_URL)
                 error = True
         if error:
-            raise Exception(_('Error, please contact administrator.'))
+            raise Exception(_('ADFS/SAML login relevant settings invalid.'))
         return func(request)
     return _decorated
 
@@ -66,7 +66,7 @@ def config_settings_loader(request):
 
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if not org_saml_config:
-            raise Exception('Failed to get org %s saml_config' % org_id)
+            raise Exception('Cannot find an ADFS/SAML config for the organization related to org_id %s.' % org_id)
 
         # get org remote_metadata_url
         remote_metadata_url = org_saml_config.metadata_url
@@ -130,7 +130,7 @@ def config_settings_loader(request):
     try:
         conf = SPConfig()
         conf.load(copy.deepcopy(saml_config))
-    except Exception as e:
-        logger.exception('Failed to load saml config, error: %s' % e)
-        raise Exception('Failed to load saml config, error: %s' % e)
+    except RuntimeError as e:
+        logger.exception('Failed to load adfs/saml config, error: %s' % e)
+        raise RuntimeError('Failed to load adfs/saml config, error: %s' % e)
     return conf

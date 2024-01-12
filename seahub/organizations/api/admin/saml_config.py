@@ -109,7 +109,7 @@ class OrgVerifyDomain(APIView):
 
         saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if not saml_config:
-            error_msg = 'Cannot find a SAML/ADFS config for the organization %s.' % org.org_name
+            error_msg = 'Cannot find an ADFS/SAML config for the team %s.' % org.org_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if saml_config.domain != domain:
