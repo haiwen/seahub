@@ -8,8 +8,7 @@ import { gettext, orgID, serviceURL } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Section from './section';
-import InputItem from './input-item';
-import FileItem from './file-item';
+import OrgSamlConfigInput from './input-item';
 
 class OrgSAMLConfig extends Component {
 
@@ -19,60 +18,24 @@ class OrgSAMLConfig extends Component {
       loading: true,
       errorMsg: '',
       samlConfigID: '',
-      newUrlPrefix: '',
-      orgUrlPrefix: '',
       metadataUrl: '',
       domain: '',
-      dns_txt: '',
-      domain_verified: false,
-      isBtnsShown: false,
+      dnsTxt: '',
+      domainVerified: false,
+      idpCertificate: '',
     };
   }
 
-  toggleBtns = () => {
-    this.setState({isBtnsShown: !this.state.isBtnsShown});
-  };
-
-  hideBtns = () => {
-    if (!this.state.isBtnsShown) return;
-    if (this.state.newUrlPrefix !== this.state.orgUrlPrefix) {
-      this.setState({newUrlPrefix: this.state.orgUrlPrefix});
-    }
-    this.toggleBtns();
-  };
-
-  onSubmit = () => {
-    const newUrlPrefix = this.state.newUrlPrefix.trim();
-    if (newUrlPrefix !== this.state.orgUrlPrefix) {
-      this.updateUrlPrefix(newUrlPrefix);
-    }
-    this.toggleBtns();
-  };
-
-  inputOrgUrlPrefix = (e) => {
-    this.setState({newUrlPrefix: e.target.value});
-  };
-
   componentDidMount() {
-    seafileAPI.orgAdminGetUrlPrefix(orgID).then((res) => {
+    seafileAPI.orgAdminGetSamlConfig(orgID).then((res) => {
       this.setState({
-        newUrlPrefix: res.data.org_url_prefix,
-        orgUrlPrefix: res.data.org_url_prefix,
-      });
-      seafileAPI.orgAdminGetSamlConfig(orgID).then((res) => {
-        this.setState({
-          loading: false,
-          samlConfigID: res.data.saml_config.id,
-          metadataUrl: res.data.saml_config.metadata_url || '',
-          domain: res.data.saml_config.domain || '',
-          dns_txt: res.data.saml_config.dns_txt || '',
-          domain_verified: res.data.saml_config.domain_verified || false,
-        });
-      }).catch(error => {
-        this.setState({
-          loading: false,
-          errorMsg: Utils.getErrorMsg(error, true),
-        });
+        loading: false,
+        samlConfigID: res.data.saml_config.id,
+        metadataUrl: res.data.saml_config.metadata_url || '',
+        domain: res.data.saml_config.domain || '',
+        dnsTxt: res.data.saml_config.dns_txt || '',
+        domainVerified: res.data.saml_config.domain_verified || false,
+        idpCertificate: res.data.saml_config.idp_certificate || '',
       });
     }).catch(error => {
       this.setState({
@@ -82,69 +45,22 @@ class OrgSAMLConfig extends Component {
     });
   }
 
-  updateUrlPrefix = (newUrlPrefix) => {
-    seafileAPI.orgAdminUpdateUrlPrefix(orgID, newUrlPrefix).then((res) => {
-      this.setState({
-        newUrlPrefix: res.data.org_url_prefix,
-        orgUrlPrefix: res.data.org_url_prefix,
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      this.setState({newUrlPrefix: this.state.orgUrlPrefix});
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
+  updateSamlConfig = (changeType, value) => {
+    let metadataUrl = null;
+    let domain = null;
+    let idpCertificate = null;
+    if (changeType === 'metadataUrl') metadataUrl = value;
+    if (changeType === 'domain') domain = value;
+    if (changeType === 'idpCertificate') idpCertificate = value;
 
-  postIdpCertificate = (file) => {
-    seafileAPI.orgAdminUploadIdpCertificate(orgID, file).then(() => {
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  updateSamlMetadataUrl = (metadataUrl) => {
-    seafileAPI.orgAdminUpdateSamlMetadataUrl(orgID, metadataUrl).then((res) => {
+    seafileAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl, domain, idpCertificate).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url || '',
+        metadataUrl: res.data.saml_config.metadata_url,
         domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  updateSamlDomain = (domain) => {
-    seafileAPI.orgAdminUpdateSamlDomain(orgID, domain).then((res) => {
-      this.setState({
-        samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url || '',
-        domain: res.data.saml_config.domain || '',
-        dns_txt: res.data.saml_config.dns_txt || '',
-        domain_verified: res.data.saml_config.domain_verified || false,
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  deleteSamlConfig = () => {
-    seafileAPI.orgAdminDeleteSamlConfig(orgID).then(() => {
-      this.setState({
-        samlConfigID: '',
-        metadataUrl: '',
-        domain: '',
-        dns_txt: '',
-        domain_verified: false,
+        dnsTxt: res.data.saml_config.dns_txt || '',
+        domainVerified: res.data.saml_config.domain_verified || false,
+        idpCertificate: res.data.saml_config.idp_certificate || '',
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -156,7 +72,7 @@ class OrgSAMLConfig extends Component {
   verifyDomain = () => {
     const {domain} = this.state;
     seafileAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
-      this.setState({domain_verified: res.data.domain_verified});
+      this.setState({domainVerified: res.data.domain_verified});
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -164,24 +80,16 @@ class OrgSAMLConfig extends Component {
     });
   };
 
-  generateDnsTxt = () => {
-    seafileAPI.orgAdminCreateDnsTxt(orgID).then((res) => {
-      this.setState({dns_txt: res.data.dns_txt});
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onCopyDnsTxt = () => {
-    const {dns_txt} = this.state;
-    copy(dns_txt);
-    toaster.success(gettext('DNS TXT is copied to the clipboard.'));
+  onCopyValue = (value) => {
+    copy(value);
+    toaster.success(gettext('Copied'));
   };
 
   render() {
-    const { loading, errorMsg, newUrlPrefix, metadataUrl, domain, dns_txt, domain_verified, isBtnsShown } = this.state;
+    const { loading, errorMsg, metadataUrl, domain, dnsTxt, domainVerified, idpCertificate } = this.state;
+    let entityID = `${serviceURL}/org/custom/${orgID}/saml2/metadata/`;
+    let acsURL = `${serviceURL}/org/custom/${orgID}/saml2/acs/`;
+    let logoutURL = `${serviceURL}/org/custom/${orgID}/saml2/ls/`;
 
     return (
       <Fragment>
@@ -196,41 +104,96 @@ class OrgSAMLConfig extends Component {
               {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
               {(!loading && !errorMsg) &&
                 <Fragment>
-                  <Section headingText={gettext('Custom Login URL')}>
+                  <Section headingText={gettext('Configure your Identity Provider')}>
+                    <p className="text-secondary mt-1">{gettext('Use these values to configure your Identity Provider')}</p>
                     <Fragment>
                       <Row className="my-4">
                         <Col md="3">
-                          <Label className="web-setting-label">{gettext('Your custom login URL')}</Label>
+                          <Label className="web-setting-label">Identifier (Entity ID)</Label>
                         </Col>
                         <Col md="5">
-                          {`${serviceURL}/org/custom/`}<input value={newUrlPrefix} onChange={this.inputOrgUrlPrefix} onFocus={this.toggleBtns} onBlur={this.hideBtns}></input>
-                          <p className="small text-secondary mt-1">
-                            {gettext('The custom part of the URL should be 6 to 20 characters, and can only contain alphanumeric characters and hyphens.')}
-                          </p>
+                          <InputGroup>
+                            <Input type="text" readOnly={true} value={entityID} />
+                            <InputGroupAddon addonType="append">
+                              <Button color="primary" onClick={this.onCopyValue.bind(this, entityID)} className="border-0">{gettext('Copy')}</Button>
+                            </InputGroupAddon>
+                          </InputGroup>
                         </Col>
-                        {isBtnsShown &&
-                          <Col md="4">
-                            <Button className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
-                            <Button className="ml-1 sf2-icon-x2 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}></Button>
-                          </Col>
-                        }
+                      </Row>
+
+                      <Row className="my-4">
+                        <Col md="3">
+                          <Label className="web-setting-label">Reply URL (Assertion Consumer Service URL)</Label>
+                        </Col>
+                        <Col md="5">
+                          <InputGroup>
+                            <Input type="text" readOnly={true} value={acsURL} />
+                            <InputGroupAddon addonType="append">
+                              <Button color="primary" onClick={this.onCopyValue.bind(this, acsURL)} className="border-0">{gettext('Copy')}</Button>
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </Col>
+                      </Row>
+
+                      <Row className="my-4">
+                        <Col md="3">
+                          <Label className="web-setting-label">Sign on URL</Label>
+                        </Col>
+                        <Col md="5">
+                          <InputGroup>
+                            <Input type="text" readOnly={true} value={serviceURL} />
+                            <InputGroupAddon addonType="append">
+                              <Button color="primary" onClick={this.onCopyValue.bind(this, serviceURL)} className="border-0">{gettext('Copy')}</Button>
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </Col>
+                      </Row>
+
+                      <Row className="my-4">
+                        <Col md="3">
+                          <Label className="web-setting-label">Logout URL</Label>
+                        </Col>
+                        <Col md="5">
+                          <InputGroup>
+                            <Input type="text" readOnly={true} value={logoutURL} />
+                            <InputGroupAddon addonType="append">
+                              <Button color="primary" onClick={this.onCopyValue.bind(this, logoutURL)} className="border-0">{gettext('Copy')}</Button>
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </Col>
                       </Row>
                     </Fragment>
                   </Section>
 
-                  <Section headingText={gettext('Manage SAML Config')}>
+                  <Section headingText={gettext('Configure Seafile')}>
+                    <p className="text-secondary mt-1">{gettext('Use information from your Identity Provider to configure Seafile')}</p>
                     <Fragment>
-                      <InputItem
+                      <OrgSamlConfigInput
                         value={metadataUrl}
-                        changeValue={this.updateSamlMetadataUrl}
-                        displayName={gettext('App Federation Metadata URL')}
+                        changeType={'metadataUrl'}
+                        changeValue={this.updateSamlConfig}
+                        displayName={'SAML App Federation Metadata URL'}
                       />
 
-                      <InputItem
+                      <OrgSamlConfigInput
+                        value={idpCertificate}
+                        changeType={'idpCertificate'}
+                        changeValue={this.updateSamlConfig}
+                        displayName={gettext('Certificate')}
+                        isCertificate={true}
+                      />
+                    </Fragment>
+                  </Section>
+
+                  <Section headingText={gettext('Verify Domain')}>
+                    <p className="text-secondary mt-1">{gettext('Create a DNS TXT record to confirm the ownership of your Email Domain.')}</p>
+                    <Fragment>
+                      <OrgSamlConfigInput
                         value={domain}
-                        changeValue={this.updateSamlDomain}
+                        changeType={'domain'}
+                        changeValue={this.updateSamlConfig}
                         displayName={gettext('Email Domain')}
-                        domainVerified={domain_verified}
+                        domainVerified={domainVerified}
                       />
 
                       <Row className="my-4">
@@ -239,41 +202,26 @@ class OrgSAMLConfig extends Component {
                         </Col>
                         <Col md="5">
                           <InputGroup>
-                            <Input type="text" readOnly={true} value={dns_txt}/>
-                            {(dns_txt && !domain_verified) &&
+                            <Input type="text" readOnly={true} value={dnsTxt}/>
+                            {(dnsTxt && !domainVerified) &&
                               <InputGroupAddon addonType="append">
-                                <Button color="primary" onClick={this.onCopyDnsTxt} className="border-0">{gettext('Copy')}</Button>
+                                <Button color="primary" onClick={this.onCopyValue.bind(this, dnsTxt)} className="border-0">{gettext('Copy')}</Button>
                               </InputGroupAddon>
                             }
                           </InputGroup>
-                          {(!dns_txt && !domain_verified) &&
+                          {(dnsTxt && !domainVerified) &&
                             <p className="small text-secondary mt-1">
-                              {gettext('Generate a domain DNS TXT, copy it and add it to your domain\'s DNS records, then click the button to verify domain ownership.')}
-                            </p>
-                          }
-                          {(dns_txt && !domain_verified) &&
-                            <p className="small text-secondary mt-1">
-                              {gettext('You must verify domain ownership before Single Sign-On.')}
+                              {gettext('Copy the domain DNS TXT and add it to your domain\'s DNS records, then click the button to verify domain ownership. You must verify the ownership of domain before Single Sign-On.')}
                             </p>
                           }
                         </Col>
                         <Col md="4">
-                          {(!dns_txt && !domain_verified) &&
-                            <Button color="secondary" onClick={this.generateDnsTxt}>{gettext('Generate')}</Button>
-                          }
-                          {(dns_txt && !domain_verified) &&
+                          {(domain && dnsTxt && !domainVerified) &&
                             <Button color="secondary" onClick={this.verifyDomain}>{gettext('Verify')}</Button>
                           }
                         </Col>
                       </Row>
                     </Fragment>
-                  </Section>
-
-                  <Section headingText={gettext('Upload IdP Files')}>
-                    <FileItem
-                      postFile={this.postIdpCertificate}
-                      displayName={gettext('IdP Certificate')}
-                    />
                   </Section>
                 </Fragment>
               }

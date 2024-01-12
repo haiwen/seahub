@@ -20,6 +20,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
+from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
         PasswordResetForm, SetPasswordForm, PasswordChangeForm, \
@@ -33,7 +34,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import is_ldap_user, get_site_name, is_valid_email
+from seahub.utils import render_error, get_site_name, is_valid_email
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
@@ -255,17 +256,20 @@ def logout(request, next_page=None,
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
 
-    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        from seahub.utils import is_org_context
+    if getattr(settings, 'ENABLE_ADFS_LOGIN', False) or getattr(settings, 'ENABLE_MULTI_ADFS', False):
         try:
             saml_subject_id = decode(request.saml_session["_saml2_subject_id"])
+            if saml_subject_id:
+                from seahub.utils import is_org_context
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    response = HttpResponseRedirect('/org/custom/%s/saml2/logout/' % str(org_id))
+                else:
+                    response = HttpResponseRedirect('/saml2/logout/')
+                response.delete_cookie('seahub_auth')
+                return response
         except Exception as e:
             logger.warning(e)
-            saml_subject_id = None
-        if saml_subject_id and is_org_context(request):
-            org_id = request.user.org.org_id
-            org = ccnet_api.get_org_by_id(org_id)
-            return HttpResponseRedirect('/org/custom/%s/saml2/logout/' % org.url_prefix)
 
     from seahub.auth import logout
     logout(request)
@@ -338,6 +342,18 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         email_template_name='registration/password_reset_email.html',
         password_reset_form=PasswordResetForm, token_generator=default_token_generator,
         post_reset_redirect=None):
+
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_reset_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_reset_password = False
+
+    if not can_reset_password:
+        return render_error(request, _('Unable to reset password.'))
+
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_done')
     if request.method == "POST":
@@ -413,8 +429,16 @@ def password_change(request, template_name='registration/password_change_form.ht
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
 
-    if is_ldap_user(request.user):
-        messages.error(request, _("Can not update password, please contact LDAP admin."))
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_change_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_change_password = False
+
+    if not can_change_password:
+        return render_error(request, _('Unable to change password.'))
 
     if settings.ENABLE_USER_SET_CONTACT_EMAIL:
         user_profile = Profile.objects.get_profile_by_user(request.user.username)
@@ -423,10 +447,10 @@ def password_change(request, template_name='registration/password_change_form.ht
             password_change_form = SetContactEmailPasswordForm
             template_name = 'registration/password_set_form.html'
 
-        elif request.user.enc_password == UNUSABLE_PASSWORD:
-            # set password only
-            password_change_form = SetPasswordForm
-            template_name = 'registration/password_set_form.html'
+    if request.user.enc_password == UNUSABLE_PASSWORD:
+        # set password only
+        password_change_form = SetPasswordForm
+        template_name = 'registration/password_set_form.html'
 
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
@@ -477,23 +501,23 @@ def multi_adfs_sso(request):
         try:
             org_saml_config = OrgSAMLConfig.objects.get_config_by_domain(domain)
             if not org_saml_config:
-                render_data['error_msg'] = "Cannot find a SAML/ADFS config for the organization related to domain %s." % domain
+                render_data['error_msg'] = "Cannot find a SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
             if not org_saml_config.domain_verified:
-                render_data['error_msg'] = "The domain %s has not been verified ownership, please login after verification." % domain
+                render_data['error_msg'] = \
+                    "The ownership of domain %s has not been verified. Please ask your team admin to verify it." % domain
                 return render(request, template_name, render_data)
             org_id = org_saml_config.org_id
             org = ccnet_api.get_org_by_id(org_id)
             if not org:
-                render_data['error_msg'] = 'Cannot find an organization related to domain %s.' % domain
+                render_data['error_msg'] = "Cannot find a SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
-            url_prefix = org.url_prefix
         except Exception as e:
             logger.error(e)
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
-        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % url_prefix)
+        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % str(org_id))
 
     if request.method == "GET":
         return render(request, template_name, render_data)

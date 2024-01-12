@@ -13,6 +13,7 @@ from seaserv import seafile_api
 
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
+from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
@@ -23,8 +24,12 @@ from seahub.utils import is_ldap_user, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
-from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+try:
+    from seahub.settings import SAML_PROVIDER_IDENTIFIER
+except ImportError as e:
+    SAML_PROVIDER_IDENTIFIER = 'saml'
 
 
 @login_required
@@ -86,8 +91,6 @@ def edit_profile(request):
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
-
-        from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
         social_connected = SocialAuthUser.objects.filter(
             username=request.user.username, provider=WORK_WEIXIN_PROVIDER).count() > 0
@@ -97,12 +100,35 @@ def edit_profile(request):
 
     if ENABLE_DINGTALK:
         enable_dingtalk = True
-        from seahub.auth.models import SocialAuthUser
         social_connected_dingtalk = SocialAuthUser.objects.filter(
             username=request.user.username, provider='dingtalk').count() > 0
     else:
         enable_dingtalk = False
         social_connected_dingtalk = False
+
+    if ENABLE_ADFS_LOGIN:
+        enable_adfs = True
+        saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_adfs = False
+        saml_connected = False
+
+    if ENABLE_MULTI_ADFS and is_org_context(request):
+        enable_multi_adfs = True
+        org_saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_multi_adfs = False
+        org_saml_connected = False
+
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_update_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_update_password = False
 
     WEBDAV_SECRET_SETTED = False
     if settings.ENABLE_WEBDAV_SECRET and \
@@ -121,7 +147,7 @@ def edit_profile(request):
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': show_two_factor_auth,
-            'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_CHANGE_PASSWORD': can_update_password if has_bind_social_auth else settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
@@ -139,6 +165,11 @@ def edit_profile(request):
             'social_connected_dingtalk': social_connected_dingtalk,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
+            'enable_adfs': enable_adfs,
+            'saml_connected': saml_connected,
+            'enable_multi_adfs': enable_multi_adfs,
+            'org_saml_connected': org_saml_connected,
+            'org_id': request.user.org and request.user.org.org_id or None,
     }
 
     if show_two_factor_auth:

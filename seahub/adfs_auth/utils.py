@@ -53,19 +53,17 @@ def settings_check(func):
 
 @settings_check
 def config_settings_loader(request):
-    # get url_prefix
-    url_prefix = ''
-    reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
-    if reg:
-        url_prefix = reg.group(1)
-
     # get org_id
-    org_id = -1
-    org = ccnet_api.get_org_by_url_prefix(url_prefix)
-    if org:
-        org_id = org.org_id
+    org_id = None
+    reg = re.search(r'org/custom/(\d+)/saml2/', request.path)
+    if reg:
+        org_id = int(reg.group(1))
 
-    if org_id != -1:
+    if org_id and org_id > 0:
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            raise Exception('Cannot find an organization related to org_id %s.' % org_id)
+
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if not org_saml_config:
             raise Exception('Failed to get org %s saml_config' % org_id)
@@ -73,7 +71,7 @@ def config_settings_loader(request):
         # get org remote_metadata_url
         remote_metadata_url = org_saml_config.metadata_url
         # get org sp_service_url
-        sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + url_prefix
+        sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + str(org_id)
     else:
         # get remote_metadata_url
         remote_metadata_url = REMOTE_METADATA_URL

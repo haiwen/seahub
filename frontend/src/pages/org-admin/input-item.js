@@ -6,6 +6,8 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   value: PropTypes.string,
   domainVerified: PropTypes.bool,
+  isCertificate: PropTypes.bool,
+  changeType: PropTypes.string.isRequired,
   changeValue: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
 };
@@ -43,9 +45,10 @@ class OrgSamlConfigInput extends Component {
   };
 
   onSubmit = () => {
+    const changeType = this.props.changeType;
     const value = this.state.value.trim();
     if (value != this.props.value) {
-      this.props.changeValue(value);
+      this.props.changeValue(changeType, value);
     }
     this.toggleBtns();
   };
@@ -53,6 +56,8 @@ class OrgSamlConfigInput extends Component {
   render() {
     const { isBtnsShown, value } = this.state;
     const { displayName } = this.props;
+    let inputType = this.props.isCertificate ? 'textarea' : 'text';
+
     return (
       <Fragment>
         <Row className="my-4">
@@ -61,13 +66,24 @@ class OrgSamlConfigInput extends Component {
           </Col>
           <Col md="5">
             <InputGroup>
-              <Input type='text' value={value} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns}/>
+              <Input type={inputType} value={value} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns}/>
               {this.props.domainVerified &&
                 <InputGroupAddon addonType="append">
                   <Button color="success" className="border-0">{gettext('Verified')}</Button>
                 </InputGroupAddon>
               }
             </InputGroup>
+            {this.props.isCertificate &&
+              <p className="small text-secondary mt-1">
+                {gettext('Copy the IdP\'s certificate and paste it here. The certificate format is as follows:')}
+                <br/>
+                -----BEGIN CERTIFICATE-----
+                <br/>
+                xxxxxxxxxxxxxxxxxxxx
+                <br/>
+                -----END CERTIFICATE-----
+              </p>
+            }
           </Col>
           <Col md="4">
             {isBtnsShown &&
