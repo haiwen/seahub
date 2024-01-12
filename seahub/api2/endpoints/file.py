@@ -171,6 +171,7 @@ class FileView(APIView):
         is_draft = request.POST.get('is_draft', '')
 
         if operation == 'create':
+
             # resource check
             try:
                 parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
@@ -223,15 +224,37 @@ class FileView(APIView):
             if is_draft.lower() == 'true':
                 Draft.objects.add(username, repo, path, file_exist=False)
 
-            # update office file by template
-            if new_file_name.endswith('.xlsx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.xlsx')
-            elif new_file_name.endswith('.pptx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.pptx')
-            elif new_file_name.endswith('.docx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.docx')
-            else:
-                empty_file_path = ''
+            LANGUAGE_DICT = {
+                'cs': 'cs-CZ',
+                'de': 'de-DE',
+                'en': 'en-US',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'it': 'it-IT',
+                'lv': 'lv-LV',
+                'nl': 'nl-NL',
+                'pl': 'pl-PL',
+                'pt-br': 'pt-BR',
+                'ru': 'ru-RU',
+                'sv': 'sv-SE',
+                'vi': 'vi-VN',
+                'uk': 'uk-UA',
+                'el': 'el-GR',
+                'ko': 'ko-KR',
+                'ja': 'ja-JP',
+                'zh-cn': 'zh-CN',
+                'zh-tw': 'zh-TW'
+            }
+
+            empty_file_path = ''
+            not_used, file_extension = os.path.splitext(new_file_name)
+            if file_extension in ('.xlsx', '.pptx', '.docx', '.docxf'):
+                # update office file by template
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, f'empty{file_extension}')
+                language_code_path = LANGUAGE_DICT.get(request.LANGUAGE_CODE)
+                if language_code_path:
+                    empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'new',
+                                                   language_code_path, f'new{file_extension}')
 
             if empty_file_path:
                 # get file server update url
