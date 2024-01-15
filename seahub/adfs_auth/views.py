@@ -42,6 +42,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
+from seahub.adfs_auth.signals import saml_sso_failed
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
 try:
@@ -58,6 +59,15 @@ logger = logging.getLogger('djangosaml2')
 
 def _set_subject_id(session, subject_id):
     session['_saml2_subject_id'] = code(subject_id)
+
+
+def get_org_admins(org):
+    org_admins = list()
+    org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+    for user in org_users:
+        if ccnet_api.is_org_staff(org.org_id, user.email):
+            org_admins.append(user)
+    return org_admins
 
 
 def update_user_profile(user, attribute_mapping, attributes):
@@ -111,6 +121,7 @@ def update_user_profile(user, attribute_mapping, attributes):
 
 
 def login(request, org_id=None):
+    org = None
     if org_id and int(org_id) > 0:
         org_id = int(org_id)
         org = ccnet_api.get_org_by_id(org_id)
@@ -131,7 +142,16 @@ def login(request, org_id=None):
         sp_config = get_config(None, request)
     except RuntimeError as e:
         logger.error(e)
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -175,7 +195,16 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
 
     if 'SAMLResponse' not in request.POST:
         logger.error('Missing "SAMLResponse" parameter in POST data.')
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
 
@@ -183,7 +212,16 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         conf = get_config(None, request)
     except RuntimeError as e:
         logger.error(e)
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -201,12 +239,30 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         response = client.parse_authn_request_response(xmlstr, BINDING_HTTP_POST, outstanding_queries)
     except Exception as e:
         logger.error('SAMLResponse Error: %s' % e)
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
     if response is None:
         logger.error('Invalid SAML Assertion received.')
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
 
@@ -254,7 +310,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
     # check user number limit by license
     if user_number_over_limit():
         logger.error('The number of users exceeds the license limit.')
-        # TODO: send msg to sys admin
+        # send error msg to admin
+        error_msg = 'The number of users exceeds the license limit.'
+        admins = User.objects.get_superusers()
+        for admin in admins:
+            saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseForbidden(_('Internal server error. Please contact system administrator.'))
 
     # check user number limit by org member quota
@@ -264,8 +324,12 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
             from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
             if org_members_quota is not None and org_members >= org_members_quota:
-                logger.error('The number of users exceeds the org quota.')
-                # TODO: send msg to org admin
+                logger.error('The number of users exceeds the organization quota.')
+                # send error msg to admin
+                error_msg = 'Failed to create new user: the number of users exceeds the organization quota.'
+                org_admins = get_org_admins(org)
+                for org_admin in org_admins:
+                    saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
                 return HttpResponseForbidden(_('Failed to create new user: '
                                                'the number of users exceeds the organization quota. '
                                                'Please report to your organization (company) administrator.'))
@@ -276,10 +340,34 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
                              attribute_mapping=attribute_mapping,
                              create_unknown_user=create_unknown_user,
                              org_id=org_id)
-    if user is None or not user.is_active:
-        logger.error('Failed to create user or user is deactivated..')
-        # TODO: send msg to admin
-        return HttpResponseForbidden(_('Login failed: failed to create user or user is deactivated. '
+    if user is None:
+        logger.error('ADFS/SAML single sign-on failed: failed to create user.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: failed to create user.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+        return HttpResponseForbidden(_('Login failed: failed to create user. '
+                                       'Please report to your organization (company) administrator.'))
+
+    if not user.is_active:
+        logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+        return HttpResponseForbidden(_('Login failed: user is deactivated. '
                                        'Please report to your organization (company) administrator.'))
 
     auth_login(request, user)
@@ -296,6 +384,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
 
 
 def metadata(request, org_id=None):
+    org = None
     if org_id and int(org_id) > 0:
         org_id = int(org_id)
         org = ccnet_api.get_org_by_id(org_id)
@@ -307,7 +396,16 @@ def metadata(request, org_id=None):
         sp_config = get_config(None, request)
     except RuntimeError as e:
         logger.error(e)
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -323,6 +421,7 @@ def metadata(request, org_id=None):
 
 @login_required
 def saml2_connect(request, org_id=None):
+    org = None
     if org_id and int(org_id) > 0:
         org_id = int(org_id)
         org = ccnet_api.get_org_by_id(org_id)
@@ -348,7 +447,16 @@ def saml2_connect(request, org_id=None):
         sp_config = get_config(None, request)
     except RuntimeError as e:
         logger.error(e)
-        # TODO: send msg to admin
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -387,6 +495,7 @@ def saml2_disconnect(request, org_id=None):
     username = request.user.username
     if request.user.enc_password == '!':
         return HttpResponseBadRequest(_('Failed to unbind SAML, please set a password first.'))
+
     profile = Profile.objects.get_profile_by_user(username)
     if not profile or not profile.contact_email:
         return HttpResponseBadRequest(_('Failed to unbind SAML, please set a contact email first.'))
