@@ -435,7 +435,7 @@
   "Replace_as": "替换为",
   "Type_replace_content": "输入替换内容",
   "Prevs": "上一个",
-  "Next": "下一页",
+  "Next": "下一个",
   "Replace": "替换",
   "Replace_all": "替换全部",
   "Are_you_sure_to_replace_all_number_xxx_in_this_document_with_yyy": "确定要将此文档内的 {{number}} 处 \"{{originalWord}} \" 替换为 \"{{replacedWord}} \" 吗？",
