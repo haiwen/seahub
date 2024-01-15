@@ -20,6 +20,7 @@ from seahub.ai.utils import create_library_sdoc_index, search, update_library_sd
     get_file_download_token, get_search_repos, RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
     format_repos
 from seahub.utils import is_org_context, normalize_cache_key
+from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
 
@@ -104,6 +105,11 @@ class Search(APIView):
                 error_msg = 'Library %s not found.' % search_repo
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            # permission check
+            if not check_folder_permission(request, search_repo, '/'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
             is_all_repo = False
 
@@ -174,6 +180,11 @@ class QuestionAnsweringSearchInLibrary(APIView):
             logger.error(e)
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
 
