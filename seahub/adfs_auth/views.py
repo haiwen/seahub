@@ -147,11 +147,11 @@ def login(request, org_id=None):
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -200,11 +200,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
 
@@ -217,11 +217,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -244,11 +244,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
     if response is None:
@@ -258,11 +258,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: Bad response from ADFS/SAML service. '
                                         'Please report to your organization (company) administrator.'))
 
@@ -314,7 +314,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         error_msg = 'The number of users exceeds the license limit.'
         admins = User.objects.get_superusers()
         for admin in admins:
-            saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+            saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseForbidden(_('Internal server error. Please contact system administrator.'))
 
     # check user number limit by org member quota
@@ -329,7 +329,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
                 error_msg = 'Failed to create new user: the number of users exceeds the organization quota.'
                 org_admins = get_org_admins(org)
                 for org_admin in org_admins:
-                    saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                    saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
                 return HttpResponseForbidden(_('Failed to create new user: '
                                                'the number of users exceeds the organization quota. '
                                                'Please report to your organization (company) administrator.'))
@@ -347,11 +347,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseForbidden(_('Login failed: failed to create user. '
                                        'Please report to your organization (company) administrator.'))
 
@@ -362,11 +362,11 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseForbidden(_('Login failed: user is deactivated. '
                                        'Please report to your organization (company) administrator.'))
 
@@ -401,11 +401,11 @@ def metadata(request, org_id=None):
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:
@@ -452,11 +452,11 @@ def saml2_connect(request, org_id=None):
         if org:
             org_admins = get_org_admins(org)
             for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
         else:
             admins = User.objects.get_superusers()
             for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin, error_msg=error_msg)
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseBadRequest(_('Login failed: ADFS/SAML service error. '
                                         'Please report to your organization (company) administrator.'))
     except Exception as e:

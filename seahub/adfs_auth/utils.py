@@ -130,7 +130,7 @@ def config_settings_loader(request):
     try:
         conf = SPConfig()
         conf.load(copy.deepcopy(saml_config))
-    except RuntimeError as e:
+    except Exception as e:
         logger.exception('Failed to load adfs/saml config, error: %s' % e)
         raise RuntimeError('Failed to load adfs/saml config, error: %s' % e)
     return conf

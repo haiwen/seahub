@@ -258,6 +258,11 @@ class Command(BaseCommand):
 
         return notice
 
+    def format_saml_sso_error_msg(self, notice):
+        d = json.loads(notice.detail)
+        notice.error_msg = d['error_msg']
+        return notice
+
     def format_sdoc_msg(self, sdoc_queryset, sdoc_notice):
         sdoc_obj = sdoc_queryset.filter(uuid=sdoc_notice.doc_uuid).first()
         if not sdoc_obj:
@@ -420,6 +425,9 @@ class Command(BaseCommand):
 
                 elif notice.is_repo_monitor_msg():
                     notice = self.format_repo_monitor_msg(notice)
+
+                elif notice.is_saml_sso_error_msg():
+                    notice = self.format_saml_sso_error_msg(notice)
 
                 if notice is None:
                     continue

@@ -422,6 +422,9 @@ class UserNotification(models.Model):
     def is_deleted_files_msg(self):
         return self.msg_type == MSG_TYPE_DELETED_FILES
 
+    def is_saml_sso_error_msg(self):
+        return self.msg_type == MSG_TYPE_SAML_SSO_FAILED
+
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
         ``msg_from``.

@@ -65,6 +65,9 @@ You've got {{num}} new notices on {{ site_name }}:
                 {% elif notice.is_deleted_files_msg %}
                 <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with repo_url=notice.repo_url repo_name=notice.repo_name %}A large number of files in your library <a href="{{url_base}}{{ repo_url }}">{{ repo_name }}</a> has been deleted recently.{% endblocktrans %}</p>
 
+                {% elif notice.is_saml_sso_error_msg %}
+                <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans %}{{notice.error_msg}}{% endblocktrans %}</p>
+
                 {% elif notice.is_repo_monitor_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">
                     {% if notice.obj_type == 'file' %}

@@ -19,6 +19,7 @@ const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 // const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
+const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 
 class NoticeItem extends React.Component {
 
@@ -278,6 +279,13 @@ class NoticeItem extends React.Component {
 
       let notice = gettext('Your library {libraryName} has recently deleted a large number of files.');
       notice = notice.replace('{libraryName}', repoLink);
+
+      return { avatar_url : null, notice };
+    }
+
+    if (noticeType === MSG_TYPE_SAML_SSO_FAILED) {
+      const { error_msg } = detail;
+      let notice = gettext(error_msg);
 
       return { avatar_url : null, notice };
     }
