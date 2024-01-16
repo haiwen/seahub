@@ -39,7 +39,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
         gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
         get_service_url, is_valid_username, is_pro_version, \
-        get_file_history_by_day, get_file_daily_history_detail
+        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -56,6 +56,9 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
+from seahub.settings import ENABLE_SEAFILE_AI
+from seahub.search.utils import search_files
+from seahub.ai.utils import search, format_repos
 
 
 logger = logging.getLogger(__name__)
@@ -2890,3 +2893,129 @@ class SeadocEditorCallBack(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class SeadocSearchFilenameView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """Search sdoc by filename.
+        """
+        if not (HAS_FILE_SEARCH or ENABLE_SEAFILE_AI):
+            error_msg = 'Search not supported.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # argument check
+        query = request.GET.get('query', None)
+        if not query:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '10'))
+            if per_page > 100:
+                per_page = 100
+        except ValueError:
+            current_page = 1
+            per_page = 10
+
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+        repo = seafile_api.get_repo(repo_id)
+
+        search_filename_only = True
+        suffixes = ['sdoc',]
+
+        if HAS_FILE_SEARCH:
+            org_id = get_org_id_by_repo_id(repo_id)
+            map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
+            repo_id_map = {map_id: repo}
+            keyword = query
+            start = (current_page - 1) * per_page
+            size = per_page
+            search_path = None
+            time_range = (None, None)
+            size_range = (None, None)
+            obj_type = 'file'
+            obj_desc = {
+                'obj_type': obj_type,
+                'suffixes': suffixes,
+                'time_range': time_range,
+                'size_range': size_range,
+            }
+            # search file
+            try:
+                results, total = search_files(
+                    repo_id_map, search_path, keyword, obj_desc, start, size, org_id, search_filename_only)
+            except Exception as e:
+                logger.error(e)
+                results, total = [], 0
+                return Response({"total": total, "results": results, "has_more": False})
+
+            for f in results:
+                f.pop('repo', None)
+                f.pop('exists', None)
+                f.pop('last_modified_by', None)
+                f.pop('name_highlight', None)
+                f.pop('score', None)
+                f.pop('content_highlight', None)
+                f.pop('last_modified', None)
+                f.pop('repo_owner_contact_email', None)
+                f.pop('repo_owner_email', None)
+                f.pop('repo_owner_name', None)
+                f.pop('thumbnail_url', None)
+                f.pop('size', None)
+                f['doc_uuid'] = get_seadoc_file_uuid(repo, f['fullpath'])
+
+            has_more = True if total > current_page * per_page else False
+            return Response({"total":total, "results":results, "has_more":has_more})
+
+        if ENABLE_SEAFILE_AI:
+            repos = [repo,]
+            searched_repos, repos_map = format_repos(repos)
+            count = per_page
+
+            params = {
+                'query': query,
+                'repos': searched_repos,
+                'count': count,
+                'suffixes': suffixes,
+                'search_filename_only': search_filename_only,
+            }
+            try:
+                resp = search(params)
+                if resp.status_code == 500:
+                    logger.error('search in library error status: %s body: %s', resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+                resp_json = resp.json()
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+            for f in resp_json.get('results'):
+                repo_id = f['repo_id']
+                repo = repos_map.get(repo_id, None)
+                if not repo:
+                    continue
+                real_repo_id = repo[0]
+                origin_path = repo[1]
+                repo_name = repo[2]
+                f['repo_name'] = repo_name
+                f.pop('_id', None)
+
+                if origin_path:
+                    if not f['fullpath'].startswith(origin_path):
+                        # this operation will reduce the result items, but it will not happen now
+                        continue
+                    else:
+                        f['repo_id'] = real_repo_id
+                        f['fullpath'] = f['fullpath'].split(origin_path)[-1]
+                f['doc_uuid'] = get_seadoc_file_uuid(repo, e['fullpath'])
+
+            return Response(resp_json, resp.status_code)
