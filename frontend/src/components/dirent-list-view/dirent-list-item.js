@@ -731,7 +731,7 @@ class DirentListItem extends React.Component {
 
     const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
-    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
+    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
     const desktopItem = (
       <tr
