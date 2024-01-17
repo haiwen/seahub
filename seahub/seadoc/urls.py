@@ -5,7 +5,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
     SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers, SeadocEditorCallBack, \
-    SeadocDailyHistoryDetail
+    SeadocDailyHistoryDetail, SeadocSearchFilenameView
 
 # api/v2.1/seadoc/
 urlpatterns = [
@@ -50,4 +50,5 @@ urlpatterns = [
     re_path(r'^editor-status-callback/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocEditorCallBack.as_view(), name='seadoc_editor_callback'),
     re_path(r'^notifications/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocNotificationsView.as_view(), name='seadoc_notifications'),
     re_path(r'^notifications/(?P<file_uuid>[-0-9a-f]{36})/(?P<notification_id>\d+)/$', SeadocNotificationView.as_view(), name='seadoc_notification'),
+    re_path(r'^search-filename/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocSearchFilenameView.as_view(), name='seadoc_search_filename'),
 ]

@@ -5,7 +5,7 @@ import os
 
 from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE
 from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
-        MARKDOWN, VIDEO, AUDIO, TEXT
+        MARKDOWN, VIDEO, AUDIO, TEXT, SEADOC
 from seahub.utils import get_user_repos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
@@ -32,6 +32,7 @@ SEARCH_FILEEXT = {
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
+    SEADOC: ('sdoc',),
 }
 
 def get_owned_repos(username, org_id=None):
