@@ -268,6 +268,13 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
+        elif notice.is_saml_sso_error_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.detail = d
+            except Exception as e:
+                logger.error(e)
+
     return notices
 
 

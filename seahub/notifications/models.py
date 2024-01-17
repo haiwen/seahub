@@ -76,6 +76,7 @@ MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
+MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -132,6 +133,11 @@ def repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name):
     """
     return json.dumps({'org_id': org_id, 'repo_owner': repo_owner,
         'repo_id': repo_id, 'repo_name': repo_name})
+
+
+def saml_sso_error_msg_to_json(error_msg):
+    return json.dumps({'error_msg': error_msg})
+
 
 def get_cache_key_of_unseen_notifications(username):
     return normalize_cache_key(username,
@@ -309,6 +315,11 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(
             to_user, MSG_TYPE_REPO_TRANSFER, detail)
 
+    def add_saml_sso_error_msg(self, to_user, detail):
+        """Notify ``to_user`` that saml sso occurred an error
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_SAML_SSO_FAILED, detail)
+
 
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
@@ -410,6 +421,9 @@ class UserNotification(models.Model):
 
     def is_deleted_files_msg(self):
         return self.msg_type == MSG_TYPE_DELETED_FILES
+
+    def is_saml_sso_error_msg(self):
+        return self.msg_type == MSG_TYPE_SAML_SSO_FAILED
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
@@ -780,6 +794,8 @@ from seahub.share.signals import share_repo_to_user_successful, \
 from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.drafts.signals import comment_draft_successful, \
         request_reviewer_successful
+from seahub.adfs_auth.signals import saml_sso_failed
+
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -918,3 +934,12 @@ def repo_transfer_cb(sender, **kwargs):
 
     detail = repo_transfer_msg_to_json(org_id, repo_owner, repo_id, repo_name)
     UserNotification.objects.add_repo_transfer_msg(to_user, detail)
+
+
+@receiver(saml_sso_failed)
+def saml_sso_failed_cb(sender, **kwargs):
+    to_user = kwargs['to_user']
+    error_msg = kwargs['error_msg']
+
+    detail = saml_sso_error_msg_to_json(error_msg)
+    UserNotification.objects.add_saml_sso_error_msg(to_user, detail)

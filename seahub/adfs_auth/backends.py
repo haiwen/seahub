@@ -49,14 +49,6 @@ class Saml2Backend(ModelBackend):
             logger.error('Session info or attribute mapping are None')
             return None
 
-        if 'ava' not in session_info:
-            logger.error('"ava" key not found in session_info')
-            return None
-
-        attributes = session_info['ava']
-        if not attributes:
-            logger.warning('The attributes dictionary is empty')
-
         name_id = session_info.get('name_id', '')
         if not name_id:
             logger.error('The name_id is not available. Could not determine user identifier.')
@@ -97,6 +89,15 @@ class Saml2Backend(ModelBackend):
                 notify_admins_on_register_complete(user.username)
 
         if user:
+            if 'ava' not in session_info:
+                logger.warning('"ava" key not found in session_info')
+                return user
+
+            attributes = session_info['ava']
+            if not attributes:
+                logger.warning('The attributes dictionary is empty')
+                return user
+
             self.make_profile(user, attributes, attribute_mapping)
             self.sync_saml_groups(user, attributes)
 
