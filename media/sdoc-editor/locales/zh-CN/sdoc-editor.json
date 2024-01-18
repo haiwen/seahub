@@ -428,6 +428,7 @@
   "My_modification": "我的更改",
   "Document_history": "文档历史",
   "Freeze_document": "冻结文档",
+  "Document_frozen": "文档已冻结",
   "Unfreeze": "取消冻结",
   "Search_and_replace": "查找和替换",
   "Search": "搜索",
