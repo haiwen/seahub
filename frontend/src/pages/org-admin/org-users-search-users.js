@@ -65,6 +65,7 @@ class OrgUsersSearchUsersResult extends React.Component {
 OrgUsersSearchUsersResult.propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   orgUsers: PropTypes.array.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 };
 
 class OrgUsersSearchUsers extends Component {
@@ -160,7 +161,7 @@ class OrgUsersSearchUsers extends Component {
     }
   };
 
-  changeStatus= (email, isActive) => {
+  changeStatus = (email, isActive) => {
     seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgUsers.map(item => {
         if (item.email == email) {
@@ -174,7 +175,7 @@ class OrgUsersSearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;
