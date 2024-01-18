@@ -10,7 +10,7 @@ import Icon from '../icon';
 import { Utils } from '../../utils/utils';
 import { SEARCH_DELAY_TIME, getValueLength } from './constant';
 import AISearchRefrences from './ai-search-widgets/ai-search-refrences';
-import AISearchHelp from './ai-search-widgets/ai-search-help';
+//import AISearchHelp from './ai-search-widgets/ai-search-help';
 import AISearchRobot from './ai-search-widgets/ai-search-robot';
 
 import './ai-search-ask.css';
@@ -182,7 +182,7 @@ export default class AISearchAsk extends Component {
                 :
                 <p>{gettext('No result')}</p>
               }
-              <AISearchHelp />
+              {/*<AISearchHelp />*/}
               {hitFiles.length > 0 &&
                 <AISearchRefrences
                   hitFiles={hitFiles}
