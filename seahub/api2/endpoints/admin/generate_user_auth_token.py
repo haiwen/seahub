@@ -11,6 +11,7 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, get_token_v1
+from seahub.auth.utils import get_virtual_id_by_email
 
 from seahub.base.accounts import User
 
@@ -30,8 +31,9 @@ class AdminGenerateUserAuthToken(APIView):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        vid = get_virtual_id_by_email(email)
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email=vid)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -41,7 +43,7 @@ class AdminGenerateUserAuthToken(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            token = get_token_v1(email)
+            token = get_token_v1(user.username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
