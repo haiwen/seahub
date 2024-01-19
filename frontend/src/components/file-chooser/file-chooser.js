@@ -283,7 +283,7 @@ class FileChooser extends React.Component {
     }
 
     if (this.state.isResultGot && this.state.searchResults.length === 0) {
-      return (<div className="search-result-none text-center">{gettext('No results matching.')}</div>);
+      return (<div className="search-result-none text-center">{gettext('No results matching')}</div>);
     }
 
     if (this.state.isResultGot && this.state.searchResults.length > 0) {
