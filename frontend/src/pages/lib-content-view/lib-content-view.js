@@ -1261,7 +1261,7 @@ class LibContentView extends React.Component {
   onConvertItem = (dirent, dstType) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     let repoID = this.props.repoID;
-    toaster.notifyInProgress(gettext('Converting, please wait...'));
+    toaster.notifyInProgress(gettext('Converting, please wait...'), {'id': 'conversion'});
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
       let newFileName = res.data.obj_name;
       let parentDir = res.data.parent_dir;
@@ -1274,7 +1274,7 @@ class LibContentView extends React.Component {
 
       this.addDirent(newFileName, 'file', res.data.size);
       let message = gettext('Successfully converted the file.');
-      toaster.success(message);
+      toaster.success(message, {'id': 'conversion'});
 
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -1282,7 +1282,7 @@ class LibContentView extends React.Component {
         let name = Utils.getFileName(path);
         errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
       }
-      toaster.danger(errMessage);
+      toaster.danger(errMessage, {'id': 'conversion'});
     });
 
   };
