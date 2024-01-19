@@ -188,11 +188,9 @@ class LinkDetails extends React.Component {
           {sharedLinkInfo.password && (
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
-              <dd className="d-flex">
-                <div className="d-flex align-items-center">
-                  <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedLinkInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedLinkInfo.password.length, 10)} />
-                  <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
-                </div>
+              <dd className="d-flex align-items-center">
+                <span className="mr-1">{this.state.storedPasswordVisible ? sharedLinkInfo.password : '***************'}</span>
+                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
               </dd>
             </>
           )}
