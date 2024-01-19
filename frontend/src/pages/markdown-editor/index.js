@@ -470,6 +470,10 @@ class MarkdownEditor extends React.Component {
     });
   };
 
+  getFileName = (fileName) => {
+    return fileName.substring(0, fileName.lastIndexOf('.'));
+  };
+
   render() {
     const { loading, editorMode, markdownContent, fileInfo, fileTagList } = this.state;
 
@@ -504,7 +508,7 @@ class MarkdownEditor extends React.Component {
             ref={this.editorRef}
             mode={editorMode}
             isFetching={loading}
-            initValue={fileName}
+            initValue={this.getFileName(fileName)}
             value={markdownContent}
             editorApi={editorApi}
             onSave={this.onSaveEditorContent}
