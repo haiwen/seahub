@@ -79,7 +79,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted;
+      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted && !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
       return ;
