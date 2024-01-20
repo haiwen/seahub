@@ -48,9 +48,9 @@ export default class SdocEditor extends React.Component {
     const { docName, docUuid } = window.seafile;
     const rencentFiles = localStorage.getItem('sdoc-recent-files') ? JSON.parse(localStorage.getItem('sdoc-recent-files')) : [];
     let arr = [];
-    const newFile = { file_uuid: docUuid, file_name: docName };
+    const newFile = { doc_uuid: docUuid, name: docName };
     if (rencentFiles.length > 0) {
-      const isExist = rencentFiles.find((item) => item.file_uuid === docUuid);
+      const isExist = rencentFiles.find((item) => item.doc_uuid === docUuid);
       if (isExist) return;
       if (!isExist) {
         let newRencentFiles = rencentFiles.slice(0);
