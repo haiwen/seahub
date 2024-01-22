@@ -212,7 +212,7 @@ class StarredItems(APIView):
             elif seafile_api.get_file_id_by_path(repo_id, path):
                 path = normalize_file_path(path)
         except Exception as e:
-            logger.warning(e)
+            pass
 
         email = request.user.username
 
