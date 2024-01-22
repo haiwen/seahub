@@ -6,6 +6,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
+import CreateFile from '../../../components/dialog/create-file-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -13,6 +14,8 @@ const propTypes = {
   docName: PropTypes.string.isRequired,
   docPerm: PropTypes.string.isRequired,
   isStarred: PropTypes.bool.isRequired,
+  direntList: PropTypes.array.isRequired,
+  dirPath: PropTypes.string.isRequired,
   toggleStar: PropTypes.func.isRequired,
   unmarkDraft: PropTypes.func.isRequired,
   onNewNotification: PropTypes.func.isRequired
@@ -26,6 +29,8 @@ class ExternalOperations extends React.Component {
       isShowInternalLinkDialog: false,
       isShowShareDialog: false,
       internalLink: '',
+      isShowCreateFileDialog: false,
+      fileType: '.sdoc',
     };
   }
 
@@ -38,6 +43,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
     this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
+    this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
   }
 
   componentWillUnmount() {
@@ -48,6 +54,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeFreezeDocument();
     this.unsubscribeUnfreeze();
     this.unsubscribeNewNotification();
+    this.unsubscribeCreateSdocFile();
   }
 
   onInternalLinkToggle = (options) => {
@@ -116,9 +123,37 @@ class ExternalOperations extends React.Component {
     this.props.onNewNotification();
   };
 
+  onCreateSdocFile = (params) => {
+    if (params?.newFileName) {
+      this.setState({fileType: `${params.newFileName}.sdoc`});
+    }
+    this.setState({
+      isShowCreateFileDialog: !this.state.isShowCreateFileDialog
+    });
+  };
+
+  checkDuplicatedName = (newName) => {
+    let direntList = this.props.direntList;
+    let isDuplicated = direntList.some(object => {
+      return object.name === newName;
+    });
+    return isDuplicated;
+  };
+
+  onAddFile = (filePath, isMarkdownDraft) => {
+    let repoID = this.props.repoID;
+    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then((res) => {
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, {data: res.data});
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
-    const { repoID, docPath, docName, docPerm } = this.props;
-    const { isShowInternalLinkDialog, isShowShareDialog, internalLink } = this.state;
+    const { repoID, docPath, docName, docPerm, dirPath } = this.props;
+    const { isShowInternalLinkDialog, isShowShareDialog, internalLink, isShowCreateFileDialog, fileType } = this.state;
     return (
       <>
         {isShowInternalLinkDialog && (
@@ -137,6 +172,15 @@ class ExternalOperations extends React.Component {
             repoID={repoID}
             userPerm={docPerm}
             toggleDialog={this.onShareToggle}
+          />
+        )}
+        {isShowCreateFileDialog && (
+          <CreateFile
+            parentPath={dirPath}
+            fileType={fileType}
+            onAddFile={this.onAddFile}
+            checkDuplicatedName={this.checkDuplicatedName}
+            toggleDialog={this.onCreateSdocFile}
           />
         )}
       </>
