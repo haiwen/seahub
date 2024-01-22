@@ -42,7 +42,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.from_email, s.to_email, s.permission
             FROM
-                {self.db_name}.SharedRepo s
+                `{self.db_name}`.`SharedRepo` s
             WHERE
                 repo_id = '{repo_id}';
             """
@@ -51,7 +51,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.from_email, s.to_email, s.permission
             FROM
-                {self.db_name}.OrgSharedRepo s
+                `{self.db_name}`.`OrgSharedRepo` s
             WHERE
                 repo_id = '{repo_id}';
             """
@@ -83,7 +83,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.user_name, s.group_id, s.permission
             FROM
-                {self.db_name}.RepoGroup s
+                `{self.db_name}`.`RepoGroup` s
             WHERE
                 repo_id = '{repo_id}';
             """
@@ -92,7 +92,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.owner, s.group_id, s.permission
             FROM
-                {self.db_name}.OrgGroupRepo s
+                `{self.db_name}`.`OrgGroupRepo` s
             WHERE
                 repo_id = '{repo_id}';
             """
@@ -123,7 +123,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, s.from_email, s.to_email, s.permission
             FROM
-                {self.db_name}.SharedRepo s join {self.db_name}.VirtualRepo v
+                `{self.db_name}`.`SharedRepo` s join `{self.db_name}`.`VirtualRepo` v
             ON
                 s.repo_id=v.repo_id
             WHERE
@@ -134,7 +134,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, s.from_email, s.to_email, s.permission
             FROM
-                {self.db_name}.OrgSharedRepo s join {self.db_name}.VirtualRepo v
+                `{self.db_name}`.`OrgSharedRepo` s join `{self.db_name}`.`VirtualRepo` v
             ON
                 s.repo_id=v.repo_id
             WHERE
@@ -168,7 +168,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, r.user_name, r.group_id, r.permission
             FROM
-                {self.db_name}.RepoGroup r join {self.db_name}.VirtualRepo v
+                `{self.db_name}`.`RepoGroup` r join `{self.db_name}`.`VirtualRepo` v
             ON
                 r.repo_id=v.repo_id
             WHERE
@@ -179,7 +179,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, r.owner, r.group_id, r.permission
             FROM
-                {self.db_name}.OrgGroupRepo r join {self.db_name}.VirtualRepo v
+                `{self.db_name}`.`OrgGroupRepo` r join `{self.db_name}`.`VirtualRepo` v
             ON
                 r.repo_id=v.repo_id
             WHERE
