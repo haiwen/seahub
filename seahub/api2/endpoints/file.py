@@ -28,7 +28,9 @@ from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
-from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES
+from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, \
+        MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
+        DOCX_SUPPORT_CONVERT_TYPES
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
@@ -553,12 +555,13 @@ class FileView(APIView):
             dst_type = request.data.get('dst_type')
 
             extension = Path(path).suffix
-            if extension not in ['.md', '.sdoc']:
+            if extension not in ['.md', '.sdoc', '.docx']:
                 error_msg = 'path invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if (extension == '.md' and dst_type not in MARKDOWN_SUPPORT_CONVERT_TYPES) or \
-                    (extension == '.sdoc' and dst_type not in SDOC_SUPPORT_CONVERT_TYPES):
+                    (extension == '.sdoc' and dst_type not in SDOC_SUPPORT_CONVERT_TYPES) or \
+                    (extension == '.docx' and dst_type not in DOCX_SUPPORT_CONVERT_TYPES):
                 error_msg = 'dst_type invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -596,6 +599,9 @@ class FileView(APIView):
             if extension == '.md':
                 src_type = 'markdown'
                 new_filename = filename[:-2] + 'sdoc'
+            if extension == '.docx':
+                src_type = 'docx'
+                new_filename = filename[:-4] + 'sdoc'
             elif extension == '.sdoc':
                 src_type = 'sdoc'
                 if dst_type == 'markdown':
@@ -606,14 +612,24 @@ class FileView(APIView):
             new_filename = check_filename_or_rename(repo_id, parent_dir, new_filename)
             new_file_path = posixpath.join(parent_dir, new_filename)
 
-            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
+            download_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                     file_id,
+                                                                     'download',
+                                                                     username)
 
             obj_id = json.dumps({'parent_dir': parent_dir})
-            upload_token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload-link', username,
+            upload_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                   obj_id,
+                                                                   'upload-link',
+                                                                   username,
                                                                    use_onetime=True)
-            doc_uuid = get_seadoc_file_uuid(repo, path)
+            if extension == '.sdoc':
+                doc_uuid = get_seadoc_file_uuid(repo, path)
+            else:
+                doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
 
             if dst_type != 'docx':
+                # md, docx file convert to sdoc
                 try:
                     resp = convert_file(path, username, doc_uuid,
                                         download_token, upload_token,
@@ -629,7 +645,7 @@ class FileView(APIView):
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                      'Internal Server Error')
             else:
-
+                # sdoc file convert to docx
                 try:
                     resp = sdoc_convert_to_docx(path, username, doc_uuid,
                                                 download_token, upload_token,

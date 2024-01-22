@@ -608,7 +608,7 @@ export const Utils = {
     }
 
     if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {
-      if (dirent.name.endsWith('.md')) {
+      if (dirent.name.endsWith('.md') || dirent.name.endsWith('.docx')) {
         list.push(CONVERT_TO_SDOC);
       }
 
