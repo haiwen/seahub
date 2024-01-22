@@ -43,7 +43,7 @@ class StarredItems(APIView):
         repo_id = starred_item.repo_id
         item_info['repo_id'] = repo_id
         item_info['repo_name'] = repo.repo_name if repo else ''
-        item_info['repo_encrypted'] = repo.encrypted
+        item_info['repo_encrypted'] = repo.encrypted if repo else False
         item_info['is_dir'] = starred_item.is_dir
 
         path = starred_item.path
@@ -53,12 +53,14 @@ class StarredItems(APIView):
             item_info['obj_name'] = repo.repo_name if repo else ''
             item_info['mtime'] = timestamp_to_isoformat_timestr(repo.last_modified) if \
                     repo else ''
+            item_info['deleted'] = False if repo else True
         else:
             item_info['obj_name'] = os.path.basename(path.rstrip('/'))
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
+            dirent = seafile_api.get_dirent_by_path(repo_id, path) if repo else ''
             item_info['mtime'] = timestamp_to_isoformat_timestr(dirent.mtime) if \
                     dirent else ''
-            if not starred_item.is_dir:
+            item_info['deleted'] = False if dirent else True
+            if dirent and not starred_item.is_dir:
                 file_type, file_ext = get_file_type_and_ext(item_info['obj_name'])
                 if file_type in (IMAGE, XMIND) or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
@@ -88,6 +90,8 @@ class StarredItems(APIView):
                 repo = seafile_api.get_repo(repo_id)
                 if repo:
                     repo_dict[repo_id] = repo
+                else:
+                    repo_dict[repo_id] = ''
 
         starred_repos = []
         starred_folders = []
@@ -95,17 +99,7 @@ class StarredItems(APIView):
         for starred_item in all_starred_items:
 
             repo_id = starred_item.repo_id
-            if repo_id not in repo_dict:
-                continue
-
             path = starred_item.path
-            if starred_item.is_dir:
-                if not seafile_api.get_dir_id_by_path(repo_id, path):
-                    continue
-            else:
-                if not seafile_api.get_file_id_by_path(repo_id, path):
-                    continue
-
             repo = repo_dict[repo_id]
             item_info = self.get_starred_item_info(repo, starred_item)
 
@@ -212,10 +206,13 @@ class StarredItems(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # handler path if item exist
-        if seafile_api.get_dir_id_by_path(repo_id, path):
-            path = normalize_dir_path(path)
-        elif seafile_api.get_file_id_by_path(repo_id, path):
-            path = normalize_file_path(path)
+        try:
+            if seafile_api.get_dir_id_by_path(repo_id, path):
+                path = normalize_dir_path(path)
+            elif seafile_api.get_file_id_by_path(repo_id, path):
+                path = normalize_file_path(path)
+        except Exception as e:
+            logger.warning(e)
 
         email = request.user.username
 

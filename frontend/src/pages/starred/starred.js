@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
@@ -79,7 +79,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted && !item.encoded_thumbnail_src;
+      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
     });
     if (items.length == 0) {
       return ;
@@ -215,12 +215,19 @@ class Item extends Component {
               <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
-        <td>
-          { data.is_dir ?
-            <Link to={linkUrl}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
+        <Fragment>
+          {data.deleted ?
+            <td>
+              {data.obj_name}{' '}<span style={{color:'red'}}>{gettext('deleted')}</span>
+            </td> :
+            <td>
+              { data.is_dir ?
+                <Link to={linkUrl}>{data.obj_name}</Link> :
+                <a className="normal" href={linkUrl} target="_blank" rel="noreferrer">{data.obj_name}</a>
+              }
+            </td>
           }
-        </td>
+        </Fragment>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
