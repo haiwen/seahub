@@ -229,7 +229,7 @@ def gen_path_link(path, repo_name):
     return zipped
 
 
-def copy_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
+def copy_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
     src_repo = seafile_api.get_repo(src_repo_id)
     src_file_uuid = get_seadoc_file_uuid(src_repo, src_path)
     src_image_parent_path = SDOC_IMAGES_DIR + src_file_uuid + '/'
@@ -260,7 +260,7 @@ def copy_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_p
     return
 
 
-def move_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
+def move_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
     src_repo = seafile_api.get_repo(src_repo_id)
     src_file_uuid = get_seadoc_file_uuid(src_repo, src_path)
     src_image_parent_path = SDOC_IMAGES_DIR + src_file_uuid + '/'
