@@ -37,7 +37,7 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
 from seahub.utils.file_types import SEADOC
-from seahub.seadoc.utils import copy_sdoc_images_to_different_repo, move_sdoc_images_to_different_repo
+from seahub.seadoc.utils import copy_sdoc_images, move_sdoc_images
 
 logger = logging.getLogger(__name__)
 
@@ -1155,13 +1155,20 @@ class ReposAsyncBatchCopyItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         result = {}
         username = request.user.username
         try:
             res = seafile_api.copy_file(src_repo_id, src_parent_dir,
                                         json.dumps(src_dirents),
                                         dst_repo_id, dst_parent_dir,
-                                        json.dumps(src_dirents),
+                                        json.dumps(dst_dirents),
                                         username=username, need_progress=1,
                                         synchronous=0)
         except Exception as e:
@@ -1174,16 +1181,15 @@ class ReposAsyncBatchCopyItemView(APIView):
 
         # sdoc image
         try:
-            sdoc_dirents = []
-            if src_repo_id != dst_repo_id:
-                for dirent in src_dirents:
-                    filetype, fileext = get_file_type_and_ext(dirent)
-                    if filetype == SEADOC:
-                        sdoc_dirents.append(dirent)
-            for sdoc_dirent in sdoc_dirents:
-                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
-                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
-                copy_sdoc_images_to_different_repo(
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_sdoc_images(
                     src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
         except Exception as e:
             logger.error(e)
@@ -1288,13 +1294,20 @@ class ReposAsyncBatchMoveItemView(APIView):
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         # move file
         result = {}
         try:
             res = seafile_api.move_file(src_repo_id, src_parent_dir,
                                         json.dumps(src_dirents),
                                         dst_repo_id, dst_parent_dir,
-                                        json.dumps(src_dirents),
+                                        json.dumps(dst_dirents),
                                         replace=False, username=username,
                                         need_progress=1, synchronous=0)
         except Exception as e:
@@ -1307,16 +1320,15 @@ class ReposAsyncBatchMoveItemView(APIView):
 
         # sdoc image
         try:
-            sdoc_dirents = []
-            if src_repo_id != dst_repo_id:
-                for dirent in src_dirents:
-                    filetype, fileext = get_file_type_and_ext(dirent)
-                    if filetype == SEADOC:
-                        sdoc_dirents.append(dirent)
-            for sdoc_dirent in sdoc_dirents:
-                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
-                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
-                move_sdoc_images_to_different_repo(
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                move_sdoc_images(
                     src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
         except Exception as e:
             logger.error(e)
@@ -1402,13 +1414,20 @@ class ReposSyncBatchCopyItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         result = {}
         username = request.user.username
         try:
             seafile_api.copy_file(src_repo_id, src_parent_dir,
                                   json.dumps(src_dirents),
                                   dst_repo_id, dst_parent_dir,
-                                  json.dumps(src_dirents),
+                                  json.dumps(dst_dirents),
                                   username=username, need_progress=0,
                                   synchronous=1)
         except Exception as e:
@@ -1421,16 +1440,15 @@ class ReposSyncBatchCopyItemView(APIView):
 
         # sdoc image
         try:
-            sdoc_dirents = []
-            if src_repo_id != dst_repo_id:
-                for dirent in src_dirents:
-                    filetype, fileext = get_file_type_and_ext(dirent)
-                    if filetype == SEADOC:
-                        sdoc_dirents.append(dirent)
-            for sdoc_dirent in sdoc_dirents:
-                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
-                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
-                copy_sdoc_images_to_different_repo(
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_sdoc_images(
                     src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
         except Exception as e:
             logger.error(e)
@@ -1552,21 +1570,7 @@ class ReposSyncBatchMoveItemView(APIView):
         result = {}
         result['success'] = True
 
-        # sdoc image
-        try:
-            sdoc_dirents = []
-            if src_repo_id != dst_repo_id:
-                for dirent in src_dirents:
-                    filetype, fileext = get_file_type_and_ext(dirent)
-                    if filetype == SEADOC:
-                        sdoc_dirents.append(dirent)
-            for sdoc_dirent in sdoc_dirents:
-                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
-                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
-                move_sdoc_images_to_different_repo(
-                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
-        except Exception as e:
-            logger.error(e)
+        # do not move sdoc image
 
         return Response(result)
 
