@@ -14,7 +14,7 @@
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
 # llj <lingjun.li1@gmail.com>, 2014
-# Seafile Info <info@seafile.com>, 2023
+# Seafile Info <info@seafile.com>, 2023-2024
 # zheng xie <xiez1989@gmail.com>, 2014-2019
 # zMingGit <517046497@qq.com>, 2017
 # zMingGit <517046497@qq.com>, 2017
@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-16 16:52+0800\n"
+"POT-Creation-Date: 2024-01-24 18:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2023\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,27 +35,64 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: seahub/adfs_auth/utils.py:49 seahub/dingtalk/views.py:50
-#: seahub/dingtalk/views.py:74 seahub/dingtalk/views.py:83
-#: seahub/dingtalk/views.py:105 seahub/dingtalk/views.py:122
-#: seahub/dingtalk/views.py:162 seahub/dingtalk/views.py:187
-#: seahub/dingtalk/views.py:196 seahub/dingtalk/views.py:218
-#: seahub/dingtalk/views.py:254 seahub/dingtalk/views.py:294
-#: seahub/dingtalk/views.py:341 seahub/dingtalk/views.py:359
-#: seahub/dingtalk/views.py:432 seahub/dingtalk/views.py:479
-#: seahub/oauth/views.py:84 seahub/oauth/views.py:107
-#: seahub/oauth/views.py:153 seahub/oauth/views.py:165
-#: seahub/oauth/views.py:171 seahub/oauth/views.py:202
-#: seahub/templates/remote_user/error.html:8 seahub/weixin/views.py:35
-#: seahub/weixin/views.py:54 seahub/weixin/views.py:59
-#: seahub/weixin/views.py:78 seahub/weixin/views.py:96
-#: seahub/work_weixin/views.py:68 seahub/work_weixin/views.py:73
-#: seahub/work_weixin/views.py:83 seahub/work_weixin/views.py:87
-#: seahub/work_weixin/views.py:106 seahub/work_weixin/views.py:177
-#: seahub/work_weixin/views.py:182 seahub/work_weixin/views.py:192
-#: seahub/work_weixin/views.py:196
-msgid "Error, please contact administrator."
-msgstr "出错了，请联系管理员。"
+#: seahub/adfs_auth/utils.py:49
+msgid "ADFS/SAML login relevant settings invalid."
+msgstr "ADFS/SAML 登录相关设置无效。"
+
+#: seahub/adfs_auth/views.py:130 seahub/adfs_auth/views.py:159
+#: seahub/adfs_auth/views.py:192 seahub/adfs_auth/views.py:229
+#: seahub/adfs_auth/views.py:285 seahub/adfs_auth/views.py:291
+#: seahub/adfs_auth/views.py:318 seahub/adfs_auth/views.py:393
+#: seahub/adfs_auth/views.py:413 seahub/adfs_auth/views.py:430
+#: seahub/adfs_auth/views.py:434 seahub/adfs_auth/views.py:464
+#: seahub/adfs_auth/views.py:489 seahub/adfs_auth/views.py:493
+#: seahub/adfs_auth/views.py:557 seahub/adfs_auth/views.py:561
+msgid "Internal server error. Please contact system administrator."
+msgstr "系统内部错误，请联系系统管理员。"
+
+#: seahub/adfs_auth/views.py:155 seahub/adfs_auth/views.py:225
+#: seahub/adfs_auth/views.py:409 seahub/adfs_auth/views.py:460
+msgid ""
+"Login failed: ADFS/SAML service error. Please report to your organization "
+"(company) administrator."
+msgstr "登录失败：ADFS/SAML 服务异常。请联系您的团队(公司)管理员。"
+
+#: seahub/adfs_auth/views.py:208 seahub/adfs_auth/views.py:252
+#: seahub/adfs_auth/views.py:266
+msgid ""
+"Login failed: Bad response from ADFS/SAML service. Please report to your "
+"organization (company) administrator."
+msgstr "登录失败：ADFS/SAML 服务返回消息异常。请联系您的团队（公司）管理员"
+
+#: seahub/adfs_auth/views.py:279
+msgid "Failed to bind SAML, please login first."
+msgstr "绑定 SAML 失败，请先登录 Seafile。"
+
+#: seahub/adfs_auth/views.py:333
+msgid ""
+"Failed to create new user: the number of users exceeds the organization "
+"quota. Please report to your organization (company) administrator."
+msgstr "创建新用户失败：团队的用户数配额已用完。请联系您的团队（公司）管理员。"
+
+#: seahub/adfs_auth/views.py:355
+msgid ""
+"Login failed: failed to create user. Please report to your organization "
+"(company) administrator."
+msgstr "登录失败：无法创建用户。请联系您的团队（公司）管理员。"
+
+#: seahub/adfs_auth/views.py:370
+msgid ""
+"Login failed: user is deactivated. Please report to your organization "
+"(company) administrator."
+msgstr "登录失败：用户已被禁用。请联系您的团队（公司）管理员。"
+
+#: seahub/adfs_auth/views.py:497
+msgid "Failed to unbind SAML, please set a password first."
+msgstr "解绑 SAML 失败，请先设置登录密码。"
+
+#: seahub/adfs_auth/views.py:501
+msgid "Failed to unbind SAML, please set a contact email first."
+msgstr "解绑 SAML 失败，请先请先设置联系邮箱。"
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:361
@@ -170,8 +207,8 @@ msgstr "资料库无法转让给所有者。"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:529
-#: seahub/api2/endpoints/share_links.py:745
+#: seahub/api2/endpoints/share_links.py:538
+#: seahub/api2/endpoints/share_links.py:754
 msgid "There is an associated published library."
 msgstr "有一个相关联的已发布资料库。"
 
@@ -332,7 +369,7 @@ msgid "There are more than 500 users, and sort is not offered."
 msgstr "用户数超过了 500, 不提供排序。"
 
 #: seahub/api2/endpoints/admin/users.py:769
-#: seahub/api2/endpoints/admin/users.py:1255 seahub/base/accounts.py:1197
+#: seahub/api2/endpoints/admin/users.py:1255 seahub/base/accounts.py:1228
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "用户数量超过限制。"
@@ -382,29 +419,33 @@ msgid ""
 "configuration."
 msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1492 seahub/views/sysadmin.py:486
+#: seahub/api2/endpoints/admin/users.py:1479 seahub/auth/views.py:355
+msgid "Unable to reset password."
+msgstr "无法重置密码。"
+
+#: seahub/api2/endpoints/admin/users.py:1503 seahub/views/sysadmin.py:486
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "%s 密码已重置"
 
-#: seahub/api2/endpoints/admin/users.py:1494
+#: seahub/api2/endpoints/admin/users.py:1505
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
 msgstr "密码已重置, 通知邮件已发送给 %(user)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1498 seahub/views/sysadmin.py:516
+#: seahub/api2/endpoints/admin/users.py:1509 seahub/views/sysadmin.py:516
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1501 seahub/views/sysadmin.py:520
+#: seahub/api2/endpoints/admin/users.py:1512 seahub/views/sysadmin.py:520
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1504 seahub/views/sysadmin.py:523
+#: seahub/api2/endpoints/admin/users.py:1515 seahub/views/sysadmin.py:523
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -430,16 +471,16 @@ msgstr "病毒文件未找到。"
 #: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:107
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3903
-#: seahub/notifications/models.py:470 seahub/notifications/models.py:511
-#: seahub/notifications/models.py:562 seahub/notifications/models.py:618
-#: seahub/notifications/models.py:648 seahub/notifications/models.py:670
-#: seahub/notifications/models.py:696 seahub/notifications/models.py:713
-#: seahub/notifications/models.py:730 seahub/notifications/models.py:759
-#: seahub/seadoc/apis.py:2720 seahub/search/views.py:200
+#: seahub/notifications/models.py:484 seahub/notifications/models.py:525
+#: seahub/notifications/models.py:576 seahub/notifications/models.py:632
+#: seahub/notifications/models.py:662 seahub/notifications/models.py:684
+#: seahub/notifications/models.py:710 seahub/notifications/models.py:727
+#: seahub/notifications/models.py:744 seahub/notifications/models.py:773
+#: seahub/seadoc/apis.py:2761 seahub/search/views.py:200
 #: seahub/share/views.py:326 seahub/utils/__init__.py:177
 #: seahub/utils/__init__.py:1165 seahub/views/__init__.py:950
-#: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
-#: seahub/wiki/views.py:215 seahub/wiki/views.py:224
+#: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
+#: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
@@ -459,8 +500,8 @@ msgstr "目标路径无效"
 #: seahub/api2/views.py:1860 seahub/api2/views.py:1921
 #: seahub/api2/views.py:1965 seahub/api2/views.py:2011
 #: seahub/api2/views.py:2060 seahub/api2/views.py:2473
-#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:328
-#: seahub/seadoc/apis.py:419
+#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:369
+#: seahub/seadoc/apis.py:460
 msgid "Out of quota."
 msgstr "空间已超"
 
@@ -470,9 +511,9 @@ msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:307 seahub/api2/endpoints/file.py:396
-#: seahub/api2/endpoints/file.py:511 seahub/api2/endpoints/file.py:568
-#: seahub/api2/endpoints/file.py:677 seahub/api2/endpoints/file.py:790
+#: seahub/api2/endpoints/file.py:334 seahub/api2/endpoints/file.py:423
+#: seahub/api2/endpoints/file.py:538 seahub/api2/endpoints/file.py:595
+#: seahub/api2/endpoints/file.py:729 seahub/api2/endpoints/file.py:842
 msgid "File is locked"
 msgstr "文件已锁定"
 
@@ -494,33 +535,34 @@ msgid "User %s not found."
 msgstr "未找到用户 %s 。"
 
 #: seahub/api2/endpoints/draft_reviewer.py:96
-#: seahub/api2/endpoints/file.py:295
+#: seahub/api2/endpoints/file.py:322
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:206
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:227 seahub/seadoc/apis.py:2704
-#: seahub/seadoc/views.py:28 seahub/seadoc/views.py:82
-#: seahub/search/views.py:174 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:760
-#: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
+#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2745
+#: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
+#: seahub/seadoc/views.py:168 seahub/search/views.py:174
+#: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
+#: seahub/views/__init__.py:760 seahub/views/ajax.py:83
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:201
 msgid "Permission denied."
 msgstr "没有权限"
 
-#: seahub/api2/endpoints/file.py:215 seahub/api2/endpoints/upload_links.py:480
+#: seahub/api2/endpoints/file.py:216 seahub/api2/endpoints/upload_links.py:480
 #: seahub/api2/endpoints/wikis.py:132 seahub/api2/views.py:1868
 msgid "The number of files in library exceeds the limit"
 msgstr "该资料库中的文件数量已超过限制"
 
-#: seahub/api2/endpoints/file.py:695 seahub/api2/endpoints/file.py:715
+#: seahub/api2/endpoints/file.py:747 seahub/api2/endpoints/file.py:767
 msgid "File is not locked."
 msgstr "文件没有被锁定。"
 
-#: seahub/api2/endpoints/file.py:742 seahub/api2/endpoints/share_links.py:827
+#: seahub/api2/endpoints/file.py:794 seahub/api2/endpoints/share_links.py:836
 msgid "You can not refresh this file's lock."
 msgstr "不能刷新文件锁。"
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2711
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
 msgid "The participant already exists."
 msgstr "该参与者已存在。"
 
@@ -591,7 +633,7 @@ msgstr "%s 已被邀请。"
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
 #: seahub/api2/endpoints/repo_share_invitations.py:173
-#: seahub/base/accounts.py:1208 seahub/organizations/api/admin/users.py:270
+#: seahub/base/accounts.py:1239 seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
 msgstr "用户 %s 已存在。"
@@ -609,28 +651,28 @@ msgstr "邮件发送失败， 邮箱服务没配置好，请联系管理员。"
 
 #: seahub/api2/endpoints/multi_share_links.py:60
 #: seahub/api2/endpoints/multi_share_links.py:268
-#: seahub/api2/endpoints/share_links.py:322
+#: seahub/api2/endpoints/share_links.py:331
 #: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4056
 #: seahub/api2/views.py:4176
 msgid "Password is required."
 msgstr "密码为必填项。"
 
 #: seahub/api2/endpoints/multi_share_links.py:65
-#: seahub/api2/endpoints/share_links.py:328
+#: seahub/api2/endpoints/share_links.py:337
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "密码长度太短。"
 
 #: seahub/api2/endpoints/multi_share_links.py:69
-#: seahub/api2/endpoints/share_links.py:332
+#: seahub/api2/endpoints/share_links.py:341
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
 msgstr "密码太弱。"
 
 #: seahub/api2/endpoints/multi_share_links.py:73
-#: seahub/api2/endpoints/share_links.py:336
+#: seahub/api2/endpoints/share_links.py:345
 #: seahub/api2/endpoints/upload_links.py:184
 #: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
@@ -640,8 +682,8 @@ msgstr "密码只能包含数字，大写字母，小写字母和其他字符。
 
 #: seahub/api2/endpoints/multi_share_links.py:96
 #: seahub/api2/endpoints/multi_share_links.py:291
-#: seahub/api2/endpoints/share_links.py:359
-#: seahub/api2/endpoints/share_links.py:669
+#: seahub/api2/endpoints/share_links.py:368
+#: seahub/api2/endpoints/share_links.py:678
 #: seahub/api2/endpoints/upload_links.py:207
 #: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3470
 #, python-format
@@ -650,8 +692,8 @@ msgstr "过期天数需要大于等于 %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:101
 #: seahub/api2/endpoints/multi_share_links.py:297
-#: seahub/api2/endpoints/share_links.py:365
-#: seahub/api2/endpoints/share_links.py:675
+#: seahub/api2/endpoints/share_links.py:374
+#: seahub/api2/endpoints/share_links.py:684
 #: seahub/api2/endpoints/upload_links.py:213
 #: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3476
 #, python-format
@@ -660,8 +702,8 @@ msgstr "过期天数需要小于等于 %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:121
 #: seahub/api2/endpoints/multi_share_links.py:319
-#: seahub/api2/endpoints/share_links.py:387
-#: seahub/api2/endpoints/share_links.py:699
+#: seahub/api2/endpoints/share_links.py:396
+#: seahub/api2/endpoints/share_links.py:708
 #: seahub/api2/endpoints/upload_links.py:235
 #: seahub/api2/endpoints/upload_links.py:371
 #, python-format
@@ -670,8 +712,8 @@ msgstr "过期时间应晚于 %s。"
 
 #: seahub/api2/endpoints/multi_share_links.py:130
 #: seahub/api2/endpoints/multi_share_links.py:328
-#: seahub/api2/endpoints/share_links.py:396
-#: seahub/api2/endpoints/share_links.py:708
+#: seahub/api2/endpoints/share_links.py:405
+#: seahub/api2/endpoints/share_links.py:717
 #: seahub/api2/endpoints/upload_links.py:244
 #: seahub/api2/endpoints/upload_links.py:380
 #, python-format
@@ -679,7 +721,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "过期时间应早于 %s。"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:472
+#: seahub/seadoc/apis.py:513
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -718,20 +760,20 @@ msgstr "解密资料库出错"
 msgid "Wrong old password"
 msgstr "密码错误"
 
-#: seahub/api2/endpoints/repos_batch.py:1278
-#: seahub/api2/endpoints/repos_batch.py:1525
-#: seahub/api2/endpoints/repos_batch.py:1631
+#: seahub/api2/endpoints/repos_batch.py:1284
+#: seahub/api2/endpoints/repos_batch.py:1543
+#: seahub/api2/endpoints/repos_batch.py:1635
 #, python-format
 msgid "File %s is locked."
 msgstr "文件%s已锁定"
 
-#: seahub/api2/endpoints/repos_batch.py:1288
-#: seahub/api2/endpoints/repos_batch.py:1535
+#: seahub/api2/endpoints/repos_batch.py:1294
+#: seahub/api2/endpoints/repos_batch.py:1553
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "无法移动文件夹%s，请检查其权限。"
 
-#: seahub/api2/endpoints/repos_batch.py:1639
+#: seahub/api2/endpoints/repos_batch.py:1643
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "无法删除文件夹%s，请检查其权限。"
@@ -768,8 +810,8 @@ msgstr "邮箱无效。"
 msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一个上传链接给你"
 
-#: seahub/api2/endpoints/share_links.py:465
 #: seahub/api2/endpoints/share_links.py:474
+#: seahub/api2/endpoints/share_links.py:483
 #, python-format
 msgid "Share link %s already exists."
 msgstr "共享链接 \"%s\" 已存在。"
@@ -831,17 +873,17 @@ msgstr "名称只能包含字母、数字、空格、中划线或下划线。"
 msgid "Please log in."
 msgstr "请登录。"
 
-#: seahub/auth/forms.py:27 seahub/templates/registration/login.html:37
-#: seahub/templates/registration/multi_adfs_sso.html:37
+#: seahub/auth/forms.py:27 seahub/templates/registration/login.html:38
+#: seahub/templates/registration/multi_adfs_sso.html:38
 msgid "Email or Username"
 msgstr "邮箱或用户名"
 
 #: seahub/auth/forms.py:28 seahub/auth/forms.py:219
-#: seahub/base/accounts.py:1185
+#: seahub/base/accounts.py:1216
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
 #: seahub/share/views.py:320 seahub/templates/decrypt_repo_form.html:10
-#: seahub/templates/registration/login.html:38
+#: seahub/templates/registration/login.html:40
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
@@ -894,7 +936,7 @@ msgid "New password confirmation"
 msgstr "新密码确认"
 
 #: seahub/auth/forms.py:185 seahub/auth/forms.py:231
-#: seahub/base/accounts.py:1242 seahub/organizations/forms.py:71
+#: seahub/base/accounts.py:1273 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
@@ -906,7 +948,7 @@ msgstr "旧密码"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "旧密码输入错误。请重新输入。"
 
-#: seahub/auth/forms.py:220 seahub/base/accounts.py:1187
+#: seahub/auth/forms.py:220 seahub/base/accounts.py:1218
 msgid "Password (again)"
 msgstr "请再次输入密码"
 
@@ -916,21 +958,21 @@ msgstr "请再次输入密码"
 msgid "A user with this email already exists."
 msgstr "此用户已存在。"
 
-#: seahub/auth/views.py:153
+#: seahub/auth/views.py:154
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "登录出错次数超过限制，该账号已被冻结。"
 
-#: seahub/auth/views.py:307
+#: seahub/auth/views.py:311
 msgid "Logged out"
 msgstr "退出"
 
-#: seahub/auth/views.py:358
+#: seahub/auth/views.py:374
 msgid "Failed to send email, please contact administrator."
 msgstr "邮件发送失败，请联系管理员。"
 
-#: seahub/auth/views.py:417
-msgid "Can not update password, please contact LDAP admin."
-msgstr "不能更新密码，请联系 LDAP 管理员。"
+#: seahub/auth/views.py:441
+msgid "Unable to change password."
+msgstr "无法修改密码。"
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -994,44 +1036,44 @@ msgstr "更新成功。"
 msgid "Successfully deleted the requested avatars."
 msgstr "删除成功。"
 
-#: seahub/base/accounts.py:700
+#: seahub/base/accounts.py:700 seahub/base/accounts.py:731
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "%(site)s 上的账号 %(account)s 已被冻结。"
 
-#: seahub/base/accounts.py:1175
+#: seahub/base/accounts.py:1206
 msgid "Email address"
 msgstr "邮箱地址"
 
-#: seahub/base/accounts.py:1181
+#: seahub/base/accounts.py:1212
 msgid "Username"
 msgstr "用户名"
 
-#: seahub/base/accounts.py:1182
+#: seahub/base/accounts.py:1213
 msgid "This value must be of length 40"
 msgstr "长度为40字符"
 
-#: seahub/base/accounts.py:1201
+#: seahub/base/accounts.py:1232
 msgid "Enter a valid email address."
 msgstr "请输入有效的邮箱地址。"
 
-#: seahub/base/accounts.py:1212
+#: seahub/base/accounts.py:1243
 msgid "Invalid user id."
 msgstr "无效user id"
 
-#: seahub/base/accounts.py:1264
+#: seahub/base/accounts.py:1295
 msgid "name"
 msgstr "名称"
 
-#: seahub/base/accounts.py:1267
+#: seahub/base/accounts.py:1298
 msgid "department"
 msgstr "部门"
 
-#: seahub/base/accounts.py:1270
+#: seahub/base/accounts.py:1301
 msgid "telephone"
 msgstr "电话"
 
-#: seahub/base/accounts.py:1273
+#: seahub/base/accounts.py:1304
 msgid "note"
 msgstr "备注"
 
@@ -1164,8 +1206,8 @@ msgstr "未激活"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:86 seahub/views/sysadmin.py:241
-#: seahub/views/sysadmin.py:242
+#: seahub/templates/base.html:86 seahub/templates/client_login_confirm.html:13
+#: seahub/views/sysadmin.py:241 seahub/views/sysadmin.py:242
 msgid "Yes"
 msgstr "确定"
 
@@ -1465,6 +1507,27 @@ msgstr "编辑 %s 成功。"
 msgid "Successfully Deleted %s"
 msgstr "成功删除 %s "
 
+#: seahub/dingtalk/views.py:50 seahub/dingtalk/views.py:74
+#: seahub/dingtalk/views.py:83 seahub/dingtalk/views.py:105
+#: seahub/dingtalk/views.py:122 seahub/dingtalk/views.py:162
+#: seahub/dingtalk/views.py:187 seahub/dingtalk/views.py:196
+#: seahub/dingtalk/views.py:218 seahub/dingtalk/views.py:254
+#: seahub/dingtalk/views.py:294 seahub/dingtalk/views.py:341
+#: seahub/dingtalk/views.py:359 seahub/dingtalk/views.py:432
+#: seahub/dingtalk/views.py:479 seahub/oauth/views.py:84
+#: seahub/oauth/views.py:107 seahub/oauth/views.py:153
+#: seahub/oauth/views.py:165 seahub/oauth/views.py:171
+#: seahub/oauth/views.py:202 seahub/templates/remote_user/error.html:8
+#: seahub/weixin/views.py:35 seahub/weixin/views.py:54
+#: seahub/weixin/views.py:59 seahub/weixin/views.py:78
+#: seahub/weixin/views.py:96 seahub/work_weixin/views.py:68
+#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
+#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
+#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
+#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
+msgid "Error, please contact administrator."
+msgstr "出错了，请联系管理员。"
+
 #: seahub/dingtalk/views.py:125 seahub/dingtalk/views.py:362
 #: seahub/weixin/views.py:99
 #, python-format
@@ -1498,7 +1561,7 @@ msgstr "名称 %s 含有无效字符"
 
 #: seahub/forms.py:97 seahub/share/views.py:296 seahub/views/ajax.py:308
 #: seahub/views/ajax.py:312 seahub/views/ajax.py:316 seahub/views/ajax.py:327
-#: seahub/views/ajax.py:447 seahub/views/file.py:1943
+#: seahub/views/ajax.py:447 seahub/views/file.py:1930
 msgid "Argument missing"
 msgstr "参数缺失"
 
@@ -1622,10 +1685,10 @@ msgstr "%(site_name)s 团队"
 
 #: seahub/group/views.py:105 seahub/share/views.py:233
 #: seahub/views/__init__.py:587 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1194
-#: seahub/views/file.py:1435 seahub/views/file.py:1952
-#: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
-#: seahub/views/repo.py:291 seahub/views/repo.py:401
+#: seahub/views/ajax.py:427 seahub/views/file.py:1181
+#: seahub/views/file.py:1422 seahub/views/file.py:1939
+#: seahub/views/repo.py:114 seahub/views/repo.py:171 seahub/views/repo.py:229
+#: seahub/views/repo.py:282 seahub/views/repo.py:392
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -3542,7 +3605,7 @@ msgstr "图标"
 
 #: seahub/help/templates/help/using_drive_client.html:24
 #: seahub/help/templates/help/using_drive_client.html:53
-#: seahub/notifications/utils.py:305 seahub/notifications/utils.py:315
+#: seahub/notifications/utils.py:312 seahub/notifications/utils.py:322
 msgid "Details"
 msgstr "详情"
 
@@ -3972,7 +4035,7 @@ msgstr "移动文件夹"
 msgid "New file updates on %s"
 msgstr "%s上有新文件改动"
 
-#: seahub/notifications/management/commands/send_notices.py:449
+#: seahub/notifications/management/commands/send_notices.py:457
 #, python-format
 msgid "New notice on %s"
 msgstr "%s 有新消息"
@@ -3982,21 +4045,21 @@ msgstr "%s 有新消息"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr "您在 %(site_name)s 上有 %(num)s 条新通知：\n"
 
-#: seahub/notifications/models.py:488
+#: seahub/notifications/models.py:502
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "新文件  <a href='%(file_link)s'>%(file_name)s</a> 上传到了 <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:495
+#: seahub/notifications/models.py:509
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "新文件 <strong>%(file_name)s</strong> 上传到<strong>删除的资料库</strong>"
 
-#: seahub/notifications/models.py:629
+#: seahub/notifications/models.py:643
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -4004,35 +4067,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "用户 <a href='%(user_profile)s'>%(username)s</a> 请求加入到群组 <a href='%(href)s'>%(group_name)s</a>，验证信息：%(join_request_msg)s"
 
-#: seahub/notifications/models.py:658
+#: seahub/notifications/models.py:672
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "用户 <a href='%(user_profile)s'>%(group_staff)s</a> 将你加入到群组 <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:684
+#: seahub/notifications/models.py:698
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "用户 %(author)s 评论了文件 <a href='%(file_url)s'>%(file_name)s</a>"
 
-#: seahub/notifications/models.py:701
+#: seahub/notifications/models.py:715
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "用户 %(author)s 评论了 <a href='%(file_url)s'>草稿 # %(draft_id)s</a>"
 
-#: seahub/notifications/models.py:718
+#: seahub/notifications/models.py:732
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s 向你发起评审 <a href='%(file_url)s'>draft #%(draft_id)s</a>请求。"
 
-#: seahub/notifications/models.py:741
+#: seahub/notifications/models.py:755
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
@@ -4040,7 +4103,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "访客%(user)s在%(time)s接受了您的<a href=\"%(url_base)s%(inv_url)s\">邀请</a>。"
 
-#: seahub/notifications/models.py:765
+#: seahub/notifications/models.py:779
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
@@ -4127,7 +4190,7 @@ msgid ""
 "recently."
 msgstr "你资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 里的大量文件最近被删除了。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:73
+#: seahub/notifications/templates/notifications/notice_email.html:76
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
@@ -4135,7 +4198,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中创建了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a>。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:75
+#: seahub/notifications/templates/notifications/notice_email.html:78
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
@@ -4144,7 +4207,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中创建了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 和 %(obj_path_count_minus_one)s 个其他文件。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:80
+#: seahub/notifications/templates/notifications/notice_email.html:83
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
@@ -4152,7 +4215,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中删除了文件 %(obj_name)s 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:82
+#: seahub/notifications/templates/notifications/notice_email.html:85
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
@@ -4160,7 +4223,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中删除了文件 %(obj_name)s 和 %(obj_path_count_minus_one)s 个其他文件。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:86
+#: seahub/notifications/templates/notifications/notice_email.html:89
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
@@ -4168,7 +4231,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中恢复了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。 "
 
-#: seahub/notifications/templates/notifications/notice_email.html:89
+#: seahub/notifications/templates/notifications/notice_email.html:92
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
@@ -4176,7 +4239,7 @@ msgid ""
 "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中将文件 %(old_obj_name)s 重命名为 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:93
+#: seahub/notifications/templates/notifications/notice_email.html:96
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
@@ -4184,7 +4247,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中移动了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。 "
 
-#: seahub/notifications/templates/notifications/notice_email.html:95
+#: seahub/notifications/templates/notifications/notice_email.html:98
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
@@ -4193,7 +4256,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中移动了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 和 %(obj_path_count_minus_one)s 个其他文件。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:99
+#: seahub/notifications/templates/notifications/notice_email.html:102
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
@@ -4201,7 +4264,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中更新了文件 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。 "
 
-#: seahub/notifications/templates/notifications/notice_email.html:104
+#: seahub/notifications/templates/notifications/notice_email.html:107
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
@@ -4209,7 +4272,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中创建了文件夹 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。 "
 
-#: seahub/notifications/templates/notifications/notice_email.html:106
+#: seahub/notifications/templates/notifications/notice_email.html:109
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
@@ -4218,7 +4281,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中创建了文件夹 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 和 %(obj_path_count_minus_one)s 个其他文件夹。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:111
+#: seahub/notifications/templates/notifications/notice_email.html:114
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
@@ -4226,7 +4289,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中删除了文件夹 %(obj_name)s 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:113
+#: seahub/notifications/templates/notifications/notice_email.html:116
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
@@ -4234,7 +4297,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中删除了文件夹 %(obj_name)s 和 %(obj_path_count_minus_one)s 个其他文件夹。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:117
+#: seahub/notifications/templates/notifications/notice_email.html:120
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
@@ -4242,7 +4305,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中恢复了文件夹 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:120
+#: seahub/notifications/templates/notifications/notice_email.html:123
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
@@ -4250,7 +4313,7 @@ msgid ""
 "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中将文件夹 %(old_obj_name)s 重命名为 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:124
+#: seahub/notifications/templates/notifications/notice_email.html:127
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
@@ -4258,7 +4321,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中移动了文件夹 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:126
+#: seahub/notifications/templates/notifications/notice_email.html:129
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
@@ -4267,7 +4330,7 @@ msgid ""
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr "用户 <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> 在资料库 <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> 中移动了文件夹 <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> 和 %(obj_path_count_minus_one)s 个其他文件夹。"
 
-#: seahub/notifications/templates/notifications/notice_email.html:139
+#: seahub/notifications/templates/notifications/notice_email.html:142
 msgid "Go check out at the following page:"
 msgstr "请到这个页面查看："
 
@@ -4316,12 +4379,12 @@ msgstr "定期扫描时发现的病毒："
 msgid "Notifications"
 msgstr "通知"
 
-#: seahub/notifications/utils.py:298
+#: seahub/notifications/utils.py:305
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
 msgstr "%(author)s  在文档 %(sdoc_name)s 中添加了一条新的评论"
 
-#: seahub/notifications/utils.py:308
+#: seahub/notifications/utils.py:315
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
 msgstr "%(author)s 在文档 %(sdoc_name)s 中添加了一条新回复"
@@ -4367,12 +4430,6 @@ msgstr "提示：后一种更安全，但并不是被所有浏览器所支持。
 msgid "Feature is not enabled."
 msgstr "功能未启用。"
 
-#: seahub/organizations/api/admin/saml_config.py:190
-msgid ""
-"org_url_prefix should be 6 to 20 characters, and can only contain "
-"alphanumeric characters and hyphens."
-msgstr "org_url_prefix 应该包含 6 到 20 个字符，且只能包含字母数字和连字符。"
-
 #: seahub/organizations/api/admin/users.py:806
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
@@ -4395,7 +4452,7 @@ msgstr "邮箱地址不合法"
 #: seahub/organizations/templates/organizations/org_register.html:8
 #: seahub/templates/choose_register.html:3
 #: seahub/templates/choose_register.html:8
-#: seahub/templates/registration/login.html:94
+#: seahub/templates/registration/login.html:102
 #: seahub/templates/registration/registration_form.html:3
 #: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
@@ -4471,41 +4528,46 @@ msgstr "设置密码"
 msgid "Update"
 msgstr "更新"
 
-#: seahub/profile/views.py:42
+#: seahub/profile/views.py:47
 msgid "Successfully edited profile."
 msgstr "修改成功"
 
-#: seahub/profile/views.py:46
+#: seahub/profile/views.py:51
 msgid "Failed to edit profile"
 msgstr "修改失败"
 
-#: seahub/profile/views.py:212
+#: seahub/profile/views.py:243
 msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
-#: seahub/profile/views.py:237
+#: seahub/profile/views.py:268
 msgid "Demo account can not be deleted."
 msgstr "Demo帐号无法被删除。"
 
-#: seahub/profile/views.py:264
+#: seahub/profile/views.py:295
 msgid "Failed to set default library."
 msgstr "设置默认资料库失败。"
 
-#: seahub/profile/views.py:268
+#: seahub/profile/views.py:299
 msgid "Can not set encrypted library as default library."
 msgstr "无法把加密资料库设为默认资料库。"
 
-#: seahub/profile/views.py:273
+#: seahub/profile/views.py:304
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "成功设置 \"%s\"为你的默认资料库。"
 
-#: seahub/seadoc/views.py:23 seahub/seadoc/views.py:77
-#: seahub/views/__init__.py:578 seahub/views/__init__.py:621
-#: seahub/views/__init__.py:755 seahub/views/__init__.py:914
-#: seahub/views/ajax.py:376 seahub/views/file.py:1938
+#: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
+#: seahub/seadoc/views.py:158 seahub/views/__init__.py:578
+#: seahub/views/__init__.py:621 seahub/views/__init__.py:755
+#: seahub/views/__init__.py:914 seahub/views/ajax.py:376
+#: seahub/views/file.py:1925
 msgid "Library does not exist"
 msgstr "资料库不存在"
+
+#: seahub/seadoc/views.py:152
+msgid "File path invalid."
+msgstr "文件路径无效。"
 
 #: seahub/search/templates/search_results.html:25
 msgid "Search Files"
@@ -4773,6 +4835,14 @@ msgstr "创建个人账号"
 msgid "Create an organization account"
 msgstr "创建组织账号"
 
+#: seahub/templates/client_login_confirm.html:10
+msgid "Desktop Client Login Confirm"
+msgstr "桌面客户端登录确认"
+
+#: seahub/templates/client_login_confirm.html:12
+msgid "Do you want to login to your client?"
+msgstr "你想登录客户端吗？"
+
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
@@ -4937,11 +5007,11 @@ msgid "Log in again"
 msgstr "重新登录"
 
 #: seahub/templates/registration/login.html:4
-#: seahub/templates/registration/login.html:35
-#: seahub/templates/registration/login.html:72
+#: seahub/templates/registration/login.html:36
+#: seahub/templates/registration/login.html:73
 #: seahub/templates/registration/multi_adfs_sso.html:4
-#: seahub/templates/registration/multi_adfs_sso.html:35
-#: seahub/templates/registration/multi_adfs_sso.html:46
+#: seahub/templates/registration/multi_adfs_sso.html:36
+#: seahub/templates/registration/multi_adfs_sso.html:47
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:23
@@ -4949,42 +5019,42 @@ msgstr "重新登录"
 msgid "Log In"
 msgstr "登录"
 
-#: seahub/templates/registration/login.html:42
+#: seahub/templates/registration/login.html:46
 msgid "Refresh"
 msgstr "刷新"
 
-#: seahub/templates/registration/login.html:58
+#: seahub/templates/registration/login.html:62
 msgid "Incorrect email or password"
 msgstr "你输入的邮箱或密码不正确"
 
-#: seahub/templates/registration/login.html:66
+#: seahub/templates/registration/login.html:70
 #, python-format
 msgid "Remember me for %(remember_days)s days "
 msgstr "%(remember_days)s天内保持登录"
 
-#: seahub/templates/registration/login.html:69
-msgid "Forgot password?"
-msgstr "忘记密码？"
-
-#: seahub/templates/registration/login.html:76
-#: seahub/templates/registration/login.html:80
+#: seahub/templates/registration/login.html:77
+#: seahub/templates/registration/login.html:81
 msgid "Single Sign-On"
 msgstr "单点登录"
 
-#: seahub/templates/registration/login.html:85
-msgid "Login with: "
-msgstr "其他登录方式："
+#: seahub/templates/registration/login.html:88
+msgid "Login with"
+msgstr "其他登录方式"
 
-#: seahub/templates/registration/login.html:151
+#: seahub/templates/registration/login.html:99
+msgid "Forgot password?"
+msgstr "忘记密码？"
+
+#: seahub/templates/registration/login.html:167
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "刷新验证码失败，请稍后尝试。"
 
-#: seahub/templates/registration/login.html:159
+#: seahub/templates/registration/login.html:175
 #: seahub/templates/registration/multi_adfs_sso.html:90
 msgid "Email or username cannot be blank"
 msgstr "邮箱或用户名不能为空"
 
-#: seahub/templates/registration/login.html:163
+#: seahub/templates/registration/login.html:179
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -5646,7 +5716,7 @@ msgstr "指定的历史记录不存在"
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: seahub/views/__init__.py:921 seahub/views/repo.py:295
+#: seahub/views/__init__.py:921 seahub/views/repo.py:286
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
@@ -5673,9 +5743,9 @@ msgid "Bad upload link token."
 msgstr "无效的上传链接"
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:457 seahub/views/file.py:488
-#: seahub/views/file.py:1189 seahub/views/file.py:1430
-#: seahub/views/file.py:1947 seahub/views/file.py:2162
-#: seahub/views/file.py:2167 seahub/views/file.py:2174
+#: seahub/views/file.py:1176 seahub/views/file.py:1417
+#: seahub/views/file.py:1934 seahub/views/file.py:2149
+#: seahub/views/file.py:2154 seahub/views/file.py:2161
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -5703,69 +5773,83 @@ msgstr "文件编码不合适"
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: seahub/views/file.py:342 seahub/views/file.py:377 seahub/views/file.py:703
-#: seahub/views/file.py:793 seahub/views/file.py:915
+#: seahub/views/file.py:342 seahub/views/file.py:377 seahub/views/file.py:690
+#: seahub/views/file.py:780 seahub/views/file.py:902
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
-#: seahub/views/file.py:349 seahub/views/file.py:828
+#: seahub/views/file.py:349 seahub/views/file.py:815
 msgid "The library is encrypted, can not open file online."
 msgstr "加密资料库不能在线预览文件。"
 
 #: seahub/views/file.py:444 seahub/views/file.py:466 seahub/views/file.py:471
-#: seahub/views/file.py:512 seahub/views/file.py:783 seahub/views/file.py:1048
-#: seahub/views/file.py:1074 seahub/views/file.py:1104
-#: seahub/views/file.py:1235 seahub/views/file.py:1341
-#: seahub/views/file.py:1471 seahub/views/file.py:1588
+#: seahub/views/file.py:512 seahub/views/file.py:770 seahub/views/file.py:1035
+#: seahub/views/file.py:1061 seahub/views/file.py:1091
+#: seahub/views/file.py:1222 seahub/views/file.py:1328
+#: seahub/views/file.py:1458 seahub/views/file.py:1575
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: seahub/views/file.py:852 seahub/views/file.py:996 seahub/views/file.py:1302
-#: seahub/views/file.py:1526
+#: seahub/views/file.py:839 seahub/views/file.py:983 seahub/views/file.py:1289
+#: seahub/views/file.py:1513
 msgid "Error when prepare Office Online file preview page."
 msgstr "Office Online 预览文件时出错。"
 
-#: seahub/views/file.py:884 seahub/views/file.py:1008
-#: seahub/views/file.py:1321 seahub/views/file.py:1542
+#: seahub/views/file.py:871 seahub/views/file.py:995 seahub/views/file.py:1308
+#: seahub/views/file.py:1529
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "OnlyOffice 预览文件时出错。"
 
-#: seahub/views/file.py:1140
+#: seahub/views/file.py:1127
 msgid "Unable to download file, invalid file path"
 msgstr "无法下载文件，无效的文件路径"
 
-#: seahub/views/file.py:1149
+#: seahub/views/file.py:1136
 msgid "Unable to download file, wrong file path"
 msgstr "无法下载文件，错误的文件路径"
 
-#: seahub/views/file.py:1156
+#: seahub/views/file.py:1143
 msgid "Unable to download file."
 msgstr "无法下载文件。"
 
-#: seahub/views/file.py:1357 seahub/views/file.py:1607
-#: seahub/views/repo.py:347
+#: seahub/views/file.py:1344 seahub/views/file.py:1594
+#: seahub/views/repo.py:338
 #, python-format
 msgid "Share link for %s."
 msgstr "%s 的共享链接。"
 
-#: seahub/views/file.py:1733 seahub/views/file.py:1738
+#: seahub/views/file.py:1720 seahub/views/file.py:1725
 msgid "Unable to download file"
 msgstr "无法下载文件"
 
-#: seahub/views/file.py:2155
+#: seahub/views/file.py:2142
 msgid "The original file does not exist"
 msgstr "源文档不存在"
 
-#: seahub/views/mobile.py:33
+#: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
 msgstr "未找到用户 {token.user} "
 
-#: seahub/views/mobile.py:37
+#: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
 msgstr "用户 {token.user} 未激活"
+
+#: seahub/views/sso.py:131
+msgid ""
+"This link has already been visited, please click the login button on the "
+"client again"
+msgstr "该链接已被访问，请再次点击客户端上的登录按钮"
+
+#: seahub/views/sso.py:156
+msgid "Invalid link, please click the login button on the client again"
+msgstr "链接无效，请再次点击客户端上的登录按钮"
+
+#: seahub/views/sso.py:161
+msgid "Login timeout, please click the login button on the client again"
+msgstr "登录超时，请再次点击客户端上的登录按钮"
 
 #: seahub/views/sysadmin.py:171 seahub/views/sysadmin.py:175
 msgid "Login ID"
@@ -5856,6 +5940,6 @@ msgstr "无法设置 %s 为管理员：用户不存在。"
 msgid "Optional"
 msgstr "可选"
 
-#: seahub/wiki/views.py:158
+#: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
 msgstr "无法查看维基"
