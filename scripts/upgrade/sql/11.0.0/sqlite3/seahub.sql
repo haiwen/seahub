@@ -39,7 +39,7 @@ DROP TABLE "options_useroptions_old";
 
 DROP TABLE IF EXISTS "org_saml_config_old";
 ALTER TABLE "org_saml_config" RENAME TO "org_saml_config_old";
-CREATE TABLE IF NOT EXISTS "org_saml_config" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL UNIQUE, "metadata_url" TEXT NOT NULL, "domain" varchar(255) NULL UNIQUE, "dns_txt" varchar(64) NULL, "domain_verified" integer NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS "org_saml_config" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL UNIQUE, "metadata_url" TEXT NOT NULL, "domain" varchar(255) NULL UNIQUE, "dns_txt" varchar(64) NULL, "domain_verified" integer NOT NULL DEFAULT 0, "idp_certificate" text NULL);
 CREATE INDEX IF NOT EXISTS "org_saml_config_domain_verified_398065b9" ON "org_saml_config" ("domain_verified");
 INSERT INTO "org_saml_config" ("org_id", "metadata_url", "domain") SELECT "org_id", "metadata_url", "domain" FROM "org_saml_config_old";
 UPDATE `org_saml_config` SET domain_verified=1 WHERE domain_verified=0;

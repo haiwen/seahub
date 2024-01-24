@@ -107,6 +107,7 @@ ALTER TABLE `org_saml_config` CHANGE domain domain varchar(255) DEFAULT NULL;
 ALTER TABLE `org_saml_config` ADD COLUMN IF NOT EXISTS `dns_txt` varchar(64) NULL;
 ALTER TABLE `org_saml_config` ADD COLUMN IF NOT EXISTS `domain_verified` TINYINT(1) NOT NULL DEFAULT 0;
 ALTER TABLE `org_saml_config` ADD INDEX IF NOT EXISTS `org_saml_config_domain_verified_398065b9` (`domain_verified`);
+ALTER TABLE `org_saml_config` ADD COLUMN IF NOT EXISTS `idp_certificate` longtext DEFAULT NULL;
 UPDATE `org_saml_config` SET domain_verified=1 WHERE domain_verified=0;
 
 ALTER TABLE `social_auth_usersocialauth` CHANGE extra_data extra_data longtext DEFAULT NULL;

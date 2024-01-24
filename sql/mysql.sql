@@ -1353,6 +1353,7 @@ CREATE TABLE `org_saml_config` (
   `domain` varchar(255) DEFAULT NULL,
   `dns_txt` varchar(64) DEFAULT NULL,
   `domain_verified` tinyint(1) NOT NULL DEFAULT 0,
+  `idp_certificate` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`),
   UNIQUE KEY `domain` (`domain`),
