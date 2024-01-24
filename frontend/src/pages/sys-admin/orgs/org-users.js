@@ -56,7 +56,7 @@ class Content extends Component {
               <tr>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">{gettext('Status')}</th>
-                <th width="15%">{gettext('Membership')}</th>
+                <th width="15%">{gettext('Role')}</th>
                 <th width="15%">{gettext('Space Used')}</th>
                 <th width="25%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
                 <th width="5%">{/* Operations */}</th>

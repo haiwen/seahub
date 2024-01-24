@@ -532,7 +532,7 @@ export default class AISearch extends Component {
 
   onDeleteIndex = () => {
     seafileAPI.deleteLibraryIndex(this.props.repoID).then(res => {
-      toaster.notify(gettext('Successfully turned off'));
+      toaster.notify(gettext('Successfully turned it off'));
       this.setState({ indexState: INDEX_STATE.UNCREATED });
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

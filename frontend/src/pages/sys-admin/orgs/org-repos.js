@@ -31,7 +31,7 @@ class Content extends Component {
               <tr>
                 <th width="5%"></th>
                 <th width="30%">{gettext('Name')}</th>
-                <th width="35%">{gettext('ID')}</th>
+                <th width="35%">{'ID'}</th>
                 <th width="20%">{gettext('Owner')}</th>
                 <th width="10%">{/* Operations */}</th>
               </tr>
