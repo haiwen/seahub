@@ -510,19 +510,6 @@ class ProfessionalConfigurator(object):
         template = '''\
 %(db_config_text)s
 
-[AUDIT]
-enabled = true
-
-[INDEX FILES]
-enabled = true
-interval = 10m
-
-highlight = fvh
-
-## If true, indexes the contents of office/pdf files while updating search index
-## Note: If you change this option from "false" to "true", then you need to clear the search index and update the index again. See the FAQ for details.
-index_office_pdf = true
-
 [SEAHUB EMAIL]
 enabled = true
 
