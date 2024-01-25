@@ -57,8 +57,10 @@ from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
 from seahub.settings import ENABLE_SEAFILE_AI
-from seahub.search.utils import search_files
-from seahub.ai.utils import search, format_repos
+if HAS_FILE_SEARCH:
+    from seahub.search.utils import search_files
+if ENABLE_SEAFILE_AI:
+    from seahub.ai.utils import search, format_repos
 
 
 logger = logging.getLogger(__name__)
