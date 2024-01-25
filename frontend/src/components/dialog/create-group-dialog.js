@@ -39,7 +39,8 @@ class CreateGroupDialog extends React.Component {
     if (name) {
       let that = this;
       seafileAPI.createGroup(name).then((res)=> {
-        that.props.onCreateGroup();
+        that.props.onCreateGroup(res.data);
+        this.props.toggleDialog();
       }).catch((error) => {
         let errorMsg = Utils.getErrorMsg(error);
         this.setState({errorMsg: errorMsg});
@@ -63,8 +64,8 @@ class CreateGroupDialog extends React.Component {
 
   render() {
     return(
-      <Modal isOpen={this.props.showAddGroupModal} toggle={this.props.toggleAddGroupModal} autoFocus={false}>
-        <ModalHeader toggle={this.props.toggleAddGroupModal}>{gettext('New Group')}</ModalHeader>
+      <Modal isOpen={true} toggle={this.props.toggleDialog} autoFocus={false}>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('New Group')}</ModalHeader>
         <ModalBody>
           <label htmlFor="groupName">{gettext('Name')}</label>
           <Input
@@ -78,7 +79,7 @@ class CreateGroupDialog extends React.Component {
           <span className="error">{this.state.errorMsg}</span>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleAddGroupModal}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmitGroup} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
@@ -87,9 +88,8 @@ class CreateGroupDialog extends React.Component {
 }
 
 const CreateGroupDialogPropTypes = {
-  toggleAddGroupModal: PropTypes.func.isRequired,
-  onCreateGroup: PropTypes.func.isRequired,
-  showAddGroupModal: PropTypes.bool.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
+  onCreateGroup: PropTypes.func.isRequired
 };
 
 CreateGroupDialog.propTypes = CreateGroupDialogPropTypes;

@@ -1,8 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.woff2?t=1694053452699') format('woff2'),
-       url('iconfont.woff?t=1694053452699') format('woff'),
-       url('iconfont.ttf?t=1694053452699') format('truetype');
+  src: url('iconfont.eot?t=1703670174797'); /* IE9 */
+  src: url('iconfont.eot?t=1703670174797#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1703670174797') format('woff2'),
+       url('iconfont.woff?t=1703670174797') format('woff'),
+       url('iconfont.ttf?t=1703670174797') format('truetype'),
+       url('iconfont.svg?t=1703670174797#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -11,6 +14,30 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-files:before {
+  content: "\e7ec";
+}
+
+.sf3-font-freeze:before {
+  content: "\e7e4";
+}
+
+.sf3-font-helpless:before {
+  content: "\e7e3";
+}
+
+.sf3-font-helpless-selected:before {
+  content: "\e7e0";
+}
+
+.sf3-font-helpful-selected:before {
+  content: "\e7e1";
+}
+
+.sf3-font-helpful:before {
+  content: "\e7e2";
 }
 
 .sf3-font-x-01:before {

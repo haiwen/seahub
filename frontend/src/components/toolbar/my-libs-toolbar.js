@@ -1,24 +1,23 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
+import { Utils } from '../../utils/utils';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateRepoDialog from '../dialog/create-repo-dialog';
-import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 
 const propTypes = {
-  libraryType: PropTypes.string.isRequired,
   onCreateRepo: PropTypes.func.isRequired,
-  onShowSidePanel: PropTypes.func.isRequired,
+  moreShown: PropTypes.bool
 };
 
-class RepoViewToolbar extends React.Component {
+class MyLibsToolbar extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isCreateRepoDialogShow: false,
+      isCreateRepoDialogOpen: false,
       isOpen: false,
     };
   }
@@ -29,7 +28,7 @@ class RepoViewToolbar extends React.Component {
   };
 
   onCreateToggle = () => {
-    this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
   };
 
   toggleMore = () => {
@@ -49,15 +48,15 @@ class RepoViewToolbar extends React.Component {
   };
 
   render() {
+    const { moreShown = false } = this.props;
     return (
       <Fragment>
-        <div className="cur-view-toolbar">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-          {Utils.isDesktop() ? (
-            <div className="operation">
-              <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
-                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-              </button>
+        {Utils.isDesktop() ? (
+          <div className="operation">
+            <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
+              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+            </button>
+            {moreShown &&
               <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
                 <DropdownToggle className='btn btn-secondary operation-item' onKeyDown={this.onDropdownToggleKeyDown}>
                   {gettext('More')}
@@ -68,15 +67,15 @@ class RepoViewToolbar extends React.Component {
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-            </div>
-          ) : (
-            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>
-          )}
-        </div>
-        {this.state.isCreateRepoDialogShow && (
+            }
+          </div>
+        ) : (
+          <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateToggle}></span>
+        )}
+        {this.state.isCreateRepoDialogOpen && (
           <ModalPortal>
             <CreateRepoDialog
-              libraryType={this.props.libraryType}
+              libraryType='mine'
               onCreateRepo={this.onCreateRepo}
               onCreateToggle={this.onCreateToggle}
             />
@@ -87,6 +86,6 @@ class RepoViewToolbar extends React.Component {
   }
 }
 
-RepoViewToolbar.propTypes = propTypes;
+MyLibsToolbar.propTypes = propTypes;
 
-export default RepoViewToolbar;
+export default MyLibsToolbar;

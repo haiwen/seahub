@@ -1,118 +1,17 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, canAddGroup } from '../../utils/constants';
+import { gettext, canAddGroup } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
-import toaster from '../../components/toast';
+import TopToolbar from '../../components/toolbar/top-toolbar';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
-import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import CreateGroupDialog from '../../components/dialog/create-group-dialog';
-import LibDetail from '../../components/dirent-detail/lib-details';
 import EmptyTip from '../../components/empty-tip';
+import GroupItem from './group-item';
 
 import '../../css/groups.css';
-
-const propTypes = {
-  group: PropTypes.object.isRequired,
-  onItemDetails: PropTypes.func.isRequired,
-};
-
-
-class RepoListViewPanel extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      repoList: [],
-    };
-  }
-
-  componentDidMount() {
-    let group = this.props.group;
-    let repoList = group.repos.map(item => {
-      let repo = new Repo(item);
-      return repo;
-    });
-    this.setState({repoList: repoList});
-  }
-
-  onItemUnshare = (repo) => {
-    let group = this.props.group;
-    seafileAPI.unshareRepoToGroup(repo.repo_id, group.id).then(() => {
-      let repoList = this.state.repoList.filter(item => {
-        return item.repo_id !== repo.repo_id;
-      });
-      this.setState({repoList: repoList});
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onItemDelete = (repo) => {
-    let repoList = this.state.repoList.filter(item => {
-      return item.repo_id !== repo.repo_id;
-    });
-    this.setState({repoList: repoList});
-  };
-
-  onItemRename = (repo, newName) => {
-    let group = this.props.group;
-    seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
-      let repoList = this.state.repoList.map(item => {
-        if (item.repo_id === repo.repo_id) {
-          item.repo_name = newName;
-        }
-        return item;
-      });
-      this.setState({repoList: repoList});
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onMonitorRepo = (repo, monitored) => {
-    let repoList = this.state.repoList.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.monitored = monitored;
-      }
-      return item;
-    });
-    this.setState({repoList: repoList});
-  };
-
-  render() {
-    let group = this.props.group;
-    const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
-    return (
-      <div className="group-list-panel">
-        <h4 className="group-item-heading ellipsis">
-          <a href={`${siteRoot}group/${group.id}/`} title={group.name}>{group.name}</a>
-        </h4>
-        {this.state.repoList.length === 0 ?
-          emptyTip :
-          <SharedRepoListView
-            isShowTableThread={false}
-            isShowRepoOwner={false}
-            currentGroup={this.props.group}
-            repoList={this.state.repoList}
-            onItemUnshare={this.onItemUnshare}
-            onItemDelete={this.onItemDelete}
-            onItemDetails={this.props.onItemDetails}
-            onItemRename={this.onItemRename}
-            onMonitorRepo={this.onMonitorRepo}
-          />
-        }
-      </div>
-    );
-  }
-}
-
-RepoListViewPanel.propTypes = propTypes;
 
 class GroupsView extends React.Component {
 
@@ -121,10 +20,7 @@ class GroupsView extends React.Component {
     this.state = {
       isLoading: true,
       errorMsg: '',
-      groupList: [],
-      showAddGroupModal: false,
-      isShowDetails: false,
-      currentRepo: null,
+      groupList: []
     };
   }
 
@@ -133,6 +29,9 @@ class GroupsView extends React.Component {
       // `{'with_repos': 1}`: list repos of every group
       let groupList = res.data.map(item => {
         let group = new Group(item);
+        group.repos = item.repos.map(item => {
+          return new Repo(item);
+        });
         return group;
       });
       this.setState({
@@ -149,34 +48,29 @@ class GroupsView extends React.Component {
     });
   };
 
-  toggleAddGroupModal = () => {
+  onCreateGroup = (groupData) => {
+    const newGroup = new Group(groupData);
+    const { groupList: newList } = this.state;
+    newList.unshift(newGroup);
     this.setState({
-      showAddGroupModal: !this.state.showAddGroupModal
+      groupList: newList
     });
-  };
-
-  onCreateGroup = () => {
-    this.setState({
-      showAddGroupModal: false,
-      isLoading: true,
-      groupList: [],
-    });
-    this.listGroups();
   };
 
   componentDidMount() {
     this.listGroups();
   }
 
-  onItemDetails = (repo) => {
+  updateGroup = (group) => {
+    const { groupList } = this.state;
     this.setState({
-      isShowDetails: true,
-      currentRepo: repo,
+      groupList: groupList.map((item) => {
+        if (item.id == group.id) {
+          item = group;
+        }
+        return item;
+      })
     });
-  };
-
-  closeDetails = () => {
-    this.setState({isShowDetails: false});
   };
 
   render() {
@@ -192,11 +86,12 @@ class GroupsView extends React.Component {
 
     return (
       <Fragment>
-        <GroupsToolbar
+        <TopToolbar
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
-          toggleAddGroupModal={this.toggleAddGroupModal}
-        />
+        >
+          {canAddGroup && <GroupsToolbar onCreateGroup={this.onCreateGroup} />}
+        </TopToolbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -208,28 +103,16 @@ class GroupsView extends React.Component {
               {(!this.state.isLoading && !this.state.errorMsg && this.state.groupList.length == 0) && emptyTip}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (
-                  <RepoListViewPanel
+                  <GroupItem
                     key={index}
                     group={group}
-                    onItemDetails={this.onItemDetails}
+                    updateGroup={this.updateGroup}
                   />
                 );
               })}
             </div>
           </div>
-          {this.state.isShowDetails && (
-            <div className="cur-view-detail">
-              <LibDetail currentRepo={this.state.currentRepo} closeDetails={this.closeDetails}/>
-            </div>
-          )}
         </div>
-        { this.state.showAddGroupModal &&
-          <CreateGroupDialog
-            toggleAddGroupModal={this.toggleAddGroupModal}
-            onCreateGroup={this.onCreateGroup}
-            showAddGroupModal={this.state.showAddGroupModal}
-          />
-        }
       </Fragment>
     );
   }

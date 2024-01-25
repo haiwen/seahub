@@ -21,7 +21,6 @@ import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import LibDetail from '../../components/dirent-detail/lib-details';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 
 import '../../css/group-view.css';
@@ -65,7 +64,6 @@ class GroupView extends React.Component {
       showImportMembersDialog: false,
       showManageMembersDialog: false,
       groupMembers: [],
-      isShowDetails: false,
       isLeaveGroupDialogOpen: false,
     };
   }
@@ -349,17 +347,6 @@ class GroupView extends React.Component {
     }
   };
 
-  onItemDetails = (repo) => {
-    this.setState({
-      isShowDetails: true,
-      currentRepo: repo,
-    });
-  };
-
-  closeDetails = () => {
-    this.setState({isShowDetails: false});
-  };
-
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
@@ -568,18 +555,12 @@ class GroupView extends React.Component {
                   sortItems={this.sortItems}
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
-                  onItemDetails={this.onItemDetails}
                   onItemRename={this.onItemRename}
                   onMonitorRepo={this.onMonitorRepo}
                 />
               }
             </div>
           </div>
-          {this.state.isShowDetails && (
-            <div className="cur-view-detail">
-              <LibDetail currentRepo={this.state.currentRepo} closeDetails={this.closeDetails}/>
-            </div>
-          )}
         </div>
         {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
           <ModalPortal>

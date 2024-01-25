@@ -719,7 +719,13 @@ a, a:hover { color: #ec8000; }
     line-height: 1.5rem;
     height: auto;
 }
+.side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link {
+    padding-left: 3rem;
+}
 
+.side-nav-con .sub-nav#files-sub-nav .sub-nav .nav-item .nav-link {
+    padding-left: 2rem;
+}
 .side-panel-slide {
     transition: all .3s ease-in-out;
 }

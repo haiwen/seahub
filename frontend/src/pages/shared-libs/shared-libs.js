@@ -54,7 +54,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder, theadHidden } = this.props;
 
     const emptyTip = (
       <EmptyTip>
@@ -90,7 +90,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       const table = (
-        <table className={isDesktop ? '' : 'table-thead-hidden'}>
+        <table className={(isDesktop && !theadHidden)? '' : 'table-thead-hidden'}>
           {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
             {items.map((item, index) => {
@@ -113,6 +113,7 @@ class Content extends Component {
 }
 
 Content.propTypes = {
+  theadHidden: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
@@ -447,28 +448,55 @@ class SharedLibraries extends Component {
     this.setState({items: items});
   };
 
+  renderContent = () => {
+    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    return (
+      <Content
+        loading={this.state.loading}
+        errorMsg={this.state.errorMsg}
+        items={this.state.items}
+        sortBy={this.state.sortBy}
+        sortOrder={this.state.sortOrder}
+        sortItems={this.sortItems}
+        onMonitorRepo={this.onMonitorRepo}
+        theadHidden={inAllLibs}
+      />
+    );
+  };
+
+  renderSortIconInMobile = () => {
+    return (
+      <>
+        {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+      </>
+    );
+  };
+
   render() {
+    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
-              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+        {inAllLibs ? (
+          <>
+            <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+              <h4 className="sf-heading m-0">{gettext('Shared with me')}</h4>
+              {this.renderSortIconInMobile()}
             </div>
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortItems={this.sortItems}
-                onMonitorRepo={this.onMonitorRepo}
-              />
+            {this.renderContent()}
+          </>
+        ) : (
+          <div className="main-panel-center">
+            <div className="cur-view-container">
+              <div className="cur-view-path">
+                <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
+                {this.renderSortIconInMobile()}
+              </div>
+              <div className="cur-view-content">
+                {this.renderContent()}
+              </div>
             </div>
           </div>
-        </div>
+        )}
         {this.state.isSortOptionsDialogOpen &&
         <SortOptionsDialog
           toggleDialog={this.toggleSortOptionsDialog}
@@ -481,5 +509,9 @@ class SharedLibraries extends Component {
     );
   }
 }
+
+SharedLibraries.propTypes = {
+  inAllLibs: PropTypes.bool
+};
 
 export default SharedLibraries;
