@@ -5,6 +5,9 @@ import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import { translateCalendar } from '../utils/date-format-utils';
 
+import 'moment/locale/zh-cn';
+import 'moment/locale/en-gb';
+
 import '@seafile/seafile-calendar/assets/index.css';
 import '../css/date-and-time-picker.css';
 
