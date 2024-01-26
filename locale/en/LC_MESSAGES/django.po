@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 18:25+0800\n"
+"POT-Creation-Date: 2024-01-26 11:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,7 +457,7 @@ msgstr ""
 #: seahub/notifications/models.py:662 seahub/notifications/models.py:684
 #: seahub/notifications/models.py:710 seahub/notifications/models.py:727
 #: seahub/notifications/models.py:744 seahub/notifications/models.py:773
-#: seahub/seadoc/apis.py:2761 seahub/search/views.py:200
+#: seahub/seadoc/apis.py:2763 seahub/search/views.py:200
 #: seahub/share/views.py:326 seahub/utils/__init__.py:177
 #: seahub/utils/__init__.py:1165 seahub/views/__init__.py:950
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
@@ -481,8 +481,8 @@ msgstr ""
 #: seahub/api2/views.py:1860 seahub/api2/views.py:1921
 #: seahub/api2/views.py:1965 seahub/api2/views.py:2011
 #: seahub/api2/views.py:2060 seahub/api2/views.py:2473
-#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:369
-#: seahub/seadoc/apis.py:460
+#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:371
+#: seahub/seadoc/apis.py:462
 msgid "Out of quota."
 msgstr ""
 
@@ -520,7 +520,7 @@ msgstr ""
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:206
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2747
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
@@ -542,7 +542,7 @@ msgstr ""
 msgid "You can not refresh this file's lock."
 msgstr ""
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2754
 msgid "The participant already exists."
 msgstr ""
 
@@ -701,7 +701,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:513
+#: seahub/seadoc/apis.py:515
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -979,8 +979,8 @@ msgstr ""
 #: seahub/avatar/templates/avatar/confirm_delete.html:11
 #, python-format
 msgid ""
-"You have no avatars to delete. Please <a "
-"href=\"%(avatar_change_url)s\">upload one</a> now."
+"You have no avatars to delete. Please <a href=\"%(avatar_change_url)s"
+"\">upload one</a> now."
 msgstr ""
 
 #: seahub/avatar/templates/avatar/confirm_delete.html:18
@@ -2275,10 +2275,9 @@ msgstr ""
 msgid ""
 "If uninstallation doesn't remove the shortcuts successfully, you can remove "
 "the SeaDrive shortcut in Windows Explorer by editing the registry. Open the "
-"path "
-"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\"
-"\" in registry editor. Remove the sub-keys correspond to the shortcut you "
-"want to remove."
+"path \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop"
+"\\NameSpace\\\" in registry editor. Remove the sub-keys correspond to the "
+"shortcut you want to remove."
 msgstr ""
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
@@ -2392,8 +2391,8 @@ msgstr ""
 
 #: seahub/help/templates/help/file_locking.html:15
 msgid ""
-"To lock a file, just right click on a synced file and choose \"lock this "
-"file\" in the \"Seafile\" menu."
+"To lock a file, just right click on a synced file and choose \"lock this file"
+"\" in the \"Seafile\" menu."
 msgstr ""
 
 #: seahub/help/templates/help/file_locking.html:17
@@ -2490,9 +2489,9 @@ msgstr ""
 #: seahub/help/templates/help/finding_older_version_files.html:14
 #, python-format
 msgid ""
-"You can configure the retention period of file versions: <a "
-"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
-"retention period</a>."
+"You can configure the retention period of file versions: <a href="
+"\"%(SITE_ROOT)shelp/setting_library_history/\">setting history retention "
+"period</a>."
 msgstr ""
 
 #: seahub/help/templates/help/folder_permission.html:6
@@ -2566,9 +2565,9 @@ msgstr ""
 #: seahub/help/templates/help/folder_permission.html:21
 msgid ""
 "If you want to see all folder permissions set in a library, hover the mouse "
-"on the library. Click \"more operations\" button, choose \"Folder "
-"Permission\" in the drop-down menu. In the pop-up window, you can see and "
-"set folder permissions in this library."
+"on the library. Click \"more operations\" button, choose \"Folder Permission"
+"\" in the drop-down menu. In the pop-up window, you can see and set folder "
+"permissions in this library."
 msgstr ""
 
 #: seahub/help/templates/help/folder_permission.html:22
@@ -2618,11 +2617,11 @@ msgstr ""
 msgid ""
 "Supposed the folder structure looks like \"A/B\", user \"John\" is in group "
 "\"Staff\". If you set \"read only\" permission on folder A for John, and, "
-"you also set \"read write\" permission on folder \"A/B\" for group "
-"\"Staff\". Then John's permission to folder \"A/B\" is still only \"read "
-"only\". That's because, according to rule 2, \"read only\" permission is "
-"first matched for folder \"A/B\" and user \"John\", which is inherited from "
-"its parent \"A\"."
+"you also set \"read write\" permission on folder \"A/B\" for group \"Staff"
+"\". Then John's permission to folder \"A/B\" is still only \"read only\". "
+"That's because, according to rule 2, \"read only\" permission is first "
+"matched for folder \"A/B\" and user \"John\", which is inherited from its "
+"parent \"A\"."
 msgstr ""
 
 #: seahub/help/templates/help/full_text_file_search.html:6
@@ -2751,10 +2750,10 @@ msgstr ""
 #: seahub/help/templates/help/ignore.html:12
 msgid ""
 "Seafile supports wildcards in the pattern. For example, \"foo/*\" matches "
-"\"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not \"foo/"
-"hello\". Note that the wildcard character * recursively matches all the "
-"paths under a folder. For instance, \"foo/*.html\" matches \"foo/a.html\" "
-"and \"foo/templates/b.html\"."
+"\"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not \"foo/hello"
+"\". Note that the wildcard character * recursively matches all the paths "
+"under a folder. For instance, \"foo/*.html\" matches \"foo/a.html\" and "
+"\"foo/templates/b.html\"."
 msgstr ""
 
 #: seahub/help/templates/help/ignore.html:13
@@ -2890,8 +2889,8 @@ msgstr ""
 #: seahub/help/templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
-"help in our forum: <a href=\"https://forum.seafile.com\" "
-"target=\"_blank\">https://forum.seafile.com</a>."
+"help in our forum: <a href=\"https://forum.seafile.com\" target=\"_blank"
+"\">https://forum.seafile.com</a>."
 msgstr ""
 
 #: seahub/help/templates/help/libraries_managing.html:6
@@ -2982,9 +2981,9 @@ msgstr ""
 #: seahub/help/templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
-"You can configure the retention period of library history: <a "
-"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
-"retention period</a>."
+"You can configure the retention period of library history: <a href="
+"\"%(SITE_ROOT)shelp/setting_library_history/\">setting history retention "
+"period</a>."
 msgstr ""
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:6
@@ -3132,9 +3131,9 @@ msgstr ""
 #: seahub/help/templates/help/restoring_deleted_files.html:15
 #, python-format
 msgid ""
-"You can configure the retention period of deleted files: <a "
-"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
-"retention period</a>."
+"You can configure the retention period of deleted files: <a href="
+"\"%(SITE_ROOT)shelp/setting_library_history/\">setting history retention "
+"period</a>."
 msgstr ""
 
 #: seahub/help/templates/help/selective_sync.html:8
@@ -3523,9 +3522,9 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:7
 msgid ""
-"After installing a drive client with the instructions on the <a "
-"href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
-"start it by double clicking the \"SeaDrive\" app icon on your desktop."
+"After installing a drive client with the instructions on the <a href="
+"\"https://www.seafile.com/en/download/\">download page</a>, you can start it "
+"by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:8
@@ -4062,8 +4061,8 @@ msgstr ""
 #: seahub/notifications/models.py:732
 #, python-format
 msgid ""
-"%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
-"#%(draft_id)s</a>"
+"%(from_user)s has sent you a request for <a href='%(file_url)s'>draft #"
+"%(draft_id)s</a>"
 msgstr ""
 
 #: seahub/notifications/models.py:755
@@ -4077,8 +4076,8 @@ msgstr ""
 #: seahub/notifications/models.py:779
 #, python-format
 msgid ""
-"%(user)s has transfered a library named <a "
-"href=\"%(repo_url)s\">%(repo_name)s</a> to you."
+"%(user)s has transfered a library named <a href=\"%(repo_url)s\">"
+"%(repo_name)s</a> to you."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
@@ -4128,8 +4127,8 @@ msgstr ""
 #, python-format
 msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
-"uploaded to your folder <a "
-"href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+"uploaded to your folder <a href=\"%(url_base)s%(folder_url)s\">"
+"%(folder_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:54
@@ -4157,17 +4156,16 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
-"A large number of files in your library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
-"recently."
+"A large number of files in your library <a href=\"%(url_base)s%(repo_url)s\">"
+"%(repo_name)s</a> has been deleted recently."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:76
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:78
@@ -4175,8 +4173,8 @@ msgstr ""
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a "
 "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other file(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"%(obj_path_count_minus_one)s other file(s) in library <a href=\"%(url_base)s"
+"%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:83
@@ -4199,8 +4197,8 @@ msgstr ""
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:92
@@ -4215,8 +4213,8 @@ msgstr ""
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:98
@@ -4224,24 +4222,24 @@ msgstr ""
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
 "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other file(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"%(obj_path_count_minus_one)s other file(s) in library <a href=\"%(url_base)s"
+"%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:102
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:107
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:109
@@ -4249,8 +4247,8 @@ msgstr ""
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
 "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other folder(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"%(obj_path_count_minus_one)s other folder(s) in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:114
@@ -4273,8 +4271,8 @@ msgstr ""
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder "
-"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:123
@@ -4289,8 +4287,8 @@ msgstr ""
 #, python-format
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a "
-"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:129
@@ -4298,8 +4296,8 @@ msgstr ""
 msgid ""
 " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a "
 "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
-"%(obj_path_count_minus_one)s other folder(s) in library <a "
-"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+"%(obj_path_count_minus_one)s other folder(s) in library <a href="
+"\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:142
@@ -4309,31 +4307,31 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
 #, python-format
 msgid ""
-"%(user)s has shared a folder named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
+"%(user)s has shared a folder named <a href=\"%(url_base)s%(lib_url)s\">"
+"%(lib_name)s</a> to you."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
 msgid ""
-"%(user)s has shared a folder named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
-"href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+"%(user)s has shared a folder named <a href=\"%(url_base)s%(lib_url)s\">"
+"%(lib_name)s</a> to group <a href=\"%(url_base)s%(group_url)s\">"
+"%(group_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
 msgid ""
-"%(user)s has shared a library named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
+"%(user)s has shared a library named <a href=\"%(url_base)s%(lib_url)s\">"
+"%(lib_name)s</a> to you."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
 msgid ""
-"%(user)s has shared a library named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
-"href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+"%(user)s has shared a library named <a href=\"%(url_base)s%(lib_url)s\">"
+"%(lib_name)s</a> to group <a href=\"%(url_base)s%(group_url)s\">"
+"%(group_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
