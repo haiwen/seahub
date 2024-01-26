@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 18:25+0800\n"
+"POT-Creation-Date: 2024-01-26 11:43+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Roberto Di Lorenzo <dilorenzo.roberto80@gmail.com>, 2020\n"
 "Language-Team: Italian (http://app.transifex.com/haiwen/seahub/language/it/)\n"
@@ -464,7 +464,7 @@ msgstr ""
 #: seahub/notifications/models.py:662 seahub/notifications/models.py:684
 #: seahub/notifications/models.py:710 seahub/notifications/models.py:727
 #: seahub/notifications/models.py:744 seahub/notifications/models.py:773
-#: seahub/seadoc/apis.py:2761 seahub/search/views.py:200
+#: seahub/seadoc/apis.py:2763 seahub/search/views.py:200
 #: seahub/share/views.py:326 seahub/utils/__init__.py:177
 #: seahub/utils/__init__.py:1165 seahub/views/__init__.py:950
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
@@ -488,8 +488,8 @@ msgstr "Percorso di destinazione non valido"
 #: seahub/api2/views.py:1860 seahub/api2/views.py:1921
 #: seahub/api2/views.py:1965 seahub/api2/views.py:2011
 #: seahub/api2/views.py:2060 seahub/api2/views.py:2473
-#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:369
-#: seahub/seadoc/apis.py:460
+#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:371
+#: seahub/seadoc/apis.py:462
 msgid "Out of quota."
 msgstr "Quota superata."
 
@@ -528,7 +528,7 @@ msgstr "Utente %s non trovato."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:206
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2747
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
@@ -550,7 +550,7 @@ msgstr "Il File non è bloccato"
 msgid "You can not refresh this file's lock."
 msgstr "Non è possibile aggiornare il blocco di questo file."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2754
 msgid "The participant already exists."
 msgstr ""
 
@@ -709,7 +709,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:513
+#: seahub/seadoc/apis.py:515
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82

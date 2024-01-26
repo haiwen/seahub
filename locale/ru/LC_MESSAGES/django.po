@@ -19,15 +19,15 @@
 # Oleg  Sergeev <djvnsk@ya.ru>, 2017
 # Rekby <timofey.koolin@gmail.com>, 2014
 # Rekby <timofey.koolin@gmail.com>, 2014
-# Vladimir <pash.vld@gmail.com>, 2015-2023
+# Vladimir <pash.vld@gmail.com>, 2015-2024
 # Vladimir <pash.vld@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 18:25+0800\n"
+"POT-Creation-Date: 2024-01-26 11:43+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2023\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2024\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:49
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "Неверные настройки входа в систему ADFS/SAML."
 
 #: seahub/adfs_auth/views.py:130 seahub/adfs_auth/views.py:159
 #: seahub/adfs_auth/views.py:192 seahub/adfs_auth/views.py:229
@@ -48,51 +48,51 @@ msgstr ""
 #: seahub/adfs_auth/views.py:489 seahub/adfs_auth/views.py:493
 #: seahub/adfs_auth/views.py:557 seahub/adfs_auth/views.py:561
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Внутренняя ошибка сервера. Пожалуйста, свяжитесь с системным администратором."
 
 #: seahub/adfs_auth/views.py:155 seahub/adfs_auth/views.py:225
 #: seahub/adfs_auth/views.py:409 seahub/adfs_auth/views.py:460
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Ошибка входа: ошибка службы ADFS/SAML. Сообщите об этом администратору вашей организации (компании)."
 
 #: seahub/adfs_auth/views.py:208 seahub/adfs_auth/views.py:252
 #: seahub/adfs_auth/views.py:266
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Ошибка входа: неправильный ответ от службы ADFS/SAML. Сообщите об этом администратору вашей организации (компании)."
 
 #: seahub/adfs_auth/views.py:279
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "Не удалось привязать SAML. Сначала войдите в систему."
 
 #: seahub/adfs_auth/views.py:333
 msgid ""
 "Failed to create new user: the number of users exceeds the organization "
 "quota. Please report to your organization (company) administrator."
-msgstr ""
+msgstr "Не удалось создать нового пользователя: количество пользователей превышает квоту организации. Сообщите об этом администратору вашей организации (компании)."
 
 #: seahub/adfs_auth/views.py:355
 msgid ""
 "Login failed: failed to create user. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Ошибка входа: не удалось создать пользователя. Сообщите об этом администратору вашей организации (компании)."
 
 #: seahub/adfs_auth/views.py:370
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Ошибка входа: пользователь деактивирован. Сообщите об этом администратору вашей организации (компании)."
 
 #: seahub/adfs_auth/views.py:497
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "Не удалось отменить привязку SAML. Сначала установите пароль."
 
 #: seahub/adfs_auth/views.py:501
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "Не удалось отменить привязку SAML. Сначала укажите контактный адрес электронной почты."
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:361
@@ -421,7 +421,7 @@ msgstr "Правка сохранена, но отправка письма не
 
 #: seahub/api2/endpoints/admin/users.py:1479 seahub/auth/views.py:355
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Невозможно сбросить пароль."
 
 #: seahub/api2/endpoints/admin/users.py:1503 seahub/views/sysadmin.py:486
 #, python-format
@@ -476,7 +476,7 @@ msgstr "Файл с вирусом не найден."
 #: seahub/notifications/models.py:662 seahub/notifications/models.py:684
 #: seahub/notifications/models.py:710 seahub/notifications/models.py:727
 #: seahub/notifications/models.py:744 seahub/notifications/models.py:773
-#: seahub/seadoc/apis.py:2761 seahub/search/views.py:200
+#: seahub/seadoc/apis.py:2763 seahub/search/views.py:200
 #: seahub/share/views.py:326 seahub/utils/__init__.py:177
 #: seahub/utils/__init__.py:1165 seahub/views/__init__.py:950
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:210
@@ -500,8 +500,8 @@ msgstr "Неправильный путь назначения"
 #: seahub/api2/views.py:1860 seahub/api2/views.py:1921
 #: seahub/api2/views.py:1965 seahub/api2/views.py:2011
 #: seahub/api2/views.py:2060 seahub/api2/views.py:2473
-#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:369
-#: seahub/seadoc/apis.py:460
+#: seahub/api2/views.py:2581 seahub/seadoc/apis.py:371
+#: seahub/seadoc/apis.py:462
 msgid "Out of quota."
 msgstr "Превышение квоты дискового пространства."
 
@@ -540,7 +540,7 @@ msgstr "Пользователь %s не найден."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:206
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2745
+#: seahub/profile/views.py:258 seahub/seadoc/apis.py:2747
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
@@ -562,7 +562,7 @@ msgstr "Файл не заблокирован."
 msgid "You can not refresh this file's lock."
 msgstr "Вы не можете обновить блокировку этого файла."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2752
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2754
 msgid "The participant already exists."
 msgstr "Участник уже существует."
 
@@ -721,7 +721,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "Время истечения должно быть раньше, чем %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:513
+#: seahub/seadoc/apis.py:515
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -972,7 +972,7 @@ msgstr "Невозможно отправить сообщение. Пожалу
 
 #: seahub/auth/views.py:441
 msgid "Unable to change password."
-msgstr ""
+msgstr "Невозможно изменить пароль."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -4588,7 +4588,7 @@ msgstr "Библиотека не существует"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Неверный путь к файлу."
 
 #: seahub/search/templates/search_results.html:25
 msgid "Search Files"
@@ -4861,11 +4861,11 @@ msgstr "Создать аккаунт организации"
 
 #: seahub/templates/client_login_confirm.html:10
 msgid "Desktop Client Login Confirm"
-msgstr ""
+msgstr "Подтверждение входа в систему Настольного клиента"
 
 #: seahub/templates/client_login_confirm.html:12
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Вы хотите войти в клиент?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -5063,7 +5063,7 @@ msgstr "Единая точка входа"
 
 #: seahub/templates/registration/login.html:88
 msgid "Login with"
-msgstr ""
+msgstr "Вход с"
 
 #: seahub/templates/registration/login.html:99
 msgid "Forgot password?"
@@ -5865,15 +5865,15 @@ msgstr "Пользователь {token.user} неактивен"
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Эта ссылка уже была посещена, нажмите кнопку входа в клиенте еще раз"
 
 #: seahub/views/sso.py:156
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Неверная ссылка. Нажмите кнопку входа в клиенте еще раз"
 
 #: seahub/views/sso.py:161
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Тайм-аут входа в систему, нажмите кнопку входа в клиенте еще раз"
 
 #: seahub/views/sysadmin.py:171 seahub/views/sysadmin.py:175
 msgid "Login ID"
