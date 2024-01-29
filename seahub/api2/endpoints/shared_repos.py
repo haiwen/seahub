@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
+from seahub.share.signals import change_repo_perms_successful, delete_repo_perms_successful
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.utils.repo import get_available_repo_perms
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
@@ -162,6 +163,19 @@ class SharedRepo(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+            org_id = None
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+            change_repo_perms_successful.send(
+                sender=None,
+                from_user=username,
+                to_user=shared_to,
+                repo=repo,
+                path='/',
+                permission=permission,
+                org_id=org_id
+            )
+
             send_perm_audit_msg('modify-repo-perm', username,
                 shared_to, repo_id, '/', permission)
 
@@ -277,6 +291,19 @@ class SharedRepo(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            org_id = None
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+            delete_repo_perms_successful.send(
+                sender=None,
+                from_user=username,
+                to_user=user,
+                repo=repo,
+                path='/',
+                org_id=org_id
+            )
+
 
             send_perm_audit_msg('delete-repo-perm', username, user,
                     repo_id, '/', permission)

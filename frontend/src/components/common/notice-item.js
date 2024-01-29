@@ -19,6 +19,8 @@ const MSG_TYPE_FILE_COMMENT = 'file_comment';
 const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
+const MSG_TYPE_REPO_SHARE_PERMS_CHANGE = 'repo_share_perms_change';
+const MSG_TYPE_REPO_SHARE_PERMS_DELETE = 'repo_share_perms_delete';
 
 class NoticeItem extends React.Component {
 
@@ -74,6 +76,57 @@ class NoticeItem extends React.Component {
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
       notice = notice.replace('{/tagA}', '</a>');
+
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_CHANGE) {
+
+      let avatar_url = detail.share_from_user_avatar_url;
+      let shareFrom = detail.share_from_user_name;
+      let permission = detail.permission;
+      let repoName = detail.repo_name;
+      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' +  repoName + '/';
+      let path = detail.path;
+      let notice = '';
+      // 1. handle translate
+      if (path === '/') { // share repo
+        notice = '{share_from} 把资料库 {repo_link} 的共享权限更新为 {permission}' ;
+      } else { // share folder
+        notice = '{share_from} 把目录 {repo_link} 的共享权限更新为 {permission}'
+      }
+
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{share_from}', shareFrom);
+      notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = notice.replace('{permission}', this.transPermission(permission));
+      notice = Utils.HTMLescape(notice);
+
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
+      notice = notice.replace('{/tagA}', '</a>');
+
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_DELETE) {
+
+      let avatar_url = detail.share_from_user_avatar_url;
+      let shareFrom = detail.share_from_user_name;
+      let repoName = detail.repo_name;
+      let path = detail.path;
+      let notice = '';
+      // 1. handle translate
+      if (path === '/') { // share repo
+        notice = gettext('{share_from} 对您取消了资料库 {repo_name} 的共享.');
+      } else { // share folder
+        notice = gettext('{share_from} 对您取消了目录 {repo_name} 的共享.');
+      }
+
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{share_from}', shareFrom);
+      notice = notice.replace('{repo_name}', repoName);
+      notice = Utils.HTMLescape(notice);
 
       return {avatar_url, notice};
     }
@@ -237,6 +290,19 @@ class NoticeItem extends React.Component {
       return;
     }
     this.props.onNoticeItemClick(item);
+  }
+
+  transPermission = (permission) => {
+    const PERMISSION_TRANS = {
+      'admin' : "管理",
+      'rw': "读写",
+      'r': "只读",
+      'cloud-edit': "仅云端读写",
+      'preview': '仅云端预览',
+    };
+
+    let result = PERMISSION_TRANS[permission];
+    return result ? result : permission
   }
 
   render() {

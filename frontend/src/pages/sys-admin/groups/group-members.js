@@ -278,7 +278,6 @@ class GroupMembers extends Component {
     return (
       <Fragment>
         <MainPanelTopbar>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddMemgerDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
