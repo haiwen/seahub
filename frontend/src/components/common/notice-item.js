@@ -20,6 +20,7 @@ const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
+const MSG_TYPE_REPO_SHARE_PERMS_CHANGE = 'repo_share_perms_change';
 
 class NoticeItem extends React.Component {
 
@@ -70,6 +71,39 @@ class NoticeItem extends React.Component {
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = Utils.HTMLescape(notice);
+
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
+      notice = notice.replace('{/tagA}', '</a>');
+
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_CHANGE) {
+
+      let avatar_url = detail.share_from_user_avatar_url;
+
+      let shareFrom = detail.share_from_user_name;
+
+      let permission = detail.permission;
+
+      let repoName = detail.repo_name;
+      let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' +  repoName + '/';
+
+      let path = detail.path;
+      let notice = '';
+      // 1. handle translate
+      if (path === '/') { // share repo
+        notice = gettext('{share_from} has changed the permission of library {repo_link} to {permission}.');
+      } else { // share folder
+        notice = gettext('{share_from} has changed the permission of library {repo_link} to {permission}.');
+      }
+
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{share_from}', shareFrom);
+      notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = notice.replace('{permission}', permission);
       notice = Utils.HTMLescape(notice);
 
       // 3. add jump link
