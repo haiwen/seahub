@@ -4,6 +4,6 @@ mock
 nose
 exam
 splinter
-pytest
+pytest==7.4.4
 pytest-django
 selenium
