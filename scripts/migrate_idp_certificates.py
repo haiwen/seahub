@@ -5,7 +5,7 @@ import sys
 import pymysql
 pymysql.install_as_MySQLdb()
 
-install_path = os.path.dirname(os.path.abspath(__file__))
+install_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 top_dir = os.path.dirname(install_path)
 central_config_dir = os.path.join(top_dir, 'conf')
 sys.path.insert(0, central_config_dir)
