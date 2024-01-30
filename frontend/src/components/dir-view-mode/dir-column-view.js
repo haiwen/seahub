@@ -67,6 +67,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
+  onItemsScroll: PropTypes.func.isRequired
 };
 
 class DirColumnView extends React.Component {
@@ -173,7 +174,7 @@ class DirColumnView extends React.Component {
           onItemsMove={this.props.onItemsMove}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
-        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
+        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
           {this.props.isViewFile ? (
             <DirColumnFile
               path={this.props.path}
