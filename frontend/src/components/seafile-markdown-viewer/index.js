@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EXTERNAL_EVENTS, EventBus, MarkdownViewer } from '@seafile/seafile-editor';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { gettext, mediaUrl, serviceURL, sharedToken, slug } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
@@ -28,25 +28,7 @@ class SeafileMarkdownViewer extends React.Component {
     this.scrollRef = React.createRef();
   }
 
-  componentDidMount() {
-    const eventBus = EventBus.getInstance();
-    this.unsubscribeLinkClick = eventBus.subscribe(EXTERNAL_EVENTS.ON_LINK_CLICK, this.onLinkClick);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeLinkClick();
-  }
-
-  onLinkClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    let link = '';
-    let target = event.target;
-    while (!target.dataset || !target.dataset.url) {
-      target = target.parentNode;
-    }
-    if (!target) return;
-    link = target.dataset.url;
+  onLinkClick = (link) => {
     this.props.onLinkClick(link);
   };
 
@@ -105,6 +87,7 @@ class SeafileMarkdownViewer extends React.Component {
       mathJaxSource: `${mediaUrl}js/mathjax/tex-svg.js`,
       value: markdownContent,
       scrollRef: this.scrollRef,
+      onLinkClick: this.onLinkClick,
       ...(isWiki && {beforeRenderCallback: this.modifyValueBeforeRender})
     };
 
