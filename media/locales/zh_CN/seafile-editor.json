@@ -14,7 +14,7 @@
   "Unordered_list": "无序列表",
   "Check_list_item": "任务列表",
   "Insert_image": "插入图片",
-  "Insert_formula": " 插入公式",
+  "Insert_formula": "插入公式",
   "Formula": "公式",
   "Insert_file": "插入文件",
   "Code": "行内代码",
@@ -219,5 +219,6 @@
     ]
   },
   "Select_field": "选中字段",
-  "Font_style": "字体样式"
+  "Font_style": "字体样式",
+  "Open_link": "打开链接"
 }

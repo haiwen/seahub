@@ -32,7 +32,7 @@
   "Switch_to_rich_text_editor": "切换至富文本编辑器",
   "Switch_to_viewer": "切换到只读模式",
   "Help": "帮助",
-  "Remove_table": "删除表格",
+  "Remove_table": "清除表格",
   "Column": "列",
   "Row": "行",
   "Insert_row_before": "上方插入行",
@@ -102,7 +102,7 @@
   "Mark_as_Resolved": "标记为已解决",
   "Ask_for_review": "发起评审",
   "Review_already_exists": "评审已存在",
-  "Ciew_review": "查看评审",
+  "View_review": "查看评审",
   "There_is_an_associated_review_with_this_file": "有一个与此文件相关联的评审。",
   "Start_review": "开始评审",
   "This_file_is_in_draft_stage": "该文件处于草稿阶段。",
@@ -116,11 +116,11 @@
   "Participants": "参与人",
   "Meeting_note": "会议记录",
   "Chooser_document_type": "选择文档类型",
-  "Empty": "空",
+  "Empty": "暂无",
   "No_related_files": "没有相关文件",
   "No_out_line": "没有大纲",
   "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "在此浏览器中，编辑文件可能导致轻微的显示问题。",
-  "no_document_improvement_suggestion": "没有文档改进建议",
+  "No_document_improvement_suggestion": "没有文档改进建议",
   "Hide_side_panel": "隐藏侧旁栏",
   "Show_side_panel": "显示侧旁栏",
   "Show_resolved_comments": "显示已解决的评论",
@@ -133,9 +133,14 @@
   "Location": "位置",
   "Last_update": "更新时间",
   "Tags": "标签",
-  "Related_Files": "相关文档",
-  "Add_participants": "增加文件参与人",
+  "Add_participants": "添加参与人",
+  "Clear_format": "清除格式",
+  "Image_address_invalid": "图片地址不正确",
   "Shortcut_help": "快捷键帮助",
+  "Link_address_required": "链接地址是必填项。",
+  "Link_address_invalid": "链接地址不合法",
+  "Link_title_required": "链接标题是必填项。",
+  "Blank_title_not_allowed": "不允许空白标题",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData": [
@@ -148,7 +153,8 @@
           "Insert_child_in_item": "插入新段落",
           "Increase_depth": "增加列表项深度"
         }
-      }, {
+      },
+      {
         "shortcutType": "标题快捷键",
         "shortcutData": {
           "Heading_1": "一级标题",
@@ -158,7 +164,8 @@
           "Heading_5": "五级标题",
           "Heading_6": "六级标题"
         }
-      }, {
+      },
+      {
         "shortcutType": "代码块快捷键",
         "shortcutData": {
           "Make_code_block": "生成代码块",
@@ -166,45 +173,52 @@
           "Escape_code_block": "退出代码块",
           "Insert_indent": "缩进"
         }
-      }, {
+      },
+      {
         "shortcutType": "引用快捷键",
         "shortcutData": {
           "Make_block_quote": "生成引用",
           "Escape_block_quote": "退出引用"
         }
-      }, {
+      },
+      {
         "shortcutType": "表格快捷键",
         "shortcutData": {
           "Insert_table_row": "插入行",
           "Escape_table": "退出表格"
         }
-      }, {
+      },
+      {
         "shortcutType": "公式快捷键",
         "shortcutData": {
           "Insert_formula": "插入公式"
         }
-      }, {
-        "shortcutType": "行内快捷键",
+      },
+      {
+        "shortcutType": "行级操作",
         "shortcutData": {
           "Bold": "粗体",
           "Italic": "斜体",
-          "Italic_bold": "斜体粗体",
+          "Italic_bold": "斜体加粗",
           "Inline_code": "行内代码"
         }
-      }, {
-        "shortcutType": "保存快捷键",
+      },
+      {
+        "shortcutType": "文件保存",
         "shortcutData": {
           "Save_file": "保存文件"
         }
-      }, {
-        "shortcutType": "图片快捷键",
+      },
+      {
+        "shortcutType": "图片操作",
         "shortcutData": {
-          "Paste_screen_shot": "粘贴屏幕截图",
-          "Drag_image_from_anywhere_to_upload_it": "从任意地方拖动图像以上传"
+          "Paste_screen_shot": "上传截图",
+          "Drag_image_from_anywhere_to_upload_it": "拖拽任意图片上传"
         }
       }
     ]
   },
-  "Select_field": "Select field",
-  "Font_style": "Font style"
+  "Select_field": "选中字段",
+  "Font_style": "字体样式",
+  "Open_link": "打开链接"
 }
