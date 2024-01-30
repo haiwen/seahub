@@ -25,7 +25,7 @@ class FilesActivities extends Component {
     this.state = {
       errorMsg: '',
       isFirstLoading: true,
-      isLoadingMore: false,
+      isLoadingMore: false, // only for 'scroll down to the bottom'
       currentPage: 1,
       hasMore: true,
       allItems: [],
@@ -57,12 +57,14 @@ class FilesActivities extends Component {
           });
         }
       });
+
+      const curItems = this.filterEvents(events);
       this.setState({
         allItems: events,
-        items: this.filterEvents(events),
+        items: curItems,
         availableUsers: availableUsers,
         currentPage: currentPage + 1,
-        isFirstLoading: false,
+        isFirstLoading: curItems.length == 0,
         hasMore: true,
       });
       if (this.state.items.length < 25) {
@@ -155,11 +157,13 @@ class FilesActivities extends Component {
         }
       });
       const filteredEvents = this.filterEvents(events);
+      const curItems = [...this.state.items, ...filteredEvents];
       this.setState({
         allItems: [...this.state.allItems, ...events],
-        items: [...this.state.items, ...filteredEvents],
+        items: curItems,
         availableUsers: availableUsers,
         currentPage: currentPage + 1,
+        isFirstLoading: curItems.length == 0,
         isLoadingMore: false,
         hasMore: res.data.events.length === 0 ? false : true
       });
@@ -170,6 +174,7 @@ class FilesActivities extends Component {
       }
     }).catch(error => {
       this.setState({
+        isFirstLoading: false,
         isLoadingMore: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
