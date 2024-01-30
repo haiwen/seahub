@@ -172,10 +172,8 @@ class SysAdminShareToGroup extends React.Component {
   shareToGroup = () => {
     let groups = [];
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        groups[i] = this.state.selectedOption[i].id;
-      }
+    if (this.state.selectedOption) {
+      groups[0] = this.state.selectedOption.id;
     }
     seafileAPI.sysAdminAddRepoSharedItem(repoID, 'group', groups, this.state.permission).then(res => {
       let errorMsg = [];
