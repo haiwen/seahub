@@ -28,28 +28,6 @@ class SdocWikiPageViewer extends React.Component {
     this.scrollRef = React.createRef();
   }
 
-  componentDidMount() {
-    // const eventBus = EventBus.getInstance();
-    // this.unsubscribeLinkClick = eventBus.subscribe(EXTERNAL_EVENTS.ON_LINK_CLICK, this.onLinkClick);
-  }
-
-  componentWillUnmount() {
-    // this.unsubscribeLinkClick();
-  }
-
-  onLinkClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    let link = '';
-    let target = event.target;
-    while (!target.dataset || !target.dataset.url) {
-      target = target.parentNode;
-    }
-    if (!target) return;
-    link = target.dataset.url;
-    this.props.onLinkClick(link);
-  };
-
   changeInlineNode = (item) => {
     const { repoID } = this.props;
     let url, imagePath;
