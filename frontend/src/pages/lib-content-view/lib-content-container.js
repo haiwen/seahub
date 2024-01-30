@@ -332,6 +332,7 @@ class LibContentContainer extends React.Component {
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
                     showDirentDetail={this.props.showDirentDetail}
+                    onItemsScroll={this.onItemsScroll}
                   />
                 )}
               </Fragment>
