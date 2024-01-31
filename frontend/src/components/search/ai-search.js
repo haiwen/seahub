@@ -445,7 +445,7 @@ export default class AISearch extends Component {
               <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
             </div>
           </li>
-          <div className="search-result-none">{gettext('No results matching.')}</div>
+          <div className="search-result-none">{gettext('No results matching')}</div>
         </>
       );
     }

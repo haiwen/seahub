@@ -190,7 +190,7 @@ class Search extends Component {
     }
     if (!this.state.resultItems.length) {
       return (
-        <div className="search-result-none">{gettext('No results matching.')}</div>
+        <div className="search-result-none">{gettext('No results matching')}</div>
       );
     }
     const { resultItems, total } = this.state;

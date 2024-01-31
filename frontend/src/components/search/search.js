@@ -422,7 +422,7 @@ class Search extends Component {
       return this.renderResults(resultItems);
     }
     else {
-      return <div className="search-result-none">{gettext('No results matching.')}</div>;
+      return <div className="search-result-none">{gettext('No results matching')}</div>;
     }
   }
 
