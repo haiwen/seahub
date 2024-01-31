@@ -93,7 +93,7 @@ class NoticeItem extends React.Component {
       if (path === '/') { // share repo
         notice = gettext('{share_from} has changed the permission of library {repo_link} to {permission}.');
       } else { // share folder
-        notice = gettext('{share_from} has changed the permission of library {repo_link} to {permission}.');
+        notice = gettext('{share_from} has changed the permission of folder {repo_link} to {permission}.');
       }
 
       // 2. handle xss(cross-site scripting)
