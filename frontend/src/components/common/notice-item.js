@@ -83,14 +83,10 @@ class NoticeItem extends React.Component {
     if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_CHANGE) {
 
       let avatar_url = detail.share_from_user_avatar_url;
-
       let shareFrom = detail.share_from_user_name;
-
       let permission = detail.permission;
-
       let repoName = detail.repo_name;
       let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' +  repoName + '/';
-
       let path = detail.path;
       let notice = '';
       // 1. handle translate
