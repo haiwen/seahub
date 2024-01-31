@@ -47,6 +47,22 @@
   text-decoration: none;
 }
 
+.search-icon-right.sf3-font-set-up {
+  left: auto;
+  right: 25px;
+}
+
+.search-container .search-settings {
+  left: 1rem;
+  right: 14px;
+  top: 54px;
+  z-index: 100;
+}
+
+.search-container .search-settings .custom-switch {
+  padding-left: 0;
+}
+
 .search-icon-arrow {
   right: 40px;
   left: auto;
@@ -81,10 +97,6 @@
   box-shadow: none;
   display: flex;
   flex-direction: column;
-}
-
-.dropdown-search-result-container .seahub-switch .custom-switch {
-  padding-left: 0;
 }
 
 .search-result-container .search-result-none {
