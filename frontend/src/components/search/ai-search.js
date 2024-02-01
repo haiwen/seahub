@@ -53,6 +53,7 @@ export default class AISearch extends Component {
       showRecent: true,
       isResultGetted: false,
       isCloseShow: false,
+      isSettingsShown: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
@@ -357,6 +358,7 @@ export default class AISearch extends Component {
       value: '',
       isMaskShow: false,
       isCloseShow: false,
+      isSettingsShown: false,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -547,7 +549,7 @@ export default class AISearch extends Component {
         <Switch
           checked={true}
           placeholder={gettext('Turn on semantic search for this library')}
-          className="w-100 mt-1"
+          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
           size="small"
           textPosition='right'
           disabled
@@ -558,7 +560,7 @@ export default class AISearch extends Component {
         <Switch
           checked={true}
           placeholder={gettext('Turn off semantic search for this library')}
-          className="w-100 mt-1"
+          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
           size="small"
           onChange={this.onDeleteIndex}
           textPosition='right'
@@ -569,7 +571,7 @@ export default class AISearch extends Component {
         <Switch
           checked={false}
           placeholder={gettext('Turn on semantic search for this library')}
-          className="w-100 mt-1"
+          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
           size="small"
           onChange={this.onCreateIndex}
           textPosition='right'
@@ -577,6 +579,12 @@ export default class AISearch extends Component {
       );
     }
     return null;
+  }
+
+  toggleSettingsShown = () => {
+    this.setState({
+      isSettingsShown: !this.state.isSettingsShown
+    });
   }
 
   render() {
@@ -604,7 +612,7 @@ export default class AISearch extends Component {
           <div className="search">
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
-              <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
+              <div className={`input-icon`}>
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
                 <input
                   type="text"
@@ -620,15 +628,20 @@ export default class AISearch extends Component {
                   onKeyDown={this.onKeydownHandler}
                 />
                 {this.state.isCloseShow &&
+                  <>
+                  {(this.isRepoOwner || this.isAdmin) &&
+                    <button type="button" className="search-icon-right input-icon-addon sf3-font-set-up sf3-font border-0 bg-transparent mr-3" onClick={this.toggleSettingsShown} aria-label={gettext('Settings')}></button>
+                  }
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                  </>
                 }
               </div>
+              {this.state.isSettingsShown && this.renderSwitch()}
               <div
-                className="search-result-container dropdown-search-result-container"
+                className="search-result-container dropdown-search-result-container mt-1"
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
-                {isCloseShow && (this.isRepoOwner || this.isAdmin) && this.renderSwitch()}
                 {this.renderSearchResult()}
               </div>
             </div>
