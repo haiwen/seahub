@@ -44,6 +44,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
@@ -626,6 +627,7 @@ class DirentGridView extends React.Component {
             fileTagList={dirent.file_tags}
             filePath={direntPath}
             toggleCancel={this.onEditFileTagToggle}
+            repoTags={this.props.repoTags}
             onFileTagChanged={this.onFileTagChanged}
           />
         }

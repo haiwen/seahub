@@ -25,6 +25,7 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
+  repoTags: PropTypes.array.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -328,7 +329,7 @@ class MultipleDirOperationToolbar extends React.Component {
 
   render() {
 
-    const { repoID, userPerm } = this.props;
+    const { repoID, repoTags, userPerm } = this.props;
     const dirent = this.props.selectedDirentList[0];
     const direntPath = this.getDirentPath(dirent);
 
@@ -458,6 +459,7 @@ class MultipleDirOperationToolbar extends React.Component {
               <ModalPortal>
                 <EditFileTagDialog
                   repoID={repoID}
+                  repoTags={repoTags}
                   filePath={direntPath}
                   fileTagList={this.state.fileTagList}
                   toggleCancel={this.toggleCancel}

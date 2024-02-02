@@ -44,6 +44,7 @@ const propTypes = {
   onItemsCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
@@ -671,6 +672,7 @@ class DirentListView extends React.Component {
                   onItemContextMenu={this.onItemContextMenu}
                   selectedDirentList={this.props.selectedDirentList}
                   activeDirent={this.state.activeDirent}
+                  repoTags={this.props.repoTags}
                   onFileTagChanged={this.props.onFileTagChanged}
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
