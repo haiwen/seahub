@@ -77,7 +77,7 @@ class Search(APIView):
         try:
             count = int(request.data.get('count'))
         except:
-            count = 10
+            count = 20
 
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
