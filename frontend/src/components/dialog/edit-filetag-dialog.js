@@ -4,7 +4,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import RepoTag from '../../models/repo-tag';
 import CreateTagDialog from './create-tag-dialog';
 import toaster from '../toast';
 require('../../css/repo-tag.css');
@@ -103,6 +102,7 @@ TagItem.propTypes = TagItemPropTypes;
 
 const TagListPropTypes = {
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
@@ -111,39 +111,15 @@ const TagListPropTypes = {
 };
 
 class TagList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      repotagList: [],
-    };
-  }
-
-  componentDidMount() {
-    this.getRepoTagList();
-  }
-
-  getRepoTagList = () => {
-    let repoID = this.props.repoID;
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let repotagList = [];
-      res.data.repo_tags.forEach(item => {
-        let repoTag = new RepoTag(item);
-        repotagList.push(repoTag);
-      });
-      this.setState({repotagList: repotagList});
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
 
   render() {
+    const { repoTags } = this.props;
     return (
       <Fragment>
         <ModalHeader toggle={this.props.toggleCancel}>{gettext('Select Tags')}</ModalHeader>
         <ModalBody className="px-0">
           <ul className="tag-list tag-list-container">
-            {this.state.repotagList.map((repoTag) => {
+            {repoTags.map((repoTag) => {
               return (
                 <TagItem
                   key={repoTag.id}
@@ -177,6 +153,7 @@ TagList.propTypes = TagListPropTypes;
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   toggleCancel: PropTypes.func.isRequired,
@@ -215,6 +192,7 @@ class EditFileTagDialog extends React.Component {
         {this.state.isListRepoTagShow &&
           <TagList
             repoID={this.props.repoID}
+            repoTags={this.props.repoTags}
             filePath={this.props.filePath}
             fileTagList={this.props.fileTagList}
             onFileTagChanged={this.props.onFileTagChanged}

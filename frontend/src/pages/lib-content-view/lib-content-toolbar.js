@@ -20,6 +20,7 @@ const propTypes = {
   // mutiple-dir
   isDirentSelected: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
@@ -77,6 +78,7 @@ class LibContentToolbar extends React.Component {
               fileTags={this.props.fileTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showShareBtn={this.props.showShareBtn}
+              repoTags={this.props.repoTags}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />
           </div>
@@ -101,6 +103,7 @@ class LibContentToolbar extends React.Component {
               path={this.props.path}
               userPerm={this.props.userPerm}
               repoEncrypted={this.props.repoEncrypted}
+              repoTags={this.props.repoTags}
               selectedDirentList={this.props.selectedDirentList}
               direntList={this.props.direntList}
               onItemsMove={this.props.onItemsMove}

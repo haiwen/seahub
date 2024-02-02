@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import RepoTag from '../../models/repo-tag';
 import toaster from '../toast';
 import CommonAddTool from '../common/common-add-tool';
 import SearchInput from '../common/search-input';
@@ -19,33 +18,13 @@ class EditFileTagPopover extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repotagList: [],
       searchVal: '',
       highlightIndex: -1,
     };
   }
 
-  componentDidMount() {
-    this.getRepoTagList();
-  }
-
   setHighlightIndex = (highlightIndex) => {
     this.setState({ highlightIndex });
-  };
-
-  getRepoTagList = () => {
-    let repoID = this.props.repoID;
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let repotagList = [];
-      res.data.repo_tags.forEach(item => {
-        let repoTag = new RepoTag(item);
-        repotagList.push(repoTag);
-      });
-      this.setState({repotagList: repotagList});
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   generateRandomColor = () => {
@@ -64,7 +43,6 @@ class EditFileTagPopover extends React.Component {
         searchVal: '',
         highlightIndex: -1,
       });
-      this.getRepoTagList();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -116,13 +94,14 @@ class EditFileTagPopover extends React.Component {
   };
 
   onKeyDown = (e) => {
+    const { repoTags } = this.props;
     if (e.keyCode === KeyCodes.ChineseInputMethod || e.keyCode === KeyCodes.LeftArrow || e.keyCode === KeyCodes.RightArrow) {
       e.stopPropagation();
     }
     else if (e.keyCode === KeyCodes.Enter) {
       const searchText = this.state.searchVal.trim();
-      const repotagList = this.state.repotagList.filter(item => item.name.includes(searchText));
-      const tag = repotagList[this.state.highlightIndex];
+      const repoTagList = repoTags.filter(item => item.name.includes(searchText));
+      const tag = repoTagList[this.state.highlightIndex];
       if (tag) {
         this.onEditFileTag(tag);
       }
@@ -134,8 +113,8 @@ class EditFileTagPopover extends React.Component {
     }
     else if (e.keyCode === KeyCodes.DownArrow) {
       const searchText = this.state.searchVal.trim();
-      const repotagList = this.state.repotagList.filter(item => item.name.includes(searchText));
-      if (this.state.highlightIndex < repotagList.length) {
+      const repoTagList = repoTags.filter(item => item.name.includes(searchText));
+      if (this.state.highlightIndex < repoTagList.length) {
         this.setHighlightIndex(this.state.highlightIndex + 1);
       }
     }
@@ -148,8 +127,21 @@ class EditFileTagPopover extends React.Component {
 
   render() {
     const searchText = this.state.searchVal.trim();
-    const repotagList = this.state.repotagList.filter(item => item.name.includes(searchText));
-    const showAddTool = searchText && !this.state.repotagList.find(item => item.name === searchText);
+    const { repoTags: repoTagList } = this.props;
+    const filteredRepoTagList = repoTagList.filter(item => item.name.includes(searchText));
+    const showAddTool = searchText && !repoTagList.find(item => item.name === searchText);
+
+    let noTagsTip = '';
+    if (!searchText) {
+      if (repoTagList.length == 0) {
+        noTagsTip = gettext('No tags');
+      }
+    } else {
+      if (filteredRepoTagList.length == 0) {
+        noTagsTip = gettext('Tag not found');
+      }
+    }
+
     return (
       <SeahubPopover
         popoverClassName="edit-filetag-popover"
@@ -165,26 +157,25 @@ class EditFileTagPopover extends React.Component {
           onChange={this.onChangeSearch}
           autoFocus={true}
         />
-        <ul className="tag-list-container">
-          {repotagList.length === 0 &&
-            <div className='tag-not-found mt-2 mb-4 mx-1'>{gettext('Tag not found')}</div>
-          }
-          {repotagList.length > 0 && repotagList.map((repoTag, index) => {
-            return (
-              <TagItem
-                index={index}
-                highlightIndex={this.state.highlightIndex}
-                setHighlightIndex={this.setHighlightIndex}
-                key={repoTag.id}
-                repoTag={repoTag}
-                repoID={this.props.repoID}
-                filePath={this.props.filePath}
-                fileTagList={this.props.fileTagList}
-                onFileTagChanged={this.props.onFileTagChanged}
-              />
-            );
-          })}
-        </ul>
+        {noTagsTip ? <div className='tag-not-found my-4 mx-1'>{noTagsTip}</div> :
+          <ul className="tag-list-container">
+            {filteredRepoTagList.map((repoTag, index) => {
+              return (
+                <TagItem
+                  index={index}
+                  highlightIndex={this.state.highlightIndex}
+                  setHighlightIndex={this.setHighlightIndex}
+                  key={repoTag.id}
+                  repoTag={repoTag}
+                  repoID={this.props.repoID}
+                  filePath={this.props.filePath}
+                  fileTagList={this.props.fileTagList}
+                  onFileTagChanged={this.props.onFileTagChanged}
+                />
+              );
+            })}
+          </ul>
+        }
         {showAddTool &&
           <CommonAddTool
             callBack={this.createNewTag}
@@ -201,6 +192,7 @@ EditFileTagPopover.propTypes = {
   repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
+  repoTags: PropTypes.array.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };

@@ -12,6 +12,7 @@ const propTypes = {
   userPerm: PropTypes.string,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
+  repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -99,6 +100,7 @@ class DirListView extends React.Component {
           onItemsDelete={this.props.onItemsDelete}
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
+          repoTags={this.props.repoTags}
           onFileTagChanged={this.props.onFileTagChanged}
           showDirentDetail={this.props.showDirentDetail}
           loadDirentList={this.props.loadDirentList}

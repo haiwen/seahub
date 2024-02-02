@@ -12,6 +12,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   userPerm: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
@@ -127,6 +128,7 @@ class ViewFileToolbar extends React.Component {
             <EditFileTagDialog
               filePath={this.props.path}
               repoID={this.props.repoID}
+              repoTags={this.props.repoTags}
               fileTagList={this.props.fileTags}
               toggleCancel={this.onEditFileTagToggle}
               onFileTagChanged={this.props.onFileTagChanged}

@@ -51,6 +51,7 @@ const propTypes = {
   onAddFolderNode: PropTypes.func.isRequired,
   // repo content
   draftCounts: PropTypes.number,
+  repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   // list
@@ -211,6 +212,7 @@ class LibContentContainer extends React.Component {
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
@@ -252,6 +254,7 @@ class LibContentContainer extends React.Component {
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     onRenameNode={this.props.onRenameNode}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
@@ -304,6 +307,7 @@ class LibContentContainer extends React.Component {
                     latestContributor={this.props.latestContributor}
                     onLinkClick={this.props.onLinkClick}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}

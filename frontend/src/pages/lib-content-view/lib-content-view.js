@@ -51,6 +51,7 @@ class LibContentView extends React.Component {
       fileTags: [],
       draftID: '',
       draftCounts: 0,
+      repoTags: [],
       usedRepoTags: [],
       isTreeDataLoading: true,
       treeData: treeHelper.buildTree(),
@@ -266,14 +267,19 @@ class LibContentView extends React.Component {
   updateUsedRepoTags = () => {
     let repoID = this.props.repoID;
     seafileAPI.listRepoTags(repoID).then(res => {
+      let repoTags = [];
       let usedRepoTags = [];
       res.data.repo_tags.forEach(item => {
-        let usedRepoTag = new RepoTag(item);
-        if (usedRepoTag.fileCount > 0) {
-          usedRepoTags.push(usedRepoTag);
+        const repoTag = new RepoTag(item);
+        repoTags.push(repoTag);
+        if (repoTag.fileCount > 0) {
+          usedRepoTags.push(repoTag);
         }
       });
-      this.setState({usedRepoTags: usedRepoTags});
+      this.setState({
+        repoTags: repoTags,
+        usedRepoTags: usedRepoTags
+      });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -2018,6 +2024,7 @@ class LibContentView extends React.Component {
             showDirentDetail={this.showDirentDetail}
             unSelectDirent={this.unSelectDirent}
             onFilesTagChanged={this.onFileTagChanged}
+            repoTags={this.state.repoTags}
           />
         </div>
         <div className="main-panel-center flex-row">
@@ -2057,6 +2064,7 @@ class LibContentView extends React.Component {
             onRenameNode={this.onRenameTreeNode}
             onDeleteNode={this.onDeleteTreeNode}
             draftCounts={this.state.draftCounts}
+            repoTags={this.state.repoTags}
             usedRepoTags={this.state.usedRepoTags}
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}

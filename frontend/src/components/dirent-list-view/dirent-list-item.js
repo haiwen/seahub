@@ -51,6 +51,7 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   activeDirent: PropTypes.object,
   getDirentItemMenuList: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
@@ -892,6 +893,7 @@ class DirentListItem extends React.Component {
           {this.state.isEditFileTagShow &&
             <EditFileTagPopover
               repoID={this.props.repoID}
+              repoTags={this.props.repoTags}
               fileTagList={dirent.file_tags}
               filePath={direntPath}
               toggleCancel={this.onEditFileTagToggle}
@@ -905,6 +907,7 @@ class DirentListItem extends React.Component {
           {this.state.isEditFileTagShow &&
             <EditFileTagDialog
               repoID={this.props.repoID}
+              repoTags={this.props.repoTags}
               fileTagList={dirent.file_tags}
               filePath={direntPath}
               toggleCancel={this.onEditFileTagToggle}
