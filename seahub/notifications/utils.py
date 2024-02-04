@@ -109,6 +109,42 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
+        elif notice.is_repo_share_perm_delete_msg():
+            try:
+                d = json.loads(notice.detail)
+                repo_id = d['repo_id']
+                path = d.get('path', '/')
+                org_id = d.get('org_id', None)
+                if path == '/':
+                    repo = seafile_api.get_repo(repo_id)
+                else:
+                    if org_id:
+                        owner = seafile_api.get_org_repo_owner(repo_id)
+                        repo = seafile_api.get_org_virtual_repo(
+                            org_id, repo_id, path, owner)
+                    else:
+                        owner = seafile_api.get_repo_owner(repo_id)
+                        repo = seafile_api.get_virtual_repo(repo_id, path, owner)
+
+                if repo is None:
+                    notice.detail = None
+                else:
+                    d.pop('org_id', None)
+                    share_from_user_email = d.pop('share_from')
+                    url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
+
+                    d['repo_name'] = repo.name
+                    d['repo_id'] = repo.id
+                    d['share_from_user_name'] = email2nickname(share_from_user_email)
+                    d['share_from_user_email'] = share_from_user_email
+                    d['share_from_user_contact_email'] = email2contact_email(share_from_user_email)
+                    d['share_from_user_avatar_url'] = url
+                    notice.detail = d
+
+            except Exception as e:
+                logger.error(e)
+
+
         elif notice.is_repo_share_to_group_msg():
             try:
                 d = json.loads(notice.detail)

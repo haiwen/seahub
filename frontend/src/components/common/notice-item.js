@@ -21,6 +21,7 @@ const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
 const MSG_TYPE_REPO_SHARE_PERMS_CHANGE = 'repo_share_perms_change';
+const MSG_TYPE_REPO_SHARE_PERMS_DELETE = 'repo_share_perms_delete';
 
 class NoticeItem extends React.Component {
 
@@ -106,6 +107,28 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
       notice = notice.replace('{/tagA}', '</a>');
 
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_DELETE) {
+
+      let avatar_url = detail.share_from_user_avatar_url;
+      let shareFrom = detail.share_from_user_name;
+      let repoName = detail.repo_name;
+      let path = detail.path;
+      let notice = '';
+      // 1. handle translate
+      if (path === '/') { // share repo
+        notice = gettext('{share_from} has cancelled the sharing of library {repo_name}.');
+      } else { // share folder
+        notice = gettext('{share_from} has cancelled the sharing of folder {repo_name}.');
+      }
+
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{share_from}', shareFrom);
+      notice = notice.replace('{repo_name}', repoName);
+      notice = Utils.HTMLescape(notice);
+      
       return {avatar_url, notice};
     }
 
