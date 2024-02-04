@@ -5,9 +5,9 @@ import classnames from 'classnames';
 import '../../../css/switch.css';
 
 function Switch(props) {
-  const { onChange, checked, placeholder, disabled, className, size, textPosition } = props;
+  const { onChange, checked, placeholder, disabled, className, size, textPosition, setRef } = props;
   return(
-    <div className={classnames('seahub-switch position-relative', className, size)}>
+    <div className={classnames('seahub-switch position-relative', className, size)} ref={setRef}>
       <label className="custom-switch">
         <input
           className="custom-switch-input"
@@ -37,6 +37,7 @@ Switch.propTypes = {
   size: PropTypes.oneOf(['large', 'small', undefined]),
   textPosition: PropTypes.oneOf(['left', 'right', undefined]),
   onChange: PropTypes.func,
+  setRef: PropTypes.func
 };
 
 Switch.defaultProps = {
