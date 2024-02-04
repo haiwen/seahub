@@ -76,6 +76,7 @@ export default class AISearch extends Component {
     document.addEventListener('keydown', this.onDocumentKeydown);
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
+    document.addEventListener('click', this.handleOutsideClick);
     this.queryLibraryIndexState();
   }
 
@@ -96,6 +97,7 @@ export default class AISearch extends Component {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
+    document.removeEventListener('click', this.handleOutsideClick);
     this.isChineseInput = false;
     this.clearTimer();
     if (this.indexStateTimer) {
@@ -542,6 +544,10 @@ export default class AISearch extends Component {
     });
   };
 
+  setSettingsContainerRef = (ref) => {
+    this.settingsContainer = ref;
+  }
+
   renderSwitch = () => {
     const { indexState } = this.state;
     if (indexState === INDEX_STATE.RUNNING) {
@@ -552,7 +558,8 @@ export default class AISearch extends Component {
           className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
           size="small"
           textPosition='right'
-          disabled
+          disabled={true}
+          setRef={this.setSettingsContainerRef}
         />
       );
     } else if (indexState === INDEX_STATE.FINISHED) {
@@ -564,6 +571,7 @@ export default class AISearch extends Component {
           size="small"
           onChange={this.onDeleteIndex}
           textPosition='right'
+          setRef={this.setSettingsContainerRef}
         />
       );
     } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {
@@ -575,6 +583,7 @@ export default class AISearch extends Component {
           size="small"
           onChange={this.onCreateIndex}
           textPosition='right'
+          setRef={this.setSettingsContainerRef}
         />
       );
     }
@@ -586,6 +595,15 @@ export default class AISearch extends Component {
       isSettingsShown: !this.state.isSettingsShown
     });
   }
+
+  handleOutsideClick = (e) => {
+    const { isSettingsShown } = this.state;
+    if (isSettingsShown &&
+      !this.settingsContainer.contains(e.target) &&
+      !this.settingIcon.contains(e.target)) {
+      this.toggleSettingsShown();
+    }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
@@ -630,7 +648,7 @@ export default class AISearch extends Component {
                 {this.state.isCloseShow &&
                   <>
                   {(this.isRepoOwner || this.isAdmin) &&
-                    <button type="button" className="search-icon-right input-icon-addon sf3-font-set-up sf3-font border-0 bg-transparent mr-3" onClick={this.toggleSettingsShown} aria-label={gettext('Settings')}></button>
+                    <button type="button" className="search-icon-right input-icon-addon sf3-font-set-up sf3-font border-0 bg-transparent mr-3" onClick={this.toggleSettingsShown} aria-label={gettext('Settings')} ref={ref => this.settingIcon = ref}></button>
                   }
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   </>
