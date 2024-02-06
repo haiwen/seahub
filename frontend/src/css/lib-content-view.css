@@ -171,6 +171,7 @@
 
 .dir-content-main .wiki-page-content {
   flex: 1;
+  width: 100%;
 }
 
 /* wiki-page-content children */
