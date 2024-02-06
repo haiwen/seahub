@@ -9,6 +9,7 @@ import posixpath
 from urllib.parse import unquote
 import time
 from datetime import datetime, timedelta
+from pypinyin import lazy_pinyin
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -2849,6 +2850,8 @@ class SdocRelatedUsers(APIView):
         related_users = []
         for email in related_user_emails:
             user_info = get_user_common_info(email)
+            user_name = user_info.get('name', '')
+            user_info['name_pinyin'] = "'".join(lazy_pinyin(user_name)) if user_name else ''
             related_users.append(user_info)
 
         return Response({'related_users': related_users})
