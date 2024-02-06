@@ -68,6 +68,7 @@ img[src=""] {
   display:flex;
   flex-direction:column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .wiki-main-panel .main-panel-north {
@@ -125,6 +126,7 @@ img[src=""] {
 
 .wiki-page-container .sf-slate-viewer-article-container {
   margin: 0 !important;
+  width: 100%;
 }
 
 .wiki-page-container .sf-slate-viewer-outline {
