@@ -3419,25 +3419,25 @@ msgstr "Zeitpunkt des Ablaufens"
 
 #: frontend/src/components/share-link-panel/index.js:106
 msgid "Link deleted"
-msgstr ""
+msgstr "Link gelöscht"
 
 #: frontend/src/components/share-link-panel/link-creation.js:155
 msgid "Please enter an integer bigger than 1 as number of links."
-msgstr ""
+msgstr "Bitte geben Sie als Anzahl der Links eine ganze Zahl größer als 1 ein."
 
 #: frontend/src/components/share-link-panel/link-creation.js:249
 #: frontend/src/components/share-link-panel/link-list.js:47
 msgid "Generate links in batch"
-msgstr ""
+msgstr "Mehrere Links auf einmal generieren"
 
 #: frontend/src/components/share-link-panel/link-creation.js:249
 #: frontend/src/components/share-link-panel/link-list.js:46
 msgid "Generate Link"
-msgstr ""
+msgstr "Link erzeugen"
 
 #: frontend/src/components/share-link-panel/link-creation.js:254
 msgid "Number of links"
-msgstr ""
+msgstr "Anzahl an Links"
 
 #: frontend/src/components/share-link-panel/link-creation.js:318
 msgid "Set permission"
@@ -3475,7 +3475,7 @@ msgstr "Nach der Löschung ist über den Link kein Download mehr möglich."
 
 #: frontend/src/components/share-link-panel/link-list.js:52
 msgid "Export"
-msgstr ""
+msgstr "Exportieren"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:46
 #: frontend/src/pages/markdown-editor/seafile-editor/index.js:149
@@ -5075,7 +5075,7 @@ msgstr "Ändern"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:100
 msgid "Team name"
-msgstr ""
+msgstr "Teamname"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:122
 msgid "File extension white list"
@@ -5215,7 +5215,7 @@ msgstr "Aufrufe"
 #: frontend/src/pages/share-admin/share-links.js:219
 #: frontend/src/pages/share-admin/upload-links.js:143
 msgid "(deleted)"
-msgstr ""
+msgstr "(gelöscht)"
 
 #: frontend/src/pages/share-admin/share-links.js:246
 #: frontend/src/pages/share-admin/share-links.js:280
@@ -5238,16 +5238,16 @@ msgstr "Absteigend nach Ablaufdatum"
 
 #: frontend/src/pages/share-admin/share-links.js:439
 msgid "Successfully cleaned invalid share links."
-msgstr ""
+msgstr "Ungültige Freigabelinks erfolgreich gelöscht".
 
 #: frontend/src/pages/share-admin/share-links.js:454
 #: frontend/src/pages/share-admin/share-links.js:493
 msgid "Clean invalid share links"
-msgstr ""
+msgstr "Ungültige Freigabelinks löschen"
 
 #: frontend/src/pages/share-admin/share-links.js:494
 msgid "Are you sure you want to clean invalid share links?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie ungültige Freigabelinks löschen wollen?"
 
 #: frontend/src/pages/share-admin/upload-links.js:39
 msgid ""
@@ -5258,16 +5258,16 @@ msgstr "Sie habe noch keine Upload-Links angelegt. Über einen Upload-Link könn
 
 #: frontend/src/pages/share-admin/upload-links.js:264
 msgid "Successfully cleaned invalid upload links."
-msgstr ""
+msgstr "Ungültige Upload-Links erfolgreich gelöscht."
 
 #: frontend/src/pages/share-admin/upload-links.js:278
 #: frontend/src/pages/share-admin/upload-links.js:302
 msgid "Clean invalid upload links"
-msgstr ""
+msgstr "Ungültige Upload-Links löschen"
 
 #: frontend/src/pages/share-admin/upload-links.js:303
 msgid "Are you sure you want to clean invalid upload links?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie ungültige Upload-Links löschen wollen?"
 
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:36
 msgid "At server"
