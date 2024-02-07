@@ -3860,7 +3860,7 @@ msgstr "Löschen fehlgeschlagen: Der Benutzer wurde nicht gefunden."
 
 #: seahub/institutions/views.py:213
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Löschen fehlgeschlagen: Der Benutzer ist Systemadministrator"
 
 #: seahub/institutions/views.py:217 seahub/views/sysadmin.py:380
 #, python-format
@@ -3870,7 +3870,7 @@ msgstr "%s ist gelöscht."
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Sie sind eingeladen, %(site_name)s beizutreten."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -3897,7 +3897,7 @@ msgstr "Guten Tag,"
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s hat Sie eingeladen, %(site_name)s beizutreten. Bitte klicken Sie auf den Link unten:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -4192,11 +4192,11 @@ msgstr "%(user)s hat die Bibliothek <a href=\"%(url_base)s%(lib_url)s\">%(lib_na
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Virus entdeckt in der Bibliothek %(repo_name)s während der regulären Scans: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Virus während der regelmäßigen Scans entdeckt:"
 
 #: seahub/notifications/templates/notifications/user_notification_list_react.html:5
 msgid "Notifications"
@@ -4365,7 +4365,7 @@ msgstr "erweitert"
 
 #: seahub/search/templates/search_results.html:56
 msgid "No result found"
-msgstr ""
+msgstr "Kein Ergebnis gefunden"
 
 #: seahub/search/templates/search_results.html:58
 #, python-format
@@ -4392,15 +4392,15 @@ msgstr "Das Startdatum muss vor dem Enddatum liegen."
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr ""
+msgstr "Ungültiges Argument".
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
-msgstr ""
+msgstr "Ungültiges Datum".
 
 #: seahub/search/views.py:97 seahub/search/views.py:105
 msgid "Invalid file size."
-msgstr ""
+msgstr "Ungültige Dateigröße".
 
 #: seahub/search/views.py:112
 msgid "Invalid file size range."
@@ -4408,12 +4408,12 @@ msgstr "Dateigröße nicht zugelassen."
 
 #: seahub/search/views.py:117
 msgid "Invalid date range."
-msgstr ""
+msgstr "Ungültiger Datumsbereich".
 
 #: seahub/search/views.py:166
 #, python-format
 msgid "Library %s not found."
-msgstr ""
+msgstr "Bibliothek %s nicht gefunden."
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -4572,7 +4572,7 @@ msgstr "Für"
 
 #: seahub/sysadmin_extra/views.py:209
 msgid "Folder Path"
-msgstr ""
+msgstr "Ordnerpfad"
 
 #: seahub/sysadmin_extra/views.py:223
 msgid "Organization"
