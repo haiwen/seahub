@@ -28,7 +28,7 @@
     "displayName": "{{request.user.username|email2nickname|escapejs}}",
     "email": "{{request.user.username|escapejs}}",
     "domain": "{{service_url}}",
-    "provider": "{{site_name}}",
+    "provider": "seafile",
     "userId": "{{request.user.username|escapejs}}",
   };
   window.AscDesktopEditor.execCommand('portal:login', JSON.stringify(params));
