@@ -1159,9 +1159,9 @@ class PubRepos(APIView):
 
         username = request.user.username
         repo_name = request.data.get("name", None)
-        if not repo_name:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Library name is required.')
+        if not repo_name or not is_valid_dirent_name(repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+
         repo_desc = request.data.get("desc", '')
         passwd = request.data.get("passwd", None)
 
@@ -4736,6 +4736,9 @@ class GroupRepos(APIView):
             permission = normalize_custom_permission_name(permission)
             if not permission:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
+
+        if not repo_name or not is_valid_dirent_name(repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
 
         org_id = -1
         if is_org_context(request):
