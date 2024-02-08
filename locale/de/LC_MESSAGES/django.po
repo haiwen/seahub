@@ -4392,15 +4392,15 @@ msgstr "Das Startdatum muss vor dem Enddatum liegen."
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr "Ungültiges Argument".
+msgstr "Ungültiges Argument."
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
-msgstr "Ungültiges Datum".
+msgstr "Ungültiges Datum."
 
 #: seahub/search/views.py:97 seahub/search/views.py:105
 msgid "Invalid file size."
-msgstr "Ungültige Dateigröße".
+msgstr "Ungültige Dateigröße."
 
 #: seahub/search/views.py:112
 msgid "Invalid file size range."
@@ -4408,7 +4408,7 @@ msgstr "Dateigröße nicht zugelassen."
 
 #: seahub/search/views.py:117
 msgid "Invalid date range."
-msgstr "Ungültiger Datumsbereich".
+msgstr "Ungültiger Datumsbereich."
 
 #: seahub/search/views.py:166
 #, python-format
