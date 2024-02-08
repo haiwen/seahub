@@ -130,7 +130,7 @@ class SharedFileView extends React.Component {
                 </Button>
               }{' '}
               {(canDownload && !trafficOverLimit) &&
-                <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
+                <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
               }{' '}
               {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
                 <Button
