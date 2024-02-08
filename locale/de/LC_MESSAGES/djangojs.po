@@ -5238,7 +5238,7 @@ msgstr "Absteigend nach Ablaufdatum"
 
 #: frontend/src/pages/share-admin/share-links.js:439
 msgid "Successfully cleaned invalid share links."
-msgstr "Ungültige Freigabelinks erfolgreich gelöscht".
+msgstr "Ungültige Freigabelinks erfolgreich gelöscht."
 
 #: frontend/src/pages/share-admin/share-links.js:454
 #: frontend/src/pages/share-admin/share-links.js:493
