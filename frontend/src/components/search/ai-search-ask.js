@@ -137,9 +137,10 @@ export default class AISearchAsk extends Component {
     };
     seafileAPI.questionAnsweringFiles(searchParams, token).then(res => {
       let { answering_result, hit_files } = res.data || {};
+      const modifiedAnsweringResult = answering_result.replace(/\[\[citation:(\d+)\]\]/g, "[$1]");
       this.setState({
         isLoading: false,
-        answeringResult: answering_result === 'false' ? '' : answering_result.trim(),
+        answeringResult: modifiedAnsweringResult === 'false' ? '' : modifiedAnsweringResult.trim(),
         hitFiles: this.formatQuestionAnsweringItems(hit_files),
       });
     }).catch(error => {
