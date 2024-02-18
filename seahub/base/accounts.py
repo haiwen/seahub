@@ -696,7 +696,7 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(u.email,
+                send_html_email_with_dj_template(email2contact_email(u.email),
                                                  subject=_('Account %(account)s froze on %(site)s.') % {
                                                      "account": self.email,
                                                      "site": get_site_name()},
@@ -727,7 +727,7 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(u.email,
+                send_html_email_with_dj_template(email2contact_email(u.email),
                                                  subject=_('Account %(account)s froze on %(site)s.') % {
                                                      "account": self.email,
                                                      "site": get_site_name()},
