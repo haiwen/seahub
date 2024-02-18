@@ -451,7 +451,7 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if repo.encrypted or \
-                seafile_api.check_permission_by_path(repo_id, '/', uls.username) != 'rw':
+                seafile_api.check_permission_by_path(repo_id, path, uls.username) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
