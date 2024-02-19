@@ -4,6 +4,7 @@ import isHotkey from 'is-hotkey';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
+import Icon from '../icon';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
@@ -590,6 +591,15 @@ export default class AISearch extends Component {
     return null;
   }
 
+  renderSearchIcon = () => {
+    const { indexState } = this.state;
+    if (indexState === INDEX_STATE.RUNNING || indexState === INDEX_STATE.FINISHED) {
+      return <Icon symbol='AI-search' className='input-icon-addon' />;
+    } else {
+      return <Icon symbol='search' className='input-icon-addon' />;
+    }
+  }
+
   toggleSettingsShown = () => {
     this.setState({
       isSettingsShown: !this.state.isSettingsShown
@@ -608,7 +618,7 @@ export default class AISearch extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow, isCloseShow, searchMode } = this.state;
+    const { isMaskShow, searchMode } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
 
     if (searchMode === SEARCH_MODE.QA) {
@@ -630,8 +640,8 @@ export default class AISearch extends Component {
           <div className="search">
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
-              <div className={`input-icon`}>
-                <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <div className="input-icon">
+                {this.renderSearchIcon()}
                 <input
                   type="text"
                   className="form-control search-input"
@@ -666,15 +676,15 @@ export default class AISearch extends Component {
           </div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
-          <div className="search-icon-container">
-            <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
+          <div className="search-icon-container" onClick={this.onSearchToggle}>
+            {this.renderSearchIcon()}
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
               <div className="search-container">
                 <div className="input-icon">
-                  <i className="search-icon-left input-icon-addon fas fa-search"></i>
+                  {this.renderSearchIcon()}
                   <input
                     type="text"
                     className="form-control search-input"
