@@ -1,0 +1,2516 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Amr Mothana <amrusud@gmail.com>, 2024
+# malnaim <malnaim@safedecision.com.sa>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-05 19:50+0800\n"
+"PO-Revision-Date: 2024-02-06 08:23+0000\n"
+"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2024\n"
+"Language-Team: Arabic (https://app.transifex.com/haiwen/teams/5086/ar/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: templates/help/base.html:26 templates/help/base.html:28
+#: templates/help/introduction.html:6
+msgid "Introduction"
+msgstr "مقدمة"
+
+#: templates/help/base.html:31
+msgid "Managing files and folders"
+msgstr "إدارة الملفات والمجلدات"
+
+#: templates/help/base.html:33 templates/help/libraries_managing.html:5
+msgid "Managing files with libraries"
+msgstr "إدارة الملفات والمكتبات"
+
+#: templates/help/base.html:34
+msgid "Restoring deleted files"
+msgstr "إعادة الملفات المحذوفة"
+
+#: templates/help/base.html:35
+msgid "Finding old file versions"
+msgstr "العثور على نسخ قديمة من الملفات"
+
+#: templates/help/base.html:36
+#: templates/help/library_history_and_snapshots.html:6
+msgid "Library history and snapshots"
+msgstr "تاريخ المكتبات و لقطاتها"
+
+#: templates/help/base.html:37
+msgid "Setting history retention period"
+msgstr "تحديد فترة الحفظ"
+
+#: templates/help/base.html:38 templates/help/deleting_a_library.html:5
+msgid "Deleting a library"
+msgstr "يتم حذف المكتبة"
+
+#: templates/help/base.html:39
+#: templates/help/viewing_files_within_web_app.html:5
+msgid "Viewing files within Web App"
+msgstr "عرض الملفات عن طريق الويب"
+
+#: templates/help/base.html:40 templates/help/full_text_file_search.html:5
+msgid "Full text file search"
+msgstr "البحث على النصوص في الملفات"
+
+#: templates/help/base.html:43
+msgid "Sharing and collaboration"
+msgstr "المشاركة والتعاون"
+
+#: templates/help/base.html:45 templates/help/sharing_files_and_folders.html:5
+msgid "Sharing files and folders"
+msgstr "مشاركة الملفات والمجلدات"
+
+#: templates/help/base.html:46 templates/help/groups_managing.html:5
+msgid "Managing groups"
+msgstr "إدارة المجموعات"
+
+#: templates/help/base.html:47
+msgid "Locking files"
+msgstr "قفل الملفات"
+
+#: templates/help/base.html:48
+msgid "Folder permission"
+msgstr "إذن المجلد"
+
+#: templates/help/base.html:49
+msgid "Departments sharing"
+msgstr "مشاركة الإدارات"
+
+#: templates/help/base.html:52
+msgid "Wiki and knowledge management"
+msgstr "الويكي و إدارة المعرفة"
+
+#: templates/help/base.html:54 templates/help/manage_library_as_wiki.html:5
+msgid "Managing a library as Wiki"
+msgstr "إدارة المكتبة كـwiki"
+
+#: templates/help/base.html:57
+msgid "Desktop client and syncing"
+msgstr "عميل سطح المكتب و المزامنة"
+
+#: templates/help/base.html:59
+msgid "Install and sync files"
+msgstr "تثبيت و مزامنة ملفات"
+
+#: templates/help/base.html:60
+msgid "Syncing existing folders"
+msgstr "مزامنة مجلدات موجودة"
+
+#: templates/help/base.html:61 templates/help/selective_sync.html:6
+msgid "Selectively sync sub-folders"
+msgstr "مزامنة مجلدات فرعية انتقائية"
+
+#: templates/help/base.html:62 templates/help/read-only_syncing.html:5
+msgid "Read-only syncing"
+msgstr "مزامنة بصلاحية القراءة فقط"
+
+#: templates/help/base.html:63
+msgid "Unsync and resync libraries"
+msgstr "الغاء مزامنة و اعادة مزامنة مكتبات"
+
+#: templates/help/base.html:64 templates/help/sync_interval.html:6
+msgid "Setting sync interval"
+msgstr "تحديد فترة المزامنة"
+
+#: templates/help/base.html:65
+msgid "Proxy settings"
+msgstr "إعدادات البروكسي"
+
+#: templates/help/base.html:66 templates/help/conflicts.html:5
+msgid "File conflicts"
+msgstr "تعارضات الملف"
+
+#: templates/help/base.html:67
+msgid "Excluding files"
+msgstr "استثناء ملفات"
+
+#: templates/help/base.html:70
+msgid "Drive client"
+msgstr "عميل سطح المكتب "
+
+#: templates/help/base.html:72 templates/help/using_drive_client.html:6
+msgid "Using Seafile drive client"
+msgstr "عميل Seafile لسطح المكتب"
+
+#: templates/help/base.html:73
+msgid "Using drive client 2.0 on Windows"
+msgstr "عميل Seafile 2.0 لسطح المكتب"
+
+#: templates/help/base.html:76
+msgid "Security and encryption"
+msgstr "الحماية و التشفير"
+
+#: templates/help/base.html:78
+msgid "How to use encrypted libraries"
+msgstr "كيفية استخدام مكتبات مشفرة"
+
+#: templates/help/conflicts.html:7
+msgid ""
+"Once you and your friends sync a shared file library onto your computers, "
+"you may add, delete or edit files in the library together. Every change you "
+"make to the library would be automatically synced to others' computers."
+msgstr ""
+"حالما تقوم أنت و أصدقائك بمزامنة مكتبة ملفات مشتركة على أجهزتكم، يمكنكم "
+"إضافة، حذف أو تحرير ملفات في المكتبة معا. كل تغيير تقومون به في المكتبة يتم "
+"مزامنته آليا في الأجهزة الأخرى."
+
+#: templates/help/conflicts.html:9
+msgid ""
+"Sometimes you and your friends may edit the same file at the same time. Your"
+" changes may conflict with each other's. In this case, Seafile would keep "
+"the first version synced to the cloud unchanged, while rename the other "
+"version to a \"conflict file\". A conflict file's name ends with it's "
+"author's email address, plus the current time, e.g. test.txt (SFConflict "
+"name@example.com 2015-03-07-11-30-28)."
+msgstr ""
+"أحيانا قد تقوم أنت و أصدقائك بتحرير نفس المف في نفس الوقت. قد تتعارض "
+"تعديلاتكم مع بعضكم الآخر. في هذه الحالة، سيحتفظ Seafile بالنسخة الأولى على "
+"السرفر بدون تغيير، و في نفس الوقت سيعيد تسمية النسخة الأخرى الى \"ملف "
+"متعارض\". اسم الملف المتعارض ينتهي ب عنوان بريد المحرر، بالاضافة الى الوقت "
+"الحالي، مثلا test.txt (SFConflict name@example.cpm 2015-03-07-11-30-28)."
+
+#: templates/help/deleting_a_library.html:6
+msgid ""
+"You can delete a library owned by you. A deleted library can be restored by "
+"you or Seafile server's administrator."
+msgstr ""
+"يمكنك حذف مكتبة تملكها . المكتبة المحذوفة يمكن أن تستعيدها أنت أو مدير "
+"الخادم"
+
+#: templates/help/deleting_a_library.html:7
+msgid "After a library is deleted, it has following effects:"
+msgstr "بعد حذف المكتبة، سيأثر على :"
+
+#: templates/help/deleting_a_library.html:9
+msgid "Share of the files and folders within this library are all canceled."
+msgstr "الملفات و المجلدات التي تم مشاركتها في المكتبة تم إلغائه"
+
+#: templates/help/deleting_a_library.html:10
+msgid ""
+"Desktop clients synced with this library cannot sync with it any more. But "
+"the local files on the client won't be deleted."
+msgstr ""
+"عميل سطح المكتب لا يستطيع مزامنة المكتبة . جميع ملفاتك المحلية لن يتم حذفها "
+"."
+
+#: templates/help/departments.html:5
+msgid "Managing and using departments"
+msgstr "إدارة الإدارات واستخدامها"
+
+#: templates/help/departments.html:6
+msgid ""
+"Some organizations consist of complex department hierarchy. There are "
+"usually two common use cases for file management in these organizations:"
+msgstr ""
+"بعض المنظمات تتضمن تسلسل هرمي معقد للإدارات. عادة ما تكون هناك حالتان "
+"شائعتان لإدارة الملفات في هذه المؤسسات:"
+
+#: templates/help/departments.html:8
+msgid ""
+"There should be a common file sharing space for the organization. The folder"
+" hierarchy should map the department hierarchy. There will be separate "
+"folder or space assigned to each department."
+msgstr ""
+"يجب أن يكون هناك مساحة مشتركة لمشاركة الملفات للمؤسسة. يجب أن تعين التسلسل "
+"الهرمي للمجلد التسلسل الهرمي للقسم. سيكون هناك مجلد منفصل أو مساحة معينة لكل"
+" قسم."
+
+#: templates/help/departments.html:9
+msgid ""
+"The sharing space should be owned and managed by the organization, but not "
+"individual employees. So that the ownership of files doesn't have to be "
+"changed when an employee leaves the organization."
+msgstr ""
+"يجب أن تكون مساحة المشاركة مملوكة وتدار من قبل المؤسسة، وليس من قبل الموظفين"
+" الأفراد. بحيث لا يلزم تغيير ملكية الملفات عندما يغادر الموظف المؤسسة."
+
+#: templates/help/departments.html:11
+msgid ""
+"The \"Departments\" feature is designed to meet the above two use cases. "
+"We'll introduce this feature from 3 different perspectives:"
+msgstr ""
+"تم تصميم ميزة \"الإدارات\" لتلبية حالتي الاستخدام المذكورتين أعلاه. سنقدم "
+"هذه الميزة من 3 وجهات نظر مختلفة:"
+
+#: templates/help/departments.html:13 templates/help/departments.html:17
+msgid "System admin"
+msgstr "مدير النظام"
+
+#: templates/help/departments.html:14 templates/help/departments.html:35
+msgid "Department admin"
+msgstr "مدير اﻹدارة "
+
+#: templates/help/departments.html:15 templates/help/departments.html:52
+msgid "Department members"
+msgstr "أعضاء الإدارة "
+
+#: templates/help/departments.html:18
+msgid "The system admin can:"
+msgstr "مدير النظام يستطيع :"
+
+#: templates/help/departments.html:20 templates/help/departments.html:24
+msgid "Manage department hierarchy and members"
+msgstr "إدارة الإدارات و الأعضاء ."
+
+#: templates/help/departments.html:21 templates/help/departments.html:29
+msgid "Assign storage quota for departments"
+msgstr "حدد المساحة المخصصة لكل إدارة"
+
+#: templates/help/departments.html:22 templates/help/departments.html:31
+msgid "Create and manage shared libraries in departments"
+msgstr "إنشاء وإدارة المكتبات المشتركة في الإدارات"
+
+#: templates/help/departments.html:25
+msgid ""
+"The system admin can set up the department hierarchy in two ways: manual "
+"setup or import from Active Directory."
+msgstr ""
+"يمكن لمسؤول النظام إعداد التسلسل الهرمي للقسم بطريقتين: الإعداد اليدوي أو "
+"الاستيراد من Active Directory."
+
+#: templates/help/departments.html:26
+msgid ""
+"The system admin can create any number of top level departments and create "
+"any levels of sub-departments under each department. And each level of "
+"department can be populated with members. The system admin can set the role "
+"of each member to 'member' or 'admin'. We'll introduce how a department "
+"admin can manage department later."
+msgstr ""
+"يمكن لمسؤول النظام إنشاء أي عدد من الادارات ذات المستوى الأعلى وإنشاء أي "
+"مستويات من الأقسام الفرعية تحت كل قسم. ويمكن ملء كل مستوى من مستويات الإدارة"
+" مع الأعضاء. يمكن لمسؤول النظام تعيين دور كل عضو إلى \"عضو\" أو \"مسؤول\". "
+"سنعرض كيف يمكن لمسؤول القسم إدارة القسم لاحقا."
+
+#: templates/help/departments.html:27
+msgid ""
+"The system admin can also import the hierarchy from OUs (Organizational "
+"Units) in AD. Each OU will be imported as a department. And the sub-OUs "
+"under an OU will be imported as sub-departments. Department libraries can be"
+" automatically created in the import process."
+msgstr ""
+"يمكن لمسؤول النظام أيضا استيراد التسلسل الهرمي من وحدات تنظيمية (OU) في AD ."
+" سيتم استيراد كل OU كقسم. وسيتم استيراد وحدات OUs الفرعية تحت الوحدة "
+"التنظيمية كإدارات فرعية. يمكن إنشاء مكتبات القسم تلقائيا في عملية الاستيراد."
+
+#: templates/help/departments.html:28
+msgid ""
+"System admin can also delete a department after all the sub-departments and "
+"libraries are deleted."
+msgstr ""
+"يمكن لمسؤول النظام أيضا حذف إدارة بعد حذف كافة الإدارات الفرعية والمكتبات."
+
+#: templates/help/departments.html:30
+msgid ""
+"The libraries created inside a department are owned by the department "
+"itself, not by any individual user. So the system admin can assign storage "
+"quota to a department. The total size of all the libraries in a department "
+"cannot exceed the storage quota. <strong>Please note that the quota of sub-"
+"department doesn't depend on the quota of its parent department.</strong>"
+msgstr ""
+"والمكتبات التي أنشئت داخل إدارة ما مملوكة للإدارة نفسها، وليس لأي مستخدم "
+"فردي. لذا النظام يُعلّمُ يُمْكِنُ أَنْ يُخصّصَ حصصاً للتخزين إلى إدارة. ولا "
+"يمكن أن يتجاوز مجموع حجم جميع المكتبات في أي إدارة حصة التخزين . يرجى ملاحظة"
+" أن حصة الإدارة الفرعية لا تتوقف على حصة الإدارة الرئيسية."
+
+#: templates/help/departments.html:32
+msgid ""
+"Department libraries can be created by the system admin or department admin."
+" There is also an option to control whether individual users can share "
+"libraries to a department."
+msgstr ""
+"يمكن إنشاء مكتبات الإدارات بواسطة مسؤول النظام أو مسؤول الإدارة. هناك أيضا "
+"خيار للتحكم في ما إذا كان يمكن للمستخدمين الفرديين مشاركة المكتبات لإدارة "
+"معينة."
+
+#: templates/help/departments.html:33
+msgid ""
+"All the above operations can be done in the system admin interface. See the "
+"below screenshot for information."
+msgstr ""
+"يمكن القيام بجميع العمليات المذكورة أعلاه في واجهة مسؤول النظام. انظر الصورة"
+" أدناه للحصول على المزيد من المعلومات."
+
+#: templates/help/departments.html:36
+msgid ""
+"As noted above, department admin is a special role assigned by the system "
+"admin to some members of a department. Department admins can perform the "
+"following operations in a department after login to his/her own account."
+msgstr ""
+"كما هو مذكور أعلاه، مسؤول الإدارة هو دور خاص تم تعيينه من قبل مسؤول النظام "
+"لبعض أعضاء الإدارة. يمكن لمسؤولي القسم تنفيذ العمليات التالية في قسم ما بعد "
+"تسجيل الدخول إلى حسابه الخاص."
+
+#: templates/help/departments.html:38
+msgid "Access to the libraries of the department"
+msgstr "الوصول إلى مكتبات الإدارة"
+
+#: templates/help/departments.html:39
+msgid "Manage members in his/her department"
+msgstr "إدارة الأعضاء في الإدارة"
+
+#: templates/help/departments.html:40
+msgid "Manage libraries in his/her department"
+msgstr "إدارة المكتبات في الإدارة"
+
+#: templates/help/departments.html:42
+msgid ""
+"If a user is the admin of a department, he/she can add or delete members in "
+"the department. Any users registered in the system can be added as member of"
+" the department. But if the departments are imported from AD, the changes to"
+" membership will be overwritten on the next sync with AD."
+msgstr ""
+"إذا كان المستخدم هو المسؤول عن قسم، فيمكنه إضافة أعضاء في القسم أو حذفهم. "
+"يمكن إضافة أي مستخدمين مسجلين في النظام كعضو في القسم. ولكن إذا تم استيراد "
+"الأقسام من AD ، الكتابة فوق التغييرات التي تطرأ على العضوية في المزامنة "
+"التالية مع AD."
+
+#: templates/help/departments.html:44
+msgid ""
+"Department admin can manage the libraries in the department. The supported "
+"operations are:"
+msgstr "يمكن لمسؤول القسم إدارة المكتبات في القسم. العمليات المدعومة هي:"
+
+#: templates/help/departments.html:46
+msgid "Create or delete library"
+msgstr "إنشاء أو حذف مكتبة"
+
+#: templates/help/departments.html:47
+msgid "Change library name"
+msgstr "تغيير إسم المكتبة"
+
+#: templates/help/departments.html:48
+msgid ""
+"Share a library to users or groups outside of this department. This is very "
+"useful for cross-department collaboration."
+msgstr ""
+"مشاركة مكتبة مع مستخدمين أو مجموعات خارج هذا القسم. هذا مفيد جدا للتعاون بين"
+" الأقسام."
+
+#: templates/help/departments.html:49
+#, python-format
+msgid ""
+"Set fine-grained permission to folders in the libraries for users or sub-"
+"departments in this department. This works like <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
+"feature</a>."
+msgstr ""
+"قم بتعيين إذن دقيق للمجلدات الموجودة في المكتبات للمستخدمين أو الأقسام "
+"الفرعية في هذا القسم. هذا يعمل مثل <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">ميزة إذن المجلد</a>."
+
+#: templates/help/departments.html:53
+msgid ""
+"A normal member of the department can use the department just like a group. "
+"Each department is presented to its members as a group. A user can not only "
+"access to the libraries in the department he/she belongs to, but also the "
+"libraries in the parent departments of his/her department. For example, if "
+"John is in the \"EMEA\" sub-department under the \"Sales\" department, and "
+"\"Sales\" is a sub-department under the company \"ACME\", John can then "
+"access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
+"departments are marked with a \"building\" icon next to its name."
+msgstr ""
+"يمكن للعضو العادي في القسم استخدام القسم تماما مثل المجموعة. يتم تقديم كل "
+"قسم لأعضائه كمجموعة. لا يمكن للمستخدم الوصول إلى المكتبات في القسم الذي "
+"ينتمي إليه فحسب ، بل يمكنه أيضا الوصول إلى المكتبات الموجودة في الأقسام الأم"
+" في قسمه. على سبيل المثال ، إذا كان محمد في القسم الفرعي \"EMEA\" ضمن قسم "
+"\"المبيعات\" ، وكان \"المبيعات\" قسما فرعيا تابعا لشركة \"ACME\" ، فيمكن "
+"لمحمد بعد ذلك الوصول إلى المجموعات \"EMEA\" و \"Sales\" و \"ACME\". يتم "
+"تمييز مجموعات الأقسام برمز \"مبنى\" بجوار اسمها."
+
+#: templates/help/desktop_proxy.html:6
+msgid "Using proxy in Seafile client"
+msgstr "استخدام البروكسي في عميل Seafile"
+
+#: templates/help/desktop_proxy.html:8
+msgid ""
+"Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
+"and system proxy settings."
+msgstr ""
+"عميل Seafile يدعم ثلاثة أنواع من خوادم البروكسي: HTTP، SOCKS5 و إعدادات "
+"بروكسي النظام."
+
+#: templates/help/desktop_proxy.html:10
+msgid ""
+"HTTP proxy and SOCKS5 proxy requires you to enter the proxy server's address"
+" and port. If you use system proxy settings, Seafile client reads proxy "
+"settings from the operating system. The operating system has some mechanisms"
+" to auto-detect proxy server information. So you don't have to manually "
+"enter proxy server address."
+msgstr ""
+"وكيل HTTP و SOCKS5 الوكيل يتطلب منك إدخال عنوان ومنفذ الخادم الوكيل. إذا كنت"
+" تستخدم إعدادات وكيل النظام، يقرأ عميل Seafile إعدادات الوكيل من نظام "
+"التشغيل. نظام التشغيل لديه بعض التقنيات للكشف الالي عن معلومات الملقم "
+"الوكيل. لذلك ليس عليك إدخال عنوان الخادم الوكيل يدويا."
+
+#: templates/help/desktop_proxy.html:12
+msgid ""
+"To change proxy settings, click the Seafile icon in the system notification "
+"area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
+"can change proxy settings in the \"Network\" tab."
+msgstr ""
+"لتغيير إعدادات الوكيل، انقر فوق رمز Seafile في ناحية إعلام النظام. اختر "
+"\"إعدادات\" من القائمة. في مربع الحوار المنبثق إعدادات، يمكنك تغيير إعدادات "
+"الوكيل في التبويب \"الشبكة\"."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:6
+msgid "SeaDrive 2.0 for Windows 10"
+msgstr "SeaDrive 2.0 لـWindows 10"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:8
+msgid ""
+"SeaDrive 2.0 (and future versions) is redesigned with deeper integration to "
+"Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
+"Update for Windows 10) and later versions. We recommend Windows 10 users to "
+"upgrade to SeaDrive 2.0 for more native virtual drive experience."
+msgstr ""
+"تمت إعادة تصميم SeaDrive 2.0 (والإصدارات المستقبلية) مع تكامل أعمق مع نظام "
+"التشغيل Windows 10. وهو يدعم إصدار Windows 10 1709 (تحديث خريف 2017 لنظام "
+"التشغيل Windows 10) والإصدارات الأحدث. نوصي مستخدمي Windows 10 بالترقية إلى "
+"SeaDrive 2.0 للحصول على تجربة محرك أقراص افتراضية ."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:10
+msgid "Install and access the Virtual Drive"
+msgstr "تثبيت محرك الأقراص الإفتراضي والوصول إليه"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:11
+msgid ""
+"You can download SeaDrive 2.0 from official Seafile website. After "
+"installation and logging into your Seafile account, SeaDrive will start "
+"downloading library and file lists from the server (just as in SeaDrive "
+"1.0.x). It may take some time, depending on the number of files available in"
+" your seafile account. The download is progressive, so in the mean time you "
+"can already access some files in the virtual drive."
+msgstr ""
+"يمكنك تنزيل SeaDrive 2.0 من موقع Seafile الرسمي. بعد التثبيت وتسجيل الدخول "
+"إلى حساب Seafile الخاص بك ، سيبدأ SeaDrive في تنزيل قوائم المكتبة والملفات "
+"من الخادم (تماما كما هو الحال في SeaDrive 1.0.x). قد يستغرق الأمر بعض الوقت "
+"، اعتمادا على عدد الملفات المتاحة في حساب seafile الخاص بك. التنزيل تقدمي ، "
+"لذلك في الوقت نفسه يمكنك بالفعل الوصول إلى بعض الملفات في محرك الأقراص "
+"الظاهري."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:12
+msgid ""
+"To access the virtual drive, just open Windows file explorer. There is a "
+"\"seadrive\" node in the navigation pane of Windows file explorer."
+msgstr ""
+"للوصول إلى محرك الأقراص الظاهري ، ما عليك سوى فتح مستكشف ملفات Windows. توجد"
+" عقدة \"seadrive\" في جزء التنقل في مستكشف ملفات Windows."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:16
+msgid "Accessing files in the Virtual Drive"
+msgstr "الوصول لمحرك الأقراص الإفتراضي"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:17
+msgid ""
+"Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
+"Shared with me, Shared with groups and Shared with all."
+msgstr ""
+"يتم تجميع المكتبات في 4 فئات في محرك الأقراص الظاهري: مكتباتي والمشتركة معي "
+"والمشتركة مع المجموعات والمشتركة مع الجميع."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:18
+msgid ""
+"As you can see, the file status icons is more integrated into Windows file "
+"explorer. The icons are a bit different form version 1.0."
+msgstr ""
+"كما ترى ، فإن أيقونات حالة الملف أكثر دمجا في مستكشف ملفات Windows. الرموز "
+"مختلفة قليلا شكل الإصدار 1.0."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:19
+msgid ""
+"Files in the virtual drive are created as \"placeholders\" in the local file"
+" system. They may be in 3 states:"
+msgstr ""
+"يتم إنشاء الملفات الموجودة في محرك الأقراص الظاهري ك \"عناصر نائبة\" في نظام"
+" الملفات المحلي. قد تكون في 3 حالات:"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:21
+msgid ""
+"<b>Placeholder file</b>: An empty representation of the file and can only be"
+" opened when there is network connection."
+msgstr ""
+"<b>ملف العنصر النائب</b>: تمثيل فارغ للملف ولا يمكن فتحه إلا عند وجود اتصال "
+"بالشبكة."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:22
+msgid ""
+"<b>Full file</b>: The file has been downloaded and saved locally. Download "
+"is automatic when a placeholder file is opened for the first time. These "
+"files are available whenever you open SeaDrive regardless to network "
+"connections. The operating system may decide to clear a full file when more "
+"disk space is needed."
+msgstr ""
+"<b>الملف الكامل</b>: تم تنزيل الملف وحفظه محليا. يكون التنزيل تلقائيا عند "
+"فتح ملف عنصر نائب لأول مرة. تتوفر هذه الملفات كلما فتحت SeaDrive بغض النظر "
+"عن اتصالات الشبكة. قد يقرر نظام التشغيل مسح ملف كامل عند الحاجة إلى مساحة "
+"أكبر على القرص."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:23
+msgid ""
+"<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
+"is guaranteed to be available offline."
+msgstr ""
+"<b>الملف الكامل المثبت</b>: تم تنزيل الملف وحفظه محليا. إنه مضمون أن يكون "
+"متاحا في وضع عدم الاتصال."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:26
+msgid ""
+"You can control which files or folder are cached locally. This can be "
+"changed from the context menu when you right click on a file or folder. "
+"Choose \"Always keep on this device\" when you want to pin a file or folder "
+"locally; choose \"Free up space\" when you want to clean the cache for a "
+"file or folder."
+msgstr ""
+"يمكنك التحكم في الملفات أو المجلدات التي يتم تخزينها مؤقتا محليا. يمكن تغيير"
+" هذا من قائمة السياق عند النقر بزر الماوس الأيمن فوق ملف أو مجلد. اختر "
+"\"الاحتفاظ دائما بهذا الجهاز\" عندما تريد تثبيت ملف أو مجلد محليا ؛ اختر "
+"\"تحرير مساحة\" عندما تريد تنظيف ذاكرة التخزين المؤقت لملف أو مجلد."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:28
+msgid ""
+"In SeaDrive 1.0, cached files are not automatically updated when they're "
+"updated on the server. In SeaDrive 2.0, full and pinned files are "
+"automatically kept in sync with the server."
+msgstr ""
+"في SeaDrive 1.0، لا يتم تحديث الملفات المخزنة مؤقتا تلقائيا عند تحديثها على "
+"الخادم. في SeaDrive 2.0 ، يتم الاحتفاظ تلقائيا بمزامنة الملفات الكاملة "
+"والمثبتة مع الخادم."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:30
+msgid "File Download and Control"
+msgstr "التحميل و التحكم بالملف"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:31
+msgid ""
+"Whenever you open a placeholder file, the operating system will "
+"automatically start to download it. If the file may take some time to "
+"download, there will be a progress bar shown up in file explorer and you may"
+" cancel the download."
+msgstr ""
+"عندما تفتح ملف عنصر نائب ، سيبدأ نظام التشغيل تلقائيا في تنزيله. إذا كان "
+"الملف قد يستغرق بعض الوقت للتنزيل ، فسيكون هناك شريط تقدم يظهر في مستكشف "
+"الملفات ويمكنك إلغاء التنزيل."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:32
+msgid ""
+"Sometimes a background application may try to download a file in the virtual"
+" drive (such as an Anti-Virus software). You will be notified by the "
+"operating system about this and you may choose to cancel the download or "
+"disallow the application from automatically downloading files in the future."
+msgstr ""
+"في بعض الأحيان قد يحاول تطبيق الخلفية تنزيل ملف في محرك الأقراص الظاهري (مثل"
+" برنامج مكافحة الفيروسات). سيتم إخطارك من قبل نظام التشغيل بهذا الأمر ويمكنك"
+" اختيار إلغاء التنزيل أو عدم السماح للتطبيق بتنزيل الملفات تلقائيا في "
+"المستقبل."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:34
+#: templates/help/using_drive_client.html:79
+msgid "FAQ"
+msgstr "اﻷسألة الشائعة"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:35
+msgid "Can I create, delete, rename libraries?"
+msgstr "هل يمكنني إنشاء المكتبات وحذفها وإعادة تسميتها؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:36
+msgid ""
+"Yes. When you create, delete or rename library folders in the virtual drive,"
+" the operation will be reflected on the server. You can only create, delete,"
+" rename libraries under the \"My Libraries\" category. Creating, deleting or"
+" renaming libraries in other categories will be ignored."
+msgstr ""
+"نعم. عند إنشاء مجلدات المكتبة أو حذفها أو إعادة تسميتها في محرك الأقراص "
+"الظاهري ، ستنعكس العملية على الخادم. يمكنك فقط إنشاء مكتبات أو حذفها أو "
+"إعادة تسميتها ضمن فئة \"مكتباتي\". سيتم تجاهل إنشاء أو حذف أو إعادة تسمية "
+"المكتبات في فئات أخرى."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:38
+msgid "Can I create files or folders outside of a library folder?"
+msgstr "هل يمكنني إنشاء ملفات أو مجلدات خارج مجلد مكتبة؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:39
+msgid ""
+"Yes. But files created outside of a library folder will be ignored and NOT "
+"synced to the server. A new folder under the \"My Libraries\" folder will be"
+" handled as a new library."
+msgstr ""
+"نعم. ولكن سيتم تجاهل الملفات التي تم إنشاؤها خارج مجلد المكتبة ولن تتم "
+"مزامنتها مع الخادم. سيتم التعامل مع مجلد جديد ضمن مجلد \"مكتباتي\" كمكتبة "
+"جديدة."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:41
+msgid "Can I access encrypted libraries?"
+msgstr "هل يمكنني الوصول إلى المكتبات المشفرة؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:42
+msgid ""
+"Yes. By default, encrypted libraries are not synced and shown in the virtual"
+" drive. You need to manually choose which encrypted libraries to sync and "
+"enter the password. Just right click on the SeaDrive icon in the system tray"
+" area and choose \"Show encrypted libraries\". A window will show up and you"
+" can choose to sync or unsync an encrypted library."
+msgstr ""
+"نعم. بشكل افتراضي ، لا تتم مزامنة المكتبات المشفرة وعرضها في محرك الأقراص "
+"الظاهري. تحتاج إلى اختيار المكتبات المشفرة يدويا لمزامنتها وإدخال كلمة "
+"المرور. فقط انقر بزر الماوس الأيمن على أيقونة SeaDrive في منطقة علبة النظام "
+"واختر \"إظهار المكتبات المشفرة\". ستظهر نافذة ويمكنك اختيار مزامنة مكتبة "
+"مشفرة أو إلغاء مزامنتها."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:44
+msgid "Is it compatible to SeaDrive 1.0?"
+msgstr "هل هي متوافقة مع SeaDrive 1.0 ؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:45
+msgid ""
+"SeaDrive 2.0 will use any existing accounts and their metadata (stored under"
+" C:\\users\\username\\seadrive\\ folder). But it will not use the cached "
+"files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
+" be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
+"the files to server or copy them out."
+msgstr ""
+"سيستخدم SeaDrive 2.0 أي حسابات موجودة وبياناتها الوصفية (المخزنة ضمن "
+"C:\\users\\username\\seadrive\\  folder). لكنه لن يستخدم الملفات المخزنة "
+"مؤقتا من SeaDrive 1.0. لذلك لن يمكن الوصول إلى أي ملفات مخزنة مؤقتا محليا في"
+" الإصدار 1.0 في الإصدار 2.0. يمكنك بدء تشغيل SeaDrive 1.0 مرة أخرى لتحميل "
+"الملفات إلى الخادم أو نسخها."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:47
+msgid "How do I clean the cache?"
+msgstr "كيف يمكنني تنظيف ذاكرة التخزين المؤقت؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:48
+msgid ""
+"You can manually choose which folders or files to be cached locally. If you "
+"find a folder consumes too much space, just choose to \"Free up space\" on "
+"that folder and all cached files in that folder will be cleaned. There is no"
+" need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
+"Because placeholders are just normal files created on your local disk, your "
+"cache size is only limited by the available disk space on your computer."
+msgstr ""
+"يمكنك اختيار المجلدات أو الملفات التي سيتم تخزينها مؤقتا محليا يدويا. إذا "
+"وجدت مجلدا يستهلك مساحة كبيرة جدا ، فما عليك سوى اختيار \"تحرير مساحة\" في "
+"هذا المجلد وسيتم تنظيف جميع الملفات المخزنة مؤقتا في هذا المجلد. ليست هناك "
+"حاجة لتعيين وقت تنظيف ذاكرة التخزين المؤقت والحد الأقصى لحجم ذاكرة التخزين "
+"المؤقت كما هو الحال في SeaDrive 1.0. نظرا لأن العناصر النائبة هي مجرد ملفات "
+"عادية تم إنشاؤها على القرص المحلي، فإن حجم ذاكرة التخزين المؤقت محدود فقط "
+"بمساحة القرص المتوفرة على الكمبيوتر."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:50
+msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
+msgstr "كيفية إزالة اختصارات SeaDrive المتبقية في مستكشف ويندوز؟"
+
+#: templates/help/drive_client_2.0_for_windows_10.html:51
+msgid ""
+"The \"SeaDrive\" shortcut in Windows Explorer won't disappear after you exit"
+" SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
+"intended behavior. You don't need to remove them if you still need to access"
+" the account later."
+msgstr ""
+"لن يختفي اختصار \"SeaDrive\" في مستكشف ويندوز بعد الخروج من برنامج SeaDrive "
+"أو تبديل حسابات Seafile في SeaDrive. هذا هو السلوك المقصود. لا تحتاج إلى "
+"إزالتها إذا كنت لا تزال بحاجة إلى الوصول إلى الحساب لاحقا."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+"في بعض الحالات ، سيتم ترك اختصار \"SeaDrvie\" في مستكشف ويندوز ويجب إزالته "
+"يدوياً."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:53
+msgid ""
+"You can usually remove those shortcuts by uninstalling SeaDrive program and "
+"choose \"Remove account information\" in the prompt dialog."
+msgstr ""
+"يمكنك عادة إزالة هذه الاختصارات عن طريق إلغاء تثبيت برنامج SeaDrive واختيار "
+"\"إزالة معلومات الحساب\" في مربع الحوار ."
+
+#: templates/help/drive_client_2.0_for_windows_10.html:54
+msgid ""
+"If uninstallation doesn't remove the shortcuts successfully, you can remove "
+"the SeaDrive shortcut in Windows Explorer by editing the registry. Open the "
+"path "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" in registry editor. Remove the sub-keys correspond to the shortcut you want"
+" to remove."
+msgstr ""
+"إذا لم تؤد إزالة التثبيت إلى إزالة الاختصارات بنجاح، فيمكنك إزالة اختصار "
+"SeaDrive في مستكشف ويندوز عن طريق تحرير سجل الـregistry. افتح المسار "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" في محرر السجل. قم بإزالة المفاتيح الفرعية التي تتوافق مع الاختصار الذي تريد"
+" إزالته."
+
+#: templates/help/encrypted_libraries.html:6
+msgid "How to Use Encrypted Libraries"
+msgstr "كيفية استخدام مكتبات مشفرة"
+
+#: templates/help/encrypted_libraries.html:8
+msgid ""
+"Seafile provides client-side end-to-end data encryption. You can create "
+"encrypted libraries to use this feature. File contents in encrypted "
+"libraries are encrypted on client side. The encryption password is not "
+"stored on the server. So even the server administrator can't access your "
+"file contents."
+msgstr ""
+"يوفر Seafile تشفير البيانات جهة-العميل طرف-الى-طرف. يمكنك إنشاء مكتبات مشفرة"
+" لاستخدام هذه الميزة. يتم تشفير محتويات الملف في مكتبات مشفرة على جانب "
+"العميل. لا يتم تخزين كلمة مرور التشفير على الملقم. بل وحتى المسؤول عن الملقم"
+" لا يمكنه الوصول إلى محتويات الملف الخاص بك."
+
+#: templates/help/encrypted_libraries.html:10
+msgid "When creating an encrypted library:"
+msgstr "عند انشاء مكتبة مشفرة:"
+
+#: templates/help/encrypted_libraries.html:12
+msgid ""
+"If you create an encrypted library in the web app, the password is sent to "
+"the server. The server uses this password to create the library. But it "
+"doesn't store the plain text password."
+msgstr ""
+"إذا قمت بإنشاء مكتبة مشفرة في تطبيق الويب، سيتم إرسال كلمة المرور إلى "
+"الخادم. يستخدم الخادم كلمة المرور هذه لإنشاء المكتبة. لكنه لا يخزن كلمة "
+"المرور ."
+
+#: templates/help/encrypted_libraries.html:13
+#, python-format
+msgid ""
+"If you create an encrypted library from a local folder with the desktop "
+"client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
+"the password is not sent to the server."
+msgstr ""
+"إذا قمت بإنشاء مكتبة مشفرة من مجلد محلي باستخدام عميل سطح المكتب (راجع <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة الملفات</a>)، فلن يتم إرسال "
+"كلمة المرور إلى الخادم."
+
+#: templates/help/encrypted_libraries.html:17
+msgid "When you access the encrypted library:"
+msgstr "عندما تصل الى المكتبة المشفرة:"
+
+#: templates/help/encrypted_libraries.html:19
+msgid ""
+"If you use web app, you have to input the password to the server. The server"
+" will cache the password in encrypted format for 1 hour. It won't store the "
+"password on disk."
+msgstr ""
+"إذا كنت تستخدم تطبيق الويب، يتعين عليك إدخال كلمة المرور للخادم. سيقوم "
+"الملقم بالتخزين المؤقت لكلمة المرور بتنسيق مشفر لمدة ساعة واحدة. لن يقوم "
+"بتخزين كلمة المرور على القرص."
+
+#: templates/help/encrypted_libraries.html:20
+msgid ""
+"If you use desktop client to sync the library, the password is not sent to "
+"the server. The client decrypts and encrypts file contents locally. The "
+"plain text password is not stored on the client disk either."
+msgstr ""
+"إذا كنت تستخدم عميل سطح المكتب لمزامنة المكتبة، لا يتم إرسال كلمة المرور إلى"
+" الخادم. يقوم العميل بفك تشفير محتويات الملف وتشفيرها محليا. لا يتم تخزين "
+"كلمة المرور على قرص العميل أيضا."
+
+#: templates/help/encrypted_libraries.html:21
+msgid ""
+"iOS client supports client side encryption since version 2.1.6. Android "
+"client supports it since version 2.1.0."
+msgstr ""
+"يدعم عميل iOS التشفير من جانب العميل منذ الإصدار 2.1.6. عميل أندرويد يدعمه "
+"منذ الإصدار 2.1.0."
+
+#: templates/help/encrypted_libraries.html:25
+msgid ""
+"Note that encrypted library only encrypts the contents of the files, but not"
+" the folder and file names."
+msgstr ""
+"لاحظ أن المكتبة المشفرة تقوم فقط بتشفير محتويات الملفات، ولكن ليس أسماء "
+"المجلدات والملفات."
+
+#: templates/help/file_locking.html:5
+msgid "File locking"
+msgstr "قفل الملف"
+
+#: templates/help/file_locking.html:6
+msgid ""
+"When more than one person collaborate on a file, it's likely that more than "
+"one person modify the file at about the same time. Seafile handles this "
+"situation nicely with conflict files. But it's often more convenient to lock"
+" the file when one person wants to exclusively modify the file. Seafile "
+"Professional Edition supports file locking."
+msgstr ""
+"عندما يتعاون أكثر من شخص في ملف، فمن المحتمل أن يقوم أكثر من شخص واحد بتعديل"
+" الملف في نفس الوقت تقريبا. يتعامل Seafile مع هذا الموقف بشكل جيد مع ملفات "
+"التعارض. ولكن غالبا ما يكون قفل الملف أكثر ملاءمة عندما يريد شخص واحد تعديل "
+"الملف حصريا. يدعم Seafile Professional Edition قفل الملفات."
+
+#: templates/help/file_locking.html:7
+msgid ""
+"File locking works on both the web app and the desktop syncing client. We'll"
+" introduce them one by one."
+msgstr ""
+"يعمل قفل الملفات على كل من تطبيق الويب وعميل مزامنة سطح المكتب. سنقدمهم "
+"واحدا تلو الآخر."
+
+#: templates/help/file_locking.html:8
+msgid "File locking on the Web App"
+msgstr "قفل الملف عن طريق الويب"
+
+#: templates/help/file_locking.html:9
+msgid ""
+"To lock a file, you can navigate into the file's folder on the web app, and "
+"click on the \"operations\" drop-down menu."
+msgstr ""
+"لقفل ملف ، يمكنك الانتقال إلى مجلد الملف على تطبيق الويب ، والنقر فوق "
+"القائمة المنسدلة \"العمليات\"."
+
+#: templates/help/file_locking.html:11
+msgid ""
+"After the file is locked, you can see a red \"stop sign\" at the corner of "
+"the file icon. Moving the mouse on the stop sign, you can see who locks the "
+"file. And you can also unlock a file that's locked by you. But you cannot "
+"unlock files locked by others."
+msgstr ""
+"بعد قفل الملف ، يمكنك رؤية \"علامة توقف\" حمراء في زاوية رمز الملف. تحريك "
+"الماوس على علامة التوقف ، يمكنك معرفة من يقوم بقفل الملف. ويمكنك أيضا إلغاء "
+"قفل ملف مقفلة بواسطتك. لكن لا يمكنك فتح الملفات المقفلة من قبل الآخرين."
+
+#: templates/help/file_locking.html:13
+msgid "File locking on the desktop client"
+msgstr "قفل الملف عن طريق عميل سطح المكتب"
+
+#: templates/help/file_locking.html:14
+msgid ""
+"After a library is synced to the desktop, you can lock/unlock files in that "
+"library inside File Explorer on Windows or Finder on Mac OS."
+msgstr ""
+"بعد مزامنة المكتبة مع سطح المكتب، يمكنك قفل/إلغاء تأمين الملفات في تلك "
+"المكتبة داخل مستكشف الملفات على Windows أو Finder على نظام التشغيل Mac OS."
+
+#: templates/help/file_locking.html:15
+msgid ""
+"To lock a file, just right click on a synced file and choose \"lock this "
+"file\" in the \"Seafile\" menu."
+msgstr ""
+"لقفل ملف ، ما عليك سوى النقر بزر الماوس الأيمن على ملف تمت مزامنته واختيار "
+"\"قفل هذا الملف\" في قائمة \"Seafile\"."
+
+#: templates/help/file_locking.html:17
+msgid ""
+"If a file is locked by you, you can see an orange \"stop sign\" on the file "
+"icon. You can choose to unlock it."
+msgstr ""
+"إذا تم قفل ملف بواسطتك ، يمكنك رؤية \"علامة قف\" برتقالية على أيقونة الملف. "
+"يمكنك اختيار إلغاء قفله."
+
+#: templates/help/file_locking.html:19
+msgid ""
+"If a file is locked by other user, you can see a red \"stop sign\" on the "
+"file icon. The file is automatically set to read-only. You cannot modify it "
+"until it's unlocked."
+msgstr ""
+"إذا تم قفل ملف من قبل مستخدم آخر ، يمكنك رؤية \"علامة قف\" حمراء على أيقونة "
+"الملف. يتم تعيين الملف تلقائيا للقراءة فقط. لا يمكنك تعديله حتى يتم إلغاء "
+"قفله."
+
+#: templates/help/file_locking.html:21
+msgid ""
+"If a library is not synced, you can still use cloud file browser to lock and"
+" unlock files in it."
+msgstr ""
+"إذا لم تتم مزامنة مكتبة ، فلا يزال بإمكانك استخدام متصفح الملفات السحابية "
+"لقفل الملفات الموجودة فيها وإلغاء قفلها."
+
+#: templates/help/file_locking.html:22
+msgid "Auto locking office files"
+msgstr "قفل ملفات office تلقائياً"
+
+#: templates/help/file_locking.html:23
+msgid ""
+"After a library is synced to the desktop, when you open a Microsoft Office "
+"file inside the library, Seafile automatically locks the file. When you "
+"close the file, Seafile automatically unlocks the file. The locking state is"
+" propagated to other computers syncing this library. It prevents concurrent "
+"editing the same Office file and is convenient for collaboration."
+msgstr ""
+"بعد مزامنة مكتبة مع سطح المكتب، عند فتح ملف Microsoft Office داخل المكتبة، "
+"يقوم Seafile تلقائيا بتأمين الملف. عند إغلاق الملف ، يقوم Seafile بإلغاء قفل"
+" الملف تلقائيا. يتم نشر حالة التأمين إلى أجهزة الكمبيوتر الأخرى التي تقوم "
+"بمزامنة هذه المكتبة. يمنع التحرير المتزامن لملف Office نفسه وهو مناسب "
+"للتعاون."
+
+#: templates/help/file_locking.html:24
+msgid "Details about file locking"
+msgstr "تفاصيل حول قفل الملفات"
+
+#: templates/help/file_locking.html:25
+msgid "There are a few useful tips about how file locking works:"
+msgstr "هناك بعض النصائح المفيدة حول كيفية عمل قفل الملف:"
+
+#: templates/help/file_locking.html:27
+msgid "A locked file can only be unlocked by the user who locked it."
+msgstr "لا يمكن إلغاء قفل الملف المقفل إلا من قبل المستخدم الذي قام بتأمينه."
+
+#: templates/help/file_locking.html:28
+msgid ""
+"A locked file cannot be modified, moved, renamed or deleted by other users. "
+"But other users can still move, delete or rename the parent folder of a "
+"locked file. The purpose of file locking is mainly to prevent concurrent "
+"editing."
+msgstr ""
+"لا يمكن تعديل الملف المقفل أو نقله أو إعادة تسميته أو حذفه من قبل مستخدمين "
+"آخرين. ولكن لا يزال بإمكان المستخدمين الآخرين نقل المجلد الأصل لملف مؤمن أو "
+"حذفه أو إعادة تسميته. الغرض من قفل الملف هو بشكل أساسي منع التحرير المتزامن."
+
+#: templates/help/file_locking.html:29
+msgid ""
+"When a locked file's parent folder is renamed or moved inside the same "
+"library, it remains locked after the operation."
+msgstr ""
+"عند إعادة تسمية المجلد الأصل لملف مؤمن أو نقله داخل نفس المكتبة، يظل مؤمنا "
+"بعد العملية."
+
+#: templates/help/finding_older_version_files.html:6
+msgid "Finding older version of files"
+msgstr "العثور على إصدار أقدم من الملف"
+
+#: templates/help/finding_older_version_files.html:7
+msgid ""
+"Seafile tracks the modification history of all files. Whenever a file is "
+"modified, a new version is created, while the old version is still kept for "
+"a configurable period. When you want to access an older version of a file, "
+"the file history feature becomes very handy."
+msgstr ""
+"يتتبع Seafile تاريخ التعديل لجميع الملفات. كلما تم تعديل ملف ، يتم إنشاء "
+"إصدار جديد ، بينما لا يزال الإصدار القديم محتفظا به لفترة قابلة للتكوين. "
+"عندما تريد الوصول إلى إصدار أقدم من ملف ، تصبح ميزة محفوظات الملفات مفيدة "
+"للغاية."
+
+#: templates/help/finding_older_version_files.html:8
+msgid "To list all the versions of a file:"
+msgstr "لسرد كافة إصدارات الملف:"
+
+#: templates/help/finding_older_version_files.html:10
+msgid ""
+"In Seafile Web App, navigate into the folder containing the file. Move the "
+"cursor onto the row of that file. An operation menu will appear. You can "
+"click the \"History\" button in that menu."
+msgstr ""
+"في Seafile Web App، انتقل إلى المجلد الذي يحتوي على الملف. حرك المؤشر إلى صف"
+" هذا الملف. ستظهر قائمة التشغيل. يمكنك النقر فوق الزر \"المحفوظات\" في تلك "
+"القائمة."
+
+#: templates/help/finding_older_version_files.html:11
+msgid ""
+"A list of all versions of that file will be displayed in time order, from "
+"newer to older. The list also contains the file's rename history."
+msgstr ""
+"سيتم عرض قائمة بجميع إصدارات هذا الملف بترتيب زمني ، من الأحدث إلى الأقدم. "
+"تحتوي القائمة أيضا على محفوظات إعادة تسمية الملف."
+
+#: templates/help/finding_older_version_files.html:12
+msgid "You can download, restore, view any version of the file."
+msgstr "يمكنك تنزيل أي إصدار من الملف واستعادته وعرضه."
+
+#: templates/help/finding_older_version_files.html:14
+#, python-format
+msgid ""
+"You can configure the retention period of file versions: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr ""
+"يمكنك تكوين فترة الاحتفاظ بإصدارات الملفات:<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\"> تعيين فترة الاحتفاظ "
+"بالمحفوظات</a>."
+
+#: templates/help/folder_permission.html:6
+msgid "Use folder permission for fine-grained access control"
+msgstr "استخدام إذن المجلدات للتحكم في الوصول بشكل أدق"
+
+#: templates/help/folder_permission.html:8
+#, python-format
+msgid ""
+"For shared libraries or folders, you can set permission to its sub-folders "
+"for a person or a group. Available permissions are the same as the ones "
+"described in <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
+" Here are some use cases:"
+msgstr ""
+"بالنسبة للمكتبات أو المجلدات المشتركة، يمكنك تعيين إذن لمجلداتها الفرعية "
+"لشخص أو مجموعة. الأذونات المتاحة هي نفسها الموضحة في <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">مكتبات المشاركة</a>. "
+"فيما يلي بعض حالات الاستخدام:"
+
+#: templates/help/folder_permission.html:10
+msgid ""
+"You shared a library to a group with \"read only\" permission. You also want"
+" to allow a specific member of the group to modify files in one sub-folder. "
+"You can grant write permission of this sub-folder to this person."
+msgstr ""
+"لقد قمت بمشاركة مكتبة إلى مجموعة بإذن \"للقراءة فقط\". تريد أيضا السماح لعضو"
+" معين في المجموعة بتعديل الملفات في مجلد فرعي واحد. يمكنك منح إذن الكتابة "
+"لهذا المجلد الفرعي لهذا الشخص."
+
+#: templates/help/folder_permission.html:11
+msgid ""
+"You shared a library to 3 groups. There are 3 sub-folders under that "
+"library, one for each group to upload files. However you don't want users to"
+" change files not belong to his/her group. You can grant write permission of"
+" a sub-folder only to its group."
+msgstr ""
+"قمت بمشاركة مكتبة إلى 3 مجموعات. هناك 3 مجلدات فرعية ضمن تلك المكتبة ، واحد "
+"لكل مجموعة لتحميل الملفات. ومع ذلك ، لا تريد أن يغير المستخدمون الملفات التي"
+" لا تنتمي إلى مجموعتهم. يمكنك منح إذن الكتابة لمجلد فرعي لمجموعتهم فقط."
+
+#: templates/help/folder_permission.html:13
+msgid ""
+"Folder permissions are only effective for libraries and folders you share to"
+" others. To effectively set folder permissions to its sub-folders, you "
+"should first share the parent library or folder; otherwise the folder "
+"permission won't take effect."
+msgstr ""
+"تكون أذونات المجلدات فعالة فقط للمكتبات والمجلدات التي تشاركها مع الآخرين. "
+"لتعيين أذونات المجلد بشكل فعال لمجلداته الفرعية ، يجب عليك أولا مشاركة "
+"المكتبة أو المجلد الأصل ؛ وإلا فلن يصبح إذن المجلد ساري المفعول."
+
+#: templates/help/folder_permission.html:14
+msgid ""
+"One important design goal of folder permission is to support hierarchical "
+"permissions:"
+msgstr "أحد أهداف التصميم المهمة لإذن المجلد هو دعم الأذونات الهرمية:"
+
+#: templates/help/folder_permission.html:16
+msgid ""
+"Sub-folders automatically inherit folder permissions from its parent folder."
+msgstr "ترث المجلدات الفرعية تلقائيا أذونات المجلد من المجلد الأصل الخاص بها."
+
+#: templates/help/folder_permission.html:17
+msgid ""
+"Permissions set on sub-folders overwrites permissions set on its parent "
+"folder. For example, you set \"read write\" permission on folder \"meeting "
+"files\" for user A, and you set \"read only\" permission on sub-folder "
+"\"meeting files/today\" for user A. Then user A's permission to \"meeting "
+"files/today\" is \"read only\"."
+msgstr ""
+"تقوم الأذونات التي تم تعيينها على المجلدات الفرعية بالكتابة فوق الأذونات "
+"التي تم تعيينها في المجلد الأصل الخاص بها. على سبيل المثال، يمكنك تعيين إذن "
+"\"قراءة وكتابة\" على المجلد \"ملفات الاجتماع\" للمستخدم أ، وتعيين إذن "
+"\"للقراءة فقط\" على المجلد الفرعي \"ملفات الاجتماع/اليوم\" للمستخدم أ. ثم "
+"إذن المستخدم أ لـ \"ملفات الاجتماع / اليوم\" هو \"للقراءة فقط\"."
+
+#: templates/help/folder_permission.html:19
+msgid "Basic usage"
+msgstr "الاستخدام العادي"
+
+#: templates/help/folder_permission.html:20
+msgid ""
+"Only library's owner can set folder permissions for its sub-folders. In the "
+"file browsing interface, click \"more operations\" button, choose "
+"\"permission\" in the drop-down menu. In the pop-up window, you can see and "
+"set folder permissions on this folder."
+msgstr ""
+"يمكن لمالك المكتبة فقط تعيين أذونات المجلد لمجلداتها الفرعية. في واجهة تصفح "
+"الملفات ، انقر فوق الزر \"المزيد من العمليات\" ، واختر \"إذن\" في القائمة "
+"المنسدلة. في النافذة المنبثقة ، يمكنك رؤية أذونات المجلد وتعيينها على هذا "
+"المجلد."
+
+#: templates/help/folder_permission.html:21
+msgid ""
+"If you want to see all folder permissions set in a library, hover the mouse "
+"on the library. Click \"more operations\" button, choose \"Folder "
+"Permission\" in the drop-down menu. In the pop-up window, you can see and "
+"set folder permissions in this library."
+msgstr ""
+"إذا كنت تريد رؤية جميع أذونات المجلد التي تم تعيينها في مكتبة، فمرر مؤشر "
+"الماوس فوق المكتبة. انقر فوق الزر \"المزيد من العمليات\" ، واختر \"إذن "
+"المجلد\" في القائمة المنسدلة. في النافذة المنبثقة، يمكنك رؤية أذونات المجلد "
+"وتعيينها في هذه المكتبة."
+
+#: templates/help/folder_permission.html:22
+msgid ""
+"When other users navigate into a folder, there will be a small \"eye\" icon "
+"next to \"read only\" sub-folders. When the user navigate into that sub-"
+"folder, he/she won't be able to add/modify/delete files."
+msgstr ""
+"عندما ينتقل المستخدمون الآخرون إلى مجلد ، سيكون هناك رمز \"عين\" صغير بجوار "
+"المجلدات الفرعية \"للقراءة فقط\". عندما ينتقل المستخدم إلى هذا المجلد الفرعي"
+" ، لن يتمكن من إضافة / تعديل / حذف الملفات."
+
+#: templates/help/folder_permission.html:24
+msgid ""
+"If a \"read only\" folder is synced to PC with the Seafile desktop App, "
+"changes under a \"read only\" folder won't be uploaded to the cloud."
+msgstr ""
+"إذا تمت مزامنة مجلد \"للقراءة فقط\" مع جهاز الكمبيوتر باستخدام تطبيق Seafile"
+" لسطح المكتب ، فلن يتم تحميل التغييرات الموجودة ضمن مجلد \"للقراءة فقط\" إلى"
+" السحابة."
+
+#: templates/help/folder_permission.html:25
+msgid "Advanced: priority between different permissions"
+msgstr "متقدم: الأولوية بين الأذونات المختلفة"
+
+#: templates/help/folder_permission.html:27
+msgid ""
+"Folder permissions have higher priority than the permission set in share. "
+"For example, if you share a library to user A with \"read write\" "
+"permission, and also set \"read only\" permission to a sub-folder of that "
+"library. Then user A only has \"read only\" access to the sub-folder, while "
+"he/she has \"read write\" access to all other sub-folders and files."
+msgstr ""
+"أذونات المجلد لها أولوية أعلى من مجموعة الأذونات في المشاركة. على سبيل "
+"المثال، إذا قمت بمشاركة مكتبة مع المستخدم \"أ\" بإذن \"قراءة وكتابة\"، وقمت "
+"أيضا بتعيين إذن \"للقراءة فقط\" إلى مجلد فرعي لتلك المكتبة. ثم يكون لدى "
+"المستخدم \"أ\" فقط حق الوصول \"للقراءة فقط\" إلى المجلد الفرعي ، بينما لديه "
+"/ لديها حق الوصول \"للقراءة والكتابة\" إلى جميع المجلدات والملفات الفرعية "
+"الأخرى."
+
+#: templates/help/folder_permission.html:28
+msgid ""
+"Folder permissions set to a specific user have higher priority than "
+"permissions set to a group. That is, when checking permission for a folder, "
+"if the system matches a permission specific to the user, it'll ignore all "
+"permissions set for the groups the user belongs to."
+msgstr ""
+"أذونات المجلد التي تم تعيينها لمستخدم معين لها أولوية أعلى من الأذونات التي "
+"تم تعيينها إلى مجموعة. أي عند التحقق من إذن مجلد، إذا تطابق النظام مع إذن "
+"خاص بالمستخدم، فسوف يتجاهل جميع الأذونات التي تم تعيينها للمجموعات التي "
+"ينتمي إليها المستخدم."
+
+#: templates/help/folder_permission.html:29
+msgid ""
+"Permissions on sub-folders have higher priority than those on parent "
+"folders."
+msgstr ""
+"الأذونات على المجلدات الفرعية لها أولوية أعلى من تلك الموجودة في المجلدات "
+"الأصل."
+
+#: templates/help/folder_permission.html:31
+msgid "Here is a more complex example:"
+msgstr "وفيما يلي مثال أكثر تعقيدا:"
+
+#: templates/help/folder_permission.html:32
+msgid ""
+"Supposed the folder structure looks like \"A/B\", user \"John\" is in group "
+"\"Staff\". If you set \"read only\" permission on folder A for John, and, "
+"you also set \"read write\" permission on folder \"A/B\" for group "
+"\"Staff\". Then John's permission to folder \"A/B\" is still only \"read "
+"only\". That's because, according to rule 2, \"read only\" permission is "
+"first matched for folder \"A/B\" and user \"John\", which is inherited from "
+"its parent \"A\"."
+msgstr ""
+"لنفترض أن بنية المجلد تبدو مثل \"أ/ب\" مجلد \"ب\" داخل مجلد \"أ\"، المستخدم "
+"\"محمد\" موجود في المجموعة \"الموظفين\". إذا قمت بتعيين إذن \"للقراءة فقط\" "
+"على المجلد أ لمحمد ، وقمت أيضا بتعيين إذن \"قراءة وكتابة\" في المجلد \"أ/ب\""
+" لمجموعة \"الموظفين\". ثم إذن محمد للمجلد \"أ/ب\" لا يزال \"للقراءة فقط\" "
+"فقط. هذا لأنه ، وفقا للقاعدة 2 ، تتم مطابقة إذن \"للقراءة فقط\" أولا للمجلد "
+"\"أ/ب\" والمستخدم \"محمد\" ، الموروث من أصل الصلاحيات للمجلد \"أ\"."
+
+#: templates/help/full_text_file_search.html:6
+msgid ""
+"If you're using a Pro Edition Server, you can search file and folder names, "
+"as well as the content of certain files, in the Seafile web app. Currently "
+"Seafile can search the contents of the following types of files:"
+msgstr ""
+"إذا كنت تستخدم اﻹصدار اﻹحترافي ، فيمكنك البحث عن أسماء الملفات والمجلدات ، "
+"بالإضافة إلى محتوى ملفات معينة ، في تطبيق سيفايل على الويب. يمكن لسيفايل "
+"حاليا البحث في محتويات الأنواع التالية من الملفات:"
+
+#: templates/help/full_text_file_search.html:8
+#: templates/help/viewing_files_within_web_app.html:8
+msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
+msgstr "مايكروسوفت أوفيس دوك:.doc,.docx (إصدار برو فقط)"
+
+#: templates/help/full_text_file_search.html:9
+#: templates/help/viewing_files_within_web_app.html:9
+msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
+msgstr "مايكروسوفت أوفيس باور بوينت :.ppt ،.pptx (إصدار برو فقط)"
+
+#: templates/help/full_text_file_search.html:10
+#: templates/help/viewing_files_within_web_app.html:10
+msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
+msgstr "مايكروسوفت أوفيس إكسل:.xls،.xlsx (إصدار برو فقط)"
+
+#: templates/help/full_text_file_search.html:11
+#: templates/help/viewing_files_within_web_app.html:11
+msgid "LibreOffice files"
+msgstr "ملفات LibreOffice"
+
+#: templates/help/full_text_file_search.html:12
+#: templates/help/viewing_files_within_web_app.html:12
+msgid "PDF files"
+msgstr "ملفات PDF"
+
+#: templates/help/full_text_file_search.html:13
+#: templates/help/viewing_files_within_web_app.html:14
+msgid "Markdown files: .md"
+msgstr "ملفات ماركداون : .md"
+
+#: templates/help/full_text_file_search.html:14
+#: templates/help/viewing_files_within_web_app.html:15
+msgid "Various source code files"
+msgstr "ملفات البرمجة المختلفة"
+
+#: templates/help/full_text_file_search.html:15
+#: templates/help/viewing_files_within_web_app.html:16
+msgid "Text files: .txt, .log"
+msgstr "ملفات نصية من نوع: .txt , .log"
+
+#: templates/help/full_text_file_search.html:17
+msgid ""
+"Note that your Seafile system administrator may not have enabled the full-"
+"text search feature. In that case, you can only search file and folder "
+"names."
+msgstr ""
+"لاحظ أن مسؤول نظام سيفايل ربما لم يقم بتمكين ميزة البحث عن النص الكامل. في "
+"هذه الحالة ، يمكنك فقط البحث عن أسماء الملفات والمجلدات."
+
+#: templates/help/groups_managing.html:6
+msgid ""
+"Creating a group is a convenient way to share files to many people. In "
+"Seafile, you can create and manage a group easily."
+msgstr ""
+"يعد إنشاء مجموعة طريقة ملائمة لمشاركة الملفات مع العديد من الأشخاص. في "
+"سيفايل ، يمكنك إنشاء مجموعة وإدارتها بسهولة."
+
+#: templates/help/groups_managing.html:7
+msgid "Here is how groups work in Seafile:"
+msgstr "إليك كيفية عمل المجموعات في سيفايل:"
+
+#: templates/help/groups_managing.html:9
+msgid ""
+"Each group has a owner. The owner is the creator of the group by default. "
+"He/she can transfer the ownership of the group to another member."
+msgstr ""
+"كل مجموعة لها مالك. المالك هو منشئ المجموعة بشكل افتراضي. يمكنه / يمكنها نقل"
+" ملكية المجموعة إلى عضو آخر."
+
+#: templates/help/groups_managing.html:10
+msgid ""
+"Each group can have multiple admins. The group owner and group admins can "
+"add more group admins."
+msgstr ""
+"يمكن أن يكون لكل مجموعة عدة مشرفين. يمكن لمالك المجموعة ومشرفي المجموعة "
+"إضافة المزيد من مشرفي المجموعة."
+
+#: templates/help/groups_managing.html:11
+msgid ""
+"The group admin can add/delete members in the group. And he/she can also "
+"unshare a library in the group."
+msgstr ""
+"يمكن لمشرف المجموعة إضافة/حذف أعضاء في المجموعة. ويمكنه أيضا إلغاء مشاركة "
+"مكتبة في المجموعة."
+
+#: templates/help/groups_managing.html:13
+msgid ""
+"Click on the \"Shared with groups\" tab on the left panel, and you'll see "
+"all the groups you're in. Clicking into any group, you'll see the libraries "
+"shared into this group."
+msgstr ""
+"انقر فوق علامة التبويب \"مشترك مع المجموعات\" في اللوحة اليمنى ، وسترى جميع "
+"المجموعات التي تشارك فيها. بالنقر فوق أي مجموعة ، سترى المكتبات المشتركة في "
+"هذه المجموعة."
+
+#: templates/help/groups_managing.html:14
+msgid ""
+"To create a new group, click on the \"Shared with groups\" tab on the left "
+"panel. Then click on \"All Groups\". In the page, you can click the \"New "
+"Group\" button to create a group."
+msgstr ""
+"لإنشاء مجموعة جديدة ، انقر فوق علامة التبويب \"مشترك مع المجموعات\" في "
+"اللوحة اليمنى. ثم انقر فوق \"كل المجموعات\". في الصفحة ، يمكنك النقر فوق "
+"الزر \"مجموعة جديدة\" لإنشاء مجموعة."
+
+#: templates/help/groups_managing.html:15
+#, python-format
+msgid ""
+"See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
+"and folders</a> about how to share libraries or folders to a group."
+msgstr ""
+"راجع <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">مشاركة الملفات"
+" والمجلدات</a> حول كيفية مشاركة المكتبات أو المجلدات مع مجموعة."
+
+#: templates/help/ignore.html:6
+msgid "Excluding files/folders from syncing"
+msgstr "استثناء ملفات/مجلدات من المزامنة"
+
+#: templates/help/ignore.html:8
+msgid ""
+"Sometimes you don't want to sync some files or folders inside a library. To "
+"achieve this, create a seafile-ignore.txt file in the root folder of a "
+"library. This special file specifies the files and folders that Seafile "
+"should not sync. Each line in a ignore.txt file specifies a pattern. The "
+"following pattern format are supported."
+msgstr ""
+"في بعض الأحيان لا تحتاج إلى مزامنة بعض الملفات أو المجلدات الموجودة داخل "
+"مكتبة. ولتحقيق ذلك، قم بإنشاء ملف seafile-ignore.txt في المجلد الرئيسي "
+"للمكتبة. يحدد هذا الملف الخاص الملفات والمجلدات التي يجب أن لا تتم مزامنتها "
+"بواسطة seafile. يحدد كل سطر في ملف ignore.txt نمط. يتم دعم تنسيق الانماط "
+"التالية."
+
+#: templates/help/ignore.html:10
+msgid "A blank line matches no files."
+msgstr "سطر فارغ لا يطابق أي ملف."
+
+#: templates/help/ignore.html:11
+msgid "A line starting with # serves as a comment."
+msgstr "سطر يبدأ ب # يرمز إلى تعليق."
+
+#: templates/help/ignore.html:12
+msgid ""
+"Seafile supports wildcards in the pattern. For example, \"foo/*\" matches "
+"\"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not "
+"\"foo/hello\". Note that the wildcard character * recursively matches all "
+"the paths under a folder. For instance, \"foo/*.html\" matches "
+"\"foo/a.html\" and \"foo/templates/b.html\"."
+msgstr ""
+"يعتمد Seafile أحرف البدل في النمط. على سبيل المثال، \"فو/*\" يطابق \"فو/1\" "
+"و \"فو/مرحبا\". \"فو/؟\" يطابق \"فو/1\" ولكن ليس \"فو/مرحبا\". لاحظ أن حرف "
+"البدل * يطابق بشكل متكرر جميع المسارات ضمن مجلد. على سبيل المثال، يطابق "
+"\"فو/*.html\" \"foo/a.html\" و \"foo/templates/b.html\"."
+
+#: templates/help/ignore.html:13
+msgid ""
+"If the pattern ends with a slash, it would only match a folder. In other "
+"words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
+"will not match a regular file or a symbolic link \"foo\"."
+msgstr ""
+"إذا كان النمط ينتهي ب خط مائل، فإنها ستطابق مجلد فقط. على سبيل المثال، "
+"\"فو/\" تطابق مجلد \"فو\" و المسارات تحته، لكنه لا يطابق ملف عادي أو رابط "
+"رمزي \"فو\"."
+
+#: templates/help/ignore.html:14
+msgid ""
+"If a pattern doesn't end with a slash or a wildcard, it would not match a "
+"folder. For example, \"foo\" can only match regular file \"foo\" or a "
+"symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
+"it."
+msgstr ""
+"إذا كان نمط لا ينتهي بخط مائل أو حرف بدل، فإنه لن يتطابق مع مجلد. على سبيل "
+"المثال، \"فو\" يمكنها فقط مطابقة ملف عادي \"فو\" أو ارتباط رمزي؛ في حين "
+"\"فو/\" \"فو\" * تطابق مجلد و المسارات تحته."
+
+#: templates/help/ignore.html:18
+msgid "Example"
+msgstr "مثال"
+
+#: templates/help/ignore.html:36
+msgid "Notes"
+msgstr "ملاحظات"
+
+#: templates/help/ignore.html:38
+msgid ""
+"The seafile-ignore.txt file only controls which files to exclude on the "
+"client side. You can still create a file from seahub web interface that's "
+"excluded on the client. In this case,"
+msgstr ""
+"الملف seafile-ignore.txt يتحكم فقط بالملفات التي سيتم استبعادها في جانب "
+"العميل. لا يزال يمكنك إنشاء ملف تم استبعاده في جانب العميل من خلال واجهة "
+"الويب. وفي هذه الحالة،"
+
+#: templates/help/ignore.html:40
+msgid ""
+"The created file will still be synced back to clients. But any later local "
+"changes to those files will be ignored."
+msgstr ""
+"سيكون الملف الذي تم انشاؤه لا يزال مزامنامرة أخرى مع العملاء. ولكن سيتم "
+"تجاهل أية تغييرات محلية لاحقة لتلك الملفات."
+
+#: templates/help/ignore.html:41
+msgid ""
+"If the file is modified on seahub, the new version will also be synced back "
+"to clients; If the file on the client is also modified, a conflict file will"
+" be generated on the client."
+msgstr ""
+"إذا تم تعديل الملف في الخادم، فإن النسخة الجديدة سيتم مزامنتها أيضا مع "
+"العملاء؛ إذا تم تعديل الملف الموجود في جانب العميل أيضا، سيتم إنشاء ملف "
+"نعارض في جانب العميل."
+
+#: templates/help/ignore.html:45
+msgid ""
+"seafile-ignore.txt only ignores files that are not synced yet. If a file is "
+"already synced, and some time later you add it to the ignore list, its "
+"existing versions won't be removed."
+msgstr ""
+"يتجاهل  seafile-ignore.txt فقط الملفات التي لم تتم مزامنتها بعد. إذا كان ملف"
+" ما قد تم مزامنته بالفعل، وبعد مضى بعض الوقت قمت بإضافته إلى ملف التجاهل، لن"
+" يتم إزالة الإصدارات الموجودة له."
+
+#: templates/help/install_sync.html:6
+msgid "Installing Seafile client program"
+msgstr "تثبيت برنامج عميل Seafile"
+
+#: templates/help/install_sync.html:8
+msgid ""
+"After downloading Seafile client program, you have 3 steps left to get it up"
+" and running."
+msgstr ""
+"بعد تحميل برنامج عميل Seafile، لديك 3 خطوات متبقية لبدء البرنامج و تشغيله."
+
+#: templates/help/install_sync.html:10
+msgid "1. Select a disk partition to store local Seafile data"
+msgstr "1. اختر قسم قرص لتخزين بيانات Seafile المحلية"
+
+#: templates/help/install_sync.html:11
+msgid "Selecting a folder to store Seafile data"
+msgstr "اختيار مجلد لتخزين بيانات Seafile"
+
+#: templates/help/install_sync.html:13
+msgid "2. Add an account"
+msgstr "2. أضف حساب"
+
+#: templates/help/install_sync.html:14
+msgid "Add an account on your private Seafile server or our public server."
+msgstr "أضف حساب على خادم Seafile الخاص بك أو على خادمنا العمومي."
+
+#: templates/help/install_sync.html:18
+msgid "3. Sync a library"
+msgstr "3. قم بمزامنة مكتبة"
+
+#: templates/help/install_sync.html:20
+msgid "Click the \"Sync this library\" button to sync it with a local folder."
+msgstr "انقر على زر \"مزامنة هذه المكتبة\" لمزامنتها مع مجلد محلي."
+
+#: templates/help/install_sync.html:21
+msgid ""
+"Then you add some files into the library. They will be automatically synced "
+"with cloud platform."
+msgstr ""
+"بعد ذلك أضف بعض الملفات الى المكتبة. سيتم مزامنتها تلقائيا مع منصة الخادم."
+
+#: templates/help/install_sync.html:26
+msgid "4. (Optional) Create a library"
+msgstr "4. (اختياري) قم بانشاء مكتبة"
+
+#: templates/help/install_sync.html:28
+msgid "You can also create a library from a local folder."
+msgstr "يمكنك أيضا انشاء مكتبة من مجلد محلي."
+
+#: templates/help/install_sync.html:34
+msgid "5. Browse files on the cloud"
+msgstr "5. استعرض الملفات على الخادم"
+
+#: templates/help/install_sync.html:35
+msgid ""
+"In some occasions, you want to modify files on the cloud directly without "
+"syncing them. Seafile client comes with a \"cloud file browser\" to meet "
+"this need. Click an unsynced library will open the cloud file browser."
+msgstr ""
+"في بعض الأحيان، تحتاج إلى تعديل ملفات على السحابة مباشرة دون مزامنتها. "
+"برنامج عميل Seafile يأتي مع \"مستعرض ملف سحابة\" لتلبية هذه الحاجة. بالنقر "
+"فوق مكتبة غير متزامنة سوف يتم فتح مستعرض الملفات في السحابة."
+
+#: templates/help/introduction.html:8
+msgid ""
+"Seafile is an enterprise file hosting platform with high reliability and "
+"performance."
+msgstr ""
+"سيفايل هي عبارة عن منصة استضافة ملفات للمؤسسات ذات موثوقية وأداء عاليين."
+
+#: templates/help/introduction.html:9
+#, python-format
+msgid ""
+"Seafile contains a web interface for you to manage and share files. It has "
+"two kinds of desktop clients, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
+"has mobile clients for Android and iOS."
+msgstr ""
+"يحتوي سيفايل على واجهة ويب لإدارة الملفات ومشاركتها. يحتوي على نوعين من "
+"عملاء سطح المكتب ، <a href=\"%(SITE_ROOT)shelp/install_sync/\">عميل مزامنة "
+"الملفات</a> و<a href=\"%(SITE_ROOT)shelp/using_drive_client\">عميل محرك "
+"الأقراص</a>. كما أن لديها عملاء متنقلين لنظامي التشغيل أندرويد Android و "
+"iOS."
+
+#: templates/help/introduction.html:10
+msgid ""
+"You can download the clients in <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
+"site</a>."
+msgstr ""
+"يمكنك تنزيل العملاء في موقع <a href=\"https://www.seafile.com/en/download/\""
+" target=\"_blank\">سيفايل على الويب</a>."
+
+#: templates/help/introduction.html:11
+msgid ""
+"If this manual does not contain the information you needed, you can seek "
+"help in our forum: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
+msgstr ""
+"إذا كان هذا الدليل لا يحتوي على المعلومات التي تحتاجها ، يمكنك طلب المساعدة "
+"في منتدانا: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
+
+#: templates/help/libraries_managing.html:6
+msgid ""
+"Seafile uses \"libraries\" to organize your files. A library is a top level "
+"container for a set of files and folders. You can create a library for each "
+"project you work on, or each document type you want to save in Seafile. A "
+"library works mostly like a top level folder. But it also has some special "
+"properties:"
+msgstr ""
+"يستخدم سيفايل \"المكتبات\" لتنظيم ملفاتك. المكتبة هي حاوية المستوى الأعلى "
+"لمجموعة من الملفات والمجلدات. يمكنك إنشاء مكتبة لكل مشروع تعمل عليه ، أو كل "
+"نوع مستند تريد حفظه في سيفايل. تعمل المكتبة في الغالب مثل مجلد المستوى "
+"الأعلى. ولكن لديها أيضا بعض الخصائص الخاصة:"
+
+#: templates/help/libraries_managing.html:8
+msgid ""
+"Each library keeps its own file modification history. There is no global "
+"file modification history across all libraries."
+msgstr ""
+"تحتفظ كل مكتبة بمحفوظات تعديل الملفات الخاصة بها. لا يوجد محفوظات تعديل "
+"ملفات عمومية عبر جميع المكتبات."
+
+#: templates/help/libraries_managing.html:9
+msgid ""
+"Each library can be synced to desktop clients separately. You can choose "
+"which libraries to be synced."
+msgstr ""
+"يمكن مزامنة كل مكتبة مع عملاء سطح المكتب بشكل منفصل. يمكنك اختيار المكتبات "
+"التي تريد مزامنتها."
+
+#: templates/help/libraries_managing.html:11
+msgid ""
+"When you log into Seafile's web app for the first time, Seafile "
+"automatically creates a default library named \"My Library\" for you. You "
+"can also create more libraries. Here is what it looks like when you've "
+"created a few libraries."
+msgstr ""
+"عند تسجيل الدخول إلى تطبيق الويب الخاص بسيفايل Seafile لأول مرة ، يقوم "
+"سيفايل Seafile تلقائيا بإنشاء مكتبة افتراضية باسم \"مكتبتي\" لك. يمكنك أيضا "
+"إنشاء المزيد من المكتبات. هذا ما يبدو عليه الأمر عند إنشاء بعض المكتبات."
+
+#: templates/help/libraries_managing.html:13
+msgid ""
+"You can navigate into a library and manage your files and folders. You can "
+"upload, download, rename, move, copy and delete files."
+msgstr ""
+"يمكنك التنقل إلى مكتبة وإدارة ملفاتك ومجلداتك. يمكنك تحميل الملفات وتنزيلها "
+"وإعادة تسميتها ونقلها ونسخها وحذفها."
+
+#: templates/help/libraries_managing.html:15
+#, python-format
+msgid ""
+"After <a href=\"%(SITE_ROOT)shelp/install_sync/\">syncing a library with "
+"desktop client</a>, you can do any file operations inside the local library "
+"folder. The operations will be uploaded to the server. "
+msgstr ""
+"بعد <a href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة مكتبة مع عميل سطح "
+"المكتب</a> ، يمكنك القيام بأي عمليات ملفات داخل مجلد المكتبة المحلية. سيتم "
+"تحميل العمليات على الخادم. "
+
+#: templates/help/library_history_and_snapshots.html:7
+msgid ""
+"Seafile tracks modification history for the entire library. Whenever a file "
+"operation applies to a library (file update, file deletion etc.), Seafile "
+"creates a \"snapshot\" of the previous state of the library. The snapshot "
+"contains the complete file and folder structure of the library."
+msgstr ""
+"يتتبع سيفايل Seafile محفوظات التعديل للمكتبة بأكملها. عندما تنطبق عملية ملف "
+"على مكتبة (تحديث الملف ، حذف الملف ، إلخ) ، يقوم سيفايل بإنشاء \"لقطة\" "
+"للحالة السابقة للمكتبة. تحتوي اللقطة على بنية الملف والمجلد الكاملة للمكتبة."
+
+#: templates/help/library_history_and_snapshots.html:8
+msgid ""
+"In some cases, you have changed a lot of files in the library, and find that"
+" you want to revert all these changes. Restoring many files to their old "
+"versions can be tedious. At this time, the snapshot feature becomes very "
+"handy. You can restore the entire library to any point in the past. All the "
+"files in the library will be restored to that point of time, all at once. It"
+" works like a \"time machine\" for the library."
+msgstr ""
+"في بعض الحالات ، قمت بتغيير الكثير من الملفات في المكتبة ، ووجدت أنك تريد "
+"التراجع عن كل هذه التغييرات. قد تكون استعادة العديد من الملفات إلى إصداراتها"
+" القديمة أمرا شاقا. في هذا الوقت ، تصبح ميزة اللقطة مفيدة للغاية. يمكنك "
+"استعادة المكتبة بأكملها إلى أي نقطة في الماضي. ستتم استعادة جميع الملفات "
+"الموجودة في المكتبة إلى تلك النقطة الزمنية ، دفعة واحدة. إنه يعمل مثل \"آلة "
+"الزمن\" للمكتبة."
+
+#: templates/help/library_history_and_snapshots.html:9
+msgid "To view library history and snapshots:"
+msgstr "تاريخ المكتبات و لقطاتها"
+
+#: templates/help/library_history_and_snapshots.html:11
+msgid ""
+"In Seafile Web App, navigate into the root folder of a library. Click the "
+"\"History\" icon in the library navigation top bar. All the change record of"
+" the library will be displayed in a list."
+msgstr ""
+"في صفحة الويب، انتقل إلى المجلد الرئيسي للمكتبة. انقر على أيقونة "
+"\"المحفوظات\" في شريط التنقل العلوي للمكتبة. سيتم عرض كل سجل التعديلات الخاص"
+" بالمكتبة في قائمة."
+
+#: templates/help/library_history_and_snapshots.html:12
+msgid ""
+"Click the \"view snapshot\" link on any modification record. You'll see the "
+"library state at the point of time."
+msgstr ""
+"انقر على رابط \"عرض لقطة\" في أي سجل التعديلات. سترى حالة المكتبة في الوقت "
+"المناسب."
+
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the enitre library to this point"
+" of time."
+msgstr ""
+"في طريقة عرض اللقطة ، يمكنك تنزيل أو استعادة أي ملف أو مجلد. إذا كنت مالك "
+"المكتبة، يمكنك استعادة المكتبة كاملاً إلى هذا الوقت."
+
+#: templates/help/library_history_and_snapshots.html:15
+#, python-format
+msgid ""
+"You can configure the retention period of library history: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr ""
+"يمكنك تكوين فترة الاحتفاظ بمحفوظات المكتبة: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">تعيين فترة استبقاء "
+"المحفوظات</a>."
+
+#: templates/help/manage_library_as_wiki.html:6
+msgid ""
+"Capturing and storing little structured data in an easy-to-use fashion – "
+"that is what Seafile’s wikis are for. Wiki pages are written in Markdown "
+"(MD), a simple markup language, to ensure cross platform compatibility. MD "
+"files store textual, tabular as well as graphical information; You can also "
+"add links to other documents in a Markdown file."
+msgstr ""
+"التقاط وتخزين القليل من البيانات المنظمة بطريقة سهلة الاستخدام - هذا هو "
+"الغرض من مواقع الويكي الخاصة بسيفايل. تتم كتابة صفحات Wiki بلغة ماركداون "
+"Markdown (MD) ، وهي لغة ترميز بسيطة ، لضمان التوافق عبر الأنظمة الأساسية. "
+"ملفات MD تخزين المعلومات النصية والجدولية وكذلك الرسومية. يمكنك أيضا إضافة "
+"روابط إلى مستندات أخرى في ملف ماركداون."
+
+#: templates/help/manage_library_as_wiki.html:7
+msgid ""
+"You can manage a standard library in Seafile like a Wiki, with the \"Column "
+"View\" introduced in 7.0 version. Since Seafile implements wikis as standard"
+" Seafile libraries, they can be synced and shared with other users just like"
+" any ordinary library."
+msgstr ""
+"يمكنك إدارة مكتبة قياسية في سيفايل مثل Wiki ، مع \"عرض العمود\" المقدم في "
+"الإصدار 7.0. نظرا لأن سيفايل ينفذ مواقع الويكي كمكتبات سيفايل اﻷساسية ، "
+"فيمكن مزامنتها ومشاركتها مع مستخدمين آخرين تماما مثل أي مكتبة عادية."
+
+#: templates/help/manage_library_as_wiki.html:8
+msgid "Column view"
+msgstr "عرض العمود"
+
+#: templates/help/manage_library_as_wiki.html:9
+msgid ""
+"Wikis usually have a side bar containing a tree-like folder structure, to "
+"enable quick-and-easy browsing of Wiki pages. Seafile's Column View allows "
+"you to manage the files in a library in the same way as a Wiki space. Users "
+"can browse in it and move files and folders just by dragging and dropping. "
+"File actions such as renaming, moving, and opening via client are available "
+"in a right-click-accessible context menu."
+msgstr ""
+"عادة ما تحتوي مواقع الويكي على شريط جانبي يحتوي على بنية مجلد تشبه الشجرة ، "
+"لتمكين التصفح السريع والسهل لصفحات Wiki. يتيح لك عرض العمود في سيفايل إدارة "
+"الملفات في مكتبة بنفس طريقة مساحة Wiki. يمكن للمستخدمين تصفحه ونقل الملفات "
+"والمجلدات فقط عن طريق السحب والإفلات. تتوفر إجراءات الملفات مثل إعادة "
+"التسمية والنقل والفتح عبر العميل في قائمة سياق يمكن الوصول إليها بالنقر بزر "
+"الماوس الأيمن."
+
+#: templates/help/manage_library_as_wiki.html:12
+msgid "WYSIWYG Markdown editor"
+msgstr "محرر WYSIWYG ماركداون"
+
+#: templates/help/manage_library_as_wiki.html:13
+msgid ""
+"Wiki pages in Seafile are saved as ordinary documents in Markdown format. To"
+" create a new Wiki page in a library, just create a new Markdown document. "
+"MD files can be edited straight from Seafile’s web interface with the online"
+" MD editor. The web-based editor offers a smooth user experience and rich "
+"formatting options for text, images, and tables. Images can be imported into"
+" MD files from libraries and local storage as well as by hyperlinks. Basic "
+"image editing functions such as scaling can also be performed in the "
+"editor’s what-you-see-is-what-you-get (WYSIWYG) interface. Tables can be "
+"inserted and modified with just a few clicks. The same thing goes for a "
+"table’s content: A table can be copied in its entirety or in part without "
+"leaving the WYSIWYG view."
+msgstr ""
+"يتم حفظ صفحات Wiki في سيفايل كمستندات عادية بتنسيق ماركداون. لإنشاء صفحة "
+"Wiki جديدة في مكتبة ، ما عليك سوى إنشاء مستند ماركداون جديد. يمكن تحرير "
+"ملفات ماركداون MD مباشرة من واجهة الويب الخاصة ب سيفايل باستخدام محرر "
+"ماركداون MD عبر الإنترنت. يوفر المحرر المستند إلى الويب تجربة مستخدم سلسة "
+"وخيارات تنسيق غنية للنصوص والصور والجداول. يمكن استيراد الصور إلى ملفات "
+"ماركداون MD من المكتبات والتخزين المحلي وكذلك عن طريق الارتباطات التشعبية. "
+"يمكن أيضا تنفيذ وظائف تحرير الصور الأساسية مثل القياس في واجهة المحرر \"ما "
+"تراه هو ما تحصل عليه\" (WYSIWYG). يمكن إدراج الجداول وتعديلها ببضع نقرات "
+"فقط. الشيء نفسه ينطبق على محتوى الجدول: يمكن نسخ الجدول كليا أو جزئيا دون "
+"مغادرة عرض WYSIWYG."
+
+#: templates/help/manage_library_as_wiki.html:15
+msgid ""
+"The change history of a Markdown file can be easily accessed by clicking the"
+" \"File History\" button in the menu on top of the editor interface."
+msgstr ""
+"يمكن الوصول بسهولة إلى محفوظات التغيير لملف ماركداون بالنقر فوق الزر "
+"\"محفوظات الملفات\" في القائمة أعلى واجهة المحرر."
+
+#: templates/help/manage_library_as_wiki.html:17
+msgid ""
+"You can open a hidden side bar on the right side of the Markdown editor. "
+"Table of contents, file information, and collaborative commenting are "
+"provided in this side bar."
+msgstr ""
+"يمكنك فتح شريط جانبي مخفي على الجانب الأيمن من محرر ماركداون. يتم توفير جدول"
+" المحتويات ومعلومات الملف والتعليق التعاوني في هذا الشريط الجانبي."
+
+#: templates/help/manage_library_as_wiki.html:19
+msgid "File tagging and related documents"
+msgstr "وضع علامات على الملفات والمستندات ذات الصلة"
+
+#: templates/help/manage_library_as_wiki.html:20
+msgid ""
+"File tagging is an important feature for knowledge management. Seafile "
+"allows users to define tags for each library and apply tags to files. Tags "
+"can be managed from the side bar of the Markdown editor, or from the file "
+"browser interface."
+msgstr ""
+"يعد وضع علامات على الملفات ميزة مهمة لإدارة المعرفة. يسمح سيفايل للمستخدمين "
+"بتحديد العلامات لكل مكتبة وتطبيق العلامات على الملفات. يمكن إدارة العلامات "
+"من الشريط الجانبي لمحرر ماركداون ، أو من واجهة متصفح الملفات."
+
+#: templates/help/manage_library_as_wiki.html:23
+msgid ""
+"The file browser interface provides a summary of all file tags in the "
+"current library."
+msgstr ""
+"توفر واجهة مستعرض الملفات ملخصا لجميع علامات الملفات في المكتبة الحالية."
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For ready-only libraries or folders, Seafile will show a forbidden icon "
+"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
+"to indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr ""
+"بالنسبة للمكتبات أو المجلدات الجاهزة فقط ، سيعرض سيفايل رمزا محظورا (<img "
+"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
+"للإشارة إلى أنها للقراءة فقط. ومع ذلك، لا يزال بإمكان المستخدمين تعديل النسخ"
+" المحلية التي تمت مزامنتها. عندما يتم تعديل نسخة محلية ، سيتجاهل سيفايل "
+"النسخة المعدلة. عندما يتم تعديل النسخة الموجودة على الخادم أيضا ، سيظهر "
+"العميل إشعارا ، يفيد بأن النسخة المعدلة المحلية تتعارض مع النسخة الموجودة "
+"على جانب الخادم. لمنع فقدان البيانات، تتم إعادة تسمية النسخة المحلية إلى ملف"
+" تعارض."
+
+#: templates/help/read-only_syncing.html:7
+msgid ""
+"If you want the be-shared users not be able to modify local copies, you can "
+"consider using the Seafile Drive client."
+msgstr ""
+"إذا كنت تريد ألا يتمكن المستخدمون الذين تمت مشاركتهم من تعديل النسخ المحلية "
+"، فيمكنك التفكير في استخدام عميل سيفايل درايف Seafile Drive."
+
+#: templates/help/restoring_deleted_files.html:6
+msgid "Restoring deleted files and folders"
+msgstr "إعادة الملفات و المجلدات المحذوفة"
+
+#: templates/help/restoring_deleted_files.html:7
+msgid ""
+"Each library in Seafile tracks your file deletion operations automatically. "
+"Sometimes you find files are deleted mistakenly. You can find back your "
+"deleted files in the trash bin of each library."
+msgstr ""
+"تتعقب كل مكتبة في سيفايل عمليات حذف الملفات تلقائيا. في بعض الأحيان تجد "
+"الملفات يتم حذفها عن طريق الخطأ. يمكنك العثور على الملفات المحذوفة مرة أخرى "
+"في سلة المهملات لكل مكتبة."
+
+#: templates/help/restoring_deleted_files.html:8
+msgid "Here is how to use the trash bin feature:"
+msgstr "كيفية استخدام ميزة سلة المهملات:"
+
+#: templates/help/restoring_deleted_files.html:10
+msgid ""
+"In Seafile Web App, navigate into the parent folder containing the deleted "
+"file or folder."
+msgstr ""
+"في تطبيق سيفايل للويب، انتقل إلى المجلد الأصل الذي يحتوي على الملف أو المجلد"
+" المحذوف."
+
+#: templates/help/restoring_deleted_files.html:11
+msgid ""
+"Click the \"trash\" icon in the library operation bar. The deleted files and"
+" folders will be listed in deletion time order. In the bottom of the list, "
+"you can click the \"more\" button to load more deleted files."
+msgstr ""
+"انقر فوق رمز \"المهملات\" في شريط عمليات المكتبة. سيتم سرد الملفات والمجلدات"
+" المحذوفة بترتيب وقت الحذف. في أسفل القائمة ، يمكنك النقر فوق الزر "
+"\"المزيد\" لتحميل المزيد من الملفات المحذوفة."
+
+#: templates/help/restoring_deleted_files.html:12
+msgid ""
+"In the deleted files list, you can restore file and folders. If a file or "
+"folder's parent folder has been deleted, it will be restored to the "
+"library's root folder."
+msgstr ""
+"في قائمة الملفات المحذوفة ، يمكنك استعادة الملفات والمجلدات. إذا تم حذف "
+"المجلد الأصل لملف أو مجلد، فستتم استعادته إلى المجلد الجذر للمكتبة."
+
+#: templates/help/restoring_deleted_files.html:13
+msgid ""
+"Note that the trash bin only contains files and sub-folders deleted under "
+"the current folder. Files deleted in the sub-folders of the current folder "
+"are also included in the list."
+msgstr ""
+"لاحظ أن سلة المهملات تحتوي فقط على الملفات والمجلدات الفرعية المحذوفة ضمن "
+"المجلد الحالي. يتم أيضا تضمين الملفات المحذوفة في المجلدات الفرعية للمجلد "
+"الحالي في القائمة."
+
+#: templates/help/restoring_deleted_files.html:15
+#, python-format
+msgid ""
+"You can configure the retention period of deleted files: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr ""
+"يمكنك تكوين فترة الاحتفاظ بالملفات المحذوفة: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">تعيين فترة الاحتفاظ "
+"بالمحفوظات</a>."
+
+#: templates/help/selective_sync.html:8
+msgid ""
+"You may have some very large libraries on the Seafile server. And you're "
+"currently only interested in a sub-folder inside one library. Then you can "
+"selectively sync a sub-folder in a library, instead of syncing the entire "
+"library."
+msgstr ""
+"قد يكون لديك بعض المكتبات الكبيرة جدا على خادم سيفايل. وأنت مهتم حاليا فقط "
+"بمجلد فرعي داخل مكتبة واحدة. ثم يمكنك مزامنة مجلد فرعي في مكتبة بشكل انتقائي"
+" ، بدلا من مزامنة المكتبة بأكملها."
+
+#: templates/help/selective_sync.html:10
+msgid ""
+"To sync a sub-folder, open cloud file browser by double clicking a library "
+"which hasn't been synced. Navigate into the parent folder of that sub-"
+"folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
+"pop-up menu."
+msgstr ""
+"لمزامنة مجلد فرعي، افتح مستعرض الملفات على السحابة بواسطة النقر المزدوج فوق "
+"مكتبة والتي لم تتم مزامنتها بعد. انتقل إلى المجلد الب لذلك المجلد الفرعي. "
+"انقر بالزر الأيمن على المجلد الفرعي. اختر \"مزامنة هذا المجلد\" من القائمة "
+"المنبثقة."
+
+#: templates/help/selective_sync.html:14
+msgid ""
+"After syncing the sub-folder, you can see its syncing status in the \"Synced"
+" Libraries\" group in the client's main window."
+msgstr ""
+"بعد مزامنة المجلد الفرعي، يمكنك أن ترى حالة المزامنة في مجموعة \"مكتبات "
+"مزامنة\" في الإطار الرئيسي للعميل."
+
+#: templates/help/setting_library_history.html:6
+msgid "Setting library history retention period"
+msgstr "تعيين فترة الاحتفاظ بتاريخ المكتبة"
+
+#: templates/help/setting_library_history.html:7
+msgid ""
+"A library's history retention period length controls how long you can access"
+" your history data in the following features:"
+msgstr ""
+"يتحكم طول فترة الاحتفاظ بالمحفوظات في المكتبة في المدة التي يمكنك خلالها "
+"الوصول إلى بيانات المحفوظات في الميزات التالية:"
+
+#: templates/help/setting_library_history.html:9
+msgid ""
+"Restore deleted files: you cannot restore files and folders deleted before "
+"the retention period."
+msgstr ""
+"استعادة الملفات المحذوفة: لا يمكنك استعادة الملفات والمجلدات المحذوفة قبل "
+"فترة الاحتفاظ."
+
+#: templates/help/setting_library_history.html:10
+msgid ""
+"File versions: you cannot access file versions older than the retention "
+"period."
+msgstr ""
+"إصدارات الملفات: لا يمكنك الوصول إلى إصدارات الملفات الأقدم من فترة "
+"الاحتفاظ."
+
+#: templates/help/setting_library_history.html:11
+msgid ""
+"Library history and snapshots: you cannot access library snapshots older "
+"than the retention period."
+msgstr ""
+"محفوظات المكتبة واللقطات: لا يمكنك الوصول إلى لقطات المكتبة الأقدم من فترة "
+"الاستبقاء."
+
+#: templates/help/setting_library_history.html:13
+msgid ""
+"The retention period of old files versions can be configured for each "
+"library, separately. You must be the library's owner to set the retention "
+"period. To set retention period length:"
+msgstr ""
+"يمكن تكوين فترة الاحتفاظ بإصدارات الملفات القديمة لكل مكتبة على حدة. يجب أن "
+"تكون مالك المكتبة لتعيين فترة الاحتفاظ. لتعيين مدة فترة الاحتفاظ:"
+
+#: templates/help/setting_library_history.html:15
+msgid ""
+"In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
+"the below screenshot). All libraries owned by you will be listed."
+msgstr ""
+"في تطبيق سيفايل للويب ، انقر فوق علامة التبويب \"مكتباتي\" في لوحة التنقل "
+"(كما في لقطة الشاشة أدناه). سيتم سرد جميع المكتبات التي تملكها."
+
+#: templates/help/setting_library_history.html:16
+msgid ""
+"Move the cursor onto the row of the library. An operation menu will appear. "
+"Click \"History Setting\" in the drop-down menu."
+msgstr ""
+"حرك المؤشر إلى صف المكتبة. ستظهر قائمة عمليات. انقر فوق \"إعداد السجل\" في "
+"القائمة المنسدلة."
+
+#: templates/help/setting_library_history.html:17
+msgid "In the pop-up dialog, you can set the length of file retention period."
+msgstr "في مربع الحوار المنبثق ، يمكنك تعيين طول فترة الاحتفاظ بالملف."
+
+#: templates/help/sharing_files_and_folders.html:6
+msgid ""
+"In Seafile there are a few ways to share files and folders with others:"
+msgstr "في سيفايل ، هناك عدة طرق لمشاركة الملفات والمجلدات مع الآخرين:"
+
+#: templates/help/sharing_files_and_folders.html:8
+msgid ""
+"Using links: there are multiple types of links that can be used to share "
+"with various scope of collaborators."
+msgstr ""
+"استخدام الروابط: هناك أنواع متعددة من الروابط التي يمكن استخدامها للمشاركة "
+"مع نطاق مختلف من المتعاونين."
+
+#: templates/help/sharing_files_and_folders.html:10
+msgid ""
+"Share links: Any user who has access to the links can access the files or "
+"folders pointed by the link. No login is required."
+msgstr ""
+"مشاركة الروابط: يمكن لأي مستخدم لديه حق الوصول إلى الروابط الوصول إلى "
+"الملفات أو المجلدات التي يشير إليها الرابط. لا يلزم تسجيل الدخول."
+
+#: templates/help/sharing_files_and_folders.html:11
+msgid ""
+"Upload links: Any user who has access to the links can upload files to the "
+"folder pointed by the link. No login is required."
+msgstr ""
+"تحميل الروابط: يمكن لأي مستخدم لديه حق الوصول إلى الروابط تحميل الملفات إلى "
+"المجلد الذي يشير إليه الرابط. لا يلزم تسجيل الدخول."
+
+#: templates/help/sharing_files_and_folders.html:12
+msgid ""
+"Internal links: Only logged in users who have read permission to the file or"
+" folder can access this link. Used for internal file sharing."
+msgstr ""
+"الروابط الداخلية: يمكن فقط للمستخدمين الذين قاموا بتسجيل الدخول والذين لديهم"
+" إذن قراءة للملف أو المجلد الوصول إلى هذا الرابط. تستخدم لمشاركة الملفات "
+"الداخلية."
+
+#: templates/help/sharing_files_and_folders.html:15
+msgid ""
+"Sharing libraries or folders: used for setting access permissions to a "
+"library or folder for specific users or groups. Users have to log in to "
+"access the folders."
+msgstr ""
+"مشاركة المكتبات أو المجلدات: تستخدم لتعيين أذونات الوصول إلى مكتبة أو مجلد "
+"لمستخدمين أو مجموعات محددة. يجب على المستخدمين تسجيل الدخول للوصول إلى "
+"المجلدات."
+
+#: templates/help/sharing_files_and_folders.html:17
+msgid "Creating share links to files or folders"
+msgstr "إنشاء روابط مشاركة إلى ملفات أو مجلدات"
+
+#: templates/help/sharing_files_and_folders.html:18
+msgid ""
+"Share links are public links to files or folders. They can be accessed by "
+"anyone, including those who don't have a Seafile account. You can also use "
+"password and expiration time to protect your links."
+msgstr ""
+"روابط المشاركة هي روابط عامة للملفات أو المجلدات. يمكن الوصول إليها من قبل "
+"أي شخص ، بما في ذلك أولئك الذين ليس لديهم حساب سيفايل. يمكنك أيضا استخدام "
+"كلمة المرور ووقت انتهاء الصلاحية لحماية الروابط الخاصة بك."
+
+#: templates/help/sharing_files_and_folders.html:19
+msgid ""
+"You can also set access permission to share links. There are three types of "
+"permissions:"
+msgstr ""
+"يمكنك أيضا تعيين إذن الوصول لمشاركة الروابط. هناك ثلاثة أنواع من الأذونات:"
+
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewd in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr ""
+"معاينة وتنزيل: يمكن تنزيل الملف أو الملفات الموجودة في المجلد. إذا كان من "
+"الممكن معاينة نوع الملفات في متصفح الويب ، فيمكن أيضا عرضها عبر الإنترنت "
+"(مثل ملفات أوفيس )."
+
+#: templates/help/sharing_files_and_folders.html:22
+msgid ""
+"Preview only: the file or files in the folder can only be viewed in web "
+"browser, but cannot be downloaded. This is useful for sharing confidential "
+"data."
+msgstr ""
+"المعاينة فقط: لا يمكن عرض الملف أو الملفات الموجودة في المجلد إلا في متصفح "
+"الويب ، ولكن لا يمكن تنزيلها. هذا مفيد لمشاركة البيانات السرية."
+
+#: templates/help/sharing_files_and_folders.html:23
+msgid ""
+"Edit on cloud and download: Similar to \"Preview and Download\", but if the "
+"file can be edited in web browser (e.g. an Office file), any user who has "
+"access to the link is allowed to edit it."
+msgstr ""
+"التحرير على السحابة والتنزيل: على غرار \"المعاينة والتنزيل\" ، ولكن إذا كان "
+"من الممكن تحرير الملف في متصفح الويب (مثل ملف Office) ، يسمح لأي مستخدم لديه"
+" حق الوصول إلى الارتباط بتحريره."
+
+#: templates/help/sharing_files_and_folders.html:25
+msgid "To create a share link in Seafile web app:"
+msgstr "لإنشاء روابط مشاركة في تطبيق ويب Seafile:"
+
+#: templates/help/sharing_files_and_folders.html:27
+msgid ""
+"Navigate into the parent folder containing the file or folder. Hover your "
+"mouse over the file or folder and click on the \"Share\" icon that appears."
+msgstr ""
+"انتقل إلى المجلد الأصل الذي يحتوي على الملف أو المجلد. مرر مؤشر الفأرة فوق "
+"الملف أو المجلد وانقر على أيقونة \"مشاركة\" التي تظهر."
+
+#: templates/help/sharing_files_and_folders.html:28
+msgid ""
+"A pop-up window will appear with share options. Click the \"Share Link\" tab"
+" on the left panel. Then click \"Generate\" button to create a link. You can"
+" use password, expiration time and permission to protect your link."
+msgstr ""
+"ستظهر نافذة منبثقة بها خيارات المشاركة. انقر فوق علامة التبويب \"مشاركة "
+"الرابط\" على اللوحة اليمنى. ثم انقر فوق الزر \"إنشاء\" لإنشاء رابط. يمكنك "
+"استخدام كلمة المرور ووقت انتهاء الصلاحية والإذن لحماية الرابط الخاص بك."
+
+#: templates/help/sharing_files_and_folders.html:29
+#: templates/help/sharing_files_and_folders.html:42
+msgid ""
+"Copy the link to email, instant messaging client or any other tool to send "
+"it to others."
+msgstr ""
+"انسخ الرابط إلى البريد الإلكتروني أو برنامج المراسلة الفورية أو أي أداة أخرى"
+" لإرساله إلى الآخرين."
+
+#: templates/help/sharing_files_and_folders.html:31
+msgid "You can also create share links from the desktop clients."
+msgstr "يمكنك أيضا إنشاء روابط مشاركة من عميل سطح المكتب."
+
+#: templates/help/sharing_files_and_folders.html:33
+msgid ""
+"If the library is synced, double click the library in the main window of "
+"Seafile client. The local folder of that library will be opened. Right click"
+" on the file or folder that you want to create a link to. In the pop-up "
+"menu, choose \"Seafile\" then \"Create share link\"."
+msgstr ""
+"إذا تمت مزامنة المكتبة، فانقر نقرًا مزدوجًا فوق المكتبة في النافذة الرئيسية "
+"لعميل سيفايل. سيتم فتح المجلد المحلي لتلك المكتبة. انقر بزر الفأرة الأيمن "
+"على الملف أو المجلد الذي تريد إنشاء رابط إليه. في القائمة المنبثقة، اختر "
+"\"سيفايل\" ثم \"إنشاء رابط مشاركة\"."
+
+#: templates/help/sharing_files_and_folders.html:34
+msgid ""
+"If the library is not synced, double click the library in the main window of"
+" Seafile client. The cloud file browser window will be opened, and you can "
+"create a link to a file or folder in it."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:36
+msgid "Creating upload links to folders"
+msgstr "إنشاء روابط مشاركة للمجلدات"
+
+#: templates/help/sharing_files_and_folders.html:37
+msgid ""
+"You can use upload links to collect files from others. You can only create "
+"upload links for folders. Others cannot see the files in the folders. They "
+"can only upload files to them."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:38
+msgid "To create an upload link in Seafile web app:"
+msgstr "لإنشاء روابط مشاركة في تطبيق ويب سيفايل:"
+
+#: templates/help/sharing_files_and_folders.html:40
+msgid ""
+"Navigate into the parent folder containing the folder. Hover your mouse over"
+" the folder and click on the \"Share\" icon that appears."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:41
+msgid ""
+"A pop-up window will appear with share options. Click the \"Upload Link\" "
+"tab on the left panel. Then click \"Generate\" button to create a link. You "
+"can use password to protect your link."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:44
+msgid "Sharing libraries or folders"
+msgstr "مشاركة المكتبات والمجلدات"
+
+#: templates/help/sharing_files_and_folders.html:45
+msgid ""
+"You can share a library or folder to other registered Seafile users. The "
+"shared library or folder can be accessed by others with the web app and "
+"Seafile clients."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:46
+msgid "You can choose the range of the share:"
+msgstr "يمكنك اختيار نطاق المشاركة:"
+
+#: templates/help/sharing_files_and_folders.html:48
+msgid "Share to user: You can share to one or more users."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:49
+msgid "Share to group: You can share to a group."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:50
+msgid ""
+"Share to organization: If you're using a private server, sometimes it's "
+"useful to share to all members on the server (the entire organization)."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:52
+msgid "You can also set permission on the share:"
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:54
+msgid "Read-Write: users can read, write, upload, download and sync files."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:55
+msgid "Read-only: users can read, download and sync files."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:56
+msgid "Admin: besides the write permission, users can also share the library."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:57
+msgid ""
+"Online Read-Write: users can view and edit files online via a web browser. "
+"The files cannot be downloaded."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:58
+msgid ""
+"Online Read-only: users can only view files online via a web browser. The "
+"files cannot be downloaded."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:60
+msgid "To share a library or folder to a user or group:"
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:62
+msgid ""
+"Hover your mouse over the library or folder and click on the \"Share\" icon "
+"that appears."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:63
+msgid ""
+"A pop-up window will appear with share options. Click the \"Share to user\" "
+"or \"Share to group\" tab on the left panel. Select the user or group. Then "
+"click \"Submit\"."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:65
+msgid ""
+"After you share a library or folder to a user, the user can see it by "
+"clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
+" you share it to a group, the group members can only see it by navigating "
+"into the group."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:66
+msgid ""
+"To share a library to the entire organization: In Seafile web app, click the"
+" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
+"button. In the drop-down menu, you can choose to share an existing library "
+"or create a new library and share it."
+msgstr ""
+
+#: templates/help/sharing_files_and_folders.html:67
+msgid "Internal links"
+msgstr "روابط داخلية"
+
+#: templates/help/sharing_files_and_folders.html:68
+msgid ""
+"Only logged in users who have read permission to the file or folder can "
+"access this link. It is used for internal file sharing. It's a convenient "
+"way for sharing files among team members who have access to a common "
+"library. You may just copy the link and paste it into an email or IM "
+"software."
+msgstr ""
+
+#: templates/help/sync_interval.html:8
+msgid ""
+"Usually Seafile client automatically detects changes on local folder and "
+"upload the changes to server. However, if the local folder is in a Windows "
+"network share drive, Seafile client cannot detect changes reliably. In this "
+"case, you can ask Seafile client to periodically checks for changes in the "
+"local folder. You can set the interval of this periodic sync. The interval "
+"is set in the unit of seconds."
+msgstr ""
+"عادة يقوم عميل Seafile تلقائياً بالكشف عن التغييرات في المجلد المحلي وتحميل "
+"التغييرات إلى الملقم. ومع ذلك، إذا كان المجلد المحلي في محرك أقراص مشاركة "
+"شبكة اتصال Windows، فإن عميل Seafile لا يمكنه الكشف عن التغييرات بشكل موثوق."
+" وفي هذه الحالة، يمكنك أن تطلب من عميل Seafile التحقق بشكل دوري من التغييرات"
+" في المجلد المحلي. يمكنك تعيين الفاصل الزمني لهذه المزامنة الدورية. يتم "
+"تعيين الفاصل الزمني بوحدة الثانية."
+
+#: templates/help/syncing_existing_folders.html:6
+msgid "Syncing with an existing folder"
+msgstr "مزامنة مجلد موجود"
+
+#: templates/help/syncing_existing_folders.html:8
+#, python-format
+msgid ""
+"Sometimes you already have a library on the Seafile server (shared by "
+"others, or uploaded from another computer). You can sync this library with "
+"an existing folder on your computer. The local folder must have the same "
+"name as the library. The files in the local folder will be merged with the "
+"files in the library. No file in the local folder or the library will be "
+"overwritten or lost. The merge will produce some <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
+"are different in the local folder and the library. "
+msgstr ""
+"أحيانا يكون لديك مكتبة على خادم Seafile (مشاركة بواسطة آخرين، أو تم تحميلها "
+"من كمبيوتر آخر). يمكنك مزامنة هذه المكتبة مع مجلد موجود في كمبيوترك. المجلد "
+"المحلي يجب أن يكون بنفس اسم المكتبة. الملفات في المجلد المحلي سيتم دمجها مع "
+"الملفات في المكتبة. لن يتم استبدال أي ملف في المجلد المحلي أو فقدانه. سينتج "
+"عن عملية الدمج بعض <a href=\"%(SITE_ROOT)shelp/conflicts/\">الملفات "
+"المتعارضة</a> في حال اختلاف محتويات الملف في المجلد المحلي عن المكتبة. "
+
+#: templates/help/syncing_existing_folders.html:10
+msgid ""
+"To sync a library with an existing folder, right click on the library in "
+"Seafile client's main window and click \"Sync this library\"."
+msgstr ""
+"لمزامنة مكتبة مع مجلد موجود، انقر بالزر الأيمن على المكتبة في النافذة "
+"الرئيسية للعميل وانقر فوق \"مزامنة هذه المكتبة\"."
+
+#: templates/help/syncing_existing_folders.html:14
+msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
+msgstr "في مربع الحوار المنبثق، انقر على رابط \"مزامنة مجلد موجود\"."
+
+#: templates/help/syncing_existing_folders.html:18
+msgid "Then choose an existing folder to sync with this library."
+msgstr "بعد ذلك اختر مجلد موجود للمزامنة مع هذه المكتبة."
+
+#: templates/help/unsync_resync.html:6
+msgid "Unsync and resync library"
+msgstr "الغاء مزامنة و اعادة مزامنة مكتبة"
+
+#: templates/help/unsync_resync.html:8
+#, python-format
+msgid ""
+"When you no longer want to sync a local folder with a library, you can "
+"unsync it. After you unsync a library, changes to the local folder and files"
+" will not be uploaded, and changes in the library will not be downloaded. If"
+" you want to sync the library with the local folder again, you can use the "
+"<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
+"folder</a> feature."
+msgstr ""
+
+#: templates/help/unsync_resync.html:10
+msgid ""
+"Sometimes there are internal errors in the client which blocks syncing. In "
+"these cases, it's usually helpful to \"resync\" the library. Resync means "
+"unsync and then immediately sync the library with the same folder. You can "
+"find this action in the pop-up menu of the client's main window."
+msgstr ""
+"تجدر الإشارة إلى أن هناك أحيانا أخطاء داخلية في جهاز العميل و التي تعيق "
+"المزامنة. وفي هذه الحالات، عادة ما يكون مفيدا \"إعادة مزامنة\"  المكتبة. "
+"\"إعادة مزامنة\" تعني إلغاء المزامنة و من ثم مزامنة المكتبة بنفس المجلد "
+"مباشرة. يمكنك العثور على هذا الإجراء في القائمة المنبثقة من الإطار الرئيسي "
+"للعميل."
+
+#: templates/help/using_drive_client.html:7
+msgid ""
+"After installing a drive client with the instructions on the <a "
+"href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
+"start it by double clicking the \"SeaDrive\" app icon on your desktop."
+msgstr ""
+
+#: templates/help/using_drive_client.html:8
+msgid ""
+"You'll be asked to choose a drive letter for the virtual drive. By default, "
+"\"S:\" will be used."
+msgstr ""
+
+#: templates/help/using_drive_client.html:9
+msgid "Then you'll be asked to log into your Seafile server."
+msgstr ""
+
+#: templates/help/using_drive_client.html:12
+msgid ""
+"After successfully log into the server, the Drive client starts to fetch "
+"library and file list from the server. The file contents are not downloaded "
+"at this moment. So it'll not take very long. You can let it run in the "
+"background. You'll be noticed when the fetch is done."
+msgstr ""
+
+#: templates/help/using_drive_client.html:14
+msgid ""
+"The virtual drive folder will be opened. You'll find it works just like an "
+"ordinary hard drive on your computer. The top level folders in the virtual "
+"drive are libraries on the Seafile server. File contents will be downloaded "
+"when you open a file. Recently opened file will be cached in your local "
+"disk. All cached files will be marked with a green tick."
+msgstr ""
+
+#: templates/help/using_drive_client.html:17
+msgid "Synced State"
+msgstr "حالة المزامنة"
+
+#: templates/help/using_drive_client.html:18
+msgid ""
+"Files and folders in the virtual drive are in either cloud-only, synced, or "
+"in partially synced state."
+msgstr ""
+
+#: templates/help/using_drive_client.html:22
+#: templates/help/using_drive_client.html:51
+msgid "State"
+msgstr "الحالة"
+
+#: templates/help/using_drive_client.html:23
+#: templates/help/using_drive_client.html:52
+msgid "Icon"
+msgstr "أيقونة"
+
+#: templates/help/using_drive_client.html:24
+#: templates/help/using_drive_client.html:53
+msgid "Details"
+msgstr "تفاصيل"
+
+#: templates/help/using_drive_client.html:29
+msgid "Cloud-only content"
+msgstr "محتوى سحابي فقط"
+
+#: templates/help/using_drive_client.html:31
+msgid ""
+"Cloud-only content shows in the virtual drive, but doesn’t use the full "
+"amount of space that the file would. In your file explorer, you can see the "
+"file, but the content isn’t fully downloaded until you need it. What "
+"downloaded is only information about the file, such as its name, its size "
+"and the date it was updated."
+msgstr ""
+
+#: templates/help/using_drive_client.html:34
+msgid "Synced content"
+msgstr "المحنوى المتزامن"
+
+#: templates/help/using_drive_client.html:36
+msgid ""
+"Synced content is downloaded and saved on the hard drive of your computer. "
+"You can directly edit these files from applications on your computer."
+msgstr ""
+
+#: templates/help/using_drive_client.html:39
+msgid "Partially synced content"
+msgstr "محتوى تمت مزامنته جزئيًا"
+
+#: templates/help/using_drive_client.html:41
+msgid ""
+"Partially synced folders contain both synced and cloud-only files or "
+"folders."
+msgstr ""
+
+#: templates/help/using_drive_client.html:46
+msgid "Special States"
+msgstr "حالة خاصة"
+
+#: templates/help/using_drive_client.html:47
+msgid ""
+"For files that are already synced to local computer, they may be in 3 other "
+"special states, besides the normal \"synced\" state. "
+msgstr ""
+
+#: templates/help/using_drive_client.html:58
+msgid "Locked by other user"
+msgstr "مقفل من قبل مستخدم آخر"
+
+#: templates/help/using_drive_client.html:60
+msgid ""
+"The file is locked by other user on the server. You can only open the file "
+"in read-only mode. You cannot modify, delete, rename or move the file."
+msgstr ""
+
+#: templates/help/using_drive_client.html:63
+msgid "Locked by me"
+msgstr "مقفل من قبلي"
+
+#: templates/help/using_drive_client.html:65
+msgid ""
+"The file is locked by you. This prevents others from modifying the file."
+msgstr ""
+
+#: templates/help/using_drive_client.html:68
+msgid "Read-only"
+msgstr "للقراءة فقط"
+
+#: templates/help/using_drive_client.html:70
+msgid ""
+"The folder or library of this file is shared with read-only permission to "
+"you. You cannot modify, delete or move the file."
+msgstr ""
+
+#: templates/help/using_drive_client.html:74
+msgid ""
+"The Drive client regularly cleans up unused cached files in the background. "
+"You can also limit the local cache space."
+msgstr ""
+
+#: templates/help/using_drive_client.html:76
+msgid ""
+"You can log into multiple accounts in the Drive client. However, only files "
+"on the current selected server will be shown in the virtual drive. You can "
+"switch among accounts."
+msgstr ""
+
+#: templates/help/using_drive_client.html:80
+msgid "1. Why can't I create new files or delete folders in root folder?"
+msgstr ""
+
+#: templates/help/using_drive_client.html:81
+msgid ""
+"The root folder of the virtual drive contains only library folders. Seafile "
+"can only sync files inside libraries. Files in the root folder cannot be "
+"uploaded to Seafile server. So it doesn't make sense to support creating "
+"files in root folder. Since the top level folders in the virtual drive "
+"represents libraries, we don't want users to delete their libraries by "
+"mistake. So the Drive client doesn't support deleting top level folders."
+msgstr ""
+
+#: templates/help/viewing_files_within_web_app.html:6
+msgid ""
+"Some types of files can be directly opened and viewed within the Seafile Web"
+" App. Currently they are:"
+msgstr ""
+
+#: templates/help/viewing_files_within_web_app.html:13
+msgid "Image files"
+msgstr "صور"

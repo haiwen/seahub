@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 11:43+0800\n"
+"POT-Creation-Date: 2024-02-05 16:23+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: mgeisselreiter <mg@gz.cz>, 2021\n"
 "Language-Team: Czech (http://app.transifex.com/haiwen/seahub/language/cs/)\n"
@@ -59,9 +59,10 @@ msgstr "Zobrazit profil a více"
 
 #: frontend/src/components/common/account.js:161
 msgid "Used:"
-msgstr ""
+msgstr "Využito:"
 
 #: frontend/src/components/common/account.js:165
+#: frontend/src/components/search/ai-search.js:651
 #: frontend/src/pages/groups/group-view.js:470
 #: frontend/src/pages/groups/group-view.js:476
 #: frontend/src/pages/org-admin/side-panel.js:56
@@ -79,7 +80,7 @@ msgstr ""
 #: frontend/src/components/common/account.js:168
 #: frontend/src/components/common/logout.js:6
 msgid "Log out"
-msgstr ""
+msgstr "Odhlástit"
 
 #: frontend/src/components/common/notice-item.js:42
 msgid "User {user_link} has added you to {group_link}"
@@ -249,7 +250,7 @@ msgstr "Knihovny"
 #: frontend/src/components/cur-dir-path/dir-tool.js:99
 #: frontend/src/components/dirent-detail/detail-list-view.js:123
 #: frontend/src/components/dirent-detail/file-details.js:89
-#: frontend/src/components/toolbar/view-file-toolbar.js:104
+#: frontend/src/components/toolbar/view-file-toolbar.js:105
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:48
 #: frontend/src/utils/text-translation.js:35
 msgid "Tags"
@@ -265,7 +266,7 @@ msgstr "Koš"
 #: frontend/src/components/cur-dir-path/dir-tool.js:106
 #: frontend/src/components/file-view/file-toolbar.js:198
 #: frontend/src/components/file-view/file-toolbar.js:248
-#: frontend/src/components/toolbar/view-file-toolbar.js:105
+#: frontend/src/components/toolbar/view-file-toolbar.js:106
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:64
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:71
 #: frontend/src/utils/text-translation.js:32
@@ -525,7 +526,7 @@ msgstr "Storno"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:65
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:270
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:268
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:255
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
 #: frontend/src/components/dialog/transfer-dialog.js:101
@@ -580,7 +581,7 @@ msgid "Search users"
 msgstr "Vyhledat uživatele"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:137
-#: frontend/src/components/dialog/edit-filetag-dialog.js:169
+#: frontend/src/components/dialog/edit-filetag-dialog.js:145
 #: frontend/src/components/dialog/list-created-files-dialog.js:55
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:86
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:107
@@ -589,8 +590,8 @@ msgstr "Vyhledat uživatele"
 #: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:68
-#: frontend/src/components/search/ai-search.js:623
-#: frontend/src/components/search/ai-search.js:659
+#: frontend/src/components/search/ai-search.js:653
+#: frontend/src/components/search/ai-search.js:690
 #: frontend/src/components/search/search.js:497
 #: frontend/src/components/search/search.js:532
 #: frontend/src/components/system-notification.js:46
@@ -776,8 +777,8 @@ msgstr "Opravdu chcete smazat svůj účet?"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:39
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:59
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:59
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:667
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:691
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:668
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:692
 #: frontend/src/components/draft-list-view/draft-list-item.js:111
 #: frontend/src/components/group-members.js:163
 #: frontend/src/components/popover/tag-list-item.js:55
@@ -794,8 +795,8 @@ msgstr "Opravdu chcete smazat svůj účet?"
 #: frontend/src/components/share-link-panel/link-list.js:69
 #: frontend/src/components/share-link-panel/link-list.js:129
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:513
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:357
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:365
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:358
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:366
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:83
 #: frontend/src/pages/invitations/invitations-view.js:104
@@ -994,7 +995,7 @@ msgstr "Nová knihovna pro oddělení."
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:82
 #: frontend/src/components/dialog/wiki-select-dialog.js:78
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:625
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:626
 #: frontend/src/components/draft-list-view/draft-list-view.js:36
 #: frontend/src/components/group-members.js:30
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:122
@@ -1053,7 +1054,7 @@ msgstr "Název"
 #: frontend/src/components/dialog/create-folder-dialog.js:54
 #: frontend/src/components/dialog/rename-dialog.js:56
 #: frontend/src/components/dialog/rename-dirent.js:56
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:113
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:114
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:78
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr "Jméno \"{name}\" je již obsazeno. Prosím zvolte jiné jméno."
@@ -1142,8 +1143,8 @@ msgstr "Typ uložiště"
 #: frontend/src/components/dialog/share-to-other-server.js:85
 #: frontend/src/components/dialog/share-to-other-server.js:223
 #: frontend/src/components/dialog/share-to-user.js:341
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:243
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:290
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:241
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:288
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:229
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:280
 #: frontend/src/components/share-link-panel/link-list.js:88
@@ -1282,8 +1283,8 @@ msgstr "Nahrát"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:157
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:180
 #: frontend/src/components/dialog/zip-download-dialog.js:123
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:661
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:685
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:662
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:686
 #: frontend/src/components/file-view/file-toolbar.js:171
 #: frontend/src/components/file-view/file-toolbar.js:255
 #: frontend/src/components/file-view/file-view-tip.js:25
@@ -1291,8 +1292,8 @@ msgstr "Nahrát"
 #: frontend/src/components/history-trash-file-view/download.js:10
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:27
 #: frontend/src/components/shared-file-view/shared-file-view.js:133
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:358
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:371
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:359
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:372
 #: frontend/src/pages/file-history-old/history-item.js:127
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:128
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:74
@@ -1339,9 +1340,9 @@ msgstr ""
 #: frontend/src/components/dialog/view-link-dialog.js:38
 #: frontend/src/components/share-link-panel/link-item.js:112
 #: frontend/src/components/shared-link.js:24
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:356
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:364
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:370
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:357
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:365
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:371
 #: frontend/src/pages/org-admin/org-saml-config.js:118
 #: frontend/src/pages/org-admin/org-saml-config.js:132
 #: frontend/src/pages/org-admin/org-saml-config.js:146
@@ -1374,7 +1375,7 @@ msgstr ""
 #: frontend/src/components/select-editor/select-editor.js:138
 #: frontend/src/components/share-link-panel/link-details.js:206
 #: frontend/src/components/share-link-panel/link-details.js:207
-#: frontend/src/components/toolbar/view-file-toolbar.js:86
+#: frontend/src/components/toolbar/view-file-toolbar.js:87
 #: frontend/src/components/user-settings/user-avatar-form.js:97
 #: frontend/src/pages/org-admin/org-user-profile.js:139
 #: frontend/src/pages/org-admin/org-user-profile.js:145
@@ -1446,12 +1447,12 @@ msgstr "Smazat skupinu"
 msgid "Really want to delete this group?"
 msgstr "Skutečně chcete smazat tuto skupinu?"
 
-#: frontend/src/components/dialog/edit-filetag-dialog.js:143
+#: frontend/src/components/dialog/edit-filetag-dialog.js:119
 msgid "Select Tags"
-msgstr ""
+msgstr "Vybrat štítky"
 
-#: frontend/src/components/dialog/edit-filetag-dialog.js:165
-#: frontend/src/components/popover/edit-filetag-popover.js:191
+#: frontend/src/components/dialog/edit-filetag-dialog.js:141
+#: frontend/src/components/popover/edit-filetag-popover.js:182
 #: frontend/src/components/popover/list-tag-popover.js:145
 msgid "Create a new tag"
 msgstr "Vytvořit nový štítek"
@@ -1552,7 +1553,7 @@ msgstr "Zobrazit"
 #: frontend/src/components/dialog/generate-upload-link.js:310
 #: frontend/src/components/share-link-panel/link-details.js:199
 msgid "Expiration Date:"
-msgstr ""
+msgstr "Datum expirace:"
 
 #: frontend/src/components/dialog/generate-upload-link.js:339
 #: frontend/src/components/share-link-panel/link-details.js:229
@@ -1576,13 +1577,13 @@ msgstr "Přidat ochranu heslem"
 #: frontend/src/components/dialog/generate-upload-link.js:403
 #: frontend/src/components/share-link-panel/link-creation.js:302
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Přidat automatickou expiraci"
 
 #: frontend/src/components/dialog/generate-upload-link.js:422
 #: frontend/src/components/share-link-panel/link-creation.js:338
 #: frontend/src/components/user-settings/web-api-auth-token.js:86
 msgid "Generate"
-msgstr ""
+msgstr "Generovat"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:23
 msgid "Welcome to {site_name_placeholder}"
@@ -1593,14 +1594,14 @@ msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. We have created a personal library for you. "
 "You can create more libraries later."
-msgstr ""
+msgstr "{site_name_placeholder} organizuje soubory do knihoven. Každou knihovnu lze synchronizovat a sdílet samostatně. Vytvořili jsme pro vás osobní knihovnu. Další knihovny můžete vytvořit později."
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:26
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
-msgstr ""
+msgstr "{site_name_placeholder} organizuje soubory do knihoven. Každou knihovnu lze synchronizovat a sdílet samostatně. Jelikož jste však nyní hostem, nemůžete vytvářet knihovny."
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
 #: frontend/src/components/dialog/org-import-users-dialog.js:37
@@ -1616,13 +1617,13 @@ msgstr ""
 #: frontend/src/components/dialog/org-import-users-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:53
 msgid "Download an example file"
-msgstr ""
+msgstr "Stáhnout ukázkový soubor"
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
-msgstr ""
+msgstr "Nahrát soubor"
 
 #: frontend/src/components/dialog/insert-file-dialog.js:55
 msgid "Select File"
@@ -1743,15 +1744,15 @@ msgstr "Opustit"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:62
 msgid "This library is password protected"
-msgstr ""
+msgstr "Tato knihovna je chráněna heslem"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:64
 msgid "Wrong password"
-msgstr ""
+msgstr "Chybné heslo"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:68
 msgid "The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "Heslo bude uloženo na serveru pouze 1 hodinu."
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:55
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:55
@@ -1833,17 +1834,17 @@ msgstr "Nastavit oprávnění pro {placeholder}"
 #: frontend/src/components/dialog/repo-api-token-dialog.js:197
 #: frontend/src/components/dialog/zip-download-dialog.js:76
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:294
-#: frontend/src/pages/lib-content-view/lib-content-view.js:184
-#: frontend/src/pages/lib-content-view/lib-content-view.js:729
-#: frontend/src/pages/lib-content-view/lib-content-view.js:778
-#: frontend/src/pages/lib-content-view/lib-content-view.js:863
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1059
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1075
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1111
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1139
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1203
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1253
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1281
+#: frontend/src/pages/lib-content-view/lib-content-view.js:185
+#: frontend/src/pages/lib-content-view/lib-content-view.js:735
+#: frontend/src/pages/lib-content-view/lib-content-view.js:784
+#: frontend/src/pages/lib-content-view/lib-content-view.js:869
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1065
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1081
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1117
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1145
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1209
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1259
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
 #: frontend/src/pages/my-libs/my-libs-deleted.js:152
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:293
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:315
@@ -1861,7 +1862,7 @@ msgstr "Chyba"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:189
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:172
 #: frontend/src/components/dialog/repo-api-token-dialog.js:199
-#: frontend/src/pages/lib-content-view/lib-content-view.js:190
+#: frontend/src/pages/lib-content-view/lib-content-view.js:191
 #: frontend/src/pages/search/main-panel.js:82
 #: frontend/src/pages/sys-admin/abuse-reports.js:47
 #: frontend/src/repo-folder-trash.js:142 frontend/src/repo-folder-trash.js:331
@@ -1875,10 +1876,10 @@ msgstr "Zkontrolujte síťové připojení."
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:283
 #: frontend/src/components/dialog/repo-share-admin/group-shares.js:187
 #: frontend/src/components/dialog/share-to-group.js:316
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:242
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:289
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:240
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:287
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:285
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:265
@@ -1889,7 +1890,7 @@ msgstr "Složka"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:302
 msgid "Select a group"
-msgstr ""
+msgstr "Vyberte skupinu"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:263
 #: frontend/src/components/dialog/repo-share-admin/user-shares.js:187
@@ -1974,7 +1975,7 @@ msgstr "Vlastník"
 #: frontend/src/components/dirent-detail/detail-list-view.js:121
 #: frontend/src/components/dirent-detail/file-details.js:87
 #: frontend/src/components/dirent-detail/lib-details.js:70
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:629
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:630
 #: frontend/src/components/draft-list-view/draft-list-view.js:38
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:125
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
@@ -2003,7 +2004,7 @@ msgstr "Oštítkované soubory"
 #: frontend/src/components/dirent-detail/detail-list-view.js:119
 #: frontend/src/components/dirent-detail/file-details.js:85
 #: frontend/src/components/dirent-detail/lib-details.js:69
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:628
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:629
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:124
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
@@ -2067,8 +2068,8 @@ msgstr "Nová Wiki stránka"
 
 #: frontend/src/components/dialog/op-menu.js:53
 #: frontend/src/components/dialog/op-menu.js:54
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:836
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:837
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:838
 #: frontend/src/components/draft-list-view/draft-list-item.js:104
 #: frontend/src/components/draft-list-view/draft-list-item.js:105
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:123
@@ -2190,7 +2191,7 @@ msgstr "Email"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:155
 msgid "Confirm Password"
-msgstr ""
+msgstr "Potvrzení hesla"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:61
 #: frontend/src/pages/org-admin/org-users-users.js:274
@@ -2315,19 +2316,19 @@ msgid "API token is copied to the clipboard."
 msgstr "Token k API rozhraní zkopírován do schránky."
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
-#: frontend/src/pages/lib-content-view/lib-content-view.js:171
-#: frontend/src/pages/lib-content-view/lib-content-view.js:174
+#: frontend/src/pages/lib-content-view/lib-content-view.js:172
+#: frontend/src/pages/lib-content-view/lib-content-view.js:175
 #: frontend/src/repo-folder-trash.js:131 frontend/src/utils/utils.js:1189
 msgid "Permission denied"
 msgstr "Přístup odepřen"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:222
 msgid "App Name"
-msgstr ""
+msgstr "Název aplikace"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:285
 msgid "{placeholder} API Token"
-msgstr ""
+msgstr "{placeholder} API Token"
 
 #: frontend/src/components/dialog/repo-seatable-integration-dialog.js:153
 msgid "{placeholder} SeaTable integration"
@@ -2487,14 +2488,14 @@ msgstr "Sdílet na jiný server"
 
 #: frontend/src/components/dialog/share-dialog.js:323
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:84
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:664
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:688
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:665
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:689
 #: frontend/src/components/file-view/file-toolbar.js:143
 #: frontend/src/components/file-view/file-toolbar.js:242
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:348
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:511
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:218
-#: frontend/src/components/toolbar/view-file-toolbar.js:102
+#: frontend/src/components/toolbar/view-file-toolbar.js:103
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:111
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:69
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:359
@@ -2523,9 +2524,9 @@ msgid "Select libraries to share"
 msgstr "Vyberte knihovnu ke sdílení"
 
 #: frontend/src/components/dialog/share-to-group.js:332
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:253
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:251
 msgid "Select groups"
-msgstr ""
+msgstr "Vybrat skupiny"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:317
 #: frontend/src/components/share-link-panel/link-list.js:89
@@ -2548,12 +2549,12 @@ msgstr "Hostilel"
 #: frontend/src/components/dialog/share-to-other-server.js:83
 #: frontend/src/components/dialog/share-to-other-server.js:221
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: frontend/src/components/dialog/share-to-other-server.js:84
 #: frontend/src/components/dialog/share-to-other-server.js:222
 msgid "User Email"
-msgstr ""
+msgstr "Email uživatele"
 
 #: frontend/src/components/dialog/share-to-other-server.js:193
 #: frontend/src/pages/groups/group-view.js:302
@@ -2890,29 +2891,29 @@ msgid "Files"
 msgstr "Soubory"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:210
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:729
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:730
 msgid "Frozen by {name}"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:210
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:729
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:730
 msgid "locked by {name}"
 msgstr "zamčeno uživatelem {name}"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:214
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:735
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:736
 msgid "freezed"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:214
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:735
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:736
 #: frontend/src/components/file-view/file-info.js:31
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:17
 msgid "locked"
 msgstr "uzamčeno"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:758
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:845
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:759
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:846
 #: frontend/src/components/file-view/file-info.js:40
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:643
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:333
@@ -2924,8 +2925,8 @@ msgstr "uzamčeno"
 msgid "Unstar"
 msgstr "Odebrat z oblíbených"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:758
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:845
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:759
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:846
 #: frontend/src/components/file-view/file-info.js:40
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:643
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:333
@@ -2968,10 +2969,10 @@ msgid "Library"
 msgstr "Knihovna"
 
 #: frontend/src/components/file-chooser/file-chooser.js:286
-#: frontend/src/components/search/ai-search.js:448
+#: frontend/src/components/search/ai-search.js:452
 #: frontend/src/components/search/wiki-search.js:193
-msgid "No results matching."
-msgstr "Žádný výsledek"
+msgid "No results matching"
+msgstr ""
 
 #: frontend/src/components/file-chooser/file-chooser.js:382
 #: frontend/src/components/file-chooser/file-chooser.js:426
@@ -3025,25 +3026,25 @@ msgstr "Nahrajte soubory menší než {placeholder}M"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:97
 #: frontend/src/pages/upload-link/upload-list-item.js:94
 msgid "Preparing to upload..."
-msgstr ""
+msgstr "Příprava pro nahrávání..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:98
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:98
 #: frontend/src/pages/upload-link/upload-list-item.js:95
 msgid "Remaining"
-msgstr ""
+msgstr "Zbývá"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:99
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:99
 #: frontend/src/pages/upload-link/upload-list-item.js:96
 msgid "Indexing..."
-msgstr ""
+msgstr "Indexování..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:130
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:130
 #: frontend/src/pages/upload-link/upload-list-item.js:127
 msgid "Retry"
-msgstr ""
+msgstr "Opakovat"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:133
 #: frontend/src/components/file-view/file-toolbar.js:150
@@ -3059,7 +3060,7 @@ msgstr "Ukládání…"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:136
 #: frontend/src/pages/upload-link/upload-list-item.js:133
 msgid "Uploaded"
-msgstr ""
+msgstr "Nahráno"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:48
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:48
@@ -3191,7 +3192,7 @@ msgstr "Člen"
 
 #: frontend/src/components/group-members.js:96
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:290
-#: frontend/src/pages/lib-content-view/lib-content-view.js:851
+#: frontend/src/pages/lib-content-view/lib-content-view.js:857
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:311
 #: frontend/src/pages/org-admin/org-group-repos.js:146
 #: frontend/src/pages/org-admin/org-user-repos.js:142
@@ -3239,13 +3240,13 @@ msgstr "Všechny skupiny"
 #: frontend/src/pages/org-admin/side-panel.js:86
 #: frontend/src/pages/sys-admin/side-panel.js:174
 msgid "Links"
-msgstr ""
+msgstr "Odkazy"
 
 #: frontend/src/components/main-side-nav.js:151
 #: frontend/src/components/main-side-nav.js:153
 #: frontend/src/pages/share-admin/folders.js:368
 msgid "Folders"
-msgstr ""
+msgstr "Složky"
 
 #: frontend/src/components/main-side-nav.js:185
 #: frontend/src/components/main-side-nav.js:187
@@ -3269,18 +3270,18 @@ msgstr "Sdíleno se všemi"
 #: frontend/src/components/main-side-nav.js:206
 #: frontend/src/components/main-side-nav.js:208
 msgid "Shared with groups"
-msgstr ""
+msgstr "Sdíleno se skupinami"
 
 #: frontend/src/components/main-side-nav.js:215
 #: frontend/src/components/main-side-nav.js:217
 #: frontend/src/components/main-side-nav.js:223
 #: frontend/src/components/main-side-nav.js:225
 msgid "Shared from other servers"
-msgstr ""
+msgstr "Sdíleno z jiných serverů"
 
 #: frontend/src/components/main-side-nav.js:232
 msgid "Tools"
-msgstr ""
+msgstr "Nástroje"
 
 #: frontend/src/components/main-side-nav.js:235
 #: frontend/src/components/main-side-nav.js:237
@@ -3303,7 +3304,7 @@ msgstr "Zveřejněné knihovny"
 #: frontend/src/components/main-side-nav.js:266
 #: frontend/src/pages/linked-devices/linked-devices.js:230
 msgid "Linked Devices"
-msgstr ""
+msgstr "Spárovaná zařízení"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
@@ -3344,12 +3345,16 @@ msgid ""
 "right}"
 msgstr "Přístup byl odepřen. Prosím zkuste {placeholder-left}přihlášení znovu.{placeholder-right}"
 
-#: frontend/src/components/popover/edit-filetag-popover.js:163
-msgid "Find a tag"
+#: frontend/src/components/popover/edit-filetag-popover.js:137
+msgid "No tags"
+msgstr "Žádné značky"
+
+#: frontend/src/components/popover/edit-filetag-popover.js:141
+msgid "Tag not found"
 msgstr ""
 
-#: frontend/src/components/popover/edit-filetag-popover.js:170
-msgid "Tag not found"
+#: frontend/src/components/popover/edit-filetag-popover.js:155
+msgid "Find a tag"
 msgstr ""
 
 #: frontend/src/components/popover/tag-list-footer.js:36
@@ -3391,8 +3396,8 @@ msgstr ""
 msgid "You are watching file changes of this library."
 msgstr ""
 
-#: frontend/src/components/sdoc-wiki-page-viewer/index.js:147
-#: frontend/src/components/seafile-markdown-viewer/index.js:128
+#: frontend/src/components/sdoc-wiki-page-viewer/index.js:125
+#: frontend/src/components/seafile-markdown-viewer/index.js:111
 msgid "Last modified by"
 msgstr "Poslední úpravu provedl"
 
@@ -3428,41 +3433,41 @@ msgstr "Ne"
 msgid "Reference documents"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:382
+#: frontend/src/components/search/ai-search.js:386
 #: frontend/src/components/search/search.js:433
 msgid "Search results visited recently"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:431
+#: frontend/src/components/search/ai-search.js:435
 #: frontend/src/components/search/search.js:413
 msgid "Type characters to start search"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:434
+#: frontend/src/components/search/ai-search.js:438
 msgid "Type more characters to start search"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:445
-#: frontend/src/components/search/ai-search.js:462
+#: frontend/src/components/search/ai-search.js:449
+#: frontend/src/components/search/ai-search.js:466
 msgid "Ask AI"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:524
+#: frontend/src/components/search/ai-search.js:528
 msgid ""
 "Indexing the library. Semantic search will be available within a few "
 "minutes."
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:535
+#: frontend/src/components/search/ai-search.js:539
 msgid "Successfully turned it off"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:549
-#: frontend/src/components/search/ai-search.js:571
+#: frontend/src/components/search/ai-search.js:557
+#: frontend/src/components/search/ai-search.js:581
 msgid "Turn on semantic search for this library"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:560
+#: frontend/src/components/search/ai-search.js:569
 msgid "Turn off semantic search for this library"
 msgstr ""
 
@@ -3621,7 +3626,7 @@ msgstr ""
 
 #: frontend/src/components/share-link-panel/link-creation.js:323
 msgid "Set permission"
-msgstr ""
+msgstr "Nastavit oprávnění"
 
 #: frontend/src/components/share-link-panel/link-details.js:50
 #: frontend/src/components/share-link-panel/link-item.js:59
@@ -3642,7 +3647,7 @@ msgstr "Přímý odkaz ke stažení:"
 
 #: frontend/src/components/share-link-panel/link-details.js:239
 msgid "Permission:"
-msgstr ""
+msgstr "Oprávnění:"
 
 #: frontend/src/components/share-link-panel/link-details.js:267
 #: frontend/src/components/share-link-panel/link-item.js:118
@@ -3689,7 +3694,7 @@ msgstr "Sdíleno od:"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:129
 msgid "Save as ..."
-msgstr ""
+msgstr "Uložit jako ..."
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:173
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:179
@@ -3803,8 +3808,8 @@ msgid "Clients"
 msgstr "Klienti"
 
 #: frontend/src/components/toolbar/common-toolbar.js:24
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:88
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:147
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:90
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:150
 #: frontend/src/pages/search/main-panel.js:330
 #: frontend/src/pages/wiki/main-panel.js:95
 #: frontend/src/pages/wiki/main-panel.js:112
@@ -3850,14 +3855,14 @@ msgstr "Nový soubor Wordu"
 msgid "New SeaDoc File"
 msgstr ""
 
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:355
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:363
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:356
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:364
 #: frontend/src/utils/text-translation.js:18
 msgid "Move"
 msgstr "Přesunout"
 
 #: frontend/src/components/toolbar/repo-view-toobar.js:63
-#: frontend/src/components/toolbar/view-file-toolbar.js:98
+#: frontend/src/components/toolbar/view-file-toolbar.js:99
 #: frontend/src/file-history-old.js:268
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:55
 #: frontend/src/repo-folder-trash.js:280
@@ -3869,31 +3874,31 @@ msgstr "Více"
 msgid "Deleted Libraries"
 msgstr "Smazané knihovny"
 
-#: frontend/src/components/toolbar/view-file-toolbar.js:86
+#: frontend/src/components/toolbar/view-file-toolbar.js:87
 msgid "Edit File"
 msgstr "Upravit soubor"
 
-#: frontend/src/components/toolbar/view-file-toolbar.js:91
+#: frontend/src/components/toolbar/view-file-toolbar.js:92
 msgid "New Draft"
 msgstr "Nový návrh"
 
-#: frontend/src/components/toolbar/view-file-toolbar.js:92
+#: frontend/src/components/toolbar/view-file-toolbar.js:93
 msgid "Create a draft from this file, instead of editing it directly."
 msgstr "Vytvořit z tohoto souboru návrh místo přímé úpravy."
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:31
 #: frontend/src/shared-dir-view.js:456 frontend/src/shared-dir-view.js:457
 msgid "List"
-msgstr ""
+msgstr "Seznam"
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:32
 #: frontend/src/shared-dir-view.js:462 frontend/src/shared-dir-view.js:463
 msgid "Grid"
-msgstr ""
+msgstr "Mřížka"
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:33
 msgid "Column"
-msgstr ""
+msgstr "Sloupec"
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:37
 #: frontend/src/utils/text-translation.js:34
@@ -4000,35 +4005,35 @@ msgstr "Stav: zapnuto"
 #: frontend/src/pages/sys-admin/users/user-info.js:179
 #: frontend/src/pages/sys-admin/users/user-info.js:182
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Vypnout dvoufaktorovou autentizaci"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:22
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
-msgstr ""
+msgstr "Pokud nemáte u sebe žádné zařízení, můžete přisupovat k Vašemu účtu pomocí záložních kódů."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:23
 msgid "You have only one backup code remaining."
-msgstr ""
+msgstr "Zbývá vám pouze jeden záložní kód."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:24
 msgid "You have {num} backup codes remaining."
-msgstr ""
+msgstr "Zbývá vám {num} záložních kódů."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:27
 msgid "Show Codes"
-msgstr ""
+msgstr "Zobrazit kódy"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:35
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
-msgstr ""
+msgstr "Dvoufaktorová autentizace není zapnuta pro Váš účet. Zapněte dvoufaktorovou autentizaci pro zvýšení zabezpečení vašeho účtu."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:37
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Zapnout dvoufaktorovou autentizaci"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:45
 #: frontend/src/pages/sys-admin/users/user-info.js:174
@@ -4050,7 +4055,7 @@ msgstr "Soubor je příliš velký. Nejvyšší umožněná velikost je 1MB."
 
 #: frontend/src/components/user-settings/user-avatar-form.js:93
 msgid "Avatar:"
-msgstr ""
+msgstr "Profilový obrázek:"
 
 #: frontend/src/components/user-settings/user-basic-info-form.js:69
 msgid "Username:"
@@ -4232,11 +4237,11 @@ msgstr "Operace"
 msgid "File"
 msgstr "Soubor"
 
-#: frontend/src/pages/dashboard/files-activities.js:242
+#: frontend/src/pages/dashboard/files-activities.js:247
 msgid "All Activities"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:245
+#: frontend/src/pages/dashboard/files-activities.js:250
 msgid "My Activities"
 msgstr ""
 
@@ -4333,7 +4338,7 @@ msgstr "Skupiny"
 
 #: frontend/src/pages/groups/group-view.js:453
 msgid "This is a special group representing a department."
-msgstr ""
+msgstr "Toto je speciální skupina reprezentující oddělení."
 
 #: frontend/src/pages/groups/group-view.js:488
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:151
@@ -4346,7 +4351,7 @@ msgstr "Převod"
 
 #: frontend/src/pages/groups/group-view.js:494
 msgid "Import Members"
-msgstr ""
+msgstr "Importovat členy"
 
 #: frontend/src/pages/groups/group-view.js:495
 msgid "Manage Members"
@@ -4371,7 +4376,7 @@ msgstr "Nejste v žádné skupině. Skupiny umožňují více lidem spolupracova
 
 #: frontend/src/pages/groups/groups-view.js:203
 msgid "My Groups"
-msgstr ""
+msgstr "Moje skupiny"
 
 #: frontend/src/pages/invitations/invitations-view.js:117
 #: frontend/src/pages/invitations/invitations-view.js:204
@@ -4395,122 +4400,122 @@ msgid ""
 "button in the menu bar."
 msgstr "Dosud jste nepozvali žádné hosty. Host má přístup ke sdíleným knihovnám prostřednictvím webového rozhraní, což umožňuje efektivnější způsoby spolupráce než prostřednictvím odkazů. Můžete pozvat hosta kliknutím na tlačítko „Pozvat hosta“ na liště nabídek."
 
-#: frontend/src/pages/lib-content-view/lib-content-container.js:101
+#: frontend/src/pages/lib-content-view/lib-content-container.js:102
 #: frontend/src/pages/wiki/main-panel.js:82
 msgid "Folder does not exist."
 msgstr "Složka neexistuje."
 
-#: frontend/src/pages/lib-content-view/lib-content-container.js:179
+#: frontend/src/pages/lib-content-view/lib-content-container.js:180
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr "Tato knihovna byla nastavena správcem pouze pro čtení a nelze ji aktualizovat."
 
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:66
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:97
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:67
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:99
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 msgid "Side Nav Menu"
 msgstr "Postranní navigační nabídka"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:179
+#: frontend/src/pages/lib-content-view/lib-content-view.js:180
 msgid "Library share permission not found."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:611
+#: frontend/src/pages/lib-content-view/lib-content-view.js:617
 msgid "Failed to move files to another library."
 msgstr "Nepodařilo se přesunout soubory do jiné knihovny."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:613
+#: frontend/src/pages/lib-content-view/lib-content-view.js:619
 #: frontend/src/shared-dir-view.js:214
 msgid "Failed to copy files to another library."
 msgstr "Nepodařilo se zkopírovat soubory do jiné knihovny."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:643
+#: frontend/src/pages/lib-content-view/lib-content-view.js:649
 msgid "Successfully moved files to another library."
 msgstr "Soubory byly úspěšně přesunuty do jiné knihovny."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:645
+#: frontend/src/pages/lib-content-view/lib-content-view.js:651
 #: frontend/src/shared-dir-view.js:228
 msgid "Successfully copied files to another library."
 msgstr "Soubory byly úspěšně zkopírovány do jiné knihovny."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:812
+#: frontend/src/pages/lib-content-view/lib-content-view.js:818
 msgid "Restored {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:813
+#: frontend/src/pages/lib-content-view/lib-content-view.js:819
 msgid "Restored {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:820
+#: frontend/src/pages/lib-content-view/lib-content-view.js:826
 msgid "Failed to restore {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:821
+#: frontend/src/pages/lib-content-view/lib-content-view.js:827
 msgid "Failed to restore {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:847
+#: frontend/src/pages/lib-content-view/lib-content-view.js:853
 msgid "Successfully deleted {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:857
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1105
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1133
+#: frontend/src/pages/lib-content-view/lib-content-view.js:863
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1111
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1139
 msgid "Undo"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:864
+#: frontend/src/pages/lib-content-view/lib-content-view.js:870
 msgid "Failed to delete {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1061
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1077
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1067
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1083
 msgid "Renaming {name} failed"
 msgstr "Přejmenování {name} selhalo"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1101
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1129
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1107
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1135
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:230
 #: frontend/src/pages/org-admin/org-groups.js:126
 #: frontend/src/pages/org-admin/org-libraries.js:83
 msgid "Successfully deleted {name}"
 msgstr "Úspěšně smazán {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1113
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1141
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1119
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1147
 msgid "Failed to delete {name}"
 msgstr "Chyba při odstranění {name}"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1197
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1203
 msgid "Successfully moved {name}."
 msgstr "Úspěšně přesunut {name}."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1204
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1210
 msgid "Failed to move {name}."
 msgstr "Chyba při přesunu {name}."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1247
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1253
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:182
 #: frontend/src/utils/utils.js:1290
 msgid "Successfully copied %(name)s."
 msgstr "Úspěšně zkopírováno %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1254
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1260
 msgid "Failed to copy %(name)s"
 msgstr "Chyba při kopírování %(name)s"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1264
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1270
 msgid "Converting, please wait..."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1276
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1282
 msgid "Successfully converted the file."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1283
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1289
 msgid "Failed to convert {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1952
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1958
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:255
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:107
 #: frontend/src/pages/shared-libs/shared-libs.js:290
@@ -4555,11 +4560,11 @@ msgstr "Poslední přístup"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:122
 msgid "Successfully unlinked %(name)s."
-msgstr ""
+msgstr "Úspěšně zrušen odkaz %(name)s."
 
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:42
 msgid "Local draft saved"
-msgstr ""
+msgstr "Místní koncept byl uložen"
 
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:87
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
@@ -5071,7 +5076,7 @@ msgstr "Neaktivní"
 
 #: frontend/src/pages/org-admin/org-user-item.js:180
 msgid "ResetPwd"
-msgstr ""
+msgstr "Reset Hesla"
 
 #: frontend/src/pages/org-admin/org-user-item.js:181
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:152
@@ -5176,32 +5181,32 @@ msgstr "Přidat uživatele"
 #: frontend/src/pages/org-admin/side-panel.js:44
 #: frontend/src/pages/sys-admin/side-panel.js:54
 msgid "Statistic"
-msgstr ""
+msgstr "Statistika"
 
 #: frontend/src/pages/org-admin/side-panel.js:50
 #: frontend/src/pages/sys-admin/side-panel.js:66
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: frontend/src/pages/org-admin/side-panel.js:92
 #: frontend/src/pages/sys-admin/side-panel.js:186
 msgid "Logs"
-msgstr ""
+msgstr "Logy"
 
 #: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:112
 #: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
 msgid "7 Days"
-msgstr ""
+msgstr "7 dní"
 
 #: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:113
 #: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
 msgid "30 Days"
-msgstr ""
+msgstr "30 dní"
 
 #: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:114
 #: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
 msgid "1 Year"
-msgstr ""
+msgstr "1 rok"
 
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:45
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
@@ -5299,7 +5304,7 @@ msgstr "Systém"
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:154
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
 msgid "Total Traffic"
-msgstr ""
+msgstr "Celkový provoz"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:167
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
@@ -5314,7 +5319,7 @@ msgstr "Provoz sdílecího odkazu"
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:193
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
 msgid "Sync Traffic"
-msgstr ""
+msgstr "Provoz synchronizace"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:28
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
@@ -5479,7 +5484,7 @@ msgstr "Dosud jste nesdíleli žádné složky s ostatními uživateli. Složku 
 #: frontend/src/pages/share-admin/libraries.js:153
 #: frontend/src/pages/share-admin/share-links.js:240
 msgid "Successfully modified permission."
-msgstr ""
+msgstr "Oprávnění úspěšně změněna."
 
 #: frontend/src/pages/share-admin/folders.js:260
 #: frontend/src/pages/share-admin/libraries.js:274
@@ -5499,7 +5504,7 @@ msgstr "Dosud jste nesdíleli žádné knihovny s ostatními uživateli. Knihovn
 
 #: frontend/src/pages/share-admin/libraries.js:215
 msgid "all members"
-msgstr ""
+msgstr "všichni členové"
 
 #: frontend/src/pages/share-admin/share-links.js:69
 msgid ""
@@ -5711,7 +5716,7 @@ msgstr "Opravdu chcete odebrat {placeholder}?"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:184
 msgid "Remove Member"
-msgstr ""
+msgstr "Odebrat člena"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:269
 msgid "Successfully added {email_placeholder}"
@@ -5719,7 +5724,7 @@ msgstr "Úspěšně přidán {email_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:275
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
-msgstr ""
+msgstr "Chyba při přidávání {email_placeholder}: {error_msg_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:294
 msgid "Successfully removed {placeholder}."
@@ -5727,15 +5732,15 @@ msgstr "Úspěšně odstraněn {placeholder}."
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:128
 msgid "Are you sure you want to unshare {placeholder} ?"
-msgstr ""
+msgstr "Opravdu chcete zrušit sdílení {placeholder}?"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:145
 msgid "Unshare Library"
-msgstr ""
+msgstr "Zrušit sdílení knihovny"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:197
 msgid "Successfully unshared library {placeholder}"
-msgstr ""
+msgstr "Úspěšně zrušeno sdílení {placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/groups.js:105
 #: frontend/src/pages/sys-admin/groups/search-groups.js:72
@@ -5824,7 +5829,7 @@ msgstr "Opravdu chcete zrušit administrátorské oprávnění uživatele {place
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:195
 #: frontend/src/pages/sys-admin/users/users-content.js:566
 msgid "Revoke"
-msgstr ""
+msgstr "Zrušit"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:253
 #: frontend/src/pages/sys-admin/users/search-users.js:247
@@ -5857,7 +5862,7 @@ msgstr "Smazat instituci"
 
 #: frontend/src/pages/sys-admin/institutions/institutions.js:240
 msgid "Add Institution"
-msgstr ""
+msgstr "Přidat instituci"
 
 #: frontend/src/pages/sys-admin/invitations/invitations.js:60
 msgid "Accepter"
@@ -5934,7 +5939,7 @@ msgstr " {userCount} uživatel(ů) a {repoCount} knihovnen této organizace bude
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:210
 msgid "Delete Organization"
-msgstr ""
+msgstr "Smazat organizaci"
 
 #: frontend/src/pages/sys-admin/orgs/orgs.js:114
 msgid "Search organizations"
@@ -5991,7 +5996,7 @@ msgstr "Vyčistit"
 
 #: frontend/src/pages/sys-admin/side-panel.js:198
 msgid "File Scan"
-msgstr ""
+msgstr "Skenování souborů"
 
 #: frontend/src/pages/sys-admin/side-panel.js:210
 msgid "Virus Scan"
@@ -6067,7 +6072,7 @@ msgstr "Poškozené ({repo_id_placeholder})"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:105
 msgid "Institution"
-msgstr ""
+msgstr "Instituce"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:283
 msgid "Default Admin"
@@ -6075,11 +6080,11 @@ msgstr "Výchozí administrátor"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:287
 msgid "Daily Admin"
-msgstr ""
+msgstr "Denní administrátor"
 
 #: frontend/src/pages/sys-admin/users/users-content.js:289
 msgid "Audit Admin"
-msgstr ""
+msgstr "Auditní administrátor"
 
 #: frontend/src/pages/sys-admin/users/users-nav.js:15
 msgid "Database"
@@ -6363,7 +6368,7 @@ msgstr "Vlastník této knihovny nemá volné místo."
 
 #: frontend/src/pages/upload-link/index.js:51
 msgid "Folder upload is limited to Chrome, Firefox 50+, and Microsoft Edge."
-msgstr ""
+msgstr "Nahrávání složek je omezeno na Chrome, Firefox 50+ a Microsoft Edge."
 
 #: frontend/src/pages/upload-link/index.js:52
 msgid "File size should be smaller than {max_size_placeholder}."
@@ -6371,11 +6376,11 @@ msgstr "Velikost souboru by měla být menší než {max_size_placeholder}."
 
 #: frontend/src/pages/upload-link/index.js:56
 msgid "Drag and drop files or folders here."
-msgstr ""
+msgstr "Sem přetáhněte soubory nebo složky."
 
 #: frontend/src/pages/wiki/side-panel.js:69
 msgid "Go to Library"
-msgstr ""
+msgstr "Jít do knihovny"
 
 #: frontend/src/pages/wikis/wikis.js:150
 msgid "No published libraries"
@@ -6421,7 +6426,7 @@ msgstr "Štítky"
 
 #: frontend/src/repo-history.js:277
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: frontend/src/repo-history.js:280 frontend/src/repo-snapshot.js:160
 msgid "Unknown"
@@ -6429,11 +6434,11 @@ msgstr "Neznámý"
 
 #: frontend/src/repo-history.js:310
 msgid "Current Version"
-msgstr ""
+msgstr "Aktuální verze"
 
 #: frontend/src/repo-history.js:311
 msgid "View Snapshot"
-msgstr ""
+msgstr "Prohlédnout Snapshot"
 
 #: frontend/src/repo-snapshot.js:145
 msgid "{placeholder} Snapshot"
@@ -6457,7 +6462,7 @@ msgstr "Nastavení profilu"
 
 #: frontend/src/shared-dir-view.js:447
 msgid "Shared by: "
-msgstr ""
+msgstr "Sdíleno uživatelem: "
 
 #: frontend/src/shared-dir-view.js:477
 msgid "ZIP Selected Items"
@@ -6469,7 +6474,7 @@ msgstr ""
 
 #: frontend/src/shared-dir-view.js:484
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: frontend/src/shared-file-view-document.js:69
 #: frontend/src/shared-file-view-spreadsheet.js:53
