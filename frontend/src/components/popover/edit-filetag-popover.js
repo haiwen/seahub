@@ -157,7 +157,8 @@ class EditFileTagPopover extends React.Component {
           onChange={this.onChangeSearch}
           autoFocus={true}
         />
-        {noTagsTip ? <div className='tag-not-found my-4 mx-1'>{noTagsTip}</div> :
+        {noTagsTip ?
+          <div className='tag-not-found my-4 mx-1'>{noTagsTip}</div> :
           <ul className="tag-list-container">
             {filteredRepoTagList.map((repoTag, index) => {
               return (
