@@ -29,6 +29,15 @@
   padding: 1rem 0rem 0rem 1rem;
 }
 
+.search-container .input-icon svg.input-icon-addon {
+  height: 100%;
+  padding: 7px;
+}
+
+.search-container.show .input-icon svg.input-icon-addon {
+  padding: 12px;
+}
+
 .search-icon-left {
   display: flex;
 }
@@ -268,6 +277,17 @@
     width: 2rem;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    position: relative;
+  }
+
+  .search-icon-container .input-icon-addon {
+    height: 100%;
+    padding: 7px;
+  }
+
+  .search-container .input-icon svg.input-icon-addon {
+    padding: 12px;
   }
 
   .search-icon {

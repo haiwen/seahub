@@ -1179,7 +1179,7 @@ class LibContentView extends React.Component {
           asyncOperationProgress: 0,
           asyncOperationType: 'move',
           isCopyMoveProgressDialogShow: true,
-	}, () => {
+        }, () => {
           this.currentMoveItemName = dirName;
           this.currentMoveItemPath = direntPath;
           this.getAsyncCopyMoveProgress(dirName, direntPath);
@@ -1880,36 +1880,28 @@ class LibContentView extends React.Component {
 
   onLibDecryptWhenCopyMove = () => {
     if (this.state.libNeedDecryptWhenCopy) {
-        if (this.state.copyMoveSingleItem) {
-          this.onCopyItem(this.state.destRepoWhenCopyMove,
-                          this.state.srcDirentWhenCopyMove,
-                          this.state.destDirentPathWhenCopyMove,
-                          this.state.srcNodeParentPathWhenCopyMove)
-	} else {
-          this.onCopyItems(this.state.destRepoWhenCopyMove,
-                           this.state.destDirentPathWhenCopyMove)
-	}
-        this.setState({
-          libNeedDecryptWhenCopy: false,
-          copyMoveSingleItem: false,
-        });
+      if (this.state.copyMoveSingleItem) {
+        this.onCopyItem(this.state.destRepoWhenCopyMove, this.state.srcDirentWhenCopyMove, this.state.destDirentPathWhenCopyMove,this.state.srcNodeParentPathWhenCopyMove);
+      } else {
+        this.onCopyItems(this.state.destRepoWhenCopyMove, this.state.destDirentPathWhenCopyMove);
+      }
+      this.setState({
+        libNeedDecryptWhenCopy: false,
+        copyMoveSingleItem: false,
+      });
     }
     if (this.state.libNeedDecryptWhenMove) {
-        if (this.state.copyMoveSingleItem) {
-          this.onMoveItem(this.state.destRepoWhenCopyMove,
-                          this.state.srcDirentWhenCopyMove,
-                          this.state.destDirentPathWhenCopyMove,
-                          this.state.srcNodeParentPathWhenCopyMove)
-	} else {
-          this.onMoveItems(this.state.destRepoWhenCopyMove,
-                           this.state.destDirentPathWhenCopyMove)
-	}
-        this.setState({
-          libNeedDecryptWhenMove: false,
-          copyMoveSingleItem: false,
-        });
+      if (this.state.copyMoveSingleItem) {
+        this.onMoveItem(this.state.destRepoWhenCopyMove, this.state.srcDirentWhenCopyMove, this.state.destDirentPathWhenCopyMove, this.state.srcNodeParentPathWhenCopyMove);
+      } else {
+        this.onMoveItems(this.state.destRepoWhenCopyMove, this.state.destDirentPathWhenCopyMove);
+      }
+      this.setState({
+        libNeedDecryptWhenMove: false,
+        copyMoveSingleItem: false,
+      });
     }
-  }
+  };
 
   goDraftPage = () => {
     window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
