@@ -14,7 +14,7 @@
     />
       <missing-glyph />
       
-      <glyph glyph-name="sdoc-center-alignment" unicode="&#58984;" d="M560 896v-160H832v-320h-272v-96H928v-320H560v-128h-96v128H96V320h368v96H192V736h272V896h96zM832 224H192v-128h640v128zM736 640H288v-128h448V640z"  horiz-adv-x="1024" />
+      <glyph glyph-name="sdoc-center-alignment" unicode="&#58984;" d="M560 896v-128H832v-320h-272v-128H928v-320H560v-128h-96v128H96V320h368v128H192V768h272V896h96zM832 224H192v-128h640v128zM736 672H288v-128h448V672z"  horiz-adv-x="1024" />
       
       <glyph glyph-name="sdoc-bottom-alignment" unicode="&#58985;" d="M0-64v96h1024v-96H0z m448 192V832H128v-704h320z m-96 96H224V736h128v-512z m544-96V640H576v-512h320z m-96 96h-128V544h128v-320z"  horiz-adv-x="1024" />
       
