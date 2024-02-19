@@ -445,5 +445,8 @@
   "Recent_visited": "Недавно посещенные",
   "The_document_does_not_exist": "Документ не существует",
   "Create_a_new_sdoc_file": "Создать новый файл sdoc",
-  "Create": "Создать"
+  "Create": "Создать",
+  "Top_align": "Top",
+  "Center_align": "Middle",
+  "Bottom_align": "Bottom"
 }

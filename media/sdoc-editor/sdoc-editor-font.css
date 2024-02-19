@@ -16,6 +16,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sdoc-center-alignment:before {
+  content: "\e668";
+}
+
+.sdoc-bottom-alignment:before {
+  content: "\e669";
+}
+
+.sdoc-top-alignment:before {
+  content: "\e66a";
+}
+
+.sdoc-all-read:before {
+  content: "\e65d";
+}
+
+.sdoc-freezed:before {
+  content: "\e667";
+}
+
 .sdoc-callout-color:before {
   content: "\e666";
 }
@@ -54,10 +74,6 @@
 
 .sdoc-find-replace:before {
   content: "\e65f";
-}
-
-.sdoc-freezed:before {
-  content: "\e65d";
 }
 
 .sdoc-jump-to:before {
