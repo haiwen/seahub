@@ -388,7 +388,10 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
     })
 
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
-    return render(request, template_name)
+    login_bg_image_path = get_login_bg_image_path()
+    return render(request, template_name, {
+        'login_bg_image_path': login_bg_image_path,
+    })
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
