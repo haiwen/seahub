@@ -411,6 +411,23 @@ class OnlyofficeGenJwtToken(APIView):
             error_msg = 'version invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        parsed_url = urllib.parse.urlparse(url)
+        query_parameters = urllib.parse.parse_qs(parsed_url.query)
+
+        username = query_parameters.get('username')[0]
+        if request.user.username != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = query_parameters.get('repo_id')[0]
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.check_permission_by_path(repo_id, '/', username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         payload = {}
         payload['key'] = key
         payload['url'] = url
