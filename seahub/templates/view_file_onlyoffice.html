@@ -51,7 +51,7 @@ html, body { padding:0; margin:0; height:100%; }
         var version = event.data;
         var payload = {
             "key": version,
-            "url": "{{service_url}}" + "{% url 'onlyoffice_api_file_history' %}" + "?repo_id={{repo_id}}&path={{path|urlencode}}" + "&obj_id=" + version,
+            "url": "{{service_url}}" + "{% url 'onlyoffice_api_file_history' %}?username={{username|escapejs}}&repo_id={{repo_id}}&path={{path|urlencode}}&obj_id=" + version,
             "version": version
         };
 
