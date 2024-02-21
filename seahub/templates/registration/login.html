@@ -112,15 +112,6 @@ html, body, #wrapper { height:100%; }
 $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
 $('.login-panel-bottom-container').append($('#lang').removeClass('fright').addClass('px-2'));
 
-$('#toggle-show-password').click(function() {
-  $(this).toggleClass('fa-eye-slash fa-eye');
-  if ($(this).hasClass('fa-eye-slash')) {
-    $('#password-input').attr('type', 'password');
-  } else {
-    $('#password-input').attr('type', 'text');
-  }
-});
-
 var $el = $('.login-panel-outer-container');
 var elHeight = $el.outerHeight();
 var wdHeight = $(window).height();
@@ -148,6 +139,15 @@ $('#lang-context').on('click', function() {
 });
 
 $('[name="login"]').trigger('focus');
+
+$('#toggle-show-password').click(function() {
+  $(this).toggleClass('fa-eye-slash fa-eye');
+  if ($(this).hasClass('fa-eye-slash')) {
+    $('#password-input').attr('type', 'password');
+  } else {
+    $('#password-input').attr('type', 'text');
+  }
+});
 
 function setCaptchaInputWidth() {
     $('#id_captcha_1').outerWidth($('.input').outerWidth() - $('.captcha').width() - $('#refresh-captcha').outerWidth(true) - 10);

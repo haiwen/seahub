@@ -356,6 +356,8 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
 
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_done')
+
+    login_bg_image_path = get_login_bg_image_path()
     if request.method == "POST":
         form = password_reset_form(request.POST)
         if form.is_valid():
@@ -374,6 +376,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
+                        'login_bg_image_path': login_bg_image_path,
                         })
             else:
                 return HttpResponseRedirect(post_reset_redirect)
@@ -381,10 +384,14 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         form = password_reset_form()
     return render(request, template_name, {
         'form': form,
+        'login_bg_image_path': login_bg_image_path,
     })
 
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
-    return render(request, template_name)
+    login_bg_image_path = get_login_bg_image_path()
+    return render(request, template_name, {
+        'login_bg_image_path': login_bg_image_path,
+    })
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
