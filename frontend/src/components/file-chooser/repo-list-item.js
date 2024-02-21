@@ -10,6 +10,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 const propTypes = {
+  isCurrentRepo: PropTypes.bool,
+  currentPath: PropTypes.string,
   isShowFile: PropTypes.bool,
   selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
@@ -28,11 +30,43 @@ class RepoListItem extends React.Component {
     this.state = {
       isShowChildren: this.props.initToShowChildren,
       treeData: treeHelper.buildTree(),
+      hasLoaded: false,
     };
   }
 
   componentDidMount () {
-    const repoID = this.props.repo.repo_id;
+    const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
+
+    // render search result
+    const { repoID, filePath } = selectedItemInfo || {};
+    if (repoID && repoID === repo.repo_id) {
+      this.loadRepoDirentList(repo);
+      setTimeout(() => {
+        this.setState({isShowChildren: true});
+        this.loadNodeAndParentsByPath(repoID, filePath);
+      }, 0);
+      return;
+    }
+
+    // the repo is current repo and currentPath is not '/'
+    if (isCurrentRepo && !repoID) {
+      this.loadRepoDirentList(repo);
+      setTimeout(() => {
+        const repoID = repo.repo_id;
+        if (isCurrentRepo && currentPath && currentPath != '/') {
+          const expandNode = true;
+          this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
+        }
+      }, 0);
+    }
+  }
+
+  loadRepoDirentList = (repo) => {
+    const { hasLoaded } = this.state;
+    if (hasLoaded) return;
+
+    const repoID = repo.repo_id;
+
     seafileAPI.listDir(repoID, '/').then(res => {
       let tree = this.state.treeData.clone();
       let direntList = [];
@@ -43,22 +77,11 @@ class RepoListItem extends React.Component {
       }
 
       this.addResponseListToNode(direntList, tree.root);
-      this.setState({treeData: tree}, () => {
-        const { isCurrentRepo, currentPath } = this.props;
-        if (isCurrentRepo && currentPath && currentPath != '/') {
-          const expandNode = true;
-          this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
-        }
-      });
+      this.setState({ treeData: tree, hasLoaded: true });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-
-    if (this.props.selectedItemInfo.repoID === this.props.repo.repo_id) {
-      this.setState({isShowChildren: true});
-      this.loadNodeAndParentsByPath(this.props.selectedItemInfo.repoID, this.props.selectedItemInfo.filePath);
-    }
   }
 
   addResponseListToNode = (list, node) => {
@@ -143,6 +166,8 @@ class RepoListItem extends React.Component {
 
   onToggleClick = (e) => {
     e.stopPropagation();
+    let repo = this.props.repo;
+    this.loadRepoDirentList(repo);
     this.setState({isShowChildren: !this.state.isShowChildren});
   }
 
@@ -152,8 +177,9 @@ class RepoListItem extends React.Component {
   }
 
   onRepoItemClick = (e) => {
-    if (!this.isCurrentRepo() || this.props.selectedPath !== '') {
-      this.props.onRepoItemClick(this.props.repo);
+    const { repo, selectedPath } = this.props;
+    if (!this.isCurrentRepo() || (selectedPath !== '' && selectedPath !== '/')) {
+      this.props.onRepoItemClick(repo);
     } else {
       this.onToggleClick(e);
     }
