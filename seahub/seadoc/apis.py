@@ -991,6 +991,20 @@ class SeadocNotificationsView(APIView):
         result = {'notifications': notifications}
         return Response(result)
 
+    def put(self, request, file_uuid):
+        """ mark all notifications seen
+        """
+        username = request.user.username
+        try:
+            SeadocNotification.objects.filter(
+                doc_uuid=file_uuid, username=username, seen=False).update(seen=True)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
     def delete(self, request, file_uuid):
         """delete notifications seen
         """
