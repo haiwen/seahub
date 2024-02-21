@@ -1,0 +1,167 @@
+.department-dialog .department-dialog-content {
+  padding: 0;
+  min-height: 30rem;
+  display: flex;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.department-dialog .department-dialog-content>div {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.department-dialog-content .department-dialog-group {
+  flex: 0 0 30%;
+  padding: 1rem;
+  border-right: 1px solid #eee;
+}
+
+.department-dialog-content .department-dialog-group .tr-highlight .dtable-icon-groups {
+  padding-right: 10px;
+  color: #ffffff;
+}
+
+.department-dialog-content .department-dialog-group .dtable-icon-groups {
+  padding-right: 10px;
+  color: #9c9c9c;
+}
+
+.department-dialog-content .department-dialog-member {
+  display: flex;
+  flex: 0 0 35%;
+  border-right: 1px solid #eee;
+}
+
+.department-dialog-content .department-dialog-member-selected {
+  display: flex;
+  flex: 0 0 35%;
+  border-right: 1px solid #eee;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.department-dialog-content .department-dialog-member-selected .modal-footer {
+  border-top: none;
+}
+
+.department-dialog-content .department-dialog-member-selected .dtable-icon-cancel {
+  cursor: pointer;
+  color: #959595;
+}
+
+.department-dialog-content .department-dialog-group .group-item {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.department-dialog-content .department-dialog-group .group-item:hover {
+  background-color: #f5f5f5;
+}
+
+.department-dialog-content .department-dialog-group .group-item.tr-highlight:hover,
+.department-dialog-content .department-dialog-group .tr-highlight {
+  background-color: #FF8000;
+  color: #ffffff;
+}
+
+.department-dialog-member-head {
+  display: flex;
+  padding: 0 0 12px 0;
+  justify-content: space-between;
+}
+
+.department-dialog-member-head .department-name {
+  font-size: 0.8125rem;
+  color: #9c9c9c;
+}
+
+.department-dialog-member-head .select-all {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: #ea7500;;
+}
+
+.department-dialog-member-head .select-all-disable {
+  font-size: 0.8125rem;
+  color: rgb(248, 205, 160);
+}
+
+.department-dialog-member-table td,
+.department-dialog-member-head td {
+  border: none;
+  text-align: left;
+  padding: 0;
+}
+
+.department-dialog-member-table {
+  display: block;
+  text-align: center;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.department-dialog-member-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  height: 36px;
+}
+
+.department-dialog-member .empty-tip {
+  border: none;
+  background-color: transparent;
+}
+
+.department-dialog-member .empty-tip .no-items-img-tip {
+  margin-bottom: 10px;
+}
+
+.department-dialog-member .empty-tip h2 {
+  color: #999;
+  font-weight: normal;
+  font-size: 1rem;
+}
+
+.department-dialog-content .avatar {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.department-dialog-content tr td:first-child {
+  padding-left: 16px;
+}
+
+.department-dialog-member-table tr td:first-child {
+  padding-bottom: 2px;
+}
+
+.department-dialog-member-table tr td .dtable-icon-use-help {
+  color: #bdbdbd;
+}
+
+.department-dialog-member-table tr td .dtable-icon-use-help:hover {
+  color: #888;
+}
+
+.tooltip-inner {
+  font-size: 13px;
+  font-weight: lighter;
+  text-align: justify;
+  color: #FFF;
+  background-color: #303133;
+}
+
+.department-dialog-member-selected tr td:last-child {
+  padding-right: 16px;
+}
+
+.department-dialog-member-selected .modal-footer .btn {
+  min-width: 80px;
+}
