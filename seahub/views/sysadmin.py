@@ -39,6 +39,7 @@ from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.repo import get_related_users_by_repo, get_repo_owner
+from seahub.utils.auth import get_login_bg_image_path
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.options.models import UserOptions
@@ -839,11 +840,13 @@ def sys_sudo_mode(request):
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+    login_bg_image_path = get_login_bg_image_path()
     return render(request,
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
             'enable_sso': enable_shib_login or enable_adfs_login,
             'next': next_page,
+            'login_bg_image_path': login_bg_image_path,
         })
 
 @login_required_ajax
