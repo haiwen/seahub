@@ -67,8 +67,8 @@ MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
-MSG_TYPE_REPO_SHARE_PERMS_CHANGE = 'repo_share_perms_change'
-MSG_TYPE_REPO_SHARE_PERMS_DELETE = 'repo_share_perms_delete'
+MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change'
+MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
@@ -92,11 +92,11 @@ def repo_share_msg_to_json(share_from, repo_id, path, org_id):
     return json.dumps({'share_from': share_from, 'repo_id': repo_id,
                        'path': path, 'org_id': org_id})
 
-def repo_share_perms_msg_to_json(share_from, repo_id, path, org_id, perm):
+def repo_share_perm_change_msg_to_json(share_from, repo_id, path, org_id, perm):
     return json.dumps({'share_from': share_from, 'repo_id': repo_id,
                        'path': path, 'org_id': org_id, 'permission': perm})
 
-def repo_share_perms_delete_msg_to_json(share_from, repo_id, path, org_id):
+def repo_share_perm_delete_msg_to_json(share_from, repo_id, path, org_id):
     return json.dumps({'share_from': share_from, 'repo_id': repo_id,
                        'path': path, 'org_id': org_id})
 
@@ -277,10 +277,10 @@ class UserNotificationManager(models.Manager):
                                            MSG_TYPE_REPO_SHARE, detail)
 
     def add_repo_share_perm_change_msg(self, to_user, detail):
-        return self._add_user_notification(to_user, MSG_TYPE_REPO_SHARE_PERMS_CHANGE, detail)
+        return self._add_user_notification(to_user, MSG_TYPE_REPO_SHARE_PERM_CHANGE, detail)
 
     def add_repo_share_perm_delete_msg(self, to_user, detail):
-        return self._add_user_notification(to_user, MSG_TYPE_REPO_SHARE_PERMS_DELETE, detail)
+        return self._add_user_notification(to_user, MSG_TYPE_REPO_SHARE_PERM_DELETE, detail)
 
 
     def add_repo_share_to_group_msg(self, to_user, detail):
@@ -387,10 +387,10 @@ class UserNotification(models.Model):
         return self.msg_type == MSG_TYPE_REPO_SHARE
 
     def is_repo_share_perm_change_msg(self):
-        return self.msg_type == MSG_TYPE_REPO_SHARE_PERMS_CHANGE
+        return self.msg_type == MSG_TYPE_REPO_SHARE_PERM_CHANGE
 
     def is_repo_share_perm_delete_msg(self):
-        return self.msg_type == MSG_TYPE_REPO_SHARE_PERMS_DELETE
+        return self.msg_type == MSG_TYPE_REPO_SHARE_PERM_DELETE
 
     def is_repo_share_to_group_msg(self):
         """
@@ -813,7 +813,7 @@ from django.dispatch import receiver
 from seahub.signals import upload_file_successful, comment_file_successful, repo_transfer
 from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
-    share_repo_to_group_successful, change_repo_perms_successful, delete_repo_perms_successful
+    share_repo_to_group_successful, change_repo_perm_successful, delete_repo_perm_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.drafts.signals import comment_draft_successful, \
         request_reviewer_successful
@@ -851,7 +851,7 @@ def add_share_repo_msg_cb(sender, **kwargs):
     detail = repo_share_msg_to_json(from_user, repo.id, path, org_id)
     UserNotification.objects.add_repo_share_msg(to_user, detail)
 
-@receiver(change_repo_perms_successful)
+@receiver(change_repo_perm_successful)
 def add_modify_share_repo_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     to_user = kwargs.get('to_user', None)
@@ -862,10 +862,10 @@ def add_modify_share_repo_msg_cb(sender, **kwargs):
 
     assert from_user and to_user and repo and path and permission is not None, 'Arguments error'
 
-    detail = repo_share_perms_msg_to_json(from_user, repo.id, path, org_id, permission)
+    detail = repo_share_perm_change_msg_to_json(from_user, repo.id, path, org_id, permission)
     UserNotification.objects.add_repo_share_perm_change_msg(to_user, detail)
 
-@receiver(delete_repo_perms_successful)
+@receiver(delete_repo_perm_successful)
 def add_delete_share_repo_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     to_user = kwargs.get('to_user', None)
@@ -875,7 +875,7 @@ def add_delete_share_repo_msg_cb(sender, **kwargs):
 
     assert from_user and to_user and repo and path is not None, 'Arguments error'
 
-    detail = repo_share_perms_delete_msg_to_json(from_user, repo.id, path, org_id)
+    detail = repo_share_perm_delete_msg_to_json(from_user, repo.id, path, org_id)
     UserNotification.objects.add_repo_share_perm_delete_msg(to_user, detail)
 
 

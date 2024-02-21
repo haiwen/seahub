@@ -20,8 +20,8 @@ const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
-const MSG_TYPE_REPO_SHARE_PERMS_CHANGE = 'repo_share_perms_change';
-const MSG_TYPE_REPO_SHARE_PERMS_DELETE = 'repo_share_perms_delete';
+const MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change';
+const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
 
 class NoticeItem extends React.Component {
 
@@ -81,7 +81,7 @@ class NoticeItem extends React.Component {
       return {avatar_url, notice};
     }
 
-    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_CHANGE) {
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERM_CHANGE) {
 
       let avatar_url = detail.share_from_user_avatar_url;
       let shareFrom = detail.share_from_user_name;
@@ -110,7 +110,7 @@ class NoticeItem extends React.Component {
       return {avatar_url, notice};
     }
 
-    if (noticeType === MSG_TYPE_REPO_SHARE_PERMS_DELETE) {
+    if (noticeType === MSG_TYPE_REPO_SHARE_PERM_DELETE) {
 
       let avatar_url = detail.share_from_user_avatar_url;
       let shareFrom = detail.share_from_user_name;
@@ -128,7 +128,6 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_name}', repoName);
       notice = Utils.HTMLescape(notice);
-      
       return {avatar_url, notice};
     }
 
