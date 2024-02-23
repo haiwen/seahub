@@ -265,8 +265,8 @@ class DirentListView extends React.Component {
 
   // common contextmenu handle
   onMouseDown = (event) => {
-    event.stopPropagation();
     if (event.button === 2) {
+      event.stopPropagation();
       return;
     }
   };
