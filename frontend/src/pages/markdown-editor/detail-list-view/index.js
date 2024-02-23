@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import RepoTag from '../../../models/repo-tag';
+import toaster from '../../../components/toast';
+import Icon from '../../../components/icon';
 import EditFileTagPopover from '../../../components/popover/edit-filetag-popover';
 import FileTagList from '../../../components/file-tag-list';
 
@@ -23,9 +26,35 @@ class DetailListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      repoTags: [],
       isEditFileTagShow: false
     };
   }
+
+  componentDidMount() {
+    seafileAPI.listRepoTags(repoID).then(res => {
+      let repoTags = [];
+      res.data.repo_tags.forEach(item => {
+        const repoTag = new RepoTag(item);
+        repoTags.push(repoTag);
+      });
+      this.setState({
+        repoTags: repoTags
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onNewRepoTagAdded = (newTag) => {
+    const repoTag = new RepoTag(newTag);
+    const { repoTags: newTags } = this.state;
+    newTags.push(repoTag);
+    this.setState({
+      repoTags: newTags
+    });
+  };
 
   onEditFileTagToggle = () => {
     this.setState({isEditFileTagShow: !this.state.isEditFileTagShow});
@@ -33,6 +62,7 @@ class DetailListView extends React.Component {
 
   render() {
     const { fileInfo } = this.props;
+    const { repoTags } = this.state;
     return (
       <Fragment>
         <div className="dirent-table-container p-2">
@@ -57,10 +87,12 @@ class DetailListView extends React.Component {
         {this.state.isEditFileTagShow &&
           <EditFileTagPopover
             repoID={repoID}
+            repoTags={repoTags}
             filePath={filePath}
             fileTagList={this.props.fileTagList}
             toggleCancel={this.onEditFileTagToggle}
             onFileTagChanged={this.props.onFileTagChanged}
+            onNewRepoTagAdded={this.onNewRepoTagAdded}
             target={'file-tag-container-icon'}
             isEditFileTagShow={this.state.isEditFileTagShow}
           />

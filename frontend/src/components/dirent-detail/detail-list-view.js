@@ -13,6 +13,7 @@ import ConfirmApplyFolderPropertiesDialog from '../dialog/confirm-apply-folder-p
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   dirent: PropTypes.object.isRequired,
   direntType: PropTypes.string.isRequired,
   direntDetail: PropTypes.object.isRequired,
@@ -150,6 +151,7 @@ class DetailListView extends React.Component {
         {this.state.isEditFileTagShow &&
           <EditFileTagPopover
             repoID={this.props.repoID}
+            repoTags={this.props.repoTags}
             filePath={direntPath}
             fileTagList={fileTagList}
             toggleCancel={this.onEditFileTagToggle}
