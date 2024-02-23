@@ -18,6 +18,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
+from django.urls import reverse
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -31,7 +32,8 @@ from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
         get_file_ext, get_file_type, get_internal_extension
 from seahub.onlyoffice.converter import get_converter_uri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
-        normalize_file_path, check_filename_with_rename, gen_inner_file_get_url
+        normalize_file_path, check_filename_with_rename, \
+        gen_inner_file_get_url, get_service_url
 from seahub.utils.file_op import if_locked_by_online_office
 
 
@@ -384,7 +386,7 @@ class OnlyofficeFileHistory(APIView):
         return HttpResponse(file_content, content_type="application/octet-stream")
 
 
-class OnlyofficeGenJwtToken(APIView):
+class OnlyofficeGetHistoryFileAccessToken(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -396,43 +398,47 @@ class OnlyofficeGenJwtToken(APIView):
             error_msg = 'feature is not enabled.'
             return api_error(501, error_msg)
 
-        key = request.data.get('key')
-        if not key:
-            error_msg = 'key invalid.'
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        url = request.data.get('url')
-        if not url:
-            error_msg = 'url invalid.'
+        file_path = request.data.get('file_path')
+        if not file_path:
+            error_msg = 'file_path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        version = request.data.get('version')
-        if not version:
-            error_msg = 'version invalid.'
+        obj_id = request.data.get('obj_id')
+        if not obj_id:
+            error_msg = 'obj_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        parsed_url = urllib.parse.urlparse(url)
-        query_parameters = urllib.parse.parse_qs(parsed_url.query)
-
-        username = query_parameters.get('username')[0]
-        if request.user.username != username:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        repo_id = query_parameters.get('repo_id')[0]
         if not seafile_api.get_repo(repo_id):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        username = request.user.username
         if not seafile_api.check_permission_by_path(repo_id, '/', username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        service_url = get_service_url().rstrip('/')
+        url = reverse('onlyoffice_api_file_history')
+        query_dict = {
+            "username": username,
+            "repo_id": repo_id,
+            "path": file_path,
+            "obj_id": obj_id
+        }
+        query_string = urllib.parse.urlencode(query_dict)
+        full_url = f"{service_url}{url}?{query_string}"
+
         payload = {}
-        payload['key'] = key
-        payload['url'] = url
-        payload['version'] = version
+        payload['key'] = obj_id
+        payload['url'] = full_url
+        payload['version'] = obj_id
 
         jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
+        payload['token'] = jwt_token
 
-        return Response({"token": jwt_token})
+        return Response({"data": payload})

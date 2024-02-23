@@ -49,22 +49,21 @@ html, body { padding:0; margin:0; height:100%; }
     };
     var onRequestHistoryData = function(event) {
         var version = event.data;
-        var payload = {
-            "key": version,
-            "url": "{{service_url}}" + "{% url 'onlyoffice_api_file_history' %}?username={{username|escapejs}}&repo_id={{repo_id}}&path={{path|urlencode}}&obj_id=" + version,
-            "version": version
+        var data = {
+            "repo_id": "{{repo_id}}",
+            "file_path": "{{path}}",
+            "obj_id": version
         };
 
         $.ajax({
-            url: '{% url "onlyoffice_api_gen_jwt_token" %}',
+            url: '{% url "onlyoffice_api_get_history_file_access_token" %}',
             type: 'POST',
             dataType: 'json',
             cache: false,
             beforeSend: prepareCSRFToken,
-            data: payload,
+            data: data,
             success: function(resp) {
-                payload['token'] = resp.token;
-                docEditor.setHistoryData(payload);
+                docEditor.setHistoryData(resp.data);
             }
         });
     };
