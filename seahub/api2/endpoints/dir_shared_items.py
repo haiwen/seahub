@@ -32,7 +32,8 @@ from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         check_group_share_out_permission, normalize_custom_permission_name
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
-from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
+from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful, \
+    change_repo_perm_successful, delete_repo_perm_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 from seahub.utils.repo import get_available_repo_perms
@@ -259,6 +260,19 @@ class DirSharedItemsEndpoint(APIView):
                 repo_owner = seafile_api.get_repo_owner(repo_id)
 
                 update_user_dir_permission(repo_id, path, repo_owner, shared_to, permission)
+
+            org_id = None
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+            change_repo_perm_successful.send(
+                sender=None,
+                from_user=username,
+                to_user=shared_to,
+                repo=repo,
+                path=path,
+                permission=permission,
+                org_id=org_id
+            )
 
             send_perm_audit_msg('modify-repo-perm', username, shared_to,
                                 repo_id, path, permission)
@@ -544,6 +558,18 @@ class DirSharedItemsEndpoint(APIView):
             if path == '/':
                 ExtraSharePermission.objects.delete_share_permission(repo_id, 
                                                                      shared_to)
+
+            org_id = None
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+            delete_repo_perm_successful.send(
+                sender=None,
+                from_user=username,
+                to_user=shared_to,
+                repo=repo,
+                path=path,
+                org_id=org_id
+            )
             send_perm_audit_msg('delete-repo-perm', username, shared_to,
                                 repo_id, path, permission)
 
