@@ -37,8 +37,8 @@ class EditFileTagPopover extends React.Component {
     let color = this.generateRandomColor();
     let repoID = this.props.repoID;
     seafileAPI.createRepoTag(repoID, name, color).then((res) => {
-      let repoTagID = res.data.repo_tag.repo_tag_id;
-      this.onRepoTagCreated(repoTagID);
+      const { repo_tag: newTag } = res.data;
+      this.onRepoTagCreated(newTag);
       this.setState({
         searchVal: '',
         highlightIndex: -1,
@@ -49,10 +49,14 @@ class EditFileTagPopover extends React.Component {
     });
   };
 
-  onRepoTagCreated = (repoTagID) => {
-    let {repoID, filePath} = this.props;
+  onRepoTagCreated = (newTag) => {
+    const { repoID, filePath } = this.props;
+    const { repo_tag_id: repoTagID } = newTag;
     seafileAPI.addFileTag(repoID, filePath, repoTagID).then(() => {
       this.props.onFileTagChanged();
+      if (this.props.onNewRepoTagAdded) {
+        this.props.onNewRepoTagAdded(newTag);
+      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -196,6 +200,7 @@ EditFileTagPopover.propTypes = {
   repoTags: PropTypes.array.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  onNewRepoTagAdded: PropTypes.func
 };
 
 export default EditFileTagPopover;

@@ -17,6 +17,7 @@ const propTypes = {
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
+  repoTags: PropTypes.array,
   fileTags: PropTypes.array,
 };
 
@@ -119,6 +120,7 @@ class DirentDetail extends React.Component {
               dirent={this.props.dirent || folderDirent}
               direntType={this.state.direntType}
               direntDetail={this.state.direntDetail}
+              repoTags={this.props.repoTags}
               fileTagList={dirent ? dirent.file_tags : fileTags}
               onFileTagChanged={this.props.onFileTagChanged}
             />
