@@ -20,7 +20,7 @@ const propTypes = {
 class CommonToolbar extends React.Component {
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, searchPlaceholder } = this.props;
+    const { repoID, repoName, isLibView, searchPlaceholder, path } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
@@ -28,6 +28,7 @@ class CommonToolbar extends React.Component {
         return (
           <AISearch
             repoID={repoID}
+            path={path}
             placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
             repoName={repoName}

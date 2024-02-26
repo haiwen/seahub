@@ -73,6 +73,7 @@ class Search(APIView):
         query = request.data.get('query')
         search_repo = request.data.get('search_repo', 'all')
         suffixes = request.data.get('suffixes', '')
+        cur_path = request.data.get('cur_path', '')
 
         try:
             count = int(request.data.get('count'))
@@ -122,6 +123,7 @@ class Search(APIView):
             'repos': searched_repos,
             'count': count,
             'suffixes': suffixes,
+            'cur_path': cur_path,
             'search_filename_only': search_filename_only,
         }
 

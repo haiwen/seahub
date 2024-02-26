@@ -139,6 +139,14 @@
   background-color: #f0f0f0;
 }
 
+.search-result-container .search-settings-container {
+  padding: 8px;
+  height: 48.5px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid grey;
+}
+
 .search-result-item .item-img {
   width: 36px;
   height: 36px;
@@ -384,4 +392,8 @@
   font-size: .875rem;
   font-weight: normal;
   margin: 7px 0 10px;
+}
+
+.searching-in-current-dic .custom-switch {
+  padding-left:0;
 }
