@@ -502,44 +502,6 @@ Please choose a way to initialize seafile databases:
         print('done')
         return conn
 
-    def create_seahub_admin(self):
-        try:
-            conn = pymysql.connect(host=self.mysql_host,
-                                   port=self.mysql_port,
-                                   user=self.seafile_mysql_user,
-                                   passwd=self.seafile_mysql_password,
-                                   db=self.ccnet_db_name)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to connect to mysql database %s: %s' % (self.ccnet_db_name, e.args[1]))
-            else:
-                Utils.error('Failed to connect to mysql database %s: %s' % (self.ccnet_db_name, e))
-
-        cursor = conn.cursor()
-        sql = '''\
-CREATE TABLE IF NOT EXISTS EmailUser (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, email VARCHAR(255), passwd CHAR(64), is_staff BOOL NOT NULL, is_active BOOL NOT NULL, ctime BIGINT, UNIQUE INDEX (email)) ENGINE=INNODB'''
-
-        try:
-            cursor.execute(sql)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to create ccnet user table: %s' % e.args[1])
-            else:
-                Utils.error('Failed to create ccnet user table: %s' % e)
-
-        sql = '''REPLACE INTO EmailUser(email, passwd, is_staff, is_active, ctime) VALUES ('%s', '%s', 1, 1, 0)''' \
-              % (seahub_config.admin_email, seahub_config.hashed_admin_password())
-
-        try:
-            cursor.execute(sql)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to create admin user: %s' % e.args[1])
-            else:
-                Utils.error('Failed to create admin user: %s' % e)
-
-        conn.commit()
-
     def ask_questions(self):
         '''Ask questions and do database operations'''
         raise NotImplementedError
@@ -1069,9 +1031,6 @@ class SeahubConfigurator(AbstractConfigurator):
         self.admin_password = ''
         self.seahub_settings_py = os.path.join(env_mgr.central_config_dir, 'seahub_settings.py')
 
-    def hashed_admin_password(self):
-        return hashlib.sha1(self.admin_password).hexdigest() # pylint: disable=E1101
-
     def ask_questions(self):
         pass
 
@@ -1580,7 +1539,7 @@ def main():
     seafile_config.do_syncdb()
     seahub_config.do_syncdb()
     seahub_config.prepare_avatar_dir()
-    # db_config.create_seahub_admin()
+
     user_manuals_handler.copy_user_manuals()
     create_seafile_server_symlink()
 
