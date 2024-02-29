@@ -18,8 +18,8 @@
   "Unordered_list": "Neseřazený seznam",
   "Check_list_item": "Check list item",
   "Insert_image": "Insert image",
-  "Insert_formula": "Insert formula",
-  "Formula": "Formula",
+  "Insert_formula": "Vložit vzorec",
+  "Formula": "Vzorec",
   "Insert_file": "Insert file",
   "Code": "Řádkový kód",
   "Code_block": "Code block",
@@ -42,8 +42,8 @@
   "Delete_table": "Delete table",
   "Delete_row": "Delete row",
   "Delete_column": "Delete column",
-  "Insert_row": "Insert row",
-  "Insert_column": "Insert column",
+  "Insert_row": "Vložit řádek",
+  "Insert_column": "Vložit sloupec",
   "Set_align": "Nastavit zarovnání",
   "Left": "Vlevo",
   "Center": "Střed",
@@ -140,10 +140,10 @@
   "Insert_library_image": "Vložit obrázek knihovny",
   "Size": "Velikost",
   "Location": "Umístění",
-  "Last_update": "Last update",
+  "Last_update": "Poslední aktualizace",
   "Tags": "Štítky",
   "Add_participants": "Přidat účastníky",
-  "Clear_format": "Clear format",
+  "Clear_format": "Jasný formát",
   "MarkdownLint": {
     "missing_h1": {
       "description": "V dokumentu není žádný h1",
@@ -158,7 +158,7 @@
       "issue": "Problém s úrovní nadpisu"
     }
   },
-  "Shortcut_help": "Shortcut help",
+  "Shortcut_help": "Zkratka nápovědy",
   "User_help": {
     "title": "Klávesové zkratky",
     "userHelpData": [
@@ -209,7 +209,7 @@
       {
         "shortcutType": "Zkratky vzorečku",
         "shortcutData": {
-          "Insert_Formula": "Insert Formula"
+          "Insert_Formula": "Vložit vzorec"
         }
       },
       {
