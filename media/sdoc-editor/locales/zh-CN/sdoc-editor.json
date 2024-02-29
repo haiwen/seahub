@@ -448,5 +448,7 @@
   "Create": "创建",
   "Top_align": "顶端对齐",
   "Center_align": "居中对齐",
-  "Bottom_align": "底端对齐"
+  "Bottom_align": "底端对齐",
+  "Move_column_count": "正在移动{{count}}列",
+  "Move_row_count": "正在移动{{count}}行"
 }

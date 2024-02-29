@@ -448,5 +448,7 @@
   "Create": "Créer",
   "Top_align": "Top",
   "Center_align": "Middle",
-  "Bottom_align": "Bottom"
+  "Bottom_align": "Bottom",
+  "Move_column_count": "Moving {{count}} column(s)",
+  "Move_row_count": "Moving {{count}} row(s)"
 }

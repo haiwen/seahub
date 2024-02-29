@@ -448,5 +448,7 @@
   "Create": "Создать",
   "Top_align": "Верх",
   "Center_align": "Середина",
-  "Bottom_align": "Низ"
+  "Bottom_align": "Низ",
+  "Move_column_count": "Moving {{count}} column(s)",
+  "Move_row_count": "Moving {{count}} row(s)"
 }
