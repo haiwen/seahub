@@ -60,6 +60,30 @@
   margin-bottom: 1rem;
 }
 
+.ai-search-ask .ai-search-ask-body .ai-search-ask-body-markdown .article .ai-search-ask-body-citation-container {
+  position: relative;
+  margin-right: 16px;
+  display: inline;
+}
+
+.ai-search-ask .ai-search-ask-body .ai-search-ask-body-markdown .article .ai-search-ask-body-citation {
+  position: absolute;
+  font-size: 12px;
+  transform: scale(0.8) translate(-10px, -3px);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: rgb(213 213 213 / 60%);
+  line-height: 16px;
+  text-align: center;
+}
+
+.ai-search-ask .ai-search-ask-body .ai-search-ask-body-markdown .article .ai-search-ask-body-citation:hover {
+  cursor: pointer;
+  background-color: rgb(213 213 213 / 90%);
+}
+
 .ai-search-ask .ai-search-ask-footer {
   border-top: 1px solid rgba(0, 40, 100, 0.12);
   margin: 0 1rem;
