@@ -156,7 +156,6 @@ export default class AISearchAsk extends Component {
         this.setState({
           htmlResult: '',
           isLoading: false,
-          answeringResult: '',
           hitFiles: this.formatQuestionAnsweringItems(hit_files)
         });
       } else {

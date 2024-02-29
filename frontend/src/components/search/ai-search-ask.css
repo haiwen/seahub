@@ -74,14 +74,14 @@
   height: 16px;
   display: inline-block;
   border-radius: 50%;
-  background-color: rgb(213 213 213 / 60%);
+  background-color: rgb(200 200 200 / 60%);
   line-height: 16px;
   text-align: center;
 }
 
 .ai-search-ask .ai-search-ask-body .ai-search-ask-body-markdown .article .ai-search-ask-body-citation:hover {
   cursor: pointer;
-  background-color: rgb(213 213 213 / 90%);
+  background-color: rgb(200 200 200 / 90%);
 }
 
 .ai-search-ask .ai-search-ask-footer {
