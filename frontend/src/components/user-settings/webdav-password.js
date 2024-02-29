@@ -16,15 +16,15 @@ class WebdavPassword extends React.Component {
     super(props);
     this.state = {
       isWebdavPasswordSetted: webdavPasswordSetted,
-      isSetPasserdDialogOpen: false,
-      isResetPasserdDialogOpen: false,
-      isRemovePasserdDialogOpen: false,
+      isSetPasswordDialogOpen: false,
+      isResetPasswordDialogOpen: false,
+      isRemovePasswordDialogOpen: false,
     };
   }
 
   toggleSetPasswordDialog = () => {
     this.setState({
-      isSetPasserdDialogOpen: !this.state.isSetPasserdDialogOpen,
+      isSetPasswordDialogOpen: !this.state.isSetPasswordDialogOpen,
     });
   };
 
@@ -106,7 +106,7 @@ class WebdavPassword extends React.Component {
             </React.Fragment>
           }
         </div>
-        {this.state.isSetPasserdDialogOpen && (
+        {this.state.isSetPasswordDialogOpen && (
           <ModalPortal>
             <SetWebdavPassword
               setPassword={this.setPassword}

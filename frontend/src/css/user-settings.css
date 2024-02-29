@@ -101,3 +101,17 @@ body {
 .btn {
   min-width: 60px;
 }
+
+.password-strength-item {
+  display: inline-block;
+  width: 70px;
+  border: 1px solid #fff;
+  background: #e4e4e4;
+  color: #cecece;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 13px;
+  line-height: 16px;
+  margin-right: 2px;
+  border-radius: 3px;
+}

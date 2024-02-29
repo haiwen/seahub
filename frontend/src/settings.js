@@ -9,6 +9,7 @@ import CommonToolbar from './components/toolbar/common-toolbar';
 import SideNav from './components/user-settings/side-nav';
 import UserAvatarForm from './components/user-settings/user-avatar-form';
 import UserBasicInfoForm from './components/user-settings/user-basic-info-form';
+import UserPassword from './components/user-settings/user-password';
 import WebAPIAuthToken from './components/user-settings/web-api-auth-token';
 import WebdavPassword from './components/user-settings/webdav-password';
 import LanguageSetting from './components/user-settings/language-setting';
@@ -26,7 +27,7 @@ import './css/search.css';
 import './css/user-settings.css';
 
 const {
-  canUpdatePassword, passwordOperationText,
+  canUpdatePassword,
   enableGetAuthToken,
   enableWebdavSecret,
   enableAddressBook,
@@ -129,13 +130,7 @@ class Settings extends React.Component {
                   <UserAvatarForm  />
                   {this.state.userInfo && <UserBasicInfoForm userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 </div>
-                {canUpdatePassword &&
-                <div id="update-user-passwd" className="setting-item">
-                  <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
-                </div>
-                }
-
+                {canUpdatePassword && <UserPassword />}
                 {enableGetAuthToken && <WebAPIAuthToken />}
                 {enableWebdavSecret && <WebdavPassword />}
                 {enableAddressBook && this.state.userInfo &&

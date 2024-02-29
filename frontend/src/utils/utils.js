@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -1500,17 +1500,17 @@ export const Utils = {
     return curPage * perPage < totalCount;
   },
 
-  getStrengthLevel: function(pwd) {
+  getStrengthLevel: function(password, passwordMinLength) {
     const _this = this;
     var num = 0;
 
-    if (pwd.length < shareLinkPasswordMinLength) {
+    if (password.length < passwordMinLength) {
       return 0;
     } else {
-      for (var i = 0; i < pwd.length; i++) {
+      for (var i = 0; i < password.length; i++) {
         // return the unicode
         // bitwise OR
-        num |= _this.getCharMode(pwd.charCodeAt(i));
+        num |= _this.getCharMode(password.charCodeAt(i));
       }
       return _this.calculateBitwise(num);
     }

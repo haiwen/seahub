@@ -34,7 +34,7 @@ class SetWebdavPassword extends Component {
       return false;
     }
 
-    if (Utils.getStrengthLevel(this.state.password) < webdavSecretStrengthLevel) {
+    if (Utils.getStrengthLevel(this.state.password, webdavSecretMinLength) < webdavSecretStrengthLevel) {
       this.setState({errMsg: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', webdavSecretStrengthLevel)});
       return false;
     }
