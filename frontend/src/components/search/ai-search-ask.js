@@ -118,10 +118,10 @@ export default class AISearchAsk extends Component {
   }
 
   onClickCitation = (e) => {
-    const index = parseInt(e.target.innerText);
+    const index = parseInt(e.target.innerText) - 1;
     const hitFile = this.state.hitFiles[index];
     if (hitFile) {
-      this.props.onItemClickHandler(this.state.hitFiles[index]);
+      this.props.onItemClickHandler(hitFile);
     }
   };
 
