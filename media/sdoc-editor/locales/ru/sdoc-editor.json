@@ -449,6 +449,6 @@
   "Top_align": "Верх",
   "Center_align": "Середина",
   "Bottom_align": "Низ",
-  "Move_column_count": "Moving {{count}} column(s)",
-  "Move_row_count": "Moving {{count}} row(s)"
+  "Move_column_count": "Перемещение {{count}} столбцов",
+  "Move_row_count": "Перемещение {{count}} строк"
 }
