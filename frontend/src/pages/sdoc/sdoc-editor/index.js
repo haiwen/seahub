@@ -23,11 +23,11 @@ export default class SdocEditor extends React.Component {
   }
 
   toggleStar = (isStarred) => {
-    this.setState({isStarred: isStarred});
+    this.setState({ isStarred: isStarred });
   };
 
   unmarkDraft = () => {
-    this.setState({isDraft: false});
+    this.setState({ isDraft: false });
   };
 
   onSetFavicon = (suffix) => {
@@ -43,6 +43,10 @@ export default class SdocEditor extends React.Component {
     this.onSetFavicon('_notification');
   };
 
+  onClearNotification = () => {
+    this.onSetFavicon();
+  };
+
   getDirPath = () => {
     const { docPath } = window.seafile;
     const index = docPath.lastIndexOf('/');
@@ -55,7 +59,7 @@ export default class SdocEditor extends React.Component {
   getDirentList = () => {
     const { repoID } = window.seafile;
     const path = this.getDirPath();
-    seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
+    seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
       let direntList = [];
       res.data.dirent_list.forEach(item => {
         let dirent = new Dirent(item);
@@ -87,6 +91,7 @@ export default class SdocEditor extends React.Component {
           toggleStar={this.toggleStar}
           unmarkDraft={this.unmarkDraft}
           onNewNotification={this.onNewNotification}
+          onClearNotification={this.onClearNotification}
         />
       </Fragment>
     );

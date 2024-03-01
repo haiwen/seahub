@@ -18,7 +18,8 @@ const propTypes = {
   dirPath: PropTypes.string.isRequired,
   toggleStar: PropTypes.func.isRequired,
   unmarkDraft: PropTypes.func.isRequired,
-  onNewNotification: PropTypes.func.isRequired
+  onNewNotification: PropTypes.func.isRequired,
+  onClearNotification: PropTypes.func.isRequired
 };
 
 class ExternalOperations extends React.Component {
@@ -43,6 +44,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
     this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
+    this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
   }
 
@@ -55,13 +57,14 @@ class ExternalOperations extends React.Component {
     this.unsubscribeUnfreeze();
     this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
+    this.unsubscribeClearNotification();
   }
 
   onInternalLinkToggle = (options) => {
     if (options && options.internalLink) {
-      this.setState({internalLink: options.internalLink});
+      this.setState({ internalLink: options.internalLink });
     }
-    this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
+    this.setState({ isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog });
   };
 
   unmark = () => {
@@ -75,7 +78,7 @@ class ExternalOperations extends React.Component {
   };
 
   toggleStar = () => {
-    const { isStarred, repoID, docPath  } = this.props;
+    const { isStarred, repoID, docPath } = this.props;
     if (isStarred) {
       seafileAPI.unstarItem(repoID, docPath).then((res) => {
         this.props.toggleStar(false);
@@ -94,7 +97,7 @@ class ExternalOperations extends React.Component {
   };
 
   onShareToggle = () => {
-    this.setState({isShowShareDialog: !this.state.isShowShareDialog});
+    this.setState({ isShowShareDialog: !this.state.isShowShareDialog });
   };
 
   onFreezeDocument = () => {
@@ -123,9 +126,13 @@ class ExternalOperations extends React.Component {
     this.props.onNewNotification();
   };
 
+  onClearNotification = () => {
+    this.props.onClearNotification();
+  };
+
   onCreateSdocFile = (params) => {
     if (params?.newFileName) {
-      this.setState({fileType: `${params.newFileName}.sdoc`});
+      this.setState({ fileType: `${params.newFileName}.sdoc` });
     }
     this.setState({
       isShowCreateFileDialog: !this.state.isShowCreateFileDialog
@@ -144,7 +151,7 @@ class ExternalOperations extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then((res) => {
       const eventBus = EventBus.getInstance();
-      eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, {data: res.data});
+      eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, { data: res.data });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
