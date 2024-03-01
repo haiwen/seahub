@@ -18,7 +18,8 @@ const propTypes = {
   dirPath: PropTypes.string.isRequired,
   toggleStar: PropTypes.func.isRequired,
   unmarkDraft: PropTypes.func.isRequired,
-  onNewNotification: PropTypes.func.isRequired
+  onNewNotification: PropTypes.func.isRequired,
+  onNotificationCleared: PropTypes.func.isRequired
 };
 
 class ExternalOperations extends React.Component {
@@ -43,6 +44,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
     this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
+    this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onNotificationCleared);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
   }
 
@@ -55,6 +57,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeUnfreeze();
     this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
+    this.unsubscribeClearNotification();
   }
 
   onInternalLinkToggle = (options) => {
@@ -121,6 +124,10 @@ class ExternalOperations extends React.Component {
 
   onNewNotification = () => {
     this.props.onNewNotification();
+  };
+
+  onNotificationCleared = () => {
+    this.props.onNotificationCleared();
   };
 
   onCreateSdocFile = (params) => {

@@ -43,6 +43,10 @@ export default class SdocEditor extends React.Component {
     this.onSetFavicon('_notification');
   };
 
+  onNotificationCleared = () => {
+    this.onSetFavicon();
+  };
+
   getDirPath = () => {
     const { docPath } = window.seafile;
     const index = docPath.lastIndexOf('/');
@@ -87,6 +91,7 @@ export default class SdocEditor extends React.Component {
           toggleStar={this.toggleStar}
           unmarkDraft={this.unmarkDraft}
           onNewNotification={this.onNewNotification}
+          onNotificationCleared={this.onNotificationCleared}
         />
       </Fragment>
     );
