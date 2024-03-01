@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon, FormGroup, Label, FormText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon, FormGroup, Label, UncontrolledPopover, PopoverBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -40,29 +40,24 @@ class PasswordInput extends Component {
 
   renderPasswordStrength = () => {
     const { value: password } = this.props;
-    if (!password) {
-      return null;
-    }
-
     const strengthLevel = Utils.getStrengthLevel(password, userPasswordMinLength);
+    const levelShown = strengthLevel < 3 ? strengthLevel : 3;
     const strength = [
-      gettext('too weak'),
-      gettext('weak'),
-      gettext('medium'),
-      gettext('strong')
+      { text: gettext('too weak'), color: '#f00000' },
+      { text: gettext('weak'), color: '#e43c44' },
+      { text: gettext('medium'), color: '#ffa800' },
+      { text: gettext('strong'), color: '#26b20e' }
     ];
 
     return (
       <div className="password-strength">
-        {strengthLevel == 0 ? (
-          <span style={{'color': '#F00000'}}>{strength[0]}</span>
-        ) : (
-          <>
-            <span className="password-strength-item" style={strengthLevel == 1 ? {'background': '#db4747'} : {}}>{strength[1]}</span>
-            <span className="password-strength-item" style={strengthLevel == 2 ? {'background': '#fdd64d'} : {}}>{strength[2]}</span>
-            <span className="password-strength-item" style={(strengthLevel == 3 || strengthLevel == 4) ? {'background': '#4aa323'} : {}}>{strength[3]}</span>
-          </>
-        )}
+        <span className="password-strength-label">{gettext('Password Strength:')}</span>
+        {password && <span style={{'color': strength[levelShown].color}} className="ml-2">{strength[levelShown].text}</span>}
+        <div className="password-strength-items-container mt-1 mb-2">
+          <span className="password-strength-item" style={strengthLevel > 0 ? {'background': strength[levelShown].color } : {}}></span>
+          <span className="password-strength-item" style={strengthLevel > 1 ? {'background': strength[levelShown].color } : {}}></span>
+          <span className="password-strength-item" style={strengthLevel > 2 ? {'background': strength[levelShown].color } : {}}></span>
+        </div>
       </div>
     );
   };
@@ -75,14 +70,20 @@ class PasswordInput extends Component {
         <InputGroup>
           <Input id={id} type={this.state.isPasswordVisible ? 'text' : 'password'} value={value || ''} onChange={this.props.onChange} />
           <InputGroupAddon addonType="append">
-            <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+            <Button onClick={this.togglePasswordVisible}><i className={`user-password-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
           </InputGroupAddon>
         </InputGroup>
         {(userStrongPasswordRequired && id == 'new-password') && (
-          <>
-            <FormText>{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', userPasswordMinLength).replace('{passwordStrengthLevel}', userPasswordStrengthLevel)}</FormText>
-            {this.renderPasswordStrength()}
-          </>
+          <UncontrolledPopover
+            placement="left"
+            trigger="focus"
+            target={id}
+          >
+            <PopoverBody>
+              {this.renderPasswordStrength()}
+              <p className="user-password-tip m-0">{gettext('The password should be at least {passwordMinLength} characters and include {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols').replace('{passwordMinLength}', userPasswordMinLength).replace('{passwordStrengthLevel}', userPasswordStrengthLevel)}</p>
+            </PopoverBody>
+          </UncontrolledPopover>
         )}
       </FormGroup>
     );

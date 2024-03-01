@@ -102,16 +102,27 @@ body {
   min-width: 60px;
 }
 
+.user-password-operation-icon {
+  color: #999;
+}
+
+.password-strength-label {
+  color: #212529;
+}
+
+.password-strength-items-container {
+  line-height: 0;
+}
+
 .password-strength-item {
   display: inline-block;
-  width: 70px;
+  width: 74px;
+  height: 6px;
   border: 1px solid #fff;
-  background: #e4e4e4;
-  color: #cecece;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 13px;
-  line-height: 16px;
-  margin-right: 2px;
-  border-radius: 3px;
+  background: #dbdbdb;
+}
+
+.user-password-tip {
+  font-size: 12px;
+  color: #666;
 }

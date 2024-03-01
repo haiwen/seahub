@@ -19,7 +19,7 @@ class UserPassword extends React.Component {
 
   toggleUpdatePasswordDialog = () => {
     this.setState({
-      isUpdatePasswordDialogOpen: !this.state.isUpdatePasswordDialogOpen,
+      isUpdatePasswordDialogOpen: !this.state.isUpdatePasswordDialogOpen
     });
   };
 
