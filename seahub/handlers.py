@@ -8,10 +8,18 @@ from seaserv import seafile_api, get_org_id_by_repo_id
 logger = logging.getLogger(__name__)
 
 try:
+    from seahub.settings import EVENTS_CONFIG_FILE
+except ImportError:
+    EVENTS_CONFIG_FILE = None
+
+try:
 
     from seafevents import seafevents_api
 
     def repo_created_cb(sender, **kwargs):
+        if not EVENTS_CONFIG_FILE:
+            return
+
         org_id = kwargs['org_id']
         creator = kwargs['creator']
         repo_id = kwargs['repo_id']
@@ -62,6 +70,9 @@ try:
         groups to which this repo is shared.
 
         """
+        if not EVENTS_CONFIG_FILE:
+            return
+
         org_id = kwargs['org_id']
         operator = kwargs['operator']
 
@@ -98,6 +109,9 @@ try:
     def clean_up_repo_trash_cb(sender, **kwargs):
         """When a repo trash is deleted, the operator will be recorded.
         """
+        if not EVENTS_CONFIG_FILE:
+            return
+
         org_id = kwargs['org_id']
         operator = kwargs['operator']
         repo_id = kwargs['repo_id']
@@ -133,6 +147,9 @@ try:
         session.close()
 
     def repo_restored_cb(sender, **kwargs):
+        if not EVENTS_CONFIG_FILE:
+            return
+
         repo_id = kwargs['repo_id']
         operator = kwargs['operator']
         repo = seafile_api.get_repo(repo_id)
