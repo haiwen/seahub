@@ -1272,6 +1272,41 @@ class ProfessionalConfigurator(AbstractConfigurator):
         if Utils.run_argv(argv, env=env_mgr.get_seahub_env()) != 0:
             Utils.error('Failed to generate seafile pro configuration')
 
+    def do_syncdb(self):
+        print('----------------------------------------')
+        print('Now creating seafevents database tables ...\n')
+        print('----------------------------------------')
+
+        try:
+            conn = pymysql.connect(host=db_config.mysql_host,
+                                   port=db_config.mysql_port,
+                                   user=db_config.seafile_mysql_user,
+                                   passwd=db_config.seafile_mysql_password,
+                                   db=db_config.seahub_db_name)
+        except Exception as e:
+            if isinstance(e, pymysql.err.OperationalError):
+                Utils.error('Failed to connect to mysql database %s: %s' % (db_config.seahub_db_name, e.args[1]))
+            else:
+                Utils.error('Failed to connect to mysql database %s: %s' % (db_config.seahub_db_name, e))
+
+        cursor = conn.cursor()
+
+        sql_file = os.path.join(env_mgr.install_path, 'pro', 'python', 'seafevents','mysql.sql')
+        with open(sql_file, 'r') as fp:
+            content = fp.read()
+
+        sqls = [line.strip() for line in content.split(';') if line.strip()]
+        for sql in sqls:
+            try:
+                cursor.execute(sql)
+            except Exception as e:
+                if isinstance(e, pymysql.err.OperationalError):
+                    Utils.error('Failed to init seahub database: %s' % e.args[1])
+                else:
+                    Utils.error('Failed to init seahub database: %s' % e)
+
+        conn.commit()
+
 class GunicornConfigurator(AbstractConfigurator):
     def __init__(self):
         AbstractConfigurator.__init__(self)
@@ -1575,6 +1610,7 @@ def main():
     seahub_config.generate()
     if env_mgr.is_pro:
         pro_config.generate()
+        pro_config.do_syncdb()
 
     ccnet_config.do_syncdb()
     seafile_config.do_syncdb()
