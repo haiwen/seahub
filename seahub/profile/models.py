@@ -165,6 +165,7 @@ class Profile(models.Model):
     login_id = models.CharField(max_length=225, unique=True, null=True, blank=True)
     # Contact email is used to receive emails.
     contact_email = models.EmailField(max_length=225, unique=True, null=True, blank=True)
+    is_manually_set_contact_email = models.BooleanField(default=False)
     institution = models.CharField(max_length=225, db_index=True, null=True, blank=True, default='')
     list_in_address_book = models.BooleanField(default=False, db_index=True)
     objects = ProfileManager()

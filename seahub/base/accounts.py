@@ -1013,10 +1013,10 @@ class CustomLDAPBackend(object):
 
         username = user.username
         if LDAP_UPDATE_USER_WHEN_LOGIN:
-            profile_kwargs = {
-                'nickname': nickname,
-                'contact_email': contact_email,
-            }
+            profile_kwargs = {'nickname': nickname}
+            p = Profile.objects.get_profile_by_user(username)
+            if not (p and p.is_manually_set_contact_email):
+                profile_kwargs['contact_email'] = contact_email
             try:
                 Profile.objects.add_or_update(username, **profile_kwargs)
             except Exception as e:

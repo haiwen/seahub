@@ -749,6 +749,7 @@ CREATE TABLE `profile_profile` (
   `lang_code` longtext,
   `login_id` varchar(225) DEFAULT NULL,
   `contact_email` varchar(225) DEFAULT NULL,
+  `is_manually_set_contact_email` tinyint(1) DEFAULT 0,
   `institution` varchar(225) DEFAULT NULL,
   `list_in_address_book` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),

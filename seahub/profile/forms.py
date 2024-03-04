@@ -56,3 +56,4 @@ class DetailedProfileForm(ProfileForm):
 
         contact_email = self.cleaned_data['contact_email']
         Profile.objects.update_contact_email(username, contact_email)
+        Profile.objects.filter(user=username).update(is_manually_set_contact_email=True)
