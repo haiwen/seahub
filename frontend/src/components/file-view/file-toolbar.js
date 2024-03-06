@@ -113,7 +113,7 @@ class FileToolbar extends React.Component {
 
     return (
       <Fragment>
-        <ButtonGroup className="d-none d-md-block">
+        <ButtonGroup className="d-none d-md-block flex-shrink-0 ml-4">
           {fileType == 'PDF' && (
             <IconButton
               id="seafile-pdf-print"
@@ -202,7 +202,7 @@ class FileToolbar extends React.Component {
           </ButtonDropdown>
         </ButtonGroup>
 
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
           <ButtonGroup >
             {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?

@@ -16,10 +16,9 @@ class FileInfo extends React.PureComponent {
 
     const lockedText = gettext('locked');
     return (
-      <div className="file-info-wrapper">
-        <div className="topbar-file-info">
+        <div className="topbar-file-info text-truncate ml-0 mr-4">
           <div className="file-title">
-            <span className='file-name'>{fileInfo.name}</span>
+            <span className='file-name text-truncate'>{fileInfo.name}</span>
             <span className="file-star" title={starTitle}>
               <i className={starIconClass} onClick={this.props.toggleStar}/>
             </span>
@@ -43,7 +42,6 @@ class FileInfo extends React.PureComponent {
             )}
           </div>
         </div>
-      </div>
     );
   }
 }

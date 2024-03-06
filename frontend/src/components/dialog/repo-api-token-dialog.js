@@ -281,7 +281,7 @@ class RepoAPITokenDialog extends React.Component {
   render() {
     let repo = this.repo;
 
-    const itemName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const itemName = '<span class="op-target text-truncate mr-1">' + Utils.HTMLescape(repo.repo_name) + '</span>';
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal
@@ -289,7 +289,7 @@ class RepoAPITokenDialog extends React.Component {
         toggle={this.props.onRepoAPITokenToggle}
       >
         <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
-          <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <div className="o-auto">

@@ -116,14 +116,14 @@ class SharedFileView extends React.Component {
         </div>
         <div className="shared-file-view-md-main">
           <div className={`shared-file-view-head ${(fileType == 'md' || fileType == 'pdf') ? 'w-100 px-4' : ''}`}>
-            <div className="float-left">
+            <div className="text-truncate">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
               {zipped ?
                 <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p> :
                 <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
               }
             </div>
-            <div className="float-right">
+            <div className="flex-shrink-0 ml-4">
               {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                 <Button color="secondary" id="save"
                   onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}

@@ -160,27 +160,30 @@ class RepoFolderTrash extends React.Component {
     const pathList = this.state.folderPath.split('/');
     return (
       <React.Fragment>
-        <a href="#" onClick={this.clickRoot}>{repoFolderName}</a>
-        <span> / </span>
+        <a href="#" onClick={this.clickRoot} className="text-truncate" title={repoFolderName}>{repoFolderName}</a>
+        <span className="mx-1">/</span>
         {pathList.map((item, index) => {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))}>{pathList[index]}</a>
-                <span> / </span>
+                <a className="text-truncate" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
+                <span className="mx-1">/</span>
               </React.Fragment>
             );
           }
           return null;
         }
         )}
-        {pathList[pathList.length - 1]}
+        <span className="text-truncate" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
       </React.Fragment>
     );
   };
 
   render() {
     const { isCleanTrashDialogOpen, showFolder } = this.state;
+
+    let title = gettext('{placeholder} Trash');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
 
     return (
       <React.Fragment>
@@ -194,14 +197,14 @@ class RepoFolderTrash extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2>{Utils.generateDialogTitle(gettext('{placeholder} Trash'), repoFolderName)}</h2>
+                <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
-                  <p className="m-0">{gettext('Current path: ')}{showFolder ? this.renderFolderPath() : repoFolderName}</p>
+                  <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>
                   {(path == '/' && enableClean && !showFolder) &&
-                  <button className="btn btn-secondary clean" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                  <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                   }
                 </div>
                 <Content

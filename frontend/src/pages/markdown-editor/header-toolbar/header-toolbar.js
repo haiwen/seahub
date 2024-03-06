@@ -63,7 +63,7 @@ class HeaderToolbar extends React.Component {
     if (this.props.editorMode === 'rich') {
       return (
         <div className="sf-md-viewer-topbar">
-          <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
+          <div className="sf-md-viewer-topbar-first d-flex justify-content-between mw-100">
             <FileInfo
               toggleStar={this.props.toggleStar}
               editorApi={this.props.editorApi}

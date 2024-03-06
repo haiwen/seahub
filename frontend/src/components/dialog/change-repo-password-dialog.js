@@ -95,12 +95,13 @@ class ChangeRepoPasswordDialog extends React.Component {
   render() {
     const { repoName, toggleDialog } = this.props;
 
+    let title = gettext('Change Password of Library {placeholder}');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
       <Modal isOpen={true} style={{height: 'auto'}} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>
-          <span>
-            {Utils.generateDialogTitle(gettext('Change Password of Library {placeholder}'), repoName)}
-          </span>
+            <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <form id="repo-change-passwd-form" action="" method="post">

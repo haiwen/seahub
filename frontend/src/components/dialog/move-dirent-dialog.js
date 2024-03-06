@@ -154,12 +154,12 @@ class MoveDirent extends React.Component {
   render() {
     let title = gettext('Move {placeholder} to');
     if (!this.props.isMutipleOperation) {
-      title = title.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     } else {
       title = gettext('Move selected item(s) to:');
     }
     let mode = 'current_repo_and_other_repos';
-    const { dirent, selectedDirentList } = this.props;
+    const { dirent, selectedDirentList, isMutipleOperation } = this.props;
     const movedDirent = dirent ? dirent : selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -168,7 +168,9 @@ class MoveDirent extends React.Component {
     }
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
+        <ModalHeader toggle={this.toggle}>
+          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></div>}
+        </ModalHeader>
         <ModalBody>
           <FileChooser
             repoID={this.props.repoID}
