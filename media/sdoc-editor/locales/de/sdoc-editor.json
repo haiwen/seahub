@@ -450,5 +450,6 @@
   "Center_align": "Middle",
   "Bottom_align": "Bottom",
   "Move_column_count": "Moving {{count}} column(s)",
-  "Move_row_count": "Moving {{count}} row(s)"
+  "Move_row_count": "Moving {{count}} row(s)",
+  "Mark_all_as_read": "Alle als gelesen markieren"
 }

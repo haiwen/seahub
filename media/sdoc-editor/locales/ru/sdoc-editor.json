@@ -450,5 +450,6 @@
   "Center_align": "Середина",
   "Bottom_align": "Низ",
   "Move_column_count": "Перемещение {{count}} столбцов",
-  "Move_row_count": "Перемещение {{count}} строк"
+  "Move_row_count": "Перемещение {{count}} строк",
+  "Mark_all_as_read": "Отметить все как прочитанное"
 }
