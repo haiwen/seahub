@@ -90,7 +90,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isDepartmentRepo: PropTypes.bool,
   folderPath: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
+  repoName: PropTypes.string,
 };
 
 

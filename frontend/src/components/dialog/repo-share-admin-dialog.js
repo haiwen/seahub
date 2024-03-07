@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
@@ -48,12 +49,13 @@ class RepoShareAdminDialog extends React.Component {
   render() {
     const { activeTab } = this.state;
     const { repo_name: repoName } = this.props.repo;
-
+    let title = gettext('{placeholder} Share Admin');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '760px'}} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
-            <span className="op-target" title={repoName}>{repoName}</span> {gettext('Share Admin')}
+            <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
           </ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
             <Fragment>

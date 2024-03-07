@@ -93,6 +93,9 @@ class RepoHistory extends React.Component {
   };
 
   render() {
+    let title = gettext('{placeholder} Modification History');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
       <React.Fragment>
         <div className="h-100 d-flex flex-column">
@@ -105,7 +108,7 @@ class RepoHistory extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2>{Utils.generateDialogTitle(gettext('{placeholder} Modification History'), repoName)}</h2>
+                <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>

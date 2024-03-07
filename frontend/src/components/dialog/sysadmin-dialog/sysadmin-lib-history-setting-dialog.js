@@ -106,12 +106,13 @@ class SysAdminLibHistorySettingDialog extends React.Component {
   };
 
   render() {
-    const itemName = this.props.itemName;
+    const { itemName: repoName } = this.props;
+    let title = gettext('{placeholder} History Setting');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span className="op-target" title={itemName}>{itemName}</span>{' '}
-          {gettext('History Setting')}
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <Form>

@@ -60,15 +60,19 @@ class TransferDialog extends React.Component {
   };
 
   render() {
-    const itemName = this.props.itemName;
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
     }
+
+    const { itemName: repoName } = this.props;
+    let title = gettext('Transfer Library {library_name}');
+    title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span>{gettext('Transfer Library {library_name}').replace('{library_name}', itemName)}</span>
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           {this.state.transferToUser ?

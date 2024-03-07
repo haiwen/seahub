@@ -91,7 +91,7 @@ class Content extends React.Component {
               <ul>
                 {
                   data[item.type].map((item, index) => {
-                    return <li key={index} dangerouslySetInnerHTML={{__html: item}} className="commit-detail-item"></li>;
+                    return <li key={index} dangerouslySetInnerHTML={{__html: item}} className="commit-detail-item text-truncate"></li>;
                   })
                 }
               </ul>

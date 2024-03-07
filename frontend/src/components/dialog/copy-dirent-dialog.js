@@ -140,14 +140,17 @@ class CopyDirent extends React.Component {
   render() {
     let title = gettext('Copy {placeholder} to');
     if (!this.props.isMutipleOperation) {
-      title = title.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     } else {
       title = gettext('Copy selected item(s) to:');
     }
     let mode = 'current_repo_and_other_repos';
+    const { isMutipleOperation } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
+        <ModalHeader toggle={this.toggle}>
+          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></div>}
+        </ModalHeader>
         <ModalBody>
           <FileChooser
             repoID={this.props.repoID}

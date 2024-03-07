@@ -91,26 +91,26 @@ class RepoSnapshot extends React.Component {
     const pathList = path.split('/');
 
     if (path == '/') {
-      return repoName;
+      return <span className="text-truncate" title={repoName}>{repoName}</span>;
     }
 
     return (
       <React.Fragment>
-        <a href="#" onClick={this.clickFolderPath.bind(this, '/')}>{repoName}</a>
-        <span> / </span>
+        <a href="#" onClick={this.clickFolderPath.bind(this, '/')} className="text-truncate" title={repoName}>{repoName}</a>
+        <span className="mx-1">/</span>
         {pathList.map((item, index) => {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))}>{pathList[index]}</a>
-                <span> / </span>
+                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))} className="text-truncate" title={pathList[index]}>{pathList[index]}</a>
+                <span className="mx-1">/</span>
               </React.Fragment>
             );
           }
           return null;
         }
         )}
-        {pathList[pathList.length - 1]}
+        <span className="text-truncate" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
       </React.Fragment>
     );
   };
@@ -129,6 +129,8 @@ class RepoSnapshot extends React.Component {
   render() {
     const { isConfirmDialogOpen, folderPath } = this.state;
 
+    let title = gettext('{placeholder} Snapshot');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <React.Fragment>
         <div className="h-100 d-flex flex-column">
@@ -142,7 +144,7 @@ class RepoSnapshot extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2>
-                  <span>{Utils.generateDialogTitle(gettext('{placeholder} Snapshot'), repoName)}</span>
+                  <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
                   <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
@@ -150,8 +152,8 @@ class RepoSnapshot extends React.Component {
                 </a>
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">
-                    <p className="m-0">{commitDesc}</p>
-                    <div className="ml-4 border-left pl-4 d-flex align-items-center">
+                    <p className="m-0 text-truncate" title={commitDesc}>{commitDesc}</p>
+                    <div className="ml-4 border-left pl-4 d-flex align-items-center flex-shrink-0">
                       {showAuthor ? (
                         <React.Fragment>
                           <img src={authorAvatarURL} width="20" height="20" alt="" className="rounded mr-1" />
@@ -163,9 +165,9 @@ class RepoSnapshot extends React.Component {
                   </div>
                 )}
                 <div className="d-flex justify-content-between align-items-center op-bar">
-                  <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
+                  <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{this.renderPath()}</p>
                   {(folderPath == '/' && canRestoreRepo) &&
-                  <button className="btn btn-secondary op-bar-btn" onClick={this.toggleDialog}>{gettext('Restore')}</button>
+                  <button className="btn btn-secondary op-bar-btn flex-shrink-0 ml-4" onClick={this.toggleDialog}>{gettext('Restore')}</button>
                   }
                 </div>
                 <Content

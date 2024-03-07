@@ -30,9 +30,9 @@ class FileInfo extends React.PureComponent {
     const starredText = isStarred ? gettext('starred') : gettext('unstarred');
     const lockedText = gettext('locked');
     return (
-      <div>
+      <div className="text-truncate">
         <h2 className="file-title d-flex align-items-center">
-          <span className="file-name">{fileName}</span>
+          <span className="file-name text-truncate" title={fileName}>{fileName}</span>
           <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
             href="#"
             title={starredText}

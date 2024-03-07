@@ -82,7 +82,7 @@ class RepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   addResponseListToNode = (list, node) => {
     node.isLoaded = true;

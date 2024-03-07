@@ -26,10 +26,10 @@ class FileView extends React.Component {
 
   render() {
     return (
-      <div className="h-100 d-flex flex-column flex-1">
+      <div className="h-100 d-flex flex-column flex-1 mw-100">
         <div className="file-view-header d-flex justify-content-between align-items-center">
-          <div>
-            <h2 className="file-title">{fileName}</h2>
+          <div className="text-truncate mr-4">
+            <h2 className="file-title text-truncate" title={fileName}>{fileName}</h2>
             <p className="meta-info m-0">{fromTrash ? `${gettext('Current Path: ')}${gettext('Trash')}`: commitTime}</p>
           </div>
           {canDownloadFile && <Download />}
