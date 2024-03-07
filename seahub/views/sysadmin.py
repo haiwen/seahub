@@ -11,6 +11,7 @@ import datetime
 import time
 from constance import config
 from openpyxl import load_workbook
+import base64
 
 from django.db.models import Q
 from django.conf import settings as dj_settings
@@ -839,6 +840,7 @@ def sys_sudo_mode(request):
         username = request.user.username
         ip = get_remote_ip(request)
         if password:
+            password = base64.b64decode(password).decode('utf-8')
             user = authenticate(username=username, password=password)
             if user:
                 update_sudo_mode_ts(request)

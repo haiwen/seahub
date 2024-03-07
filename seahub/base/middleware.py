@@ -3,6 +3,7 @@ import re
 import os
 from datetime import datetime
 
+
 from django.utils.deprecation import MiddlewareMixin
 from django.core.cache import cache
 from django.urls import reverse
@@ -190,11 +191,13 @@ class CountAPICallsMiddleware(MiddlewareMixin):
 
     def process_response(self, request, response):
         if "api2/" in request.path or "api/v2.1/" in request.path or 'pa_api' in request.path:
-            if response.status_code < 300:
-                with open(self._logfile, 'a') as f:
-                    f.write('[%s] %s called the API: %s.\n' % (datetime.now(), request.user.username, request.path))
-            else:
-                with open(self._logfile, 'a') as f:
-                    f.write('response status code: %s \n' % response.status_code)
-
+            client_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))  
+            user_agent = request.META.get('HTTP_USER_AGENT', 'N/A')  
+            username = request.user and request.user.username or 'anonymous'
+            status_code = response.status_code
+            request_line = f"{request.method} {request.path} {status_code}"  
+            log_entry = f'{client_ip} - - {datetime.now()} "{request_line}" {status_code} {len(response.content)} "{user_agent}" "{username}"' 
+            with open(self._logfile, 'a') as f:
+                    f.write("%s\n" % log_entry)
+                    
         return response
