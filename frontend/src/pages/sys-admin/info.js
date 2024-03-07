@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro, isDefaultAdmin } from '../../utils/constants';
+import { gettext, isPro, isDefaultAdmin, seafileVersion } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -109,6 +109,10 @@ class Info extends Component {
                     <a className="ml-1" href="https://download.seafile.com/published/seafile-manual/deploy_pro/migrate_from_seafile_community_server.md" target="_blank" rel="noreferrer">{gettext('Upgrade to Pro Edition')}</a>
                   </dd>
                 }
+
+                <dt className="info-item-heading">{gettext('Version')}</dt>
+                <dd className="info-item-content">{seafileVersion}</dd>
+
                 <dt className="info-item-heading">{gettext('Libraries')} / {gettext('Files')}</dt>
                 <dd className="info-item-content">{repos_count} / {total_files_count}</dd>
 
