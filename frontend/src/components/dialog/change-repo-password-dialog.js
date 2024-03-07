@@ -101,7 +101,7 @@ class ChangeRepoPasswordDialog extends React.Component {
     return (
       <Modal isOpen={true} style={{height: 'auto'}} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>
-            <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <form id="repo-change-passwd-form" action="" method="post">

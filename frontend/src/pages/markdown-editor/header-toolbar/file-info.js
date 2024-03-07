@@ -16,32 +16,32 @@ class FileInfo extends React.PureComponent {
 
     const lockedText = gettext('locked');
     return (
-        <div className="topbar-file-info text-truncate ml-0 mr-4">
-          <div className="file-title">
-            <span className='file-name text-truncate'>{fileInfo.name}</span>
-            <span className="file-star" title={starTitle}>
-              <i className={starIconClass} onClick={this.props.toggleStar}/>
-            </span>
-            <InternalLinkOperation path={filePath} repoID={repoID} />
-            {(isPro && isLocked) && (
-              <img
-                className="file-locked-icon mx-2"
-                width="16"
-                src={`${mediaUrl}img/file-locked-32.png`}
-                alt={lockedText}
-                title={lockedText}
-                aria-label={lockedText}
-              />
-            )}
-          </div>
-          <div className="file-state">
-            <span className={'file-modifier-name'}>{fileInfo.lastModifier}</span>
-            <span className={'file-modifier-time'}>{modifyTime}</span>
-            {this.props.showDraftSaved && (
-              <span className={'file-modifier-savedraft'}>{gettext('Local draft saved')}</span>
-            )}
-          </div>
+      <div className="topbar-file-info text-truncate ml-0 mr-4">
+        <div className="file-title">
+          <span className='file-name text-truncate'>{fileInfo.name}</span>
+          <span className="file-star" title={starTitle}>
+            <i className={starIconClass} onClick={this.props.toggleStar}/>
+          </span>
+          <InternalLinkOperation path={filePath} repoID={repoID} />
+          {(isPro && isLocked) && (
+            <img
+              className="file-locked-icon mx-2"
+              width="16"
+              src={`${mediaUrl}img/file-locked-32.png`}
+              alt={lockedText}
+              title={lockedText}
+              aria-label={lockedText}
+            />
+          )}
         </div>
+        <div className="file-state">
+          <span className={'file-modifier-name'}>{fileInfo.lastModifier}</span>
+          <span className={'file-modifier-time'}>{modifyTime}</span>
+          {this.props.showDraftSaved && (
+            <span className={'file-modifier-savedraft'}>{gettext('Local draft saved')}</span>
+          )}
+        </div>
+      </div>
     );
   }
 }
