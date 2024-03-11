@@ -59,6 +59,22 @@ html, body { padding:0; margin:0; height:100%; }
             {% endif %}
         }
     };
+    var historyObject = JSON.parse("{{ history_object }}".replaceAll("&quot;",'\"'));
+    var onRequestHistory = function () {
+        docEditor.refreshHistory(historyObject);
+    }
+    var onRequestHistoryClose = function () {
+        document.location.reload();
+    }
+    var onRequestHistoryData = function (event) {
+        version = event.data;
+        docEditor.setHistoryData(historyObject.data[version-1]);
+    }
+    config.events = {
+        "onRequestHistory": onRequestHistory,
+        "onRequestHistoryClose": onRequestHistoryClose,
+        "onRequestHistoryData": onRequestHistoryData
+    }
     var docEditor = new DocsAPI.DocEditor("placeholder", config);
 </script>
 <script type="text/javascript">

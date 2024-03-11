@@ -3,6 +3,7 @@ import hashlib
 import logging
 import urllib.parse
 import posixpath
+import json
 
 from django.urls import reverse
 from django.utils.encoding import force_bytes
@@ -11,7 +12,7 @@ from seaserv import seafile_api
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
-        get_site_scheme_and_netloc
+        get_site_scheme_and_netloc, get_file_history
 
 from seahub.onlyoffice.models import OnlyOfficeDocKey
 
@@ -141,7 +142,51 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
     callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
 
+    history_object = {}
+    try:
+        history_limit = seafile_api.get_repo_history_limit(origin_repo_id)
+        file_revisions, total_count = get_file_history(origin_repo_id, origin_file_path, 0, 999999, history_limit)
+        file_revisions.reverse()
+        history = []
+        data = []
+        for v,ent in enumerate(file_revisions, start=1):
+            if repo.is_virtual:
+                origin_history_file_path = posixpath.join(repo.origin_path, ent.path.strip('/'))
+            else:
+                origin_history_file_path = ent.path
+            key = generate_onlyoffice_doc_key(origin_repo_id, origin_history_file_path, ent.file_id)
+            dl_history_token = seafile_api.get_fileserver_access_token(repo_id, ent.file_id, 'download',
+                                                                        username, use_onetime=False)
+            url = gen_file_get_url(dl_history_token, os.path.basename(ent.path.rstrip('/')))
+
+            file_history = {
+                "version": v,
+                "created": str(ent.timestamp),
+                "key": key,
+                "user": {
+                    "id": ent.op_user,
+                    "name": email2nickname(ent.op_user)
+                }
+            }
+            file_data = {
+                "fileType": fileext,
+                "key": key,
+                "url": url,
+                "version": v,
+            }
+            history.append(file_history)
+            data.append(file_data)
+        history_object = {
+            "data": data,
+            "history": history,
+            "currentVersion": len(file_revisions)
+        }
+    except Exception as e:
+        logger.error(e)
+        history_object = str(e)
+
     return_dict = {
+        'history_object': json.dumps(history_object, ensure_ascii=False),
         'repo_id': repo_id,
         'path': file_path,
         'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
