@@ -978,3 +978,5 @@ if ENABLE_ADFS_LOGIN:
 #      'link': 'http://127.0.0.1:8000/shared-libs/',
 #      },
 # ]
+
+SEAFILE_VERSION = "9.0.2"

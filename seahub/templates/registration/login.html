@@ -145,6 +145,12 @@ html, body, #wrapper { height:100%; }
         <button id="modal-close" class="simplemodal-close">取消</button>
     </div>
 </div>
+<div id="confirm-modal-no" style="display:none">
+    <p>当前系统登录账号与开机账号不一致，不允许登录</p>
+    <div id="modal-buttons"style="margin-bottom: 2em;">
+        <div id="login-confirm-no" class="btn btn-primary" style="margin-right: 0px;">我知道了</div>
+    </div>
+</div>
 
 {% include "snippets/policy_service_link.html" %}
 <div class="logo-company-copyright">
@@ -245,6 +251,7 @@ function doEncrypt() {
 
 const validPcOwnerBtn = $('#valid-pc-owner');
 const loginConfirm = $('#login-confirm');
+const loginConfirmNo = $('#login-confirm-no');
 validPcOwnerBtn.on('click', function(evnet) {
     event.stopPropagation();
     var loginName = $.trim($('input[name="login"]').val());
@@ -256,9 +263,7 @@ validPcOwnerBtn.on('click', function(evnet) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
     }
-    if (loginName.indexOf('@') === -1) {
-        doEncrypt();
-    }
+
     const clickCount = parseInt(validPcOwnerBtn.data('click'));
     if (clickCount === 0 && '{{ page_id }}') {
         $.ajax({
@@ -267,7 +272,15 @@ validPcOwnerBtn.on('click', function(evnet) {
             data: {account: loginName, page_id: '{{ page_id }}'},
             cache:false,
             success: function(data) {
-                if (data['code'] === 'NEED_PC_OWNER_LOGIN' || data['code'] === 'SUGGEST_PC_OWNER_LOGIN') {
+                if(data['code'] === 'NEED_PC_OWNER_LOGIN'){
+                    $('#confirm-modal-no').modal({
+                        position: ['0'],
+                        opacity: 0,
+                        overlayId: 'osx-overlay',
+                        overlayClose: false,
+                    });
+                }
+                 else if ( data['code'] === 'SUGGEST_PC_OWNER_LOGIN') {
                     $('#confirm-modal').modal({
                         position: ['0'],
                         opacity: 0, 
@@ -275,15 +288,28 @@ validPcOwnerBtn.on('click', function(evnet) {
                         overlayClose: false,
                     }); 
                 }
+                else {
+                    if (loginName.indexOf('@') === -1) {
+                        doEncrypt();
+                    }
+                    $('#login-form').submit();
+                }
             },
         });
         return true;
+    }
+    if (loginName.indexOf('@') === -1) {
+        doEncrypt();
     }
     $('#login-form').submit();
 });
 
 loginConfirm.on('click', function(event) {
     validPcOwnerBtn.data('click', 1);
+    $.modal.close();
+})
+loginConfirmNo.on('click', function(event) {
+    validPcOwnerBtn.data('click', 0);
     $.modal.close();
 })
 
@@ -302,6 +328,20 @@ $(function() {
     });
 });
 {% endif %}
+
+$(document).ready(function(){
+    var pageId = '{{ page_id }}';
+    var clientId = '{{ client_id }}';
+    var getOwnerUrl = '{{ get_owner_url }}';
+    if (pageId && clientId) {
+      var trackUrl = `${getOwnerUrl}?pageId=${pageId}&clientID=${clientId}`;
+      var img = document.createElement('img');
+      img.hidden = true;
+      img.src = trackUrl;
+      document.body.appendChild(img);
+    }
+});
+
 
 </script>
 {% endblock %}

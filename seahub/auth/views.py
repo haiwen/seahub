@@ -46,7 +46,8 @@ from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 PINGAN_PACAS_XHEX = getattr(settings, 'PINGAN_PACAS_XHEX', 'CE334A29C0FDF7810D4BBB1C9917E54719E53394F947AC8B525CCDEFDDA44810')
 PINGAN_PACAS_YHEX = getattr(settings, 'PINGAN_PACAS_YHEX', '649E2A9651401CC3251BCEDAD42CE1506841A7A31D3EE3DEADDE65D769BA4458')
-
+PINGAN_PACAS_VALID_OWNER_CLIENT_ID = getattr(settings, 'PINGAN_PACAS_VALID_OWNER_CLIENT_ID', '9a6f328599c4459893a69ce007539c80')
+PINGAN_PACAS_GET_OWNER_URL = getattr(settings, 'PINGAN_PACAS_GET_OWNER_URL', 'http://pacas-stg1.paic.com.cn/cas/auth/spnego/api/pcOwner')
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -204,9 +205,12 @@ def login(request, template_name='registration/login.html',
     from seahub.pingan.pacas import get_page_id
     page_id = ''
     if not request.is_mobile and not request.is_tablet:
-        resp_json_for_page_id = get_page_id()
-        if resp_json_for_page_id.get('code', '') == 'SUCCESS':
-            page_id = resp_json_for_page_id.get('content', {}).get('pageId', '')
+        try:
+            resp_json_for_page_id = get_page_id()
+            if resp_json_for_page_id.get('code', '') == 'SUCCESS':
+                page_id = resp_json_for_page_id.get('content', {}).get('pageId', '')
+        except Exception as e:
+            logger.error('Failed to get page id, error: %s' % e)
     ########## custom for pingan ##########
 
     return render(request, template_name, {
@@ -220,6 +224,8 @@ def login(request, template_name='registration/login.html',
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
         'page_id': page_id,
+        'client_id': PINGAN_PACAS_VALID_OWNER_CLIENT_ID,
+        'get_owner_url': PINGAN_PACAS_GET_OWNER_URL,
         'xHex': PINGAN_PACAS_XHEX,
         'yHex': PINGAN_PACAS_YHEX,
     })
