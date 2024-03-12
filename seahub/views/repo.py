@@ -388,7 +388,7 @@ def view_shared_upload_link(request, uploadlink):
         raise Http404
 
     if repo.encrypted or \
-            seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
+            seafile_api.check_permission_by_path(repo_id, path, username) != 'rw':
         return render_error(request, _('Permission denied'))
 
     uploadlink.view_cnt = F('view_cnt') + 1
