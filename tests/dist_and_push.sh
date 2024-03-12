@@ -17,7 +17,7 @@ set +x
 function commit_dist_files() {
     echo 'commit seahub'
     git checkout -b dist-$GITHUB_BRANCH
-    git add -u . && git add -A media/assets && git add -A static/scripts && git add -A frontend && git add -A locale
+    git add -u . && git add -A media/assets && git add -A static/scripts && git add -A frontend && git add -A locale && git add -A seahub/help/locale && git add -A seahub/trusted_ip/locale
     git config --global user.email "github_actions@seafile.com"
     git config --global user.name "GitHub Actions CI"
     git commit -m "[dist][CI SKIP] GitHub Actions CI build: #$GITHUB_BUILD_NUMBER, based on commit $GITHUB_SHA." -m "$GITHUB_COMMIT_MESSAGE"
