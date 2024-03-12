@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from constance import config
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -8,10 +9,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import gettext as _
 
-from seahub.utils import is_valid_email
+from seahub.utils import is_valid_email, is_user_password_strong
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.base.accounts import User as SeafileUser
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
@@ -19,6 +21,7 @@ from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMA
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
 
 class User(APIView):
     """ Query/update user info of myself.
@@ -88,7 +91,7 @@ class User(APIView):
         # argument check for contact_email
         contact_email = request.data.get("contact_email", None)
         if contact_email:
-            
+
             if not ENABLE_USER_SET_CONTACT_EMAIL:
                 error_msg = _('Feature disabled.')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -138,3 +141,48 @@ class User(APIView):
         # get user info and return
         info = self._get_user_info(email)
         return Response(info)
+
+
+class UserResetLoginPassword(APIView):
+    """ Update user login password.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+
+        old_password = request.data.get("old_password", None)
+        if not old_password:
+            error_msg = _('Please provide old password')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_password = request.data.get("new_password", None)
+        if not new_password:
+            error_msg = _('Please provide new password')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if config.USER_STRONG_PASSWORD_REQUIRED and \
+                not is_user_password_strong(new_password):
+
+            password_length = config.USER_PASSWORD_MIN_LENGTH
+            character_types = config.USER_PASSWORD_STRENGTH_LEVEL
+
+            error_msg = _(f"New password should have at least {password_length} characters, include {character_types} types or more of these: letters(case sensitive), numbers, and symbols")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        try:
+            user = SeafileUser.objects.get(email=username)
+        except SeafileUser.DoesNotExist:
+            error_msg = f'User {username} not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not user.check_password(old_password):
+            error_msg = _('Old password is not correct')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'success': True})
