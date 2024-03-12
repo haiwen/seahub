@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2023
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2024
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-05 16:23+0800\n"
+"POT-Creation-Date: 2024-03-11 10:40+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2023\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2024\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgid "Used:"
 msgstr "사용함:"
 
 #: frontend/src/components/common/account.js:165
-#: frontend/src/components/search/ai-search.js:651
+#: frontend/src/components/search/ai-search.js:661
 #: frontend/src/pages/groups/group-view.js:470
 #: frontend/src/pages/groups/group-view.js:476
 #: frontend/src/pages/org-admin/side-panel.js:56
@@ -78,116 +78,136 @@ msgstr "고객 포털"
 msgid "Log out"
 msgstr "로그아웃"
 
-#: frontend/src/components/common/notice-item.js:42
+#: frontend/src/components/common/notice-item.js:44
 msgid "User {user_link} has added you to {group_link}"
 msgstr "{group_link} 그룹에 {user_link} 사용자를 추가했습니다."
 
-#: frontend/src/components/common/notice-item.js:65
+#: frontend/src/components/common/notice-item.js:67
 msgid "{share_from} has shared a library named {repo_link} to you."
 msgstr "{share_from} 님께서 {repo_link} 라이브러리를 공유했습니다."
 
-#: frontend/src/components/common/notice-item.js:67
+#: frontend/src/components/common/notice-item.js:69
 msgid "{share_from} has shared a folder named {repo_link} to you."
 msgstr "{share_from} 님께서 {repo_link} 폴더를 공유했습니다."
 
-#: frontend/src/components/common/notice-item.js:98
+#: frontend/src/components/common/notice-item.js:95
+msgid ""
+"{share_from} has changed the permission of library {repo_link} to "
+"{permission}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:97
+msgid ""
+"{share_from} has changed the permission of folder {repo_link} to "
+"{permission}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:122
+msgid "{share_from} has cancelled the sharing of library {repo_name}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:124
+msgid "{share_from} has cancelled the sharing of folder {repo_name}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:150
 msgid ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
 msgstr "{share_from} 님께서 {repo_link} 라이브러리를 {group_link} 그룹에 공유했습니다."
 
-#: frontend/src/components/common/notice-item.js:100
+#: frontend/src/components/common/notice-item.js:152
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
 msgstr "{share_from} 님께서 {repo_link} 폴더를 {group_link} 그룹에 공유했습니다."
 
-#: frontend/src/components/common/notice-item.js:126
+#: frontend/src/components/common/notice-item.js:178
 msgid "{user} has transfered a library named {repo_link} to you."
 msgstr "{user} 님께서 {repo_link} 라이브러리를 전송했습니다."
 
-#: frontend/src/components/common/notice-item.js:182
+#: frontend/src/components/common/notice-item.js:234
 msgid "{from_user} has sent you a request for {draft_link}."
 msgstr "{from_user} 님께서 {draft_link} 초안에 대한 요청을 보냈습니다."
 
-#: frontend/src/components/common/notice-item.js:183
+#: frontend/src/components/common/notice-item.js:235
 msgid "Draft"
 msgstr "초안"
 
-#: frontend/src/components/common/notice-item.js:214
+#: frontend/src/components/common/notice-item.js:266
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {fileName} 파일을 {libraryName} 라이브러리에 만들었습니다."
 
-#: frontend/src/components/common/notice-item.js:214
+#: frontend/src/components/common/notice-item.js:266
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user}님 께서 {fileName} 파일 및 기타 파일 {fileCount}개를 {libraryName} 라이브러리에 만들었습니다."
 
-#: frontend/src/components/common/notice-item.js:217
+#: frontend/src/components/common/notice-item.js:269
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {fileName} 파일을 {libraryName} 라이브러리에서 삭제했습니다."
 
-#: frontend/src/components/common/notice-item.js:217
+#: frontend/src/components/common/notice-item.js:269
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user}님 께서 {fileName} 파일 및 기타 파일 {fileCount}개를 {libraryName} 라이브러리에서 삭제했습니다."
 
-#: frontend/src/components/common/notice-item.js:221
+#: frontend/src/components/common/notice-item.js:273
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {fileName} 파일을 {libraryName} 라이브러리에 복원했습니다."
 
-#: frontend/src/components/common/notice-item.js:224
+#: frontend/src/components/common/notice-item.js:276
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {oldFileName} 파일을 {fileName} 파일 이름으로 {libraryName} 라이브러리에서 바꾸었습니다."
 
-#: frontend/src/components/common/notice-item.js:228
+#: frontend/src/components/common/notice-item.js:280
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {fileName} 파일을 {libraryName} 라이브러리에 이동했습니다."
 
-#: frontend/src/components/common/notice-item.js:228
+#: frontend/src/components/common/notice-item.js:280
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user}님 께서 {fileName} 파일 및 기타 파일 {fileCount}개를 {libraryName} 라이브러리에 이동했습니다."
 
-#: frontend/src/components/common/notice-item.js:231
+#: frontend/src/components/common/notice-item.js:283
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr "{user}님 께서 {fileName} 파일을 {libraryName} 라이브러리에서 업데이트했습니다."
 
-#: frontend/src/components/common/notice-item.js:243
+#: frontend/src/components/common/notice-item.js:295
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더를 {libraryName} 라이브러리에 만들었습니다."
 
-#: frontend/src/components/common/notice-item.js:243
+#: frontend/src/components/common/notice-item.js:295
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더 및 기타 폴더 {folderCount}개를 {libraryName} 라이브러리에 만들었습니다."
 
-#: frontend/src/components/common/notice-item.js:246
+#: frontend/src/components/common/notice-item.js:298
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더를 {libraryName} 라이브러리에서 삭제했습니다."
 
-#: frontend/src/components/common/notice-item.js:246
+#: frontend/src/components/common/notice-item.js:298
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더 및 기타 폴더 {folderCount}개를 {libraryName} 라이브러리에서 삭제했습니다."
 
-#: frontend/src/components/common/notice-item.js:250
+#: frontend/src/components/common/notice-item.js:302
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더를 {libraryName} 라이브러리에 복원했습니다."
 
-#: frontend/src/components/common/notice-item.js:253
+#: frontend/src/components/common/notice-item.js:305
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
 msgstr "{user}님 께서 {oldFolderName} 폴더를 {folderName} 폴더 이름으로 {libraryName} 라이브러리에서 바꾸었습니다."
 
-#: frontend/src/components/common/notice-item.js:257
+#: frontend/src/components/common/notice-item.js:309
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr "{user}님 께서 {folderName} 폴더를 {libraryName} 라이브러리에 이동했습니다."
 
-#: frontend/src/components/common/notice-item.js:257
+#: frontend/src/components/common/notice-item.js:309
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -201,15 +221,15 @@ msgstr "알림"
 
 #: frontend/src/components/common/notification.js:103
 msgid "Notification"
-msgstr ""
+msgstr "알림"
 
 #: frontend/src/components/common/notification.js:104
 msgid "Mark all as read"
-msgstr ""
+msgstr "모두 읽음으로 표시"
 
 #: frontend/src/components/common/notification.js:105
 msgid "View all notifications"
-msgstr ""
+msgstr "모든 알림 보기"
 
 #: frontend/src/components/common/select/no-group-message.js:7
 msgid "Group not found"
@@ -233,7 +253,7 @@ msgstr "파일을 업로드하고 있습니다. 이 페이지를 정말로 벗�
 #: frontend/src/pages/share-admin/libraries.js:360
 #: frontend/src/pages/sys-admin/departments/department.js:45
 #: frontend/src/pages/sys-admin/groups/group-nav.js:17
-#: frontend/src/pages/sys-admin/info.js:112
+#: frontend/src/pages/sys-admin/info.js:116
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:20
 #: frontend/src/pages/sys-admin/repos/search-repos.js:140
 #: frontend/src/pages/sys-admin/side-panel.js:90
@@ -244,10 +264,10 @@ msgstr "라이브러리"
 #: frontend/src/components/cur-dir-path/dir-tool.js:77
 #: frontend/src/components/cur-dir-path/dir-tool.js:98
 #: frontend/src/components/cur-dir-path/dir-tool.js:99
-#: frontend/src/components/dirent-detail/detail-list-view.js:123
+#: frontend/src/components/dirent-detail/detail-list-view.js:124
 #: frontend/src/components/dirent-detail/file-details.js:89
 #: frontend/src/components/toolbar/view-file-toolbar.js:105
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:48
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:78
 #: frontend/src/utils/text-translation.js:35
 msgid "Tags"
 msgstr "태그"
@@ -343,7 +363,7 @@ msgstr "연락처 정보"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:142
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:31
 #: frontend/src/pages/sys-admin/abuse-reports.js:91
-#: frontend/src/repo-history.js:137 frontend/src/repo-history.js:144
+#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
 msgid "Description"
 msgstr "설명"
 
@@ -355,7 +375,7 @@ msgstr "설명"
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
 #: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/confirm-unlink-device.js:49
-#: frontend/src/components/dialog/copy-dirent-dialog.js:162
+#: frontend/src/components/dialog/copy-dirent-dialog.js:165
 #: frontend/src/components/dialog/create-file-dialog.js:179
 #: frontend/src/components/dialog/create-folder-dialog.js:99
 #: frontend/src/components/dialog/create-group-dialog.js:81
@@ -374,11 +394,11 @@ msgstr "설명"
 #: frontend/src/components/dialog/invite-people-dialog.js:121
 #: frontend/src/components/dialog/label-repo-state-dialog.js:88
 #: frontend/src/components/dialog/leave-group-dialog.js:32
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:150
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:151
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:123
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:273
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:253
-#: frontend/src/components/dialog/move-dirent-dialog.js:183
+#: frontend/src/components/dialog/move-dirent-dialog.js:185
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/org-add-member-dialog.js:68
 #: frontend/src/components/dialog/org-delete-department-dialog.js:42
@@ -414,7 +434,7 @@ msgstr "설명"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:59
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:143
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:104
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:95
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:51
@@ -423,7 +443,7 @@ msgstr "설명"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:47
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:60
-#: frontend/src/components/dialog/transfer-dialog.js:100
+#: frontend/src/components/dialog/transfer-dialog.js:104
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/view-link-dialog.js:37
 #: frontend/src/components/dialog/wiki-delete-dialog.js:25
@@ -446,10 +466,10 @@ msgstr "취소"
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:93
 #: frontend/src/components/dialog/add-reviewer-dialog.js:110
 #: frontend/src/components/dialog/add-reviewer-dialog.js:111
-#: frontend/src/components/dialog/change-repo-password-dialog.js:117
+#: frontend/src/components/dialog/change-repo-password-dialog.js:118
 #: frontend/src/components/dialog/clean-trash.js:77
 #: frontend/src/components/dialog/confirm-apply-folder-properties-dialog.js:56
-#: frontend/src/components/dialog/copy-dirent-dialog.js:163
+#: frontend/src/components/dialog/copy-dirent-dialog.js:166
 #: frontend/src/components/dialog/create-department-repo-dialog.js:95
 #: frontend/src/components/dialog/create-file-dialog.js:180
 #: frontend/src/components/dialog/create-folder-dialog.js:100
@@ -465,13 +485,13 @@ msgstr "취소"
 #: frontend/src/components/dialog/invite-people-dialog.js:122
 #: frontend/src/components/dialog/label-repo-state-dialog.js:89
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:151
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:152
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:124
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:274
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:326
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:254
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:306
-#: frontend/src/components/dialog/move-dirent-dialog.js:184
+#: frontend/src/components/dialog/move-dirent-dialog.js:186
 #: frontend/src/components/dialog/new-wiki-dialog.js:61
 #: frontend/src/components/dialog/org-add-admin-dialog.js:66
 #: frontend/src/components/dialog/org-add-department-dialog.js:86
@@ -515,7 +535,7 @@ msgstr "취소"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:90
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:57
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:145
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:105
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:96
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:52
@@ -525,7 +545,7 @@ msgstr "취소"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:268
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:255
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
-#: frontend/src/components/dialog/transfer-dialog.js:101
+#: frontend/src/components/dialog/transfer-dialog.js:105
 #: frontend/src/components/dialog/transfer-group-dialog.js:69
 #: frontend/src/components/dialog/wiki-select-dialog.js:99
 #: frontend/src/components/dialog/wiki-select-dialog.js:100
@@ -586,8 +606,8 @@ msgstr "사용자 검색"
 #: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:68
-#: frontend/src/components/search/ai-search.js:653
-#: frontend/src/components/search/ai-search.js:690
+#: frontend/src/components/search/ai-search.js:663
+#: frontend/src/components/search/ai-search.js:700
 #: frontend/src/components/search/search.js:497
 #: frontend/src/components/search/search.js:532
 #: frontend/src/components/system-notification.js:46
@@ -619,24 +639,24 @@ msgstr "새 암호가 일치하지 않습니다"
 msgid "Successfully changed library password."
 msgstr "라이브러리 암호를 성공적으로 바꾸었습니다."
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:102
+#: frontend/src/components/dialog/change-repo-password-dialog.js:98
 msgid "Change Password of Library {placeholder}"
 msgstr "{placeholder} 라이브러리의 암호 바꾸기"
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:107
+#: frontend/src/components/dialog/change-repo-password-dialog.js:108
 msgid "Old Password"
 msgstr "이전 암호"
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:109
+#: frontend/src/components/dialog/change-repo-password-dialog.js:110
 msgid "New Password"
 msgstr "새 암호"
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:109
+#: frontend/src/components/dialog/change-repo-password-dialog.js:110
 #: frontend/src/components/dialog/create-repo-dialog.js:240
 msgid "(at least {placeholder} characters)"
 msgstr "(최소 {placeholder} 문자)"
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:111
+#: frontend/src/components/dialog/change-repo-password-dialog.js:112
 msgid "New Password Again"
 msgstr "새 암호를 다시 입력하세요"
 
@@ -666,7 +686,7 @@ msgstr "지우기 성공."
 #: frontend/src/pages/share-admin/upload-links.js:306
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:197
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:400
-#: frontend/src/repo-folder-trash.js:204
+#: frontend/src/repo-folder-trash.js:207
 msgid "Clean"
 msgstr "지우기"
 
@@ -715,17 +735,17 @@ msgstr "수락"
 
 #: frontend/src/components/dialog/confirm-apply-folder-properties-dialog.js:31
 msgid "Successfully applied the properties."
-msgstr ""
+msgstr "속성 적용을 성공했습니다."
 
 #: frontend/src/components/dialog/confirm-apply-folder-properties-dialog.js:46
 msgid "Apply properties"
-msgstr ""
+msgstr "속성 적용"
 
 #: frontend/src/components/dialog/confirm-apply-folder-properties-dialog.js:50
 msgid ""
 "Are you sure you want to apply the properties to all the files inside the "
 "folder?"
-msgstr ""
+msgstr "폴더 내 모든 파일에 정말로 속성을 적용할까요?"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:27
 #: frontend/src/components/user-settings/delete-account.js:36
@@ -875,9 +895,9 @@ msgstr "이 라이브러리를 정말로 복원할까요?"
 #: frontend/src/pages/my-libs/my-libs-deleted.js:177
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:197
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:269
-#: frontend/src/repo-folder-trash.js:358 frontend/src/repo-folder-trash.js:368
-#: frontend/src/repo-snapshot.js:168 frontend/src/repo-snapshot.js:297
-#: frontend/src/repo-snapshot.js:306
+#: frontend/src/repo-folder-trash.js:361 frontend/src/repo-folder-trash.js:371
+#: frontend/src/repo-snapshot.js:170 frontend/src/repo-snapshot.js:299
+#: frontend/src/repo-snapshot.js:308
 msgid "Restore"
 msgstr "복원"
 
@@ -1041,7 +1061,7 @@ msgstr "새 부서 라이브러리"
 #: frontend/src/pages/sys-admin/users/user-links.js:49
 #: frontend/src/pages/sys-admin/users/user-repos.js:54
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:35
-#: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:198
+#: frontend/src/repo-folder-trash.js:239 frontend/src/repo-snapshot.js:200
 #: frontend/src/shared-dir-view.js:661
 msgid "Name"
 msgstr "이름"
@@ -1214,8 +1234,8 @@ msgstr "\"{name}\" 태그가 이미 있습니다."
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
 #: frontend/src/components/share-link-panel/link-creation.js:253
 #: frontend/src/components/share-link-panel/link-details.js:166
-#: frontend/src/repo-folder-trash.js:198 frontend/src/repo-history.js:109
-#: frontend/src/repo-snapshot.js:148
+#: frontend/src/repo-folder-trash.js:201 frontend/src/repo-history.js:112
+#: frontend/src/repo-snapshot.js:150
 msgid "Back"
 msgstr "뒤로"
 
@@ -1306,7 +1326,7 @@ msgstr "업로드"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:202
-#: frontend/src/repo-snapshot.js:307 frontend/src/shared-dir-view.js:769
+#: frontend/src/repo-snapshot.js:309 frontend/src/shared-dir-view.js:769
 #: frontend/src/shared-dir-view.js:796 frontend/src/shared-dir-view.js:844
 #: frontend/src/shared-dir-view.js:876 frontend/src/shared-dir-view.js:945
 #: frontend/src/shared-dir-view.js:963
@@ -1387,7 +1407,7 @@ msgstr "공유 링크 만들기"
 #: frontend/src/pages/sys-admin/users/user-info.js:91
 #: frontend/src/pages/sys-admin/users/users-content.js:502
 #: frontend/src/pages/wiki/main-panel.js:106
-#: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:303
+#: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:306
 msgid "Edit"
 msgstr "편집"
 
@@ -1448,7 +1468,7 @@ msgid "Select Tags"
 msgstr "태그 선택"
 
 #: frontend/src/components/dialog/edit-filetag-dialog.js:141
-#: frontend/src/components/popover/edit-filetag-popover.js:182
+#: frontend/src/components/popover/edit-filetag-popover.js:187
 #: frontend/src/components/popover/list-tag-popover.js:145
 msgid "Create a new tag"
 msgstr "새 태그 만들기"
@@ -1466,8 +1486,8 @@ msgid "Find an option"
 msgstr "옵션 찾기"
 
 #: frontend/src/components/dialog/extra-attributes-dialog/index.js:217
-#: frontend/src/components/dirent-detail/detail-list-view.js:92
-#: frontend/src/components/dirent-detail/detail-list-view.js:133
+#: frontend/src/components/dirent-detail/detail-list-view.js:93
+#: frontend/src/components/dirent-detail/detail-list-view.js:134
 msgid "Edit extra properties"
 msgstr "추가 속성 편집"
 
@@ -1755,36 +1775,33 @@ msgstr "암호는 한 시간동안만 서버에서 유지합니다."
 msgid "Successfully set library history."
 msgstr "라이브러리 기록 설정에 성공했습니다."
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:116
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:114
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:351
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:154
-#: frontend/src/pages/sys-admin/repos/repos.js:271
-msgid "History Setting"
-msgstr "기록 설정"
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:112
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:110
+msgid "{placeholder} History Setting"
+msgstr "{placeholder} 기록 설정"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:122
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:123
 msgid "Setting library history is disabled by Admin."
 msgstr "관리자가 라이브러리 기록 설정을 비활성화했습니다."
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:127
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:120
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:128
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:121
 msgid "Keep full history"
 msgstr "전체 이력 유지"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:131
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:132
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:125
 msgid "Don't keep history"
 msgstr "이력 유지하지 않음"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:135
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:128
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:136
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:129
 msgid "Only keep a period of history:"
 msgstr "특정 기간동안의 이력 유지:"
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:145
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:117
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:138
 #: frontend/src/components/set-link-expiration.js:89
 msgid "days"
 msgstr "일"
@@ -1817,13 +1834,13 @@ msgstr "사용자 권한"
 msgid "Group Permission"
 msgstr "그룹 권한"
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:69
 msgid "{placeholder} Folder Permission"
 msgstr "{placeholder} 폴더 사용 권한"
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
-msgid "Set {placeholder}'s permission"
-msgstr "{placeholder} 권한 설정"
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:69
+msgid "Set permission of {placeholder}"
+msgstr ""
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:186
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:169
@@ -1831,16 +1848,16 @@ msgstr "{placeholder} 권한 설정"
 #: frontend/src/components/dialog/zip-download-dialog.js:76
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:294
 #: frontend/src/pages/lib-content-view/lib-content-view.js:185
-#: frontend/src/pages/lib-content-view/lib-content-view.js:735
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:869
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1065
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1081
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1117
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1145
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1209
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1259
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
+#: frontend/src/pages/lib-content-view/lib-content-view.js:732
+#: frontend/src/pages/lib-content-view/lib-content-view.js:780
+#: frontend/src/pages/lib-content-view/lib-content-view.js:872
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1068
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1084
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1120
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1148
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1210
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1266
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1304
 #: frontend/src/pages/my-libs/my-libs-deleted.js:152
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:293
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:315
@@ -1850,7 +1867,7 @@ msgstr "{placeholder} 권한 설정"
 #: frontend/src/pages/shared-with-all/public-shared-view.js:106
 #: frontend/src/pages/sys-admin/abuse-reports.js:45
 #: frontend/src/pages/upload-link/file-uploader.js:437
-#: frontend/src/repo-folder-trash.js:136 frontend/src/repo-folder-trash.js:329
+#: frontend/src/repo-folder-trash.js:136 frontend/src/repo-folder-trash.js:332
 #: frontend/src/utils/utils.js:1194
 msgid "Error"
 msgstr "오류"
@@ -1861,7 +1878,7 @@ msgstr "오류"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:191
 #: frontend/src/pages/search/main-panel.js:82
 #: frontend/src/pages/sys-admin/abuse-reports.js:47
-#: frontend/src/repo-folder-trash.js:142 frontend/src/repo-folder-trash.js:331
+#: frontend/src/repo-folder-trash.js:142 frontend/src/repo-folder-trash.js:334
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/utils/utils.js:1197 frontend/src/view-file-document.js:76
@@ -1916,7 +1933,7 @@ msgstr "만든 파일"
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:48
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:53
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:48
-#: frontend/src/repo-history.js:138 frontend/src/repo-history.js:145
+#: frontend/src/repo-history.js:141 frontend/src/repo-history.js:148
 #: frontend/src/user-notifications.js:131
 #: frontend/src/user-notifications.js:135
 msgid "Time"
@@ -1967,8 +1984,8 @@ msgstr "소유자"
 #: frontend/src/components/dialog/search-file-dialog.js:95
 #: frontend/src/components/dialog/share-repo-dialog.js:129
 #: frontend/src/components/dialog/wiki-select-dialog.js:79
-#: frontend/src/components/dirent-detail/detail-list-view.js:86
-#: frontend/src/components/dirent-detail/detail-list-view.js:121
+#: frontend/src/components/dirent-detail/detail-list-view.js:87
+#: frontend/src/components/dirent-detail/detail-list-view.js:122
 #: frontend/src/components/dirent-detail/file-details.js:87
 #: frontend/src/components/dirent-detail/lib-details.js:70
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:630
@@ -1976,7 +1993,7 @@ msgstr "소유자"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:125
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/components/wiki-list-view/wiki-list-view.js:46
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:46
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:76
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:94
 #: frontend/src/pages/org-admin/org-user-repos.js:81
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
@@ -1997,14 +2014,14 @@ msgstr "태그 표시한 파일"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
 #: frontend/src/components/dialog/search-file-dialog.js:94
-#: frontend/src/components/dirent-detail/detail-list-view.js:119
+#: frontend/src/components/dirent-detail/detail-list-view.js:120
 #: frontend/src/components/dirent-detail/file-details.js:85
 #: frontend/src/components/dirent-detail/lib-details.js:69
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:629
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:124
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:44
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:74
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
 #: frontend/src/pages/org-admin/org-department-item.js:327
 #: frontend/src/pages/org-admin/org-group-repos.js:84
@@ -2020,7 +2037,7 @@ msgstr "태그 표시한 파일"
 #: frontend/src/pages/sys-admin/repos/repos.js:82
 #: frontend/src/pages/sys-admin/repos/repos.js:84
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:37
-#: frontend/src/repo-folder-trash.js:238 frontend/src/repo-snapshot.js:199
+#: frontend/src/repo-folder-trash.js:241 frontend/src/repo-snapshot.js:201
 #: frontend/src/shared-dir-view.js:663
 msgid "Size"
 msgstr "크기"
@@ -2135,7 +2152,7 @@ msgstr "관리자 추가"
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:59
 msgid "Select a user as admin"
-msgstr ""
+msgstr "관리자 사용자 선택"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:66
@@ -2193,13 +2210,13 @@ msgstr "암호 확인"
 #: frontend/src/pages/org-admin/org-users-users.js:274
 #: frontend/src/pages/org-admin/org-users-users.js:275
 msgid "Invite users"
-msgstr ""
+msgstr "사용자 초대"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:63
 msgid ""
 "You can enter multiple emails. An invitation link will be sent to each of "
 "them."
-msgstr ""
+msgstr "여러 전자메일 주소를 입력할 수 있습니다. 초대 링크는 각 사용자에게 보냅니다."
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:33
 #: frontend/src/components/dialog/org-delete-member-dialog.js:36
@@ -2328,35 +2345,31 @@ msgstr "{placeholder} API 토큰"
 
 #: frontend/src/components/dialog/repo-seatable-integration-dialog.js:153
 msgid "{placeholder} SeaTable integration"
+msgstr "{placeholder} SeaTable 통합"
+
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:52
+msgid "{placeholder} Share Admin"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:56
-#: frontend/src/components/main-side-nav.js:278
-#: frontend/src/components/main-side-nav.js:280
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:354
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:178
-msgid "Share Admin"
-msgstr "공유 관리"
-
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:65
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:67
 #: frontend/src/pages/share-admin/share-links.js:554
 #: frontend/src/pages/share-admin/upload-links.js:286
 #: frontend/src/pages/sys-admin/links/links-nav.js:15
 msgid "Share Links"
 msgstr "링크 공유"
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:72
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:74
 #: frontend/src/pages/share-admin/share-links.js:557
 #: frontend/src/pages/share-admin/upload-links.js:288
 #: frontend/src/pages/sys-admin/links/links-nav.js:16
 msgid "Upload Links"
 msgstr "업로드 링크"
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:78
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:80
 msgid "User Shares"
 msgstr "사용자 공유"
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:83
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:85
 msgid "Group Shares"
 msgstr "그룹 공유"
 
@@ -2588,7 +2601,7 @@ msgstr "항목 1개 삭제에 성공했습니다."
 
 #: frontend/src/components/dialog/share-to-other-server.js:231
 msgid "Select a server"
-msgstr ""
+msgstr "서버 선택"
 
 #: frontend/src/components/dialog/share-to-user.js:239
 #: frontend/src/components/dialog/share-to-user.js:265
@@ -2732,7 +2745,7 @@ msgstr "(이 칸을 비워두면, 소유자를 관리자로 설정합니다)"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:80
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:81
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:51
-#: frontend/src/components/dialog/transfer-dialog.js:79
+#: frontend/src/components/dialog/transfer-dialog.js:83
 msgid "Select a user"
 msgstr "사용자 선택"
 
@@ -2757,7 +2770,7 @@ msgid "End date"
 msgstr "마감 일자"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
-#: frontend/src/components/dialog/transfer-dialog.js:71
+#: frontend/src/components/dialog/transfer-dialog.js:69
 msgid "Transfer Library {library_name}"
 msgstr "{library_name} 라이브러리 전송"
 
@@ -2777,15 +2790,15 @@ msgstr "이름 설정"
 msgid "Terms"
 msgstr "조항"
 
-#: frontend/src/components/dialog/transfer-dialog.js:87
+#: frontend/src/components/dialog/transfer-dialog.js:91
 msgid "Select a department"
 msgstr "부서를 선택하십시오"
 
-#: frontend/src/components/dialog/transfer-dialog.js:95
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to department"
 msgstr "부서로 전송"
 
-#: frontend/src/components/dialog/transfer-dialog.js:95
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to user"
 msgstr "사용자로 전송"
 
@@ -2846,7 +2859,7 @@ msgstr "라이브러리 공개"
 
 #: frontend/src/components/dialog/zip-download-dialog.js:70
 msgid "Failed to download. The total size of the files exceeded the limit."
-msgstr ""
+msgstr "다운로드에 실패했습니다. 파일의 총 용량이 제한 용량을 넘었습니다."
 
 #: frontend/src/components/dialog/zip-download-dialog.js:150
 msgid "Packaging..."
@@ -2864,23 +2877,23 @@ msgstr "이 파일은 초안 단계에 있습니다."
 msgid "View Draft"
 msgstr "초안 보기"
 
-#: frontend/src/components/dirent-detail/detail-list-view.js:85
-#: frontend/src/components/dirent-detail/detail-list-view.js:120
+#: frontend/src/components/dirent-detail/detail-list-view.js:86
+#: frontend/src/components/dirent-detail/detail-list-view.js:121
 #: frontend/src/components/dirent-detail/file-details.js:86
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:45
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:75
 msgid "Location"
 msgstr "위치"
 
-#: frontend/src/components/dirent-detail/detail-list-view.js:101
-#: frontend/src/components/dirent-detail/detail-list-view.js:103
+#: frontend/src/components/dirent-detail/detail-list-view.js:102
+#: frontend/src/components/dirent-detail/detail-list-view.js:104
 msgid "Apply properties to files inside the folder"
-msgstr ""
+msgstr "폴더 내 파일에 속성 적용"
 
 #: frontend/src/components/dirent-detail/lib-details.js:68
 #: frontend/src/components/main-side-nav.js:181
 #: frontend/src/pages/org-admin/org-libraries.js:149
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:161
-#: frontend/src/pages/sys-admin/info.js:112
+#: frontend/src/pages/sys-admin/info.js:116
 #: frontend/src/pages/sys-admin/repos/repos.js:81
 #: frontend/src/pages/sys-admin/repos/repos.js:84
 msgid "Files"
@@ -2889,7 +2902,7 @@ msgstr "파일"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:210
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:730
 msgid "Frozen by {name}"
-msgstr ""
+msgstr "{name}님이 잠금"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:210
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:730
@@ -2899,7 +2912,7 @@ msgstr "{name}님이 잠금"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:214
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:736
 msgid "freezed"
-msgstr ""
+msgstr "잠김"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:214
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:736
@@ -2965,10 +2978,10 @@ msgid "Library"
 msgstr "라이브러리"
 
 #: frontend/src/components/file-chooser/file-chooser.js:286
-#: frontend/src/components/search/ai-search.js:452
+#: frontend/src/components/search/ai-search.js:453
 #: frontend/src/components/search/wiki-search.js:193
 msgid "No results matching"
-msgstr ""
+msgstr "일치하는 결과 없음"
 
 #: frontend/src/components/file-chooser/file-chooser.js:382
 #: frontend/src/components/file-chooser/file-chooser.js:426
@@ -3144,7 +3157,7 @@ msgstr "상위 폴더 열기"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:342
 #: frontend/src/pages/org-admin/org-logs-file-update.js:260
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
-#: frontend/src/repo-history.js:289 frontend/src/utils/text-translation.js:21
+#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:21
 msgid "Details"
 msgstr "상세"
 
@@ -3188,7 +3201,7 @@ msgstr "구성원"
 
 #: frontend/src/components/group-members.js:96
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:290
-#: frontend/src/pages/lib-content-view/lib-content-view.js:857
+#: frontend/src/pages/lib-content-view/lib-content-view.js:860
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:311
 #: frontend/src/pages/org-admin/org-group-repos.js:146
 #: frontend/src/pages/org-admin/org-user-repos.js:142
@@ -3302,6 +3315,13 @@ msgstr "공개 라이브러리"
 msgid "Linked Devices"
 msgstr "연결 장치"
 
+#: frontend/src/components/main-side-nav.js:278
+#: frontend/src/components/main-side-nav.js:280
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:354
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:178
+msgid "Share Admin"
+msgstr "공유 관리"
+
 #: frontend/src/components/more.js:14
 msgid "show more"
 msgstr "더 보기"
@@ -3341,52 +3361,52 @@ msgid ""
 "right}"
 msgstr "권한 거부함. {placeholder-left}다시 로그인{placeholder-right}해주세요."
 
-#: frontend/src/components/popover/edit-filetag-popover.js:137
+#: frontend/src/components/popover/edit-filetag-popover.js:141
 msgid "No tags"
 msgstr "태그 없음"
 
-#: frontend/src/components/popover/edit-filetag-popover.js:141
+#: frontend/src/components/popover/edit-filetag-popover.js:145
 msgid "Tag not found"
-msgstr ""
+msgstr "태그가 없습니다"
 
-#: frontend/src/components/popover/edit-filetag-popover.js:155
+#: frontend/src/components/popover/edit-filetag-popover.js:159
 msgid "Find a tag"
-msgstr ""
+msgstr "태그 찾기"
 
 #: frontend/src/components/popover/tag-list-footer.js:36
 msgid "Please select a file"
-msgstr ""
+msgstr "파일을 선택하세요"
 
 #: frontend/src/components/popover/tag-list-footer.js:71
 #: frontend/src/components/popover/tag-list-footer.js:75
 msgid "The imported tags are invalid"
-msgstr ""
+msgstr "가져온 태그가 적절하지 않습니다"
 
 #: frontend/src/components/popover/tag-list-footer.js:80
 msgid "The imported tag already exists"
-msgstr ""
+msgstr "가져온 태그가 이미 있습니다"
 
 #: frontend/src/components/popover/tag-list-footer.js:84
 msgid "Tags imported"
-msgstr ""
+msgstr "태그를 가져왔습니다"
 
 #: frontend/src/components/popover/tag-list-footer.js:99
 msgid "Failed to import tags. Please reupload."
-msgstr ""
+msgstr "태그 가져오기를 실패했습니다. 다시 업로드하세요."
 
 #: frontend/src/components/popover/tag-list-footer.js:120
 msgid ""
 "Use the import/export function to transfer tags quickly to another library. "
 "(The export is in JSON format.)"
-msgstr ""
+msgstr "태그를 다른 라이브러리로 보내려면 가져오기/내보내기 기능을 사용하세요. (내보내기는 JSON 형식입니다.)"
 
 #: frontend/src/components/popover/tag-list-footer.js:129
 msgid "Import tags"
-msgstr ""
+msgstr "태그 가져오기"
 
 #: frontend/src/components/popover/tag-list-footer.js:132
 msgid "Export tags"
-msgstr ""
+msgstr " 태그 내보내기"
 
 #: frontend/src/components/repo-monitored-icon.js:24
 msgid "You are watching file changes of this library."
@@ -3399,23 +3419,23 @@ msgstr "최종 수정일"
 
 #: frontend/src/components/search/ai-search-ask.js:123
 msgid "Please create index first."
-msgstr ""
+msgstr "색인을 먼저 만드세요."
 
 #: frontend/src/components/search/ai-search-ask.js:127
 msgid "Indexing, please try again later."
-msgstr ""
+msgstr "색인 만드는 중. 다음에 다시 시도하세요."
 
 #: frontend/src/components/search/ai-search-ask.js:165
 msgid "Return"
-msgstr ""
+msgstr "돌아가기"
 
 #: frontend/src/components/search/ai-search-ask.js:206
 msgid "Ask a question"
-msgstr ""
+msgstr "질문하기"
 
 #: frontend/src/components/search/ai-search-widgets/ai-search-help.js:10
 msgid "Is this answer helpful to you?"
-msgstr ""
+msgstr "이 답변이 도움이 되나요?"
 
 #: frontend/src/components/search/ai-search-widgets/ai-search-help.js:14
 msgid "Yes"
@@ -3427,100 +3447,100 @@ msgstr "아니요"
 
 #: frontend/src/components/search/ai-search-widgets/ai-search-refrences.js:10
 msgid "Reference documents"
-msgstr ""
+msgstr "참조 문서"
 
-#: frontend/src/components/search/ai-search.js:386
+#: frontend/src/components/search/ai-search.js:387
 #: frontend/src/components/search/search.js:433
 msgid "Search results visited recently"
-msgstr ""
+msgstr "최근 방문한 결과 검색"
 
-#: frontend/src/components/search/ai-search.js:435
+#: frontend/src/components/search/ai-search.js:436
 #: frontend/src/components/search/search.js:413
 msgid "Type characters to start search"
-msgstr ""
+msgstr "검색을 시작하려면 문자를 입력하세요"
 
-#: frontend/src/components/search/ai-search.js:438
+#: frontend/src/components/search/ai-search.js:439
 msgid "Type more characters to start search"
-msgstr ""
+msgstr "검색을 시작하려면 더 많은 문자를 입력하세요"
 
-#: frontend/src/components/search/ai-search.js:449
-#: frontend/src/components/search/ai-search.js:466
+#: frontend/src/components/search/ai-search.js:450
+#: frontend/src/components/search/ai-search.js:467
 msgid "Ask AI"
-msgstr ""
+msgstr "AI에 질문하기"
 
-#: frontend/src/components/search/ai-search.js:528
+#: frontend/src/components/search/ai-search.js:529
 msgid ""
 "Indexing the library. Semantic search will be available within a few "
 "minutes."
-msgstr ""
+msgstr "라이브러리 색인을 만드는 중입니다. 잠시 후 의미 검색을 사용할 수 있습니다."
 
-#: frontend/src/components/search/ai-search.js:539
+#: frontend/src/components/search/ai-search.js:540
 msgid "Successfully turned it off"
-msgstr ""
+msgstr "검색 기능 끄기를 성공했습니다"
 
-#: frontend/src/components/search/ai-search.js:557
-#: frontend/src/components/search/ai-search.js:581
+#: frontend/src/components/search/ai-search.js:558
+#: frontend/src/components/search/ai-search.js:582
 msgid "Turn on semantic search for this library"
-msgstr ""
+msgstr "라이브러리 의미 검색 켜기"
 
-#: frontend/src/components/search/ai-search.js:569
+#: frontend/src/components/search/ai-search.js:570
 msgid "Turn off semantic search for this library"
-msgstr ""
+msgstr "라이브러리 의미 검색 끄기"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:75
 msgid "SeaTable base name is required"
-msgstr ""
+msgstr "SeaTable 베이스 이름이 필요합니다"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:78
 msgid "SeaTable server URL is required"
-msgstr ""
+msgstr "SeaTable 서버 URL 주소가 필요합니다"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:81
 msgid "SeaTable API token is required"
-msgstr ""
+msgstr "SeaTable API 토큰이 필요합니다"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:106
 msgid "URL or SeaTable API token is invalid"
-msgstr ""
+msgstr "URL 주소 또는 SeaTable API 토큰이 부적절합니다"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:128
 msgid "Add SeaTable Integration"
-msgstr ""
+msgstr "SeaTable 통합 추가"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:134
 msgid "Check"
-msgstr ""
+msgstr "검사"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:139
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:32
 msgid "SeaTable base name"
-msgstr ""
+msgstr "SeaTable 베이스 이름"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:143
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:33
 msgid "SeaTable server URL"
-msgstr ""
+msgstr "SeaTable 서버 URL 주소"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:147
 msgid "SeaTable API token"
-msgstr ""
+msgstr "SeaTable API 토큰"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:160
 msgid "Successfully connected to SeaTable"
-msgstr ""
+msgstr "SeaTable 연결을 성공했습니다"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/delete-seatables-dialog.js:19
 msgid "Delete SeaTable base"
-msgstr ""
+msgstr "SeaTable 베이스 삭제"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/delete-seatables-dialog.js:21
 msgid "Are you sure to delete SeaTable {accountName}?"
-msgstr ""
+msgstr "SeaTable {accountName}을(를) 정말로 삭제할까요?"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:22
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:23
 msgid "No SeaTable bases"
-msgstr ""
+msgstr "SeaTable 베이스 없음"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:64
 #: frontend/src/pages/sys-admin/terms-and-conditions/terms-and-conditions.js:85
@@ -3679,7 +3699,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "파일 다운로드를 비활성화했습니다: 소유자의 공유 링크 트래픽이 사용 중입니다."
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:122
-#: frontend/src/repo-folder-trash.js:202 frontend/src/repo-snapshot.js:166
+#: frontend/src/repo-folder-trash.js:205 frontend/src/repo-snapshot.js:168
 #: frontend/src/shared-dir-view.js:449
 msgid "Current path: "
 msgstr "현재 경로: "
@@ -3735,6 +3755,12 @@ msgstr "폴더 권한"
 msgid "Unshare"
 msgstr "공유 해제"
 
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:351
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:154
+#: frontend/src/pages/sys-admin/repos/repos.js:271
+msgid "History Setting"
+msgstr "기록 설정"
+
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:357
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:157
 msgid "Change Password"
@@ -3771,12 +3797,12 @@ msgstr "자동 삭제 설정"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:375
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:184
 msgid "Advanced"
-msgstr ""
+msgstr "고급 설정"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:378
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:187
 msgid "SeaTable integration"
-msgstr ""
+msgstr "SeaTable 통합"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:616
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:161
@@ -3810,7 +3836,7 @@ msgstr "클라이언트"
 #: frontend/src/pages/wiki/main-panel.js:95
 #: frontend/src/pages/wiki/main-panel.js:112
 msgid "Search files"
-msgstr ""
+msgstr "파일 검색"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:192
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:54
@@ -3861,7 +3887,7 @@ msgstr "이동"
 #: frontend/src/components/toolbar/view-file-toolbar.js:99
 #: frontend/src/file-history-old.js:268
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:55
-#: frontend/src/repo-folder-trash.js:280
+#: frontend/src/repo-folder-trash.js:283
 msgid "More"
 msgstr "좀 더 보기"
 
@@ -4109,8 +4135,8 @@ msgstr "암호 삭제"
 msgid "History Versions"
 msgstr "기록 버전"
 
-#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:139
-#: frontend/src/repo-history.js:146
+#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:142
+#: frontend/src/repo-history.js:149
 msgid "Modifier"
 msgstr "수정 구성원"
 
@@ -4216,7 +4242,7 @@ msgstr "폴더를 이동했습니다"
 
 #: frontend/src/pages/dashboard/content.js:25
 msgid "No more activities"
-msgstr ""
+msgstr "더 이상의 활동이 없습니다"
 
 #: frontend/src/pages/dashboard/content.js:33
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:46
@@ -4228,30 +4254,30 @@ msgstr "운영"
 #: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:88
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
-#: frontend/src/repo-folder-trash.js:363 frontend/src/repo-folder-trash.js:419
-#: frontend/src/repo-snapshot.js:302
+#: frontend/src/repo-folder-trash.js:366 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:304
 msgid "File"
 msgstr "파일"
 
 #: frontend/src/pages/dashboard/files-activities.js:247
 msgid "All Activities"
-msgstr ""
+msgstr "모든 활동"
 
 #: frontend/src/pages/dashboard/files-activities.js:250
 msgid "My Activities"
-msgstr ""
+msgstr "내 활동"
 
 #: frontend/src/pages/dashboard/user-selector.js:78
 msgid "Modified by:"
-msgstr ""
+msgstr "수정 사용자:"
 
 #: frontend/src/pages/dashboard/user-selector.js:81
 msgid "Modified by"
-msgstr ""
+msgstr "수정 사용자"
 
 #: frontend/src/pages/dashboard/user-selector.js:100
 msgid "Find modifiers"
-msgstr ""
+msgstr "수정 사용자 찾기"
 
 #: frontend/src/pages/drafts/draft-content.js:44
 msgid "Successfully published draft %(draft)s."
@@ -4324,7 +4350,7 @@ msgstr "위에 있는 \"새 라이브러리\" 단추를 눌러 라이브러리�
 #: frontend/src/pages/sys-admin/groups/group-nav.js:27
 #: frontend/src/pages/sys-admin/groups/groups.js:137
 #: frontend/src/pages/sys-admin/groups/search-groups.js:110
-#: frontend/src/pages/sys-admin/info.js:132
+#: frontend/src/pages/sys-admin/info.js:136
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:19
 #: frontend/src/pages/sys-admin/side-panel.js:114
 #: frontend/src/pages/sys-admin/users/user-nav.js:21
@@ -4433,51 +4459,51 @@ msgstr "다른 라이브러리로의 파일 이동에 성공했습니다."
 msgid "Successfully copied files to another library."
 msgstr "다른 라이브러리로의 파일 복사에 성공했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:818
+#: frontend/src/pages/lib-content-view/lib-content-view.js:821
 msgid "Restored {name} and {n} other items"
 msgstr "{name}와(과) 기타 항목 {n}개를 복원했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:819
+#: frontend/src/pages/lib-content-view/lib-content-view.js:822
 msgid "Restored {name}"
 msgstr "{name}을(를) 복원했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:829
 msgid "Failed to restore {name} and {n} other items"
 msgstr "{name}와(과) 기타 항목 {n}개 복원에 실패했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:827
+#: frontend/src/pages/lib-content-view/lib-content-view.js:830
 msgid "Failed to restore {name}"
 msgstr "{name} 복원에 실패했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:853
+#: frontend/src/pages/lib-content-view/lib-content-view.js:856
 msgid "Successfully deleted {name} and {n} other items."
 msgstr "{name}와(과) 기타 항목 {n}개 삭제에 성공했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:863
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1111
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1139
+#: frontend/src/pages/lib-content-view/lib-content-view.js:866
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1114
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1142
 msgid "Undo"
 msgstr "실행 취소"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:870
+#: frontend/src/pages/lib-content-view/lib-content-view.js:873
 msgid "Failed to delete {name} and {n} other items."
 msgstr "{name}와(과) 기타 항목 {n}개 삭제에 실패했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1067
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1083
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1070
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1086
 msgid "Renaming {name} failed"
 msgstr "{name} 이름 바꾸기에 실패했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1107
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1135
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1110
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1138
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:230
 #: frontend/src/pages/org-admin/org-groups.js:126
 #: frontend/src/pages/org-admin/org-libraries.js:83
 msgid "Successfully deleted {name}"
 msgstr "{name} 항목 삭제에 성공했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1119
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1147
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1122
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1150
 msgid "Failed to delete {name}"
 msgstr "{name} 삭제에 실패했습니다"
 
@@ -4485,33 +4511,33 @@ msgstr "{name} 삭제에 실패했습니다"
 msgid "Successfully moved {name}."
 msgstr "{name} 이동에 성공했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1210
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1211
 msgid "Failed to move {name}."
 msgstr "{name} 이동에 실패했습니다"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1253
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1259
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:182
 #: frontend/src/utils/utils.js:1290
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s을(를) 성공적으로 복사했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1260
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1267
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s 복사에 실패했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1270
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
 msgid "Converting, please wait..."
-msgstr ""
+msgstr "변환 중입니다. 기다리세요..."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1282
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1299
 msgid "Successfully converted the file."
-msgstr ""
+msgstr "파일 변환에 성공했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1289
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1306
 msgid "Failed to convert {name}."
-msgstr ""
+msgstr "{name} 변환을 실패했습니다."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1958
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2011
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:255
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:107
 #: frontend/src/pages/shared-libs/shared-libs.js:290
@@ -4558,7 +4584,7 @@ msgstr "최근 접근"
 msgid "Successfully unlinked %(name)s."
 msgstr "%(name)s 링크 끊기에 성공했습니다."
 
-#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:42
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:41
 msgid "Local draft saved"
 msgstr "로컬 초안을 저장했습니다"
 
@@ -4683,8 +4709,9 @@ msgstr "모두"
 #: frontend/src/pages/org-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:45
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:49
+#: frontend/src/pages/sys-admin/info.js:113
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
-#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Version"
 msgstr "버전"
 
@@ -4696,7 +4723,7 @@ msgstr "장치 링크 끊기에 성공했습니다."
 #: frontend/src/pages/org-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:89
-#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Device"
 msgstr "장치"
 
@@ -4722,13 +4749,13 @@ msgstr "오류"
 
 #: frontend/src/pages/org-admin/input-item.js:72
 msgid "Verified"
-msgstr ""
+msgstr "검증함"
 
 #: frontend/src/pages/org-admin/input-item.js:78
 msgid ""
 "Copy the IdP's certificate and paste it here. The certificate format is as "
 "follows:"
-msgstr ""
+msgstr "신원 제공자의 인증서를 복사하여 이곳에 붙여넣으세요. 인증서 형식은 다음과 같습니다:"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:51
 #: frontend/src/pages/org-admin/org-users-list.js:73
@@ -4895,13 +4922,13 @@ msgid "Active Users"
 msgstr "활동 사용자"
 
 #: frontend/src/pages/org-admin/org-info.js:50
-#: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
+#: frontend/src/pages/sys-admin/info.js:131
 msgid "Total Users"
 msgstr "전체 사용자"
 
 #: frontend/src/pages/org-admin/org-info.js:50
-#: frontend/src/pages/sys-admin/info.js:123
+#: frontend/src/pages/sys-admin/info.js:127
 msgid "Limits"
 msgstr "제한"
 
@@ -4997,46 +5024,46 @@ msgstr "SAML 구성"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:107
 msgid "Configure your Identity Provider"
-msgstr ""
+msgstr "신원 제공자 설정"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:108
 msgid "Use these values to configure your Identity Provider"
-msgstr ""
+msgstr "신원 제공자 설정에 이 값 사용"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:168
 msgid "Configure Seafile"
-msgstr ""
+msgstr "Seafile 설정"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:169
 msgid "Use information from your Identity Provider to configure Seafile"
-msgstr ""
+msgstr "Seafile 설정에 신원 제공자 정보 사용"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:182
 msgid "Certificate"
-msgstr ""
+msgstr "인증서"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:188
 msgid "Verify Domain"
-msgstr ""
+msgstr "도메인 인증"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:189
 msgid "Create a DNS TXT record to confirm the ownership of your Email Domain."
-msgstr ""
+msgstr "전자메일 도메인 소유주를 확인하려면 DNS TXT 레코드를 만드세요."
 
 #: frontend/src/pages/org-admin/org-saml-config.js:195
 msgid "Email Domain"
-msgstr ""
+msgstr "전자메일 도메인"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:201
 msgid "DNS TXT Value"
-msgstr ""
+msgstr "DNS TXT 값"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:214
 msgid ""
 "Copy the domain DNS TXT and add it to your domain's DNS records, then click "
 "the button to verify domain ownership. You must verify the ownership of "
 "domain before Single Sign-On."
-msgstr ""
+msgstr "도메인 DNS TXT 값을 복사하고 도메인 DNS 레코드에 추가한 다음, 단추를 눌러 도메인 소유주임을 증명하세요. 단일 로그인을 수행하기 전 도메인 소유주를 증명해야합니다."
 
 #: frontend/src/pages/org-admin/org-saml-config.js:220
 msgid "Verify"
@@ -5102,7 +5129,7 @@ msgstr "사용 용량 / 제한 용량"
 #: frontend/src/pages/sys-admin/users/users.js:206
 #, javascript-format
 msgid "Deleted user %s"
-msgstr ""
+msgstr "%s 사용자 삭제"
 
 #: frontend/src/pages/org-admin/org-users-admins.js:58
 #, javascript-format
@@ -5163,7 +5190,7 @@ msgstr "%s 사용자 추가에 성공했습니다."
 #: frontend/src/pages/org-admin/org-users-users.js:222
 #, javascript-format
 msgid "successfully sent email to %s."
-msgstr ""
+msgstr "%s(에)게 전자메일을 잘 보냈습니다."
 
 #: frontend/src/pages/org-admin/org-users-users.js:270
 msgid "Import users"
@@ -5789,24 +5816,24 @@ msgstr "커뮤니티판"
 msgid "Upgrade to Pro Edition"
 msgstr "전문가판으로 업그레이드"
 
-#: frontend/src/pages/sys-admin/info.js:115
+#: frontend/src/pages/sys-admin/info.js:119
 msgid "Storage Used"
 msgstr "사용 저장 공간"
 
-#: frontend/src/pages/sys-admin/info.js:118
+#: frontend/src/pages/sys-admin/info.js:122
 msgid "Total Devices"
 msgstr "모든 장치"
 
-#: frontend/src/pages/sys-admin/info.js:118
+#: frontend/src/pages/sys-admin/info.js:122
 msgid "Current Connected Devices"
 msgstr "현재 연결 장치"
 
-#: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
+#: frontend/src/pages/sys-admin/info.js:131
 msgid "Activated Users"
 msgstr "활성 사용자"
 
-#: frontend/src/pages/sys-admin/info.js:137
+#: frontend/src/pages/sys-admin/info.js:141
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:31
 #: frontend/src/pages/sys-admin/orgs/orgs.js:133
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:106
@@ -6389,54 +6416,54 @@ msgid ""
 "by clicking the \"Publish a Library\" button in the menu bar."
 msgstr "아직 어떤 라이브러리도 공개하지 않았습니다. 공개 라이브러리는 사용자 뿐만 아니라 그 어떤 누구도 자체 URL을 통해 접근할 수 있습니다. 메뉴 표시줄에서 \"라이브러리 공개\" 단추를 눌러 라이브러리를 공개할 수 있습니다."
 
-#: frontend/src/repo-folder-trash.js:197
+#: frontend/src/repo-folder-trash.js:185
 msgid "{placeholder} Trash"
 msgstr "{placeholder} 휴지통"
 
-#: frontend/src/repo-folder-trash.js:237
+#: frontend/src/repo-folder-trash.js:240
 msgid "Delete Time"
 msgstr "삭제 시간"
 
-#: frontend/src/repo-folder-trash.js:325 frontend/src/repo-snapshot.js:271
+#: frontend/src/repo-folder-trash.js:328 frontend/src/repo-snapshot.js:273
 msgid "Successfully restored 1 item."
 msgstr "항목 1개를 성공적으로 복원했습니다."
 
-#: frontend/src/repo-folder-trash.js:353 frontend/src/repo-folder-trash.js:411
-#: frontend/src/repo-snapshot.js:293
+#: frontend/src/repo-folder-trash.js:356 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:295
 msgid "Directory"
 msgstr "디렉터리"
 
-#: frontend/src/repo-history.js:108
+#: frontend/src/repo-history.js:96
 msgid "{placeholder} Modification History"
 msgstr "{placeholder} 수정 기록"
 
-#: frontend/src/repo-history.js:112
+#: frontend/src/repo-history.js:115
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification."
 msgstr "요령: 수정한 이후에는 수정 이후 라이브러리 상태를 기록하는 스냅샷을 만듭니다."
 
-#: frontend/src/repo-history.js:141
+#: frontend/src/repo-history.js:144
 msgid "Labels"
 msgstr "레이블"
 
-#: frontend/src/repo-history.js:277
+#: frontend/src/repo-history.js:280
 msgid "None"
 msgstr "없음"
 
-#: frontend/src/repo-history.js:280 frontend/src/repo-snapshot.js:160
+#: frontend/src/repo-history.js:283 frontend/src/repo-snapshot.js:162
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: frontend/src/repo-history.js:310
+#: frontend/src/repo-history.js:313
 msgid "Current Version"
 msgstr "현재 버전"
 
-#: frontend/src/repo-history.js:311
+#: frontend/src/repo-history.js:314
 msgid "View Snapshot"
 msgstr "스냅샷 보기"
 
-#: frontend/src/repo-snapshot.js:145
+#: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
 msgstr "{placeholder} 스냅샷"
 
@@ -6590,23 +6617,23 @@ msgstr "메시지"
 
 #: frontend/src/utils/text-translation.js:24
 msgid "Freeze Document"
-msgstr ""
+msgstr "문서 잠그기"
 
 #: frontend/src/utils/text-translation.js:26
 msgid "Convert to Markdown"
-msgstr ""
+msgstr "마크다운으로 변환"
 
 #: frontend/src/utils/text-translation.js:27
 msgid "Convert to sdoc"
-msgstr ""
+msgstr "sdoc으로 변환"
 
 #: frontend/src/utils/text-translation.js:28
 msgid "Convert to docx"
-msgstr ""
+msgstr "docx로 변환"
 
 #: frontend/src/utils/text-translation.js:29
 msgid "Export as docx"
-msgstr ""
+msgstr "docx로 내보내기"
 
 #: frontend/src/utils/text-translation.js:30
 msgid "Mark as draft"

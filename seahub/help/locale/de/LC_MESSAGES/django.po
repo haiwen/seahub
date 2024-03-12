@@ -11,6 +11,7 @@
 # A. Heß <schnuecks78@gmail.com>, 2024
 # Ralf Dyllick <rdb@datamate.org>, 2024
 # Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2024
+# Marco, 2024
 # 
 #, fuzzy
 msgid ""
@@ -19,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-05 19:50+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2024\n"
+"Last-Translator: Marco, 2024\n"
 "Language-Team: German (https://app.transifex.com/haiwen/teams/5086/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -196,30 +197,41 @@ msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Sie können eine Bibliothek löschen, wenn sie Ihnen gehört. Eine gelöschte "
+"Bibliothek kann von Ihnen oder dem Administrator des Seafile-Servers "
+"wiederhergestellt werden."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Wenn eine Bibliothek gelöscht wird, hat dies folgende Auswirkungen:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
 msgstr ""
+"Alle Freigaben von Dateien und Ordnern in dieser Bibliothek werden "
+"aufgehoben."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Desktop-Programme, welche mit dieser Bibliothek verbunden sind, können diese"
+" nicht mehr synchronisieren. Die lokalen Dateien auf dem Rechner mit dem "
+"Desktop-Programm werden jedoch nicht gelöscht."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Verwaltung und Nutzung von Bereichen"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Einige Organisationen bestehen aus einer komplexen Struktur von Bereichen "
+"(Abteilungen, Gruppen usw.). In der Regel gibt es zwei gängige "
+"Anwendungsfälle für die Dateiverwaltung in solchen Organisationen:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -227,6 +239,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Es soll ein gemeinsamer Speicherort für die Dateien der Organisation geben. "
+"Die Ordnerstruktur sollte der Organisationsstruktur entsprechen. Jedem "
+"Bereich wird ein separater Ordner oder Speicherort zugewiesen."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -234,12 +249,18 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Der Speicherort soll der Organisation gehören und von ihr verwaltet werden, "
+"nicht von einzelnen Angestellten. So, dass die Eigentümer von Dateien nicht "
+"geändert werden müssen, wenn eine Person die Organisation verlässt."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Die Bereichs-Funktion wurde für die beiden oben genannten Anwendungsfälle "
+"konzipiert. Wir stellen diese Funktion aus drei verschiedenen Blickwinkeln "
+"vor:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"

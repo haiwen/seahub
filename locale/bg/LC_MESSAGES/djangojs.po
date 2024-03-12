@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-05 16:23+0800\n"
+"POT-Creation-Date: 2024-03-11 10:40+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Веселин Панайотов <support@ivexbg.com>, 2015\n"
 "Language-Team: Bulgarian (http://app.transifex.com/haiwen/seahub/language/bg/)\n"
@@ -58,7 +58,7 @@ msgid "Used:"
 msgstr ""
 
 #: frontend/src/components/common/account.js:165
-#: frontend/src/components/search/ai-search.js:651
+#: frontend/src/components/search/ai-search.js:661
 #: frontend/src/pages/groups/group-view.js:470
 #: frontend/src/pages/groups/group-view.js:476
 #: frontend/src/pages/org-admin/side-panel.js:56
@@ -78,116 +78,136 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:42
+#: frontend/src/components/common/notice-item.js:44
 msgid "User {user_link} has added you to {group_link}"
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:65
+#: frontend/src/components/common/notice-item.js:67
 msgid "{share_from} has shared a library named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:67
+#: frontend/src/components/common/notice-item.js:69
 msgid "{share_from} has shared a folder named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:98
+#: frontend/src/components/common/notice-item.js:95
+msgid ""
+"{share_from} has changed the permission of library {repo_link} to "
+"{permission}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:97
+msgid ""
+"{share_from} has changed the permission of folder {repo_link} to "
+"{permission}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:122
+msgid "{share_from} has cancelled the sharing of library {repo_name}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:124
+msgid "{share_from} has cancelled the sharing of folder {repo_name}."
+msgstr ""
+
+#: frontend/src/components/common/notice-item.js:150
 msgid ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:100
+#: frontend/src/components/common/notice-item.js:152
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:126
+#: frontend/src/components/common/notice-item.js:178
 msgid "{user} has transfered a library named {repo_link} to you."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:182
+#: frontend/src/components/common/notice-item.js:234
 msgid "{from_user} has sent you a request for {draft_link}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:183
+#: frontend/src/components/common/notice-item.js:235
 msgid "Draft"
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:214
+#: frontend/src/components/common/notice-item.js:266
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:214
+#: frontend/src/components/common/notice-item.js:266
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:217
+#: frontend/src/components/common/notice-item.js:269
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:217
+#: frontend/src/components/common/notice-item.js:269
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:221
+#: frontend/src/components/common/notice-item.js:273
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:224
+#: frontend/src/components/common/notice-item.js:276
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:228
+#: frontend/src/components/common/notice-item.js:280
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:228
+#: frontend/src/components/common/notice-item.js:280
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:231
+#: frontend/src/components/common/notice-item.js:283
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:243
+#: frontend/src/components/common/notice-item.js:295
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:243
+#: frontend/src/components/common/notice-item.js:295
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:246
+#: frontend/src/components/common/notice-item.js:298
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:246
+#: frontend/src/components/common/notice-item.js:298
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:250
+#: frontend/src/components/common/notice-item.js:302
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:253
+#: frontend/src/components/common/notice-item.js:305
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:257
+#: frontend/src/components/common/notice-item.js:309
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr ""
 
-#: frontend/src/components/common/notice-item.js:257
+#: frontend/src/components/common/notice-item.js:309
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -233,7 +253,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/libraries.js:360
 #: frontend/src/pages/sys-admin/departments/department.js:45
 #: frontend/src/pages/sys-admin/groups/group-nav.js:17
-#: frontend/src/pages/sys-admin/info.js:112
+#: frontend/src/pages/sys-admin/info.js:116
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:20
 #: frontend/src/pages/sys-admin/repos/search-repos.js:140
 #: frontend/src/pages/sys-admin/side-panel.js:90
@@ -244,10 +264,10 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-tool.js:77
 #: frontend/src/components/cur-dir-path/dir-tool.js:98
 #: frontend/src/components/cur-dir-path/dir-tool.js:99
-#: frontend/src/components/dirent-detail/detail-list-view.js:123
+#: frontend/src/components/dirent-detail/detail-list-view.js:124
 #: frontend/src/components/dirent-detail/file-details.js:89
 #: frontend/src/components/toolbar/view-file-toolbar.js:105
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:48
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:78
 #: frontend/src/utils/text-translation.js:35
 msgid "Tags"
 msgstr ""
@@ -343,7 +363,7 @@ msgstr ""
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:142
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:31
 #: frontend/src/pages/sys-admin/abuse-reports.js:91
-#: frontend/src/repo-history.js:137 frontend/src/repo-history.js:144
+#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
 msgid "Description"
 msgstr ""
 
@@ -355,7 +375,7 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:35
 #: frontend/src/components/dialog/confirm-restore-repo.js:36
 #: frontend/src/components/dialog/confirm-unlink-device.js:49
-#: frontend/src/components/dialog/copy-dirent-dialog.js:162
+#: frontend/src/components/dialog/copy-dirent-dialog.js:165
 #: frontend/src/components/dialog/create-file-dialog.js:179
 #: frontend/src/components/dialog/create-folder-dialog.js:99
 #: frontend/src/components/dialog/create-group-dialog.js:81
@@ -374,11 +394,11 @@ msgstr ""
 #: frontend/src/components/dialog/invite-people-dialog.js:121
 #: frontend/src/components/dialog/label-repo-state-dialog.js:88
 #: frontend/src/components/dialog/leave-group-dialog.js:32
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:150
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:151
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:123
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:273
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:253
-#: frontend/src/components/dialog/move-dirent-dialog.js:183
+#: frontend/src/components/dialog/move-dirent-dialog.js:185
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 #: frontend/src/components/dialog/org-add-member-dialog.js:68
 #: frontend/src/components/dialog/org-delete-department-dialog.js:42
@@ -414,7 +434,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:59
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:143
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:104
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:95
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:51
@@ -423,7 +443,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:47
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:60
-#: frontend/src/components/dialog/transfer-dialog.js:100
+#: frontend/src/components/dialog/transfer-dialog.js:104
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 #: frontend/src/components/dialog/view-link-dialog.js:37
 #: frontend/src/components/dialog/wiki-delete-dialog.js:25
@@ -446,10 +466,10 @@ msgstr ""
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:93
 #: frontend/src/components/dialog/add-reviewer-dialog.js:110
 #: frontend/src/components/dialog/add-reviewer-dialog.js:111
-#: frontend/src/components/dialog/change-repo-password-dialog.js:117
+#: frontend/src/components/dialog/change-repo-password-dialog.js:118
 #: frontend/src/components/dialog/clean-trash.js:77
 #: frontend/src/components/dialog/confirm-apply-folder-properties-dialog.js:56
-#: frontend/src/components/dialog/copy-dirent-dialog.js:163
+#: frontend/src/components/dialog/copy-dirent-dialog.js:166
 #: frontend/src/components/dialog/create-department-repo-dialog.js:95
 #: frontend/src/components/dialog/create-file-dialog.js:180
 #: frontend/src/components/dialog/create-folder-dialog.js:100
@@ -465,13 +485,13 @@ msgstr ""
 #: frontend/src/components/dialog/invite-people-dialog.js:122
 #: frontend/src/components/dialog/label-repo-state-dialog.js:89
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:67
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:151
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:152
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:124
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:274
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:326
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:254
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:306
-#: frontend/src/components/dialog/move-dirent-dialog.js:184
+#: frontend/src/components/dialog/move-dirent-dialog.js:186
 #: frontend/src/components/dialog/new-wiki-dialog.js:61
 #: frontend/src/components/dialog/org-add-admin-dialog.js:66
 #: frontend/src/components/dialog/org-add-department-dialog.js:86
@@ -515,7 +535,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:90
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:57
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:145
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:105
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:96
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:52
@@ -525,7 +545,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:268
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:255
 #: frontend/src/components/dialog/sysadmin-dialog/update-user.js:61
-#: frontend/src/components/dialog/transfer-dialog.js:101
+#: frontend/src/components/dialog/transfer-dialog.js:105
 #: frontend/src/components/dialog/transfer-group-dialog.js:69
 #: frontend/src/components/dialog/wiki-select-dialog.js:99
 #: frontend/src/components/dialog/wiki-select-dialog.js:100
@@ -586,8 +606,8 @@ msgstr ""
 #: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:68
-#: frontend/src/components/search/ai-search.js:653
-#: frontend/src/components/search/ai-search.js:690
+#: frontend/src/components/search/ai-search.js:663
+#: frontend/src/components/search/ai-search.js:700
 #: frontend/src/components/search/search.js:497
 #: frontend/src/components/search/search.js:532
 #: frontend/src/components/system-notification.js:46
@@ -619,24 +639,24 @@ msgstr ""
 msgid "Successfully changed library password."
 msgstr ""
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:102
+#: frontend/src/components/dialog/change-repo-password-dialog.js:98
 msgid "Change Password of Library {placeholder}"
 msgstr ""
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:107
+#: frontend/src/components/dialog/change-repo-password-dialog.js:108
 msgid "Old Password"
 msgstr ""
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:109
+#: frontend/src/components/dialog/change-repo-password-dialog.js:110
 msgid "New Password"
 msgstr ""
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:109
+#: frontend/src/components/dialog/change-repo-password-dialog.js:110
 #: frontend/src/components/dialog/create-repo-dialog.js:240
 msgid "(at least {placeholder} characters)"
 msgstr ""
 
-#: frontend/src/components/dialog/change-repo-password-dialog.js:111
+#: frontend/src/components/dialog/change-repo-password-dialog.js:112
 msgid "New Password Again"
 msgstr ""
 
@@ -666,7 +686,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:306
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:197
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:400
-#: frontend/src/repo-folder-trash.js:204
+#: frontend/src/repo-folder-trash.js:207
 msgid "Clean"
 msgstr ""
 
@@ -875,9 +895,9 @@ msgstr ""
 #: frontend/src/pages/my-libs/my-libs-deleted.js:177
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:197
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:269
-#: frontend/src/repo-folder-trash.js:358 frontend/src/repo-folder-trash.js:368
-#: frontend/src/repo-snapshot.js:168 frontend/src/repo-snapshot.js:297
-#: frontend/src/repo-snapshot.js:306
+#: frontend/src/repo-folder-trash.js:361 frontend/src/repo-folder-trash.js:371
+#: frontend/src/repo-snapshot.js:170 frontend/src/repo-snapshot.js:299
+#: frontend/src/repo-snapshot.js:308
 msgid "Restore"
 msgstr ""
 
@@ -1041,7 +1061,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-links.js:49
 #: frontend/src/pages/sys-admin/users/user-repos.js:54
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:35
-#: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:198
+#: frontend/src/repo-folder-trash.js:239 frontend/src/repo-snapshot.js:200
 #: frontend/src/shared-dir-view.js:661
 msgid "Name"
 msgstr ""
@@ -1214,8 +1234,8 @@ msgstr ""
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
 #: frontend/src/components/share-link-panel/link-creation.js:253
 #: frontend/src/components/share-link-panel/link-details.js:166
-#: frontend/src/repo-folder-trash.js:198 frontend/src/repo-history.js:109
-#: frontend/src/repo-snapshot.js:148
+#: frontend/src/repo-folder-trash.js:201 frontend/src/repo-history.js:112
+#: frontend/src/repo-snapshot.js:150
 msgid "Back"
 msgstr ""
 
@@ -1306,7 +1326,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:202
-#: frontend/src/repo-snapshot.js:307 frontend/src/shared-dir-view.js:769
+#: frontend/src/repo-snapshot.js:309 frontend/src/shared-dir-view.js:769
 #: frontend/src/shared-dir-view.js:796 frontend/src/shared-dir-view.js:844
 #: frontend/src/shared-dir-view.js:876 frontend/src/shared-dir-view.js:945
 #: frontend/src/shared-dir-view.js:963
@@ -1387,7 +1407,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-info.js:91
 #: frontend/src/pages/sys-admin/users/users-content.js:502
 #: frontend/src/pages/wiki/main-panel.js:106
-#: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:303
+#: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:306
 msgid "Edit"
 msgstr ""
 
@@ -1448,7 +1468,7 @@ msgid "Select Tags"
 msgstr ""
 
 #: frontend/src/components/dialog/edit-filetag-dialog.js:141
-#: frontend/src/components/popover/edit-filetag-popover.js:182
+#: frontend/src/components/popover/edit-filetag-popover.js:187
 #: frontend/src/components/popover/list-tag-popover.js:145
 msgid "Create a new tag"
 msgstr ""
@@ -1466,8 +1486,8 @@ msgid "Find an option"
 msgstr ""
 
 #: frontend/src/components/dialog/extra-attributes-dialog/index.js:217
-#: frontend/src/components/dirent-detail/detail-list-view.js:92
-#: frontend/src/components/dirent-detail/detail-list-view.js:133
+#: frontend/src/components/dirent-detail/detail-list-view.js:93
+#: frontend/src/components/dirent-detail/detail-list-view.js:134
 msgid "Edit extra properties"
 msgstr ""
 
@@ -1755,36 +1775,33 @@ msgstr ""
 msgid "Successfully set library history."
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:116
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:114
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:351
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:154
-#: frontend/src/pages/sys-admin/repos/repos.js:271
-msgid "History Setting"
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:112
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:110
+msgid "{placeholder} History Setting"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:122
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:123
 msgid "Setting library history is disabled by Admin."
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:127
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:120
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:128
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:121
 msgid "Keep full history"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:131
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:132
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:125
 msgid "Don't keep history"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:135
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:128
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:136
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:129
 msgid "Only keep a period of history:"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:145
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:117
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:138
 #: frontend/src/components/set-link-expiration.js:89
 msgid "days"
 msgstr ""
@@ -1817,12 +1834,12 @@ msgstr ""
 msgid "Group Permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:69
 msgid "{placeholder} Folder Permission"
 msgstr ""
 
-#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
-msgid "Set {placeholder}'s permission"
+#: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:69
+msgid "Set permission of {placeholder}"
 msgstr ""
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:186
@@ -1831,16 +1848,16 @@ msgstr ""
 #: frontend/src/components/dialog/zip-download-dialog.js:76
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:294
 #: frontend/src/pages/lib-content-view/lib-content-view.js:185
-#: frontend/src/pages/lib-content-view/lib-content-view.js:735
-#: frontend/src/pages/lib-content-view/lib-content-view.js:784
-#: frontend/src/pages/lib-content-view/lib-content-view.js:869
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1065
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1081
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1117
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1145
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1209
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1259
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
+#: frontend/src/pages/lib-content-view/lib-content-view.js:732
+#: frontend/src/pages/lib-content-view/lib-content-view.js:780
+#: frontend/src/pages/lib-content-view/lib-content-view.js:872
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1068
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1084
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1120
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1148
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1210
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1266
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1304
 #: frontend/src/pages/my-libs/my-libs-deleted.js:152
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:293
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:315
@@ -1850,7 +1867,7 @@ msgstr ""
 #: frontend/src/pages/shared-with-all/public-shared-view.js:106
 #: frontend/src/pages/sys-admin/abuse-reports.js:45
 #: frontend/src/pages/upload-link/file-uploader.js:437
-#: frontend/src/repo-folder-trash.js:136 frontend/src/repo-folder-trash.js:329
+#: frontend/src/repo-folder-trash.js:136 frontend/src/repo-folder-trash.js:332
 #: frontend/src/utils/utils.js:1194
 msgid "Error"
 msgstr ""
@@ -1861,7 +1878,7 @@ msgstr ""
 #: frontend/src/pages/lib-content-view/lib-content-view.js:191
 #: frontend/src/pages/search/main-panel.js:82
 #: frontend/src/pages/sys-admin/abuse-reports.js:47
-#: frontend/src/repo-folder-trash.js:142 frontend/src/repo-folder-trash.js:331
+#: frontend/src/repo-folder-trash.js:142 frontend/src/repo-folder-trash.js:334
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
 #: frontend/src/utils/utils.js:1197 frontend/src/view-file-document.js:76
@@ -1916,7 +1933,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:48
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:53
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:48
-#: frontend/src/repo-history.js:138 frontend/src/repo-history.js:145
+#: frontend/src/repo-history.js:141 frontend/src/repo-history.js:148
 #: frontend/src/user-notifications.js:131
 #: frontend/src/user-notifications.js:135
 msgid "Time"
@@ -1967,8 +1984,8 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:95
 #: frontend/src/components/dialog/share-repo-dialog.js:129
 #: frontend/src/components/dialog/wiki-select-dialog.js:79
-#: frontend/src/components/dirent-detail/detail-list-view.js:86
-#: frontend/src/components/dirent-detail/detail-list-view.js:121
+#: frontend/src/components/dirent-detail/detail-list-view.js:87
+#: frontend/src/components/dirent-detail/detail-list-view.js:122
 #: frontend/src/components/dirent-detail/file-details.js:87
 #: frontend/src/components/dirent-detail/lib-details.js:70
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:630
@@ -1976,7 +1993,7 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:125
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
 #: frontend/src/components/wiki-list-view/wiki-list-view.js:46
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:46
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:76
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:94
 #: frontend/src/pages/org-admin/org-user-repos.js:81
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
@@ -1997,14 +2014,14 @@ msgstr ""
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
 #: frontend/src/components/dialog/search-file-dialog.js:94
-#: frontend/src/components/dirent-detail/detail-list-view.js:119
+#: frontend/src/components/dirent-detail/detail-list-view.js:120
 #: frontend/src/components/dirent-detail/file-details.js:85
 #: frontend/src/components/dirent-detail/lib-details.js:69
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:629
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:124
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:44
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:74
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
 #: frontend/src/pages/org-admin/org-department-item.js:327
 #: frontend/src/pages/org-admin/org-group-repos.js:84
@@ -2020,7 +2037,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repos/repos.js:82
 #: frontend/src/pages/sys-admin/repos/repos.js:84
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:37
-#: frontend/src/repo-folder-trash.js:238 frontend/src/repo-snapshot.js:199
+#: frontend/src/repo-folder-trash.js:241 frontend/src/repo-snapshot.js:201
 #: frontend/src/shared-dir-view.js:663
 msgid "Size"
 msgstr ""
@@ -2330,33 +2347,29 @@ msgstr ""
 msgid "{placeholder} SeaTable integration"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:56
-#: frontend/src/components/main-side-nav.js:278
-#: frontend/src/components/main-side-nav.js:280
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:354
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:178
-msgid "Share Admin"
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:52
+msgid "{placeholder} Share Admin"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:65
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:67
 #: frontend/src/pages/share-admin/share-links.js:554
 #: frontend/src/pages/share-admin/upload-links.js:286
 #: frontend/src/pages/sys-admin/links/links-nav.js:15
 msgid "Share Links"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:72
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:74
 #: frontend/src/pages/share-admin/share-links.js:557
 #: frontend/src/pages/share-admin/upload-links.js:288
 #: frontend/src/pages/sys-admin/links/links-nav.js:16
 msgid "Upload Links"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:78
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:80
 msgid "User Shares"
 msgstr ""
 
-#: frontend/src/components/dialog/repo-share-admin-dialog.js:83
+#: frontend/src/components/dialog/repo-share-admin-dialog.js:85
 msgid "Group Shares"
 msgstr ""
 
@@ -2732,7 +2745,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:80
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:81
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:51
-#: frontend/src/components/dialog/transfer-dialog.js:79
+#: frontend/src/components/dialog/transfer-dialog.js:83
 msgid "Select a user"
 msgstr ""
 
@@ -2757,7 +2770,7 @@ msgid "End date"
 msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
-#: frontend/src/components/dialog/transfer-dialog.js:71
+#: frontend/src/components/dialog/transfer-dialog.js:69
 msgid "Transfer Library {library_name}"
 msgstr ""
 
@@ -2777,15 +2790,15 @@ msgstr ""
 msgid "Terms"
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-dialog.js:87
+#: frontend/src/components/dialog/transfer-dialog.js:91
 msgid "Select a department"
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-dialog.js:95
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to department"
 msgstr ""
 
-#: frontend/src/components/dialog/transfer-dialog.js:95
+#: frontend/src/components/dialog/transfer-dialog.js:99
 msgid "Transfer to user"
 msgstr ""
 
@@ -2864,15 +2877,15 @@ msgstr ""
 msgid "View Draft"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/detail-list-view.js:85
-#: frontend/src/components/dirent-detail/detail-list-view.js:120
+#: frontend/src/components/dirent-detail/detail-list-view.js:86
+#: frontend/src/components/dirent-detail/detail-list-view.js:121
 #: frontend/src/components/dirent-detail/file-details.js:86
-#: frontend/src/pages/markdown-editor/detail-list-view/index.js:45
+#: frontend/src/pages/markdown-editor/detail-list-view/index.js:75
 msgid "Location"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/detail-list-view.js:101
-#: frontend/src/components/dirent-detail/detail-list-view.js:103
+#: frontend/src/components/dirent-detail/detail-list-view.js:102
+#: frontend/src/components/dirent-detail/detail-list-view.js:104
 msgid "Apply properties to files inside the folder"
 msgstr ""
 
@@ -2880,7 +2893,7 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:181
 #: frontend/src/pages/org-admin/org-libraries.js:149
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:161
-#: frontend/src/pages/sys-admin/info.js:112
+#: frontend/src/pages/sys-admin/info.js:116
 #: frontend/src/pages/sys-admin/repos/repos.js:81
 #: frontend/src/pages/sys-admin/repos/repos.js:84
 msgid "Files"
@@ -2965,7 +2978,7 @@ msgid "Library"
 msgstr ""
 
 #: frontend/src/components/file-chooser/file-chooser.js:286
-#: frontend/src/components/search/ai-search.js:452
+#: frontend/src/components/search/ai-search.js:453
 #: frontend/src/components/search/wiki-search.js:193
 msgid "No results matching"
 msgstr ""
@@ -3144,7 +3157,7 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:342
 #: frontend/src/pages/org-admin/org-logs-file-update.js:260
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
-#: frontend/src/repo-history.js:289 frontend/src/utils/text-translation.js:21
+#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:21
 msgid "Details"
 msgstr ""
 
@@ -3188,7 +3201,7 @@ msgstr ""
 
 #: frontend/src/components/group-members.js:96
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:290
-#: frontend/src/pages/lib-content-view/lib-content-view.js:857
+#: frontend/src/pages/lib-content-view/lib-content-view.js:860
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:311
 #: frontend/src/pages/org-admin/org-group-repos.js:146
 #: frontend/src/pages/org-admin/org-user-repos.js:142
@@ -3302,6 +3315,13 @@ msgstr ""
 msgid "Linked Devices"
 msgstr ""
 
+#: frontend/src/components/main-side-nav.js:278
+#: frontend/src/components/main-side-nav.js:280
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:354
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:178
+msgid "Share Admin"
+msgstr ""
+
 #: frontend/src/components/more.js:14
 msgid "show more"
 msgstr ""
@@ -3341,15 +3361,15 @@ msgid ""
 "right}"
 msgstr ""
 
-#: frontend/src/components/popover/edit-filetag-popover.js:137
+#: frontend/src/components/popover/edit-filetag-popover.js:141
 msgid "No tags"
 msgstr ""
 
-#: frontend/src/components/popover/edit-filetag-popover.js:141
+#: frontend/src/components/popover/edit-filetag-popover.js:145
 msgid "Tag not found"
 msgstr ""
 
-#: frontend/src/components/popover/edit-filetag-popover.js:155
+#: frontend/src/components/popover/edit-filetag-popover.js:159
 msgid "Find a tag"
 msgstr ""
 
@@ -3429,41 +3449,41 @@ msgstr ""
 msgid "Reference documents"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:386
+#: frontend/src/components/search/ai-search.js:387
 #: frontend/src/components/search/search.js:433
 msgid "Search results visited recently"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:435
+#: frontend/src/components/search/ai-search.js:436
 #: frontend/src/components/search/search.js:413
 msgid "Type characters to start search"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:438
+#: frontend/src/components/search/ai-search.js:439
 msgid "Type more characters to start search"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:449
-#: frontend/src/components/search/ai-search.js:466
+#: frontend/src/components/search/ai-search.js:450
+#: frontend/src/components/search/ai-search.js:467
 msgid "Ask AI"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:528
+#: frontend/src/components/search/ai-search.js:529
 msgid ""
 "Indexing the library. Semantic search will be available within a few "
 "minutes."
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:539
+#: frontend/src/components/search/ai-search.js:540
 msgid "Successfully turned it off"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:557
-#: frontend/src/components/search/ai-search.js:581
+#: frontend/src/components/search/ai-search.js:558
+#: frontend/src/components/search/ai-search.js:582
 msgid "Turn on semantic search for this library"
 msgstr ""
 
-#: frontend/src/components/search/ai-search.js:569
+#: frontend/src/components/search/ai-search.js:570
 msgid "Turn off semantic search for this library"
 msgstr ""
 
@@ -3679,7 +3699,7 @@ msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr ""
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:122
-#: frontend/src/repo-folder-trash.js:202 frontend/src/repo-snapshot.js:166
+#: frontend/src/repo-folder-trash.js:205 frontend/src/repo-snapshot.js:168
 #: frontend/src/shared-dir-view.js:449
 msgid "Current path: "
 msgstr ""
@@ -3733,6 +3753,12 @@ msgstr ""
 #: frontend/src/pages/sys-admin/groups/group-repos.js:140
 #: frontend/src/pages/sys-admin/groups/group-repos.js:148
 msgid "Unshare"
+msgstr ""
+
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:351
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:154
+#: frontend/src/pages/sys-admin/repos/repos.js:271
+msgid "History Setting"
 msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:357
@@ -3861,7 +3887,7 @@ msgstr ""
 #: frontend/src/components/toolbar/view-file-toolbar.js:99
 #: frontend/src/file-history-old.js:268
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:55
-#: frontend/src/repo-folder-trash.js:280
+#: frontend/src/repo-folder-trash.js:283
 msgid "More"
 msgstr ""
 
@@ -4109,8 +4135,8 @@ msgstr ""
 msgid "History Versions"
 msgstr ""
 
-#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:139
-#: frontend/src/repo-history.js:146
+#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:142
+#: frontend/src/repo-history.js:149
 msgid "Modifier"
 msgstr ""
 
@@ -4228,8 +4254,8 @@ msgstr ""
 #: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:88
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
-#: frontend/src/repo-folder-trash.js:363 frontend/src/repo-folder-trash.js:419
-#: frontend/src/repo-snapshot.js:302
+#: frontend/src/repo-folder-trash.js:366 frontend/src/repo-folder-trash.js:422
+#: frontend/src/repo-snapshot.js:304
 msgid "File"
 msgstr "Файл"
 
@@ -4324,7 +4350,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/groups/group-nav.js:27
 #: frontend/src/pages/sys-admin/groups/groups.js:137
 #: frontend/src/pages/sys-admin/groups/search-groups.js:110
-#: frontend/src/pages/sys-admin/info.js:132
+#: frontend/src/pages/sys-admin/info.js:136
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:19
 #: frontend/src/pages/sys-admin/side-panel.js:114
 #: frontend/src/pages/sys-admin/users/user-nav.js:21
@@ -4433,51 +4459,51 @@ msgstr ""
 msgid "Successfully copied files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:818
+#: frontend/src/pages/lib-content-view/lib-content-view.js:821
 msgid "Restored {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:819
+#: frontend/src/pages/lib-content-view/lib-content-view.js:822
 msgid "Restored {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:826
+#: frontend/src/pages/lib-content-view/lib-content-view.js:829
 msgid "Failed to restore {name} and {n} other items"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:827
+#: frontend/src/pages/lib-content-view/lib-content-view.js:830
 msgid "Failed to restore {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:853
+#: frontend/src/pages/lib-content-view/lib-content-view.js:856
 msgid "Successfully deleted {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:863
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1111
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1139
+#: frontend/src/pages/lib-content-view/lib-content-view.js:866
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1114
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1142
 msgid "Undo"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:870
+#: frontend/src/pages/lib-content-view/lib-content-view.js:873
 msgid "Failed to delete {name} and {n} other items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1067
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1083
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1070
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1086
 msgid "Renaming {name} failed"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1107
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1135
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1110
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1138
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:230
 #: frontend/src/pages/org-admin/org-groups.js:126
 #: frontend/src/pages/org-admin/org-libraries.js:83
 msgid "Successfully deleted {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1119
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1147
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1122
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1150
 msgid "Failed to delete {name}"
 msgstr ""
 
@@ -4485,33 +4511,33 @@ msgstr ""
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1210
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1211
 msgid "Failed to move {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1253
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1259
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:182
 #: frontend/src/utils/utils.js:1290
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1260
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1267
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1270
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1287
 msgid "Converting, please wait..."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1282
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1299
 msgid "Successfully converted the file."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1289
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1306
 msgid "Failed to convert {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1958
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2011
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:255
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:107
 #: frontend/src/pages/shared-libs/shared-libs.js:290
@@ -4558,7 +4584,7 @@ msgstr ""
 msgid "Successfully unlinked %(name)s."
 msgstr ""
 
-#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:42
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:41
 msgid "Local draft saved"
 msgstr ""
 
@@ -4683,8 +4709,9 @@ msgstr ""
 #: frontend/src/pages/org-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:45
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:49
+#: frontend/src/pages/sys-admin/info.js:113
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
-#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Version"
 msgstr ""
 
@@ -4696,7 +4723,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:49
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:89
-#: frontend/src/repo-history.js:140 frontend/src/repo-history.js:147
+#: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Device"
 msgstr ""
 
@@ -4895,13 +4922,13 @@ msgid "Active Users"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-info.js:50
-#: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
+#: frontend/src/pages/sys-admin/info.js:131
 msgid "Total Users"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-info.js:50
-#: frontend/src/pages/sys-admin/info.js:123
+#: frontend/src/pages/sys-admin/info.js:127
 msgid "Limits"
 msgstr ""
 
@@ -5789,24 +5816,24 @@ msgstr ""
 msgid "Upgrade to Pro Edition"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/info.js:115
+#: frontend/src/pages/sys-admin/info.js:119
 msgid "Storage Used"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/info.js:118
+#: frontend/src/pages/sys-admin/info.js:122
 msgid "Total Devices"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/info.js:118
+#: frontend/src/pages/sys-admin/info.js:122
 msgid "Current Connected Devices"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
+#: frontend/src/pages/sys-admin/info.js:131
 msgid "Activated Users"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/info.js:137
+#: frontend/src/pages/sys-admin/info.js:141
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:31
 #: frontend/src/pages/sys-admin/orgs/orgs.js:133
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:106
@@ -6389,54 +6416,54 @@ msgid ""
 "by clicking the \"Publish a Library\" button in the menu bar."
 msgstr ""
 
-#: frontend/src/repo-folder-trash.js:197
+#: frontend/src/repo-folder-trash.js:185
 msgid "{placeholder} Trash"
 msgstr ""
 
-#: frontend/src/repo-folder-trash.js:237
+#: frontend/src/repo-folder-trash.js:240
 msgid "Delete Time"
 msgstr ""
 
-#: frontend/src/repo-folder-trash.js:325 frontend/src/repo-snapshot.js:271
+#: frontend/src/repo-folder-trash.js:328 frontend/src/repo-snapshot.js:273
 msgid "Successfully restored 1 item."
 msgstr ""
 
-#: frontend/src/repo-folder-trash.js:353 frontend/src/repo-folder-trash.js:411
-#: frontend/src/repo-snapshot.js:293
+#: frontend/src/repo-folder-trash.js:356 frontend/src/repo-folder-trash.js:414
+#: frontend/src/repo-snapshot.js:295
 msgid "Directory"
 msgstr ""
 
-#: frontend/src/repo-history.js:108
+#: frontend/src/repo-history.js:96
 msgid "{placeholder} Modification History"
 msgstr ""
 
-#: frontend/src/repo-history.js:112
+#: frontend/src/repo-history.js:115
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification."
 msgstr ""
 
-#: frontend/src/repo-history.js:141
+#: frontend/src/repo-history.js:144
 msgid "Labels"
 msgstr ""
 
-#: frontend/src/repo-history.js:277
+#: frontend/src/repo-history.js:280
 msgid "None"
 msgstr ""
 
-#: frontend/src/repo-history.js:280 frontend/src/repo-snapshot.js:160
+#: frontend/src/repo-history.js:283 frontend/src/repo-snapshot.js:162
 msgid "Unknown"
 msgstr ""
 
-#: frontend/src/repo-history.js:310
+#: frontend/src/repo-history.js:313
 msgid "Current Version"
 msgstr ""
 
-#: frontend/src/repo-history.js:311
+#: frontend/src/repo-history.js:314
 msgid "View Snapshot"
 msgstr ""
 
-#: frontend/src/repo-snapshot.js:145
+#: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
 msgstr ""
 

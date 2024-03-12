@@ -35,14 +35,14 @@
   "Remove_table": "Tabelle entfernen",
   "Column": "Spalte",
   "Row": "Zeile",
-  "Insert_row_before": "Insert row before",
-  "Insert_row_after": "Insert row after",
-  "Insert_column_before": "Insert column before",
-  "Insert_column_after": "Insert column after",
-  "Remove_row": "Remove row",
-  "Remove_column": "Remove column",
-  "Insert_row": "Insert row",
-  "Insert_column": "Insert column",
+  "Insert_row_before": "Zeile darüber einfügen",
+  "Insert_row_after": "Zeile darunter einfügen",
+  "Insert_column_before": "Spalte links einfügen",
+  "Insert_column_after": "Spalte rechts einfügen",
+  "Remove_row": "Zeile entfernen",
+  "Remove_column": "Spalte entfernen",
+  "Insert_row": "Zeile einfügen",
+  "Insert_column": "Spalte einfügen",
   "Set_align": "Ausrichtung festlegen",
   "Left": "Links",
   "Center": "Zentrieren",
@@ -131,16 +131,16 @@
   "Insert_library_image": "Bild aus Bibliothek einfügen",
   "Size": "Größe",
   "Location": "Ort",
-  "Last_update": "Last update",
+  "Last_update": "Letzte Änderung",
   "Tags": "Tags",
   "Add_participants": "Teilnehmer hinzufügen",
-  "Clear_format": "Clear format",
-  "Image_address_invalid": "Image address invalid",
+  "Clear_format": "Formatierung löschen",
+  "Image_address_invalid": "Die Adresse des Bildes ist ungültig.",
   "Shortcut_help": "Hilfe Tastenkombinationen",
-  "Link_address_required": "Link address required",
-  "Link_address_invalid": "Link address invalid",
-  "Link_title_required": "Link title required",
-  "Blank_title_not_allowed": "Blank title not allowed",
+  "Link_address_required": "Eine Link-Adresse ist erforderlich.",
+  "Link_address_invalid": "Die Link-Adresse ist ungültig.",
+  "Link_title_required": "Ein Link-Titel ist erforderlich.",
+  "Blank_title_not_allowed": "Ein leerer Titel ist nicht erlaubt.",
   "userHelp": {
     "title": "Tastenkombinationen",
     "userHelpData": [
@@ -177,21 +177,21 @@
       {
         "shortcutType": "Blockquote",
         "shortcutData": {
-          "Make_block_quote": "Make block quote",
-          "Escape_block_quote": "Escape block quote"
+          "Make_block_quote": "Blockquote einfügen",
+          "Escape_block_quote": "Blockquote beenden"
         }
       },
       {
         "shortcutType": "Tabellen",
         "shortcutData": {
-          "Insert_table_row": "Insert table tow",
+          "Insert_table_row": "Tabellenzeile einfügen",
           "Escape_table": "Tabelle beenden"
         }
       },
       {
         "shortcutType": "Formeln",
         "shortcutData": {
-          "Insert_formula": "Insert formula"
+          "Insert_formula": "Formel einfügen"
         }
       },
       {
@@ -199,7 +199,7 @@
         "shortcutData": {
           "Bold": "Fett",
           "Italic": "Kursiv",
-          "Italic_bold": "Italic bold",
+          "Italic_bold": "Kursiv fett",
           "Inline_code": "Inline-Code"
         }
       },
@@ -218,7 +218,6 @@
       }
     ]
   },
-  "Select_field": "Select field",
-  "Font_style": "Font style",
-  "Open_link": "Open link"
+  "Select_field": "Feld auswählen",
+  "Font_style": "Schriftschnitt"
 }
