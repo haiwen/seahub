@@ -132,8 +132,14 @@ class LinkCreation extends React.Component {
           this.props.updateAfterCreation(newLink);
         }
       }).catch((error) => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
+        let resp_data = error.response.data;
+        let errMessage = resp_data && resp_data['error_msg'];
+        if (errMessage === 'Folder permission denied.') {
+          this.setState({errorInfo: gettext('Share links cannot be generated because there are invisible or online r/rw folder permissions in the library.')});
+        } else {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        }
       });
     }
   };
