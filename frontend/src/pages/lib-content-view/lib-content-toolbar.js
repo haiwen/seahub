@@ -144,6 +144,7 @@ class LibContentToolbar extends React.Component {
         <CommonToolbar
           isLibView={true}
           repoID={this.props.repoID}
+          path={this.props.path}
           repoName={this.props.repoName}
           currentRepoInfo={this.props.currentRepoInfo}
           onSearchedClick={this.props.onSearchedClick}
