@@ -214,6 +214,7 @@ LANGUAGES = [
 LOCALE_PATHS = [
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
+    os.path.join(PROJECT_ROOT, 'seahub/help/locale'),
 ]
 
 INSTALLED_APPS = [
