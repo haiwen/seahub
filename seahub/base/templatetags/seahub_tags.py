@@ -29,6 +29,7 @@ from seahub.utils.file_size import get_file_size_unit
 
 register = template.Library()
 current_timezone = get_current_timezone()
+VIRTUAL_ID_EMAIL_DOMAIN = '@auth.local'
 
 
 @register.filter(name='tsstr_sec')
@@ -370,7 +371,10 @@ def email2nickname(value):
         nickname = profile.nickname.strip()
     else:
         contact_email = email2contact_email(value)
-        nickname = contact_email.split('@')[0]
+        if VIRTUAL_ID_EMAIL_DOMAIN not in contact_email:
+            nickname = contact_email.split('@')[0]
+        else:
+            nickname = '-'
 
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
@@ -390,6 +394,8 @@ def email2contact_email(value):
         return contact_email
 
     contact_email = Profile.objects.get_contact_email_by_user(value)
+    if VIRTUAL_ID_EMAIL_DOMAIN in contact_email:
+        contact_email = '-@example.com'
     cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT) 
     return contact_email
 
