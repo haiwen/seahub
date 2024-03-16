@@ -370,7 +370,7 @@ def email2nickname(value):
         nickname = profile.nickname.strip()
     else:
         contact_email = email2contact_email(value)
-        nickname = ''
+        nickname = 'nickname'
 
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
