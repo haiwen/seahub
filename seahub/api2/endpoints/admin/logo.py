@@ -58,6 +58,8 @@ class AdminLogo(APIView):
             # save logo file to custom dir
             custom_logo_file = os.path.join(SEAHUB_DATA_ROOT, CUSTOM_LOGO_PATH)
             image = Image.open(logo_file)
+            if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+                    image = image.convert("RGB")
             image.save(custom_logo_file)
 
             # create symlink for custom dir
