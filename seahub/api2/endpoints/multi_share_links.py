@@ -199,7 +199,11 @@ class MultiShareLinks(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        if not _user_pass_folder_permissions(request, repo_id):
+        origin_repo_id = repo_id
+        if repo.is_virtual:
+            origin_repo_id = repo.origin_repo_id
+
+        if not _user_pass_folder_permissions(request, origin_repo_id):
             error_msg = 'Folder permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -399,7 +403,11 @@ class MultiShareLinksBatch(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        if not _user_pass_folder_permissions(request, repo_id):
+        origin_repo_id = repo_id
+        if repo.is_virtual:
+            origin_repo_id = repo.origin_repo_id
+        
+        if not _user_pass_folder_permissions(request, origin_repo_id):
             error_msg = 'Folder permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
