@@ -245,4 +245,9 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
 
         return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
 
+        for version in history_object['data']:
+            version["token"] = jwt.encode(version, ONLYOFFICE_JWT_SECRET)
+
+        return_dict['history_object'] = json.dumps(history_object, ensure_ascii=False)
+
     return return_dict
