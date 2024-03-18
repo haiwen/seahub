@@ -374,7 +374,7 @@ def email2nickname(value):
         if VIRTUAL_ID_EMAIL_DOMAIN not in contact_email:
             nickname = contact_email.split('@')[0]
         else:
-            nickname = '-'
+            nickname = ''
 
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
@@ -395,7 +395,7 @@ def email2contact_email(value):
 
     contact_email = Profile.objects.get_contact_email_by_user(value)
     if VIRTUAL_ID_EMAIL_DOMAIN in contact_email:
-        contact_email = '-@example.com'
+        contact_email = ''
     cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT) 
     return contact_email
 
