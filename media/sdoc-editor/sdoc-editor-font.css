@@ -16,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sdoc-save:before {
+  content: "\e66b";
+}
+
 .sdoc-center-alignment:before {
   content: "\e668";
 }
