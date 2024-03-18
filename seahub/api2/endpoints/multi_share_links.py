@@ -15,15 +15,16 @@ from django.utils import timezone
 from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext as _
 
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW, PERMISSION_INVISIBLE
 from seahub.share.models import FileShare
 from seahub.share.decorators import check_share_link_count
+from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context, get_password_strength_level, \
         is_valid_password, gen_shared_link
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -35,6 +36,44 @@ from seahub.api2.endpoints.share_links import get_share_link_info, check_permiss
 
 logger = logging.getLogger(__name__)
 
+FORBID_SHARE_LINK_CREATE_PERMISSIONS = [
+    PERMISSION_INVISIBLE,
+    PERMISSION_PREVIEW, 
+    PERMISSION_PREVIEW_EDIT
+]
+
+def _user_pass_folder_permissions(request, repo_id):
+    username = request.user.username
+
+    # 1. check repo user admin
+    if is_repo_admin(username, repo_id):
+        return True
+
+    # 2. check folder permissions of the repo of users
+    user_folder_perms = seafile_api.list_folder_user_perm_by_repo(repo_id)
+    for ufp in user_folder_perms:
+        if ufp.user == username and ufp.permission in FORBID_SHARE_LINK_CREATE_PERMISSIONS:
+            return False
+        
+    # 3. check folder permissions of the repo of groups
+
+    # 3.1 list folder perms of a groups    
+    group_folder_perms = seafile_api.list_folder_group_perm_by_repo(repo_id)
+    # 3.2 list user groups
+    if group_folder_perms:
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
+        else:
+            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
+
+        user_group_ids = [g.id for g in user_groups]
+        # 3.3 check folder permissions
+        for gfp in group_folder_perms:
+            if gfp.group_id in user_group_ids and gfp.permission in FORBID_SHARE_LINK_CREATE_PERMISSIONS:
+                return False
+        
+    return True
 
 class MultiShareLinks(APIView):
 
@@ -158,6 +197,10 @@ class MultiShareLinks(APIView):
         # permission check
         if repo.encrypted:
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not _user_pass_folder_permissions(request, repo_id):
+            error_msg = 'Folder permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
@@ -354,6 +397,10 @@ class MultiShareLinksBatch(APIView):
         # permission check
         if repo.encrypted:
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not _user_pass_folder_permissions(request, repo_id):
+            error_msg = 'Folder permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
