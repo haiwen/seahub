@@ -30,6 +30,7 @@ class ProfileManager(models.Manager):
             profile = self.get(user=username)
         except Profile.DoesNotExist:
             profile = self.model(user=username)
+        old_contact_email = profile.contact_email
 
         if nickname is not None:
             nickname = nickname.strip()
@@ -54,7 +55,9 @@ class ProfileManager(models.Manager):
             profile.save(using=self._db)
             return profile
         except IntegrityError:
-            raise DuplicatedContactEmailError
+            profile.contact_email = old_contact_email
+            profile.save(using=self._db)
+            return profile
 
     def update_contact_email(self, username, contact_email):
         """
@@ -91,13 +94,13 @@ class ProfileManager(models.Manager):
             return None
 
     def get_contact_email_by_user(self, username):
-        """Get a user's contact email, use username(login email) if not found.
+        """Get a user's contact email.
         """
         p = self.get_profile_by_user(username)
         if p and p.contact_email:
             return p.contact_email
 
-        return username
+        return ''
 
     def get_username_by_login_id(self, login_id):
         """Convert a user's login id to username(login email).
