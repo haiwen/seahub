@@ -12,6 +12,7 @@ from tests.common.common import USERNAME, PASSWORD, \
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.api.urls import TOKEN_URL, GROUPS_URL, ACCOUNTS_URL, REPOS_URL
 from seahub.base.accounts import User
+from seahub.profile.models import Profile
 
 class ApiTestBase(unittest.TestCase):
     _token = None
@@ -181,11 +182,13 @@ class ApiTestBase(unittest.TestCase):
         user.is_active = True
         user.set_password(password)
         user.save()
+        Profile.objects.add_or_update(username, nickname=username.split('@')[0], contact_email=username)
         return _User(username, password)
 
     def remove_user(self, username):
         user_url = urljoin(ACCOUNTS_URL, username)
         self.admin_delete(user_url)
+        Profile.objects.delete_profile_by_user(username)
 
     def create_file(self, repo, fname=None):
         if isinstance(repo, str):

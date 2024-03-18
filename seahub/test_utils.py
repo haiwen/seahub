@@ -23,6 +23,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname,\
         email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.role_permissions.models import AdminRole
+from seahub.profile.models import Profile
 
 
 TRAVIS = 'TRAVIS' in os.environ
@@ -190,7 +191,7 @@ class Fixtures(Exam):
         user.is_active = kwargs.get('is_active', True)
         user.set_password('secret')
         user.save()
-
+        Profile.objects.add_or_update(email, nickname=email.split('@')[0], contact_email=email)
         return User.objects.get(email)
 
     def remove_user(self, email=None):
@@ -202,6 +203,7 @@ class Fixtures(Exam):
             pass
         for g in ccnet_api.get_groups(email):
             ccnet_threaded_rpc.remove_group(g.id, email)
+        Profile.objects.delete_profile_by_user(email)
 
     def create_repo(self, **kwargs):
         repo_id = seafile_api.create_repo(**kwargs)
@@ -307,6 +309,7 @@ class Fixtures(Exam):
             user.set_password(password)
             user.save()
             user = User.objects.get(email=email)
+        Profile.objects.add_or_update(email, nickname=email.split('@')[0], contact_email=email)
         ccnet_api.add_org_user(self.org.org_id, email, 0)
         return user
 
@@ -322,6 +325,7 @@ class Fixtures(Exam):
             user.set_password(password)
             user.save()
             admin = User.objects.get(email=email)
+        Profile.objects.add_or_update(email, nickname=email.split('@')[0], contact_email=email)
         ccnet_api.add_org_user(self.org.org_id, email, 1)
         return admin
 
