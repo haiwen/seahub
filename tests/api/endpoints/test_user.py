@@ -73,8 +73,8 @@ class AccountTest(BaseTestCase):
         resp = self.client.get(self.url)
         json_resp = json.loads(resp.content)
         assert json_resp['email'] == self.user_name
-        assert json_resp['name'] == email2nickname(self.user_name)
-        assert json_resp['contact_email'] == email2contact_email(self.user_name)
+        assert json_resp['name'] == (profile.nickname if profile.nickname else '')
+        assert json_resp['contact_email'] == (profile.contact_email if profile.contact_email else '')
         assert json_resp['telephone'] == d_profile.telephone
         assert json_resp['login_id'] == profile.login_id
         assert 'list_in_address_book' in json_resp
