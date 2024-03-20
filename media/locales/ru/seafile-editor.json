@@ -12,7 +12,7 @@
   "Quote": "Цитата",
   "Ordered_list": "Нумерованный список",
   "Unordered_list": "Маркированный список",
-  "Check_list_item": "Проверка элемента списка",
+  "Check_list_item": "Элемент контрольного списка",
   "Insert_image": "Вставить изображение",
   "Insert_formula": "Вставить формулу",
   "Formula": "Формула",
@@ -99,7 +99,7 @@
   "Comments": "Комментарии",
   "Add_a_comment": "Добавить комментарий...",
   "No_comment_yet": "Комментариев пока нет.",
-  "Mark_as_Resolved": "Отметить как решённый",
+  "Mark_as_resolved": "Отметить как разрешённый",
   "Ask_for_review": "Спросить отзыв",
   "Review_already_exists": "Отзыв уже существует",
   "View_review": "Просмотр отзыва",
@@ -118,7 +118,7 @@
   "Chooser_document_type": "Выбор типа документа",
   "Empty": "Пусто",
   "No_related_files": "Нет связанных файлов",
-  "No_out_line": "Нет контура",
+  "No_outline": "Нет контура",
   "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "Изменение файлов в этом браузере может привести к небольшим проблемам с отображением.",
   "No_document_improvement_suggestion": "Нет предложений по улучшению документа",
   "Hide_side_panel": "Скрыть боковую панель",
@@ -219,5 +219,6 @@
     ]
   },
   "Select_field": "Выбрать поле",
-  "Font_style": "Стиль шрифта"
+  "Font_style": "Стиль шрифта",
+  "Open_link": "Открыть ссылку"
 }
