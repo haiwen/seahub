@@ -209,6 +209,8 @@ urlpatterns = [
     path('mobile-login/', mobile_login, name="mobile_login"),
 
     path('sso/', sso, name='sso'),
+    path('work-weixin-sso/', work_weixin_sso, name='work_weixin_sso'),
+    path('dingtalk-sso/', dingtalk_sso, name='dingtalk_sso'),
     path('jwt-sso/', jwt_sso, name='jwt_sso'),
     re_path(r'^shib-login/', shib_login, name="shib_login"),
     path('oauth/', include('seahub.oauth.urls')),
