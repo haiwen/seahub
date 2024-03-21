@@ -64,7 +64,7 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
 
 
 class ViaRepoDirView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get_dir_info(self, repo_id, dir_path):
@@ -402,7 +402,7 @@ class ViaRepoDirView(APIView):
 
 
 class ViaRepoUploadLinkView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
@@ -455,7 +455,7 @@ class ViaRepoUploadLinkView(APIView):
 
 
 class ViaRepoDownloadLinkView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -480,7 +480,7 @@ class ViaRepoDownloadLinkView(APIView):
 
 
 class RepoInfoView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -500,7 +500,7 @@ class RepoInfoView(APIView):
 
 
 class ViaRepoBatchMove(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
@@ -570,7 +570,7 @@ class ViaRepoBatchMove(APIView):
 
 
 class ViaRepoBatchCopy(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
@@ -639,7 +639,7 @@ class ViaRepoBatchCopy(APIView):
 
 
 class ViaRepoBatchDelete(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def delete(self, request):
@@ -694,7 +694,7 @@ class ViaRepoBatchDelete(APIView):
 
 
 class ViaRepoTokenFile(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get_file_info(self, username, repo_id, file_path):
