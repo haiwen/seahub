@@ -172,8 +172,11 @@ class Item extends Component {
   };
 
   resetPassword = () => {
+    toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
-      toaster.success(res.data.reset_tip);
+      const { reset_tip } = res.data;
+      const msg = <span className="d-block text-truncate" title={reset_tip}>{reset_tip}</span>;
+      toaster.success(msg, {duration: 5});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

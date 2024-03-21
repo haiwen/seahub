@@ -185,8 +185,8 @@ class OrgUsers extends Component {
         orgUsers: this.state.orgUsers
       });
       this.toggleAddOrgUser();
-      let msg = gettext('successfully added user %s.');
-      msg = msg.replace('%s', email);
+      let msg = gettext('Successfully added user {user_email}');
+      msg = Utils.getTruncatedMsg(msg, '{user_email}', email);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -199,8 +199,8 @@ class OrgUsers extends Component {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
       this.setState({orgUsers: users});
-      let msg = gettext('Deleted user %s');
-      msg = msg.replace('%s', username);
+      let msg = gettext('Deleted user {user_name}');
+      msg = Utils.getTruncatedMsg(msg, '{user_name}', username);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -219,8 +219,8 @@ class OrgUsers extends Component {
       });
 
       res.data.success.forEach(item => {
-        let msg = gettext('successfully sent email to %s.');
-        msg = msg.replace('%s', item.email);
+        let msg = gettext('Successfully sent email to {email}');
+        msg = Utils.getTruncatedMsg(msg, '{email}', item.email);
         toaster.success(msg);
       });
 

@@ -203,8 +203,8 @@ class Users extends Component {
         return item.email != email;
       });
       this.setState({userList: newUserList});
-      let msg = gettext('Deleted user %s');
-      msg = msg.replace('%s', username);
+      let msg = gettext('Deleted user {user_name}');
+      msg = Utils.getTruncatedMsg(msg, '{user_name}', username);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -298,7 +298,10 @@ class Users extends Component {
       this.setState({
         userList: userList
       });
-      toaster.success(res.data.add_user_tip);
+      const { contact_email } = res.data;
+      let msg = gettext("Successfully added user {placeholder}. A notification email has been sent.");
+      msg = Utils.getTruncatedMsg(msg, '{placeholder}', contact_email);
+      toaster.success(msg);
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
@@ -355,7 +358,8 @@ class Users extends Component {
       this.setState({
         userList: userList
       });
-      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}.').replace('{placeholder}', name));
+      const msg = Utils.getTruncatedMsg(gettext('Successfully revoked the admin permission of {placeholder}'), '{placeholder}', name);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

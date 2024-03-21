@@ -194,8 +194,7 @@ class GroupRepos extends Component {
       this.setState({
         repoList: newRepoList
       });
-      const msg = gettext('Successfully unshared library {placeholder}')
-        .replace('{placeholder}', repoName);
+      const msg = Utils.getTruncatedMsg(gettext('Successfully unshared library {placeholder}'), '{placeholder}', repoName);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

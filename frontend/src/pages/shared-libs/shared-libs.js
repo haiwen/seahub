@@ -185,12 +185,12 @@ class Item extends Component {
 
     request.then((res) => {
       this.setState({unshared: true});
-      let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
+      let message = Utils.getTruncatedMsg(gettext('Successfully unshared {name}'), '{name}', data.repo_name);
       toaster.success(message);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to unshare {name}').replace('{name}', data.repo_name);
+        errMessage = Utils.getTruncatedMsg(gettext('Failed to unshare {name}'), '{name}', data.repo_name);
       }
       toaster(errMessage);
     });
@@ -206,8 +206,8 @@ class Item extends Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
+        const msg = Utils.getTruncatedMsg(gettext('Successfully unstarred {library_name_placeholder}'),
+          '{library_name_placeholder}', repoName);
         toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -216,8 +216,8 @@ class Item extends Component {
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        const msg = gettext('Successfully starred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
+        const msg = Utils.getTruncatedMsg(gettext('Successfully starred {library_name_placeholder}'),
+          '{library_name_placeholder}', repoName);
         toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);

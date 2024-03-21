@@ -177,7 +177,7 @@ export default class Toast extends React.PureComponent {
               marginBottom: this.state.isShown ? 0 : -this.state.height
             }}
           >
-            <div ref={this.onRef} style={{ padding: 8 }}>
+            <div ref={this.onRef} style={{ padding: 8 }} className="mw-100">
               <Alert
                 intent={this.props.intent}
                 title={this.props.title}

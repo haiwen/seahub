@@ -119,8 +119,8 @@ class Item extends Component {
       this.setState({
         unlinked: true
       });
-      let msg = gettext('Successfully unlinked %(name)s.');
-      msg = msg.replace('%(name)s', data.device_name);
+      let msg = gettext('Successfully unlinked %(name)s');
+      msg = Utils.getTruncatedMsg(msg, '%(name)s', data.device_name);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

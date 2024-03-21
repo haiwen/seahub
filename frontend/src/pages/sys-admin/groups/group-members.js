@@ -266,15 +266,14 @@ class GroupMembers extends Component {
           memberList: newMemberList.concat(this.state.memberList)
         });
         newMemberList.forEach(item => {
-          const msg = gettext('Successfully added {email_placeholder}')
-            .replace('{email_placeholder}', item.email);
+          const msg = Utils.getTruncatedMsg(gettext('Successfully added {email_placeholder}'), '{email_placeholder}', item.email);
           toaster.success(msg);
         });
       }
       res.data.failed.forEach(item => {
-        const msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
-          .replace('{email_placeholder}', item.email)
+        let msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
           .replace('{error_msg_placeholder}', item.error_msg);
+        msg = Utils.getTruncatedMsg(msg, '{email_placeholder}', item.email);
         toaster.danger(msg, {duration: 3});
       });
     }).catch((error) => {
@@ -291,7 +290,7 @@ class GroupMembers extends Component {
       this.setState({
         memberList: newRepoList
       });
-      toaster.success(gettext('Successfully removed {placeholder}.').replace('{placeholder}', name));
+      toaster.success(Utils.getTruncatedMsg(gettext('Successfully removed {placeholder}'), '{placeholder}', name));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

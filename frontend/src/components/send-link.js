@@ -60,8 +60,7 @@ class SendLink extends React.Component {
       this.props.closeShareDialog();
       const { success, failed } = res.data;
       if (success.length) {
-        const feedbackMsg = gettext('Successfully sent to {placeholder}')
-          .replace('{placeholder}', success.join(', '));
+        const feedbackMsg = Utils.getTruncatedMsg(gettext('Successfully sent to {placeholder}'), '{placeholder}', success.join(', '));
         toaster.success(feedbackMsg);
       }
       if (failed.length) {

@@ -89,11 +89,11 @@ class Alert extends React.PureComponent {
   render() {
     const toastStyle = this.getContainerStyle(this.props.intent);
     return (
-      <div {...css(toastStyle.borderStyle, this.containerStyle)}>
+      <div {...css(toastStyle.borderStyle, this.containerStyle)} className="mw-100">
         <div className={this.toastIcon} >
           <i className={toastStyle.iconClass} {...toastStyle.iconColor}/>
         </div>
-        <div className={this.toastTextContainer}>
+        <div className="text-truncate">
           <p className={this.toastTextTitle}>{this.props.title}</p>
           {this.props.children ? <p className={this.toastTextChild}>{this.props.children}</p> : null}
         </div>
@@ -108,7 +108,10 @@ class Alert extends React.PureComponent {
 Alert.propTypes = {
   onRemove: PropTypes.func.isRequired,
   children: PropTypes.any,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
   intent: PropTypes.string.isRequired,
 };
 

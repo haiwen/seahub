@@ -142,9 +142,8 @@ class DeletedRepoItem extends Component {
   restoreDeletedRepo = (e) => {
     e.preventDefault();
     let repoID = this.props.repo.repo_id;
-    let repoName = this.props.repo.repo_name;
     seafileAPI.restoreDeletedRepo(repoID).then(res => {
-      let message = gettext('Successfully restored the library.') + '  ' + repoName;
+      let message = gettext('Successfully restored the library.');
       toaster.success(message);
       this.props.refreshDeletedRepoList(repoID);
     }).catch(error => {

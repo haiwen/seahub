@@ -250,7 +250,7 @@ class InstitutionAdmins extends Component {
         return user.email != email;
       });
       this.setState({userList: userList});
-      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}.').replace('{placeholder}', name));
+      toaster.success(Utils.getTruncatedMsg(gettext('Successfully revoked the admin permission of {placeholder}'), '{placeholder}', name));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -263,7 +263,7 @@ class InstitutionAdmins extends Component {
         return user.email != email;
       });
       this.setState({userList: newUserList});
-      toaster.success('success');
+      toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

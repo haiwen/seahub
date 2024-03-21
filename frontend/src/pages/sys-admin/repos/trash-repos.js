@@ -156,7 +156,7 @@ class Item extends Component {
     const repo = this.props.repo;
     seafileAPI.sysAdminDeleteTrashRepo(repo.id).then((res) => {
       this.props.onDeleteRepo(repo);
-      const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.name);
+      const msg = Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', repo.name);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

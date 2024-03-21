@@ -48,7 +48,7 @@ class OCMViaWebdav extends Component {
         return item.id != id;
       });
       this.setState({items: items});
-      toaster.success(gettext('Successfully unshared {name}').replace('{name}', name));
+      toaster.success(Utils.getTruncatedMsg(gettext('Successfully unshared {name}'), '{name}', name));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

@@ -202,13 +202,12 @@ class ShareToInvitePeople extends React.Component {
       if (success.length) {
         let successMsg = '';
         if (success.length == 1) {
-          successMsg = gettext('Successfully invited %(email).')
-            .replace('%(email)', success[0].accepter);
+          successMsg = gettext('Successfully invited %(email)');
         } else {
-          successMsg = gettext('Successfully invited %(email) and %(num) other people.')
-            .replace('%(email)', success[0].accepter)
+          successMsg = gettext('Successfully invited %(email) and %(num) other people')
             .replace('%(num)', success.length - 1);
         }
+        successMsg = Utils.getTruncatedMsg(successMsg, '%(email)', success[0].accepter);
         toaster.success(successMsg);
         this.onInvitePeople(success);
       }

@@ -42,11 +42,11 @@ class ListRepoDraftsDialog extends React.Component {
       });
       this.setState({drafts: drafts});
       let msg = gettext('Successfully deleted draft %(draft)s.');
-      msg = msg.replace('%(draft)s', draft.draftFilePath);
+      msg = Utils.getTruncatedMsg(msg, '%(draft)s', draft.draftFilePath);
       toaster.success(msg);
     }).catch(() => {
       let msg = gettext('Failed to delete draft %(draft)s.');
-      msg = msg.replace('%(draft)s', draft.draftFilePath);
+      msg = Utils.getTruncatedMsg(msg, '%(draft)s', draft.draftFilePath);
       toaster.danger(msg);
     });
   };

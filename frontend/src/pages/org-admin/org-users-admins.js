@@ -41,8 +41,8 @@ class OrgUsers extends Component {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
-      let msg = gettext('Deleted user %s');
-      msg = msg.replace('%s', username);
+      let msg = gettext('Deleted user {user_name}');
+      msg = Utils.getTruncatedMsg(msg, '{user_name}', username);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -55,8 +55,8 @@ class OrgUsers extends Component {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
-      let msg = gettext('Successfully revoke the admin permission of %s');
-      msg = msg.replace('%s', res.data.name);
+      let msg = gettext('Successfully revoke the admin permission of {user}');
+      msg = Utils.getTruncatedMsg(msg, '{user}', res.data.name);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -69,8 +69,8 @@ class OrgUsers extends Component {
     this.setState({
       orgAdminUsers: this.state.orgAdminUsers
     });
-    let msg = gettext('Successfully set %s as admin.');
-    msg = msg.replace('%s', userInfo.email);
+    let msg = gettext('Successfully set {user} as admin');
+    msg = Utils.getTruncatedMsg(msg, '{user}', userInfo.email);
     toaster.success(msg);
     this.toggleAddOrgAdmin();
   };

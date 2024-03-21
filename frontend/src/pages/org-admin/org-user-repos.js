@@ -139,7 +139,7 @@ class Item extends Component {
         deleted: true,
         isRepoDeleted: true,
       });
-      const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.repo_name);
+      const msg = Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', repo.repo_name);
       toaster.success(msg);
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);

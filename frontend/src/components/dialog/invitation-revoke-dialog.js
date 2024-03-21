@@ -31,7 +31,7 @@ class InvitationRevokeDialog extends React.Component {
     seafileAPI.revokeInvitation(this.props.token).then((res) => {
       this.props.revokeInvitation();
       this.props.toggleDialog();
-      const msg = gettext('Successfully revoked access of user {placeholder}.').replace('{placeholder}', this.props.accepter);
+      const msg = Utils.getTruncatedMsg(gettext('Successfully revoked access of user {placeholder}'), '{placeholder}', this.props.accepter);
       toaster.success(msg);
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);

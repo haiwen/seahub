@@ -7,6 +7,7 @@ import { gettext, orgID } from '../../utils/constants';
 import toaster from '../../components/toast';
 import UserItem from './org-user-item';
 import OrgUserInfo from '../../models/org-user';
+import MainPanelTopbar from './main-panel-topbar';
 
 class OrgUsersSearchUsersResult extends React.Component {
 
@@ -112,8 +113,8 @@ class OrgUsersSearchUsers extends Component {
         return item.email != email;
       });
       this.setState({orgUsers: newUserList});
-      let msg = gettext('Deleted user %s');
-      msg = msg.replace('%s', username);
+      let msg = gettext('Deleted user {user_name}');
+      msg = Utils.getTruncatedMsg(msg, '{user_name}', username);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -182,6 +183,7 @@ class OrgUsersSearchUsers extends Component {
 
     return (
       <Fragment>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

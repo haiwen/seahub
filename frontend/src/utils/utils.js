@@ -1287,14 +1287,14 @@ export const Utils = {
     let message;
     let dirNamesLength = dirNames.length;
     if (dirNamesLength === 1) {
-      message = gettext('Successfully copied %(name)s.');
+      message = gettext('Successfully copied %(name)s');
     } else if (dirNamesLength === 2) {
-      message = gettext('Successfully copied %(name)s and 1 other item.');
+      message = gettext('Successfully copied %(name)s and 1 other item');
     } else {
-      message = gettext('Successfully copied %(name)s and %(amount)s other items.');
+      message = gettext('Successfully copied %(name)s and %(amount)s other items');
       message = message.replace('%(amount)s', dirNamesLength - 1);
     }
-    message = message.replace('%(name)s', dirNames[0]);
+    message = this.getTruncatedMsg(message, '%(name)s', dirNames[0]);
     return message;
   },
 
@@ -1302,14 +1302,14 @@ export const Utils = {
     let message;
     let dirNamesLength = dirNames.length;
     if (dirNamesLength === 1) {
-      message = gettext('Successfully moved %(name)s.');
+      message = gettext('Successfully moved %(name)s');
     } else if (dirNamesLength === 2) {
-      message = gettext('Successfully moved %(name)s and 1 other item.');
+      message = gettext('Successfully moved %(name)s and 1 other item');
     } else {
-      message = gettext('Successfully moved %(name)s and %(amount)s other items.');
+      message = gettext('Successfully moved %(name)s and %(amount)s other items');
       message = message.replace('%(amount)s', dirNamesLength - 1);
     }
-    message = message.replace('%(name)s', dirNames[0]);
+    message = this.getTruncatedMsg(message, '%(name)s', dirNames[0]);
     return message;
   },
 
@@ -1318,12 +1318,12 @@ export const Utils = {
     let dirNamesLength = dirNames.length;
 
     if (dirNamesLength > 1) {
-      message = gettext('Failed to copy %(name)s and %(amount)s other item(s).');
+      message = gettext('Failed to copy %(name)s and %(amount)s other item(s)');
       message = message.replace('%(amount)s', dirNamesLength - 1);
     } else {
-      message = gettext('Failed to copy %(name)s.');
+      message = gettext('Failed to copy %(name)s');
     }
-    message = message.replace('%(name)s', dirNames[0]);
+    message = this.getTruncatedMsg(message, '%(name)s', dirNames[0]);
     return message;
   },
 
@@ -1331,12 +1331,12 @@ export const Utils = {
     let message;
     let dirNamesLength = dirNames.length;
     if (dirNamesLength > 1) {
-      message = gettext('Failed to move %(name)s and %(amount)s other item(s).');
+      message = gettext('Failed to move %(name)s and %(amount)s other item(s)');
       message = message.replace('%(amount)s', dirNamesLength - 1);
     } else {
-      message = gettext('Failed to move %(name)s.');
+      message = gettext('Failed to move %(name)s');
     }
-    message = message.replace('%(name)s', dirNames[0]);
+    message = this.getTruncatedMsg(message, '%(name)s', dirNames[0]);
     return message;
   },
 
@@ -1629,5 +1629,18 @@ export const Utils = {
     }
     history.replaceState(null, '', origin + pathname + newSearch);
   },
+
+  // for msgs(with placeholder, e.g., 'Failed to delete {name}') used in toast
+  // msgs with more than 1 placeholder can pass the other placeholder/values with `moreItems`
+  getTruncatedMsg(msg, placeholder, value, moreItems) {
+    let targetMsg = msg.replace(placeholder, `<span class="text-truncate mx-1">${value}</span>`);
+    if (moreItems) {
+      for (let i = 0, len = moreItems.length; i < len; i++) {
+        const { placeholder: itemPlaceholder, value: itemValue } = moreItems[i];
+        targetMsg = targetMsg.replace(itemPlaceholder, `<span class="text-truncate mx-1">${itemValue}</span>`);
+      }
+    }
+    return (<span className="text-truncate d-flex" dangerouslySetInnerHTML={{__html: targetMsg}}></span>);
+  }
 
 };

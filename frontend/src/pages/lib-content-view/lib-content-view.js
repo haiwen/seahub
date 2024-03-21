@@ -730,7 +730,7 @@ class LibContentView extends React.Component {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
-          errMessage = Utils.getCopyFailedMessage(dirNames);
+          errMessage = Utils.getMoveFailedMessage(dirNames);
         }
         toaster.danger(errMessage);
       } else {
@@ -818,18 +818,18 @@ class LibContentView extends React.Component {
       });
 
       if (success.length) {
-        let msg = success.length > 1 ? gettext('Restored {name} and {n} other items') :
+        let msg = success.length > 1 ? gettext('Restored {name} and {n} other item(s)') :
           gettext('Restored {name}');
-        msg = msg.replace('{name}', success[0].path.split('/').pop())
-          .replace('{n}', success.length - 1);
+        msg = msg.replace('{n}', success.length - 1);
+        msg = Utils.getTruncatedMsg(msg, '{name}', success[0].path.split('/').pop());
         toaster.success(msg);
       }
 
       if (failed.length) {
-        let msg = failed.length > 1 ? gettext('Failed to restore {name} and {n} other items') :
+        let msg = failed.length > 1 ? gettext('Failed to restore {name} and {n} other item(s)') :
           gettext('Failed to restore {name}');
-        msg = msg.replace('{name}', failed[0].path.split('/').pop())
-          .replace('{n}', failed.length - 1);
+        msg = msg.replace('{n}', failed.length - 1);
+        msg = Utils.getTruncatedMsg(msg, '{name}', failed[0].path.split('/').pop());
         toaster.danger(msg);
       }
     }).catch((error) => {
@@ -853,26 +853,24 @@ class LibContentView extends React.Component {
 
       let msg = '';
       if (direntPaths.length > 1) {
-        msg = gettext('Successfully deleted {name} and {n} other items.');
-        msg = msg.replace('{name}', dirNames[0]);
+        msg = gettext('Successfully deleted {name} and {n} other item(s)');
         msg = msg.replace('{n}', dirNames.length - 1);
       } else {
-        msg = gettext('Successfully deleted {name}.');
-        msg = msg.replace('{name}', dirNames[0]);
+        msg = gettext('Successfully deleted {name}');
       }
       const successTipWithUndo = (
-        <>
-          <span>{msg}</span>
-          <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, direntPaths)}>{gettext('Undo')}</a>
-        </>
+        <span className="d-flex">
+          {Utils.getTruncatedMsg(msg, '{name}', dirNames[0])}
+          <a className="action-link p-0 ml-2" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, direntPaths)}>{gettext('Undo')}</a>
+        </span>
       );
       toaster.success(successTipWithUndo, {duration: 5});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
         errMessage = gettext('Failed to delete {name} and {n} other items.');
-        errMessage = errMessage.replace('{name}', dirNames[0]);
         errMessage = errMessage.replace('{n}', dirNames.length - 1);
+        errMessage = Utils.getTruncatedMsg(errMessage, '{name}', dirNames[0]);
       }
       toaster.danger(errMessage);
     });
@@ -1067,7 +1065,7 @@ class LibContentView extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
           let name = Utils.getFileName(path);
-          errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+          errMessage = Utils.getTruncatedMsg(gettext('Renaming {name} failed'), '{name}', name);
         }
         toaster.danger(errMessage);
       });
@@ -1083,7 +1081,7 @@ class LibContentView extends React.Component {
         }
         if (errMessage === gettext('Error')) {
           let name = Utils.getFileName(path);
-          errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+          errMessage = Utils.getTruncatedMsg(gettext('Renaming {name} failed'), '{name}', name);
         }
         toaster.danger(errMessage);
       });
@@ -1107,19 +1105,18 @@ class LibContentView extends React.Component {
     seafileAPI.deleteDir(repoID, path).then((res) => {
       this.deleteItemAjaxCallback(path, true);
       let name = Utils.getFileName(path);
-      var msg = gettext('Successfully deleted {name}').replace('{name}', name);
       const successTipWithUndo = (
-        <>
-          <span>{msg}</span>
-          <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
-        </>
+        <span className="d-flex">
+          {Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', name)}
+          <a className="action-link p-0 ml-2" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
+        </span>
       );
       toaster.success(successTipWithUndo, {duration: 5});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
         let name = Utils.getFileName(path);
-        errMessage = gettext('Failed to delete {name}').replace('{name}', name);
+        errMessage = Utils.getTruncatedMsg(gettext('Failed to delete {name}'), '{name}', name);
       }
       toaster.danger(errMessage);
     });
@@ -1134,20 +1131,19 @@ class LibContentView extends React.Component {
     } else {
       seafileAPI.deleteFile(repoID, path).then((res) => {
         this.deleteItemAjaxCallback(path, isDir);
-        let name = Utils.getFileName(path);
-        var msg = gettext('Successfully deleted {name}').replace('{name}', name);
+        const name = Utils.getFileName(path);
         const successTipWithUndo = (
-          <>
-            <span>{msg}</span>
-            <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
-          </>
+          <span className="d-flex">
+            {Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', name)}
+            <a className="action-link p-0 ml-2" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
+          </span>
         );
         toaster.success(successTipWithUndo, {duration: 5});
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
           let name = Utils.getFileName(path);
-          errMessage = gettext('Failed to delete {name}').replace('{name}', name);
+          errMessage = Utils.getTruncatedMsg(gettext('Failed to delete {name}'), '{name}', name);
         }
         toaster.danger(errMessage);
       });
@@ -1200,16 +1196,16 @@ class LibContentView extends React.Component {
 
       // show tip message if move to current repo
       if (repoID === destRepo.repo_id) {
-        let message = gettext('Successfully moved {name}.');
-        message = message.replace('{name}', dirName);
+        let message = gettext('Successfully moved {name}');
+        message = Utils.getTruncatedMsg(message, '{name}', dirName);
         toaster.success(message);
       }
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
-          errMessage = gettext('Failed to move {name}.');
-          errMessage = errMessage.replace('{name}', dirName);
+          errMessage = gettext('Failed to move {name}');
+          errMessage = Utils.getTruncatedMsg(errMessage, '{name}', dirName);
         }
         toaster.danger(errMessage);
       } else {
@@ -1256,8 +1252,8 @@ class LibContentView extends React.Component {
           this.loadDirentList(this.state.path);
         }
 
-        let message = gettext('Successfully copied %(name)s.');
-        message = message.replace('%(name)s', dirName);
+        let message = gettext('Successfully copied %(name)s');
+        message = Utils.getTruncatedMsg(message, '%(name)s', dirName);
         toaster.success(message);
       }
     }).catch((error) => {
@@ -1265,7 +1261,7 @@ class LibContentView extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {
           errMessage = gettext('Failed to copy %(name)s');
-          errMessage = errMessage.replace('%(name)s', dirName);
+          errMessage = Utils.getTruncatedMsg(errMessage, '%(name)s', dirName);
         }
         toaster.danger(errMessage);
       } else {
@@ -1298,16 +1294,14 @@ class LibContentView extends React.Component {
       this.addDirent(newFileName, 'file', res.data.size);
       let message = gettext('Successfully converted the file.');
       toaster.success(message, {'id': 'conversion'});
-
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
         let name = Utils.getFileName(path);
-        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
+        errMessage = Utils.getTruncatedMsg(gettext('Failed to convert {name}'), '{name}', name);
       }
       toaster.danger(errMessage, {'id': 'conversion'});
     });
-
   };
 
   onDirentClick = (dirent) => {

@@ -64,7 +64,7 @@ class LabelRepoStateDialog extends React.Component {
     const {repoID, repoName} = this.props;
     const labels = inputValue.map((item, index) => item.value).join(',');
     seafileAPI.addNewRepoLabels(repoID, labels).then((res) => {
-      const msg = gettext('Successfully added label(s) for library {placeholder}').replace('{placeholder}', repoName);
+      const msg = Utils.getTruncatedMsg(gettext('Successfully added label(s) for library {placeholder}'), '{placeholder}', repoName);
       toaster.success(msg);
       this.props.toggleDialog();
     }).catch((error) => {

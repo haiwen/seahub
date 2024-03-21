@@ -140,8 +140,8 @@ class SearchUsers extends Component {
         return item.email != email;
       });
       this.setState({userList: newUserList});
-      let msg = gettext('Deleted user %s');
-      msg = msg.replace('%s', username);
+      let msg = gettext('Deleted user {user_name}');
+      msg = Utils.getTruncatedMsg(msg, '{user_name}', username);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -244,7 +244,8 @@ class SearchUsers extends Component {
       this.setState({
         userList: userList
       });
-      toaster.success(gettext('Successfully revoked the admin permission of {placeholder}.').replace('{placeholder}', name));
+      const msg = Utils.getTruncatedMsg(gettext('Successfully revoked the admin permission of {placeholder}'), '{placeholder}', name);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

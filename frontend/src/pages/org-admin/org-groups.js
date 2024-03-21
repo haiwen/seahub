@@ -124,7 +124,7 @@ class OrgGroups extends Component {
         orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
       });
       let msg = gettext('Successfully deleted {name}');
-      msg = msg.replace('{name}', group.groupName);
+      msg = Utils.getTruncatedMsg(msg, '{name}', group.groupName);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

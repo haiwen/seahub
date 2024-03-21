@@ -76,7 +76,7 @@ class SharedRepoListView extends React.Component {
     });
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      errMessage = Utils.getTruncatedMsg(errMessage, '{name}', newName);
       toaster.danger(errMessage);
       return false;
     }

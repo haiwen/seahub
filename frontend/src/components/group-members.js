@@ -93,7 +93,7 @@ class Member extends React.PureComponent {
     const { item } = this.props;
     seafileAPI.deleteGroupMember(this.props.groupID, item.email).then((res) => {
       this.props.deleteMember(item);
-      toaster.success(gettext('Successfully deleted {name}.').replace('{name}', item.name));
+      toaster.success(Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', item.name));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

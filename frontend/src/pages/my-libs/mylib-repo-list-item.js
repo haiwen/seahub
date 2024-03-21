@@ -158,8 +158,8 @@ class MylibRepoListItem extends React.Component {
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
+        let msg = gettext('Successfully unstarred {library_name_placeholder}');
+        msg = Utils.getTruncatedMsg(msg, '{library_name_placeholder}', repoName);
         toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -168,8 +168,8 @@ class MylibRepoListItem extends React.Component {
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
-        const msg = gettext('Successfully starred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
+        let msg = gettext('Successfully starred {library_name_placeholder}');
+        msg = Utils.getTruncatedMsg(msg, '{library_name_placeholder}', repoName);
         toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -308,13 +308,13 @@ class MylibRepoListItem extends React.Component {
 
       this.props.onDeleteRepo(repo);
       let name = repo.repo_name;
-      var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
+      let msg = Utils.getTruncatedMsg(gettext('Successfully deleted {name}'), '{name}', name);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
         let name = repo.repo_name;
-        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
+        errMessage = Utils.getTruncatedMsg(gettext('Failed to delete {name}'), '{name}', name);
       }
       toaster.danger(errMessage);
 

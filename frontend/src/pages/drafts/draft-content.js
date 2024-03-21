@@ -26,12 +26,12 @@ class DraftContent extends React.Component {
     let draft_name = Utils.getFileName(draft.draft_file_path);
     editUtilities.deleteDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
-      let msg_s = gettext('Successfully deleted draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft_name);
+      let msg_s = gettext('Successfully deleted draft %(draft)s');
+      msg_s = Utils.getTruncatedMsg(msg_s, '%(draft)s', draft_name);
       toaster.success(msg_s);
     }).catch(() => {
-      let msg_s = gettext('Failed to delete draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft_name);
+      let msg_s = gettext('Failed to delete draft %(draft)s');
+      msg_s = Utils.getTruncatedMsg(msg_s, '%(draft)s', draft_name);
       toaster.danger(msg_s);
     });
   };
@@ -41,12 +41,12 @@ class DraftContent extends React.Component {
     let draft_name = Utils.getFileName(draft.draft_file_path);
     editUtilities.publishDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
-      let msg_s = gettext('Successfully published draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft_name);
+      let msg_s = gettext('Successfully published draft %(draft)s');
+      msg_s = Utils.getTruncatedMsg(msg_s, '%(draft)s', draft_name);
       toaster.success(msg_s);
     }).catch(() => {
-      let msg_s = gettext('Failed to publish draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft_name);
+      let msg_s = gettext('Failed to publish draft %(draft)s');
+      msg_s = Utils.getTruncatedMsg(msg_s, '%(draft)s', draft_name);
       toaster.danger(msg_s);
     });
   };

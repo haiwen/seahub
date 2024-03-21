@@ -175,7 +175,7 @@ class Item extends Component {
       this.setState({
         unshared: true
       });
-      let message = gettext('Successfully unshared {name}').replace('{name}', item.repo_name);
+      let message = Utils.getTruncatedMsg(gettext('Successfully unshared {name}'), '{name}', item.repo_name);
       toaster.success(message);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

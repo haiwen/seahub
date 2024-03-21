@@ -333,7 +333,8 @@ class InstitutionUsers extends Component {
         this.setState({userList: newUserList});
       }
       failedArray.forEach((item) => {
-        toaster.danger(item.error_msg);
+        const msg = <span className="d-block text-truncate" title={item.error_msg}>{item.error_msg}</span>;
+        toaster.danger(msg, {duration: 5});
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -347,7 +348,7 @@ class InstitutionUsers extends Component {
         return user.email != email;
       });
       this.setState({userList: newUserList});
-      toaster.success('success');
+      toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

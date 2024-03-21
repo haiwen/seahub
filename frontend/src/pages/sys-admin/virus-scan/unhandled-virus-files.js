@@ -373,9 +373,11 @@ class UnhandledVirusFiles extends Component {
         let errMsg = op == 'delete-virus' ?
           gettext('Failed to delete %(virus_file) from library %(library): %(error_msg)') :
           gettext('Failed to ignore %(virus_file) from library %(library): %(error_msg)');
-        errMsg = errMsg.replace('%(virus_file)', file.file_path)
-          .replace('%(library)', file.repo_name)
-          .replace('%(error_msg)', item.error_msg);
+        errMsg = errMsg.replace('%(error_msg)', item.error_msg);
+        errMsg = Utils.getTruncatedMsg(errMsg, '%(virus_file)', file.file_path, [{
+          placeholder: '%(library)', value: file.repo_name
+        }]);
+
         toaster.danger(errMsg);
       });
     }).catch((error) => {

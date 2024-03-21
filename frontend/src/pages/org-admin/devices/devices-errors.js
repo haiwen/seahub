@@ -185,6 +185,7 @@ class OrgDevicesErrors extends Component {
       this.getDeviceErrorsListByPage(1);
     });
   };
+
   render() {
     return (
       <Fragment>

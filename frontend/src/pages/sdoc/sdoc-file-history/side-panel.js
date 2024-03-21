@@ -179,9 +179,9 @@ class SidePanel extends Component {
   copyHistoryFile = (historyVersion) => {
     const { path, obj_id, ctime_format } = historyVersion;
     seafileAPI.sdocCopyHistoryFile(historyRepoID, path, obj_id, ctime_format).then(res => {
-      let message = gettext('Successfully copied %(name)s.');
       let filename = res.data.file_name;
-      message = message.replace('%(name)s', filename);
+      let message = gettext('Successfully copied %(name)s');
+      message = Utils.getTruncatedMsg(message, '%(name)s', filename);
       toaster.success(message);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);

@@ -81,7 +81,7 @@ class OrgLibraries extends Component {
         orgRepos: this.state.orgRepos.filter(item => item.repoID != repo.repoID)
       });
       let msg = gettext('Successfully deleted {name}');
-      msg = msg.replace('{name}', repo.repoName);
+      msg = Utils.getTruncatedMsg(msg, '{name}', repo.repoName);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
