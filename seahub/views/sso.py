@@ -21,6 +21,8 @@ from seahub.utils import render_permission_error, render_error
 from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_TOKEN_EXPIRATION, LOGIN_URL
 from seahub.base.models import ClientSSOToken
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -63,8 +65,8 @@ def sso(request):
 
 def work_weixin_sso(request):
 
-    if not getattr(settings, 'ENABLE_WORK_WEIXIN', False):
-        error_msg = "work weixin sso feature is not enabled."
+    if not ENABLE_WORK_WEIXIN:
+        error_msg = _('Work weixin sso feature is not enabled')
         return render_error(request, error_msg)
 
     request.session['is_sso_user'] = True
@@ -83,8 +85,8 @@ def work_weixin_sso(request):
 
 def dingtalk_sso(request):
 
-    if not getattr(settings, 'ENABLE_DINGTALK', False):
-        error_msg = "dingtalk sso feature is not enabled."
+    if not ENABLE_DINGTALK:
+        error_msg = _('Dingtalk sso feature is not enabled')
         return render_error(request, error_msg)
 
     request.session['is_sso_user'] = True
