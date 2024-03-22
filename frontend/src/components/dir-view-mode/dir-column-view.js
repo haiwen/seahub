@@ -38,7 +38,6 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   // repo content
   isRepoInfoBarShow: PropTypes.bool.isRequired,
-  draftCounts: PropTypes.number.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   // list
@@ -202,7 +201,6 @@ class DirColumnView extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isRepoInfoBarShow={this.props.isRepoInfoBarShow}
               usedRepoTags={this.props.usedRepoTags}
-              draftCounts={this.props.draftCounts}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}

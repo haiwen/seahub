@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, isDocs, enableVideoThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, username, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -49,8 +49,6 @@ class LibContentView extends React.Component {
       isDraft: false,
       hasDraft: false,
       fileTags: [],
-      draftID: '',
-      draftCounts: 0,
       repoTags: [],
       usedRepoTags: [],
       isTreeDataLoading: true,
@@ -296,7 +294,7 @@ class LibContentView extends React.Component {
 
     // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_id } = res.data;
+      let { mtime, permission, last_modifier_name } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           if (this.state.content !== res.data) {
@@ -309,9 +307,6 @@ class LibContentView extends React.Component {
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
             isFileLoadedErr: false,
-            isDraft: is_draft,
-            hasDraft: has_draft,
-            draftID: draft_id
           });
         });
       });
@@ -332,18 +327,6 @@ class LibContentView extends React.Component {
 
     // list used FileTags
     this.updateUsedRepoTags();
-
-    // list draft counts and review counts
-    if (isDocs) {
-      seafileAPI.getRepoDraftCounts(repoID).then(res => {
-        this.setState({
-          draftCounts: res.data.draft_counts,
-        });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
 
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
@@ -441,7 +424,7 @@ class LibContentView extends React.Component {
 
     // update data
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name, is_draft, has_draft, draft_id } = res.data;
+      let { mtime, permission, last_modifier_name } = res.data;
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         seafileAPI.getFileContent(res.data).then((res) => {
           this.setState({
@@ -451,9 +434,6 @@ class LibContentView extends React.Component {
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
             isFileLoadedErr: false,
-            isDraft: is_draft,
-            hasDraft: has_draft,
-            draftID: draft_id
           });
         });
       });
@@ -897,7 +877,7 @@ class LibContentView extends React.Component {
     });
   };
 
-  onAddFile = (filePath, isMarkdownDraft, isSdocDraft) => {
+  onAddFile = (filePath, isMarkdownDraft) => {
     let repoID = this.props.repoID;
     seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then(res => {
       let name = Utils.getFileName(filePath);
@@ -906,17 +886,6 @@ class LibContentView extends React.Component {
         this.addNodeToTree(name, parentPath, 'file');
       }
       if (parentPath === this.state.path && !this.state.isViewFile) {
-        if (isSdocDraft) { // the new file is marked to be draft
-          seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
-            this.addDirent(name, 'file', res.data.size, isSdocDraft);
-          }).catch(error => {
-            let errMessage = Utils.getErrorMsg(error);
-            toaster.danger(errMessage);
-            this.addDirent(name, 'file', res.data.size);
-          });
-          return;
-        }
-
         this.addDirent(name, 'file', res.data.size);
       }
     }).catch((error) => {
@@ -1470,8 +1439,8 @@ class LibContentView extends React.Component {
     }
   };
 
-  addDirent = (name, type, size, isSdocDraft) => {
-    let item = this.createDirent(name, type, size, isSdocDraft);
+  addDirent = (name, type, size) => {
+    let item = this.createDirent(name, type, size);
     let direntList = this.state.direntList;
     if (type === 'dir') {
       direntList.unshift(item);
@@ -1810,14 +1779,11 @@ class LibContentView extends React.Component {
     return new TreeNode({object});
   }
 
-  createDirent(name, type, size, isSdocDraft) {
+  createDirent(name, type, size) {
     // use current dirent parent's permission as it's permission
     const { userPerm: permission } = this.state;
     const mtime = new Date().getTime()/1000;
     const obj = { name, type, mtime, size, permission };
-    if (isSdocDraft) {
-      obj.is_sdoc_draft = isSdocDraft;
-    }
     const dirent = new Dirent(obj);
     return dirent;
   }
@@ -1901,10 +1867,6 @@ class LibContentView extends React.Component {
         copyMoveSingleItem: false,
       });
     }
-  };
-
-  goDraftPage = () => {
-    window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
   };
 
   sortItems = (sortBy, sortOrder) => {
@@ -2098,7 +2060,6 @@ class LibContentView extends React.Component {
             isDraft={this.state.isDraft}
             hasDraft={this.state.hasDraft}
             fileTags={this.state.fileTags}
-            goDraftPage={this.goDraftPage}
             isFileLoading={this.state.isFileLoading}
             isFileLoadedErr={this.state.isFileLoadedErr}
             filePermission={this.state.filePermission}
@@ -2116,7 +2077,6 @@ class LibContentView extends React.Component {
             onAddFileNode={this.onAddFile}
             onRenameNode={this.onRenameTreeNode}
             onDeleteNode={this.onDeleteTreeNode}
-            draftCounts={this.state.draftCounts}
             repoTags={this.state.repoTags}
             usedRepoTags={this.state.usedRepoTags}
             updateUsedRepoTags={this.updateUsedRepoTags}

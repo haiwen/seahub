@@ -70,21 +70,9 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
       }
-    } else if (item.obj_type == 'draft') {
-      let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = <a href={fileURL} target="_blank" rel="noreferrer">{item.name}</a>;
-      op = gettext('Publish draft');
-      details = fileLink;
-      moreDetails = true;
     } else if (item.obj_type == 'files') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      if (item.name.endsWith('(draft).md')) {
-        fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
-      }
       let fileLink = `<a href=${fileURL} target="_blank">${item.name}</a>`;
-      if (item.name.endsWith('(draft).md') && !item.draft_id) {
-        fileLink = item.name;
-      }
       let fileCount = item.createdFilesCount - 1;
       let firstLine = gettext('{file} and {n} other files')
         .replace('{file}', fileLink)

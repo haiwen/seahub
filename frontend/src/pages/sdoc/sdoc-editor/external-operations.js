@@ -39,7 +39,6 @@ class ExternalOperations extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeInternalLinkEvent = eventBus.subscribe(EXTERNAL_EVENT.INTERNAL_LINK_CLICK, this.onInternalLinkToggle);
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
-    this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
@@ -65,16 +64,6 @@ class ExternalOperations extends React.Component {
       this.setState({ internalLink: options.internalLink });
     }
     this.setState({ isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog });
-  };
-
-  unmark = () => {
-    const { repoID, docPath } = this.props;
-    seafileAPI.sdocUnmarkAsDraft(repoID, docPath).then((res) => {
-      this.props.unmarkDraft();
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   toggleStar = () => {

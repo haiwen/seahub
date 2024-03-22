@@ -131,21 +131,6 @@ export const useNewAPI = window.fileHistory ? window.fileHistory.pageOptions.use
 export const canDownload = window.fileHistory ? window.fileHistory.pageOptions.can_download_file : '';
 export const canCompare = window.fileHistory ? window.fileHistory.pageOptions.can_compare : '';
 
-// Draft review
-export const draftFilePath = window.draft ? window.draft.config.draftFilePath: '';
-export const draftOriginFilePath = window.draft ? window.draft.config.draftOriginFilePath: '';
-export const draftFileName = window.draft ? window.draft.config.draftFileName: '';
-export const draftID = window.draft ? window.draft.config.draftID : '';
-export const draftRepoID = window.draft ? window.draft.config.draftRepoID : '';
-export const author = window.draft ? window.draft.config.author : '';
-export const authorAvatar = window.draft ? window.draft.config.authorAvatar : '';
-export const originFileExists = window.draft ? window.draft.config.originFileExists : '';
-export const draftFileExists = window.draft ? window.draft.config.draftFileExists : '';
-export const draftStatus = window.draft ? window.draft.config.draftStatus : '';
-export const draftPublishVersion = window.draft ? window.draft.config.draftPublishVersion : '';
-export const originFileVersion = window.draft ? window.draft.config.originFileVersion : '';
-export const filePermission = window.draft ? window.draft.config.perm : '';
-
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
 export const orgName = window.org ? window.org.pageOptions.orgName : '';

@@ -14,7 +14,6 @@ const propTypes = {
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -64,7 +63,6 @@ class DirListView extends React.Component {
           <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
-            draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
             onFileTagChanged={this.props.onFileTagChanged}

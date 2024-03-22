@@ -126,28 +126,6 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   };
 
-  onMarkAsDraft = (dirent) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(dirent, 'is_sdoc_draft', true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onUnmarkAsDraft = (dirent) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(dirent, 'is_sdoc_draft', false);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   onStartRevise = (dirent) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
@@ -205,12 +183,6 @@ class MultipleDirOperationToolbar extends React.Component {
         break;
       case 'Unlock':
         this.unlockFile(dirent);
-        break;
-      case 'Mark as draft':
-        this.onMarkAsDraft(dirent);
-        break;
-      case 'Unmark as draft':
-        this.onUnmarkAsDraft(dirent);
         break;
       case 'History':
         this.onHistory(dirent);

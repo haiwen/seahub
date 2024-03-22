@@ -1,7 +1,7 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-const { repoID, repoName, filePath, fileName, draftID } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName } = window.app.pageOptions;
 const { serviceUrl } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -137,10 +137,6 @@ class EditorApi {
     return seafileAPI.deleteShareLink(token);
   }
 
-  getDraftKey() {
-    return (repoID + filePath);
-  }
-
   getFileContent(url) {
     return seafileAPI.getFileContent(url);
   }
@@ -155,22 +151,6 @@ class EditorApi {
 
   getUserAvatar(size) {
     return seafileAPI.getUserAvatar(userName, size);
-  }
-
-  goDraftPage() {
-    window.location.href = serviceUrl + '/drafts/' + draftID + '/';
-  }
-
-  createDraftFile() {
-    return seafileAPI.createDraft(repoID, filePath).then(res => {
-      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + Utils.encodePath(res.data.draft_file_path) + '?mode=edit';
-    });
-  }
-
-  publishDraftFile() {
-    return seafileAPI.publishDraft(draftID).then(res => {
-      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(res.data.published_file_path);
-    });
   }
 
   fileMetaData() {
