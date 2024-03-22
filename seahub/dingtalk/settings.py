@@ -1,9 +1,10 @@
 import seahub.settings as settings
+from seahub.utils import is_pro_version
 
 # constants
 DINGTALK_PROVIDER = 'dingtalk'
 
-ENABLE_DINGTALK = getattr(settings, 'ENABLE_DINGTALK', False)
+ENABLE_DINGTALK = getattr(settings, 'ENABLE_DINGTALK', False) and is_pro_version()
 DINGTALK_AGENT_ID = getattr(settings, 'DINGTALK_AGENT_ID', '')
 
 # for 10.0 or later

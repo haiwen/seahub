@@ -18,7 +18,7 @@ from constance import config
 import seaserv
 
 from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
-    MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
+    MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT, \
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, APPLE_TOUCH_ICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
@@ -48,6 +48,7 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 try:
     from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
@@ -131,6 +132,8 @@ def base(request):
         'site_name': get_site_name(),
         'enable_signup': config.ENABLE_SIGNUP,
         'enable_weixin': ENABLE_WEIXIN,
+        'enable_work_weixin': ENABLE_WORK_WEIXIN,
+        'enable_dingtalk': ENABLE_DINGTALK,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
@@ -162,7 +165,6 @@ def base(request):
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
-        'enable_work_weixin': ENABLE_WORK_WEIXIN,
         'avatar_url': avatar_url if avatar_url else '',
         'privacy_policy_link': PRIVACY_POLICY_LINK,
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,

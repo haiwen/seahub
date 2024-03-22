@@ -81,16 +81,31 @@ html, body, #wrapper { height:100%; }
     <button id="multi_adfs_sso" class="btn btn-secondary btn-block">{% trans "Single Sign-On" %}</button>
     {% endif %}
 
-    {% if enable_weixin %}
+    {% if enable_weixin or enable_work_weixin or enable_dingtalk %}
     <div class="text-center">
       <div class="mt-5 mb-4 d-flex align-items-center">
         <span class="login-with-wechat-deco flex-fill"></span>
         <span id="login-with-wechat" class="mx-2">{% trans "Login with" %}</span>
         <span class="login-with-wechat-deco flex-fill"></span>
       </div>
-      <a href="{% url "weixin_oauth_login" %}">
-        <img src="{{MEDIA_URL}}img/weixin.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}微信{% else %}WeChat{% endif %}" />
-      </a>
+
+      {% if enable_weixin %}
+        <a href="{% url "weixin_oauth_login" %}">
+          <img src="{{MEDIA_URL}}img/weixin.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}微信{% else %}WeChat{% endif %}" />
+        </a>
+      {% endif %}
+
+      {% if enable_work_weixin %}
+        <a href="{% url "work_weixin_sso" %}">
+          <img src="{{MEDIA_URL}}img/work-weixin.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}企业微信{% else %}Work-WeChat{% endif %}" />
+        </a>
+      {% endif %}
+
+      {% if enable_dingtalk %}
+        <a href="{% url "dingtalk_sso" %}">
+          <img src="{{MEDIA_URL}}img/dingtalk.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}钉钉{% else %}DingTalk{% endif %}" />
+        </a>
+      {% endif %}
     </div>
     {% endif %}
 

@@ -1,9 +1,10 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 # encoding: utf-8
 from django.conf import settings
+from seahub.utils import is_pro_version
 
 # # work weixin base
-ENABLE_WORK_WEIXIN = getattr(settings, 'ENABLE_WORK_WEIXIN', False)
+ENABLE_WORK_WEIXIN = getattr(settings, 'ENABLE_WORK_WEIXIN', False) and is_pro_version()
 WORK_WEIXIN_CORP_ID = getattr(settings, 'WORK_WEIXIN_CORP_ID', '')
 WORK_WEIXIN_AGENT_SECRET = getattr(settings, 'WORK_WEIXIN_AGENT_SECRET', '')
 WORK_WEIXIN_ACCESS_TOKEN_URL = getattr(settings, 'WORK_WEIXIN_ACCESS_TOKEN_URL',
