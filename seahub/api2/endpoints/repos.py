@@ -460,7 +460,7 @@ class RepoShareInfoView(APIView):
             org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
             if folder_path == '/':
-                shared_users = seafile_api.list_org_repo_shared_to(repo_owner, repo_id)
+                shared_users = seafile_api.list_org_repo_shared_to(org_id, repo_owner, repo_id)
                 shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
             else:
                 shared_users = seafile_api.get_org_shared_users_for_subdir(org_id,
