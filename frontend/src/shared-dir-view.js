@@ -443,10 +443,10 @@ class SharedDirView extends React.Component {
           </div>
           <div className="o-auto">
             <div className="shared-dir-view-main">
-              <h2 className="h3">{dirName}</h2>
+              <h2 className="h3 text-truncate" title={dirName}>{dirName}</h2>
               <p>{gettext('Shared by: ')}{sharedBy}</p>
               <div className="d-flex justify-content-between align-items-center op-bar">
-                <p className="m-0 mr-4 ellipsis d-flex align-items-center"><span className="flex-none">{gettext('Current path: ')}</span>{this.renderPath()}</p>
+                <p className="m-0 mr-4 ellipsis d-flex align-items-center">{gettext('Current path: ')}{this.renderPath()}</p>
                 <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
