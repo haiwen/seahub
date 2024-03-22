@@ -89,7 +89,7 @@ class SharedFileView extends React.Component {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`${siteRoot}d/${sharedToken}/?p=${encodeURIComponent(item.path)}`}>{item.name}</a>
+                <a className="text-truncate mx-1" href={`${siteRoot}d/${sharedToken}/?p=${encodeURIComponent(item.path)}`} title={item.name}>{item.name}</a>
                 <span> / </span>
               </React.Fragment>
             );
@@ -97,7 +97,7 @@ class SharedFileView extends React.Component {
           return null;
         })
         }
-        {zipped[zipped.length - 1].name}
+        <span className="text-truncate ml-1" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
       </React.Fragment>
     );
   };
@@ -119,7 +119,7 @@ class SharedFileView extends React.Component {
             <div className="text-truncate">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
               {zipped ?
-                <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p> :
+                <p className="m-0 d-flex">{gettext('Current path: ')}{this.renderPath()}</p> :
                 <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
               }
             </div>
