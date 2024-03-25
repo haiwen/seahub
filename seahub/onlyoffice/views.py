@@ -356,7 +356,7 @@ class OnlyofficeFileHistory(APIView):
 
         parsed_url = urllib.parse.urlparse(url)
         query_parameters = urllib.parse.parse_qs(parsed_url.query)
-        username = query_parameters.get('username')[0]
+        # username = query_parameters.get('username')[0]
         repo_id = query_parameters.get('repo_id')[0]
         file_path = query_parameters.get('path')[0]
         obj_id = query_parameters.get('obj_id')[0]
@@ -365,14 +365,6 @@ class OnlyofficeFileHistory(APIView):
             logger.error(url)
             error_msg = 'url invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not seafile_api.get_repo(repo_id):
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not seafile_api.check_permission_by_path(repo_id, '/', username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         file_name = os.path.basename(file_path)
         fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
