@@ -13,15 +13,11 @@ const { seafileCollabServer } = window.app.config;
 const { canDownloadFile } = window.app.pageOptions;
 
 const propTypes = {
-  isDocs: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
-  isDraft: PropTypes.bool.isRequired,
   editorApi: PropTypes.object.isRequired,
   collabUsers: PropTypes.array.isRequired,
   fileInfo: PropTypes.object.isRequired,
   toggleShareLinkDialog: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  toggleNewDraft: PropTypes.func.isRequired,
   toggleStar: PropTypes.func.isRequired,
   openDialogs: PropTypes.func.isRequired,
   showFileHistory: PropTypes.bool.isRequired,
@@ -31,7 +27,6 @@ const propTypes = {
   contentChanged: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
   onSaveEditorContent: PropTypes.func.isRequired,
-  showDraftSaved: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
   toggleLockFile: PropTypes.func.isRequired,
@@ -68,7 +63,6 @@ class HeaderToolbar extends React.Component {
               toggleStar={this.props.toggleStar}
               editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}
-              showDraftSaved={this.props.showDraftSaved}
               isLocked={isLocked}
               isPro={isPro}
               mediaUrl={mediaUrl}
@@ -154,7 +148,6 @@ class HeaderToolbar extends React.Component {
               toggleStar={this.props.toggleStar}
               editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}
-              showDraftSaved={this.props.showDraftSaved}
             />
             <div className="topbar-btn-container">
               <ButtonGroup>

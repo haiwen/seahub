@@ -9,7 +9,6 @@ const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
   tabItemClick: PropTypes.func.isRequired,
-  draftCounts: PropTypes.number,
 };
 
 class SidePanel extends React.Component {
@@ -21,7 +20,7 @@ class SidePanel extends React.Component {
           <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
-          <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>
+          <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} />
         </div>
         <div className="side-panel-footer">
           <SideNavFooter />

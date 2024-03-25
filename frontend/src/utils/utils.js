@@ -620,15 +620,6 @@ export const Utils = {
     }
 
     if (permission == 'rw') {
-      /*
-      if (Utils.isSdocFile(dirent.name)) {
-        if (dirent.is_sdoc_draft) {
-          list.push(UNMARK_AS_DRAFT);
-        } else {
-          list.push(MARK_AS_DRAFT);
-        }
-      }
-      */
       list.push('Divider');
       list.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {

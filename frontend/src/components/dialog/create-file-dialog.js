@@ -18,8 +18,6 @@ class CreateFile extends React.Component {
     this.state = {
       parentPath: '',
       childName: props.fileType || '',
-      isMarkdownDraft: false,
-      isSdocDraft: false,
       errMessage: '',
       isSubmitBtnActive: props.fileType.slice(0, -5) ? true : false,
     };
@@ -61,8 +59,7 @@ class CreateFile extends React.Component {
       this.setState({errMessage: errMessage});
     } else {
       let path = this.state.parentPath + newName;
-      const { isMarkdownDraft, isSdocDraft } = this.state;
-      this.props.onAddFile(path, isMarkdownDraft, isSdocDraft);
+      this.props.onAddFile(path);
       this.props.toggleDialog();
     }
   };
@@ -71,55 +68,6 @@ class CreateFile extends React.Component {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
-    }
-  };
-
-  handleCheck = () => {
-    let pos = this.state.childName.lastIndexOf('.');
-
-    if (this.state.isMarkdownDraft) {
-      // from draft to not draft
-      // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
-      // case 2, the file name is not ended with `(draft)`, the user has deleted some characters, like `test(dra.md`
-      let p = this.state.childName.substring(pos-7, pos);
-      let fileName = this.state.childName.substring(0, pos-7);
-      let fileType = this.state.childName.substring(pos);
-      if (p === '(draft)') {
-        // remove `(draft)` from file name
-        this.setState({
-          childName: fileName + fileType,
-          isMarkdownDraft: !this.state.isMarkdownDraft
-        });
-      } else {
-        // don't change file name
-        this.setState({
-          isMarkdownDraft: !this.state.isMarkdownDraft
-        });
-      }
-    }
-
-    if (!this.state.isMarkdownDraft) {
-      // from not draft to draft
-      // case 1, test.md  ===> test(draft).md
-      // case 2, .md ===> (draft).md
-      // case 3, no '.' in the file name, don't change the file name
-      if (pos > 0) {
-        let fileName = this.state.childName.substring(0, pos);
-        let fileType = this.state.childName.substring(pos);
-        this.setState({
-          childName: fileName + '(draft)' + fileType,
-          isMarkdownDraft: !this.state.isMarkdownDraft
-        });
-      } else if (pos === 0 ) {
-        this.setState({
-          childName: '(draft)' + this.state.childName,
-          isMarkdownDraft: !this.state.isMarkdownDraft
-        });
-      } else {
-        this.setState({
-          isMarkdownDraft: !this.state.isMarkdownDraft
-        });
-      }
     }
   };
 
@@ -132,12 +80,6 @@ class CreateFile extends React.Component {
     if (!this.newInput.current) return;
     this.newInput.current.focus();
     this.newInput.current.setSelectionRange(0,0);
-  };
-
-  toggleMarkSdocDraft = (e) => {
-    this.setState({
-      isSdocDraft: e.target.checked
-    });
   };
 
   render() {
@@ -157,21 +99,6 @@ class CreateFile extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            {/*this.props.fileType == '.md' && isDocs && (
-              <FormGroup check>
-                <Label check>
-                  <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
-                </Label>
-              </FormGroup>
-            )*/}
-            {/*this.props.fileType == '.sdoc' && (
-              <FormGroup check>
-                <Label check>
-                  <Input type="checkbox" checked={isSdocDraft} onChange={this.toggleMarkSdocDraft}/>
-                  <span>{gettext('Mark as draft')}</span>
-                </Label>
-              </FormGroup>
-            )*/}
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>

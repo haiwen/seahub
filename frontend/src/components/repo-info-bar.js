@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
-import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
 
 import '../css/repo-info-bar.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
   className: PropTypes.string,
@@ -24,7 +22,6 @@ class RepoInfoBar extends React.Component {
     this.state = {
       currentTag: null,
       isListTaggedFileShow: false,
-      showRepoDrafts: false
     };
   }
 
@@ -41,19 +38,8 @@ class RepoInfoBar extends React.Component {
     });
   };
 
-  toggleDrafts = () => {
-    this.setState({
-      showRepoDrafts: !this.state.showRepoDrafts
-    });
-  };
-
   render() {
-    let { repoID, usedRepoTags, draftCounts, className } = this.props;
-
-    // to be compatible with the existing code
-    if (draftCounts === undefined) {
-      draftCounts = 0;
-    }
+    let { repoID, usedRepoTags, className } = this.props;
 
     return (
       <div className={`repo-info-bar ${className ? className : ''}`}>
@@ -72,17 +58,6 @@ class RepoInfoBar extends React.Component {
             })}
           </ul>
         )}
-        {/*<div className={usedRepoTags.length > 0 ? 'file-info-list mt-1' : 'file-info-list'}>
-          {draftCounts > 0 &&
-            <span className="file-info">
-              <span className="info-icon sf2-icon-drafts"></span>
-              <span className="used-tag-name">{gettext('draft')}</span>
-              <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.toggleDrafts}>
-                {draftCounts > 1 ? draftCounts + ' files' : draftCounts + ' file'}
-              </button>
-            </span>
-          }
-        </div>*/}
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <ListTaggedFilesDialog
@@ -97,16 +72,6 @@ class RepoInfoBar extends React.Component {
             />
           </ModalPortal>
         )}
-
-        {this.state.showRepoDrafts && (
-          <ModalPortal>
-            <ListRepoDraftsDialog
-              toggle={this.toggleDrafts}
-              repoID={this.props.repoID}
-            />
-          </ModalPortal>
-        )}
-
       </div>
     );
   }

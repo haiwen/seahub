@@ -181,12 +181,6 @@ class DirentGridView extends React.Component {
       case 'Lock':
         this.onLockItem(currentObject);
         break;
-      case 'Mark as draft':
-        this.onMarkAsDraft(currentObject);
-        break;
-      case 'Unmark as draft':
-        this.onUnmarkAsDraft(currentObject);
-        break;
       case 'History':
         this.onHistory(currentObject);
         break;
@@ -323,28 +317,6 @@ class DirentGridView extends React.Component {
       this.props.updateDirent(currentObject, 'is_locked', false);
       this.props.updateDirent(currentObject, 'locked_by_me', false);
       this.props.updateDirent(currentObject, 'lock_owner_name', '');
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onMarkAsDraft = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(currentObject, 'is_sdoc_draft', true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onUnmarkAsDraft = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(currentObject, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

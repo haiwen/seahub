@@ -17,7 +17,6 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   dirPath: PropTypes.string.isRequired,
   toggleStar: PropTypes.func.isRequired,
-  unmarkDraft: PropTypes.func.isRequired,
   onNewNotification: PropTypes.func.isRequired,
   onClearNotification: PropTypes.func.isRequired
 };
@@ -39,7 +38,6 @@ class ExternalOperations extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeInternalLinkEvent = eventBus.subscribe(EXTERNAL_EVENT.INTERNAL_LINK_CLICK, this.onInternalLinkToggle);
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
-    this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
@@ -65,16 +63,6 @@ class ExternalOperations extends React.Component {
       this.setState({ internalLink: options.internalLink });
     }
     this.setState({ isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog });
-  };
-
-  unmark = () => {
-    const { repoID, docPath } = this.props;
-    seafileAPI.sdocUnmarkAsDraft(repoID, docPath).then((res) => {
-      this.props.unmarkDraft();
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   toggleStar = () => {
@@ -147,9 +135,9 @@ class ExternalOperations extends React.Component {
     return isDuplicated;
   };
 
-  onAddFile = (filePath, isMarkdownDraft) => {
+  onAddFile = (filePath) => {
     let repoID = this.props.repoID;
-    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then((res) => {
+    seafileAPI.createFile(repoID, filePath).then((res) => {
       const eventBus = EventBus.getInstance();
       eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, { data: res.data });
     }).catch((error) => {

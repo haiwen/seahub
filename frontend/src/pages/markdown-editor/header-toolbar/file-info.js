@@ -37,9 +37,6 @@ class FileInfo extends React.PureComponent {
         <div className="file-state">
           <span className={'file-modifier-name'}>{fileInfo.lastModifier}</span>
           <span className={'file-modifier-time'}>{modifyTime}</span>
-          {this.props.showDraftSaved && (
-            <span className={'file-modifier-savedraft'}>{gettext('Local draft saved')}</span>
-          )}
         </div>
       </div>
     );
@@ -52,7 +49,6 @@ FileInfo.propTypes = {
   isLocked: PropTypes.bool,
   mediaUrl: PropTypes.string,
   toggleStar: PropTypes.func,
-  showDraftSaved: PropTypes.bool,
 };
 
 export default FileInfo;

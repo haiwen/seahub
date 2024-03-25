@@ -28,10 +28,7 @@ const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
-  goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
@@ -50,7 +47,6 @@ const propTypes = {
   onAddFileNode: PropTypes.func.isRequired,
   onAddFolderNode: PropTypes.func.isRequired,
   // repo content
-  draftCounts: PropTypes.number,
   repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -164,10 +160,10 @@ class LibContentContainer extends React.Component {
   };
 
   render() {
-    let { path, repoID, usedRepoTags, draftCounts } = this.props;
+    let { path, repoID, usedRepoTags } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
-      if (usedRepoTags.length !== 0 || draftCounts !== 0) {
+      if (usedRepoTags.length !== 0) {
         isRepoInfoBarShow = true;
       }
     }
@@ -214,7 +210,6 @@ class LibContentContainer extends React.Component {
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -256,7 +251,6 @@ class LibContentContainer extends React.Component {
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -298,9 +292,6 @@ class LibContentContainer extends React.Component {
                     isFileLoading={this.props.isFileLoading}
                     isFileLoadedErr={this.props.isFileLoadedErr}
                     hash={this.props.hash}
-                    isDraft={this.props.isDraft}
-                    hasDraft={this.props.hasDraft}
-                    goDraftPage={this.props.goDraftPage}
                     filePermission={this.props.filePermission}
                     content={this.props.content}
                     lastModified={this.props.lastModified}
@@ -309,7 +300,6 @@ class LibContentContainer extends React.Component {
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}

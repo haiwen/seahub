@@ -295,12 +295,6 @@ class DirentListItem extends React.Component {
       case 'Convert to sdoc':
         this.onItemConvert(event, 'sdoc');
         break;
-      case 'Mark as draft':
-        this.onMarkAsDraft();
-        break;
-      case 'Unmark as draft':
-        this.onUnmarkAsDraft();
-        break;
       case 'History':
         this.onHistory();
         break;
@@ -409,28 +403,6 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
       this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onMarkAsDraft = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(this.props.dirent, 'is_sdoc_draft', true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  onUnmarkAsDraft = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(this.props.dirent, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -779,9 +751,6 @@ class DirentListItem extends React.Component {
                 <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
                 <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
               }
-              {/*(Utils.isSdocFile(dirent.name) && dirent.is_sdoc_draft) &&
-                <span className="dirent-sdoc-draft-identifier">{gettext('Draft')}</span>
-              */}
             </Fragment>
           )}
         </td>

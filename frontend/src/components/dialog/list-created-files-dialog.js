@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
-import { gettext, siteRoot, serviceURL } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -33,11 +33,8 @@ class ListCreatedFileDialog extends React.Component {
               {
                 activity.createdFilesList.map((item, index) => {
                   let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-                  if (item.name.endsWith('(draft).md')) {
-                    fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
-                  }
                   let fileLink = <a href={fileURL} target='_blank' rel="noreferrer">{item.name}</a>;
-                  if (item.name.endsWith('(draft).md') && !item.draft_id) {
+                  if (item.name.endsWith('(draft).md')) { // be compatible with the existing draft files
                     fileLink = item.name;
                   }
                   return (

@@ -15,7 +15,6 @@ const MSG_TYPE_REPO_SHARE = 'repo_share';
 const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group';
 const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
-const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 // const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
@@ -219,22 +218,6 @@ class NoticeItem extends React.Component {
         notice = Utils.HTMLescape(notice);
         notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
-      return {avatar_url, notice};
-    }
-
-    if (noticeType === MSG_TYPE_DRAFT_REVIEWER) {
-
-      let avatar_url = detail.request_user_avatat_url;
-
-      let fromUser = detail.request_user_name;
-
-      let draftId = detail.draft_id;
-      let draftUrl = siteRoot + 'drafts/' + draftId + '/';
-
-      let notice = gettext('{from_user} has sent you a request for {draft_link}.');
-      let draftLink = '<a href=' + draftUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
-      notice = notice.replace('{from_user}', fromUser);
-      notice = notice.replace('{draft_link}', draftLink);
       return {avatar_url, notice};
     }
 

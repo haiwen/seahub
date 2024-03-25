@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { EXTERNAL_EVENTS, EventBus, RichMarkdownEditor } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isDocs, mediaUrl } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
 import ShareDialog from '../../components/dialog/share-dialog';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
@@ -16,7 +16,7 @@ import './css/markdown-editor.css';
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
-const { repoID, filePath, fileName, isDraft, hasDraft, isLocked, lockedByMe } = window.app.pageOptions;
+const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
@@ -42,11 +42,9 @@ class MarkdownEditor extends React.Component {
       },
       editorMode: 'rich',
       collabServer: seafileCollabServer ? seafileCollabServer : null,
-      localDraftDialog: false,
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
-      showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
       value: null,
@@ -61,10 +59,6 @@ class MarkdownEditor extends React.Component {
     };
 
     this.timer = null;
-    this.localDraft = '';
-    this.autoSave = false;
-    this.draftRichValue = '';
-    this.draftPlainValue = '';
 
     if (this.state.collabServer) {
       const socket = io(this.state.collabServer);
@@ -179,50 +173,6 @@ class MarkdownEditor extends React.Component {
     this.setState({editorMode: editorMode});
   };
 
-  setDraftValue = (type, value) => {
-    if (type === 'rich') {
-      this.draftRichValue = value;
-    } else {
-      this.draftPlainValue = value;
-    }
-  };
-
-  checkDraft = () => {
-    let draftKey = editorApi.getDraftKey();
-    let draft = localStorage.getItem(draftKey);
-    let that = this;
-    if (draft) {
-      that.setState({localDraftDialog: true});
-      that.localDraft = draft;
-      localStorage.removeItem(draftKey);
-    }
-  };
-
-  useDraft = () => {
-    this.setState({
-      localDraftDialog: false,
-      loading: false,
-      markdownContent: this.localDraft,
-      editorMode: 'rich',
-    });
-    this.emitSwitchEditor(true);
-  };
-
-  deleteDraft = () => {
-    if (this.state.localDraftDialog) {
-      this.setState({
-        localDraftDialog: false,
-        loading: false,
-      });
-    }
-    let draftKey = editorApi.getDraftKey();
-    localStorage.removeItem(draftKey);
-  };
-
-  closeDraftDialog = () => {
-    this.setState({localDraftDialog: false});
-  };
-
   clearTimer = () => {
     clearTimeout(this.timer);
     this.timer = null;
@@ -279,16 +229,13 @@ class MarkdownEditor extends React.Component {
 
     // Goto rich edit page
     // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
-    // case1: If file is draft file
-    // case2: If mode == 'edit' and the file has no draft
-    // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
     const { fileInfo } = this.state;
     this.setState({
       loading: false,
       fileInfo: {...fileInfo, mtime, size, starred, permission, lastModifier, id},
       markdownContent,
       value: '',
-      readOnly: !hasPermission || hasDraft,
+      readOnly: !hasPermission,
     });
 
     if (userInfo && this.socket) {
@@ -309,7 +256,6 @@ class MarkdownEditor extends React.Component {
         },
       });
     }
-    this.checkDraft();
     this.listFileTags();
 
     this.listFileParticipants();
@@ -480,9 +426,6 @@ class MarkdownEditor extends React.Component {
     return (
       <Fragment>
         <HeaderToolbar
-          isDocs={isDocs}
-          hasDraft={hasDraft}
-          isDraft={isDraft}
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
           fileInfo={this.state.fileInfo}
@@ -490,7 +433,6 @@ class MarkdownEditor extends React.Component {
           openDialogs={this.openDialogs}
           toggleShareLinkDialog={this.toggleShareLinkDialog}
           onEdit={this.setEditorMode}
-          toggleNewDraft={editorApi.createDraftFile}
           showFileHistory={this.state.isShowHistory ? false : true }
           toggleHistory={this.toggleHistory}
           readOnly={this.state.readOnly}
@@ -498,7 +440,6 @@ class MarkdownEditor extends React.Component {
           contentChanged={this.state.contentChanged}
           saving={this.state.saving}
           onSaveEditorContent={this.onSaveEditorContent}
-          showDraftSaved={this.state.showDraftSaved}
           isLocked={this.state.isLocked}
           lockedByMe={this.state.lockedByMe}
           toggleLockFile={this.toggleLockFile}
