@@ -640,7 +640,7 @@ export default class AISearch extends Component {
           <div className="search">
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
-              <div className="input-icon">
+              <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
                 {this.renderSearchIcon()}
                 <input
                   type="text"
@@ -666,7 +666,7 @@ export default class AISearch extends Component {
               </div>
               {this.state.isSettingsShown && this.renderSwitch()}
               <div
-                className="search-result-container dropdown-search-result-container mt-1"
+                className="search-result-container dropdown-search-result-container"
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
