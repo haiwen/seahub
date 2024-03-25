@@ -25,8 +25,6 @@ class Acticity {
       this.old_name = json.old_name;
     } else if (json.op_type === 'publish') {
       this.old_path = json.old_path;
-    } else if (json.name.endsWith('(draft).md')) {
-      this.draft_id = json.draft_id;
     }
   }
 }

@@ -17,7 +17,6 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   dirPath: PropTypes.string.isRequired,
   toggleStar: PropTypes.func.isRequired,
-  unmarkDraft: PropTypes.func.isRequired,
   onNewNotification: PropTypes.func.isRequired,
   onClearNotification: PropTypes.func.isRequired
 };
@@ -136,9 +135,9 @@ class ExternalOperations extends React.Component {
     return isDuplicated;
   };
 
-  onAddFile = (filePath, isMarkdownDraft) => {
+  onAddFile = (filePath) => {
     let repoID = this.props.repoID;
-    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then((res) => {
+    seafileAPI.createFile(repoID, filePath).then((res) => {
       const eventBus = EventBus.getInstance();
       eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, { data: res.data });
     }).catch((error) => {

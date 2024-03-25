@@ -46,8 +46,6 @@ class LibContentView extends React.Component {
       isGroupOwnedRepo: false,
       userPerm: '',
       selectedDirentList: [],
-      isDraft: false,
-      hasDraft: false,
       fileTags: [],
       repoTags: [],
       usedRepoTags: [],
@@ -877,9 +875,9 @@ class LibContentView extends React.Component {
     });
   };
 
-  onAddFile = (filePath, isMarkdownDraft) => {
+  onAddFile = (filePath) => {
     let repoID = this.props.repoID;
-    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then(res => {
+    seafileAPI.createFile(repoID, filePath).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
       if (this.state.currentMode === 'column') {
@@ -2005,8 +2003,6 @@ class LibContentView extends React.Component {
           <LibContentToolbar
             isViewFile={this.state.isViewFile}
             filePermission={this.state.filePermission}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
             fileTags={this.state.fileTags}
             onFileTagChanged={this.onToolbarFileTagChanged}
             onSideNavMenuClick={this.props.onMenuClick}
@@ -2057,8 +2053,6 @@ class LibContentView extends React.Component {
             onMainNavBarClick={this.onMainNavBarClick}
             isViewFile={this.state.isViewFile}
             hash={this.state.hash}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
             fileTags={this.state.fileTags}
             isFileLoading={this.state.isFileLoading}
             isFileLoadedErr={this.state.isFileLoadedErr}

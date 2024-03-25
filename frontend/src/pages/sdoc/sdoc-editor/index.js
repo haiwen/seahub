@@ -26,10 +26,6 @@ export default class SdocEditor extends React.Component {
     this.setState({ isStarred: isStarred });
   };
 
-  unmarkDraft = () => {
-    this.setState({ isDraft: false });
-  };
-
   onSetFavicon = (suffix) => {
     let { docName } = window.seafile;
     if (suffix) {
@@ -89,7 +85,6 @@ export default class SdocEditor extends React.Component {
           direntList={direntList}
           dirPath={dirPath}
           toggleStar={this.toggleStar}
-          unmarkDraft={this.unmarkDraft}
           onNewNotification={this.onNewNotification}
           onClearNotification={this.onClearNotification}
         />

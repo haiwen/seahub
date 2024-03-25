@@ -11,8 +11,6 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,  // for file-view-toolbar
   // side-panel
@@ -73,8 +71,6 @@ class LibContentToolbar extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               filePermission={this.props.filePermission}
-              isDraft={this.props.isDraft}
-              hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showShareBtn={this.props.showShareBtn}

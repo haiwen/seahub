@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip} from 'reactstrap';
-import { gettext, siteRoot, isDocs } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 import ModalPotal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';

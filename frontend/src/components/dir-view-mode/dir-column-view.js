@@ -28,9 +28,6 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
-  goDraftPage: PropTypes.func.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
@@ -180,9 +177,6 @@ class DirColumnView extends React.Component {
               path={this.props.path}
               repoID={this.props.repoID}
               hash={this.props.hash}
-              isDraft={this.props.isDraft}
-              hasDraft={this.props.hasDraft}
-              goDraftPage={this.props.goDraftPage}
               isFileLoading={this.props.isFileLoading}
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}

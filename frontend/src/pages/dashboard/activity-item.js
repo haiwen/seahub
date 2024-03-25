@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { gettext, siteRoot, serviceURL } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
 import ModalPortal from '../../components/modal-portal';
@@ -87,10 +87,10 @@ class ActivityItem extends Component {
       moreDetails = true;
     } else if (item.obj_type == 'file') {
       const isDraft = item.name.endsWith('(draft).md');
-      const fileURL = isDraft ? serviceURL + '/drafts/' + item.draft_id + '/' :
+      const fileURL = isDraft ? '' :
         `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
       let fileLink = <a href={fileURL} target="_blank" rel="noreferrer">{item.name}</a>;
-      if (isDraft && !item.draft_id) {
+      if (isDraft) {
         fileLink = item.name;
       }
       switch (item.op_type) {

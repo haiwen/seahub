@@ -18,8 +18,6 @@ class CreateFile extends React.Component {
     this.state = {
       parentPath: '',
       childName: props.fileType || '',
-      isMarkdownDraft: false,
-      isSdocDraft: false,
       errMessage: '',
       isSubmitBtnActive: props.fileType.slice(0, -5) ? true : false,
     };
@@ -61,8 +59,7 @@ class CreateFile extends React.Component {
       this.setState({errMessage: errMessage});
     } else {
       let path = this.state.parentPath + newName;
-      const { isMarkdownDraft, isSdocDraft } = this.state;
-      this.props.onAddFile(path, isMarkdownDraft, isSdocDraft);
+      this.props.onAddFile(path);
       this.props.toggleDialog();
     }
   };

@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { EXTERNAL_EVENTS, EventBus, RichMarkdownEditor } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isDocs, mediaUrl } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
 import ShareDialog from '../../components/dialog/share-dialog';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
@@ -16,7 +16,7 @@ import './css/markdown-editor.css';
 const CryptoJS = require('crypto-js');
 const URL = require('url-parse');
 
-const { repoID, filePath, fileName, isDraft, hasDraft, isLocked, lockedByMe } = window.app.pageOptions;
+const { repoID, filePath, fileName, isLocked, lockedByMe } = window.app.pageOptions;
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
@@ -59,8 +59,6 @@ class MarkdownEditor extends React.Component {
     };
 
     this.timer = null;
-    this.localDraft = '';
-    this.autoSave = false;
 
     if (this.state.collabServer) {
       const socket = io(this.state.collabServer);
@@ -237,7 +235,7 @@ class MarkdownEditor extends React.Component {
       fileInfo: {...fileInfo, mtime, size, starred, permission, lastModifier, id},
       markdownContent,
       value: '',
-      readOnly: !hasPermission || hasDraft,
+      readOnly: !hasPermission,
     });
 
     if (userInfo && this.socket) {
@@ -428,9 +426,6 @@ class MarkdownEditor extends React.Component {
     return (
       <Fragment>
         <HeaderToolbar
-          isDocs={isDocs}
-          hasDraft={hasDraft}
-          isDraft={isDraft}
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
           fileInfo={this.state.fileInfo}
@@ -438,7 +433,6 @@ class MarkdownEditor extends React.Component {
           openDialogs={this.openDialogs}
           toggleShareLinkDialog={this.toggleShareLinkDialog}
           onEdit={this.setEditorMode}
-          toggleNewDraft={editorApi.createDraftFile}
           showFileHistory={this.state.isShowHistory ? false : true }
           toggleHistory={this.toggleHistory}
           readOnly={this.state.readOnly}

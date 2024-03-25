@@ -38,10 +38,6 @@ class EditorUtilities {
     });
   }
 
-  createFile(filePath, isDraft) {
-    return seafileAPI.createFile(repoID, filePath, isDraft);
-  }
-
   deleteFile(filePath) {
     return seafileAPI.deleteFile(repoID, filePath);
   }
@@ -93,18 +89,6 @@ class EditorUtilities {
 
   revertFile(filePath, commitID) {
     return seafileAPI.revertFile(historyRepoID, filePath, commitID);
-  }
-
-  listDrafts() {
-    return seafileAPI.listDrafts();
-  }
-
-  deleteDraft(id) {
-    return seafileAPI.deleteDraft(id);
-  }
-
-  publishDraft(id) {
-    return seafileAPI.publishDraft(id);
   }
 
   zipDownload(parent_dir, dirents) {

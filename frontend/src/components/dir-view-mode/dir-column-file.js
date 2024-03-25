@@ -8,8 +8,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   hash: PropTypes.string,
-  isDraft: PropTypes.bool,
-  hasDraft: PropTypes.bool,
   isFileLoading: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
