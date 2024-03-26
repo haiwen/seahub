@@ -59,7 +59,7 @@
   "Copy_internal_link": "Der interne Link wurde in den Zwischenspeicher kopiert.",
   "Internal_link_desc": "Interne Links sind Verweise auf Dateien bzw. Ordner, die nur von Benutzer/innen mit mindestens Leserechten für die Dateien bzw. Ordner genutzt werden können. Interne Links eignen sich insbesondere für die interne Kommunikation in Ticket-/CRM-Systemen sowie E-Mails und Chats.",
   "Share": "Freigeben",
-  "Share_link": "Download-Link",
+  "Share_link": "Freigabe-Link",
   "Generate": "Erstellen",
   "Add_password_protection": "Passwort hinzufügen",
   "Password": "Passwort",
@@ -220,5 +220,6 @@
   },
   "Select_field": "Feld auswählen",
   "Font_style": "Schriftschnitt",
-  "Open_link": "Open link"
+  "Open_link": "Open link",
+  "Image_is_uploading": "Image is uploading"
 }
