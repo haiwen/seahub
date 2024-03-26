@@ -400,7 +400,7 @@
   "Delete_failed": "Не удалось удалить",
   "Insert_caption": "Вставить подпись",
   "No_collaborators_available": "Нет доступных соавторов",
-  "Search_collaborator": "Search collaborator",
+  "Search_collaborator": "Поиск соавтора",
   "Doc_comments": "Комментарии к документу",
   "Tag_not_found": "Тег не найден",
   "Create_a_new_tag": "Создать новый тег",
@@ -452,5 +452,5 @@
   "Move_column_count": "Перемещение {{count}} столбцов",
   "Move_row_count": "Перемещение {{count}} строк",
   "Mark_all_as_read": "Отметить все как прочитанное",
-  "Alignment_type": "Alignment"
+  "Alignment_type": "Выравнивание"
 }
