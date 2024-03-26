@@ -334,7 +334,7 @@ class OnlyofficeFileHistory(APIView):
         except Exception as e:
             logger.error(e)
             logger.error(token)
-            error_msg = 'Encode bearer failed.'
+            error_msg = 'Decode JWT token failed.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         payload = payload.get('payload')
