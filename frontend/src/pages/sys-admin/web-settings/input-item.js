@@ -23,6 +23,10 @@ class WebSettingInput extends Component {
     };
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({value: nextProps.value});
+  }
+
   toggleBtns = () => {
     this.setState({isBtnsShown: !this.state.isBtnsShown});
   };
