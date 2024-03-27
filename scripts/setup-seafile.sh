@@ -543,7 +543,7 @@ if [[ ! -f ${dest_settings_py} ]]; then
 # -*- coding: utf-8 -*-
 SECRET_KEY = "$key"
 
-SERVICE_URL = "http://$ip_or_domain/"
+SERVICE_URL = "http://$ip_or_domain"
 
 EOF
 fi

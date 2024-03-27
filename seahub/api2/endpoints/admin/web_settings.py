@@ -95,6 +95,9 @@ class AdminWebSettings(APIView):
                 error_msg = 'value invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if key in ('SERVICE_URL', 'FILE_SERVER_ROOT'):
+                value = value.rstrip('/')
+
             try:
                 setattr(config, key, value)
             except AttributeError as e:
