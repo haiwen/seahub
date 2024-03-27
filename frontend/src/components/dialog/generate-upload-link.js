@@ -150,7 +150,7 @@ class GenerateUploadLink extends React.Component {
         this.setState({errorInfo: gettext('Passwords don\'t match')});
         return false;
       }
-      if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
+      if (Utils.getStrengthLevel(password, shareLinkPasswordMinLength) < shareLinkPasswordStrengthLevel) {
         this.setState({errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)});
         return false;
       }
