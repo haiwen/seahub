@@ -2,6 +2,7 @@ const paths = require('./paths');
 
 const entryFiles = {
   markdownEditor: "/index.js",
+  plainMarkdownEditor: "/index.js",
   TCAccept: "/tc-accept.js",
   TCView: "/tc-view.js",
   wiki: "/wiki.js",
