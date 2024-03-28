@@ -724,6 +724,10 @@ def view_lib_file(request, repo_id, path):
     if filetype == MARKDOWN:
 
         mode = request.GET.get('mode', '')
+        if mode not in ('edit', 'viewer', 'plain'):
+            mode = 'viewer'
+        if mode == 'plain':
+            template = 'plain_' + template
 
         is_draft = is_draft_file(repo.id, path)
 
@@ -737,7 +741,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['domain'] = get_current_site(request).domain
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
         return_dict['language_code'] = get_language()
-        return_dict['mode'] = 'edit' if mode == 'edit' else 'viewer'
+        return_dict['mode'] = mode
         return_dict['is_draft'] = is_draft
         return_dict['has_draft'] = has_draft
         return_dict['draft_id'] = draft['draft_id']
