@@ -50,7 +50,9 @@ if ENABLE_OAUTH:
     INCLUDE_CLIENT_ID = getattr(settings, 'OAUTH_INCLUDE_CLIENT_ID', None)
 
     # Used for init an user for Seahub.
-    PROVIDER_DOMAIN = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
+    OAUTH_PROVIDER = getattr(settings, 'OAUTH_PROVIDER', '')
+    if not OAUTH_PROVIDER:
+        OAUTH_PROVIDER = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
     OAUTH_ATTRIBUTE_MAP = getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {})
 
 
@@ -67,7 +69,7 @@ def oauth_check(func):
         else:
             if not CLIENT_ID or not CLIENT_SECRET or not AUTHORIZATION_URL \
                     or not REDIRECT_URL or not TOKEN_URL or not USER_INFO_URL \
-                    or not SCOPE or not PROVIDER_DOMAIN:
+                    or not SCOPE or not OAUTH_PROVIDER:
                 logger.error('OAuth relevant settings invalid.')
                 logger.error('CLIENT_ID: %s' % CLIENT_ID)
                 logger.error('CLIENT_SECRET: %s' % CLIENT_SECRET)
@@ -76,7 +78,7 @@ def oauth_check(func):
                 logger.error('TOKEN_URL: %s' % TOKEN_URL)
                 logger.error('USER_INFO_URL: %s' % USER_INFO_URL)
                 logger.error('SCOPE: %s' % SCOPE)
-                logger.error('PROVIDER_DOMAIN: %s' % PROVIDER_DOMAIN)
+                logger.error('OAUTH_PROVIDER: %s' % OAUTH_PROVIDER)
                 error = True
 
         if error:
@@ -173,7 +175,7 @@ def oauth_callback(request):
     # compatible with old users via email
     old_email = oauth_user_info.get('email', '')
 
-    oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(PROVIDER_DOMAIN, uid)
+    oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
     if oauth_user:
         email = oauth_user.username
         is_new_user = False
@@ -181,9 +183,9 @@ def oauth_callback(request):
         if not is_valid_email(str(old_email)):
             # In previous versions, if 'email' is not in mailbox format,
             # we combine 'email' and 'provider' to mailbox format.
-            old_email = '%s@%s' % (str(old_email), PROVIDER_DOMAIN)
+            old_email = '%s@%s' % (str(old_email), OAUTH_PROVIDER)
         try:
-            old_user = User.objects.get_old_user(old_email, PROVIDER_DOMAIN, uid)
+            old_user = User.objects.get_old_user(old_email, OAUTH_PROVIDER, uid)
             email = old_user.username
             is_new_user = False
         except User.DoesNotExist:
@@ -206,7 +208,7 @@ def oauth_callback(request):
 
     email = user.username
     if is_new_user:
-        SocialAuthUser.objects.add(email, PROVIDER_DOMAIN, uid)
+        SocialAuthUser.objects.add(email, OAUTH_PROVIDER, uid)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
