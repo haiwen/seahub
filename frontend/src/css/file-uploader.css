@@ -73,11 +73,45 @@
   color: #666666;
 }
 
-.upload-operation .saving {
-  color: #ee8204;
-  word-wrap: break-word;
-}
-
 .disabled-link {
   color: #999999;
+}
+
+#upload-link-total-progress-container {
+  margin: 20px -32px 0;
+  border: 1px solid #eee;
+  border-width: 1px 0;
+  font-size: 14px;
+  height: 36px;
+}
+
+.file-upload-item .upload-success-icon {
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  color: #fff;
+  background: #47b881;
+  border-radius: 100%;
+  font-size: 8px;
+  line-height: 1.1;
+  font-weight: bolder;
+}
+
+.file-upload-item .upload-success-msg {
+  color: #47b881;
+}
+
+.file-upload-item .upload-failure-icon {
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  color: #fff;
+  background: #ec4c47;
+  border-radius: 100%;
+  font-size: 8px;
+  text-align: center;
+}
+
+.file-upload-item .upload-failure-msg {
+  color: #ec4c47;
 }

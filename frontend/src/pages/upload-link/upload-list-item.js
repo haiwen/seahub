@@ -105,17 +105,37 @@ class UploadListItem extends React.Component {
                   )}
                 </Fragment>
               }
-              {(resumableFile.size < (100 * 1000 * 1000)) &&
-                <div className="progress-container d-flex align-items-center">
-                  <div className="progress">
-                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+              {(resumableFile.size < (100 * 1000 * 1000)) && (
+                <>
+                  <div className="progress-container d-flex align-items-center">
+                    <div className="progress">
+                      <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                   </div>
-                </div>
-              }
+                  {this.state.uploadState === UPLOAD_UPLOADING && (
+                    <>
+                      {progress == 0 && <p className="progress-text mb-0">{gettext('Waiting...')}</p>}
+                      {progress > 0 && <p className="progress-text mb-0">{`${gettext('Uploading...')} ${progress}%`}</p>}
+                    </>
+                  )}
+                  {this.state.uploadState === UPLOAD_ISSAVING && (
+                    <p className="progress-text mb-0">{gettext('Saving...')}</p>
+                  )}
+                </>
+              )}
             </Fragment>
           }
+          {this.state.uploadState === UPLOAD_UPLOADED && (
+            <div className="d-flex align-items-center">
+              <span className="upload-success-icon sf2-icon-tick mr-2"></span>
+              <span className="upload-success-msg">{gettext('Uploaded')}</span>
+            </div>
+          )}
           {this.state.uploadState === UPLOAD_ERROR && (
-            <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
+            <div className="d-flex align-items-center">
+              <span className="upload-failure-icon fas fa-exclamation mr-2"></span>
+              <span className="upload-failure-msg" dangerouslySetInnerHTML={{__html: error}}></span>
+            </div>
           )}
         </td>
         <td className="upload-operation">
@@ -125,12 +145,6 @@ class UploadListItem extends React.Component {
             )}
             {this.state.uploadState === UPLOAD_ERROR && (
               <a href="#" onClick={this.onUploadRetry} role="button">{gettext('Retry')}</a>
-            )}
-            {this.state.uploadState === UPLOAD_ISSAVING && (
-              <span className="saving">{gettext('Saving...')}</span>
-            )}
-            {this.state.uploadState === UPLOAD_UPLOADED && (
-              <span className="uploaded">{gettext('Uploaded')}</span>
             )}
           </Fragment>
         </td>

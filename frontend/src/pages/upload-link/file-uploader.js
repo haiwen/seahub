@@ -302,8 +302,10 @@ class FileUploader extends React.Component {
 
   // start uploading
   onUploadStart = () => {
+    /*
     const message = gettext('File upload started');
     toaster.notify(message);
+    */
   };
 
   onProgress = () => {
@@ -421,10 +423,12 @@ class FileUploader extends React.Component {
   };
 
   onComplete = () => {
+    /*
     if (!this.error) {
       const message = gettext('All files uploaded');
       toaster.success(message);
     }
+    */
     this.error = false; // reset it
 
     this.notifiedFolders = [];
