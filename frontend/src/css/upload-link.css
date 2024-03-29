@@ -25,9 +25,6 @@ body {
   color: #f25041;
   font-size: 48px;
 }
-#upload-link-panel .tip-list-item {
-  list-style: decimal inside none;
-}
 #upload-link-drop-zone {
   background: rgba(255, 152, 0, 0.1);
   border: 2px dashed #ff9800;

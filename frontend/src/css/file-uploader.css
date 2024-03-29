@@ -81,3 +81,22 @@
 .disabled-link {
   color: #999999;
 }
+
+#upload-link-total-progress-container {
+  margin: 20px -32px 0;
+  border: 1px solid #eee;
+  border-width: 1px 0;
+  font-size: 14px;
+  height: 36px;
+}
+
+.file-upload-item .uploaded {
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  color: #fff;
+  background: #47b881;
+  border-radius: 100%;
+  font-size: 8px;
+  font-weight: bolder;
+}

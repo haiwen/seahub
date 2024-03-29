@@ -130,7 +130,7 @@ class UploadListItem extends React.Component {
               <span className="saving">{gettext('Saving...')}</span>
             )}
             {this.state.uploadState === UPLOAD_UPLOADED && (
-              <span className="uploaded">{gettext('Uploaded')}</span>
+              <span className="uploaded sf2-icon-tick" title={gettext('Uploaded')}></span>
             )}
           </Fragment>
         </td>
