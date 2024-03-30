@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import SeafileCodeMirror from './code-mirror';
-import processor from '../../slate-convert/md-to-html';
+import { processor } from '@seafile/seafile-editor';
 import HeaderToolbar from '../markdown-editor/header-toolbar/header-toolbar';
 import editorApi from '../markdown-editor/editor-api';
 import { getPlainOptions } from './helper';

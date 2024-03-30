@@ -170,7 +170,6 @@ class MarkdownEditor extends React.Component {
   };
 
   setEditorMode = (editorMode) => { // rich | plain
-    // this.setState({editorMode: editorMode});
     const href = window.location.href;
     window.location.href = href + '?mode=plain';
   };
