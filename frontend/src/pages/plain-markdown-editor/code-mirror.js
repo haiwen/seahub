@@ -82,7 +82,6 @@ class SeafileCodeMirror extends React.Component {
       </div>
     );
   }
-
 }
 
 SeafileCodeMirror.propTypes = propTypes;
