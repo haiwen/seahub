@@ -43,7 +43,6 @@ class FileUploader extends React.Component {
       isUploadProgressDialogShow: false,
       currentResumableFile: null,
       uploadBitrate: 0,
-      allFilesUploaded: false,
     };
 
     this.uploadInput = React.createRef();
@@ -150,12 +149,6 @@ class FileUploader extends React.Component {
   };
 
   onChunkingComplete = (resumableFile) => {
-
-    let allFilesUploaded = this.state.allFilesUploaded;
-    if (allFilesUploaded === true) {
-      this.setState({allFilesUploaded: false});
-    }
-
     let path = this.props.path;
     let fileName = resumableFile.fileName;
     let relativePath = resumableFile.relativePath;
@@ -434,7 +427,6 @@ class FileUploader extends React.Component {
     this.notifiedFolders = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    this.setState({allFilesUploaded: true});
   };
 
   onError = (message, file) => {
@@ -522,8 +514,7 @@ class FileUploader extends React.Component {
 
     if (!this.resumable.isUploading()) {
       this.setState({
-        totalProgress: '100',
-        allFilesUploaded: true,
+        totalProgress: 100
       });
       this.loaded = 0;
     }
@@ -543,8 +534,7 @@ class FileUploader extends React.Component {
     this.loaded = 0;
 
     this.setState({
-      allFilesUploaded: true,
-      totalProgress: '100',
+      totalProgress: 100,
       uploadFileList: uploadFileList
     });
     // reset upload link loaded
@@ -641,7 +631,6 @@ class FileUploader extends React.Component {
           forbidUploadFileList={this.state.forbidUploadFileList}
           totalProgress={this.state.totalProgress}
           uploadBitrate={this.state.uploadBitrate}
-          allFilesUploaded={this.state.allFilesUploaded}
           onCloseUploadDialog={this.onCloseUploadDialog}
           onCancelAllUploading={this.onCancelAllUploading}
           onUploadCancel={this.onUploadCancel}

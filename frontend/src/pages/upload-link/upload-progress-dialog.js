@@ -16,7 +16,6 @@ const propTypes = {
   onUploadRetry: PropTypes.func.isRequired,
   onFileUpload: PropTypes.func.isRequired,
   onFolderUpload: PropTypes.func.isRequired,
-  allFilesUploaded: PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
@@ -47,7 +46,7 @@ class UploadProgressDialog extends React.Component {
   };
 
   render() {
-    const { totalProgress, allFilesUploaded, uploadBitrate, uploadFileList, forbidUploadFileList } = this.props;
+    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList } = this.props;
     const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
       .replace('{uploaded_files_num}', uploadFileList.filter(file => file.isSaved).length)
       .replace('{all_files_num}', uploadFileList.length);
@@ -71,7 +70,7 @@ class UploadProgressDialog extends React.Component {
           </ButtonDropdown>
           <Button color="primary" outline={true} className="ml-4"
             onClick={this.props.onCancelAllUploading}
-            disabled={allFilesUploaded}>
+            disabled={totalProgress == 0 || totalProgress == 100}>
             {gettext('Cancel All')}
           </Button>
         </div>
