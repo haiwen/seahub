@@ -82,7 +82,12 @@
   border: 1px solid #eee;
   border-width: 1px 0;
   font-size: 14px;
-  height: 36px;
+  height: 52px;
+}
+
+#upload-link-total-progress-container .progress {
+  height: 5px;
+  margin-top: 8px;
 }
 
 .file-upload-item .upload-success-icon {
