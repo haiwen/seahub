@@ -1,0 +1,8 @@
+.sf-code-mirror .cm-editor {
+  height: 100vh;
+  font-size: 13px;
+}
+
+.sf-code-mirror .cm-editor .cm-scroller {
+  overflow-x: initial;
+}
