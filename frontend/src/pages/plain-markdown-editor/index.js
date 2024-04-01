@@ -9,6 +9,7 @@ import editorApi from '../markdown-editor/editor-api';
 import { getPlainOptions } from './helper';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
+import CodeMirrorLoading from '../../components/code-mirror-loading';
 
 import './style.css';
 import '../markdown-editor/css/markdown-editor.css';
@@ -192,6 +193,8 @@ const PlainMarkdownEditor = (props) => {
   }, []);
 
   const ignoreCallBack = useCallback(() => void 0, []);
+
+  if (options.loading) return <CodeMirrorLoading />;
 
   return (
     <>
