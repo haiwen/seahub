@@ -143,8 +143,12 @@ def dingtalk_callback(request):
         if not profile:
             profile = Profile(user=email)
         profile.nickname = name.strip()
-        profile.contact_email = contact_email
-        profile.save()
+        if contact_email:
+            profile.contact_email = contact_email
+        try:
+            profile.save()
+        except Exception as e:
+            logger.error(e)
 
     # generate auth token for Seafile client
     api_token = get_api_token(request)
