@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import io from 'socket.io-client';
-import { EXTERNAL_EVENTS, EventBus, RichMarkdownEditor } from '@seafile/seafile-editor';
+import { EXTERNAL_EVENTS, EventBus, MarkdownEditor as SeafileMarkdownEditor } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, mediaUrl } from '../../utils/constants';
@@ -422,7 +422,7 @@ class MarkdownEditor extends React.Component {
   };
 
   render() {
-    const { loading, editorMode, markdownContent, fileInfo, fileTagList } = this.state;
+    const { loading, markdownContent, fileInfo, fileTagList } = this.state;
 
     return (
       <Fragment>
@@ -446,9 +446,8 @@ class MarkdownEditor extends React.Component {
           toggleLockFile={this.toggleLockFile}
         />
         <div className='sf-md-viewer-content'>
-          <RichMarkdownEditor
+          <SeafileMarkdownEditor
             ref={this.editorRef}
-            mode={editorMode}
             isFetching={loading}
             initValue={this.getFileName(fileName)}
             value={markdownContent}
@@ -459,7 +458,7 @@ class MarkdownEditor extends React.Component {
             isSupportInsertSeafileImage={true}
           >
             <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
-          </RichMarkdownEditor>
+          </SeafileMarkdownEditor>
         </div>
         {this.state.showMarkdownEditorDialog && (
           <React.Fragment>
