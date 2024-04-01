@@ -15,11 +15,12 @@ const propTypes = {
 class CreateFile extends React.Component {
   constructor(props) {
     super(props);
+    const { fileType = '' } = props;
     this.state = {
       parentPath: '',
-      childName: props.fileType || '',
+      childName: fileType,
       errMessage: '',
-      isSubmitBtnActive: props.fileType.slice(0, -5) ? true : false,
+      isSubmitBtnActive: this.isSdocSuffix(fileType) ? true : false,
     };
     this.newInput = React.createRef();
   }
@@ -32,6 +33,10 @@ class CreateFile extends React.Component {
       this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
   }
+
+  isSdocSuffix = (name) => {
+    return name.endsWith('.sdoc');
+  };
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
