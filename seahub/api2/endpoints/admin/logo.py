@@ -58,6 +58,14 @@ class AdminLogo(APIView):
             # save logo file to custom dir
             custom_logo_file = os.path.join(SEAHUB_DATA_ROOT, CUSTOM_LOGO_PATH)
             image = Image.open(logo_file)
+            # The format of log is png by default. If the mode of original image not one of of 
+            # '1'： Grayscale mode, where each pixel has an 8-bit sample
+            # 'L': as '1'
+            # 'P': Palette mode
+            # 'RGB':  Red, green, and blue mode
+            # 'RGBA': Red, green, blue, and alpha mode.
+            #
+            # the image mode should be converted or it might cause an error.
             if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
                     image = image.convert("RGB")
             image.save(custom_logo_file)
