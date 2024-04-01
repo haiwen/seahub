@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from 'react';
 import ReactDom from 'react-dom';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
@@ -89,11 +89,26 @@ const PlainMarkdownEditor = (props) => {
     });
   }, [options, setContent]);
 
-
   useLayoutEffect(() => {
     updateOptions({ fileName, filePath, repoID });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const onUnload = useCallback((event) => {
+    const { contentChanged } = options;
+    if (!contentChanged) return;
+
+    const confirmationMessage = gettext('Leave this page? The system may not save your changes.');
+    event.returnValue = confirmationMessage;
+    return confirmationMessage;
+  }, [options]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
 
   const updateCode = useCallback((newCode) => {
     setContent(String(newCode));
