@@ -15,6 +15,7 @@ const propTypes = {
   toggleItemFreezed: PropTypes.func,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
+  isSearchable: PropTypes.bool,
 
 };
 
@@ -148,6 +149,7 @@ class SelectEditor extends React.Component {
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
             menuShouldScrollIntoView
+            isSearchable={this.props.isSearchable}
           />
         }
         {(isTextMode && !this.state.isEditing) &&

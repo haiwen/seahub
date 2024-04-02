@@ -140,7 +140,7 @@ class MylibRepoListItem extends React.Component {
   }
 
   onToggleStarRepo = (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     const repoName = this.props.repo.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {

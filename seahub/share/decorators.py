@@ -5,17 +5,28 @@ from django.http import Http404
 from django.shortcuts import render
 
 from seahub.share.models import FileShare, UploadLinkShare
-from seahub.utils import normalize_cache_key, is_pro_version, redirect_to_login
+from seahub.utils import normalize_cache_key, is_pro_version, redirect_to_login, render_error
+
 
 def share_link_audit(func):
     def _decorated(request, token, *args, **kwargs):
         assert token is not None    # Checked by URLconf
-
-        fileshare = FileShare.objects.get_valid_file_link_by_token(token) or \
-                    FileShare.objects.get_valid_dir_link_by_token(token) or \
-                    UploadLinkShare.objects.get_valid_upload_link_by_token(token)
-        if fileshare is None:
-            raise Http404
+        
+        ################### pingan custom ############################
+        fileshare = FileShare.objects.filter(token=token).first() or \
+                    UploadLinkShare.objects.filter(token=token).first()
+        if not fileshare:
+            return render_error(request, '该链接已失效')
+        if fileshare.is_expired():
+            return render_error(request, '该链接已过期')
+            
+        # fileshare = FileShare.objects.get_valid_file_link_by_token(token) or \
+        #             FileShare.objects.get_valid_dir_link_by_token(token) or \
+        #             UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+        # if fileshare is None:
+        #
+        #     # raise Http404
+        #################### pingan custom ##############################
 
         if not is_pro_version() or not settings.ENABLE_SHARE_LINK_AUDIT:
             return func(request, fileshare, *args, **kwargs)

@@ -1344,3 +1344,15 @@ CREATE TABLE `onlyoffice_onlyofficedockey` (
   UNIQUE KEY `repo_id_file_path_md5` (`repo_id_file_path_md5`),
   KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `user_scope` varchar(225) DEFAULT 'all_users';
+
+ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `authed_details` LONGTEXT;
+CREATE TABLE `user_role_update_time` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  `update_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;

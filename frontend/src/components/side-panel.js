@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
 import SideNavFooter from './side-nav-footer';
+import { isGuest } from "../utils/constants";
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -21,7 +22,7 @@ class SidePanel extends React.Component {
           <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
-          <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>
+            {!isGuest && <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>}
         </div>
         <div className="side-panel-footer">
           <SideNavFooter />

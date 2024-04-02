@@ -25,6 +25,8 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.utils import normalize_cache_key
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
+from django.utils.http import urlquote
+
 
 
 logger = logging.getLogger(__name__)
@@ -471,6 +473,7 @@ def pacas_login(request):
         'get_owner_url': PINGAN_PACAS_GET_OWNER_URL,
         'xHex': PINGAN_PACAS_XHEX,
         'yHex': PINGAN_PACAS_YHEX,
+
     }
 
     # get access token
@@ -501,11 +504,13 @@ def pacas_login(request):
     cas_sso_cookie = ''
     pasession = ''
 
+    redirect_to_post = None
     # for login page
     if request.method == "POST":
 
         pingan_user = request.POST.get('login', '')
         password = request.POST.get('password', '')
+        redirect_to_post = request.POST.get('next')
 
         if '@' in pingan_user:
             if ccnet_api.validate_emailuser(pingan_user, password) != 0:
@@ -561,7 +566,6 @@ def pacas_login(request):
 
     # for login via pacas sso cookie
     if request.method == "GET":
-
         if request.COOKIES.get('CAS_SSO_COOKIE'):
             sso_cookie = request.COOKIES.get('CAS_SSO_COOKIE')
             sso_type = 'CAS_SSO_COOKIE'
@@ -569,14 +573,14 @@ def pacas_login(request):
             sso_cookie = request.COOKIES.get('PASESSION')
             sso_type = 'PASESSION'
         else:
-            return HttpResponseRedirect(dj_settings.REDIRECT_LOGIN_URL)
+            return HttpResponseRedirect('%s?next=%s' % (dj_settings.REDIRECT_LOGIN_URL, redirect_to))
 
         resp_json_for_authenticate_by_sso = pingan_pacas_authenticate_by_sso(
             request, sso_cookie, sso_type, access_token, request_id)
         if resp_json_for_authenticate_by_sso['code'] != 'SUCCESS' or \
                 not resp_json_for_authenticate_by_sso.get('content', '') or \
                 not resp_json_for_authenticate_by_sso['content'].get('username', ''):
-            return HttpResponseRedirect(dj_settings.REDIRECT_LOGIN_URL)
+            return HttpResponseRedirect('%s?next=%s' % (dj_settings.REDIRECT_LOGIN_URL, redirect_to))
 
         pingan_user = resp_json_for_authenticate_by_sso['content']['username']
         username = Profile.objects.get_username_by_login_id(pingan_user)
@@ -604,8 +608,10 @@ def pacas_login(request):
 
     request.user = user
     auth.login(request, user)
-
-    redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
+    if redirect_to_post:
+        redirect_to = redirect_to_post
+    else:
+        redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
     response = HttpResponseRedirect(redirect_to)
 
     if cas_sso_cookie:

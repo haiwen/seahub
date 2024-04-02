@@ -340,6 +340,7 @@ class ShareToGroup extends React.Component {
                   onPermissionChanged={this.setPermission}
                   enableAddCustomPermission={isPro}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
+                  isSearchable={false}
                 />
               </td>
               <td>

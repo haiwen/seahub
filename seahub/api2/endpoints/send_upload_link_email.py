@@ -17,6 +17,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, \
 from seahub.share.models import UploadLinkShare
 from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 from seahub.profile.models import Profile
+from seahub.utils.authoritative_domain import get_authoritative_domain
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,14 @@ class SendUploadLinkView(APIView):
         if not email:
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        quanweiyu = get_authoritative_domain()
+        emails = string2list(email)
+        for to_email in emails:
+            to_email = to_email.split("@")[-1]
+            if to_email not in quanweiyu.split(','):
+                error_msg = '【请输入平安内网邮箱】'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         token = request.POST.get('token', None)
         if not token:

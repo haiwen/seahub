@@ -86,6 +86,7 @@ export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
+export const isGuest = window.app.pageOptions.isGuest || false;
 
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;

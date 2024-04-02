@@ -28,6 +28,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
+from seahub.base.accounts import User
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
@@ -99,6 +100,7 @@ def get_share_link_info(fileshare):
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
     data['password'] = fileshare.get_password()
+    data['user_scope'] = fileshare.user_scope
 
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
@@ -366,6 +368,7 @@ class ShareLinks(APIView):
             if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
                 expire_date = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_DEFAULT)
 
+        
         try:
             perm = check_permissions_arg(request)
         except Exception:
@@ -442,7 +445,27 @@ class ShareLinks(APIView):
                                                    password, expire_date,
                                                    permission=perm, org_id=org_id)
 
+        ############# pingan custom ###########################
+        user_scope = request.data.get('user_scope', '')
+        if user_scope and user_scope in ['specific_users', 'all_users']:
+            emails = request.data.get('emails', [])
+            emails_to_add = []
+
+            for username in emails:
+                try:
+                    User.objects.get(email=username)
+                except User.DoesNotExist:
+                    continue
+                emails_to_add.append(username)
+
+            fs.authed_details = json.dumps(
+                {'authed_users': emails_to_add}
+            )
+            fs.user_scope = user_scope
+            fs.save()
+        ############# pingan custom ###########################
         link_info = get_share_link_info(fs)
+        
         return Response(link_info)
 
 
@@ -611,7 +634,15 @@ class ShareLink(APIView):
 
             fs.expire_date = expire_date
             fs.save()
+            
+        ############# pingan custom ########################
+        user_scope = request.data.get('user_scope', '')
+        if user_scope and user_scope in ['specific_users', 'all_users']:
+            fs.user_scope = user_scope
+            fs.authed_details = None
+            fs.save()
 
+        ############# pingan custom ########################
         link_info = get_share_link_info(fs)
         return Response(link_info)
 

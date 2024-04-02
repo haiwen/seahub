@@ -89,17 +89,17 @@ class DirentListItem extends React.Component {
   }
 
   componentDidMount() {
-    //设置权限，按照朱莎莎的指引
-    if (window.KLPA_WS_APP !== undefined) {
-      const params = {
-        appId: "1e5d00f45ebbbfb800000004"
-      };
-      const promise = window.KLPA_WS_APP.setConfig(params);
-      promise.then(res => {
-        console.log(res);
-      });
-    }
-  }
+    //设置权限，按照朱莎莎的指引
+    if (window.KLPA_WS_APP !== undefined) {
+      const params = {
+        appId:window.location.hostname==='fcloud.paic.com.cn'? '1e5d00f45ebbbfb800000004':'1e7302e95fd081dc00000003'
+      };
+      const promise = window.KLPA_WS_APP.setConfig(params);
+      promise.then(res => {
+        console.log(res);
+      });
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
@@ -194,164 +194,254 @@ class DirentListItem extends React.Component {
 
   onItemShareToColleague = () => {
     const _this = this;
-    if (window.KLPA_WS_APP !== undefined) {
-    if (window.KLPA_WS_APP.IS_IOS) {
-      let dirent = this.props.dirent;
-      let repoID = this.props.repoID;
-      let filePath = this.getDirentPath(dirent);
-      const params = {
-        umIds: [], title: "选取用户", max: 5, min: 1,
-      };
-      window.KLPA_WS_APP.call('selectMembers', JSON.stringify(params), function (res) {
-        if (+res.code === 200) {
-          console.log(res.data.members);
-          if (!res.data || !res.data.members) {
-            toaster.danger('获取用户um账号列表失败');
-            return;
-          }
-          const { members } = res.data;
-          let pinganUmIds = Array.isArray(members) && members.map(member => {
-            if (member.umid.toLowerCase) {
-              return member.umid.toLowerCase();
-            }
-            return '';
-          }).filter(Boolean);
-          const params = { umIds: pinganUmIds };
-          window.KLPA_WS_APP.call('queryJidByUmId', JSON.stringify(params), function (res) {
-            if (+res.code === 200) {
-              console.log(res.data);
-              if (!res.data) {
-                toaster.danger('获取用户Jid列表失败');
-                return;
-              }
-              const result = res.data;
-              let pinganJids = Object.values(result);
-              seafileAPI.getShareLink(repoID, filePath).then((res) => {
-                if (res.data.length > 0) {
-                  let link = res.data[0].link;
-                  const params = {
-                    id: pinganJids,
+    const isWKWebView = typeof window.webkit !== 'undefined'
+    const {IS_IOS} = window.KLPA_WS_APP
+    if (!window.KLPA_WS_APP) {
+        return
+    }
+    if (IS_IOS) {
+        let dirent = this.props.dirent;
+        let repoID = this.props.repoID;
+        let filePath = this.getDirentPath(dirent);
+        const params = {
+            umIds: [], title: "选取用户", max: 5, min: 1,
+        };
+        if (isWKWebView) {
+            window.KLPA_WS_APP.selectMembers(params).then(res => {
+                if (+res.code === 200) {
+                    if (!res.data || !res.data.members) {
+                        toaster.danger('获取用户um账号列表失败');
+                        return;
+                    }
+                    const {members} = res.data;
+                    let pinganUmIds = Array.isArray(members) && members.map(member => {
+                        if (member.umid.toLowerCase) {
+                            return member.umid.toLowerCase();
+                        }
+                        return '';
+                    }).filter(Boolean);
+                    const params = {umIds: pinganUmIds};
+                    window.KLPA_WS_APP.queryJidByUmId(params).then(res => {
+                        if (+res.code === 200) {
+                            if (!res.data) {
+                                toaster.danger('获取用户Jid列表失败');
+                                return;
+                            }
+                            const result = res.data;
+                            let pinganJids = Object.values(result);
+                            seafileAPI.getShareLink(repoID, filePath).then((res) => {
+                                console.log(res, '------seafileAPI.getShareLink');
+                                if (res.data.length > 0) {
+                                    let link = res.data[0].link;
+                                    const params = {
+                                        id: pinganJids,
+                                        msgType: '8',
+                                        content: {
+                                            content: '转发的文本',
+                                            cardDisplayType: 0,
+                                            fileName: dirent.name,
+                                            previewUrl: link,
+                                            fileSize: _this.getSize(dirent.size),
+                                            fileType: res.data[0].is_dir ? 1 : 0,
+                                            fileToken: res.data[0].token,
+                                            expireDate: res.data[0].expire_date,
+                                            sourceRepoId: res.data[0].repo_id,
+                                            sourcePath: res.data[0].path,
+                                        },
+                                    };
+                                    window.KLPA_WS_APP.sendMessage(params).then(res => {
+                                        if (+res.code === 200) {
+                                            toaster.success('发送成功');
+                                        }
+                                    })
+                                } else {
+                                    seafileAPI.createShareLink(repoID, filePath).then((res) => {
+                                        let link = res.data.link;
+                                        const params = {
+                                            id: pinganJids,
+                                            msgType: '8',
+                                            // chatType:
+                                            content: {
+                                                cardDisplayType: 0,
+                                                content: '转发的文本',
+                                                fileName: dirent.name,
+                                                previewUrl: link,
+                                                fileSize: _this.getSize(dirent.size),
+                                                fileType: res.data.is_dir ? 1 : 0,
+                                                fileToken: res.data.token,
+                                                expireDate: res.data.expire_date,
+                                                sourceRepoId: res.data.repo_id,
+                                                sourcePath: res.data.path,
+                                            },
+                                        };
+                                        window.KLPA_WS_APP.sendMessage(params).then(res => {
+                                            if (+res.code === 200) {
+                                                toaster.success('发送成功');
+                                            }
+                                        })
+                                    }).catch(error => {
+                                        let errMessage = Utils.getErrorMsg(error);
+                                        toaster.danger(errMessage);
+                                    });
+                                }
+                            }).catch(error => {
+                                let errMessage = Utils.getErrorMsg(error);
+                                toaster.danger(errMessage);
+                            });
+                        }
+                    })
+                }
+            })
+        } else {
+            window.KLPA_WS_APP.call('selectMembers', JSON.stringify(params), function (res) {
+                if (+res.code === 200) {
+                    console.log(res.data.members);
+                    if (!res.data || !res.data.members) {
+                        toaster.danger('获取用户um账号列表失败');
+                        return;
+                    }
+                    const {members} = res.data;
+                    let pinganUmIds = Array.isArray(members) && members.map(member => {
+                        if (member.umid.toLowerCase) {
+                            return member.umid.toLowerCase();
+                        }
+                        return '';
+                    }).filter(Boolean);
+                    const params = {umIds: pinganUmIds};
+                    window.KLPA_WS_APP.call('queryJidByUmId', JSON.stringify(params), function (res) {
+                        if (+res.code === 200) {
+                            console.log(res.data);
+                            if (!res.data) {
+                                toaster.danger('获取用户Jid列表失败');
+                                return;
+                            }
+                            const result = res.data;
+                            let pinganJids = Object.values(result);
+                            seafileAPI.getShareLink(repoID, filePath).then((res) => {
+                                if (res.data.length > 0) {
+                                    let link = res.data[0].link;
+                                    const params = {
+                                        id: pinganJids,
+                                        msgType: 8,
+                                        content: {
+                                            fileName: dirent.name,
+                                            previewUrl: link,
+                                            fileSize: _this.getSize(dirent.size),
+                                            fileType: res.data[0].is_dir ? 1 : 0,
+                                            fileToken: res.data[0].token,
+                                            expireDate: res.data[0].expire_date,
+                                            sourceRepoId: res.data[0].repo_id,
+                                            sourcePath: res.data[0].path,
+                                        },
+                                    };
+                                    window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
+                                        if (+res.code === 200) {
+                                            console.log(res.data);
+                                            toaster.success('发送成功');
+                                        }
+                                    });
+                                } else {
+                                    seafileAPI.createShareLink(repoID, filePath).then((res) => {
+                                        let link = res.data.link;
+                                        const params = {
+                                            id: pinganJids,
+                                            msgType: 8,
+                                            content: {
+                                                fileName: dirent.name,
+                                                previewUrl: link,
+                                                fileSize: _this.getSize(dirent.size),
+                                                fileType: res.data.is_dir ? 1 : 0,
+                                                fileToken: res.data.token,
+                                                expireDate: res.data.expire_date,
+                                                sourceRepoId: res.data.repo_id,
+                                                sourcePath: res.data.path,
+                                            },
+                                        };
+                                        window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
+                                            if (+res.code === 200) {
+                                                console.log(res.data);
+                                                toaster.success('发送成功');
+                                            }
+                                        });
+                                    }).catch(error => {
+                                        let errMessage = Utils.getErrorMsg(error);
+                                        toaster.danger(errMessage);
+                                    });
+                                }
+                            }).catch(error => {
+                                let errMessage = Utils.getErrorMsg(error);
+                                toaster.danger(errMessage);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    } else {
+        let dirent = this.props.dirent;
+        let repoID = this.props.repoID;
+        let filePath = this.getDirentPath(dirent);
+        seafileAPI.getShareLink(repoID, filePath).then((res) => {
+            if (res.data.length > 0) {
+                let link = res.data[0].link;
+                const paramsRelay = {
                     msgType: 8,
                     content: {
-                      fileName: dirent.name,
-                      previewUrl: link,
-                      fileSize: _this.getSize(dirent.size),
-                      fileType: res.data[0].is_dir ? 1 : 0,
-                      fileToken: res.data[0].token,
-                      expireDate: res.data[0].expire_date,
-                      sourceRepoId: res.data[0].repo_id,
-                      sourcePath: res.data[0].path,
-                    },
-                  };
-                  window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
-                    if (+res.code === 200) {
-                      console.log(res.data);
-                      toaster.success('发送成功');
-                    }
-                  });
-                } else {
-                  seafileAPI.createShareLink(repoID, filePath).then((res) => {
-                    let link = res.data.link;
-                    const params = {
-                      id: pinganJids,
-                      msgType: 8,
-                      content: {
                         fileName: dirent.name,
                         previewUrl: link,
                         fileSize: _this.getSize(dirent.size),
-                        fileType: res.data.is_dir ? 1 : 0,
-                        fileToken: res.data.token,
-                        expireDate: res.data.expire_date,
-                        sourceRepoId: res.data.repo_id,
-                        sourcePath: res.data.path,
-                      },
-                    };
-                    window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
-                      if (+res.code === 200) {
+                        fileType: res.data[0].is_dir ? 1 : 0,
+                        fileToken: res.data[0].token,
+                        expireDate: res.data[0].expire_date,
+                        sourceRepoId: res.data[0].repo_id,
+                        sourcePath: res.data[0].path,
+                    }
+                }
+                console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
+                const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
+                promiseRelay.then(res => {
+                    console.log("调用relayMessage的结果" + JSON.stringify(res))
+                    if (+res.code === 200) {
                         console.log(res.data);
                         toaster.success('发送成功');
-                      }
+                    }
+                })
+            } else {
+                seafileAPI.createShareLink(repoID, filePath).then((res) => {
+                    let link = res.data.link;
+                    const paramsRelay = {
+                        msgType: 8,
+                        content: {
+                            fileName: dirent.name,
+                            previewUrl: link,
+                            fileSize: _this.getSize(dirent.size),
+                            fileType: res.data.is_dir ? 1 : 0,
+                            fileToken: res.data.token,
+                            expireDate: res.data.expire_date,
+                            sourceRepoId: res.data.repo_id,
+                            sourcePath: res.data.path,
+                        },
+                    };
+                    console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
+                    const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
+                    promiseRelay.then(res => {
+                        console.log("调用relayMessage的结果" + JSON.stringify(res))
+                        if (+res.code === 200) {
+                            console.log(res.data);
+                            toaster.success('发送成功');
+                        }
                     });
-                  }).catch(error => {
+                }).catch(error => {
                     let errMessage = Utils.getErrorMsg(error);
                     toaster.danger(errMessage);
-                  });
-                }
-              }).catch(error => {
-                let errMessage = Utils.getErrorMsg(error);
-                toaster.danger(errMessage);
-              });
+                });
             }
-          });
-        }
-      });
-    } else {
-      let dirent = this.props.dirent;
-      let repoID = this.props.repoID;
-      let filePath = this.getDirentPath(dirent);
-      seafileAPI.getShareLink(repoID, filePath).then((res) => {
-        if (res.data.length > 0) {
-          let link = res.data[0].link;
-          const paramsRelay = {
-            msgType: 8,
-            content: {
-              fileName: dirent.name,
-              previewUrl: link,
-              fileSize: _this.getSize(dirent.size),
-              fileType: res.data[0].is_dir ? 1 : 0,
-              fileToken: res.data[0].token,
-              expireDate: res.data[0].expire_date,
-              sourceRepoId: res.data[0].repo_id,
-              sourcePath: res.data[0].path,
-            }
-          }
-          console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
-          const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
-          promiseRelay.then(res => {
-            console.log("调用relayMessage的结果" + JSON.stringify(res))
-            if (+res.code === 200) {
-              console.log(res.data);
-              toaster.success('发送成功');
-            }
-          });
-
-        } else {
-          seafileAPI.createShareLink(repoID, filePath).then((res) => {
-            let link = res.data.link;
-            const paramsRelay = {
-              msgType: 8,
-              content: {
-                fileName: dirent.name,
-                previewUrl: link,
-                fileSize: _this.getSize(dirent.size),
-                fileType: res.data.is_dir ? 1 : 0,
-                fileToken: res.data.token,
-                expireDate: res.data.expire_date,
-                sourceRepoId: res.data.repo_id,
-                sourcePath: res.data.path,
-              },
-            };
-            console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
-            const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
-            promiseRelay.then(res => {
-              console.log("调用relayMessage的结果" + JSON.stringify(res))
-              if (+res.code === 200) {
-                console.log(res.data);
-                toaster.success('发送成功');
-              }
-            });
-          }).catch(error => {
+        }).catch(error => {
             let errMessage = Utils.getErrorMsg(error);
             toaster.danger(errMessage);
-          });
-        }
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
+        });
     }
-    }
-  }
+}
 
   // on '<tr>'
   onDirentClick = (e) => {

@@ -339,6 +339,7 @@ class ShareToUser extends React.Component {
                   className="reviewer-select"
                   placeholder={gettext('Search users...')}
                   onSelectChange={this.handleSelectChange}
+                  excludeGuest={true}
                 />
               </td>
               <td>
@@ -351,6 +352,7 @@ class ShareToUser extends React.Component {
                   onPermissionChanged={this.setPermission}
                   enableAddCustomPermission={isPro}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
+                  isSearchable={false}
                 />
               </td>
               <td>

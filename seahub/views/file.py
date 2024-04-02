@@ -60,7 +60,7 @@ from seahub.utils import render_error, is_org_context, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
-    normalize_cache_key
+    normalize_cache_key, check_share_link_user_access
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
@@ -1125,6 +1125,12 @@ def view_shared_file(request, fileshare):
 
     token = fileshare.token
 
+    ##############  pingan custom ###########
+    if not check_share_link_user_access(fileshare, request.user.username):
+        error_msg = '该共享链接未给您授权， 如果您有权限查看该文件， 请到内部资料库访问'
+        return render_error(request,error_msg)
+    ##############  pingan custom ###########
+
     # check if share link is encrypted
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     direct_download = request.GET.get('dl', '') == '1'
@@ -1328,6 +1334,12 @@ def view_shared_file(request, fileshare):
 def view_file_via_shared_dir(request, fileshare):
 
     token = fileshare.token
+
+    ##############  pingan custom ###########
+    if not check_share_link_user_access(fileshare, request.user.username):
+        error_msg = '该共享链接未给您授权， 如果您有权限查看该文件， 请到内部资料库访问'
+        return render_error(request, error_msg)
+    ##############  pingan custom ###########
 
     # argument check
     req_path = request.GET.get('p', '')

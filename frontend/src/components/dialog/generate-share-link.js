@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
@@ -13,6 +13,12 @@ import Loading from '../loading';
 import SendLink from '../send-link';
 import SharedLink from '../shared-link';
 import SetLinkExpiration from '../set-link-expiration';
+import LinkUserAuth from "../share-link/link-user-auth";
+import UserSelect from "../user-select";
+
+import { customAPI } from "../../utils/custom-api";
+import ShareLinkScopeEditor from "../select-editor/share-link-scope-editor";
+
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -51,7 +57,15 @@ class GenerateShareLink extends React.Component {
       isLoading: true,
       permissionOptions: [],
       currentPermission: '',
-      isSendLinkShown: false
+      isSendLinkShown: false,
+
+      currentScope: 'all_users',  // all_users, specific_users
+      selectedOption: null,
+      isSpecificUserChecked: false,
+      isScopeOpIconShown: false,
+
+
+      mode: ''
     };
   }
 
@@ -63,10 +77,11 @@ class GenerateShareLink extends React.Component {
         let sharedLinkInfo = new ShareLink(res.data[0]);
         this.setState({
           isLoading: false,
-          sharedLinkInfo: sharedLinkInfo
+          sharedLinkInfo: sharedLinkInfo,
+          mode: ''
         });
       } else {
-        this.setState({isLoading: false});
+        this.setState({isLoading: false, mode: 'addLink'});
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -159,6 +174,10 @@ class GenerateShareLink extends React.Component {
     this.setState({currentPermission: e.target.value});
   }
 
+  setScope = (e) => {
+    this.setState({currentScope: e.target.value, selectedOption: null});
+  }
+
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
@@ -178,9 +197,16 @@ class GenerateShareLink extends React.Component {
           expirationTime = expDate.format();
         }
       }
-      seafileAPI.createShareLink(repoID, itemPath, password, expirationTime, permissions).then((res) => {
+
+      const { currentScope, selectedOption } = this.state;
+      let users;
+      if ( selectedOption ) {
+        users = selectedOption.map((item, index) => item.email);
+      }
+
+      customAPI.createShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users).then((res) => {
         let sharedLinkInfo = new ShareLink(res.data);
-        this.setState({sharedLinkInfo: sharedLinkInfo});
+        this.setState({sharedLinkInfo: sharedLinkInfo, mode: ''});
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -215,6 +241,7 @@ class GenerateShareLink extends React.Component {
         errorInfo: '',
         sharedLinkInfo: null,
         isNoticeMessageShow: false,
+        mode: 'addLink',
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -232,7 +259,7 @@ class GenerateShareLink extends React.Component {
   }
 
   validateParamsInput = () => {
-    let { isShowPasswordInput, password, passwdnew, isExpireChecked, expType, expireDays, expDate } = this.state;
+    let { isShowPasswordInput, password, passwdnew, isExpireChecked, expType, expireDays, expDate, currentScope, selectedOption } = this.state;
 
     // validate password
     if (isShowPasswordInput) {
@@ -302,6 +329,14 @@ class GenerateShareLink extends React.Component {
       this.setState({expireDays: expireDays});
     }
 
+     if (currentScope === 'specific_users') {
+       if (!selectedOption) {
+        this.setState({'errorInfo': '用户不能为空。'});
+        return false;
+      }
+
+    }
+
     return true;
   }
 
@@ -359,6 +394,14 @@ class GenerateShareLink extends React.Component {
     this.setState({isOpIconShown: false});
   }
 
+  handleMouseOverScope = () => {
+    this.setState({isScopeOpIconShown: true});
+  }
+
+  handleMouseOutScope = () => {
+    this.setState({isScopeOpIconShown: false});
+  }
+
   changePerm = (permission) => {
     const permissionDetails = Utils.getShareLinkPermissionObject(permission).permissionDetails;
     seafileAPI.updateShareLink(this.state.sharedLinkInfo.token, JSON.stringify(permissionDetails)).then((res) => {
@@ -372,6 +415,30 @@ class GenerateShareLink extends React.Component {
     });
   }
 
+  changeScope = (scope) => {
+    customAPI.updateShareLinkScope(this.state.sharedLinkInfo.token, scope).then((res) => {
+      let sharedLinkInfo = new ShareLink(res.data);
+      this.setState({sharedLinkInfo: sharedLinkInfo});
+      let message = '设置成功';
+      toaster.success(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  setMode = (mode) => {
+    this.setState({mode: mode});
+  }
+
+  onUserAuth  = () => {
+    this.setMode('userAuth');
+  }
+
+  handleSelectChange = (option) => {
+    this.setState({selectedOption: option});
+  };
+
   render() {
     if (this.state.isLoading) {
       return <Loading />;
@@ -384,10 +451,11 @@ class GenerateShareLink extends React.Component {
     const { userPerm } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
-    if (this.state.sharedLinkInfo) {
+    if (this.state.mode === '') {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       let currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
-      const { permissionOptions , isOpIconShown } = this.state;
+      let currentScope = sharedLinkInfo.user_scope || 'all_users';
+      const { permissionOptions , isOpIconShown, isScopeOpIconShown } = this.state;
       return (
         <div>
           <Form className="mb-4">
@@ -478,6 +546,18 @@ class GenerateShareLink extends React.Component {
               </FormGroup>
             )}
 
+            <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{'访问范围'}</dt>
+                <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverScope} onMouseLeave={this.handleMouseOutScope}>
+                  <ShareLinkScopeEditor
+                    isTextMode={true}
+                    isEditIconShow={isScopeOpIconShown}
+                    currentScope={currentScope}
+                    onScopeChanged={this.changeScope}
+                  />
+                </dd>
+              </FormGroup>
+
           </Form>
           {(canSendShareLinkEmail && !this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
             <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
@@ -491,7 +571,12 @@ class GenerateShareLink extends React.Component {
           />
           }
           {(!this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
-            <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
+            <Fragment>
+              <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
+                {currentScope === 'specific_users' &&
+                  <Button onClick={this.onUserAuth} style={{'marginLeft': '5px'}}>{'授权用户'}</Button>
+                }
+            </Fragment>
           }
           {this.state.isNoticeMessageShow &&
             <div className="alert alert-warning">
@@ -503,7 +588,7 @@ class GenerateShareLink extends React.Component {
           }
         </div>
       );
-    } else {
+    } else if (this.state.mode === 'addLink') {
       return (
         <Form className="generate-share-link">
           <FormGroup check>
@@ -578,12 +663,47 @@ class GenerateShareLink extends React.Component {
                   </FormGroup>
                 );
               })}
+              <Label check>
+                <span>{'设置访问范围'}</span>
+              </Label>
+              <FormGroup check className="ml-4">
+                <Label check>
+                  <Input type="radio" name="scope" value={"all_users"} checked={this.state.currentScope === 'all_users'} onChange={this.setScope} className="mr-1" />
+                    {'全网盘用户'}
+                </Label>
+              </FormGroup>
+              <FormGroup check className="ml-4">
+                <Label check>
+                  <Input type="radio" name="scope" value = {"specific_users"} checked={this.state.currentScope === 'specific_users'} onChange={this.setScope} className="mr-1" />
+                    {'指定用户'}
+                </Label>
+              </FormGroup>
+                {this.state.currentScope === 'specific_users' &&
+                  <div className="ml-4" style={{marginBottom:'50px'}}>
+                    <UserSelect
+                      ref="userSelect"
+                      isMulti={true}
+                      className="reviewer-select"
+                      placeholder={gettext('Search users')}
+                      onSelectChange={this.handleSelectChange}
+                    />
+                  </div>
+                }
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
           <Button onClick={this.generateShareLink} className="mt-2">{gettext('Generate')}</Button>
         </Form>
       );
+    } else if (this.state.mode === 'userAuth') {
+      return (
+          <LinkUserAuth
+            repoID={this.props.repoID}
+            linkToken={this.state.sharedLinkInfo.token}
+            setMode={this.setMode}
+            path={this.props.itemPath}
+          />
+      )
     }
   }
 }

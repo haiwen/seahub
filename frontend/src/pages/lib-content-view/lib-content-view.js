@@ -626,7 +626,9 @@ class LibContentView extends React.Component {
       // init state: total is 0
       let asyncOperationProgress = !data.total ? 0 : parseInt((data.done/data.total * 100).toFixed(2));
 
-      this.getAsyncCopyMoveProgress();
+      setTimeout(() => {
+        this.getAsyncCopyMoveProgress();
+      }, 500);
       this.setState({asyncOperationProgress: asyncOperationProgress});
     } catch (error) {
       this.setState({

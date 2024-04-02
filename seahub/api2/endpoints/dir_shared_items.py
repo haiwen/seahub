@@ -39,7 +39,7 @@ from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
 from seahub.utils.repo import get_available_repo_perms
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_SHARE_TO_DEPARTMENT
-
+from seahub.utils.user_permissions import get_user_role
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -346,7 +346,7 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
                 try:
-                    User.objects.get(email=to_user)
+                    user = User.objects.get(email=to_user)
                 except User.DoesNotExist:
                     result['failed'].append({
                         'email': to_user,
@@ -359,6 +359,14 @@ class DirSharedItemsEndpoint(APIView):
                         'email': to_user,
                         'error_msg': _('This item has been shared to %s.') % email2nickname(to_user)
                         })
+                    continue
+
+                user_role = get_user_role(user)
+                if user_role == 'guest':
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': _('Cannot share to a guest user')
+                    })
                     continue
 
                 try:

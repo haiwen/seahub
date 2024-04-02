@@ -341,6 +341,11 @@ class FileShare(models.Model):
     permission = models.CharField(max_length=50, db_index=True,
                                   choices=PERMISSION_CHOICES,
                                   default=PERM_VIEW_DL)
+    
+    ######### pingan custom ########
+    user_scope = models.CharField(max_length=255, default='all_users')
+    authed_details = models.TextField()
+    ######## pingan custom #########
 
     objects = FileShareManager()
 
@@ -641,7 +646,6 @@ class CustomSharePermissions(models.Model):
             'description': self.description,
             'permission': permission,
         }
-
 
 # signal handlers
 

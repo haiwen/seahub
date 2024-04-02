@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, isGuest } from '../../utils/constants';
 import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
@@ -21,20 +21,20 @@ class CommonToolbar extends React.Component {
     let searchPlaceholder = this.props.searchPlaceholder || gettext('Search Files');
     return (
       <div className="common-toolbar">
-        {isPro && (
+        {isPro && !isGuest && (
           <Search
             repoID={this.props.repoID}
             placeholder={searchPlaceholder}
             onSearchedClick={this.props.onSearchedClick}
           />
         )}
-        {this.props.isLibView && !isPro &&
+        {this.props.isLibView && !isPro && !isGuest &&
           <SearchByName
             repoID={this.props.repoID}
             repoName={this.props.repoName}
           />
         }
-        <Notification />
+        {!isGuest && <Notification />}
         <Account />
         {showLogoutIcon && (<Logout />)}
       </div>

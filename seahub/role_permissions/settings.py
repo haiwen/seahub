@@ -60,7 +60,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_desktop_clients': False,
         'can_export_files_via_mobile_client': False,
         'storage_ids': [],
-        'role_quota': '',
+        'role_quota': '0g',
         'can_publish_repo': False,
     },
 }

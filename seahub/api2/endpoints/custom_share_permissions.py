@@ -108,6 +108,9 @@ class CustomSharePermissionView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if repo.is_virtual:
+            repo_id = repo.origin_repo_id
+
         # main
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id, repo_id=repo_id)

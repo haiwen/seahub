@@ -29,6 +29,7 @@ from seahub.group.signals import add_user_to_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 from seahub.profile.models import Profile
+from seahub.utils.user_permissions import get_user_role
 
 from .utils import api_check_group
 
@@ -327,7 +328,7 @@ class GroupMembersBulk(APIView):
         for email in emails_list:
             email_name = email2nickname(email)
             try:
-                User.objects.get(email=email)
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
                 result['failed'].append({
                     'email': email,
@@ -359,6 +360,15 @@ class GroupMembersBulk(APIView):
                     'email_name': email_name,
                     'error_msg': _('User %s is an organization user.') % email_name
                     })
+                continue
+
+            user_role = get_user_role(user)
+            if user_role == 'guest':
+                result['failed'].append({
+                    'email': email,
+                    'email_name': email_name,
+                    'error_msg': _('Cannot add guest user to group')
+                })
                 continue
 
             emails_need_add.append(email)

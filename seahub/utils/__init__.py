@@ -2,6 +2,7 @@
 # encoding: utf-8
 from functools import partial
 import os
+import json
 import re
 import urllib.request
 import urllib.parse
@@ -1389,3 +1390,22 @@ ASCII_RE = re.compile(r'[^\x00-\x7f]')
 def is_valid_password(password):
 
     return False if ASCII_RE.search(password) else True
+
+
+
+########### pingan custom ################
+def check_share_link_user_access(share, username):
+    if share.user_scope == 'all_users':
+        return True
+    try:
+        authed_details = json.loads(share.authed_details)
+    except:
+        authed_details = {}
+    
+    if share.user_scope == 'specific_users':
+        authed_users = authed_details.get('authed_users', [])
+        authed_users.append(share.username)
+        if username in authed_users:
+            return True
+    return False
+########### pingan custom ################

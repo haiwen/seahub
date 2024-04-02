@@ -304,3 +304,9 @@ img[src=""],img:not([src]){ /* for first loading img*/
 .path-container span.path-file-name, .path-container span.path-repo-name {
   flex-shrink: 1;
 }
+
+.guest-layout {
+  text-align: center;
+  font-size: 18px;
+  padding: 100px;
+}

@@ -142,6 +142,7 @@ class ManageMembersDialog extends React.Component {
             ref="userSelect"
             isMulti={true}
             className="add-members-select"
+            excludeGuest={true}
           />
           {this.state.selectedOption ?
             <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :

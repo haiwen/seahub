@@ -134,15 +134,16 @@ export const Utils = {
 
     const { isCustomPermission } = Utils.getUserPermission(permission);
     if (isCustomPermission) {
-      permissionOptions.push('preview_download');
       permissionOptions.push('preview_only');
+      permissionOptions.push('preview_download');
       return permissionOptions;
     }
 
+    permissionOptions.push('preview_only');
     if (permission == 'rw' || permission == 'admin' || permission == 'r') {
       permissionOptions.push('preview_download');
     }
-    permissionOptions.push('preview_only');
+
 
     if (itemType == 'library' || itemType == 'dir') {
       if (permission == 'rw' || permission == 'admin') {

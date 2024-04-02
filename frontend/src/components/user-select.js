@@ -14,6 +14,7 @@ const propTypes = {
   isMulti: PropTypes.bool.isRequired,
   className: PropTypes.string,
   value: PropTypes.string,
+  excludeGuest: PropTypes.bool,
 };
 
 class UserSelect extends React.Component {
@@ -43,6 +44,9 @@ class UserSelect extends React.Component {
         for (let i = 0 ; i < res.data.users.length; i++) {
           const item = res.data.users[i];
           let obj = {};
+          if (this.props.excludeGuest && item.role === 'guest') {
+            continue;
+          }
           obj.value = item.name;
           obj.email = item.email;
           obj.label =

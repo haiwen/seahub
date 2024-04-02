@@ -24,7 +24,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 
 from seahub.utils import gen_dir_share_link, \
     gen_shared_upload_link, render_error, \
-    get_file_type_and_ext, get_service_url, normalize_dir_path
+    get_file_type_and_ext, get_service_url, normalize_dir_path, check_share_link_user_access
 from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_VIDEO_THUMBNAIL, \
@@ -262,6 +262,12 @@ def view_shared_dir(request, fileshare):
 
     token = fileshare.token
 
+    ##############  pingan custom ###########
+    if not check_share_link_user_access(fileshare, request.user.username):
+        error_msg = '该共享链接未给您授权， 如果您有权限查看该目录， 请到内部资料库访问'
+        return render_error(request, error_msg)
+    ##############  pingan custom ###########
+
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
         d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
@@ -369,6 +375,7 @@ def view_shared_dir(request, fileshare):
 
 
 @share_link_audit
+@share_link_login_required
 def view_shared_upload_link(request, uploadlink):
     token = uploadlink.token
 

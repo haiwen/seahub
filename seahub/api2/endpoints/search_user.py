@@ -28,6 +28,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
     ENABLE_SEARCH_FROM_LDAP_DIRECTLY
+from seahub.utils.user_permissions import get_user_role
 
 logger = logging.getLogger(__name__)
 
@@ -167,6 +168,7 @@ class SearchUser(APIView):
         except ValueError:
             size = 32
 
+        email_result = list(set(email_result))
         formated_result = format_searched_user_result(
                 request, email_result[:10], size)
 
@@ -177,12 +179,15 @@ def format_searched_user_result(request, users, size):
     results = []
 
     for email in users:
+        user = User.objects.get(email=email)
+        user_role = get_user_role(user)
         url, is_default, date_uploaded = api_avatar_url(email, size)
         results.append({
             "email": email,
             "avatar_url": url,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
+            "role": user_role
         })
 
     return results

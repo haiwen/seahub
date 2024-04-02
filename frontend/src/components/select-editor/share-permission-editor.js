@@ -16,6 +16,7 @@ const propTypes = {
   onPermissionChanged: PropTypes.func.isRequired,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
+  isSearchable: PropTypes.bool,
 };
 
 class SharePermissionEditor extends React.Component {
@@ -128,6 +129,7 @@ class SharePermissionEditor extends React.Component {
         translateExplanation={this.translateExplanation}
         enableAddCustomPermission={this.props.enableAddCustomPermission}
         onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
+        isSearchable={this.props.isSearchable}
       />
     );
   }

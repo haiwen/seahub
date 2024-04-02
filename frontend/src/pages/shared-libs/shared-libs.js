@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
 import { Link, navigate } from '@reach/router';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { gettext, siteRoot, isPro, isGuest } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -324,6 +324,9 @@ class SharedLibraries extends Component {
   }
 
   componentDidMount() {
+    if (isGuest) {
+      return;
+    }
     seafileAPI.listRepos({type:'shared'}).then((res) => {
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
@@ -357,16 +360,43 @@ class SharedLibraries extends Component {
   }
 
   render() {
+    if (isGuest) {
+      return (
+        <Fragment>
+          <div className="main-panel-center">
+            <div className="cur-view-container">
+              <div className="cur-view-path">
+                <h3 className="sf-heading m-0"></h3>
+                {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              </div>
+              <div className="cur-view-content">
+                  <div className='guest-layout'>
+                      访客模式下无法访问平安网盘主页，如需获得完整的平安网盘用户权限，请 <a href="http://626888.paic.com.cn/#/main/ereport/eventReport/1098">点击申请</a>
+                  </div>
+              </div>
+            </div>
+          </div>
+          {this.state.isSortOptionsDialogOpen &&
+          <SortOptionsDialog
+            toggleDialog={this.toggleSortOptionsDialog}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortItems={this.sortItems}
+          />
+          }
+      </Fragment>
+      )
+    }
     return (
       <Fragment>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
+              <h3 className="sf-heading m-0"></h3>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
-              <Content
+                 <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}

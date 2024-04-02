@@ -78,6 +78,7 @@ class TransferDialog extends React.Component {
               className="reviewer-select"
               placeholder={gettext('Select a user')}
               onSelectChange={this.handleSelectChange}
+              excludeGuest={true}
             /> :
             <Select
               isClearable

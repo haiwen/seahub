@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -12,6 +12,9 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
+import ShareLinkScopeEditor from "../../components/select-editor/share-link-scope-editor";
+import {customAPI} from "../../utils/custom-api";
+import LinkUserAuth from "../../components/share-link/link-user-auth";
 
 class Content extends Component {
 
@@ -58,9 +61,10 @@ class Content extends Component {
             {isDesktop ? (
               <tr>
                 <th width="4%">{/*icon*/}</th>
-                <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="28%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width={columnWidths[0]}>{gettext('Library')}</th>
-                {isPro && <th width="20%">{gettext('Permission')}</th>}
+                {isPro && <th width="15%">{gettext('Permission')}</th>}
+                {isPro && <th width="15%">{'访问范围'}</th>}
                 <th width={columnWidths[1]}>{gettext('Visits')}</th>
                 <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
                 <th width="10%">{/*Operations*/}</th>
@@ -98,6 +102,12 @@ class Item extends Component {
       isLinkDialogOpen: false,
       permissionOptions: [],
       currentPermission: '',
+
+
+      isScopeOpIconShown: false,
+      currentScope: '',
+      isUserAuthDialogOpen: false,
+
     };
   }
 
@@ -115,7 +125,8 @@ class Item extends Component {
     let currentPermission = Utils.getShareLinkPermissionStr(this.props.item.permissions);
     this.setState({
       permissionOptions: permissionOptions,
-      currentPermission: currentPermission
+      currentPermission: currentPermission,
+      currentScope: item.user_scope
     });
   }
 
@@ -138,7 +149,7 @@ class Item extends Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({isOpIconShown: true });
   }
 
   handleMouseOut = () => {
@@ -180,9 +191,26 @@ class Item extends Component {
     });
   }
 
+  changeScope = (scope) => {
+    const item = this.props.item;
+    customAPI.updateShareLinkScope(item.token, scope).then((res) => {
+      let sharedLinkInfo = new ShareLink(res.data);
+      this.setState({currentScope: sharedLinkInfo.user_scope});
+      let message = '设置成功';
+      toaster.success(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onUserAuthToggle = () => {
+    this.setState({isUserAuthDialogOpen: !this.state.isUserAuthDialogOpen})
+  }
+
   render() {
     const item = this.props.item;
-    const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen, isUserAuthDialogOpen, currentScope } = this.state;
 
     let iconUrl, objUrl;
     if (item.is_dir) {
@@ -215,10 +243,21 @@ class Item extends Component {
           />
         </td>
         }
+        {isPro &&
+        <td>
+          <ShareLinkScopeEditor
+            isTextMode={true}
+            isEditIconShow={isOpIconShown}
+            currentScope={currentScope}
+            onScopeChanged={this.changeScope}
+          />
+        </td>
+        }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          {currentScope === 'specific_users' && <a href="#" className={`sf2-icon-user action-icon ${isOpIconShown ? '': 'invisible'}`} title={'授权用户'} aria-label={'授权用户'} role="button" onClick={this.onUserAuthToggle}></a>}
+          <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>
           <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
@@ -278,6 +317,22 @@ class Item extends Component {
           link={item.link}
           toggleDialog={this.toggleLinkDialog}
         />
+        }
+        {isUserAuthDialogOpen &&
+          <div>
+            <Modal isOpen={true} toggle={this.onUserAuthToggle}>
+              <ModalHeader toggle={this.onUserAuthToggle}>{item.obj_name + ' 授权用户'}</ModalHeader>
+              <ModalBody style={{height: '450px', overflow: 'auto'}}>
+                <LinkUserAuth
+                  repoID={this.props.repoID}
+                  linkToken={item.token}
+                  setMode={this.onUserAuthToggle}
+                  path={item.path}
+                  hideHead={true}
+                />
+              </ModalBody>
+            </Modal>
+          </div>
         }
       </Fragment>
     );

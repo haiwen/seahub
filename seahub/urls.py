@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
+from seahub.pingan.share_link_auth import ShareLinkUserAuthView
 from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
@@ -199,6 +200,9 @@ urlpatterns = [
     url(r'^pingan/pacas-login/', pacas_login, name='pingan_pacas_login'),
     url(r'^api/pingan/pacas-refresh-valid-code/', api_pingan_pacas_refresh_valid_code, name='api_pingan_pacas_refresh_valid_code'),
     url(r'^api/pingan/pacas-valid-login-account/', api_pingan_pacas_valid_login_account, name='api_pingan_pacas_valid_login_account'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/user-auth/$', ShareLinkUserAuthView.as_view(), name='api-v2.1-share-link-user-auth'),
+
+
 
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
