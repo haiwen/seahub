@@ -25,25 +25,36 @@
 
 .uploader-list-header {
   background-color: #f0f0f0;
-  padding: 0.375rem 0.625rem;
+  padding: 0.625rem;
   font-size: 1rem;
-  line-height: 1.5;
   color: #322;
   display: flex;
   justify-content: space-between;
   min-height: 2.25rem;
+  border-bottom: 1px solid #ddd;
 }
 
-.uploader-list-header .uploader-options span{
+.uploader-list-header .progress {
+  height: 5px;
+  margin-top: 8px;
+  width: 475px;
+}
+
+.uploader-list-header .upload-dialog-op-container {
+  line-height: 1;
+}
+
+.uploader-list-header .upload-dialog-op {
   display: inline-block;
-  margin-left: 0.25rem;
+  margin: 3px 0 0 4px;
   font-size: 18px;
+  line-height: 1;
   color: #b8b8b8;
   cursor: pointer;
 }
 
 .uploader-list-content {
-  padding: 0rem 1rem 1.25rem;
+  padding: 0 1rem 1.25rem;
   background-color: #fff;
   overflow: auto;
 }

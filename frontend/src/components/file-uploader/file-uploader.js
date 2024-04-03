@@ -46,7 +46,6 @@ class FileUploader extends React.Component {
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
       uploadBitrate: 0,
-      allFilesUploaded: false,
     };
 
     this.uploadInput = React.createRef();
@@ -158,11 +157,6 @@ class FileUploader extends React.Component {
   };
 
   onChunkingComplete = (resumableFile) => {
-
-    let allFilesUploaded = this.state.allFilesUploaded;
-    if (allFilesUploaded === true) {
-      this.setState({allFilesUploaded: false});
-    }
 
     //get parent_dir relative_path
     let path = this.props.path === '/' ? '/' : this.props.path + '/';
@@ -439,11 +433,9 @@ class FileUploader extends React.Component {
     this.notifiedFolders = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    this.setState({allFilesUploaded: true});
   };
 
   onPause = () => {
-
   };
 
   onError = (message) => {
@@ -536,8 +528,7 @@ class FileUploader extends React.Component {
 
     if (!this.resumable.isUploading()) {
       this.setState({
-        totalProgress: '100',
-        allFilesUploaded: true,
+        totalProgress: 100,
       });
       this.loaded = 0;
     }
@@ -557,8 +548,7 @@ class FileUploader extends React.Component {
     this.loaded = 0;
 
     this.setState({
-      allFilesUploaded: true,
-      totalProgress: '100',
+      totalProgress: 100,
       uploadFileList: uploadFileList
     });
     // reset upload link loaded
@@ -709,12 +699,12 @@ class FileUploader extends React.Component {
             forbidUploadFileList={this.state.forbidUploadFileList}
             totalProgress={this.state.totalProgress}
             uploadBitrate={this.state.uploadBitrate}
-            allFilesUploaded={this.state.allFilesUploaded}
             onCloseUploadDialog={this.onCloseUploadDialog}
             onCancelAllUploading={this.onCancelAllUploading}
             onUploadCancel={this.onUploadCancel}
             onUploadRetry={this.onUploadRetry}
             onUploadRetryAll={this.onUploadRetryAll}
+            isUploading={this.resumable.isUploading()}
           />
         }
       </Fragment>
