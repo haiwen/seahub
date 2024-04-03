@@ -91,20 +91,6 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
     return log_user_in(request, user, redirect_to)
 
 
-# def _handle_login_saml(request, user, redirect_to, remember_me):
-#     enable_saml = getattr(settings, 'ENABLE_SAML', False)
-#     if enable_saml:
-#         multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
-#         if multi_tenancy:
-#             try:
-#                 # org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(user.org.org_id)
-#                 if SocialAuthUser.objects.filter(username=user.username, provider=settings.SAML_PROVIDER).exists() and \
-#                         getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
-#                     # return
-#                     pass
-#             except OrgSAMLConfig.DoesNotExist:
-#                 pass
-#         return _handle_login_form_valid(request, user, redirect_to, remember_me)
 
 
 @csrf_protect

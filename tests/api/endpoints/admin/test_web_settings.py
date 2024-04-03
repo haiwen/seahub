@@ -28,7 +28,7 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 29
+        assert len(json_resp) == 31
 
     @override_settings(ENABLE_SETTINGS_VIA_WEB=False)
     def test_get_with_enable_settings(self):
@@ -63,7 +63,7 @@ class AdminWebSettingsTest(BaseTestCase):
             "ENABLE_SIGNUP": False,
             "USER_PASSWORD_STRENGTH_LEVEL": 3,
             "FILE_SERVER_ROOT": "http://127.0.0.1:8082",
-            "LOGIN_ATTEMPT_LIMIT": 5
+            "LOGIN_ATTEMPT_LIMIT": 5,
         }
         for key, value in data.items():
             if value in (True, False):

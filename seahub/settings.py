@@ -761,6 +761,7 @@ ENABLE_USER_SET_CONTACT_EMAIL = False
 # SAML login
 DISABLE_SAML_USER_PWD_LOGIN = True
 ENABLE_SAML = True
+SAML_PROVIDER = 'saml'
 
 # SSO to thirdparty website
 ENABLE_SSO_TO_THIRDPART_WEBSITE = False
@@ -1003,7 +1004,8 @@ CONSTANCE_CONFIG = {
     'CLIENT_SSO_TOKEN_EXPIRATION': (CLIENT_SSO_TOKEN_EXPIRATION, ''),
 
     'DISABLE_SAML_USER_PWD_LOGIN': (DISABLE_SAML_USER_PWD_LOGIN, ''),
-    'ENABLE_SAML': (ENABLE_SAML, '')
+    'ENABLE_SAML': (ENABLE_SAML, ''),
+    'SAML_PROVIDER': (SAML_PROVIDER, ''),
 }
 
 # if Seafile admin enable remote user authentication in conf/seahub_settings.py

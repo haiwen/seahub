@@ -88,19 +88,16 @@ class AuthenticationForm(forms.Form):
                     multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
                     if multi_tenancy:
                         # org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(user.org.org_id)
-                        print("multi_tenancy", multi_tenancy)
                         if SocialAuthUser.objects.filter(username=username,
                                                          provider=settings.SAML_PROVIDER).exists() and \
                                 getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
                             self.errors['disable_pwd_login'] = _('You cannot login with email and password. ')
                             raise forms.ValidationError(_('You cannot login with email and password. '))
                     else:
-                        print("multi_tenancy", multi_tenancy)
                         if SocialAuthUser.objects.filter(username=username,provider=settings.SAML_PROVIDER).exists()\
                                 and getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
                             self.errors['disable_pwd_login'] = _('You cannot login with email and password. ')
                             raise forms.ValidationError(_('You cannot login with email and password. '))
-                print(username)
 
 
         # TODO: determine whether this should move to its own method.
