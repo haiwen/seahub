@@ -237,10 +237,10 @@ class Content extends React.Component {
     this.theadData = [
       {width: '5%', text: ''},
       {width: '20%', text: gettext('Name')},
-      {width: '25%', text: gettext('Original path')},
-      {width: '20%', text: gettext('Delete Time')},
-      {width: '15%', text: gettext('Size')},
-      {width: '15%', text: ''}
+      {width: '40%', text: gettext('Original path')},
+      {width: '12%', text: gettext('Delete Time')},
+      {width: '13%', text: gettext('Size')},
+      {width: '10%', text: ''}
     ];
   }
 
