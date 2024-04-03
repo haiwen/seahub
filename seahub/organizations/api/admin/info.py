@@ -20,6 +20,7 @@ from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
 from seahub.organizations.api.permissions import IsOrgAdmin
 
+from constance import config
 logger = logging.getLogger(__name__)
 
 
@@ -60,6 +61,7 @@ def get_org_info(request, org_id):
         active_members = len([m for m in org_members if m.is_active])
 
     file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
+    disable_saml_user_pwd_login = getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN')
 
     info = {}
     info['storage_quota'] = storage_quota
@@ -68,7 +70,7 @@ def get_org_info(request, org_id):
     info['member_usage'] = member_usage
     info['active_members'] = active_members
     info['file_ext_white_list'] = file_ext_white_list
-
+    info['disable_saml_user_pwd_login'] = disable_saml_user_pwd_login
     return info
 
 

@@ -23,8 +23,8 @@ from seahub.auth import login as auth_login
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
-        PasswordResetForm, SetPasswordForm, PasswordChangeForm, \
-        SetContactEmailPasswordForm
+    PasswordResetForm, SetPasswordForm, PasswordChangeForm, \
+    SetContactEmailPasswordForm
 from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
 from seahub.auth.utils import (
@@ -74,6 +74,7 @@ def log_user_in(request, user, redirect_to):
 
     return HttpResponseRedirect(redirect_to)
 
+
 def _handle_login_form_valid(request, user, redirect_to, remember_me):
     if UserOptions.objects.passwd_change_required(
             user.username):
@@ -88,6 +89,23 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
     # password is valid, log user in
     request.session['remember_me'] = remember_me
     return log_user_in(request, user, redirect_to)
+
+
+# def _handle_login_saml(request, user, redirect_to, remember_me):
+#     enable_saml = getattr(settings, 'ENABLE_SAML', False)
+#     if enable_saml:
+#         multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
+#         if multi_tenancy:
+#             try:
+#                 # org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(user.org.org_id)
+#                 if SocialAuthUser.objects.filter(username=user.username, provider=settings.SAML_PROVIDER).exists() and \
+#                         getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
+#                     # return
+#                     pass
+#             except OrgSAMLConfig.DoesNotExist:
+#                 pass
+#         return _handle_login_form_valid(request, user, redirect_to, remember_me)
+
 
 @csrf_protect
 @never_cache
@@ -136,8 +154,9 @@ def login(request, template_name='registration/login.html',
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
                 # log user in if password is valid otherwise freeze account
-                logger.warn('Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attemps: %d' %
-                            (login, ip, failed_attempt))
+                logger.warn(
+                    'Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attemps: %d' %
+                    (login, ip, failed_attempt))
                 email = Profile.objects.get_username_by_login_id(login)
                 if email is None:
                     email = login
@@ -145,8 +164,9 @@ def login(request, template_name='registration/login.html',
                     user = User.objects.get(email)
                     if user.is_active:
                         user.freeze_user(notify_admins=True, notify_org_admins=True)
-                        logger.warn('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
-                                    (login, ip, failed_attempt))
+                        logger.warn(
+                            'Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
+                            (login, ip, failed_attempt))
                 except User.DoesNotExist:
                     logger.warn('Login attempt limit reached with invalid email/username: %s, ip: %s, attemps: %d' %
                                 (login, ip, failed_attempt))
@@ -213,6 +233,7 @@ def login(request, template_name='registration/login.html',
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
 
+
 def login_simple_check(request):
     """A simple check for login called by thirdpart systems(OA, etc).
 
@@ -226,7 +247,7 @@ def login_simple_check(request):
         raise Http404
 
     today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
+    expect = hashlib.md5((settings.SECRET_KEY + username + today).encode('utf-8')).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)
@@ -309,7 +330,8 @@ def logout(request, next_page=None,
         else:
             response = render(request, template_name, {
                 'title': _('Logged out'),
-                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get(
+                    'user-agent', ''),
             })
     else:
         # Redirect to this page until the session has been cleared.
@@ -318,17 +340,20 @@ def logout(request, next_page=None,
     response.delete_cookie('seahub_auth')
     return response
 
+
 def logout_then_login(request, login_url=None):
     "Logs out the user if he is logged in. Then redirects to the log-in page."
     if not login_url:
         login_url = settings.LOGIN_URL
     return logout(request, login_url)
 
+
 def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
     "Redirects the user to the login page, passing the given 'next' page"
     if not login_url:
         login_url = settings.LOGIN_URL
     return HttpResponseRedirect('%s?%s=%s' % (login_url, quote(redirect_field_name), quote(next)))
+
 
 # 4 views for password reset:
 # - password_reset sends the mail
@@ -339,10 +364,9 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
 
 @csrf_protect
 def password_reset(request, is_admin_site=False, template_name='registration/password_reset_form.html',
-        email_template_name='registration/password_reset_email.html',
-        password_reset_form=PasswordResetForm, token_generator=default_token_generator,
-        post_reset_redirect=None):
-
+                   email_template_name='registration/password_reset_email.html',
+                   password_reset_form=PasswordResetForm, token_generator=default_token_generator,
+                   post_reset_redirect=None):
     has_bind_social_auth = False
     if SocialAuthUser.objects.filter(username=request.user.username).exists():
         has_bind_social_auth = True
@@ -375,9 +399,9 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 logger.error(str(e))
                 messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
-                        'form': form,
-                        'login_bg_image_path': login_bg_image_path,
-                        })
+                    'form': form,
+                    'login_bg_image_path': login_bg_image_path,
+                })
             else:
                 return HttpResponseRedirect(post_reset_redirect)
     else:
@@ -387,11 +411,13 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         'login_bg_image_path': login_bg_image_path,
     })
 
+
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
     login_bg_image_path = get_login_bg_image_path()
     return render(request, template_name, {
         'login_bg_image_path': login_bg_image_path,
     })
+
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
@@ -401,7 +427,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     View that checks the hash in a password reset link and presents a
     form for entering a new password.
     """
-    assert uidb36 is not None and token is not None # checked by URLconf
+    assert uidb36 is not None and token is not None  # checked by URLconf
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_complete')
     try:
@@ -426,8 +452,10 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     context_instance['form'] = form
     return render(request, template_name, context_instance)
 
+
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):
     return render(request, template_name, {'login_url': settings.LOGIN_URL})
+
 
 @csrf_protect
 @login_required
@@ -482,6 +510,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         'force_passwd_change': request.session.get('force_passwd_change', False),
     })
 
+
 def password_change_done(request, template_name='registration/password_change_done.html'):
     return render(request, template_name)
 
@@ -512,7 +541,7 @@ def multi_adfs_sso(request):
                 return render(request, template_name, render_data)
             if not org_saml_config.domain_verified:
                 render_data['error_msg'] = \
-                  "The ownership of domain %s has not been verified. Please ask your team admin to verify it." % domain
+                    "The ownership of domain %s has not been verified. Please ask your team admin to verify it." % domain
                 return render(request, template_name, render_data)
             org_id = org_saml_config.org_id
             org = ccnet_api.get_org_by_id(org_id)

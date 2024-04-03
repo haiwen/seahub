@@ -14,6 +14,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
+from constance import config
+
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +38,6 @@ class OrgAdminWebSettings(APIView):
             config_dict['file_ext_white_list'] = ''
         else:
             config_dict['file_ext_white_list'] = file_ext_white_list
-
         return Response(config_dict)
 
     def put(self, request, org_id):
@@ -57,5 +58,10 @@ class OrgAdminWebSettings(APIView):
                 else:
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
-
+            if key == 'DISABLE_SAML_USER_PWD_LOGIN':
+                if value != '':
+                    setattr(config, 'DISABLE_SAML_USER_PWD_LOGIN', value)
+                    disable_saml_user_pwd_login = getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN')
+                    config_dict['DISABLE_SAML_USER_PWD_LOGIN'] = disable_saml_user_pwd_login
+                    print(getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'))
         return Response(config_dict)

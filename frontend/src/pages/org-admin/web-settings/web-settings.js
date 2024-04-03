@@ -8,8 +8,9 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
-
+import CheckboxItem from './checkbox-item';
 import '../../../css/system-admin-web-settings.css';
+import { disabled } from 'glamor';
 
 class OrgWebSettings extends Component {
 
@@ -63,6 +64,17 @@ class OrgWebSettings extends Component {
     });
   };
 
+  saveSetting = (key, value) => {
+    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+      this.setState({
+        // config_dict: res.data
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
@@ -114,6 +126,17 @@ class OrgWebSettings extends Component {
                       helpTip='logo.png, 256px * 64px'
                     />
                     }
+                  </Fragment>
+                </Section>
+                <Section headingText={gettext('User')}>
+                  <Fragment>
+                    <CheckboxItem
+                      saveSetting={this.saveSetting}
+                      displayName='prohibit SAML user password login'
+                      keyText='DISABLE_SAML_USER_PWD_LOGIN'
+                      value={parseInt(config_dict['disable_saml_user_pwd_login'])}
+                      helpTip={gettext('Force users to use single sign on')}
+                    />
                   </Fragment>
                 </Section>
                 <Section headingText={gettext('File Upload')}>
