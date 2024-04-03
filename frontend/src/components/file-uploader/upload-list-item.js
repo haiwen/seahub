@@ -93,7 +93,7 @@ class UploadListItem extends React.Component {
                       </div>
                       {(resumableFile.remainingTime === -1) && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
                       {(resumableFile.remainingTime > 0) && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.remainingTime)}</div>}
-                      {(resumableFile.remainingTime === 0) && <div className="progress-text">{gettext('Indexing...')}</div>}
+                      {(resumableFile.remainingTime === 0) && <div className="progress-text">{gettext('Saving...')}</div>}
                     </div>
                   )}
                   {!resumableFile.isUploading() && (

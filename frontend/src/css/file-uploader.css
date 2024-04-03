@@ -27,7 +27,6 @@
   background-color: #f0f0f0;
   padding: 0.625rem;
   font-size: 1rem;
-  line-height: 1.5;
   color: #322;
   display: flex;
   justify-content: space-between;
@@ -41,9 +40,13 @@
   width: 475px;
 }
 
+.uploader-list-header .upload-dialog-op-container {
+  line-height: 1;
+}
+
 .uploader-list-header .upload-dialog-op {
   display: inline-block;
-  margin-left: 0.25rem;
+  margin: 3px 0 0 4px;
   font-size: 18px;
   line-height: 1;
   color: #b8b8b8;

@@ -16,7 +16,6 @@ const propTypes = {
   onUploadCancel: PropTypes.func.isRequired,
   onUploadRetry: PropTypes.func.isRequired,
   onUploadRetryAll: PropTypes.func.isRequired,
-  allFilesUploaded: PropTypes.bool.isRequired,
 };
 
 class UploadProgressDialog extends React.Component {
@@ -43,14 +42,14 @@ class UploadProgressDialog extends React.Component {
   };
 
   render() {
-    const { totalProgress, allFilesUploaded, retryFileList, uploadBitrate, uploadFileList, forbidUploadFileList } = this.props;
+    const { totalProgress, retryFileList, uploadBitrate, uploadFileList, forbidUploadFileList, isUploading } = this.props;
 
     const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
       .replace('{uploaded_files_num}', uploadFileList.filter(file => file.isSaved).length)
       .replace('{all_files_num}', uploadFileList.length);
 
     let filesFailedMsg;
-    if (totalProgress == 100) {
+    if (!isUploading) {
       const failedNum = uploadFileList.filter(file => file.error).length + forbidUploadFileList.length;
       if (failedNum > 0) {
         filesFailedMsg = gettext('{failed_files_num} file(s) failed to upload')
@@ -59,11 +58,10 @@ class UploadProgressDialog extends React.Component {
     }
 
     return (
-      <div className="uploader-list-view mw-100" style={{height: this.state.isMinimized ? '2.25rem' : '20rem'}}>
+      <div className="uploader-list-view mw-100" style={{height: this.state.isMinimized ? document.querySelector('.uploader-list-header').offsetHeight : '20rem'}}>
         <div className="uploader-list-header flex-shrink-0">
           <div>
-            {totalProgress == 0 && <span>{gettext('File Upload')}</span>}
-            {(totalProgress > 0 && totalProgress < 100) && (
+            {isUploading ? (
               <>
                 <span>{gettext('File Uploading...')}</span>
                 <span className="ml-2">{`${totalProgress}% (${Utils.formatBitRate(uploadBitrate)})`}</span>
@@ -71,8 +69,7 @@ class UploadProgressDialog extends React.Component {
                   <div className="progress-bar" role="progressbar" style={{width: `${totalProgress}%`}} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </>
-            )}
-            {totalProgress == 100 && (
+            ) : (
               <>
                 {filesFailedMsg ?
                   <p className="m-0 error">{filesFailedMsg}</p> :
@@ -81,9 +78,9 @@ class UploadProgressDialog extends React.Component {
               </>
             )}
           </div>
-          <div>
+          <div className="upload-dialog-op-container">
             <span className="sf2-icon-minus upload-dialog-op" onClick={this.onMinimizeUpload}></span>
-            {(totalProgress == 0 || totalProgress == 100) && <span className="sf2-icon-x1 upload-dialog-op" onClick={this.onCloseUpload}></span>}
+            {!isUploading && <span className="sf2-icon-x1 upload-dialog-op" onClick={this.onCloseUpload}></span>}
           </div>
         </div>
         <div className="uploader-list-content">
@@ -100,7 +97,7 @@ class UploadProgressDialog extends React.Component {
               <button
                 className="btn btn-lg border-0 background-transparent px-0 ml-3"
                 onClick={this.props.onCancelAllUploading}
-                disabled={allFilesUploaded}
+                disabled={!isUploading}
               >
                 {gettext('Cancel All')}
               </button>
