@@ -236,10 +236,11 @@ class Content extends React.Component {
     super(props);
     this.theadData = [
       {width: '5%', text: ''},
-      {width: '45%', text: gettext('Name')},
-      {width: '20%', text: gettext('Delete Time')},
-      {width: '15%', text: gettext('Size')},
-      {width: '15%', text: ''}
+      {width: '20%', text: gettext('Name')},
+      {width: '40%', text: gettext('Original path')},
+      {width: '12%', text: gettext('Delete Time')},
+      {width: '13%', text: gettext('Size')},
+      {width: '10%', text: ''}
     ];
   }
 
@@ -355,6 +356,7 @@ class Item extends React.Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
+        <td>{item.parent_dir}</td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
@@ -365,6 +367,7 @@ class Item extends React.Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank" rel="noreferrer">{item.obj_name}</a></td>
+        <td>{item.parent_dir}</td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
@@ -413,7 +416,7 @@ class FolderItem extends React.Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
-        <td></td>
+        <td>{item.parent_dir}</td>
         <td></td>
         <td></td>
       </tr>
@@ -421,6 +424,7 @@ class FolderItem extends React.Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
+        <td>{item.parent_dir}</td>
         <td></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td></td>
