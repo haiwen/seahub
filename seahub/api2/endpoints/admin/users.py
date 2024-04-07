@@ -1485,6 +1485,30 @@ class AdminUserResetPassword(APIView):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        profile = Profile.objects.get_profile_by_user(email)
+        if IS_EMAIL_CONFIGURED and profile and profile.contact_email:
+
+            from seahub.utils import get_site_name
+            from django.utils.http import int_to_base36
+            from seahub.auth.tokens import default_token_generator
+
+            site_name = get_site_name()
+            contact_email = profile.contact_email
+            email_template_name = 'sysadmin/short_time_linving_password_reset_link.html'
+            c = {
+                'email': contact_email,
+                'uid': int_to_base36(user.id),
+                'user': user,
+                'token': default_token_generator.make_token(user),
+            }
+
+            send_html_email(_("Reset Password on %s") % site_name,
+                            email_template_name, c, None,
+                            [email2contact_email(user.username)])
+
+            reset_tip = _(f'A password reset link has been sent to {contact_email}.')
+            return Response({'reset_tip': reset_tip})
+
         if isinstance(INIT_PASSWD, FunctionType):
             new_password = INIT_PASSWD()
         else:
