@@ -16,6 +16,7 @@ const propTypes = {
   onUploadCancel: PropTypes.func.isRequired,
   onUploadRetry: PropTypes.func.isRequired,
   onUploadRetryAll: PropTypes.func.isRequired,
+  isUploading : PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
