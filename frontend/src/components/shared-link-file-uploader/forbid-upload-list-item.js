@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, maxUploadFileSize } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   file: PropTypes.object,
@@ -9,15 +10,20 @@ const propTypes = {
 class ForbidUploadListItem extends React.Component {
 
   render() {
-    let { file } = this.props;
-    let msg = gettext('Please upload files less than {placeholder}M').replace('{placeholder}', maxUploadFileSize);
+    const { file } = this.props;
     return (
       <tr className="file-upload-item">
         <td className="upload-name">
           <div className="ellipsis" title={file.name}>{file.name}</div>
         </td>
-
-        <td colSpan={3} className="error">{msg}</td>
+        <td>{Utils.bytesToSize(file.size)}</td>
+        <td>
+          <div className="d-flex align-items-center">
+            <span className="upload-failure-icon fas fa-exclamation mr-2"></span>
+            <span className="upload-failure-msg">{gettext('File too large')}</span>
+          </div>
+        </td>
+        <td></td>
       </tr>
     );
   }
