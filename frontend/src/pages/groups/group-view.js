@@ -2,7 +2,7 @@ import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -14,7 +14,6 @@ import toaster from '../../components/toast';
 import OpIcon from '../../components/op-icon';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
@@ -53,7 +52,7 @@ class GroupView extends React.Component {
       isSortOptionsDialogOpen: false,
       repoList: [],
       currentPage: 1,
-      perPage: 50,
+      perPage: 300,
       hasNextPage: false,
       libraryType: 'group',
       isCreateRepoDialogShow: false,
@@ -76,7 +75,7 @@ class GroupView extends React.Component {
     this.loadGroup(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.groupID !== this.props.groupID) {
       this.loadGroup(nextProps.groupID);
     }
@@ -106,7 +105,7 @@ class GroupView extends React.Component {
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   loadRepos = (page) => {
     const { perPage } = this.state;
@@ -137,7 +136,7 @@ class GroupView extends React.Component {
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   getEmptyTip = (currentGroup) => {
     let emptyTip = null;
@@ -167,11 +166,11 @@ class GroupView extends React.Component {
       }
     }
     return emptyTip;
-  }
+  };
 
   onCreateRepoToggle = () => {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
-  }
+  };
 
   onCreateRepo = (repo, groupOwnerType) => {
     let groupId = this.props.groupID;
@@ -206,7 +205,7 @@ class GroupView extends React.Component {
       });
     }
     this.onCreateRepoToggle();
-  }
+  };
 
   onItemDelete = (repo) => {
     let groupID = this.props.groupID;
@@ -215,13 +214,13 @@ class GroupView extends React.Component {
     });
     this.setState({repoList: repoList});
     this.loadGroup(groupID);
-  }
+  };
 
   addRepoItem = (repo) => {
     let newRepoList = this.state.repoList.map(item => {return item;});
     newRepoList.unshift(repo);
     return newRepoList;
-  }
+  };
 
   onItemUnshare = (repo) => {
     let group = this.state.currentGroup;
@@ -235,7 +234,7 @@ class GroupView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onItemRename = (repo, newName) => {
     seafileAPI.renameGroupOwnedLibrary(this.props.groupID, repo.repo_id, newName).then(res => {
@@ -250,49 +249,59 @@ class GroupView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
+
+  onMonitorRepo = (repo, monitored) => {
+    let repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.monitored = monitored;
+      }
+      return item;
+    });
+    this.setState({repoList: repoList});
+  };
 
   onTabNavClick = (tabName) => {
     this.props.onTabNavClick(tabName);
-  }
+  };
 
   toggleGroupDropdown = () => {
     this.setState({
       showGroupDropdown: !this.state.showGroupDropdown
     });
-  }
+  };
 
   toggleDismissGroupDialog = () => {
     this.setState({
       showDismissGroupDialog: !this.state.showDismissGroupDialog,
       showGroupDropdown: false,
     });
-  }
+  };
 
   toggleRenameGroupDialog = () => {
     this.setState({
       showRenameGroupDialog: !this.state.showRenameGroupDialog,
       showGroupDropdown: false,
     });
-  }
+  };
 
   toggleTransferGroupDialog = () => {
     this.setState({
       showTransferGroupDialog: !this.state.showTransferGroupDialog,
       showGroupDropdown: false,
     });
-  }
+  };
 
   toggleImportMembersDialog= () => {
     this.setState({
       showImportMembersDialog: !this.state.showImportMembersDialog
     });
-  }
+  };
 
   importMembersInBatch= (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });
@@ -300,21 +309,21 @@ class GroupView extends React.Component {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
     });
-  }
+  };
 
   toggleManageMembersDialog = () => {
     this.setState({
       showManageMembersDialog: !this.state.showManageMembersDialog,
       showGroupDropdown: false,
     });
-  }
+  };
 
   toggleLeaveGroupDialog = () => {
     this.setState({
       isLeaveGroupDialogOpen: !this.state.isLeaveGroupDialogOpen,
       showGroupDropdown: false,
     });
-  }
+  };
 
   listGroupMembers = () => {
     seafileAPI.listGroupMembers(this.props.groupID).then((res) => {
@@ -325,7 +334,7 @@ class GroupView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleGroupMembersPopover = (state) => {
     if (state === 'open') {
@@ -338,18 +347,18 @@ class GroupView extends React.Component {
         showGroupMembersPopover: false
       });
     }
-  }
+  };
 
   onItemDetails = (repo) => {
     this.setState({
       isShowDetails: true,
       currentRepo: repo,
     });
-  }
+  };
 
   closeDetails = () => {
     this.setState({isShowDetails: false});
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -359,7 +368,7 @@ class GroupView extends React.Component {
       sortOrder: sortOrder,
       repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
-  }
+  };
 
   translateRole = (role) => {
     if (role === 'Admin') {
@@ -371,13 +380,13 @@ class GroupView extends React.Component {
     else if (role === 'Owner') {
       return gettext('Owner');
     }
-  }
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   handleScroll = (event) => {
     // isLoadingMore: to avoid repeated request
@@ -393,7 +402,7 @@ class GroupView extends React.Component {
         });
       }
     }
-  }
+  };
 
   render() {
     let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
@@ -561,6 +570,7 @@ class GroupView extends React.Component {
                   onItemDelete={this.onItemDelete}
                   onItemDetails={this.onItemDetails}
                   onItemRename={this.onItemRename}
+                  onMonitorRepo={this.onMonitorRepo}
                 />
               }
             </div>

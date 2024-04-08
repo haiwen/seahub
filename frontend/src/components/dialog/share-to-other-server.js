@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
-import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { gettext, ocmRemoteServers } from '../../utils/constants';
-import { Input } from 'reactstrap';
-import { Button } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { Input, Button } from 'reactstrap';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import { SeahubSelect } from '../common/select';
 
 class ShareItem extends React.Component {
 
@@ -22,11 +21,11 @@ class ShareItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     this.setState({
@@ -37,14 +36,14 @@ class ShareItem extends React.Component {
     });
     let item = this.props.item;
     this.props.deleteShareItem(item);
-  }
+  };
 
   render() {
     let item = this.props.item;
     const { isOperationShow, isOpFrozen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
+        <td><a href={item.to_server_url} target="_blank" rel="noreferrer">{item.to_server_name}</a></td>
         <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
@@ -67,6 +66,11 @@ class ShareItem extends React.Component {
     );
   }
 }
+
+ShareItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
 
 class ShareList extends React.Component {
 
@@ -98,6 +102,11 @@ class ShareList extends React.Component {
     );
   }
 }
+
+ShareList.propTypes = {
+  items: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
@@ -162,7 +171,7 @@ class ShareToOtherServer extends React.Component {
         isSubmitting: false
       });
     });
-  }
+  };
 
   handleToUserChange = (e) => {
     const toUser = e.target.value;
@@ -170,14 +179,14 @@ class ShareToOtherServer extends React.Component {
       toUser: toUser,
       btnDisabled: !this.state.selectedServer || !toUser.trim()
     });
-  }
+  };
 
   handleServerChange = (selectedServer) => {
     this.setState({
       selectedServer,
       btnDisabled: !this.state.toUser.trim()
     });
-  }
+  };
 
   deleteShareItem = (deletedItem) => {
     const { id } = deletedItem;
@@ -192,11 +201,11 @@ class ShareToOtherServer extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   render() {
     const {
@@ -218,8 +227,8 @@ class ShareToOtherServer extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
-                  placeholder={gettext('Select a server...')}
+                <SeahubSelect
+                  placeholder={gettext('Select a server')}
                   value={selectedServer}
                   options={ocmRemoteServers}
                   onChange={this.handleServerChange}

@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.utils.translation import gettext as _
+from urllib.parse import quote
 
 import seaserv
 from seaserv import seafile_api
@@ -67,15 +67,6 @@ def get_nav_path(path, repo_name):
 
 def is_no_quota(repo_id):
     return True if seaserv.check_quota(repo_id) < 0 else False
-
-
-def get_fileshare(repo_id, username, path):
-    if path == '/':    # no shared link for root dir
-        return None
-
-    share_list = FileShare.objects.filter(repo_id=repo_id).filter(
-        username=username).filter(path=path)
-    return share_list[0] if len(share_list) > 0 else None
 
 
 def get_dir_share_link(fileshare):
@@ -336,7 +327,7 @@ def view_shared_dir(request, fileshare):
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
                 req_image_path = posixpath.join(req_path, f.obj_name)
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                f.encoded_thumbnail_src = urlquote(src)
+                f.encoded_thumbnail_src = quote(src)
 
     # for 'upload file'
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
@@ -397,7 +388,7 @@ def view_shared_upload_link(request, uploadlink):
         raise Http404
 
     if repo.encrypted or \
-            seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
+            seafile_api.check_permission_by_path(repo_id, path, username) != 'rw':
         return render_error(request, _('Permission denied'))
 
     uploadlink.view_cnt = F('view_cnt') + 1

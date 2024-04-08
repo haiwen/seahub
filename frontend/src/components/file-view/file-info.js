@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isPro, gettext, mediaUrl, siteRoot } from '../../utils/constants';
-import InternalLinkDialog from '../dialog/internal-link-dialog';
+import { InternalLinkOperation } from '../operations';
 
 const propTypes = {
   toggleStar: PropTypes.func.isRequired,
@@ -23,16 +23,16 @@ class FileInfo extends React.PureComponent {
   toggleStar = (e) => {
     e.preventDefault();
     this.props.toggleStar();
-  }
+  };
 
   render() {
     const { isStarred, isLocked } = this.props;
     const starredText = isStarred ? gettext('starred') : gettext('unstarred');
     const lockedText = gettext('locked');
     return (
-      <div>
+      <div className="text-truncate">
         <h2 className="file-title d-flex align-items-center">
-          <span className="file-name">{fileName}</span>
+          <span className="file-name text-truncate" title={fileName}>{fileName}</span>
           <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
             href="#"
             title={starredText}
@@ -40,7 +40,7 @@ class FileInfo extends React.PureComponent {
             aria-label={isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.toggleStar}>
           </a>
-          <InternalLinkDialog repoID={repoID} path={filePath} />
+          <InternalLinkOperation repoID={repoID} path={filePath} />
           {(isPro && isLocked) &&
             <img className="file-locked-icon" width="16"
               src={`${mediaUrl}img/file-locked-32.png`}

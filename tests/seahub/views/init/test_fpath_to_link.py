@@ -1,7 +1,7 @@
 # encoding: utf-8
 from seahub.test_utils import BaseTestCase
 from seahub.views import fpath_to_link
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 
 class FpathToLinkTest(BaseTestCase):
@@ -12,4 +12,4 @@ class FpathToLinkTest(BaseTestCase):
                                     'repo_name': self.repo.name,
                                     'path': path.strip('/')}
 
-        assert urlquote(url) in resp
+        assert quote(url) in resp

@@ -5,7 +5,7 @@ import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import UserSelect from '../user-select.js';
+import UserSelect from '../user-select';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class AddMemberDialog extends React.Component {
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
     this.Options = [];
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.selectedOption) return;
@@ -47,7 +47,7 @@ class AddMemberDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -55,7 +55,7 @@ class AddMemberDialog extends React.Component {
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             ref="orgSelect"
             isMulti={false}

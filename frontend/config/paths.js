@@ -15,11 +15,19 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // single-page apps that may serve index.html for nested URLs like /todos/42.
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
-const publicUrlOrPath = getPublicUrlOrPath(
-  process.env.NODE_ENV === 'development',
-  require(resolveApp('package.json')).homepage,
-  process.env.PUBLIC_URL
-);
+// const publicUrlOrPath = getPublicUrlOrPath(
+//   process.env.NODE_ENV === 'development',
+//   require(resolveApp('package.json')).homepage,
+//   process.env.PUBLIC_URL
+// );
+
+// reset by custom
+const HOST = process.env.HOST || '0.0.0.0';
+const PORT = process.env.PORT || '3000';
+const publicPath = process.env.PUBLIC_PATH || '/assets/bundles/';
+const publicUrlOrPath = `http://${HOST}:${PORT}${publicPath}`;
+
+const buildPath = process.env.BUILD_PATH || 'build/frontend';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -52,7 +60,7 @@ const resolveModule = (resolveFn, filePath) => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build/frontend'),
+  appBuild: resolveApp(buildPath),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),
@@ -64,6 +72,8 @@ module.exports = {
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   proxySetup: resolveApp('src/setupProxy.js'),
   appNodeModules: resolveApp('node_modules'),
+  appWebpackCache: resolveApp('node_modules/.cache'),
+  appTsBuildInfoFile: resolveApp('node_modules/.cache/tsconfig.tsbuildinfo'),
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
 };

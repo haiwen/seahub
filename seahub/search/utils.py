@@ -5,7 +5,7 @@ import os
 
 from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE
 from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
-        MARKDOWN, VIDEO, AUDIO, TEXT
+        MARKDOWN, VIDEO, AUDIO, TEXT, SEADOC
 from seahub.utils import get_user_repos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
@@ -32,6 +32,7 @@ SEARCH_FILEEXT = {
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
+    SEADOC: ('sdoc',),
 }
 
 def get_owned_repos(username, org_id=None):
@@ -130,11 +131,11 @@ def get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_
 
     return repo_id_map, repo_type_map
 
-def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=None):
+def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=None, search_filename_only=False):
     # search file
     if len(repos_map) > 1:
         search_path = None
-    files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size)
+    files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size, search_filename_only)
 
     result = []
     for f in files_found:

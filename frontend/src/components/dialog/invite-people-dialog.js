@@ -33,14 +33,14 @@ class InvitePeopleDialog extends React.Component {
         errorMsg: ''
       });
     }
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
       this.handleSubmitInvite();
     }
-  }
+  };
 
   handleSubmitInvite = () => {
     let emails = this.state.emails.trim();
@@ -98,7 +98,7 @@ class InvitePeopleDialog extends React.Component {
       toaster.danger(errorMsg);
       this.props.toggleDialog();
     });
-  }
+  };
 
   render() {
     const { isSubmitting } = this.state;

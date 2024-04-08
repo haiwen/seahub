@@ -1,5 +1,12 @@
+export const defaultContentForSDoc = {
+  version: 0,
+  children: [{id: 'aaaa', type: 'paragraph', children: [{ text: '' }]}]
+};
+
 export const dirPath = '/';
 export const gettext = window.gettext;
+
+export const internalFilePath = '/_Internal/seatable-integration.json';
 
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
@@ -11,6 +18,7 @@ export const siteName = window.app.config.siteName;
 export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === 'True';
+export const isDBSqlite3 = window.app.config.isDBSqlite3;
 export const isDocs = window.app.config.isDocs === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
@@ -20,10 +28,10 @@ export const serviceURL = window.app.config.serviceURL;
 export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
+export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
 
 //pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
-export const dtableWebServer = window.app.pageOptions.dtableWebServer;
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
 export const contactEmail = window.app.pageOptions.contactEmail;
@@ -36,7 +44,6 @@ export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLin
 export const canSendShareLinkEmail = window.app.pageOptions.canSendShareLinkEmail;
 export const canViewOrg = window.app.pageOptions.canViewOrg === 'True';
 export const fileAuditEnabled = window.app.pageOptions.fileAuditEnabled;
-export const enableFileComment = window.app.pageOptions.enableFileComment ? true : false;
 export const folderPermEnabled = window.app.pageOptions.folderPermEnabled;
 export const enableResetEncryptedRepoPassword = window.app.pageOptions.enableResetEncryptedRepoPassword === 'True';
 export const isEmailConfigured = window.app.pageOptions.isEmailConfigured === 'True';
@@ -75,6 +82,8 @@ export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfF
 export const enableOCM = window.app.pageOptions.enableOCM;
 export const ocmRemoteServers = window.app.pageOptions.ocmRemoteServers;
 export const enableOCMViaWebdav = window.app.pageOptions.enableOCMViaWebdav;
+export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThirdpartWebsite;
+export const enableSeadoc = window.app.pageOptions.enableSeadoc;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
@@ -86,12 +95,18 @@ export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
+export const canSetExProps = window.app.pageOptions.canSetExProps || false;
+
+// seafile_ai
+export const enableSeafileAI = window.app.pageOptions.enableSeafileAI || false;
+
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
 export const additionalShareDialogNote = window.app.pageOptions.additionalShareDialogNote;
 export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
 export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
+export const enableSeaTableIntegration = window.app.pageOptions.enableSeaTableIntegration;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
@@ -104,6 +119,7 @@ export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'T
 export const sharedToken = window.wiki ? window.wiki.config.sharedToken : '';
 export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 export const hasIndex = window.wiki ? window.wiki.config.hasIndex : '';
+export const assetsUrl = window.wiki ? window.wiki.config.assetsUrl : '';
 
 // file history
 export const PER_PAGE = 25;
@@ -115,25 +131,15 @@ export const useNewAPI = window.fileHistory ? window.fileHistory.pageOptions.use
 export const canDownload = window.fileHistory ? window.fileHistory.pageOptions.can_download_file : '';
 export const canCompare = window.fileHistory ? window.fileHistory.pageOptions.can_compare : '';
 
-// Draft review
-export const draftFilePath = window.draft ? window.draft.config.draftFilePath: '';
-export const draftOriginFilePath = window.draft ? window.draft.config.draftOriginFilePath: '';
-export const draftFileName = window.draft ? window.draft.config.draftFileName: '';
-export const draftID = window.draft ? window.draft.config.draftID : '';
-export const draftRepoID = window.draft ? window.draft.config.draftRepoID : '';
-export const author = window.draft ? window.draft.config.author : '';
-export const authorAvatar = window.draft ? window.draft.config.authorAvatar : '';
-export const originFileExists = window.draft ? window.draft.config.originFileExists : '';
-export const draftFileExists = window.draft ? window.draft.config.draftFileExists : '';
-export const draftStatus = window.draft ? window.draft.config.draftStatus : '';
-export const draftPublishVersion = window.draft ? window.draft.config.draftPublishVersion : '';
-export const originFileVersion = window.draft ? window.draft.config.originFileVersion : '';
-export const filePermission = window.draft ? window.draft.config.perm : '';
-
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
+export const orgName = window.org ? window.org.pageOptions.orgName : '';
 export const invitationLink = window.org ? window.org.pageOptions.invitationLink : '';
 export const orgMemberQuotaEnabled = window.org ? window.org.pageOptions.orgMemberQuotaEnabled : '';
+export const orgEnableAdminCustomLogo = window.org ? window.org.pageOptions.orgEnableAdminCustomLogo === 'True' : false;
+export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgEnableAdminCustomName === 'True' : false;
+export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
+export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';

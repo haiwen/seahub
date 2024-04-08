@@ -1,0 +1,43 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags avatar_tags i18n static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
+{% render_bundle 'sdocRevisions' 'css'%}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+        window.app.config.lang = '{{LANGUAGE_CODE}}';
+        console.log('{{page_next}}')
+        window.sdocRevisions = {
+            repo: { "id": "{{ repo.id }}", "name": "{{ repo.name }}" },
+            revisions: '{{ revisions|escapejs }}',
+            count: '{{ count }}',
+            filePath: '{{ path|escapejs }}',
+            docUuid: '{{ docUuid }}',
+            perPage: '{{ per_page }}',
+            filename: '{{ filename }}',
+            zipped: '{{ zipped|escapejs }}',
+            currentPage: Number('{{ current_page }}'),
+            prevPage: Number('{{ prev_page }}'),
+            nextPage: Number('{{ next_page }}'),
+            perPage: Number('{{ per_page }}'),
+            pageNext: '{{ page_next }}' === 'False' ? false : true,
+            extraHref: '{{ extra_href|escapejs }}',
+        
+        }
+        {% if not forloop.last %}
+            window.sdocRevisions['forloopLast'] = false;
+            window.sdocRevisions['viewLibFile'] = '{% url 'lib_view' repo.id repo.name '' %}';
+        {% else %}
+            window.sdocRevisions['forloopLast'] = true;
+            window.sdocRevisions['viewLibFile'] = '{% url 'view_lib_file' repo.id '' %}';
+        {% endif %}
+
+
+    </script>
+    {% render_bundle 'sdocRevisions' 'js'%}
+{% endblock %}

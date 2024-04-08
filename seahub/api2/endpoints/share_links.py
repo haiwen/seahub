@@ -18,8 +18,8 @@ from rest_framework import status
 
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.utils.translation import gettext as _
+from urllib.parse import quote
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -31,9 +31,11 @@ from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
+from seahub.share.decorators import check_share_link_count
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
-        check_filename_with_rename, gen_file_upload_url, get_password_strength_level
+        check_filename_with_rename, gen_file_upload_url, \
+        get_password_strength_level, is_valid_password
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
@@ -72,6 +74,16 @@ def get_share_link_info(fileshare):
     else:
         obj_name = ''
 
+    if repo:
+        if fileshare.s_type == 'd':
+            folder_path = normalize_dir_path(fileshare.path)
+            obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+        else:
+            file_path = normalize_file_path(fileshare.path)
+            obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    else:
+        obj_id = ''
+
     if fileshare.expire_date:
         expire_date = datetime_to_isoformat_timestr(fileshare.expire_date)
     else:
@@ -88,6 +100,7 @@ def get_share_link_info(fileshare):
 
     data['path'] = path
     data['obj_name'] = obj_name
+    data['obj_id'] = obj_id or ""
     data['is_dir'] = True if fileshare.s_type == 'd' else False
 
     data['token'] = token
@@ -165,6 +178,15 @@ class ShareLinks(APIView):
         1. default(NOT guest) user;
         """
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        offset = per_page * (current_page - 1)
+
         username = request.user.username
 
         repo_id = request.GET.get('repo_id', '')
@@ -173,7 +195,7 @@ class ShareLinks(APIView):
         fileshares = []
         # get all share links of current user
         if not repo_id and not path:
-            fileshares = FileShare.objects.filter(username=username)
+            fileshares = FileShare.objects.filter(username=username)[offset:offset + per_page]
 
         # share links in repo
         if repo_id and not path:
@@ -183,7 +205,7 @@ class ShareLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             fileshares = FileShare.objects.filter(username=username) \
-                                          .filter(repo_id=repo_id)
+                                          .filter(repo_id=repo_id)[offset:offset + per_page]
 
         # share links by repo and path
         if repo_id and path:
@@ -205,34 +227,70 @@ class ShareLinks(APIView):
 
             fileshares = FileShare.objects.filter(username=username) \
                                           .filter(repo_id=repo_id) \
-                                          .filter(path=path)
+                                          .filter(path=path)[offset:offset + per_page]
 
+        repo_object_dict = {}
         repo_folder_permission_dict = {}
+
         for fileshare in fileshares:
 
-            if fileshare.s_type == 'd':
-                folder_path = normalize_dir_path(fileshare.path)
-            else:
-                file_path = normalize_file_path(fileshare.path)
-                folder_path = os.path.dirname(file_path)
-
             repo_id = fileshare.repo_id
-            if repo_id not in repo_folder_permission_dict:
+            path = fileshare.path
 
+            if repo_id not in repo_object_dict:
+                repo = seafile_api.get_repo(repo_id)
+                repo_object_dict[repo_id] = repo
+
+            tmp_key = f"{repo_id}_{path}"
+            if tmp_key not in repo_folder_permission_dict:
                 try:
                     permission = seafile_api.check_permission_by_path(repo_id,
-                                                                      folder_path,
-                                                                      fileshare.username)
-                except Exception as e:
-                    logger.error(e)
-                    permission = ''
-
-                repo_folder_permission_dict[repo_id] = permission
+                                                                      path,
+                                                                      username)
+                    repo_folder_permission_dict[tmp_key] = permission
+                except Exception:
+                    repo_folder_permission_dict[tmp_key] = ''
 
         links_info = []
         for fs in fileshares:
-            link_info = get_share_link_info(fs)
-            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(link_info['repo_id'], '')
+
+            link_info = {}
+
+            token = fs.token
+            repo_id = fs.repo_id
+            path = fs.path
+            s_type = fs.s_type
+
+            link_info['username'] = username
+            link_info['repo_id'] = repo_id
+
+            repo_object = repo_object_dict.get(repo_id, '')
+            if repo_object:
+                repo_name = repo_object.repo_name
+            else:
+                repo_name = ''
+
+            if path:
+                obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
+            else:
+                obj_name = ''
+
+            link_info['repo_name'] = repo_name
+            link_info['path'] = path
+            link_info['obj_name'] = obj_name
+            link_info['is_dir'] = True if s_type == 'd' else False
+            link_info['token'] = token
+            link_info['link'] = gen_shared_link(token, s_type)
+            link_info['view_cnt'] = fs.view_cnt
+            link_info['ctime'] = datetime_to_isoformat_timestr(fs.ctime) if fs.ctime else ''
+            link_info['expire_date'] = datetime_to_isoformat_timestr(fs.expire_date) if fs.expire_date else ''
+            link_info['is_expired'] = fs.is_expired()
+            link_info['permissions'] = fs.get_permissions()
+            link_info['password'] = fs.get_password()
+
+            tmp_key = f"{repo_id}_{path}"
+            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")
+
             links_info.append(link_info)
 
         if len(links_info) == 1:
@@ -248,6 +306,7 @@ class ShareLinks(APIView):
 
         return Response(result)
 
+    @check_share_link_count
     def post(self, request):
         """ Create share link.
 
@@ -280,6 +339,10 @@ class ShareLinks(APIView):
 
             if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
                 error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_password(password):
+                error_msg = _('Password can only contain number, upper letter, lower letter and other symbols.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_days = request.data.get('expire_days', '')
@@ -425,6 +488,71 @@ class ShareLinks(APIView):
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
+
+    def delete(self, request):
+        """ Delete share links.
+
+        Permission checking:
+        1. default(NOT guest) user;
+        2. link owner;
+        """
+
+        token_list = request.data.get('tokens')
+        if not token_list:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        username = request.user.username
+        for token in token_list:
+
+            try:
+                fs = FileShare.objects.get(token=token)
+            except FileShare.DoesNotExist:
+                result['success'].append({
+                    'token': token,
+                })
+                continue
+
+            has_published_library = False
+            if fs.path == '/':
+                try:
+                    Wiki.objects.get(repo_id=fs.repo_id)
+                    has_published_library = True
+                except Wiki.DoesNotExist:
+                    pass
+
+            if not fs.is_owner(username):
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': 'Permission denied.'
+                    })
+                continue
+
+            if has_published_library:
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': _('There is an associated published library.')
+                    })
+                continue
+
+            try:
+                fs.delete()
+                result['success'].append({
+                    'token': token,
+                })
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': 'Internal Server Error'
+                    })
+                continue
+
+        return Response(result)
 
 
 class ShareLink(APIView):
@@ -825,7 +953,7 @@ class ShareLinkDirents(APIView):
                     if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
                         src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                        dirent_info['encoded_thumbnail_src'] = urlquote(src)
+                        dirent_info['encoded_thumbnail_src'] = quote(src)
 
                 # get tag info
                 file_tags = files_tags_in_dir.get(dirent.obj_name, [])
@@ -1196,9 +1324,9 @@ class ShareLinkSaveItemsToRepo(APIView):
             src_parent_dir = os.path.dirname(src_dirent_path)
             src_dirent_name = os.path.basename(src_dirent_path)
 
-            dst_dirent_name = check_filename_with_rename(dst_repo_id,
-                                                         dst_parent_dir,
-                                                         src_dirent_name)
+            check_filename_with_rename(dst_repo_id,
+                                       dst_parent_dir,
+                                       src_dirent_name)
         else:
             # save items in folder share link
             src_parent_dir = request.POST.get('src_parent_dir', '')
@@ -1322,3 +1450,41 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
                 filtered_tagged_files.append(tagged_file)
 
         return Response({'tagged_files': filtered_tagged_files})
+
+
+class ShareLinksCleanInvalid(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanGenerateShareLink)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request):
+        """ Clean invalid share links.
+        """
+
+        username = request.user.username
+        share_links = FileShare.objects.filter(username=username)
+
+        for share_link in share_links.iterator(chunk_size=1000):
+
+            if share_link.is_expired():
+                share_link.delete()
+                continue
+
+            repo_id = share_link.repo_id
+            if not seafile_api.get_repo(repo_id):
+                share_link.delete()
+                continue
+
+            if share_link.s_type == 'd':
+                folder_path = normalize_dir_path(share_link.path)
+                obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+            else:
+                file_path = normalize_file_path(share_link.path)
+                obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
+            if not obj_id:
+                share_link.delete()
+                continue
+
+        return Response({'success': True})

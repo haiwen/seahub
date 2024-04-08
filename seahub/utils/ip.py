@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 def get_remote_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    x_forwarded_for = request.headers.get('x-forwarded-for')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:

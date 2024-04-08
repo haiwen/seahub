@@ -16,7 +16,7 @@ class CustomPermissionEditor extends React.Component {
 
   static defaultProps = {
     mode: 'add'
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -58,14 +58,14 @@ class CustomPermissionEditor extends React.Component {
     const newName = evt.target.value;
     if (newName === permission_name) return;
     this.setState({permission_name: newName});
-  }
+  };
 
   onChangePermissionDescription = (evt) => {
     const { permission_desc } = this.state;
     const newDescription = evt.target.value;
     if (newDescription === permission_desc) return;
     this.setState({permission_desc: newDescription});
-  }
+  };
 
   onChangePermission = (type) => {
     return () => {
@@ -74,7 +74,7 @@ class CustomPermissionEditor extends React.Component {
       const newPermission = Object.assign({}, permission, {[type]: value});
       this.setState({permission: newPermission});
     };
-  }
+  };
 
   validParams = () => {
     const { permission_name, permission_desc } = this.state;
@@ -91,7 +91,7 @@ class CustomPermissionEditor extends React.Component {
 
     isValid = true;
     return { isValid };
-  }
+  };
 
   onUpdateCustomPermission = () => {
     const { permission_name, permission_desc, permission } = this.state;
@@ -101,11 +101,11 @@ class CustomPermissionEditor extends React.Component {
       return;
     }
     this.props.onUpdateCustomPermission(permission_name, permission_desc, permission);
-  }
+  };
 
   toggle = () => {
     this.setState({tooltipOpen: !this.state.tooltipOpen});
-  }
+  };
 
   render() {
 
@@ -126,7 +126,7 @@ class CustomPermissionEditor extends React.Component {
             <span>{title}</span>
           </div>
           <div className="operation">
-            <button type="button" className="btn btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
+            <button type="button" className="btn btn-sm btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
           </div>
         </div>
         <div className="permission-main mt-4">
@@ -159,6 +159,12 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
+                    <Input type="checkbox" onChange={this.onChangePermission('create')} checked={permission.create}/>
+                    <span>{gettext('Create')}</span>
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="fa fa-question-circle ml-2" style={{color: '#999'}}></span>
@@ -168,7 +174,7 @@ class CustomPermissionEditor extends React.Component {
                       target={'modify-tip'}
                       placement='bottom'
                       isOpen={this.state.tooltipOpen}>
-                      ({gettext('Modify includes modify file, create file and folder, move/rename file and folder')})
+                      ({gettext('Modify includes modify file, move/rename file and folder')})
                     </Tooltip>
                   </Label>
                 </FormGroup>

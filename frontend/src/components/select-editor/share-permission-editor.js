@@ -10,6 +10,8 @@ import { isPro } from '../../utils/constants';
 const propTypes = {
   repoID: PropTypes.string,
   isTextMode: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool,
+  autoFocus: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
@@ -19,6 +21,11 @@ const propTypes = {
 };
 
 class SharePermissionEditor extends React.Component {
+
+  static defaultProps = {
+    isEditing: false,
+    autoFocus: false,
+  };
 
   constructor(props) {
     super(props);
@@ -73,7 +80,7 @@ class SharePermissionEditor extends React.Component {
       toaster.danger(errMessage);
       this.setState({isLoading: false});
     });
-  }
+  };
 
   translatePermission = (permission) => {
     let value = Utils.sharePerms(permission);
@@ -83,8 +90,8 @@ class SharePermissionEditor extends React.Component {
       value = item && item.name;
     }
     return value;
-  }
-  
+  };
+
   translateExplanation = (explanation) => {
     let value = Utils.sharePermsExplanation(explanation);
     if (!value) {
@@ -93,7 +100,7 @@ class SharePermissionEditor extends React.Component {
       value = item && item.description;
     }
     return value;
-  }
+  };
 
   getPermissions = () => {
     const { permissions } = this.props;
@@ -108,7 +115,7 @@ class SharePermissionEditor extends React.Component {
       this.customPermissions = newPermissions;
     }
     return this.customPermissions;
-  }
+  };
 
   render() {
 
@@ -120,7 +127,9 @@ class SharePermissionEditor extends React.Component {
     return (
       <SelectEditor
         isTextMode={this.props.isTextMode}
+        isEditing={this.props.isEditing}
         isEditIconShow={this.props.isEditIconShow}
+        autoFocus={this.props.autoFocus}
         options={this.getPermissions()}
         currentOption={this.props.currentPermission}
         onOptionChanged={this.props.onPermissionChanged}

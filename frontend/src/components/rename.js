@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
+import { Utils } from '../utils/utils';
 import toaster from './toast';
 
 const propTypes = {
@@ -17,34 +18,48 @@ class Rename extends React.Component {
     this.state = {
       name: props.name
     };
+    this.inputRef = React.createRef();
   }
 
   componentDidMount() {
-    this.refs.renameInput.focus();
+    this.inputRef.current.focus();
     if (this.props.hasSuffix) {
       var endIndex = this.props.name.lastIndexOf('.');
-      this.refs.renameInput.setSelectionRange(0, endIndex, 'forward');
+      this.inputRef.current.setSelectionRange(0, endIndex, 'forward');
     } else {
-      this.refs.renameInput.setSelectionRange(0, -1);
+      this.inputRef.current.setSelectionRange(0, -1);
     }
+    // ensure real dom has been rendered, then listen the click event
+    setTimeout(() => {
+      document.addEventListener('click', this.onClick);
+    }, 1);
   }
 
-  onChange = (e) => {
-    this.setState({name: e.target.value});
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onClick);
   }
 
   onClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-  }
-
-  onKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.onRenameConfirm(e);
+    if (!this.inputRef.current.contains(e.target)) {
+      this.onRenameConfirm();
     }
-  }
+  };
+
+  onChange = (e) => {
+    this.setState({name: e.target.value});
+  };
+
+  onKeyDown = (e) => {
+    if (e.keyCode === Utils.keyCodes.enter) {
+      this.onRenameConfirm(e);
+    } else if (e.keyCode === Utils.keyCodes.esc) {
+      this.onRenameCancel(e);
+    }
+    e.nativeEvent.stopImmediatePropagation();
+  };
 
   onRenameConfirm = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
+    e && e.nativeEvent.stopImmediatePropagation();
     let newName = this.state.name.trim();
     if (newName === this.props.name) {
       this.props.onRenameCancel();
@@ -54,15 +69,16 @@ class Rename extends React.Component {
     let { isValid, errMessage } = this.validateInput();
     if (!isValid) {
       toaster.danger(errMessage);
+      this.props.onRenameCancel();
     } else {
       this.props.onRenameConfirm(newName);
     }
-  }
+  };
 
   onRenameCancel = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onRenameCancel();
-  }
+  };
 
   validateInput = () => {
     let newName = this.state.name.trim();
@@ -81,20 +97,17 @@ class Rename extends React.Component {
     }
 
     return { isValid, errMessage };
-  }
+  };
 
   render() {
     return (
       <div className="rename-container">
         <input
-          ref="renameInput"
+          ref={this.inputRef}
           value={this.state.name}
           onChange={this.onChange}
-          onKeyPress={this.onKeyPress}
-          onClick={this.onClick}
+          onKeyDown={this.onKeyDown}
         />
-        <button className="btn btn-secondary sf2-icon-confirm confirm" onClick={this.onRenameConfirm}></button>
-        <button className="btn btn-secondary sf2-icon-cancel cancel" onClick={this.onRenameCancel}></button>
       </div>
     );
   }

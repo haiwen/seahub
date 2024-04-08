@@ -1,0 +1,38 @@
+.sf-plain-editor {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
+
+/* fix plain editor main height */
+.sf-plain-editor-main {
+  position: absolute;
+  inset: 0;
+}
+
+.sf-plain-editor-left-panel {
+  height: 100%;
+  width: 50%;
+  background-color: #fff;
+  border-right: 1px solid rgb(230, 230, 221);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.sf-plain-editor-right-panel {
+  height: 100%;
+  width: 50%;
+  background-color: rgb(250, 250, 249);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.rendered-markdown.article {
+  padding: 0 20px 20px;
+}
+
+.rendered-markdown tbody tr:first-child {
+  font-weight: 400;
+}

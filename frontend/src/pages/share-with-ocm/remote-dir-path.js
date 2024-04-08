@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -17,7 +17,7 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
-  }
+  };
 
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -25,7 +25,7 @@ class DirPath extends React.Component {
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') {
-        return;
+        return null;
       }
       if (index === (pathList.length - 1)) {
         return (
@@ -45,7 +45,7 @@ class DirPath extends React.Component {
       }
     });
     return pathElem;
-  }
+  };
 
   render() {
     let { currentPath, repoName } = this.props;

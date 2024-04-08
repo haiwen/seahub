@@ -6,7 +6,7 @@ import hashlib
 
 from django import forms, VERSION, conf
 from django.apps import apps
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin, messages
 from django.contrib.admin import widgets
 from django.contrib.admin.options import csrf_protect_m
@@ -19,7 +19,7 @@ from django.utils import timezone
 from django.utils.encoding import smart_bytes
 from django.utils.formats import localize
 from django.utils.module_loading import import_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import six
 
 from . import LazyConfig, settings
@@ -175,6 +175,7 @@ class ConstanceForm(forms.Form):
         return cleaned_data
 
 
+@admin.register(Config)
 class ConstanceAdmin(admin.ModelAdmin):
     change_list_template = 'admin/constance/change_list.html'
     change_list_form = ConstanceForm
@@ -182,10 +183,10 @@ class ConstanceAdmin(admin.ModelAdmin):
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.module_name
         return [
-            url(r'^$',
+            path('',
                 self.admin_site.admin_view(self.changelist_view),
                 name='%s_%s_changelist' % info),
-            url(r'^$',
+            path('',
                 self.admin_site.admin_view(self.changelist_view),
                 name='%s_%s_add' % info),
         ]
@@ -327,4 +328,3 @@ class Config(object):
     _meta = Meta()
 
 
-admin.site.register([Config], ConstanceAdmin)

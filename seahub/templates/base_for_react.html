@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
-<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<title>{% block wiki_title %}{% block sub_title %}{% endblock %}{{ site_title }}{% endblock %}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
 {% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
@@ -13,13 +13,12 @@
 {% endblock %}
 {% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" type="image/x-icon">
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
-{% render_bundle 'commons' 'css'%}
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -28,6 +27,7 @@
 <body>
     <div id="wrapper" class="{{ LANGUAGE_CODE }}"></div>
     <div id="modal-wrapper" class="{{ LANGUAGE_CODE }}"></div>
+    {%block extra_content %}{% endblock %}
 
 <script type="text/javascript">
     window.app = {
@@ -43,9 +43,11 @@
             siteRoot: '{{ SITE_ROOT }}',
             loginUrl: '{{ LOGIN_URL }}',
             isPro: '{{ is_pro }}',
+            isDBSqlite3: {% if is_db_sqlite3 %} true {% else %} false {% endif %},
             isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+            enableRepoAutoDel: {% if enable_repo_auto_del %} true {% else %} false {% endif %},
             useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
@@ -53,7 +55,6 @@
         },
         pageOptions: {
             csrfToken: "{{ csrf_token }}",
-            dtableWebServer: "{{dtable_web_server}}",
             seafileCollabServer: '{{seafile_collab_server}}',
             name: "{{request.user.username|email2nickname|escapejs}}",
             contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
@@ -134,19 +135,22 @@
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
             enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
+            enableSSOToThirdpartWebsite: {% if enable_sso_to_thirdpart_website %} true {% else %} false {% endif %},
             enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% endif %},
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
             enableOnlyoffice: {% if enableOnlyoffice %} true {% else %} false {% endif %},
-            onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %}
+            onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %},
+            enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
+            enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+            canSetExProps: {% if can_set_ex_props %} true {% else %} false {% endif %},
+            enableSeaTableIntegration: {% if enable_seatable_integration %} true {% else %} false {% endif %},
         }
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-{% render_bundle 'commons' 'js' %}
-{% render_bundle 'runtime' %}
 {% block extra_script %}{% endblock %}
 </body>
 </html>

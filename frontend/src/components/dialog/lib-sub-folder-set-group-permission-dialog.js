@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api.js';
-import { Utils } from '../../utils/utils.js';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser/file-chooser';
+import { SeahubSelect, NoGroupMessage } from '../common/select';
 
 class GroupItem extends React.Component {
 
@@ -20,28 +19,28 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteGroupPermissionItem = () => {
     let item = this.props.item;
     this.props.deleteGroupPermissionItem(item);
-  }
+  };
 
   onChangeGroupPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeGroupPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
-          <a href={`${siteRoot}group/${item.group_id}/`} target="_blank">{item.group_name}</a>
+          <a href={`${siteRoot}group/${item.group_id}/`} target="_blank" rel="noreferrer">{item.group_name}</a>
         </td>
         {this.props.showPath &&
           <td>
@@ -51,6 +50,7 @@ class GroupItem extends React.Component {
         <td>
           <SharePermissionEditor
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}
@@ -74,18 +74,26 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteUserFolderPermission: PropTypes.func.isRequired,
+  onChangeUserFolderPerm: PropTypes.func.isRequired,
+  showPath: PropTypes.bool.isRequired,
+  repoName: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  deleteGroupPermissionItem: PropTypes.func.isRequired,
+  onChangeGroupPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  isDepartmentRepo: PropTypes.bool
+  isDepartmentRepo: PropTypes.bool,
+  repoName: PropTypes.string,
+  folderPath: PropTypes.string,
 };
 
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
-  );
-};
-
-class LibSubFolderSerGroupPermissionDialog extends React.Component {
+class LibSubFolderSetGroupPermissionDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -101,13 +109,13 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
     if (!isPro) {
       this.permissions = ['r', 'rw'];
     } else {
-      this.permissions = ['r', 'rw', 'cloud-edit', 'preview'];
+      this.permissions = ['r', 'rw', 'cloud-edit', 'preview', 'invisible'];
     }
   }
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -124,7 +132,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         };
       });
     });
-  }
+  };
 
   listGroupPermissionItems = () => {
     const { isDepartmentRepo, repoID, folderPath } = this.props;
@@ -138,11 +146,11 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         });
       }
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   addGroupFolderPerm = () => {
     const { selectedOption } = this.state;
@@ -184,7 +192,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         errorMsg: [errorMsg]
       });
     });
-  }
+  };
 
   deleteGroupPermissionItem = (item) => {
     const request = this.props.isDepartmentRepo ?
@@ -195,7 +203,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; })
       });
     });
-  }
+  };
 
   onChangeGroupPermission = (item, permission) => {
     const request = this.props.isDepartmentRepo ?
@@ -204,7 +212,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
     request.then(() => {
       this.updateGroupPermission(item, permission);
     });
-  }
+  };
 
   updateGroupPermission = (item, permission) => {
     let groupID = item.group_id;
@@ -216,38 +224,38 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       return sharedItem;
     });
     this.setState({groupPermissionItems: groupPermissionItems});
-  }
+  };
 
   onSetSubFolder = (e) => {
     this.setState({
       folderPath: e.target.value
     });
-  }
+  };
 
   toggleFileChooser = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser,
       folderPath: ''
     });
-  }
+  };
 
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
     });
-  }
+  };
 
   handleSubmit = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser
     });
-  }
+  };
 
   onRepoItemClick = () => {
     this.setState({
       folderPath: '/'
     });
-  }
+  };
 
   render() {
     let showPath = this.props.folderPath ? false : true;
@@ -288,14 +296,13 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
+                <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.options}
                   placeholder={gettext('Select a group')}
                   maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
+                  components={{ NoOptionsMessage: NoGroupMessage }}
                 />
               </td>
               {showPath &&
@@ -356,6 +363,6 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 }
 
-LibSubFolderSerGroupPermissionDialog.propTypes = propTypes;
+LibSubFolderSetGroupPermissionDialog.propTypes = propTypes;
 
-export default LibSubFolderSerGroupPermissionDialog;
+export default LibSubFolderSetGroupPermissionDialog;

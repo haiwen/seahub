@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled, canGenerateShareLink } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -29,9 +29,11 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object,
   direntList: PropTypes.array.isRequired,
+  fullDirentList: PropTypes.array,
   onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -42,13 +44,17 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   isDirentDetailShow: PropTypes.bool.isRequired,
   onGridItemClick: PropTypes.func,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
+  posX: PropTypes.number,
+  posY: PropTypes.number,
+  dirent: PropTypes.object,
 };
 
-class DirentGridView extends React.Component{
+class DirentGridView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,6 +70,7 @@ class DirentGridView extends React.Component{
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
       isCreateFileDialogShow: false,
+      fileType: '',
       isPermissionDialogOpen: false,
 
       isMutipleOperation: false,
@@ -73,48 +80,58 @@ class DirentGridView extends React.Component{
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
 
-  onCreateFileToggle = () => {
+  onCreateFileToggle = (fileType) => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: fileType || ''
     });
-  }
+  };
 
   onGridItemClick = (dirent) => {
+    hideMenu();
     this.setState({activeDirent: dirent});
     this.props.onGridItemClick(dirent);
-  }
+  };
 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
+  };
 
   onAddFolder = (dirPath) => {
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
-  }
+  };
 
   onItemShare = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   closeSharedDialog = () => {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   onItemDelete = (currentObject, e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(currentObject);
-  }
+  };
+
+  onItemConvert = (currentObject, e, dstType) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.props.onItemConvert(currentObject, dstType);
+  };
+
+  exportDocx = () => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
+    window.location.href = exportToDocxUrl;
+  };
 
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
@@ -137,6 +154,21 @@ class DirentGridView extends React.Component{
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Freeze Document':
+        this.onFreezeDocument(currentObject);
+        break;
+      case 'Convert to Markdown':
+        this.onItemConvert(currentObject, event, 'markdown');
+        break;
+      case 'Convert to docx':
+        this.onItemConvert(currentObject, event, 'docx');
+        break;
+      case 'Export docx':
+        this.exportDocx();
+        break;
+      case 'Convert to sdoc':
+        this.onItemConvert(currentObject, event, 'sdoc');
+        break;
       case 'Tags':
         this.onEditFileTagToggle();
         break;
@@ -149,9 +181,6 @@ class DirentGridView extends React.Component{
       case 'Lock':
         this.onLockItem(currentObject);
         break;
-      case 'Comment':
-        this.onCommentItem();
-        break;
       case 'History':
         this.onHistory(currentObject);
         break;
@@ -159,10 +188,28 @@ class DirentGridView extends React.Component{
         this.onCreateFolderToggle(currentObject);
         break;
       case 'New File':
-        this.onCreateFileToggle(currentObject);
+        this.onCreateFileToggle('');
+        break;
+      case 'New Markdown File':
+        this.onCreateFileToggle('.md');
+        break;
+      case 'New Excel File':
+        this.onCreateFileToggle('.xlsx');
+        break;
+      case 'New PowerPoint File':
+        this.onCreateFileToggle('.pptx');
+        break;
+      case 'New Word File':
+        this.onCreateFileToggle('.docx');
+        break;
+      case 'New SeaDoc File':
+        this.onCreateFileToggle('.sdoc');
         break;
       case 'Access Log':
         this.onAccessLog(currentObject);
+        break;
+      case 'Properties':
+        this.props.showDirentDetail('info');
         break;
       case 'Open via Client':
         this.onOpenViaClient(currentObject);
@@ -170,30 +217,30 @@ class DirentGridView extends React.Component{
       default:
         break;
     }
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
     });
-  }
+  };
 
   onFileTagChanged = () => {
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(this.props.path, dirent.name);
     this.props.onFileTagChanged(dirent, direntPath);
-  }
+  };
 
   getDirentPath = (dirent) => {
     let path = this.props.path;
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
+  };
 
   closeZipDialog = () => {
     this.setState({
       isZipDialogOpen: false
     });
-  }
+  };
 
   onItemDownload = (currentObject, e) => {
     e.nativeEvent.stopImmediatePropagation();
@@ -208,31 +255,31 @@ class DirentGridView extends React.Component{
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
     }
-  }
+  };
 
   onCreateFolderToggle = () => {
     this.setState({
       isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
     });
-  }
+  };
 
   onItemRenameToggle = () => {
     this.setState({
       isRenameDialogShow: !this.state.isRenameDialogShow,
     });
-  }
+  };
 
   onItemMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onItemCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onPermissionItem = () => {
     this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
-  }
+  };
 
   onLockItem = (currentObject) => {
     let repoID = this.props.repoID;
@@ -246,7 +293,22 @@ class DirentGridView extends React.Component{
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
+
+  onFreezeDocument = (currentObject) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(currentObject);
+    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
+      this.props.updateDirent(currentObject, 'is_freezed', true);
+      this.props.updateDirent(currentObject, 'is_locked', true);
+      this.props.updateDirent(currentObject, 'locked_by_me', true);
+      let lockName = username.split('@');
+      this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   onUnlockItem = (currentObject) => {
     let repoID = this.props.repoID;
@@ -259,58 +321,45 @@ class DirentGridView extends React.Component{
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  onCommentItem = () => {
-    this.props.showDirentDetail('comments');
-  }
+  };
 
   onHistory = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
     location.href = url;
-  }
+  };
 
   onAccessLog = (currentObject) => {
     let filePath = this.getDirentPath(currentObject);
     let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
     window.open(path);
-  }
+  };
 
   onOpenViaClient = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
-  }
+  };
 
   onItemRename = (newName) => {
     this.props.onItemRename(this.state.activeDirent, newName);
-  }
+  };
 
   prepareImageItem = (item) => {
-    const useThumbnail = !this.repoEncrypted;
     const name = item.name;
-
-    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-    const isGIF = fileExt == 'gif';
-
-    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
     const repoID = this.props.repoID;
-    let src;
-    if (useThumbnail && !isGIF) {
-      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
-    } else {
-      src = `${siteRoot}repo/${repoID}/raw${path}`;
-    }
+    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+
+    const src = `${siteRoot}repo/${repoID}/raw${path}`;
 
     return {
       'name': name,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'src': src
     };
-  }
+  };
 
   showImagePopup = (curItem) => {
     let items = this.props.fullDirentList.filter((item) => {
@@ -326,29 +375,29 @@ class DirentGridView extends React.Component{
       imageItems: imageItems,
       imageIndex: items.indexOf(curItem)
     });
-  }
+  };
 
   closeImagePopup = () => {
     this.setState({isImagePopupOpen: false});
-  }
+  };
 
   moveToPrevImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
     }));
-  }
+  };
 
   moveToNextImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
-  }
+  };
 
   // common contextmenu handle
   onMouseDown = (event) => {
@@ -356,21 +405,22 @@ class DirentGridView extends React.Component{
     if (event.button === 2) {
       return;
     }
-  }
+  };
 
   onGridContainerMouseDown = (event) => {
     this.onMouseDown(event);
-  }
+  };
 
   onGridItemMouseDown = (event) => {
     this.onMouseDown(event);
-  }
+  };
 
   gridContainerClick = () => {
+    hideMenu();
     if (!this.props.isDirentDetailShow) {
       this.onGridItemClick(null);
     }
-  }
+  };
 
   onGridContainerContextMenu = (event) => {
     event.preventDefault();
@@ -380,9 +430,27 @@ class DirentGridView extends React.Component{
       return;
     }
     let id = 'dirent-grid-container-menu';
-    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+    const {
+      NEW_FOLDER, NEW_FILE,
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE,
+      NEW_SEADOC_FILE
+    } = TextTranslation;
+
+    const menuList = [
+      NEW_FOLDER, NEW_FILE, 'Divider',
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE
+    ];
+    if (enableSeadoc) {
+      menuList.push(NEW_SEADOC_FILE);
+    }
     this.handleContextClick(event, id, menuList);
-  }
+  };
 
   onGridItemContextMenu = (event, dirent) => {
     // Display menu items according to the current dirent permission
@@ -390,7 +458,7 @@ class DirentGridView extends React.Component{
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
     this.props.onGridItemClick && this.props.onGridItemClick(dirent);
-  }
+  };
 
   handleContextClick = (event, id, menuList, currentObject = null) => {
     event.preventDefault();
@@ -423,13 +491,13 @@ class DirentGridView extends React.Component{
     }
 
     showMenu(showMenuConfig);
-  }
+  };
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
     return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
-  }
+  };
 
   render() {
     let {direntList, path} = this.props;
@@ -486,9 +554,10 @@ class DirentGridView extends React.Component{
           <ModalPortal>
             <CreateFile
               parentPath={this.props.path}
-              onAddFile={this.onAddFile}
+              fileType={this.state.fileType}
+              onAddFile={this.props.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
+              toggleDialog={this.onCreateFileToggle}
             />
           </ModalPortal>
         )}
@@ -530,6 +599,7 @@ class DirentGridView extends React.Component{
             fileTagList={dirent.file_tags}
             filePath={direntPath}
             toggleCancel={this.onEditFileTagToggle}
+            repoTags={this.props.repoTags}
             onFileTagChanged={this.onFileTagChanged}
           />
         }

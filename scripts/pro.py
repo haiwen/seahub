@@ -24,7 +24,6 @@ The diretory layout:
         - seaf-dav/
       - elasticsearch/
       - misc
-        - seahub_extra.sql
 
   - seafile-license.txt
   - seahub.db
@@ -355,8 +354,6 @@ class EnvManager(object):
 
             os.path.join(self.top_dir, 'conf'), # LDAP sync has to access seahub_settings.py
             os.path.join(self.install_path, 'seahub', 'thirdpart'),
-            os.path.join(self.install_path, 'seahub-extra'),
-            os.path.join(self.install_path, 'seahub-extra', 'thirdparts'),
 
             os.path.join(self.install_path, 'seafile/lib/python3/site-packages'),
             os.path.join(self.install_path, 'seafile/lib64/python3/site-packages'),
@@ -405,9 +402,6 @@ class DBConf(object):
     def generate_conf(self, config):
         raise NotImplementedError
 
-    def create_extra_tables(self):
-        raise NotImplementedError
-
     def generate_config_text(self):
         config = Utils.read_config()
         self.generate_conf(config)
@@ -451,22 +445,6 @@ class MySQLDBConf(DBConf):
         config.set(self.DB_SECTION, 'password', self.mysql_password)
         config.set(self.DB_SECTION, 'name', self.mysql_db)
 
-    def create_extra_tables(self):
-        self.get_conn()
-        sql_file = os.path.join(env_mgr.pro_misc_dir, 'seahub_extra.mysql.sql')
-        with open(sql_file, 'r') as fp:
-            content = fp.read()
-
-        sqls = content.split(';')
-
-        for sql in sqls:
-            sql = sql.strip()
-            if not sql:
-                continue
-
-            print('>>> sql is', sql, len(sql))
-            self.exec_sql(sql)
-
     def exec_sql(self, sql):
         cursor = self.conn.cursor()
         try:
@@ -509,16 +487,6 @@ class SQLiteDBConf(DBConf):
         config.set(self.DB_SECTION, 'type', 'sqlite3')
         config.set(self.DB_SECTION, 'path', self.db_path)
 
-    def create_extra_tables(self):
-        seahub_db = os.path.join(env_mgr.top_dir, 'seahub.db')
-        sql_file = os.path.join(env_mgr.pro_misc_dir, 'seahub_extra.sqlite3.sql')
-
-        Utils.info('Create extra database tables ... ', newline=False)
-        cmd = 'sqlite3 %s < %s' % (seahub_db, sql_file)
-        if os.system(cmd) != 0:
-            Utils.error('\nfailed to create seahub extra database tables')
-        Utils.info('Done')
-
 
 class ProfessionalConfigurator(object):
     '''Main abstract class for the config process '''
@@ -541,19 +509,6 @@ class ProfessionalConfigurator(object):
     def generate_seafevents_conf(self):
         template = '''\
 %(db_config_text)s
-
-[AUDIT]
-enabled = true
-
-[INDEX FILES]
-enabled = true
-interval = 10m
-
-highlight = fvh
-
-## If true, indexes the contents of office/pdf files while updating search index
-## Note: If you change this option from "false" to "true", then you need to clear the search index and update the index again. See the FAQ for details.
-index_office_pdf = true
 
 [SEAHUB EMAIL]
 enabled = true
@@ -582,11 +537,10 @@ class MigratingProfessionalConfigurator(ProfessionalConfigurator):
         ProfessionalConfigurator.__init__(self, args, migrate=True)
 
     def check_pre_condition(self):
-        self.check_java()
+        pass
 
     def config(self):
         self.detect_db_type()
-        # self.create_extra_tables()
         self.update_avatars_link()
 
     def detect_db_type(self):
@@ -632,20 +586,6 @@ class MigratingProfessionalConfigurator(ProfessionalConfigurator):
         if Utils.run_argv(argv) != 0:
             Utils.error('failed to update avatars folder')
 
-    def check_java(self):
-        Utils.info('\nChecking java ... ', newline=False)
-        if not Utils.find_in_path('java'):
-            msg = '''\nJava is not found. instal it first.\n
-    On Debian/Ubuntu:     apt-get install default-jre
-    On CentOS/RHEL:       yum install jre
-    '''
-            Utils.error(msg)
-
-        Utils.info('Done')
-
-    def create_extra_tables(self):
-        '''Create seahub-extra database tables'''
-        self.db_config.create_extra_tables()
 
 class SetupProfessionalConfigurator(ProfessionalConfigurator):
     '''This script is invokded by setup-seafile.sh/setup-seafile-mysql.sh to

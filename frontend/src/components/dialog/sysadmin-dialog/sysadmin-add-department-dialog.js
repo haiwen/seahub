@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 
 const propTypes = {
   groupID: PropTypes.string,
   parentGroupID: PropTypes.string,
   toggle: PropTypes.func.isRequired,
-  onDepartChanged: PropTypes.func.isRequired,
+  onAddNewDepartment: PropTypes.func.isRequired
 };
 
 class AddDepartDialog extends React.Component {
@@ -19,12 +19,6 @@ class AddDepartDialog extends React.Component {
       departName: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
@@ -36,13 +30,13 @@ class AddDepartDialog extends React.Component {
       }
       seafileAPI.sysAdminAddNewDepartment(parentGroup, this.state.departName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onDepartChanged();
+        this.props.onAddNewDepartment(res.data);
       }).catch(error => {
         let errorMsg = gettext(error.response.data.error_msg);
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -53,25 +47,25 @@ class AddDepartDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       departName: e.target.value,
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     let header = this.props.parentGroupID ? gettext('New Sub-department') : gettext('New Department');
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
         <ModalBody>
           <Form>
@@ -79,16 +73,17 @@ class AddDepartDialog extends React.Component {
               <Label for="departName">{gettext('Name')}</Label>
               <Input
                 id="departName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.departName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {this.state.errMessage && <p className="error">{this.state.errMessage}</p>}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

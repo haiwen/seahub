@@ -32,7 +32,7 @@ class ShareLinkPermissionSelect extends React.Component {
 
     this.props.changePerm(currentOption);
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     const options = this.props.permissions;

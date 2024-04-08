@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link, navigate } from '@reach/router';
+import { Link, navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -58,6 +59,11 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object,
+  items: PropTypes.array,
+};
+
 class TableBody extends Component {
 
   constructor(props) {
@@ -73,7 +79,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted;
+      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
     });
     if (items.length == 0) {
       return ;
@@ -116,6 +122,10 @@ class TableBody extends Component {
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       item.dirent_view_url = item.is_dir ? `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}` : `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
+      // item is folder or file
+      if (item.encoded_path !== '/') {
+        item.dirent_view_url = item.dirent_view_url.replace(/\/+$/, '');
+      }
 
       item.mtime_relative = moment(item.mtime).fromNow();
 
@@ -128,6 +138,11 @@ class TableBody extends Component {
     );
   }
 }
+
+TableBody.propTypes = {
+  data: PropTypes.object,
+  items: PropTypes.array,
+};
 
 class Item extends Component {
 
@@ -144,19 +159,19 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
-  }
+  };
 
   unstar = (e) => {
     e.preventDefault();
@@ -168,7 +183,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   visitItem = () => {
     const data = this.props.data;
@@ -177,7 +192,7 @@ class Item extends Component {
     } else {
       window.open(data.dirent_view_url);
     }
-  }
+  };
 
   render() {
 
@@ -189,6 +204,7 @@ class Item extends Component {
 
     let opClasses = 'sf2-icon-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
+    const linkUrl = data.dirent_view_url;
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -199,12 +215,19 @@ class Item extends Component {
               <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
-        <td>
-          { data.is_dir ?
-            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+        <Fragment>
+          {data.deleted ?
+            <td>
+              {data.obj_name}{' '}<span style={{color:'red'}}>{gettext('deleted')}</span>
+            </td> :
+            <td>
+              { data.is_dir ?
+                <Link to={linkUrl}>{data.obj_name}</Link> :
+                <a className="normal" href={linkUrl} target="_blank" rel="noreferrer">{data.obj_name}</a>
+              }
+            </td>
           }
-        </td>
+        </Fragment>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
@@ -224,8 +247,8 @@ class Item extends Component {
         </td>
         <td onClick={this.visitItem}>
           { data.is_dir ?
-            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+            <Link to={linkUrl}>{data.obj_name}</Link> :
+            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
           }
           <br />
           <span className="item-meta-info">{data.repo_name}</span>
@@ -236,7 +259,7 @@ class Item extends Component {
             <DropdownToggle
               tag="i"
               className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-              title={gettext('More Operations')}
+              title={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isOpMenuOpen}
             />
@@ -254,6 +277,11 @@ class Item extends Component {
     return Utils.isDesktop() ? desktopItem : mobileItem;
   }
 }
+
+Item.propTypes = {
+  data: PropTypes.object,
+  items: PropTypes.array,
+};
 
 class Starred extends Component {
   constructor(props) {

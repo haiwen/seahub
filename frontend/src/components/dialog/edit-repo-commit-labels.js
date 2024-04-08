@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import CreatableSelect from 'react-select/lib/Creatable';
+import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -30,7 +30,7 @@ class UpdateRepoCommitLabels extends React.Component {
     this.setState({
       inputValue: value
     });
-  }
+  };
 
   formSubmit = () => {
     const inputValue = this.state.inputValue;
@@ -52,7 +52,7 @@ class UpdateRepoCommitLabels extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     const { formErrorMsg } = this.state;

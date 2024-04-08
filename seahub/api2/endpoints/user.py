@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.utils import is_valid_email
 from seahub.api2.authentication import TokenAuthentication
@@ -34,8 +34,8 @@ class User(APIView):
 
         info = {}
         info['email'] = email
-        info['name'] = email2nickname(email)
-        info['contact_email'] = email2contact_email(email)
+        info['name'] = profile.nickname if profile and profile.nickname else ''
+        info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
         info['telephone'] = d_profile.telephone if d_profile else ''
         info['login_id'] = profile.login_id if profile else ''
         info['list_in_address_book'] = profile.list_in_address_book if profile else False

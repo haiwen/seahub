@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../../components/toast';
-import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext, contactEmail } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
@@ -44,7 +42,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
     let message = gettext('New password has been sent to your email {mail}. Please check your mailbox. If you don’t receive the password, please check if your email address is properly configured.').replace('{mail}', user_email);
 
     return (
-      <Modal isOpen={true}  centered={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           {gettext('Reset library password')}
         </ModalHeader>

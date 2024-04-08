@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -191,7 +191,7 @@ class AdminLibraries(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_name = request.data.get('name', None)
-        if not repo_name:
+        if not repo_name or not is_valid_dirent_name(repo_name):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -482,7 +482,7 @@ class AdminSearchLibrary(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
-        """ Search library by name.
+        """ Search library by name or id.
 
         Permission checking:
         1. only admin can perform this action.
@@ -496,7 +496,36 @@ class AdminSearchLibrary(APIView):
             error_msg = 'query invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        start = (current_page - 1) * per_page
+        end = current_page * per_page
+        limit = per_page + 1
+
         repos = seafile_api.search_repos_by_name(query_str)
+        repos_count = len(repos)
+        if repos_count > end:
+            repos = repos[start: end]
+            has_next_page = True
+        else:
+            if start - repos_count > 0:
+                repos = list()
+                start = start - repos_count
+            else:
+                repos = repos[start: end]
+                start = 0
+
+            repos += seafile_api.get_repos_by_id_prefix(query_str, start, limit)
+            if len(repos) > per_page:
+                repos = repos[:per_page]
+                has_next_page = True
+            else:
+                has_next_page = False
 
         default_repo_id = get_system_default_repo_id()
         repos = [r for r in repos if not r.is_virtual]
@@ -545,7 +574,7 @@ class AdminSearchLibrary(APIView):
         result = []
         for repo in repos:
 
-            info = {}
+            info = dict()
             info['id'] = repo.repo_id
             info['name'] = repo.repo_name
 
@@ -560,4 +589,8 @@ class AdminSearchLibrary(APIView):
 
             result.append(info)
 
-        return Response({"repo_list": result})
+        page_info = {
+            'has_next_page': has_next_page,
+            'current_page': current_page
+        }
+        return Response({"repo_list": result, "page_info": page_info})

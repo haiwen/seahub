@@ -11,13 +11,16 @@ from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect, Http404
 
-from django.utils.http import urlquote, base36_to_int, is_safe_url
-from django.utils.translation import ugettext as _
+from urllib.parse import quote
+from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
-from seaserv import seafile_api
+from saml2.ident import decode
+from seaserv import seafile_api, ccnet_api
 
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
+from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
         PasswordResetForm, SetPasswordForm, PasswordChangeForm, \
@@ -31,12 +34,13 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import is_ldap_user, get_site_name
+from seahub.utils import render_error, get_site_name, is_valid_email
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.organizations.models import OrgSAMLConfig
 
 from constance import config
 
@@ -50,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
-    if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     if request.session.test_cookie_worked():
@@ -95,7 +99,7 @@ def login(request, template_name='registration/login.html',
 
     redirect_to = request.GET.get(redirect_field_name, '')
     if request.user.is_authenticated:
-        if redirect_to:
+        if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=request.get_host()):
             return HttpResponseRedirect(redirect_to)
         else:
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
@@ -140,7 +144,7 @@ def login(request, template_name='registration/login.html',
                 try:
                     user = User.objects.get(email)
                     if user.is_active:
-                        user.freeze_user(notify_admins=True)
+                        user.freeze_user(notify_admins=True, notify_org_admins=True)
                         logger.warn('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
                                     (login, ip, failed_attempt))
                 except User.DoesNotExist:
@@ -204,6 +208,7 @@ def login(request, template_name='registration/login.html',
         'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
         'enable_sso': enable_sso,
+        'enable_multi_adfs': getattr(settings, 'ENABLE_MULTI_ADFS', False),
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
@@ -236,7 +241,7 @@ def login_simple_check(request):
         # Ensure the user-originating redirection url is safe.
         if REDIRECT_FIELD_NAME in request.GET:
             next_page = request.GET[REDIRECT_FIELD_NAME]
-            if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+            if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
                 next_page = settings.LOGIN_REDIRECT_URL
         else:
             next_page = settings.SITE_ROOT
@@ -250,6 +255,21 @@ def logout(request, next_page=None,
            template_name='registration/logged_out.html',
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
+
+    if getattr(settings, 'ENABLE_ADFS_LOGIN', False) or getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        try:
+            saml_subject_id = decode(request.saml_session["_saml2_subject_id"])
+            if saml_subject_id:
+                from seahub.utils import is_org_context
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    response = HttpResponseRedirect('/org/custom/%s/saml2/logout/' % str(org_id))
+                else:
+                    response = HttpResponseRedirect('/saml2/logout/')
+                response.delete_cookie('seahub_auth')
+                return response
+        except Exception as e:
+            logger.warning(e)
 
     from seahub.auth import logout
     logout(request)
@@ -279,7 +299,7 @@ def logout(request, next_page=None,
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
             next_page = request.path
 
     if next_page is None:
@@ -289,7 +309,7 @@ def logout(request, next_page=None,
         else:
             response = render(request, template_name, {
                 'title': _('Logged out'),
-                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
             })
     else:
         # Redirect to this page until the session has been cleared.
@@ -308,7 +328,7 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
     "Redirects the user to the login page, passing the given 'next' page"
     if not login_url:
         login_url = settings.LOGIN_URL
-    return HttpResponseRedirect('%s?%s=%s' % (login_url, urlquote(redirect_field_name), urlquote(next)))
+    return HttpResponseRedirect('%s?%s=%s' % (login_url, quote(redirect_field_name), quote(next)))
 
 # 4 views for password reset:
 # - password_reset sends the mail
@@ -322,8 +342,22 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         email_template_name='registration/password_reset_email.html',
         password_reset_form=PasswordResetForm, token_generator=default_token_generator,
         post_reset_redirect=None):
+
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_reset_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_reset_password = False
+
+    if not can_reset_password:
+        return render_error(request, _('Unable to reset password.'))
+
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_done')
+
+    login_bg_image_path = get_login_bg_image_path()
     if request.method == "POST":
         form = password_reset_form(request.POST)
         if form.is_valid():
@@ -331,7 +365,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
             opts['use_https'] = request.is_secure()
             opts['token_generator'] = token_generator
             if is_admin_site:
-                opts['domain_override'] = request.META['HTTP_HOST']
+                opts['domain_override'] = request.headers['host']
             else:
                 opts['email_template_name'] = email_template_name
                 opts['domain_override'] = get_current_site(request).domain
@@ -342,6 +376,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
+                        'login_bg_image_path': login_bg_image_path,
                         })
             else:
                 return HttpResponseRedirect(post_reset_redirect)
@@ -349,10 +384,14 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
         form = password_reset_form()
     return render(request, template_name, {
         'form': form,
+        'login_bg_image_path': login_bg_image_path,
     })
 
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
-    return render(request, template_name)
+    login_bg_image_path = get_login_bg_image_path()
+    return render(request, template_name, {
+        'login_bg_image_path': login_bg_image_path,
+    })
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
@@ -397,8 +436,16 @@ def password_change(request, template_name='registration/password_change_form.ht
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
 
-    if is_ldap_user(request.user):
-        messages.error(request, _("Can not update password, please contact LDAP admin."))
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_change_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_change_password = False
+
+    if not can_change_password:
+        return render_error(request, _('Unable to change password.'))
 
     if settings.ENABLE_USER_SET_CONTACT_EMAIL:
         user_profile = Profile.objects.get_profile_by_user(request.user.username)
@@ -407,10 +454,10 @@ def password_change(request, template_name='registration/password_change_form.ht
             password_change_form = SetContactEmailPasswordForm
             template_name = 'registration/password_set_form.html'
 
-        elif request.user.enc_password == UNUSABLE_PASSWORD:
-            # set password only
-            password_change_form = SetPasswordForm
-            template_name = 'registration/password_set_form.html'
+    if request.user.enc_password == UNUSABLE_PASSWORD:
+        # set password only
+        password_change_form = SetPasswordForm
+        template_name = 'registration/password_set_form.html'
 
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
@@ -437,3 +484,47 @@ def password_change(request, template_name='registration/password_change_form.ht
 
 def password_change_done(request, template_name='registration/password_change_done.html'):
     return render(request, template_name)
+
+
+def multi_adfs_sso(request):
+    if not getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        return HttpResponseRedirect(settings.LOGIN_URL)
+
+    template_name = 'registration/multi_adfs_sso.html'
+    render_data = {'login_bg_image_path': get_login_bg_image_path()}
+
+    if request.method == "POST":
+        request.session['is_sso_user'] = True
+        login_email = request.POST.get('login', '')
+        if not is_valid_email(login_email):
+            render_data['error_msg'] = 'Email invalid.'
+            return render(request, template_name, render_data)
+
+        domain = login_email.split('@')[-1]
+        if not domain:
+            render_data['error_msg'] = 'Email invalid.'
+            return render(request, template_name, render_data)
+
+        try:
+            org_saml_config = OrgSAMLConfig.objects.get_config_by_domain(domain)
+            if not org_saml_config:
+                render_data['error_msg'] = "Cannot find an ADFS/SAML config for the team related to domain %s." % domain
+                return render(request, template_name, render_data)
+            if not org_saml_config.domain_verified:
+                render_data['error_msg'] = \
+                  "The ownership of domain %s has not been verified. Please ask your team admin to verify it." % domain
+                return render(request, template_name, render_data)
+            org_id = org_saml_config.org_id
+            org = ccnet_api.get_org_by_id(org_id)
+            if not org:
+                render_data['error_msg'] = "Cannot find an ADFS/SAML config for the team related to domain %s." % domain
+                return render(request, template_name, render_data)
+        except Exception as e:
+            logger.error(e)
+            render_data['error_msg'] = 'Error, please contact administrator.'
+            return render(request, template_name, render_data)
+
+        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % str(org_id))
+
+    if request.method == "GET":
+        return render(request, template_name, render_data)

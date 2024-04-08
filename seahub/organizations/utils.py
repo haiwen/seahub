@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from seahub.utils import gen_token, get_service_url
 
+
 def get_or_create_invitation_link(org_id):
     """Invitation link for an org. Users will be redirected to WeChat QR page.
     Mainly used in docs.seafile.com.

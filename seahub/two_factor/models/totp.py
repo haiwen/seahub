@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-
-
+import logging
 from binascii import unhexlify
 import time
 
@@ -100,17 +99,21 @@ class TOTPDevice(Device):
 
             for offset in range(-self.tolerance, self.tolerance + 1):
                 totp.drift = self.drift + offset
-                # print('user input = %s, token = %s, self.last_t = %s, totp.t() = %s' % (token, totp.token(), totp.t(), self.last_t))
-                # if (totp.t() > self.last_t) and (totp.token() == token):
-                if totp.token() == token:
-                    self.last_t = totp.t()
-                    if (offset != 0) and OTP_TOTP_SYNC:
-                        self.drift += offset
-                    self.save()
-
-                    verified = True
-                    break
+                if token == totp.token():
+                    if self.last_t < totp.t():
+                        self.last_t = totp.t()
+                        if (offset != 0) and OTP_TOTP_SYNC:
+                            self.drift += offset
+                        self.save()
+                        verified = True
+                        break
+                    else:
+                        logging.warning('Warning! Suspected token replay!')
+                        logging.warning('user input token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                                     % (token, totp.token(), self.last_t, totp.t()))
             else:
+                logging.info('user input invalid token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                             % (token, totp.token(), self.last_t, totp.t()))
                 verified = False
 
         return verified

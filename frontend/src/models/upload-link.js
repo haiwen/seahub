@@ -6,6 +6,7 @@ class UploadLink {
     this.path = object.path;
     this.link = object.link;
     this.obj_name = object.obj_name;
+    this.obj_id = object.obj_id;
     this.username = object.username;
     this.ctime = object.ctime;
     this.token = object.token;

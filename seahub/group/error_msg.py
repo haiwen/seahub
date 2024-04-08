@@ -2,7 +2,7 @@
 """
 This file contains error messages from ccnet or seafile that will be translated.
 """
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 # create_group rpc
 msg = _("The group has already created")

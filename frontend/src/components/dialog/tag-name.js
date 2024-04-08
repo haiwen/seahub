@@ -22,6 +22,14 @@ class TagName extends React.Component {
     this.input = React.createRef();
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.tag.name !== this.props.tag.name) {
+      this.setState({
+        tagName: nextProps.tag.name,
+      });
+    }
+  }
+
   toggleMode = () => {
     this.setState({
       isEditing: !this.state.isEditing
@@ -30,7 +38,7 @@ class TagName extends React.Component {
         this.input.current.focus();
       }
     });
-  }
+  };
 
   updateTagName = (e) => {
     const newName = e.target.value;
@@ -44,19 +52,23 @@ class TagName extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onInputKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.toggleMode();
       this.updateTagName(e);
     }
-  }
+    else if (e.key == 'Escape') {
+      e.nativeEvent.stopImmediatePropagation();
+      this.toggleMode();
+    }
+  };
 
   onInputBlur = (e) => {
     this.toggleMode();
     this.updateTagName(e);
-  }
+  };
 
   render() {
     const { isEditing, tagName } = this.state;

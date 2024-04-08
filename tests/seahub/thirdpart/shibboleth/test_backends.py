@@ -5,6 +5,7 @@ from shibboleth import backends
 
 from seahub.base.accounts import User
 from seahub.auth import authenticate
+from seahub.auth.models import SocialAuthUser
 from seahub.test_utils import BaseTestCase
 import importlib
 
@@ -48,6 +49,8 @@ settings.MIDDLEWARE.append(
     'shibboleth.middleware.ShibbolethRemoteUserMiddleware',
 )
 
+SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
+
 
 class ShibbolethRemoteUserBackendTest(BaseTestCase):
     def setUp(self):
@@ -61,9 +64,10 @@ class ShibbolethRemoteUserBackendTest(BaseTestCase):
         user = authenticate(remote_user=self.remote_user,
                             shib_meta=SAMPLE_HEADERS)
         assert user.is_active is True
-        self.assertEqual(user.username, 'sampledeveloper@school.edu')
-        self.assertEqual(User.objects.get(self.remote_user).username,
-                         'sampledeveloper@school.edu')
+        shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, self.remote_user)
+        self.assertEqual(shib_user.uid, 'sampledeveloper@school.edu')
+        self.assertEqual(User.objects.get(shib_user.username).username,
+                         shib_user.username)
 
     def test_notify_admins_on_activate_request(self):
         self.assertEqual(len(mail.outbox), 0)
@@ -75,7 +79,8 @@ class ShibbolethRemoteUserBackendTest(BaseTestCase):
             importlib.reload(backends)
             user = authenticate(remote_user=self.remote_user,
                                 shib_meta=SAMPLE_HEADERS)
-            self.assertEqual(user.username, 'sampledeveloper@school.edu')
+            shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, self.remote_user)
+            self.assertEqual(shib_user.uid, 'sampledeveloper@school.edu')
             assert user.is_active is False
 
         assert len(mail.outbox) != 0

@@ -24,14 +24,8 @@ class WebdavSecretTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
 
-        json_resp = json.loads(resp.content)
-        assert json_resp['secret'] == '123456'
-
         resp = self.client.put(
             reverse('api-v2.1-webdav-secret'), 'secret=',
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(200, resp.status_code)
-
-        json_resp = json.loads(resp.content)
-        assert json_resp['secret'] is None

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { gettext } from '../../utils/constants';
 import OpIcon from '../op-icon';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired,
@@ -34,23 +34,23 @@ class RepoAPITokenPermissionEditor extends React.Component {
 
   onHideSelect = () => {
     this.setState({ isEditing: false });
-  }
+  };
 
   onEditPermission = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({ isEditing: true });
-  }
+  };
 
   onPermissionChanged = (e) => {
     if (e.value !== this.props.currentPermission) {
       this.props.onPermissionChanged(e.value);
     }
     this.setState({ isEditing: false });
-  }
+  };
 
   onSelectHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-  }
+  };
 
   render() {
     const { currentPermission, isTextMode } = this.props;
@@ -65,11 +65,12 @@ class RepoAPITokenPermissionEditor extends React.Component {
             }
           </Fragment>
           :
-          <Select
+          <SeahubSelect
             options={this.options}
             placeholder={optionTranslation}
             onChange={this.onPermissionChanged}
             captureMenuScroll={false}
+            value={this.options.find(opt => opt.value === currentPermission) || null}
           />
         }
       </div>

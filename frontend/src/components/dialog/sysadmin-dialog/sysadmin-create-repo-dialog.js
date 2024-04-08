@@ -19,7 +19,6 @@ class SysAdminCreateRepoDialog extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false
     };
-    this.newInput = React.createRef();
   }
 
   handleRepoNameChange = (e) => {
@@ -28,39 +27,35 @@ class SysAdminCreateRepoDialog extends React.Component {
       repoName: value,
       isSubmitBtnActive: value.trim()
     });
-  }
+  };
 
   handleSubmit = () => {
     const { repoName, ownerEmail } = this.state;
     this.props.createRepo(repoName.trim(), ownerEmail);
     this.toggle();
-  }
+  };
 
   handleSelectChange = (option) => {
     // option can be null
     this.setState({
       ownerEmail: option ? option.email : ''
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -68,10 +63,10 @@ class SysAdminCreateRepoDialog extends React.Component {
               <Label for="repoName">{gettext('Name')}</Label>
               <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
+                autoFocus={true}
               />
             </FormGroup>
             <FormGroup>

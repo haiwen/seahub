@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -40,7 +40,7 @@ class AllRepos extends Component {
 
   toggleCreateRepoDialog = () => {
     this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
-  }
+  };
 
   getReposByPage = (page) => {
     const { perPage, sortBy } = this.state;
@@ -56,7 +56,7 @@ class AllRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   sortItems = (sortBy) => {
     this.setState({
@@ -72,7 +72,7 @@ class AllRepos extends Component {
       navigate(url.toString());
       this.getReposByPage(currentPage);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -80,7 +80,7 @@ class AllRepos extends Component {
     }, () => {
       this.getReposByPage(1);
     });
-  }
+  };
 
   createRepo = (repoName, Owner) => {
     seafileAPI.sysAdminCreateRepo(repoName, Owner).then(res => {
@@ -92,7 +92,7 @@ class AllRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDeleteRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
@@ -101,7 +101,7 @@ class AllRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   onTransferRepo = (targetRepo) => {
     let repos = this.state.repos.map((item) => {
@@ -110,24 +110,45 @@ class AllRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   getSearch = () => {
     return <Search
-      placeholder={gettext('Search libraries by name')}
+      placeholder={gettext('Search libraries by name or ID')}
       submit={this.searchRepos}
     />;
-  }
+  };
 
-  searchRepos = (repoName) => {
-    navigate(`${siteRoot}sys/search-libraries/?name=${encodeURIComponent(repoName)}`);
+  searchRepos = (repoNameOrID) => {
+    if (this.getValueLength(repoNameOrID) < 3) {
+      toaster.notify(gettext('Required at least three letters.'));
+      return;
+    }
+    navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
+  };
+
+  getValueLength(str) {
+    let code, len = 0;
+    for (let i = 0, length = str.length; i < length; i++) {
+      code = str.charCodeAt(i);
+      if (code === 10) { //solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
   }
 
   render() {
     let { isCreateRepoDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
+        <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
             <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
           </Button>

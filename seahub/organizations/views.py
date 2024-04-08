@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.core.cache import cache
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 
@@ -18,6 +18,7 @@ from django.utils.crypto import get_random_string
 import seaserv
 from seaserv import ccnet_api
 
+from seahub import settings
 from seahub.auth import login
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.accounts import User
@@ -30,11 +31,16 @@ from seahub.organizations.signals import org_created
 from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
-        ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER
+        ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
+        ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME, \
+        ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.utils import get_or_create_invitation_link
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+ENABLE_MULTI_ADFS = getattr(settings, 'ENABLE_MULTI_ADFS', False)
+
 
 ########## ccnet rpc wrapper
 def create_org(org_name, url_prefix, creator):
@@ -149,7 +155,7 @@ def gen_org_url_prefix(max_trial=None):
         Url prefix if succed, otherwise, ``None``.
     """
     def _gen_prefix():
-        url_prefix = 'org_' + get_random_string(
+        url_prefix = 'org-' + get_random_string(
             6, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
         if get_org_by_url_prefix(url_prefix) is not None:
             logger.info("org url prefix, %s is duplicated" % url_prefix)
@@ -242,14 +248,18 @@ def react_fake_view(request, **kwargs):
     group_id = kwargs.get('group_id', '')
     org = request.user.org
 
-    invitation_link = get_or_create_invitation_link(org.org_id) if ORG_ENABLE_ADMIN_INVITE_USER else ''
+    invitation_link = get_or_create_invitation_link(org.org_id) if ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN else ''
 
     # Whether use new page
     return render(request, "organizations/org_admin_react.html", {
         'org': org,
         'org_member_quota_enabled': ORG_MEMBER_QUOTA_ENABLED,
+        'org_enable_admin_custom_logo': ORG_ENABLE_ADMIN_CUSTOM_LOGO,
+        'org_enable_admin_custom_name': ORG_ENABLE_ADMIN_CUSTOM_NAME,
+        'org_enable_admin_invite_user': ORG_ENABLE_ADMIN_INVITE_USER,
         'group_id': group_id,
         'invitation_link': invitation_link,
+        'enable_multi_adfs': ENABLE_MULTI_ADFS,
         })
 
 @login_required

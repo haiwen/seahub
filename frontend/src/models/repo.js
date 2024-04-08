@@ -17,6 +17,7 @@ class Repo {
     this.modifier_name = object.modifier_name;
     this.type = object.type;
     this.starred = object.starred;
+    this.monitored = object.monitored;
     this.status = object.status;
     this.storage_name = object.storage_name;
     if (object.is_admin != undefined) {

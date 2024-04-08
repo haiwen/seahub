@@ -28,6 +28,8 @@ accesslog=${TOPDIR}/logs/gunicorn_access.log
 gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
+seahubdir=${INSTALLPATH}/seahub
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 script_name=$0
 function usage () {
@@ -35,17 +37,13 @@ function usage () {
     echo
     echo "  $(basename ${script_name}) { start <port> | stop | restart <port> }"
     echo
-    echo "To run seahub in fastcgi:"
-    echo
-    echo "  $(basename ${script_name}) { start-fastcgi <port> | stop | restart-fastcgi <port> }"
-    echo
     echo "<port> is optional, and defaults to 8000"
     echo ""
 }
 
 # Check args
 if [[ $1 != "start" && $1 != "stop" && $1 != "restart" \
-    && $1 != "start-fastcgi" && $1 != "restart-fastcgi" && $1 != "clearsessions" && $1 != "python-env" ]]; then
+    && $1 != "clearsessions" && $1 != "python-env" ]]; then
     usage;
     exit 1;
 fi
@@ -74,7 +72,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             exit 1
         fi
@@ -108,7 +106,7 @@ function validate_port () {
     fi
 }
 
-if [[ ($1 == "start" || $1 == "restart" || $1 == "start-fastcgi" || $1 == "restart-fastcgi") \
+if [[ ($1 == "start" || $1 == "restart") \
     && ($# == 2 || $# == 1) ]]; then
     if [[ $# == 2 ]]; then
         port=$2
@@ -153,7 +151,7 @@ function before_start() {
     validate_seahub_running;
     prepare_seahub_log_dir;
 
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         if [[ -z "$LANG" ]]; then
             echo "LANG is not set in ENV, set to en_US.UTF-8"
             export LANG='en_US.UTF-8'
@@ -162,12 +160,10 @@ function before_start() {
             echo "LC_ALL is not set in ENV, set to en_US.UTF-8"
             export LC_ALL='en_US.UTF-8'
         fi
-
-        export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
-        export SEAFES_DIR=$seafesdir
     fi
+    export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+    export SEAFES_DIR=$seafesdir
+    export SEAHUB_DIR=$seahubdir
 }
 
 function start_seahub () {
@@ -183,29 +179,6 @@ function start_seahub () {
     if ! pgrep -f "seahub.wsgi:application" 2>/dev/null 1>&2; then
         printf "\033[33mError:Seahub failed to start.\033[m\n"
         echo "Please try to run \"./seahub.sh start\" again"
-        exit 1;
-    fi
-    echo
-    echo "Seahub is started"
-    echo
-}
-
-function start_seahub_fastcgi () {
-    before_start;
-
-    # Returns 127.0.0.1 if SEAFILE_FASTCGI_HOST is unset or hasn't got any value,
-    # otherwise returns value of SEAFILE_FASTCGI_HOST environment variable
-    address=`(test -z "$SEAFILE_FASTCGI_HOST" && echo "127.0.0.1") || echo $SEAFILE_FASTCGI_HOST`
-
-    echo "Starting seahub (fastcgi) at ${address}:${port} ..."
-    check_init_admin;
-    $PYTHON "${manage_py}" runfcgi maxchildren=8 host=$address port=$port pidfile=$pidfile \
-        outlog=${accesslog} errlog=${errorlog}
-
-    # Ensure seahub is started successfully
-    sleep 5
-    if ! pgrep -f "${manage_py}" >/dev/null; then
-        printf "\033[33mError:Seahub failed to start.\033[m\n"
         exit 1;
     fi
     echo
@@ -249,7 +222,7 @@ function clear_sessions () {
 function stop_seahub () {
     if [[ -f ${pidfile} ]]; then
         echo "Stopping seahub ..."
-        pkill -9 -f "thirdpart/bin/gunicorn"
+        pkill -f "thirdpart/bin/gunicorn"
         sleep 1
         if pgrep -f "thirdpart/bin/gunicorn" 2>/dev/null 1>&2 ; then
             echo 'Failed to stop seahub.'
@@ -276,9 +249,8 @@ function run_python_env() {
 
     if [[ -d ${INSTALLPATH}/pro ]]; then
         export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
         export SEAFES_DIR=$seafesdir
+        export SEAHUB_DIR=$seahubdir
     fi
 
     if which ipython 2>/dev/null; then
@@ -298,9 +270,6 @@ case $1 in
     "start" )
         start_seahub;
         ;;
-    "start-fastcgi" )
-        start_seahub_fastcgi;
-        ;;
     "stop" )
         stop_seahub;
         ;;
@@ -308,11 +277,6 @@ case $1 in
         stop_seahub
         sleep 2
         start_seahub
-        ;;
-    "restart-fastcgi" )
-        stop_seahub
-        sleep 2
-        start_seahub_fastcgi
         ;;
     "python-env")
         shift

@@ -43,23 +43,23 @@ class AddOrUpdateTermDialog extends React.Component {
 
   handleNameChange = (e) => {
     this.setState({name: e.target.value.trim()});
-  }
+  };
 
   handleVersionNumberChange = (e) => {
     this.setState({versionNumber: e.target.value.trim()});
-  }
+  };
 
   handleTextChange = (e) => {
     this.setState({text: e.target.value.trim()});
-  }
+  };
 
   setActive = () => {
     this.setState({isActive: true});
-  }
+  };
 
   setInActive = () => {
     this.setState({isActive: false});
-  }
+  };
 
   addTerm = () => {
     let { name, versionNumber, text, isActive } = this.state;
@@ -84,19 +84,19 @@ class AddOrUpdateTermDialog extends React.Component {
     } else {
       this.props.addTerm(name, versionNumber, text, isActive);
     }
-  }
+  };
 
   onContentClick = () => {
     this.setState({isConditionsEditorDialogShow: !this.state.isConditionsEditorDialogShow});
-  }
+  };
 
   onCloseEditorDialog = () => {
     this.setState({isConditionsEditorDialogShow: false});
-  }
+  };
 
   onUpdateContent = (content) => {
     this.setState({ text: content });
-  }
+  };
 
   render() {
     let title = this.props.isUpdate ? gettext('Update Terms and Conditions') : gettext('Add Terms and Conditions');

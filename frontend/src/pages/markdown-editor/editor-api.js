@@ -1,7 +1,7 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-const { repoID, repoName, filePath, fileName, draftID } = window.app.pageOptions;
+const { repoID, repoName, filePath, fileName } = window.app.pageOptions;
 const { serviceUrl } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
@@ -45,7 +45,7 @@ class EditorApi {
     );
   }
 
-  getParentDectionaryUrl() {
+  getParentDictionaryUrl() {
     let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
     let libName = encodeURIComponent(repoName);
     let path = Utils.encodePath(parentPath);
@@ -72,7 +72,7 @@ class EditorApi {
         return this._getImageURL(res.data[0].name);
       })
     );
-  }
+  };
 
   getFileURL(fileNode) {
     var url;
@@ -94,6 +94,7 @@ class EditorApi {
   }
 
   isInternalDirLink(url) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceUrl + '/library/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }
@@ -128,20 +129,12 @@ class EditorApi {
     return seafileAPI.getInternalLink(repoID, filePath);
   }
 
-  getShareLink() {
-    return seafileAPI.getShareLink(repoID, filePath);
-  }
-
   createShareLink (repoID, filePath, userPassword, userValidDays, permissions) {
     return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays, permissions);
   }
 
   deleteShareLink(token){
     return seafileAPI.deleteShareLink(token);
-  }
-
-  getDraftKey() {
-    return (repoID + filePath);
   }
 
   getFileContent(url) {
@@ -156,44 +149,8 @@ class EditorApi {
     return seafileAPI.getFileRevision(repoID, commitID, filePath);
   }
 
-  getCommentsNumber() {
-    return seafileAPI.getCommentsNumber(this.repoID, filePath);
-  }
-
-  postComment(comment, detail) {
-    return seafileAPI.postComment(this.repoID, this.filePath, comment, detail);
-  }
-
-  listComments() {
-    return seafileAPI.listComments(this.repoID, this.filePath);
-  }
-
-  updateComment(commentID, resolved, detail, newComment) {
-    return seafileAPI.updateComment(this.repoID, commentID, resolved, detail, newComment);
-  }
-
-  deleteComment(commentID) {
-    return seafileAPI.deleteComment(this.repoID, commentID);
-  }
-
   getUserAvatar(size) {
     return seafileAPI.getUserAvatar(userName, size);
-  }
-
-  goDraftPage() {
-    window.location.href = serviceUrl + '/drafts/' + draftID + '/';
-  }
-
-  createDraftFile() {
-    return seafileAPI.createDraft(repoID, filePath).then(res => {
-      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + Utils.encodePath(res.data.draft_file_path) + '?mode=edit';
-    });
-  }
-
-  publishDraftFile() {
-    return seafileAPI.publishDraft(draftID).then(res => {
-      window.location.href = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(res.data.published_file_path);
-    });
   }
 
   fileMetaData() {
@@ -202,11 +159,11 @@ class EditorApi {
 
   listFileTags = () => {
     return seafileAPI.listFileTags(repoID, filePath);
-  }
+  };
 
   listRepoTags = () => {
     return seafileAPI.listRepoTags(repoID);
-  }
+  };
 
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);

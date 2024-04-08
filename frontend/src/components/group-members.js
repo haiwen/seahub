@@ -4,13 +4,13 @@ import { Table } from 'reactstrap';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
-import RoleEditor from './select-editor/role-editor';
+import RoleSelector from './single-selector';
 import toaster from './toast';
 import OpIcon from './op-icon';
 
 const propTypes = {
   groupMembers: PropTypes.array.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
@@ -61,7 +61,7 @@ const MemberPropTypes = {
   changeMember: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired
 };
@@ -70,21 +70,24 @@ class Member extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.roles = ['Admin', 'Member'];
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
     this.state = ({
       highlight: false,
     });
   }
 
-  onChangeUserRole = (role) => {
-    let isAdmin = role === 'Admin' ? 'True' : 'False';
+  onChangeUserRole = (roleOption) => {
+    let isAdmin = roleOption.value === 'Admin' ? 'True' : 'False';
     seafileAPI.setGroupAdmin(this.props.groupID, this.props.item.email, isAdmin).then((res) => {
       this.props.changeMember(res.data);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteMember = () => {
     const { item } = this.props;
@@ -95,21 +98,21 @@ class Member extends React.PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleMouseOver = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: true,
     });
-  }
+  };
 
   handleMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: false,
     });
-  }
+  };
 
   translateRole = (role) => {
     if (role === 'Admin') {
@@ -121,11 +124,20 @@ class Member extends React.PureComponent {
     else if (role === 'Owner') {
       return gettext('Owner');
     }
-  }
+  };
 
   render() {
+    const { highlight } = this.state;
     const { item, isOwner } = this.props;
     const deleteAuthority = (item.role !== 'Owner' && isOwner === true) || (item.role === 'Member' && isOwner === false);
+
+    const { role: curRole } = item;
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == curRole;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return(
       <tr onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} className={this.state.highlight ? 'tr-highlight' : ''} tabIndex="0" onFocus={this.handleMouseOver}>
         <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
@@ -135,12 +147,11 @@ class Member extends React.PureComponent {
             <span className="group-admin">{this.translateRole(item.role)}</span>
           }
           {(isOwner === true && item.role !== 'Owner') &&
-            <RoleEditor
-              isTextMode={true}
-              isEditIconShow={this.state.highlight}
-              currentRole={item.role}
-              roles={this.roles}
-              onRoleChanged={this.onChangeUserRole}
+            <RoleSelector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedOption}
+              options={this.roleOptions}
+              selectOption={this.onChangeUserRole}
               toggleItemFreezed={this.props.toggleItemFreezed}
             />
           }

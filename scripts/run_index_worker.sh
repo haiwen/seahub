@@ -38,7 +38,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             exit 1
         fi
@@ -65,8 +65,6 @@ function before_start() {
     export SEAFES_DIR=$pro_pylibs_dir/seafes
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
     export EVENTS_CONFIG_FILE=${SEAFILE_CENTRAL_CONF_DIR}/seafevents.conf
     export INDEX_SLAVE_CONFIG_FILE=${SEAFILE_CENTRAL_CONF_DIR}/index-slave.conf
 }

@@ -18,12 +18,6 @@ class NewWikiDialog extends React.Component {
       repoID: '',
       isSubmitBtnActive: false,
     };
-    this.newName = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newName.focus();
-    this.newName.setSelectionRange(0, -1);
   }
 
   inputNewName = (e) => {
@@ -36,31 +30,31 @@ class NewWikiDialog extends React.Component {
     this.setState({
       name: e.target.value,
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     let { isExist, name, repoID } = this.state;
     this.props.addWiki(isExist, name, repoID);
     this.props.toggleCancel();
-  }
+  };
 
   toggle = () => {
     this.props.toggleCancel();
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
         <ModalBody>
           <label className="form-label">{gettext('Name')}</label>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newName = input;}} value={this.state.name} onChange={this.inputNewName}/>
+          <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

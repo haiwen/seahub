@@ -14,6 +14,7 @@ from seahub.api2.utils import get_client_ip
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.ocm.models import OCMShare
 from seahub.utils import within_time_range
+from seahub.utils.auth import AUTHORIZATION_PREFIX
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -51,8 +52,8 @@ class TokenAuthentication(BaseAuthentication):
     """
 
     def authenticate(self, request):
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
-        if not auth or auth[0].lower() != 'token':
+        auth = request.headers.get('authorization', '').split()
+        if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:
@@ -164,8 +165,8 @@ class RepoAPITokenAuthentication(BaseAuthentication):
         :param request: request
         :return: AnonymousUser, repo_api_token
         """
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
-        if not auth or auth[0].lower() != 'token':
+        auth = request.headers.get('authorization', '').split()
+        if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:
@@ -183,5 +184,57 @@ class RepoAPITokenAuthentication(BaseAuthentication):
             # if is request by remote server through ocm, use from_user instead of app_name
             rat.app_name = rat.from_user
         request.repo_api_token_obj = rat
+
+        return AnonymousUser(), auth[1]
+
+
+class SdocJWTTokenAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        """ sdoc jwt token
+        """
+        from seahub.seadoc.utils import is_valid_seadoc_access_token
+        file_uuid = request.parser_context['kwargs'].get('file_uuid')
+        if not file_uuid:
+            if request._request.method == 'POST':
+                file_uuid = request._request.POST.get('file_uuid')
+            elif request._request.method == 'GET':
+                file_uuid = request._request.GET.get('file_uuid')
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            return None
+
+        username = payload.get('username')
+        if not username:
+            return None
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        if not user or not user.is_active:
+            return None
+
+        return user, auth[1]
+
+
+class SeafileAiAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        """ seafile ai jwt token
+        """
+        import jwt
+        from seahub.settings import SEAFILE_AI_SECRET_KEY
+
+        auth = request.headers.get('authorization', '').split()
+        token = auth[1]
+        try:
+            payload = jwt.decode(token, SEAFILE_AI_SECRET_KEY, algorithms=['HS256'])
+        except Exception as e:
+            raise AuthenticationFailed('Failed to decode jwt')
+
+        username = payload.get('username')
+        if username != 'seafile-ai':
+            raise AuthenticationFailed('Invalid username')
 
         return AnonymousUser(), auth[1]

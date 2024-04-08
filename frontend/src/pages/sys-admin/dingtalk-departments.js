@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import _ from 'lodash';
+import deepCopy from 'deep-copy';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import MainPanelTopbar from './main-panel-topbar';
 import toaster from '../../components/toast';
-import Account from '../../components/common/account';
 import { DingtalkDepartmentMembersList, DingtalkDepartmentsTreePanel } from './dingtalk';
 import ImportDingtalkDepartmentDialog from '../../components/dialog/import-dingtalk-department-dialog';
 
@@ -50,7 +50,7 @@ class DingtalkDepartments extends Component {
     let rootIds = parentIds.concat(intersection).filter((v) => {
       return parentIds.indexOf(v) === -1 || intersection.indexOf(v) === -1;
     });
-    let cloneData = _.cloneDeep(list);
+    let cloneData = deepCopy(list);
     return cloneData.filter(father => {
       let branchArr = cloneData.filter(child => father.id === child.parentid);
       branchArr.length > 0 ? father.children = branchArr : '';
@@ -102,7 +102,7 @@ class DingtalkDepartments extends Component {
       this.setState({isMembersListLoading: false});
       this.handleError(error);
     });
-  }
+  };
   getCanCheckUserIds = (membersList) => {
     let userIds = [];
     membersList.forEach((member) => {
@@ -225,7 +225,7 @@ class DingtalkDepartments extends Component {
       membersList: membersList,
       canCheckUserIds: canCheckUserIds,
     });
-  }
+  };
 
   importDepartmentDialogToggle = (importDepartment) => {
     this.setState({
@@ -283,26 +283,10 @@ class DingtalkDepartments extends Component {
   handleError = (error) => {
     const errorMsg = Utils.getErrorMsg(error);
     toaster.danger(errorMsg);
-  }
+  };
 
   componentDidMount() {
     this.getDingtalkDepartmentsList(null);
-  }
-
-  renderNav() {
-    const btnClass = 'btn btn-secondary operation-item ';
-    return (
-      <div className="main-panel-north border-left-show">
-        <div className="cur-view-toolbar">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          <Button className={btnClass + 'my-1 d-md-none'} onClick={this.onSubmit}>{'导入用户'}</Button>
-          <Button className={btnClass + 'hidden-md-up'} onClick={this.onSubmit}>{'导入用户'}</Button>
-        </div>
-        <div className="common-toolbar">
-          <Account isAdminPanel={true}/>
-        </div>
-      </div>
-    );
   }
 
   render() {
@@ -310,7 +294,9 @@ class DingtalkDepartments extends Component {
     let canImportDepartment = !!(isPro && isImportDepartmentDialogShow && !isTreeLoading && importDepartment);
     return (
       <Fragment>
-        {this.renderNav()}
+        <MainPanelTopbar {...this.props}>
+          <Button className="operation-item" onClick={this.onSubmit}>{'导入用户'}</Button>
+        </MainPanelTopbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">

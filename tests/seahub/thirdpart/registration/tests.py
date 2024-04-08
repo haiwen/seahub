@@ -22,8 +22,6 @@ class RegistrationTest(TestCase):
         user = RegistrationProfile.objects.create_inactive_user(site=self.site,
                                                                 send_email=False,
                                                                 **self.user_info)
-        self.assertEqual(user.username, 'test@test.com')
-        self.assertEqual(user.email, 'test@test.com')
         self.assertTrue(user.check_password('password'))
         self.assertFalse(user.is_active)
 

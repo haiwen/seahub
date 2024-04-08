@@ -33,9 +33,9 @@ class LibDecryptDialog extends React.Component {
     });
 
     e.preventDefault();
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit(e);
     }
@@ -46,7 +46,7 @@ class LibDecryptDialog extends React.Component {
       password: e.target.value,
       showError: false
     });
-  }
+  };
 
   toggle = () => {
     window.location.href = siteRoot;
@@ -54,7 +54,7 @@ class LibDecryptDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalBody>
           <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
           <Form className="lib-decrypt-form text-center">
@@ -63,7 +63,7 @@ class LibDecryptDialog extends React.Component {
             {this.state.showError &&
               <p className="error">{gettext('Wrong password')}</p>
             }
-            <input type="password" name="password" className="form-control password-input" autoComplete="off" onKeyPress={this.handleKeyPress} placeholder={gettext('Password')} onChange={this.handleChange} />
+            <input type="password" name="password" className="form-control password-input" autoComplete="off" onKeyDown={this.handleKeyDown} placeholder={gettext('Password')} onChange={this.handleChange} />
             <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Submit')}</button>
             <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
           </Form>

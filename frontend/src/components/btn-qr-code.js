@@ -24,7 +24,7 @@ class ButtonQR extends React.Component {
     this.setState({
       isPopoverOpen: !this.state.isPopoverOpen
     });
-  }
+  };
 
   render() {
     const { link } = this.props;

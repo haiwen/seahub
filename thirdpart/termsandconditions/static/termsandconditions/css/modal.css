@@ -17,7 +17,7 @@
 }
 
 .termsandconditions-modal div {
-  poistion: absolute;
+  position: absolute;
   z-index: 1000;
   top: 33%;
   left: 25%;

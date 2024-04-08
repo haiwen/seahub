@@ -1,0 +1,186 @@
+.notification-wrapper .popover {
+  max-width: 300px;
+}
+
+.notification-container {
+  position: absolute;
+  background: #fff;
+  width: 320px;
+  right: -10px;
+  top: -1px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px #ccc;
+}
+
+.notification-container .notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-bottom: 1px solid #ededed;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.notification-container .notification-header .notification-close-icon {
+  position: absolute;
+  right: 14px;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  cursor: pointer;
+  color: #000;
+  opacity: 0.5;
+  font-weight: 700;
+}
+
+.notification-container .notification-header .notification-close-icon:hover {
+  opacity: 0.75;
+}
+
+.notification-container .notification-body {
+  padding: 0;
+}
+
+.notification-container .notification-body .show-weixin-qrcode {
+  cursor: pointer;
+  border-bottom: 1px solid #ededed;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.show-weixin-qrcode .weixin-icon {
+  color: #999;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.notification-container .notification-body .mark-notifications {
+  color: #b4b4b4;
+  cursor: pointer;
+  border-bottom: 1px solid #ededed;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.notification-container .notification-body .mark-notifications:hover {
+  text-decoration: underline;
+}
+
+.notification-body .notification-list-container {
+  max-height: 260px;
+  overflow: auto;
+}
+
+.notification-list-container .notification-item {
+  padding: 14px 16px 14px 10px;
+  border-bottom: 1px solid #ededed;
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-list-container .notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-list-container .notification-item:hover {
+  background: #f5f5f5;
+}
+
+.notification-list-container .notification-item .notification-item-header {
+  display: flex;
+  align-items: center
+}
+
+.notification-list-container .notification-item .notification-point {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
+  margin-right: 12px;
+  position: absolute;
+}
+
+.notification-list-container .notification-item .notification-header-info {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 20px;
+  width: calc(100% - 20px);
+}
+
+.notification-user-detail {
+  display: flex;
+  width: 65%;
+}
+
+.notification-user-detail img {
+  margin-top: 3px;
+}
+
+.notification-user-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.notification-item .notification-header-info .notification-time {
+  color: #b4b4b4;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.notification-list-container .notification-item .notification-content-wrapper {
+  font-size: 13px;
+}
+
+.notification-item .notification-content-quotes {
+  width: 8px;
+}
+
+.notification-list-container .notification-item .notification-comment-content {
+  max-width: calc(100% - 16px);
+}
+
+.notification-list-container .notification-item .notification-comment-content p {
+  display: inline-block;
+  letter-spacing: 1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.notification-list-container .notification-item .notification-comment-content p img {
+  max-width: 70%;
+  height: auto;
+  max-height: 60px;
+}
+
+.notification-body .notification-footer {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  cursor: pointer;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top: 1px solid #ededed;
+}
+
+.notification-body .notification-footer:hover {
+  text-decoration: underline;
+}

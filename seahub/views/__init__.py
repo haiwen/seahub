@@ -14,9 +14,9 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 
 import seaserv
@@ -36,13 +36,15 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.revision_tag.models import RevisionTags
+from seahub.tags.models import FileUUIDMap
 from seahub.utils import render_permission_error, render_error, \
     gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_windows_operating_system, seafevents_api, IS_EMAIL_CONFIGURED
+    is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
+    normalize_file_path
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -55,7 +57,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER
+    DTABLE_WEB_SERVER, EX_PROPS_TABLE, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_EDITABLE_COLUMNS
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
@@ -120,6 +122,22 @@ def check_folder_permission(request, repo_id, path):
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
 
+def get_seadoc_file_uuid(repo, path):
+    repo_id = repo.repo_id
+    if repo.is_virtual:
+        repo_id = repo.origin_repo_id
+        path = posixpath.join(repo.origin_path, path.strip('/'))
+
+    path = normalize_file_path(path)
+    parent_dir = os.path.dirname(path)
+    filename = os.path.basename(path)
+
+    uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(
+        repo_id, parent_dir, filename, is_dir=False)
+
+    file_uuid = str(uuid_map.uuid)  # 36 chars str
+    return file_uuid
+
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
@@ -154,7 +172,7 @@ def get_file_download_link(repo_id, obj_id, path):
     - `filename`:
     """
     return reverse('download_file', args=[repo_id, obj_id]) + '?p=' + \
-        urlquote(path)
+        quote(path)
 
 def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
     """List repo dirents based on commit id and path. Use ``offset`` and
@@ -212,8 +230,8 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                         dirent.uploadtoken = link.token
                         break
                 p_dpath = posixpath.join(path, dirent.obj_name)
-                dirent.view_link = view_dir_base + '?p=' + urlquote(p_dpath)
-                dirent.dl_link = dl_dir_base + '?p=' + urlquote(p_dpath)
+                dirent.view_link = view_dir_base + '?p=' + quote(p_dpath)
+                dirent.dl_link = dl_dir_base + '?p=' + quote(p_dpath)
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
@@ -227,7 +245,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 dirent.view_link = reverse('view_lib_file', args=[repo.id, p_fpath])
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
-                dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
+                dirent.history_link = file_history_base + '?p=' + quote(p_fpath)
                 if fpath in starred_files:
                     dirent.starred = True
                 for share in fileshares:
@@ -303,7 +321,7 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
+        referer = request.headers.get('referer', None)
         next_page = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next_page)
 
@@ -365,7 +383,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
+        referer = request.headers.get('referer', None)
         next_page = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next_page)
 
@@ -551,7 +569,7 @@ def repo_history(request, repo_id):
 @require_POST
 def repo_revert_history(request, repo_id):
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = settings.SITE_ROOT
 
@@ -751,8 +769,8 @@ def file_revisions(request, repo_id):
 
     u_filename = os.path.basename(path)
 
-    filetype, file_ext = [x.lower() for x in get_file_type_and_ext(u_filename)]
-    if filetype == 'text' or filetype == 'markdown':
+    file_type, file_ext = [x.lower() for x in get_file_type_and_ext(u_filename)]
+    if file_type == 'text' or file_type == 'markdown' or file_type == 'sdoc':
         can_compare = True
     else:
         can_compare = False
@@ -778,15 +796,29 @@ def file_revisions(request, repo_id):
     if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
+    if file_type == 'sdoc':
+        file_uuid = get_seadoc_file_uuid(repo, path)
+        return render(request, 'sdoc_file_revisions.html', {
+            'repo': repo,
+            'path': path,
+            'u_filename': u_filename,
+            'file_uuid': file_uuid,
+            'zipped': zipped,
+            'is_owner': is_owner,
+            'can_compare': can_compare,
+            'can_revert_file': can_revert_file,
+            'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid
+        })
+
     # Whether use new file history API which read file history from db.
-    suffix_list = seafevents_api.get_file_history_suffix()
+    suffix_list = get_file_history_suffix()
     if suffix_list and isinstance(suffix_list, list):
         suffix_list = [x.lower() for x in suffix_list]
     else:
         suffix_list = []
 
     use_new_api = True if file_ext in suffix_list else False
-    use_new_style = True if use_new_api and filetype == 'markdown' else False
+    use_new_style = True if use_new_api and file_type == 'markdown' else False
 
     if use_new_style:
         return render(request, 'file_revisions_new.html', {
@@ -853,7 +885,7 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.headers.get('referer', settings.SITE_ROOT)
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -934,7 +966,7 @@ def group_events_data(events):
         e.time = utc_to_local(e.timestamp)
         e.date = e.time.strftime("%Y-%m-%d")
         if e.etype == 'repo-update':
-            e.author = e.commit.creator_name
+            e.author = getattr(e.commit, 'creator_name', '')
         elif e.etype == 'repo-create':
             e.author = e.creator
         else:
@@ -1123,7 +1155,10 @@ def react_fake_view(request, **kwargs):
     if resolve(request.path).url_name == 'lib_view':
 
         repo_id = kwargs.get('repo_id', '')
+        repo_name = kwargs.get('repo_name', '')
         path = kwargs.get('path', '')
+        if repo_id and repo_name and not path:
+            path = '/'
 
         if repo_id and path and \
                 not check_folder_permission(request, repo_id, path):
@@ -1175,7 +1210,6 @@ def react_fake_view(request, **kwargs):
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-        'dtable_web_server': DTABLE_WEB_SERVER,
         'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
@@ -1192,7 +1226,6 @@ def react_fake_view(request, **kwargs):
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
-        'enableFileComment': settings.ENABLE_FILE_COMMENT,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
         'folder_perm_enabled': is_pro_version(),
@@ -1208,5 +1241,7 @@ def react_fake_view(request, **kwargs):
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
-        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
+        'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
+        'can_set_ex_props': DTABLE_WEB_SERVER and SEATABLE_EX_PROPS_BASE_API_TOKEN and EX_PROPS_TABLE and EX_EDITABLE_COLUMNS
     })

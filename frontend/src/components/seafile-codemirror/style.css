@@ -1,0 +1,24 @@
+.text-file-view .cm-editor {
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 6px #ccc;
+}
+
+.text-file-view .cm-editor {
+  height: auto;
+  min-height: 300px;
+  width: calc(100% - 40px);
+  max-width: 950px;
+}
+
+.text-file-view .cm-editor.cm-focused {
+  outline: none;
+}
+
+.text-file-view .cm-scroll {
+  min-height: 300px;
+}
+
+.text-file-view .cm-gutter {
+  min-height: 300px;
+}

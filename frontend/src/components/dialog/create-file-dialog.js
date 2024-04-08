@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, isDocs } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -9,18 +9,18 @@ const propTypes = {
   parentPath: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
   checkDuplicatedName: PropTypes.func.isRequired,
-  addFileCancel: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
 };
 
 class CreateFile extends React.Component {
   constructor(props) {
     super(props);
+    const { fileType = '' } = props;
     this.state = {
       parentPath: '',
-      childName: props.fileType || '',
-      isDraft: false,
+      childName: fileType,
       errMessage: '',
-      isSubmitBtnActive: false,
+      isSubmitBtnActive: this.isSdocSuffix(fileType) ? true : false,
     };
     this.newInput = React.createRef();
   }
@@ -32,9 +32,11 @@ class CreateFile extends React.Component {
     } else {
       this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0,0);
   }
+
+  isSdocSuffix = (name) => {
+    return name.endsWith('.sdoc');
+  };
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
@@ -46,7 +48,7 @@ class CreateFile extends React.Component {
     this.setState({
       childName: e.target.value,
     }) ;
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) {
@@ -62,104 +64,51 @@ class CreateFile extends React.Component {
       this.setState({errMessage: errMessage});
     } else {
       let path = this.state.parentPath + newName;
-      let isDraft = this.state.isDraft;
-      this.props.onAddFile(path, isDraft);
+      this.props.onAddFile(path);
+      this.props.toggleDialog();
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
-
-  handleCheck = () => {
-    let pos = this.state.childName.lastIndexOf('.');
-
-    if (this.state.isDraft) {
-      // from draft to not draft
-      // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
-      // case 2, the file name is not ended with `(draft)`, the user has deleted some characters, like `test(dra.md`
-      let p = this.state.childName.substring(pos-7, pos);
-      let fileName = this.state.childName.substring(0, pos-7);
-      let fileType = this.state.childName.substring(pos);
-      if (p === '(draft)') {
-        // remove `(draft)` from file name
-        this.setState({
-          childName: fileName + fileType,
-          isDraft: !this.state.isDraft
-        });
-      } else {
-        // don't change file name
-        this.setState({
-          isDraft: !this.state.isDraft
-        });
-      }
-    }
-
-    if (!this.state.isDraft) {
-      // from not draft to draft
-      // case 1, test.md  ===> test(draft).md
-      // case 2, .md ===> (draft).md
-      // case 3, no '.' in the file name, don't change the file name
-      if (pos > 0) {
-        let fileName = this.state.childName.substring(0, pos);
-        let fileType = this.state.childName.substring(pos);
-        this.setState({
-          childName: fileName + '(draft)' + fileType,
-          isDraft: !this.state.isDraft
-        });
-      } else if (pos === 0 ) {
-        this.setState({
-          childName: '(draft)' + this.state.childName,
-          isDraft: !this.state.isdraft
-        });
-      } else {
-        this.setState({
-          isDraft: !this.state.isdraft
-        });
-      }
-    }
-  }
-
-  toggle = () => {
-    this.props.addFileCancel();
-  }
+  };
 
   checkDuplicatedName = () => {
     let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
     return isDuplicated;
-  }
+  };
+
+  onAfterModelOpened = () => {
+    if (!this.newInput.current) return;
+    this.newInput.current.focus();
+    this.newInput.current.setSelectionRange(0,0);
+  };
 
   render() {
+    const { toggleDialog } = this.props;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('New File')}</ModalHeader>
+      <Modal isOpen={true} toggle={toggleDialog} onOpened={this.onAfterModelOpened}>
+        <ModalHeader toggle={toggleDialog}>{gettext('New File')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
               <Label for="fileName">{gettext('Name')}</Label>
               <Input
                 id="fileName"
-                onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
+                onKeyDown={this.handleKeyDown}
+                innerRef={this.newInput}
                 value={this.state.childName}
                 onChange={this.handleChange}
               />
             </FormGroup>
-            {this.props.fileType == '.md' && isDocs && (
-              <FormGroup check>
-                <Label check>
-                  <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
-                </Label>
-              </FormGroup>
-            )}
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

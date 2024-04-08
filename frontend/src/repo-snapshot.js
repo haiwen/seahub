@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -42,7 +43,7 @@ class RepoSnapshot extends React.Component {
     this.setState({
       isConfirmDialogOpen: !this.state.isConfirmDialogOpen
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -53,12 +54,12 @@ class RepoSnapshot extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   renderFolder = (folderPath) => {
     this.setState({
@@ -78,40 +79,41 @@ class RepoSnapshot extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clickFolderPath = (folderPath, e) => {
     e.preventDefault();
     this.renderFolder(folderPath);
-  }
+  };
 
   renderPath = () => {
     const path = this.state.folderPath;
     const pathList = path.split('/');
 
     if (path == '/') {
-      return repoName;
+      return <span className="text-truncate" title={repoName}>{repoName}</span>;
     }
 
     return (
       <React.Fragment>
-        <a href="#" onClick={this.clickFolderPath.bind(this, '/')}>{repoName}</a>
-        <span> / </span>
+        <a href="#" onClick={this.clickFolderPath.bind(this, '/')} className="text-truncate" title={repoName}>{repoName}</a>
+        <span className="mx-1">/</span>
         {pathList.map((item, index) => {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))}>{pathList[index]}</a>
-                <span> / </span>
+                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))} className="text-truncate" title={pathList[index]}>{pathList[index]}</a>
+                <span className="mx-1">/</span>
               </React.Fragment>
             );
           }
+          return null;
         }
         )}
-        {pathList[pathList.length - 1]}
+        <span className="text-truncate" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
       </React.Fragment>
     );
-  }
+  };
 
   restoreRepo = () => {
     seafileAPI.revertRepo(repoID, commitID).then((res) => {
@@ -122,11 +124,13 @@ class RepoSnapshot extends React.Component {
       this.toggleDialog();
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   render() {
     const { isConfirmDialogOpen, folderPath } = this.state;
 
+    let title = gettext('{placeholder} Snapshot');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <React.Fragment>
         <div className="h-100 d-flex flex-column">
@@ -139,14 +143,17 @@ class RepoSnapshot extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Snapshot'), repoName) + ` <span class="heading-commit-time">(${commitTime})</span>`}}></h2>
+                <h2>
+                  <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+                  <span className="heading-commit-time ml-1">({commitTime})</span>
+                </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">
-                    <p className="m-0">{commitDesc}</p>
-                    <div className="ml-4 border-left pl-4 d-flex align-items-center">
+                    <p className="m-0 text-truncate" title={commitDesc}>{commitDesc}</p>
+                    <div className="ml-4 border-left pl-4 d-flex align-items-center flex-shrink-0">
                       {showAuthor ? (
                         <React.Fragment>
                           <img src={authorAvatarURL} width="20" height="20" alt="" className="rounded mr-1" />
@@ -158,9 +165,9 @@ class RepoSnapshot extends React.Component {
                   </div>
                 )}
                 <div className="d-flex justify-content-between align-items-center op-bar">
-                  <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
+                  <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{this.renderPath()}</p>
                   {(folderPath == '/' && canRestoreRepo) &&
-                  <button className="btn btn-secondary op-bar-btn" onClick={this.toggleDialog}>{gettext('Restore')}</button>
+                  <button className="btn btn-secondary op-bar-btn flex-shrink-0 ml-4" onClick={this.toggleDialog}>{gettext('Restore')}</button>
                   }
                 </div>
                 <Content
@@ -232,6 +239,11 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
 class FolderItem extends React.Component {
 
   constructor(props) {
@@ -243,11 +255,11 @@ class FolderItem extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   restoreItem = (e) => {
     e.preventDefault();
@@ -263,7 +275,7 @@ class FolderItem extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   renderFolder = (e) => {
     e.preventDefault();
@@ -271,7 +283,7 @@ class FolderItem extends React.Component {
     const item = this.props.item;
     const { folderPath } = this.props;
     this.props.renderFolder(Utils.joinPath(folderPath, item.name));
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -290,7 +302,7 @@ class FolderItem extends React.Component {
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
+        <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
           <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
@@ -301,7 +313,10 @@ class FolderItem extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RepoSnapshot />,
-  document.getElementById('wrapper')
-);
+FolderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  folderPath: PropTypes.string.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
+ReactDom.render(<RepoSnapshot />, document.getElementById('wrapper'));

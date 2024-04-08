@@ -21,6 +21,7 @@ from seahub.utils import is_pro_version
 
 logger = logging.getLogger(__name__)
 
+
 class AdminDeviceErrors(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle, )
@@ -34,13 +35,29 @@ class AdminDeviceErrors(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        limit = per_page + 1
+
         return_results = []
         try:
-            device_errors = seafile_api.list_repo_sync_errors()
+            device_errors = seafile_api.list_repo_sync_errors(start, limit)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(device_errors) > per_page:
+            device_errors = device_errors[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
 
         for error in device_errors:
             result = {}
@@ -51,7 +68,7 @@ class AdminDeviceErrors(APIView):
             result['repo_id'] = error.repo_id if error.repo_id else ''
             result['error_msg'] = error.error_con if error.error_con else ''
 
-            tokens = TokenV2.objects.filter(device_id = error.peer_id)
+            tokens = TokenV2.objects.filter(device_id=error.peer_id)
             if tokens:
                 result['device_name'] = tokens[0].device_name
                 result['client_version'] = tokens[0].client_version
@@ -66,7 +83,12 @@ class AdminDeviceErrors(APIView):
 
             return_results.append(result)
 
-        return Response(return_results)
+        page_info = {
+            'has_next_page': has_next_page,
+            'current_page': current_page
+        }
+
+        return Response({"page_info": page_info, "device_errors": return_results})
 
     def delete(self, request, format=None):
         if not is_pro_version():

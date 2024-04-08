@@ -1,34 +1,39 @@
 # Copyright (c) 2012-2017 Seafile Ltd.
 import os
+import jwt
 import json
 import logging
 import requests
 import posixpath
 import email.utils
+import urllib.parse
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
+from django.urls import reverse
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
 from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
         get_file_ext, get_file_type, get_internal_extension
 from seahub.onlyoffice.converter import get_converter_uri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
-        normalize_file_path, check_filename_with_rename
+        normalize_file_path, check_filename_with_rename, \
+        gen_inner_file_get_url, get_service_url
 from seahub.utils.file_op import if_locked_by_online_office
 
 
@@ -40,7 +45,9 @@ logger = logging.getLogger('onlyoffice')
 def onlyoffice_editor_callback(request):
     """ Callback func of OnlyOffice.
 
-    The document editing service informs the document storage service about status of the document editing using the callbackUrl from JavaScript API. The document editing service use the POST request with the information in body.
+    The document editing service informs the document storage service
+    about status of the document editing using the callbackUrl from JavaScript API.
+    The document editing service use the POST request with the information in body.
 
     https://api.onlyoffice.com/editors/callback
     """
@@ -85,7 +92,9 @@ def onlyoffice_editor_callback(request):
 
     # Status 1 is received every user connection to or disconnection from document co-editing.
     #
-    # Status 2 (3) is received 10 seconds after the document is closed for editing with the identifier of the user who was the last to send the changes to the document editing service.
+    # Status 2 (3) is received 10 seconds after the document is closed
+    #              for editing with the identifier of the user who was the last to
+    #              send the changes to the document editing service.
     #
     # Status 4 is received after the document is closed for editing with no changes by the last user.
     #
@@ -99,15 +108,23 @@ def onlyoffice_editor_callback(request):
     doc_info = get_file_info_by_doc_key(doc_key)
     if not doc_info:
 
-        logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+        logger.warning('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
 
         doc_info = cache.get(doc_key)
         if not doc_info:
-            logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+            if status not in (1, 4):
+                logger.error('status {}: can not get doc_info from cache by doc_key {}, post_data: {}'
+                             .format(status, doc_key, post_data))
+                return HttpResponse('{"error": 1}')
+            else:
+                # if the status is 1 and 4, the log level should not be error
+                logger.info('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+                return HttpResponse('{"error": 1}')
+        else:
+            logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
 
-        logger.info(post_data)
-
-        return HttpResponse('{"error": 1}')
+    else:
+        logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     if status == 1:
 
@@ -123,14 +140,12 @@ def onlyoffice_editor_callback(request):
         return HttpResponse('{"error": 0}')
 
     if status not in (2, 4, 6):
-        logger.error('status {}: invalid status'.format(status))
+        logger.error('status {}: invalid status; doc_key {}.'.format(status, doc_key))
         return HttpResponse('{"error": 1}')
 
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
     username = doc_info['username']
-
-    logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     # save file
     if status in (2, 6):
@@ -162,9 +177,8 @@ def onlyoffice_editor_callback(request):
         resp = requests.post(update_url, files=files, data=data)
         if resp.status_code != 200:
             logger.error('update_url: {}'.format(update_url))
-            logger.error('parameter file: {}'.format(files['file'][:100]))
-            logger.error('parameter file_name: {}'.format(files['file_name']))
-            logger.error('parameter target_file: {}'.format(files['target_file']))
+            logger.error('repo_id: {}, file_path: {}, content size: {}'.format(
+                repo_id, file_path, len(onlyoffice_resp.content)))
             logger.error('response: {}'.format(resp.__dict__))
 
         # 2 - document is ready for saving,
@@ -280,7 +294,7 @@ class OnlyofficeConvert(APIView):
 
         if resp.status_code != 200:
             logger.error('upload_url: {}'.format(upload_url))
-            logger.error('parameter file: {}'.format(files['file'][:100]))
+            logger.error('content size: {}'.format(len(onlyoffice_resp.content)))
             logger.error('parameter parent_dir: {}'.format(files['parent_dir']))
             logger.error('response: {}'.format(resp.__dict__))
 
@@ -290,3 +304,133 @@ class OnlyofficeConvert(APIView):
         result['file_path'] = posixpath.join(parent_dir, file_name)
 
         return Response(result)
+
+
+class OnlyofficeFileHistory(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+
+        if not ONLYOFFICE_JWT_SECRET:
+            error_msg = 'feature is not enabled.'
+            return api_error(501, error_msg)
+
+        bearer_string = request.headers.get('authorization', '')
+        if not bearer_string:
+            logger.error('No authentication header.')
+            error_msg = 'No authentication header.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        bearer_list = bearer_string.split()
+        if len(bearer_list) != 2 or bearer_list[0].lower() != 'bearer':
+            logger.error(f'Bearer {bearer_string} invalid')
+            error_msg = 'Bearer invalid.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        token = bearer_list[1]
+        try:
+            payload = jwt.decode(token, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+        except Exception as e:
+            logger.error(e)
+            logger.error(token)
+            error_msg = 'Decode JWT token failed.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        payload = payload.get('payload')
+        if not payload:
+            logger.error(payload)
+            error_msg = 'Payload invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        url = payload.get('url')
+        if not url:
+            logger.error(payload)
+            error_msg = 'No url in payload.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        query_string = request.META.get('QUERY_STRING', '')
+        if request.path not in url or query_string not in url:
+            error_msg = 'Bearer invalid.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        parsed_url = urllib.parse.urlparse(url)
+        query_parameters = urllib.parse.parse_qs(parsed_url.query)
+        # username = query_parameters.get('username')[0]
+        repo_id = query_parameters.get('repo_id')[0]
+        file_path = query_parameters.get('path')[0]
+        obj_id = query_parameters.get('obj_id')[0]
+
+        if not repo_id or not file_path or not obj_id:
+            logger.error(url)
+            error_msg = 'url invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_name = os.path.basename(file_path)
+        fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                   obj_id,
+                                                                   'view',
+                                                                   '',
+                                                                   use_onetime=False)
+
+        inner_path = gen_inner_file_get_url(fileserver_token, file_name)
+        file_content = urllib.request.urlopen(inner_path).read()
+        return HttpResponse(file_content, content_type="application/octet-stream")
+
+
+class OnlyofficeGetHistoryFileAccessToken(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+
+        if not ONLYOFFICE_JWT_SECRET:
+            error_msg = 'feature is not enabled.'
+            return api_error(501, error_msg)
+
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_path = request.data.get('file_path')
+        if not file_path:
+            error_msg = 'file_path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        obj_id = request.data.get('obj_id')
+        if not obj_id:
+            error_msg = 'obj_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not seafile_api.check_permission_by_path(repo_id, '/', username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        service_url = get_service_url().rstrip('/')
+        url = reverse('onlyoffice_api_file_history')
+        query_dict = {
+            "username": username,
+            "repo_id": repo_id,
+            "path": file_path,
+            "obj_id": obj_id
+        }
+        query_string = urllib.parse.urlencode(query_dict)
+        full_url = f"{service_url}{url}?{query_string}"
+
+        payload = {}
+        payload['key'] = obj_id
+        payload['url'] = full_url
+        payload['version'] = obj_id
+
+        jwt_token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
+        payload['token'] = jwt_token
+
+        return Response({"data": payload})

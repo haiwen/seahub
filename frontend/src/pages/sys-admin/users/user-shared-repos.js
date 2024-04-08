@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -13,11 +14,6 @@ import Nav from './user-nav';
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { loading, errorMsg, items } = this.props;
     if (loading) {
@@ -58,11 +54,13 @@ class Content extends Component {
   }
 }
 
-class Item extends Component {
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
-  constructor(props) {
-    super(props);
-  }
+class Item extends Component {
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -77,7 +75,7 @@ class Item extends Component {
       return gettext('Broken ({repo_id_placeholder})')
         .replace('{repo_id_placeholder}', repo.id);
     }
-  }
+  };
 
   getOwnerLink = () => {
     let link;
@@ -90,7 +88,7 @@ class Item extends Component {
       link = <Link to={`${siteRoot}sys/departments/${groupID}/`}>{item.owner_name}</Link>;
     }
     return link;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -110,6 +108,10 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
+
 class Repos extends Component {
 
   constructor(props) {
@@ -123,12 +125,13 @@ class Repos extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListShareInRepos(this.props.email).then(res => {
+    seafileAPI.sysAdminListShareInRepos(email).then(res => {
       this.setState({
         loading: false,
         repoList: res.data.repo_list
@@ -144,7 +147,7 @@ class Repos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="shared-repos" email={this.props.email} userName={this.state.userInfo.name} />
@@ -161,5 +164,9 @@ class Repos extends Component {
     );
   }
 }
+
+Repos.propTypes = {
+  email: PropTypes.string,
+};
 
 export default Repos;

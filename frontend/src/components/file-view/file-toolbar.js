@@ -16,17 +16,17 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
-  toggleCommentPanel: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired
 };
 
 const {
   canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
+  fileType,
   fileName,
   canEditFile, err,
-  fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
-  canDownloadFile, enableComment
+  // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
+  canDownloadFile,
 } = window.app.pageOptions;
 
 class FileToolbar extends React.Component {
@@ -63,19 +63,19 @@ class FileToolbar extends React.Component {
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
-  }
+  };
 
   toggleMoreOpMenu = () => {
     this.setState({
       moreDropdownOpen: !this.state.moreDropdownOpen
     });
-  }
+  };
 
   toggle = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -105,17 +105,22 @@ class FileToolbar extends React.Component {
       showShareBtn = true;
     }
 
-    let canComment = enableComment;
     const { isCustomPermission, customPermission } = this;
     if (isCustomPermission) {
       const { download_external_link } = customPermission.permission;
       showShareBtn = download_external_link;
-      canComment = false;
     }
 
     return (
       <Fragment>
-        <ButtonGroup className="d-none d-md-block">
+        <ButtonGroup className="d-none d-md-block flex-shrink-0 ml-4">
+          {fileType == 'PDF' && (
+            <IconButton
+              id="seafile-pdf-print"
+              icon="fa fa-print"
+              text={gettext('Print')}
+            />
+          )}
           <IconButton
             id="open-parent-folder"
             icon="fa fa-folder-open"
@@ -140,7 +145,7 @@ class FileToolbar extends React.Component {
             />
           )}
 
-          {(canEditFile && !err) &&
+          {(canEditFile && fileType != 'SDoc' && !err) &&
             ( this.props.isSaving ?
               <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
@@ -184,27 +189,22 @@ class FileToolbar extends React.Component {
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle aria-label={gettext('More Operations')}>
+            <DropdownToggle aria-label={gettext('More operations')}>
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
-              {canComment && (
-                <DropdownItem onClick={this.props.toggleCommentPanel}>
-                  {gettext('Comment')}
-                </DropdownItem>
-              )}
               {filePerm == 'rw' && (
-                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
-                    {gettext('History')}
-                  </a>
+                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                  {gettext('History')}
+                </a>
               )}
             </DropdownMenu>
           </ButtonDropdown>
         </ButtonGroup>
 
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
+        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
           <ButtonGroup >
-            {(canEditFile && !err) &&
+            {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button> :
@@ -225,7 +225,7 @@ class FileToolbar extends React.Component {
                 )}
           </ButtonGroup>
 
-          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More Operations')}></DropdownToggle>
+          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More operations')}></DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
@@ -254,11 +254,6 @@ class FileToolbar extends React.Component {
                 <a href="?dl=1" className="text-inherit">
                   {gettext('Download')}
                 </a>
-              </DropdownItem>
-            )}
-            {canComment && (
-              <DropdownItem onClick={this.props.toggleCommentPanel}>
-                {gettext('Comment')}
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>

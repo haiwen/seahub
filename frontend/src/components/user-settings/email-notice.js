@@ -40,7 +40,7 @@ class EmailNotice extends React.Component {
         fileUpdatesEmailInterval: parseInt(e.target.value)
       });
     }
-  }
+  };
 
   inputCollaborateEmailIntervalChange = (e) => {
     if (e.target.checked) {
@@ -48,7 +48,7 @@ class EmailNotice extends React.Component {
         collaborateEmailInterval: parseInt(e.target.value)
       });
     }
-  }
+  };
 
   formSubmit = (e) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ class EmailNotice extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   render() {
     const { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;

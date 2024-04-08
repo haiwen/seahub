@@ -30,7 +30,7 @@ def value_to_db_datetime(value):
     # MySQL doesn't support tz-aware datetimes
     if timezone.is_aware(value):
         if settings.USE_TZ:
-            value = value.astimezone(timezone.utc).replace(tzinfo=None)
+            value = value.astimezone(datetime.timezone.utc).replace(tzinfo=None)
         else:
             raise ValueError("MySQL backend does not support timezone-aware datetimes when USE_TZ is False.")
 
@@ -41,7 +41,7 @@ def value_to_db_datetime(value):
 def utc_to_local(dt):
     # change from UTC timezone to current seahub timezone
     tz = timezone.get_default_timezone()
-    utc = dt.replace(tzinfo=timezone.utc)
+    utc = dt.replace(tzinfo=datetime.timezone.utc)
     local = timezone.make_naive(utc, tz)
     return local
 
@@ -56,7 +56,10 @@ def timestamp_to_isoformat_timestr(timestamp):
             dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
         dt_obj = dt_obj.replace(microsecond=0)
-        isoformat_timestr = current_timezone.localize(dt_obj).isoformat()
+        aware_datetime = dt_obj.replace(tzinfo=current_timezone)
+        target_timezone = pytz.timezone(str(current_timezone))
+        localized_datetime = target_timezone.normalize(aware_datetime.astimezone(pytz.UTC))
+        isoformat_timestr = localized_datetime.isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)
@@ -77,8 +80,12 @@ def datetime_to_isoformat_timestr(datetime):
         # This library only supports two ways of building a localized time.
         # The first is to use the localize() method provided by the pytz library.
         # This is used to localize a naive datetime (datetime with no timezone information):
+
         datetime = datetime.replace(microsecond=0)
-        isoformat_timestr = current_timezone.localize(datetime).isoformat()
+        aware_datetime = datetime.replace(tzinfo=current_timezone)
+        target_timezone = pytz.timezone(str(current_timezone))
+        localized_datetime = target_timezone.normalize(aware_datetime.astimezone(pytz.UTC))
+        isoformat_timestr = localized_datetime.isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)

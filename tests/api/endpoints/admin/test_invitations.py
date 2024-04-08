@@ -41,7 +41,7 @@ class InvitationsTest(BaseTestCase):
         entry = models.Invitation(token=models.gen_token(max_length=32),
                          inviter=self.admin,
                          accepter=email,
-                         invite_type=models.GUEST,
+                         invite_type=models.GUEST_USER,
                          expire_time=timezone.now())
         entry.save()
 
@@ -80,7 +80,7 @@ class InvitationTest(BaseTestCase):
         entry = models.Invitation(token=token,
                                   inviter=self.admin,
                                   accepter=email,
-                                  invite_type=models.GUEST,
+                                  invite_type=models.GUEST_USER,
                                   expire_time=timezone.now())
         entry.save()
         return token

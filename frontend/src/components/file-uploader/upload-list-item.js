@@ -23,7 +23,7 @@ class UploadListItem extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let { resumableFile } = nextProps;
     let uploadState = UPLOAD_UPLOADING;
 
@@ -45,12 +45,12 @@ class UploadListItem extends React.Component {
   onUploadCancel = (e) => {
     e.preventDefault();
     this.props.onUploadCancel(this.props.resumableFile);
-  }
+  };
 
   onUploadRetry = (e) => {
     e.preventDefault();
     this.props.onUploadRetry(this.props.resumableFile);
-  }
+  };
 
   formatFileSize = (size) => {
     if (typeof size !== 'number') {
@@ -66,25 +66,22 @@ class UploadListItem extends React.Component {
       return (size / 1000).toFixed(1) + ' K';
     }
     return size.toFixed(1) + ' B';
-  }
+  };
 
   render() {
     let { resumableFile } = this.props;
     let progress = Math.round(resumableFile.progress() * 100);
     let error = resumableFile.error;
 
-    const fileName = resumableFile.newFileName;
-    const size = this.formatFileSize(resumableFile.size);
-
     return (
       <tr className="file-upload-item">
         <td className="upload-name">
-          <div className="ellipsis" title={fileName}>{fileName}</div>
+          <div className="ellipsis">{resumableFile.newFileName}</div>
         </td>
-        <td className="ellipsis">
-          <span className="file-size" title={size}>{size}</span>
+        <td>
+          <span className="file-size">{this.formatFileSize(resumableFile.size)}</span>
         </td>
-        <td className="upload-progress ellipsis">
+        <td className="upload-progress">
           {(this.state.uploadState === UPLOAD_UPLOADING || this.state.uploadState === UPLOAD_ISSAVING) &&
             <Fragment>
               {resumableFile.size >= (100 * 1000 * 1000) &&
@@ -96,7 +93,7 @@ class UploadListItem extends React.Component {
                       </div>
                       {(resumableFile.remainingTime === -1) && <div className="progress-text">{gettext('Preparing to upload...')}</div>}
                       {(resumableFile.remainingTime > 0) && <div className="progress-text">{gettext('Remaining')}{' '}{Utils.formatTime(resumableFile.remainingTime)}</div>}
-                      {(resumableFile.remainingTime === 0) && <div className="progress-text">{gettext('Indexing...')}</div>}
+                      {(resumableFile.remainingTime === 0) && <div className="progress-text">{gettext('Saving...')}</div>}
                     </div>
                   )}
                   {!resumableFile.isUploading() && (
@@ -108,32 +105,46 @@ class UploadListItem extends React.Component {
                   )}
                 </Fragment>
               }
-              {(resumableFile.size < (100 * 1000 * 1000)) &&
-                <div className="progress-container d-flex align-items-center">
-                  <div className="progress">
-                    <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+              {(resumableFile.size < (100 * 1000 * 1000)) && (
+                <>
+                  <div className="progress-container d-flex align-items-center">
+                    <div className="progress">
+                      <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                   </div>
-                </div>
-              }
+                  {this.state.uploadState === UPLOAD_UPLOADING && (
+                    <>
+                      {progress == 0 && <p className="progress-text mb-0">{gettext('Waiting...')}</p>}
+                      {progress > 0 && <p className="progress-text mb-0">{`${gettext('Uploading...')} ${progress}%`}</p>}
+                    </>
+                  )}
+                  {this.state.uploadState === UPLOAD_ISSAVING && (
+                    <p className="progress-text mb-0">{gettext('Saving...')}</p>
+                  )}
+                </>
+              )}
             </Fragment>
           }
+          {this.state.uploadState === UPLOAD_UPLOADED && (
+            <div className="d-flex align-items-center">
+              <span className="upload-success-icon sf2-icon-tick mr-2"></span>
+              <span className="upload-success-msg">{gettext('Uploaded')}</span>
+            </div>
+          )}
           {this.state.uploadState === UPLOAD_ERROR && (
-            <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
+            <div className="d-flex align-items-center">
+              <span className="upload-failure-icon fas fa-exclamation mr-2"></span>
+              <span className="upload-failure-msg" dangerouslySetInnerHTML={{__html: error}}></span>
+            </div>
           )}
         </td>
-        <td className="upload-operation ellipsis">
+        <td className="upload-operation">
           <Fragment>
             {this.state.uploadState === UPLOAD_UPLOADING && (
-              <a href="#" onClick={this.onUploadCancel}>{gettext('Cancel')}</a>
+              <a href="#" onClick={this.onUploadCancel} role="button">{gettext('Cancel')}</a>
             )}
             {this.state.uploadState === UPLOAD_ERROR && (
-              <a href="#" onClick={this.onUploadRetry}>{gettext('Retry')}</a>
-            )}
-            {this.state.uploadState === UPLOAD_ISSAVING && (
-              <span className="saving">{gettext('Saving...')}</span>
-            )}
-            {this.state.uploadState === UPLOAD_UPLOADED && (
-              <span className="uploaded">{gettext('Uploaded')}</span>
+              <a href="#" onClick={this.onUploadRetry} role="button">{gettext('Retry')}</a>
             )}
           </Fragment>
         </td>

@@ -11,8 +11,6 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,  // for file-view-toolbar
   // side-panel
@@ -20,6 +18,7 @@ const propTypes = {
   // mutiple-dir
   isDirentSelected: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoTags: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
@@ -48,6 +47,8 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func,
   currentRepoInfo: PropTypes.object,
+  onItemRename: PropTypes.func,
+  showDirentDetail: PropTypes.func,
 };
 
 class LibContentToolbar extends React.Component {
@@ -70,15 +71,20 @@ class LibContentToolbar extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               filePermission={this.props.filePermission}
-              isDraft={this.props.isDraft}
-              hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showShareBtn={this.props.showShareBtn}
+              repoTags={this.props.repoTags}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />
           </div>
-          <CommonToolbar isLibView={true} repoID={this.props.repoID} repoName={this.props.repoName} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
+          <CommonToolbar
+            isLibView={true}
+            repoID={this.props.repoID}
+            repoName={this.props.repoName}
+            onSearchedClick={this.props.onSearchedClick}
+            searchPlaceholder={gettext('Search files')}
+          />
         </Fragment>
       );
     }
@@ -93,6 +99,7 @@ class LibContentToolbar extends React.Component {
               path={this.props.path}
               userPerm={this.props.userPerm}
               repoEncrypted={this.props.repoEncrypted}
+              repoTags={this.props.repoTags}
               selectedDirentList={this.props.selectedDirentList}
               direntList={this.props.direntList}
               onItemsMove={this.props.onItemsMove}
@@ -130,7 +137,14 @@ class LibContentToolbar extends React.Component {
             />
           }
         </div>
-        <CommonToolbar isLibView={true} repoID={this.props.repoID} repoName={this.props.repoName} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
+        <CommonToolbar
+          isLibView={true}
+          repoID={this.props.repoID}
+          repoName={this.props.repoName}
+          currentRepoInfo={this.props.currentRepoInfo}
+          onSearchedClick={this.props.onSearchedClick}
+          searchPlaceholder={gettext('Search files')}
+        />
       </Fragment>
     );
   }

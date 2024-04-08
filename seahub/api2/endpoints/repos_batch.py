@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import posixpath
 import json
 import logging
 
@@ -9,7 +10,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
@@ -29,12 +30,14 @@ from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
 from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
-        normalize_file_path, check_filename_with_rename
+        normalize_file_path, check_filename_with_rename, get_file_type_and_ext
 from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
         parse_repo_perm, get_locked_files_by_dir, get_sub_folder_permission_by_dir
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
+from seahub.utils.file_types import SEADOC
+from seahub.seadoc.utils import copy_sdoc_images, move_sdoc_images
 
 logger = logging.getLogger(__name__)
 
@@ -1132,7 +1135,8 @@ class ReposAsyncBatchCopyItemView(APIView):
             error_msg = 'Folder %s not found.' % src_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_repo(dst_repo_id):
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1152,13 +1156,26 @@ class ReposAsyncBatchCopyItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # 3. if dst repo is encrypted, should decrypt it first
+        username = request.user.username
+        if dst_repo.encrypted and not seafile_api.is_password_set(dst_repo.id, username):
+            result = {'lib_need_decrypt': True}
+            return Response(result, status=status.HTTP_403_FORBIDDEN)
+
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         result = {}
         username = request.user.username
         try:
             res = seafile_api.copy_file(src_repo_id, src_parent_dir,
                                         json.dumps(src_dirents),
                                         dst_repo_id, dst_parent_dir,
-                                        json.dumps(src_dirents),
+                                        json.dumps(dst_dirents),
                                         username=username, need_progress=1,
                                         synchronous=0)
         except Exception as e:
@@ -1168,6 +1185,22 @@ class ReposAsyncBatchCopyItemView(APIView):
 
         result = {}
         result['task_id'] = res.task_id if res.background else ''
+
+        # sdoc image
+        try:
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_sdoc_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1229,7 +1262,8 @@ class ReposAsyncBatchMoveItemView(APIView):
             error_msg = 'Folder %s not found.' % src_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_repo(dst_repo_id):
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1247,6 +1281,12 @@ class ReposAsyncBatchMoveItemView(APIView):
         if parse_repo_perm(check_folder_permission(request, dst_repo_id, dst_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # 3. if dst repo is encrypted, should decrypt it first
+        username = request.user.username
+        if dst_repo.encrypted and not seafile_api.is_password_set(dst_repo.id, username):
+            result = {'lib_need_decrypt': True}
+            return Response(result, status=status.HTTP_403_FORBIDDEN)
 
         # check locked files
         username = request.user.username
@@ -1268,13 +1308,20 @@ class ReposAsyncBatchMoveItemView(APIView):
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         # move file
         result = {}
         try:
             res = seafile_api.move_file(src_repo_id, src_parent_dir,
                                         json.dumps(src_dirents),
                                         dst_repo_id, dst_parent_dir,
-                                        json.dumps(src_dirents),
+                                        json.dumps(dst_dirents),
                                         replace=False, username=username,
                                         need_progress=1, synchronous=0)
         except Exception as e:
@@ -1284,6 +1331,22 @@ class ReposAsyncBatchMoveItemView(APIView):
 
         result = {}
         result['task_id'] = res.task_id if res.background else ''
+
+        # sdoc image
+        try:
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                move_sdoc_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1365,13 +1428,20 @@ class ReposSyncBatchCopyItemView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        dirents_map = {}
+        dst_dirents = []
+        for src_dirent in src_dirents:
+            dst_dirent = check_filename_with_rename(dst_repo_id, dst_parent_dir, src_dirent)
+            dst_dirents.append(dst_dirent)
+            dirents_map[src_dirent] = dst_dirent
+
         result = {}
         username = request.user.username
         try:
             seafile_api.copy_file(src_repo_id, src_parent_dir,
                                   json.dumps(src_dirents),
                                   dst_repo_id, dst_parent_dir,
-                                  json.dumps(src_dirents),
+                                  json.dumps(dst_dirents),
                                   username=username, need_progress=0,
                                   synchronous=1)
         except Exception as e:
@@ -1381,6 +1451,22 @@ class ReposSyncBatchCopyItemView(APIView):
 
         result = {}
         result['success'] = True
+
+        # sdoc image
+        try:
+            sdoc_dirents_map = {}
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype == SEADOC:
+                    sdoc_dirents_map[src_dirent] = dst_dirent
+            for src_dirent, dst_dirent in sdoc_dirents_map.items():
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_sdoc_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1497,6 +1583,9 @@ class ReposSyncBatchMoveItemView(APIView):
 
         result = {}
         result['success'] = True
+
+        # do not move sdoc image
+
         return Response(result)
 
 
@@ -1535,7 +1624,8 @@ class ReposBatchDeleteItemView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        if not seafile_api.get_repo(repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1563,7 +1653,7 @@ class ReposBatchDeleteItemView(APIView):
         folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    folder_permission_dict[dirent] not in ('rw', 'cloud-edit'):
                 error_msg = _("Can't delete folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1580,4 +1670,5 @@ class ReposBatchDeleteItemView(APIView):
 
         result = {}
         result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
         return Response(result)

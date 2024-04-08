@@ -15,12 +15,12 @@ class CommonOperationConfirmationDialog extends Component {
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   executeOperation = () => {
     this.toggle();
     this.props.executeOperation();
-  }
+  };
 
   render() {
     let { title, message, confirmBtnText } = this.props;

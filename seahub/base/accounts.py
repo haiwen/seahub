@@ -1,21 +1,27 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
+import os
+import sys
 import re
 import logging
 
 from django import forms
 from django.core.mail import send_mail
 from django.utils import translation
-from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
     seafile_api, ccnet_api
 from constance import config
 from registration import signals
+import ldap
+from ldap import sasl
+from ldap import filter
 
 from seahub.auth import login
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
@@ -26,6 +32,9 @@ from seahub.utils import is_user_password_strong, get_site_name, \
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
+from seahub.utils.auth import gen_user_virtual_id
+from seahub.auth.models import SocialAuthUser
+from seahub.repo_auto_delete.models import RepoAutoDelete
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -36,11 +45,63 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 
+from seahub.settings import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LAST_NAME_ATTR, \
+    LDAP_USER_NAME_REVERSE, LDAP_FILTER, LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, \
+    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR
+
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+try:
+    from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR
+except ImportError:
+    LDAP_SERVER_URL = ''
+    LDAP_BASE_DN = ''
+    LDAP_ADMIN_DN = ''
+    LDAP_ADMIN_PASSWORD = ''
+    LDAP_LOGIN_ATTR = ''
+
+# multi ldap
+try:
+    from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, \
+         MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR
+except ImportError:
+    ENABLE_MULTI_LDAP = False
+    MULTI_LDAP_1_SERVER_URL = ''
+    MULTI_LDAP_1_BASE_DN = ''
+    MULTI_LDAP_1_ADMIN_DN = ''
+    MULTI_LDAP_1_ADMIN_PASSWORD = ''
+    MULTI_LDAP_1_LOGIN_ATTR = ''
+
+MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
+MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
+MULTI_LDAP_1_CONTACT_EMAIL_ATTR = getattr(settings, 'MULTI_LDAP_1_CONTACT_EMAIL_ATTR', '')
+MULTI_LDAP_1_USER_ROLE_ATTR = getattr(settings, 'MULTI_LDAP_1_USER_ROLE_ATTR', '')
+MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
+MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+MULTI_LDAP_1_SASL_AUTHC_ID_ATTR = getattr(settings, 'MULTI_LDAP_1_SASL_AUTHC_ID_ATTR', '')
+
+LDAP_UPDATE_USER_WHEN_LOGIN = getattr(settings, 'LDAP_UPDATE_USER_WHEN_LOGIN', True)
+
 logger = logging.getLogger(__name__)
 
 ANONYMOUS_EMAIL = 'Anonymous'
 
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
+
+
+def default_ldap_role_mapping(role):
+    return role
+
+
+ldap_role_mapping = default_ldap_role_mapping
+if ENABLE_LDAP:
+    try:
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        conf_dir = os.path.join(current_path, '../../../../conf')
+        sys.path.append(conf_dir)
+        from seahub_custom_functions import ldap_role_mapping
+        ldap_role_mapping = ldap_role_mapping
+    except:
+        pass
 
 
 class UserManager(object):
@@ -49,9 +110,90 @@ class UserManager(object):
         """
         Creates and saves a User with given username and password.
         """
+        virtual_id = gen_user_virtual_id()
+
         # Lowercasing email address to avoid confusion.
         email = email.lower()
 
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email)
+
+        return self.get(email=virtual_id)
+
+    def update_role(self, email, role):
+        """
+        If user has a role, update it; or create a role for user.
+        """
+        ccnet_api.update_role_emailuser(email, role)
+        return self.get(email=email)
+
+    def create_oauth_user(self, email=None, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves an oauth user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email)
+
+        return self.get(email=virtual_id)
+
+    def create_ldap_user(self, email=None, password=None, nickname=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a ldap user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email, nickname=nickname)
+
+        return self.get(email=virtual_id)
+
+    def create_saml_user(self, email=None, password=None, nickname=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a saml user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email, nickname=nickname)
+
+        return self.get(email=virtual_id)
+
+    def create_remote_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a remote user with given username.
+        """
         user = User(email=email)
         user.is_staff = is_staff
         user.is_active = is_active
@@ -60,12 +202,45 @@ class UserManager(object):
 
         return self.get(email=email)
 
-    def update_role(self, email, role):
+    def create_cas_user(self, password=None, is_staff=False, is_active=False):
         """
-        If user has a role, update it; or create a role for user.
+        Creates and saves a CAS user with given username.
         """
-        ccnet_api.update_role_emailuser(email, role)
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        return self.get(email=virtual_id)
+
+    def create_krb_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a KRB5 user with given username.
+        """
+        user = User(email=email)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
         return self.get(email=email)
+
+    def create_shib_user(self, is_staff=False, is_active=False):
+        """
+        Creates and saves a SHIB user with given username.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_unusable_password()
+        user.save()
+
+        return self.get(email=virtual_id)
 
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)
@@ -97,6 +272,43 @@ class UserManager(object):
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
             raise User.DoesNotExist('User matching query does not exits.')
+
+        user = User(emailuser.email)
+        user.id = emailuser.id
+        user.enc_password = emailuser.password
+        user.is_staff = emailuser.is_staff
+        user.is_active = emailuser.is_active
+        user.ctime = emailuser.ctime
+        user.org = emailuser.org
+        user.source = emailuser.source
+        user.role = emailuser.role
+        user.reference_id = emailuser.reference_id
+
+        if user.is_staff:
+            try:
+                role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+                admin_role = role_obj.role
+            except AdminRole.DoesNotExist:
+                admin_role = DEFAULT_ADMIN
+
+            user.admin_role = admin_role
+        else:
+            user.admin_role = ''
+
+        return user
+
+    def get_old_user(self, email, provider, uid):
+        if not email:
+            raise User.DoesNotExist('User matching query does not exits.')
+
+        emailuser = ccnet_threaded_rpc.get_emailuser(email)
+        if not emailuser:
+            raise User.DoesNotExist('User matching query does not exits.')
+
+        try:
+            SocialAuthUser.objects.add(emailuser.email, provider, uid)
+        except Exception as e:
+            logger.error(e)
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -295,7 +507,7 @@ class User(object):
     def name(self):
         if not hasattr(self, '_cached_nickname'):
             # convert raw string to unicode obj
-            self._cached_nickname = smart_text(email2nickname(self.username))
+            self._cached_nickname = smart_str(email2nickname(self.username))
 
         return self._cached_nickname
 
@@ -386,6 +598,8 @@ class User(object):
         for r in owned_repos:
             seafile_api.remove_repo(r.id)
 
+        RepoAutoDelete.objects.filter(repo_id__in=[r.id for r in owned_repos]).delete()
+
         # remove shared in repos
         shared_in_repos = []
         if orgs:
@@ -468,7 +682,7 @@ class User(object):
         "Sends an e-mail to this User."
         send_mail(subject, message, from_email, [self.email])
 
-    def freeze_user(self, notify_admins=False):
+    def freeze_user(self, notify_admins=False, notify_org_admins=False):
         self.is_active = False
         self.save()
 
@@ -482,7 +696,38 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(u.email,
+                send_html_email_with_dj_template(email2contact_email(u.email),
+                                                 subject=_('Account %(account)s froze on %(site)s.') % {
+                                                     "account": self.email,
+                                                     "site": get_site_name()},
+                                                 dj_template='sysadmin/user_freeze_email.html',
+                                                 context={'user': self.email})
+
+                # restore current language
+                translation.activate(cur_language)
+
+        if notify_org_admins:
+            org = None
+            if is_pro_version():
+                orgs = ccnet_api.get_orgs_by_user(self.username)
+                if orgs:
+                    org = orgs[0]
+
+            org_members = list()
+            if org:
+                org_members = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+            for u in org_members:
+                if not (ccnet_api.is_org_staff(org.org_id, u.email) == 1):
+                    continue
+
+                # save current language
+                cur_language = translation.get_language()
+
+                # get and active user language
+                user_language = Profile.objects.get_user_language(u.email)
+                translation.activate(user_language)
+
+                send_html_email_with_dj_template(email2contact_email(u.email),
                                                  subject=_('Account %(account)s froze on %(site)s.') % {
                                                      "account": self.email,
                                                      "site": get_site_name()},
@@ -581,6 +826,204 @@ class AuthBackend(object):
 
         if user.check_password(password):
             return user
+
+
+def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr):
+    first_name = ''
+    last_name = ''
+    contact_email = ''
+    user_role = ''
+    authc_id = ''
+    dn = ldap_search_result[0][0]
+    first_name_list = ldap_search_result[0][1].get(LDAP_USER_FIRST_NAME_ATTR, [])
+    last_name_list = ldap_search_result[0][1].get(LDAP_USER_LAST_NAME_ATTR, [])
+    contact_email_list = ldap_search_result[0][1].get(contact_email_attr, [])
+    user_role_list = ldap_search_result[0][1].get(role_attr, [])
+    authc_id_list = list()
+    if enable_sasl and sasl_mechanism:
+        authc_id_list = ldap_search_result[0][1].get(sasl_authc_id_attr, [])
+
+    if first_name_list:
+        first_name = first_name_list[0].decode()
+    if last_name_list:
+        last_name = last_name_list[0].decode()
+
+    if LDAP_USER_NAME_REVERSE:
+        nickname = last_name + ' ' + first_name
+    else:
+        nickname = first_name + ' ' + last_name
+
+    if contact_email_list:
+        contact_email = contact_email_list[0].decode()
+
+    if user_role_list:
+        user_role = user_role_list[0].decode()
+        user_role = ldap_role_mapping(user_role)
+
+    if authc_id_list:
+        authc_id = authc_id_list[0].decode()
+
+    return dn, nickname, contact_email, user_role, authc_id
+
+
+class CustomLDAPBackend(object):
+    """ A custom LDAP authentication backend """
+
+    def get_user(self, username):
+        try:
+            user = User.objects.get(username)
+        except User.DoesNotExist:
+            user = None
+        return user
+
+    def ldap_bind(self, server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
+        bind_conn = ldap.initialize(server_url)
+
+        try:
+            bind_conn.set_option(ldap.OPT_REFERRALS, 0)
+        except Exception as e:
+            raise Exception('Failed to set referrals option: %s' % e)
+
+        try:
+            bind_conn.protocol_version = ldap.VERSION3
+            if enable_sasl and sasl_mechanism:
+                sasl_cb_value_dict = {}
+                if sasl_mechanism != 'EXTERNAL' and sasl_mechanism != 'GSSAPI':
+                    sasl_cb_value_dict = {
+                        sasl.CB_AUTHNAME: authc_id,
+                        sasl.CB_PASS: password,
+                    }
+                sasl_auth = sasl.sasl(sasl_cb_value_dict, sasl_mechanism)
+                bind_conn.sasl_interactive_bind_s('', sasl_auth)
+            else:
+                bind_conn.simple_bind_s(dn, password)
+        except Exception as e:
+            raise Exception('ldap bind failed: %s' % e)
+
+        return bind_conn
+
+    def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
+                    sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
+                    contact_email_attr, role_attr):
+        try:
+            admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
+        except Exception as e:
+            raise Exception(e)
+
+        filterstr = filter.filter_format(f'(&({login_attr_conf}=%s))', [login_attr])
+        if serch_filter:
+            filterstr = filterstr[:-1] + '(' + serch_filter + '))'
+
+        result_data = None
+        base_list = base_dn.split(';')
+        for base in base_list:
+            if base == '':
+                continue
+            try:
+                result_data = admin_bind.search_s(base, ldap.SCOPE_SUBTREE, filterstr)
+                if result_data is not None:
+                    break
+            except Exception as e:
+                raise Exception('ldap user search failed: %s' % e)
+
+        # user not found in ldap
+        if not result_data:
+            raise Exception('ldap user %s not found.' % login_attr)
+
+        # delete old ldap bind_conn instance and create new, if not, some err will occur
+        admin_bind.unbind_s()
+        del admin_bind
+
+        try:
+            dn, nickname, contact_email, user_role, authc_id = parse_ldap_res(
+                result_data, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr)
+        except Exception as e:
+            raise Exception('parse ldap result failed: %s' % e)
+
+        try:
+            user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism)
+        except Exception as e:
+            raise Exception(e)
+
+        user_bind.unbind_s()
+        return nickname, contact_email, user_role
+
+    def authenticate(self, ldap_user=None, password=None):
+        if not ENABLE_LDAP:
+            return
+
+        # search user from ldap server
+        try:
+            auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=LDAP_PROVIDER).first()
+            if auth_user:
+                login_attr = auth_user.uid
+            else:
+                login_attr = ldap_user
+
+            nickname, contact_email, user_role = self.search_user(
+                LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
+                SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR)
+            ldap_provider = LDAP_PROVIDER
+        except Exception as e:
+            if ENABLE_MULTI_LDAP:
+                auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=MULTI_LDAP_1_PROVIDER).first()
+                if auth_user:
+                    login_attr = auth_user.uid
+                else:
+                    login_attr = ldap_user
+
+                try:
+                    nickname, contact_email, user_role = self.search_user(
+                        MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
+                        MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
+                        MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
+                        MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR)
+                    ldap_provider = MULTI_LDAP_1_PROVIDER
+                except Exception as e:
+                    logger.error(e)
+                    return
+            else:
+                logger.error(e)
+                return
+
+        # check if existed
+        ldap_auth_user = SocialAuthUser.objects.filter(provider=ldap_provider, uid=login_attr).first()
+        if ldap_auth_user:
+            user = self.get_user(ldap_auth_user.username)
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
+                SocialAuthUser.objects.filter(provider=ldap_provider, uid=login_attr).delete()
+        else:
+            # compatible with old users
+            try:
+                user = User.objects.get_old_user(ldap_user, ldap_provider, login_attr)
+            except User.DoesNotExist:
+                user = None
+
+        if not user:
+            try:
+                user = User.objects.create_ldap_user(is_active=True)
+                SocialAuthUser.objects.add(user.username, ldap_provider, login_attr)
+            except Exception as e:
+                logger.error(f'recreate ldap user failed. {e}')
+                return
+
+        username = user.username
+        if LDAP_UPDATE_USER_WHEN_LOGIN:
+            try:
+                if nickname:
+                    Profile.objects.add_or_update(username, nickname=nickname)
+                if contact_email:
+                    Profile.objects.add_or_update(username, contact_email=contact_email)
+            except Exception as e:
+                logger.error(f'update ldap user failed {e}')
+
+        if user_role:
+            User.objects.update_role(username, user_role)
+        return user
 
 
 # Register related
@@ -787,6 +1230,7 @@ class RegistrationForm(forms.Form):
         if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))
 
+        email = get_virtual_id_by_email(email)
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             return self.cleaned_data['email']
@@ -858,6 +1302,7 @@ class DetailedRegistrationForm(RegistrationForm):
     note = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
                            required=note_required)
+
 
 # Move here to avoid circular import
 from seahub.base.templatetags.seahub_tags import email2nickname, \

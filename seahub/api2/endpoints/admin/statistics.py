@@ -9,15 +9,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.http import HttpResponse
 
 from seaserv import ccnet_api
 
-from seahub.utils import get_file_ops_stats_by_day, \
+from seahub.utils import get_file_ops_stats_by_day, IS_DB_SQLITE3, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
-        seafevents_api
+        get_all_users_traffic_by_month, get_all_orgs_traffic_by_month
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.file_size import byte_to_mb
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
-        if not is_pro_version() or not EVENTS_ENABLED:
+        if not EVENTS_ENABLED or (not is_pro_version() and IS_DB_SQLITE3):
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
         start_time = request.GET.get("start", "")
         end_time = request.GET.get("end", "")
@@ -253,7 +253,7 @@ class SystemUserTrafficView(APIView):
 
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_users_traffic_by_month(month_obj,
+            traffics = get_all_users_traffic_by_month(month_obj,
                                                                      start,
                                                                      start + per_page + 1,
                                                                      order_by)
@@ -330,7 +330,7 @@ class SystemOrgTrafficView(APIView):
 
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_orgs_traffic_by_month(month_obj,
+            traffics = get_all_orgs_traffic_by_month(month_obj,
                                                                     start,
                                                                     start + per_page + 1,
                                                                     order_by)
@@ -387,7 +387,7 @@ class SystemUserTrafficExcelView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            res_data = seafevents_api.get_all_users_traffic_by_month(month_obj, -1, -1)
+            res_data = get_all_users_traffic_by_month(month_obj, -1, -1)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

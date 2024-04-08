@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, get_file_id_by_path
 from pysearpc import SearpcError
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg

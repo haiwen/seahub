@@ -51,7 +51,7 @@ deps
 seahub/thumbnail/thumb/*
 
 .virtualenv
-.env
+# .env
 .dumbjump
 .projectile
 .pytest_cache/
@@ -64,3 +64,5 @@ frontend/package-lock.json
 frontend/.eslintcache
 
 /.idea
+
+.vscode

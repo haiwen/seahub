@@ -30,13 +30,13 @@ class SendLink extends React.Component {
     this.setState({
       emails: e.target.value
     });
-  }
+  };
 
   handleMsgInputChange = (e) => {
     this.setState({
       msg: e.target.value
     });
-  }
+  };
 
   sendLink = () => {
     const { emails, msg } = this.state;
@@ -65,7 +65,7 @@ class SendLink extends React.Component {
         toaster.success(feedbackMsg);
       }
       if (failed.length) {
-        failed.map((item) => {
+        failed.forEach((item) => {
           const feedbackMsg = gettext('Failed to send to {email_placeholder}: {errorMsg_placeholder}')
             .replace('{email_placeholder}', item.email)
             .replace('{errorMsg_placeholder}', item.error_msg);
@@ -80,7 +80,7 @@ class SendLink extends React.Component {
         errorMsg: errorMsg
       });
     });
-  }
+  };
 
   render() {
     const { emails, msg, errorMsg, btnDisabled, sending } = this.state;

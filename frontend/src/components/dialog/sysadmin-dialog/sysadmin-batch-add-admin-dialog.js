@@ -20,26 +20,19 @@ class SysAdminBatchAddAdminDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
- handleSelectChange = (options) => {
-   this.setState({
-     options: options,
-     isSubmitBtnActive: options.length > 0
-   });
- }
+  handleSelectChange = (options) => {
+    this.setState({
+      options: options,
+      isSubmitBtnActive: options.length > 0
+    });
+  };
 
- handleSubmit = () => {
-   this.props.addAdminInBatch(this.state.options.map(item => item.email));
-   this.toggle();
- }
-
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSubmit();
-      e.preventDefault();
-    }
-  }
+  handleSubmit = () => {
+    this.props.addAdminInBatch(this.state.options.map(item => item.email));
+    this.toggle();
+  };
 
   render() {
     return (
@@ -49,7 +42,7 @@ class SysAdminBatchAddAdminDialog extends React.Component {
           <UserSelect
             isMulti={true}
             className="reviewer-select"
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
           />
         </ModalBody>

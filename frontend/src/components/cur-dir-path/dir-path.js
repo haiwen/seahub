@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
-import InternalLinkDialog from '../dialog/internal-link-dialog';
 import { Utils } from '../../utils/utils';
+import { InternalLinkOperation } from '../operations';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -22,7 +22,7 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
-  }
+  };
 
   onTabNavClick = (e, tabName, id) => {
     if (window.uploader &&
@@ -35,7 +35,7 @@ class DirPath extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.onTabNavClick(tabName, id);
-  }
+  };
 
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -43,7 +43,7 @@ class DirPath extends React.Component {
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') {
-        return;
+        return null;
       }
       if (index === (pathList.length - 1)) {
         return (
@@ -63,7 +63,7 @@ class DirPath extends React.Component {
       }
     });
     return pathElem;
-  }
+  };
 
   render() {
     let { currentPath, repoName, fileTags } = this.props;
@@ -103,14 +103,11 @@ class DirPath extends React.Component {
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
-        {this.props.isViewFile &&
-          <InternalLinkDialog
-            repoID={this.props.repoID}
-            path={this.props.currentPath}
-          />
-        }
+        {this.props.isViewFile && (
+          <InternalLinkOperation repoID={this.props.repoID} path={this.props.currentPath}/>
+        )}
         {(this.props.isViewFile && fileTags.length !== 0) &&
-          <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1">
+          <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1 d-flex align-items-center">
             {fileTags.map((fileTag, index) => {
               return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>);
             })}

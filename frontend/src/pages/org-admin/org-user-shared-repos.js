@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
@@ -22,7 +23,8 @@ class OrgUserSharedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));
@@ -54,11 +56,6 @@ class OrgUserSharedRepos extends Component {
 }
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       loading, errorMsg, repo_list
@@ -92,12 +89,11 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
 class Item extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const repo = this.props.data;
     return (
@@ -113,5 +109,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+OrgUserSharedRepos.propTypes = {
+  email: PropTypes.string,
+};
+
 
 export default OrgUserSharedRepos;

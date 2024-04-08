@@ -9,6 +9,7 @@ const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   toggleInvitePeopleDialog: PropTypes.func.isRequired,
+  searchPlaceholder: PropTypes.string.isRequired,
 };
 
 class InvitationsToolbar extends React.Component {

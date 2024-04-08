@@ -16,7 +16,6 @@ class CreateDepartmentRepoDialog extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
   }
 
   handleChange = (e) => {
@@ -29,7 +28,7 @@ class CreateDepartmentRepoDialog extends React.Component {
     this.setState({
       repoName: e.target.value,
     });
-  }
+  };
 
   handleSubmit = () => {
     let isValid = this.validateRepoName();
@@ -37,22 +36,18 @@ class CreateDepartmentRepoDialog extends React.Component {
       let repo = this.createRepo(this.state.repoName);
       this.props.onCreateRepo(repo, 'department');
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.onCreateToggle();
-  }
-
-  componentDidMount = () => {
-    this.newInput.focus();
-  }
+  };
 
   validateRepoName = () => {
     let errMessage = '';
@@ -69,16 +64,16 @@ class CreateDepartmentRepoDialog extends React.Component {
     }
 
     return true;
-  }
+  };
 
   createRepo = (repoName) => {
     let repo = { repo_name: repoName };
     return repo;
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Department Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -86,11 +81,11 @@ class CreateDepartmentRepoDialog extends React.Component {
               <Label for="repo-name">{gettext('Name')}</Label>
               <Input
                 id="repo-name"
-                onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleChange}
                 maxLength={maxFileName}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>

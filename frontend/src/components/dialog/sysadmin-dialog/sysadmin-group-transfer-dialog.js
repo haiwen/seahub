@@ -26,20 +26,20 @@ class SysAdminTransferGroupDialog extends React.Component {
       selectedOption: option,
       submitBtnDisabled: option == null
     });
-  }
+  };
 
   submit = () => {
     const receiver = this.state.selectedOption.email;
     this.props.transferGroup(receiver);
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     const { submitBtnDisabled } = this.state;
     const groupName = '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) +'</span>';
     const msg = gettext('Transfer Group {placeholder} to').replace('{placeholder}', groupName);
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{__html: msg}}></span>
         </ModalHeader>

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import makeAnimated from 'react-select/animated';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -29,12 +29,12 @@ class TransferDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  }
+  };
 
   componentDidMount() {
     if (isPro) {
@@ -57,22 +57,22 @@ class TransferDialog extends React.Component {
     this.setState({
       transferToUser: !this.state.transferToUser,
     });
-  }
+  };
 
   render() {
-    const itemName = this.props.itemName;
-    const innerSpan = '<span class="op-target" title=' + itemName + '>' + itemName +'</span>';
-    let msg = gettext('Transfer Library {library_name}');
-    let message = msg.replace('{library_name}', innerSpan);
-
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
     }
+
+    const { itemName: repoName } = this.props;
+    let title = gettext('Transfer Library {library_name}');
+    title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <div dangerouslySetInnerHTML={{__html:message}} />
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           {this.state.transferToUser ?
@@ -83,15 +83,15 @@ class TransferDialog extends React.Component {
               placeholder={gettext('Select a user')}
               onSelectChange={this.handleSelectChange}
             /> :
-            <Select
+            <SeahubSelect
               isClearable
-              isMulti={false}
               maxMenuHeight={200}
               hideSelectedOptions={true}
               components={makeAnimated()}
               placeholder={gettext('Select a department')}
               options={this.options}
               onChange={this.handleSelectChange}
+              value={this.state.selectedOption}
             />
           }
           {isPro && canTransferToDept &&

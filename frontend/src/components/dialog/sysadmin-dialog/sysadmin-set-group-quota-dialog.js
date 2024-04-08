@@ -9,7 +9,7 @@ import toaster from '../../toast';
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   groupID: PropTypes.number.isRequired,
-  onDepartChanged: PropTypes.func.isRequired,
+  onSetQuota: PropTypes.func.isRequired,
 };
 
 class SetGroupQuotaDialog extends React.Component {
@@ -20,12 +20,6 @@ class SetGroupQuotaDialog extends React.Component {
       quota: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   setGroupQuota = () => {
@@ -36,7 +30,7 @@ class SetGroupQuotaDialog extends React.Component {
       let newQuota = this.state.quota == -2 ? this.state.quota : this.state.quota * 1000000;
       seafileAPI.sysAdminUpdateDepartmentQuota(this.props.groupID, newQuota).then((res) => {
         this.props.toggle();
-        this.props.onDepartChanged();
+        this.props.onSetQuota(res.data);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -45,31 +39,31 @@ class SetGroupQuotaDialog extends React.Component {
       const err = gettext('Quota is invalid.');
       this.setState({ errMessage: err });
     }
-  }
+  };
 
   handleChange = (e) => {
     const quota = e.target.value.trim();
     this.setState({ quota: quota });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.setGroupQuota();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Set Quota')}</ModalHeader>
         <ModalBody>
           <InputGroup>
             <Input
-              onKeyPress={this.handleKeyPress}
+              onKeyDown={this.handleKeyDown}
               value={this.state.quota}
               onChange={this.handleChange}
-              innerRef={input => {this.newInput = input;}}
+              autoFocus={true}
             />
             <InputGroupAddon addonType="append">{'MB'}</InputGroupAddon>
           </InputGroup>
@@ -77,9 +71,10 @@ class SetGroupQuotaDialog extends React.Component {
             <br/><span>{gettext('An integer that is greater than 0 or equal to -2.')}</span><br/>
             <span>{gettext('Tip: -2 means no limit.')}</span>
           </p>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {this.state.errMessage && <p className="error">{this.state.errMessage}</p>}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.setGroupQuota}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

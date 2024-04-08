@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { isPro, username, gettext, multiInstitution, siteRoot } from '../../../utils/constants';
@@ -8,9 +9,7 @@ import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
-import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
-import SelectEditor from '../../../components/select-editor/select-editor';
+import Selector from '../../../components/single-selector';
 import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
@@ -27,26 +26,30 @@ class Content extends Component {
     };
   }
 
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
+
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
-  }
+  };
 
   render() {
     const {
@@ -78,7 +81,7 @@ class Content extends Component {
       const spaceText = gettext('Space Used');
       const spaceEl =
         sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
-        <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
+          <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
           spaceText;
       const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
 
@@ -132,6 +135,7 @@ class Content extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                   updateUser={this.props.updateUser}
                   deleteUser={this.props.deleteUser}
                   updateAdminRole={this.props.updateAdminRole}
@@ -161,6 +165,31 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  items: PropTypes.array,
+  deleteItem: PropTypes.func,
+  isAdmin: PropTypes.bool,
+  isLDAPImported: PropTypes.bool,
+  isSearchResult: PropTypes.bool,
+  sortBy: PropTypes.string,
+  sortByQuotaUsage: PropTypes.func,
+  getListByPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  toggleSelectAllUsers: PropTypes.func,
+  isAllUsersSelected: PropTypes.bool,
+  resetPerPage: PropTypes.func,
+  updateUser: PropTypes.func,
+  deleteUser: PropTypes.func,
+  updateAdminRole: PropTypes.func,
+  revokeAdmin: PropTypes.func,
+  onUserSelected: PropTypes.func,
+  curPerPage: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+  sortOrder: PropTypes.string,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -182,7 +211,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -191,7 +220,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -199,43 +228,54 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleDeleteUserDialog = () => {
     this.setState({isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen});
-  }
+  };
 
   toggleResetUserPasswordDialog = () => {
     this.setState({isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen});
-  }
+  };
 
   toggleRevokeAdminDialog = () => {
     this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
-  }
+  };
 
   onUserSelected = () => {
     this.props.onUserSelected(this.props.item);
-  }
+  };
 
-  updateStatus= (value) => {
-    const isActive = value == 'active';
+  updateStatus= (roleOption) => {
+    const isActive = roleOption.value == 'active';
     if (isActive) {
       toaster.notify(gettext('It may take some time, please wait.'));
     }
     this.props.updateUser(this.props.item.email, 'is_active', isActive);
-  }
+  };
 
-  updateRole = (value) => {
-    this.props.updateUser(this.props.item.email, 'role', value);
-  }
+  updateRole = (roleOption) => {
+    this.props.updateUser(this.props.item.email, 'role', roleOption.value);
+  };
 
-  updateAdminRole = (value) => {
-    this.props.updateAdminRole(this.props.item.email, value);
-  }
+  updateAdminRole = (roleOption) => {
+    this.props.updateAdminRole(this.props.item.email, roleOption.value);
+  };
+
+  translateRole = (role) => {
+    switch (role) {
+      case 'default':
+        return gettext('Default');
+      case 'guest':
+        return gettext('Guest');
+      default:
+        return role;
+    }
+  };
 
   translateAdminRole = (role) => {
     switch (role) {
@@ -250,24 +290,29 @@ class Item extends Component {
       default:
         return role;
     }
-  }
+  };
 
-  updateInstitution = (value) => {
-    this.props.updateUser(this.props.item.email, 'institution', value);
-  }
+  translateStatus = (status) => {
+    switch (status) {
+      case 'active':
+        return gettext('Active');
+      case 'inactive':
+        return gettext('Inactive');
+    }
+  };
 
-  translateInstitution = (inst) => {
-    return inst;
-  }
+  updateInstitution = (instOption) => {
+    this.props.updateUser(this.props.item.email, 'institution', instOption.value);
+  };
 
   updateQuota = (value) => {
     this.props.updateUser(this.props.item.email, 'quota_total', value);
-  }
+  };
 
   deleteUser = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    this.props.deleteUser(this.props.item.email);
-  }
+    this.props.deleteUser(this.props.item.email, this.props.item.name);
+  };
 
   resetPassword = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
@@ -277,12 +322,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   revokeAdmin = () => {
     const { item } = this.props;
     this.props.revokeAdmin(item.email, item.name);
-  }
+  };
 
   getMenuOperations = () => {
     const {
@@ -298,7 +343,7 @@ class Item extends Component {
       list = ['Revoke Admin'];
     }
     return list;
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -315,7 +360,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -331,11 +376,12 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   render() {
     const { item, isAdmin } = this.props;
     const {
+      highlight,
       isOpIconShown,
       isSetQuotaDialogOpen,
       isDeleteUserDialogOpen,
@@ -347,6 +393,58 @@ class Item extends Component {
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     const resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
     const revokeAdminDialogMsg = gettext('Are you sure you want to revoke the admin permission of {placeholder} ?').replace('{placeholder}', itemName);
+
+    // for 'user status'
+    const curStatus = item.is_active ? 'active' : 'inactive';
+    this.statusOptions = ['active', 'inactive'].map(item => {
+      return {
+        value: item,
+        text: this.translateStatus(item),
+        isSelected: item == curStatus
+      };
+    });
+    const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
+
+    let currentSelectedAdminRoleOption;
+    let currentSelectedRoleOption;
+    if (isAdmin) {
+      const { admin_role: curAdminRole } = item;
+      this.adminRoleOptions = availableAdminRoles.map(item => {
+        return {
+          value: item,
+          text: this.translateAdminRole(item),
+          isSelected: item == curAdminRole
+        };
+      });
+      currentSelectedAdminRoleOption = this.adminRoleOptions.filter(item => item.isSelected)[0];
+    } else {
+      const { role: curRole } = item;
+      this.roleOptions = availableRoles.map(item => {
+        return {
+          value: item,
+          text: this.translateRole(item),
+          isSelected: item == curRole
+        };
+      });
+      currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || { // `|| {...}`: to be compatible with old data(roles not in the present `availableRoles`
+        value: curRole,
+        text: this.translateRole(curRole),
+        isSelected: true
+      };
+    }
+
+    let currentSelectedInstOption;
+    if (multiInstitution && !isAdmin) {
+      const { institution: curInstitution } = item;
+      this.instOptions = institutions.map(item => {
+        return {
+          value: item,
+          text: item,
+          isSelected: item == curInstitution
+        };
+      });
+      currentSelectedInstOption = this.instOptions.filter(item => item.isSelected)[0];
+    }
 
     return (
       <Fragment>
@@ -369,31 +467,31 @@ class Item extends Component {
             }
           </td>
           <td>
-            <SysAdminUserStatusEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentStatus={item.is_active ? 'active' : 'inactive'}
-              statusOptions={['active', 'inactive']}
-              onStatusChanged={this.updateStatus}
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedStatusOption}
+              options={this.statusOptions}
+              selectOption={this.updateStatus}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           {isPro &&
           <td>
             {isAdmin ?
-              <SelectEditor
-                isTextMode={true}
-                isEditIconShow={isOpIconShown}
-                options={availableAdminRoles}
-                currentOption={item.admin_role}
-                onOptionChanged={this.updateAdminRole}
-                translateOption={this.translateAdminRole}
-              /> :
-              <SysAdminUserRoleEditor
-                isTextMode={true}
-                isEditIconShow={isOpIconShown}
-                currentRole={item.role}
-                roleOptions={availableRoles}
-                onRoleChanged={this.updateRole}
+              <Selector
+                isDropdownToggleShown={highlight}
+                currentSelectedOption={currentSelectedAdminRoleOption}
+                options={this.adminRoleOptions}
+                selectOption={this.updateAdminRole}
+                toggleItemFreezed={this.props.toggleItemFreezed}
+              />
+              :
+              <Selector
+                isDropdownToggleShown={highlight}
+                currentSelectedOption={currentSelectedRoleOption}
+                options={this.roleOptions}
+                selectOption={this.updateRole}
+                toggleItemFreezed={this.props.toggleItemFreezed}
               />
             }
           </td>
@@ -408,13 +506,12 @@ class Item extends Component {
           </td>
           {(multiInstitution && !isAdmin) &&
             <td>
-              <SelectEditor
-                isTextMode={true}
-                isEditIconShow={isOpIconShown && institutions.length > 0}
-                options={institutions}
-                currentOption={item.institution}
-                onOptionChanged={this.updateInstitution}
-                translateOption={this.translateInstitution}
+              <Selector
+                isDropdownToggleShown={highlight && institutions.length > 0}
+                currentSelectedOption={currentSelectedInstOption}
+                options={this.instOptions}
+                selectOption={this.updateInstitution}
+                toggleItemFreezed={this.props.toggleItemFreezed}
               />
             </td>
           }
@@ -474,5 +571,21 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object,
+  isItemFreezed: PropTypes.bool,
+  isAdmin: PropTypes.bool,
+  isLDAPImported: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
+  toggleItemFreezed: PropTypes.func.isRequired,
+  updateUser: PropTypes.func,
+  deleteUser: PropTypes.func,
+  updateAdminRole: PropTypes.func,
+  revokeAdmin: PropTypes.func,
+  onUserSelected: PropTypes.func,
+  isSearchResult: PropTypes.bool,
+};
 
 export default Content;

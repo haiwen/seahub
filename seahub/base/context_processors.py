@@ -18,21 +18,25 @@ from constance import config
 import seaserv
 
 from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
-    MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
+    MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT, \
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, APPLE_TOUCH_ICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, ENABLE_SEAFILE_AI, \
+    ENABLE_SEATABLE_INTEGRATION
 
+from seahub.organizations.models import OrgAdminSettings
+from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_CONVERTER_EXTENSIONS
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
+    IS_DB_SQLITE3
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -44,6 +48,7 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 try:
     from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
@@ -81,13 +86,22 @@ def base(request):
     # filter ajax/api request out
     avatar_url = ''
     username = request.user.username
-    if (not request.is_ajax()) and ("api2/" not in request.path) and \
+
+    if (not request.headers.get('x-requested-with') == 'XMLHttpRequest') and ("api2/" not in request.path) and \
             ("api/v2.1/" not in request.path):
 
         # get logo path
         custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
         if os.path.exists(custom_logo_file):
             logo_path = CUSTOM_LOGO_PATH
+
+        if ORG_ENABLE_ADMIN_CUSTOM_LOGO and org:
+            org_logo_url = OrgAdminSettings.objects.get_org_logo_url(org.org_id)
+            if org_logo_url:
+                logo_path = org_logo_url
+                from seahub.avatar.settings import AVATAR_FILE_STORAGE
+                if AVATAR_FILE_STORAGE == 'seahub.base.database_storage.DatabaseStorage':
+                    logo_path = "/image-view/" + logo_path
 
         # get favicon path
         custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)
@@ -118,6 +132,8 @@ def base(request):
         'site_name': get_site_name(),
         'enable_signup': config.ENABLE_SIGNUP,
         'enable_weixin': ENABLE_WEIXIN,
+        'enable_work_weixin': ENABLE_WORK_WEIXIN,
+        'enable_dingtalk': ENABLE_DINGTALK,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
@@ -143,17 +159,21 @@ def base(request):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
+        'is_db_sqlite3': IS_DB_SQLITE3,
         'is_docs': ENABLE_SEAFILE_DOCS,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
-        'enable_work_weixin': ENABLE_WORK_WEIXIN,
         'avatar_url': avatar_url if avatar_url else '',
         'privacy_policy_link': PRIVACY_POLICY_LINK,
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
+        'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
+        'enable_seadoc': ENABLE_SEADOC,
+        'enable_seafile_ai': ENABLE_SEAFILE_AI,
+        'enable_seatable_integration': ENABLE_SEATABLE_INTEGRATION
     }
 
     if request.user.is_staff:

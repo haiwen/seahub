@@ -17,6 +17,7 @@ from seahub.base.accounts import User
 from seahub.settings import INIT_PASSWD, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 from seahub.utils import IS_EMAIL_CONFIGURED
 from seahub.views.sysadmin import send_user_reset_email
+from seahub.profile.models import Profile
 
 from seahub.organizations.views import org_user_exists
 
@@ -62,8 +63,13 @@ class OrgAdminUserSetPassword(APIView):
         # send password reset email
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
+                send_to = user.username
+                profile = Profile.objects.get_profile_by_user(user.username)
+                if profile and profile.contact_email:
+                    send_to = profile.contact_email
+
                 try:
-                    send_user_reset_email(request, user.email, new_password)
+                    send_user_reset_email(request, send_to, new_password)
                 except Exception as e:
                     logger.error(str(e))
 

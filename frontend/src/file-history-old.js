@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
@@ -48,7 +48,7 @@ class FileHistory extends React.Component {
       }
       this.initNewRecords(res.data);
     });
-  }
+  };
 
   listOldHistoryRecords = (repoID, filePath) => {
     seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
@@ -59,7 +59,7 @@ class FileHistory extends React.Component {
       }
       this.initOldRecords(res.data);
     });
-  }
+  };
 
   initNewRecords(result) {
     if (result.total_count < 5) {
@@ -130,7 +130,7 @@ class FileHistory extends React.Component {
     if (isBottom && hasMore) {
       this.reloadMore();
     }
-  }
+  };
 
   reloadMore = () => {
     if (!this.state.isReloadingData) {
@@ -159,7 +159,7 @@ class FileHistory extends React.Component {
         }
       }
     }
-  }
+  };
 
   updateNewRecords(result) {
     this.setState({
@@ -198,7 +198,7 @@ class FileHistory extends React.Component {
         this.refershFileList();
       }
     });
-  }
+  };
 
   refershFileList() {
     if (useNewAPI) {
@@ -214,23 +214,24 @@ class FileHistory extends React.Component {
 
   onSearchedClick = (searchedItem) => {
     Utils.handleSearchedItemClick(searchedItem);
-  }
+  };
+
+  goBack = (e) => {
+    e.preventDefault();
+    window.history.back();
+  };
 
   render() {
     return (
       <Fragment>
         <div id="header" className="old-history-header">
-          <div className="logo">
-            <Logo showCloseSidePanelIcon={false}/>
-          </div>
-          <div className='toolbar'>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
-          </div>
+          <Logo showCloseSidePanelIcon={false} />
+          <CommonToolbar onSearchedClick={this.onSearchedClick} />
         </div>
         <div id="main" onScroll={this.onScrollHandler}>
           <div className="old-history-main">
             <Fragment>
-              <a href="javascript:window.history.back()" className="go-back" title="Back">
+              <a href="#" className="go-back" title="Back" onClick={this.goBack}>
                 <span className="fas fa-chevron-left"></span>
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
@@ -274,7 +275,4 @@ class FileHistory extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <FileHistory />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<FileHistory />, document.getElementById('wrapper'));

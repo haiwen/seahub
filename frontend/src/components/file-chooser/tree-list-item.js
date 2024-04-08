@@ -32,7 +32,7 @@ class TreeViewItem extends React.Component {
     } else {
       this.props.onNodeExpanded(node);
     }
-  }
+  };
 
   onItemClick = (e) => {
     e.stopPropagation();  // need prevent event popup
@@ -52,7 +52,7 @@ class TreeViewItem extends React.Component {
     } else {
       this.props.onDirentItemClick(this.state.filePath, this.props.node.object);
     }
-  }
+  };
 
   renderChildren = () => {
     let { node } = this.props;
@@ -77,7 +77,7 @@ class TreeViewItem extends React.Component {
         })}
       </div>
     );
-  }
+  };
 
   render() {
     let { node } = this.props;

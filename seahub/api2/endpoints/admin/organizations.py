@@ -11,6 +11,7 @@ from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
 
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.utils import is_valid_email
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -22,6 +23,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.role_permissions.utils import get_available_roles
+from seahub.organizations.models import OrgSAMLConfig
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -36,6 +38,11 @@ try:
     from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
+
+try:
+    from seahub.settings import ENABLE_MULTI_ADFS
+except ImportError:
+    ENABLE_MULTI_ADFS = False
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +84,15 @@ def get_org_detailed_info(org):
     groups = ccnet_api.get_org_groups(org_id, -1, -1)
     org_info['groups_count'] = len(groups)
 
+    # saml config
+    org_info['enable_saml_login'] = False
+    if ENABLE_MULTI_ADFS:
+        org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
+        if org_saml_config:
+            org_info['enable_saml_login'] = True
+            org_info['metadata_url'] = org_saml_config.metadata_url
+            org_info['domain'] = org_saml_config.domain
+
     return org_info
 
 def gen_org_url_prefix(max_trial=None, length=20):
@@ -90,7 +106,7 @@ def gen_org_url_prefix(max_trial=None, length=20):
         Url prefix if succed, otherwise, ``None``.
     """
     def _gen_prefix():
-        url_prefix = 'org_' + get_random_string(
+        url_prefix = 'org-' + get_random_string(
             length, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
         if ccnet_api.get_org_by_url_prefix(url_prefix) is not None:
             logger.error("org url prefix, %s is duplicated" % url_prefix)
@@ -191,8 +207,9 @@ class AdminOrganizations(APIView):
             error_msg = 'Failed to create organization, please try again later.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        vid = get_virtual_id_by_email(owner_email)
         try:
-            User.objects.get(email=owner_email)
+            User.objects.get(email=vid)
         except User.DoesNotExist:
             pass
         else:
@@ -391,6 +408,9 @@ class AdminOrganization(APIView):
 
             # remove org repos
             seafile_api.remove_org_repo_by_org_id(org_id)
+
+            # remove org saml config
+            OrgSAMLConfig.objects.filter(org_id=org_id).delete()
 
             # remove org
             ccnet_api.remove_org(org_id)

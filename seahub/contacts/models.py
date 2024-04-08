@@ -3,7 +3,7 @@
 from django import forms
 from django.db import models
 from django.forms import ModelForm
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.core.exceptions import MultipleObjectsReturned
 
 from seaserv import ccnet_threaded_rpc

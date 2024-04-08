@@ -21,6 +21,7 @@ from django.core.cache import cache
 from pysearpc import SearpcError
 from seaserv import seafile_api
 
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.accounts import User, ANONYMOUS_EMAIL
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url, \
@@ -55,7 +56,7 @@ def generate_file_lock_key_value(request):
         file_path_hash = hashlib.sha256(file_path.encode('utf8')).hexdigest()
         lock_cache_key = '_'.join(['HTTP_X_WOPI_LOCK', repo_id, file_path_hash])
 
-    x_wopi_lock = request.META.get('HTTP_X_WOPI_LOCK', None)
+    x_wopi_lock = request.headers.get('x-wopi-lock', None)
 
     return lock_cache_key, x_wopi_lock
 
@@ -229,7 +230,7 @@ class WOPIFilesView(APIView):
             dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
             if dirent:
                 last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
-                result['LastModifiedTime'] = last_modified.isoformat()
+                result['LastModifiedTime'] = last_modified.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
@@ -244,18 +245,23 @@ class WOPIFilesView(APIView):
 
         absolute_uri = request.build_absolute_uri('/')
         result['PostMessageOrigin'] = urllib.parse.urljoin(absolute_uri, SITE_ROOT).strip('/')
-        result['HideSaveOption'] = True
-        result['HideExportOption'] = True
+        result['HideSaveOption'] = True if not can_edit else False
+        result['HideExportOption'] = True if not can_download else False
         result['EnableOwnerTermination'] = True
         result['SupportsLocks'] = True
         result['SupportsGetLock'] = True
 
         result['DisablePrint'] = True if not can_download else False
         result['HidePrintOption'] = True if not can_download else False
+        result['DisableCopy'] = True if not can_download else False
+        result['DisableExport'] = True if not can_download else False
 
         result['SupportsUpdate'] = True if can_edit else False
         result['UserCanWrite'] = True if can_edit else False
         result['ReadOnly'] = True if not can_edit else False
+
+        avatar_url, _, _ = api_avatar_url(request_user, int(72))
+        result['UserExtraInfo'] = { 'avatar': avatar_url, 'mail': request_user }
 
         # new file creation feature is not implemented on wopi host(seahub)
         # hide save as button on view/edit file page
@@ -271,9 +277,9 @@ class WOPIFilesView(APIView):
                                     status=409,
                                     content_type=json_content_type)
 
-        x_wopi_override = request.META.get('HTTP_X_WOPI_OVERRIDE', None)
-        x_wopi_lock = request.META.get('HTTP_X_WOPI_LOCK', None)
-        x_wopi_oldlock = request.META.get('HTTP_X_WOPI_OLDLOCK', None)
+        x_wopi_override = request.headers.get('x-wopi-override', None)
+        x_wopi_lock = request.headers.get('x-wopi-lock', None)
+        x_wopi_oldlock = request.headers.get('x-wopi-oldlock', None)
         current_lock_id = get_current_lock_id(request)
 
         if x_wopi_override == 'LOCK':
@@ -445,14 +451,22 @@ class WOPIFilesContentsView(APIView):
             resp = requests.post(update_url, files=files, data=data)
             if resp.status_code != 200:
                 logger.error('update_url: {}'.format(update_url))
-                logger.error('parameter file: {}'.format(files['file'][:100]))
-                logger.error('parameter file_name: {}'.format(files['file_name']))
-                logger.error('parameter target_file: {}'.format(files['target_file']))
+                logger.error('parameter file: {}'.format(files['file'][1][:100]))
+                logger.error('parameter file_name: {}'.format(files['file'][0]))
+                logger.error('parameter target_file: {}'.format(data['target_file']))
                 logger.error('response: {}'.format(resp.__dict__))
+                return HttpResponse(json.dumps({}), status=500, content_type=json_content_type)
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
                                 content_type=json_content_type)
 
-        return HttpResponse(json.dumps({}), status=200,
-                            content_type=json_content_type)
+        result = dict()
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
+            if dirent:
+                last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
+                result['LastModifiedTime'] = last_modified.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        except Exception as e:
+            logger.error(e)
+        return HttpResponse(json.dumps(result), status=200, content_type=json_content_type)

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils.js';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
-import RoleEditor from '../../components/select-editor/role-editor';
+import RoleSelector from '../../components/single-selector';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
 import DeleteMemberDialog from '../../components/dialog/org-delete-member-dialog';
@@ -54,7 +54,7 @@ class OrgDepartmentItem extends React.Component {
     this.listOrgMembers(groupID);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listOrgGroupRepo(nextProps.groupID);
       this.listOrgMembers(nextProps.groupID);
@@ -68,7 +68,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listOrgMembers = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
@@ -82,7 +82,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSubDepartGroups = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
@@ -91,7 +91,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
@@ -100,15 +100,15 @@ class OrgDepartmentItem extends React.Component {
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     });
-  }
+  };
 
   onFreezedDepart = () => {
     this.setState({isDepartFreezed: true});
-  }
+  };
 
   onUnfreezedDepart = () => {
     this.setState({isDepartFreezed: false});
-  }
+  };
 
   onDepartmentNameChanged = (dept) => {
     this.setState({
@@ -119,43 +119,43 @@ class OrgDepartmentItem extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   onSubDepartChanged = () => {
     this.listSubDepartGroups(this.props.groupID);
-  }
+  };
 
   onRepoChanged = () => {
     this.listOrgGroupRepo(this.props.groupID);
-  }
+  };
 
   onMemberChanged = () => {
     this.listOrgMembers(this.props.groupID);
-  }
+  };
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
-  }
+  };
 
   showDeleteMemberDialog = (member) => {
     this.setState({ showDeleteMemberDialog: true, deletedMember: member });
-  }
+  };
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
-  }
+  };
 
   toggleAddRepoDialog = () => {
     this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
-  }
+  };
 
   toggleAddMemberDialog = () => {
     this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
-  }
+  };
 
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
-  }
+  };
 
   showDeleteDepartDialog = (subGroup) => {
     this.setState({
@@ -163,14 +163,14 @@ class OrgDepartmentItem extends React.Component {
       subGroupID: subGroup.id,
       subGroupName: subGroup.name
     });
-  }
+  };
 
   showSetGroupQuotaDialog = (subGroupID) => {
     this.setState({
       showSetGroupQuotaDialog: true,
       subGroupID: subGroupID
     });
-  }
+  };
 
   render() {
     const { members, repos, groups } = this.state;
@@ -396,28 +396,26 @@ class MemberItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false,
-      showRoleMenu: false,
+      highlight: false
     };
-    this.roles = ['Admin', 'Member'];
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
   }
 
   onMouseEnter = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: false });
-  }
+  };
 
-  toggleMemberRoleMenu = () => {
-    this.setState({ showRoleMenu: !this.state.showRoleMenu });
-  }
-
-  onChangeUserRole = (role) => {
-    let isAdmin = role === 'Admin' ? true : false;
+  onChangeUserRole = (roleOption) => {
+    let isAdmin = roleOption.value === 'Admin' ? true : false;
     seafileAPI.orgAdminSetGroupMemberRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
     }).catch(error => {
@@ -427,39 +425,43 @@ class MemberItem extends React.Component {
     this.setState({
       highlight: false,
     });
-  }
+  };
 
   render() {
     const member = this.props.member;
     const highlight = this.state.highlight;
     let memberLink = serviceURL + '/org/useradmin/info/' + member.email + '/';
     if (member.role === 'Owner') return null;
+
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == member.role;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
         <td><a href={memberLink}>{member.name}</a></td>
         <td>
-          <RoleEditor
-            isTextMode={true}
-            isEditIconShow={highlight}
-            currentRole={member.role}
-            roles={this.roles}
-            onRoleChanged={this.onChangeUserRole}
+          <RoleSelector
+            isDropdownToggleShown={highlight}
+            currentSelectedOption={currentSelectedOption}
+            options={this.roleOptions}
+            selectOption={this.onChangeUserRole}
             toggleItemFreezed={this.props.toggleItemFreezed}
           />
         </td>
-        {!this.props.isItemFreezed ?
-          <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-            <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-          </td> : <td></td>
-        }
+        <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
+          <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+        </td>
       </tr>
     );
   }
 }
 
 const MemberItemPropTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,
@@ -480,11 +482,11 @@ class RepoItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({ highlight: false });
-  }
+  };
 
   render() {
     const repo = this.props.repo;
@@ -528,7 +530,7 @@ class GroupItem extends React.Component {
         highlight: true
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -537,7 +539,7 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -553,7 +555,7 @@ class GroupItem extends React.Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     const { group } = this.props;
@@ -567,7 +569,7 @@ class GroupItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -575,13 +577,13 @@ class GroupItem extends React.Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleRenameDialog = () => {
     this.setState({
       isRenameDialogOpen: !this.state.isRenameDialogOpen
     });
-  }
+  };
 
   render() {
     const group = this.props.group;

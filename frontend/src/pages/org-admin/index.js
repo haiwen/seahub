@@ -1,8 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router } from '@reach/router';
-import { siteRoot } from '../../utils/constants';
+import ReactDom from 'react-dom';
+import { Router } from '@gatsbyjs/reach-router';
+import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import SidePanel from './side-panel';
+
+import OrgStatisticFile from './statistic/statistic-file';
+import OrgStatisticStorage from './statistic/statistic-storage';
+import OrgStatisticTraffic from './statistic/statistic-traffic';
+import OrgStatisticUsers from './statistic/statistic-users';
+import OrgStatisticReport from './statistic/statistic-reports';
+import OrgDesktopDevices from './devices/desktop-devices';
+import OrgMobileDevices from './devices/mobile-devices';
+import OrgDevicesErrors from './devices/devices-errors';
+import OrgWebSettings from './web-settings/web-settings';
 import OrgUsers from './org-users-users';
 import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
@@ -24,6 +34,7 @@ import OrgLogs from './org-logs';
 import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
+import OrgSAMLConfig from './org-saml-config';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
@@ -44,6 +55,12 @@ class Org extends React.Component {
     if (location.href.indexOf(`${siteRoot}org/useradmin`) != -1) {
       currentTab = 'users';
     }
+    if (location.href.indexOf(`${siteRoot}org/statistics-admin/`) != -1) {
+      currentTab = 'statistics-admin';
+    }
+    if (location.href.indexOf(`${siteRoot}org/deviceadmin/`) != -1) {
+      currentTab = 'deviceadmin';
+    }
     if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
       currentTab = 'groupadmin';
     }
@@ -55,20 +72,29 @@ class Org extends React.Component {
 
   onCloseSidePanel = () => {
     this.setState({isSidePanelClosed: !this.state.isSidePanelClosed});
-  }
+  };
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});
-  }
+  };
 
   render() {
     let { isSidePanelClosed, currentTab } = this.state;
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
-        <div className="main-panel o-hidden">
+        <div className="main-panel">
           <Router className="reach-router">
-            <OrgInfo path={siteRoot + 'org/orgmanage'}/>
+            <OrgInfo path={siteRoot + 'org/info/'} />
+            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} />
+            <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
+            <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
+            <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
+            <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
+            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
+            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
+            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
+            <OrgWebSettings path={siteRoot + 'org/web-settings'} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
@@ -91,6 +117,9 @@ class Org extends React.Component {
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
             </OrgLogs>
+            {enableMultiADFS &&
+              <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
+            }
           </Router>
         </div>
       </div>
@@ -98,7 +127,4 @@ class Org extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Org />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<Org />, document.getElementById('wrapper'));

@@ -8,7 +8,7 @@ import logging
 import posixpath
 
 from django.urls import reverse
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.encoding import smart_str
 
 import seaserv

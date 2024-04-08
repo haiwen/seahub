@@ -10,10 +10,14 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.db import connection
 from django.db.models import Q
 from django.core.cache import cache
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.timezone import make_naive, is_aware
+import ldap
+from ldap import sasl
+from ldap.controls.libldap import SimplePagedResultsControl
 
 from seaserv import seafile_api, ccnet_api
 
@@ -21,7 +25,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.models import TokenV2
-
+from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
     SEND_EMAIL_ON_RESETTING_USER_PASSWD
@@ -37,7 +41,7 @@ from seahub.utils import is_valid_username2, is_org_context, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
 
-from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.file_size import get_file_size_unit, byte_to_kb
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
@@ -53,12 +57,174 @@ from seahub.admin_log.models import USER_DELETE, USER_ADD
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
+from seahub.auth.utils import get_virtual_id_by_email
+from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
+from seahub.settings import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, ENABLE_SSO_USER_CHANGE_PASSWORD
+
+try:
+    from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR
+except ImportError:
+    LDAP_SERVER_URL = ''
+    LDAP_BASE_DN = ''
+    LDAP_ADMIN_DN = ''
+    LDAP_ADMIN_PASSWORD = ''
+    LDAP_LOGIN_ATTR = ''
+
+try:
+    from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, \
+         MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR
+except ImportError:
+    ENABLE_MULTI_LDAP = False
+    MULTI_LDAP_1_SERVER_URL = ''
+    MULTI_LDAP_1_BASE_DN = ''
+    MULTI_LDAP_1_ADMIN_DN = ''
+    MULTI_LDAP_1_ADMIN_PASSWORD = ''
+    MULTI_LDAP_1_LOGIN_ATTR = ''
+
+
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+LDAP_USER_OBJECT_CLASS = getattr(settings, 'LDAP_USER_OBJECT_CLASS', 'person')
+MULTI_LDAP_1_USER_OBJECT_CLASS = getattr(settings, 'MULTI_LDAP_1_USER_OBJECT_CLASS', 'person')
+MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
+MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
+MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
+MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+
+class UserObj(object):
+    def __init__(self, email, ctime, is_staff, is_active, role):
+        self.email = email
+        self.ctime = ctime
+        self.is_staff = is_staff
+        self.is_active = is_active
+        self.role = role
+
+
+def get_user_objs_from_ccnet(email_list):
+    db_name, error_msg = get_ccnet_db_name()
+    if error_msg:
+        logger.error(error_msg)
+        return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+    if not email_list:
+        return list(), None
+
+    sql = """SELECT e.email, is_staff, is_active, ctime, role FROM `%s`.`EmailUser` e
+             LEFT JOIN `%s`.`UserRole` r ON e.email=r.email WHERE e.email IN %%s""" % (db_name, db_name)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql, (email_list,))
+            res = cursor.fetchall()
+    except Exception as e:
+        logger.error('Failed to query email_user object list from ccnet_db, error: %s.' % e)
+        return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+    user_objs = list()
+    for email, is_staff, is_active, ctime, role in res:
+        user_objs.append(UserObj(email, ctime, is_staff, is_active, role))
+
+    return user_objs, None
+
+
+def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
+    bind_conn = ldap.initialize(server_url)
+
+    try:
+        bind_conn.set_option(ldap.OPT_REFERRALS, 0)
+    except Exception as e:
+        raise Exception('Failed to set referrals option: %s' % e)
+
+    try:
+        bind_conn.protocol_version = ldap.VERSION3
+        if enable_sasl and sasl_mechanism:
+            sasl_cb_value_dict = {}
+            if sasl_mechanism != 'EXTERNAL' and sasl_mechanism != 'GSSAPI':
+                sasl_cb_value_dict = {
+                    sasl.CB_AUTHNAME: authc_id,
+                    sasl.CB_PASS: password,
+                }
+            sasl_auth = sasl.sasl(sasl_cb_value_dict, sasl_mechanism)
+            bind_conn.sasl_interactive_bind_s('', sasl_auth)
+        else:
+            bind_conn.simple_bind_s(dn, password)
+    except Exception as e:
+        raise Exception('Failed to bind ldap server: %s' % e)
+
+    return bind_conn
+
+
+def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism, base_dn,
+                   login_attr, serch_filter, object_class):
+    try:
+        admin_bind = ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
+    except Exception as e:
+        raise Exception(e)
+
+    if serch_filter:
+        filterstr = '(&(objectClass=%s)(%s))' % (object_class, serch_filter)
+    else:
+        filterstr = '(objectClass=%s)' % object_class
+
+    result_data = []
+    attr_list = [login_attr]
+    base_list = base_dn.split(';')
+    for base in base_list:
+        if base == '':
+            continue
+        ctrl = SimplePagedResultsControl(True, size=100, cookie='')
+        while True:
+            try:
+                result = admin_bind.search_ext(base, ldap.SCOPE_SUBTREE, filterstr, attr_list, serverctrls=[ctrl])
+                rtype, rdata, rmsgid, ctrls = admin_bind.result3(result)
+            except Exception as e:
+                raise Exception('Failed to get users from ldap server: %s.' % e)
+
+            result_data.extend(rdata)
+
+            page_ctrls = [c for c in ctrls if c.controlType == SimplePagedResultsControl.controlType]
+            if not page_ctrls or not page_ctrls[0].cookie:
+                break
+            ctrl.cookie = page_ctrls[0].cookie
+
+    # get ldap user's uid list, uid means login_attr, likes: ['uid1', 'uid2', 'uid3', 'uid5', ...]
+    ldap_uid_list = list()
+    for pair in result_data:
+        user_dn, attrs = pair
+        if not isinstance(attrs, dict):
+            continue
+        if login_attr not in attrs:
+            continue
+        uid = attrs[login_attr][0].lower().decode()
+        ldap_uid_list.append(uid)
+
+    # get uid_email_map, likes {'uid2': '2@2.com', 'uid3': '3@3.com', 'uid4': '4@4.com', ...}
+    imported_ldap_users = SocialAuthUser.objects.filter(provider__in=[LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER],
+                                                        uid__in=ldap_uid_list)
+    uid_email_map = dict()
+    for user in imported_ldap_users:
+        uid_email_map[user.uid] = user.username
+
+    users = list()
+    email_list = list()
+    for uid in ldap_uid_list:
+        if uid in uid_email_map:
+            email_list.append(uid_email_map[uid])
+        else:
+            users.append(UserObj(uid, None, None, None, None))
+
+    user_objs, error = get_user_objs_from_ccnet(email_list)
+    if error:
+        raise Exception('Failed to query email_user object list from ccnet_db.')
+    users.extend(user_objs)
+
+    return users
 
 
 def get_user_last_access_time(email, last_login_time):
@@ -180,7 +346,9 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
-                     nickname, login_id, contact_email, reference_id, quota_total_mb, institution_name):
+                     nickname, login_id, contact_email, reference_id,
+                     quota_total_mb, institution_name,
+                     upload_rate_limit, download_rate_limit):
 
     # update basic user info
     if is_active is not None:
@@ -238,6 +406,12 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         except Exception as e:
             logger.error(e)
             seafile_api.set_user_quota(email, -1)
+
+    if is_pro_version() and upload_rate_limit is not None:
+        seafile_api.set_user_upload_rate_limit(email, upload_rate_limit * 1000)
+
+    if is_pro_version() and download_rate_limit is not None:
+        seafile_api.set_user_download_rate_limit(email, download_rate_limit * 1000)
 
 
 def get_user_info(email):
@@ -377,7 +551,16 @@ class AdminUsers(APIView):
         if source == 'db':
             users = ccnet_api.get_emailusers('DB', -1, -1)
         else:
-            users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+            email_list = list()
+            if ENABLE_LDAP:
+                ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                email_list.extend([user.username for user in ldap_users])
+            if ENABLE_MULTI_LDAP:
+                multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                email_list.extend([user.username for user in multi_ldap_users])
+            users, error = get_user_objs_from_ccnet(email_list)
+            if error:
+                return error
 
         for user in users:
             email = user.email
@@ -488,10 +671,13 @@ class AdminUsers(APIView):
                 users = ccnet_api.get_emailusers('DB', start, per_page)
 
         elif source == 'ldapimport':
+            ldap_users_count = multi_ldap_users_count = 0
+            if ENABLE_LDAP:
+                ldap_users_count = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER).count()
+            if ENABLE_MULTI_LDAP:
+                multi_ldap_users_count = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER).count()
+            total_count = ldap_users_count + multi_ldap_users_count
 
-            # api param is 'LDAP', but actually get count of 'LDAPImport' users
-            total_count = ccnet_api.count_emailusers('LDAP') + \
-                          ccnet_api.count_inactive_emailusers('LDAP')
             if order_by:
 
                 if total_count > 500 and \
@@ -512,7 +698,17 @@ class AdminUsers(APIView):
                 result = {'data': data, 'total_count': total_count}
                 return Response(result)
             else:
-                users = ccnet_api.get_emailusers('LDAPImport', start, per_page)
+                email_list = list()
+                if ENABLE_LDAP:
+                    ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                    email_list.extend([user.username for user in ldap_users])
+                if ENABLE_MULTI_LDAP:
+                    multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                    email_list.extend([user.username for user in multi_ldap_users])
+                all_ldap_users, error = get_user_objs_from_ccnet(email_list)
+                if error:
+                    return error
+                users = all_ldap_users[start: start + per_page]
 
         data = []
         for user in users:
@@ -613,11 +809,6 @@ class AdminUsers(APIView):
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        contact_email = request.data.get('contact_email', None)
-        if contact_email and not is_valid_email(contact_email):
-            error_msg = 'contact_email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
             try:
@@ -638,8 +829,9 @@ class AdminUsers(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        vid = get_virtual_id_by_email(email)
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=vid)
             user_exist = True
         except User.DoesNotExist:
             user_exist = False
@@ -657,7 +849,7 @@ class AdminUsers(APIView):
         try:
             user_obj = User.objects.create_user(email, password, is_staff, is_active)
             create_user_info(request, email=user_obj.username, role=role,
-                             nickname=name, contact_email=contact_email,
+                             nickname=name, contact_email=email,
                              quota_total_mb=quota_total_mb)
         except Exception as e:
             logger.error(e)
@@ -679,7 +871,7 @@ class AdminUsers(APIView):
                 logger.error(str(e))
                 add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
 
-        user_info = get_user_info(email)
+        user_info = get_user_info(user_obj.username)
         user_info['add_user_tip'] = add_user_tip
 
         # send admin operation log signal
@@ -690,7 +882,7 @@ class AdminUsers(APIView):
                              operation=USER_ADD, detail=admin_op_detail)
 
         if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(email)
+            UserOptions.objects.set_force_passwd_change(user_obj.email)
 
         return Response(user_info)
 
@@ -707,6 +899,9 @@ class AdminLDAPUsers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+        if not ENABLE_LDAP:
+            error_msg = 'Feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -719,9 +914,31 @@ class AdminLDAPUsers(APIView):
             per_page = 25
 
         start = (page - 1) * per_page
-        end = page * per_page + 1
-        users = ccnet_api.get_emailusers('LDAP', start, end)
+        end = page * per_page
+        try:
+            ldap_users = get_ldap_users(LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD,
+                                        ENABLE_SASL, SASL_MECHANISM, LDAP_BASE_DN, LDAP_LOGIN_ATTR,
+                                        LDAP_FILTER, LDAP_USER_OBJECT_CLASS)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        multi_ldap_users = list()
+        if ENABLE_MULTI_LDAP:
+            try:
+                multi_ldap_users = get_ldap_users(MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN,
+                                                  MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_ENABLE_SASL,
+                                                  MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_BASE_DN,
+                                                  MULTI_LDAP_1_LOGIN_ATTR, MULTI_LDAP_1_FILTER,
+                                                  MULTI_LDAP_1_USER_OBJECT_CLASS)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        users = ldap_users + multi_ldap_users
+        users = users[start: end]
         if len(users) == end - start:
             users = users[:per_page]
             has_next_page = True
@@ -995,6 +1212,18 @@ class AdminUser(APIView):
 
         user_info = get_user_info(email)
         user_info['avatar_url'], _, _ = api_avatar_url(email, avatar_size)
+        if is_pro_version():
+            user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
+            user_info['download_rate_limit'] = byte_to_kb(seafile_api.get_user_download_rate_limit(email))
+
+        last_login_obj = UserLastLogin.objects.get_by_username(email)
+        if last_login_obj:
+            user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+            user_info['last_access_time'] = get_user_last_access_time(email,
+                                                                      last_login_obj.last_login)
+        else:
+            user_info['last_login'] = ''
+            user_info['last_access_time'] = get_user_last_access_time(email, '')
 
         return Response(user_info)
 
@@ -1097,6 +1326,40 @@ class AdminUser(APIView):
                 error_msg = 'Institution %s does not exist' % institution
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        upload_rate_limit = request.data.get("upload_rate_limit", None)
+        if upload_rate_limit:
+
+            if not is_pro_version():
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            try:
+                upload_rate_limit = int(upload_rate_limit)
+            except ValueError:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if upload_rate_limit < 0:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        download_rate_limit = request.data.get("download_rate_limit", None)
+        if download_rate_limit:
+
+            if not is_pro_version():
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            try:
+                download_rate_limit = int(download_rate_limit)
+            except ValueError:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if download_rate_limit < 0:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # query user info
         try:
             user_obj = User.objects.get(email=email)
@@ -1105,9 +1368,20 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_user_info(request, user=user_obj, password=password, is_active=is_active, is_staff=is_staff,
-                             role=role, nickname=name, login_id=login_id, contact_email=contact_email,
-                             reference_id=reference_id, quota_total_mb=quota_total_mb, institution_name=institution)
+            update_user_info(request,
+                             user=user_obj,
+                             password=password,
+                             is_active=is_active,
+                             is_staff=is_staff,
+                             role=role,
+                             nickname=name,
+                             login_id=login_id,
+                             contact_email=contact_email,
+                             reference_id=reference_id,
+                             quota_total_mb=quota_total_mb,
+                             institution_name=institution,
+                             upload_rate_limit=upload_rate_limit,
+                             download_rate_limit=download_rate_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -1138,6 +1412,9 @@ class AdminUser(APIView):
 
         user_info = get_user_info(email)
         user_info['update_status_tip'] = update_status_tip
+        if is_pro_version():
+            user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
+            user_info['download_rate_limit'] = byte_to_kb(seafile_api.get_user_download_rate_limit(email))
 
         return Response(user_info)
 
@@ -1190,12 +1467,47 @@ class AdminUserResetPassword(APIView):
             error_msg = 'email invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        has_bind_social_auth = False
+        if SocialAuthUser.objects.filter(username=email).exists():
+            has_bind_social_auth = True
+
+        can_reset_password = True
+        if has_bind_social_auth and (not ENABLE_SSO_USER_CHANGE_PASSWORD):
+            can_reset_password = False
+
+        if not can_reset_password:
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
+
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if IS_EMAIL_CONFIGURED and profile and profile.contact_email:
+
+            from seahub.utils import get_site_name
+            from django.utils.http import int_to_base36
+            from seahub.auth.tokens import default_token_generator
+
+            site_name = get_site_name()
+            contact_email = profile.contact_email
+            email_template_name = 'sysadmin/short_time_linving_password_reset_link.html'
+            c = {
+                'email': contact_email,
+                'uid': int_to_base36(user.id),
+                'user': user,
+                'token': default_token_generator.make_token(user),
+            }
+
+            send_html_email(_("Reset Password on %s") % site_name,
+                            email_template_name, c, None,
+                            [email2contact_email(user.username)])
+
+            reset_tip = _(f'A password reset link has been sent to {contact_email}.')
+            return Response({'reset_tip': reset_tip})
 
         if isinstance(INIT_PASSWD, FunctionType):
             new_password = INIT_PASSWD()
@@ -1214,8 +1526,8 @@ class AdminUserResetPassword(APIView):
                 try:
                     send_html_email(_(u'Password has been reset on %s') % get_site_name(),
                                     'sysadmin/user_reset_email.html', c, None, [contact_email])
-                    reset_tip = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
-                        {'passwd': new_password, 'user': contact_email}
+                    reset_tip = _('Successfully reset password, an email has been sent to %(user)s.') % \
+                        {'user': contact_email}
                 except Exception as e:
                     logger.warning(e)
                     reset_tip = _('Successfully reset password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \

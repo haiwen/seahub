@@ -2,4 +2,4 @@
 from django.dispatch import Signal
 
 # A new org is created
-org_created = Signal(providing_args=['org'])
+org_created = Signal()

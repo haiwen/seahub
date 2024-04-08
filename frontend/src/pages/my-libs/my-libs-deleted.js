@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { gettext, siteRoot, lang, trashReposExpireDays } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -38,7 +39,7 @@ class MyLibsDeleted extends Component {
       return item.repo_id !== repoID;
     });
     this.setState({deletedRepoList: deletedRepoList});
-  }
+  };
 
   render() {
     return (
@@ -95,7 +96,7 @@ class DeletedRepoTable extends Component {
           </tr>
         </thead>
         <tbody>
-          { deletedRepos && deletedRepos.map((item) => {
+          {deletedRepos && deletedRepos.map((item) => {
             return (
               <DeletedRepoItem
                 key={item.repo_id}
@@ -110,6 +111,11 @@ class DeletedRepoTable extends Component {
   }
 }
 
+DeletedRepoTable.propTypes = {
+  deletedRepoList: PropTypes.array.isRequired,
+  refreshDeletedRepoList: PropTypes.func.isRequired,
+};
+
 class DeletedRepoItem extends Component {
   constructor(props) {
     super(props);
@@ -120,22 +126,18 @@ class DeletedRepoItem extends Component {
   }
 
   onMouseEnter = () => {
-    if (!this.props.isItemFreezed) {
-      this.setState({
-        hideRestoreMenu: false,
-        highlight: true,
-      });
-    }
-  }
+    this.setState({
+      hideRestoreMenu: false,
+      highlight: true,
+    });
+  };
 
   onMouseLeave = () => {
-    if (!this.props.isItemFreezed) {
-      this.setState({
-        hideRestoreMenu: true,
-        highlight: false,
-      });
-    }
-  }
+    this.setState({
+      hideRestoreMenu: true,
+      highlight: false,
+    });
+  };
 
   restoreDeletedRepo = (e) => {
     e.preventDefault();
@@ -152,7 +154,7 @@ class DeletedRepoItem extends Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let localTime = moment.utc(this.props.repo.del_time).toDate();
@@ -179,5 +181,14 @@ class DeletedRepoItem extends Component {
     );
   }
 }
+
+DeletedRepoItem.propTypes = {
+  repo: PropTypes.object.isRequired,
+  refreshDeletedRepoList: PropTypes.func.isRequired,
+};
+
+MyLibsDeleted.propTypes = {
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 export default MyLibsDeleted;

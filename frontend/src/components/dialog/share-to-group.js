@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import Select from 'react-select';
 import { gettext, isPro, enableShareToDepartment } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import { SeahubSelect, NoGroupMessage } from '../common/select';
 
 class GroupItem extends React.Component {
 
@@ -19,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_info.id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -45,6 +45,7 @@ class GroupItem extends React.Component {
           <SharePermissionEditor
             repoID={this.props.repoID}
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
@@ -67,6 +68,14 @@ class GroupItem extends React.Component {
     );
   }
 }
+
+GroupItem.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 class GroupList extends React.Component {
 
@@ -91,6 +100,14 @@ class GroupList extends React.Component {
   }
 }
 
+GroupList.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -98,12 +115,6 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   onAddCustomPermissionToggle: PropTypes.func,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
-  );
 };
 
 class ShareToGroup extends React.Component {
@@ -134,7 +145,7 @@ class ShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -162,7 +173,7 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let path = this.props.itemPath;
@@ -177,24 +188,20 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
-    let groups = [];
+
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     let isGroupOwnedRepo = this.props.isGroupOwnedRepo;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        groups[i] = this.state.selectedOption[i].id;
-      }
-    }
+
     if (isGroupOwnedRepo) {
-      seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, groups, path).then(res => {
+      seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, this.state.selectedOption['id'], path).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -223,7 +230,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups).then(res => {
+      seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, [this.state.selectedOption['id']]).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -242,7 +249,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let path = this.props.itemPath;
@@ -266,7 +273,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let path = this.props.itemPath;
@@ -287,7 +294,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_info.id;
@@ -300,7 +307,7 @@ class ShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     const thead = (
@@ -319,15 +326,13 @@ class ShareToGroup extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
-                  isMulti
+                <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.state.options}
-                  placeholder={gettext('Select groups...')}
+                  placeholder={gettext('Select groups')}
                   maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
+                  components={{ NoOptionsMessage: NoGroupMessage }}
                 />
               </td>
               <td>

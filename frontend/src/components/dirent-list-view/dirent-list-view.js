@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled, canGenerateShareLink } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
-import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import toaster from '../toast';
@@ -43,13 +42,18 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
-  loadDirentList: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
+  posX: PropTypes.string,
+  posY: PropTypes.string,
 };
 
 class DirentListView extends React.Component {
@@ -96,11 +100,11 @@ class DirentListView extends React.Component {
 
   freezeItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   unfreezeItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onItemRename = (dirent, newName) => {
     let isDuplicated = this.props.direntList.some(item => {
@@ -113,69 +117,60 @@ class DirentListView extends React.Component {
       return false;
     }
     this.props.onItemRename(dirent, newName);
-  }
+  };
 
   onItemRenameToggle = () => {
     this.freezeItem();
-  }
+  };
 
   onItemSelected = (dirent) => {
     this.setState({activeDirent: null});
     this.props.onItemSelected(dirent);
-  }
+  };
 
   onDirentClick = (dirent) => {
+    hideMenu();
     if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent ) {
       return;
     }
     this.setState({activeDirent: dirent});
     this.props.onDirentClick(dirent);
-  }
+  };
 
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   // for image popup
   prepareImageItem = (item) => {
-    const useThumbnail = !this.repoEncrypted;
     const name = item.name;
-
-    const fileExt = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
-    const isGIF = fileExt == 'gif';
-
-    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
     const repoID = this.props.repoID;
-    let src;
-    if (useThumbnail && !isGIF) {
-      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
-    } else {
-      src = `${siteRoot}repo/${repoID}/raw${path}`;
-    }
+    const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
+    const src = `${siteRoot}repo/${repoID}/raw${path}`;
 
     return {
       'name': name,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'src': src
     };
-  }
+  };
 
   showImagePopup = (curItem) => {
     let items = this.props.fullDirentList.filter((item) => {
@@ -191,43 +186,41 @@ class DirentListView extends React.Component {
       imageItems: imageItems,
       imageIndex: items.indexOf(curItem)
     });
-  }
+  };
 
   moveToPrevImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
     }));
-  }
+  };
 
   moveToNextImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
-  }
+  };
 
   closeImagePopup = () => {
     this.setState({isImagePopupOpen: false});
-  }
+  };
 
-  onCreateFileToggle = () => {
-    this.setState({isCreateFileDialogShow: !this.state.isCreateFileDialogShow});
-  }
+  onCreateFileToggle = (fileType) => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: fileType || ''
+    });
+  };
 
   onCreateFolderToggle = () => {
     this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
+  };
 
   onAddFolder = (dirPath) => {
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
@@ -235,15 +228,15 @@ class DirentListView extends React.Component {
       return object.name === newName;
     });
     return isDuplicated;
-  }
+  };
 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
@@ -264,19 +257,19 @@ class DirentListView extends React.Component {
         downloadItems: selectedDirentNames
       });
     }
-  }
+  };
 
   onCloseZipDownloadDialog = () => {
     this.setState({isProgressDialogShow: false});
-  }
+  };
 
   // common contextmenu handle
   onMouseDown = (event) => {
-    event.stopPropagation();
     if (event.button === 2) {
+      event.stopPropagation();
       return;
     }
-  }
+  };
 
   handleContextClick = (event, id, menuList, currentObject = null) => {
     event.preventDefault();
@@ -307,18 +300,19 @@ class DirentListView extends React.Component {
     }
 
     showMenu(showMenuConfig);
-  }
+  };
 
   // table-container contextmenu handle
   onContainerClick = () => {
+    hideMenu();
     if (this.state.activeDirent) {
       this.onDirentClick(null);
     }
-  }
+  };
 
   onContainerMouseDown = (event) => {
     this.onMouseDown(event);
-  }
+  };
 
   onContainerContextMenu = (event) => {
     event.preventDefault();
@@ -330,16 +324,36 @@ class DirentListView extends React.Component {
       return;
     }
 
+    const {
+      NEW_FOLDER, NEW_FILE,
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE,
+      NEW_SEADOC_FILE
+    } = TextTranslation;
+
+    const direntsContainerMenuList = [
+      NEW_FOLDER, NEW_FILE, 'Divider',
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE
+    ];
+    if (enableSeadoc) {
+      direntsContainerMenuList.push(NEW_SEADOC_FILE);
+    }
+
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
-      
+
       // custom permission judgement
       if (isCustomPermission) {
-        const { modify } = customPermission.permission;
-        if (!modify) return;
+        const { create: canCreate } = customPermission.permission;
+        if (!canCreate) return;
       }
 
-      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+      let menuList = direntsContainerMenuList;
       this.handleContextClick(event, id, menuList);
     } else {
       if (this.props.selectedDirentList.length === 1) {
@@ -361,7 +375,8 @@ class DirentListView extends React.Component {
 
           setTimeout(() => {
             let id = 'dirent-container-menu';
-            let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+
+            let menuList = direntsContainerMenuList;
             this.handleContextClick(event, id, menuList);
           }, 0);
         }
@@ -369,7 +384,7 @@ class DirentListView extends React.Component {
         let id = 'dirents-menu';
         let menuList = [];
         if (isCustomPermission) {
-          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
+          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
           canModify && menuList.push(TextTranslation.MOVE);
           canCopy && menuList.push(TextTranslation.COPY);
           canDownload && menuList.push(TextTranslation.DOWNLOAD);
@@ -381,7 +396,7 @@ class DirentListView extends React.Component {
         this.handleContextClick(event, id, menuList);
       }
     }
-  }
+  };
 
   onContainerMenuItemClick = (operation) => {
     switch(operation) {
@@ -391,12 +406,27 @@ class DirentListView extends React.Component {
       case 'New File':
         this.onCreateFileToggle();
         break;
+      case 'New Markdown File':
+        this.onCreateFileToggle('.md');
+        break;
+      case 'New Excel File':
+        this.onCreateFileToggle('.xlsx');
+        break;
+      case 'New PowerPoint File':
+        this.onCreateFileToggle('.pptx');
+        break;
+      case 'New Word File':
+        this.onCreateFileToggle('.docx');
+        break;
+      case 'New SeaDoc File':
+        this.onCreateFileToggle('.sdoc');
+        break;
       default:
         break;
     }
 
     hideMenu();
-  }
+  };
 
   onDirentsMenuItemClick = (operation) => {
     switch(operation) {
@@ -417,21 +447,21 @@ class DirentListView extends React.Component {
     }
 
     hideMenu();
-  }
+  };
 
   // table-thread contextmenu handle -- Shield event
   onThreadMouseDown = (event) => {
     this.onMouseDown(event);
-  }
+  };
 
   onThreadContextMenu = (event) => {
     event.stopPropagation();
-  }
+  };
 
   // table-dirent-item contextmenu handle
   onItemMouseDown = (event) => {
     this.onMouseDown(event);
-  }
+  };
 
   onItemContextMenu = (event, dirent) => {
     // Display menu items according to the current dirent permission
@@ -442,26 +472,26 @@ class DirentListView extends React.Component {
     let id = 'dirent-item-menu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
-  }
+  };
 
   setDirentItemRef = (index) => item => {
     this.direntItems[index] = item;
-  }
+  };
 
   onMenuItemClick = (operation, currentObject, event) => {
     let index = this.getDirentIndex(currentObject);
     this.direntItems[index].onMenuItemClick(operation, event);
 
     hideMenu();
-  }
+  };
 
   onShowMenu = (e) => {
     this.freezeItem();
-  }
+  };
 
   onHideMenu = (e) => {
     this.unfreezeItem();
-  }
+  };
 
   // contextmenu utils
   getDirentIndex = (dirent) => {
@@ -474,13 +504,13 @@ class DirentListView extends React.Component {
       }
     }
     return index;
-  }
+  };
 
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
     return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
-  }
+  };
 
   onTableDragEnter = (e) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -493,7 +523,7 @@ class DirentListView extends React.Component {
       }
       this.setState({isListDropTipShow: true});
     }
-  }
+  };
 
   onTableDragOver = (e) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -504,7 +534,7 @@ class DirentListView extends React.Component {
     }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  }
+  };
 
   onTableDragLeave = (e) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -514,7 +544,7 @@ class DirentListView extends React.Component {
     if (this.enteredCounter === 0) {
       this.setState({isListDropTipShow: false});
     }
-  }
+  };
 
   tableDrop = (e) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -544,19 +574,19 @@ class DirentListView extends React.Component {
     }
 
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, this.props.path, nodeParentPath);
-  }
+  };
 
   onShowDirentsDraggablePreview = () => {
     this.setState({
       isShowDirentsDraggablePreview: true,
     });
-  }
+  };
 
   onHideDirentsDraggablePreview = () => {
     this.setState({
       isShowDirentsDraggablePreview: false
     });
-  }
+  };
 
   render() {
     const { direntList, sortBy, sortOrder } = this.props;
@@ -631,6 +661,7 @@ class DirentListView extends React.Component {
                   onItemRename={this.onItemRename}
                   onItemMove={this.props.onItemMove}
                   onItemCopy={this.props.onItemCopy}
+                  onItemConvert={this.props.onItemConvert}
                   updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
                   freezeItem={this.freezeItem}
@@ -641,6 +672,7 @@ class DirentListView extends React.Component {
                   onItemContextMenu={this.onItemContextMenu}
                   selectedDirentList={this.props.selectedDirentList}
                   activeDirent={this.state.activeDirent}
+                  repoTags={this.props.repoTags}
                   onFileTagChanged={this.props.onFileTagChanged}
                   getDirentItemMenuList={this.getDirentItemMenuList}
                   showDirentDetail={this.props.showDirentDetail}
@@ -702,9 +734,9 @@ class DirentListView extends React.Component {
               <CreateFile
                 parentPath={this.props.path}
                 fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
+                onAddFile={this.props.onAddFile}
                 checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
+                toggleDialog={this.onCreateFileToggle}
               />
             </ModalPortal>
           )}

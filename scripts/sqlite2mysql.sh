@@ -89,6 +89,9 @@ else
     fi
 fi
 
+# remove reporter field in custom_share_permission
+sed 's/`permission` , `reporter` text NOT NULL/`permission` longtext NOT NULL/g' ${SEAHUB_DB} > ${SEAHUB_DB}.tmp && mv ${SEAHUB_DB}.tmp ${SEAHUB_DB}
+
 # change username from VARCHAR(256) to VARCHAR(255) in wiki_personalwiki
 sed 's/varchar(256) NOT NULL UNIQUE/varchar(255) NOT NULL UNIQUE/g' ${SEAHUB_DB} > ${SEAHUB_DB}.tmp && mv ${SEAHUB_DB}.tmp ${SEAHUB_DB}
 

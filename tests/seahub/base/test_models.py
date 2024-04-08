@@ -1,6 +1,6 @@
 import hashlib
 
-from seahub.base.models import FileComment
+from seahub.base.models import FileComment, ClientSSOToken
 from seahub.test_utils import BaseTestCase
 from seahub.tags.models import FileUUIDMap
 
@@ -89,3 +89,11 @@ class FileCommentTest(BaseTestCase):
                     comment='test comment').save()
 
         assert len(FileComment.objects.all()) == 1
+
+
+class ClientSSOTokenManagerTest(BaseTestCase):
+    def test_new(self):
+        t = ClientSSOToken.objects.new()
+        assert len(t.token) == 60
+        assert t.created_at is not None
+        assert t.api_key is None

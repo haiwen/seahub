@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import ToastManager from './toastManager';
 
 const isBrowser =
@@ -17,7 +17,7 @@ export default class Toaster {
     container.setAttribute('data-evergreen-toaster-container', '');
     document.body.appendChild(container);
 
-    ReactDOM.render(
+    ReactDom.render(
       <ToastManager
         bindNotify={this._bindNotify}
         bindGetToasts={this._bindGetToasts}
@@ -29,37 +29,41 @@ export default class Toaster {
 
   _bindNotify = handler => {
     this.notifyHandler = handler;
-  }
+  };
 
   _bindGetToasts = handler => {
     this.getToastsHandler = handler;
-  }
+  };
 
   _bindCloseAll = handler => {
     this.closeAllHandler = handler;
-  }
+  };
 
   getToasts = () => {
     return this.getToastsHandler();
-  }
+  };
 
   closeAll = () => {
     return this.closeAllHandler();
-  }
+  };
 
   notify = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'none' });
-  }
+  };
+
+  notifyInProgress = (title, settings = {}) => {
+    return this.notifyHandler(title, { ...settings, intent: 'notify-in-progress' });
+  };
 
   success = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'success' });
-  }
+  };
 
   warning = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'warning' });
-  }
+  };
 
   danger = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'danger' });
-  }
+  };
 }

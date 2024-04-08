@@ -28,10 +28,7 @@ const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
-  goDraftPage: PropTypes.func.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
@@ -50,9 +47,8 @@ const propTypes = {
   onAddFileNode: PropTypes.func.isRequired,
   onAddFolderNode: PropTypes.func.isRequired,
   // repo content
-  draftCounts: PropTypes.number,
+  repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -69,6 +65,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
@@ -86,7 +83,8 @@ const propTypes = {
   onListContainerScroll: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
-  loadDirentList: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
 };
 
 class LibContentContainer extends React.Component {
@@ -100,7 +98,7 @@ class LibContentContainer extends React.Component {
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({currentDirent: null});
     }
@@ -109,45 +107,45 @@ class LibContentContainer extends React.Component {
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
     this.props.closeDirentDetail();
-  }
+  };
 
   onItemClick = (dirent) => {
     this.props.onItemClick(dirent);
     this.props.closeDirentDetail();
-  }
+  };
 
   onGridItemClick = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onDirentClick(dirent);
-  }
+  };
 
   // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onDirentClick(dirent);
-  }
+  };
 
   onItemSelected = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onItemSelected(dirent);
-  }
+  };
 
   onItemDelete = (dirent) => {
     this.checkCurrentDirent(dirent);
     this.props.onItemDelete(dirent);
-  }
+  };
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
     this.checkCurrentDirent(dirent);
     this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
-  }
+  };
 
   checkCurrentDirent = (deletedDirent) => {
     let { currentDirent } = this.state;
     if (currentDirent && deletedDirent.name === currentDirent.name) {
       this.setState({currentDirent: null});
     }
-  }
+  };
 
   onItemsScroll = (e) => {
     let target = e.target;
@@ -159,13 +157,13 @@ class LibContentContainer extends React.Component {
     if (target.scrollTop + target.clientHeight + 1 >= target.scrollHeight) {
       this.props.onListContainerScroll();
     }
-  }
+  };
 
   render() {
-    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
+    let { path, repoID, usedRepoTags } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
-      if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
+      if (usedRepoTags.length !== 0) {
         isRepoInfoBarShow = true;
       }
     }
@@ -210,9 +208,8 @@ class LibContentContainer extends React.Component {
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -228,6 +225,7 @@ class LibContentContainer extends React.Component {
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
@@ -251,9 +249,8 @@ class LibContentContainer extends React.Component {
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     onRenameNode={this.props.onRenameNode}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -263,6 +260,7 @@ class LibContentContainer extends React.Component {
                     onItemDelete={this.props.onItemDelete}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     updateDirent={this.props.updateDirent}
                     onAddFolder={this.props.onAddFolder}
                     showDirentDetail={this.props.showDirentDetail}
@@ -294,18 +292,14 @@ class LibContentContainer extends React.Component {
                     isFileLoading={this.props.isFileLoading}
                     isFileLoadedErr={this.props.isFileLoadedErr}
                     hash={this.props.hash}
-                    isDraft={this.props.isDraft}
-                    hasDraft={this.props.hasDraft}
-                    goDraftPage={this.props.goDraftPage}
                     filePermission={this.props.filePermission}
                     content={this.props.content}
                     lastModified={this.props.lastModified}
                     latestContributor={this.props.latestContributor}
                     onLinkClick={this.props.onLinkClick}
                     isRepoInfoBarShow={isRepoInfoBarShow}
+                    repoTags={this.props.repoTags}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
-                    draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
@@ -321,6 +315,7 @@ class LibContentContainer extends React.Component {
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
@@ -331,6 +326,7 @@ class LibContentContainer extends React.Component {
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
                     showDirentDetail={this.props.showDirentDetail}
+                    onItemsScroll={this.onItemsScroll}
                   />
                 )}
               </Fragment>
@@ -350,6 +346,8 @@ class LibContentContainer extends React.Component {
                   path={this.props.path}
                   dirent={this.state.currentDirent}
                   currentRepoInfo={this.props.currentRepoInfo}
+                  repoTags={this.props.repoTags}
+                  fileTags={this.props.isViewFile ? this.props.fileTags : []}
                   onFileTagChanged={this.props.onFileTagChanged}
                   onItemDetailsClose={this.props.closeDirentDetail}
                   direntDetailPanelTab={this.props.direntDetailPanelTab}

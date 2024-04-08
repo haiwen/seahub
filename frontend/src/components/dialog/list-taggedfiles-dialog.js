@@ -32,7 +32,7 @@ class ListTaggedFilesDialog extends React.Component {
     const dirent = {name: TaggedFile.filename};
     let direntPath = path === '/' ? path + TaggedFile.filename : path + '/' + TaggedFile.filename;
     this.props.onFileTagChanged(dirent, direntPath);
-  }
+  };
 
   onDeleteTaggedFile = (taggedFile) => {
     let repoID = this.props.repoID;
@@ -45,7 +45,7 @@ class ListTaggedFilesDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   componentDidMount() {
     this.getTaggedFiles();
@@ -70,7 +70,7 @@ class ListTaggedFilesDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let taggedFileList = this.state.taggedFileList;
@@ -136,18 +136,18 @@ class TaggedFile extends React.Component {
     this.setState({
       active: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       active: false
     });
-  }
+  };
 
   deleteFile = (e) => {
     e.preventDefault();
     this.props.onDeleteTaggedFile(this.props.taggedFile);
-  }
+  };
 
   render() {
     const { taggedFile, shareLinkToken, enableFileDownload } = this.props;

@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import MainPanelTopbar from './main-panel-topbar';
@@ -52,7 +52,7 @@ class OrgLibraries extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
 
   onChangePageNum = (e, num) => {
@@ -65,15 +65,15 @@ class OrgLibraries extends Component {
       page = page - 1;
     }
     this.listRepos(page);
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   deleteRepoItem = (repo) => {
     seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repoID).then(res => {
@@ -87,7 +87,7 @@ class OrgLibraries extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   transferRepoItem = (repoID, user) => {
     this.setState({
@@ -99,7 +99,7 @@ class OrgLibraries extends Component {
         return item;
       })
     });
-  }
+  };
 
   sortItems = (sortBy) => {
     this.setState({
@@ -115,17 +115,17 @@ class OrgLibraries extends Component {
       navigate(url.toString());
       this.listRepos(page);
     });
-  }
+  };
 
   sortByFileCount = (e) => {
     e.preventDefault();
     this.sortItems('file_count');
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     this.sortItems('size');
-  }
+  };
 
   render() {
     const { orgRepos, sortBy } = this.state;
@@ -211,7 +211,7 @@ class RepoItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -220,12 +220,12 @@ class RepoItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -242,15 +242,11 @@ class RepoItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   toggleDelete = () => {
     this.props.deleteRepoItem(this.props.repo);
-  }
-
-  toggleTransfer = () => {
-    this.props.transferRepoItem(this.props.repo);
-  }
+  };
 
   renderLibIcon = (repo) => {
     let href;
@@ -263,7 +259,7 @@ class RepoItem extends React.Component {
       iconTitle = gettext('Read-Write library');
     }
     return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
-  }
+  };
 
   renderRepoOwnerHref = (repo) => {
     let href;
@@ -273,11 +269,11 @@ class RepoItem extends React.Component {
       href = siteRoot + 'org/useradmin/info/' + repo.ownerEmail + '/';
     }
     return href;
-  }
+  };
 
   toggleTransfer = () => {
     this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
-  }
+  };
 
   onTransferRepo = (user) => {
     let repo = this.props.repo;
@@ -290,7 +286,7 @@ class RepoItem extends React.Component {
       toaster.danger(errMessage);
     });
     this.toggleTransfer();
-  }
+  };
 
   render() {
     let { repo } = this.props;
@@ -310,7 +306,8 @@ class RepoItem extends React.Component {
                 <DropdownToggle
                   tag="a"
                   className="attr-action-icon fas fa-ellipsis-v"
-                  title={gettext('More Operations')}
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
                   data-toggle="dropdown"
                   aria-expanded={this.state.isItemMenuShow}
                   onClick={this.onDropdownToggleClick}

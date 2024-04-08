@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import Select from 'react-select';
+import { MenuSelectStyle } from '../common/select';
 import '../../css/select-editor.css';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
+  isEditing: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
+  autoFocus: PropTypes.bool,
   options: PropTypes.array.isRequired,
   currentOption: PropTypes.string.isRequired,
   translateOption: PropTypes.func.isRequired,
@@ -15,26 +18,26 @@ const propTypes = {
   toggleItemFreezed: PropTypes.func,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
-
 };
 
 class SelectEditor extends React.Component {
 
   static defaultProps = {
     enableAddCustomPermission: false,
-  }
+    isEditing: false,
+    autoFocus: false,
+  };
 
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: false,
+      isEditing: props.isEditing,
       options: []
     };
     this.options = [];
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.onHideSelect);
     this.setOptions();
   }
 
@@ -70,14 +73,10 @@ class SelectEditor extends React.Component {
     this.setState({
       options: this.options
     });
-  }
+  };
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setOptions();
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideSelect);
   }
 
   onEditPermission = (e) => {
@@ -85,7 +84,7 @@ class SelectEditor extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
-  }
+  };
 
   onOptionChanged = (e) => {
     let permission = e.value;
@@ -94,42 +93,19 @@ class SelectEditor extends React.Component {
     }
     this.setState({isEditing: false});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
-  }
+  };
 
   onSelectHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-  }
+  };
 
-  onHideSelect = () => {
+  onMenuClose = () => {
     this.setState({isEditing: false});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
-  }
+  };
 
   render() {
     let { currentOption, isTextMode } = this.props;
-
-    const MenuSelectStyle = {
-      option: (provided, state) => {
-        const { isDisabled, isSelected, isFocused } = state;
-        return ({
-          ...provided,
-          cursor: isDisabled ? 'default' : 'pointer',
-          //backgroundColor: isSelected ? '#5A98F8' : (isFocused ? '#f5f5f5' : '#fff'),
-          '.header-icon .dtable-font': {
-            color: isSelected ? '#fff' : '#aaa',
-          },
-        });
-      },
-      control: (provided) => ({
-        ...provided,
-        fontSize: '14px',
-        cursor: 'pointer',
-        lineHeight: '1.5',
-      }),
-      menuPortal:  base => ({ ...base, zIndex: 9999 }),
-      indicatorSeparator: () => {},
-    };
-
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
     return (
@@ -147,6 +123,8 @@ class SelectEditor extends React.Component {
             menuPosition={'fixed'}
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
+            onMenuClose={this.onMenuClose}
+            autoFocus={this.props.autoFocus}
             menuShouldScrollIntoView
           />
         }

@@ -30,7 +30,7 @@ class TermsPreviewWidget extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let mdFile = nextProps.content;
     this.formatterLongTextValue(mdFile);
   }
@@ -43,7 +43,7 @@ class TermsPreviewWidget extends React.Component {
         innerHtml: innerHtml
       });
     });
-  }
+  };
 
   render() {
     if (this.state.isFormatValue) {

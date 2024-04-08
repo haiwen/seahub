@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -10,6 +11,15 @@ import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+
+const contentPropTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
 
 class Content extends Component {
 
@@ -63,6 +73,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = contentPropTypes;
+
+const itemPropTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  item: PropTypes.object.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -74,35 +92,35 @@ class Item extends Component {
     };
   }
 
- toggleOpMenu = () => {
-   this.setState({
-     isOpMenuOpen: !this.state.isOpMenuOpen
-   });
- }
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  };
 
   toggleLinkDialog = () => {
     this.setState({
       isLinkDialogOpen: !this.state.isLinkDialogOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   viewLink = (e) => {
     e.preventDefault();
     this.toggleLinkDialog();
-  }
+  };
 
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
-  }
+  };
 
   renderExpiration = () => {
     const item = this.props.item;
@@ -112,7 +130,7 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -122,10 +140,11 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
+    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
-        <td><Link to={objUrl}>{item.obj_name}</Link></td>
+        <td><Link to={objUrl}>{item.obj_name}</Link>{deletedTip}</td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
@@ -143,15 +162,16 @@ class Item extends Component {
           <Link to={objUrl}>{item.obj_name}</Link>
           <br />
           <span>{item.repo_name}</span><br />
-          <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
-          <span className="item-meta-info">{this.renderExpiration()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+          <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+          <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
         </td>
         <td>
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
               className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-              title={gettext('More Operations')}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isOpMenuOpen}
             />
@@ -180,11 +200,19 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = itemPropTypes;
+
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired
+};
+
 class ShareAdminUploadLinks extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isCleanInvalidUploadLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: []
@@ -192,6 +220,10 @@ class ShareAdminUploadLinks extends Component {
   }
 
   componentDidMount() {
+    this.listUserUploadLinks();
+  }
+
+  listUserUploadLinks() {
     seafileAPI.listUserUploadLinks().then((res) => {
       let items = res.data.map(item => {
         return new UploadLink(item);
@@ -220,32 +252,66 @@ class ShareAdminUploadLinks extends Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
+
+  toggleCleanInvalidUploadLinksDialog = () => {
+    this.setState({isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen});
+  };
+
+  cleanInvalidUploadLinks = () => {
+    seafileAPI.cleanInvalidUploadLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
+      this.setState({items: newItems});
+      toaster.success(gettext('Successfully cleaned invalid upload links.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path share-upload-nav">
-            <ul className="nav">
-              {canGenerateShareLink && (
-                <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
-              )}
-              <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
-            </ul>
-          </div>
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={this.state.items}
-              onRemoveLink={this.onRemoveLink}
-            />
+      <Fragment>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidUploadLinksDialog}>{gettext('Clean invalid upload links')}</Button>
+        </TopToolbar>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path share-upload-nav">
+              <ul className="nav">
+                {canGenerateShareLink && (
+                  <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
+                )}
+                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
+              </ul>
+            </div>
+            <div className="cur-view-content">
+              <Content
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                onRemoveLink={this.onRemoveLink}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isCleanInvalidUploadLinksDialogOpen &&
+        <CommonOperationConfirmationDialog
+          title={gettext('Clean invalid upload links')}
+          message={gettext('Are you sure you want to clean invalid upload links?')}
+          executeOperation={this.cleanInvalidUploadLinks}
+          confirmBtnText={gettext('Clean')}
+          toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
+        />
+        }
+      </Fragment>
     );
   }
 }
+
+ShareAdminUploadLinks.propTypes = propTypes;
 
 export default ShareAdminUploadLinks;

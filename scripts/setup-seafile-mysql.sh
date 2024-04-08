@@ -36,7 +36,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             err_and_quit
         fi
@@ -49,22 +49,7 @@ function check_python () {
     echo
 }
 
-function check_java () {
-    echo -n "Checking for java ..."
-    if ! which java 2>/dev/null 1>&2; then
-        echo -e "\nJava is not found. install it first.\n"
-        echo "On Debian/Ubuntu:     apt-get install default-jre"
-        echo "On CentOS/RHEL:       yum install jre"
-        err_and_quit;
-    fi
-    printf "Done.\n\n"
-}
-
 check_python;
-
-if [[ -d ${INSTALLPATH}/pro ]]; then
-    check_java;
-fi
 
 export PYTHON=$PYTHON
 

@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-
 import Lightbox from '@seafile/react-image-lightbox';
 import '@seafile/react-image-lightbox/style.css';
 
@@ -14,27 +13,18 @@ const propTypes = {
 };
 
 class ImageDialog extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const imageItems = this.props.imageItems;
     const imageIndex = this.props.imageIndex;
     const imageItemsLength = imageItems.length;
-    const imageCaption = imageItemsLength && (
-      <Fragment>
-        <span>{gettext('%curr% of %total%').replace('%curr%', imageIndex + 1).replace('%total%', imageItemsLength)}</span>
-        <br />
-        <a href={imageItems[imageIndex].url} target="_blank">{gettext('Open in New Tab')}</a>
-      </Fragment>
-    );
+    const name = imageItems[imageIndex].name;
+    const imageTitle = `${name} (${imageIndex + 1}/${imageItemsLength})`;
 
     return (
       <Lightbox
+        imageTitle={imageTitle}
         mainSrc={imageItems[imageIndex].src}
-        imageTitle={imageItems[imageIndex].name}
-        imageCaption={imageCaption}
         nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
         prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
         onCloseRequest={this.props.closeImagePopup}

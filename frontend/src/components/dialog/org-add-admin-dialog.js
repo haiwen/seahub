@@ -29,7 +29,7 @@ class AddOrgAdminDialog extends React.Component {
       errMessage: ''
     });
     this.options = [];
-  }
+  };
 
   addOrgAdmin = () => {
     if (!this.state.selectedOption) return;
@@ -41,11 +41,11 @@ class AddOrgAdminDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   render() {
     return (
@@ -56,7 +56,7 @@ class AddOrgAdminDialog extends React.Component {
             ref="userSelect"
             isMulti={false}
             className="reviewer-select"
-            placeholder={gettext('Select a user as admin...')}
+            placeholder={gettext('Select a user as admin')}
             onSelectChange={this.handleSelectChange}
           />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}

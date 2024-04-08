@@ -54,7 +54,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             exit 1
         fi
@@ -107,8 +107,6 @@ function before_start() {
     export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
     # Allow LDAP user sync to import seahub_settings.py
     export PYTHONPATH=$PYTHONPATH:${central_config_dir}
     export SEAFES_DIR=$pro_pylibs_dir/seafes
@@ -118,7 +116,7 @@ function start_seafile_background_tasks () {
     before_start;
     echo "Starting seafile background tasks ..."
     $PYTHON -m seafevents.background_tasks --config-file "${seafevents_conf}" \
-        --loglevel debug --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>/dev/null 1>&2 &
+        --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>/dev/null 1>&2 &
 
     # Ensure started successfully
     sleep 5
@@ -138,7 +136,6 @@ function stop_seafile_background_tasks () {
         if ps "${pid}" 2>/dev/null 1>&2 ; then
             kill -KILL "${pid}"
         fi
-        pkill -f "soffice.*--invisible --nocrashreport"
         rm -f "${pidfile}"
         return 0
     else

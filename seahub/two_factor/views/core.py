@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.forms import Form
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.module_loading import import_string
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters

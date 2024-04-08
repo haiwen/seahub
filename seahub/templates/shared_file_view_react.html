@@ -2,6 +2,8 @@
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
 
+{% block sub_title %}{{file_name}} - {% endblock %}
+
 {% block extra_ogp_tags %}
 <meta property="og:type" content="object" />
 <meta property="og:site_name" content="{{ site_name }}">
@@ -26,6 +28,8 @@
 {% elif filetype == 'Audio' %}
     {% render_bundle 'sharedFileViewAudio' 'css' %}
 {% elif filetype == 'PDF' %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/custom.css" />
     <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
     {% render_bundle 'sharedFileViewPDF' 'css' %}
 {% elif filetype == 'Document' %}
@@ -33,6 +37,9 @@
     {% render_bundle 'sharedFileViewDocument' 'css' %}
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
+{% elif filetype == 'SDoc' %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
+    {% render_bundle 'sharedFileViewSdoc' 'css' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'css' %}
 {% endif %}
@@ -65,6 +72,7 @@ body {
       siteName: '{{ site_name }}',
       enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
       canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
+      canEdit: {% if permissions.can_edit %}true{% else %}false{% endif %},
       fileContent: '{{ file_content|escapejs }}',
       err: {% if err %}'{{ err }}'{% else %}''{% endif %},
       fileType: '{{ filetype }}',
@@ -86,7 +94,19 @@ body {
       })(),
       {% endif %}
       prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
-      nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %}
+      nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %},
+      assetsUrl: '{{ assets_url }}',
+
+      {% if filetype == 'SDoc' %}
+        docPath: '{{ path|escapejs }}',
+        docName: '{{ file_name|escapejs }}',
+        docUuid: '{{ file_uuid }}',
+        assetsUrl: '{{ assets_url }}',
+        seadocAccessToken: '{{ seadoc_access_token }}',
+        seadocServerUrl: '{{ seadoc_server_url }}',
+        canEditFile: {% if can_edit_file %}true{% else %}false{% endif %},
+        filePerm: '{{ file_perm }}',
+      {% endif %}
     }
   };
 </script>
@@ -120,6 +140,8 @@ body {
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'js' %}
+{% elif filetype == 'SDoc' %}
+    {% render_bundle 'sharedFileViewSdoc' 'js' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'js' %}
 {% endif %}

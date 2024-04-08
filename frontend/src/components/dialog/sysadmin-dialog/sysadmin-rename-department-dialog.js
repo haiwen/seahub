@@ -27,11 +27,6 @@ class RenameDepartmentDialog extends React.Component {
     this.newInput = React.createRef();
   }
 
-  componentDidMount() {
-    this.newInput.select();
-    this.newInput.focus();
-  }
-
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
@@ -44,7 +39,7 @@ class RenameDepartmentDialog extends React.Component {
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -55,25 +50,31 @@ class RenameDepartmentDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       departmentName: e.target.value
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
+
+  onAfterModelOpened = () => {
+    if (!this.newInput.current) return;
+    this.newInput.current.focus();
+    this.newInput.current.select();
+  };
 
   render() {
     let header = gettext('Rename Department');
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} onOpened={this.onAfterModelOpened}>
         <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
         <ModalBody>
           <Form>
@@ -81,16 +82,17 @@ class RenameDepartmentDialog extends React.Component {
               <Label for="departmentName">{gettext('Name')}</Label>
               <Input
                 id="departmentName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.departmentName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                innerRef={this.newInput}
               />
             </FormGroup>
           </Form>
           {this.state.errMessage && <p className="error">{this.state.errMessage}</p>}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

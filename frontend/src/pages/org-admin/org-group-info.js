@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -54,13 +55,6 @@ class OrgGroupInfo extends Component {
 }
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   render() {
     const {
       loading, errorMsg,
@@ -87,5 +81,13 @@ class Content extends Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+OrgGroupInfo.propTypes = {
+  groupID: PropTypes.string,
+};
 
 export default OrgGroupInfo;

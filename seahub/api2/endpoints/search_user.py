@@ -134,6 +134,13 @@ class SearchUser(APIView):
             if user_obj.is_active:
                 email_result.append(user_obj.email)
 
+        # specific search `q`
+        user_q_obj = ccnet_api.get_emailuser(q)
+        if user_q_obj and user_q_obj.is_active:
+            if q in email_result:
+                email_result.remove(q)
+            email_result.insert(0, q)
+
         if django_settings.ENABLE_ADDRESSBOOK_OPT_IN:
             # get users who has setted to show in address book
             listed_users = Profile.objects.filter(list_in_address_book=True).values('user')

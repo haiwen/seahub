@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Users from './users';
 
 class AdminUsers extends Component {
 
   render() {
-    return <Users isAdmin={true} />;
+    return <Users isAdmin={true} {...this.props} />;
   }
 }
 

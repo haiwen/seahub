@@ -1,0 +1,25 @@
+.ai-search-help {
+  padding: 20px 0 20px 0;
+  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+}
+
+.ai-search-help .ai-search-help-title {
+  margin-bottom: 10px;
+}
+
+.ai-search-help .ai-search-help-container {
+  display: flex;
+}
+
+.ai-search-help .ai-search-help-container .ai-search-help-detail {
+  border: 1px solid #ccc;
+  max-width: 200px;
+  margin-right: 8px;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.ai-search-help .ai-search-help-detail:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+}

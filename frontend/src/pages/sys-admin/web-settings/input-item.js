@@ -23,9 +23,13 @@ class WebSettingInput extends Component {
     };
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({value: nextProps.value});
+  }
+
   toggleBtns = () => {
     this.setState({isBtnsShown: !this.state.isBtnsShown});
-  }
+  };
 
   hideBtns = (e) => {
     if (!this.state.isBtnsShown) {
@@ -35,11 +39,11 @@ class WebSettingInput extends Component {
       this.setState({value: this.props.value});
     }
     this.toggleBtns();
-  }
+  };
 
   onInputChange = (e) => {
     this.setState({ value: e.target.value });
-  }
+  };
 
   onSubmit = (e) => {
     const value = this.state.value.trim();
@@ -47,7 +51,7 @@ class WebSettingInput extends Component {
       this.props.saveSetting(this.props.keyText, value);
     }
     this.toggleBtns();
-  }
+  };
 
   render() {
     const { isBtnsShown, value } = this.state;

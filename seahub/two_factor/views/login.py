@@ -10,11 +10,11 @@ from constance import config
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.debug import sensitive_post_parameters
 
 from formtools.wizard.views import SessionWizardView
@@ -106,7 +106,7 @@ class TwoFactorVerifyView(SessionWizardView):
 
         self.reset_two_factor_session()
 
-        if not is_safe_url(url=redirect_to, allowed_hosts=self.request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=self.request.get_host()):
             redirect_to = str(settings.LOGIN_REDIRECT_URL)
 
         res = HttpResponseRedirect(redirect_to)

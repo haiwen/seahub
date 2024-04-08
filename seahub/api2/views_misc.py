@@ -31,6 +31,9 @@ class ServerInfoView(APIView):
         if config.DISABLE_SYNC_WITH_ANY_FOLDER:
             features.append('disable-sync-with-any-folder')
 
+        if config.CLIENT_SSO_VIA_LOCAL_BROWSER:
+            features.append('client-sso-via-local-browser')
+
         if hasattr(settings, 'DESKTOP_CUSTOM_LOGO'):
             info['desktop-custom-logo'] = settings.MEDIA_URL + getattr(settings, 'DESKTOP_CUSTOM_LOGO')
 

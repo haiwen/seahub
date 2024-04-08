@@ -41,7 +41,7 @@ class SearchGroups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteGroup = (groupID) => {
     seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
@@ -56,7 +56,7 @@ class SearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   transferGroup = (groupID, receiverEmail) => {
     seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
@@ -74,27 +74,36 @@ class SearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleNameInputChange = (e) => {
     this.setState({
       name: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { name } = this.state;
     this.setState({
       isSubmitBtnActive: name.trim()
     });
-  }
+  };
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getGroups();
+      }
+    }
+  };
 
   render() {
     const { name, isSubmitBtnActive } = this.state;
 
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -104,11 +113,11 @@ class SearchGroups extends Component {
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Groups')}</h4>
                 <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name')}</Label>
                     <Col sm={5}>
-                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
+                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>

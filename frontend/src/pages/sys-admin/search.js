@@ -19,14 +19,14 @@ class Search extends React.Component {
     this.setState({
       value: e.target.value
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     const value = this.state.value.trim();
@@ -34,7 +34,7 @@ class Search extends React.Component {
       return false;
     }
     this.props.submit(value);
-  }
+  };
 
   render() {
     return (
@@ -43,11 +43,11 @@ class Search extends React.Component {
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
-          style={{width: '15rem'}}
+          style={{width: '17rem'}}
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.handleInputChange}
-          onKeyPress={this.handleKeyPress}
+          onKeyDown={this.handleKeyDown}
           autoComplete="off"
         />
       </div>

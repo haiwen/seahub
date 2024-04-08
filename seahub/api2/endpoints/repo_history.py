@@ -30,7 +30,7 @@ class RepoHistory(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get_item_info(self, commit):
-        email = commit.creator_name
+        email = getattr(commit, 'creator_name', '')
         item_info = {
             'email': email,
             "name": email2nickname(email),

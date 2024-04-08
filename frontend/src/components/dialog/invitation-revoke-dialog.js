@@ -41,7 +41,7 @@ class InvitationRevokeDialog extends React.Component {
   };
 
   render() {
-    const { accepter, toggleDialog } = this.props;
+    const { toggleDialog } = this.props;
     const { isSubmitting } = this.state;
     const email = '<span class="op-target">' + Utils.HTMLescape(this.props.accepter) + '</span>';
     const content = gettext('Are you sure to revoke access of user {placeholder} ?').replace('{placeholder}', email);

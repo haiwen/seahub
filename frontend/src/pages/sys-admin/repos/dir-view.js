@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { post } from 'axios';
+import axios from 'axios';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -15,7 +16,6 @@ class DirView extends Component {
 
   constructor(props) {
     super(props);
-    this.fileInput = React.createRef();
     this.state = {
       loading: true,
       errorMsg: '',
@@ -25,6 +25,7 @@ class DirView extends Component {
       direntList: [],
       isNewFolderDialogOpen: false
     };
+    this.fileInput = React.createRef();
   }
 
   componentDidMount () {
@@ -33,11 +34,11 @@ class DirView extends Component {
 
   onPathClick = (path) => {
     this.loadDirentList(path);
-  }
+  };
 
   toggleNewFolderDialog = () => {
     this.setState({isNewFolderDialogOpen: !this.state.isNewFolderDialogOpen});
-  }
+  };
 
   createNewFolder = (path) => {
     let folderName = Utils.getFileName(path);
@@ -53,14 +54,14 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openFolder = (dirent) => {
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (!dirent.is_file) {
       this.loadDirentList(direntPath);
     }
-  }
+  };
 
   loadDirentList = (path) => {
     const repoID = this.props.repoID;
@@ -87,7 +88,7 @@ class DirView extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -103,7 +104,7 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   downloadDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -113,11 +114,11 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   onFileInputChange = () => {
     if (!this.fileInput.current.files.length) {
@@ -130,7 +131,7 @@ class DirView extends Component {
       let formData = new FormData();
       formData.append('parent_dir', path);
       formData.append('file', file);
-      post(res.data.upload_link, formData).then(res => {
+      axios.post(res.data.upload_link, formData).then(res => {
         const fileObj = res.data[0];
         let newDirent = new Dirent({
           'is_file': true,
@@ -149,7 +150,7 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     let direntList = this.state.direntList;
@@ -157,7 +158,7 @@ class DirView extends Component {
       return object.name === newName;
     });
     return isDuplicated;
-  }
+  };
 
   render() {
     const { loading, errorMsg,
@@ -168,13 +169,13 @@ class DirView extends Component {
     return (
       <Fragment>
         {isSystemRepo ?
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Fragment>
               <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
               <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
               <Button className="operation-item" onClick={this.toggleNewFolderDialog}>{gettext('New Folder')}</Button>
             </Fragment>
-          </MainPanelTopbar> : <MainPanelTopbar />
+          </MainPanelTopbar> : <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -212,5 +213,9 @@ class DirView extends Component {
     );
   }
 }
+
+DirView.propTypes = {
+  repoID: PropTypes.string,
+};
 
 export default DirView;

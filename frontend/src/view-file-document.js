@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
-import { gettext, mediaUrl} from './utils/constants';
+import { gettext, mediaUrl } from './utils/constants';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import Loading from './components/loading';
@@ -58,7 +58,7 @@ class FileContent extends React.Component {
               isLoading: false,
               errorMsg: ''
             });
-
+            // eslint-disable-next-line
             let scriptNode = document.createElement('script');
             scriptNode.type = 'text/javascript';
             scriptNode.src = `${mediaUrl}js/pdf/web/viewer.js`;
@@ -106,7 +106,4 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <ViewFileDocument />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<ViewFileDocument />, document.getElementById('wrapper'));

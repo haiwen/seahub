@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -59,6 +59,7 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
+  leaveShare: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -74,18 +75,18 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   leaveShare = (e) => {
     e.preventDefault();
     this.props.leaveShare(this.props.item);
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -111,7 +112,8 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired,
+  leaveShare: PropTypes.func.isRequired,
 };
 
 class SharedWithOCM extends Component {
@@ -150,7 +152,7 @@ class SharedWithOCM extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

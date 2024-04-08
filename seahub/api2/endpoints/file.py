@@ -5,6 +5,7 @@ import json
 import logging
 import posixpath
 import requests
+from pathlib import Path
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -20,16 +21,22 @@ from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
     gen_inner_file_upload_url, is_valid_dirent_name, normalize_file_path, \
-    normalize_dir_path, get_file_type_and_ext
+    normalize_dir_path, get_file_type_and_ext, check_filename_or_rename
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
-from seahub.utils.file_types import MARKDOWN, TEXT
-
+from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, \
+        MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
+        DOCX_SUPPORT_CONVERT_TYPES
+from seahub.tags.models import FileUUIDMap
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
+from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
+from seahub.seadoc.utils import get_seadoc_file_uuid
 
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import is_draft_file, get_file_draft
@@ -60,6 +67,8 @@ class FileView(APIView):
             can_preview, error_msg = can_preview_file(file_name, file_size, repo)
             can_edit, error_msg = can_edit_file(file_name, file_size, repo)
         else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+            file_size = ''
             can_preview = False
             can_edit = False
 
@@ -148,8 +157,8 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = operation.lower()
-        if operation not in ('create', 'rename', 'move', 'copy', 'revert'):
-            error_msg = "operation can only be 'create', 'rename', 'move', 'copy' or 'revert'."
+        if operation not in ('create', 'rename', 'move', 'copy', 'revert', 'convert'):
+            error_msg = "operation can only be 'create', 'rename', 'move', 'copy', 'convert' or 'revert'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -164,6 +173,7 @@ class FileView(APIView):
         is_draft = request.POST.get('is_draft', '')
 
         if operation == 'create':
+
             # resource check
             try:
                 parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
@@ -203,23 +213,50 @@ class FileView(APIView):
 
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit")
+                    from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                    return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             if is_draft.lower() == 'true':
                 Draft.objects.add(username, repo, path, file_exist=False)
 
-            # update office file by template
-            if new_file_name.endswith('.xlsx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.xlsx')
-            elif new_file_name.endswith('.pptx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.pptx')
-            elif new_file_name.endswith('.docx'):
-                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.docx')
-            else:
-                empty_file_path = ''
+            LANGUAGE_DICT = {
+                'cs': 'cs-CZ',
+                'de': 'de-DE',
+                'en': 'en-US',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'it': 'it-IT',
+                'lv': 'lv-LV',
+                'nl': 'nl-NL',
+                'pl': 'pl-PL',
+                'pt-br': 'pt-BR',
+                'ru': 'ru-RU',
+                'sv': 'sv-SE',
+                'vi': 'vi-VN',
+                'uk': 'uk-UA',
+                'el': 'el-GR',
+                'ko': 'ko-KR',
+                'ja': 'ja-JP',
+                'zh-cn': 'zh-CN',
+                'zh-tw': 'zh-TW'
+            }
+
+            empty_file_path = ''
+            not_used, file_extension = os.path.splitext(new_file_name)
+            if file_extension in ('.xlsx', '.pptx', '.docx', '.docxf'):
+                # update office file by template
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, f'empty{file_extension}')
+                language_code_path = LANGUAGE_DICT.get(request.LANGUAGE_CODE)
+                if language_code_path:
+                    empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'new',
+                                                   language_code_path, f'new{file_extension}')
 
             if empty_file_path:
                 # get file server update url
@@ -244,6 +281,10 @@ class FileView(APIView):
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
             file_info = self.get_file_info(username, repo_id, new_file_path)
+            # gen doc_uuid
+            if new_file_name.endswith('.sdoc'):
+                doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
+                file_info['doc_uuid'] = doc_uuid
             return Response(file_info)
 
         if operation == 'rename':
@@ -280,7 +321,7 @@ class FileView(APIView):
 
             # permission check
             if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
-                error_msg = 'Permission denied.'
+                error_msg = _("Permission denied.")
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # check file lock
@@ -514,6 +555,119 @@ class FileView(APIView):
 
             return Response({'success': True})
 
+        if operation == 'convert':
+            dst_type = request.data.get('dst_type')
+
+            extension = Path(path).suffix
+            if extension not in ['.md', '.sdoc', '.docx']:
+                error_msg = 'path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if (extension == '.md' and dst_type not in MARKDOWN_SUPPORT_CONVERT_TYPES) or \
+                    (extension == '.sdoc' and dst_type not in SDOC_SUPPORT_CONVERT_TYPES) or \
+                    (extension == '.docx' and dst_type not in DOCX_SUPPORT_CONVERT_TYPES):
+                error_msg = 'dst_type invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # resource check
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not file_id:
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check file lock
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_locked and not locked_by_me:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            filename = os.path.basename(path)
+
+            if extension == '.md':
+                src_type = 'markdown'
+                new_filename = filename[:-2] + 'sdoc'
+            if extension == '.docx':
+                src_type = 'docx'
+                new_filename = filename[:-4] + 'sdoc'
+            elif extension == '.sdoc':
+                src_type = 'sdoc'
+                if dst_type == 'markdown':
+                    new_filename = filename[:-4] + 'md'
+                if dst_type == 'docx':
+                    new_filename = filename[:-4] + 'docx'
+
+            new_filename = check_filename_or_rename(repo_id, parent_dir, new_filename)
+            new_file_path = posixpath.join(parent_dir, new_filename)
+
+            download_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                     file_id,
+                                                                     'download',
+                                                                     username)
+
+            obj_id = json.dumps({'parent_dir': parent_dir})
+            upload_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                   obj_id,
+                                                                   'upload-link',
+                                                                   username,
+                                                                   use_onetime=True)
+            if extension == '.sdoc':
+                doc_uuid = get_seadoc_file_uuid(repo, path)
+            else:
+                doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
+
+            if dst_type != 'docx':
+                # md, docx file convert to sdoc
+                try:
+                    resp = convert_file(path, username, doc_uuid,
+                                        download_token, upload_token,
+                                        src_type, dst_type)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if resp.status_code == 500:
+                    logger.error('convert file error status: %s body: %s',
+                                 resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                     'Internal Server Error')
+            else:
+                # sdoc file convert to docx
+                try:
+                    resp = sdoc_convert_to_docx(path, username, doc_uuid,
+                                                download_token, upload_token,
+                                                src_type, dst_type)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if resp.status_code != 200:
+                    logger.error('convert file error status: %s body: %s',
+                                 resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                     'Internal Server Error')
+
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            return Response(file_info)
+
     def put(self, request, repo_id, format=None):
         """ Currently only support lock, unlock, refresh-lock file.
 
@@ -572,10 +726,9 @@ class FileView(APIView):
 
         if operation == 'lock':
 
-            if is_locked:
-                error_msg = _("File is locked")
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+            # expire < 0, freeze document
+            # expire = 0, use default lock duration
+            # expire > 0, specify lock duration
             expire = request.data.get('expire', 0)
             try:
                 expire = int(expire)
@@ -583,21 +736,26 @@ class FileView(APIView):
                 error_msg = 'expire invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if expire < 0:
-                error_msg = 'expire invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if expire < 0 and locked_by_online_office:
+                # freeze document
+                seafile_api.unlock_file(repo_id, path)
+                seafile_api.lock_file(repo_id, path, username, expire)
+            else:
+                if is_locked:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # lock file
-            try:
-                if expire > 0:
-                    seafile_api.lock_file(repo_id, path, username,
-                                          int(time.time()) + expire)
-                else:
-                    seafile_api.lock_file(repo_id, path, username, 0)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+                # lock file
+                try:
+                    if expire > 0:
+                        seafile_api.lock_file(repo_id, path, username,
+                                              int(time.time()) + expire)
+                    else:
+                        seafile_api.lock_file(repo_id, path, username, expire)
+                except SearpcError as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if operation == 'unlock':
 
@@ -711,4 +869,21 @@ class FileView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        try:  # rm sdoc fileuuid
+            filetype, fileext = get_file_type_and_ext(file_name)
+            if filetype == SEADOC:
+                from seahub.seadoc.utils import get_seadoc_file_uuid
+                file_uuid = get_seadoc_file_uuid(repo, path)
+                FileComment.objects.filter(uuid=file_uuid).delete()
+                FileUUIDMap.objects.delete_fileuuidmap_by_path(
+                    repo_id, parent_dir, file_name, is_dir=False)
+                SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
+                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
+                SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+        except Exception as e:
+            logger.error(e)
+
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)

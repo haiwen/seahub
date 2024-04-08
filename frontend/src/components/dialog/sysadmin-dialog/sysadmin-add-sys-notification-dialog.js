@@ -24,16 +24,16 @@ class SysAdminAddSysNotificationDialog extends React.Component {
       value: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleSubmit = () => {
     this.toggle();
     this.props.addNotification(this.state.value.trim());
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   render() {
     return (

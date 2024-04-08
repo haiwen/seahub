@@ -15,6 +15,7 @@ UNIT_GIB = 'gib'
 UNIT_TIB = 'tib'
 UNIT_PIB = 'pib'
 
+
 def get_file_size_unit(unit_type):
     """
     File size unit according to https://en.wikipedia.org/wiki/Kibibyte.
@@ -40,6 +41,7 @@ def get_file_size_unit(unit_type):
 
     return table.get(unit_type)
 
+
 def get_quota_from_string(quota_str):
     quota_str = quota_str.lower()
     if quota_str.endswith('g'):
@@ -50,6 +52,20 @@ def get_quota_from_string(quota_str):
         return None
 
     return quota
+
+
+def byte_to_kb(byte):
+
+    if byte < 0:
+        return ''
+
+    try:
+        unit = get_file_size_unit(UNIT_KB)
+        return round(float(byte)/unit, 2)
+    except Exception as e:
+        logger.error(e)
+        return ''
+
 
 def byte_to_mb(byte):
 

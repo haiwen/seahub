@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'glamor';
 
 class Alert extends React.PureComponent {
@@ -77,6 +78,8 @@ class Alert extends React.PureComponent {
         return { borderStyle: this.containerBorderWarn, iconColor: css({color: 'rgb(217, 130, 43)'}) , iconClass: 'fa fa-exclamation-triangle' };
       case 'none':
         return { borderStyle: this.containerBorderNotify, iconColor: css({color: 'rgb(16, 112, 202)'}), iconClass: 'fa fa-exclamation-circle' };
+      case 'notify-in-progress':
+        return { borderStyle: this.containerBorderNotify, iconColor: css({width: '15px', height: '15px', margin: '3px'}), iconClass: 'loading-icon' };
       case  'danger':
         return { borderStyle: this.containerBorderDanger, iconColor: css({color: 'rgb(236, 76, 71)'}), iconClass: 'fa fa-exclamation-circle' };
     }
@@ -101,5 +104,12 @@ class Alert extends React.PureComponent {
     );
   }
 }
+
+Alert.propTypes = {
+  onRemove: PropTypes.func.isRequired,
+  children: PropTypes.any,
+  title: PropTypes.string.isRequired,
+  intent: PropTypes.string.isRequired,
+};
 
 export default Alert;

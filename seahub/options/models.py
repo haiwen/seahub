@@ -267,7 +267,7 @@ class UserOptionsManager(models.Manager):
         from seahub.utils.hasher import AESPasswordHasher
 
         secret = UserOptions.objects.get_webdav_secret(username)
-        if secret:
+        if secret and secret.startswith(AESPasswordHasher.algorithm):
             aes = AESPasswordHasher()
             decoded = aes.decode(secret)
         else:

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import { gettext } from './utils/constants';
@@ -51,7 +51,4 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <SharedFileViewImage />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<SharedFileViewImage />, document.getElementById('wrapper'));

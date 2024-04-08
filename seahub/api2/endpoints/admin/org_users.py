@@ -2,7 +2,7 @@
 import logging
 from types import FunctionType
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -18,6 +18,7 @@ from seahub.utils import is_valid_email, is_valid_username, IS_EMAIL_CONFIGURED,
     send_html_email, get_site_name
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_file_size_unit
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -179,8 +180,9 @@ class AdminOrgUsers(APIView):
 
         is_active = active == 'true'
 
+        vid = get_virtual_id_by_email(email)
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=vid)
             user_exists = True
         except User.DoesNotExist:
             user_exists = False
@@ -215,7 +217,7 @@ class AdminOrgUsers(APIView):
         # add user to org
         # set `is_staff` parameter as `0`
         try:
-            ccnet_api.add_org_user(org_id, email, 0)
+            ccnet_api.add_org_user(org_id, user.email, 0)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -223,10 +225,10 @@ class AdminOrgUsers(APIView):
 
         name = request.POST.get('name', None)
         if name:
-            Profile.objects.add_or_update(email, name)
+            Profile.objects.add_or_update(user.email, name)
 
         if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(email)
+            UserOptions.objects.set_force_passwd_change(user.email)
 
         user_info = get_org_user_info(org_id, user)
         user_info['active'] = is_active

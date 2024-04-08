@@ -1,10 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
+import uuid
 import logging
 from django.db import models
 
 from .settings import ORG_MEMBER_QUOTA_DEFAULT
+
 from seahub.constants import DEFAULT_ORG
 from seahub.role_permissions.utils import get_available_roles
+from seahub.avatar.util import get_avatar_file_storage
+from seahub.avatar.settings import AVATAR_STORAGE_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +29,7 @@ class OrgMemberQuotaManager(models.Manager):
             q = self.model(org_id=org_id, quota=quota)
         q.save(using=self._db)
         return q
+
 
 class OrgMemberQuota(models.Model):
     org_id = models.IntegerField(db_index=True)
@@ -50,7 +56,7 @@ class OrgSettingsManager(models.Manager):
             if role in get_available_roles():
                 return role
             else:
-                logger.warn('Role %s is not valid' % role)
+                logger.warning('Role %s is not valid' % role)
                 return DEFAULT_ORG
 
     def add_or_update(self, org, role=None):
@@ -64,7 +70,7 @@ class OrgSettingsManager(models.Manager):
             if role in get_available_roles():
                 settings.role = role
             else:
-                logger.warn('Role %s is not valid' % role)
+                logger.warning('Role %s is not valid' % role)
 
         settings.save(using=self._db)
         return settings
@@ -75,3 +81,104 @@ class OrgSettings(models.Model):
     role = models.CharField(max_length=100, null=True, blank=True)
 
     objects = OrgSettingsManager()
+
+
+class OrgSAMLConfigManager(models.Manager):
+    def get_config_by_org_id(self, org_id):
+        try:
+            config = self.get(org_id=org_id)
+            return config
+        except OrgSAMLConfig.DoesNotExist:
+            return None
+
+    def get_config_by_domain(self, domain):
+        try:
+            config = self.get(domain=domain)
+            return config
+        except OrgSAMLConfig.DoesNotExist:
+            return None
+
+
+class OrgSAMLConfig(models.Model):
+    org_id = models.IntegerField(unique=True)
+    metadata_url = models.TextField()
+    domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    dns_txt = models.CharField(max_length=64, null=True, blank=True)
+    domain_verified = models.BooleanField(default=False, db_index=True)
+    idp_certificate = models.TextField(null=True, blank=True)
+
+    objects = OrgSAMLConfigManager()
+
+    class Meta:
+        db_table = 'org_saml_config'
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'org_id': self.org_id,
+            'metadata_url': self.metadata_url,
+            'domain': self.domain,
+            'dns_txt': self.dns_txt,
+            'domain_verified': self.domain_verified,
+            'idp_certificate': self.idp_certificate,
+        }
+
+
+def _gen_org_logo_path(org_id, image_file):
+
+    (root, ext) = os.path.splitext(image_file.name.lower())
+    return '%s/org-logo/%s/%s%s' % (AVATAR_STORAGE_DIR, org_id, uuid.uuid4(), ext)
+
+
+def _save_org_logo_file(org_id, image_file):
+
+    org_logo_path = _gen_org_logo_path(org_id, image_file)
+    storage = get_avatar_file_storage()
+    storage.save(org_logo_path, image_file)
+
+    return org_logo_path
+
+
+def _delete_org_logo_file(org_logo_path):
+
+    storage = get_avatar_file_storage()
+    storage.delete(org_logo_path)
+
+
+class OrgAdminSettingsManager(models.Manager):
+
+    def save_org_logo(self, org_id, image_file):
+
+        obj = self.filter(org_id=org_id, key='org_logo_path').first()
+        if obj and obj.value:  # delete old file
+            _delete_org_logo_file(obj.value)
+        if not obj:
+            obj = self.model(org_id=org_id, key='org_logo_path')
+
+        obj.value = _save_org_logo_file(org_id, image_file)
+        obj.save()
+
+        return obj
+
+    def get_org_logo_url(self, org_id):
+
+        obj = self.filter(org_id=org_id, key='org_logo_path').first()
+        if not obj:
+            return ''
+
+        return obj.value
+
+
+class OrgAdminSettings(models.Model):
+
+    # boolean settings / str settings / int settings, etc
+    # key: default-value
+
+    org_id = models.IntegerField(db_index=True, null=False)
+    key = models.CharField(max_length=255, null=False)
+    value = models.TextField()
+
+    objects = OrgAdminSettingsManager()
+
+    class Meta:
+        unique_together = [('org_id', 'key')]

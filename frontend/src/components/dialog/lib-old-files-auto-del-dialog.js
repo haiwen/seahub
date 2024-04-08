@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
@@ -63,21 +63,21 @@ class LibOldFilesAutoDelDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
     }
-  }
+  };
 
   onChange = (e) => {
     let days = e.target.value;
     this.setState({
       autoDelDays: days,
     });
-  }
+  };
 
   updateRadioCheck = (type) => {
     if (type === 'noAutoDel') {
@@ -89,11 +89,11 @@ class LibOldFilesAutoDelDialog extends React.Component {
         isAutoDel: true,
       });
     }
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           {gettext('Auto deletion')}
         </ModalHeader>
@@ -112,7 +112,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
                 value={this.state.autoDelDays}
                 disabled={!this.state.isAutoDel}
                 onChange={this.onChange}
-                onKeyDown={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>

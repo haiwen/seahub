@@ -7,7 +7,7 @@ const {
 
 function Download() {
   return (
-    <a href={`${siteRoot}repo/${repoID}/${objID}/download/?file_name=${encodeURIComponent(fileName)}&p=${encodeURIComponent(path)}`} className="btn btn-secondary">{gettext('Download')}</a>
+    <a href={`${siteRoot}repo/${repoID}/${objID}/download/?file_name=${encodeURIComponent(fileName)}&p=${encodeURIComponent(path)}`} className="btn btn-secondary flex-shrink-0">{gettext('Download')}</a>
   );
 }
 

@@ -89,8 +89,8 @@ class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
         if user.otp_device is not None:
             return None
 
-        if ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username):
+        if (ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username)) \
+                and not request.session.get('is_sso_user'):
             return HttpResponseRedirect(reverse('two_factor:setup'))
 
         return None
-

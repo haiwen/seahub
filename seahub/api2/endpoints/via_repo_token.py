@@ -3,8 +3,9 @@ import os
 import json
 import logging
 import posixpath
+import requests
 from django.http import HttpResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -15,9 +16,15 @@ from rest_framework.views import APIView
 from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
+from seahub.base.models import FileComment
+from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, get_file_draft
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.seadoc.utils import get_seadoc_file_uuid
+
 
 from seaserv import seafile_api, get_repo, check_quota
 from pysearpc import SearpcError
@@ -25,9 +32,15 @@ from pysearpc import SearpcError
 import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
+from seahub.tags.models import FileUUIDMap
+
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
-    normalize_file_path, render_error, gen_file_get_url, is_pro_version
+    normalize_file_path, render_error, gen_file_get_url, is_pro_version, gen_inner_file_upload_url, \
+    get_file_type_and_ext, SEADOC
+from seahub.utils.file_op import check_file_lock
+
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -51,7 +64,7 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
 
 
 class ViaRepoDirView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get_dir_info(self, repo_id, dir_path):
@@ -339,9 +352,57 @@ class ViaRepoDirView(APIView):
 
             return Response({'success': True})
 
+    def delete(self, request, format=None):
+
+        repo_id = request.repo_api_token_obj.repo_id
+        username = request.repo_api_token_obj.app_name
+
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if path == '/':
+            error_msg = 'Can not delete root path.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if path[-1] == '/':
+            path = path[:-1]
+
+        path = path.rstrip('/')
+        parent_dir = os.path.dirname(path)
+        dir_name = os.path.basename(path)
+        if check_folder_permission_by_repo_api(request, repo_id, parent_dir) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps([dir_name]), username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)
+
 
 class ViaRepoUploadLinkView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
@@ -394,7 +455,7 @@ class ViaRepoUploadLinkView(APIView):
 
 
 class ViaRepoDownloadLinkView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -419,7 +480,7 @@ class ViaRepoDownloadLinkView(APIView):
 
 
 class RepoInfoView(APIView):
-    authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
+    authentication_classes = (RepoAPITokenAuthentication, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -431,5 +492,544 @@ class RepoInfoView(APIView):
         data = {
             'repo_id': repo.id,
             'repo_name': repo.name,
+            'size': repo.size,
+            'file_count': repo.file_count,
+            'last_modified': timestamp_to_isoformat_timestr(repo.last_modify),
         }
         return Response(data)
+
+
+class ViaRepoBatchMove(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi move files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # argument check
+        src_parent_dir = request.data.get('src_parent_dir', None)
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_dirents = request.data.get('src_dirents', None)
+        if not src_dirents:
+            error_msg = 'src_dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir', None)
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
+            error_msg = 'Folder %s not found.' % src_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+
+        try:
+            seafile_api.move_file(repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
+                                  replace=False, username=username,
+                                  need_progress=0, synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoBatchCopy(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Asynchronous multi copy files/folders.
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_parent_dir":"/a/b/c/",
+            "src_dirents":["1.md", "2.md"],
+
+            "dst_parent_dir":"/x/y/",
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # argument check
+        src_parent_dir = request.data.get('src_parent_dir', None)
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_dirents = request.data.get('src_dirents', None)
+        if not src_dirents:
+            error_msg = 'src_dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir', None)
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, src_parent_dir):
+            error_msg = 'Folder %s not found.' % src_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+
+        try:
+            seafile_api.copy_file(repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
+                                  username=username, need_progress=0,
+                                  synchronous=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoBatchDelete(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request):
+        """ Multi delete files/folders.
+        Permission checking:
+        1. User must has `rw` permission for parent folder.
+        Parameter:
+        {
+            "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+            "parent_dir":"/a/b/c/",
+            "dirents":["1.md", "2.md"],
+        }
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        parent_dir = request.data.get('parent_dir', None)
+        if not parent_dir:
+            error_msg = 'parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dirents = request.data.get('dirents', None)
+        if not dirents:
+            error_msg = 'dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps(dirents),
+                                 username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ViaRepoTokenFile(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+
+    def get_file_info(self, username, repo_id, file_path):
+
+        repo = seafile_api.get_repo(repo_id)
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        if file_obj:
+            file_name = file_obj.obj_name
+            file_size = file_obj.size
+            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+            can_edit, error_msg = can_edit_file(file_name, file_size, repo)
+        else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+            file_size = ''
+            can_preview = False
+            can_edit = False
+
+        file_info = {
+            'type': 'file',
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(file_path),
+            'obj_name': file_name,
+            'obj_id': file_obj.obj_id if file_obj else '',
+            'size': file_size,
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
+            'can_preview': can_preview,
+            'can_edit': can_edit,
+        }
+
+        return file_info
+
+    def get(self, request, format=None):
+        repo_id = request.repo_api_token_obj.repo_id
+        username = request.repo_api_token_obj.app_name
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_info = self.get_file_info(username, repo_id, path)
+        return Response(file_info)
+
+    def post(self, request, format=None):
+        """ Create, rename, move, copy, revert file
+
+        Permission checking:
+        2. rename: user with 'rw' permission for current file;
+        4. revert: user with 'rw' permission for current file's parent dir;
+        """
+        repo_id = request.repo_api_token_obj.repo_id
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # argument check
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+
+        operation = request.data.get('operation', None)
+        if not operation:
+            error_msg = 'operation invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        operation = operation.lower()
+        if operation not in ('rename', 'revert', 'create'):
+            error_msg = "operation can only be 'rename', 'revert', 'create'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = ''
+        parent_dir = os.path.dirname(path)
+
+        is_draft = request.POST.get('is_draft', '')
+
+        if operation == 'create':
+
+            # resource check
+            try:
+                parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not parent_dir_id:
+                error_msg = 'Folder %s not found.' % parent_dir
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            if check_folder_permission_by_repo_api(request, repo_id, parent_dir) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if is_draft.lower() == 'true':
+                file_name = os.path.basename(path)
+                file_dir = os.path.dirname(path)
+
+                draft_type = os.path.splitext(file_name)[0][-7:]
+                file_type = os.path.splitext(file_name)[-1]
+
+                if draft_type != '(draft)':
+                    f = os.path.splitext(file_name)[0]
+                    path = file_dir + '/' + f + '(draft)' + file_type
+
+            # create new empty file
+            new_file_name = os.path.basename(path)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+
+            try:
+                seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, username)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit")
+                    from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                    return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_draft.lower() == 'true':
+                Draft.objects.add(username, repo, path, file_exist=False)
+
+            LANGUAGE_DICT = {
+                'cs': 'cs-CZ',
+                'de': 'de-DE',
+                'en': 'en-US',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'it': 'it-IT',
+                'lv': 'lv-LV',
+                'nl': 'nl-NL',
+                'pl': 'pl-PL',
+                'pt-br': 'pt-BR',
+                'ru': 'ru-RU',
+                'sv': 'sv-SE',
+                'vi': 'vi-VN',
+                'uk': 'uk-UA',
+                'el': 'el-GR',
+                'ko': 'ko-KR',
+                'ja': 'ja-JP',
+                'zh-cn': 'zh-CN',
+                'zh-tw': 'zh-TW'
+            }
+
+            empty_file_path = ''
+            not_used, file_extension = os.path.splitext(new_file_name)
+            if file_extension in ('.xlsx', '.pptx', '.docx', '.docxf'):
+                # update office file by template
+                empty_file_path = os.path.join(settings.OFFICE_TEMPLATE_ROOT, f'empty{file_extension}')
+                language_code_path = LANGUAGE_DICT.get(request.LANGUAGE_CODE)
+                if language_code_path:
+                    empty_file_path = os.path.join(settings.OFFICE_TEMPLATE_ROOT, 'new',
+                                                   language_code_path, f'new{file_extension}')
+
+            if empty_file_path:
+                # get file server update url
+                update_token = seafile_api.get_fileserver_access_token(
+                        repo_id, 'dummy', 'update', username)
+
+                if not update_token:
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                update_url = gen_inner_file_upload_url('update-api', update_token)
+                # update file
+                new_file_path = posixpath.join(parent_dir, new_file_name)
+                try:
+                    requests.post(
+                        update_url,
+                        data={'filename': new_file_name, 'target_file': new_file_path},
+                        files={'file': open(empty_file_path, 'rb')}
+                    )
+                except Exception as e:
+                    logger.error(e)
+
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            # gen doc_uuid
+            if new_file_name.endswith('.sdoc'):
+                doc_uuid = get_seadoc_file_uuid(repo, new_file_path)
+                file_info['doc_uuid'] = doc_uuid
+            return Response(file_info)
+
+        if operation == 'rename':
+            # argument check
+            new_file_name = request.data.get('newname', None)
+            if not new_file_name:
+                error_msg = 'newname invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
+            if len(new_file_name) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+                error_msg = 'newname is too long.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            oldname = os.path.basename(path)
+            if oldname == new_file_name:
+                error_msg = 'The new name is the same to the old'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # resource check
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not file_id:
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # rename file
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+            try:
+                seafile_api.rename_file(repo_id, parent_dir, oldname, new_file_name, username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            return Response(file_info)
+
+        if operation == 'revert':
+            commit_id = request.data.get('commit_id', None)
+            if not commit_id:
+                error_msg = 'commit_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                seafile_api.revert_file(repo_id, commit_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
+
+    def delete(self, request, format=None):
+        repo_id = request.repo_api_token_obj.repo_id
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            return Response({'success': True})
+
+        # permission check
+        parent_dir = os.path.dirname(path)
+        # permission check
+        if check_folder_permission_by_repo_api(request, repo_id, parent_dir) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # delete file
+        file_name = os.path.basename(path)
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps([file_name]),
+                                 request.user.username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:  # rm sdoc fileuuid
+            filetype, fileext = get_file_type_and_ext(file_name)
+            if filetype == SEADOC:
+                from seahub.seadoc.utils import get_seadoc_file_uuid
+                file_uuid = get_seadoc_file_uuid(repo, path)
+                FileComment.objects.filter(uuid=file_uuid).delete()
+                FileUUIDMap.objects.delete_fileuuidmap_by_path(
+                    repo_id, parent_dir, file_name, is_dir=False)
+                SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
+                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
+                SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+        except Exception as e:
+            logger.error(e)
+
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)

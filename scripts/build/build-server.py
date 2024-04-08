@@ -549,6 +549,15 @@ def copy_go_fileserver():
 
     must_copy(src_go_fileserver, dst_bin_dir)
 
+# copy notification_server notification-server to directory seafile-server/seafile/bin
+def copy_notification_server():
+    builddir = conf[CONF_BUILDDIR]
+    srcdir = conf[CONF_SRCDIR]
+    src_notification_server = os.path.join(srcdir, 'notification-server')
+    dst_bin_dir = os.path.join(builddir, 'seafile-server', 'seafile', 'bin')
+
+    must_copy(src_notification_server, dst_bin_dir)
+
 def copy_seafdav():
     dst_dir = os.path.join(conf[CONF_BUILDDIR], 'seafile-server', 'seahub', 'thirdpart')
     tarball = os.path.join(conf[CONF_SRCDIR], 'seafdav.tar.gz')
@@ -577,6 +586,8 @@ def copy_scripts_and_libs():
     must_copy(os.path.join(scripts_srcdir, 'setup-seafile-mysql.py'),
               serverdir)
     must_copy(os.path.join(scripts_srcdir, 'seafile.sh'),
+              serverdir)
+    must_copy(os.path.join(scripts_srcdir, 'seafile-monitor.sh'),
               serverdir)
     must_copy(os.path.join(scripts_srcdir, 'seahub.sh'),
               serverdir)
@@ -634,6 +645,9 @@ def copy_scripts_and_libs():
 
     # copy go_fileserver
     copy_go_fileserver()
+
+    # copy notification_server
+    copy_notification_server()
 
 def copy_pdf2htmlex():
     '''Copy pdf2htmlEX exectuable and its dependent libs'''

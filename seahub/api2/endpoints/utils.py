@@ -1,19 +1,24 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import re
-import datetime
+import jwt
 import time
-import urllib.request, urllib.parse, urllib.error
 import logging
+import requests
+import datetime
+import urllib.request
+import urllib.parse
+import urllib.error
 
+from urllib.parse import urljoin
 from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
-from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
-from seahub.base.templatetags.seahub_tags import email2nickname, \
-        email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
+
+from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -22,15 +27,16 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 def api_check_group(func):
     """
     Decorator for check if group valid
     """
     def _decorated(view, request, group_id, *args, **kwargs):
-        group_id = int(group_id) # Checked by URL Conf
+        group_id = int(group_id)  # Checked by URL Conf
         try:
             group = ccnet_api.get_group(int(group_id))
-        except SearpcError as e:
+        except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -43,6 +49,7 @@ def api_check_group(func):
 
     return _decorated
 
+
 def add_org_context(func):
     def _decorated(view, request, *args, **kwargs):
         if is_org_context(request):
@@ -52,6 +59,7 @@ def add_org_context(func):
         return func(view, request, org_id=org_id, *args, **kwargs)
 
     return _decorated
+
 
 def is_org_user(username, org_id=None):
     """ Check if an user is an org user.
@@ -75,6 +83,7 @@ def is_org_user(username, org_id=None):
         logger.error(e)
         return False
 
+
 def get_user_contact_email_dict(email_list):
     email_list = set(email_list)
     user_contact_email_dict = {}
@@ -84,6 +93,7 @@ def get_user_contact_email_dict(email_list):
 
     return user_contact_email_dict
 
+
 def get_user_name_dict(email_list):
     email_list = set(email_list)
     user_name_dict = {}
@@ -92,6 +102,7 @@ def get_user_name_dict(email_list):
             user_name_dict[email] = email2nickname(email)
 
     return user_name_dict
+
 
 def get_repo_dict(repo_id_list):
     repo_id_list = set(repo_id_list)
@@ -113,7 +124,6 @@ def get_group_dict(group_id_list):
         if group_id not in group_dict:
             group_dict[group_id] = ''
             group = ccnet_api.get_group(int(group_id))
-            print(group)
             if group:
                 group_dict[group_id] = group
 
@@ -131,6 +141,7 @@ def check_time_period_valid(start, end):
 
     return True
 
+
 def get_log_events_by_type_and_time(log_type, start, end):
     start_struct_time = datetime.datetime.strptime(start, "%Y-%m-%d")
     start_timestamp = time.mktime(start_struct_time.timetuple())
@@ -142,6 +153,7 @@ def get_log_events_by_type_and_time(log_type, start, end):
     events = get_log_events_by_time(log_type, start_timestamp, end_timestamp)
     events = events if events else []
     return events
+
 
 def generate_links_header_for_paginator(base_url, page, per_page, total_count, option_dict={}):
 
@@ -210,3 +222,63 @@ def get_user_quota_usage_and_total(email, org_id=''):
         quota_usage = -1
         quota_total = -1
     return quota_usage, quota_total
+
+
+def convert_file_gen_headers():
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SEADOC_PRIVATE_KEY, algorithm='HS256')
+    return {"Authorization": "Token %s" % token}
+
+
+def convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type):
+    headers = convert_file_gen_headers()
+    params = {
+        'path': path,
+        'username': username,
+        'doc_uuid': doc_uuid,
+        'download_token': download_token,
+        'upload_token': upload_token,
+        'src_type': src_type,
+        'dst_type': dst_type,
+    }
+    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/file-convert/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+
+    return resp
+
+
+def sdoc_convert_to_docx(path, username, doc_uuid, download_token,
+                         upload_token, src_type, dst_type):
+
+    headers = convert_file_gen_headers()
+    params = {
+        'path': path,
+        'username': username,
+        'doc_uuid': doc_uuid,
+        'download_token': download_token,
+        'upload_token': upload_token,
+        'src_type': src_type,
+        'dst_type': dst_type,
+    }
+    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/sdoc-convert-to-docx/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+
+    return resp
+
+
+def sdoc_export_to_docx(path, username, doc_uuid, download_token,
+                        src_type, dst_type):
+
+    headers = convert_file_gen_headers()
+    params = {
+        'path': path,
+        'username': username,
+        'doc_uuid': doc_uuid,
+        'download_token': download_token,
+        'src_type': src_type,
+        'dst_type': dst_type,
+    }
+    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/sdoc-export-to-docx/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+
+    return resp

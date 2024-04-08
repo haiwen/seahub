@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext, username } from '../../../utils/constants';
+import { gettext, username } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
-import SysAdminUserMembershipEditor from '../../../components/select-editor/sysadmin-user-membership-editor';
+import Selector from '../../../components/single-selector';
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
@@ -25,13 +25,17 @@ class Content extends Component {
     };
   }
 
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
+
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -52,7 +56,7 @@ class Content extends Component {
               <tr>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">{gettext('Status')}</th>
-                <th width="15%">{gettext('Membership')}</th>
+                <th width="15%">{gettext('Role')}</th>
                 <th width="15%">{gettext('Space Used')}</th>
                 <th width="25%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
                 <th width="5%">{/* Operations */}</th>
@@ -66,6 +70,7 @@ class Content extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                   updateStatus={this.props.updateStatus}
                   updateMembership={this.props.updateMembership}
                   deleteUser={this.props.deleteUser}
@@ -80,6 +85,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
 class Item extends Component {
 
   constructor(props) {
@@ -99,7 +112,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -108,7 +121,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -116,7 +129,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -129,34 +142,34 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleResetPasswordDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen});
-  }
+  };
 
-  updateStatus= (statusValue) => {
-    this.props.updateStatus(this.props.item.email, statusValue);
-  }
+  updateStatus= (statusOption) => {
+    this.props.updateStatus(this.props.item.email, statusOption.value);
+  };
 
-  updateMembership= (membershipValue) => {
-    this.props.updateMembership(this.props.item.email, membershipValue);
-  }
+  updateMembership= (membershipOption) => {
+    this.props.updateMembership(this.props.item.email, membershipOption.value);
+  };
 
   deleteUser = () => {
     const { item } = this.props;
     this.props.deleteUser(item.org_id, item.email);
-  }
+  };
 
   resetPassword = () => {
     seafileAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
@@ -165,7 +178,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -179,36 +192,76 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
+
+  translateStatus = (status) => {
+    switch (status) {
+      case 'active':
+        return gettext('Active');
+      case 'inactive':
+        return gettext('Inactive');
+    }
+  };
+
+  translateMembership = (membership) => {
+    switch (membership) {
+      case 'Admin':
+        return gettext('Admin');
+      case 'Member':
+        return gettext('Member');
+    }
+  };
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
+    const { highlight, isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     let resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
+
+    // for 'user status'
+    const curStatus = item.active ? 'active' : 'inactive';
+    this.statusOptions = ['active', 'inactive'].map(item => {
+      return {
+        value: item,
+        text: this.translateStatus(item),
+        isSelected: item == curStatus
+      };
+    });
+    const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
+
+    // for 'user membership'
+    const curMembership = item.is_org_staff? 'Admin' : 'Member';
+    this.membershipOptions = ['Admin', 'Member'].map(item => {
+      return {
+        value: item,
+        text: this.translateMembership(item),
+        isSelected: item == curMembership
+      };
+    });
+    const currentSelectedMembershipOption = this.membershipOptions.filter(item => item.isSelected)[0];
 
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><UserLink email={item.email} name={item.name} /></td>
           <td>
-            <SysAdminUserStatusEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentStatus={item.active ? 'active' : 'inactive'}
-              statusOptions={['active', 'inactive']}
-              onStatusChanged={this.updateStatus}
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedStatusOption}
+              options={this.statusOptions}
+              selectOption={this.updateStatus}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           <td>
-            <SysAdminUserMembershipEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentStatus={item.is_org_staff ? 'is_org_staff' : 'not_is_org_staff'}
-              statusOptions={['is_org_staff', 'not_is_org_staff']}
-              onStatusChanged={this.updateMembership}
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedMembershipOption}
+              options={this.membershipOptions}
+              selectOption={this.updateMembership}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
@@ -250,6 +303,17 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
+
 class OrgUsers extends Component {
 
   constructor(props) {
@@ -284,7 +348,7 @@ class OrgUsers extends Component {
 
   toggleAddUserDialog = () => {
     this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
-  }
+  };
 
   addUser = (newUserInfo) => {
     const { email, name, password } = newUserInfo;
@@ -296,7 +360,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUser = (orgID, email) => {
     seafileAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
@@ -309,7 +373,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateStatus = (email, statusValue) => {
     const isActive = statusValue == 'active';
@@ -325,10 +389,10 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMembership = (email, membershipValue) => {
-    const isOrgStaff = membershipValue == 'is_org_staff';
+    const isOrgStaff = membershipValue == 'Admin';
     seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
@@ -341,13 +405,13 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { isAddUserDialogOpen, orgName } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
@@ -379,5 +443,9 @@ class OrgUsers extends Component {
     );
   }
 }
+
+OrgUsers.propTypes = {
+  orgID: PropTypes.string,
+};
 
 export default OrgUsers;

@@ -135,11 +135,7 @@ class DBUpdater(object):
 
     @staticmethod
     def get_ccnet_mysql_info(version):
-        if version > '5.0.0':
-            config_path = env_mgr.central_config_dir
-        else:
-            config_path = env_mgr.ccnet_dir
-
+        config_path = env_mgr.central_config_dir
         ccnet_conf = os.path.join(config_path, 'ccnet.conf')
         defaults = {
             'HOST': '127.0.0.1',
@@ -172,11 +168,7 @@ class DBUpdater(object):
 
     @staticmethod
     def get_seafile_mysql_info(version):
-        if version > '5.0.0':
-            config_path = env_mgr.central_config_dir
-        else:
-            config_path = env_mgr.seafile_dir
-
+        config_path = env_mgr.central_config_dir
         seafile_conf = os.path.join(config_path, 'seafile.conf')
         defaults = {
             'HOST': '127.0.0.1',

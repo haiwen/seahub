@@ -6,9 +6,13 @@ import UserItem from './org-user-item';
 const propTypes = {
   initOrgUsersData: PropTypes.func.isRequired,
   toggleDelete: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
   orgUsers: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
   pageNext: PropTypes.bool.isRequired,
+  sortByQuotaUsage: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
 };
 
 class OrgUsersList extends React.Component {
@@ -22,11 +26,15 @@ class OrgUsersList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -39,12 +47,12 @@ class OrgUsersList extends React.Component {
     }
 
     this.props.initOrgUsersData(page);
-  }
+  };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
-  }
+  };
 
   render() {
     const { sortBy, sortOrder } = this.props;
@@ -79,8 +87,10 @@ class OrgUsersList extends React.Component {
                   currentTab="users"
                   isItemFreezed={this.state.isItemFreezed}
                   toggleDelete={this.props.toggleDelete}
+                  changeStatus={this.props.changeStatus}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                 />
               );})}
           </tbody>

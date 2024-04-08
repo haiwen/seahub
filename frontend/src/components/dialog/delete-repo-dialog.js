@@ -23,26 +23,26 @@ class DeleteRepoDialog extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.isRepoDeleted) {
       this.setState({isRequestSended: false});
     }
   }
 
   componentDidMount() {
-    seafileAPI.getRepoShareInfo(this.props.repo.repo_id).then((res) => {
+    seafileAPI.getRepoFolderShareInfo(this.props.repo.repo_id).then((res) => {
       this.setState({
         sharedToUserCount: res.data['shared_user_emails'].length,
         sharedToGroupCount: res.data['shared_group_ids'].length,
       });
-    })
+    });
   }
 
   onDeleteRepo = () => {
     this.setState({isRequestSended: true}, () => {
       this.props.onDeleteRepo(this.props.repo);
     });
-  }
+  };
 
   render() {
 

@@ -7,6 +7,12 @@
   font-size: 1rem;
   padding: 0.5rem 1rem;
 }
+
+.file-history-header { /* for markdown file history */
+  background-color: #fff;
+  height: 50px;
+}
+
 .history-header .title {
   font-size: 1.25rem;
   line-height: 1rem;
@@ -23,20 +29,20 @@
 }
 
 .content-viewer {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.content-viewer .sf-slate-viewer-scroll-container {
   background-color: #fafaf9;
-  border-radius: 10px;
-  overflow: auto;
+  padding: 20px 40px;
+  display: block;
 }
 
-.markdown-viewer-render-content {
-  background-color: #fff;
-  word-break: break-word;
-  margin: 20px 40px;
-  border: 1px solid #e6e6dd;
-}
-
-.markdown-viewer-render-content .diff-view {
-  padding: 40px 60px;
+.content-viewer .sf-slate-viewer-article-container .article {
+  width: 100%;
+  max-width: 100%;
 }
 
 .panel-header {
@@ -76,54 +82,6 @@
   background-color: #ffe7d5;
 }
 
-.item-active {
-  color: #fff;
-  background-color: #fdc297 !important;
-}
-
-.item-active i {
-  color: #fff;
-}
-
-.history-list-item .history-info {
-  flex: 1;
-  padding: 0 0.5rem;
-}
-
-.history-list-item .history-operation {
-  width: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.history-info .time {
-  color: #000;
-}
-
-.history-info .owner {
-  margin-top: 0.25rem;
-  color: #888;
-  display: flex;
-  align-items: center;
-}
-
-.owner .squire-icon {
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #549b5a;
-  margin-right: 0.25rem;
-}
-
-.history-body .dropdown-menu {
-  min-width: 8rem;
-}
-
-.history-body .dropdown-menu a {
-  text-decoration: none;
-  color: #6e7687;
-}
-
 .history-content .main-panel {
   flex: 1 1 auto;
 }
@@ -143,7 +101,7 @@
   line-height: 50px;
   font-size: 1rem;
   padding: 0 10px;
-  background-color: rgb(250,250,249);
+  /*background-color: rgb(250,250,249);*/
   font-weight: bolder;
 }
 
@@ -166,10 +124,14 @@
   .history-content .main-panel {
     max-width: 100%;
   }
-  .markdown-viewer-render-content {
-    margin: 20px;
+  .content-viewer .sf-slate-viewer-scroll-container {
+    padding: 20px;
   }
-  .markdown-viewer-render-content .diff-view {
+  .content-viewer .sf-slate-viewer-article-container {
+    margin: 0;
+    padding: 0;
+  }
+  .content-viewer .sf-slate-viewer-article-container .article {
     padding: 20px;
   }
 }

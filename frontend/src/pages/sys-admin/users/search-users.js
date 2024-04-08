@@ -47,11 +47,11 @@ class SearchUsers extends Component {
 
   toggleBatchSetQuotaDialog = () => {
     this.setState({isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen});
-  }
+  };
 
   toggleBatchDeleteUserDialog = () => {
     this.setState({isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen});
-  }
+  };
 
   onUserSelected = (item) => {
     let hasUserSelected = false;
@@ -81,7 +81,7 @@ class SearchUsers extends Component {
       hasUserSelected: hasUserSelected,
       selectedUserList: selectedUserList,
     });
-  }
+  };
 
   toggleSelectAllUsers = () => {
     if (this.state.isAllUsersSelected) {
@@ -109,7 +109,7 @@ class SearchUsers extends Component {
         selectedUserList: users
       });
     }
-  }
+  };
 
   getItems = (page) => {
     seafileAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
@@ -124,7 +124,7 @@ class SearchUsers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -132,20 +132,22 @@ class SearchUsers extends Component {
     }, () => {
       this.getItems(1);
     });
-  }
+  };
 
-  deleteUser = (email) => {
+  deleteUser = (email, username) => {
     seafileAPI.sysAdminDeleteUser(email).then(res => {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
       this.setState({userList: newUserList});
-      toaster.success(gettext('Successfully deleted 1 item.'));
+      let msg = gettext('Deleted user %s');
+      msg = msg.replace('%s', username);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setUserQuotaInBatch = (quotaTotal) => {
     let emails = this.state.selectedUserList.map(user => {
@@ -153,7 +155,7 @@ class SearchUsers extends Component {
     });
     seafileAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
       let userList = this.state.userList.map(item => {
-        res.data.success.map(resultUser => {
+        res.data.success.forEach(resultUser => {
           if (item.email == resultUser.email) {
             item.quota_total = resultUser.quota_total;
           }
@@ -165,7 +167,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUserInBatch = () => {
     let emails = this.state.selectedUserList.map(user => {
@@ -190,7 +192,7 @@ class SearchUsers extends Component {
             .replace('{user_number_placeholder}', length);
         toaster.success(msg);
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });
@@ -198,7 +200,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
@@ -216,7 +218,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateAdminRole = (email, role) => {
     seafileAPI.sysAdminUpdateAdminRole(email, role).then(res => {
@@ -232,7 +234,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   revokeAdmin = (email, name) => {
     seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
@@ -247,28 +249,37 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
 
   getPreviousPageList = () => {
     this.getItems(this.state.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.getItems(this.state.pageInfo.current_page + 1);
-  }
+  };
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;
@@ -280,13 +291,13 @@ class SearchUsers extends Component {
     return (
       <Fragment>
         {hasUserSelected ?
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Fragment>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchSetQuotaDialog}>{gettext('Set Quota')}</Button>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchDeleteUserDialog}>{gettext('Delete Users')}</Button>
             </Fragment>
           </MainPanelTopbar> :
-          <MainPanelTopbar />
+          <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -296,10 +307,10 @@ class SearchUsers extends Component {
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Users')}</h4>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
-                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>

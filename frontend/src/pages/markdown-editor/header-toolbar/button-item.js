@@ -10,6 +10,8 @@ const propTypes = {
   className: PropTypes.string,
   icon: PropTypes.string,
   text: PropTypes.string,
+  onClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
 };
 
 class ButtonItem extends React.Component {
@@ -17,7 +19,7 @@ class ButtonItem extends React.Component {
   static defaultProps = {
     className: '',
     isActive: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -43,7 +45,7 @@ class ButtonItem extends React.Component {
     setTimeout(() => {
       this.setState({ isFreezed: false });
     }, 100);
-  }
+  };
 
   shouldComponentUpdate (nextProps, nextState) {
     const { disabled, isActive } = nextProps;
@@ -66,13 +68,13 @@ class ButtonItem extends React.Component {
     if (!this.props.disabled) {
       this.props.onClick && this.props.onClick(event);
     }
-  }
-  
+  };
+
   onMouseDown = (event) => {
     if (!this.props.disabled) {
       this.props.onMouseDown(event);
     }
-  }
+  };
 
   getClassName = () => {
     const { isRichEditor, className, disabled } = this.props;
@@ -81,7 +83,7 @@ class ButtonItem extends React.Component {
 
     itemClass = `rich-icon-btn ${disabled ? 'rich-icon-btn-disabled' : 'rich-icon-btn-hover'}`;
     return itemClass + ' ' + className;
-  }
+  };
 
   render() {
     const { tooltipOpen } = this.state;
@@ -89,13 +91,13 @@ class ButtonItem extends React.Component {
     const className = this.getClassName();
     const delay = {show: 0, hide: 0};
     return (
-      <button 
+      <button
         type="button"
-        id={id} 
+        id={id}
         className={className}
         data-active={isActive }
         disabled={disabled}
-        onClick ={this.onClick} 
+        onClick ={this.onClick}
         onMouseDown={this.onMouseDown}
       >
         <i className={icon} />

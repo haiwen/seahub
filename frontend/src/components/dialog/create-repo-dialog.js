@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -25,7 +25,14 @@ class CreateRepoDialog extends React.Component {
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
+    this.templateOptions = [];
+    this.storageOptions = [];
+    if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
+      this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
+    }
+    if (Array.isArray(storages) && storages.length) {
+      this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+    }
   }
 
   handleRepoNameChange = (e) => {
@@ -36,15 +43,15 @@ class CreateRepoDialog extends React.Component {
     }
 
     this.setState({repoName: e.target.value});
-  }
+  };
 
   handlePassword1Change = (e) => {
     this.setState({password1: e.target.value});
-  }
+  };
 
   handlePassword2Change = (e) => {
     this.setState({password2: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     let isValid = this.validateInputParams();
@@ -56,22 +63,18 @@ class CreateRepoDialog extends React.Component {
       }
       this.props.onCreateRepo(repoData);
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.onCreateToggle();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-  }
+  };
 
   validateInputParams() {
     let errMessage = '';
@@ -116,15 +119,15 @@ class CreateRepoDialog extends React.Component {
   onPermissionChange = (e) => {
     let permission = e.target.value;
     this.setState({permission: permission});
-  }
+  };
 
   handleStorageInputChange = (selectedItem) => {
     this.setState({storage_id: selectedItem.value});
-  }
+  };
 
   handlelibraryTemplatesInputChange = (selectedItem) => {
     this.setState({library_template: selectedItem.value});
-  }
+  };
 
   onEncrypted = (e) => {
     let isChecked = e.target.checked;
@@ -132,7 +135,7 @@ class CreateRepoDialog extends React.Component {
       encrypt: isChecked,
       disabled: !isChecked
     });
-  }
+  };
 
   prepareRepoData = () => {
     let libraryType = this.props.libraryType;
@@ -173,11 +176,11 @@ class CreateRepoDialog extends React.Component {
     }
 
     return repo;
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -185,33 +188,33 @@ class CreateRepoDialog extends React.Component {
               <Label for="repoName">{gettext('Name')}</Label>
               <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
+                autoFocus={true}
               />
             </FormGroup>
 
             {libraryTemplates.length > 0 && (
               <FormGroup>
-                <Label for="library-template">{gettext('Template')}</Label>
-                <Select
-                  id="library-template"
-                  defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
-                  options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
+                <Label>{gettext('Template')}</Label>
+                <SeahubSelect
+                  defaultValue={this.templateOptions[0]}
+                  options={this.templateOptions}
                   onChange={this.handlelibraryTemplatesInputChange}
-                /> 
+                  value={this.templateOptions.find(opt => opt.value === this.state.library_template) || null}
+                />
               </FormGroup>
             )}
 
             {storages.length > 0 && (
               <FormGroup>
-                <Label for="storage-backend">{gettext('Storage Backend')}</Label>
-                <Select
-                  id="storage-backend"
-                  defaultValue={{value: storages[0].id, label: storages[0].name}}
-                  options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
+                <Label>{gettext('Storage Backend')}</Label>
+                <SeahubSelect
+                  defaultValue={this.storageOptions[0]}
+                  options={this.storageOptions}
                   onChange={this.handleStorageInputChange}
+                  value={this.storageOptions.find(opt => opt.value === this.state.storage_id) || null}
                 />
               </FormGroup>
             )}

@@ -7,8 +7,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from django.utils.http import urlquote
-from django.utils.translation import ugettext as _
+from urllib.parse import quote
+from django.utils.translation import gettext as _
 
 from seahub.auth.decorators import login_required
 import seaserv
@@ -84,7 +84,7 @@ def group_check(func):
         if not request.user.is_authenticated:
             if not group.is_pub:
                 login_url = settings.LOGIN_URL
-                path = urlquote(request.get_full_path())
+                path = quote(request.get_full_path())
                 tup = login_url, REDIRECT_FIELD_NAME, path
                 return HttpResponseRedirect('%s?%s=%s' % tup)
             else:
@@ -117,7 +117,7 @@ def group_remove(request, group_id):
     operation.
     """
     # Request header may missing HTTP_REFERER, we need to handle that case.
-    next_page = request.META.get('HTTP_REFERER', SITE_ROOT)
+    next_page = request.headers.get('referer', SITE_ROOT)
 
     try:
         group_id_int = int(group_id)

@@ -25,7 +25,7 @@ class DingtalkDepartmentMembersList extends Component {
     const { newUsersTempObj, checkedDepartmentId, isMembersListLoading, canCheckUserIds } = this.props;
     const membersList = this.props.membersList.map((member, index) => {
       let avatar = member.avatar;
-      if (member.avatar.length > 0) {
+      if (member.avatar && member.avatar.length > 0) {
         avatar = member.avatar;
       } else {
         avatar = siteRoot + 'media/avatars/default.png';

@@ -1,0 +1,9 @@
+.go-back {
+  margin-right: 0.75rem;
+  color: #c0c0c0;
+}
+
+.go-back:hover {
+  color: #ff9933;
+  cursor: pointer;
+}

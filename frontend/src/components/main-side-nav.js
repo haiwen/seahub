@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
-import { Badge } from 'reactstrap';
-import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM, enableOCMViaWebdav } from '../utils/constants';
+import { Link } from '@gatsbyjs/reach-router';
+import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM, enableOCMViaWebdav } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 import Group from '../models/group';
 
-import { canViewOrg, isDocs, isPro, customNavItems } from '../utils/constants';
+import { canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
-  draftCounts: PropTypes.number,
 };
 
 class MainSideNav extends React.Component {
@@ -36,13 +34,13 @@ class MainSideNav extends React.Component {
       groupsExtended: !this.state.groupsExtended,
     });
     this.loadGroups();
-  }
+  };
 
   shExtend = () => {
     this.setState({
       sharedExtended: !this.state.sharedExtended,
     });
-  }
+  };
 
   loadGroups = () => {
     let _this = this;
@@ -62,7 +60,7 @@ class MainSideNav extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   tabItemClick = (e, param, id) => {
     if (window.uploader &&
@@ -75,16 +73,11 @@ class MainSideNav extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.tabItemClick(param, id);
-  }
-
-  onDTableClick = () => {
-    let url = dtableWebServer;
-    window.open(url);
-  }
+  };
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
-  }
+  };
 
   renderSharedGroups() {
     let style = {height: 0};
@@ -180,7 +173,7 @@ class MainSideNav extends React.Component {
   }
 
   render() {
-    let showActivity = isDocs || isPro;
+    let showActivity = isDocs || isPro || !isDBSqlite3;
     return (
       <div className="side-nav">
         <div className="side-nav-con">
@@ -210,9 +203,9 @@ class MainSideNav extends React.Component {
             }
             <li className="nav-item flex-column" id="group-nav">
               <a className="nav-link ellipsis" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
-                <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-group" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Shared with groups')}</span>
+                <span className={`toggle-icon fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
               </a>
               {this.renderSharedGroups()}
             </li>
@@ -251,25 +244,12 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
-            {canPublishRepo &&
-              <li className="nav-item">
-                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={(e) => this.tabItemClick(e, 'published')}>
-                  <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Published Libraries')}</span>
-                </Link>
-              </li>
-            }
-            {isDocs &&
-              <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'drafts')}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
-                  <span className="sf2-icon-edit" aria-hidden="true"></span>
-                  <span className="draft-info nav-text">
-                    {gettext('Drafts')}
-                    {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
-                  </span>
-                </Link>
-              </li>
-            }
+            <li className="nav-item">
+              <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={(e) => this.tabItemClick(e, 'published')}>
+                <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Published Libraries')}</span>
+              </Link>
+            </li>
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={(e) => this.tabItemClick(e, 'linked-devices')}>
                 <span className="sf2-icon-monitor" aria-hidden="true"></span>
@@ -286,23 +266,15 @@ class MainSideNav extends React.Component {
             }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
-                <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-wrench" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Share Admin')}</span>
+                <span className={`toggle-icon fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
               </a>
               {this.renderSharedAdmin()}
             </li>
             {customNavItems && this.renderCustomNavItems()}
           </ul>
         </div>
-
-        {dtableWebServer &&
-          <div className="side-nav-link" onClick={this.onDTableClick}>
-            <span className="link-icon icon-left sf3-font sf3-font-dtable-logo" aria-hidden="true"></span>
-            <span className="link-text">SeaTable</span>
-            <span className="link-icon icon-right sf3-font sf3-font-arrow"></span>
-          </div>
-        }
       </div>
     );
   }

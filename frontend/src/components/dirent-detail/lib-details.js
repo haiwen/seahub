@@ -26,7 +26,7 @@ class LibDetail extends React.Component {
     this.getFileCounts(repo);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.currentRepo.repo_id !== this.props.currentRepo.repo_id) {
       this.getFileCounts(nextProps.currentRepo);
     }
@@ -39,7 +39,7 @@ class LibDetail extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let repo = this.props.currentRepo;

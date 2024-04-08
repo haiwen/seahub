@@ -20,21 +20,21 @@ class WikiDirListItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({highlight: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({highlight: false});
-  }
+  };
 
   onContextMenu = (event) => {
     event.preventDefault();
     event.stopPropagation();
-  }
+  };
 
   onDirentClick = (e) => {
     e.preventDefault();
     this.props.onDirentClick(this.props.dirent);
-  }
+  };
 
   render() {
     let { path, dirent } = this.props;

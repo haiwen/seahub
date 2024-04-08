@@ -1,7 +1,7 @@
 from mock import patch
 
 from django.core.cache import cache
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.test import override_settings
 from django.test.client import RequestFactory
 
@@ -11,7 +11,9 @@ from seahub.share.decorators import share_link_audit
 from seahub.share.models import FileShare
 from seahub.utils import gen_token, normalize_cache_key
 
+
 class ShareLinkAuditTest(BaseTestCase):
+
     def setUp(self):
         share_file_info = {
             'username': self.user.username,
@@ -30,6 +32,7 @@ class ShareLinkAuditTest(BaseTestCase):
         request = self.factory.get('/rand')
         request.user = self.user
         request.session = session
+        request.cloud_mode = False
         return request
 
     def _anon_request(self, session={}):
@@ -53,14 +56,9 @@ class ShareLinkAuditTest(BaseTestCase):
         return fake_view_shared_file(request, token)
 
     def test_bad_share_token(self):
-        @share_link_audit
-        def a_view(request, fileshare):
-            return HttpResponse()
-
-        request = self.factory.get('/rand')
-        request.user = self.user
-
-        self.assertRaises(Http404, a_view, request, 'xxx')
+        resp = self._fake_view_shared_file(self._request, 'fake-token')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(b'Link does not exist', resp.content)
 
     def test_non_pro_version(self):
         """

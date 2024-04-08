@@ -34,7 +34,9 @@
               {% else %}
                 <span class="user-status-cur-value">{% trans "Inactive" %}</span>
               {% endif %}
+              {% if not user.is_self and not user.is_staff and not user.is_institution_admin %}
                 <span title="{% trans "Edit"%}" class="user-status-edit-icon sf2-icon-edit op-icon vh"></span>
+              {% endif %}
             </div>
             <select name="permission" class="user-status-select hide">
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
@@ -53,7 +55,7 @@
             {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
-          {% if not user.is_self %}
+          {% if not user.is_self and not user.is_staff and not user.is_institution_admin %}
           <a href="#" class="remove-user-btn op vh" data-url="{% url 'institutions:user_remove' user.email %}" data-target="{{ user.email }}">{% trans "Delete" %}</a>
           {% endif %}
         </td>

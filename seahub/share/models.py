@@ -11,7 +11,7 @@ from django.db import models
 from django.db.models import Q
 from django.dispatch import receiver
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import check_password
 
 from seahub.signals import repo_deleted
@@ -179,6 +179,9 @@ class FileShareManager(models.Manager):
 
     def get_valid_dir_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
+
+    def get_share_link_count_by_repo(self, repo_id):
+        return super(FileShareManager, self).filter(repo_id=repo_id).count()
 
 
 class ExtraSharePermissionManager(models.Manager):
@@ -491,7 +494,7 @@ class UploadLinkShare(models.Model):
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     password = models.CharField(max_length=128, null=True)
-    expire_date = models.DateTimeField(null=True)
+    expire_date = models.DateTimeField(null=True, db_index=True)
     objects = UploadLinkShareManager()
 
     def is_encrypted(self):

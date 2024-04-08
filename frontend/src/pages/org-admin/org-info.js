@@ -9,6 +9,7 @@ class OrgInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      org_name: '',
       storage_quota: 0,
       storage_usage: 0,
       member_quota: 0,
@@ -20,6 +21,7 @@ class OrgInfo extends Component {
   componentDidMount() {
     seafileAPI.orgAdminGetOrgInfo().then(res => {
       this.setState({
+        org_name: res.data.org_name,
         storage_quota: res.data.storage_quota,
         storage_usage: res.data.storage_usage,
         member_quota: res.data.member_quota,
@@ -40,6 +42,7 @@ class OrgInfo extends Component {
             </div>
             <div className="cur-view-content">
               <dl>
+                <strong>{this.state.org_name}</strong>
                 <dt>{gettext('Space Used')}</dt>
 
                 {(this.state.storage_quota > 0) ? <dd>{Utils.bytesToSize(this.state.storage_usage)} / {Utils.bytesToSize(this.state.storage_quota)}</dd> : <dd>{Utils.bytesToSize(this.state.storage_usage)}</dd>}

@@ -3,7 +3,7 @@
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib import messages
 
@@ -34,7 +34,7 @@ def _get_next(request):
     redirect to that previous page.
     """
     next_page = request.POST.get('next', request.GET.get('next',
-        request.META.get('HTTP_REFERER', None)))
+        request.headers.get('referer', None)))
     if not next_page:
         next_page = request.path
     return next_page

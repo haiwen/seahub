@@ -12,8 +12,10 @@ from seahub.two_factor.models import default_device
 from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
+from seahub.settings import ENABLE_LDAP
 
 logger = logging.getLogger(__name__)
+
 
 def all_none(values):
     for value in values:
@@ -22,12 +24,14 @@ def all_none(values):
 
     return True
 
+
 def all_not_none(values):
     for value in values:
         if value is None:
             return False
 
     return True
+
 
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -72,17 +76,18 @@ class AuthTokenSerializer(serializers.Serializer):
                 if not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
             else:
-                """try login id/contact email/primary id"""
+                """try login id/contact email"""
                 # convert login id or contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(login_id)
-                # convert username to primary id if any
-                p_id = ccnet_api.get_primary_id(username)
-                if p_id is not None:
-                    username = p_id
-
                 user = authenticate(username=username, password=password)
+                # After local user authentication process is completed, authenticate LDAP user
+                if user is None and ENABLE_LDAP:
+                    user = authenticate(ldap_user=username, password=password)
+
                 if user is None:
                     raise serializers.ValidationError('Unable to login with provided credentials.')
+                elif not user.is_active:
+                    raise serializers.ValidationError('User account is disabled.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
@@ -103,7 +108,7 @@ class AuthTokenSerializer(serializers.Serializer):
                 logger.info('%s: unrecognized device' % login_id)
 
             token = get_token_v2(self.context['request'], user.username, platform,
-                    device_id, device_name, client_version, platform_version)
+                                 device_id, device_name, client_version, platform_version)
         else:
             token = get_token_v1(user.username)
 
@@ -113,11 +118,11 @@ class AuthTokenSerializer(serializers.Serializer):
         if not has_two_factor_auth() or not two_factor_auth_enabled(user):
             return
 
-        if is_device_remembered(request.META.get('HTTP_X_SEAFILE_S2FA', ''),
+        if is_device_remembered(request.headers.get('x-seafile-s2fa', ''),
                                 user):
             return
 
-        token = request.META.get('HTTP_X_SEAFILE_OTP', '')
+        token = request.headers.get('x-seafile-otp', '')
         if not token:
             # Generate challenge(send sms/call/...) if token is not provided.
             default_device(user).generate_challenge()

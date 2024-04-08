@@ -20,12 +20,6 @@ class SetGroupQuotaDialog extends React.Component {
       quota: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   setGroupQuota = () => {
@@ -45,31 +39,31 @@ class SetGroupQuotaDialog extends React.Component {
       const err = gettext('Quota is invalid.');
       this.setState({ errMessage: err });
     }
-  }
+  };
 
   handleChange = (e) => {
     const quota = e.target.value.trim();
     this.setState({ quota: quota });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.setGroupQuota();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Set Quota')}</ModalHeader>
         <ModalBody>
           <InputGroup>
             <Input
-              onKeyPress={this.handleKeyPress}
+              onKeyDown={this.handleKeyDown}
               value={this.state.quota}
               onChange={this.handleChange}
-              innerRef={input => {this.newInput = input;}}
+              autoFocus={true}
             />
             <InputGroupAddon addonType="append">{'MB'}</InputGroupAddon>
           </InputGroup>

@@ -10,12 +10,12 @@ class UserAvatarForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.fileInput = React.createRef();
-    this.form = React.createRef();
     this.state = {
       avatarSrc: avatarURL,
       isEditShown: false
     };
+    this.fileInput = React.createRef();
+    this.form = React.createRef();
   }
 
   fileInputChange = () => {
@@ -62,29 +62,29 @@ class UserAvatarForm extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({
       isEditShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isEditShown: false
     });
-  }
+  };
 
   onEditIconKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
     return (

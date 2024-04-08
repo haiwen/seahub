@@ -5,7 +5,7 @@ import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import UserStatusEditor from '../../components/select-editor/user-status-editor';
+import Selector from '../../components/single-selector';
 
 const propTypes = {
   user: PropTypes.object,
@@ -15,6 +15,8 @@ const propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 };
 
 class UserItem extends React.Component {
@@ -24,11 +26,8 @@ class UserItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      currentStatus: this.props.user.is_active ? 'active' : 'inactive',
       isItemMenuShow: false
     };
-
-    this.statusArray = ['active', 'inactive'];
   }
 
   onMouseEnter = () => {
@@ -38,7 +37,7 @@ class UserItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -47,12 +46,13 @@ class UserItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   toggleDelete = () => {
     const email = this.props.user.email;
-    this.props.toggleDelete(email);
-  }
+    const username = this.props.user.name;
+    this.props.toggleDelete(email, username);
+  };
 
   toggleResetPW = () => {
     const { email, name } = this.props.user;
@@ -69,41 +69,25 @@ class UserItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleRevokeAdmin = () => {
     const email = this.props.user.email;
     this.props.toggleRevokeAdmin(email);
-  }
+  };
 
-  changeStatus = (st) => {
-    let isActive;
-    if (st == 'active') {
-      isActive = 'true';
-    } else {
-      isActive = 'false';
+  changeStatus = (statusOption) => {
+    const isActive = statusOption.value == 'active';
+    if (isActive) {
+      toaster.notify(gettext('It may take some time, please wait.'));
     }
-
-    seafileAPI.orgAdminChangeOrgUserStatus(orgID, this.props.user.email, isActive).then(res => {
-      this.setState({
-        currentStatus: isActive == 'true' ? 'active' : 'inactive',
-        highlight: false,
-        showMenu: false,
-      });
-      toaster.success(gettext('Edit succeeded.'));
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Edit failed.');
-      }
-      toaster.danger(errMessage);
-    });
-  }
+    this.props.changeStatus(this.props.user.email, isActive);
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -120,7 +104,7 @@ class UserItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   getQuotaTotal = (data) => {
     switch (data) {
@@ -131,25 +115,46 @@ class UserItem extends React.Component {
       default: // data > 0
         return Utils.formatSize({bytes: data});
     }
-  }
+  };
+
+  translateStatus = (status) => {
+    switch (status) {
+      case 'active':
+        return gettext('Active');
+      case 'inactive':
+        return gettext('Inactive');
+    }
+  };
 
   render() {
+    const { highlight } = this.state;
     let { user, currentTab } = this.props;
     let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
     let isOperationMenuShow = (user.email !== username)  && this.state.showMenu;
-    let isEditIconShow = isOperationMenuShow;
+
+    // for 'user status'
+    const curStatus = user.is_active ? 'active' : 'inactive';
+    this.statusOptions = ['active', 'inactive'].map(item => {
+      return {
+        value: item,
+        text: this.translateStatus(item),
+        isSelected: item == curStatus
+      };
+    });
+    const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
+
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>
           <a href={href}>{user.name}</a>
         </td>
         <td>
-          <UserStatusEditor
-            isTextMode={true}
-            isEditIconShow={isEditIconShow}
-            currentStatus={this.state.currentStatus}
-            statusArray={this.statusArray}
-            onStatusChanged={this.changeStatus}
+          <Selector
+            isDropdownToggleShown={highlight}
+            currentSelectedOption={currentSelectedStatusOption}
+            options={this.statusOptions}
+            selectOption={this.changeStatus}
+            toggleItemFreezed={this.props.toggleItemFreezed}
           />
         </td>
         <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
@@ -164,7 +169,8 @@ class UserItem extends React.Component {
               <DropdownToggle
                 tag="a"
                 className="attr-action-icon fas fa-ellipsis-v"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}

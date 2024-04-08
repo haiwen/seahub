@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files.storage import default_storage, get_storage_class
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,\
@@ -18,7 +18,7 @@ def get_cache_key(user_or_username, size, prefix):
     """
     if isinstance(user_or_username, User):
         user_or_username = user_or_username.username
-    return '%s_%s_%s' % (prefix, urlquote(user_or_username), size)
+    return '%s_%s_%s' % (prefix, quote(user_or_username), size)
 
 def get_grp_cache_key(group_id, size):
     """

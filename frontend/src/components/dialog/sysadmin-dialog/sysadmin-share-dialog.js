@@ -28,13 +28,13 @@ class SysAdminShareDialog extends React.Component {
 
   getInitialActiveTab = () => {
     return 'shareToUser';
-  }
+  };
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({activeTab: tab});
     }
-  }
+  };
 
   renderDirContent = () => {
     let activeTab = this.state.activeTab;
@@ -75,7 +75,7 @@ class SysAdminShareDialog extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     return (

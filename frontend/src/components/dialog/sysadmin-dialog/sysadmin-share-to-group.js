@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated';
 import { isPro, gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api.js';
+import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
+import { SeahubSelect, NoGroupMessage } from '../../common/select';
 
 class GroupItem extends React.Component {
 
@@ -20,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -46,6 +45,7 @@ class GroupItem extends React.Component {
           <SharePermissionEditor
             repoID={item.repo_id}
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
@@ -64,6 +64,13 @@ class GroupItem extends React.Component {
     );
   }
 }
+
+GroupItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 class GroupList extends React.Component {
 
@@ -87,18 +94,19 @@ class GroupList extends React.Component {
   }
 }
 
+GroupList.propTypes = {
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
-  );
 };
 
 class SysAdminShareToGroup extends React.Component {
@@ -120,7 +128,7 @@ class SysAdminShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -141,7 +149,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let repoID = this.props.repoID;
@@ -155,19 +163,17 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
     let groups = [];
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        groups[i] = this.state.selectedOption[i].id;
-      }
+    if (this.state.selectedOption) {
+      groups[0] = this.state.selectedOption.id;
     }
     seafileAPI.sysAdminAddRepoSharedItem(repoID, 'group', groups, this.state.permission).then(res => {
       let errorMsg = [];
@@ -187,7 +193,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let repoID = this.props.repoID;
@@ -199,7 +205,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
@@ -210,7 +216,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_id;
@@ -223,7 +229,7 @@ class SysAdminShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     return (
@@ -239,16 +245,13 @@ class SysAdminShareToGroup extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
-                  isMulti
+                <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.options}
-                  placeholder={gettext('Select groups...')}
-                  components={makeAnimated()}
+                  placeholder={gettext('Select groups')}
                   maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
+                  components={{ NoOptionsMessage: NoGroupMessage }}
                 />
               </td>
               <td>

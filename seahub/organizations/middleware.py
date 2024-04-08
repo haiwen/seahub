@@ -38,7 +38,7 @@ class RedirectMiddleware(MiddlewareMixin):
             return None
 
         path = request.get_full_path()
-        domain = request.META.get('HTTP_HOST') or request.META.get('SERVER_NAME')
+        domain = request.headers.get('host') or request.META.get('SERVER_NAME')
 
         if request.user.is_anonymous:
             return None

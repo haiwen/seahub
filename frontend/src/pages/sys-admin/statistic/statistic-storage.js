@@ -48,13 +48,13 @@ class StatisticStorage extends React.Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { labels, filesData, isLoading } = this.state;
     return(
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="storageStatistic" />
           <div className="cur-view-content">

@@ -502,44 +502,6 @@ Please choose a way to initialize seafile databases:
         print('done')
         return conn
 
-    def create_seahub_admin(self):
-        try:
-            conn = pymysql.connect(host=self.mysql_host,
-                                   port=self.mysql_port,
-                                   user=self.seafile_mysql_user,
-                                   passwd=self.seafile_mysql_password,
-                                   db=self.ccnet_db_name)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to connect to mysql database %s: %s' % (self.ccnet_db_name, e.args[1]))
-            else:
-                Utils.error('Failed to connect to mysql database %s: %s' % (self.ccnet_db_name, e))
-
-        cursor = conn.cursor()
-        sql = '''\
-CREATE TABLE IF NOT EXISTS EmailUser (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, email VARCHAR(255), passwd CHAR(64), is_staff BOOL NOT NULL, is_active BOOL NOT NULL, ctime BIGINT, UNIQUE INDEX (email)) ENGINE=INNODB'''
-
-        try:
-            cursor.execute(sql)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to create ccnet user table: %s' % e.args[1])
-            else:
-                Utils.error('Failed to create ccnet user table: %s' % e)
-
-        sql = '''REPLACE INTO EmailUser(email, passwd, is_staff, is_active, ctime) VALUES ('%s', '%s', 1, 1, 0)''' \
-              % (seahub_config.admin_email, seahub_config.hashed_admin_password())
-
-        try:
-            cursor.execute(sql)
-        except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
-                Utils.error('Failed to create admin user: %s' % e.args[1])
-            else:
-                Utils.error('Failed to create admin user: %s' % e)
-
-        conn.commit()
-
     def ask_questions(self):
         '''Ask questions and do database operations'''
         raise NotImplementedError
@@ -639,9 +601,9 @@ class NewDBConfigurator(AbstractDBConfigurator):
                                   validate=self.validate_db_name)
 
     def ask_db_names(self):
-        self.ccnet_db_name = self.ask_db_name('ccnet-server', 'ccnet-db')
-        self.seafile_db_name = self.ask_db_name('seafile-server', 'seafile-db')
-        self.seahub_db_name = self.ask_db_name('seahub', 'seahub-db')
+        self.ccnet_db_name = self.ask_db_name('ccnet-server', 'ccnet_db')
+        self.seafile_db_name = self.ask_db_name('seafile-server', 'seafile_db')
+        self.seahub_db_name = self.ask_db_name('seahub', 'seahub_db')
 
     def validate_db_name(self, db_name):
         return db_name
@@ -932,6 +894,7 @@ class SeafileConfigurator(AbstractConfigurator):
             fp.write('[fileserver]\nport=%d\n' % self.fileserver_port)
 
         self.generate_db_conf()
+        self.generate_notification_conf()
 
         ## use default seafile-data path: seafile_data_dir=${TOPDIR}/seafile-data
 
@@ -956,6 +919,32 @@ class SeafileConfigurator(AbstractConfigurator):
         config.set(db_section, 'password', db_config.seafile_mysql_password)
         config.set(db_section, 'db_name', db_config.seafile_db_name)
         config.set(db_section, 'connection_charset', 'utf8')
+
+        Utils.write_config(config, self.seafile_conf)
+
+    def generate_notification_conf(self):
+        config = Utils.read_config(self.seafile_conf)
+        # [notification]
+        # enabled=
+        # host=
+        # port=
+        # log_level=
+        # jwt_private_key=
+        script = os.path.join(env_mgr.install_path, 'seahub/tools/secret_key_generator.py')
+        cmd = [
+            Utils.get_python_executable(),
+            script,
+        ]
+        jwt_private_key = Utils.get_command_output(cmd).strip().decode('utf8').replace('%', '')
+
+        db_section = 'notification'
+        if not config.has_section(db_section):
+            config.add_section(db_section)
+        config.set(db_section, 'enabled', 'false')
+        config.set(db_section, 'host', '127.0.0.1')
+        config.set(db_section, 'port', '8083')
+        config.set(db_section, 'log_level', 'info')
+        config.set(db_section, 'jwt_private_key', jwt_private_key)
 
         Utils.write_config(config, self.seafile_conf)
 
@@ -1042,9 +1031,6 @@ class SeahubConfigurator(AbstractConfigurator):
         self.admin_password = ''
         self.seahub_settings_py = os.path.join(env_mgr.central_config_dir, 'seahub_settings.py')
 
-    def hashed_admin_password(self):
-        return hashlib.sha1(self.admin_password).hexdigest() # pylint: disable=E1101
-
     def ask_questions(self):
         pass
 
@@ -1056,7 +1042,7 @@ class SeahubConfigurator(AbstractConfigurator):
             fp.write('\n')
             self.write_secret_key(fp)
             fp.write('\n')
-            fp.write('SERVICE_URL = "http://%s/"' % ccnet_config.ip_or_domain)
+            fp.write('SERVICE_URL = "http://%s"' % ccnet_config.ip_or_domain)
             fp.write('\n')
             self.write_database_config(fp)
 
@@ -1244,6 +1230,41 @@ class ProfessionalConfigurator(AbstractConfigurator):
         ]
         if Utils.run_argv(argv, env=env_mgr.get_seahub_env()) != 0:
             Utils.error('Failed to generate seafile pro configuration')
+
+    def do_syncdb(self):
+        print('----------------------------------------')
+        print('Now creating seafevents database tables ...\n')
+        print('----------------------------------------')
+
+        try:
+            conn = pymysql.connect(host=db_config.mysql_host,
+                                   port=db_config.mysql_port,
+                                   user=db_config.seafile_mysql_user,
+                                   passwd=db_config.seafile_mysql_password,
+                                   db=db_config.seahub_db_name)
+        except Exception as e:
+            if isinstance(e, pymysql.err.OperationalError):
+                Utils.error('Failed to connect to mysql database %s: %s' % (db_config.seahub_db_name, e.args[1]))
+            else:
+                Utils.error('Failed to connect to mysql database %s: %s' % (db_config.seahub_db_name, e))
+
+        cursor = conn.cursor()
+
+        sql_file = os.path.join(env_mgr.install_path, 'pro', 'python', 'seafevents','mysql.sql')
+        with open(sql_file, 'r') as fp:
+            content = fp.read()
+
+        sqls = [line.strip() for line in content.split(';') if line.strip()]
+        for sql in sqls:
+            try:
+                cursor.execute(sql)
+            except Exception as e:
+                if isinstance(e, pymysql.err.OperationalError):
+                    Utils.error('Failed to init seahub database: %s' % e.args[1])
+                else:
+                    Utils.error('Failed to init seahub database: %s' % e)
+
+        conn.commit()
 
 class GunicornConfigurator(AbstractConfigurator):
     def __init__(self):
@@ -1501,9 +1522,9 @@ def main():
         parser.add_argument('-w', '--mysql-user-passwd', help='mysql user password')
         parser.add_argument('-q', '--mysql-user-host', help='mysql user host')
         parser.add_argument('-r', '--mysql-root-passwd', help='mysql root password')
-        parser.add_argument('-c', '--ccnet-db', help='ccnet db name')
-        parser.add_argument('-s', '--seafile-db', help='seafile db name')
-        parser.add_argument('-b', '--seahub-db', help='seahub db name')
+        parser.add_argument('-c', '--ccnet_db', help='ccnet db name')
+        parser.add_argument('-s', '--seafile_db', help='seafile db name')
+        parser.add_argument('-b', '--seahub_db', help='seahub db name')
 
         args = parser.parse_args()
 
@@ -1548,12 +1569,13 @@ def main():
     seahub_config.generate()
     if env_mgr.is_pro:
         pro_config.generate()
+        pro_config.do_syncdb()
 
     ccnet_config.do_syncdb()
     seafile_config.do_syncdb()
     seahub_config.do_syncdb()
     seahub_config.prepare_avatar_dir()
-    # db_config.create_seahub_admin()
+
     user_manuals_handler.copy_user_manuals()
     create_seafile_server_symlink()
 

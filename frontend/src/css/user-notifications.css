@@ -1,17 +1,142 @@
-body {
-  overflow: hidden;
+.notification-list-dialog {
+  width: 720px;
+  max-width: 720px;
+  height: calc(100% - 56px);
 }
-#wrapper {
+
+.notification-list-dialog .notification-list-content {
   height: 100%;
 }
-.top-header {
-  background: #f4f4f7;
-  border-bottom: 1px solid #e8e8e8;
-  padding: .5rem 1rem;
-  flex-shrink: 0;
+
+.notification-header-close {
+  display: flex;
 }
-.op-bar {
-  padding: 9px 10px;
-  background: #f2f2f2;
-  border-radius: 2px;
+
+.notification-header-close .notification-dropdown-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px
+}
+
+.notification-header-close .item-dropdown-icon,
+.notification-header-close .notification-close-icon {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  color: #000;
+  opacity: 0.5;
+}
+
+.notification-header-close .notification-close-icon:hover,
+.notification-header-close .item-dropdown-icon:hover {
+  color: #000;
+  opacity: 0.75;
+}
+
+/* The icon "..." do not need to be bold */
+.notification-header-close .item-dropdown-icon {
+  font-weight: 400;
+}
+
+/* The icon 'x' needs to be bold */
+.notification-header-close .notification-close-icon {
+  font-weight: 700;
+}
+
+.notification-header-close .dropdown-menu {
+  min-width: 8rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.notification-header-close .dtable-dropdown-menu.large.dropdown-menu .dropdown-item {
+  padding: 0.25rem 1.5rem;
+  min-height: unset;
+}
+
+.notification-list-content .notification-modal-body {
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.notification-modal-body .notification-dialog-body {
+  overflow: auto;
+  padding: 2rem 1rem;
+  height: 100%;
+}
+
+.notification-dialog-body table {
+  width: 100%;
+  table-layout: fixed;
+  overflow-y: auto;
+}
+
+.notification-modal-body .notification-dialog-body .paginator {
+  height: 38px;
+}
+
+.notification-dialog-body table thead tr {
+  height: 2.1875rem;
+}
+
+.notification-dialog-body table th {
+  padding: 0.3125rem 0.1875rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-weight: normal;
+  line-height: 1.6;
+  color: #9c9c9c;
+}
+
+.notification-dialog-body table tbody tr:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.notification-dialog-body table td {
+  padding: 0.5rem 0.1875rem;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.wechat-dialog-body {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wechat-dialog-message {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  color: #666;
+  font-size: 14px;
+}
+
+.notification-dialog-body .empty-tip {
+  margin: 5.5em 1em;
+  border-radius: 3px;
+  padding: 30px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.notification-dialog-body .empty-tip .no-items-img-tip {
+  width: 100px;
+  height: 100px;
+}
+
+@media (min-width: 768px) {
+  .notification-dialog-body .empty-tip {
+    padding: 30px 80px;
+  }
 }

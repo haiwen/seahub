@@ -4,7 +4,7 @@ from time import time
 
 from django import forms
 from django.forms import ModelForm, Form
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seahub.two_factor.oath import totp
 from seahub.two_factor.models import (Device, TOTPDevice, StaticDevice,
@@ -291,6 +291,9 @@ class OTPAuthenticationFormMixin(object):
 
 
 class AuthenticationTokenForm(OTPAuthenticationFormMixin, Form):
+
+    SESSION_KEY_TWO_FACTOR_FAILED_ATTEMPT = '2fa-failed-attempt'
+
     otp_token = forms.IntegerField(label=_("Token"), min_value=1,
                                    max_value=int('9' * totp_digits()))
     remember_me = forms.BooleanField(required=False)
@@ -304,7 +307,15 @@ class AuthenticationTokenForm(OTPAuthenticationFormMixin, Form):
         """
         super(AuthenticationTokenForm, self).__init__(**kwargs)
         self.user = user
+        self.request = request
 
     def clean(self):
         self.clean_otp(self.user)
         return self.cleaned_data
+
+    def is_valid(self):
+        ret = super(Form, self).is_valid()
+        if not ret:
+            failed_attempt = self.request.session.get(self.SESSION_KEY_TWO_FACTOR_FAILED_ATTEMPT, 0)
+            self.request.session[self.SESSION_KEY_TWO_FACTOR_FAILED_ATTEMPT] = failed_attempt + 1
+        return ret

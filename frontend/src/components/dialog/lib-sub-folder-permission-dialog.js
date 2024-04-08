@@ -29,10 +29,10 @@ class LibSubFolderPermissionDialog extends React.Component {
     if (this.state.activeTab !== tab) {
       this.setState({activeTab: tab});
     }
-  }
+  };
 
   renderContent = () => {
-    let activeTab = this.state.activeTab;
+    const activeTab = this.state.activeTab;
 
     return (
       <Fragment>
@@ -62,16 +62,17 @@ class LibSubFolderPermissionDialog extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     const { repoName, folderName } = this.props;
-
+    let title = repoName ? gettext('{placeholder} Folder Permission') : gettext('Set permission of {placeholder}');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName || folderName) + '</span>');
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '980px'}} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
-            <span dangerouslySetInnerHTML={{__html: repoName ? Utils.generateDialogTitle(gettext('{placeholder} Folder Permission'), repoName) : Utils.generateDialogTitle(gettext('Set {placeholder}\'s permission'), folderName)}}></span>
+            <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
           </ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
             {this.renderContent()}

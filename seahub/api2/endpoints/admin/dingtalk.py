@@ -21,19 +21,29 @@ from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 
 from seahub.base.accounts import User
-from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile
 from seahub.avatar.models import Avatar
 from seahub.group.utils import validate_group_name
 from seahub.auth.models import ExternalDepartment
 
-from seahub.dingtalk.utils import dingtalk_get_access_token
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL, \
         DINGTALK_DEPARTMENT_USER_SIZE, DINGTALK_PROVIDER
+
+
+# for 10.0 or later
+from seahub.dingtalk.settings import DINGTALK_APP_KEY, \
+        DINGTALK_APP_SECRET
+
+if DINGTALK_APP_KEY and DINGTALK_APP_SECRET:
+    from seahub.dingtalk.utils import \
+            dingtalk_get_orgapp_token as dingtalk_get_access_token
+else:
+    from seahub.dingtalk.utils import dingtalk_get_access_token
+
 
 DEPARTMENT_OWNER = 'system admin'
 
@@ -199,9 +209,9 @@ class AdminDingtalkUsersBatch(APIView):
                 })
                 continue
 
-            email = gen_user_virtual_id()
             try:
-                User.objects.create_user(email)
+                oauth_user = User.objects.create_oauth_user()
+                email = oauth_user.username
                 SocialAuthUser.objects.add(email, 'dingtalk', user_id)
                 success.append({
                     'userid': user_id,
@@ -215,6 +225,7 @@ class AdminDingtalkUsersBatch(APIView):
                     'name': user.get('name'),
                     'error_msg': '导入失败'
                 })
+                continue
 
             try:
                 update_dingtalk_user_info(email,
@@ -300,7 +311,7 @@ class AdminDingtalkDepartmentsImport(APIView):
         sub_department_resp_json = requests.get(DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, params=data).json()
         sub_department_list = sub_department_resp_json.get('department', [])
         department_list = current_department_list + sub_department_list
-        department_list = sorted(department_list, key=lambda x:x['id'])
+        department_list = sorted(department_list, key=lambda x: x['id'])
 
         # get department user list
         data = {
@@ -379,7 +390,7 @@ class AdminDingtalkDepartmentsImport(APIView):
         # import api_user
         for api_user in api_user_list:
             uid = api_user.get('unionid', '')
-            api_user['contact_email'] = api_user.get('email')
+            api_user['contact_email'] = api_user.get('email', '')
             api_user_name = api_user.get('name')
 
             #  determine the user exists
@@ -387,9 +398,9 @@ class AdminDingtalkDepartmentsImport(APIView):
                 email = social_auth_queryset.get(uid=uid).username
             else:
                 # create user
-                email = gen_user_virtual_id()
                 try:
-                    User.objects.create_user(email)
+                    oauth_user = User.objects.create_oauth_user()
+                    email = oauth_user.username
                     SocialAuthUser.objects.add(email, 'dingtalk', uid)
                 except Exception as e:
                     logger.error(e)

@@ -1,0 +1,17 @@
+.dialog-operation {
+  display: flex;
+  align-items: center;
+}
+
+.dialog-operation .file-internal-link {
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  color: #999;
+  margin-top: 2px;
+}
+
+.dialog-operation .file-internal-link:hover {
+  color: #333;
+}

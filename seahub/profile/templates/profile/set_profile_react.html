@@ -12,6 +12,7 @@
 <script type="text/javascript">
 // overwrite the one in base_for_react.html
 window.app.pageOptions = {
+  username: "{{request.user.username|escapejs}}",
   avatarURL: '{% avatar_url request.user 160 %}',
   csrfToken: '{{ csrf_token }}',
 
@@ -28,7 +29,8 @@ window.app.pageOptions = {
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
   {% if ENABLE_WEBDAV_SECRET %}
-  webdavPasswd: '{{ webdav_passwd|escapejs }}',
+  webdavUrl: "{{ WEBDAV_URL }}",
+  webdavPasswordSetted: {% if WEBDAV_SECRET_SETTED %} true {% else %} false {% endif %},
   webdavSecretMinLength: {{ WEBDAV_SECRET_MIN_LENGTH }},
   webdavSecretStrengthLevel: {{ WEBDAV_SECRET_STRENGTH_LEVEL }},
   {% endif %}
@@ -50,10 +52,8 @@ window.app.pageOptions = {
     return list;
   })(),
 
-  {% if is_pro %}
   fileUpdatesEmailInterval: {{ file_updates_email_interval }},
   collaborateEmailInterval: {{ collaborate_email_interval }},
-  {% endif %}
 
   twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
   {% if two_factor_auth_enabled %}
@@ -73,6 +73,23 @@ window.app.pageOptions = {
   socialConnectedDingtalk: {% if social_connected_dingtalk %} true {% else %} false {% endif %},
   socialNextPage: "{{ social_next_page|escapejs }}",
   {% endif %}
+
+  enableADFS: {% if enable_adfs %} true {% else %} false {% endif %},
+  {% if enable_adfs %}
+  samlConnected: {% if saml_connected %} true {% else %} false {% endif %},
+  socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
+
+  enableMultiADFS: {% if enable_multi_adfs %} true {% else %} false {% endif %},
+  {% if enable_multi_adfs %}
+  orgSamlConnected: {% if org_saml_connected %} true {% else %} false {% endif %},
+  socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
+
+  orgID: "{{ org_id }}",
+
+  cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
+  isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
 
   enableDeleteAccount: {% if ENABLE_DELETE_ACCOUNT %} true {% else %} false {% endif %}
 };

@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -18,7 +19,7 @@ class Content extends Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -72,16 +73,27 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       share_permission: this.props.item.share_permission,
+      share_permission_name: this.props.item.share_permission_name,
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
-      unshared: false
+      unshared: false,
+      isShowPermEditor: false,
     };
 
     this.permissions = ['rw', 'r'];
@@ -94,21 +106,21 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   onMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   unshare = (e) => {
     e.preventDefault();
@@ -139,7 +151,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster(errMessage);
     });
-  }
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -168,7 +180,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
+
+  onEditPermission = (event) => {
+    event.nativeEvent.stopImmediatePropagation();
+    this.setState({isShowPermEditor: true});
+  };
 
   render() {
     if (this.state.unshared) {
@@ -176,7 +193,7 @@ class Item extends Component {
     }
 
     const item = this.props.item;
-    let { share_permission, isOpIconShown, isPermSelectDialogOpen } = this.state;
+    let { share_permission, share_permission_name, isOpIconShown, isPermSelectDialogOpen, isShowPermEditor } = this.state;
 
     let is_readonly = false;
     if (share_permission == 'r' || share_permission == 'preview') {
@@ -201,14 +218,32 @@ class Item extends Component {
             <span title={item.contact_email}>{item.user_name}</span> : item.group_name}
         </td>
         <td>
-          <SharePermissionEditor
-            repoID={item.repo_id}
-            isTextMode={true}
-            isEditIconShow={isOpIconShown}
-            currentPermission={share_permission}
-            permissions={this.permissions}
-            onPermissionChanged={this.changePerm}
-          />
+          {!isShowPermEditor && (
+            <div>
+              <span>{Utils.sharePerms(share_permission) || share_permission_name}</span>
+              {isOpIconShown && (
+                <a href="#"
+                  role="button"
+                  aria-label={gettext('Edit')}
+                  title={gettext('Edit')}
+                  className="fa fa-pencil-alt attr-action-icon"
+                  onClick={this.onEditPermission}>
+                </a>
+              )}
+            </div>
+          )}
+          {isShowPermEditor && (
+            <SharePermissionEditor
+              repoID={item.repo_id}
+              isTextMode={true}
+              isEditIconShow={isOpIconShown}
+              isEditing={true}
+              autoFocus={true}
+              currentPermission={share_permission}
+              permissions={this.permissions}
+              onPermissionChanged={this.changePerm}
+            />
+          )}
         </td>
         <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
@@ -229,7 +264,8 @@ class Item extends Component {
               <DropdownToggle
                 tag="i"
                 className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />
@@ -258,6 +294,11 @@ class Item extends Component {
     return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};
 
 class ShareAdminFolders extends Component {
 
@@ -292,7 +333,7 @@ class ShareAdminFolders extends Component {
 
     items.sort(comparator);
     return items;
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     this.setState({
@@ -300,7 +341,7 @@ class ShareAdminFolders extends Component {
       sortOrder: sortOrder,
       items: this._sortItems(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   componentDidMount() {
     seafileAPI.listSharedFolders().then((res) => {

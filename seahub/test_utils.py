@@ -185,11 +185,13 @@ class Fixtures(Exam):
         if not email:
             email = uuid4().hex + '@test.com'
 
-        kwargs.setdefault('email', email)
-        kwargs.setdefault('is_staff', False)
-        kwargs.setdefault('is_active', True)
+        user = User(email=email)
+        user.is_staff = kwargs.get('is_staff', False)
+        user.is_active = kwargs.get('is_active', True)
+        user.set_password('secret')
+        user.save()
 
-        return User.objects.create_user(password='secret', **kwargs)
+        return User.objects.get(email)
 
     def remove_user(self, email=None):
         if not email:
@@ -280,7 +282,11 @@ class Fixtures(Exam):
             return new_org
 
         quota = int(quota)
-        User.objects.create_user(username, password, is_staff=False, is_active=True)
+        user = User(email=username)
+        user.is_staff = False
+        user.is_active = True
+        user.set_password(password)
+        user.save()
         create_org(org_name, prefix, username)
         new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
         from seahub.organizations.models import OrgMemberQuota
@@ -295,7 +301,12 @@ class Fixtures(Exam):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            user = User.objects.create_user(email, password, is_staff=False, is_active=True)
+            user = User(email=email)
+            user.is_staff = False
+            user.is_active = True
+            user.set_password(password)
+            user.save()
+            user = User.objects.get(email=email)
         ccnet_api.add_org_user(self.org.org_id, email, 0)
         return user
 
@@ -305,7 +316,12 @@ class Fixtures(Exam):
         try:
             admin = User.objects.get(email=email)
         except User.DoesNotExist:
-            admin = User.objects.create_user(email, password, is_staff=False, is_active=True)
+            user = User(email=email)
+            user.is_staff = False
+            user.is_active = True
+            user.set_password(password)
+            user.save()
+            admin = User.objects.get(email=email)
         ccnet_api.add_org_user(self.org.org_id, email, 1)
         return admin
 

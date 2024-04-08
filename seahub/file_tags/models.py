@@ -32,6 +32,21 @@ class FileTagsManager(models.Manager):
 
         return file_tags
 
+    def list_file_tags_by_file_uuid(self, file_uuid):
+        file_tag_list = super(FileTagsManager, self).filter(
+            file_uuid=file_uuid).select_related('repo_tag')
+
+        file_tags = list()
+        for file_tag in file_tag_list:
+            tag_dict = dict()
+            tag_dict['file_tag_id'] = file_tag.pk
+            tag_dict['repo_tag_id'] = file_tag.repo_tag.pk
+            tag_dict['tag_name'] = file_tag.repo_tag.name
+            tag_dict['tag_color'] = file_tag.repo_tag.color
+            file_tags.append(tag_dict)
+
+        return file_tags
+
     def get_file_tag_by_id(self, file_tag_id):
         try:
             return super(FileTagsManager, self).get(pk=file_tag_id)
@@ -51,12 +66,25 @@ class FileTagsManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
+    def get_file_tag_by_file_uuid(self, file_uuid, repo_tag_id):
+        try:
+            return super(FileTagsManager, self).get(
+                repo_tag_id=repo_tag_id, file_uuid=file_uuid)
+        except self.model.DoesNotExist:
+            return None
+
     def add_file_tag(self, repo_id, repo_tag_id, file_path):
         file_path = normalize_file_path(file_path)
         filename = os.path.basename(file_path)
         parent_path = os.path.dirname(file_path)
         file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(
             repo_id, parent_path, filename, is_dir=False)
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
+        file_tag = self.model(repo_tag=repo_tag, file_uuid=file_uuid)
+        file_tag.save()
+        return file_tag
+
+    def add_file_tag_by_file_uuid(self, file_uuid, repo_tag_id):
         repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
         file_tag = self.model(repo_tag=repo_tag, file_uuid=file_uuid)
         file_tag.save()

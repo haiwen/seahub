@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
   email: PropTypes.string.isRequired,
   contactEmail: PropTypes.string.isRequired,
   updateContactEmail: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ class SetOrgUserContactEmail extends React.Component {
     this.setState({
       inputValue: e.target.value
     });
-  }
+  };
 
   formSubmit = () => {
     const { orgID, email } = this.props;
@@ -48,7 +48,7 @@ class SetOrgUserContactEmail extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     const { inputValue, formErrorMsg, submitBtnDisabled } = this.state;

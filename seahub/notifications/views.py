@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.notifications.models import Notification, NotificationForm, \

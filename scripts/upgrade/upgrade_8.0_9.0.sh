@@ -50,7 +50,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             exit 1
         fi
@@ -190,7 +190,7 @@ function move_old_customdir_outside() {
 }
 
 function update_seahub_settings () {
-    service_url=`awk -F '=' '/\[General\]/{a=1}a==1&&$1~/SERVICE_URL/{print $2;exit}' ${default_conf_dir}/ccnet.conf`
+    service_url=`awk -F '=' '/\[General\]/{a=1}a==1&&$1~/^SERVICE_URL/{print $2;exit}' ${default_conf_dir}/ccnet.conf`
     service_url=$(echo $service_url)
     echo "SERVICE_URL = '${service_url}'">>${default_conf_dir}/seahub_settings.py
 }

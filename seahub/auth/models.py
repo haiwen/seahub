@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models.manager import EmptyManager
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_str
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -154,7 +154,7 @@ class SocialAuthUser(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=255)
-    extra_data = models.TextField()
+    extra_data = models.TextField(null=True)
     objects = SocialAuthUserManager()
 
     class Meta:

@@ -1,0 +1,17 @@
+.file-tag-list .file-tag-item {
+  display: flex;
+  align-items: center;
+  max-width: 180px;
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.file-tag-list .file-tag-item .tag-name {
+  color: #fff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

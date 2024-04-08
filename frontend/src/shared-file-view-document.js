@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { gettext, mediaUrl} from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
@@ -56,7 +56,7 @@ class FileContent extends React.Component {
               isLoading: false,
               errorMsg: ''
             });
-
+            // eslint-disable-next-line
             let scriptNode = document.createElement('script');
             scriptNode.type = 'text/javascript';
             scriptNode.src = `${mediaUrl}js/pdf/web/viewer.js`;
@@ -103,7 +103,4 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <SharedFileViewDocument />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<SharedFileViewDocument />, document.getElementById('wrapper'));

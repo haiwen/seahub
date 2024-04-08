@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import { Button, InputGroup, InputGroupText, Input } from 'reactstrap';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -10,9 +10,8 @@ import Loading from './loading';
 import GroupMembers from './group-members';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
-  isOwner: PropTypes.bool.isRequired,
-  changeMode: PropTypes.func.isRequired
+  groupID: PropTypes.string,
+  isOwner: PropTypes.bool.isRequired
 };
 
 class ManageMembersDialog extends React.Component {
@@ -28,7 +27,10 @@ class ManageMembersDialog extends React.Component {
       hasNextPage: false,
       selectedOption: null,
       errMessage: [],
-      isItemFreezed: false
+      isItemFreezed: false,
+      searchActive: false,
+      keyword: '',
+      membersFound: []
     };
   }
 
@@ -57,14 +59,14 @@ class ManageMembersDialog extends React.Component {
         hasNextPage: false
       });
     });
-  }
+  };
 
   onSelectChange = (option) => {
     this.setState({
       selectedOption: option,
       errMessage: [],
     });
-  }
+  };
 
   addGroupMember = () => {
     let emails = [];
@@ -87,13 +89,13 @@ class ManageMembersDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({
       isItemFreezed: isFreezed
     });
-  }
+  };
 
   handleScroll = (event) => {
     // isLoadingMore: to avoid repeated request
@@ -109,7 +111,7 @@ class ManageMembersDialog extends React.Component {
         });
       }
     }
-  }
+  };
 
   changeMember = (targetMember) => {
     this.setState({
@@ -120,7 +122,7 @@ class ManageMembersDialog extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   deleteMember = (targetMember) => {
     const groupMembers = this.state.groupMembers;
@@ -128,16 +130,47 @@ class ManageMembersDialog extends React.Component {
     this.setState({
       groupMembers: groupMembers
     });
-  }
+  };
+
+  searchMembers = (e) => {
+    const { groupMembers } = this.state;
+    const keyword = e.target.value;
+    const value = keyword.trim().toLowerCase();
+    const membersFound = groupMembers.filter(item => item.name.toLowerCase().indexOf(value) > -1);
+    this.setState({ keyword, membersFound });
+  };
+
+  clearSearch = () => {
+    this.setState({
+      keyword: '',
+      membersFound: []
+    });
+  };
+
+  onSearchInputFocus = () => {
+    this.setState({
+      searchActive: true
+    });
+  };
+
+  onSearchInputBlur = () => {
+    this.setState({
+      searchActive: false
+    });
+  };
 
   render() {
-    const { isLoading, hasNextPage, groupMembers } = this.state;
+    const {
+      isLoading, hasNextPage, groupMembers,
+      keyword, membersFound,
+      searchActive
+    } = this.state;
     return (
       <Fragment>
         <p className="mb-2">{gettext('Add group member')}</p>
         <div className='add-members'>
           <UserSelect
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.onSelectChange}
             ref="userSelect"
             isMulti={true}
@@ -157,16 +190,31 @@ class ManageMembersDialog extends React.Component {
             })
         }
         {groupMembers.length > 10 &&
-          <button className="btn btn-secondary btn-block search-group-members-btn text-left border-0" onClick={this.props.changeMode}>
-            <i className="fas fa-search mr-1" aria-hidden={true}></i>
-            {gettext('Search group members')}
-          </button>
+          <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
+            <InputGroupText>
+              <i className="fas fa-search" aria-hidden={true}></i>
+            </InputGroupText>
+            <Input
+              type="text"
+              className="input-group-input px-0"
+              placeholder={gettext('Search group members')}
+              value={keyword}
+              onChange={this.searchMembers}
+              onFocus={this.onSearchInputFocus}
+              onBlur={this.onSearchInputBlur}
+            />
+            {keyword && (
+              <InputGroupText>
+                <i className="sf2-icon-x1" aria-hidden={true} onClick={this.clearSearch}></i>
+              </InputGroupText>
+            )}
+          </InputGroup>
         }
-        <div className="manage-members" onScroll={this.handleScroll}>
+        <div className="manage-members" onScroll={keyword.trim() ? () => {} : this.handleScroll}>
           {isLoading ? <Loading /> : (
             <Fragment>
               <GroupMembers
-                groupMembers={groupMembers}
+                groupMembers={keyword.trim() ? membersFound : groupMembers}
                 changeMember={this.changeMember}
                 deleteMember={this.deleteMember}
                 groupID={this.props.groupID}
@@ -174,7 +222,7 @@ class ManageMembersDialog extends React.Component {
                 isItemFreezed={this.state.isItemFreezed}
                 toggleItemFreezed={this.toggleItemFreezed}
               />
-              {hasNextPage && <Loading />}
+              {(!keyword.trim() && hasNextPage) && <Loading />}
             </Fragment>
           )}
         </div>

@@ -9,6 +9,8 @@ default_seahub_db=${TOPDIR}/seahub.db
 default_conf_dir=${TOPDIR}/conf
 default_pids_dir=${TOPDIR}/pids
 default_logs_dir=${TOPDIR}/logs
+pro_pylibs_dir=${INSTALLPATH}/pro/python
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
 
@@ -16,7 +18,7 @@ server_manual_http='https://download.seafile.com/published/seafile-manual/home.m
 
 function welcome () {
     echo "-----------------------------------------------------------------"
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         echo "This script will guide you to config and setup your seafile professional server."
     else
         echo "This script will guide you to config and setup your seafile server."
@@ -107,7 +109,7 @@ function check_python_executable() {
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
-            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment variable to it"
             echo
             err_and_quit
         fi
@@ -152,25 +154,10 @@ function check_sqlite3 () {
     printf "Done.\n\n"
 }
 
-function check_java () {
-    echo -n "Checking for java ..."
-    if ! which java 2>/dev/null 1>&2; then
-        echo -e "\nJava is not found. install it first.\n"
-        echo "On Debian/Ubuntu:     apt-get install default-jre"
-        echo "On CentOS/RHEL:       yum install jre"
-        err_and_quit;
-    fi
-    printf "Done.\n\n"
-}
-
 function check_system_dependency () {
     printf "Checking packages needed by seafile ...\n\n"
     check_python;
     check_sqlite3;
-
-    if [[ -d ${INSTALLPATH}/pro ]]; then
-        check_java;
-    fi
 
     printf "Checking Done.\n\n"
 }
@@ -444,6 +431,13 @@ function usage() {
 # Main workflow of this script 
 # -------------------------------------------
 
+echo "-----------------------------------------------------------------"
+echo
+echo "[Warning] SQLite database support is deprecated. The support of SQLite database will be removed in version 12 or version 13."
+echo
+echo "-----------------------------------------------------------------"
+echo
+
 for param in $@; do
     if [[ "$param" == "-h" || "$param" == "--help" ]]; then
         usage;
@@ -549,7 +543,7 @@ if [[ ! -f ${dest_settings_py} ]]; then
 # -*- coding: utf-8 -*-
 SECRET_KEY = "$key"
 
-SERVICE_URL = "http://$ip_or_domain/"
+SERVICE_URL = "http://$ip_or_domain"
 
 EOF
 fi

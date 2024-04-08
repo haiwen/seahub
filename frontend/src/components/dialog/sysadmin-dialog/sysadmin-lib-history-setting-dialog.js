@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api.js';
+import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 
@@ -66,14 +66,14 @@ class SysAdminLibHistorySettingDialog extends React.Component {
         errorInfo: gettext('Please enter a non-negative integer'),
       });
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
     }
-  }
+  };
 
   onChange = (e) => {
     let num = e.target.value;
@@ -81,7 +81,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
       keepDays: num,
       expireDays: num,
     });
-  }
+  };
 
   setLimitDays = (type) => {
     if (type === 'allHistory') {
@@ -103,15 +103,16 @@ class SysAdminLibHistorySettingDialog extends React.Component {
       noHistory: type === 'noHistory' ? true : false,
       autoHistory: type === 'autoHistory' ? true : false,
     });
-  }
+  };
 
   render() {
-    const itemName = this.props.itemName;
+    const { itemName: repoName } = this.props;
+    let title = gettext('{placeholder} History Setting');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span className="op-target" title={itemName}>{itemName}</span>{' '}
-          {gettext('History Setting')}
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -132,7 +133,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
                 value={this.state.expireDays}
                 onChange={this.onChange}
                 disabled={this.state.disabled}
-                onKeyDown={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>

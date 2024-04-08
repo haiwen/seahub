@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../../utils/constants';
 
 const propTypes = {
+  institutionID: PropTypes.string,
+  institutionName: PropTypes.string.isRequired,
   currentItem: PropTypes.string.isRequired
 };
 

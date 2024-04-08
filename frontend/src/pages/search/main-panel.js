@@ -1,5 +1,6 @@
 import React from 'react';
-import { gettext } from '../../utils/constants';
+import deepCopy from 'deep-copy';
+import { gettext, enableSeafileAI } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
 import AdvancedSearch from './advanced-search';
@@ -8,7 +9,6 @@ import Loading from '../../components/loading';
 
 import '../../css/search.css';
 
-const _ = require('lodash');
 const { q, search_repo, search_ftypes } = window.search.pageOptions;
 
 class SearchViewPanel extends React.Component {
@@ -49,7 +49,16 @@ class SearchViewPanel extends React.Component {
       isLoading: true,
       isResultGot: false,
     });
-    const stateHistory = _.cloneDeep(this.state);
+
+    if (enableSeafileAI) {
+      this.onAiSearch(params);
+    } else {
+      this.onNormalSearch(params);
+    }
+  }
+
+  onNormalSearch = (params) => {
+    const stateHistory = deepCopy(this.state);
     seafileAPI.searchFiles(params, null).then(res => {
       const { results, has_more, total } = res.data;
       this.setState({
@@ -73,7 +82,25 @@ class SearchViewPanel extends React.Component {
         toaster.danger(gettext('Please check the network.'), {duration: 3});
       }
     });
-  }
+  };
+
+  onAiSearch = (params) => {
+    let results = [];
+    seafileAPI.aiSearchFiles(params, null).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        hasMore: false,
+      });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  };
+
 
   handleSearchParams = (page) => {
     let params = { q: this.state.q.trim(), page: page };
@@ -114,20 +141,21 @@ class SearchViewPanel extends React.Component {
 
   compareNumber = (num1, num2) => {
     if (!num1 || !num2) return false;
+    // eslint-disable-next-line
     if (parseInt(num1.replace(/\-/g, '')) >= parseInt(num2.replace(/\-/g, ''))) {
       return true;
     } else {
       return false;
     }
-  }
+  };
 
   showSearchFilter = () => {
     this.setState({ isShowSearchFilter: true });
-  }
+  };
 
   hideSearchFilter = () => {
     this.setState({ isShowSearchFilter: false });
-  }
+  };
 
   handleReset = () => {
     this.setState({
@@ -144,7 +172,7 @@ class SearchViewPanel extends React.Component {
       errorDateMsg: '',
       errorSizeMsg: '',
     });
-  }
+  };
 
   handlePrevious = (e) => {
     e.preventDefault();
@@ -299,7 +327,7 @@ class SearchViewPanel extends React.Component {
               name="query"
               autoComplete="off"
               value={this.state.q}
-              placeholder={gettext('Search Files')}
+              placeholder={gettext('Search files')}
               onChange={this.handleSearchInput}
               onKeyDown={this.handleKeyDown}
             />

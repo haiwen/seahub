@@ -20,7 +20,7 @@ class ListCustomPermissions extends React.Component {
         <div className="permission-header">
           <div className="title">{gettext('Permission')}</div>
           <div className="operation">
-            <button type="button" className="btn btn-outline-primary" onClick={this.props.onAddCustomPermission}>{gettext('Add permission')}</button>
+            <button type="button" className="btn btn-sm btn-outline-primary" onClick={this.props.onAddCustomPermission}>{gettext('Add permission')}</button>
           </div>
         </div>
         <div className="permission-main mt-4">
@@ -39,7 +39,7 @@ class ListCustomPermissions extends React.Component {
                 {permissions.map(permission => {
                   return (
                     <CustomPermissionItem
-                      key={permission.id} 
+                      key={permission.id}
                       permission={permission}
                       onEditCustomPermission={this.props.onEditCustomPermission}
                       onDeleteCustomPermission={this.props.onDeleteCustomPermission}

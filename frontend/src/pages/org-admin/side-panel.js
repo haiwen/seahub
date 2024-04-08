@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -15,11 +15,11 @@ class SidePanel extends React.Component {
 
   getActiveClass = (tab) => {
     return this.props.currentTab == tab ? 'active' : '';
-  }
+  };
 
   tabItemClick = (tab) => {
     this.props.tabItemClick(tab);
-  }
+  };
 
   render() {
     return (
@@ -33,9 +33,27 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading" style={{ 'color': '#f7941d' }}>{gettext('Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('orgmanage')}`} to={siteRoot + 'org/orgmanage/'} onClick={() => this.tabItemClick('orgmanage')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('info')}`} to={siteRoot + 'org/info/'} onClick={() => this.tabItemClick('info')} >
                     <span className="sf2-icon-info"></span>
                     <span className="nav-text">{gettext('Info')}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('statistics-admin')}`} to={siteRoot + 'org/statistics-admin/file/'} onClick={() => this.tabItemClick('statistics-admin')} >
+                    <span className="sf2-icon-histogram"></span>
+                    <span className="nav-text">{gettext('Statistic')}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('deviceadmin')}`} to={siteRoot + 'org/deviceadmin/desktop-devices/'} onClick={() => this.tabItemClick('deviceadmin')} >
+                    <span className="sf2-icon-monitor"></span>
+                    <span className="nav-text">{gettext('Devices')}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('web-settings')}`} to={siteRoot + 'org/web-settings/'} onClick={() => this.tabItemClick('web-settings')} >
+                    <span className="sf2-icon-cog2"></span>
+                    <span className="nav-text">{gettext('Settings')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -74,6 +92,14 @@ class SidePanel extends React.Component {
                     <span className="nav-text">{gettext('Logs')}</span>
                   </Link>
                 </li>
+                {enableMultiADFS &&
+                  <li className="nav-item">
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('SAML config')}`} to={siteRoot + 'org/samlconfig/'} onClick={() => this.tabItemClick('SAML config')} >
+                      <span className="sf2-icon-cog2"></span>
+                      <span className="nav-text">{gettext('SAML config')}</span>
+                    </Link>
+                  </li>
+                }
               </ul>
             </div>
           </div>

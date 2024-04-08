@@ -1,13 +1,14 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
-import { strChineseFirstPY } from './pinyin-by-unicode';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
 import PermissionDeniedTip from '../components/permission-denied-tip';
+import { compareTwoString } from './compare-two-string';
 
 export const Utils = {
 
   keyCodes:  {
+    enter: 13,
     esc:   27,
     space: 32,
     tab:   9,
@@ -86,7 +87,9 @@ export const Utils = {
     'mp3' : 'music.png',
     'oga' : 'music.png',
     'ogg' : 'music.png',
+    'wav' : 'music.png',
     'flac' : 'music.png',
+    'opus' : 'music.png',
     'aac' : 'music.png',
     'ac3' : 'music.png',
     'wma' : 'music.png',
@@ -102,7 +105,9 @@ export const Utils = {
     'heic' : 'pic.png',
 
     // default
-    'default' : 'file.png'
+    'default' : 'file.png',
+    'sdoc': 'sdoc.png',
+    'sdoc_notification': 'sdoc_notification.ico'
   },
 
   // check if a file is an image
@@ -112,7 +117,7 @@ export const Utils = {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'heic'];
+    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'jfif', 'heic'];
     if (image_exts.indexOf(file_ext) != -1) {
       return true;
     } else {
@@ -236,9 +241,12 @@ export const Utils = {
     /*
      * @param title: gettext('...{placeholder}...')
      */
+    /*
     const targetStr = this.HTMLescape(operationTarget);
     const str = `<span class="op-target ellipsis ellipsis-op-target" title=${targetStr}>${targetStr}</span>`;
     return title.replace('{placeholder}', str);
+    */
+    return title.replace('{placeholder}', operationTarget);
   },
 
   getFileName: function(filePath) {
@@ -274,7 +282,7 @@ export const Utils = {
     if (path === '/') {
       return path;
     }
-    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length -2);
+    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length - 1);
     return path.slice(path.lastIndexOf('/') + 1);
   },
 
@@ -369,7 +377,7 @@ export const Utils = {
       if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
         readonly = true;
       }
-      return this.getFolderIconUrl(readonly, size);
+      return this.getFolderIconUrl(readonly, size, dirent.has_been_shared_out);
     } else {
       return this.getFileIconUrl(dirent.name, size);
     }
@@ -385,12 +393,12 @@ export const Utils = {
     }
   },
 
-  getFolderIconUrl: function(readonly = false, size) {
+  getFolderIconUrl: function(readonly = false, size, sharedOut) {
     if (!size) {
       size = Utils.isHiDPI() ? 48 : 24;
     }
     size = size > 24 ? 192 : 24;
-    return `${mediaUrl}img/folder${readonly ? '-read-only-' : '-'}${size}.png`;
+    return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${sharedOut ? '-shared-out' : ''}-${size}.png`;
   },
 
   getFileIconUrl: function(filename, size) {
@@ -477,7 +485,7 @@ export const Utils = {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
+      if (permission == 'rw' || permission == 'cloud-edit') {
         list.push(DELETE, 'Divider');
       }
 
@@ -486,7 +494,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(RENAME, MOVE);
     }
 
@@ -494,7 +502,7 @@ export const Utils = {
       list.push(RENAME, MOVE);
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(COPY);
     }
 
@@ -523,8 +531,8 @@ export const Utils = {
 
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, FREEZE_DOCUMENT,
+      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -541,7 +549,7 @@ export const Utils = {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
+      if (permission == 'rw' || permission == 'cloud-edit') {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
         }
@@ -556,7 +564,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
       }
@@ -568,7 +576,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(COPY);
     }
 
@@ -586,15 +594,35 @@ export const Utils = {
             list.push(UNLOCK);
           }
         } else {
-          list.push(LOCK);
+          if (!dirent.name.endsWith('.sdoc')) {
+            list.push(LOCK);
+          }
         }
       }
 
       list.push('Divider');
-      if (enableFileComment) {
-        list.push(COMMENT);
+
+      if (isPro && !dirent.is_locked && dirent.name.endsWith('.sdoc')) {
+        list.push(FREEZE_DOCUMENT);
       }
-      list.push(HISTORY);
+
+    }
+
+    if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {
+      if (dirent.name.endsWith('.md') || dirent.name.endsWith('.docx')) {
+        list.push(CONVERT_TO_SDOC);
+      }
+
+      if (dirent.name.endsWith('.sdoc')) {
+        list.push(CONVERT_TO_MARKDOWN);
+        list.push(CONVERT_TO_DOCX);
+        list.push(EXPORT_DOCX);
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push('Divider');
+      list.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
       }
@@ -604,9 +632,6 @@ export const Utils = {
     if (permission == 'r') {
       if (!currentRepoInfo.encrypted) {
         list.push(COPY);
-      }
-      if (enableFileComment) {
-        list.push(COMMENT);
       }
       list.push(HISTORY);
     }
@@ -620,6 +645,15 @@ export const Utils = {
     if (list[list.length - 1] === 'Divider') {
       list.pop();
     }
+
+    // Remove adjacent excess 'Divider'
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] === 'Divider' && list[i + 1] === 'Divider') {
+        list.splice(i, 1);
+        i--;
+      }
+    }
+
     return list;
   },
 
@@ -653,6 +687,9 @@ export const Utils = {
       case 'preview':
         title = gettext('Online Read-Only');
         break;
+      case 'invisible':
+        title = gettext('Invisible');
+        break;
     }
     return title;
   },
@@ -674,6 +711,9 @@ export const Utils = {
         break;
       case 'preview':
         title = gettext('User can only view files online via browser. Files can\'t be downloaded.');
+        break;
+      case 'invisible':
+        title = gettext('User can not see this folder.');
         break;
     }
     return title;
@@ -801,12 +841,27 @@ export const Utils = {
     }
   },
 
+  isSdocFile: function(filePath) {
+    let index = filePath.lastIndexOf('.');
+    if (index === -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type === '.sdoc') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+
   isInternalFileLink: function(url, repoID) {
     var re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*');
     return re.test(url);
   },
 
   isInternalMarkdownLink: function(url, repoID) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
     return re.test(url);
   },
@@ -817,6 +872,7 @@ export const Utils = {
   },
 
   getPathFromInternalMarkdownLink: function(url, repoID) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
@@ -834,6 +890,7 @@ export const Utils = {
 
   isWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
     return re.test(url);
   },
@@ -846,6 +903,7 @@ export const Utils = {
 
   getPathFromWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
     var array = re.exec(url);
     var path = array[1];
@@ -877,28 +935,7 @@ export const Utils = {
     // if wordA >= wordB, return 1
     // if wordA < wordB, return -1
 
-    var a_val, b_val,
-      a_uni = wordA.charCodeAt(0),
-      b_uni = wordB.charCodeAt(0);
-
-    if ((19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
-      // both are chinese words
-      a_val = strChineseFirstPY.charAt(a_uni - 19968).toLowerCase();
-      b_val = strChineseFirstPY.charAt(b_uni - 19968).toLowerCase();
-    } else if ((19968 < a_uni && a_uni < 40869) && !(19968 < b_uni && b_uni < 40869)) {
-      // a is chinese and b is english
-      return 1;
-    } else if (!(19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
-      // a is english and b is chinese
-      return -1;
-    } else {
-      // both are english words
-      a_val = wordA.toLowerCase();
-      b_val = wordB.toLowerCase();
-      return this.compareStrWithNumbersIn(a_val, b_val);
-    }
-
-    return a_val >= b_val ? 1 : -1;
+    return compareTwoString(wordA, wordB);
   },
 
   // compare two strings which may have digits in them
@@ -1155,13 +1192,12 @@ export const Utils = {
   },
 
   changeMarkdownNodes: function(nodes, fn) {
-    nodes.map((item) => {
+    nodes.forEach((item) => {
       fn(item);
       if (item.children && item.children.length > 0){
         Utils.changeMarkdownNodes(item.children, fn);
       }
     });
-
     return nodes;
   },
 
@@ -1175,22 +1211,25 @@ export const Utils = {
         mode = 'javascript';
         break;
       case 'c':
-        mode = 'text/x-csrc';
+        mode = 'c';
         break;
       case 'cpp':
-        mode = 'text/x-c++src';
-        break;
-      case 'java':
-        mode = 'text/x-java';
+        mode = 'cpp';
         break;
       case 'cs':
-        mode = 'text/x-csharp';
+        mode = 'csharp';
+        break;
+      case 'java':
+        mode = 'java';
         break;
       case 'mdf':
         mode = 'text/x-sql';
         break;
       case 'html':
-        mode = 'htmlmixed';
+        mode = 'html';
+        break;
+      case 'sh':
+        mode = 'shell';
         break;
       default:
         mode = suffix;
@@ -1307,7 +1346,7 @@ export const Utils = {
 
   generatePassword: function(length, hasNum=1, hasChar=1, hasSymbol=1) {
 
-    var password = "";
+    var password = '';
 
     // 65~90：A~Z
     password += String.fromCharCode(Math.floor((Math.random() * (90-65)) + 65));
@@ -1526,6 +1565,61 @@ export const Utils = {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  },
+
+  updateTabTitle: function(content) {
+    const title = document.getElementsByTagName('title')[0];
+    title.innerText = content;
+  },
+
+  generateHistoryURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    return siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + this.encodePath(path);
+  },
+
+  generateRevisionURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    return siteRoot + 'repo/sdoc_revision/' + repoID + '/?p=' + this.encodePath(path);
+  },
+
+  generateRevisionsURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    return siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path);
+  },
+
+  isFunction: function(functionToCheck) {
+    const getType = {};
+    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+  },
+
+  getUrlSearches() {
+    const search = location.search;
+    let searchParams = {};
+    if (search.length === 0) {
+      return searchParams;
+    }
+    let allSearches = search.split('?')[1];
+    let allSearchesArr = allSearches.split('&');
+    allSearchesArr.forEach(item => {
+      let itemArr = item.split('=');
+      searchParams[itemArr[0]] = decodeURI(itemArr[1]);
+    });
+    return searchParams;
+  },
+
+  // If value is null, delete the search parameter; else, add or update the search parameter.
+  updateSearchParameter(key, value) {
+    const { origin, pathname } = location;
+    const searchParams = this.getUrlSearches();
+    searchParams[key] = value;
+    let newSearch = '?';
+    for (let key in searchParams) {
+      let value = searchParams[key];
+      if (value) {
+        newSearch = newSearch === '?' ? `?${key}=${value}` : `${newSearch}&${key}=${value}`;
+      }
+    }
+    history.replaceState(null, '', origin + pathname + newSearch);
+  },
 
 };

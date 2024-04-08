@@ -8,8 +8,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  readmeMarkdown: PropTypes.object,
-  draftCounts: PropTypes.number,
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -19,6 +17,7 @@ const propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
@@ -29,8 +28,10 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   onItemRename: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array,
 };
 
 class DirGridView extends React.Component {
@@ -51,8 +52,6 @@ class DirGridView extends React.Component {
           <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
-            readmeMarkdown={this.props.readmeMarkdown}
-            draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
             onFileTagChanged={this.props.onFileTagChanged}
@@ -72,6 +71,7 @@ class DirGridView extends React.Component {
           onItemDelete={this.props.onItemDelete}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
+          onItemConvert={this.props.onItemConvert}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
           onRenameNode={this.props.onRenameNode}
@@ -80,6 +80,7 @@ class DirGridView extends React.Component {
           isDirentDetailShow={this.props.isDirentDetailShow}
           onItemRename={this.props.onItemRename}
           onAddFolder={this.props.onAddFolder}
+          repoTags={this.props.repoTags}
           onFileTagChanged={this.props.onFileTagChanged}
         />
       </Fragment>

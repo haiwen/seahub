@@ -24,25 +24,25 @@ class SysAdminGroupAddMemberDialog extends React.Component {
       selectedOptions: options,
       isSubmitBtnDisabled: !options.length
     });
-  }
+  };
 
   addMembers = () => {
     let emails = this.state.selectedOptions.map(item => item.email);
     this.props.addMembers(emails);
     this.props.toggle();
-  }
+  };
 
   render() {
     const { isSubmitBtnDisabled } = this.state;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"
             isMulti={true}
             className="reviewer-select"
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
           />
         </ModalBody>

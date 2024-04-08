@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Router, navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { siteRoot, canAddRepo, isDocs } from './utils/constants';
+import { siteRoot, canAddRepo } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
-import DraftsView from './pages/drafts/drafts-view';
-import DraftContent from './pages/drafts/draft-content';
 import FilesActivities from './pages/dashboard/files-activities';
+import MyFileActivities from './pages/dashboard/my-file-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
-import editUtilities from './utils/editor-utilities';
 import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
@@ -37,7 +35,7 @@ import './css/toolbar.css';
 import './css/search.css';
 
 const FilesActivitiesWrapper = MainContentWrapper(FilesActivities);
-const DraftsViewWrapper = MainContentWrapper(DraftsView);
+const MyFileActivitiesWrapper = MainContentWrapper(MyFileActivities);
 const StarredWrapper = MainContentWrapper(Starred);
 const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
 const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
@@ -45,8 +43,6 @@ const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
 const OCMViaWebdavWrapper = MainContentWrapper(OCMViaWebdav);
 const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
-const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
-const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
 
 class App extends Component {
 
@@ -55,9 +51,6 @@ class App extends Component {
     this.state = {
       isOpen: false,
       isSidePanelClosed: false,
-      draftCounts: 0,
-      draftList:[],
-      isLoadingDraft: true,
       currentTab: '/',
       pathPrefix: [],
     };
@@ -70,9 +63,9 @@ class App extends Component {
       let { currentTab, pathPrefix } = event.state;
       this.setState({currentTab, pathPrefix});
     }
-  }
+  };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
       this.setState({
         isSidePanelClosed: true
@@ -87,51 +80,29 @@ class App extends Component {
       let url = siteRoot + 'library/' + repoID + '/';
       navigate(url, {repalce: true});
     }
-  }
+  };
 
   componentDidMount() {
     // url from client  e.g. http://127.0.0.1:8000/#common/lib/34e7fb92-e91d-499d-bcde-c30ea8af9828/
     // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
     this.navigateClientUrlToLib();
 
-    // e.g.  from http://127.0.0.1:8000/drafts/reviews/
-    // get reviews
     // TODO: need refactor later
     let href = window.location.href.split('/');
-    if (isDocs) {
-      this.getDrafts();
-    }
     this.setState({currentTab: href[href.length - 2]});
-  }
-
-  getDrafts = () => {
-    editUtilities.listDrafts().then(res => {
-      this.setState({
-        draftCounts: res.data.draft_counts,
-        draftList: res.data.data,
-        isLoadingDraft: false,
-      });
-    });
-  }
-
-  updateDraftsList = (draft_id) => {
-    this.setState({
-      draftCounts: this.state.draftCounts - 1,
-      draftList: this.state.draftList.filter(draft => draft.id != draft_id),
-    });
   }
 
   onCloseSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   onShowSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -148,7 +119,7 @@ class App extends Component {
         location.href = url;
       }
     }
-  }
+  };
 
   onGroupChanged = (groupID) => {
     setTimeout(function(){
@@ -161,7 +132,7 @@ class App extends Component {
       }
       window.location = url.toString();
     }, 1);
-  }
+  };
 
   tabItemClick = (tabName, groupID) => {
     let pathPrefix = [];
@@ -178,7 +149,7 @@ class App extends Component {
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
-  }
+  };
 
   generatorPrefix = (tabName, groupID) => {
     let pathPrefix = [];
@@ -207,7 +178,7 @@ class App extends Component {
       pathPrefix.push(navTab);
     }
     return pathPrefix;
-  }
+  };
 
   getTabShowName = (tabName) => {
     if (tabName === 'my-libs') {
@@ -219,13 +190,13 @@ class App extends Component {
     if (tabName === 'org') {
       return 'Shared with all';
     }
-  }
+  };
 
   toggleSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   render() {
     let { currentTab, isSidePanelClosed } = this.state;
@@ -238,29 +209,18 @@ class App extends Component {
       <React.Fragment>
         <SystemNotification />
         <div id="main">
-          <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
+          <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
           <MainPanel>
             <Router className="reach-router">
               {home}
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <DraftsViewWrapper path={siteRoot + 'drafts'}
-                onShowSidePanel={this.onShowSidePanel}
-                onSearchedClick={this.onSearchedClick}
-              >
-                <DraftContent
-                  path='/'
-                  getDrafts={this.getDrafts}
-                  isLoadingDraft={this.state.isLoadingDraft}
-                  draftList={this.state.draftList}
-                  updateDraftsList={this.updateDraftsList}
-                />
-              </DraftsViewWrapper>
+              <MyFileActivitiesWrapper path={siteRoot + 'my-activities'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <OCMViaWebdavWrapper path={siteRoot + 'ocm-via-webdav'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
@@ -290,7 +250,4 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<App />, document.getElementById('wrapper'));

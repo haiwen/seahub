@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { gettext, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
@@ -20,17 +22,36 @@ class Content extends Component {
       currentKey: '',
       dialogTitle: '',
       isSetQuotaDialogOpen: false,
+      isSetUserUploadRateLimitDialogOpen: false,
+      isSetUserDownloadRateLimitDialogOpen: false,
       isUpdateUserDialogOpen: false
     };
   }
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
+
+  toggleSetUserUploadRateLimitDialog = () => {
+    this.setState({isSetUserUploadRateLimitDialogOpen: !this.state.isSetUserUploadRateLimitDialogOpen});
+  };
+
+  toggleSetUserDownloadRateLimitDialog = () => {
+    this.setState({isSetUserDownloadRateLimitDialogOpen: !this.state.isSetUserDownloadRateLimitDialogOpen});
+  };
 
   updateQuota = (value) => {
     this.props.updateUser('quota_total', value);
-  }
+  };
+
+  updateUploadDownloadRateLimit = (uploadOrDownload, value) => {
+    if (uploadOrDownload == 'upload'){
+      this.props.updateUser('upload_rate_limit', value);
+    }
+    if (uploadOrDownload == 'download'){
+      this.props.updateUser('download_rate_limit', value);
+    }
+  };
 
   toggleDialog = (key, dialogTitle) => {
     this.setState({
@@ -38,31 +59,31 @@ class Content extends Component {
       dialogTitle: dialogTitle,
       isUpdateUserDialogOpen: !this.state.isUpdateUserDialogOpen
     });
-  }
+  };
 
   toggleSetNameDialog = () => {
     this.toggleDialog('name', gettext('Set Name'));
-  }
+  };
 
   toggleSetUserLoginIDDialog = () => {
     this.toggleDialog('login_id', gettext('Set Login ID'));
-  }
+  };
 
- toggleSetUserComtactEmailDialog = () => {
-   this.toggleDialog('contact_email', gettext('Set Contact Email'));
- }
+  toggleSetUserComtactEmailDialog = () => {
+    this.toggleDialog('contact_email', gettext('Set Contact Email'));
+  };
 
   toggleSetUserReferenceIDDialog = () => {
     this.toggleDialog('reference_id', gettext('Set Reference ID'));
-  }
+  };
 
   updateValue = (value) => {
     this.props.updateUser(this.state.currentKey, value);
-  }
+  };
 
   toggleUpdateUserDialog = () => {
     this.toggleDialog('', '');
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -72,10 +93,10 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
-    const { loading, errorMsg, userInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -84,7 +105,8 @@ class Content extends Component {
       const user = this.props.userInfo;
       const {
         currentKey, dialogTitle,
-        isSetQuotaDialogOpen, isUpdateUserDialogOpen
+        isSetQuotaDialogOpen, isUpdateUserDialogOpen,
+        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen
       } = this.state;
       return (
         <Fragment>
@@ -133,7 +155,20 @@ class Content extends Component {
               {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
-
+            {isPro &&
+              <Fragment>
+                <dt className="info-item-heading">{gettext('Upload Rate Limit')}</dt>
+                <dd className="info-item-content">
+                  {user.upload_rate_limit > 0 ? user.upload_rate_limit + ' kB/s' : '--'}
+                  {this.showEditIcon(this.toggleSetUserUploadRateLimitDialog)}
+                </dd>
+                <dt className="info-item-heading">{gettext('Download Rate Limit')}</dt>
+                <dd className="info-item-content">
+                  {user.download_rate_limit > 0 ? user.download_rate_limit + ' kB/s' : '--'}
+                  {this.showEditIcon(this.toggleSetUserDownloadRateLimitDialog)}
+                </dd>
+              </Fragment>
+            }
             {twoFactorAuthEnabled &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
@@ -163,6 +198,20 @@ class Content extends Component {
             toggle={this.toggleSetQuotaDialog}
           />
           }
+          {(isPro && isSetUserUploadRateLimitDialogOpen) &&
+          <SysAdminSetUploadDownloadRateLimitDialog
+            uploadOrDownload="upload"
+            updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
+            toggle={this.toggleSetUserUploadRateLimitDialog}
+          />
+          }
+          {(isPro && isSetUserDownloadRateLimitDialogOpen) &&
+          <SysAdminSetUploadDownloadRateLimitDialog
+            uploadOrDownload="download"
+            updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
+            toggle={this.toggleSetUserDownloadRateLimitDialog}
+          />
+          }
           {isUpdateUserDialogOpen &&
           <SysAdminUpdateUserDialog
             dialogTitle={dialogTitle}
@@ -177,6 +226,18 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func,
+  updateUser: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+  disable2FA: PropTypes.func.isRequired,
+  toggleForce2fa: PropTypes.func.isRequired,
+  email: PropTypes.string,
+};
+
 class User extends Component {
 
   constructor(props) {
@@ -190,7 +251,8 @@ class User extends Component {
 
   componentDidMount () {
     // avatar size: 160
-    seafileAPI.sysAdminGetUser(this.props.email, 160).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email, 160).then((res) => {
       this.setState({
         loading: false,
         userInfo: res.data
@@ -216,7 +278,7 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   disable2FA = () => {
     const email = this.state.userInfo.email;
@@ -230,7 +292,7 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleForce2fa = (e) => {
     const email = this.state.userInfo.email;
@@ -245,13 +307,13 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { userInfo } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="info" email={this.props.email} userName={userInfo.name} />
@@ -271,5 +333,9 @@ class User extends Component {
     );
   }
 }
+
+User.propTypes = {
+  email: PropTypes.string,
+};
 
 export default User;

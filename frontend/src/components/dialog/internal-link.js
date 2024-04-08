@@ -39,10 +39,10 @@ class InternalLink extends React.Component {
   copyToClipBoard = () => {
     copy(this.state.smartLink);
     let message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message), {
+    toaster.success(message, {
       duration: 2
-    };
-  }
+    });
+  };
 
   render() {
     if (this.state.isInternalLoding) {
@@ -54,7 +54,7 @@ class InternalLink extends React.Component {
           {gettext('An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.')}
         </p>
         <p>
-          <a target="_blank" href={this.state.smartLink}>{this.state.smartLink}</a>
+          <a target="_blank" href={this.state.smartLink} rel="noreferrer">{this.state.smartLink}</a>
         </p>
         <Button onClick={this.copyToClipBoard} color="primary" className="mt-2">{gettext('Copy')}</Button>
       </div>

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
@@ -23,29 +23,29 @@ class UserItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   userAvatarOnMouseEnter = () => {
     this.setState({isUserDetailsPopoverOpen: true});
-  }
+  };
 
   userAvatarOnMouseLeave = () => {
     this.setState({isUserDetailsPopoverOpen: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_info.name);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -81,6 +81,7 @@ class UserItem extends React.Component {
           <SharePermissionEditor
             repoID={this.props.repoID}
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
@@ -104,6 +105,14 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class UserList extends React.Component {
 
   render() {
@@ -126,6 +135,14 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
@@ -165,7 +182,7 @@ class ShareToUser extends React.Component {
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
     this.options = [];
-  }
+  };
 
   componentDidMount() {
     let path = this.props.itemPath;
@@ -182,7 +199,7 @@ class ShareToUser extends React.Component {
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToUser = () => {
     let users = [];
@@ -255,7 +272,7 @@ class ShareToUser extends React.Component {
         }
       });
     }
-  }
+  };
 
   deleteShareItem = (username) => {
     let path = this.props.itemPath;
@@ -279,7 +296,7 @@ class ShareToUser extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let path = this.props.itemPath;
@@ -300,7 +317,7 @@ class ShareToUser extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let username = item.user_info.name;
@@ -313,7 +330,7 @@ class ShareToUser extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     let { sharedItems } = this.state;
@@ -337,7 +354,7 @@ class ShareToUser extends React.Component {
                   ref="userSelect"
                   isMulti={true}
                   className="reviewer-select"
-                  placeholder={gettext('Search users...')}
+                  placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
                 />
               </td>

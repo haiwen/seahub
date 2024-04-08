@@ -14,7 +14,7 @@ from rest_framework import status
 
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -26,7 +26,8 @@ from seahub.api2.permissions import CanGenerateUploadLink
 
 from seahub.share.models import UploadLinkShare, check_share_link_common
 from seahub.utils import gen_shared_upload_link, gen_file_upload_url, \
-        is_pro_version, get_password_strength_level
+        is_pro_version, get_password_strength_level, is_valid_password
+
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -54,6 +55,11 @@ def get_upload_link_info(uls):
     else:
         obj_name = ''
 
+    if repo:
+        obj_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    else:
+        obj_id = ''
+
     if uls.ctime:
         ctime = datetime_to_isoformat_timestr(uls.ctime)
     else:
@@ -68,6 +74,7 @@ def get_upload_link_info(uls):
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
     data['obj_name'] = obj_name
+    data['obj_id'] = obj_id or ""
     data['view_cnt'] = uls.view_cnt
     data['ctime'] = ctime
     data['link'] = gen_shared_upload_link(token)
@@ -171,6 +178,10 @@ class UploadLinks(APIView):
 
             if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
                 error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_password(password):
+                error_msg = _('Password can only contain number, upper letter, lower letter and other symbols.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_days = request.data.get('expire_days', '')
@@ -440,7 +451,7 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if repo.encrypted or \
-                seafile_api.check_permission_by_path(repo_id, '/', uls.username) != 'rw':
+                seafile_api.check_permission_by_path(repo_id, path, uls.username) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -450,19 +461,29 @@ class UploadLinkUpload(APIView):
         if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
             check_virus = True
 
-        if check_virus:
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                                                            obj_id,
-                                                            'upload-link',
-                                                            uls.username,
-                                                            use_onetime=False,
-                                                            check_virus=check_virus)
-        else:
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                                                            obj_id,
-                                                            'upload-link',
-                                                            uls.username,
-                                                            use_onetime=False)
+        try:
+            if check_virus:
+                token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                obj_id,
+                                                                'upload-link',
+                                                                uls.username,
+                                                                use_onetime=False,
+                                                                check_virus=check_virus)
+            else:
+                token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                obj_id,
+                                                                'upload-link',
+                                                                uls.username,
+                                                                use_onetime=False)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -471,3 +492,34 @@ class UploadLinkUpload(APIView):
         result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
+
+
+class UploadLinksCleanInvalid(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanGenerateUploadLink)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request):
+        """ Clean invalid upload links.
+        """
+
+        username = request.user.username
+        upload_links = UploadLinkShare.objects.filter(username=username)
+
+        for upload_link in upload_links:
+
+            if upload_link.is_expired():
+                upload_link.delete()
+                continue
+
+            repo_id = upload_link.repo_id
+            if not seafile_api.get_repo(repo_id):
+                upload_link.delete()
+                continue
+
+            obj_id = seafile_api.get_dir_id_by_path(repo_id, upload_link.path)
+            if not obj_id:
+                upload_link.delete()
+                continue
+
+        return Response({'success': True})

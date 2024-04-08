@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import FileTag from '../../models/file-tag';
+import FileTagList from '../file-tag-list';
 
 import '../../css/dirent-detail.css';
 
@@ -63,10 +64,10 @@ class FileDetails extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
   renderDetailBody = (bigIconUrl) => {
-    const { direntDetail, fileTagList } = this.state;
+    const { direntDetail } = this.state;
     const { repoName, path } = this.props;
     return (
       <div className="detail-body dirent-info">
@@ -75,7 +76,10 @@ class FileDetails extends React.Component {
         <div className="dirent-table-container">
           <table className="table-thead-hidden">
             <thead>
-              <tr><th width="35%"></th><th width="65%"></th></tr>
+              <tr>
+                <th width="35%"></th>
+                <th width="65%"></th>
+              </tr>
             </thead>
             <tbody>
               <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
@@ -84,16 +88,7 @@ class FileDetails extends React.Component {
               <tr className="file-tag-container">
                 <th>{gettext('Tags')}</th>
                 <td>
-                  <ul className="file-tag-list">
-                    {fileTagList.map((fileTag) => {
-                      return (
-                        <li key={fileTag.id} className="file-tag-item">
-                          <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
-                          <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <FileTagList fileTagList={this.state.fileTagList} />
                 </td>
               </tr>
             </tbody>
@@ -102,7 +97,7 @@ class FileDetails extends React.Component {
         }
       </div>
     );
-  }
+  };
 
   render() {
     let { dirent, repoID, path } = this.props;

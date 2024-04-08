@@ -21,7 +21,6 @@ class CreateForder extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
   }
 
   componentDidMount() {
@@ -31,8 +30,6 @@ class CreateForder extends React.Component {
     } else {
       this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0,0);
   }
 
   handleChange = (e) => {
@@ -43,7 +40,7 @@ class CreateForder extends React.Component {
     }
 
     this.setState({childName: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) {
@@ -61,27 +58,27 @@ class CreateForder extends React.Component {
       let path = this.state.parentPath + newName;
       this.props.onAddFolder(path);
     }
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.addFolderCancel();
-  }
+  };
 
   checkDuplicatedName = () => {
     let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
     return isDuplicated;
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Folder')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -90,9 +87,9 @@ class CreateForder extends React.Component {
               <Input
                 id="folderName"
                 value={this.state.childName}
-                innerRef={input => {this.newInput = input;}}
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 onChange={this.handleChange}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>

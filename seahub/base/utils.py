@@ -3,9 +3,9 @@ import re
 import string
 
 from django.utils.safestring import SafeData, mark_safe
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.functional import allow_lazy
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 # Configuration for urlize() function.
 LEADING_PUNCTUATION  = ['(', '<', '&lt;']
@@ -21,7 +21,7 @@ def escape(html):
     """
     Returns the given HTML with ampersands, quotes and angle brackets encoded.
     """
-    return mark_safe(force_text(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;'))
+    return mark_safe(force_str(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;'))
 escape = allow_lazy(escape, str)
 
 ## modification of django's urlize, add '%' to safe:
@@ -47,7 +47,7 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
     """
     trim_url = lambda x, limit=trim_url_limit: limit is not None and (len(x) > limit and ('%s...' % x[:max(0, limit - 3)])) or x
     safe_input = isinstance(text, SafeData)
-    words = word_split_re.split(force_text(text))
+    words = word_split_re.split(force_str(text))
     nofollow_attr = nofollow and ' rel="nofollow"' or ''
     for i, word in enumerate(words):
         match = None
@@ -58,11 +58,11 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
             # Make URL we want to point to.
             url = None
             if middle.startswith('http://') or middle.startswith('https://'):
-                url = urlquote(middle, safe='/&=:;#?+*%')
+                url = quote(middle, safe='/&=:;#?+*%')
             elif middle.startswith('www.') or ('@' not in middle and \
                     middle and middle[0] in string.ascii_letters + string.digits and \
                     (middle.endswith('.org') or middle.endswith('.net') or middle.endswith('.com'))):
-                url = urlquote('http://%s' % middle, safe='/&=:;#?+*%')
+                url = quote('http://%s' % middle, safe='/&=:;#?+*%')
             # elif '@' in middle and not ':' in middle and simple_email_re.match(middle):
             #     url = 'mailto:%s' % middle
             #     nofollow_attr = ''

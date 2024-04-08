@@ -1,33 +1,59 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import PropTypes from 'prop-types';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
 import ShareLink from '../../models/share-link';
-import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
+import SortOptionsDialog from '../../components/dialog/sort-options';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+import Selector from '../../components/single-selector';
+
+const contentPropTypes = {
+  loading: PropTypes.bool.isRequired,
+  isLoadingMore: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -53,7 +79,7 @@ class Content extends Component {
       // only for some columns
       const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
       const table = (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`${isDesktop ? '': 'table-thead-hidden'}`}>
           <thead>
             {isDesktop ? (
               <tr>
@@ -75,16 +101,39 @@ class Content extends Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} />);
+              return (<Item
+                key={index}
+                isDesktop={isDesktop}
+                item={item}
+                onRemoveLink={this.props.onRemoveLink}
+                isItemFreezed={this.state.isItemFreezed}
+                toggleItemFreezed={this.toggleItemFreezed}
+              />
+              );
             })}
           </tbody>
         </table>
       );
 
-      return items.length ? table : emptyTip;
+      return items.length ? (
+        <>
+          {table}
+          {this.props.isLoadingMore && <div className="flex-shrink-0"><Loading /></div>}
+        </>
+      ) : emptyTip;
     }
   }
 }
+
+Content.propTypes = contentPropTypes;
+
+const itemPropTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+  onRemoveLink: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired
+};
 
 class Item extends Component {
 
@@ -92,6 +141,7 @@ class Item extends Component {
     super(props);
 
     this.state = {
+      highlight: false,
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
@@ -117,43 +167,53 @@ class Item extends Component {
       permissionOptions: permissionOptions,
       currentPermission: currentPermission
     });
-  }
+  };
 
   toggleOpMenu = () => {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   toggleLinkDialog = () => {
     this.setState({
       isLinkDialogOpen: !this.state.isLinkDialogOpen
     });
-  }
+  };
 
-  handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
-  }
+  handleMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
+  };
 
-  handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
-  }
+  handleMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  };
 
   viewLink = (e) => {
     e.preventDefault();
     this.toggleLinkDialog();
-  }
+  };
 
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
-  }
+  };
 
   renderExpiration = () => {
     const item = this.props.item;
@@ -163,7 +223,12 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
+
+  // for 'selector' in desktop
+  changePermission = (permOption) => {
+    this.changePerm(permOption.value);
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -178,11 +243,19 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
     const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    this.permOptions = permissionOptions.map(item => {
+      return {
+        value: item,
+        text: Utils.getShareLinkPermissionObject(item).text,
+        isSelected: item == currentPermission
+      };
+    });
+    const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0] || {};
 
     let iconUrl, objUrl;
     if (item.is_dir) {
@@ -194,26 +267,28 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
+    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
-      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onFocus={this.handleMouseEnter}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
             <Link to={objUrl}>{item.obj_name}</Link> :
-            <a href={objUrl} target="_blank">{item.obj_name}</a>
+            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
           }
+          {deletedTip}
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
         {isPro &&
-        <td>
-          <ShareLinkPermissionEditor
-            isTextMode={true}
-            isEditIconShow={isOpIconShown && !item.is_expired}
-            currentPermission={currentPermission}
-            permissionOptions={permissionOptions}
-            onPermissionChanged={this.changePerm}
-          />
-        </td>
+          <td>
+            <Selector
+              isDropdownToggleShown={isOpIconShown && !item.is_expired}
+              currentSelectedOption={currentSelectedPermOption}
+              options={this.permOptions}
+              selectOption={this.changePermission}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+            />
+          </td>
         }
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
@@ -231,20 +306,21 @@ class Item extends Component {
           <td>
             {item.is_dir ?
               <Link to={objUrl}>{item.obj_name}</Link> :
-              <a href={objUrl} target="_blank">{item.obj_name}</a>
+              <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
             }
             {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
             <br />
             <span>{item.repo_name}</span><br />
-            <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
-            <span className="item-meta-info">{this.renderExpiration()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+            <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+            <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
           </td>
           <td>
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
               <DropdownToggle
                 tag="i"
                 className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-                title={gettext('More Operations')}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
               />
@@ -284,17 +360,38 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = itemPropTypes;
+
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired
+};
+
+const PER_PAGE = 25;
+
 class ShareAdminShareLinks extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isCleanInvalidShareLinksDialogOpen: false,
       loading: true,
+      hasMore: false,
+      isLoadingMore: false,
+      page: 1,
       errorMsg: '',
       items: [],
       sortBy: 'name', // 'name' or 'time'
       sortOrder: 'asc' // 'asc' or 'desc'
     };
+
+    // for mobile
+    this.sortOptions = [
+      {value: 'name-asc', text: gettext('By name ascending')},
+      {value: 'name-desc', text: gettext('By name descending')},
+      {value: 'time-asc', text: gettext('By expiration ascending')},
+      {value: 'time-desc', text: gettext('By expiration descending')}
+    ];
   }
 
   _sortItems = (items, sortBy, sortOrder) => {
@@ -323,6 +420,8 @@ class ShareAdminShareLinks extends Component {
           return a.expire_date < b.expire_date ? 1 : -1;
         };
         break;
+
+      // no default
     }
 
     items.sort((a, b) => {
@@ -335,7 +434,7 @@ class ShareAdminShareLinks extends Component {
       }
     });
     return items;
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     this.setState({
@@ -343,15 +442,21 @@ class ShareAdminShareLinks extends Component {
       sortOrder: sortOrder,
       items: this._sortItems(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   componentDidMount() {
-    seafileAPI.listUserShareLinks().then((res) => {
+    this.listUserShareLinks();
+  }
+
+  listUserShareLinks() {
+    const { page } = this.state;
+    seafileAPI.listShareLinks({ page }).then((res) => {
       let items = res.data.map(item => {
         return new ShareLink(item);
       });
       this.setState({
         loading: false,
+        hasMore: res.data.length == PER_PAGE,
         items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
@@ -361,6 +466,40 @@ class ShareAdminShareLinks extends Component {
       });
     });
   }
+
+  handleScroll = (event) => {
+    if (!this.state.isLoadingMore && this.state.hasMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({isLoadingMore: true}, () => {
+          this.getMore();
+        });
+      }
+    }
+  };
+
+  getMore = () => {
+    const { page } = this.state;
+    seafileAPI.listShareLinks({ page: page + 1 }).then((res) => {
+      let moreItems = res.data.map(item => {
+        return new ShareLink(item);
+      });
+      this.setState({
+        isLoadingMore: false,
+        hasMore: res.data.length == PER_PAGE,
+        page: page + 1,
+        items: this._sortItems(this.state.items.concat(moreItems), this.state.sortBy, this.state.sortOrder)
+      });
+    }).catch((error) => {
+      this.setState({
+        isLoadingMore: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  };
 
   onRemoveLink = (item) => {
     seafileAPI.deleteShareLink(item.token).then(() => {
@@ -374,37 +513,89 @@ class ShareAdminShareLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
+
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  };
+
+  toggleCleanInvalidShareLinksDialog = () => {
+    this.setState({isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen});
+  };
+
+  cleanInvalidShareLinks = () => {
+    seafileAPI.cleanInvalidShareLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
+      this.setState({items: newItems});
+      toaster.success(gettext('Successfully cleaned invalid share links.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path share-upload-nav">
-            <ul className="nav">
-              <li className="nav-item">
-                <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
-              </li>
-              {canGenerateUploadLink && (
-                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
-              )}
-            </ul>
-          </div>
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={this.state.items}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortItems}
-              onRemoveLink={this.onRemoveLink}
-            />
+      <Fragment>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidShareLinksDialog}>{gettext('Clean invalid share links')}</Button>
+        </TopToolbar>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path share-upload-nav">
+              <ul className="nav">
+                <li className="nav-item">
+                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
+                </li>
+                {canGenerateUploadLink && (
+                  <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                )}
+              </ul>
+              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+            </div>
+            <div className="cur-view-content" onScroll={this.handleScroll}>
+              <Content
+                loading={this.state.loading}
+                isLoadingMore={this.state.isLoadingMore}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
+                onRemoveLink={this.onRemoveLink}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortOptions={this.sortOptions}
+          sortItems={this.sortItems}
+        />
+        }
+        {this.state.isCleanInvalidShareLinksDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Clean invalid share links')}
+            message={gettext('Are you sure you want to clean invalid share links?')}
+            executeOperation={this.cleanInvalidShareLinks}
+            confirmBtnText={gettext('Clean')}
+            toggleDialog={this.toggleCleanInvalidShareLinksDialog}
+          />
+        }
+      </Fragment>
     );
   }
 }
+
+ShareAdminShareLinks.propTypes = propTypes;
 
 export default ShareAdminShareLinks;

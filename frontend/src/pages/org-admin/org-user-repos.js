@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
@@ -24,7 +25,8 @@ class OrgUserOwnedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));
@@ -56,11 +58,6 @@ class OrgUserOwnedRepos extends Component {
 }
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       loading, errorMsg, repo_list
@@ -96,6 +93,10 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -112,24 +113,24 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   handleDeleteIconClick = (e) => {
     e.preventDefault();
     this.toggleDeleteRepoDialog();
-  }
+  };
 
   toggleDeleteRepoDialog = () => {
     this.setState({
       isDeleteRepoDialogOpen: !this.state.isDeleteRepoDialogOpen
     });
-  }
+  };
 
   deleteRepo = () => {
     const repo = this.props.data;
@@ -146,7 +147,7 @@ class Item extends Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   render() {
     const { deleted, isOpIconShown, isDeleteRepoDialogOpen } = this.state;
@@ -181,5 +182,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+OrgUserOwnedRepos.propTypes = {
+  email: PropTypes.string,
+};
+
 
 export default OrgUserOwnedRepos;

@@ -24,12 +24,12 @@ from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import loader
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
-from django.views.static import serve as django_static_serve
+from django.utils.crypto import get_random_string
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
@@ -60,7 +60,6 @@ logger = logging.getLogger(__name__)
 if EVENTS_CONFIG_FILE:
     try:
         from seafevents import seafevents_api
-        seafevents_api.init(EVENTS_CONFIG_FILE)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents_api = None
@@ -106,6 +105,17 @@ def is_cluster_mode():
 
 CLUSTER_MODE = is_cluster_mode()
 
+def is_db_sqlite3():
+    is_db_sqlite3 = False
+    try:
+        if 'sqlite3' in seahub.settings.DATABASES['default']['ENGINE']:
+            is_db_sqlite3 = True
+    except:
+        pass
+    return is_db_sqlite3
+
+IS_DB_SQLITE3 = is_db_sqlite3()
+
 try:
     from seahub.settings import OFFICE_CONVERTOR_ROOT
 except ImportError:
@@ -118,16 +128,17 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'heic'),
+    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'heic'),
     DOCUMENT: ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
     PDF: ('pdf', 'ai'),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
-    AUDIO: ('mp3', 'oga', 'ogg'),
+    AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
+    SEADOC: ('sdoc',),
 }
 
 def gen_fileext_type_map():
@@ -213,7 +224,7 @@ def normalize_cache_key(value, prefix=None, token=None, max_length=200):
     """
     key = value if prefix is None else prefix + value
     key = key if token is None else key + '_' + token
-    return urlquote(key)[:max_length]
+    return quote(key)[:max_length]
 
 def get_repo_last_modify(repo):
     """ Get last modification time for a repo.
@@ -287,6 +298,11 @@ def is_valid_username2(username):
 def is_valid_dirent_name(name):
     """Check whether repo/dir/file name is valid.
     """
+    for character in name:
+        # Emojis fall within the range \U0001F300 to \U0001FAD6
+        if 0x1F300 <= ord(character) <= 0x1FAD6:
+            return False
+
     # `repo_id` parameter is not used in seafile api
     return seafile_api.is_valid_filename('fake_repo_id', name)
 
@@ -323,6 +339,10 @@ def get_no_duplicate_obj_name(obj_name, exist_obj_names):
                 i += 1
 
 def check_filename_with_rename(repo_id, parent_dir, obj_name):
+    exist_obj_names = list_obj_names_in_dir(repo_id, parent_dir)
+    return get_no_duplicate_obj_name(obj_name, exist_obj_names)
+
+def list_obj_names_in_dir(repo_id, parent_dir):
     cmmts = seafile_api.get_commit_list(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None
     if not latest_commit:
@@ -332,6 +352,13 @@ def check_filename_with_rename(repo_id, parent_dir, obj_name):
             latest_commit.id, parent_dir)
 
     exist_obj_names = [dirent.obj_name for dirent in dirents]
+    return exist_obj_names
+
+def check_filename_or_rename(repo_id, parent_dir, obj_name):
+    exist_obj_names = list_obj_names_in_dir(repo_id, parent_dir)
+
+    if obj_name not in exist_obj_names:
+        return obj_name
     return get_no_duplicate_obj_name(obj_name, exist_obj_names)
 
 def get_user_repos(username, org_id=None):
@@ -460,7 +487,7 @@ def gen_inner_file_get_url(token, filename):
     """
     if ENABLE_INNER_FILESERVER:
         return '%s/files/%s/%s' % (get_inner_fileserver_root(), token,
-                                   urlquote(filename))
+                                   quote(filename))
     else:
         return gen_file_get_url(token, filename)
 
@@ -505,7 +532,7 @@ def gen_file_get_url(token, filename):
     Generate fileserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
-    return '%s/files/%s/%s' % (get_fileserver_root(), token, urlquote(filename))
+    return '%s/files/%s/%s' % (get_fileserver_root(), token, quote(filename))
 
 def gen_file_upload_url(token, op, replace=False):
     url = '%s/%s/%s' % (get_fileserver_root(), op, token)
@@ -550,9 +577,8 @@ if EVENTS_CONFIG_FILE:
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
     try:
-        import seafevents
         EVENTS_ENABLED = True
-        SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+        SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
@@ -566,126 +592,19 @@ if EVENTS_CONFIG_FILE:
         finally:
            session.close()
 
-    def _same_events(e1, e2):
-        """Two events are equal should follow two rules:
-        1. event1.repo_id = event2.repo_id
-        2. event1.commit.creator = event2.commit.creator
-        3. event1.commit.desc = event2.commit.desc
-        """
-        if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-            if e1.repo_id == e2.repo_id and \
-               e1.commit.desc == e2.commit.desc and \
-               e1.commit.creator_name == e2.commit.creator_name:
-                return True
-        return False
-
-    def _get_events(username, start, count, org_id=None):
-        ev_session = SeafEventsSession()
-
-        valid_events = []
-        total_used = 0
-        try:
-            next_start = start
-            while True:
-                events = _get_events_inner(ev_session, username, next_start,
-                                           count, org_id)
-                if not events:
-                    break
-
-                # filter duplicatly commit and merged commit
-                for e1 in events:
-                    duplicate = False
-                    for e2 in valid_events:
-                        if _same_events(e1, e2): duplicate = True; break
-
-                    new_merge = False
-                    if hasattr(e1, 'commit') and e1.commit and \
-                       new_merge_with_no_conflict(e1.commit):
-                        new_merge = True
-
-                    if not duplicate and not new_merge:
-                        valid_events.append(e1)
-                    total_used = total_used + 1
-                    if len(valid_events) == count:
-                        break
-
-                if len(valid_events) == count:
-                    break
-                next_start = next_start + len(events)
-        finally:
-            ev_session.close()
-
-        for e in valid_events:            # parse commit description
-            if hasattr(e, 'commit'):
-                e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
-                e.commit.more_files = more_files_in_commit(e.commit)
-        return valid_events, start + total_used
 
     def _get_activities(username, start, count):
         ev_session = SeafEventsSession()
 
-        events, total_count = [], 0
+        events = []
         try:
-            events = seafevents.get_user_activities(ev_session,
+            events = seafevents_api.get_user_activities(ev_session,
                     username, start, count)
         finally:
             ev_session.close()
 
         return events
 
-    def _get_events_inner(ev_session, username, start, limit, org_id=None):
-        '''Read events from seafevents database, and remove events that are
-        no longer valid
-
-        Return 'limit' events or less than 'limit' events if no more events remain
-        '''
-        valid_events = []
-        next_start = start
-        while True:
-            if org_id and org_id > 0:
-                events = seafevents.get_org_user_events(ev_session, org_id,
-                                                        username, next_start,
-                                                        limit)
-            else:
-                events = seafevents.get_user_events(ev_session, username,
-                                                    next_start, limit)
-            if not events:
-                break
-
-            for ev in events:
-                if ev.etype == 'repo-update':
-                    repo = seafile_api.get_repo(ev.repo_id)
-                    if not repo:
-                        # delete the update event for repo which has been deleted
-                        seafevents.delete_event(ev_session, ev.uuid)
-                        continue
-                    if repo.encrypted:
-                        repo.password_set = seafile_api.is_password_set(
-                            repo.id, username)
-                    ev.repo = repo
-                    ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
-
-                valid_events.append(ev)
-                if len(valid_events) == limit:
-                    break
-
-            if len(valid_events) == limit:
-                break
-            next_start = next_start + len(valid_events)
-
-        return valid_events
-
-
-    def get_user_events(username, start, count):
-        """Return user events list and a new start.
-
-        For example:
-        ``get_user_events('foo@example.com', 0, 10)`` returns the first 10
-        events.
-        ``get_user_events('foo@example.com', 5, 10)`` returns the 6th through
-        15th events.
-        """
-        return _get_events(username, start, count)
 
     def get_user_activities(username, start, count):
         """Return user events list and a new start.
@@ -700,24 +619,42 @@ if EVENTS_CONFIG_FILE:
         """
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_user_activity_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_user_activity_stats_by_day(session, start, end, offset)
         return res
 
-    def get_org_user_events(org_id, username, start, count):
-        return _get_events(username, start, count, org_id=org_id)
+    def get_org_user_activity_stats_by_day(org_id, start, end):
+        """
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_user_activity_stats_by_day(session, org_id, start, end)
+        return res
 
     def get_file_history(repo_id, path, start, count, history_limit=-1):
         """Return file histories
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_history(session, repo_id, path, start, count, history_limit)
+            res = seafevents_api.get_file_history(session, repo_id, path, start, count, history_limit)
+        return res
+
+    def get_file_history_by_day(repo_id, path, start, count, to_tz, history_limit):
+        """Return file histories
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_file_history_by_day(session, repo_id, path, start, count, to_tz, history_limit)
+        return res
+    
+    def get_file_daily_history_detail(repo_id, path, start_time, end_time, to_tz):
+        """Return file histories detail
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_file_daily_history_detail(session, repo_id, path, start_time, end_time, to_tz)
         return res
 
     def get_log_events_by_time(log_type, tstart, tend):
         """Return log events list by start/end timestamp. (If no logs, return 'None')
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_event_log_by_time(session, log_type, tstart, tend)
+            events = seafevents_api.get_event_log_by_time(session, log_type, tstart, tend)
 
         return events if events else None
 
@@ -747,7 +684,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_audit_events_by_path(session,
+            events = seafevents_api.get_file_audit_events_by_path(session,
                 email, org_id, repo_id, file_path, start, limit)
 
         return events if events else None
@@ -762,7 +699,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_audit_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_file_audit_events(session, email, org_id, repo_id, start, limit)
 
         return events if events else None
 
@@ -770,24 +707,38 @@ if EVENTS_CONFIG_FILE:
         """ return file audit record of sepcifiy time group by day.
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_ops_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_file_ops_stats_by_day(session, start, end, offset)
+        return res
+
+    def get_org_file_ops_stats_by_day(org_id, start, end, offset):
+        """ return file audit record of sepcifiy time group by day.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_file_ops_stats_by_day(session, org_id, start, end, offset)
         return res
 
     def get_total_storage_stats_by_day(start, end, offset):
         """
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_total_storage_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_total_storage_stats_by_day(session, start, end, offset)
+        return res
+
+    def get_org_total_storage_stats_by_day(org_id, start, end, offset):
+        """
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_storage_stats_by_day(session, org_id, start, end, offset)
         return res
 
     def get_system_traffic_by_day(start, end, offset, op_type='all'):
         with _get_seafevents_session() as session:
-            res = seafevents.get_system_traffic_by_day(session, start, end, offset, op_type)
+            res = seafevents_api.get_system_traffic_by_day(session, start, end, offset, op_type)
         return res
 
     def get_org_traffic_by_day(org_id, start, end, offset, op_type='all'):
         with _get_seafevents_session() as session:
-            res = seafevents.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
+            res = seafevents_api.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
         return res
 
     def get_file_update_events(email, org_id, repo_id, start, limit):
@@ -800,7 +751,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_update_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_file_update_events(session, email, org_id, repo_id, start, limit)
         return events if events else None
 
     def get_perm_audit_events(email, org_id, repo_id, start, limit):
@@ -813,48 +764,79 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_perm_audit_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_perm_audit_events(session, email, org_id, repo_id, start, limit)
 
         return events if events else None
 
     def get_virus_files(repo_id=None, has_handled=None, start=-1, limit=-1):
         with _get_seafevents_session() as session:
-            r = seafevents.get_virus_files(session, repo_id, has_handled, start, limit)
+            r = seafevents_api.get_virus_files(session, repo_id, has_handled, start, limit)
         return r if r else []
 
     def delete_virus_file(vid):
         with _get_seafevents_session() as session:
-            return True if seafevents.delete_virus_file(session, vid) == 0 else False
+            return True if seafevents_api.delete_virus_file(session, vid) == 0 else False
 
     def operate_virus_file(vid, ignore):
         with _get_seafevents_session() as session:
-            return True if seafevents.operate_virus_file(session, vid, ignore) == 0 else False
+            return True if seafevents_api.operate_virus_file(session, vid, ignore) == 0 else False
 
     def get_virus_file_by_vid(vid):
         with _get_seafevents_session() as session:
-            return seafevents.get_virus_file_by_vid(session, vid)
+            return seafevents_api.get_virus_file_by_vid(session, vid)
 
     def get_file_scan_record(start=-1, limit=-1):
-        records = seafevents_api.get_content_scan_results(start, limit)
+        with _get_seafevents_session() as session:
+            records = seafevents_api.get_content_scan_results(session, start, limit)
         return records if records else []
 
     def get_user_activities_by_timestamp(username, start, end):
-        events = seafevents.get_user_activities_by_timestamp(username, start, end)
+        with _get_seafevents_session() as session:
+            events = seafevents_api.get_user_activities_by_timestamp(session, username, start, end)
         return events if events else []
 
+    def get_all_users_traffic_by_month(month, start=-1, limit=-1, order_by='user', org_id=-1):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_all_users_traffic_by_month(session, month, start, limit, order_by, org_id)
+        return res
+
+    def get_all_orgs_traffic_by_month(month, start=-1, limit=-1, order_by='user'):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_all_orgs_traffic_by_month(session, month, start, limit, order_by)
+        return res
+
+    def get_user_traffic_by_month(username, month):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_user_traffic_by_month(session, username, month)
+        return res
+
+    def get_file_history_suffix():
+        return seafevents_api.get_file_history_suffix(parsed_events_conf)
+
 else:
+    parsed_events_conf = None
     EVENTS_ENABLED = False
-    def get_user_events():
+    def get_file_history_suffix():
+        pass
+    def get_all_users_traffic_by_month():
+        pass
+    def get_all_orgs_traffic_by_month():
+        pass
+    def get_user_traffic_by_month():
         pass
     def get_user_activity_stats_by_day():
         pass
-    def get_log_events_by_time():
+    def get_org_user_activity_stats_by_day():
         pass
-    def get_org_user_events():
+    def get_log_events_by_time():
         pass
     def get_user_activities():
         pass
     def get_file_history():
+        pass
+    def get_file_history_by_day():
+        pass
+    def get_file_daily_history_detail():
         pass
     def generate_file_audit_event_type():
         pass
@@ -864,9 +846,15 @@ else:
         pass
     def get_file_ops_stats_by_day():
         pass
+    def get_org_file_ops_stats_by_day():
+        pass
     def get_total_storage_stats_by_day():
         pass
+    def get_org_total_storage_stats_by_day():
+        pass
     def get_system_traffic_by_day():
+        pass
+    def get_org_system_traffic_by_day():
         pass
     def get_org_traffic_by_day():
         pass
@@ -900,6 +888,33 @@ def get_service_url():
     """Get service url from seaserv.
     """
     return config.SERVICE_URL
+
+def get_webdav_url():
+    """Get webdav url.
+    """
+
+    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
+        conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    else:
+        conf_dir = os.environ['SEAFILE_CONF_DIR']
+
+    conf_file = os.path.join(conf_dir, 'seafdav.conf')
+    if not os.path.exists(conf_file):
+        return ""
+
+    config = configparser.ConfigParser()
+    config.read(conf_file)
+    if not config.has_option("WEBDAV", "share_name"):
+        return ""
+
+    share_name = config.get("WEBDAV", "share_name")
+    share_name = share_name.strip('/')
+
+    service_url = get_service_url()
+    service_url = service_url.rstrip('/')
+
+    return "{}/{}/".format(service_url, share_name)
+
 
 def get_server_id():
     """Get server id from seaserv.
@@ -1000,7 +1015,7 @@ def is_textual_file(file_type):
     """
     Check whether a file type is a textual file.
     """
-    if file_type == TEXT or file_type == MARKDOWN:
+    if file_type == TEXT or file_type == MARKDOWN or file_type == SEADOC:
         return True
     else:
         return False
@@ -1008,7 +1023,7 @@ def is_textual_file(file_type):
 def redirect_to_login(request):
     from django.conf import settings
     login_url = settings.LOGIN_URL
-    path = urlquote(request.get_full_path())
+    path = quote(request.get_full_path())
     tup = login_url, REDIRECT_FIELD_NAME, path
     return HttpResponseRedirect('%s?%s=%s' % tup)
 
@@ -1046,10 +1061,10 @@ def convert_cmmt_desc_link(commit):
 
         tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s" class="normal">%s</a>"'
         if remaining:
-            return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir),
+            return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, quote(file_or_dir),
                                         escape(file_or_dir), remaining)
         else:
-            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), escape(file_or_dir))
+            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, quote(file_or_dir), escape(file_or_dir))
 
     return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
@@ -1071,8 +1086,8 @@ FILE_AUDIT_ENABLED = False
 if EVENTS_CONFIG_FILE:
     def check_file_audit_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_audit_enabled'):
-            enabled = seafevents.is_audit_enabled(parsed_events_conf)
+        if hasattr(seafevents_api, 'is_audit_enabled'):
+            enabled = seafevents_api.is_audit_enabled(parsed_events_conf)
 
             if enabled:
                 logging.debug('file audit: enabled')
@@ -1160,8 +1175,8 @@ HAS_FILE_SEARCH = False
 if EVENTS_CONFIG_FILE:
     def check_search_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_search_enabled'):
-            enabled = seafevents.is_search_enabled(parsed_events_conf)
+        if hasattr(seafevents_api, 'is_search_enabled'):
+            enabled = seafevents_api.is_search_enabled(parsed_events_conf)
 
             if enabled:
                 logging.debug('search: enabled')
@@ -1170,6 +1185,21 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     HAS_FILE_SEARCH = check_search_enabled()
+
+# repo auto delete related
+ENABLE_REPO_AUTO_DEL = False
+if EVENTS_CONFIG_FILE:
+    def check_repo_auto_del_enabled():
+        enabled = False
+        if hasattr(seafevents_api, 'is_repo_auto_del_enabled'):
+            enabled = seafevents_api.is_repo_auto_del_enabled(parsed_events_conf)
+            if enabled:
+                logging.debug('search: enabled')
+            else:
+                logging.debug('search: not enabled')
+        return enabled
+
+    ENABLE_REPO_AUTO_DEL = check_repo_auto_del_enabled()
 
 
 def is_user_password_strong(password):
@@ -1304,10 +1334,10 @@ def get_system_admins():
     return admins
 
 def is_windows_operating_system(request):
-    if 'HTTP_USER_AGENT' not in request.META:
+    if 'user-agent' not in request.headers:
         return False
 
-    if 'windows' in request.META['HTTP_USER_AGENT'].lower():
+    if 'windows' in request.headers['user-agent'].lower():
         return True
     else:
         return False
@@ -1337,6 +1367,28 @@ def is_valid_org_id(org_id):
         return False
 
 
-def encrypt_with_sha1(origin_str):
+def hash_password(password, algorithm='sha1', salt=get_random_string(4)):
 
-    return hashlib.sha1(origin_str.encode()).hexdigest()
+    digest = hashlib.pbkdf2_hmac(algorithm,
+                                 password.encode(),
+                                 salt.encode(),
+                                 10000)
+    hex_hash = digest.hex()
+
+    # sha1$QRle$5511a4e2efb7d12e1f64647f64c0c6e105d150ff
+    return "{}${}${}".format(algorithm, salt, hex_hash)
+
+
+def check_hashed_password(password, hashed_password):
+
+    algorithm, salt, hex_hash = hashed_password.split('$')
+
+    return hashed_password == hash_password(password, algorithm, salt)
+
+
+ASCII_RE = re.compile(r'[^\x00-\x7f]')
+
+
+def is_valid_password(password):
+
+    return False if ASCII_RE.search(password) else True

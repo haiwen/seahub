@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -20,14 +20,15 @@ from seahub.api2.views import get_dir_file_recursively
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
-        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
+        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP, get_file_type_and_ext
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_types import IMAGE, VIDEO, XMIND, SEADOC
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
+from seahub.constants import PERMISSION_INVISIBLE
 
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 
@@ -59,8 +60,14 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
     # only get dir info list
     if not request_type or request_type == 'd':
+
         dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
+
         for dirent in dir_list:
+
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
             dir_info = {}
             dir_info["type"] = "dir"
             dir_info["id"] = dirent.obj_id
@@ -98,6 +105,19 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             logger.error(e)
             files_tags_in_dir = {}
 
+        try:
+            from seahub.tags.models import FileUUIDMap
+            from seahub.seadoc.models import SeadocDraft, SeadocRevision
+            file_uuid_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(
+                repo_id, parent_dir)
+            file_uuid_list = [item.uuid for item in file_uuid_queryset]
+            seadoc_draft_queryset = SeadocDraft.objects.list_by_doc_uuids(
+                file_uuid_list)
+            seadoc_revision_queryset = SeadocRevision.objects.list_by_doc_uuids(
+                file_uuid_list)
+        except Exception as e:
+            logger.error(e)
+
         for dirent in file_list:
 
             file_name = dirent.obj_name
@@ -122,6 +142,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             if is_pro_version():
                 file_info["is_locked"] = dirent.is_locked
                 file_info["lock_time"] = dirent.lock_time
+                file_info["is_freezed"] = dirent.expire is not None and dirent.expire < 0
 
                 lock_owner_email = dirent.lock_owner or ''
                 file_info["lock_owner"] = lock_owner_email
@@ -164,7 +185,30 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                             str(thumbnail_size), file_obj_id)
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
-                        file_info['encoded_thumbnail_src'] = urlquote(src)
+                        file_info['encoded_thumbnail_src'] = quote(src)
+
+            # sdoc
+            filetype, fileext = get_file_type_and_ext(file_info['name'])
+            if filetype == SEADOC:
+                try:
+                    file_uuid_map = file_uuid_queryset.filter(
+                        filename=file_name).first()
+                    if file_uuid_map:
+                        sdoc_draft = seadoc_draft_queryset.filter(
+                            doc_uuid=file_uuid_map.uuid).first()
+                        if sdoc_draft:
+                            file_info['is_sdoc_draft'] = True
+                        else:
+                            file_info['is_sdoc_draft'] = False
+                        sdoc_revision = seadoc_revision_queryset.filter(
+                            doc_uuid=file_uuid_map.uuid).first()
+                        if sdoc_revision:
+                            file_info['is_sdoc_revision'] = True
+                            file_info['revision_id'] = sdoc_revision.revision_id
+                        else:
+                            file_info['is_sdoc_revision'] = False
+                except Exception as e:
+                    logger.error(e)
 
             file_info_list.append(file_info)
 
@@ -525,7 +569,10 @@ class DirView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)
 
 
 class DirDetailView(APIView):

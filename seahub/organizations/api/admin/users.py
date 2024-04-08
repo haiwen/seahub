@@ -1,11 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from io import BytesIO
+from openpyxl import load_workbook
 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import ccnet_api, seafile_api
 
@@ -14,25 +16,34 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.endpoints.utils import is_org_user
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.profile.models import Profile
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER
-from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED
+from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, \
+        get_file_type_and_ext
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.error_msg import file_type_error_msg
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
+        datetime_to_isoformat_timestr
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.views.sysadmin import send_user_add_mail
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.invitations.models import Invitation
+from seahub.constants import DEFAULT_USER
 
 from pysearpc import SearpcError
 
 import seahub.settings as settings
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED
-from seahub.organizations.views import get_org_user_self_usage, get_org_user_quota, \
-    is_org_staff, org_user_exists, unset_org_user, set_org_user, set_org_staff, unset_org_staff
+from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
+        ORG_ENABLE_ADMIN_INVITE_USER
+from seahub.organizations.views import get_org_user_self_usage, \
+        get_org_user_quota, is_org_staff, org_user_exists, \
+        unset_org_user, set_org_user, set_org_staff, unset_org_staff
 
 
 logger = logging.getLogger(__name__)
@@ -44,8 +55,8 @@ class OrgAdminUsers(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsProVersion, IsOrgAdminUser)
 
-    def get_info_of_users_order_by_quota_usage(self, org, all_users, direction,
-            page, per_page):
+    def get_info_of_users_order_by_quota_usage(self, org, all_users,
+                                               direction, page, per_page):
 
         # get user's quota usage info
         user_usage_dict = {}
@@ -145,8 +156,11 @@ class OrgAdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(org, all_users, direction,
-                            current_page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(org,
+                                                                       all_users,
+                                                                       direction,
+                                                                       current_page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -201,7 +215,6 @@ class OrgAdminUsers(APIView):
                 'page_next': page_next
             })
 
-
     def post(self, request, org_id):
         """Added an organization user, check member quota before adding.
         """
@@ -216,7 +229,6 @@ class OrgAdminUsers(APIView):
         org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
 
         if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and org_members >= org_members_quota:
                 err_msg = 'Failed. You can only invite %d members.' % org_members_quota
@@ -254,6 +266,10 @@ class OrgAdminUsers(APIView):
         except User.DoesNotExist:
             pass
 
+        if Profile.objects.filter(contact_email=email).first():
+            error_msg = _('User %s already exists.') % email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
@@ -282,12 +298,16 @@ class OrgAdminUsers(APIView):
         user_info['email'] = user.email
         user_info['contact_email'] = email2contact_email(user.email)
         user_info['last_login'] = None
-        user_info['self_usage'] = 0 # get_org_user_self_usage(org.org_id, user.email)
+        user_info['self_usage'] = 0  # get_org_user_self_usage(org.org_id, user.email)
         try:
             user_info['quota'] = get_org_user_quota(org_id, user.email)
         except SearpcError as e:
             logger.error(e)
             user_info['quota'] = -1
+
+        user_info['quota_usage'] = user_info['self_usage']
+        user_info['quota_total'] = user_info['quota']
+        user_info['create_time'] = user_info['ctime']
 
         return Response(user_info)
 
@@ -586,3 +606,249 @@ class OrgAdminSearchUser(APIView):
             user_list.append(user_info)
 
         return Response({'user_list': user_list})
+
+
+class OrgAdminImportUsers(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def post(self, request, org_id):
+        """ Import users from xlsx file
+
+        Permission checking:
+        1. admin user.
+        """
+
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        xlsx_file = request.FILES.get('file', None)
+        if not xlsx_file:
+            error_msg = 'file can not be found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_type, ext = get_file_type_and_ext(xlsx_file.name)
+        if ext != 'xlsx':
+            error_msg = file_type_error_msg(ext, 'xlsx')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        content = xlsx_file.read()
+
+        try:
+            fs = BytesIO(content)
+            wb = load_workbook(filename=fs, read_only=True)
+        except Exception as e:
+            logger.error(e)
+
+        # example file is like:
+        # Email    Password Name(Optional) Space Quota(MB, Optional)
+        # a@a.com  a        a              1024
+        # b@b.com  b        b              2048
+
+        rows = wb.worksheets[0].rows
+        records = []
+
+        # skip first row(head field).
+        next(rows)
+        for row in rows:
+            if not all(col.value is None for col in row):
+                records.append([col.value for col in row])
+
+        # check plan
+        url_prefix = request.user.org.url_prefix
+        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+
+        if ORG_MEMBER_QUOTA_ENABLED:
+            from seahub.organizations.models import OrgMemberQuota
+            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+            if org_members_quota is not None and org_members+len(records) > org_members_quota:
+                err_msg = 'The number of users exceeds the limit.'
+                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+
+        if user_number_over_limit(new_users=len(records)):
+            error_msg = 'The number of users exceeds the limit.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        for record in records:
+            if record[0]:
+                email = record[0].strip()
+                if not is_valid_email(email):
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg': 'email %s invalid.' % email
+                    })
+                    continue
+            else:
+                result['failed'].append({
+                    'email': '',
+                    'error_msg': 'email invalid.'
+                })
+                continue
+
+            if not record[1] or not str(record[1]).strip():
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'password invalid.'
+                })
+                continue
+            else:
+                password = str(record[1]).strip()
+
+            vid = get_virtual_id_by_email(email)
+            try:
+                User.objects.get(email=vid)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'user %s exists.' % email
+                })
+                continue
+            except User.DoesNotExist:
+                pass
+
+            user = User.objects.create_user(email, password, is_staff=False, is_active=True)
+            set_org_user(org_id, user.email)
+
+            if IS_EMAIL_CONFIGURED:
+                if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
+                    try:
+                        send_user_add_mail(request, email, password)
+                    except Exception as e:
+                        logger.error(str(e))
+
+            # update the user's optional info
+            # update nikename
+            if record[2]:
+                try:
+                    nickname = record[2].strip()
+                    if len(nickname) <= 64 and '/' not in nickname:
+                        Profile.objects.add_or_update(user.email, nickname, '')
+                except Exception as e:
+                    logger.error(e)
+
+            # update quota
+            if record[3]:
+                try:
+                    space_quota_mb = int(record[3])
+                    if space_quota_mb >= 0:
+                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
+                        seafile_api.set_org_user_quota(org_id, user.email, space_quota)
+                except Exception as e:
+                    logger.error(e)
+
+            info = {}
+            info['email'] = user.email
+            info['name'] = email2nickname(user.email)
+            info['contact_email'] = email2contact_email(user.email)
+
+            info['is_staff'] = user.is_staff
+            info['is_active'] = user.is_active
+
+            info['quota_usage'] = 0
+            try:
+                info['quota_total'] = get_org_user_quota(org_id, user.email)
+            except SearpcError as e:
+                logger.error(e)
+                info['quota_total'] = -1
+
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+            info['last_login'] = None
+
+            result['success'].append(info)
+
+        return Response(result)
+
+
+class OrgAdminInviteUser(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def post(self, request, org_id):
+
+        """Invite organization user
+        """
+        if not ORG_ENABLE_ADMIN_INVITE_USER:
+            error_msg = _('Feature disabled.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not IS_EMAIL_CONFIGURED:
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # parameter check
+        email_list = request.data.getlist("email", None)
+        if not email_list:
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            error_msg = f'Organization {org_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check plan
+        url_prefix = request.user.org.url_prefix
+        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+
+        if ORG_MEMBER_QUOTA_ENABLED:
+            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+            if org_members_quota is not None and \
+                    org_members + len(email_list) > org_members_quota:
+                err_msg = _(f'Failed. You can only invite {org_members_quota} members.')
+                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+
+        if user_number_over_limit(len(email_list)):
+            err_msg = _('The number of users exceeds the limit')
+            return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+
+        username = request.user.username
+        quota_total = seafile_api.get_org_quota(org_id)
+
+        # add user
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        for email in email_list:
+
+            try:
+                User.objects.get(email=email)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': _(f'User {email} already exists.')
+                })
+                continue
+            except User.DoesNotExist:
+                new_user = User.objects.create_user(email, '!',
+                                                    is_staff=False,
+                                                    is_active=False)
+                set_org_user(org_id, email)
+
+            # send invitation link
+            i = Invitation.objects.add(inviter=username,
+                                       accepter=email,
+                                       invite_type=DEFAULT_USER)
+            i.send_to(email=email, org_name=org.org_name)
+
+            user_info = {}
+            user_info['email'] = email
+            user_info['name'] = email2nickname(email)
+            user_info['contact_email'] = email2contact_email(email)
+            user_info['is_staff'] = False
+            user_info['is_active'] = False
+            user_info['create_time'] = timestamp_to_isoformat_timestr(new_user.ctime)
+            user_info['quota_usage'] = 0
+            user_info['quota_total'] = quota_total
+            user_info['last_login'] = ''
+            result['success'].append(user_info)
+
+        return Response(result)

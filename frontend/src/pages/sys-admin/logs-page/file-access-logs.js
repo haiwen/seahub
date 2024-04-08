@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import { Button } from 'reactstrap';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
@@ -28,29 +29,29 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getLogsByPage(this.props.currentPage + 1);
-  }
+  };
 
   toggleFilterByUser = () => {
     this.props.filterByUser(null);
-  }
+  };
 
   toggleFilterByRepo = () => {
     this.props.filterByRepo(null);
-  }
+  };
 
   toggleFreezeItem = (freezed) => {
     this.setState({
       isItemFreezed: freezed
     });
-  }
+  };
 
   render() {
     const {
-      loading, errorMsg, items, 
+      loading, errorMsg, items,
       userFilteredBy, repoFilteredBy,
       perPage, currentPage, hasNextPage
     } = this.props;
@@ -123,6 +124,24 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  items: PropTypes.array,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  toggleFreezeItem: PropTypes.func,
+  userFilteredBy: PropTypes.string,
+  repoFilteredBy: PropTypes.string,
+  filterByUser: PropTypes.func,
+  filterByRepo: PropTypes.func,
+};
+
+
 class Item extends Component {
 
   constructor(props) {
@@ -140,7 +159,7 @@ class Item extends Component {
         isOpIconShown: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isFreezed) {
@@ -149,17 +168,17 @@ class Item extends Component {
         isOpIconShown: false
       });
     }
-  }
+  };
 
   filterByUser = () => {
     const { item } = this.props;
     this.props.filterByUser(item.email);
-  }
+  };
 
   filterByRepo = () => {
     const { item } = this.props;
     this.props.filterByRepo(item.repo_id);
-  }
+  };
 
   toggleFreezeItem = (freezed) => {
     this.props.toggleFreezeItem(freezed);
@@ -169,7 +188,7 @@ class Item extends Component {
         isOpIconShown: false
       });
     }
-  }
+  };
 
   render() {
     const { isHighlighted, isOpIconShown } = this.state;
@@ -205,6 +224,17 @@ class Item extends Component {
   }
 }
 
+
+Item.propTypes = {
+  item: PropTypes.object,
+  isFreezed: PropTypes.bool,
+  toggleFreezeItem: PropTypes.func,
+  userFilteredBy: PropTypes.string,
+  repoFilteredBy: PropTypes.string,
+  filterByUser: PropTypes.func,
+  filterByRepo: PropTypes.func,
+};
+
 class FileAccessLogs extends Component {
 
   constructor(props) {
@@ -223,7 +253,7 @@ class FileAccessLogs extends Component {
 
   toggleExportExcelDialog = () => {
     this.setState({isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen});
-  }
+  };
 
   componentDidMount () {
     let urlParams = (new URL(window.location)).searchParams;
@@ -253,54 +283,54 @@ class FileAccessLogs extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getLogsByPage(this.initPage));
-  }
+  };
 
   updateURL = (obj) => {
     let url = new URL(location.href);
     let searchParams = new URLSearchParams(url.search);
     for (let key in obj) {
-      obj[key] == null ? 
+      obj[key] == null ?
         searchParams.delete(key) :
         searchParams.set(key, obj[key]);
     }
     url.search = searchParams.toString();
     navigate(url.toString());
-  }
+  };
 
   filterByUser = (email) => {
     this.setState({
-      userFilteredBy: email 
+      userFilteredBy: email
     }, () => {
       this.getLogsByPage(this.initPage);
       this.updateURL({'email': email});
     });
-  }
+  };
 
   filterByRepo = (repoID) => {
     this.setState({
-      repoFilteredBy: repoID 
+      repoFilteredBy: repoID
     }, () => {
       this.getLogsByPage(this.initPage);
       this.updateURL({'repo_id': repoID});
     });
-  } 
+  };
 
   render() {
     const {
       logList,
-      userFilteredBy, repoFilteredBy, 
+      userFilteredBy, repoFilteredBy,
       currentPage, perPage, hasNextPage,
       isExportExcelDialogOpen
     } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

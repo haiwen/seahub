@@ -35,39 +35,39 @@ class SysAdminAddOrgDialog extends React.Component {
     this.setState({
       isSubmitBtnActive: btnActive
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   inputPassword = (e) => {
     let passwd = e.target.value;
     this.setState({
       password: passwd
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputPasswordAgain = (e) => {
     let passwd = e.target.value;
     this.setState({
       passwordAgain: passwd
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputEmail = (e) => {
     let email = e.target.value;
     this.setState({
       email: email
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputName = (e) => {
     let name = e.target.value;
     this.setState({
       name: name
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   handleSubmit = () => {
     let { name, email, password, passwordAgain } = this.state;
@@ -82,7 +82,7 @@ class SysAdminAddOrgDialog extends React.Component {
     };
     this.props.addOrg(data);
     this.toggle();
-  }
+  };
 
   render() {
     const { errorMsg, password, passwordAgain, email, name, isSubmitBtnActive } = this.state;

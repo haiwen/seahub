@@ -9,7 +9,7 @@ import urllib.parse
 import urllib.error
 
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seahub.auth.decorators import login_required
 from seahub.utils import get_site_scheme_and_netloc
 from seahub.api2.utils import get_api_token
@@ -22,7 +22,7 @@ from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIX
     WORK_WEIXIN_USER_INFO_AUTO_UPDATE, REMEMBER_ME
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
     handler_work_weixin_api_response, update_work_weixin_user_info
-from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
+from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.auth.models import SocialAuthUser
 from django.urls import reverse
 
@@ -47,7 +47,7 @@ def work_weixin_oauth_login(request):
         'state': state,
     }
 
-    if 'micromessenger' in request.META.get('HTTP_USER_AGENT').lower():
+    if 'micromessenger' in request.headers.get('user-agent').lower():
         data['response_type'] = 'code'
         data['scope'] = 'snsapi_base'
         authorization_url = MP_WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data) + '#wechat_redirect'
@@ -94,7 +94,7 @@ def work_weixin_oauth_callback(request):
         email = work_weixin_user.username
         is_new_user = False
     else:
-        email = gen_user_virtual_id()
+        email = None
         is_new_user = True
 
     try:
@@ -110,7 +110,7 @@ def work_weixin_oauth_callback(request):
             request, _('Error, new user registration is not allowed, please contact administrator.'))
 
     if is_new_user:
-        SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
+        SocialAuthUser.objects.add(user.username, WORK_WEIXIN_PROVIDER, uid)
 
     # update user info
     if is_new_user or WORK_WEIXIN_USER_INFO_AUTO_UPDATE:
@@ -123,7 +123,7 @@ def work_weixin_oauth_callback(request):
         if user_info_api_response_dic:
             api_user = user_info_api_response_dic
             api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             update_work_weixin_user_info(api_user)
 
     if not user.is_active:
@@ -217,7 +217,7 @@ def work_weixin_oauth_connect_callback(request):
         if user_info_api_response_dic:
             api_user = user_info_api_response_dic
             api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             update_work_weixin_user_info(api_user)
 
     # redirect user to page

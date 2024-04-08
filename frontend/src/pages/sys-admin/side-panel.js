@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, otherPermission, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
   enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin, enableDingtalk,
-  enableShareLinkReportAbuse } from '../../utils/constants';
+  enableShareLinkReportAbuse, isDBSqlite3 } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -19,7 +19,7 @@ class SidePanel extends React.Component {
 
   getActiveClass = (tab) => {
     return this.props.currentTab == tab ? 'active' : '';
-  }
+  };
 
   render() {
     return (
@@ -44,7 +44,7 @@ class SidePanel extends React.Component {
                   </Link>
                 </li>
                 }
-                {isPro && canViewStatistic &&
+                {(isPro || !isDBSqlite3) && canViewStatistic &&
                   <li className="nav-item">
                     <Link className={`nav-link ellipsis ${this.getActiveClass('statistic')}`}
                       to={siteRoot + 'sys/statistics/file/'}

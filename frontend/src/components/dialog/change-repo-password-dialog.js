@@ -28,19 +28,19 @@ class ChangeRepoPasswordDialog extends React.Component {
     this.setState({
       oldPassword: e.target.value
     });
-  }
+  };
 
   handleNewPasswordInputChange = (e) => {
     this.setState({
       newPassword: e.target.value
     });
-  }
+  };
 
   handleNewPasswordAgainInputChange = (e) => {
     this.setState({
       newPasswordAgain: e.target.value
     });
-  }
+  };
 
   formSubmit = (e) => {
     const { oldPassword, newPassword, newPasswordAgain } = this.state;
@@ -89,16 +89,19 @@ class ChangeRepoPasswordDialog extends React.Component {
           submitBtnDisabled: false
         });
       });
-  }
+  };
 
 
   render() {
     const { repoName, toggleDialog } = this.props;
 
+    let title = gettext('Change Password of Library {placeholder}');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
-      <Modal isOpen={true} centered={true} style={{height: 'auto'}}>
+      <Modal isOpen={true} style={{height: 'auto'}} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>
-          <span dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('Change Password of Library {placeholder}'), repoName)}}></span>
+          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <form id="repo-change-passwd-form" action="" method="post">

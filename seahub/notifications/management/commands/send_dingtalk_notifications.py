@@ -9,16 +9,26 @@ import json
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ungettext
+from django.utils.translation import ngettext
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.utils import get_site_scheme_and_netloc, get_site_name
 from seahub.auth.models import SocialAuthUser
 
-from seahub.dingtalk.utils import dingtalk_get_access_token, dingtalk_get_userid_by_unionid
 from seahub.dingtalk.settings import DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL, \
         DINGTALK_AGENT_ID
+
+# for 10.0 or later
+from seahub.dingtalk.settings import DINGTALK_APP_KEY, \
+        DINGTALK_APP_SECRET
+
+if DINGTALK_APP_KEY and DINGTALK_APP_SECRET:
+    from seahub.dingtalk.utils import dingtalk_get_orgapp_token as dingtalk_get_access_token
+    from seahub.dingtalk.utils import dingtalk_get_userid_by_unionid_new as dingtalk_get_userid_by_unionid
+else:
+    from seahub.dingtalk.utils import dingtalk_get_access_token, dingtalk_get_userid_by_unionid
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -87,7 +97,7 @@ class Command(BaseCommand, CommandLogMixin):
             }
         }
         resp_json = requests.post(self.dingtalk_message_send_to_conversation_url,
-                data=json.dumps(data)).json()
+                                  data=json.dumps(data)).json()
         if resp_json.get('errcode') != 0:
             self.log_info(resp_json)
 
@@ -163,7 +173,7 @@ class Command(BaseCommand, CommandLogMixin):
             if count == 0:
                 continue
 
-            title = ungettext(
+            title = ngettext(
                 "\n"
                 "You've got 1 new notice on %(site_name)s:\n",
                 "\n"

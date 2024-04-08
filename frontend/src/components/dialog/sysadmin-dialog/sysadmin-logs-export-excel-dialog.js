@@ -14,11 +14,6 @@ class LogsExportExcelDialog extends React.Component {
       endDateStr: '',
       errMsg: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
   }
 
   downloadExcel = () => {
@@ -44,7 +39,7 @@ class LogsExportExcelDialog extends React.Component {
     }
     location.href = url + '?start=' + startDateStr + '&end=' + endDateStr;
     this.props.toggle();
-  }
+  };
 
   isValidDateStr = () => {
     let { startDateStr, endDateStr } = this.state;
@@ -59,7 +54,7 @@ class LogsExportExcelDialog extends React.Component {
       });
       return false;
     }
-  }
+  };
 
   handleStartChange = (e) => {
     const startDateStr = e.target.value.trim();
@@ -67,7 +62,7 @@ class LogsExportExcelDialog extends React.Component {
       startDateStr: startDateStr,
       errMsg: ''
     });
-  }
+  };
 
   handleEndChange = (e) => {
     const endDateStr = e.target.value.trim();
@@ -75,11 +70,11 @@ class LogsExportExcelDialog extends React.Component {
       endDateStr: endDateStr,
       errMsg: '',
     });
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Choose date')}</ModalHeader>
         <ModalBody>
           <FormGroup>
@@ -88,7 +83,7 @@ class LogsExportExcelDialog extends React.Component {
               value={this.state.startDateStr}
               onChange={this.handleStartChange}
               placeholder='yyyy-mm-dd'
-              innerRef={input => {this.newInput = input;}}
+              autoFocus={true}
             />
           </FormGroup>
           <FormGroup>

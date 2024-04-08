@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{% trans "Log Out" %} - {% endblock %}
+
+{% block main_content %}
+<div class="text-panel">
+	<p>{% trans "Thanks for your participation! " %}<a href="{{ SITE_ROOT }}accounts/login/">{% trans "Log in again" %}</a></p>
+</div>
+{% endblock %}
+{% block extra_script %}
+{% if request_from_onlyoffice_desktop_editor %}
+<script type="text/javascript">
+  var params = {
+    "domain": "{{service_url}}",
+  };
+  window.AscDesktopEditor.execCommand('portal:logout', JSON.stringify(params));
+</script>
+{% endif %}
+{% endblock %}

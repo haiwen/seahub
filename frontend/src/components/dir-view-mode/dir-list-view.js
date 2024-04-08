@@ -12,9 +12,8 @@ const propTypes = {
   userPerm: PropTypes.string,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
+  repoTags: PropTypes.array.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
-  draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -36,10 +35,12 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
-  loadDirentList: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
 };
 
 class DirListView extends React.Component {
@@ -62,8 +63,6 @@ class DirListView extends React.Component {
           <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
-            readmeMarkdown={this.props.readmeMarkdown}
-            draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}
             onFileTagChanged={this.props.onFileTagChanged}
@@ -95,9 +94,11 @@ class DirListView extends React.Component {
           selectedDirentList={this.props.selectedDirentList}
           onItemsMove={this.props.onItemsMove}
           onItemsCopy={this.props.onItemsCopy}
+          onItemConvert={this.props.onItemConvert}
           onItemsDelete={this.props.onItemsDelete}
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
+          repoTags={this.props.repoTags}
           onFileTagChanged={this.props.onFileTagChanged}
           showDirentDetail={this.props.showDirentDetail}
           loadDirentList={this.props.loadDirentList}

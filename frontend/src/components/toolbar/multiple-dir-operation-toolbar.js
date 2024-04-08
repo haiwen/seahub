@@ -25,6 +25,7 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
+  repoTags: PropTypes.array.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -37,6 +38,10 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
+  onItemRename: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class MultipleDirOperationToolbar extends React.Component {
@@ -60,15 +65,15 @@ class MultipleDirOperationToolbar extends React.Component {
 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onItemsDelete = () => {
     this.props.onItemsDelete();
-  }
+  };
 
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
@@ -97,33 +102,41 @@ class MultipleDirOperationToolbar extends React.Component {
         });
       }
     }
-  }
+  };
 
   closeZipDialog = () => {
     this.setState({
       isZipDialogOpen: false
     });
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
-  }
+  };
 
   onItemRename = (newName) => {
     const dirent = this.props.selectedDirentList[0];
     this.props.onItemRename(dirent, newName);
-  }
+  };
 
   onPermissionItem = () => {
     this.setState({
       showLibContentViewDialogs: !this.state.showLibContentViewDialogs,
       isPermissionDialogOpen: !this.state.isPermissionDialogOpen
     });
-  }
+  };
 
-  onCommentItem = () => {
-    this.props.showDirentDetail('comments');
-  }
+  onStartRevise = (dirent) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
+      let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
+      window.open(url);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   getDirentMenuList = (dirent) => {
     const isRepoOwner = this.props.isRepoOwner;
@@ -141,7 +154,7 @@ class MultipleDirOperationToolbar extends React.Component {
       });
     }
     return opList;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     const dirents = this.props.selectedDirentList;
@@ -171,14 +184,14 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Unlock':
         this.unlockFile(dirent);
         break;
-      case 'Comment':
-        this.onCommentItem();
-        break;
       case 'History':
         this.onHistory(dirent);
         break;
       case 'Access Log':
         this.onAccessLog(dirent);
+        break;
+      case 'Properties':
+        this.props.showDirentDetail('info');
         break;
       case 'Open via Client':
         this.onOpenViaClient(dirent);
@@ -186,7 +199,7 @@ class MultipleDirOperationToolbar extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   lockFile = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -201,7 +214,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unlockFile = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -216,7 +229,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onOpenViaClient = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -226,7 +239,7 @@ class MultipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
-  }
+  };
 
   onHistory = (dirent) => {
     let filePath = this.getDirentPath(dirent);
@@ -236,13 +249,13 @@ class MultipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
-  }
+  };
 
   onAccessLog = (dirent) => {
     let filePath = this.getDirentPath(dirent);
     let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
     window.open(path);
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
@@ -252,7 +265,7 @@ class MultipleDirOperationToolbar extends React.Component {
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false,
     });
-  }
+  };
 
   listFileTags = (dirent) => {
     let filePath = this.getDirentPath(dirent);
@@ -270,7 +283,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onMenuFileTagChanged = () => {
     this.listFileTags(this.props.selectedDirentList[0]);
@@ -280,15 +293,15 @@ class MultipleDirOperationToolbar extends React.Component {
       const direntPath = this.getDirentPath(dirent);
       this.props.onFilesTagChanged(dirent, direntPath);
     }
-  }
+  };
 
   getDirentPath = (dirent) => {
     if (dirent) return Utils.joinPath(this.props.path, dirent.name);
-  }
+  };
 
   render() {
 
-    const { repoID, userPerm } = this.props;
+    const { repoID, repoTags, userPerm } = this.props;
     const dirent = this.props.selectedDirentList[0];
     const direntPath = this.getDirentPath(dirent);
 
@@ -316,6 +329,13 @@ class MultipleDirOperationToolbar extends React.Component {
                   {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
                   {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
                   {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>}
+                </Fragment>
+              )}
+              {userPerm === 'cloud-edit' && (
+                <Fragment>
+                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
+                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
                 </Fragment>
               )}
               {userPerm === 'r' && (
@@ -411,6 +431,7 @@ class MultipleDirOperationToolbar extends React.Component {
               <ModalPortal>
                 <EditFileTagDialog
                   repoID={repoID}
+                  repoTags={repoTags}
                   filePath={direntPath}
                   fileTagList={this.state.fileTagList}
                   toggleCancel={this.toggleCancel}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 
 const propTypes = {
@@ -23,11 +23,6 @@ class SearchFileDialog extends React.Component {
       errMessage: '',
       fileList: null
     };
-    this.inputRef = React.createRef();
-  }
-
-  componentDidMount() {
-    this.inputRef.current.focus();
   }
 
   searchFile = () => {
@@ -54,18 +49,18 @@ class SearchFileDialog extends React.Component {
         isSubmitting: false
       });
     });
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.searchFile();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   handleInputChange = (e) => {
     const q = e.target.value;
@@ -73,16 +68,16 @@ class SearchFileDialog extends React.Component {
       q: q,
       isSubmitDisabled: !q.trim()
     });
-  }
+  };
 
   render() {
     const { q, errMessage, fileList, isSubmitDisabled, isSubmitting } = this.state;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
         <ModalBody style={{height: '250px'}} className="o-auto">
           <div className="d-flex">
-            <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} ref={this.inputRef} />
+            <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} autoFocus={true} />
             <button type="submit" className={`btn btn-primary flex-shrink-0 ${isSubmitting ? 'btn-loading' : ''}`} onClick={this.searchFile} disabled={isSubmitDisabled}>{gettext('Search')}</button>
           </div>
           {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}

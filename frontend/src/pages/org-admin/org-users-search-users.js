@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, orgID } from '../../utils/constants';
@@ -18,14 +19,14 @@ class OrgUsersSearchUsersResult extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
-    let { orgUsers } = this.props;
+    let { orgUsers, changeStatus } = this.props;
     return (
       <div className="cur-view-content">
         <table>
@@ -51,6 +52,7 @@ class OrgUsersSearchUsersResult extends React.Component {
                   toggleDelete={this.props.toggleDelete}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  changeStatus={changeStatus}
                 />
               );})}
           </tbody>
@@ -59,6 +61,12 @@ class OrgUsersSearchUsersResult extends React.Component {
     );
   }
 }
+
+OrgUsersSearchUsersResult.propTypes = {
+  toggleDelete: PropTypes.func.isRequired,
+  orgUsers: PropTypes.array.isRequired,
+  changeStatus: PropTypes.func.isRequired,
+};
 
 class OrgUsersSearchUsers extends Component {
 
@@ -96,20 +104,22 @@ class OrgUsersSearchUsers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
-  deleteUser = (email) => {
+  deleteUser = (email, username) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let newUserList = this.state.orgUsers.filter(item => {
         return item.email != email;
       });
       this.setState({orgUsers: newUserList});
-      toaster.success(gettext('Successfully deleted 1 item.'));
+      let msg = gettext('Deleted user %s');
+      msg = msg.replace('%s', username);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
@@ -127,20 +137,45 @@ class OrgUsersSearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  };
+
+  changeStatus = (email, isActive) => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+      let users = this.state.orgUsers.map(item => {
+        if (item.email == email) {
+          item['is_active']= res.data['is_active'];
+        }
+        return item;
+      });
+      this.setState({orgUsers: users});
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;
@@ -155,10 +190,10 @@ class OrgUsersSearchUsers extends Component {
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Users')}</h4>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
-                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
@@ -172,6 +207,7 @@ class OrgUsersSearchUsers extends Component {
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Result')}</h4>
                 <OrgUsersSearchUsersResult
                   toggleDelete={this.deleteUser}
+                  changeStatus={this.changeStatus}
                   orgUsers={this.state.orgUsers}
                 />
               </div>

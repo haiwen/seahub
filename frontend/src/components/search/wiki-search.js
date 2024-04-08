@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import More from '../more';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import { getValueLength } from './constant';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -41,16 +42,16 @@ class Search extends Component {
       isMaskShow: true,
       isCloseShow: true
     });
-  }
+  };
 
   onCloseHandler = () => {
     this.resetToDefault();
-  }
+  };
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
     this.props.onSearchedClick(item);
-  }
+  };
 
   onChangeHandler = (event) => {
     let _this = this;
@@ -61,7 +62,7 @@ class Search extends Component {
     }
     this.inputValue = newValue.trim();
 
-    if (this.inputValue === '' || _this.getValueLength(this.inputValue) < 3) {
+    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         isResultShow: false,
         isResultGetted: false
@@ -80,7 +81,7 @@ class Search extends Component {
     }
 
     this.timer = setTimeout(_this.getSearchResult(queryData), 500);
-  }
+  };
 
   getSearchResult(queryData) {
 
@@ -134,23 +135,6 @@ class Search extends Component {
     this.source.cancel('prev request is cancelled');
   }
 
-  getValueLength(str) {
-    var i = 0, code, len = 0;
-    for (; i < str.length; i++) {
-      code = str.charCodeAt(i);
-      if (code == 10) { //solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
-  }
-
   formatResultItems(data) {
     let items = [];
     let length = data.length > 5 ? 5 : data.length;
@@ -192,21 +176,21 @@ class Search extends Component {
       const { page, perPage } = this.state;
       this.searchWiki(repoID, newValue, page, perPage);
     });
-  }
+  };
 
   renderSearchResult() {
     var _this = this;
     if (!this.state.isResultShow) {
       return;
     }
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );
     }
     if (!this.state.resultItems.length) {
       return (
-        <div className="search-result-none">{gettext('No results matching.')}</div>
+        <div className="search-result-none">{gettext('No results matching')}</div>
       );
     }
     const { resultItems, total } = this.state;
@@ -232,7 +216,7 @@ class Search extends Component {
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
     });
-  }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';

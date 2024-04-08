@@ -5,6 +5,8 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
+import '../../css/history-record-item.css';
+
 moment.locale(window.app.config.lang);
 
 const propTypes = {
@@ -31,18 +33,18 @@ class HistoryListItem extends React.Component {
     if (!this.props.isItemFreezed) {
       this.setState({isShowOperationIcon: true});
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({isShowOperationIcon: false});
     }
-  }
+  };
 
   onToggleClick = (e) => {
     this.setState({isMenuShow: !this.state.isMenuShow});
     this.props.onFreezedItemToggle();
-  }
+  };
 
   onItemClick = () => {
     this.setState({isShowOperationIcon: false});  //restore to default state
@@ -51,15 +53,15 @@ class HistoryListItem extends React.Component {
     }
     let currentIndex = this.props.index;
     this.props.onItemClick(this.props.item, currentIndex);
-  }
+  };
 
   onItemRestore = () => {
     this.props.onItemRestore(this.props.currentItem);
-  }
+  };
 
   onItemDownload = () => {
     // nothing todo
-  }
+  };
 
   render() {
     if (!this.props.currentItem) {
@@ -94,7 +96,8 @@ class HistoryListItem extends React.Component {
               className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
               data-toggle="dropdown"
               aria-expanded={this.state.isMenuShow}
-              alt={gettext('More Operations')}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
             />
             <DropdownMenu>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}

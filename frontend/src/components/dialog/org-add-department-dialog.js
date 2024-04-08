@@ -19,12 +19,6 @@ class AddDepartDialog extends React.Component {
       departName: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
@@ -42,7 +36,7 @@ class AddDepartDialog extends React.Component {
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -53,25 +47,25 @@ class AddDepartDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       departName: e.target.value,
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     let header = this.props.parentGroupID ? gettext('New Sub-department') : gettext('New Department');
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
         <ModalBody>
           <Form>
@@ -79,10 +73,10 @@ class AddDepartDialog extends React.Component {
               <Label for="departName">{gettext('Name')}</Label>
               <Input
                 id="departName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.departName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>

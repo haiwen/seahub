@@ -52,7 +52,7 @@ class FileUpdateDetailDialog extends React.Component {
     }
     con += '</ul>';
     return {__html: con};
-  }
+  };
 
   renderContent = () => {
     if (this.state.newfile.length > 0) {
@@ -114,7 +114,7 @@ class FileUpdateDetailDialog extends React.Component {
         </div>
       );
     }
-  }
+  };
 
   render() {
     return (

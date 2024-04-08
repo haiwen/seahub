@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api, ccnet_api
 

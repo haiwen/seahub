@@ -11,13 +11,13 @@ class Logo extends React.Component {
 
   closeSide = () => {
     this.props.onCloseSidePanel();
-  }
+  };
 
   render() {
     return (
       <div className="top-logo">
         <a href={siteRoot} id="logo">
-          <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+          <img src={logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>
         {this.props.showCloseSidePanelIcon &&
           <a

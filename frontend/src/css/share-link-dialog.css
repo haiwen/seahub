@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
 }
+
 @media (min-width: 768px) {
   .share-dialog .share-dialog-content {
     flex-direction: row;
@@ -11,29 +12,35 @@
 }
 
 .share-dialog-content .share-dialog-side {
-    display: flex;
-    flex: 0 0 22%;
+    /*display: flex;*/
+    flex-basis: 22%;
     padding: 1rem;
     border-bottom: 1px solid #eee;
 }
+
+.share-dialog .nav .nav-item .nav-link {
+    padding: 0.3125rem 0.25rem;
+}
+
 @media (min-width: 768px) {
   .share-dialog-content .share-dialog-side {
-    padding: 1rem 0 0 1rem;
+    padding: 12px 8px;
     border: 0;
     border-right: 1px solid #eee;
   }
-  .share-dialog-side .nav {
-    flex-direction: column;
-  }
-}
-
-.share-dialog-side .nav-pills .nav-item .nav-link {
-    width: 100%;
+   .share-dialog-side .nav {
+     flex-direction: column;
+   }
+   .share-dialog-side .nav-pills .nav-item .nav-link {
+     width: 100%;
+     padding: 0.3125rem 0.5rem;
+     margin: 0;
+   }
 }
 
 .share-dialog-content .share-dialog-main {
     display: flex;
-    flex: 0 0 78%;
+    flex-basis: 78%;
     padding: 1rem;
 }
 
@@ -43,12 +50,22 @@
 
 .share-dialog-content .share-dialog-main .tab-pane {
     height: 100%;
-    overflow: auto;
 }
 
 .share-list-container {
-    max-height: 18rem;
+    max-height: 20rem;
     min-height: 10rem;
+    overflow: auto;
+}
+
+#share-link-panel .share-list-container {
+    max-height: 23rem;
+    overflow: hidden;
+}
+
+#share-link-panel .table-real-container {
+    height: 20rem;
+    overflow: auto;
 }
 
 .share-dialog-content label {
@@ -83,10 +100,6 @@
 
 .generate-link-btn {
     margin-top: 1.125rem;
-}
-
-.share-dialog .nav .nav-item .nav-link {
-    padding: 0.3125rem 1rem 0.3125rem 0.25rem;
 }
 
 input.expire-input {
@@ -142,11 +155,10 @@ input.expire-input {
 .custom-permission .permission-name-desc {
     margin-top: .375rem;
 }
-  
 .custom-permission .permission-name-desc label {
     font-size: 14px;
     color: #999;
-}   
+}
 
 .custom-permission .permission-name-desc .permission-name,
 .custom-permission .permission-name-desc .permission-desc {
@@ -160,4 +172,4 @@ input.expire-input {
 .custom-permission .permissions-list-body {
     max-height: 350px;
     overflow-y: scroll;
-  }
+}

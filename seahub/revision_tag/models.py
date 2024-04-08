@@ -78,7 +78,7 @@ class RevisionTags(models.Model):
         if not repo:
             return None
         commit = seaserv.get_commit(repo.id, repo.revision, self.revision_id)
-        email = commit.creator_name
+        email = getattr(commit, 'creator_name', '')
         return  {"tag":self.tag.name,
                  "tag_creator": self.username,
                  "revision": {

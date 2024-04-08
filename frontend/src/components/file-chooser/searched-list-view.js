@@ -20,7 +20,7 @@ class SearchedListView extends React.Component {
   onItemClick = (item) => {
     this.setState({currentItem: item});
     this.props.onItemClick(item);
-  }
+  };
 
   render() {
     return (
@@ -40,7 +40,8 @@ class SearchedListView extends React.Component {
                 currentItem={this.state.currentItem}
                 onItemClick={this.onItemClick}
                 onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
-              />);
+              />
+            );
           })}
         </tbody>
       </table>

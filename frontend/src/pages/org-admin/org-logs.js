@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import MainPanelTopbar from './main-panel-topbar';
 
@@ -12,7 +12,7 @@ class OrgLogs extends Component {
 
   tabItemClick = (param) => {
     this.props.tabItemClick(param);
-  }
+  };
 
   render() {
     return (
@@ -53,6 +53,7 @@ class OrgLogs extends Component {
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
   tabItemClick: PropTypes.func.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 OrgLogs.propTypes = propTypes;

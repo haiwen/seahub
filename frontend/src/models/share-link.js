@@ -5,6 +5,7 @@ class ShareLink {
     this.repo_name = object.repo_name;
     this.path = object.path;
     this.obj_name = object.obj_name;
+    this.obj_id = object.obj_id;
     this.is_dir = object.is_dir;
     this.can_edit = object.can_edit;
     this.repo_folder_permission = object.repo_folder_permission;

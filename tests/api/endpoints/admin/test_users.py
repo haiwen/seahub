@@ -72,12 +72,11 @@ class AdminUsersTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
         self.assertEqual(200, resp.status_code)
-        assert json_resp['email'] == self.tmp_email
+        assert json_resp['contact_email'] == self.tmp_email
 
-        ccnet_email = ccnet_api.get_emailuser(self.tmp_email)
-        assert ccnet_email.email == self.tmp_email
+        ccnet_email = ccnet_api.get_emailuser(json_resp['email'])
 
-        self.remove_user(self.tmp_email)
+        self.remove_user(ccnet_email.email)
 
     def test_create_with_invalid_user_permission(self):
         self.login_as(self.user)

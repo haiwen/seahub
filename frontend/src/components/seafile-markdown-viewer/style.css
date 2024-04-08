@@ -1,0 +1,25 @@
+.wiki-page-container .article {
+  margin: 0;
+  padding: 0 10px;
+  max-width: none;
+  border: none;
+}
+
+.wiki-page-container .article span[data-url] {
+  cursor: pointer;
+}
+
+.wiki-page-container .article .ml-2 {
+  text-decoration: underline;
+}
+
+.wiki-page-container .article .ml-2:hover {
+  text-decoration: underline;
+  color:#eb8205;
+}
+
+#wiki-page-last-modified {
+  padding: 40px 10px;
+  font-size:12px;
+  color: #666;
+}

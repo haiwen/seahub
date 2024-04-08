@@ -40,7 +40,7 @@ class ItemDropdownMenu extends React.Component {
     this.setState({menuList: menuList});
   }
 
-  componentWillReceiveProps(nextProps) {  // for toolbar item operation
+  UNSAFE_componentWillReceiveProps(nextProps) {  // for toolbar item operation
     let { item } = nextProps;
     if (item.name !== this.props.item.name) {
       let menuList = this.props.getMenuList(item);
@@ -56,7 +56,7 @@ class ItemDropdownMenu extends React.Component {
 
   onShowMenu = () => {
     // nothing todo
-  }
+  };
 
   onHideMenu = () => {
     if (this.state.isItemMenuShow) {
@@ -65,20 +65,20 @@ class ItemDropdownMenu extends React.Component {
         this.props.unfreezeItem();
       }
     }
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onDropdownToggleClick(e);
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     this.toggleOperationMenu();
-  }
+  };
 
   toggleOperationMenu = () => {
     this.setState(
@@ -91,19 +91,19 @@ class ItemDropdownMenu extends React.Component {
         }
       }
     );
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onMenuItemClick(e);
     }
-  }
+  };
 
   onMenuItemClick = (event) => {
     let operation = Utils.getEventData(event, 'toggle');
     let item = this.props.item;
     this.props.onMenuItemClick(operation, event, item);
-  }
+  };
 
   render() {
     let menuList = this.state.menuList;
@@ -120,8 +120,8 @@ class ItemDropdownMenu extends React.Component {
           <DropdownToggle
             className={toggleClass}
             data-toggle="dropdown"
-            title={gettext('More Operations')}
-            aria-label={gettext('More Operations')}
+            title={gettext('More operations')}
+            aria-label={gettext('More operations')}
             aria-expanded={this.state.isItemMenuShow}
             onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
@@ -143,16 +143,16 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
           tabIndex="0"
           className={toggleClass}
-          title={gettext('More Operations')}
+          title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
-          aria-label={gettext('More Operations')}
+          aria-label={gettext('More operations')}
           onKeyDown={this.onDropdownToggleKeyDown}
           // onClick={this.onDropdownToggleClick}
         />

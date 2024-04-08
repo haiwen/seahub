@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 class ListInAddressBook extends React.Component {
@@ -19,7 +20,7 @@ class ListInAddressBook extends React.Component {
     this.props.updateUserInfo({
       list_in_address_book: checked.toString()
     });
-  }
+  };
 
   render() {
     const { inputChecked } = this.state;
@@ -35,5 +36,10 @@ class ListInAddressBook extends React.Component {
     );
   }
 }
+
+ListInAddressBook.propTypes = {
+  updateUserInfo: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+};
 
 export default ListInAddressBook;

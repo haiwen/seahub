@@ -6,25 +6,30 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib import messages
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import seaserv
 from seaserv import seafile_api
 
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
+from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
-from seahub.utils import is_ldap_user
+from seahub.utils import is_ldap_user, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
-from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+try:
+    from seahub.settings import SAML_PROVIDER_IDENTIFIER
+except ImportError as e:
+    SAML_PROVIDER_IDENTIFIER = 'saml'
 
 
 @login_required
@@ -79,12 +84,6 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = [r for r in owned_repos if not r.is_virtual]
 
-    if settings.ENABLE_WEBDAV_SECRET:
-        decoded = UserOptions.objects.get_webdav_decoded_secret(username)
-        webdav_passwd = decoded if decoded else ''
-    else:
-        webdav_passwd = ''
-
     file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
@@ -92,8 +91,6 @@ def edit_profile(request):
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
-
-        from seahub.auth.models import SocialAuthUser
         from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
         social_connected = SocialAuthUser.objects.filter(
             username=request.user.username, provider=WORK_WEIXIN_PROVIDER).count() > 0
@@ -103,12 +100,42 @@ def edit_profile(request):
 
     if ENABLE_DINGTALK:
         enable_dingtalk = True
-        from seahub.auth.models import SocialAuthUser
         social_connected_dingtalk = SocialAuthUser.objects.filter(
             username=request.user.username, provider='dingtalk').count() > 0
     else:
         enable_dingtalk = False
         social_connected_dingtalk = False
+
+    if ENABLE_ADFS_LOGIN:
+        enable_adfs = True
+        saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_adfs = False
+        saml_connected = False
+
+    if ENABLE_MULTI_ADFS and is_org_context(request):
+        enable_multi_adfs = True
+        org_saml_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
+    else:
+        enable_multi_adfs = False
+        org_saml_connected = False
+
+    has_bind_social_auth = False
+    if SocialAuthUser.objects.filter(username=request.user.username).exists():
+        has_bind_social_auth = True
+
+    can_update_password = True
+    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+        can_update_password = False
+
+    WEBDAV_SECRET_SETTED = False
+    if settings.ENABLE_WEBDAV_SECRET and \
+            UserOptions.objects.get_webdav_secret(username):
+        WEBDAV_SECRET_SETTED = True
+
+    show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
 
     resp_dict = {
             'form': form,
@@ -119,15 +146,16 @@ def edit_profile(request):
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
-            'two_factor_auth_enabled': has_two_factor_auth(),
-            'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'two_factor_auth_enabled': show_two_factor_auth,
+            'ENABLE_CHANGE_PASSWORD': can_update_password if has_bind_social_auth else settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
+            'WEBDAV_URL': get_webdav_url(),
             'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
             'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
-            'webdav_passwd': webdav_passwd,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
             'social_next_page': reverse('edit_profile'),
@@ -137,9 +165,14 @@ def edit_profile(request):
             'social_connected_dingtalk': social_connected_dingtalk,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
+            'enable_adfs': enable_adfs,
+            'saml_connected': saml_connected,
+            'enable_multi_adfs': enable_multi_adfs,
+            'org_saml_connected': org_saml_connected,
+            'org_id': request.user.org and request.user.org.org_id or None,
     }
 
-    if has_two_factor_auth():
+    if show_two_factor_auth:
         from seahub.two_factor.models import StaticDevice, default_device
 
         try:
@@ -223,7 +256,7 @@ def get_user_profile(request, user):
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
         messages.error(request, _('Permission denied.'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
@@ -233,7 +266,7 @@ def delete_user_account(request):
 
     if username == 'demo@seafile.com':
         messages.error(request, _('Demo account can not be deleted.'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
@@ -254,7 +287,7 @@ def default_repo(request):
         raise Http404
 
     repo_id = request.POST.get('dst_repo', '')
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = seafile_api.get_repo(repo_id)

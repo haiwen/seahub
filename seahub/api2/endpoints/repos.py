@@ -14,7 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
-from seahub.base.models import UserStarredFiles
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -98,6 +98,15 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
+            owned_repo_ids = [item.repo_id for item in owned_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=owned_repo_ids)
+                monitored_repos = monitored_repos.filter(email=email)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
+
             owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
 
@@ -120,6 +129,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
@@ -148,6 +158,15 @@ class ReposView(APIView):
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
+
+            shared_repo_ids = [item.repo_id for item in shared_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=shared_repo_ids)
+                monitored_repos = monitored_repos.filter(email=email)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
@@ -179,6 +198,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
@@ -208,6 +228,15 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
+            group_repo_ids = [item.repo_id for item in group_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=group_repo_ids)
+                monitored_repos = monitored_repos.filter(email=email)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
+
             for r in group_repos:
                 repo_info = {
                     "type": "group",
@@ -223,6 +252,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
@@ -419,15 +449,40 @@ class RepoShareInfoView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        folder_path = request.GET.get('path', '/')
+        if folder_path != '/':
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % folder_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
-            shared_users = seafile_api.list_org_repo_shared_to(repo_owner, repo_id)
-            shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
+            if folder_path == '/':
+                shared_users = seafile_api.list_org_repo_shared_to(org_id, repo_owner, repo_id)
+                shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
+            else:
+                shared_users = seafile_api.get_org_shared_users_for_subdir(org_id,
+                                                                           repo_id,
+                                                                           folder_path,
+                                                                           repo_owner)
+                shared_groups = seafile_api.get_org_shared_groups_for_subdir(org_id,
+                                                                             repo_id,
+                                                                             folder_path,
+                                                                             repo_owner)
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
-            shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
-            shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+            if folder_path == '/':
+                shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+                shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+            else:
+                shared_users = seafile_api.get_shared_users_for_subdir(repo_id,
+                                                                       folder_path,
+                                                                       repo_owner)
+                shared_groups = seafile_api.get_shared_groups_for_subdir(repo_id,
+                                                                         folder_path,
+                                                                         repo_owner)
 
         group_id = ''
         if '@seafile_group' in repo_owner:

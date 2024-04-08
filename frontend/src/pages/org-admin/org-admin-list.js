@@ -10,6 +10,7 @@ const propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   toggleRevokeAdmin: PropTypes.func.isRequired,
   orgAdminUsers: PropTypes.array.isRequired,
+  changeStatus: PropTypes.func.isRequired,
   initOrgAdmin: PropTypes.func.isRequired
 };
 
@@ -28,11 +29,15 @@ class OrgAdminList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   render() {
     let orgAdminUsers = this.props.orgAdminUsers;
@@ -50,17 +55,19 @@ class OrgAdminList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {orgAdminUsers.map(item => {
+            {orgAdminUsers.map((item, index) => {
               return (
                 <UserItem
-                  key={item.index}
+                  key={index}
                   user={item}
                   currentTab="admins"
                   isItemFreezed={this.state.isItemFreezed}
                   toggleDelete={this.props.toggleDelete}
                   toggleRevokeAdmin={this.props.toggleRevokeAdmin}
+                  changeStatus={this.props.changeStatus}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                 />
               );
             })}

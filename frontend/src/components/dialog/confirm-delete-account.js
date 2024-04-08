@@ -18,7 +18,7 @@ class ConfirmDeleteAccount extends Component {
 
   action = () => {
     this.form.current.submit();
-  }
+  };
 
   render() {
     const {formActionURL, csrfToken, toggle} = this.props;

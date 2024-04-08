@@ -7,7 +7,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
-import CommentPanel from './comment-panel';
 import FileDetails from '../dirent-detail/file-details';
 
 import '../../css/file-view.css';
@@ -35,20 +34,18 @@ class FileView extends React.Component {
       isStarred: isStarred,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      isCommentPanelOpen: false,
       isDetailsPanelOpen: false
     };
   }
 
-  toggleDetailsPanel = () => {
-    this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
+  componentDidMount() {
+    const fileIcon = Utils.getFileIconUrl(fileName, 192);
+    document.getElementById('favicon').href = fileIcon;
   }
 
-  toggleCommentPanel = () => {
-    this.setState({
-      isCommentPanelOpen: !this.state.isCommentPanelOpen
-    });
-  }
+  toggleDetailsPanel = () => {
+    this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
+  };
 
   toggleStar = () => {
     if (this.state.isStarred) {
@@ -70,7 +67,7 @@ class FileView extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   toggleLockFile = () => {
     if (this.state.isLocked) {
@@ -94,7 +91,7 @@ class FileView extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   render() {
     const { isDetailsPanelOpen } = this.state;
@@ -113,19 +110,11 @@ class FileView extends React.Component {
             isSaving={this.props.isSaving}
             needSave={this.props.needSave}
             toggleLockFile={this.toggleLockFile}
-            toggleCommentPanel={this.toggleCommentPanel}
             toggleDetailsPanel={this.toggleDetailsPanel}
           />
         </div>
         <div className="file-view-body flex-auto d-flex o-hidden">
           {this.props.content}
-          {this.state.isCommentPanelOpen &&
-            <CommentPanel
-              toggleCommentPanel={this.toggleCommentPanel}
-              participants={this.props.participants}
-              onParticipantsChange={this.props.onParticipantsChange}
-            />
-          }
           {isDetailsPanelOpen &&
           <FileDetails
             repoID={repoID}

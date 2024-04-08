@@ -71,14 +71,14 @@ class StatisticFile extends React.Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { labels, filesData, isLoading } = this.state;
 
     return(
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="fileStatistic" />
           <div className="cur-view-content">

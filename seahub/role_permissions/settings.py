@@ -43,6 +43,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_publish_repo': True,
+        'upload_rate_limit': 0,
+        'download_rate_limit': 0,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -62,6 +64,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'storage_ids': [],
         'role_quota': '',
         'can_publish_repo': False,
+        'upload_rate_limit': 0,
+        'download_rate_limit': 0,
     },
 }
 
@@ -73,6 +77,7 @@ except AttributeError:
 ENABLED_ROLE_PERMISSIONS = merge_roles(
     DEFAULT_ENABLED_ROLE_PERMISSIONS, custom_role_permissions
 )
+
 
 # role permission for administraror
 

@@ -49,7 +49,7 @@ class OrgLogsFileAudit extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
 
   onChangePageNum = (e, num) => {
@@ -64,15 +64,15 @@ class OrgLogsFileAudit extends React.Component {
     let email = this.state.userSelected;
     let repoID = this.state.repoSelected;
     this.initData(email, repoID, page);
-  }
+  };
 
   filterUser = (userSelected) => {
     this.setState({ userSelected: userSelected });
-  }
+  };
 
   filterRepo = (repoSelected) => {
     this.setState({ repoSelected: repoSelected });
-  }
+  };
 
   render() {
     let eventList = this.state.eventList;
@@ -159,7 +159,7 @@ class FileAuditItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -168,11 +168,11 @@ class FileAuditItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   toggleUserDropdown = () => {
     this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
-  }
+  };
 
   renderUser = (fileEvent) => {
     if (!fileEvent.user_email) {
@@ -195,7 +195,7 @@ class FileAuditItem extends React.Component {
       </span>
     );
 
-  }
+  };
 
   renderType = (type) => {
     if (type.indexOf('web') != -1) {
@@ -208,11 +208,11 @@ class FileAuditItem extends React.Component {
       type = 'share link';
     }
     return type;
-  }
+  };
 
   toggleRepoDropdown = () => {
     this.setState({ repoDropdownOpen: !this.state.repoDropdownOpen });
-  }
+  };
 
   renderRepo = (fileEvent) => {
     let repoName = 'Deleted';
@@ -234,7 +234,7 @@ class FileAuditItem extends React.Component {
         }
       </span>
     );
-  }
+  };
 
   render() {
     let { fileEvent } = this.props;

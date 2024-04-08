@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { TAG_COLORS } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
@@ -17,12 +18,10 @@ class CreateTagDialog extends React.Component {
     super(props);
     this.state = {
       tagName: '',
-      tagColor: '',
+      tagColor: TAG_COLORS[0],
       newTag: {},
       errorMsg: '',
-      colorList: ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84', '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'],
     };
-    this.newInput = React.createRef();
   }
 
   inputNewName = (e) => {
@@ -32,13 +31,13 @@ class CreateTagDialog extends React.Component {
     if (this.state.errorMsg) {
       this.setState({errorMsg: ''});
     }
-  }
+  };
 
   selectTagcolor = (e) => {
     this.setState({
       tagColor: e.target.value,
     });
-  }
+  };
 
   createTag = () => {
     let name = this.state.tagName;
@@ -58,24 +57,15 @@ class CreateTagDialog extends React.Component {
       }
       this.setState({errorMsg: errMessage});
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.createTag();
     }
-  }
-
-  componentDidMount() {
-    this.setState({
-      tagColor: this.state.colorList[0]
-    });
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
-  }
+  };
 
   render() {
-    let colorList = this.state.colorList;
     let canSave = this.state.tagName.trim() ? true : false;
     return (
       <Fragment>
@@ -87,13 +77,13 @@ class CreateTagDialog extends React.Component {
           <div role="form" className="tag-create">
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
-              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.tagName} onChange={this.inputNewName}/>
+              <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.tagName} onChange={this.inputNewName}/>
               <div className="mt-2"><span className="error">{this.state.errorMsg}</span></div>
             </div>
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
               <div className="d-flex justify-content-between">
-                {colorList.map((item, index)=>{
+                {TAG_COLORS.map((item, index)=>{
                   return (
                     <div key={index} className="tag-color-option" onChange={this.selectTagcolor}>
                       <label className="colorinput">

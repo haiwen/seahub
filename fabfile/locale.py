@@ -10,7 +10,9 @@ from fabric.colors import red, green
 def make(default=True, lang='en'):
     """Update source language.
     """
-    local('django-admin makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html" -i "seahub/two_factor/models/phone.py" -i "seahub/two_factor/models/base.py" -i "seahub/two_factor/templates/two_factor/core/setup_complete.html"' % lang)
+    local('django-admin makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html" -i "seahub/two_factor/models/phone.py" -i "seahub/two_factor/models/base.py" -i "seahub/two_factor/templates/two_factor/core/setup_complete.html" -i "seahub/help"' % lang)
+    local('cd seahub/help && django-admin makemessages -l %s' % lang)
+    local('cd ../../')
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".
@@ -33,7 +35,7 @@ def push():
 def pull():
     """Update local po files with Transifex.
     """
-    local('tx -f pull')
+    local('tx pull -f')
 
 @task()
 def compile():

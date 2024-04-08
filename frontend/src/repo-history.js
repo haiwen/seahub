@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
+import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -65,7 +66,7 @@ class RepoHistory extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -73,7 +74,7 @@ class RepoHistory extends React.Component {
     }, () => {
       this.getItems(1);
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -84,14 +85,17 @@ class RepoHistory extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
+    let title = gettext('{placeholder} Modification History');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
+
     return (
       <React.Fragment>
         <div className="h-100 d-flex flex-column">
@@ -104,7 +108,7 @@ class RepoHistory extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Modification History'), repoName)}}></h2>
+                <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
@@ -150,11 +154,11 @@ class Content extends React.Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -201,6 +205,17 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+};
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -215,43 +230,43 @@ class Item extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   showCommitDetails = (e) => {
     e.preventDefault();
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   toggleCommitDetailsDialog = () => {
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   editLabel = (e) => {
     e.preventDefault();
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   toggleLabelEditDialog = () => {
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   updateLabels = (labels) => {
     this.setState({
       labels: labels
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -326,7 +341,8 @@ class Item extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RepoHistory />,
-  document.getElementById('wrapper')
-);
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
+
+ReactDom.render(<RepoHistory />, document.getElementById('wrapper'));

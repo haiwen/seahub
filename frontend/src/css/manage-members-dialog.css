@@ -1,6 +1,7 @@
 .manage-members {
+  min-height: 200px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0.5rem 0;
 }
 
@@ -31,18 +32,31 @@
   margin-top: 10px;
 }
 
-.group-manage-members-dialog .back-icon {
-  color: #999999; 
-  cursor: pointer;
-}
-
-.group-manage-members-dialog .search-group-members-btn {
+.group-manage-members-dialog .search-group-members {
+  color: #999;
   font-size: 14px;
   font-weight: normal;
   background: #f1f1f1;
+  border: 1px solid transparent;
   margin: 12px 0 0;
 }
 
-.group-manage-members-dialog .search-group-members-btn:hover {
-  background: #dbdbdb;
+.group-manage-members-dialog .search-group-members.active {
+  background: #fff;
+  border-color: #ccc;
+}
+
+.group-manage-members-dialog .search-group-members .input-group-text,
+.group-manage-members-dialog .search-group-members .input-group-input {
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+
+.group-manage-members-dialog .search-group-members.active .input-group-input {
+  color: #495057;
+}
+
+.group-manage-members-dialog .search-group-members .input-group-input:focus {
+  box-shadow: none;
 }

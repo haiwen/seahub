@@ -1,0 +1,25 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'sdocFileHistory' 'css'%}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+    window.app.config.lang = '{{LANGUAGE_CODE}}';
+    window.fileHistory = {
+        pageOptions: {
+            repoID: '{{ repo.id }}',
+            repoName: '{{ repo.name }}',
+            filePath: '{{ path|escapejs }}',
+            fileName: '{{ u_filename|escapejs }}',
+            docUuid: '{{ file_uuid }}',
+            domain: '{{ domain }}',
+            protocol: '{{ protocol }}',
+            assetsUrl: '{{ assets_url }}',
+        }
+    }
+    </script>
+    {% render_bundle 'sdocFileHistory' 'js'%}
+{% endblock %}

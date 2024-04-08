@@ -79,7 +79,7 @@ class PublicSharedView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onRepoSelectedHandler = (selectedRepoList) => {
     selectedRepoList.forEach(repo => {
@@ -91,7 +91,7 @@ class PublicSharedView extends React.Component {
         toaster.danger(errMessage);
       });
     });
-  }
+  };
 
   onItemUnshare = (repo) => {
     seafileAPI.unshareRepo(repo.repo_id, {share_type: 'public'}).then(() => {
@@ -108,11 +108,11 @@ class PublicSharedView extends React.Component {
       }
       toaster(errMessage);
     });
-  }
+  };
 
   onItemDelete = () => {
     // todo need to optimized
-  }
+  };
 
   addRepoItem = (repo) => {
     let isExist = false;
@@ -132,19 +132,19 @@ class PublicSharedView extends React.Component {
     let newRepoList = this.state.repoList.map(item => {return item;});
     newRepoList.unshift(repo);
     return newRepoList;
-  }
+  };
 
   onAddRepoToggle = () => {
     this.setState({isCreateMenuShow: !this.state.isCreateMenuShow});
-  }
+  };
 
   onCreateRepoToggle = () => {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
-  }
+  };
 
   onSelectRepoToggle = () => {
     this.setState({isSelectRepoDialpgShow: !this.state.isSelectRepoDialpgShow});
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -154,13 +154,13 @@ class PublicSharedView extends React.Component {
       sortOrder: sortOrder,
       repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
-  }
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   render() {
     let errMessage = this.state.errMessage;

@@ -94,7 +94,7 @@ class GroupsTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse('api-v2.1-admin-groups')
-        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        other_punctuation = """!"#$%&*+,/:;<=>?@[\]^`{|}~"""
         group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
 
         data = {

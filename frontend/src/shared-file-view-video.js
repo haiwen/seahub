@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import VideoPlayer from './components/video-player';
@@ -24,6 +24,7 @@ class FileContent extends React.Component {
       autoplay: false,
       controls: true,
       preload: 'auto',
+      playbackRates: [0.5, 1, 1.5, 2],
       sources: [{
         src: rawPath
       }]
@@ -38,7 +39,4 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <SharedFileViewImage />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<SharedFileViewImage />, document.getElementById('wrapper'));

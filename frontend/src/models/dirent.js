@@ -16,10 +16,14 @@ class Dirent {
     this.permission = json.permission || 'rw';
     this.isSelected = false; // is check or not
     this.starred = json.starred || false;
+    if (json.type === 'dir') {
+      this.has_been_shared_out = false;
+    }
     if (json.type === 'file') {
       this.size_original = json.size;
       this.size = Utils.bytesToSize(json.size);
       this.is_locked = json.is_locked || false;
+      this.is_freezed = json.is_freezed || false;
       this.lock_time = json.lock_time || '';
       this.lock_owner= json.lock_owner || null;
       this.lock_owner_name= json.lock_owner_name || null;
@@ -36,6 +40,10 @@ class Dirent {
       this.file_tags = file_tags;
       if (json.encoded_thumbnail_src) {
         this.encoded_thumbnail_src = json.encoded_thumbnail_src;
+      }
+      if (Utils.isSdocFile(json.name)) {
+        this.is_sdoc_revision = json.is_sdoc_revision || false;
+        this.revision_id = json.revision_id || null;
       }
     }
   }

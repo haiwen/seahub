@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { siteRoot, gettext } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
@@ -80,7 +80,7 @@ class FileContent extends React.Component {
   setIframeHeight = (e) => {
     const iframe = e.currentTarget;
     iframe.height = iframe.contentDocument.body.scrollHeight;
-  }
+  };
 
   render() {
     const { isLoading, errorMsg } = this.state;
@@ -105,7 +105,4 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <SharedFileViewSpreadsheet />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<SharedFileViewSpreadsheet />, document.getElementById('wrapper'));

@@ -21,6 +21,7 @@ central_config_dir=${TOPDIR}/conf
 seaf_controller="${INSTALLPATH}/seafile/bin/seafile-controller"
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
@@ -53,8 +54,6 @@ function validate_running_user () {
 export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
 if [[ -d ${INSTALLPATH}/pro ]]; then
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
     export SEAFES_DIR=$seafesdir
 fi
 
@@ -109,29 +108,21 @@ function validate_already_running () {
     check_component_running "seafevents" "seafevents.main --config-file ${central_config_dir}"
 }
 
-function test_java {
-    if ! which java 2>/dev/null 1>&2; then
-        echo "java is not found on your machine. Please install it first."
-        exit 1;
-    fi
-}
-
 function start_seafile_server () {
     validate_already_running;
     validate_central_conf_dir;
     validate_seafile_data_dir;
     validate_running_user;
 
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         test_config;
-        test_java;
     fi
 
     echo "Starting seafile server, please wait ..."
 
     mkdir -p $TOPDIR/logs
 
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         if ! LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" -F "${central_config_dir}"; then
             controller_log="$default_seafile_data_dir/controller.log"
             echo
@@ -154,6 +145,9 @@ function start_seafile_server () {
         exit 1;
     fi
 
+    # seafevents, notification-sever
+    ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+
     echo "Seafile server started"
     echo
 }
@@ -162,9 +156,9 @@ function kill_all () {
     pkill -f "seaf-server -c ${default_ccnet_conf_dir}"
     pkill -f "fileserver -c ${default_ccnet_conf_dir}"
     pkill -f "seafevents.main"
-    pkill -f "convert_server.py"
-    pkill -f "soffice.*--invisible --nocrashreport"
     pkill -f  "wsgidav.server.server_cli"
+    pkill -f  "notification-server -c ${central_config_dir}"
+    pkill -f  "seafile-monitor.sh"
 }
 
 function stop_seafile_server () {

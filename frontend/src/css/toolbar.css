@@ -11,7 +11,7 @@
 .border-left-show:before {
   position: absolute;
   top: 10px;
-  left: 0;
+  left: -1px;
   width: 1px;
   height: 30px;
   content: '';
@@ -79,6 +79,7 @@
 .common-toolbar {
   display: flex;
   margin-left: auto;
+  align-items: center;
 }
 
 .common-toolbar > div{

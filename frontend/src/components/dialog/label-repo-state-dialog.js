@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import CreatableSelect from 'react-select/lib/Creatable';
+import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -45,7 +45,7 @@ class LabelRepoStateDialog extends React.Component {
     this.setState({
       inputValue: value
     });
-  }
+  };
 
   formSubmit = () => {
     const inputValue = this.state.inputValue;
@@ -74,7 +74,7 @@ class LabelRepoStateDialog extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     return (
@@ -120,6 +120,11 @@ class Content extends React.Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
 
 LabelRepoStateDialog.propTypes = propTypes;
 

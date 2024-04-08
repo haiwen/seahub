@@ -14,9 +14,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
 from seahub.notifications.models import get_cache_key_of_unseen_notifications
-from seahub.notifications.views import add_notice_from_info
 from seahub.notifications.utils import update_notice_detail
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -115,7 +114,6 @@ class NotificationsView(APIView):
         cache.delete(cache_key)
 
         return Response({'success': True})
-
 
 
 class NotificationView(APIView):

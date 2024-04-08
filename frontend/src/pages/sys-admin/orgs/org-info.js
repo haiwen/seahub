@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { gettext, serviceURL } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -23,15 +25,15 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleSetNameDialog = () => {
     this.setState({isSetNameDialogOpen: !this.state.isSetNameDialogOpen});
-  }
+  };
 
   toggleSetMaxUserNumberDialog = () => {
     this.setState({isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen});
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -41,16 +43,16 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
-    const { loading, errorMsg, orgInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain } = this.props.orgInfo;
       const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
         <Fragment>
@@ -82,6 +84,35 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
+            {enable_saml_login &&
+              <Fragment>
+                <dt className="info-item-heading">{gettext('SAML Config')}</dt>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="4">Identifier (Entity ID)</Col>
+                    <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/metadata/`}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="4">Reply URL (Assertion Consumer Service URL)</Col>
+                    <Col md="6">{`${serviceURL}/org/custom/${this.props.orgID}/saml2/acs/`}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="4">SAML App Federation Metadata URL</Col>
+                    <Col md="6">{metadata_url}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="4">{gettext('Email Domain')}</Col>
+                    <Col md="6">{domain}</Col>
+                  </Row>
+                </dd>
+              </Fragment>
+            }
           </dl>
           {isSetQuotaDialogOpen &&
           <SysAdminSetOrgQuotaDialog
@@ -108,6 +139,20 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  orgID: PropTypes.string,
+  orgInfo: PropTypes.object,
+  updateQuota: PropTypes.func.isRequired,
+  updateName: PropTypes.func.isRequired,
+  updateMaxUserNumber: PropTypes.func.isRequired,
+};
 
 class OrgInfo extends Component {
 
@@ -146,7 +191,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateName = (orgName) => {
     const data = {orgName: orgName};
@@ -160,7 +205,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMaxUserNumber = (newValue) => {
     const data = {maxUserNumber: newValue};
@@ -174,13 +219,13 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { orgInfo } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgNav currentItem="info" orgID={this.props.orgID} orgName={orgInfo.org_name} />
@@ -201,5 +246,10 @@ class OrgInfo extends Component {
     );
   }
 }
+
+OrgInfo.propTypes = {
+  orgID: PropTypes.string,
+  orgInfo: PropTypes.object,
+};
 
 export default OrgInfo;

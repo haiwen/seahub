@@ -1,9 +1,14 @@
-.md-content {
-    box-shadow: 0 0 6px #ccc;
+.file-view-content.md-content {
+    width: 100%;
+    height: 100%;
+    background: #f4f4f4;
+    border-right: none;
+    padding: 0;
+    display: flex;
+}
+
+.md-content .sf-slate-viewer-scroll-container .article {
     border: 1px solid #ccc;
+    box-shadow: 0 0 6px #ccc;
     padding: 70px 75px;
-    width: calc(100% - 40px);
-    max-width: 950px;
-    background: #fff;
-    margin: 0 auto;
 }

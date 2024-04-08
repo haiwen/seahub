@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import UploadListItem from './upload-list-item';
 import ForbidUploadListItem from './forbid-upload-list-item';
 
 const propTypes = {
+  totalProgress: PropTypes.number.isRequired,
+  uploadBitrate: PropTypes.number.isRequired,
   uploadFileList: PropTypes.array.isRequired,
   forbidUploadFileList: PropTypes.array.isRequired,
   onCancelAllUploading: PropTypes.func.isRequired,
@@ -13,7 +16,6 @@ const propTypes = {
   onUploadRetry: PropTypes.func.isRequired,
   onFileUpload: PropTypes.func.isRequired,
   onFolderUpload: PropTypes.func.isRequired,
-  allFilesUploaded: PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
@@ -29,22 +31,33 @@ class UploadProgressDialog extends React.Component {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.toggleDropdown();
     }
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
-    let { allFilesUploaded } = this.props;
+    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList } = this.props;
+    const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
+      .replace('{uploaded_files_num}', uploadFileList.filter(file => file.isSaved).length)
+      .replace('{all_files_num}', uploadFileList.length);
+    let filesFailedMsg;
+    if (totalProgress == 100) {
+      const failedNum = uploadFileList.filter(file => file.error).length + forbidUploadFileList.length;
+      if (failedNum > 0) {
+        filesFailedMsg = gettext('{failed_files_num} file(s) failed to upload')
+          .replace('{failed_files_num}', failedNum);
+      }
+    }
     return (
       <Fragment>
         <div className="text-center">
@@ -57,17 +70,43 @@ class UploadProgressDialog extends React.Component {
           </ButtonDropdown>
           <Button color="primary" outline={true} className="ml-4"
             onClick={this.props.onCancelAllUploading}
-            disabled={allFilesUploaded}>
+            disabled={totalProgress == 0 || totalProgress == 100}>
             {gettext('Cancel All')}
           </Button>
         </div>
-        <div className="mt-4 mh-2">
+        {totalProgress > 0 && (
+          <div id="upload-link-total-progress-container" className={`${totalProgress == 100 ? 'd-flex align-items-center' : ''} px-6 py-2`}>
+            <div className="d-flex align-items-center flex-fill">
+              {totalProgress < 100 && (
+                <>
+                  <span>{gettext('File Uploading...')}</span>
+                  <span className="ml-2">{`${totalProgress}% (${Utils.formatBitRate(uploadBitrate)})`}</span>
+                </>
+              )}
+              {totalProgress == 100 && (
+                <>
+                  {filesFailedMsg ?
+                    <p className="m-0 error">{filesFailedMsg}</p> :
+                    <p className="m-0">{gettext('All files uploaded')}</p>
+                  }
+                </>
+              )}
+              {uploadFileList.length > 0 && <span className="ml-auto">{filesUploadedMsg}</span>}
+            </div>
+            {totalProgress < 100 && (
+              <div className="progress">
+                <div className="progress-bar" role="progressbar" style={{width: `${totalProgress}%`}} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="mh-2">
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="35%">{gettext('name')}</th>
+                <th width="40%">{gettext('name')}</th>
                 <th width="15%">{gettext('size')}</th>
-                <th width="35%">{gettext('progress')}</th>
+                <th width="30%">{gettext('progress')}</th>
                 <th width="15%">{gettext('state')}</th>
               </tr>
             </thead>

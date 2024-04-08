@@ -5,8 +5,8 @@ import logging
 import posixpath
 import datetime
 
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.utils.translation import gettext as _
+from urllib.parse import quote
 from django.http import HttpResponse
 from django.views.decorators.http import condition
 from django.shortcuts import render
@@ -56,7 +56,7 @@ def thumbnail_create(request, repo_id):
     success, status_code = generate_thumbnail(request, repo_id, size, path)
     if success:
         src = get_thumbnail_src(repo_id, size, path)
-        result['encoded_thumbnail_src'] = urlquote(src)
+        result['encoded_thumbnail_src'] = quote(src)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         err_msg = _('Failed to create thumbnail.')
@@ -179,7 +179,7 @@ def share_link_thumbnail_create(request, token):
     success, status_code = generate_thumbnail(request, repo_id, size, real_path)
     if success:
         src = get_share_link_thumbnail_src(token, size, req_path)
-        result['encoded_thumbnail_src'] = urlquote(src)
+        result['encoded_thumbnail_src'] = quote(src)
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
         err_msg = _('Failed to create thumbnail.')

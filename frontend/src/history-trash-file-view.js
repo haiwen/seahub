@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import FileView from './components/history-trash-file-view/file-view';
 import FileViewTip from './components/history-trash-file-view/file-view-tip';
 import Image from './components/file-content-view/image';
@@ -7,6 +7,7 @@ import SVG from './components/file-content-view/svg';
 import PDF from './components/file-content-view/pdf';
 import Text from './components/file-content-view/text';
 import Markdown from './components/file-content-view/markdown';
+import SDoc from './components/file-content-view/sdoc';
 import Video from './components/file-content-view/video';
 import Audio from './components/file-content-view/audio';
 
@@ -40,6 +41,9 @@ class HistoryTrashFileView extends React.Component {
       case 'Markdown':
         content = <Markdown />;
         break;
+      case 'SDoc':
+        content = <SDoc />;
+        break;
       case 'Video':
         content = <Video />;
         break;
@@ -56,7 +60,4 @@ class HistoryTrashFileView extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <HistoryTrashFileView />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<HistoryTrashFileView />, document.getElementById('wrapper'));

@@ -132,7 +132,7 @@ def api_group_check(func):
     return _decorated
 
 def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    x_forwarded_for = request.headers.get('x-forwarded-for', '')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:
@@ -229,6 +229,17 @@ def get_api_token(request, keys=None, key_prefix='shib_'):
         token = get_token_v2(request, request.user.username, platform,
                              device_id, device_name, client_version,
                              platform_version)
+
+    elif all([key in request.session for key in keys]):
+        platform = request.session['%splatform' % key_prefix]
+        device_id = request.session['%sdevice_id' % key_prefix]
+        device_name = request.session['%sdevice_name' % key_prefix]
+        client_version = request.session['%sclient_version' % key_prefix]
+        platform_version = request.session['%splatform_version' % key_prefix]
+        token = get_token_v2(
+            request, request.user.username, platform, device_id,
+            device_name, client_version, platform_version)
+
     else:
         token = get_token_v1(request.user.username)
 

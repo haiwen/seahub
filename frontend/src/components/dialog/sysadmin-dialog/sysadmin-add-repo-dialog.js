@@ -7,8 +7,8 @@ import { Utils } from '../../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
-  onRepoChanged: PropTypes.func.isRequired,
+  groupID: PropTypes.string,
+  onAddNewRepo: PropTypes.func.isRequired
 };
 
 class AddRepoDialog extends React.Component {
@@ -19,12 +19,6 @@ class AddRepoDialog extends React.Component {
       repoName: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
@@ -32,13 +26,13 @@ class AddRepoDialog extends React.Component {
     if (isValid) {
       seafileAPI.sysAdminAddRepoInDepartment(this.props.groupID, this.state.repoName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onRepoChanged();
+        this.props.onAddNewRepo(res.data);
       }).catch(error => {
         let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -49,24 +43,24 @@ class AddRepoDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       repoName: e.target.value,
     });
-  }
+  };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -74,16 +68,17 @@ class AddRepoDialog extends React.Component {
               <Label for="repoName">{gettext('Name')}</Label>
               <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>
           {this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

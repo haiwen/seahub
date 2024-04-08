@@ -15,25 +15,25 @@ class UploadRemindDialog extends React.Component {
   toggle = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.cancelFileUpload();
-  }
+  };
 
   replaceRepetitionFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.replaceRepetitionFile();
-  }
+  };
 
   uploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.uploadFile();
-  }
+  };
 
   render() {
-
-    let title = gettext('Replace file {filename}?');
-    title = title.replace('{filename}', '<span class="a-simaulte">' + this.props.currentResumableFile.fileName + '</span>');
+    const { fileName } = this.props.currentResumableFile;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle} ><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
+        <ModalHeader toggle={this.toggle}>
+          <span>{gettext('Replace file {filename}?').replace('{filename}', fileName)}</span>
+        </ModalHeader>
         <ModalBody>
           <p>{gettext('A file with the same name already exists in this folder.')}</p>
           <p>{gettext('Replacing it will overwrite its content.')}</p>

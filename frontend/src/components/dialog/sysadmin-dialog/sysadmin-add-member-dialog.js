@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
-import UserSelect from '../../user-select.js';
+import UserSelect from '../../user-select';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   groupID:  PropTypes.string.isRequired,
-  onMemberChanged: PropTypes.func.isRequired
+  onAddNewMembers: PropTypes.func.isRequired
 };
 
 class AddMemberDialog extends React.Component {
@@ -25,7 +25,7 @@ class AddMemberDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.selectedOption) return;
@@ -38,14 +38,14 @@ class AddMemberDialog extends React.Component {
         this.setState({ errMessage: res.data.failed[0].error_msg });
       }
       if (res.data.success.length > 0) {
-        this.props.onMemberChanged();
+        this.props.onAddNewMembers(res.data.success);
         this.props.toggle();
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -53,7 +53,7 @@ class AddMemberDialog extends React.Component {
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
         <ModalBody>
           <UserSelect
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             ref="orgSelect"
             isMulti={true}
@@ -62,8 +62,8 @@ class AddMemberDialog extends React.Component {
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

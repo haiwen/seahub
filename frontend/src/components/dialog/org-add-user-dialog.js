@@ -32,13 +32,6 @@ class AddOrgUserDialog extends React.Component {
       this.setState({isAddingUser: true});
       this.props.handleSubmit(email, name.trim(), password);
     }
-  }
-
-  handleKeyPress = (e) => {
-    e.preventDefault();
-    if (e.key == 'Enter') {
-      this.handleSubmit(e);
-    }
   };
 
   togglePasswordVisible = () => {
@@ -51,7 +44,7 @@ class AddOrgUserDialog extends React.Component {
         this.passwdNewInput.type = 'text';
       }
     });
-  }
+  };
 
   generatePassword = () => {
     let val = Math.random().toString(36).substr(5);
@@ -63,17 +56,17 @@ class AddOrgUserDialog extends React.Component {
       this.passwdInput.type = 'text';
       this.passwdNewInput.type = 'text';
     });
-  }
+  };
 
   inputEmail = (e) => {
     let email = e.target.value.trim();
     this.setState({email: email});
-  }
+  };
 
   inputName = (e) => {
     let name = e.target.value;
     this.setState({name: name});
-  }
+  };
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
@@ -83,7 +76,7 @@ class AddOrgUserDialog extends React.Component {
         this.passwdNewInput.type = 'password';
       }
     });
-  }
+  };
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
@@ -93,11 +86,11 @@ class AddOrgUserDialog extends React.Component {
         this.passwdNewInput.type = 'password';
       }
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   validateInputParams() {
     let errMessage;

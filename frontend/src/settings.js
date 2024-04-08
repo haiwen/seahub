@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
-import { isPro, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { isPro, isDBSqlite3, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
@@ -17,6 +17,7 @@ import EmailNotice from './components/user-settings/email-notice';
 import TwoFactorAuthentication from './components/user-settings/two-factor-auth';
 import SocialLogin from './components/user-settings/social-login';
 import SocialLoginDingtalk from './components/user-settings/social-login-dingtalk';
+import SocialLoginSAML from './components/user-settings/social-login-saml';
 import DeleteAccount from './components/user-settings/delete-account';
 
 import './css/toolbar.css';
@@ -32,6 +33,9 @@ const {
   twoFactorAuthEnabled,
   enableWechatWork,
   enableDingtalk,
+  isOrgContext,
+  enableADFS,
+  enableMultiADFS,
   enableDeleteAccount
 } = window.app.pageOptions;
 
@@ -48,8 +52,7 @@ class Settings extends React.Component {
       {show: true, href: '#lang-setting', text: gettext('Language')},
       {show: isPro, href: '#email-notice', text: gettext('Email Notification')},
       {show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication')},
-      {show: enableWechatWork, href: '#social-auth', text: gettext('Social Login')},
-      {show: enableDingtalk, href: '#social-auth', text: gettext('Social Login')},
+      {show: (enableWechatWork || enableDingtalk || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login')},
       {show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account')},
     ];
 
@@ -79,7 +82,7 @@ class Settings extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -90,7 +93,7 @@ class Settings extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   handleContentScroll = (e) => {
     const scrollTop = e.target.scrollTop;
@@ -102,7 +105,7 @@ class Settings extends React.Component {
         curItemID: scrolled[scrolled.length -1].href.substr(1)
       });
     }
-  }
+  };
 
   render() {
     return (
@@ -138,10 +141,11 @@ class Settings extends React.Component {
                 {enableAddressBook && this.state.userInfo &&
                   <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 <LanguageSetting />
-                {isPro && <EmailNotice />}
+                {(isPro || !isDBSqlite3) && <EmailNotice />}
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
+                {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
                 {enableDeleteAccount && <DeleteAccount />}
               </div>
             </div>
@@ -152,7 +156,4 @@ class Settings extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Settings />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<Settings />, document.getElementById('wrapper'));

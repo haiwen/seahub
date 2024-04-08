@@ -16,6 +16,7 @@ PERMISSION_PREVIEW_EDIT = 'cloud-edit'  # preview only with edit on the web
 PERMISSION_READ = 'r'
 PERMISSION_READ_WRITE = 'rw'
 PERMISSION_ADMIN = 'admin'
+PERMISSION_INVISIBLE = 'invisible'
 CUSTOM_PERMISSION_PREFIX = 'custom'
 
 DEFAULT_ADMIN = 'default_admin'
@@ -30,3 +31,5 @@ HASH_URLS = {
         'GROUP_DISCUSS': settings.SITE_ROOT + '#group/%(group_id)s/discussions/',
         'SYS_REPO_ADMIN': settings.SITE_ROOT + 'sysadmin/#all-libs/',
         }
+
+REPO_SHARE_LINK_COUNT_LIMIT = 500000

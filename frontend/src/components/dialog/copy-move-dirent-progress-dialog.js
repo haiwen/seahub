@@ -23,7 +23,7 @@ class CopyMoveDirentProgressDialog extends React.Component {
       textAlign: 'left',
     };
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{title}</ModalHeader>
         <ModalBody style={{minHeight: '80px'}}>
           <div className="progress" style={{height: '40px'}}>

@@ -1,15 +1,16 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminGroupAddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog';
-import SysAdminGroupRoleEditor from '../../../components/select-editor/sysadmin-group-role-editor';
+import RoleSelector from '../../../components/single-selector';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
@@ -18,15 +19,22 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemFreezed: false
+    };
   }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -42,7 +50,7 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
                 <th width="5%">{/* icon */}</th>
@@ -56,6 +64,8 @@ class Content extends Component {
                 return (<Item
                   key={index}
                   item={item}
+                  isItemFreezed={this.state.isItemFreezed}
+                  toggleItemFreezed={this.toggleItemFreezed}
                   removeMember={this.props.removeMember}
                   updateMemberRole={this.props.updateMemberRole}
                 />);
@@ -79,68 +89,93 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func,
+  updateMemberRole: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  getListByPage: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
     super(props);
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
     this.state = {
-      isOpIconShown: false,
+      highlighted: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
-  }
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: true});
+  };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
-  }
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: false});
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   removeMember = () => {
     const { item } = this.props;
     this.props.removeMember(item.email, item.name);
     this.toggleDeleteDialog();
-  }
+  };
 
-  updateMemberRole = (role) => {
-    this.props.updateMemberRole(this.props.item.email, role);
-  }
+  updateMemberRole = (roleOption) => {
+    this.props.updateMemberRole(this.props.item.email, roleOption.value);
+  };
 
   render() {
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    let { highlighted, isDeleteDialogOpen } = this.state;
     let { item } = this.props;
 
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?').replace('{placeholder}', itemName);
 
+    const { role: curRole } = item;
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == curRole;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><img src={item.avatar_url} alt="" className="rounded-circle" width="24" /></td>
           <td><UserLink email={item.email} name={item.name} /></td>
           <td>
             {item.role == 'Owner' ?
               gettext('Owner') :
-              <SysAdminGroupRoleEditor
-                isTextMode={true}
-                isEditIconShow={isOpIconShown}
-                roleOptions={['Member', 'Admin']}
-                currentRole={item.role}
-                onRoleChanged={this.updateMemberRole}
+              <RoleSelector
+                isDropdownToggleShown={highlighted}
+                currentSelectedOption={currentSelectedOption}
+                options={this.roleOptions}
+                selectOption={this.updateMemberRole}
+                toggleItemFreezed={this.props.toggleItemFreezed}
               />
             }
           </td>
           <td>
             {item.role != 'Owner' &&
-            <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf2-icon-x3 ${highlighted ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.toggleDeleteDialog}></a>
             }
           </td>
         </tr>
@@ -157,6 +192,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  updateMemberRole: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired
+};
 
 class GroupMembers extends Component {
 
@@ -201,7 +244,7 @@ class GroupMembers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -209,11 +252,11 @@ class GroupMembers extends Component {
     }, () => {
       this.getListByPage(1);
     });
-  }
+  };
 
   toggleAddMemgerDialog = () => {
     this.setState({isAddMemberDialogOpen: !this.state.isAddMemberDialogOpen});
-  }
+  };
 
   addMembers = (emails) => {
     seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
@@ -222,13 +265,13 @@ class GroupMembers extends Component {
         this.setState({
           memberList: newMemberList.concat(this.state.memberList)
         });
-        newMemberList.map(item => {
+        newMemberList.forEach(item => {
           const msg = gettext('Successfully added {email_placeholder}')
             .replace('{email_placeholder}', item.email);
           toaster.success(msg);
         });
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
           .replace('{email_placeholder}', item.email)
           .replace('{error_msg_placeholder}', item.error_msg);
@@ -238,7 +281,7 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   removeMember = (email, name) => {
     seafileAPI.sysAdminDeleteGroupMember(this.props.groupID, email).then(res => {
@@ -253,7 +296,7 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMemberRole = (email, role) => {
     let isAdmin = role == 'Admin';
@@ -271,13 +314,13 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { isAddMemberDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddMemgerDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
@@ -312,5 +355,9 @@ class GroupMembers extends Component {
     );
   }
 }
+
+GroupMembers.propTypes = {
+  groupID: PropTypes.string,
+};
 
 export default GroupMembers;

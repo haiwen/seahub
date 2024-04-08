@@ -1,31 +1,22 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 
-import os
-from io import BytesIO
 from types import FunctionType
 import logging
 import json
-import re
 import datetime
 import time
 from constance import config
-from openpyxl import load_workbook
 
-from django.db.models import Q
 from django.conf import settings as dj_settings
 from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.shortcuts import render
+from django.utils.translation import gettext as _
 
-import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafile_api, get_group, get_group_members, ccnet_api, \
-    get_related_users_by_org_repo
+    seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -36,55 +27,38 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
     email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
-from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
-        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS, DEFAULT_ORG
-from seahub.institutions.models import (Institution, InstitutionAdmin,
-                                        InstitutionQuota)
-from seahub.institutions.utils import get_institution_space_usage
-from seahub.invitations.models import Invitation
+from seahub.constants import GUEST_USER, DEFAULT_USER, HASH_URLS
+from seahub.institutions.models import Institution
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
-from seahub.role_permissions.models import AdminRole
-from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version, send_html_email, \
-    get_server_id, delete_virus_file, get_virus_file_by_vid, \
-    get_virus_files, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
-    get_site_name, seafevents_api
+    is_pro_version, send_html_email, get_site_name, is_org_context
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
-from seahub.utils.licenseparse import parse_license, user_number_over_limit
-from seahub.utils.rpc import mute_seafile_api
-from seahub.utils.sysinfo import get_platform_name
+from seahub.utils.licenseparse import parse_license
 from seahub.utils.ms_excel import write_xls
-from seahub.utils.user_permissions import get_basic_user_roles, \
-        get_user_role, get_basic_admin_roles
-from seahub.utils.auth import get_login_bg_image_path
 from seahub.utils.repo import get_related_users_by_repo, get_repo_owner
+from seahub.utils.auth import get_login_bg_image_path
 from seahub.views import get_system_default_repo_id
-from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
-    TermsAndConditionsForm
+from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.signals import repo_deleted, institution_deleted
-from seahub.share.models import FileShare, UploadLinkShare
+from seahub.signals import repo_deleted
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-    ENABLE_LIMIT_IPADDRESS, ENABLE_SHARE_LINK_REPORT_ABUSE
+    ENABLE_SHARE_LINK_REPORT_ABUSE
 
 try:
     from seahub.settings import MULTI_TENANCY
-    from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
 
 from seahub.utils.two_factor_auth import has_two_factor_auth
-from termsandconditions.models import TermsAndConditions
 try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
@@ -177,7 +151,7 @@ def sys_useradmin_export_excel(request):
     """ Export all users from database to excel
     """
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -195,13 +169,13 @@ def sys_useradmin_export_excel(request):
         is_pro = False
 
     if is_pro:
-        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"), _("Role"),
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Login ID"), _("Status"), _("Role"),
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
-                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)")]
     else:
-        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Login ID"), _("Status"),
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
-                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)")]
 
     # only operate 100 users for every `for` loop
     looped = 0
@@ -221,10 +195,12 @@ def sys_useradmin_export_excel(request):
             # populate name and contact email
             user.contact_email = ''
             user.name = ''
+            user.login_id = ''
             for profile in user_profiles:
                 if profile.user == user.email:
                     user.contact_email = profile.contact_email
                     user.name = profile.nickname
+                    user.login_id = profile.login_id
 
             # populate space usage and quota
             MB = get_file_size_unit('MB')
@@ -277,13 +253,13 @@ def sys_useradmin_export_excel(request):
                 else:
                     role = _('Default')
 
-                row = [user.email, user.name, user.contact_email, status, role,
-                        space_usage_MB, space_quota_MB, create_at,
-                        last_login, is_admin, ldap_import]
+                row = [user.email, user.name, user.contact_email, user.login_id, status, role,
+                       space_usage_MB, space_quota_MB, create_at,
+                       last_login, is_admin, ldap_import]
             else:
-                row = [user.email, user.name, user.contact_email, status,
-                        space_usage_MB, space_quota_MB, create_at,
-                        last_login, is_admin, ldap_import]
+                row = [user.email, user.name, user.contact_email, user.login_id, status,
+                       space_usage_MB, space_quota_MB, create_at,
+                       last_login, is_admin, ldap_import]
 
             data_list.append(row)
 
@@ -365,7 +341,7 @@ def sys_org_set_quota(request, org_id):
 @require_POST
 def user_remove(request, email):
     """Remove user"""
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     try:
@@ -422,7 +398,7 @@ def user_remove_admin(request, email):
     except User.DoesNotExist:
         messages.error(request, _('Failed to revoke admin: the user does not exist'))
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
@@ -551,7 +527,7 @@ def user_reset(request, email):
         msg = _('Failed to reset password: user does not exist')
         messages.error(request, msg)
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
@@ -608,17 +584,17 @@ def user_add(request):
                 operation=USER_ADD, detail=admin_op_detail)
 
         if user:
-            User.objects.update_role(email, role)
+            User.objects.update_role(user.email, role)
             if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(email)
+                UserOptions.objects.set_force_passwd_change(user.email)
             if name:
-                Profile.objects.add_or_update(email, name, '')
+                Profile.objects.add_or_update(user.email, name, '')
             if department:
-                DetailedProfile.objects.add_or_update(email, department, '')
+                DetailedProfile.objects.add_or_update(user.email, department, '')
 
         if request.user.org:
             org_id = request.user.org.org_id
-            ccnet_threaded_rpc.add_org_user(org_id, email, 0)
+            ccnet_threaded_rpc.add_org_user(org_id, user.email, 0)
             if IS_EMAIL_CONFIGURED:
                 try:
                     send_user_add_mail(request, email, password)
@@ -654,7 +630,7 @@ def sys_group_admin_export_excel(request):
     """ Export all groups to excel
     """
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -713,7 +689,7 @@ def sys_org_set_member_quota(request, org_id):
 def sys_repo_delete(request, repo_id):
     """Delete a repo.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = HASH_URLS['SYS_REPO_ADMIN']
 
@@ -779,28 +755,39 @@ def batch_user_make_admin(request):
     return HttpResponse(json.dumps({'success': True,}), content_type=content_type)
 
 @login_required
-@sys_staff_required
 def batch_add_user_example(request):
     """ get example file.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
     data_list = []
-    head = [_('Email'),
-            _('Password'),
-            _('Name') + '(' + _('Optional') + ')',
-            _('Role') + '(' + _('Optional') + ')',
-            _('Space Quota') + '(MB, ' + _('Optional') + ')',
-            'Login ID']
-    for i in range(5):
-        username = "test" + str(i) + "@example.com"
-        password = "123456"
-        name = "test" + str(i)
-        role = "default"
-        quota = "1000"
-        login_id = "login id " + str(i)
-        data_list.append([username, password, name, role, quota, login_id])
+    if not is_org_context(request):
+        head = [_('Email'),
+                _('Password'),
+                _('Name') + '(' + _('Optional') + ')',
+                _('Role') + '(' + _('Optional') + ')',
+                _('Space Quota') + '(MB, ' + _('Optional') + ')',
+                'Login ID']
+        for i in range(5):
+            username = "test" + str(i) + "@example.com"
+            password = "123456"
+            name = "test" + str(i)
+            role = "default"
+            quota = "1000"
+            login_id = "login id " + str(i)
+            data_list.append([username, password, name, role, quota, login_id])
+    else:
+        head = [_('Email'),
+                _('Password'),
+                _('Name') + '(' + _('Optional') + ')',
+                _('Space Quota') + '(MB, ' + _('Optional') + ')']
+        for i in range(5):
+            username = "test" + str(i) + "@example.com"
+            password = "123456"
+            name = "test" + str(i)
+            quota = "1000"
+            data_list.append([username, password, name, quota])
 
     wb = write_xls('sample', head, data_list)
     if not wb:
@@ -829,6 +816,9 @@ def sys_sudo_mode(request):
         ip = get_remote_ip(request)
         if password:
             user = authenticate(username=username, password=password)
+            # After local user authentication process is completed, authenticate LDAP user
+            if user is None and settings.ENABLE_LDAP:
+                user = authenticate(ldap_user=username, password=password)
             if user:
                 update_sudo_mode_ts(request)
 
@@ -850,11 +840,13 @@ def sys_sudo_mode(request):
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+    login_bg_image_path = get_login_bg_image_path()
     return render(request,
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
             'enable_sso': enable_shib_login or enable_adfs_login,
             'next': next_page,
+            'login_bg_image_path': login_bg_image_path,
         })
 
 @login_required_ajax

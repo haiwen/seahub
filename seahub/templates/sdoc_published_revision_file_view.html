@@ -1,0 +1,36 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
+{% render_bundle 'sdocPublishedRevision' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+docPath: '{{ path|escapejs }}',
+docName: '{{ filename|escapejs }}',
+docUuid: '{{ file_uuid }}',
+assetsUrl: '{{ assets_url }}',
+seadocAccessToken: '{{ seadoc_access_token }}',
+seadocServerUrl: '{{ seadoc_server_url }}',
+isSdocRevision: {% if is_sdoc_revision %}true{% else %}false{% endif %},
+revisionId: '{{ revision_id }}',
+originDocUuid: '{{ origin_doc_uuid }}',
+originParentPath: '{{ origin_parent_path }}',
+originFilename: '{{ origin_filename }}',
+originFilePath: '{{ origin_file_path }}',
+originFileVersion: '{{ origin_file_version }}',
+publishFileVersion: '{{ publish_file_version }}',
+publisher: '{{ publisher }}',
+publisherNickname: '{{ publisher_nickname }}',
+isPublished: {% if is_published %}true{% else %}false{% endif %},
+revisionCreatedAt: '{{ revision_created_at }}',
+revisionUpdatedAt: '{{ revision_updated_at }}',
+isSdocDraft: {% if is_sdoc_draft %}true{% else %}false{% endif %}
+{% endblock %}
+
+{% block render_bundle %}
+<script src="{{ MEDIA_URL }}js/init-scroll-bar.js" ></script>
+{% render_bundle 'sdocPublishedRevision' 'js' %}
+{% endblock %}

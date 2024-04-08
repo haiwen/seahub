@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 
@@ -6,9 +7,9 @@ class FilterMenu extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       isMenuShown: false
-    };  
+    };
   }
 
   toggleMenu = () => {
@@ -17,12 +18,12 @@ class FilterMenu extends React.Component {
     }, () => {
       this.props.toggleFreezeItem(this.state.isMenuShown);
     });
-  }
+  };
 
   onItemClick = () => {
     this.props.filterItems();
     this.props.toggleFreezeItem(false);
-  }
+  };
 
   render() {
     const { filterBy } = this.props;
@@ -31,7 +32,8 @@ class FilterMenu extends React.Component {
         <DropdownToggle
           tag="i"
           className="sf-dropdown-toggle sf2-icon-caret-down"
-          title={gettext('More Operations')}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isMenuShown}
         />
@@ -42,5 +44,11 @@ class FilterMenu extends React.Component {
     );
   }
 }
+
+FilterMenu.propTypes = {
+  toggleFreezeItem: PropTypes.func.isRequired,
+  filterItems: PropTypes.func.isRequired,
+  filterBy: PropTypes.string.isRequired,
+};
 
 export default FilterMenu;

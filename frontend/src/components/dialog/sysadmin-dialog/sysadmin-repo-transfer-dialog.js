@@ -21,12 +21,12 @@ class SysAdminRepoTransferDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  }
+  };
 
   render() {
     const repoName = this.props.repoName;
@@ -34,7 +34,7 @@ class SysAdminRepoTransferDialog extends React.Component {
     let msg = gettext('Transfer Library {library_name}');
     let message = msg.replace('{library_name}', innerSpan);
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>
           <div dangerouslySetInnerHTML={{__html:message}} />
         </ModalHeader>
@@ -43,7 +43,7 @@ class SysAdminRepoTransferDialog extends React.Component {
             ref="userSelect"
             isMulti={false}
             className="reviewer-select"
-            placeholder={gettext('Search users...')}
+            placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
           />
         </ModalBody>

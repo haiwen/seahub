@@ -18,7 +18,8 @@ const propTypes = {
 
 let loginUser = window.app.pageOptions.name;
 let contactEmail = window.app.pageOptions.contactEmail;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
+const { sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload,
+  zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
@@ -34,27 +35,31 @@ class SharedFileView extends React.Component {
     this.setState({
       showSaveSharedFileDialog: true
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showSaveSharedFileDialog: false
     });
-  }
+  };
 
   handleSaveSharedFile = () => {
     toaster.success(gettext('Successfully saved'), {
       duration: 3
     });
-  }
+  };
 
   toggleAddAbuseReportDialog = () => {
     this.setState({
       isAddAbuseReportDialogOpen: !this.state.isAddAbuseReportDialogOpen
     });
-  }
+  };
 
   componentDidMount() {
+
+    const fileIcon = Utils.getFileIconUrl(fileName, 192);
+    document.getElementById('favicon').href = fileIcon;
+
     if (trafficOverLimit) {
       toaster.danger(gettext('File download is disabled: the share link traffic of owner is used up.'), {
         duration: 3
@@ -84,17 +89,18 @@ class SharedFileView extends React.Component {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`${siteRoot}d/${sharedToken}/?p=${encodeURIComponent(item.path)}`}>{item.name}</a>
+                <a className="text-truncate mx-1" href={`${siteRoot}d/${sharedToken}/?p=${encodeURIComponent(item.path)}`} title={item.name}>{item.name}</a>
                 <span> / </span>
               </React.Fragment>
             );
           }
+          return null;
         })
         }
-        {zipped[zipped.length - 1].name}
+        <span className="text-truncate ml-1" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const { fileType } = this.props;
@@ -109,22 +115,22 @@ class SharedFileView extends React.Component {
           { loginUser && <Account /> }
         </div>
         <div className="shared-file-view-md-main">
-          <div className={`shared-file-view-head ${fileType == 'md' ? 'w-100 px-4' : ''}`}>
-            <div className="float-left">
+          <div className={`shared-file-view-head ${(fileType == 'md' || fileType == 'pdf') ? 'w-100 px-4' : ''}`}>
+            <div className="text-truncate">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
               {zipped ?
-                <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p> :
+                <p className="m-0 d-flex">{gettext('Current path: ')}{this.renderPath()}</p> :
                 <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
               }
             </div>
-            <div className="float-right">
+            <div className="flex-shrink-0 ml-4">
               {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                 <Button color="secondary" id="save"
                   onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                 </Button>
               }{' '}
               {(canDownload && !trafficOverLimit) &&
-                <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
+                <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
               }{' '}
               {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
                 <Button

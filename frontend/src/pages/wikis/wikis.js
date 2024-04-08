@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
@@ -47,24 +47,24 @@ class Wikis extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clickMenuToggle = (e) => {
     e.preventDefault();
     this.onMenuToggle();
-  }
+  };
 
   onMenuToggle = () => {
     this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
-  }
+  };
 
   onSelectToggle = () => {
     this.setState({isShowSelectDialog: !this.state.isShowSelectDialog});
-  }
+  };
 
   onCreateToggle = () => {
     this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
-  }
+  };
 
   addWiki = (repoID) => {
     seafileAPI.addWiki(repoID).then((res) => {
@@ -76,7 +76,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   renameWiki = (wiki, newName) => {
     seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
@@ -93,7 +93,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   deleteWiki = (wiki) => {
     seafileAPI.deleteWiki(wiki.slug).then(() => {
@@ -107,7 +107,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   render() {
     return (
@@ -115,6 +115,7 @@ class Wikis extends Component {
         <div className="main-panel-north border-left-show">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            {canPublishRepo &&
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
@@ -125,6 +126,7 @@ class Wikis extends Component {
                 </MediaQuery>
               </Fragment>
             </div>
+            }
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>

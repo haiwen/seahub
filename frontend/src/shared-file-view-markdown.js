@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDom from 'react-dom';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -59,18 +59,11 @@ class FileContent extends React.Component {
       innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
     }
     return innerNode;
-  }
+  };
 
   modifyValueBeforeRender = (value) => {
     return Utils.changeMarkdownNodes(value, this.changeImageURL);
-  }
-
-  updateForNoOutline = () => {
-    const $outline = document.querySelector('.md-view .seafile-markdown-outline');
-    const $main = document.querySelector('.md-view .article');
-    $outline.className += ' d-none';
-    $main.className += ' article-no-outline';
-  }
+  };
 
   render() {
     if (err) {
@@ -82,26 +75,16 @@ class FileContent extends React.Component {
     }
 
     return (
-      <div className="shared-file-view-body">
-        <div className="md-view h-100">
-          <MarkdownViewer
-            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-            markdownContent={this.state.markdownContent}
-            showTOC={true}
-            updateForNoOutline={this.updateForNoOutline}
-            activeTitleIndex={''}
-            serviceURL={serviceURL}
-            sharedToken={sharedToken}
-            repoID={repoID}
-            modifyValueBeforeRender={this.modifyValueBeforeRender}
-          />
-        </div>
+      <div className="shared-file-view-body md-view">
+        <MarkdownViewer
+          value={this.state.markdownContent}
+          isShowOutline={true}
+          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          beforeRenderCallback={this.modifyValueBeforeRender}
+        />
       </div>
     );
   }
 }
 
-ReactDOM.render (
-  <SharedFileViewMarkdown />,
-  document.getElementById('wrapper')
-);
+ReactDom.render(<SharedFileViewMarkdown />, document.getElementById('wrapper'));

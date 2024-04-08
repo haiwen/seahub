@@ -22,7 +22,7 @@ class OrgUsers extends Component {
 
   toggleAddOrgAdmin = () => {
     this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
-  }
+  };
 
   initOrgAdmin = () => {
     seafileAPI.orgAdminListOrgUsers(orgID, true).then(res => {
@@ -34,21 +34,21 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
-  toggleOrgAdminDelete = (email) => {
+  toggleOrgAdminDelete = (email, username) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       this.setState({
         orgAdminUsers: this.state.orgAdminUsers.filter(item => item.email != email)
       });
-      let msg = gettext('Successfully deleted %s');
-      msg = msg.replace('%s', email);
+      let msg = gettext('Deleted user %s');
+      msg = msg.replace('%s', username);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleRevokeAdmin = (email) => {
     seafileAPI.orgAdminSetOrgAdmin(orgID, email, false).then(res => {
@@ -62,7 +62,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onAddedOrgAdmin = (userInfo) => {
     this.state.orgAdminUsers.unshift(userInfo);
@@ -73,7 +73,23 @@ class OrgUsers extends Component {
     msg = msg.replace('%s', userInfo.email);
     toaster.success(msg);
     this.toggleAddOrgAdmin();
-  }
+  };
+
+  changeStatus = (email, isActive) => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+      let users = this.state.orgAdminUsers.map(item => {
+        if (item.email == email) {
+          item['is_active']= res.data['is_active'];
+        }
+        return item;
+      });
+      this.setState({orgAdminUsers: users});
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';
@@ -103,6 +119,7 @@ class OrgUsers extends Component {
               toggleRevokeAdmin={this.toggleRevokeAdmin}
               orgAdminUsers={this.state.orgAdminUsers}
               initOrgAdmin={this.initOrgAdmin}
+              changeStatus={this.changeStatus}
             />
           </div>
         </div>

@@ -28,9 +28,6 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isFileLoadedErr: PropTypes.bool.isRequired,
   hash: PropTypes.string,
-  isDraft: PropTypes.bool.isRequired,
-  hasDraft: PropTypes.bool.isRequired,
-  goDraftPage: PropTypes.func.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
   lastModified: PropTypes.string,
@@ -38,9 +35,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   // repo content
   isRepoInfoBarShow: PropTypes.bool.isRequired,
-  draftCounts: PropTypes.number.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -57,6 +52,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
@@ -64,8 +60,11 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array,
+  onItemsScroll: PropTypes.func.isRequired
 };
 
 class DirColumnView extends React.Component {
@@ -86,7 +85,7 @@ class DirColumnView extends React.Component {
       });
     }
     this.setCookie('navRate', this.state.navRate);
-  }
+  };
 
   onResizeMouseDown = () => {
     this.containerWidth = this.refs.viewModeContainer.clientWidth;
@@ -120,7 +119,7 @@ class DirColumnView extends React.Component {
   setCookie = (name, value) => {
     let cookie = name + '=' + value + ';';
     document.cookie = cookie;
-  }
+  };
 
   getCookie = (cookiename) => {
     let name = cookiename + '=';
@@ -132,9 +131,9 @@ class DirColumnView extends React.Component {
       }
     }
     return '';
-  }
+  };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let rate = this.getCookie('navRate');
     if (rate) {
       this.setState({
@@ -172,15 +171,12 @@ class DirColumnView extends React.Component {
           onItemsMove={this.props.onItemsMove}
         />
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
-        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
+        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
           {this.props.isViewFile ? (
             <DirColumnFile
               path={this.props.path}
               repoID={this.props.repoID}
               hash={this.props.hash}
-              isDraft={this.props.isDraft}
-              hasDraft={this.props.hasDraft}
-              goDraftPage={this.props.goDraftPage}
               isFileLoading={this.props.isFileLoading}
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
@@ -199,8 +195,6 @@ class DirColumnView extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isRepoInfoBarShow={this.props.isRepoInfoBarShow}
               usedRepoTags={this.props.usedRepoTags}
-              readmeMarkdown={this.props.readmeMarkdown}
-              draftCounts={this.props.draftCounts}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}
@@ -216,6 +210,7 @@ class DirColumnView extends React.Component {
               onItemRename={this.props.onItemRename}
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
+              onItemConvert={this.props.onItemConvert}
               onDirentClick={this.props.onDirentClick}
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}
@@ -224,6 +219,7 @@ class DirColumnView extends React.Component {
               onItemsMove={this.props.onItemsMove}
               onItemsCopy={this.props.onItemsCopy}
               onItemsDelete={this.props.onItemsDelete}
+              repoTags={this.props.repoTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
             />
