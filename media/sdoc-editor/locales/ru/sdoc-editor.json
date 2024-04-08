@@ -452,5 +452,6 @@
   "Move_column_count": "Перемещение {{count}} столбцов",
   "Move_row_count": "Перемещение {{count}} строк",
   "Mark_all_as_read": "Отметить все как прочитанное",
-  "Alignment_type": "Выравнивание"
+  "Alignment_type": "Выравнивание",
+  "Print": "Печать"
 }

@@ -452,5 +452,6 @@
   "Move_column_count": "Moving {{count}} column(s)",
   "Move_row_count": "Moving {{count}} row(s)",
   "Mark_all_as_read": "Mark all as read",
-  "Alignment_type": "Alignment"
+  "Alignment_type": "Alignment",
+  "Print": "Print"
 }
