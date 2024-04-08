@@ -452,5 +452,6 @@
   "Move_column_count": "移动{{count}}列",
   "Move_row_count": "移动{{count}}行",
   "Mark_all_as_read": "全部标记为已读",
-  "Alignment_type": "对齐方式"
+  "Alignment_type": "对齐方式",
+  "Print": "打印"
 }
