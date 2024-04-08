@@ -20,6 +20,7 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-history-header-right {
   height: 100%;
+  min-width: 100px;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-container {
@@ -59,11 +60,8 @@
 }
 
 .sdoc-file-history .sdoc-file-history-content {
-  flex: 1;
-  min-height: 0;
-  padding: 20px 40px;
-  background-color: #F5F5F5;
-  overflow-y: scroll;
+  height: 100%;
+  width: 100%;
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-file-history-viewer {
@@ -75,9 +73,13 @@
   border: 1px solid #e6e6dd;
 }
 
+.sdoc-file-history .sdoc-file-history-container .sdoc-file-history-content .sdoc-editor-content {
+  position: absolute;
+  padding: 20px 40px;
+}
+
 .sdoc-file-history .sdoc-file-history-content .sdoc-scroll-container {
   position: relative !important;
-  overflow: hidden;
   width: 100%;
 }
 
@@ -90,7 +92,6 @@
 
 .sdoc-file-history .sdoc-file-history-content .article {
   width: 100%;
-  margin: 0;
 }
 
 /* panel */
