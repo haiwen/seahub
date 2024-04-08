@@ -26,4 +26,4 @@ Markdown==3.4.*
 bleach==5.0.*
 python-ldap==3.4.*
 pypinyin==0.50.*
-pyheif-pillow-opener==0.1.0
+pillow_heif==0.16.*

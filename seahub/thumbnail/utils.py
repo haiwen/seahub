@@ -17,10 +17,9 @@ from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
-from pyheif_pillow_opener import register_heif_opener
+from pillow_heif import register_heif_opener
 
 register_heif_opener()
-
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
 from seahub.utils.file_types import VIDEO, XMIND
