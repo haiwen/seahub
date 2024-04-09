@@ -170,8 +170,8 @@ class MarkdownEditor extends React.Component {
   };
 
   setEditorMode = (editorMode) => { // rich | plain
-    const href = window.location.href;
-    window.location.href = href + '?mode=plain';
+    const { origin, pathname } = window.location;
+    window.location.href = origin + pathname + '?mode=plain';
   };
 
   clearTimer = () => {
