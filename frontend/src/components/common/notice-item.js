@@ -15,6 +15,7 @@ const MSG_TYPE_REPO_SHARE = 'repo_share';
 const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group';
 const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
+const MSG_TYPE_FOLDER_UPLOADED = 'folder_uploaded';
 // const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
@@ -215,6 +216,40 @@ class NoticeItem extends React.Component {
 
         // 2. handle xss(cross-site scripting)
         notice = notice.replace('{upload_file_link}', `${fileName}`);
+        notice = Utils.HTMLescape(notice);
+        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
+      }
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_FOLDER_UPLOADED) {
+      let avatar_url = detail.uploaded_user_avatar_url;
+      let folderName = detail.folder_name;
+      let folderLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + detail.folder_path;
+
+      let parentDirName = detail.parent_dir_name;
+      let parentDirLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + detail.parent_dir_path;
+      let notice = '';
+      if (detail.repo_id) { // todo is repo exist ?
+        // 1. handle translate
+        notice = gettext('A folder named {upload_folder_link} is uploaded to {uploaded_link}.');
+
+        // 2. handle xss(cross-site scripting)
+        notice = notice.replace('{upload_folder_link}', `{tagA}${folderName}{/tagA}`);
+        notice = notice.replace('{uploaded_link}', `{tagB}${parentDirName}{/tagB}`);
+        notice = Utils.HTMLescape(notice);
+
+        // 3. add jump link
+        notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(folderLink)}>`);
+        notice = notice.replace('{/tagA}', '</a>');
+        notice = notice.replace('{tagB}', `<a href=${Utils.encodePath(parentDirLink)}>`);
+        notice = notice.replace('{/tagB}', '</a>');
+      } else {
+        // 1. handle translate
+        notice = gettext('A folder named {upload_folder_link} is uploaded to {uploaded_link}.');
+
+        // 2. handle xss(cross-site scripting)
+        notice = notice.replace('{upload_folder_link}', `${folderName}`);
         notice = Utils.HTMLescape(notice);
         notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }

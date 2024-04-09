@@ -153,6 +153,32 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_default_avatar_src()
         return notice
 
+    def format_folder_uploaded_msg(self, notice):
+        d = json.loads(notice.detail)
+
+        folder_name = d['folder_name']
+        repo_id = d['repo_id']
+        repo = seafile_api.get_repo(repo_id)
+
+        uploaded_to = d['uploaded_to']
+        if uploaded_to != '/':
+            uploaded_to = d['uploaded_to'].rstrip('/')
+            folder_path = uploaded_to + '/' + folder_name
+            parent_dir_link = reverse('lib_view', args=[repo_id, repo.name, uploaded_to.strip('/')])
+            parent_dir_name = os.path.basename(uploaded_to)
+        else:
+            folder_path = '/' + folder_name
+            parent_dir_link = reverse('lib_view', args=[repo_id, repo.name, ''])
+            parent_dir_name = repo.name
+
+        folder_link = reverse('lib_view', args=[repo_id, repo.name, folder_path.strip('/')])
+        notice.folder_link = folder_link
+        notice.folder_name = folder_name
+        notice.parent_dir_link = parent_dir_link
+        notice.parent_dir_name = parent_dir_name
+        notice.avatar_src = self.get_default_avatar_src()
+        return notice
+
     def format_group_join_request(self, notice):
         d = json.loads(notice.detail)
         username = d['username']
@@ -299,13 +325,17 @@ class Command(BaseCommand):
         results = {}
         for notice in all_unseen_notices:
             if notice.to_user not in results:
-                results[notice.to_user] = {'notices': [notice], 'sdoc_notices': [] , 'interval': DEFAULT_COLLABORATE_EMAIL_INTERVAL}
+                results[notice.to_user] = {'notices': [notice],
+                                           'sdoc_notices': [],
+                                           'interval': DEFAULT_COLLABORATE_EMAIL_INTERVAL}
             else:
                 results[notice.to_user]['notices'].append(notice)
 
         for sdoc_notice in all_unseen_sdoc_notices:
             if sdoc_notice.username not in results:
-                results[sdoc_notice.username] = {'notices': [], 'sdoc_notices': [sdoc_notice], 'interval': DEFAULT_COLLABORATE_EMAIL_INTERVAL}
+                results[sdoc_notice.username] = {'notices': [],
+                                                 'sdoc_notices': [sdoc_notice],
+                                                 'interval': DEFAULT_COLLABORATE_EMAIL_INTERVAL}
             else:
                 results[sdoc_notice.username]['sdoc_notices'].append(sdoc_notice)
 
@@ -323,7 +353,9 @@ class Command(BaseCommand):
             else:
                 results[email]['interval'] = interval
 
-        return [(key, value['interval'], value['notices'], value['sdoc_notices'], sdoc_queryset) for key, value in results.items()]
+        return [(key, value['interval'],
+                 value['notices'], value['sdoc_notices'],
+                 sdoc_queryset) for key, value in results.items()]
 
     def do_action(self):
 
@@ -407,6 +439,9 @@ class Command(BaseCommand):
 
                 elif notice.is_file_uploaded_msg():
                     notice = self.format_file_uploaded_msg(notice)
+
+                elif notice.is_folder_uploaded_msg():
+                    notice = self.format_folder_uploaded_msg(notice)
 
                 elif notice.is_group_join_request():
                     notice = self.format_group_join_request(notice)

@@ -50,6 +50,9 @@ You've got {{num}} new notices on {{ site_name }}:
                 {% elif notice.is_file_uploaded_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with file_url=notice.file_link file_name=notice.file_name folder_url=notice.folder_link folder_name=notice.folder_name %}A file named <a href="{{url_base}}{{file_url}}">{{file_name}}</a> is uploaded to your folder <a href="{{url_base}}{{folder_url}}">{{folder_name}}</a>.{% endblocktrans %}</p>
 
+                {% elif notice.is_folder_uploaded_msg %}
+                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with folder_url=notice.folder_link folder_name=notice.folder_name parent_dir_url=notice.parent_dir_link parent_dir_name=notice.parent_dir_name %}A folder named <a href="{{url_base}}{{folder_url}}">{{folder_name}}</a> is uploaded to your folder <a href="{{url_base}}{{parent_dir_url}}">{{parent_dir_name}}</a>.{% endblocktrans %}</p>
+
                 {% elif notice.is_group_join_request %}
                 <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user_url=notice.grpjoin_user_profile_url user=notice.notice_from grp_url=notice.grpjoin_group_url grp_name=notice.grpjoin_group_name msg=notice.grpjoin_request_msg %}User <a href="{{url_base}}{{user_url}}">{{user}}</a> has asked to join group <a href="{{url_base}}{{grp_url}}">{{grp_name}}</a>, verification message: {{msg}}{% endblocktrans %}</p>
 

@@ -25,7 +25,8 @@ class SharedUploadLink extends React.Component {
 
   onFileUploadSuccess = (direntObject) => {
     const { name } = direntObject;
-    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(path, name));
+    const isDir = direntObject.type === 'dir';
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(path, name), isDir);
   };
 
   render() {

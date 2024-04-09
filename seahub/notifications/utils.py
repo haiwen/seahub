@@ -144,7 +144,6 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
-
         elif notice.is_repo_share_to_group_msg():
             try:
                 d = json.loads(notice.detail)
@@ -276,6 +275,41 @@ def update_notice_detail(request, notices):
                     d['folder_path'] = d.pop('uploaded_to')
                     d['folder_name'] = name
                     d['file_path'] = file_path
+                    url, is_default, date_uploaded = api_avatar_url('', 32)
+                    d['uploaded_user_avatar_url'] = url
+                    notice.detail = d
+                else:
+                    notice.detail = None
+
+            except Exception as e:
+                logger.error(e)
+
+        elif notice.is_folder_uploaded_msg():
+            try:
+                d = json.loads(notice.detail)
+                foldername = d['folder_name']
+                repo_id = d['repo_id']
+
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
+                if repo:
+                    if d['uploaded_to'] == '/':
+                        # current upload path is '/'
+                        folder_path = '/' + foldername
+                        name = repo.name
+                    else:
+                        uploaded_to = d['uploaded_to'].rstrip('/')
+                        folder_path = uploaded_to + '/' + foldername
+                        name = os.path.basename(uploaded_to)
+
+                    d['repo_name'] = repo.name
+                    d['parent_dir_path'] = d.pop('uploaded_to')
+                    d['parent_dir_name'] = name
+                    d['folder_path'] = folder_path
                     url, is_default, date_uploaded = api_avatar_url('', 32)
                     d['uploaded_user_avatar_url'] = url
                     notice.detail = d
