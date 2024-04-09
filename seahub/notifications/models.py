@@ -66,6 +66,7 @@ class NotificationForm(ModelForm):
 MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
+MSG_TYPE_FOLDER_UPLOADED = 'folder_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_PERM_CHANGE = 'repo_share_perm_change'
 MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete'
@@ -86,6 +87,12 @@ def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     """Encode file uploaded message to json string.
     """
     return json.dumps({'file_name': file_name, 'repo_id': repo_id,
+                       'uploaded_to': uploaded_to})
+
+def folder_uploaded_msg_to_json(folder_name, repo_id, uploaded_to):
+    """Encode folder uploaded message to json string.
+    """
+    return json.dumps({'folder_name': folder_name, 'repo_id': repo_id,
                        'uploaded_to': uploaded_to})
 
 def repo_share_msg_to_json(share_from, repo_id, path, org_id):
@@ -265,6 +272,18 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(to_user,
                                            MSG_TYPE_FILE_UPLOADED, detail)
 
+    def add_folder_uploaded_msg(self, to_user, detail):
+        """
+
+        Arguments:
+        - `self`:
+        - `to_user`:
+        - `folder_name`:
+        - `upload_to`:
+        """
+        return self._add_user_notification(to_user,
+                                           MSG_TYPE_FOLDER_UPLOADED, detail)
+
     def add_repo_share_msg(self, to_user, detail):
         """Notify ``to_user`` that others shared a repo to him/her.
 
@@ -378,6 +397,14 @@ class UserNotification(models.Model):
         """
         return self.msg_type == MSG_TYPE_FILE_UPLOADED
 
+    def is_folder_uploaded_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        return self.msg_type == MSG_TYPE_FOLDER_UPLOADED
+
     def is_repo_share_msg(self):
         """
 
@@ -473,6 +500,8 @@ class UserNotification(models.Model):
     def format_msg(self):
         if self.is_file_uploaded_msg():
             return self.format_file_uploaded_msg()
+        if self.is_folder_uploaded_msg():
+            return self.format_folder_uploaded_msg()
         elif self.is_repo_share_msg():
             return self.format_repo_share_msg()
         elif self.is_repo_share_to_group_msg():
@@ -531,6 +560,47 @@ class UserNotification(models.Model):
         else:
             msg = _("A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
                 'file_name': escape(filename),
+                }
+
+        return msg
+
+    def format_folder_uploaded_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        foldername = d['folder_name']
+        repo_id = d['repo_id']
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            if d['uploaded_to'] == '/':
+                # current upload path is '/'
+                folder_path = '/' + foldername
+                link = reverse('lib_view', args=[repo_id, repo.name, ''])
+                name = repo.name
+            else:
+                uploaded_to = d['uploaded_to'].rstrip('/')
+                folder_path = uploaded_to + '/' + foldername
+                link = reverse('lib_view', args=[repo_id, repo.name, uploaded_to.lstrip('/')])
+                name = os.path.basename(uploaded_to)
+            folder_link = reverse('lib_view', args=[repo_id, folder_path])
+
+            msg = _("A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
+                'folder_link': folder_link,
+                'folder_name': escape(foldername),
+                'link': link,
+                'name': escape(name),
+                }
+        else:
+            msg = _("A folder named <strong>%(folder_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+                'folder_name': escape(foldername),
                 }
 
         return msg
@@ -810,7 +880,8 @@ class UserNotification(models.Model):
 ########## handle signals
 from django.dispatch import receiver
 
-from seahub.signals import upload_file_successful, comment_file_successful, repo_transfer
+from seahub.signals import upload_file_successful, upload_folder_successful,\
+        comment_file_successful, repo_transfer
 from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful, change_repo_perm_successful, delete_repo_perm_successful
@@ -835,6 +906,23 @@ def add_upload_file_msg_cb(sender, **kwargs):
 
     detail = file_uploaded_msg_to_json(filename, repo_id, folder_path)
     UserNotification.objects.add_file_uploaded_msg(owner, detail)
+
+
+@receiver(upload_folder_successful)
+def add_upload_folder_msg_cb(sender, **kwargs):
+    """Notify repo owner when others upload folder to his/her folder from shared link.
+    """
+    repo_id = kwargs.get('repo_id', None)
+    folder_path = kwargs.get('folder_path', None)
+    owner = kwargs.get('owner', None)
+
+    assert repo_id and folder_path and owner is not None, 'Arguments error'
+
+    folder_name = os.path.basename(folder_path.rstrip('/'))
+    parent_dir = os.path.dirname(folder_path.rstrip('/'))
+    detail = folder_uploaded_msg_to_json(folder_name, repo_id, parent_dir)
+    UserNotification.objects.add_folder_uploaded_msg(owner, detail)
+
 
 @receiver(share_repo_to_user_successful)
 def add_share_repo_msg_cb(sender, **kwargs):

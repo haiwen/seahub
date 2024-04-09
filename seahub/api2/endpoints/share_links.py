@@ -51,7 +51,7 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
 from seahub.views import check_folder_permission
-from seahub.signals import upload_file_successful
+from seahub.signals import upload_file_successful, upload_folder_successful
 from seahub.repo_tags.models import RepoTags
 
 logger = logging.getLogger(__name__)
@@ -1129,33 +1129,17 @@ class ShareLinkUploadDone(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             parent_dir = share_link.path
-            if seafile_api.check_permission_by_path(repo_id, parent_dir, share_link.username) != 'rw':
+            link_owner = share_link.username
+            if seafile_api.check_permission_by_path(repo_id,
+                                                    parent_dir,
+                                                    link_owner) != 'rw':
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            file_path = request.data.get('file_path')
-            if not file_path:
-                error_msg = 'file_path invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-            if not file_id:
-                error_msg = 'File %s not found.' % file_path
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-            # send singal
-            upload_file_successful.send(sender=None,
-                                        repo_id=repo_id,
-                                        file_path=file_path,
-                                        owner=share_link.username)
-
-            return Response({'success': True})
-
         if upload_link:
 
-            if upload_link.is_encrypted() and not check_share_link_access(request,
-                                                                          token,
-                                                                          is_upload_link=True):
+            if upload_link.is_encrypted() and not \
+                    check_share_link_access(request, token, is_upload_link=True):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1170,26 +1154,44 @@ class ShareLinkUploadDone(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             parent_dir = upload_link.path
-            if seafile_api.check_permission_by_path(repo_id, parent_dir, upload_link.username) != 'rw':
+            link_owner = upload_link.username
+            if seafile_api.check_permission_by_path(repo_id,
+                                                    parent_dir,
+                                                    link_owner) != 'rw':
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            file_path = request.data.get('file_path')
-            if not file_path:
-                error_msg = 'file_path invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # send signal
+        dirent_path = request.data.get('file_path')
+        if not dirent_path:
+            error_msg = 'file_path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-            if not file_id:
-                error_msg = 'File %s not found.' % file_path
+        is_dir = request.data.get('is_dir', 'false')
+        if is_dir.lower() == 'true':
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, dirent_path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % dirent_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            # send singal
+            upload_folder_successful.send(sender=None,
+                                          repo_id=repo_id,
+                                          folder_path=dirent_path,
+                                          owner=link_owner)
+        else:
+            file_id = seafile_api.get_file_id_by_path(repo_id, dirent_path)
+            if not file_id:
+                error_msg = 'File %s not found.' % dirent_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # send singal
             upload_file_successful.send(sender=None,
                                         repo_id=repo_id,
-                                        file_path=file_path,
-                                        owner=upload_link.username)
+                                        file_path=dirent_path,
+                                        owner=link_owner)
 
-            return Response({'success': True})
+        return Response({'success': True})
 
 
 class ShareLinkSaveFileToRepo(APIView):
