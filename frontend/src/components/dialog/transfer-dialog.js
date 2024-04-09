@@ -1,6 +1,17 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane
+} from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
@@ -8,6 +19,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import { SeahubSelect } from '../common/select';
+import '../../css/transfer-dialog.css';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -23,23 +35,26 @@ class TransferDialog extends React.Component {
       selectedOption: null,
       errorMsg: [],
       transferToUser: true,
+      transferToGroup: false,
+      activeTab: 'transUser'
     };
     this.options = [];
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
+
   };
 
   componentDidMount() {
     if (isPro) {
       seafileAPI.listDepartments().then((res) => {
-        for (let i = 0 ; i < res.data.length; i++) {
+        for (let i = 0; i < res.data.length; i++) {
           let obj = {};
           obj.value = res.data[i].name;
           obj.email = res.data[i].email;
@@ -59,46 +74,82 @@ class TransferDialog extends React.Component {
     });
   };
 
-  render() {
+  toggle = (tab) => {
+    if (this.state.activeTab !== tab) {
+      this.setState({ activeTab: tab });
+    }
+  };
+
+  renderTransContent = () => {
+    let activeTab = this.state.activeTab;
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
     }
 
+    return (
+      <Fragment>
+        <div className="transfer-dialog-side">
+          <Nav pills>
+            <NavItem role="tab" aria-selected={activeTab === 'transUser'} aria-controls="transfer-user-panel">
+              <NavLink className={activeTab === 'transUser' ? 'active' : ''} onClick={(this.toggle.bind(this, 'transUser'))} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                {gettext('Transfer to user')}
+              </NavLink>
+            </NavItem>
+            {isPro &&
+            <NavItem role="tab" aria-selected={activeTab === 'transDepart'} aria-controls="transfer-depart-panel">
+              <NavLink className={activeTab === 'transDepart' ? 'active' : ''} onClick={this.toggle.bind(this, 'transDepart')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                {gettext('Transfer to department')}
+              </NavLink>
+            </NavItem>}
+          </Nav>
+        </div>
+        <div className="transfer-dialog-main">
+          <TabContent activeTab={this.state.activeTab}>
+            <Fragment>
+              <TabPane tabId="transUser" role="tabpanel" id="transfer-user-panel">
+                <UserSelect
+                  ref="userSelect"
+                  isMulti={false}
+                  className="reviewer-select"
+                  placeholder={gettext('Select a user')}
+                  onSelectChange={this.handleSelectChange}
+                />
+              </TabPane>
+              {isPro && canTransferToDept &&
+              <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
+                <SeahubSelect
+                  isClearable
+                  maxMenuHeight={200}
+                  hideSelectedOptions={true}
+                  components={makeAnimated()}
+                  placeholder={gettext('Select a department')}
+                  options={this.options}
+                  onChange={this.handleSelectChange}
+                  value={this.state.selectedOption}
+                />
+              </TabPane>}
+            </Fragment>
+          </TabContent>
+        </div>
+      </Fragment>
+    );
+  };
+  render() {
+
+
     const { itemName: repoName } = this.props;
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
 
+
     return (
-      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} style={{maxWidth: '720px'}} toggle={this.props.toggleDialog} className="transfer-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+          <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>
-        <ModalBody>
-          {this.state.transferToUser ?
-            <UserSelect
-              ref="userSelect"
-              isMulti={false}
-              className="reviewer-select"
-              placeholder={gettext('Select a user')}
-              onSelectChange={this.handleSelectChange}
-            /> :
-            <SeahubSelect
-              isClearable
-              maxMenuHeight={200}
-              hideSelectedOptions={true}
-              components={makeAnimated()}
-              placeholder={gettext('Select a department')}
-              options={this.options}
-              onChange={this.handleSelectChange}
-              value={this.state.selectedOption}
-            />
-          }
-          {isPro && canTransferToDept &&
-            <span role="button" tabIndex="0" className="action-link" onClick={this.onClick} onKeyDown={Utils.onKeyDown}>{this.state.transferToUser ?
-              gettext('Transfer to department'): gettext('Transfer to user')}
-            </span>
-          }
+        <ModalBody className="transfer-dialog-content" role="tablist">
+          {this.renderTransContent()}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>

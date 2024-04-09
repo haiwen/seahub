@@ -359,7 +359,7 @@ class Item extends Component {
             <TransferDialog
               itemName={repo.name}
               submit={this.onTransferRepo}
-              canTransferToDept={false}
+              canTransferToDept={true}
               toggleDialog={this.toggleTransferDialog}
             />
           </ModalPortal>

@@ -26,6 +26,7 @@ from seahub.utils import is_valid_dirent_name, is_valid_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.constants import PERMISSION_READ_WRITE
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -342,7 +343,7 @@ class AdminLibrary(APIView):
 
         new_owner = request.data.get('owner', None)
         if new_owner:
-            if not is_valid_email(new_owner):
+            if not is_valid_email(new_owner) and '@seafile_group' not in new_owner:
                 error_msg = 'owner invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -419,7 +420,11 @@ class AdminLibrary(APIView):
                 pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
             # transfer repo
-            seafile_api.set_repo_owner(repo_id, new_owner)
+            if '@seafile_group' in new_owner:
+                group_id = int(new_owner.split('@')[0])
+                seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
+            else:
+                seafile_api.set_repo_owner(repo_id, new_owner)
 
             # reshare repo to user
             for shared_user in shared_users:
