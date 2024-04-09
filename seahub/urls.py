@@ -38,7 +38,7 @@ from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
 from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
-        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
+        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample, GroupInviteLinks, group_invite
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
@@ -342,6 +342,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
     re_path(r'^api/v2.1/search-group/$', SearchGroup.as_view(), name='api-v2.1-search-group'),
 
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/invite-links/$', GroupInviteLinks.as_view(),name='api-v2.1-group-invite-links'),
+    re_path(r'^group-invite/(?P<token>[-0-9a-f]{8})/$', group_invite, name='group_invite'),
     ## address book
     re_path(r'^api/v2.1/address-book/groups/(?P<group_id>\d+)/sub-groups/$', AddressBookGroupsSubGroups.as_view(), name='api-v2.1-address-book-groups-sub-groups'),
     re_path(r'^api/v2.1/address-book/groups/(?P<group_id>\d+)/search-member/$', AddressBookGroupsSearchMember.as_view(), name='api-v2.1-address-book-search-member'),

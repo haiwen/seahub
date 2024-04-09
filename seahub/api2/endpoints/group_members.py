@@ -3,7 +3,7 @@ import logging
 from io import BytesIO
 from openpyxl import load_workbook
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext as _
 
 from rest_framework.authentication import SessionAuthentication
@@ -28,10 +28,11 @@ from seahub.base.accounts import User
 from seahub.group.signals import add_user_to_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
-from seahub.profile.models import Profile
-
+from seahub.profile.models import Profile, GroupInviteLinkModel
 from .utils import api_check_group
 
+from seahub.settings import SERVICE_URL
+from seahub.auth.decorators import login_required
 logger = logging.getLogger(__name__)
 
 
@@ -552,3 +553,111 @@ class GroupMembersImportExample(APIView):
         wb.save(response)
 
         return response
+
+
+def is_group_owner_or_admin(group, email):
+    if email == group.creator_name:
+        return True
+    return ccnet_api.check_group_staff(group.id, email)
+
+
+class GroupInviteLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    @api_check_group
+    def get(self, request, group_id):
+        """
+        Get invitation link
+        """
+        group_id = int(group_id)
+        email = request.user.username
+
+        group = ccnet_api.get_group(group_id)
+        if not group:
+            error_msg = 'group not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_group_owner_or_admin(group, email):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            invite_link_query_set = GroupInviteLinkModel.objects.filter(group_id=group_id)
+        except Exception as e:
+            logger.error(f'query group invite links failed. {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'group_invite_link_list': [group_invite_link.to_dict() for group_invite_link in
+                                                    invite_link_query_set]})
+
+    @api_check_group
+    def post(self, request, group_id):
+        group_id = int(group_id)
+        email = request.user.username
+
+        group = ccnet_api.get_group(group_id)
+        if not group:
+            error_msg = 'group not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not is_group_owner_or_admin(group, email):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            invite_link = GroupInviteLinkModel.objects.create_link(group_id, email)
+        except Exception as e:
+            logger.error(f'create group invite links failed. {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(invite_link.to_dict())
+
+
+@login_required
+def group_invite(request, token):
+    """
+    reigsterd user add to group
+    """
+    print(request.METHOD)
+    print(request.user)
+    email = request.user.username
+    print(request.user)
+    print(111)
+    next_url = request.GET.get('next', '/')
+    redirect_to = SERVICE_URL.rstrip('/') + '/' + next_url.lstrip('/')
+    group_invite_link = GroupInviteLinkModel.objects.filter(token=token).first()
+    if not group_invite_link:
+        return render_error(request, _('Group invite link does not exist'))
+
+    if is_group_member(group_invite_link.group_id, email):
+        print("is group member")
+        print(group_invite_link.group_id, group_invite_link.created_by, email)
+        return HttpResponseRedirect(redirect_to)
+
+    try:
+        group_org_id = ccnet_api.get_org_id_by_group(group_invite_link.group_id)
+    except Exception as e:
+        logger.error(f'get org id by group failed. {e}')
+        return render_error(request, 'Internal Server Error')
+
+    # org user but not same org
+    if request.user.org and request.user.org.org_id != group_org_id:
+        return render_error(request, _('You cannot join this group'))
+
+    # non-org user but group is in org
+    if not request.user.org and group_org_id > 0:
+        return render_error(request, _('You cannot join this group'))
+
+    if not group_invite_link.created_by:
+        return render_error(request, _('Group invite link broken'))
+
+    try:
+        print(group_invite_link.group_id, group_invite_link.created_by, email)
+        ccnet_api.group_add_member(group_invite_link.group_id, group_invite_link.created_by, email)
+    except Exception as e:
+        logger.error(f'group invite add user failed. {e}')
+        return render_error(request, 'Internal Server Error')
+    print(redirect_to)
+    return HttpResponseRedirect(redirect_to)
