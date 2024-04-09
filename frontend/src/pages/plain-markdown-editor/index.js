@@ -203,8 +203,8 @@ const PlainMarkdownEditor = (props) => {
   }, [options]);
 
   const setEditorMode = useCallback(() => {
-    const href = window.location.href;
-    window.location.href = href.replace('?mode=plain', '');
+    const { origin, pathname } = window.location;
+    window.location.href = origin + pathname;
   }, []);
 
   const ignoreCallBack = useCallback(() => void 0, []);
