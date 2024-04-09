@@ -590,7 +590,8 @@ class UserNotification(models.Model):
                 folder_path = uploaded_to + '/' + foldername
                 link = reverse('lib_view', args=[repo_id, repo.name, uploaded_to.lstrip('/')])
                 name = os.path.basename(uploaded_to)
-            folder_link = reverse('lib_view', args=[repo_id, folder_path])
+
+            folder_link = reverse('lib_view', args=[repo_id, repo.name, folder_path])
 
             msg = _("A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
                 'folder_link': folder_link,
