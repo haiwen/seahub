@@ -19,6 +19,8 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import is_pro_version
 
+from seahub.utils.db_api import SeafileDB
+
 logger = logging.getLogger(__name__)
 
 
@@ -47,7 +49,16 @@ class AdminDeviceErrors(APIView):
 
         return_results = []
         try:
-            device_errors = seafile_api.list_repo_sync_errors(start, limit)
+            seafile_db = SeafileDB()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            # device_errors = seafile_api.list_repo_sync_errors(start, limit)
+            device_errors = seafile_db.get_devices_error(start, limit)
+
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -58,17 +69,16 @@ class AdminDeviceErrors(APIView):
             has_next_page = True
         else:
             has_next_page = False
-
         for error in device_errors:
-            result = {}
-            result['email'] = error.email if error.email else ''
-            result['name'] = email2nickname(error.email)
-            result['device_ip'] = error.peer_ip if error.peer_ip else ''
-            result['repo_name'] = error.repo_name if error.repo_name else ''
-            result['repo_id'] = error.repo_id if error.repo_id else ''
-            result['error_msg'] = error.error_con if error.error_con else ''
+            result = dict()
+            result['email'] = error.get('email', '')
+            result['name'] = email2nickname(error.get('email', ''))
+            result['device_ip'] = error.get('peer_ip', '')
+            result['repo_name'] = error.get('repo_name', '')
+            result['repo_id'] = error.get('repo_id', '')
+            result['error_msg'] = error.get('error_con', '')
 
-            tokens = TokenV2.objects.filter(device_id=error.peer_id)
+            tokens = TokenV2.objects.filter(device_id=error.get('peer_id', ''))
             if tokens:
                 result['device_name'] = tokens[0].device_name
                 result['client_version'] = tokens[0].client_version
@@ -76,8 +86,9 @@ class AdminDeviceErrors(APIView):
                 result['device_name'] = ''
                 result['client_version'] = ''
 
-            if error.error_time:
-                result['error_time'] = timestamp_to_isoformat_timestr(error.error_time)
+            error_time = error.get('error_time')
+            if error_time:
+                result['error_time'] = timestamp_to_isoformat_timestr(error_time)
             else:
                 result['error_time'] = ''
 
