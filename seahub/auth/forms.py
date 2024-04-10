@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.http import int_to_base36
 from collections import OrderedDict
 
+from seahub.auth.models import SocialAuthUser
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
@@ -16,7 +17,6 @@ from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
 from seahub.auth.utils import get_virtual_id_by_email
 
 from captcha.fields import CaptchaField
-from .models import SocialAuthUser
 from constance import config
 
 class AuthenticationForm(forms.Form):
@@ -83,22 +83,20 @@ class AuthenticationForm(forms.Form):
 
 
             # Non administrators can only log in with single sign on
-            if getattr(settings, 'ENABLE_SAML', False):
-                if not self.user_cache.is_staff:
-                    multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
-                    if multi_tenancy:
-                        # org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(user.org.org_id)
-                        if SocialAuthUser.objects.filter(username=username,
-                                                         provider=settings.SAML_PROVIDER).exists() and \
-                                getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
-                            self.errors['disable_pwd_login'] = _('You cannot login with email and password. ')
-                            raise forms.ValidationError(_('You cannot login with email and password. '))
-                    else:
-                        if SocialAuthUser.objects.filter(username=username,provider=settings.SAML_PROVIDER).exists()\
-                                and getattr(config, 'DISABLE_SAML_USER_PWD_LOGIN'):
-                            self.errors['disable_pwd_login'] = _('You cannot login with email and password. ')
-                            raise forms.ValidationError(_('You cannot login with email and password. '))
-
+            enable_adfs = settings.ENABLE_ADFS_LOGIN
+            disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
+            saml_provider_identifier = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
+            if disable_pwd_login:
+                username = self.user_cache.username
+                is_admin = self.user_cache.is_staff
+                if not is_admin:
+                    adfs_user = SocialAuthUser.objects.filter(
+                        username = username,
+                        provider = saml_provider_identifier
+                    )
+                    if adfs_user.exists():
+                        self.errors['disable_pwd_login'] = _('You cannot login with email and password.')
+                        raise forms.ValidationError(_('You cannot login with email and password. '))
 
         # TODO: determine whether this should move to its own method.
         if self.request:
