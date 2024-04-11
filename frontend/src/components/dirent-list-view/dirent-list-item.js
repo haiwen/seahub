@@ -280,6 +280,9 @@ class DirentListItem extends React.Component {
       case 'Lock':
         this.onLockItem();
         break;
+      case 'Unfreeze Document':
+        this.onUnlockItem();
+        break;
       case 'Freeze Document':
         this.onFreezeDocument();
         break;

@@ -154,6 +154,9 @@ class DirentGridView extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Unfreeze Document':
+        this.onUnlockItem(currentObject);
+        break;
       case 'Freeze Document':
         this.onFreezeDocument(currentObject);
         break;
