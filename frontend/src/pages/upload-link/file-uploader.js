@@ -637,6 +637,7 @@ class FileUploader extends React.Component {
           onUploadRetry={this.onUploadRetry}
           onFileUpload={this.onFileUpload}
           onFolderUpload={this.onFolderUpload}
+          isUploading={this.resumable ? this.resumable.isUploading() : false}
         />
       </Fragment>
     );
