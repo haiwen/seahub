@@ -473,6 +473,8 @@ class Item extends Component {
               options={this.statusOptions}
               selectOption={this.updateStatus}
               toggleItemFreezed={this.props.toggleItemFreezed}
+              isSetUserStatus={true}
+              nickname={item.name}
             />
           </td>
           {isPro &&

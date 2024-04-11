@@ -355,9 +355,23 @@ def update_user_info(request, user, password, is_active, is_staff, role,
                      quota_total_mb, institution_name,
                      upload_rate_limit, download_rate_limit):
 
+    email = user.username
+
     # update basic user info
     if is_active is not None:
         user.is_active = is_active
+        if is_active == False:
+            # del tokens and repo tokens
+            from seahub.utils import clear_token
+            from seahub.repo_api_tokens.models import RepoAPITokens
+            try:
+                clear_token(email)
+            except Exception as e:
+                logger.error("Failed to delete tokens for user %s: %s." % (email, e))
+            try:
+                RepoAPITokens.objects.filter(generated_by=email).delete()
+            except Exception as e:
+                logger.error("Failed to delete api tokens for user %s: %s." % (email, e))
 
     if password:
         user.set_password(password)
@@ -367,8 +381,6 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     # update user
     user.save()
-
-    email = user.username
 
     # update additional user info
     if is_pro_version() and role:

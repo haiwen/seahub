@@ -177,12 +177,32 @@ class RepoAPITokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed(msg)
 
         rat = RepoAPITokens.objects.filter(token=auth[1]).first()
-        if not rat:
+        if rat:
+            try:
+                user = User.objects.get(email=rat.generated_by)
+            except User.DoesNotExist:
+                raise AuthenticationFailed('User inactive or deleted')
+            if not user.is_active:
+                return None
+        else:
             rat = OCMShare.objects.filter(shared_secret=auth[1]).first()
             if not rat:
                 raise AuthenticationFailed('Token inactive or deleted')
             # if is request by remote server through ocm, use from_user instead of app_name
             rat.app_name = rat.from_user
+            try:
+                from_user = User.objects.get(email=rat.from_user)
+            except User.DoesNotExist:
+                raise AuthenticationFailed('User inactive or deleted')
+            if not from_user.is_active:
+                return None
+            try:
+                to_user = User.objects.get(email=rat.to_user)
+            except User.DoesNotExist:
+                raise AuthenticationFailed('User inactive or deleted')
+            if not to_user.is_active:
+                return None
+
         request.repo_api_token_obj = rat
 
         return AnonymousUser(), auth[1]

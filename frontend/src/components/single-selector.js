@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ModalPortal from '../components/modal-portal';
+import InactiveUserDialog from '../components/dialog/sysadmin-dialog/sysadmin-inactive-user-dialog';
 
 import '../css/single-selector.css';
 
@@ -8,7 +10,9 @@ const propTypes = {
   currentSelectedOption: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,
-  toggleItemFreezed: PropTypes.func
+  toggleItemFreezed: PropTypes.func,
+  isSetUserStatus: PropTypes.bool,
+  nickname: PropTypes.string,
 };
 
 class Selector extends Component {
@@ -16,7 +20,8 @@ class Selector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPopoverOpen: false
+      isPopoverOpen: false,
+      isInactiveModalOpen: false,
     };
   }
 
@@ -51,9 +56,30 @@ class Selector extends Component {
   };
 
   selectItem = (e, targetItem) => {
+    if (this.props.isSetUserStatus && targetItem.value !== 'active') {
+      e.stopPropagation();
+      this.togglePopover();
+      this.setState({
+        isInactiveModalOpen: true,
+      });
+      return;
+    }
+
     e.stopPropagation();
     this.props.selectOption(targetItem);
     this.togglePopover();
+  };
+
+  confirmInactive = (e) => {
+    e.stopPropagation();
+    this.props.selectOption('inactive');
+    this.toggleInactiveModal();
+  };
+
+  toggleInactiveModal = () => {
+    this.setState({
+      isInactiveModalOpen: !this.state.isInactiveModalOpen
+    });
   };
 
   render() {
@@ -78,6 +104,15 @@ class Selector extends Component {
               })}
             </ul>
           </div>
+        )}
+        {this.state.isInactiveModalOpen && (
+          <ModalPortal>
+            <InactiveUserDialog
+              toggle={this.toggleInactiveModal}
+              nickname={this.props.nickname}
+              confirmInactive={this.confirmInactive}
+            />
+          </ModalPortal>
         )}
       </div>
     );

@@ -155,6 +155,8 @@ class UserItem extends React.Component {
             options={this.statusOptions}
             selectOption={this.changeStatus}
             toggleItemFreezed={this.props.toggleItemFreezed}
+            isSetUserStatus={true}
+            nickname={user.name}
           />
         </td>
         <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
