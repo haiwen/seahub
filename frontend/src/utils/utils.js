@@ -530,7 +530,7 @@ export const Utils = {
 
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, FREEZE_DOCUMENT,
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -590,7 +590,9 @@ export const Utils = {
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
-            list.push(UNLOCK);
+            if (!dirent.name.endsWith('.sdoc')) {
+              list.push(UNLOCK);
+            }
           }
         } else {
           if (!dirent.name.endsWith('.sdoc')) {
@@ -603,6 +605,9 @@ export const Utils = {
 
       if (isPro && !dirent.is_locked && dirent.name.endsWith('.sdoc')) {
         list.push(FREEZE_DOCUMENT);
+      }
+      if (isPro && dirent.is_locked && dirent.name.endsWith('.sdoc')) {
+        list.push(UNFREEZE_DOCUMENT);
       }
 
     }
