@@ -16,6 +16,7 @@ const propTypes = {
   onUploadRetry: PropTypes.func.isRequired,
   onFileUpload: PropTypes.func.isRequired,
   onFolderUpload: PropTypes.func.isRequired,
+  isUploading : PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
@@ -46,12 +47,12 @@ class UploadProgressDialog extends React.Component {
   };
 
   render() {
-    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList } = this.props;
+    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList, isUploading } = this.props;
     const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
       .replace('{uploaded_files_num}', uploadFileList.filter(file => file.isSaved).length)
       .replace('{all_files_num}', uploadFileList.length);
     let filesFailedMsg;
-    if (totalProgress == 100) {
+    if (!isUploading) {
       const failedNum = uploadFileList.filter(file => file.error).length + forbidUploadFileList.length;
       if (failedNum > 0) {
         filesFailedMsg = gettext('{failed_files_num} file(s) failed to upload')
@@ -70,20 +71,19 @@ class UploadProgressDialog extends React.Component {
           </ButtonDropdown>
           <Button color="primary" outline={true} className="ml-4"
             onClick={this.props.onCancelAllUploading}
-            disabled={totalProgress == 0 || totalProgress == 100}>
+            disabled={!isUploading}>
             {gettext('Cancel All')}
           </Button>
         </div>
         {totalProgress > 0 && (
-          <div id="upload-link-total-progress-container" className={`${totalProgress == 100 ? 'd-flex align-items-center' : ''} px-6 py-2`}>
+          <div id="upload-link-total-progress-container" className={`${!isUploading ? 'd-flex align-items-center' : ''} px-6 py-2`}>
             <div className="d-flex align-items-center flex-fill">
-              {totalProgress < 100 && (
+              {isUploading ? (
                 <>
                   <span>{gettext('File Uploading...')}</span>
                   <span className="ml-2">{`${totalProgress}% (${Utils.formatBitRate(uploadBitrate)})`}</span>
                 </>
-              )}
-              {totalProgress == 100 && (
+              ) : (
                 <>
                   {filesFailedMsg ?
                     <p className="m-0 error">{filesFailedMsg}</p> :
@@ -93,7 +93,7 @@ class UploadProgressDialog extends React.Component {
               )}
               {uploadFileList.length > 0 && <span className="ml-auto">{filesUploadedMsg}</span>}
             </div>
-            {totalProgress < 100 && (
+            {isUploading && (
               <div className="progress">
                 <div className="progress-bar" role="progressbar" style={{width: `${totalProgress}%`}} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
               </div>
