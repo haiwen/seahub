@@ -313,14 +313,16 @@ def get_user_share_link_info(fileshare):
     if fileshare.s_type == 'f':
         obj_id = seafile_api.get_file_id_by_path(repo_id, path)
         data['size'] = seafile_api.get_file_size(repo.store_id,
-                repo.version, obj_id)
+                                                 repo.version, obj_id)
     else:
         data['size'] = ''
 
     return data
 
 
-def create_user_info(request, email, role, nickname, contact_email, quota_total_mb):
+def create_user_info(request, email, role, nickname,
+                     contact_email, quota_total_mb,
+                     login_id):
     # update additional user info
 
     if is_pro_version() and role:
@@ -343,6 +345,9 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
             seafile_api.set_org_user_quota(org_id, email, quota_total)
         else:
             seafile_api.set_user_quota(email, quota_total)
+
+    if login_id is not None:
+        Profile.objects.add_or_update(email, login_id=login_id)
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
@@ -537,7 +542,7 @@ class AdminUsers(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get_info_of_users_order_by_quota_usage(self, source, direction,
-            page, per_page):
+                                               page, per_page):
 
         # get user's quota usage info
         user_usage_dict = {}
@@ -568,7 +573,7 @@ class AdminUsers(APIView):
 
         # sort
         users.sort(key=lambda item: item.quota_usage,
-                reverse = direction == 'desc')
+                   reverse=direction == 'desc')
 
         data = []
         MULTI_INSTITUTION = getattr(settings, 'MULTI_INSTITUTION', False)
@@ -845,12 +850,21 @@ class AdminUsers(APIView):
             error_msg = 'password required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        login_id = request.data.get("login_id", None)
+        if login_id is not None:
+            login_id = login_id.strip()
+            username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
+            if username_by_login_id is not None:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 _("Login id %s already exists." % login_id))
+
         # create user
         try:
             user_obj = User.objects.create_user(email, password, is_staff, is_active)
             create_user_info(request, email=user_obj.username, role=role,
                              nickname=name, contact_email=email,
-                             quota_total_mb=quota_total_mb)
+                             quota_total_mb=quota_total_mb,
+                             login_id=login_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -862,9 +876,7 @@ class AdminUsers(APIView):
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
                                 'sysadmin/user_add_email.html',
-                                c,
-                                None,
-                                [email2contact_email(email)])
+                                c, None, [email2contact_email(email)])
 
                 add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
             except Exception as e:
@@ -1018,7 +1030,7 @@ class AdminSearchUser(APIView):
 
             # search user from profile
             searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
-                                                       Q(contact_email__icontains=query_str))[:10]
+                                                      Q(contact_email__icontains=query_str))[:10]
 
             for profile in searched_profile:
                 email = profile.user
@@ -1073,7 +1085,6 @@ class AdminSearchUser(APIView):
                     ccnet_users = ccnet_ldap_import_users[-per_page:]
 
             # search user from profile
-            profile_users = []
             all_ccnet_users = ccnet_db_users + ccnet_ldap_import_users
             all_profile_users = []
 
@@ -1192,8 +1203,8 @@ class AdminUser(APIView):
 
     def get(self, request, email):
 
-        if not (request.user.admin_permissions.can_manage_user() or \
-            request.user.admin_permissions.can_update_user()):
+        if not (request.user.admin_permissions.can_manage_user() or
+                request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         avatar_size = request.data.get('avatar_size', 64)
@@ -1229,8 +1240,8 @@ class AdminUser(APIView):
 
     def put(self, request, email):
 
-        if not (request.user.admin_permissions.can_manage_user() or \
-            request.user.admin_permissions.can_update_user()):
+        if not (request.user.admin_permissions.can_manage_user() or
+                request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # basic user info check
