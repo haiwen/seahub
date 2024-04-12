@@ -14,7 +14,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
-from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email, translate_commit_desc
 from seahub.utils import get_file_audit_events, generate_file_audit_event_type, \
     get_file_update_events, get_perm_audit_events, is_valid_email
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
@@ -265,8 +266,7 @@ class AdminLogsFileUpdateLogs(APIView):
             repo = repo_dict.get(repo_id, None)
             data['repo_name'] = repo.name if repo else ''
             data['repo_encrypted'] = repo.encrypted if repo else None
-
-            data['file_operation'] = ev.file_oper
+            data['file_operation'] = translate_commit_desc(ev.file_oper)
             data['commit_id'] = ev.commit_id
             events_info.append(data)
 
