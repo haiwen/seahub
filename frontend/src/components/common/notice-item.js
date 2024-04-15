@@ -212,12 +212,11 @@ class NoticeItem extends React.Component {
         notice = notice.replace('{/tagB}', '</a>');
       } else {
         // 1. handle translate
-        notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
+        notice = gettext('A file named {upload_file_link} is uploaded.');
 
         // 2. handle xss(cross-site scripting)
         notice = notice.replace('{upload_file_link}', `${fileName}`);
         notice = Utils.HTMLescape(notice);
-        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
       return {avatar_url, notice};
     }
@@ -246,12 +245,11 @@ class NoticeItem extends React.Component {
         notice = notice.replace('{/tagB}', '</a>');
       } else {
         // 1. handle translate
-        notice = gettext('A folder named {upload_folder_link} is uploaded to {uploaded_link}.');
+        notice = gettext('A folder named {upload_folder_link} is uploaded.');
 
         // 2. handle xss(cross-site scripting)
         notice = notice.replace('{upload_folder_link}', `${folderName}`);
         notice = Utils.HTMLescape(notice);
-        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
       return {avatar_url, notice};
     }
