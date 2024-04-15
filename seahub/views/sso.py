@@ -66,7 +66,7 @@ def sso(request):
 def work_weixin_sso(request):
 
     if not ENABLE_WORK_WEIXIN:
-        error_msg = _('Work weixin sso feature is not enabled')
+        error_msg = '企业微信单点登录功能未开启'
         return render_error(request, error_msg)
 
     request.session['is_sso_user'] = True
@@ -86,7 +86,7 @@ def work_weixin_sso(request):
 def dingtalk_sso(request):
 
     if not ENABLE_DINGTALK:
-        error_msg = _('DingTalk sso feature is not enabled')
+        error_msg = '钉钉单点登录功能未开启'
         return render_error(request, error_msg)
 
     request.session['is_sso_user'] = True
