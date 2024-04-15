@@ -135,7 +135,7 @@ class LinkCreation extends React.Component {
         let resp_data = error.response.data;
         let errMessage = resp_data && resp_data['error_msg'];
         if (errMessage === 'Folder permission denied.') {
-          this.setState({errorInfo: gettext('Share links cannot be generated because there are invisible or online r/rw folder permissions in the library.')});
+          this.setState({errorInfo: gettext('Share links cannot be generated because "Invisible", "Online Read-Write" or "Online Read-Only" is set for you on some folder(s) in the library.')});
         } else {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);

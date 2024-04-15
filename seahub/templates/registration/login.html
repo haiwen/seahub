@@ -59,7 +59,7 @@ html, body, #wrapper { height:100%; }
         {% elif form.errors.not_found %}
         <p class="error mt-2">{{ form.errors.not_found }}</p>
         {% elif form.errors.disable_pwd_login %}
-        <p class="error mt-2">{% trans "You cannot login with email and password. " %}</p>
+        <p class="error mt-2">{% trans "You cannot login with email and password." %}</p>
         {% else %}
         <p class="error mt-2">{% trans "Incorrect email or password" %}</p>
         {% endif %}
