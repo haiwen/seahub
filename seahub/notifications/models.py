@@ -558,7 +558,7 @@ class UserNotification(models.Model):
                 'name': escape(name),
                 }
         else:
-            msg = _("A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+            msg = _("A file named <strong>%(file_name)s</strong> is uploaded") % {
                 'file_name': escape(filename),
                 }
 
@@ -600,7 +600,7 @@ class UserNotification(models.Model):
                 'name': escape(name),
                 }
         else:
-            msg = _("A folder named <strong>%(folder_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+            msg = _("A folder named <strong>%(folder_name)s</strong> is uploaded") % {
                 'folder_name': escape(foldername),
                 }
 
