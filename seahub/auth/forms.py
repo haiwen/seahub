@@ -96,7 +96,7 @@ class AuthenticationForm(forms.Form):
                     )
                     if adfs_user.exists():
                         self.errors['disable_pwd_login'] = _('You cannot login with email and password.')
-                        raise forms.ValidationError(_('You cannot login with email and password. '))
+                        raise forms.ValidationError(_('You cannot login with email and password.'))
 
         # TODO: determine whether this should move to its own method.
         if self.request:
