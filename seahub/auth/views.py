@@ -140,7 +140,9 @@ def login(request, template_name='registration/login.html',
                             (login, ip, failed_attempt))
                 email = Profile.objects.get_username_by_login_id(login)
                 if email is None:
-                    email = login
+                    email = Profile.objects.get_username_by_contact_email(login)
+                    if email is None:
+                        email = login
                 try:
                     user = User.objects.get(email)
                     if user.is_active:
