@@ -361,7 +361,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
     if is_active is not None:
         user.is_active = is_active
         if is_active == False:
-            # del tokens and repo tokens
+            # del tokens and personal repo api tokens (not group)
             from seahub.utils import clear_token
             from seahub.repo_api_tokens.models import RepoAPITokens
             try:
@@ -369,9 +369,33 @@ def update_user_info(request, user, password, is_active, is_staff, role,
             except Exception as e:
                 logger.error("Failed to delete tokens for user %s: %s." % (email, e))
             try:
-                RepoAPITokens.objects.filter(generated_by=email).delete()
+                from seahub.settings import MULTI_TENANCY
+            except ImportError:
+                MULTI_TENANCY = False
+            try:
+                if MULTI_TENANCY:
+                    orgs = ccnet_api.get_orgs_by_user(email)
+                    if orgs:
+                        org = orgs[0]
+                        org_id = org.org_id
+                    else:
+                        org_id = None
+                repo_api_token_ids = []
+                repo_api_token_queryset = RepoAPITokens.objects.filter(
+                    generated_by=email)
+                for repo_api_token in repo_api_token_queryset:
+                    repo_id = repo_api_token.repo_id
+                    if org_id:
+                        shared_group_ids = seafile_api.org_get_shared_group_ids_by_repo(
+                            org_id, repo_id)
+                    else:
+                        shared_group_ids = seafile_api.get_shared_group_ids_by_repo(
+                            repo_id)
+                    if not shared_group_ids:
+                        repo_api_token_ids.append(repo_api_token.id)
+                repo_api_token_queryset.filter(id__in=repo_api_token_ids).delete()
             except Exception as e:
-                logger.error("Failed to delete api tokens for user %s: %s." % (email, e))
+                logger.error("Failed to delete repo api tokens for user %s: %s." % (email, e))
 
     if password:
         user.set_password(password)
