@@ -453,5 +453,7 @@
   "Move_row_count": "Moving {{count}} row(s)",
   "Mark_all_as_read": "Alle als gelesen markieren",
   "Alignment_type": "Alignment",
-  "Print": "Drucken"
+  "Print": "Drucken",
+  "Enter_more_character_start_search": "Enter more characters to start search",
+  "Create_file_name_sdoc": "Create {{file_name_sdoc}}"
 }

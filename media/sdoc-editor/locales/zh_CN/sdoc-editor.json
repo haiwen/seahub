@@ -453,5 +453,7 @@
   "Move_row_count": "移动{{count}}行",
   "Mark_all_as_read": "全部标记为已读",
   "Alignment_type": "对齐方式",
-  "Print": "打印"
+  "Print": "打印",
+  "Enter_more_character_start_search": "输入更多字符开始搜索",
+  "Create_file_name_sdoc": "新建 {{file_name_sdoc}}"
 }
