@@ -26,7 +26,7 @@ from seahub.share.models import FileShare
 from seahub.share.decorators import check_share_link_count
 from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context, get_password_strength_level, \
-        is_valid_password, gen_shared_link
+    is_valid_password, gen_shared_link, is_pro_version
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
@@ -43,6 +43,9 @@ FORBID_SHARE_LINK_CREATE_PERMISSIONS = [
 ]
 
 def _user_pass_folder_permissions(request, repo_id):
+    if not is_pro_version():
+        return True
+    
     username = request.user.username
 
     # 1. check repo user admin
