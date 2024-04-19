@@ -17,7 +17,6 @@ const propTypes = {
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func,
-  onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
   hasNextPage: PropTypes.bool,
   onMonitorRepo: PropTypes.func,
@@ -98,7 +97,6 @@ class SharedRepoListView extends React.Component {
               onUnfreezedItem={this.onUnfreezedItem}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
-              onItemDetails={this.props.onItemDetails}
               onItemRename={this.props.onItemRename}
               onMonitorRepo={this.props.onMonitorRepo}
             />
@@ -109,12 +107,11 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
-
+    const { theadHidden = false } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     return (
-      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
+      <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
             <th width="4%"></th>

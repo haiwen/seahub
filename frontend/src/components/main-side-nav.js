@@ -18,6 +18,7 @@ class MainSideNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      FilesNavUnfolded: false,
       groupsExtended: false,
       sharedExtended: false,
       closeSideBar:false,
@@ -172,64 +173,71 @@ class MainSideNav extends React.Component {
     );
   }
 
+  toggleFilesNav = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      FilesNavUnfolded: !this.state.FilesNavUnfolded
+    });
+  };
+
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
+    const { FilesNavUnfolded } = this.state;
     return (
       <div className="side-nav">
         <div className="side-nav-con">
-          <h3 className="sf-heading">{gettext('Files')}</h3>
           <ul className="nav nav-pills flex-column nav-container">
-            {canAddRepo && (
-              <li className="nav-item">
-                <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
-                  <span className="sf2-icon-user" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('My Libraries')}</span>
-                </Link>
-              </li>
-            )}
-            <li className="nav-item">
-              <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={(e) => this.tabItemClick(e, 'shared-libs')}>
-                <span className="sf2-icon-share" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Shared with me')}</span>
+            <li className="nav-item flex-column" id="files">
+              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Files')}</span>
+                <span className={`toggle-icon fas ${FilesNavUnfolded ? 'fa-caret-down':'fa-caret-left'} ${this.getActiveClass('libraries') ? 'text-white' : ''}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
               </Link>
+              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${FilesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`}>
+                {canAddRepo && (
+                  <li className="nav-item">
+                    <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
+                      <span className="nav-text">{gettext('My Libraries')}</span>
+                    </Link>
+                  </li>
+                )}
+                <li className="nav-item">
+                  <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={(e) => this.tabItemClick(e, 'shared-libs')}>
+                    <span className="nav-text">{gettext('Shared with me')}</span>
+                  </Link>
+                </li>
+                {canViewOrg &&
+                <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'org')}>
+                  <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
+                    <span className="nav-text">{gettext('Shared with all')}</span>
+                  </Link>
+                </li>
+                }
+                <li className="nav-item flex-column" id="group-nav">
+                  <a className="nav-link ellipsis d-flex pr-1" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
+                    <span className="nav-text">{gettext('Shared with groups')}</span>
+                    <span className={`toggle-icon fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
+                  </a>
+                  {this.renderSharedGroups()}
+                </li>
+                {enableOCM &&
+                <li className="nav-item">
+                  <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
+                    <span className="nav-text">{gettext('Shared from other servers')}</span>
+                  </Link>
+                </li>
+                }
+                {enableOCMViaWebdav &&
+                <li className="nav-item">
+                  <Link to={siteRoot + 'ocm-via-webdav/'} className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}>
+                    <span className="nav-text">{gettext('Shared from other servers')}</span>
+                  </Link>
+                </li>
+                }
+              </ul>
             </li>
-            { canViewOrg &&
-              <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'org')}>
-                <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
-                  <span className="sf2-icon-organization" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Shared with all')}</span>
-                </Link>
-              </li>
-            }
-            <li className="nav-item flex-column" id="group-nav">
-              <a className="nav-link ellipsis" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
-                <span className="sf2-icon-group" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Shared with groups')}</span>
-                <span className={`toggle-icon fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
-              </a>
-              {this.renderSharedGroups()}
-            </li>
-            {enableOCM &&
-              <li className="nav-item">
-                <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
-                  <span className="sf3-font-share-from-other-servers sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Shared from other servers')}</span>
-                </Link>
-              </li>
-            }
-            {enableOCMViaWebdav &&
-              <li className="nav-item">
-                <Link to={siteRoot + 'ocm-via-webdav/'} className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}>
-                  <span className="sf3-font-share-from-other-servers sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Shared from other servers')}</span>
-                </Link>
-              </li>
-            }
-          </ul>
 
-
-          <h3 className="sf-heading">{gettext('Tools')}</h3>
-          <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
                 <span className="sf2-icon-star" aria-hidden="true"></span>
