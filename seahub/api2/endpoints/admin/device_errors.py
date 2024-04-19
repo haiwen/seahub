@@ -50,16 +50,8 @@ class AdminDeviceErrors(APIView):
         return_results = []
         try:
             seafile_db = SeafileDB()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            # device_errors = seafile_api.list_repo_sync_errors(start, limit)
             device_errors = seafile_db.get_devices_error(start, limit)
-
-        except SearpcError as e:
+        except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
