@@ -203,3 +203,59 @@ class SeafileDB:
                 share_info_list.append(info)
 
         return share_info_list
+
+    def get_devices_error(self, start, limit):
+
+        if start == -1 and limit == -1:
+            sql = f"""
+            SELECT
+                u.repo_id, o.owner_id, u.email, e.token, 
+                p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
+            FROM
+                `{self.db_name}`.`RepoSyncError` e 
+            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token 
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id 
+            LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
+            CROSS JOIN `{self.db_name}`.`RepoOwner` o
+            WHERE
+                u.repo_id = o.repo_id
+            ORDER BY
+                e.error_time DESC
+            """
+        else:
+            sql =f"""
+            SELECT
+                u.repo_id, o.owner_id, u.email, e.token, 
+                p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
+            FROM
+                `{self.db_name}`.`RepoSyncError` e 
+            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token 
+            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id 
+            LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
+            CROSS JOIN `{self.db_name}`.`RepoOwner` o
+            WHERE
+                u.repo_id = o.repo_id
+            ORDER BY
+                e.error_time DESC
+            LIMIT {limit} OFFSET {start}
+            """
+
+        device_errors = []
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            for item in cursor.fetchall():
+                info = {}
+                info['repo_id'] = item[0]
+                info['email'] = item[2]
+                info['peer_id'] = item[4]
+                info['peer_ip'] = item[5]
+                info['device_name'] = item[6]
+                info['client_version'] = item[8]
+                info['error_time'] = item[9]
+                info['error_con'] = item[10]
+                info['repo_name'] = item[11]
+
+                device_errors.append(info)
+
+        return device_errors
+
