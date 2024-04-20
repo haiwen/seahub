@@ -149,6 +149,7 @@ class Item extends Component {
       isTransferDialogOpen: false,
       isHistorySettingDialogOpen: false,
       isRepoDeleted: false,
+      isStaff: true,
     };
   }
 
@@ -361,6 +362,7 @@ class Item extends Component {
               submit={this.onTransferRepo}
               canTransferToDept={true}
               toggleDialog={this.toggleTransferDialog}
+              sysAdmin={this.state.isStaff}
             />
           </ModalPortal>
         }

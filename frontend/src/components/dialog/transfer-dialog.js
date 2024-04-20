@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
+import {gettext, isPro, orgID} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
@@ -25,7 +25,10 @@ const propTypes = {
   itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
-  canTransferToDept: PropTypes.bool
+  canTransferToDept: PropTypes.bool,
+  orgAdmin: PropTypes.bool,
+  sysAdmin: PropTypes.bool,
+
 };
 
 class TransferDialog extends React.Component {
@@ -52,7 +55,35 @@ class TransferDialog extends React.Component {
   };
 
   componentDidMount() {
-    if (isPro) {
+    if (isPro && this.props.orgAdmin) {
+      seafileAPI.listOrgDepartments(orgID).then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          let obj = {};
+          obj.value = res.data[i].name;
+          obj.email = res.data[i].email;
+          obj.label = res.data[i].name;
+          this.options.push(obj);
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+    else if (isPro && this.props.sysAdmin) {
+      seafileAPI.listAdminDepartments().then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          let obj = {};
+          obj.value = res.data[i].name;
+          obj.email = res.data[i].email;
+          obj.label = res.data[i].name;
+          this.options.push(obj);
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+    else{
       seafileAPI.listDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
@@ -71,6 +102,7 @@ class TransferDialog extends React.Component {
   onClick = () => {
     this.setState({
       transferToUser: !this.state.transferToUser,
+
     });
   };
 
@@ -86,7 +118,6 @@ class TransferDialog extends React.Component {
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
     }
-
     return (
       <Fragment>
         <div className="transfer-dialog-side">

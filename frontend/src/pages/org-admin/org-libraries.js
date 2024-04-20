@@ -20,7 +20,7 @@ class OrgLibraries extends Component {
       pageNext: false,
       orgRepos: [],
       sortBy: '',
-      isItemFreezed: false
+      isItemFreezed: false,
     };
   }
 
@@ -200,7 +200,8 @@ class RepoItem extends React.Component {
       highlight: false,
       showMenu: false,
       isItemMenuShow: false,
-      isTransferDialogShow: false
+      isTransferDialogShow: false,
+      orgAdmin: true
     };
   }
 
@@ -326,6 +327,7 @@ class RepoItem extends React.Component {
               itemName={repo.repoName}
               submit={this.onTransferRepo}
               toggleDialog={this.toggleTransfer}
+              orgAdmin={this.state.orgAdmin}
             />
           </ModalPortal>
         )}

@@ -26,7 +26,7 @@ from seahub.api2.endpoints.search_file import SearchFile
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken 
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
-from seahub.api2.endpoints.departments import Departments
+from seahub.api2.endpoints.departments import Departments, OrgDepartments, AdminDepartments
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 
@@ -324,6 +324,7 @@ urlpatterns = [
 
     # departments
     re_path(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
+    re_path(r'api/v2.1/admin/departments/$', AdminDepartments.as_view(), name='api-v2.1-admin-departments'),
 
     ## user::groups
     re_path(r'^api/v2.1/all-groups/$', AllGroups.as_view(), name='api-v2.1-all-groups'),
@@ -678,6 +679,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/groups/$', AdminOrgGroups.as_view(),name='api-v2.1-admin-org-groups'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/repos/$', AdminOrgRepos.as_view(),name='api-v2.1-admin-org-repos'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
+    re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/departments/$', OrgDepartments.as_view(), name='api-v2.1-org-departments'),
 
     ## admin::institutions
     re_path(r'^api/v2.1/admin/institutions/$', AdminInstitutions.as_view(), name='api-v2.1-admin-institutions'),
