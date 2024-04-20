@@ -32,10 +32,10 @@ html, body, #wrapper { height:100%; }
 
 {% block main_content %}
 <div class="login-panel-outer-container vh">
-<div class="login-panel">
+<div class="login-panel" id="log-in-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
     <form action="" method="post" id="login-form">{% csrf_token %}
-        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input name-input" /><br />
+        <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input" /><br />
 
         <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
         {% if error_msg %}
@@ -90,12 +90,6 @@ $('#login-form').on('submit', function(){
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
     }
-});
-// set tabindex
-$(function() {
-    $('input:not([type="hidden"])').each(function(index) {
-        $(this).attr('tabindex', index + 1);
-    });
 });
 
 </script>

@@ -727,7 +727,7 @@ class DirentListItem extends React.Component {
         onContextMenu={this.onItemContextMenu}
       >
         <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
+          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected} aria-label={dirent.isSelected ?gettext('Unselect this item') : gettext('Select this item')} />
         </td>
         <td className="pl10">
           {dirent.starred !== undefined &&
