@@ -95,14 +95,14 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
             logger.error(e)
             url = get_default_avatar_non_registered_url()
 
-    return format_html("""<img src="%s" width="%s" height="%s" class="avatar" />""" % (url, size, size))
+    return format_html("""<img src="%s" width="%s" height="%s" class="avatar" alt="Avatar" />""" % (url, size, size))
 
 @cache_result
 @register.simple_tag
 def primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
     """
     This tag tries to get the default avatar for a user without doing any db
-    requests. It achieve this by linking to a special view that will do all the 
+    requests. It achieve this by linking to a special view that will do all the
     work for us. If that special view is then cached by a CDN for instance,
     we will avoid many db calls.
     """

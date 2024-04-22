@@ -664,7 +664,7 @@ class FileUploader extends React.Component {
       <Fragment>
         <div className="file-uploader-container">
           <div className="file-uploader">
-            <input className="upload-input" type="file" ref={this.uploadInput} onClick={this.onClick}/>
+            <input className="upload-input" type="file" ref={this.uploadInput} onClick={this.onClick} aria-label={gettext('Upload')} />
           </div>
         </div>
         {this.state.isUploadProgressDialogShow &&

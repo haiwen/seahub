@@ -72,12 +72,6 @@ $('[type="submit"]').on('click', function(){
         return false;
     }
 });
-// set tabindex
-$(function() {
-    $('input:not([type="hidden"]), button').each(function(index) {
-        $(this).attr('tabindex', index + 1);
-    });
-});
 
 {% if enable_sso %}
 $(function() {
