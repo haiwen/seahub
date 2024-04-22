@@ -340,7 +340,8 @@ class DirentListView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     ];
-    if (enableSeadoc) {
+    const { currentRepoInfo } = this.props;
+    if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
     }
 

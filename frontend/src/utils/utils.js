@@ -612,7 +612,7 @@ export const Utils = {
 
     }
 
-    if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {
+    if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc && !currentRepoInfo.encrypted) {
       if (dirent.name.endsWith('.md') || dirent.name.endsWith('.docx')) {
         list.push(CONVERT_TO_SDOC);
       }
