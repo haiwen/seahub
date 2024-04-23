@@ -10,6 +10,7 @@ import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
+import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -44,6 +45,7 @@ class Wiki extends Component {
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
     this.pythonWrapper = null;
+    this.isEditWiki = window.location.pathname.split('/').includes('wiki-edit');
   }
 
   UNSAFE_componentWillMount() {
@@ -475,6 +477,9 @@ class Wiki extends Component {
   render() {
     return (
       <div id="main" className="wiki-main">
+        {this.isEditWiki &&
+          <WikiLeftBar/>
+        }
         <SidePanel
           isTreeDataLoading={this.state.isTreeDataLoading}
           closeSideBar={this.state.closeSideBar}
@@ -487,6 +492,7 @@ class Wiki extends Component {
           onNodeCollapse={this.onNodeCollapse}
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
+          isEditWiki={this.isEditWiki}
         />
         <MainPanel
           path={this.state.path}
@@ -503,6 +509,7 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
+          isEditWiki={this.isEditWiki}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>

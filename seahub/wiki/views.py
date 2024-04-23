@@ -238,6 +238,7 @@ def slug(request, slug, file_path="home.md"):
 
     last_modified = datetime.fromtimestamp(last_modified)
 
+    # check edit wiki page user permission
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -136,10 +136,14 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
-    let deleteIcon = `action-icon sf2-icon-x3 ${this.state.highlight ? '' : 'invisible'}`;
 
     const desktopItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+      <tr
+        className={this.state.highlight ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td className="name">
           <a href={wiki.link}>{wiki.name}</a>
@@ -151,13 +155,27 @@ class WikiListItem extends Component {
         <td><a href={userProfileURL} target='_blank' rel="noreferrer">{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
         <td className="text-center cursor-pointer">
-          <a href="#" role="button" aria-label={gettext('Unpublish')} title={gettext('Unpublish')} className={deleteIcon} onClick={this.onDeleteToggle}></a>
+          <span
+            className={`iconfont icon-edit mr-4 action-icon ${this.state.highlight ? '' : 'invisible'}`}
+            onClick={() => window.open(wiki.link.replace('/published/', '/wiki-edit/'))}
+            title={gettext('Edit')}
+            aria-label={gettext('Edit')}
+            style={{color: '#999'}}
+          ></span>
+          <a
+            href="#"
+            role="button"
+            aria-label={gettext('Unpublish')}
+            title={gettext('Unpublish')}
+            className={`action-icon sf2-icon-x3 ${this.state.highlight ? '' : 'invisible'}`}
+            onClick={this.onDeleteToggle}
+          ></a>
         </td>
       </tr>
     );
 
     const mobileItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr>
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td>
           <a href={wiki.link}>{wiki.name}</a><br />
@@ -186,7 +204,7 @@ class WikiListItem extends Component {
     );
 
     return (
-      <Fragment>
+      <>
         {Utils.isDesktop() ? desktopItem : mobileItem}
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
@@ -196,7 +214,7 @@ class WikiListItem extends Component {
             />
           </ModalPortal>
         }
-      </Fragment>
+      </>
     );
   }
 }
