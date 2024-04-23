@@ -355,9 +355,18 @@ def update_user_info(request, user, password, is_active, is_staff, role,
                      quota_total_mb, institution_name,
                      upload_rate_limit, download_rate_limit):
 
+    email = user.username
+
     # update basic user info
     if is_active is not None:
         user.is_active = is_active
+        if is_active == False:
+            # del tokens and personal repo api tokens (not department)
+            from seahub.utils import inactive_user
+            try:
+                inactive_user(email)
+            except Exception as e:
+                logger.error("Failed to inactive_user %s: %s." % (email, e))
 
     if password:
         user.set_password(password)
@@ -367,8 +376,6 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     # update user
     user.save()
-
-    email = user.username
 
     # update additional user info
     if is_pro_version() and role:

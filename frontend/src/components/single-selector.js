@@ -8,6 +8,7 @@ const propTypes = {
   currentSelectedOption: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,
+  operationBeforeSelect: PropTypes.func,
   toggleItemFreezed: PropTypes.func
 };
 
@@ -52,7 +53,11 @@ class Selector extends Component {
 
   selectItem = (e, targetItem) => {
     e.stopPropagation();
-    this.props.selectOption(targetItem);
+    if (this.props.operationBeforeSelect) {
+      this.props.operationBeforeSelect();
+    } else {
+      this.props.selectOption(targetItem);
+    }
     this.togglePopover();
   };
 
