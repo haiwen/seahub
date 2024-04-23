@@ -442,6 +442,13 @@ class OrgAdminUser(APIView):
 
             user.is_active = is_active == 'true'
             user.save()
+            if not is_active == 'true':
+                # del tokens and personal repo api tokens (not department)
+                from seahub.utils import inactive_user
+                try:
+                    inactive_user(email)
+                except Exception as e:
+                    logger.error("Failed to inactive_user %s: %s." % (email, e))
 
         # update quota_total
         quota_total_mb = request.data.get("quota_total", None)

@@ -18,7 +18,7 @@ from urllib.parse import urlparse, urljoin
 
 from constance import config
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from django.urls import reverse
 from django.core.mail import EmailMessage
@@ -1279,6 +1279,38 @@ def clear_token(username):
     Token.objects.filter(user = username).delete()
     TokenV2.objects.filter(user = username).delete()
     seafile_api.delete_repo_tokens_by_email(username)
+
+
+def inactive_user(username):
+    # del tokens and personal repo api tokens (not department)
+    from seahub.repo_api_tokens.models import RepoAPITokens
+    try:
+        clear_token(username)
+    except Exception as e:
+        logger.error("Failed to delete tokens for user %s: %s." % (username, e))
+    try:
+        from seahub.settings import MULTI_TENANCY
+    except ImportError:
+        MULTI_TENANCY = False
+    try:
+        org_id = -1
+        if MULTI_TENANCY:
+            orgs = ccnet_api.get_orgs_by_user(username)
+            if orgs:
+                org = orgs[0]
+                org_id = org.org_id
+        if org_id > 0:
+            owned_repos = seafile_api.get_org_owned_repo_list(
+                org_id, username, ret_corrupted=True)
+        else:
+            owned_repos = seafile_api.get_owned_repo_list(
+                username, ret_corrupted=True)
+        owned_repo_ids = [item.repo_id for item in owned_repos]
+        RepoAPITokens.objects.filter(
+            repo_id__in=owned_repo_ids).delete()
+    except Exception as e:
+        logger.error("Failed to delete repo api tokens for user %s: %s." % (username, e))
+
 
 def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     """Send repo permission audit msg.

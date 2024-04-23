@@ -362,34 +362,11 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         user.is_active = is_active
         if is_active == False:
             # del tokens and personal repo api tokens (not department)
-            from seahub.utils import clear_token
-            from seahub.repo_api_tokens.models import RepoAPITokens
+            from seahub.utils import inactive_user
             try:
-                clear_token(email)
+                inactive_user(email)
             except Exception as e:
-                logger.error("Failed to delete tokens for user %s: %s." % (email, e))
-            try:
-                from seahub.settings import MULTI_TENANCY
-            except ImportError:
-                MULTI_TENANCY = False
-            try:
-                org_id = -1
-                if MULTI_TENANCY:
-                    orgs = ccnet_api.get_orgs_by_user(email)
-                    if orgs:
-                        org = orgs[0]
-                        org_id = org.org_id
-                if org_id > 0:
-                    owned_repos = seafile_api.get_org_owned_repo_list(
-                        org_id, email, ret_corrupted=True)
-                else:
-                    owned_repos = seafile_api.get_owned_repo_list(
-                        email, ret_corrupted=True)
-                owned_repo_ids = [item.repo_id for item in owned_repos]
-                RepoAPITokens.objects.filter(
-                    repo_id__in=owned_repo_ids).delete()
-            except Exception as e:
-                logger.error("Failed to delete repo api tokens for user %s: %s." % (email, e))
+                logger.error("Failed to inactive_user %s: %s." % (email, e))
 
     if password:
         user.set_password(password)
