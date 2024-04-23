@@ -147,16 +147,62 @@ class SdocFileHistory extends React.Component {
     });
   };
 
+  getTopLevelChanges = (changes) => {
+    const topLevelChanges = [];
+    changes.forEach((item) => {
+      let dom = document.querySelectorAll(`[data-id="${item}"]`)[0];
+      if (!dom) return [];
+      while (dom?.dataset?.root !== 'true') {
+        if (!dom?.parentNode || dom instanceof Document) break;
+        const parentNode = dom.parentNode;
+        if (parentNode instanceof Document) {
+          break;
+        } else {
+          dom = parentNode;
+        }
+      }
+      topLevelChanges.push(dom.dataset.id);
+    });
+    return Array.from(new Set(topLevelChanges));
+  };
+
+  // Merge consecutive added areas or deleted areas
+  getMergedChanges = (topLevelChanges, diffValue) => {
+    const topLevelChangesValue = [];
+    const changes = [];
+
+    diffValue.forEach((item) => {
+      if (topLevelChanges.includes(item.id)) {
+        const obj = {
+          id: item.id,
+          value: item
+        };
+        topLevelChangesValue.push(obj);
+      }
+    });
+
+    topLevelChangesValue.forEach((item) => {
+      const preChange = changes[changes.length - 1]?.value;
+      const curChange = item.value;
+      if (curChange?.add && preChange?.add) return;
+      if (curChange?.delete && preChange?.delete) return;
+      changes.push(item);
+    });
+    return changes.map(item => item.id);
+  };
+
   setDiffCount = (diff = { value: [], changes: [] }) => {
-    const { changes } = diff;
-    this.setState({ changes, currentDiffIndex: 0 });
+    const { changes, value } = diff;
+    const topLevelChanges = this.getTopLevelChanges(changes);
+    const mergedChanges = this.getMergedChanges(topLevelChanges, value);
+    this.setState({ changes: mergedChanges, currentDiffIndex: 0 });
   };
 
   jumpToElement = (currentDiffIndex) => {
     this.setState({ currentDiffIndex }, () => {
       const { currentDiffIndex, changes } = this.state;
       const change = changes[currentDiffIndex];
-      const changeElement = document.querySelectorAll(`[data-id=${change}]`)[0];
+      const changeElement = document.querySelectorAll(`[data-id="${change}"]`)[0];
       if (changeElement) {
         this.historyContentRef.scrollTop = changeElement.offsetTop - 10;
       }
