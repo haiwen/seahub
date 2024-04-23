@@ -1,15 +1,191 @@
 import React, { Fragment, Component } from 'react';
-import { navigate } from '@gatsbyjs/reach-router';
+import { navigate, Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 import MainPanelTopbar from './main-panel-topbar';
 import OrgAdminRepo from '../../models/org-admin-repo';
 import toaster from '../../components/toast';
 import TransferDialog from '../../components/dialog/transfer-dialog';
 import ModalPortal from '../../components/modal-portal';
+import EmptyTip from '../../components/empty-tip';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { mediaUrl, siteRoot, gettext, orgID } from '../../utils/constants';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import OpMenu from '../../components/dialog/op-menu';
+import UserLink from './user-link';
+import moment from 'moment';
+
+class Item extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+      isOpIconShown: false,
+      isDeleteRepoDialogOpen: false,
+      isRestoreRepoDialogOpen: false
+    };
+  }
+
+  handleMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
+  };
+
+  handleMouseOut = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
+  };
+
+  onDeleteRepo = () => {
+    const repo = this.props.repo;
+    seafileAPI.orgAdminDeleteTrashRepo(orgID, repo.id).then((res) => {
+      this.props.onDeleteRepo(repo);
+      const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.name);
+      toaster.success(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onRestoreRepo = () => {
+    const repo = this.props.repo;
+    seafileAPI.orgAdminRestoreTrashRepo(orgID, repo.id).then((res) => {
+      this.props.onRestoreRepo(repo);
+      let message = gettext('Successfully restored the library.');
+      toaster.success(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  toggleDeleteRepoDialog = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this.setState({isDeleteRepoDialogOpen: !this.state.isDeleteRepoDialogOpen});
+  };
+
+  toggleRestoreRepoDialog = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this.setState({isRestoreRepoDialogOpen: !this.state.isRestoreRepoDialogOpen});
+  };
+
+  translateOperations = (item) => {
+    let translateResult = '';
+    switch(item) {
+      case 'Restore':
+        translateResult = gettext('Restore');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      default:
+        break;
+    }
+
+    return translateResult;
+  };
+
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Restore':
+        this.toggleRestoreRepoDialog();
+        break;
+      case 'Delete':
+        this.toggleDeleteRepoDialog();
+        break;
+      default:
+        break;
+    }
+  };
+
+  render () {
+    const { repo } = this.props;
+    const { isOpIconShown, isDeleteRepoDialogOpen, isRestoreRepoDialogOpen } = this.state;
+    const iconUrl = Utils.getLibIconUrl(repo);
+    const iconTitle = Utils.getLibIconTitle(repo);
+    const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.name) + '</span>';
+    return (
+      <Fragment>
+        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+          <td>{repo.name}</td>
+          <td>
+            {repo.owner?.indexOf('@seafile_group') == -1 ?
+              <UserLink email={repo.owner} name={repo.owner_name} /> :
+              repo.group_name}
+          </td>
+          <td>{moment(repo.delete_time).fromNow()}</td>
+          <td>
+            {isOpIconShown && (
+              <OpMenu
+                operations={['Restore', 'Delete']}
+                translateOperations={this.translateOperations}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.props.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+              />
+            )}
+          </td>
+        </tr>
+        {isDeleteRepoDialogOpen &&
+          <ModalPortal>
+            <CommonOperationConfirmationDialog
+              title={gettext('Delete Library')}
+              message={gettext('Are you sure you want to delete {placeholder} completely?').replace('{placeholder}', repoName)}
+              executeOperation={this.onDeleteRepo}
+              confirmBtnText={gettext('Delete')}
+              toggleDialog={this.toggleDeleteRepoDialog}
+            />
+          </ModalPortal>
+        }
+        {isRestoreRepoDialogOpen &&
+          <ModalPortal>
+            <CommonOperationConfirmationDialog
+              title={gettext('Restore Library')}
+              message={gettext('Are you sure you want to restore {placeholder}?').replace('{placeholder}', repoName)}
+              executeOperation={this.onRestoreRepo}
+              confirmBtnText={gettext('Restore')}
+              toggleDialog={this.toggleRestoreRepoDialog}
+            />
+          </ModalPortal>
+        }
+      </Fragment>
+    );
+  }
+}
+
+Item.propTypes = {
+  repo: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onRestoreRepo: PropTypes.func,
+};
+
 
 class OrgLibraries extends Component {
 
@@ -20,8 +196,15 @@ class OrgLibraries extends Component {
       pageNext: false,
       orgRepos: [],
       sortBy: '',
-      isItemFreezed: false
+      isItemFreezed: false,
+      currentItem: 'all',
+      isCreateRepoDialogOpen: false,
+      isCleanTrashDialogOpen: false
     };
+    this.navItems = [
+      {name: 'all', urlPart: 'all-libraries', text: gettext('All')},
+      {name: 'trash', urlPart: 'trash-libraries', text: gettext('Trash')}
+    ];
   }
 
   componentDidMount() {
@@ -127,19 +310,96 @@ class OrgLibraries extends Component {
     this.sortItems('size');
   };
 
+  handleClick = (currentItem,itmeID, event) => {
+    event.preventDefault();
+    this.setState({
+      currentItem: currentItem
+    });
+    if(currentItem == 'all'){
+      this.listRepos(this.state.page);
+    }
+    if(currentItem == 'trash'){
+      seafileAPI.orgAdminListTrashRepos(orgID).then(res => {
+        this.setState({
+          orgRepos: res.data.repos,
+          pageNext: res.data.page_next,
+          page: res.data.page,
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  };
+
+  toggleCreateRepoDialog = () => {
+    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+  };
+
+  toggleCleanTrashDialog = () => {
+    this.setState({isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen});
+  };
+
+  onDeleteRepo = (targetRepo) => {
+    let repos = this.state.orgRepos.filter(repo => {
+      return repo.id != targetRepo.id;
+    });
+    this.setState({
+      orgRepos: repos
+    });
+  };
+
+  onRestoreRepo = (targetRepo) => {
+    let repos = this.state.orgRepos.filter(repo => {
+      return repo.id != targetRepo.id;
+    });
+    this.setState({
+      orgRepos: repos
+    });
+  };
+
+  cleanTrash = () => {
+    seafileAPI.orgAdminCleanTrashRepo(orgID).then(res => {
+      this.setState({orgRepos: []});
+      toaster.success(gettext('Successfully cleared trash.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     const { orgRepos, sortBy } = this.state;
     const initialSortIcon = <span className="fas fa-sort"></span>;
     const sortIcon = <span className="fas fa-caret-down"></span>;
+    let topbarChildren;
+    topbarChildren = (
+      <Fragment>
+        {this.state.currentItem=='trash' && <Button className="btn btn-secondary operation-item" onClick={this.toggleCleanTrashDialog}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Clean')} </Button>
+        }
+      </Fragment>
+    );
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar children={topbarChildren} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('All Libraries')}</h3>
+            <div className="cur-view-path tab-nav-container">
+              <ul className="nav">
+                {this.navItems.map((item, index) => {
+                  return (
+                    <li className="nav-item" key={index}>
+                      <Link
+                        to=''
+                        className={`nav-link${this.state.currentItem === item.name ? ' active' : ''}`}
+                        onClick={(event) => this.handleClick(item.name,item.id, event)} >{item.text}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-            <div className="cur-view-content">
+            {this.state.currentItem=='all' && <div className="cur-view-content">
               <table>
                 <thead>
                   <tr>
@@ -175,7 +435,46 @@ class OrgLibraries extends Component {
                 {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
                 {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
               </div>
-            </div>
+            </div>}
+            {this.state.currentItem=='trash' && this.state.orgRepos.length!=0 && <div>
+              <table className="table-hover">
+                <thead>
+                  <tr>
+                    <th width="5%">{/*icon*/}</th>
+                    <th width="43%">{gettext('Name')}</th>
+                    <th width="27%">{gettext('Owner')}</th>
+                    <th width="20%">{gettext('Deleted Time')}</th>
+                    <th width="5%">{/*Operations*/}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orgRepos?.map((item, index) => {
+                    return (<Item
+                      key={index}
+                      repo={item}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                      onDeleteRepo={this.onDeleteRepo}
+                      onRestoreRepo={this.onRestoreRepo}
+                    />);
+                  })}
+                </tbody>
+              </table>
+            </div> }
+            {this.state.currentItem=='trash' && this.state.orgRepos.length==0 && <EmptyTip>
+              <h2>{gettext('No deleted libraries')}</h2>
+            </EmptyTip>}
+            {this.state.isCleanTrashDialogOpen && (
+              <CommonOperationConfirmationDialog
+                title={gettext('Clear Trash')}
+                message={gettext('Are you sure you want to clear trash?')}
+                executeOperation={this.cleanTrash}
+                confirmBtnText={gettext('Clear')}
+                toggleDialog={this.toggleCleanTrashDialog}
+              />
+            )
+            }
           </div>
         </div>
       </Fragment>
@@ -200,7 +499,7 @@ class RepoItem extends React.Component {
       highlight: false,
       showMenu: false,
       isItemMenuShow: false,
-      isTransferDialogShow: false
+      isTransferDialogShow: false,
     };
   }
 
@@ -288,9 +587,9 @@ class RepoItem extends React.Component {
     this.toggleTransfer();
   };
 
+
   render() {
     let { repo } = this.props;
-
     let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
     return (
       <Fragment>
