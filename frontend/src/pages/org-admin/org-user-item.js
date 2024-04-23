@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Selector from '../../components/single-selector';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 const propTypes = {
   user: PropTypes.object,
@@ -84,6 +85,11 @@ class UserItem extends React.Component {
     this.props.changeStatus(this.props.user.email, isActive);
   };
 
+  setUserInactive = () => {
+    const isActive = false;
+    this.props.changeStatus(this.props.user.email, isActive);
+  };
+
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
@@ -126,8 +132,12 @@ class UserItem extends React.Component {
     }
   };
 
+  toggleConfirmInactiveDialog= () => {
+    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  };
+
   render() {
-    const { highlight } = this.state;
+    const { highlight, isConfirmInactiveDialogOpen } = this.state;
     let { user, currentTab } = this.props;
     let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
     let isOperationMenuShow = (user.email !== username)  && this.state.showMenu;
@@ -143,49 +153,62 @@ class UserItem extends React.Component {
     });
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
 
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(user.name) + '</span>';
+    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
+
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>
-          <a href={href}>{user.name}</a>
-        </td>
-        <td>
-          <Selector
-            isDropdownToggleShown={highlight}
-            currentSelectedOption={currentSelectedStatusOption}
-            options={this.statusOptions}
-            selectOption={this.changeStatus}
-            toggleItemFreezed={this.props.toggleItemFreezed}
-            isSetUserStatus={true}
-            nickname={user.name}
-          />
-        </td>
-        <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
-        <td>
-          {user.ctime} /
-          <br />
-          {user.last_login ? user.last_login : '--'}
-        </td>
-        <td className="text-center cursor-pointer">
-          {isOperationMenuShow && (
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="a"
-                className="attr-action-icon fas fa-ellipsis-v"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              />
-              <DropdownMenu>
-                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.toggleResetPW}>{gettext('ResetPwd')}</DropdownItem>
-                {currentTab == 'admins' && <DropdownItem onClick={this.toggleRevokeAdmin}>{gettext('Revoke Admin')}</DropdownItem>}
-              </DropdownMenu>
-            </Dropdown>
-          )}
-        </td>
-      </tr>
+      <>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>
+            <a href={href}>{user.name}</a>
+          </td>
+          <td>
+            <Selector
+              isDropdownToggleShown={highlight}
+              currentSelectedOption={currentSelectedStatusOption}
+              options={this.statusOptions}
+              selectOption={this.changeStatus}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+              operationBeforeSelect={user.is_active ? this.toggleConfirmInactiveDialog : undefined}
+            />
+          </td>
+          <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
+          <td>
+            {user.ctime} /
+            <br />
+            {user.last_login ? user.last_login : '--'}
+          </td>
+          <td className="text-center cursor-pointer">
+            {isOperationMenuShow && (
+              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+                <DropdownToggle
+                  tag="a"
+                  className="attr-action-icon fas fa-ellipsis-v"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isItemMenuShow}
+                  onClick={this.onDropdownToggleClick}
+                />
+                <DropdownMenu>
+                  <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+                  <DropdownItem onClick={this.toggleResetPW}>{gettext('ResetPwd')}</DropdownItem>
+                  {currentTab == 'admins' && <DropdownItem onClick={this.toggleRevokeAdmin}>{gettext('Revoke Admin')}</DropdownItem>}
+                </DropdownMenu>
+              </Dropdown>
+            )}
+          </td>
+        </tr>
+        {isConfirmInactiveDialogOpen &&
+        <CommonOperationConfirmationDialog
+          title={gettext('Set user inactive')}
+          message={confirmSetUserInactiveMsg}
+          executeOperation={this.setUserInactive}
+          confirmBtnText={gettext('Set')}
+          toggleDialog={this.toggleConfirmInactiveDialog}
+        />
+        }
+      </>
     );
   }
 }
