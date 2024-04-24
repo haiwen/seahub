@@ -23,13 +23,13 @@ logger = logging.getLogger(__name__)
 
 
 class Departments(APIView):
+
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
-        """
-        List all departments where the current user is located
+        """list all departments
         """
 
         if not is_pro_version():
@@ -76,8 +76,3 @@ class Departments(APIView):
             result.append(department_info)
 
         return Response(result)
-
-
-
-
-
