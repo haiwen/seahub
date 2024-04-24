@@ -17,6 +17,7 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired,
 };
 
 class SidePanel extends Component {
@@ -59,11 +60,14 @@ class SidePanel extends Component {
   };
 
   render() {
+    const { wiki_name, wiki_icon } = this.props.config;
+    const name = wiki_name || this.libName;
+    const src = wiki_icon && wiki_icon === 'default' ? `${mediaUrl}img/wiki/default.png` : wiki_icon;
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
-          <img src={`${mediaUrl}img/wiki/default.png`} width="32" alt='' />
-          <h4 className="ml-2 mb-0">{this.libName}</h4>
+          {wiki_icon && <img src={src} width="32" alt='' className='mr-2' />}
+          <h4 className="ml-0 mb-0">{name}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           {this.props.isTreeDataLoading && <Loading /> }

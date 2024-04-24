@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Button, Label } from 'reactstrap';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
@@ -9,7 +9,7 @@ class AppSettingsDialogName extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '' // todo: wiki name
+      name: props.config.wiki_name || '',
     };
   }
 
@@ -38,7 +38,7 @@ class AppSettingsDialogName extends Component {
       toaster.danger(message);
       return;
     } else {
-      // TODO rename wiki name
+      this.props.updateConfig({ wiki_name: message });
     }
   };
 
@@ -64,6 +64,8 @@ class AppSettingsDialogName extends Component {
 }
 
 AppSettingsDialogName.propTypes = {
+  config: PropTypes.object.isRequired,
+  updateConfig: PropTypes.func.isRequired,
 };
 
 export default AppSettingsDialogName;

@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import AppSettingsDialog from './app-settings-dialog/index';
 import Icon from './wiki-left-bar-icon.jsx';
 import { gettext } from '../../../utils/constants';
@@ -9,6 +9,8 @@ import './wiki-left-bar.css';
 export default class WikiLeftBar extends React.Component {
 
   static propTypes = {
+    config: PropTypes.object.isRequired,
+    updateConfig: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -38,6 +40,8 @@ export default class WikiLeftBar extends React.Component {
         {this.state.isShowSettingsDialog &&
           <AppSettingsDialog
             toggle={this.closeAppSettingsDialog}
+            config={this.props.config}
+            updateConfig={this.props.updateConfig}
           />
         }
       </div>

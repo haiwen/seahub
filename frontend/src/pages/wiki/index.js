@@ -11,6 +11,7 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
+import WikiConfig from './utils/wiki-config';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -39,6 +40,7 @@ class Wiki extends Component {
       currentNode: null,
       indexNode: null,
       indexContent: '',
+      config: this.getConfigFromLocal(),
     };
 
     window.onpopstate = this.onpopstate;
@@ -65,6 +67,24 @@ class Wiki extends Component {
   componentWillUnmount() {
     this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
   }
+
+  getConfigFromLocal = () => {
+    const config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
+    return new WikiConfig(config);
+  };
+
+  saveConfigToLocal = () => {
+    localStorage.setItem('sf-wiki-settings', JSON.stringify(this.state.config));
+    // TODO: save settings to server
+  };
+
+  updateConfig = (data) => {
+    this.setState({
+      config: Object.assign({}, this.state.config, data)
+    }, () => {
+      this.saveConfigToLocal();
+    });
+  };
 
   loadSidePanel = (initialPath) => {
     if (hasIndex) {
@@ -478,7 +498,10 @@ class Wiki extends Component {
     return (
       <div id="main" className="wiki-main">
         {this.isEditWiki &&
-          <WikiLeftBar/>
+          <WikiLeftBar
+            config={this.state.config}
+            updateConfig={this.updateConfig}
+          />
         }
         <SidePanel
           isTreeDataLoading={this.state.isTreeDataLoading}
@@ -493,6 +516,7 @@ class Wiki extends Component {
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
           isEditWiki={this.isEditWiki}
+          config={this.state.config}
         />
         <MainPanel
           path={this.state.path}

@@ -49,10 +49,16 @@ class AppSettingsDialog extends React.Component {
         <div className="app-settings-dialog-main">
           <TabContent activeTab={activeTab}>
             <TabPane tabId="Icon">
-              <AppSettingsDialogIconColor/>
+              <AppSettingsDialogIconColor
+                config={this.props.config}
+                updateConfig={this.props.updateConfig}
+              />
             </TabPane>
             <TabPane tabId="Name">
-              <AppSettingsDialogName/>
+              <AppSettingsDialogName
+                config={this.props.config}
+                updateConfig={this.props.updateConfig}
+              />
             </TabPane>
           </TabContent>
         </div>
@@ -74,6 +80,8 @@ class AppSettingsDialog extends React.Component {
 
 AppSettingsDialog.propTypes = {
   toggle: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired,
+  updateConfig: PropTypes.func.isRequired,
 };
 
 export default AppSettingsDialog;

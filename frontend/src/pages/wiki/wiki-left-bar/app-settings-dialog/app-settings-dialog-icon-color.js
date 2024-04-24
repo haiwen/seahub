@@ -1,6 +1,6 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-import { FormGroup, Label, Tooltip } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { FormGroup, Label, Tooltip, Button } from 'reactstrap';
 import IconSettingsPopover from './icon-settings-popover';
 import { gettext, mediaUrl } from '../../../../utils/constants';
 
@@ -26,16 +26,25 @@ class AppSettingsDialogIconColor extends React.Component {
   };
 
   render() {
-    const iconName = 'default';
+    const { wiki_icon } = this.props.config;
+    const src = wiki_icon && wiki_icon === 'default' ? `${mediaUrl}img/wiki/default.png` : wiki_icon;
     return (
       <div className="app-settings-dialog-icon-color">
         <FormGroup className="app-settings-dialog-theme-color">
           <Label>{gettext('Wiki icon')}</Label>
           <div className='position-relative'>
-            <img src={`${mediaUrl}img/wiki/${iconName}.png`} width={60} height={60} alt="" />
-            <div className="theme-color-backdrop" onClick={this.onIconPopoverToggle} id='app-settings-dialog-icon-backdrop'>
-              <span className="dtable-font dtable-icon-rename" ref={this.renameRef}></span>
-            </div>
+            {wiki_icon ?
+              <>
+                <img src={src} width={60} height={60} alt="" />
+                <div className="theme-color-backdrop" onClick={this.onIconPopoverToggle} id='app-settings-dialog-icon-backdrop'>
+                  <span className="iconfont icon-edit mr-4 action-icon" ref={this.renameRef}></span>
+                </div>
+              </>
+              :
+              <div onClick={this.onIconPopoverToggle} id='app-settings-dialog-icon-backdrop'>
+                <Button onClick={this.onIconPopoverToggle} size="sm" color="primary">{gettext('Select icon')}</Button>
+              </div>
+            }
             <Tooltip
               placement="bottom"
               isOpen={this.state.isTooltipOpen}
@@ -50,6 +59,8 @@ class AppSettingsDialogIconColor extends React.Component {
           <IconSettingsPopover
             onToggle={this.onIconPopoverToggle}
             targetId='app-settings-dialog-icon-backdrop'
+            config={this.props.config}
+            updateConfig={this.props.updateConfig}
           />
         }
       </div>
@@ -58,6 +69,8 @@ class AppSettingsDialogIconColor extends React.Component {
 }
 
 AppSettingsDialogIconColor.propTypes = {
+  config: PropTypes.object.isRequired,
+  updateConfig: PropTypes.func.isRequired,
 };
 
 export default AppSettingsDialogIconColor;
