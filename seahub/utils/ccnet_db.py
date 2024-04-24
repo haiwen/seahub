@@ -56,7 +56,6 @@ class CcnetDB:
         WHERE
           org_id={org_id} AND parent_group_id<>0;
         """
-        print(sql)
         groups = []
         with connection.cursor() as cursor:
             cursor.execute(sql)

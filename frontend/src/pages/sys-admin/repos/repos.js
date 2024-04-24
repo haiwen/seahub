@@ -280,6 +280,12 @@ class Item extends Component {
   getOperations = () => {
     const { repo } = this.props;
     let operations = ['Delete', 'Transfer'];
+    const index = repo.owner_email.indexOf('@seafile_group');
+    let isGroupOwnedRepo = index != -1;
+    if (isGroupOwnedRepo) {
+      operations = ['Transfer'];
+      return operations;
+    }
     if (!repo.encrypted) {
       operations.push('Share');
     }
@@ -319,7 +325,7 @@ class Item extends Component {
             }
           </td>
           <td>
-            {(!isGroupOwnedRepo && isOpIconShown) &&
+            {(isOpIconShown) &&
             <OpMenu
               operations={this.getOperations()}
               translateOperations={this.translateOperations}

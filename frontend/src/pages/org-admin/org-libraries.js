@@ -292,7 +292,7 @@ class RepoItem extends React.Component {
   render() {
     let { repo } = this.props;
 
-    let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
+    let isOperationMenuShow = this.state.showMenu;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

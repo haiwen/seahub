@@ -225,8 +225,7 @@ class OrgAdminDepartments(APIView):
         except Exception:
             error_msg = 'Permission Denied'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        all_departments = []
+
         try:
             db_api = CcnetDB()
             departments = db_api.list_org_departments(int(org_id))
