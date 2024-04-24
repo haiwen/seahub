@@ -216,16 +216,6 @@ class OrgAdminDepartments(APIView):
     throttle_classes = (UserRateThrottle,)
     
     def get(self, request, org_id):
-        
-        try:
-            org = request.user.org
-            org_staff = org.is_staff
-            if org_staff != 1:
-                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        except Exception:
-            error_msg = 'Permission Denied'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         try:
             db_api = CcnetDB()
             departments = db_api.list_org_departments(int(org_id))
