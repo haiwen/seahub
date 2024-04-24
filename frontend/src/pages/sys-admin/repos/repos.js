@@ -279,7 +279,7 @@ class Item extends Component {
 
   getOperations = () => {
     const { repo } = this.props;
-    let operations = ['Delete', 'Transfer'];
+    let operations = ['Delete', 'Transfer']; 
     if (!repo.encrypted) {
       operations.push('Share');
     }
