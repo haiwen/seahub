@@ -365,10 +365,6 @@ class AdminDepartments(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        if CLOUD_MODE or MULTI_TENANCY:
-            error_msg = "Feature is not enabled."
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            
         try:
             all_groups = ccnet_api.list_all_departments()
         except Exception as e:

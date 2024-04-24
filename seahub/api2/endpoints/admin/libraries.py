@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import gettext as _
+import seaserv
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -422,6 +423,9 @@ class AdminLibrary(APIView):
             # transfer repo
             if '@seafile_group' in new_owner:
                 group_id = int(new_owner.split('@')[0])
+                if seaserv.is_org_group(group_id):
+                    error_msg = 'Can not transfer library to an organization department %s' % new_owner
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)

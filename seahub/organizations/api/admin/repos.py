@@ -171,6 +171,11 @@ class OrgAdminRepo(APIView):
         # transfer repo
         if '@seafile_group' in new_owner:
             group_id = int(new_owner.split('@')[0])
+            if seaserv.is_org_group(group_id):
+                group_org_id = ccnet_api.get_org_id_by_group(group_id)
+                if org_id != group_org_id:
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             seafile_api.org_transfer_repo_to_group(repo_id, org_id, group_id, PERMISSION_READ_WRITE)
         else:
             seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
