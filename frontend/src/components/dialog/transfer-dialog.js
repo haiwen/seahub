@@ -26,8 +26,8 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   canTransferToDept: PropTypes.bool,
-  orgAdmin: PropTypes.bool,
-  sysAdmin: PropTypes.bool,
+  isOrgAdmin: PropTypes.bool,
+  isSysAdmin: PropTypes.bool,
 
 };
 
@@ -55,7 +55,7 @@ class TransferDialog extends React.Component {
   };
 
   componentDidMount() {
-    if (isPro && this.props.orgAdmin) {
+    if (this.props.isOrgAdmin) {
       seafileAPI.orgAdminListDepartments(orgID).then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
@@ -69,7 +69,7 @@ class TransferDialog extends React.Component {
         toaster.danger(errMessage);
       });
     }
-    else if (isPro && this.props.sysAdmin) {
+    else if (this.props.isSysAdmin) {
       seafileAPI.sysAdminListDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
