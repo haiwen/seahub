@@ -56,7 +56,7 @@ class TransferDialog extends React.Component {
 
   componentDidMount() {
     if (isPro && this.props.orgAdmin) {
-      seafileAPI.listOrgDepartments(orgID).then((res) => {
+      seafileAPI.orgAdminListDepartments(orgID).then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
           obj.value = res.data[i].name;
@@ -70,7 +70,7 @@ class TransferDialog extends React.Component {
       });
     }
     else if (isPro && this.props.sysAdmin) {
-      seafileAPI.listAdminDepartments().then((res) => {
+      seafileAPI.sysAdminListDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
           obj.value = res.data[i].name;

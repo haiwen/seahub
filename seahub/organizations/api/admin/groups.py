@@ -13,7 +13,10 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.api2.endpoints.admin.groups import AdminGroup as SysAdminGroup
+from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
+from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from pysearpc import SearpcError
@@ -202,3 +205,57 @@ class OrgAdminSearchGroup(APIView):
             groups_list.append(group)
 
         return Response({'group_list': groups_list})
+
+
+class OrgAdminDepartments(APIView):
+    """
+    List all departments of the current organization
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+    throttle_classes = (UserRateThrottle,)
+    
+    def get(self, request, org_id):
+        
+        try:
+            org = request.user.org
+            org_staff = org.is_staff
+            if org_staff != 1:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        except Exception:
+            error_msg = 'Permission Denied'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        all_departments = []
+        try:
+            db_api = CcnetDB()
+            departments = db_api.list_org_departments(int(org_id))
+        except Exception as e:
+            raise
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        try:
+            avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = GROUP_AVATAR_DEFAULT_SIZE
+        result = []
+        for group in departments:
+            try:
+                avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
+            except:
+                avatar_url = get_default_group_avatar_url()
+            created_at = timestamp_to_isoformat_timestr(group.timestamp)
+            department_info = {
+                "id": group.id,
+                "email": '%s@seafile_group' % str(group.id),
+                "parent_group_id": group.parent_group_id,
+                "name": group.group_name,
+                "owner": group.creator_name,
+                "created_at": created_at,
+                "avatar_url": request.build_absolute_uri(avatar_url),
+            }
+            result.append(department_info)
+        
+        return Response(result)

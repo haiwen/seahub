@@ -26,7 +26,7 @@ from seahub.api2.endpoints.search_file import SearchFile
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken 
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
-from seahub.api2.endpoints.departments import Departments, OrgDepartments, AdminDepartments
+from seahub.api2.endpoints.departments import Departments
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 
@@ -150,7 +150,7 @@ from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
         AdminSystemLibraryUploadLink
 from seahub.api2.endpoints.admin.default_library import AdminDefaultLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
-from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup, AdminSearchGroup
+from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup, AdminSearchGroup, AdminDepartments
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
@@ -324,7 +324,6 @@ urlpatterns = [
 
     # departments
     re_path(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
-    re_path(r'api/v2.1/admin/departments/$', AdminDepartments.as_view(), name='api-v2.1-admin-departments'),
 
     ## user::groups
     re_path(r'^api/v2.1/all-groups/$', AllGroups.as_view(), name='api-v2.1-all-groups'),
@@ -635,7 +634,10 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/$', AdminGroupOwnedLibraries.as_view(), name='api-v2.1-admin-group-owned-libraries'),
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupOwnedLibrary.as_view(), name='api-v2.1-admin-owned-group-library'),
-
+    
+    ## admin::departments
+    re_path(r'api/v2.1/admin/departments/$', AdminDepartments.as_view(), name='api-v2.1-admin-departments'),
+    
     ## admin::shares
     re_path(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
 
@@ -679,7 +681,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/groups/$', AdminOrgGroups.as_view(),name='api-v2.1-admin-org-groups'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/repos/$', AdminOrgRepos.as_view(),name='api-v2.1-admin-org-repos'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
-    re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/departments/$', OrgDepartments.as_view(), name='api-v2.1-org-departments'),
 
     ## admin::institutions
     re_path(r'^api/v2.1/admin/institutions/$', AdminInstitutions.as_view(), name='api-v2.1-admin-institutions'),
