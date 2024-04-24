@@ -230,7 +230,6 @@ class OrgAdminDepartments(APIView):
             db_api = CcnetDB()
             departments = db_api.list_org_departments(int(org_id))
         except Exception as e:
-            raise
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
