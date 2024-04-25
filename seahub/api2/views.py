@@ -1663,11 +1663,10 @@ class RepoOwner(APIView):
             if not is_group_admin(group_id, username):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # transfer to org user
-        if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
-            error_msg = _('User %s not found in organization.') % new_owner
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        else:
+            if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
+                error_msg = _('User %s not found in organization.') % new_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # to user can not add repo
         if not new_owner_obj.permissions.can_add_repo():
