@@ -1,0 +1,77 @@
+.select-page-icon-popover .popover {
+  min-width: 466px;
+  height: 130px;
+  margin-top: 0;
+}
+
+.select-page-icons {
+  width: 466px;
+  height: 130px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+.svg-item {
+  width: 1em;
+  height: 1em;
+  font-size: 16px;
+}
+
+.select-page-icons .select-page-icon {
+  padding: 5px;
+  width: 37px;
+  height: 37px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+}
+
+#select-page-icon-input-group {
+  cursor: pointer;
+  position: relative;
+}
+
+#select-page-icon-input-group .svg-item,
+.select-page-icons .select-page-icon .svg-item {
+  color: #999;
+}
+
+.select-page-icons .select-page-icon-active .svg-item {
+  color: #fff;
+}
+
+.select-page-icons .select-page-icon:hover {
+  background-color: #eee;
+}
+
+.select-page-icons .select-page-icon-active,
+.select-page-icons .select-page-icon-active:hover {
+  background-color: #ff8000;
+}
+
+.select-page-indicatorContainer {
+  color: hsl(0, 0%, 80%);
+  display: flex;
+  padding: 8px;
+  transition: color 150ms;
+  box-sizing: border-box;
+  position: absolute;
+  right: 1px;
+  top: 2px;
+}
+
+.select-page-indicatorContainer .dtable-font {
+  font-size: 12px;
+}
+
+.form-control-active {
+  color: #495057;
+  background-color: #fff;
+  border-color: #1991eb;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgb(70 127 207 / 25%);
+}

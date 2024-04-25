@@ -33,7 +33,7 @@ class AppSettingsDialogIcons extends React.Component {
                 onClick={(e) => {
                   this.onClickIcon(name, e);
                 }}
-                className={`multicolor-icon-container ${index < 5 ? 'top' : ''}`}
+                className={`seafile-multicolor-icon-container ${index < 5 ? 'top' : ''}`}
               >
                 <img src={`${mediaUrl}img/wiki/${name}.png`} className={`${name === this.state.iconClass ? 'active' : ''}`} alt='' />
               </div>

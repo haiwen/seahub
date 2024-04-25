@@ -25,7 +25,7 @@ const propTypes = {
   onMainNavBarClick: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  isEditWiki: PropTypes.bool,
+  isEditMode: PropTypes.bool,
 };
 
 class MainPanel extends Component {
@@ -79,11 +79,11 @@ class MainPanel extends Component {
 
 
   render() {
-    let { onSearchedClick, isEditWiki } = this.props;
+    let { onSearchedClick, isEditMode } = this.props;
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
     return (
-      <div className="main-panel wiki-main-panel" style={{flex: isEditWiki ? '1 0 76%' : '1 0 80%'}}>
+      <div className="main-panel wiki-main-panel" style={{flex: isEditMode ? '1 0 76%' : '1 0 80%'}}>
         <div className="main-panel-hide hide">{this.props.content}</div>
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&

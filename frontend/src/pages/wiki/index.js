@@ -3,15 +3,17 @@ import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
+import { gettext, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
 import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
+import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
 import WikiConfig from './utils/wiki-config';
+import PageUtils from './view-structure/page-utils';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -41,13 +43,15 @@ class Wiki extends Component {
       indexNode: null,
       indexContent: '',
       config: this.getConfigFromLocal(),
+      isIndexJSON: false,
+      currentPageId: '',
     };
 
     window.onpopstate = this.onpopstate;
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
     this.pythonWrapper = null;
-    this.isEditWiki = window.location.pathname.split('/').includes('wiki-edit');
+    this.isEditMode = window.location.pathname.split('/').includes('wiki-edit');
   }
 
   UNSAFE_componentWillMount() {
@@ -59,6 +63,7 @@ class Wiki extends Component {
   componentDidMount() {
     this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
+    this.loadWikiSettings(initialPath);
 
     this.links = document.querySelectorAll('#wiki-file-content a');
     this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
@@ -69,20 +74,61 @@ class Wiki extends Component {
   }
 
   getConfigFromLocal = () => {
-    const config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
+    let config = {};
+    // try {
+    //   config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
+    // } catch (error) {
+    //   console.log(error);
+    // }
     return new WikiConfig(config);
   };
 
-  saveConfigToLocal = () => {
+  saveConfig = () => {
     localStorage.setItem('sf-wiki-settings', JSON.stringify(this.state.config));
+    // slug 是资料库对应的 wiki 的名称？
     // TODO: save settings to server
+    // 现在只能从服务器获取到文件内容，不支持保存到服务器，需要写一个 API，如果没有可以新建
+    // seafileAPI.saveWikiFileContent(slug, '/index.json', JSON.stringify(this.state.config)).then(res => {
+    //   console.log(res.data);
+    // });
   };
 
   updateConfig = (data) => {
     this.setState({
       config: Object.assign({}, this.state.config, data)
     }, () => {
-      this.saveConfigToLocal();
+      this.saveConfig();
+    });
+  };
+
+  saveAppSettings = (config, onSuccess, onError) => {
+    window.wikiSettings = config; // for local test
+    this.setState({ config, isIndexJSON: true, }, () => {
+      this.saveConfig();
+      onSuccess && onSuccess();
+    });
+    // todo save to server error
+  };
+
+  loadWikiSettings = () => {
+    seafileAPI.getWikiFileContent(slug, '/index.json').then(res => {
+      const configStr = res.data.content;
+      try {
+        this.setState({
+          isIndexJSON: true,
+          config: new WikiConfig(JSON.parse(configStr)),
+        });
+      } catch (error) {
+        toaster.danger(gettext('Index.json format error'));
+        return;
+      }
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      if (errorMsg === 'File not found') {
+        toaster.info(gettext('Index.json not found, you can add page or folder to config wiki.'));
+      } else {
+        toaster.danger(errorMsg);
+      }
     });
   };
 
@@ -174,10 +220,13 @@ class Wiki extends Component {
         lastModified: moment.unix(data.last_modified).fromNow(),
         latestContributor: data.latest_contributor,
       });
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
     });
 
     const hash = window.location.hash;
-    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(filePath) + hash;
+    let fileUrl = `${siteRoot}${this.isEditMode ? 'wiki-edit/' : 'published/'}${slug}${Utils.encodePath(filePath)}${hash}`;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {
@@ -289,6 +338,7 @@ class Wiki extends Component {
     this.onLinkClick(link);
   };
 
+  // 点击 markdown 中的链接后
   onLinkClick = (link) => {
     const url = link;
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
@@ -494,10 +544,37 @@ class Wiki extends Component {
     node.addChildren(nodeList);
   };
 
+  setCurrentPage = (pageId, callback) => {
+    const { currentPageId, config } = this.state;
+    if (pageId === currentPageId) {
+      callback && callback();
+      return;
+    }
+    const { pages } = config;
+    const currentPage = PageUtils.getPageById(pages, pageId);
+    const path = currentPage.path;
+    if (Utils.isMarkdownFile(path) || Utils.isSdocFile(path)) {
+      if (path !== this.state.path) {
+        this.showFile(path);
+      }
+      this.onCloseSide();
+    } else {
+      const w = window.open('about:blank');
+      const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(path);
+      w.location.href = url;
+    }
+    this.setState({
+      currentPageId: pageId,
+      path: path,
+    }, () => {
+      callback && callback();
+    });
+  };
+
   render() {
     return (
       <div id="main" className="wiki-main">
-        {this.isEditWiki &&
+        {this.isEditMode &&
           <WikiLeftBar
             config={this.state.config}
             updateConfig={this.updateConfig}
@@ -515,8 +592,12 @@ class Wiki extends Component {
           onNodeCollapse={this.onNodeCollapse}
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
-          isEditWiki={this.isEditWiki}
+          isEditMode={this.isEditMode}
           config={this.state.config}
+          isIndexJSON={this.state.isIndexJSON}
+          saveAppSettings={this.saveAppSettings}
+          setCurrentPage={this.setCurrentPage}
+          currentPageId={this.state.currentPageId}
         />
         <MainPanel
           path={this.state.path}
@@ -533,7 +614,7 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
-          isEditWiki={this.isEditWiki}
+          isEditMode={this.isEditMode}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>

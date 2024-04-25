@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style type="text/css">
+        .st0{fill:#949494;}
+    </style>
+    <title>app-rules-and-regulations</title>
+    <g id="app-rules-and-regulations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="rules-and-regulations" transform="translate(-402, -686)">
+            <g transform="translate(402, 686)">
+                <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+                <path class="st0" d="M6.74999998,2.7990381 C7.21410161,3.0669873 7.78589839,3.0669873 8.25000002,2.7990381 C8.71410164,2.53108891 9,2.03589838 9,1.5 C9,0.964101623 8.71410164,0.468911092 8.25000002,0.200961896 C7.78589839,-0.0669872988 7.21410161,-0.0669872988 6.74999998,0.200961896 C6.28589836,0.468911092 6,0.964101623 6,1.5 C6,2.03589838 6.28589836,2.53108891 6.74999998,2.7990381 Z" id="路径" fill="currentColor" fill-rule="nonzero"></path>
+                <path class="st0" d="M12.9505543,15 L1.09581613,15 C0.49809824,15 0,14.4117647 0,13.7058824 L0,5.29411765 C0,4.58823529 0.49809824,4 1.09581613,4 L13.9007444,4 C14.4984623,4 14.9965606,4.58823529 14.9965606,5.29411765 L14.9965606,13.7058824 C15.0463704,14.4117647 14.5482721,15 13.9505543,15 L12.9505543,15 Z M13,14 L13,15 L13,14 Z M1.34510612,5.47317123 L1.34510612,13.5304604 L13.508551,13.5304604 L13.508551,5.47317123 L1.34510612,5.47317123 Z" id="形状" fill="currentColor" fill-rule="nonzero"></path>
+                <polygon class="st0" id="路径" fill="currentColor" fill-rule="nonzero" points="11.337635 4.46 7.5 2.11475611 3.6863718 4.46 2 4.46 7.5 0.959866047 13 4.46"></polygon>
+                <path class="st0" d="M11.6666667,8.5 L6.28571429,8.5 C6.14285714,8.5 6,8.125 6,7.75 C6,7.375 6.14285714,7 6.28571429,7 L11.7142857,7 C11.8571429,7 12,7.375 12,7.75 C11.952381,8.25 11.8095238,8.5 11.6666667,8.5 Z" id="路径" fill="currentColor" fill-rule="nonzero"></path>
+                <rect class="st0" id="矩形" fill="currentColor" x="3" y="7" width="2" height="1.5" rx="0.5"></rect>
+                <rect class="st0" id="矩形备份-2" fill="currentColor" x="3" y="10" width="2" height="1.5" rx="0.5"></rect>
+                <path class="st0" d="M11.6666667,11.5 L6.28571429,11.5 C6.14285714,11.5 6,11.125 6,10.75 C6,10.375 6.14285714,10 6.28571429,10 L11.7142857,10 C11.8571429,10 12,10.375 12,10.75 C11.952381,11.125 11.8095238,11.5 11.6666667,11.5 Z" id="路径" fill="currentColor" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

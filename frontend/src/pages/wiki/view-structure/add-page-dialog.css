@@ -1,0 +1,98 @@
+.add-page-dialog {
+  width: 506px;
+  max-width: 506px;
+}
+
+.add-page-dialog .modal-content {
+  height: 100%;
+  max-height: inherit;
+}
+
+.add-page-dialog .modal-content .modal-body {
+  height: 100%;
+  overflow: auto;
+}
+
+.add-page-dialog .app-select-pages {
+  margin: -8px 0;
+}
+
+.add-page-dialog .app-select-pages .app-select-page-item {
+  flex-direction: column;
+  height: auto;
+  width: 88px;
+  flex-shrink: 0;
+  margin: 8px 8px 8px 0px;
+}
+
+.add-page-dialog .app-select-pages .app-select-page-item:nth-child(5n) {
+  margin-right: 0;
+}
+
+.add-page-dialog .app-select-pages .app-select-page-item:hover {
+  cursor: pointer;
+}
+
+.add-page-dialog .app-select-page-item .app-select-page-item-image-container {
+  height: 64px;
+  width: 100%;
+  border: 1px solid #e9e9e9;
+  border-radius: 3px;
+}
+
+.add-page-dialog .app-select-page-item .app-select-page-item-image-container .app-select-page-item-image {
+  width: 86px;
+  height: 62px;
+}
+
+.add-page-dialog .app-select-page-item.selected .app-select-page-item-image-container,
+.add-page-dialog .app-select-page-item.selected .app-select-page-item-image-container:hover {
+  border-color: #ff8000;
+}
+
+.add-page-dialog .app-select-page-item .app-select-page-item-image-container:hover {
+  border-color: #bdbdbd;
+}
+
+.add-page-dialog .app-select-page-item .app-select-page-item-name {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+}
+
+.add-page-dialog .app-select-page-item.selected .app-select-page-item-name {
+  color: #ff8000;
+}
+
+.add-page-dialog .add-page-dialog-switch .custom-switch {
+  padding-left: 0;
+}
+
+.add-page-dialog .add-page-dialog-switch .custom-switch-description {
+  color: #212529;
+}
+
+.app-select-page-item-popover .popover {
+  width: 204px;
+}
+
+.app-select-page-item-popover .popover .app-select-page-item-popover-container {
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.app-select-page-item-popover .popover .app-select-page-item-popover-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.app-select-page-item-popover .popover .app-select-page-item-popover-tip {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.app-select-page-item-popover .popover .app-select-page-item-popover-image-container {
+  border: 2px solid #ff8000;
+  border-radius: 3px;
+  overflow: hidden;
+}

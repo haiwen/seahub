@@ -38,7 +38,7 @@
   height: 260px;
 }
 
-.app-settings-dialog-icons .multicolor-icon-container {
+.app-settings-dialog-icons .seafile-multicolor-icon-container {
   padding: 8px;
   margin: 10px;
   cursor: pointer;
@@ -47,17 +47,17 @@
   position: relative;
 }
 
-.app-settings-dialog-icons .multicolor-icon-container.top {
+.app-settings-dialog-icons .seafile-multicolor-icon-container.top {
   margin: 0 10px 10px 10px;
 }
 
-.app-settings-dialog-icons .multicolor-icon-container img {
+.app-settings-dialog-icons .seafile-multicolor-icon-container img {
   width: 40px;
   max-width: fit-content;
   height: 40px;
 }
 
-.app-settings-dialog-icons .multicolor-icon-container img.active {
+.app-settings-dialog-icons .seafile-multicolor-icon-container img.active {
   width: 42px;
   height: 42px;
   border: 2px solid #b6e8e4;

@@ -23,12 +23,11 @@ class AppSettingsDialogCustomIcon extends React.Component {
     // }
     // const file = this.fileInput.current.files[0];
     // this.uploadLocalFile(file).then((iconLink) => {
-    //   let appConfig = Object.assign({}, this.props.appConfig, {
+    //   let config = Object.assign({}, this.props.config, {
     //     app_icon: iconLink,
     //     use_custom_icon: true,
     //     icon_class_name: '',
     //   });
-    //   window.app && window.app.initAppFavicon(appConfig);
     //   this.setState({
     //     iconUrl: iconLink,
     //   });
