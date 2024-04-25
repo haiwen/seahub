@@ -75,19 +75,18 @@ class Wiki extends Component {
 
   getConfigFromLocal = () => {
     let config = {};
-    // try {
-    //   config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    // TODO: get config from server
+    try {
+      config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
+    } catch (error) {
+      console.log(error);
+    }
     return new WikiConfig(config);
   };
 
   saveConfig = () => {
     localStorage.setItem('sf-wiki-settings', JSON.stringify(this.state.config));
-    // slug 是资料库对应的 wiki 的名称？
-    // TODO: save settings to server
-    // 现在只能从服务器获取到文件内容，不支持保存到服务器，需要写一个 API，如果没有可以新建
+    // TODO: save config to server
     // seafileAPI.saveWikiFileContent(slug, '/index.json', JSON.stringify(this.state.config)).then(res => {
     //   console.log(res.data);
     // });
@@ -102,7 +101,6 @@ class Wiki extends Component {
   };
 
   saveAppSettings = (config, onSuccess, onError) => {
-    window.wikiSettings = config; // for local test
     this.setState({ config, isIndexJSON: true, }, () => {
       this.saveConfig();
       onSuccess && onSuccess();
@@ -338,7 +336,6 @@ class Wiki extends Component {
     this.onLinkClick(link);
   };
 
-  // 点击 markdown 中的链接后
   onLinkClick = (link) => {
     const url = link;
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
