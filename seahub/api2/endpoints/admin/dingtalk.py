@@ -37,6 +37,7 @@ from seahub.dingtalk.settings import ENABLE_DINGTALK, \
 # for 10.0 or later
 from seahub.dingtalk.settings import DINGTALK_APP_KEY, \
         DINGTALK_APP_SECRET
+from seahub import settings
 
 if DINGTALK_APP_KEY and DINGTALK_APP_SECRET:
     from seahub.dingtalk.utils import \
@@ -210,7 +211,7 @@ class AdminDingtalkUsersBatch(APIView):
                 continue
 
             try:
-                oauth_user = User.objects.create_oauth_user()
+                oauth_user = User.objects.create_oauth_user(is_active=settings.USER_ACTIVATE_AFTER_DINGTALK_IMPORT)
                 email = oauth_user.username
                 SocialAuthUser.objects.add(email, 'dingtalk', user_id)
                 success.append({

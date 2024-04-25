@@ -355,6 +355,8 @@ def dingtalk_callback_new(request):
 
     try:
         user = auth.authenticate(remote_user=email)
+        if is_new_user:
+            SocialAuthUser.objects.add(user.username, 'dingtalk', union_id)
         email = user.username
     except User.DoesNotExist:
         user = None
@@ -365,9 +367,6 @@ def dingtalk_callback_new(request):
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
 
-    # bind
-    if is_new_user:
-        SocialAuthUser.objects.add(user.username, 'dingtalk', union_id)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
