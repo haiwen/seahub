@@ -200,7 +200,8 @@ class RepoItem extends React.Component {
       highlight: false,
       showMenu: false,
       isItemMenuShow: false,
-      isTransferDialogShow: false
+      isTransferDialogShow: false,
+      orgAdmin: true
     };
   }
 
@@ -291,7 +292,7 @@ class RepoItem extends React.Component {
   render() {
     let { repo } = this.props;
 
-    let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
+    let isOperationMenuShow = this.state.showMenu;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -326,6 +327,7 @@ class RepoItem extends React.Component {
               itemName={repo.repoName}
               submit={this.onTransferRepo}
               toggleDialog={this.toggleTransfer}
+              isOrgAdmin={true}
             />
           </ModalPortal>
         )}

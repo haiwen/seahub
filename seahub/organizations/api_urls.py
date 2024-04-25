@@ -13,7 +13,7 @@ from .api.group_members import AdminGroupMembers, AdminGroupMember
 from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
         OrgAdminImportUsers, OrgAdminInviteUser
 from .api.admin.user_set_password import OrgAdminUserSetPassword
-from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup
+from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup, OrgAdminDepartments
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
 from .api.admin.info import OrgAdminInfo
 from .api.admin.links import OrgAdminLinks, OrgAdminLink
@@ -95,5 +95,6 @@ urlpatterns = [
     path('admin/logs/file-access/', OrgAdminLogsFileAccess.as_view(), name='api-v2.1-org-admin-logs-file-access'),
     path('admin/logs/file-update/', OrgAdminLogsFileUpdate.as_view(), name='api-v2.1-org-admin-logs-file-update'),
     path('admin/logs/repo-permission/', OrgAdminLogsPermAudit.as_view(), name='api-v2.1-org-admin-logs-repo-permission'),
+    path('<int:org_id>/admin/departments/', OrgAdminDepartments.as_view(), name='api-v2.1-org-admin-departments'),
 ]
 

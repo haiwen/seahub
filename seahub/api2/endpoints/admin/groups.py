@@ -11,8 +11,11 @@ from django.utils.translation import gettext as _
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
+from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
+from seahub.avatar.templatetags.group_avatar_tags import get_default_group_avatar_url, api_grp_avatar_url
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.settings import CLOUD_MODE, MULTI_TENANCY
 from seahub.utils import is_valid_username, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
@@ -351,3 +354,47 @@ class AdminSearchGroup(APIView):
             result.append(group_info)
 
         return Response({"group_list": result})
+    
+    
+class AdminDepartments(APIView):
+    """
+    List all departments
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        try:
+            all_groups = ccnet_api.list_all_departments()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = GROUP_AVATAR_DEFAULT_SIZE
+
+        
+        result = []
+        for group in all_groups:
+            try:
+                avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
+            except:
+                avatar_url = get_default_group_avatar_url()
+            created_at = timestamp_to_isoformat_timestr(group.timestamp)
+            department_info = {
+                "id": group.id,
+                "email": '%s@seafile_group' % str(group.id),
+                "parent_group_id": group.parent_group_id,
+                "name": group.group_name,
+                "owner": group.creator_name,
+                "created_at": created_at,
+                "avatar_url": request.build_absolute_uri(avatar_url),
+            }
+            result.append(department_info)
+
+        return Response(result)
+
