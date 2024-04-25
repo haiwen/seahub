@@ -158,8 +158,16 @@ class Item extends Component {
     this.setState({isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen});
   };
 
+  toggleConfirmInactiveDialog= () => {
+    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  };
+
   updateStatus= (statusOption) => {
     this.props.updateStatus(this.props.item.email, statusOption.value);
+  };
+
+  setUserInactive = () => {
+    this.props.updateStatus(this.props.item.email, 'inactive');
   };
 
   updateMembership= (membershipOption) => {
@@ -214,11 +222,12 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { highlight, isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen } = this.state;
+    const { highlight, isOpIconShown, isDeleteDialogOpen, isResetPasswordDialogOpen, isConfirmInactiveDialogOpen } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     let resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
+    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
 
     // for 'user status'
     const curStatus = item.active ? 'active' : 'inactive';
@@ -253,6 +262,7 @@ class Item extends Component {
               options={this.statusOptions}
               selectOption={this.updateStatus}
               toggleItemFreezed={this.props.toggleItemFreezed}
+              operationBeforeSelect={item.active ? this.toggleConfirmInactiveDialog : undefined}
             />
           </td>
           <td>
@@ -297,6 +307,15 @@ class Item extends Component {
             confirmBtnText={gettext('Reset')}
             toggleDialog={this.toggleResetPasswordDialog}
           />
+        }
+        {isConfirmInactiveDialogOpen &&
+        <CommonOperationConfirmationDialog
+          title={gettext('Set user inactive')}
+          message={confirmSetUserInactiveMsg}
+          executeOperation={this.setUserInactive}
+          confirmBtnText={gettext('Set')}
+          toggleDialog={this.toggleConfirmInactiveDialog}
+        />
         }
       </Fragment>
     );

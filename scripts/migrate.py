@@ -173,6 +173,14 @@ class ObjMigrateWorker(Thread):
                 logging.warning('[%s] Failed to write object %s from repo %s: %s' % (self.dtype, task.obj_id, task.repo_id, e))
                 raise
 
+    def put_task(self, objs):
+        if self.dest_store.get_name() != "filesystem storage backend":
+            random.shuffle(objs)
+        for obj in objs:
+            repo_id,obj_id=obj.split('/')
+            task = Task(repo_id, 1, obj_id)
+            self.thread_pool.put_task(task)
+
     def migrate(self):
         try:
             obj_list = self.orig_store.list_objs(self.repo_id)
@@ -187,14 +195,11 @@ class ObjMigrateWorker(Thread):
             repo_id = obj[0]
             obj_id = obj[1]
             objs.append(repo_id+"/"+obj_id)
+            if len(objs) >= 1000000:
+                self.put_task(objs)
+                objs = []
 
-        if self.dest_store.get_name() != "filesystem storage backend":
-            random.shuffle(objs)
-
-        for obj in objs:
-            repo_id,obj_id=obj.split('/')
-            task = Task(repo_id, 1, obj_id)
-            self.thread_pool.put_task(task)
+        self.put_task(objs)
 
     def invalid_obj(self, obj):
         if len(obj) < 2:

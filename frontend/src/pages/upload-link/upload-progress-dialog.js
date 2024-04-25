@@ -104,10 +104,10 @@ class UploadProgressDialog extends React.Component {
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="40%">{gettext('name')}</th>
-                <th width="15%">{gettext('size')}</th>
-                <th width="30%">{gettext('progress')}</th>
-                <th width="15%">{gettext('state')}</th>
+                <th width="40%" scope="col">{gettext('name')}</th>
+                <th width="15%" scope="col">{gettext('size')}</th>
+                <th width="30%" scope="col">{gettext('progress')}</th>
+                <th width="15%" scope="col">{gettext('state')}</th>
               </tr>
             </thead>
             <tbody>

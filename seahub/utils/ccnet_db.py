@@ -22,3 +22,56 @@ def get_ccnet_db_name():
         error_msg = 'Failed to init ccnet db, only mysql db supported.'
         return None, error_msg
     return db_name, None
+
+
+import os
+import configparser
+from django.db import connection
+
+class CcnetGroup(object):
+    
+    def __init__(self, **kwargs):
+        self.id = kwargs.get('group_id')
+        self.group_name = kwargs.get('group_name')
+        self.creator_name = kwargs.get('creator_name')
+        self.timestamp = kwargs.get('timestamp')
+        self.parent_group_id = kwargs.get('parent_group_id')
+
+class CcnetDB:
+
+    def __init__(self):
+
+        self.db_name = get_ccnet_db_name()[0]
+
+    
+    def list_org_departments(self, org_id):
+        sql = f"""
+        SELECT
+            g.group_id, group_name, creator_name, timestamp, type, parent_group_id
+        FROM
+            `{self.db_name}`.`OrgGroup` o
+        LEFT JOIN
+            `{self.db_name}`.`Group` g
+        ON o.group_id=g.group_id
+        WHERE
+          org_id={org_id} AND parent_group_id<>0;
+        """
+        groups = []
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            for item in cursor.fetchall():
+                group_id = item[0]
+                group_name = item[1]
+                creator_name = item[2]
+                timestamp=item[3]
+                parent_group_id = item[5]
+                params = {
+                    'group_id':group_id,
+                    'group_name': group_name,
+                    'creator_name': creator_name,
+                    'timestamp': timestamp,
+                    'parent_group_id': parent_group_id
+                }
+                group_obj = CcnetGroup(**params)
+                groups.append(group_obj)
+        return groups

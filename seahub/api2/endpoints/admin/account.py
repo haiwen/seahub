@@ -282,6 +282,13 @@ class Account(APIView):
                             'is_active invalid.')
 
                 user.is_active = is_active
+                if is_active == False:
+                    # del tokens and personal repo api tokens (not department)
+                    from seahub.utils import inactive_user
+                    try:
+                        inactive_user(email)
+                    except Exception as e:
+                        logger.error("Failed to inactive_user %s: %s." % (email, e))
 
             # update password
             password = request.data.get("password", None)

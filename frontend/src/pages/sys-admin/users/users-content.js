@@ -200,7 +200,8 @@ class Item extends Component {
       isSetQuotaDialogOpen: false,
       isDeleteUserDialogOpen: false,
       isResetUserPasswordDialogOpen: false,
-      isRevokeAdminDialogOpen: false
+      isRevokeAdminDialogOpen: false,
+      isConfirmInactiveDialogOpen: false
     };
   }
 
@@ -246,6 +247,10 @@ class Item extends Component {
     this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
   };
 
+  toggleConfirmInactiveDialog= () => {
+    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  };
+
   onUserSelected = () => {
     this.props.onUserSelected(this.props.item);
   };
@@ -256,6 +261,10 @@ class Item extends Component {
       toaster.notify(gettext('It may take some time, please wait.'));
     }
     this.props.updateUser(this.props.item.email, 'is_active', isActive);
+  };
+
+  setUserInactive = () => {
+    this.props.updateUser(this.props.item.email, 'is_active', false);
   };
 
   updateRole = (roleOption) => {
@@ -386,13 +395,15 @@ class Item extends Component {
       isSetQuotaDialogOpen,
       isDeleteUserDialogOpen,
       isResetUserPasswordDialogOpen,
-      isRevokeAdminDialogOpen
+      isRevokeAdminDialogOpen,
+      isConfirmInactiveDialogOpen
     } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     const resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
     const revokeAdminDialogMsg = gettext('Are you sure you want to revoke the admin permission of {placeholder} ?').replace('{placeholder}', itemName);
+    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
 
     // for 'user status'
     const curStatus = item.is_active ? 'active' : 'inactive';
@@ -473,6 +484,7 @@ class Item extends Component {
               options={this.statusOptions}
               selectOption={this.updateStatus}
               toggleItemFreezed={this.props.toggleItemFreezed}
+              operationBeforeSelect={item.is_active ? this.toggleConfirmInactiveDialog : undefined}
             />
           </td>
           {isPro &&
@@ -565,6 +577,15 @@ class Item extends Component {
             executeOperation={this.revokeAdmin}
             confirmBtnText={gettext('Revoke')}
             toggleDialog={this.toggleRevokeAdminDialog}
+          />
+        }
+        {isConfirmInactiveDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Set user inactive')}
+            message={confirmSetUserInactiveMsg}
+            executeOperation={this.setUserInactive}
+            confirmBtnText={gettext('Set')}
+            toggleDialog={this.toggleConfirmInactiveDialog}
           />
         }
       </Fragment>

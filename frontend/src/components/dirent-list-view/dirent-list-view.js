@@ -340,7 +340,8 @@ class DirentListView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     ];
-    if (enableSeadoc) {
+    const { currentRepoInfo } = this.props;
+    if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
     }
 
@@ -619,7 +620,7 @@ class DirentListView extends React.Component {
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
               <tr>
                 <th width="3%" className="pl10">
-                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected} />
+                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected} aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')} />
                 </th>
                 <th width="3%" className="pl10">{/*icon */}</th>
                 <th width="5%" className="pl10">{/*star */}</th>

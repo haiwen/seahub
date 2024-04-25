@@ -292,6 +292,15 @@ def logout(request, next_page=None,
         response.delete_cookie('seahub_auth')
         return response
 
+    # Local logout for ouath user.
+    via_oauth = request.COOKIES.get('via_oauth', '')
+    oauth_logout_url = getattr(settings, 'OAUTH_LOGOUT_URL', '')
+    if getattr(settings, 'ENABLE_OAUTH', False) and via_oauth and oauth_logout_url:
+        response = HttpResponseRedirect(oauth_logout_url)
+        response.delete_cookie('via_oauth')
+        response.delete_cookie('seahub_auth')
+        return response
+
     from seahub.settings import LOGOUT_REDIRECT_URL
     if LOGOUT_REDIRECT_URL:
         response = HttpResponseRedirect(LOGOUT_REDIRECT_URL)
