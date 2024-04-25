@@ -1664,7 +1664,7 @@ class RepoOwner(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         else:
-            if not ccnet_api.org_user_exists(org_id, new_owner):
+            if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
                 error_msg = _('User %s not found in organization.') % new_owner
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
