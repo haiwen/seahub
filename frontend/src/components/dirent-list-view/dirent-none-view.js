@@ -10,6 +10,7 @@ import '../../css/tip-for-new-file.css';
 const propTypes = {
   path: PropTypes.string.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
   onAddFile: PropTypes.func.isRequired
 };
 
@@ -45,6 +46,7 @@ class DirentNodeView extends React.Component {
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
+    const { currentRepoInfo } = this.props;
 
     return (
       <Fragment>
@@ -61,7 +63,7 @@ class DirentNodeView extends React.Component {
           <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>
             {'+ Excel'}</button>
           <br />
-          {enableSeadoc && <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>
+          {enableSeadoc && !currentRepoInfo.encrypted && <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>
             {'+ SeaDoc'}</button>}
         </div>
         {this.state.isCreateFileDialogShow && (

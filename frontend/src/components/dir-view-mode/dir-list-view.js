@@ -53,6 +53,7 @@ class DirListView extends React.Component {
           path={this.props.path}
           isDirentListLoading={this.props.isDirentListLoading}
           onAddFile={this.props.onAddFile}
+          currentRepoInfo={this.props.currentRepoInfo}
         />
       );
     }

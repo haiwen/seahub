@@ -449,7 +449,8 @@ class DirentGridView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     ];
-    if (enableSeadoc) {
+    const { currentRepoInfo } = this.props;
+    if (enableSeadoc && !currentRepoInfo.encrypted) {
       menuList.push(NEW_SEADOC_FILE);
     }
     this.handleContextClick(event, id, menuList);

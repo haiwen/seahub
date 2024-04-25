@@ -251,4 +251,5 @@ def oauth_callback(request):
     # redirect user to home page
     response = HttpResponseRedirect(request.session.get('oauth_redirect', '/'))
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
+    response.set_cookie('via_oauth', 'true')
     return response
