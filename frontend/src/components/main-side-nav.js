@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM, enableOCMViaWebdav } from '../utils/constants';
+import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -19,23 +19,14 @@ class MainSideNav extends React.Component {
     super(props);
     this.state = {
       FilesNavUnfolded: false,
-      groupsExtended: false,
       sharedExtended: false,
       closeSideBar:false,
       groupItems: [],
     };
 
     this.listHeight = 24; //for caculate tabheight
-    this.groupsHeight = 0;
     this.adminHeight = 0;
   }
-
-  grpsExtend = () => {
-    this.setState({
-      groupsExtended: !this.state.groupsExtended,
-    });
-    this.loadGroups();
-  };
 
   shExtend = () => {
     this.setState({
@@ -51,7 +42,6 @@ class MainSideNav extends React.Component {
         return group;
       });
 
-      this.groupsHeight = (groupList.length + 1) * _this.listHeight;
       _this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -81,23 +71,13 @@ class MainSideNav extends React.Component {
   };
 
   renderSharedGroups() {
-    let style = {height: 0};
-    if (this.state.groupsExtended) {
-      style = {height: this.groupsHeight};
-    }
     return (
-      <ul className={`nav sub-nav nav-pills flex-column grp-list ${this.state.groupsExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style}>
-        <li className="nav-item">
-          <Link to={siteRoot + 'groups/'}  className={`nav-link ellipsis ${this.getActiveClass('groups')}`} onClick={(e) => this.tabItemClick(e, 'groups')}>
-            <span className="sharp" aria-hidden="true">#</span>
-            <span className="nav-text">{gettext('All Groups')}</span>
-          </Link>
-        </li>
+      <ul className={'nav sub-nav nav-pills flex-column grp-list'}>
         {this.state.groupItems.map(item => {
           return (
             <li key={item.id} className="nav-item">
               <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.name)}`} onClick={(e) => this.tabItemClick(e, item.name, item.id)}>
-                <span className="sharp" aria-hidden="true">#</span>
+                <span className="sf3-font-group sf3-font nav-icon" aria-hidden="true"></span>
                 <span className="nav-text">{item.name}</span>
               </Link>
             </li>
@@ -178,6 +158,10 @@ class MainSideNav extends React.Component {
     e.stopPropagation();
     this.setState({
       FilesNavUnfolded: !this.state.FilesNavUnfolded
+    }, () => {
+      if (this.state.FilesNavUnfolded) {
+        this.loadGroups();
+      }
     });
   };
 
@@ -198,43 +182,28 @@ class MainSideNav extends React.Component {
                 {canAddRepo && (
                   <li className="nav-item">
                     <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
+                      <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('My Libraries')}</span>
                     </Link>
                   </li>
                 )}
                 <li className="nav-item">
                   <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={(e) => this.tabItemClick(e, 'shared-libs')}>
+                    <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Shared with me')}</span>
                   </Link>
                 </li>
                 {canViewOrg &&
                 <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'org')}>
                   <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
+                    <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Shared with all')}</span>
                   </Link>
                 </li>
                 }
                 <li className="nav-item flex-column" id="group-nav">
-                  <a className="nav-link ellipsis d-flex pr-1" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
-                    <span className="nav-text">{gettext('Shared with groups')}</span>
-                    <span className={`toggle-icon fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
-                  </a>
                   {this.renderSharedGroups()}
                 </li>
-                {enableOCM &&
-                <li className="nav-item">
-                  <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
-                    <span className="nav-text">{gettext('Shared from other servers')}</span>
-                  </Link>
-                </li>
-                }
-                {enableOCMViaWebdav &&
-                <li className="nav-item">
-                  <Link to={siteRoot + 'ocm-via-webdav/'} className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}>
-                    <span className="nav-text">{gettext('Shared from other servers')}</span>
-                  </Link>
-                </li>
-                }
               </ul>
             </li>
 

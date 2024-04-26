@@ -1,8 +1,7 @@
 import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
-import { Link } from '@gatsbyjs/reach-router';
+import { gettext, username, canAddRepo } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -29,7 +28,6 @@ const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
-  onTabNavClick: PropTypes.func.isRequired,
   groupID: PropTypes.string,
 };
 
@@ -259,10 +257,6 @@ class GroupView extends React.Component {
     this.setState({repoList: repoList});
   };
 
-  onTabNavClick = (tabName) => {
-    this.props.onTabNavClick(tabName);
-  };
-
   toggleGroupDropdown = () => {
     this.setState({
       showGroupDropdown: !this.state.showGroupDropdown
@@ -432,8 +426,6 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="path-container">
-                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
-                    <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {isDepartmentGroup && (
                       <Fragment>

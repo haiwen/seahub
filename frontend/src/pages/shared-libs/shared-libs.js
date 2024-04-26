@@ -78,12 +78,12 @@ class Content extends Component {
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-            <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="16%">{gettext('Owner')}</th>
+            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            <th width="17%">{gettext('Owner')}</th>
           </tr>
         </thead>
       );
@@ -479,7 +479,10 @@ class SharedLibraries extends Component {
         {inAllLibs ? (
           <>
             <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
-              <h4 className="sf-heading m-0">{gettext('Shared with me')}</h4>
+              <h4 className="sf-heading m-0">
+                {inAllLibs && <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>}
+                {gettext('Shared with me')}
+              </h4>
               {this.renderSortIconInMobile()}
             </div>
             {this.renderContent()}

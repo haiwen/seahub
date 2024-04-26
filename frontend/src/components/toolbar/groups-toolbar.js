@@ -29,7 +29,7 @@ class GroupsToolbar extends React.Component {
         {Utils.isDesktop() ? (
           <div className="operation">
             <button className="btn btn-secondary operation-item" onClick={this.toggleDialog}>
-              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Group')}
+              <i className="sf3-font-new-group1 sf3-font text-secondary mr-1"></i>{gettext('New Group')}
             </button>
           </div>
         ) : (

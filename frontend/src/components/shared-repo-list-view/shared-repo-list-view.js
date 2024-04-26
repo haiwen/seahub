@@ -20,6 +20,7 @@ const propTypes = {
   onItemRename: PropTypes.func,
   hasNextPage: PropTypes.bool,
   onMonitorRepo: PropTypes.func,
+  theadHidden: PropTypes.bool,
 };
 
 class SharedRepoListView extends React.Component {
@@ -115,12 +116,12 @@ class SharedRepoListView extends React.Component {
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="12%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="16%">{gettext('Owner')}</th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            <th width="17%">{gettext('Owner')}</th>
           </tr>
         </thead>
         <tbody>

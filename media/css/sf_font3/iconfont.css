@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1706682203259'); /* IE9 */
-  src: url('iconfont.eot?t=1706682203259#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1706682203259') format('woff2'),
-       url('iconfont.woff?t=1706682203259') format('woff'),
-       url('iconfont.ttf?t=1706682203259') format('truetype'),
-       url('iconfont.svg?t=1706682203259#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1713953465004'); /* IE9 */
+  src: url('iconfont.eot?t=1713953465004#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1713953465004') format('woff2'),
+       url('iconfont.woff?t=1713953465004') format('woff'),
+       url('iconfont.ttf?t=1713953465004') format('truetype'),
+       url('iconfont.svg?t=1713953465004#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-share-with-all:before {
+  content: "\e807";
+}
+
+.sf3-font-new-group1:before {
+  content: "\e803";
+}
+
+.sf3-font-share-with-me:before {
+  content: "\e804";
+}
+
+.sf3-font-group:before {
+  content: "\e805";
+}
+
+.sf3-font-mine:before {
+  content: "\e806";
+}
+
+.sf3-font-ai-search:before {
+  content: "\e801";
+}
+
+.sf3-font-search:before {
+  content: "\e802";
 }
 
 .sf3-font-set-up:before {

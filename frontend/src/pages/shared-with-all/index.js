@@ -155,7 +155,10 @@ class PublicSharedView extends React.Component {
       return (
         <>
           <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
-            <h4 className="sf-heading m-0">{gettext('Shared with all')}</h4>
+            <h4 className="sf-heading m-0">
+              <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
+              {gettext('Shared with all')}
+            </h4>
             {this.renderSortIconInMobile()}
           </div>
           {this.renderContent()}
