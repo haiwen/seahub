@@ -94,7 +94,9 @@
 
     // scroll event handle
     const container = document.getElementById('wiki-file-content');
-    container.style.left = '24%';
+    if (container) {
+        container.style.left = '24%';
+    }
     container && container.addEventListener('scroll', () => {
         const titlesLength = titlesInfo.length;
         const contentScrollTop = container.scrollTop + 180;

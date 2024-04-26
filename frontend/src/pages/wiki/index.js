@@ -73,6 +73,10 @@ class Wiki extends Component {
     this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
   }
 
+  handlePath = () => {
+    return isEditWiki ? 'edit-wiki/' : 'published/';
+  };
+
   getWikiConfig = () => {
     wikiAPI.getWikiConfig(slug).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
@@ -142,7 +146,7 @@ class Wiki extends Component {
 
     if (isDir === 'None') {
       this.setState({pathExist: false});
-      let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
+      let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(initialPath);
       window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
     }
   };
@@ -170,7 +174,7 @@ class Wiki extends Component {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(dirPath);
+    let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   };
 
@@ -197,7 +201,7 @@ class Wiki extends Component {
     });
 
     const hash = window.location.hash;
-    let fileUrl = `${siteRoot}${isEditWiki ? 'published/edit/' : 'published/'}${slug}${Utils.encodePath(filePath)}${hash}`;
+    let fileUrl = `${siteRoot}${this.handlePath()}${slug}${Utils.encodePath(filePath)}${hash}`;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {
