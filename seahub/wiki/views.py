@@ -284,11 +284,11 @@ def edit_slug(request, slug, file_path="home.md"):
     if dir_id:
         is_dir = True
 
-    # compatible with old wiki url
-    if is_dir is None:
-        if len(file_path.split('.')) == 1:
-            new_path = file_path[1:] + '.md'
-            return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
+    # # compatible with old wiki url
+    # if is_dir is None:
+    #     if len(file_path.split('.')) == 1:
+    #         new_path = file_path[1:] + '.md'
+    #         return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
 
     # perm check
     req_user = request.user.username
