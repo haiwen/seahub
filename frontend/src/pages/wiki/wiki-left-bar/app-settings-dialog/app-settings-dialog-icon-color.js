@@ -61,6 +61,7 @@ class AppSettingsDialogIconColor extends React.Component {
             targetId='app-settings-dialog-icon-backdrop'
             config={this.props.config}
             updateConfig={this.props.updateConfig}
+            repoId={this.props.repoId}
           />
         }
       </div>
@@ -70,6 +71,7 @@ class AppSettingsDialogIconColor extends React.Component {
 
 AppSettingsDialogIconColor.propTypes = {
   config: PropTypes.object.isRequired,
+  repoId: PropTypes.string.isRequired,
   updateConfig: PropTypes.func.isRequired,
 };
 

@@ -10,6 +10,7 @@ export default class WikiLeftBar extends React.Component {
 
   static propTypes = {
     config: PropTypes.object.isRequired,
+    repoId: PropTypes.string.isRequired,
     updateConfig: PropTypes.func.isRequired,
   };
 
@@ -41,6 +42,7 @@ export default class WikiLeftBar extends React.Component {
           <AppSettingsDialog
             toggle={this.closeAppSettingsDialog}
             config={this.props.config}
+            repoId={this.props.repoId}
             updateConfig={this.props.updateConfig}
           />
         }

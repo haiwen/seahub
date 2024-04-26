@@ -71,10 +71,16 @@ class WikisView(APIView):
             filter_repo_ids += ([r.id for r in public])
 
         filter_repo_ids = list(set(filter_repo_ids))
-        ret = [x.to_dict() for x in Wiki.objects.filter(
-            repo_id__in=filter_repo_ids)]
 
-        return Response({'data': ret})
+        wikis = Wiki.objects.filter(repo_id__in=filter_repo_ids)
+
+        wiki_list = []
+        for wiki in wikis:
+            wiki_info = wiki.to_dict()
+            wiki_info['can_edit'] = (username == wiki.username)
+            wiki_list.append(wiki_info)
+
+        return Response({'data': wiki_list})
 
     def post(self, request, format=None):
         """Add a new wiki.
@@ -168,7 +174,7 @@ class WikiView(APIView):
         return Response()
 
     def put(self, request, slug):
-        """Edit a wiki permission
+        """Edit a wiki
         """
         username = request.user.username
 
@@ -183,11 +189,17 @@ class WikiView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         permission = request.data.get('permission', '').lower()
-        if permission not in [x[0] for x in Wiki.PERM_CHOICES]:
-            msg = 'Permission invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+        if permission:
+            if permission not in [x[0] for x in Wiki.PERM_CHOICES]:
+                msg = 'Permission invalid'
+                return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
-        wiki.permission = permission
+            wiki.permission = permission
+
+        wiki_config = request.data.get('wiki_config', None)
+        if wiki_config:
+            wiki.wiki_config = wiki_config
+
         wiki.save()
         return Response(wiki.to_dict())
 
@@ -231,3 +243,13 @@ class WikiView(APIView):
                              "Unable to rename wiki")
 
         return Response(wiki.to_dict())
+
+    def get(self, request, slug):
+
+        try:
+            wiki = Wiki.objects.get(slug=slug)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        return Response({'wiki': wiki.to_dict()})

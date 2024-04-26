@@ -710,7 +710,7 @@ urlpatterns = [
     path('invite/', include(('seahub.invitations.urls', 'invitations'), namespace='invitations')),
     path('terms/', include('termsandconditions.urls')),
     path('published/', include(('seahub.wiki.urls', 'wiki'), namespace='wiki')),
-    path('wiki-edit/', include(('seahub.wiki.urls', 'wiki'), namespace='wiki')),
+    # path('wiki-edit/', include(('seahub.wiki.urls', 'wiki'), namespace='wiki')),
     path('work-weixin/', include('seahub.work_weixin.urls')),
     path('weixin/', include('seahub.weixin.urls')),
     # Must specify a namespace if specifying app_name.

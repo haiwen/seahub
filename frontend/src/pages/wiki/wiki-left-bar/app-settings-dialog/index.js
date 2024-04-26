@@ -24,6 +24,7 @@ class AppSettingsDialog extends React.Component {
 
   renderContent = () => {
     const { activeTab } = this.state;
+    console.log(this.props.config)
     return (
       <Fragment>
         <div className="app-settings-dialog-side">
@@ -51,6 +52,7 @@ class AppSettingsDialog extends React.Component {
             <TabPane tabId="Icon">
               <AppSettingsDialogIconColor
                 config={this.props.config}
+                repoId={this.props.repoId}
                 updateConfig={this.props.updateConfig}
               />
             </TabPane>

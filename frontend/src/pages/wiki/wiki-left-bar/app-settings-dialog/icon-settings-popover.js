@@ -15,6 +15,7 @@ export default class IconSettingsPopover extends React.Component {
     onToggle: PropTypes.func.isRequired,
     config: PropTypes.object.isRequired,
     updateConfig: PropTypes.func.isRequired,
+    repoId: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -63,8 +64,10 @@ export default class IconSettingsPopover extends React.Component {
           <TabContent activeTab={activeTab}>
             <TabPane tabId='custom'>
               <AppSettingsDialogCustomIcon
+                onToggle={this.props.onToggle}
                 config={this.props.config}
                 updateConfig={this.props.updateConfig}
+                repoId={this.props.repoId}
               />
             </TabPane>
             <TabPane tabId='system'>

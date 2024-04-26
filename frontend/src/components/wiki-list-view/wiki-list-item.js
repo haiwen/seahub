@@ -136,6 +136,7 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
+    console.log(wiki.link)
 
     const desktopItem = (
       <tr
@@ -157,7 +158,8 @@ class WikiListItem extends Component {
         <td className="text-center cursor-pointer">
           <span
             className={`iconfont icon-edit mr-4 action-icon ${this.state.highlight ? '' : 'invisible'}`}
-            onClick={() => window.open(wiki.link.replace('/published/', '/wiki-edit/'))}
+            // onClick={() => window.open(wiki.link.replace('/published/', '/wiki-edit/'))}
+            onClick={() => window.open('http://127.0.0.1:8000/published/edit/test-wiki/')}
             title={gettext('Edit')}
             aria-label={gettext('Edit')}
             style={{color: '#999'}}
