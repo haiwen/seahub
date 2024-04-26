@@ -31,7 +31,8 @@ from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL, \
-        DINGTALK_DEPARTMENT_USER_SIZE, DINGTALK_PROVIDER
+        DINGTALK_DEPARTMENT_USER_SIZE, DINGTALK_PROVIDER, \
+        USER_ACTIVATE_AFTER_DINGTALK_IMPORT
 
 
 # for 10.0 or later
@@ -43,6 +44,7 @@ if DINGTALK_APP_KEY and DINGTALK_APP_SECRET:
             dingtalk_get_orgapp_token as dingtalk_get_access_token
 else:
     from seahub.dingtalk.utils import dingtalk_get_access_token
+
 
 
 DEPARTMENT_OWNER = 'system admin'
@@ -210,7 +212,7 @@ class AdminDingtalkUsersBatch(APIView):
                 continue
 
             try:
-                oauth_user = User.objects.create_oauth_user()
+                oauth_user = User.objects.create_oauth_user(is_active=USER_ACTIVATE_AFTER_DINGTALK_IMPORT)
                 email = oauth_user.username
                 SocialAuthUser.objects.add(email, 'dingtalk', user_id)
                 success.append({
