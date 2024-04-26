@@ -37,7 +37,7 @@ class AppSettingsDialogIconColor extends React.Component {
               <>
                 <img src={src} width={60} height={60} alt="" />
                 <div className="theme-color-backdrop" onClick={this.onIconPopoverToggle} id='app-settings-dialog-icon-backdrop'>
-                  <span className="iconfont icon-edit mr-4 action-icon" ref={this.renameRef}></span>
+                  <span className="iconfont icon-edit" ref={this.renameRef} style={{color: '#fff', fontSize: '24px'}}></span>
                 </div>
               </>
               :

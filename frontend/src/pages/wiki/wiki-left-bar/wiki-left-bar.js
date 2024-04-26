@@ -22,7 +22,7 @@ export default class WikiLeftBar extends React.Component {
   }
 
   openPreviewApp = () => {
-    window.open(window.location.href.replace('wiki-edit', 'published'));
+    window.open(window.location.href.replace('/published/edit/', '/published/'));
   };
 
   openAppSettingsDialog = () => {

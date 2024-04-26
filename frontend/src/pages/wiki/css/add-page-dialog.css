@@ -64,14 +64,6 @@
   color: #ff8000;
 }
 
-.add-page-dialog .add-page-dialog-switch .custom-switch {
-  padding-left: 0;
-}
-
-.add-page-dialog .add-page-dialog-switch .custom-switch-description {
-  color: #212529;
-}
-
 .app-select-page-item-popover .popover {
   width: 204px;
 }
