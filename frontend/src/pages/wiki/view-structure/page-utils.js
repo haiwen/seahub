@@ -3,24 +3,11 @@ const PAGE = 'page';
 
 export default class PageUtils {
 
-  static normalizePage = (page) => {
-    if (page.filterConjunction) {
-      page.filter_conjunction = page.filterConjunction;
-      delete page.filterConjunction;
-    }
-  };
-
   static getPageById = (pages, page_id) => {
     if (!page_id || !Array.isArray(pages)) return null;
     return pages.find((page) => page.id === page_id) || null;
   };
 
-  /**
-   * get page by page.id
-   * @param {object} navigation
-   * @param {string} page_id
-   * @returns page
-   */
   static getPageFromNavigationById = (navigation, page_id) => {
     if (!page_id || !Array.isArray(navigation)) return null;
     let page_index = navigation.indexOf(item => item.id === page_id);
@@ -44,35 +31,16 @@ export default class PageUtils {
     return null;
   };
 
-  /**
-   * get page index from pages by id
-   * @param {String} pageId
-   * @param {Array} pages
-   * @returns page index
-   */
   static getPageIndexById = (pageId, pages) => {
     return pages.findIndex(page => page.id === pageId);
   };
 
-  /**
-   * Get folder from all the root folders, subfolders are not supported
-   * @param {array} list
-   * @param {string} folder_id
-   * @returns folder
-   */
   static getFolderById = (list, folder_id) => {
     if (!folder_id || !Array.isArray(list)) return null;
     return list.find(item => item.type === FOLDER && item.id === folder_id);
   };
 
-  /**
-   * Get folder from all the root folders index, subfolders are not supported
-   * @param {array} list
-   * @param {string} folder_id
-   * @returns folder
-   */
   static getFolderIndexById = (list, folder_id) => {
-    // TODO：The ID of the page and folder will not be duplicate
     if (!folder_id || !Array.isArray(list)) return -1;
     return list.findIndex(folder => folder.id === folder_id);
   };
@@ -252,37 +220,13 @@ export default class PageUtils {
 
   // movePageintoFolder
   static movePage(navigation, moved_page_id, target_page_id, source_folder_id, target_folder_id, move_position) {
-    // remove id from source folder
     this.deletePage(navigation, moved_page_id, source_folder_id);
-    // insert id into target folder
     this.insertPage(navigation, moved_page_id, target_page_id, target_folder_id, move_position);
   }
 
   // movePageOutsideFolder
   static movePageOut(navigation, moved_page_id, source_folder_id, target_folder_id, move_position) {
-    // remove id from source folder
     this.deletePage(navigation, moved_page_id, source_folder_id);
-    // insert id out target folder
     this.insertPageOut(navigation, moved_page_id, target_folder_id, move_position);
-  }
-
-  static getAvailableColumns(page, columns) {
-    const { shown_column_keys } = page;
-    if (!Array.isArray(shown_column_keys) || shown_column_keys.length === 0) {
-      return columns;
-    }
-    return columns.filter(column => shown_column_keys.includes(column.key));
-  }
-
-  static getVisibleColumns(page, columns, localShownColumnKeys = []) {
-    const { shown_column_keys } = page;
-    let visibleColumns = columns;
-    if (Array.isArray(shown_column_keys) && shown_column_keys.length > 0) {
-      visibleColumns = visibleColumns.filter(column => shown_column_keys.includes(column.key));
-    }
-    if (Array.isArray(localShownColumnKeys) && localShownColumnKeys.length > 0) {
-      visibleColumns = visibleColumns.filter(column => localShownColumnKeys.includes(column.key));
-    }
-    return visibleColumns;
   }
 }
