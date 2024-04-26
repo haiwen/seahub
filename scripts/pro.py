@@ -519,6 +519,11 @@ interval = 30m
 # Enable statistics
 [STATISTICS]
 enabled=true
+
+# Enable file history
+[FILE HISTORY]
+enabled = true
+suffix = md,txt,doc,docx,xls,xlsx,ppt,pptx,sdoc
 '''
         db_config_text = self.db_config.generate_config_text()
         if not os.path.exists(env_mgr.pro_data_dir):
