@@ -1,16 +1,25 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
-import { gettext, mediaUrl } from '../../../../utils/constants';
+import PropTypes from 'prop-types';
+import {Button} from 'reactstrap';
+import {gettext, mediaUrl, slug} from '../../../../utils/constants';
+import {seafileAPI} from '../../../../utils/seafile-api';
+// import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
+const { serviceURL } = window.app.config;
+
+function getImageFileNameWithTimestamp() {
+  var d = Date.now();
+  return 'image-' + d.toString() + '.png';
+}
 
 class AppSettingsDialogCustomIcon extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      iconUrl: `${mediaUrl}img/wiki/default.png`,
+      iconUrl: this.props.config.wiki_icon ? this.props.config.wiki_icon : `${mediaUrl}img/wiki/default.png`,
     };
     this.fileInput = React.createRef();
+    this.serviceUrl = serviceURL;
   }
 
   openFileInput = () => {
@@ -18,42 +27,52 @@ class AppSettingsDialogCustomIcon extends React.Component {
   };
 
   uploadFile = () => {
-    // if (!this.fileInput.current.files.length) {
-    //   return;
-    // }
-    // const file = this.fileInput.current.files[0];
-    // this.uploadLocalFile(file).then((iconLink) => {
-    //   let config = Object.assign({}, this.props.config, {
-    //     app_icon: iconLink,
-    //     use_custom_icon: true,
-    //     icon_class_name: '',
-    //   });
-    //   this.setState({
-    //     iconUrl: iconLink,
-    //   });
-    // });
+    if (!this.fileInput.current.files.length) {
+      return;
+    }
+    const file = this.fileInput.current.files[0];
+    console.log('upload image')
+    this.uploadLocalFile(file).then((iconLink) => {
+      let wikiConfig = Object.assign({}, this.props.appConfig, {
+        wiki_icon: iconLink,
+        // use_custom_icon: true,
+        // icon_class_name: '',
+      });
+      this.props.updateConfig(wikiConfig)
+      this.props.onToggle()
+      this.setState({
+        iconUrl: iconLink,
+      });
+    });
   };
 
   uploadLocalFile = (imageFile) => {
-    // let parentPath = '';
-    // return (
-    //   api.getPublicUploadLink(appUuid).then((res) => {
-    //     const { upload_link, parent_path } = res.data;
-    //     const uploadLink = upload_link + '?ret-json=1';
-    //     const formData = new FormData();
-    //     parentPath = parent_path;
-    //     formData.append('parent_dir', parentPath);
-    //     const imageName = imageNameFilter(imageFile.name);
-    //     formData.append('file', imageFile, imageName);
-    //     return api.uploadImage(uploadLink, formData);
-    //   }).then((res) => {
-    //     const fileName = res.data[0].name;
-    //     return `${SERVER}/workspace/${workspaceID}${parentPath}/${encodeURIComponent(fileName)}`;
-    //   }).catch(error => {
-    //     getErrorMessage(error);
-    //   })
-    // );
+    let repoID = this.props.repoId;
+    console.log(repoID)
+    const name = 'getImageFileNameWithTimestamp.png';
+    return (
+      seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
+        const uploadLink = res.data + '?ret-json=1';
+
+        const newFile = new File([imageFile], name, {type: imageFile.type});
+        const formData = new FormData();
+        formData.append('parent_dir', '/');
+        formData.append('relative_path', '_Internal/Wiki/Icon');
+        formData.append('file', newFile);
+        return seafileAPI.uploadImage(uploadLink, formData);
+      }).then ((res) => {
+        console.log(res)
+        return this._getImageURL(name);
+      })
+    );
   };
+
+  _getImageURL(fileName) {
+    let repoID = this.props.repoId;
+    console.log('repoID')
+    console.log(repoID)
+    return this.serviceUrl + '/lib/' + repoID + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
+  }
 
   render() {
     const hasIcon = false;
@@ -89,6 +108,10 @@ class AppSettingsDialogCustomIcon extends React.Component {
 }
 
 AppSettingsDialogCustomIcon.propTypes = {
+  onToggle: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired,
+  updateConfig: PropTypes.func.isRequired,
+  repoId: PropTypes.string.isRequired,
 };
 
 export default AppSettingsDialogCustomIcon;

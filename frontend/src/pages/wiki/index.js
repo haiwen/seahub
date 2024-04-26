@@ -42,16 +42,19 @@ class Wiki extends Component {
       currentNode: null,
       indexNode: null,
       indexContent: '',
-      config: this.getConfigFromLocal(),
+      // config: this.getConfigFromLocal(),
       isIndexJSON: false,
       currentPageId: '',
+      config: {},
+      repoId: '',
     };
 
     window.onpopstate = this.onpopstate;
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
     this.pythonWrapper = null;
-    this.isEditMode = window.location.pathname.split('/').includes('wiki-edit');
+    // this.isEditMode = window.location.pathname.split('/').includes('wiki-edit');
+    this.isEditMode = true;
   }
 
   UNSAFE_componentWillMount() {
@@ -64,6 +67,7 @@ class Wiki extends Component {
     this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
     this.loadWikiSettings(initialPath);
+    this.getConfigFromLocal()
 
     this.links = document.querySelectorAll('#wiki-file-content a');
     this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
@@ -74,14 +78,40 @@ class Wiki extends Component {
   }
 
   getConfigFromLocal = () => {
-    let config = {};
-    // TODO: get config from server
-    try {
-      config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
-    } catch (error) {
-      console.log(error);
-    }
-    return new WikiConfig(config);
+    // const config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
+    seafileAPI.getWiki(slug).then(res => {
+      console.log('res')
+      console.log(res)
+      let config = JSON.parse(res.data.wiki.wiki_config);
+      this.setState({config: new WikiConfig(config), isDataLoading: true, repoId:res.data.wiki.repo_id})
+
+    }).catch(() => {
+      console.log('update config failed')
+    });
+  };
+
+  updateConfig = (data) => {
+    console.log('slug')
+    console.log(slug)
+    let wikiConfig = Object.assign({}, this.state.config, data);
+    seafileAPI.updateWikiConfig(slug, JSON.stringify(wikiConfig)).then(res => {
+      console.log('res')
+      console.log(res)
+      this.setState({
+        config: wikiConfig
+      });
+    }).catch(() => {
+      console.log()
+      console.log('update config failed')
+    });
+
+
+    // , () => {
+    //   this.saveConfigToLocal();
+    // });
+
+    console.log('this.state.config')
+    console.log(this.state.config)
   };
 
   saveConfig = () => {
@@ -92,13 +122,13 @@ class Wiki extends Component {
     // });
   };
 
-  updateConfig = (data) => {
-    this.setState({
-      config: Object.assign({}, this.state.config, data)
-    }, () => {
-      this.saveConfig();
-    });
-  };
+  // updateConfig = (data) => {
+  //   this.setState({
+  //     config: Object.assign({}, this.state.config, data)
+  //   }, () => {
+  //     this.saveConfig();
+  //   });
+  // };
 
   saveAppSettings = (config, onSuccess, onError) => {
     this.setState({ config, isIndexJSON: true, }, () => {
@@ -574,6 +604,7 @@ class Wiki extends Component {
         {this.isEditMode &&
           <WikiLeftBar
             config={this.state.config}
+            repoId={this.state.repoId}
             updateConfig={this.updateConfig}
           />
         }
