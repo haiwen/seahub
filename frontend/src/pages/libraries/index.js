@@ -225,10 +225,28 @@ class Libraries extends Component {
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
             <div className="cur-view-content">
+
+              <table aria-hidden={true} className="my-3">
+                <thead>
+                  <tr>
+                    <th width="4%"></th>
+                    <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                    <th width="35%">{gettext('Name')}</th>
+                    <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                    <th width="14%">{gettext('Size')}</th>
+                    <th width="17%">{gettext('Last Update')}</th>
+                    <th width="17%">{gettext('Owner')}</th>
+                  </tr>
+                </thead>
+              </table>
+
               {canAddRepo && (
-                <div className="pb-4">
+                <div className="pb-3">
                   <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
-                    <h4 className="sf-heading m-0">{gettext('My Libraries')}</h4>
+                    <h4 className="sf-heading m-0">
+                      <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+                      {gettext('My Libraries')}
+                    </h4>
                     {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                   </div>
                   {this.state.isLoading ? <Loading /> : (
@@ -244,26 +262,23 @@ class Libraries extends Component {
                           onMonitorRepo={this.onMonitorRepo}
                           onRepoClick={this.onRepoClick}
                           sortRepoList={this.sortRepoList}
-                          theadHidden={true}
+                          inAllLibs={true}
                         />
                       )))}
                 </div>
               )}
 
-              <div className="pb-4">
+              <div className="pb-3">
                 <SharedLibs inAllLibs={true} />
               </div>
 
               {canViewOrg && (
-                <div className="pb-4">
+                <div className="pb-3">
                   <SharedWithAll inAllLibs={true} />
                 </div>
               )}
 
-              <div className="pb-4">
-                <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
-                  <h4 className="sf-heading m-0">{gettext('Shared with groups')}</h4>
-                </div>
+              <div className="group-list-panel">
                 {this.state.isGroupsLoading? <Loading /> : (
                   this.state.groupsErrorMsg ? <p className="error text-center mt-8">{this.state.groupsErrorMsg}</p> : (
                     this.state.groupList.length === 0 ? groupsEmptyTip : (

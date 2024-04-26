@@ -231,7 +231,6 @@ class App extends Component {
                 path={siteRoot + 'group/:groupID'}
                 onShowSidePanel={this.onShowSidePanel}
                 onSearchedClick={this.onSearchedClick}
-                onTabNavClick={this.tabItemClick}
                 onGroupChanged={this.onGroupChanged}
               />
               <Wikis path={siteRoot + 'published'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
