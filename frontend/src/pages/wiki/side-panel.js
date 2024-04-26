@@ -41,9 +41,6 @@ class SidePanel extends Component {
   constructor(props) {
     super(props);
     this.isNodeMenuShow = false;
-    const paths = window.location.pathname.split('/');
-    const index = paths.indexOf('wiki-edit') + 1;
-    this.libName = paths[index] || 'Wiki';
     this.state = {
       isShowNewFolderDialog: false,
       isShowAddPageDialog: false,
@@ -388,13 +385,12 @@ class SidePanel extends Component {
 
   render() {
     const { wiki_name, wiki_icon } = this.props.config;
-    const name = wiki_name || this.libName;
     const src = wiki_icon && wiki_icon === 'default' ? `${mediaUrl}img/wiki/default.png` : wiki_icon;
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           {wiki_icon && <img src={src} width="32" alt='' className='mr-2' />}
-          <h4 className="ml-0 mb-0">{name}</h4>
+          <h4 className="ml-0 mb-0">{wiki_name || slug}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           {this.renderContent() }

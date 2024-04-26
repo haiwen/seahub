@@ -1,14 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { gettext, mediaUrl } from '../../../../utils/constants';
 import { seafileAPI } from '../../../../utils/seafile-api';
-
-const { serviceURL } = window.app.config;
-
-function getImageFileNameWithTimestamp() {
-  return 'wiki-icon-image-' + Date.now().toString() + '.png';
-}
+import { gettext, mediaUrl, serviceURL } from '../../../../utils/constants';
 
 class AppSettingsDialogCustomIcon extends React.Component {
 
@@ -18,7 +12,6 @@ class AppSettingsDialogCustomIcon extends React.Component {
       iconUrl: this.props.config.wiki_icon ? this.props.config.wiki_icon : `${mediaUrl}img/wiki/default.png`,
     };
     this.fileInput = React.createRef();
-    this.serviceUrl = serviceURL;
   }
 
   openFileInput = () => {
@@ -44,7 +37,7 @@ class AppSettingsDialogCustomIcon extends React.Component {
 
   uploadLocalFile = (imageFile) => {
     let repoID = this.props.repoId;
-    const name = getImageFileNameWithTimestamp();
+    const name = 'wiki-icon-image-' + Date.now().toString() + '.png';
     return (
       seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
         const uploadLink = res.data + '?ret-json=1';
@@ -61,8 +54,7 @@ class AppSettingsDialogCustomIcon extends React.Component {
   };
 
   _getImageURL(fileName) {
-    let repoID = this.props.repoId;
-    return this.serviceUrl + '/lib/' + repoID + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
+    return serviceURL + '/lib/' + this.props.repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
   }
 
   render() {
