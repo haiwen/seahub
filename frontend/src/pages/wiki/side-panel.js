@@ -389,7 +389,7 @@ class SidePanel extends Component {
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
-          {wiki_icon && <img src={src} width="32" alt='' className='mr-2' />}
+          {wiki_icon && <img src={src} width="32" height="32" alt='' className='mr-2' />}
           <h4 className="ml-0 mb-0">{wiki_name || slug}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
