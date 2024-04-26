@@ -221,5 +221,6 @@
   "Select_field": "Выбрать поле",
   "Font_style": "Стиль шрифта",
   "Open_link": "Открыть ссылку",
-  "Image_is_uploading": "Изображение загружается"
+  "Image_is_uploading": "Изображение загружается",
+  "Image_loading_failed": "Image loading failed"
 }
