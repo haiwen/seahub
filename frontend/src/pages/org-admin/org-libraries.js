@@ -237,6 +237,18 @@ class OrgLibraries extends Component {
     });
   };
 
+  listTrashRepos = (orgID, page) => {
+    seafileAPI.orgAdminListTrashRepos(orgID, page).then(res => {
+      this.setState({
+        orgRepos: res.data.repos,
+        pageNext: res.data.page_info.has_next_page,
+        page: res.data.page_info.current_page,
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -247,7 +259,11 @@ class OrgLibraries extends Component {
     } else {
       page = page - 1;
     }
-    this.listRepos(page);
+    if (this.state.currentItem=='all') {
+      this.listRepos(page);
+    } else {
+      this.listTrashRepos(orgID, page);
+    }
   };
 
   onFreezedItem = () => {
@@ -319,16 +335,7 @@ class OrgLibraries extends Component {
       this.listRepos(this.state.page);
     }
     if(currentItem == 'trash'){
-      seafileAPI.orgAdminListTrashRepos(orgID).then(res => {
-        this.setState({
-          orgRepos: res.data.repos,
-          pageNext: res.data.page_next,
-          page: res.data.page,
-        });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
+      this.listTrashRepos(orgID, this.state.page);
     }
   };
 
@@ -461,8 +468,13 @@ class OrgLibraries extends Component {
                   })}
                 </tbody>
               </table>
-            </div> }
-            {this.state.currentItem=='trash' && this.state.orgRepos.length==0 && <EmptyTip>
+              <div className="paginator">
+                {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+                {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+                {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
+              </div>
+            </div>}
+            {this.state.currentItem == 'trash' && this.state.orgRepos.length == 0 && <EmptyTip>
               <h2>{gettext('No deleted libraries')}</h2>
             </EmptyTip>}
             {this.state.isCleanTrashDialogOpen && (

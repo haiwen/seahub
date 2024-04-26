@@ -24,14 +24,12 @@ from seahub.organizations.views import org_user_exists
 logger = logging.getLogger(__name__)
 
 def get_trash_repo_info(repo):
-
     result = {}
     owner = repo.owner_id
 
     result['name'] = repo.repo_name
     result['id'] = repo.repo_id
     result['owner'] = owner
-    result['org_id'] = repo.org_id
     result['owner_name'] = email2nickname(owner)
     result['delete_time'] = timestamp_to_isoformat_timestr(repo.del_time)
 
@@ -91,8 +89,13 @@ class OrgAdminTrashLibraries(APIView):
         start = (current_page - 1) * per_page
         limit = per_page + 1
 
-        repos_all = seafile_api.get_trash_repo_list(start, limit)
-
+        try:
+            db_api = SeafileDB()
+            repos_all = db_api.get_org_trash_repo_list(int(org_id), start, limit)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         if len(repos_all) > per_page:
             repos_all = repos_all[:per_page]
             has_next_page = True
@@ -101,8 +104,6 @@ class OrgAdminTrashLibraries(APIView):
 
         return_results = []
         for repo in repos_all:
-            if repo.org_id != org_id:
-                continue
             repo_info = get_trash_repo_info(repo)
             return_results.append(repo_info)
 
@@ -128,13 +129,16 @@ class OrgAdminTrashLibraries(APIView):
                     error_msg = 'owner invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+                if not org_user_exists(org_id, owner):
+                    error_msg = 'User %s not in org %s.' % (owner, org_id)
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
                 seafile_api.empty_repo_trash_by_owner(owner)
             else:
                 try:
                     db_api = SeafileDB()
                     db_api.empty_org_repo_trash(int(org_id))
                 except Exception as e:
-                    raise
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -155,7 +159,7 @@ class OrgAdminTrashLibrary(APIView):
         """ restore a deleted library
 
         Permission checking:
-        1. only admin can perform this action.
+        1. only org admin can perform this action.
         """
 
         org_id = int(org_id)
@@ -169,8 +173,8 @@ class OrgAdminTrashLibrary(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if '@seafile_group' in owner:
-            group_id = ccnet_api.get_org_id_by_group(int(owner.split('@')[0]))
-            if group_id != org_id:
+            group_org_id = ccnet_api.get_org_id_by_group(int(owner.split('@')[0]))
+            if group_org_id != org_id:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         else:
             if not org_user_exists(org_id, owner):
@@ -199,8 +203,8 @@ class OrgAdminTrashLibrary(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if '@seafile_group' in owner:
-            group_id = ccnet_api.get_org_id_by_group(int(owner.split('@')[0]))
-            if group_id != org_id:
+            group_org_id = ccnet_api.get_org_id_by_group(int(owner.split('@')[0]))
+            if group_org_id != org_id:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         else:
             if not org_user_exists(org_id, owner):
