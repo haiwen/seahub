@@ -10,7 +10,7 @@ import Switch from '../../../components/common/switch';
 import SelectIcon from './select-icon';
 import FileChooser from '../../../components/file-chooser/file-chooser';
 
-import './add-page-dialog.css';
+import '../css/add-page-dialog.css';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -117,7 +117,10 @@ class AddPageDialog extends React.Component {
   };
 
   onSwitchChange = (e) => {
-    this.setState({ isUseExistFile: e.target.checked });
+    this.setState({
+      isUseExistFile: e.target.checked,
+      selectedPath: '',
+    });
   };
 
   onDirentItemClick = (repo, selectedPath) => {
@@ -162,24 +165,37 @@ class AddPageDialog extends React.Component {
               />
             </FormGroup>
             {!this.state.isUseExistFile &&
+              <>
+                <FormGroup>
+                  <Label>{gettext('New file name(markdown or sdoc)')}</Label>
+                  <Input value={this.state.newFileName} onChange={this.onFileNameChange} autoFocus={true} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>{gettext('Select a directory to save new file ')}</Label>
+                  <FileChooser
+                    isShowFile={false}
+                    repoID={repoID}
+                    currentPath={this.state.selectedPath}
+                    onDirentItemClick={this.onDirentItemClick}
+                    onRepoItemClick={this.onRepoItemClick}
+                    mode={'only_current_library'}
+                  />
+                </FormGroup>
+              </>
+            }
+            {this.state.isUseExistFile &&
               <FormGroup>
-                <Label>{gettext('New file name(markdown or sdoc)')}</Label>
-                <Input value={this.state.newFileName} onChange={this.onFileNameChange} autoFocus={true} />
+                <Label>{gettext('Select an existing file')}</Label>
+                <FileChooser
+                  isShowFile={true}
+                  repoID={repoID}
+                  currentPath={this.state.selectedPath}
+                  onDirentItemClick={this.onDirentItemClick}
+                  onRepoItemClick={this.onRepoItemClick}
+                  mode={'only_current_library'}
+                />
               </FormGroup>
             }
-            <FormGroup>
-              <Label>
-                {this.state.isUseExistFile ? gettext('Select an existing file') : gettext('Select a directory to save new file ')}
-              </Label>
-              <FileChooser
-                isShowFile={this.state.isUseExistFile}
-                repoID={repoID}
-                currentPath={this.state.selectedPath}
-                onDirentItemClick={this.onDirentItemClick}
-                onRepoItemClick={this.onRepoItemClick}
-                mode={'only_current_library'}
-              />
-            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>

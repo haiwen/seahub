@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button} from 'reactstrap';
-import {gettext, mediaUrl, slug} from '../../../../utils/constants';
-import {seafileAPI} from '../../../../utils/seafile-api';
-// import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
+import { Button } from 'reactstrap';
+import { gettext, mediaUrl } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+
 const { serviceURL } = window.app.config;
 
 function getImageFileNameWithTimestamp() {
-  var d = Date.now();
-  return 'image-' + d.toString() + '.png';
+  return 'wiki-icon-image-' + Date.now().toString() + '.png';
 }
 
 class AppSettingsDialogCustomIcon extends React.Component {
@@ -31,15 +30,12 @@ class AppSettingsDialogCustomIcon extends React.Component {
       return;
     }
     const file = this.fileInput.current.files[0];
-    console.log('upload image')
     this.uploadLocalFile(file).then((iconLink) => {
-      let wikiConfig = Object.assign({}, this.props.appConfig, {
+      let wikiConfig = Object.assign({}, this.props.config, {
         wiki_icon: iconLink,
-        // use_custom_icon: true,
-        // icon_class_name: '',
       });
-      this.props.updateConfig(wikiConfig)
-      this.props.onToggle()
+      this.props.updateConfig(wikiConfig);
+      this.props.onToggle();
       this.setState({
         iconUrl: iconLink,
       });
@@ -48,12 +44,10 @@ class AppSettingsDialogCustomIcon extends React.Component {
 
   uploadLocalFile = (imageFile) => {
     let repoID = this.props.repoId;
-    console.log(repoID)
-    const name = 'getImageFileNameWithTimestamp.png';
+    const name = getImageFileNameWithTimestamp();
     return (
       seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
         const uploadLink = res.data + '?ret-json=1';
-
         const newFile = new File([imageFile], name, {type: imageFile.type});
         const formData = new FormData();
         formData.append('parent_dir', '/');
@@ -61,7 +55,6 @@ class AppSettingsDialogCustomIcon extends React.Component {
         formData.append('file', newFile);
         return seafileAPI.uploadImage(uploadLink, formData);
       }).then ((res) => {
-        console.log(res)
         return this._getImageURL(name);
       })
     );
@@ -69,8 +62,6 @@ class AppSettingsDialogCustomIcon extends React.Component {
 
   _getImageURL(fileName) {
     let repoID = this.props.repoId;
-    console.log('repoID')
-    console.log(repoID)
     return this.serviceUrl + '/lib/' + repoID + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
   }
 

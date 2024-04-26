@@ -371,7 +371,6 @@ class FileChooser extends React.Component {
   };
 
   renderRepoListView = () => {
-
     return (
       <div className="file-chooser-container user-select-none" onScroll={this.onScroll}>
         {this.props.mode === 'current_repo_and_other_repos' && (

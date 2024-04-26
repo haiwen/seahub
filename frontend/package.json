@@ -20,7 +20,6 @@
     "copy-to-clipboard": "^3.0.8",
     "crypto-js": "4.2.0",
     "deep-copy": "1.4.2",
-    "dtable-utils": "^4.4.4",
     "glamor": "^2.20.40",
     "i18next": "^17.0.13",
     "i18next-browser-languagedetector": "^3.0.3",

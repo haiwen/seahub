@@ -239,7 +239,6 @@ def slug(request, slug, file_path="home.md"):
     last_modified = datetime.fromtimestamp(last_modified)
 
     is_owner = (request.user.username == wiki.username)
-    print('pppppppppppp')
 
     # check edit wiki page user permission
     return render(request, "wiki/wiki.html", {

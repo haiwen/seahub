@@ -1,6 +1,11 @@
-import {
-  generatorBase64Code,
-} from 'dtable-utils';
+const generatorBase64Code = (keyLength = 4) => {
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+  let key = '';
+  for (let i = 0; i < keyLength; i++) {
+    key += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return key;
+};
 
 const generateUniqueId = (navigation, length = 4) => {
   let idMap = {};
@@ -22,4 +27,43 @@ const generateUniqueId = (navigation, length = 4) => {
   return _id;
 };
 
-export { generateUniqueId };
+const isObjectNotEmpty = (obj) => {
+  return obj && Object.keys(obj).length > 0;
+};
+
+const PAGE_ICON_LIST = [
+  'app-table',
+  'app-form',
+  'app-gallery',
+  'app-map',
+  'app-information',
+  'app-inquire',
+  'app-label',
+  'app-matter',
+  'app-design',
+  'app-statistics',
+  'app-link',
+  'app-external-links',
+  'app-page',
+  'app-home',
+  'app-personnel',
+  'app-star-mark',
+  'app-history',
+  'app-edit',
+  'app-folder',
+  'app-calendar',
+  'app-invoice',
+  'app-contract',
+  'app-email',
+  'app-logistics',
+  'app-product-library',
+  'app-purchase',
+  'app-distribution',
+  'app-achievement-distribution',
+  'app-address-book',
+  'app-individual-bill',
+  'app-post-sale',
+  'app-rules-and-regulations'
+];
+
+export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, PAGE_ICON_LIST };

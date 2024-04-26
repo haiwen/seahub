@@ -4,44 +4,9 @@ import { Label } from 'reactstrap';
 import SeahubPopover from '../../../components/common/seahub-popover';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
+import { PAGE_ICON_LIST } from '../utils';
 
-import './select-page-icon.css';
-
-const PAGE_ICON_LIST = [
-  'app-table',
-  'app-form',
-  'app-gallery',
-  'app-map',
-  'app-information',
-  'app-inquire',
-  'app-label',
-  'app-matter',
-  'app-design',
-  'app-statistics',
-  'app-link',
-  'app-external-links',
-  'app-page',
-  'app-home',
-  'app-personnel',
-  'app-star-mark',
-  'app-history',
-  'app-edit',
-  'app-folder',
-  'app-calendar',
-  'app-invoice',
-  'app-contract',
-  'app-email',
-  'app-logistics',
-  'app-product-library',
-  'app-purchase',
-  'app-distribution',
-  'app-achievement-distribution',
-  'app-address-book',
-  'app-individual-bill',
-  'app-post-sale',
-  'app-rules-and-regulations'
-];
-
+import '../css/select-page-icon.css';
 
 
 export default class SelectIcon extends React.Component {

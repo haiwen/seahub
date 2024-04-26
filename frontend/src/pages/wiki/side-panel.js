@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, siteRoot, repoID, slug, username, permission, mediaUrl } from '../../utils/constants';
+import { gettext, siteRoot, repoID, slug, username, permission, mediaUrl, isEditWiki } from '../../utils/constants';
+import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view/tree-view';
 import ViewStructure from './view-structure';
 import IndexMdViewer from './index-md-viewer';
-import { generateUniqueId } from './utils';
-
 import PageUtils from './view-structure/page-utils';
-import Folder from './utils/folder';
-import Page from './utils/page';
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddPageDialog from './view-structure/add-page-dialog';
-import toaster from '../../components/toast';
 import ViewStructureFooter from './view-structure/view-structure-footer';
+import { generateUniqueId, isObjectNotEmpty } from './utils';
+import Folder from './models/folder';
+import Page from './models/page';
 
 export const FOLDER = 'folder';
 export const PAGE = 'page';
 
 const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
-  isTreeDataLoading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   indexNode: PropTypes.object,
   indexContent: PropTypes.string.isRequired,
@@ -32,10 +31,8 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-  isIndexJSON: PropTypes.bool.isRequired,
   saveAppSettings: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
-  isEditMode: PropTypes.bool.isRequired,
   currentPageId: PropTypes.string,
 };
 
@@ -78,7 +75,7 @@ class SidePanel extends Component {
             onNodeExpanded={this.props.onNodeExpanded}
           />
         )}
-        {this.props.isEditMode &&
+        {isEditWiki &&
           <ViewStructureFooter
             onToggleAddView={this.openAddPageDialog.bind(this, null)}
             onToggleAddFolder={this.onToggleAddFolder}
@@ -340,7 +337,7 @@ class SidePanel extends Component {
     return (
       <div className="wiki-pages-container">
         <ViewStructure
-          isEditMode={this.props.isEditMode}
+          isEditMode={isEditWiki}
           navigation={navigation}
           views={pages}
           onToggleAddView={this.openAddPageDialog}
@@ -376,14 +373,14 @@ class SidePanel extends Component {
   };
 
   renderContent = () => {
-    const { isTreeDataLoading, indexNode, isIndexJSON } = this.props;
-    if (isTreeDataLoading) {
+    const { isLoading, indexNode, config } = this.props;
+    if (isLoading) {
       return <Loading />;
     }
     if (indexNode) {
       return this.renderIndexView();
     }
-    if (isIndexJSON) {
+    if (isObjectNotEmpty(config)) {
       return this.renderFolderView();
     }
     return this.renderTreeView();

@@ -3,16 +3,16 @@ import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { gettext, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import wikiAPI from '../../utils/wiki-api';
+import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isEditWiki } from '../../utils/constants';
 import Dirent from '../../models/dirent';
+import WikiConfig from './models/wiki-config';
 import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
-import WikiConfig from './utils/wiki-config';
 import PageUtils from './view-structure/page-utils';
 
 import '../../css/layout.css';
@@ -38,12 +38,11 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       isTreeDataLoading: true,
+      isConfigLoading: true,
       treeData: treeHelper.buildTree(),
       currentNode: null,
       indexNode: null,
       indexContent: '',
-      // config: this.getConfigFromLocal(),
-      isIndexJSON: false,
       currentPageId: '',
       config: {},
       repoId: '',
@@ -53,8 +52,6 @@ class Wiki extends Component {
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
     this.pythonWrapper = null;
-    // this.isEditMode = window.location.pathname.split('/').includes('wiki-edit');
-    this.isEditMode = true;
   }
 
   UNSAFE_componentWillMount() {
@@ -64,10 +61,9 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
+    this.getWikiConfig();
     this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
-    this.loadWikiSettings(initialPath);
-    this.getConfigFromLocal()
 
     this.links = document.querySelectorAll('#wiki-file-content a');
     this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
@@ -77,86 +73,33 @@ class Wiki extends Component {
     this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
   }
 
-  getConfigFromLocal = () => {
-    // const config = JSON.parse(localStorage.getItem('sf-wiki-settings')) || {};
-    seafileAPI.getWiki(slug).then(res => {
-      console.log('res')
-      console.log(res)
-      let config = JSON.parse(res.data.wiki.wiki_config);
-      this.setState({config: new WikiConfig(config), isDataLoading: true, repoId:res.data.wiki.repo_id})
-
-    }).catch(() => {
-      console.log('update config failed')
+  getWikiConfig = () => {
+    wikiAPI.getWikiConfig(slug).then(res => {
+      const { wiki_config, repo_id } = res.data.wiki;
+      this.setState({
+        config: new WikiConfig(JSON.parse(wiki_config) || {}),
+        isConfigLoading: false,
+        repoId: repo_id,
+      });
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.setState({
+        isConfigLoading: false,
+      });
     });
   };
 
-  updateConfig = (data) => {
-    console.log('slug')
-    console.log(slug)
-    let wikiConfig = Object.assign({}, this.state.config, data);
-    seafileAPI.updateWikiConfig(slug, JSON.stringify(wikiConfig)).then(res => {
-      console.log('res')
-      console.log(res)
+  saveAppSettings = (wikiConfig, onSuccess, onError) => {
+    wikiAPI.updateWikiConfig(slug, JSON.stringify(wikiConfig)).then(res => {
       this.setState({
         config: wikiConfig
       });
-    }).catch(() => {
-      console.log()
-      console.log('update config failed')
-    });
-
-
-    // , () => {
-    //   this.saveConfigToLocal();
-    // });
-
-    console.log('this.state.config')
-    console.log(this.state.config)
-  };
-
-  saveConfig = () => {
-    localStorage.setItem('sf-wiki-settings', JSON.stringify(this.state.config));
-    // TODO: save config to server
-    // seafileAPI.saveWikiFileContent(slug, '/index.json', JSON.stringify(this.state.config)).then(res => {
-    //   console.log(res.data);
-    // });
-  };
-
-  // updateConfig = (data) => {
-  //   this.setState({
-  //     config: Object.assign({}, this.state.config, data)
-  //   }, () => {
-  //     this.saveConfig();
-  //   });
-  // };
-
-  saveAppSettings = (config, onSuccess, onError) => {
-    this.setState({ config, isIndexJSON: true, }, () => {
-      this.saveConfig();
       onSuccess && onSuccess();
-    });
-    // todo save to server error
-  };
-
-  loadWikiSettings = () => {
-    seafileAPI.getWikiFileContent(slug, '/index.json').then(res => {
-      const configStr = res.data.content;
-      try {
-        this.setState({
-          isIndexJSON: true,
-          config: new WikiConfig(JSON.parse(configStr)),
-        });
-      } catch (error) {
-        toaster.danger(gettext('Index.json format error'));
-        return;
-      }
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
-      if (errorMsg === 'File not found') {
-        toaster.info(gettext('Index.json not found, you can add page or folder to config wiki.'));
-      } else {
-        toaster.danger(errorMsg);
-      }
+      toaster.danger(errorMsg);
+      onError && onError();
     });
   };
 
@@ -205,11 +148,11 @@ class Wiki extends Component {
   };
 
   loadIndexNode = () => {
-    seafileAPI.listWikiDir(slug, '/').then(res => {
+    wikiAPI.listWikiDir(slug, '/').then(res => {
       let tree = this.state.treeData;
       this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
       let indexNode = tree.getNodeByPath(this.indexPath);
-      seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+      wikiAPI.getWikiFileContent(slug, indexNode.path).then(res => {
         this.setState({
           treeData: tree,
           indexNode: indexNode,
@@ -239,7 +182,7 @@ class Wiki extends Component {
     });
 
     this.removePythonWrapper();
-    seafileAPI.getWikiFileContent(slug, filePath).then(res => {
+    wikiAPI.getWikiFileContent(slug, filePath).then(res => {
       let data = res.data;
       this.setState({
         isDataLoading: false,
@@ -254,7 +197,7 @@ class Wiki extends Component {
     });
 
     const hash = window.location.hash;
-    let fileUrl = `${siteRoot}${this.isEditMode ? 'wiki-edit/' : 'published/'}${slug}${Utils.encodePath(filePath)}${hash}`;
+    let fileUrl = `${siteRoot}${isEditWiki ? 'published/edit/' : 'published/'}${slug}${Utils.encodePath(filePath)}${hash}`;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {
@@ -264,7 +207,7 @@ class Wiki extends Component {
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
-    seafileAPI.listWikiDir(slug, dirPath).then(res => {
+    wikiAPI.listWikiDir(slug, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
         return dirent;
@@ -294,7 +237,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
-      seafileAPI.listWikiDir(slug, node.path).then(res => {
+      wikiAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
@@ -315,7 +258,7 @@ class Wiki extends Component {
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
     }
-    seafileAPI.listWikiDir(slug, path, true).then(res => {
+    wikiAPI.listWikiDir(slug, path, true).then(res => {
       let direntList = res.data.dirent_list;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
@@ -478,7 +421,7 @@ class Wiki extends Component {
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
-        seafileAPI.listWikiDir(slug, node.path).then(res => {
+        wikiAPI.listWikiDir(slug, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
@@ -526,7 +469,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
-      seafileAPI.listWikiDir(slug, node.path).then(res => {
+      wikiAPI.listWikiDir(slug, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });
@@ -601,15 +544,15 @@ class Wiki extends Component {
   render() {
     return (
       <div id="main" className="wiki-main">
-        {this.isEditMode &&
+        {isEditWiki &&
           <WikiLeftBar
             config={this.state.config}
             repoId={this.state.repoId}
-            updateConfig={this.updateConfig}
+            updateConfig={(data) => this.saveAppSettings(Object.assign({}, this.state.config, data))}
           />
         }
         <SidePanel
-          isTreeDataLoading={this.state.isTreeDataLoading}
+          isLoading={this.state.isTreeDataLoading || this.state.isConfigLoading}
           closeSideBar={this.state.closeSideBar}
           currentPath={this.state.path}
           treeData={this.state.treeData}
@@ -620,9 +563,7 @@ class Wiki extends Component {
           onNodeCollapse={this.onNodeCollapse}
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
-          isEditMode={this.isEditMode}
           config={this.state.config}
-          isIndexJSON={this.state.isIndexJSON}
           saveAppSettings={this.saveAppSettings}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
@@ -642,7 +583,6 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
-          isEditMode={this.isEditMode}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>

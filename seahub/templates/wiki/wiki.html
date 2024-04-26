@@ -48,6 +48,7 @@
             isPublicWiki: "{{ is_public_wiki }}",
             isDir: "{{ is_dir }}",
             hasIndex: {% if has_index %} true {% else %} false {% endif %},
+            isEditWiki: false,
             assetsUrl: "{{ assets_url }}"
         }
     };
@@ -92,11 +93,6 @@
 
     // scroll event handle
     const container = document.getElementById('wiki-file-content');
-
-    // edit wiki page is 24%, preview wiki page is 20%
-    if (window.location.pathname.split('/').includes('wiki-edit')) {
-        container.style.left = '24%';
-    }
     container && container.addEventListener('scroll', () => {
         const titlesLength = titlesInfo.length;
         const contentScrollTop = container.scrollTop + 180;

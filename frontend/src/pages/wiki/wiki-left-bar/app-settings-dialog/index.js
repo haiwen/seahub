@@ -24,7 +24,6 @@ class AppSettingsDialog extends React.Component {
 
   renderContent = () => {
     const { activeTab } = this.state;
-    console.log(this.props.config)
     return (
       <Fragment>
         <div className="app-settings-dialog-side">
@@ -81,6 +80,7 @@ class AppSettingsDialog extends React.Component {
 }
 
 AppSettingsDialog.propTypes = {
+  repoId: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   updateConfig: PropTypes.func.isRequired,
