@@ -94,7 +94,7 @@ class Wiki extends Component {
     });
   };
 
-  saveAppSettings = (wikiConfig, onSuccess, onError) => {
+  saveWikiConfig = (wikiConfig, onSuccess, onError) => {
     wikiAPI.updateWikiConfig(slug, JSON.stringify(wikiConfig)).then(res => {
       this.setState({
         config: wikiConfig
@@ -552,7 +552,7 @@ class Wiki extends Component {
           <WikiLeftBar
             config={this.state.config}
             repoId={this.state.repoId}
-            updateConfig={(data) => this.saveAppSettings(Object.assign({}, this.state.config, data))}
+            updateConfig={(data) => this.saveWikiConfig(Object.assign({}, this.state.config, data))}
           />
         }
         <SidePanel
@@ -568,7 +568,7 @@ class Wiki extends Component {
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
           config={this.state.config}
-          saveAppSettings={this.saveAppSettings}
+          saveWikiConfig={this.saveWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
         />

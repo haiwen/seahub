@@ -4,7 +4,7 @@ import deepCopy from 'deep-copy';
 import { gettext, siteRoot, repoID, slug, username, permission, mediaUrl, isEditWiki } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
-import TreeView from '../../components/tree-view/tree-view';
+// import TreeView from '../../components/tree-view/tree-view';
 import ViewStructure from './view-structure';
 import IndexMdViewer from './index-md-viewer';
 import PageUtils from './view-structure/page-utils';
@@ -31,7 +31,7 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-  saveAppSettings: PropTypes.func.isRequired,
+  saveWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
 };
@@ -62,7 +62,7 @@ class SidePanel extends Component {
   renderTreeView = () => {
     return (
       <div className="wiki-pages-container">
-        {this.props.treeData && (
+        {/* {this.props.treeData && (
           <TreeView
             treeData={this.props.treeData}
             currentPath={this.props.currentPath}
@@ -71,7 +71,7 @@ class SidePanel extends Component {
             onNodeCollapse={this.props.onNodeCollapse}
             onNodeExpanded={this.props.onNodeExpanded}
           />
-        )}
+        )} */}
         {isEditWiki &&
           <ViewStructureFooter
             onToggleAddView={this.openAddPageDialog.bind(this, null)}
@@ -100,7 +100,7 @@ class SidePanel extends Component {
     const index = PageUtils.getPageIndexById(pageId, pages);
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
     } else {
@@ -142,7 +142,7 @@ class SidePanel extends Component {
       this.props.setCurrentPage(pageId, successCallback);
       successCallback();
     };
-    this.props.saveAppSettings(config, onSuccess, errorCallback);
+    this.props.saveWikiConfig(config, onSuccess, errorCallback);
   };
 
   onUpdatePage = (pageId, newPage) => {
@@ -155,7 +155,7 @@ class SidePanel extends Component {
     let currentPage = pages.find(page => page.id === pageId);
     Object.assign(currentPage, newPage);
     config.pages = pages;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   movePage = ({ moved_view_id, target_view_id, source_view_folder_id, target_view_folder_id, move_position }) => {
@@ -163,7 +163,7 @@ class SidePanel extends Component {
     let { navigation } = config;
     PageUtils.movePage(navigation, moved_view_id, target_view_id, source_view_folder_id, target_view_folder_id, move_position);
     config.navigation = navigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   movePageOut = (moved_page_id, source_folder_id, target_folder_id, move_position) => {
@@ -171,7 +171,7 @@ class SidePanel extends Component {
     let { navigation } = config;
     PageUtils.movePageOut(navigation, moved_page_id, source_folder_id, target_folder_id, move_position);
     config.navigation = navigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   // Create a new folder in the root directory (not supported to create a new subfolder in the folder)
@@ -190,7 +190,7 @@ class SidePanel extends Component {
         }
       });
     }
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   _addFolder(folder, newFolder, parent_folder_id) {
@@ -210,7 +210,7 @@ class SidePanel extends Component {
     const { navigation } = config;
     PageUtils.modifyFolder(navigation, folder_id, folder_data);
     config.navigation = navigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   onDeleteFolder = (page_folder_id) => {
@@ -218,7 +218,7 @@ class SidePanel extends Component {
     const { navigation, pages } = config;
     PageUtils.deleteFolder(navigation, pages, page_folder_id);
     config.navigation = navigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   // Drag a folder to the front and back of another folder
@@ -266,7 +266,7 @@ class SidePanel extends Component {
       updatedNavigation.splice(target_folder_index + indexOffset, 0, moved_folder);
     }
     config.navigation = updatedNavigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   // Not support yet: Move a folder into another folder
@@ -307,7 +307,7 @@ class SidePanel extends Component {
       });
     }
     config.navigation = navigation;
-    this.props.saveAppSettings(config);
+    this.props.saveWikiConfig(config);
   };
 
   onToggleAddFolder = () => {
