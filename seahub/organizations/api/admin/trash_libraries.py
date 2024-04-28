@@ -9,7 +9,7 @@ from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.utils import is_valid_username
-from seahub.utils.seafile_db import SeafileDB
+from seahub.utils.db_api import SeafileDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.authentication import TokenAuthentication
