@@ -238,9 +238,6 @@ def slug(request, slug, file_path="home.md"):
 
     last_modified = datetime.fromtimestamp(last_modified)
 
-    is_owner = (request.user.username == wiki.username)
-
-    # check edit wiki page user permission
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',
@@ -284,11 +281,12 @@ def edit_slug(request, slug, file_path="home.md"):
     if dir_id:
         is_dir = True
 
-    # # compatible with old wiki url
-    # if is_dir is None:
-    #     if len(file_path.split('.')) == 1:
-    #         new_path = file_path[1:] + '.md'
-    #         return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
+    # compatible with old wiki url
+    if is_dir is None:
+        if len(file_path.split('.')) == 1:
+            new_path = file_path[1:] + '.md'
+            url = reverse('edit_slug', args=[slug, new_path])
+            return HttpResponseRedirect(url)
 
     # perm check
     req_user = request.user.username
