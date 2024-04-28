@@ -46,6 +46,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
@@ -633,12 +634,14 @@ class AdminUsers(APIView):
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
+            is_active = request.GET.get('is_active', 'active')
+            role = request.GET.get('role', 'default')
         except ValueError:
             page = 1
             per_page = 25
 
         start = (page - 1) * per_page
-
+        limit = per_page + 1
         source = request.GET.get('source', 'DB').lower().strip()
         if source not in ['db', 'ldapimport']:
             # source: 'DB' or 'LDAPImport', default is 'DB'
@@ -680,7 +683,11 @@ class AdminUsers(APIView):
                 result = {'data': data, 'total_count': total_count}
                 return Response(result)
             else:
-                users = ccnet_api.get_emailusers('DB', start, per_page)
+                try:
+                    ccnet_db = CcnetDB()
+                    users = ccnet_db.list_eligible_users(start, limit, is_active, role)
+                except Exception:
+                    users = ccnet_api.get_emailusers('DB', start, per_page)
 
         elif source == 'ldapimport':
             ldap_users_count = multi_ldap_users_count = 0
