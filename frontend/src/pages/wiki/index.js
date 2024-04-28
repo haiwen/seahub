@@ -97,7 +97,7 @@ class Wiki extends Component {
   saveWikiConfig = (wikiConfig, onSuccess, onError) => {
     wikiAPI.updateWikiConfig(slug, JSON.stringify(wikiConfig)).then(res => {
       this.setState({
-        config: wikiConfig
+        config: new WikiConfig(wikiConfig || {}),
       });
       onSuccess && onSuccess();
     }).catch((error) => {

@@ -64,7 +64,6 @@ class Wiki(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
     permission = models.CharField(max_length=50)  # private, public
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
-    wiki_config = models.TextField(null=True)
     objects = WikiManager()
 
     class Meta:
@@ -109,7 +108,6 @@ class Wiki(models.Model):
             'permission': self.permission,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': timestamp_to_isoformat_timestr(self.updated_at),
-            'wiki_config': self.wiki_config,
             'repo_id': self.repo_id,
         }
 

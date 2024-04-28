@@ -11,7 +11,7 @@ import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddPageDialog from './view-structure/add-page-dialog';
 import ViewStructureFooter from './view-structure/view-structure-footer';
-import { generateUniqueId, isObjectNotEmpty } from './utils';
+import { generateUniqueId, getIconURL, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
 
@@ -385,7 +385,7 @@ class SidePanel extends Component {
 
   render() {
     const { wiki_name, wiki_icon } = this.props.config;
-    const src = wiki_icon && wiki_icon === 'default' ? `${mediaUrl}img/wiki/default.png` : wiki_icon;
+    const src = wiki_icon ? getIconURL(repoID, wiki_icon) : `${mediaUrl}img/wiki/default.png`;
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">

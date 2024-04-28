@@ -1,3 +1,5 @@
+import {serviceURL} from '../../../utils/constants';
+
 const generatorBase64Code = (keyLength = 4) => {
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
   let key = '';
@@ -66,4 +68,8 @@ const PAGE_ICON_LIST = [
   'app-rules-and-regulations'
 ];
 
-export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, PAGE_ICON_LIST };
+const getIconURL = (repoId, fileName) => {
+    return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
+  }
+
+export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, PAGE_ICON_LIST, getIconURL };

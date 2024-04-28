@@ -86,7 +86,7 @@ from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
-from seahub.api2.endpoints.wikis import WikisView, WikiView
+from seahub.api2.endpoints.wikis import WikisView, WikiView, WikiConfigView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
 from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
 from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
@@ -516,6 +516,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
+    re_path(r'^api/v2.1/wiki-config/(?P<slug>[^/]+)/$', WikiConfigView.as_view(), name='api-v2.1-wiki-config'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     path('view-image-via-public-wiki/', view_media_file_via_public_wiki, name='view_media_file_via_public_wiki'),
 

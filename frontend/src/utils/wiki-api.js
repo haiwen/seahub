@@ -120,7 +120,7 @@ class WikiAPI {
   }
 
   updateWikiConfig(wikiSlug, wikiConfig) {
-    const url = this.server + '/api/v2.1/wikis/' + wikiSlug + '/';
+    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
     let params = {
       wiki_config: wikiConfig
     };
@@ -128,7 +128,7 @@ class WikiAPI {
   }
 
   getWikiConfig(wikiSlug) {
-    const url = this.server + '/api/v2.1/wikis/' + wikiSlug + '/';
+    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
     return this.req.get(url);
   }
 

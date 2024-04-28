@@ -17,7 +17,7 @@ class AppSettingsDialogIcons extends React.Component {
 
   onClickIcon = (iconClass) => {
     this.setState({ iconClass }, () => {
-      this.props.updateConfig({ wiki_icon: this.props.config.wiki_icon === 'default' ? '' : 'default' });
+      this.props.updateConfig({ wiki_icon: '' });
       this.props.onToggle();
     });
   };

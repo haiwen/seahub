@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../../utils/seafile-api';
 import { gettext, mediaUrl, serviceURL } from '../../../../utils/constants';
+import { getIconURL } from '../../utils'
 
 class AppSettingsDialogCustomIcon extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      iconUrl: this.props.config.wiki_icon ? this.props.config.wiki_icon : `${mediaUrl}img/wiki/default.png`,
+      iconName: this.props.config.wiki_icon,
     };
     this.fileInput = React.createRef();
   }
@@ -23,14 +24,14 @@ class AppSettingsDialogCustomIcon extends React.Component {
       return;
     }
     const file = this.fileInput.current.files[0];
-    this.uploadLocalFile(file).then((iconLink) => {
+    this.uploadLocalFile(file).then((iconName) => {
       let wikiConfig = Object.assign({}, this.props.config, {
-        wiki_icon: iconLink,
+        wiki_icon: iconName,
       });
       this.props.updateConfig(wikiConfig);
       this.props.onToggle();
       this.setState({
-        iconUrl: iconLink,
+        iconName: iconName,
       });
     });
   };
@@ -48,21 +49,19 @@ class AppSettingsDialogCustomIcon extends React.Component {
         formData.append('file', newFile);
         return seafileAPI.uploadImage(uploadLink, formData);
       }).then ((res) => {
-        return this._getImageURL(name);
+        return name;
       })
     );
   };
 
-  _getImageURL(fileName) {
-    return serviceURL + '/lib/' + this.props.repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
-  }
-
   render() {
     const hasIcon = false;
+    let { iconName } = this.state;
+    const iconUrl = iconName ? getIconURL(this.props.repoId, iconName) : `${mediaUrl}img/wiki/default.png`
     if (hasIcon) {
       return (
         <div className="app-setting-dialog-icon">
-          <img src={this.state.iconUrl} alt="" width={128} height={128} ></img>
+          <img src={iconUrl} alt="" width={128} height={128} ></img>
           <p className="mt-2 mb-1 app-setting-dialog-icon-description">
             {gettext('Please select a png image within 5MB.')}
           </p>
