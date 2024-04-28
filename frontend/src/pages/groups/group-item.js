@@ -74,7 +74,7 @@ class GroupItem extends React.Component {
     const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
     return (
       <div className="pb-3">
-        <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+        <div className="d-flex justify-content-between mt-3 py-1 border-bottom">
           <h4 className="sf-heading m-0 ellipsis">
             <span className="sf3-font-group sf3-font nav-icon" aria-hidden="true"></span>
             <a href={`${siteRoot}group/${group.id}/`} title={group.name}>{group.name}</a>
