@@ -46,6 +46,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
@@ -549,7 +550,7 @@ class AdminUsers(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get_info_of_users_order_by_quota_usage(self, source, direction,
-                                               page, per_page):
+                                               page, per_page, is_active=None, role=None):
 
         # get user's quota usage info
         user_usage_dict = {}
@@ -581,6 +582,13 @@ class AdminUsers(APIView):
         # sort
         users.sort(key=lambda item: item.quota_usage,
                    reverse=direction == 'desc')
+        if is_active == '1':
+            users = [u for u in users if u.is_active]
+        elif is_active == '0':
+            users = [u for u in users if not u.is_active]
+            
+        if role:
+            users = [u for u in users if get_user_role(u) == role]
 
         data = []
         MULTI_INSTITUTION = getattr(settings, 'MULTI_INSTITUTION', False)
@@ -633,12 +641,15 @@ class AdminUsers(APIView):
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
+            is_active = request.GET.get('is_active', None)
+            role = request.GET.get('role', None)
         except ValueError:
             page = 1
             per_page = 25
+            is_active, role = None, None
 
         start = (page - 1) * per_page
-
+        limit = per_page + 1
         source = request.GET.get('source', 'DB').lower().strip()
         if source not in ['db', 'ldapimport']:
             # source: 'DB' or 'LDAPImport', default is 'DB'
@@ -671,7 +682,10 @@ class AdminUsers(APIView):
                     data = self.get_info_of_users_order_by_quota_usage(source,
                                                                        direction,
                                                                        page,
-                                                                       per_page)
+                                                                       per_page,
+                                                                       is_active,
+                                                                       role,
+                                                                       )
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -680,7 +694,11 @@ class AdminUsers(APIView):
                 result = {'data': data, 'total_count': total_count}
                 return Response(result)
             else:
-                users = ccnet_api.get_emailusers('DB', start, per_page)
+                try:
+                    ccnet_db = CcnetDB()
+                    users, total_count = ccnet_db.list_eligible_users(start, limit, is_active, role)
+                except Exception:
+                    users = ccnet_api.get_emailusers('DB', start, per_page)
 
         elif source == 'ldapimport':
             ldap_users_count = multi_ldap_users_count = 0
