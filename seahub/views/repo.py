@@ -332,6 +332,12 @@ def view_shared_dir(request, fileshare):
     # for 'upload file'
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
+    try:
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+    except Exception as e:
+        logger.error(e)
+        max_upload_file_size = -1
+
     template = 'view_shared_dir_react.html'
 
     dir_share_link = request.path
@@ -348,6 +354,7 @@ def view_shared_dir(request, fileshare):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': False,
+            'max_upload_file_size': max_upload_file_size,
             'no_quota': no_quota,
             'permissions': permissions,
             'mode': mode,
