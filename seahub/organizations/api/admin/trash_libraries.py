@@ -47,37 +47,13 @@ class OrgAdminTrashLibraries(APIView):
     permission_classes = (IsProVersion, IsOrgAdminUser )
 
     def get(self, request, org_id):
-        """ List deleted repos (by owner)
+        """ List deleted repos (by team admin)
 
         Permission checking:
         1. only admin can perform this action.
         """
 
         org_id = int(org_id)
-        if not ccnet_api.get_org_by_id(org_id):
-            error_msg = 'Organization %s not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # list by owner
-        search_owner = request.GET.get('owner', '')
-        if search_owner:
-            if not org_user_exists(org_id, search_owner):
-                error_msg = 'User %s not in org %s.' % (search_owner, org_id)
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-            if not is_valid_username(search_owner):
-                error_msg = 'owner invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            repos = seafile_api.get_trash_repos_by_owner(search_owner)
-
-            return_repos = []
-            for repo in repos:
-                result = get_trash_repo_info(repo)
-                return_repos.append(result)
-
-            return Response({"search_owner": search_owner, "repos": return_repos})
-
         # list by page
         try:
             current_page = int(request.GET.get('page', '1'))
@@ -115,34 +91,18 @@ class OrgAdminTrashLibraries(APIView):
         return Response({"page_info": page_info, "repos": return_results})
 
     def delete(self, request, org_id):
-        """ clean all deleted org libraries(by owner)
+        """ clean all deleted org libraries(by team admin)
 
         Permission checking:
         1. only org admin can perform this action.
         """
 
         org_id = int(org_id)
-        owner = request.data.get('owner', '')
         try:
-            if owner:
-                if not is_valid_username(owner):
-                    error_msg = 'owner invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-                if not org_user_exists(org_id, owner):
-                    error_msg = 'User %s not in org %s.' % (owner, org_id)
-                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-                seafile_api.empty_repo_trash_by_owner(owner)
-            else:
-                try:
-                    db_api = SeafileDB()
-                    db_api.empty_org_repo_trash(int(org_id))
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        except SearpcError as e:
+            
+            db_api = SeafileDB()
+            db_api.empty_org_repo_trash(int(org_id))
+        except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -163,10 +123,6 @@ class OrgAdminTrashLibrary(APIView):
         """
 
         org_id = int(org_id)
-        if not ccnet_api.get_org_by_id(org_id):
-            error_msg = 'Organization %s not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         owner = seafile_api.get_trash_repo_owner(repo_id)
         if not owner:
             error_msg = "Library does not exist in trash."
@@ -195,7 +151,6 @@ class OrgAdminTrashLibrary(APIView):
         Permission checking:
         1. only org admin can perform this action.
         """
-
         org_id = int(org_id)
         owner = seafile_api.get_trash_repo_owner(repo_id)
         if not owner:
