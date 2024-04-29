@@ -88,9 +88,15 @@ class App extends Component {
     // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
     this.navigateClientUrlToLib();
 
-    // TODO: need refactor later
-    let href = window.location.href.split('/');
-    this.setState({currentTab: href[href.length - 2]});
+    let currentTab;
+    // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
+    if (location.pathname == siteRoot) {
+      currentTab = 'libraries';
+    } else {
+      let href = window.location.href.split('/');
+      currentTab = href[href.length - 2];
+    }
+    this.setState({currentTab: currentTab});
   }
 
   onCloseSidePanel = () => {
