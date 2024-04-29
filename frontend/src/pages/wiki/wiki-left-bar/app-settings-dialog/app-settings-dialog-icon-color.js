@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label, Tooltip, Button } from 'reactstrap';
 import IconSettingsPopover from './icon-settings-popover';
 import { gettext, mediaUrl } from '../../../../utils/constants';
-import { getIconURL } from '../../utils'
+import { getIconURL } from '../../utils';
 
 import './app-settings-dialog-icon-color.css';
 

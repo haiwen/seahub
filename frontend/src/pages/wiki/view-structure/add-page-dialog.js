@@ -106,13 +106,21 @@ class AddPageDialog extends React.Component {
         toaster.danger(gettext('New file name cannot be empty'));
         return;
       }
+      if (newFileName.includes('/')) {
+        toaster.danger(gettext('Name cannot contain slash'));
+        return;
+      }
+      if (newFileName.includes('\\')) {
+        toaster.danger(gettext('Name cannot contain backslash'));
+        return;
+      }
       this.setState({ isLoading: true });
       seafileAPI.createFile(repoID, `${selectedPath}/${newFileName}${selectedOption.value}`).then(res => {
         const { obj_name, parent_dir } = res.data;
         this.props.onAddNewPage({
           name: pageName,
           icon: iconClassName,
-          path: `${parent_dir}/${obj_name}`,
+          path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
           successCallback: this.onSuccess,
           errorCallback: this.onError,
         });

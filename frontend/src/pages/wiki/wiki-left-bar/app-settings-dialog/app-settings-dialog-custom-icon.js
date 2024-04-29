@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../../utils/seafile-api';
-import { gettext, mediaUrl, serviceURL } from '../../../../utils/constants';
-import { getIconURL } from '../../utils'
+import { gettext, mediaUrl } from '../../../../utils/constants';
+import { getIconURL } from '../../utils';
 
 class AppSettingsDialogCustomIcon extends React.Component {
 
@@ -57,7 +57,7 @@ class AppSettingsDialogCustomIcon extends React.Component {
   render() {
     const hasIcon = false;
     let { iconName } = this.state;
-    const iconUrl = iconName ? getIconURL(this.props.repoId, iconName) : `${mediaUrl}img/wiki/default.png`
+    const iconUrl = iconName ? getIconURL(this.props.repoId, iconName) : `${mediaUrl}img/wiki/default.png`;
     if (hasIcon) {
       return (
         <div className="app-setting-dialog-icon">

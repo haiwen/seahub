@@ -69,7 +69,7 @@ const PAGE_ICON_LIST = [
 ];
 
 const getIconURL = (repoId, fileName) => {
-    return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
-  }
+  return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
+};
 
 export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, PAGE_ICON_LIST, getIconURL };
