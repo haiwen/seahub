@@ -25,6 +25,3 @@ def get_seafile_db_name():
     db_name = config.get('database', 'db_name', fallback='seafile')
 
     return db_name, None
-
-
-
