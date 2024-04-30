@@ -2,21 +2,20 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, orgID } from '../../utils/constants';
-import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
-import Loading from '../../components/loading';
-import Paginator from '../../components/paginator';
-import ModalPortal from '../../components/modal-portal';
-import OpMenu from '../../components/dialog/op-menu';
-import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import MainPanelTopbar from './main-panel-topbar';
-import UserLink from './user-link';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext, orgID } from '../../../utils/constants';
+import toaster from '../../../components/toast/index';
+import EmptyTip from '../../../components/empty-tip';
+import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
+import ModalPortal from '../../../components/modal-portal';
+import OpMenu from '../../../components/dialog/op-menu';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
 import ReposNav from './org-repo-nav';
 
-// const { trashReposExpireDays } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
@@ -83,14 +82,14 @@ class Content extends Component {
             </tbody>
           </table>
           {pageInfo &&
-          <Paginator
-            gotoPreviousPage={this.getPreviousPageList}
-            gotoNextPage={this.getNextPageList}
-            currentPage={pageInfo.current_page}
-            hasNextPage={pageInfo.has_next_page}
-            curPerPage={curPerPage}
-            resetPerPage={this.props.resetPerPage}
-          />
+            <Paginator
+              gotoPreviousPage={this.getPreviousPageList}
+              gotoNextPage={this.getNextPageList}
+              currentPage={pageInfo.current_page}
+              hasNextPage={pageInfo.has_next_page}
+              curPerPage={curPerPage}
+              resetPerPage={this.props.resetPerPage}
+            />
           }
         </Fragment>
       );
@@ -314,7 +313,7 @@ class TrashRepos extends Component {
   };
 
   getReposByPage = (page) => {
-    let perPage = this.state.perPage;
+    let { perPage } = this.state;
     seafileAPI.orgAdminListTrashRepos(orgID, page, perPage).then((res) => {
       this.setState({
         repos: res.data.repos,
@@ -362,23 +361,6 @@ class TrashRepos extends Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    });
-  };
-
-
-  searchRepos = (owner) => {
-    seafileAPI.sysAdminSearchTrashRepos(owner).then((res) => {
-      this.setState({
-        repos: res.data.repos,
-        pageInfo: null,
-        errorMsg: '', // necessary!
-        loading: false
-      });
-    }).catch((error) => {
-      this.setState({
-        loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
     });
   };
 

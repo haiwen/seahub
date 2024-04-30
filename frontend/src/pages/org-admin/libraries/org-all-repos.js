@@ -1,18 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, mediaUrl, orgID } from '../../utils/constants';
-import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
-import Loading from '../../components/loading';
-import Paginator from '../../components/paginator';
-import ModalPortal from '../../components/modal-portal';
-import TransferDialog from '../../components/dialog/transfer-dialog';
+import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext, siteRoot, mediaUrl, orgID } from '../../../utils/constants';
+import toaster from '../../../components/toast/index';
+import EmptyTip from '../../../components/empty-tip';
+import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
+import ModalPortal from '../../../components/modal-portal';
+import TransferDialog from '../../../components/dialog/transfer-dialog';
 import { navigate } from '@gatsbyjs/reach-router';
-import OrgAdminRepo from '../../models/org-admin-repo';
-import MainPanelTopbar from './main-panel-topbar';
+import OrgAdminRepo from '../../../models/org-admin-repo';
+import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
 
 
@@ -102,14 +102,14 @@ class Content extends Component {
             </tbody>
           </table>
           {pageInfo &&
-          <Paginator
-            gotoPreviousPage={this.getPreviousPageList}
-            gotoNextPage={this.getNextPageList}
-            currentPage={pageInfo.current_page}
-            hasNextPage={pageInfo.has_next_page}
-            curPerPage={curPerPage}
-            resetPerPage={this.props.resetPerPage}
-          />
+            <Paginator
+              gotoPreviousPage={this.getPreviousPageList}
+              gotoNextPage={this.getNextPageList}
+              currentPage={pageInfo.current_page}
+              hasNextPage={pageInfo.has_next_page}
+              curPerPage={curPerPage}
+              resetPerPage={this.props.resetPerPage}
+            />
           }
         </Fragment>
       );
@@ -216,7 +216,7 @@ class RepoItem extends React.Component {
   renderRepoOwnerHref = (repo) => {
     let href;
     if (repo.isDepartmentRepo) {
-      href = siteRoot + 'org/admin/#address-book/groups/' + repo.groupID + '/';
+      href = siteRoot + 'org/groupadmin/' + repo.groupID + '/';
     } else {
       href = siteRoot + 'org/useradmin/info/' + repo.ownerEmail + '/';
     }
@@ -315,12 +315,13 @@ class OrgAllRepos extends Component {
   }
 
   getReposByPage = (page) => {
-    seafileAPI.orgAdminListOrgRepos(orgID, page, this.state.sortBy).then((res) => {
+    let { perPage } = this.state;
+    seafileAPI.orgAdminListOrgRepos(orgID, page, perPage, this.state.sortBy).then((res) => {
       let orgRepos = res.data.repo_list.map(item => {
         return new OrgAdminRepo(item);
       });
       let page_info = {};
-      if(res.data.page_info==undefined){
+      if(res.data.page_info === undefined){
         let page = res.data.page;
         let has_next_page = res.data.page_next;
         page_info = {
@@ -371,7 +372,7 @@ class OrgAllRepos extends Component {
   deleteRepoItem = (repo) => {
     seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repoID).then(res => {
       this.setState({
-        repos: this.state.repos.filter(item => item.repoID != repo.repoID)
+        repos: this.state.repos.filter(item => item.repoID !== repo.repoID)
       });
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', repo.repoName);
@@ -393,32 +394,6 @@ class OrgAllRepos extends Component {
       })
     });
   };
-
-
-  searchRepos = (repoNameOrID) => {
-    if (this.getValueLength(repoNameOrID) < 3) {
-      toaster.notify(gettext('Required at least three letters.'));
-      return;
-    }
-    navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
-  };
-
-  getValueLength(str) {
-    let code, len = 0;
-    for (let i = 0, length = str.length; i < length; i++) {
-      code = str.charCodeAt(i);
-      if (code === 10) { //solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
-  }
 
   render() {
     return (
