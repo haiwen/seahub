@@ -244,7 +244,7 @@ class Libraries extends Component {
 
               {canAddRepo && (
                 <div className="pb-3">
-                  <div className="d-flex justify-content-between mt-3 py-1 border-bottom">
+                  <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
                     <h4 className="sf-heading m-0">
                       <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                       {gettext('My Libraries')}
