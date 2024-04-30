@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react';
 import io from 'socket.io-client';
-import { EXTERNAL_EVENTS, EventBus, MarkdownEditor as SeafileMarkdownEditor } from '@seafile/seafile-editor';
+import {
+  EXTERNAL_EVENTS,
+  EventBus,
+  MarkdownEditor as SeafileMarkdownEditor,
+  MarkdownViewer as SeafileMarkdownViewer,
+} from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, mediaUrl } from '../../utils/constants';
@@ -422,7 +427,7 @@ class MarkdownEditor extends React.Component {
   };
 
   render() {
-    const { loading, markdownContent, fileInfo, fileTagList } = this.state;
+    const { loading, markdownContent, fileInfo, fileTagList, isLocked } = this.state;
 
     return (
       <Fragment>
@@ -446,19 +451,31 @@ class MarkdownEditor extends React.Component {
           toggleLockFile={this.toggleLockFile}
         />
         <div className='sf-md-viewer-content'>
-          <SeafileMarkdownEditor
-            ref={this.editorRef}
-            isFetching={loading}
-            initValue={this.getFileName(fileName)}
-            value={markdownContent}
-            editorApi={editorApi}
-            onSave={this.onSaveEditorContent}
-            onContentChanged={this.onContentChanged}
-            mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-            isSupportInsertSeafileImage={true}
-          >
-            <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
-          </SeafileMarkdownEditor>
+          {!isLocked && (
+            <SeafileMarkdownEditor
+              ref={this.editorRef}
+              isFetching={loading}
+              initValue={this.getFileName(fileName)}
+              value={markdownContent}
+              editorApi={editorApi}
+              onSave={this.onSaveEditorContent}
+              onContentChanged={this.onContentChanged}
+              mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+              isSupportInsertSeafileImage={true}
+            >
+              <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
+            </SeafileMarkdownEditor>
+          )}
+          {isLocked && (
+            <SeafileMarkdownViewer
+              isFetching={loading}
+              value={markdownContent}
+              mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+              isSupportInsertSeafileImage={true}
+              isShowOutline={true}
+            >
+            </SeafileMarkdownViewer>
+          )}
         </div>
         {this.state.showMarkdownEditorDialog && (
           <React.Fragment>
