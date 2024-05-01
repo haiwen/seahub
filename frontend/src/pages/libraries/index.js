@@ -19,6 +19,8 @@ import SharedLibs from '../../pages/shared-libs/shared-libs.js';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 
+import '../../css/files.css';
+
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired
@@ -224,7 +226,7 @@ class Libraries extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content" id="files-content-container">
 
               <table aria-hidden={true} className="my-3">
                 <thead>
@@ -242,7 +244,7 @@ class Libraries extends Component {
 
               {canAddRepo && (
                 <div className="pb-3">
-                  <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+                  <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
                     <h4 className="sf-heading m-0">
                       <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                       {gettext('My Libraries')}

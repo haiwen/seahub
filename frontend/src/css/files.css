@@ -1,0 +1,5 @@
+#files-content-container td:first-child {
+  text-align: left!important;
+  padding-left: 20px;
+}
+  

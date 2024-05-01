@@ -478,7 +478,7 @@ class SharedLibraries extends Component {
       <Fragment>
         {inAllLibs ? (
           <>
-            <div className="d-flex justify-content-between mt-3 p-1 border-bottom">
+            <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
               <h4 className="sf-heading m-0">
                 {inAllLibs && <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>}
                 {gettext('Shared with me')}

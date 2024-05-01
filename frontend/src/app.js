@@ -52,10 +52,10 @@ class App extends Component {
     this.state = {
       isOpen: false,
       isSidePanelClosed: false,
-      currentTab: '/',
+      currentTab: '',
       pathPrefix: [],
     };
-    this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
+    this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
   }
 
@@ -88,9 +88,15 @@ class App extends Component {
     // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
     this.navigateClientUrlToLib();
 
-    // TODO: need refactor later
-    let href = window.location.href.split('/');
-    this.setState({currentTab: href[href.length - 2]});
+    let currentTab;
+    // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
+    if (location.pathname == siteRoot) {
+      currentTab = 'libraries';
+    } else {
+      let href = window.location.href.split('/');
+      currentTab = href[href.length - 2];
+    }
+    this.setState({currentTab: currentTab});
   }
 
   onCloseSidePanel = () => {
@@ -129,7 +135,7 @@ class App extends Component {
         url = siteRoot + 'group/' + groupID + '/';
       }
       else {
-        url = siteRoot + 'groups/';
+        url = siteRoot + 'libraries/';
       }
       window.location = url.toString();
     }, 1);
@@ -155,20 +161,13 @@ class App extends Component {
   generatorPrefix = (tabName, groupID) => {
     let pathPrefix = [];
     if (groupID) {
-      let navTab1 = {
-        url: siteRoot + 'groups/',
-        showName: 'Groups',
-        name: 'groups',
-        id: null,
-      };
-      let navTab2 = {
+      let navTab = {
         url: siteRoot + 'group/' + groupID + '/',
         showName: tabName,
         name: tabName,
         id: groupID,
       };
-      pathPrefix.push(navTab1);
-      pathPrefix.push(navTab2);
+      pathPrefix.push(navTab);
     } else {
       let navTab = {
         url: siteRoot + tabName + '/',
@@ -182,14 +181,19 @@ class App extends Component {
   };
 
   getTabShowName = (tabName) => {
-    if (tabName === 'my-libs') {
-      return 'Libraries';
-    }
-    if (tabName === 'shared-libs') {
-      return 'Shared with me';
-    }
-    if (tabName === 'org') {
-      return 'Shared with all';
+    switch (tabName) {
+      case 'libraries': {
+        return 'Files';
+      }
+      case 'my-libs': {
+        return 'My Libraries';
+      }
+      case 'shared-libs': {
+        return 'Shared with me';
+      }
+      case 'org': {
+        return 'Shared with all';
+      }
     }
   };
 

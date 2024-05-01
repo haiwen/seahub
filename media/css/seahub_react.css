@@ -163,6 +163,10 @@ a, a:hover { color: #ec8000; }
     cursor: pointer;
 }
 
+.sf-border-bottom {
+  border-bottom: 1px solid #e8e8e8;
+}
+
 .vh {
     visibility: hidden;
 }
@@ -857,7 +861,7 @@ table tbody tr {
 
 table th {
     padding: 0.3125rem 0.1875rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e8e8e8;
     text-align: left;
     font-weight: normal;
     font-size: 0.8125rem;
@@ -867,7 +871,7 @@ table th {
 
 table td {
     padding: 0.5rem 0.1875rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e8e8e8;
     color: #333;
     font-size: 0.875rem;
     word-break: break-all;
