@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, siteRoot, repoID, slug, username, permission, mediaUrl, isEditWiki } from '../../utils/constants';
+import { gettext, siteRoot, repoID, slug, username, permission, isEditWiki } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 // import TreeView from '../../components/tree-view/tree-view';
@@ -385,11 +385,11 @@ class SidePanel extends Component {
 
   render() {
     const { wiki_name, wiki_icon } = this.props.config;
-    const src = wiki_icon ? getIconURL(repoID, wiki_icon) : `${mediaUrl}img/wiki/default.png`;
+    const src = getIconURL(repoID, wiki_icon);
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
-          {wiki_icon && <img src={src} width="32" height="32" alt='' className='mr-2' />}
+          {src && <img src={src} width="32" height="32" alt='' className='mr-2' />}
           <h4 className="ml-0 mb-0">{wiki_name || slug}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">

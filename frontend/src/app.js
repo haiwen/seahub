@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { siteRoot, canAddRepo } from './utils/constants';
+import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import SidePanel from './components/side-panel';

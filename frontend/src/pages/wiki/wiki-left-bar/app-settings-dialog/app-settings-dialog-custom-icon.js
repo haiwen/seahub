@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../../utils/seafile-api';
-import { gettext, mediaUrl } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import { getIconURL } from '../../utils';
 
 class AppSettingsDialogCustomIcon extends React.Component {
@@ -55,13 +55,12 @@ class AppSettingsDialogCustomIcon extends React.Component {
   };
 
   render() {
-    const hasIcon = false;
     let { iconName } = this.state;
-    const iconUrl = iconName ? getIconURL(this.props.repoId, iconName) : `${mediaUrl}img/wiki/default.png`;
-    if (hasIcon) {
+    const src = getIconURL(this.props.repoId, iconName);
+    if (src) {
       return (
         <div className="app-setting-dialog-icon">
-          <img src={iconUrl} alt="" width={128} height={128} ></img>
+          <img src={src} alt="" width={128} height={128} ></img>
           <p className="mt-2 mb-1 app-setting-dialog-icon-description">
             {gettext('Please select a png image within 5MB.')}
           </p>

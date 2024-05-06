@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label, Tooltip, Button } from 'reactstrap';
 import IconSettingsPopover from './icon-settings-popover';
-import { gettext, mediaUrl } from '../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 import { getIconURL } from '../../utils';
 
 import './app-settings-dialog-icon-color.css';
@@ -28,7 +28,7 @@ class AppSettingsDialogIconColor extends React.Component {
 
   render() {
     const { wiki_icon } = this.props.config;
-    const src = wiki_icon ? getIconURL(this.props.repoId, wiki_icon) : `${mediaUrl}img/wiki/default.png`;
+    const src = getIconURL(this.props.repoId, wiki_icon);
     return (
       <div className="app-settings-dialog-icon-color">
         <FormGroup className="app-settings-dialog-theme-color">

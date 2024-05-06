@@ -348,6 +348,12 @@
   color: #8c8c8c;
 }
 
+.dtable-dropdown-menu .dropdown-item .seafile-multicolor-icon.seafile-multicolor-icon-right-slide {
+  font-size: 12px;
+  transform: scale(0.8);
+  color: #666;
+}
+
 .dtable-dropdown-menu .dropdown-item:hover .item-icon,
 .dtable-dropdown-menu .dropdown-item:hover .seafile-multicolor-icon {
   color: #fff;

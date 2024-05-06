@@ -119,10 +119,10 @@ class Wikis extends Component {
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
+                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Add Wiki')}</Button>
                 </MediaQuery>
                 <MediaQuery query="(max-width: 767.8px)">
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Publish a Library')} onClick={this.onSelectToggle}></span>
+                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.onSelectToggle}></span>
                 </MediaQuery>
               </Fragment>
             </div>
@@ -134,7 +134,7 @@ class Wikis extends Component {
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
               <div className="path-container">
-                <h3 className="sf-heading m-0">{gettext('Published Libraries')}</h3>
+                <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
@@ -148,7 +148,7 @@ class Wikis extends Component {
               {(!this.state.loading && this.state.wikis.length === 0) &&
                 <EmptyTip>
                   <h2>{gettext('No published libraries')}</h2>
-                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Publish a Library" button in the menu bar.')}</p>
+                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Add Wiki" button in the menu bar.')}</p>
                 </EmptyTip>
               }
             </div>
