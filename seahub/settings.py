@@ -139,6 +139,7 @@ MIDDLEWARE = [
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
     'seahub.organizations.middleware.RedirectMiddleware',
+    'seahub.base.middleware.UserAgentMiddleWare',
 ]
 
 SITE_ROOT_URLCONF = 'seahub.urls'

@@ -2,7 +2,11 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if request.is_mobile or request.is_tablet %}
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  {% else %}
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% endif %}
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>

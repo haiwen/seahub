@@ -4,7 +4,11 @@
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
         <meta charset="UTF-8" />
+        {% if request.is_mobile or request.is_tablet %}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        {% else %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {% endif %}
         <title>{{ filename }}</title>
 
         <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" id="favicon" />
