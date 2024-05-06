@@ -2,31 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mediaUrl } from '../../../../utils/constants';
 
-const APP_ICON_CLASSNAMES = [
+const ICON_CLASSNAMES = [
   'default',
 ];
 
 class AppSettingsDialogIcons extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      iconClass: '',
-    };
-  }
-
-  onClickIcon = (iconClass) => {
-    this.setState({ iconClass }, () => {
+  onClickIcon = () => {
+    if (this.props.config.wiki_icon === 'default') {
       this.props.updateConfig({ wiki_icon: '' });
-      this.props.onToggle();
-    });
+    } else {
+      this.props.updateConfig({ wiki_icon: 'default' });
+    }
+    this.props.onToggle();
   };
 
   render() {
     return (
       <div className="app-settings-dialog-icons">
         <div className='d-flex flex-wrap'>
-          {APP_ICON_CLASSNAMES.map((name, index) => {
+          {ICON_CLASSNAMES.map((name, index) => {
             return (
               <div
                 key={index}
@@ -35,7 +30,7 @@ class AppSettingsDialogIcons extends React.Component {
                 }}
                 className={`seafile-multicolor-icon-container ${index < 5 ? 'top' : ''}`}
               >
-                <img src={`${mediaUrl}img/wiki/${name}.png`} className={`${name === this.state.iconClass ? 'active' : ''}`} alt='' />
+                <img src={`${mediaUrl}img/wiki/${name}.png`} alt='' />
               </div>
             );
           })}

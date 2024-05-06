@@ -1,4 +1,4 @@
-import {serviceURL} from '../../../utils/constants';
+import { serviceURL, mediaUrl } from '../../../utils/constants';
 
 const generatorBase64Code = (keyLength = 4) => {
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
@@ -34,6 +34,12 @@ const isObjectNotEmpty = (obj) => {
 };
 
 const getIconURL = (repoId, fileName) => {
+  if (!fileName) {
+    return null;
+  }
+  if (fileName === 'default') {
+    return `${mediaUrl}img/wiki/default.png`;
+  }
   return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
 };
 

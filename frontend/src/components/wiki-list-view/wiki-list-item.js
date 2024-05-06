@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 // import { seafileAPI } from '../../utils/seafile-api';
 // import Toast from '../toast';
@@ -136,6 +136,7 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
+    const isWikiOwner = wiki.owner === username;
 
     const desktopItem = (
       <tr
@@ -154,14 +155,16 @@ class WikiListItem extends Component {
         </td>
         <td><a href={userProfileURL} target='_blank' rel="noreferrer">{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
-        <td className="text-center cursor-pointer">
+        <td className="text-center cursor-pointer align-top">
+          {isWikiOwner &&
           <span
             className={`iconfont icon-edit mr-4 action-icon ${this.state.highlight ? '' : 'invisible'}`}
             onClick={() => window.open(wiki.link.replace('/published/', '/edit-wiki/'))}
             title={gettext('Edit')}
             aria-label={gettext('Edit')}
-            style={{color: '#999'}}
+            style={{color: '#999', fontSize: '20px'}}
           ></span>
+          }
           <a
             href="#"
             role="button"
