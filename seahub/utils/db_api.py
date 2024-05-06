@@ -3,6 +3,17 @@ import configparser
 from django.db import connection
 
 
+class RepoTrash(object):
+
+    def __init__(self, **kwargs):
+        self.repo_id = kwargs.get('repo_id')
+        self.repo_name = kwargs.get('repo_name')
+        self.head_id = kwargs.get('head_id')
+        self.owner_id = kwargs.get('owner_id')
+        self.size = kwargs.get('size')
+        self.del_time = kwargs.get('del_time')
+
+
 class SeafileDB:
 
     def __init__(self):
@@ -259,3 +270,81 @@ class SeafileDB:
 
         return device_errors
 
+    def get_org_trash_repo_list(self, org_id, start, limit):
+
+        sql = f"""
+        SELECT repo_id, repo_name, head_id, owner_id, `size`, del_time 
+        FROM `{self.db_name}`.`RepoTrash`
+        WHERE org_id = {org_id}
+        ORDER BY del_time DESC
+        LIMIT {limit} OFFSET {start}
+        """
+        trash_repo_list = []
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            for item in cursor.fetchall():
+                repo_id = item[0]
+                repo_name = item[1]
+                head_id = item[2]
+                owner_id = item[3]
+                size = item[4]
+                del_time = item[5]
+                params = {
+                    'repo_id': repo_id,
+                    'repo_name': repo_name,
+                    'head_id': head_id,
+                    'owner_id': owner_id,
+                    'size': size,
+                    'del_time': del_time,
+                }
+                trash_repo_obj = RepoTrash(**params)
+                trash_repo_list.append(trash_repo_obj)
+            cursor.close()
+        return trash_repo_list
+
+    def empty_org_repo_trash(self, org_id):
+        """
+        empty org repo trash
+        """
+        def del_repo_trash(cursor,repo_ids):
+            del_file_count_sql = """
+            DELETE FROM
+                `%s`.`RepoFileCount`
+            WHERE  
+                repo_id in %%s;
+            """ % self.db_name
+            cursor.execute(del_file_count_sql, (repo_ids, ))
+            
+            del_repo_info_sql = """
+            DELETE FROM
+                `%s`.`RepoInfo`
+            WHERE
+                repo_id in %%s;
+            """ % self.db_name
+            cursor.execute(del_repo_info_sql, (repo_ids, ))
+            
+            del_trash_sql = """
+            DELETE FROM
+                `%s`.`RepoTrash`
+            WHERE
+                repo_id in %%s;
+            """ % self.db_name
+            cursor.execute(del_trash_sql, (repo_ids,))
+            
+
+        sql_list_repo_id = f"""
+        SELECT 
+            t.repo_id
+        FROM
+            `{self.db_name}`.`RepoTrash` t
+        WHERE  
+            org_id={org_id};
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql_list_repo_id)
+            repo_ids = []
+            for item in cursor.fetchall():
+                repo_id = item[0]
+                repo_ids.append(repo_id)
+            del_repo_trash(cursor, repo_ids)
+            cursor.close()

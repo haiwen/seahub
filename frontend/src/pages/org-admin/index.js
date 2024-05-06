@@ -24,7 +24,8 @@ import OrgGroupsSearchGroups from './org-groups-search-groups';
 import OrgGroupInfo from './org-group-info';
 import OrgGroupRepos from './org-group-repos';
 import OrgGroupMembers from './org-group-members';
-import OrgLibraries from './org-libraries';
+import OrgAllRepos from './libraries/org-all-repos';
+import OrgTrashRepos from './libraries/org-repo-trash';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
 import OrgDepartments from './org-departments';
@@ -106,7 +107,8 @@ class Org extends React.Component {
             <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} />
             <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} />
             <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} />
-            <OrgLibraries path={siteRoot + 'org/repoadmin'}/>
+            <OrgAllRepos path={siteRoot + 'org/repoadmin'}/>
+            <OrgTrashRepos path={siteRoot + 'org/repoadmin-trash'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
             <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
               <OrgDepartmentsList path='/'/>
