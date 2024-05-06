@@ -158,7 +158,7 @@ class DeviceErrors extends Component {
         loading: false,
         devicesErrors: res.data.device_errors,
         pageInfo: res.data.page_info,
-        isCleanBtnShown: res.data.length > 0
+        isCleanBtnShown: res.data.device_errors.length > 0
       });
     }).catch((error) => {
       this.setState({

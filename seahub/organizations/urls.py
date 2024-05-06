@@ -24,6 +24,7 @@ urlpatterns = [
     path('useradmin/info/<str:email>/repos/', react_fake_view, name='org_user_repos'),
     path('useradmin/info/<str:email>/shared-repos/', react_fake_view, name='org_user_shared_repos'),
     path('repoadmin/', react_fake_view, name='org_repo_admin'),
+    path('repoadmin-trash/', react_fake_view, name='org_repo_trash'),
 
     path('groupadmin/', react_fake_view, name='org_group_admin'),
     path('groupadmin/search-groups/', react_fake_view, name='org_group_admin_search_groups'),

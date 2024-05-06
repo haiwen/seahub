@@ -15,6 +15,7 @@ from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
 from .api.admin.user_set_password import OrgAdminUserSetPassword
 from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup, OrgAdminDepartments
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
+from .api.admin.trash_libraries import OrgAdminTrashLibraries, OrgAdminTrashLibrary
 from .api.admin.info import OrgAdminInfo
 from .api.admin.links import OrgAdminLinks, OrgAdminLink
 from .api.admin.web_settings import OrgAdminWebSettings
@@ -87,6 +88,8 @@ urlpatterns = [
     path('<int:org_id>/admin/users/<str:email>/repos/', OrgAdminUserRepos.as_view(), name='api-v2.1-org-admin-user-repos'),
     path('<int:org_id>/admin/users/<str:email>/beshared-repos/', OrgAdminUserBesharedRepos.as_view(), name='api-v2.1-org-admin-user-beshared-repos'),
     path('<int:org_id>/admin/repos/', OrgAdminRepos.as_view(), name='api-v2.1-org-admin-repos'),
+    re_path(r'^(?P<org_id>\d+)/admin/trash-libraries/$', OrgAdminTrashLibraries.as_view(), name='api-v2.1-org-admin-trash-libraries'),
+    re_path(r'^(?P<org_id>\d+)/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', OrgAdminTrashLibrary.as_view(), name='api-v2.1-org-admin-trash-librarie'),
     re_path(r'^(?P<org_id>\d+)/admin/repos/(?P<repo_id>[-0-9a-f]{36})/$', OrgAdminRepo.as_view(), name='api-v2.1-org-admin-repo'),
     path('<int:org_id>/admin/web-settings/', OrgAdminWebSettings.as_view(), name='api-v2.1-org-admin-web-settings'),
     path('admin/info/', OrgAdminInfo.as_view(), name='api-v2.1-org-admin-info'),
