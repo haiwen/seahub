@@ -21,6 +21,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
+  hideLibraryName: PropTypes.bool,
 };
 
 class RepoListItem extends React.Component {
@@ -199,17 +200,19 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
-          <div className="item-text">
-            <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+        {!this.props.hideLibraryName &&
+          <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+            <div className="item-text">
+              <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+            </div>
+            <div className="item-left-icon">
+              <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+              <i className="tree-node-icon">
+                <span className="icon far fa-folder tree-node-icon"></span>
+              </i>
+            </div>
           </div>
-          <div className="item-left-icon">
-            <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-            <i className="tree-node-icon">
-              <span className="icon far fa-folder tree-node-icon"></span>
-            </i>
-          </div>
-        </div>
+        }
         {this.state.isShowChildren && (
           <TreeListView
             repo={this.props.repo}

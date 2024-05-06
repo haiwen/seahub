@@ -108,6 +108,7 @@ class Wiki(models.Model):
             'permission': self.permission,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': timestamp_to_isoformat_timestr(self.updated_at),
+            'repo_id': self.repo_id,
         }
 
 

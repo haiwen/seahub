@@ -120,6 +120,7 @@ export const sharedToken = window.wiki ? window.wiki.config.sharedToken : '';
 export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 export const hasIndex = window.wiki ? window.wiki.config.hasIndex : '';
 export const assetsUrl = window.wiki ? window.wiki.config.assetsUrl : '';
+export const isEditWiki = window.wiki ? window.wiki.config.isEditWiki : false;
 
 // file history
 export const PER_PAGE = 25;

@@ -86,7 +86,7 @@ from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
-from seahub.api2.endpoints.wikis import WikisView, WikiView
+from seahub.api2.endpoints.wikis import WikisView, WikiView, WikiConfigView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
 from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
 from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
@@ -203,6 +203,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
+from seahub.wiki.views import edit_slug
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -515,6 +516,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
+    re_path(r'^api/v2.1/wiki-config/(?P<slug>[^/]+)/$', WikiConfigView.as_view(), name='api-v2.1-wiki-config'),
     re_path(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     path('view-image-via-public-wiki/', view_media_file_via_public_wiki, name='view_media_file_via_public_wiki'),
 
@@ -698,6 +700,8 @@ urlpatterns = [
     ## admin::invitations
     re_path(r'^api/v2.1/admin/invitations/$', AdminInvitations.as_view(), name='api-v2.1-admin-invitations'),
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
+
+    re_path(r'^edit-wiki/(?P<slug>[^/]+)/(?P<file_path>.*)$', edit_slug, name='edit_slug'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('notice/', include('seahub.notifications.urls')),

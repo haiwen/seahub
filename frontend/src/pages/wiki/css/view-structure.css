@@ -1,0 +1,402 @@
+.view-structure {
+  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+}
+
+.views-structure-header {
+  height: 30px;
+  min-height: 30px;
+  padding: 0.25rem 10px;
+  display: flex;
+}
+
+.view-structure-body {
+  margin-top: 10px;
+  padding-bottom: 0.5rem;
+  overflow: auto;
+  user-select: none;
+}
+
+.view-structure .view-folder {
+  position: relative;
+}
+
+.view-structure .view-folder.can-drop::after,
+.view-structure .view-folder.can-drop-top::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 40px;
+  background-color: #666;
+}
+
+.view-structure .view-folder .view-folder-children {
+  transition: height 0.25s ease-in-out 0s;
+}
+
+.view-structure .view-drop-target {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  border-bottom: 1px solid #666;
+}
+
+.view-structure .view-folder.can-drop::after {
+  top: unset;
+  bottom: 0;
+}
+
+.view-structure .view-folder.can-drop-top::after {
+  top: 0;
+}
+
+.view-structure .view-folder-wrapper,
+.view-structure .view-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.view-structure .view-item.selected-view,
+.view-structure .view-folder-wrapper:hover,
+.view-structure .view-item:hover {
+  background-color: #f5f5f5;
+}
+
+.view-structure .folder-main,
+.view-structure .view-item-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.view-structure .more-views .folder-main {
+  padding-left: 20px;
+}
+
+.view-structure .rdg-drag-handle {
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}
+
+.view-structure .rdg-drag-handle:hover {
+  cursor: move;
+  cursor: grab;
+}
+
+.view-structure .view-folder-wrapper:hover .rdg-drag-handle,
+.view-structure .view-item:hover .rdg-drag-handle {
+  visibility: visible;
+}
+
+.view-structure .view-folder-wrapper .icon-expand-folder {
+  display: inline-block;
+  font-size: 12px;
+  transform: scale(0.8);
+  color: #b5b5b5;
+  cursor: pointer;
+}
+
+.view-structure .folder-content,
+.view-structure .view-content {
+  height: 100%;
+  padding-right: 8px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.view-structure .in-folder .view-content {
+  padding-left: calc(12 * 0.8px + 0.5rem);
+}
+
+.view-structure .folder-content:hover,
+.view-structure .view-content:hover {
+  cursor: pointer;
+}
+
+.view-structure .folder-content .dtable-font,
+.view-structure .view-content .dtable-font {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.view-structure .folder-content .folder-name,
+.view-structure .view-content .view-title {
+  height: 40px;
+  line-height: 40px;
+  flex: 1;
+}
+
+.view-structure .more-view-folder-operation,
+.view-structure .more-view-operation {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-structure .view-folder-wrapper .more-view-folder-operation .seafile-multicolor-icon-more-level,
+.view-structure .view-item .more-view-operation .seafile-multicolor-icon-more-level {
+  opacity: 0;
+}
+
+.view-structure .view-folder-wrapper:hover .more-view-folder-operation .seafile-multicolor-icon-more-level,
+.view-structure .view-item:hover .more-view-operation .seafile-multicolor-icon-more-level {
+  opacity: 1;
+}
+
+.view-structure .more-view-folder-operation:hover,
+.view-structure .more-view-operation:hover {
+  cursor: pointer;
+}
+
+.view-structure .more-view-folder-operation .dtable-font,
+.view-structure .more-view-operation .dtable-font {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.view-structure .folder-list .view-folder.fold-freezed .btn-folder-operation,
+.view-structure .view-item.view-freezed .seafile-multicolor-icon-more-level {
+  opacity: 1;
+}
+
+.view-structure-footer {
+  user-select: none;
+}
+
+.view-structure-footer.return-to-app {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.add-view-wrapper {
+  position: relative;
+}
+
+.view-structure-footer .dropdown {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.add-view-dropdown-menu {
+  margin-top: 0;
+}
+
+.view-structure-footer .dropdown button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent !important;
+}
+
+.view-structure-footer .dropdown button::after {
+  display: none !important;
+}
+
+.view-structure-footer .dropdown button:focus {
+  box-shadow: none !important;
+}
+
+.view-structure-footer .add-view-btn {
+  padding-left: 20px;
+  border-top: none;
+  height: 40px;
+}
+
+.view-structure-footer .add-view-btn .dtable-icon-add-table {
+  margin-left: 1px;
+  margin-right: 0.5rem;
+  transform: unset;
+}
+
+.view-sidebar .view-structure-footer .add-view-btn {
+  border-top: none;
+}
+
+/* view operation dropdown */
+.view-structure .view-operation-dropdown-toggle {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.view-structure .view-operation-dropdown .view-operation-dropdown-menu {
+  margin-left: -15px;
+  margin-top: 4px;
+}
+
+/* folders dropdown */
+.view-structure .more-view-operation .btn-move-to-folder {
+  display: flex;
+  align-items: center;
+}
+
+.view-structure .more-view-operation .move-to-folders-toggle {
+  opacity: 0;
+  width: 0;
+  min-width: 0;
+  margin-left: -12px;
+  padding: 0;
+}
+
+.view-structure .more-view-operation .folders-dropdown-menu {
+  margin-top: -16px;
+  margin-left: -12px;
+}
+
+.view-structure .folders-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.view-structure .more-view-operation .folders-dropdown .dtable-icon-right-slide {
+  display: inline-flex;
+  font-size: 12px;
+  transform: scale(0.8);
+}
+
+.view-structure .more-view-operation .btn-move-to-folder:focus .dtable-icon-insert-right,
+.view-structure .more-view-operation .btn-move-to-folder:focus .dtable-icon-right-slide {
+  color: #fff;
+}
+
+.view-structure .folders-dropdown {
+  width: 100%;
+}
+
+.view-structure .folders-dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.view-structure .folders-dropdown .item-text {
+  flex: 1;
+}
+
+.view-structure .folders-dropdown .dropdown-menu {
+  max-width: 180px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.view-structure .folders-dropdown .dropdown-menu .folder-name {
+  display: inline-block;
+  width: 100%;
+}
+
+.view-structure .folders-dropdown .icon-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  margin-right: 12px;
+}
+
+.view-structure .folders-dropdown .icon-dropdown-toggle .item-icon {
+  transform: scale(0.8);
+}
+
+.view-structure .view-item.view-can-drop::after,
+.view-structure .view-item.view-can-drop-top::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 39px;
+  background-color: #666 !important;
+}
+
+.view-structure .view-item.view-can-drop-top::after {
+  top: 0;
+}
+
+/* dropdown icon */
+.dtable-dropdown-menu .dropdown-item .item-icon,
+.dtable-dropdown-menu .dropdown-item .seafile-multicolor-icon {
+  font-size: 14px;
+  margin-right: 10px;
+  color: #8c8c8c;
+}
+
+.dtable-dropdown-menu .dropdown-item:hover .item-icon,
+.dtable-dropdown-menu .dropdown-item:hover .seafile-multicolor-icon {
+  color: #fff;
+}
+
+/* dark mode */
+.view-structure-dark.view-structure,
+.view-structure-dark.view-structure .view-folder .icon-expand-folder {
+  color: #fff;
+}
+
+/* light mode */
+.view-structure-light.view-structure,
+.view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level:hover,
+.view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level:hover,
+.view-structure-light.view-structure .view-folder .icon-expand-folder:hover {
+  color: #212529;
+}
+
+.view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level,
+.view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level,
+.view-structure-light.view-structure .view-folder .icon-expand-folder {
+  color: #666;
+  margin-left: 4px;
+}
+
+.view-structure .view-folder-wrapper.can-drop-top::before {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #666;
+}
+
+.view-structure .view-folder-wrapper.can-drop::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  background-color: #666;
+  top: unset;
+  bottom: 0;
+}
+
+.svg-item {
+  width: 1em;
+  height: 1em;
+  font-size: 16px;
+}
