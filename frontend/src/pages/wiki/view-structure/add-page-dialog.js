@@ -7,7 +7,6 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import { SeahubSelect } from '../../../components/common/select';
-// import SelectIcon from './select-icon';
 import FileChooser from '../../../components/file-chooser/file-chooser';
 
 import '../css/add-page-dialog.css';
@@ -173,12 +172,6 @@ class AddPageDialog extends React.Component {
               <Label>{gettext('Page name')}</Label>
               <Input value={this.state.pageName} onChange={this.handleChange} autoFocus={true} />
             </FormGroup>
-            {/* <FormGroup>
-              <SelectIcon
-                onIconChange={this.onIconChange}
-                iconClassName={this.state.iconClassName}
-              />
-            </FormGroup> */}
             <FormGroup>
               <Label>{gettext('The file corresponding to this page')}</Label>
               <SeahubSelect

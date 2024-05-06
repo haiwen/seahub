@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { PopoverBody } from 'reactstrap';
 import SeahubPopover from '../../../../components/common/seahub-popover';
 import { gettext } from '../../../../utils/constants';
-import { PAGE_ICON_LIST } from '../../utils';
 
 import '../../css/view-edit-popover.css';
 
@@ -31,13 +29,6 @@ class ViewEditPopover extends Component {
     this.props.toggleViewEditor();
   };
 
-  removeViewIcon = () => {
-    const { viewIcon, onChangeIcon } = this.props;
-    if (viewIcon) {
-      onChangeIcon(null);
-    }
-  };
-
   renderViewName = () => {
     const { viewName } = this.props;
     return (
@@ -50,30 +41,6 @@ class ViewEditPopover extends Component {
           autoFocus={true}
           ref={this.viewInputRef}
         />
-      </div>
-    );
-  };
-
-  renderIconSettings = () => {
-    const { viewIcon } = this.props;
-    return (
-      <div className="row view-icon-editor">
-        {PAGE_ICON_LIST.map((icon) => {
-          let currentViewIcon = (viewIcon && viewIcon.includes('dtable-icon')) ? viewIcon.replace('dtable-icon-', '') : viewIcon;
-          let isActive = icon === currentViewIcon;
-          return (
-            <div key={icon}
-              className="view-icon-item-editor"
-              onClick={() => this.props.onChangeIcon(isActive ? '' : icon)}
-              style={{ background: isActive ? '#ff8000' : '' }}
-            >
-              <label className="view-icon-item-container">
-                <svg className={classnames('svg-item', { 'view-icon-color-white': isActive })}><use xlinkHref={`#${icon}`}/></svg>
-              </label>
-            </div>
-          );
-        })
-        }
       </div>
     );
   };
@@ -91,12 +58,9 @@ class ViewEditPopover extends Component {
       >
         <div className="view-edit-popover-header">
           <span className='header-text'>{gettext('Modify Name')}</span>
-          {/* <span className='header-text'>{gettext('Name and icon')}</span> */}
-          {/* <span className='remove-icon-button' onClick={this.removeViewIcon}>{gettext('Remove icon')}</span> */}
         </div>
         <PopoverBody className="view-edit-content">
           {this.renderViewName()}
-          {/* {this.renderIconSettings()} */}
         </PopoverBody>
       </SeahubPopover>
     );
@@ -105,9 +69,7 @@ class ViewEditPopover extends Component {
 
 ViewEditPopover.propTypes = {
   viewName: PropTypes.string,
-  viewIcon: PropTypes.string,
   onChangeName: PropTypes.func,
-  onChangeIcon: PropTypes.func,
   toggleViewEditor: PropTypes.func,
   viewEditorId: PropTypes.string,
 };
