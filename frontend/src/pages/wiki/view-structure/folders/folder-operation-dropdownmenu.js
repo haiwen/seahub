@@ -87,7 +87,7 @@ export default class FolderOperationDropdownMenu extends Component {
             </DropdownItem>
             <DropdownItem onClick={this.openFolderEditor}>
               <Icon symbol={'edit'}/>
-              <span className="item-text">{gettext('Modify name and icon')}</span>
+              <span className="item-text">{gettext('Modify name')}</span>
             </DropdownItem>
             <DropdownItem
               // onMouseDown={this.onClickDelete}

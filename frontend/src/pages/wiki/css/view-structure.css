@@ -371,6 +371,7 @@
 .view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level,
 .view-structure-light.view-structure .view-folder .icon-expand-folder {
   color: #666;
+  margin-left: 4px;
 }
 
 .view-structure .view-folder-wrapper.can-drop-top::before {
@@ -392,4 +393,10 @@
   background-color: #666;
   top: unset;
   bottom: 0;
+}
+
+.svg-item {
+  width: 1em;
+  height: 1em;
+  font-size: 16px;
 }

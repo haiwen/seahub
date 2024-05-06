@@ -90,12 +90,13 @@ class ViewEditPopover extends Component {
         popoverClassName="view-edit-popover"
       >
         <div className="view-edit-popover-header">
-          <span className='header-text'>{gettext('Name and icon')}</span>
-          <span className='remove-icon-button' onClick={this.removeViewIcon}>{gettext('Remove icon')}</span>
+          <span className='header-text'>{gettext('Modify Name')}</span>
+          {/* <span className='header-text'>{gettext('Name and icon')}</span> */}
+          {/* <span className='remove-icon-button' onClick={this.removeViewIcon}>{gettext('Remove icon')}</span> */}
         </div>
         <PopoverBody className="view-edit-content">
           {this.renderViewName()}
-          {this.renderIconSettings()}
+          {/* {this.renderIconSettings()} */}
         </PopoverBody>
       </SeahubPopover>
     );

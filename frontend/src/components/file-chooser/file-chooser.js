@@ -14,6 +14,7 @@ import '../../css/file-chooser.css';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
+  hideLibraryName: PropTypes.bool,
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
@@ -420,10 +421,12 @@ class FileChooser extends React.Component {
         )}
         {this.props.mode === 'only_current_library' && (
           <div className="list-view">
+            {!this.props.hideLibraryName &&
             <div className="list-view-header">
               <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
               <span className="library">{gettext('Current Library')}</span>
             </div>
+            }
             {
               this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
               <RepoListView
@@ -437,6 +440,7 @@ class FileChooser extends React.Component {
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
                 selectedItemInfo={this.state.selectedItemInfo}
+                hideLibraryName={this.props.hideLibraryName}
               />
             }
           </div>

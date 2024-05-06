@@ -124,7 +124,7 @@ export default class PageDropdownMenu extends Component {
         >
           <DropdownItem onClick={this.onRenameView}>
             <Icon symbol={'edit'}/>
-            <span className="item-text">{gettext('Modify name and icon')}</span>
+            <span className="item-text">{gettext('Modify name')}</span>
           </DropdownItem>
           {canDuplicate &&
             <DropdownItem onClick={this.duplicatePage}>

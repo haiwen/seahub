@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
-import SelectIcon from './select-icon';
+// import SelectIcon from './select-icon';
 import { gettext } from '../../../utils/constants';
 
 export default class NewFolderDialog extends Component {
@@ -63,7 +63,7 @@ export default class NewFolderDialog extends Component {
   };
 
   render() {
-    const { folderName, iconClassName, errMessage } = this.state;
+    const { folderName, errMessage } = this.state;
     return (
       <Modal
         isOpen={true}
@@ -86,12 +86,12 @@ export default class NewFolderDialog extends Component {
                 autoFocus={true}
               />
             </FormGroup>
-            <FormGroup>
+            {/* <FormGroup>
               <SelectIcon
                 onIconChange={this.onIconChange}
-                iconClassName={iconClassName}
+                iconClassName={this.state.iconClassName}
               />
-            </FormGroup>
+            </FormGroup> */}
           </Form>
           {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
         </ModalBody>
