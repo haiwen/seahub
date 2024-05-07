@@ -35,6 +35,7 @@ class LibContentView extends React.Component {
     super(props);
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || 'list',
+      isTreePanelShown: true, // display the 'dirent tree' side panel
       path: '',
       pathExist: true,
       isViewFile: false,
@@ -213,7 +214,7 @@ class LibContentView extends React.Component {
       }
     } else if (event.state && event.state.path) { // file path
       let path = event.state.path;
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         if (Utils.isMarkdownFile(path)) { // Judging not strict
           this.showFile(path);
           return;
@@ -235,7 +236,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let { path, dirID } = this.state;
 
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       if (this.state.isViewFile) {
         this.updateColumnMarkdownData(path);
       } else {
@@ -328,14 +329,16 @@ class LibContentView extends React.Component {
 
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
+        /*
         if (this.state.currentMode !== 'column') {
           cookie.save('seafile_view_mode', 'column');
           this.setState({currentMode: 'column'});
         }
+        */
         this.loadSidePanel(path);
         this.showFile(path);
       }).catch(() => {
-        if (this.state.currentMode === 'column') { // After an error occurs, follow dir
+        if (this.state.isTreePanelShown) { // After an error occurs, follow dir
           this.loadSidePanel(path);
           this.showDir(path);
         } else {
@@ -343,7 +346,7 @@ class LibContentView extends React.Component {
         }
       });
     } else {
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.loadSidePanel(path);
         this.showDir(path);
       } else {
@@ -401,7 +404,7 @@ class LibContentView extends React.Component {
   showFile = (filePath) => {
     let repoID = this.props.repoID;
 
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       seafileAPI.listFileTags(repoID, filePath).then(res => {
         let fileTags = res.data.file_tags.map(item => {
           return new FileTag(item);
@@ -607,14 +610,14 @@ class LibContentView extends React.Component {
       if (data.successful) {
         if (asyncOperationType === 'move') {
           if (this.currentMoveItemName && this.currentMoveItemPath) {
-            if (this.state.currentMode === 'column') {
+            if (this.state.isTreePanelShown) {
               this.deleteTreeNode(this.currentMoveItemPath);
             }
             this.moveDirent(this.currentMoveItemName);
             this.currentMoveItemName = '';
             this.currentMoveItemPath = '';
           } else {
-            if (this.state.currentMode === 'column') {
+            if (this.state.isTreePanelShown) {
               let direntPaths = this.getSelectedDirentPaths();
               this.deleteTreeNodes(direntPaths);
             }
@@ -688,14 +691,14 @@ class LibContentView extends React.Component {
       }
 
       if (repoID === destRepo.repo_id) {
-        if (this.state.currentMode === 'column') {
+        if (this.state.isTreePanelShown) {
           this.deleteTreeNodes(direntPaths);
         }
 
         this.moveDirents(dirNames);
 
         // 2. tow columns mode need update left tree
-        if (this.state.currentMode === 'column') {
+        if (this.state.isTreePanelShown) {
           this.updateMoveCopyTreeNode(destDirentPath);
         }
 
@@ -740,7 +743,7 @@ class LibContentView extends React.Component {
       }
 
       if (repoID === destRepo.repo_id) {
-        if (this.state.currentMode === 'column') {
+        if (this.state.isTreePanelShown) {
           this.updateMoveCopyTreeNode(destDirentPath);
         }
 
@@ -779,14 +782,14 @@ class LibContentView extends React.Component {
         let name = Utils.getFileName(dirent.path);
         let parentPath = Utils.getDirName(dirent.path);
         if (!dirent.is_dir) {
-          if (this.state.currentMode === 'column') {
+          if (this.state.isTreePanelShown) {
             this.addNodeToTree(name, parentPath, 'file');
           }
           if (parentPath === this.state.path && !this.state.isViewFile) {
             this.addDirent(name, 'file');
           }
         } else {
-          if (this.state.currentMode === 'column') {
+          if (this.state.isTreePanelShown) {
             this.addNodeToTree(name, parentPath, 'dir');
           }
           if (parentPath === this.state.path && !this.state.isViewFile) {
@@ -823,7 +826,7 @@ class LibContentView extends React.Component {
 
     this.setState({updateDetail: !this.state.updateDetail});
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.deleteTreeNodes(direntPaths);
       }
 
@@ -862,7 +865,7 @@ class LibContentView extends React.Component {
       let name = Utils.getFileName(dirPath);
       let parentPath = Utils.getDirName(dirPath);
 
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.addNodeToTree(name, parentPath, 'dir');
       }
 
@@ -880,7 +883,7 @@ class LibContentView extends React.Component {
     seafileAPI.createFile(repoID, filePath).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.addNodeToTree(name, parentPath, 'file');
       }
       if (parentPath === this.state.path && !this.state.isViewFile) {
@@ -902,7 +905,7 @@ class LibContentView extends React.Component {
     }
     cookie.save('seafile_view_mode', mode);
     let path = this.state.path;
-    if (this.state.currentMode === 'column' && this.state.isViewFile) {
+    if (this.state.isTreePanelShown && this.state.isViewFile) {
       path = Utils.getDirName(path);
       this.setState({
         path: path,
@@ -914,7 +917,7 @@ class LibContentView extends React.Component {
       window.history.pushState({url: url, path: path}, path, url);
     }
 
-    if (mode === 'column') {
+    if (this.state.isTreePanelShown) {
       this.loadSidePanel(this.state.path);
     }
     this.isNeedUpdateHistoryState = false;
@@ -927,7 +930,7 @@ class LibContentView extends React.Component {
     if (this.state.currentPath === path) {
       return;
     }
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       // load sidePanel
       let index = -1;
       let paths = Utils.getPaths(path);
@@ -982,7 +985,7 @@ class LibContentView extends React.Component {
   onMainNavBarClick = (nodePath) => {
     //just for dir
     this.resetSelected();
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(nodePath);
       tree.expandNode(node);
@@ -1058,7 +1061,7 @@ class LibContentView extends React.Component {
   };
 
   renameItemAjaxCallback(path, newName) {
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       this.renameTreeNode(path, newName);
     }
     this.renameDirent(path, newName);
@@ -1122,7 +1125,7 @@ class LibContentView extends React.Component {
   }
 
   deleteItemAjaxCallback(path) {
-    if (this.state.currentMode === 'column') {
+    if (this.state.isTreePanelShown) {
       this.deleteTreeNode(path);
     }
     this.deleteDirent(path);
@@ -1153,13 +1156,14 @@ class LibContentView extends React.Component {
         });
       }
 
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.deleteTreeNode(direntPath);
       }
 
       // 1. move to current repo
       // 2. tow columns mode need update left tree
-      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
+      if (repoID === destRepo.repo_id &&
+    this.state.isTreePanelShown) {
         this.updateMoveCopyTreeNode(moveToDirentPath);
       }
 
@@ -1215,7 +1219,7 @@ class LibContentView extends React.Component {
       }
 
       if (repoID === destRepo.repo_id) {
-        if (this.state.currentMode === 'column') {
+        if (this.state.isTreePanelShown) {
           this.updateMoveCopyTreeNode(copyToDirentPath);
         }
 
@@ -1258,7 +1262,7 @@ class LibContentView extends React.Component {
       let new_path = parentDir + '/' + newFileName;
       let parentPath = Utils.getDirName(new_path);
 
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.addNodeToTree(newFileName, parentPath, 'file');
       }
 
@@ -1303,12 +1307,12 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (dirent.isDir()) {  // is dir
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.loadTreeNodeByPath(direntPath);
       }
       this.showDir(direntPath);
     } else {  // is file
-      if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
+      if (this.state.isTreePanelShown && Utils.isMarkdownFile(direntPath)) {
         this.showColumnMarkdownFile(direntPath);
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
@@ -1426,7 +1430,7 @@ class LibContentView extends React.Component {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
       let dirent = new Dirent(direntObject);
-      if (this.state.currentMode === 'column') {
+      if (this.state.isTreePanelShown) {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
       }
       if (direntObject.type === 'dir') {
@@ -2041,6 +2045,7 @@ class LibContentView extends React.Component {
         <div className="main-panel-center flex-row">
           <LibContentContainer
             pathPrefix={this.props.pathPrefix}
+            isTreePanelShown={this.state.isTreePanelShown}
             currentMode={this.state.currentMode}
             path={this.state.path}
             pathExist={this.state.pathExist}
