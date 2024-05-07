@@ -4,14 +4,13 @@ import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import LibDetail from '../../components/dirent-detail/lib-details';
-import DirListView from '../../components/dir-view-mode/dir-list-view';
-import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 
 import '../../css/lib-content-view.css';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
+  isTreePanelShown: PropTypes.bool.isRequired,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
@@ -114,12 +113,6 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   };
 
-  onGridItemClick = (dirent) => {
-    this.setState({currentDirent: dirent});
-    this.props.onDirentClick(dirent);
-  };
-
-  // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onDirentClick(dirent);
@@ -195,141 +188,68 @@ class LibContentContainer extends React.Component {
               sortItems={this.props.sortItems}
             />
           </div>
-          <div className={`cur-view-content lib-content-container ${this.props.currentMode === 'column' ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
+          <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
-              <Fragment>
-                {this.props.currentMode === 'list' && (
-                  <DirListView
-                    path={this.props.path}
-                    repoID={repoID}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    userPerm={this.props.userPerm}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    isRepoInfoBarShow={isRepoInfoBarShow}
-                    repoTags={this.props.repoTags}
-                    usedRepoTags={this.props.usedRepoTags}
-                    updateUsedRepoTags={this.props.updateUsedRepoTags}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
-                    fullDirentList={this.props.fullDirentList}
-                    sortBy={this.props.sortBy}
-                    sortOrder={this.props.sortOrder}
-                    sortItems={this.props.sortItems}
-                    onAddFolder={this.props.onAddFolder}
-                    onAddFile={this.props.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemSelected={this.onItemSelected}
-                    onItemDelete={this.onItemDelete}
-                    onItemRename={this.props.onItemRename}
-                    onItemMove={this.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onItemConvert={this.props.onItemConvert}
-                    onDirentClick={this.onDirentClick}
-                    updateDirent={this.props.updateDirent}
-                    isAllItemSelected={this.props.isAllDirentSelected}
-                    onAllItemSelected={this.props.onAllDirentSelected}
-                    selectedDirentList={this.props.selectedDirentList}
-                    onItemsMove={this.props.onItemsMove}
-                    onItemsCopy={this.props.onItemsCopy}
-                    onItemsDelete={this.props.onItemsDelete}
-                    onFileTagChanged={this.props.onFileTagChanged}
-                    showDirentDetail={this.props.showDirentDetail}
-                    loadDirentList={this.props.loadDirentList}
-                  />
-                )}
-                {this.props.currentMode === 'grid' && (
-                  <DirGridView
-                    path={this.props.path}
-                    repoID={repoID}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    userPerm={this.props.userPerm}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    onRenameNode={this.props.onRenameNode}
-                    isRepoInfoBarShow={isRepoInfoBarShow}
-                    repoTags={this.props.repoTags}
-                    usedRepoTags={this.props.usedRepoTags}
-                    updateUsedRepoTags={this.props.updateUsedRepoTags}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
-                    fullDirentList={this.props.fullDirentList}
-                    onAddFile={this.props.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemDelete={this.props.onItemDelete}
-                    onItemMove={this.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onItemConvert={this.props.onItemConvert}
-                    updateDirent={this.props.updateDirent}
-                    onAddFolder={this.props.onAddFolder}
-                    showDirentDetail={this.props.showDirentDetail}
-                    onGridItemClick={this.onGridItemClick}
-                    isDirentDetailShow={this.props.isDirentDetailShow}
-                    onItemRename={this.props.onItemRename}
-                    onFileTagChanged={this.props.onFileTagChanged}
-                  />
-                )}
-                {this.props.currentMode === 'column' && (
-                  <DirColumnView
-                    path={this.props.path}
-                    repoID={repoID}
-                    currentRepoInfo={this.props.currentRepoInfo}
-                    isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                    userPerm={this.props.userPerm}
-                    enableDirPrivateShare={this.props.enableDirPrivateShare}
-                    isTreeDataLoading={this.props.isTreeDataLoading}
-                    treeData={this.props.treeData}
-                    currentNode={this.props.currentNode}
-                    onNodeClick={this.props.onNodeClick}
-                    onNodeCollapse={this.props.onNodeCollapse}
-                    onNodeExpanded={this.props.onNodeExpanded}
-                    onAddFolderNode={this.props.onAddFolder}
-                    onAddFileNode={this.props.onAddFile}
-                    onRenameNode={this.props.onRenameNode}
-                    onDeleteNode={this.props.onDeleteNode}
-                    isViewFile={this.props.isViewFile}
-                    isFileLoading={this.props.isFileLoading}
-                    isFileLoadedErr={this.props.isFileLoadedErr}
-                    hash={this.props.hash}
-                    filePermission={this.props.filePermission}
-                    content={this.props.content}
-                    lastModified={this.props.lastModified}
-                    latestContributor={this.props.latestContributor}
-                    onLinkClick={this.props.onLinkClick}
-                    isRepoInfoBarShow={isRepoInfoBarShow}
-                    repoTags={this.props.repoTags}
-                    usedRepoTags={this.props.usedRepoTags}
-                    updateUsedRepoTags={this.props.updateUsedRepoTags}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    direntList={this.props.direntList}
-                    fullDirentList={this.props.fullDirentList}
-                    sortBy={this.props.sortBy}
-                    sortOrder={this.props.sortOrder}
-                    sortItems={this.props.sortItems}
-                    onAddFolder={this.props.onAddFolder}
-                    onAddFile={this.props.onAddFile}
-                    onItemClick={this.onItemClick}
-                    onItemSelected={this.onItemSelected}
-                    onItemDelete={this.onItemDelete}
-                    onItemRename={this.props.onItemRename}
-                    onItemMove={this.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onItemConvert={this.props.onItemConvert}
-                    onDirentClick={this.onDirentClick}
-                    updateDirent={this.props.updateDirent}
-                    isAllItemSelected={this.props.isAllDirentSelected}
-                    onAllItemSelected={this.props.onAllDirentSelected}
-                    selectedDirentList={this.props.selectedDirentList}
-                    onItemsMove={this.props.onItemsMove}
-                    onItemsCopy={this.props.onItemsCopy}
-                    onItemsDelete={this.props.onItemsDelete}
-                    onFileTagChanged={this.props.onFileTagChanged}
-                    showDirentDetail={this.props.showDirentDetail}
-                    onItemsScroll={this.onItemsScroll}
-                  />
-                )}
-              </Fragment>
+              <DirColumnView
+                currentMode={this.props.currentMode}
+                path={this.props.path}
+                repoID={repoID}
+                currentRepoInfo={this.props.currentRepoInfo}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                userPerm={this.props.userPerm}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                isTreeDataLoading={this.props.isTreeDataLoading}
+                treeData={this.props.treeData}
+                currentNode={this.props.currentNode}
+                onNodeClick={this.props.onNodeClick}
+                onNodeCollapse={this.props.onNodeCollapse}
+                onNodeExpanded={this.props.onNodeExpanded}
+                onAddFolderNode={this.props.onAddFolder}
+                onAddFileNode={this.props.onAddFile}
+                onRenameNode={this.props.onRenameNode}
+                onDeleteNode={this.props.onDeleteNode}
+                isViewFile={this.props.isViewFile}
+                isFileLoading={this.props.isFileLoading}
+                isFileLoadedErr={this.props.isFileLoadedErr}
+                hash={this.props.hash}
+                filePermission={this.props.filePermission}
+                content={this.props.content}
+                lastModified={this.props.lastModified}
+                latestContributor={this.props.latestContributor}
+                onLinkClick={this.props.onLinkClick}
+                isRepoInfoBarShow={isRepoInfoBarShow}
+                repoTags={this.props.repoTags}
+                usedRepoTags={this.props.usedRepoTags}
+                updateUsedRepoTags={this.props.updateUsedRepoTags}
+                isDirentListLoading={this.props.isDirentListLoading}
+                direntList={this.props.direntList}
+                fullDirentList={this.props.fullDirentList}
+                sortBy={this.props.sortBy}
+                sortOrder={this.props.sortOrder}
+                sortItems={this.props.sortItems}
+                onAddFolder={this.props.onAddFolder}
+                onAddFile={this.props.onAddFile}
+                onItemClick={this.onItemClick}
+                onItemSelected={this.onItemSelected}
+                onItemDelete={this.onItemDelete}
+                onItemRename={this.props.onItemRename}
+                onItemMove={this.onItemMove}
+                onItemCopy={this.props.onItemCopy}
+                onItemConvert={this.props.onItemConvert}
+                onDirentClick={this.onDirentClick}
+                updateDirent={this.props.updateDirent}
+                isAllItemSelected={this.props.isAllDirentSelected}
+                onAllItemSelected={this.props.onAllDirentSelected}
+                selectedDirentList={this.props.selectedDirentList}
+                onItemsMove={this.props.onItemsMove}
+                onItemsCopy={this.props.onItemsCopy}
+                onItemsDelete={this.props.onItemsDelete}
+                onFileTagChanged={this.props.onFileTagChanged}
+                showDirentDetail={this.props.showDirentDetail}
+                onItemsScroll={this.onItemsScroll}
+                isDirentDetailShow={this.props.isDirentDetailShow}
+              />
             )}
           </div>
         </div>

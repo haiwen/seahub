@@ -30,7 +30,6 @@ class ViewModeToolbar extends React.Component {
         <div className="view-mode btn-group">
           <button className={`${baseClass} sf2-icon-list-view ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode}></button>
           <button className={`${baseClass} sf2-icon-grid-view ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode}></button>
-          <button className={`${baseClass} sf2-icon-two-columns ${this.props.currentMode === 'column' ? 'current-mode' : ''}`} id='column' title={gettext('Column')} aria-label={gettext('Column')} onClick={this.switchViewMode}></button>
         </div>
         {!this.props.isCustomPermission && (
           <div className="detail-btn btn-group">

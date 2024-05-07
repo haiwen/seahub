@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
 import DirListView from './dir-list-view';
+import DirGridView from './dir-grid-view';
 
 const propTypes = {
+  currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   // repoinfo
@@ -64,7 +66,8 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
-  onItemsScroll: PropTypes.func.isRequired
+  onItemsScroll: PropTypes.func.isRequired,
+  isDirentDetailShow: PropTypes.bool.isRequired
 };
 
 class DirColumnView extends React.Component {
@@ -143,6 +146,7 @@ class DirColumnView extends React.Component {
   }
 
   render() {
+    const { currentMode } = this.props;
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const select = this.state.inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
@@ -185,7 +189,7 @@ class DirColumnView extends React.Component {
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}
             />
-          ) : (
+          ) : (currentMode == 'list' ?
             <DirListView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -222,6 +226,35 @@ class DirColumnView extends React.Component {
               repoTags={this.props.repoTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
+            /> :
+            <DirGridView
+              path={this.props.path}
+              repoID={this.props.repoID}
+              currentRepoInfo={this.props.currentRepoInfo}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+              userPerm={this.props.userPerm}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              onRenameNode={this.props.onRenameNode}
+              isRepoInfoBarShow={this.props.isRepoInfoBarShow}
+              repoTags={this.props.repoTags}
+              usedRepoTags={this.props.usedRepoTags}
+              updateUsedRepoTags={this.props.updateUsedRepoTags}
+              isDirentListLoading={this.props.isDirentListLoading}
+              direntList={this.props.direntList}
+              fullDirentList={this.props.fullDirentList}
+              onAddFile={this.props.onAddFile}
+              onItemClick={this.props.onItemClick}
+              onItemDelete={this.props.onItemDelete}
+              onItemMove={this.props.onItemMove}
+              onItemCopy={this.props.onItemCopy}
+              onItemConvert={this.props.onItemConvert}
+              updateDirent={this.props.updateDirent}
+              onAddFolder={this.props.onAddFolder}
+              showDirentDetail={this.props.showDirentDetail}
+              onGridItemClick={this.props.onDirentClick}
+              isDirentDetailShow={this.props.isDirentDetailShow}
+              onItemRename={this.props.onItemRename}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
           )}
         </div>
