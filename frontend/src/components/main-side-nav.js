@@ -209,27 +209,27 @@ class MainSideNav extends React.Component {
 
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                <span className="sf2-icon-star" aria-hidden="true"></span>
+                <span className="sf3-font-starred sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Favorites')}</span>
               </Link>
             </li>
             {showActivity &&
               <li className="nav-item">
                 <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
-                  <span className="sf2-icon-clock" aria-hidden="true"></span>
+                  <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Activities')}</span>
                 </Link>
               </li>
             }
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
-                <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
+                <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Wikis')}</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={(e) => this.tabItemClick(e, 'linked-devices')}>
-                <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Linked Devices')}</span>
               </Link>
             </li>
@@ -243,7 +243,7 @@ class MainSideNav extends React.Component {
             }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
-                <span className="sf2-icon-wrench" aria-hidden="true"></span>
+                <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Share Admin')}</span>
                 <span className={`toggle-icon fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
               </a>

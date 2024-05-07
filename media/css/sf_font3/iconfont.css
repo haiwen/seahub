@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1713953465004'); /* IE9 */
-  src: url('iconfont.eot?t=1713953465004#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1713953465004') format('woff2'),
-       url('iconfont.woff?t=1713953465004') format('woff'),
-       url('iconfont.ttf?t=1713953465004') format('truetype'),
-       url('iconfont.svg?t=1713953465004#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1714979170396'); /* IE9 */
+  src: url('iconfont.eot?t=1714979170396#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1714979170396') format('woff2'),
+       url('iconfont.woff?t=1714979170396') format('woff'),
+       url('iconfont.ttf?t=1714979170396') format('truetype'),
+       url('iconfont.svg?t=1714979170396#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-starred:before {
+  content: "\e80b";
+}
+
+.sf3-font-devices:before {
+  content: "\e80c";
+}
+
+.sf3-font-wrench:before {
+  content: "\e808";
+}
+
+.sf3-font-wiki:before {
+  content: "\e809";
+}
+
+.sf3-font-activities:before {
+  content: "\e80a";
 }
 
 .sf3-font-share-with-all:before {
