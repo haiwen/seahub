@@ -81,9 +81,13 @@ export default class FolderOperationDropdownMenu extends Component {
             positionFixed={true}
             style={{ zIndex: 1051 }}
           >
-            <DropdownItem onClick={this.props.onToggleAddView.bind(this, this.props.folderId)}>
+            <DropdownItem onClick={this.props.onToggleAddView.bind(this, this.props.folderId, 'new-page')}>
               <Icon symbol={'main-view'}/>
               <span className="item-text">{gettext('Add page')}</span>
+            </DropdownItem>
+            <DropdownItem onClick={this.props.onToggleAddView.bind(this, this.props.folderId, 'existing-file')}>
+              <Icon symbol={'file'}/>
+              <span className="item-text">{gettext('Add existing file')}</span>
             </DropdownItem>
             <DropdownItem onClick={this.openFolderEditor}>
               <Icon symbol={'edit'}/>
