@@ -152,7 +152,7 @@ a, a:hover { color: #ec8000; }
 }
 
 .sf-heading .nav-icon {
-  font-size: .875rem;
+  font-size: 1rem;
   margin-right: 6px;
   line-height: 1;
   color: #999;
@@ -681,7 +681,7 @@ a, a:hover { color: #ec8000; }
 
 .side-nav-con [class^="sf2-icon-"],
 .side-nav-con [class^="sf3-font-"] {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 1;
     color: #999;
     margin-right: 0.5rem;
@@ -727,14 +727,14 @@ a, a:hover { color: #ec8000; }
     height: auto;
 }
 .side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link {
-    padding-left: 2.5rem;
+    padding-left: 2.25rem;
     height: 28px;
     display: flex;
     align-items: center;
 }
 
 .side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link .nav-icon {
-  font-size: .875rem;
+  font-size: 1rem;
   margin-right: 6px;
 }
 
