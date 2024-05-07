@@ -9,7 +9,8 @@ import ViewStructure from './view-structure';
 import IndexMdViewer from './index-md-viewer';
 import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
-import AddPageDialog from './view-structure/add-page-dialog';
+import AddExistFileDialog from './view-structure/add-exist-file-dialog';
+import AddNewPageDialog from './view-structure/add-new-page-dialog';
 import ViewStructureFooter from './view-structure/view-structure-footer';
 import { generateUniqueId, getIconURL, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
@@ -43,7 +44,8 @@ class SidePanel extends Component {
     this.isNodeMenuShow = false;
     this.state = {
       isShowNewFolderDialog: false,
-      isShowAddPageDialog: false,
+      isShowAddExistFileDialog: false,
+      isShowAddNewPageDialog: false,
     };
   }
 
@@ -74,7 +76,7 @@ class SidePanel extends Component {
         )} */}
         {isEditWiki &&
           <ViewStructureFooter
-            onToggleAddView={this.openAddPageDialog.bind(this, null)}
+            onToggleAddView={this.openAddPageDialog}
             onToggleAddFolder={this.onToggleAddFolder}
           />
         }
@@ -84,9 +86,15 @@ class SidePanel extends Component {
             onToggleAddFolderDialog={this.onToggleAddFolder}
           />
         }
-        {this.state.isShowAddPageDialog &&
-          <AddPageDialog
-            toggle={this.closeAddPageDialog}
+        {this.state.isShowAddExistFileDialog &&
+          <AddExistFileDialog
+            toggle={this.closeAddExistFileDialog}
+            onAddNewPage={this.onAddNewPage}
+          />
+        }
+        {this.state.isShowAddNewPageDialog &&
+          <AddNewPageDialog
+            toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
           />
         }
@@ -314,14 +322,23 @@ class SidePanel extends Component {
     this.setState({ isShowNewFolderDialog: !this.state.isShowNewFolderDialog });
   };
 
-  openAddPageDialog = (folder_id) => {
+  openAddPageDialog = (folder_id, pageType) => {
     this.current_folder_id = folder_id;
-    this.setState({ isShowAddPageDialog: true });
+    if (pageType === 'new-page') {
+      this.setState({ isShowAddNewPageDialog: true });
+    } else if (pageType === 'existing-file') {
+      this.setState({ isShowAddExistFileDialog: true });
+    }
   };
 
-  closeAddPageDialog = () => {
+  closeAddExistFileDialog = () => {
     this.current_folder_id = null;
-    this.setState({ isShowAddPageDialog: false });
+    this.setState({ isShowAddExistFileDialog: false });
+  };
+
+  closeAddNewPageDialog = () => {
+    this.current_folder_id = null;
+    this.setState({ isShowAddNewPageDialog: false });
   };
 
   onSetFolderId = (folder_id) => {
@@ -359,9 +376,15 @@ class SidePanel extends Component {
             onToggleAddFolderDialog={this.onToggleAddFolder}
           />
         }
-        {this.state.isShowAddPageDialog &&
-          <AddPageDialog
-            toggle={this.closeAddPageDialog}
+        {this.state.isShowAddExistFileDialog &&
+          <AddExistFileDialog
+            toggle={this.closeAddExistFileDialog}
+            onAddNewPage={this.onAddNewPage}
+          />
+        }
+        {this.state.isShowAddNewPageDialog &&
+          <AddNewPageDialog
+            toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
           />
         }
