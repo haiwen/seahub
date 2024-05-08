@@ -9,7 +9,6 @@ import ViewStructure from './view-structure';
 import IndexMdViewer from './index-md-viewer';
 import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
-import AddExistFileDialog from './view-structure/add-exist-file-dialog';
 import AddNewPageDialog from './view-structure/add-new-page-dialog';
 import ViewStructureFooter from './view-structure/view-structure-footer';
 import { generateUniqueId, getIconURL, isObjectNotEmpty } from './utils';
@@ -44,7 +43,6 @@ class SidePanel extends Component {
     this.isNodeMenuShow = false;
     this.state = {
       isShowNewFolderDialog: false,
-      isShowAddExistFileDialog: false,
       isShowAddNewPageDialog: false,
     };
   }
@@ -84,12 +82,6 @@ class SidePanel extends Component {
           <NewFolderDialog
             onAddFolder={this.addPageFolder}
             onToggleAddFolderDialog={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowAddExistFileDialog &&
-          <AddExistFileDialog
-            toggle={this.closeAddExistFileDialog}
-            onAddNewPage={this.onAddNewPage}
           />
         }
         {this.state.isShowAddNewPageDialog &&
@@ -322,18 +314,9 @@ class SidePanel extends Component {
     this.setState({ isShowNewFolderDialog: !this.state.isShowNewFolderDialog });
   };
 
-  openAddPageDialog = (folder_id, pageType) => {
+  openAddPageDialog = (folder_id) => {
     this.current_folder_id = folder_id;
-    if (pageType === 'new-page') {
-      this.setState({ isShowAddNewPageDialog: true });
-    } else if (pageType === 'existing-file') {
-      this.setState({ isShowAddExistFileDialog: true });
-    }
-  };
-
-  closeAddExistFileDialog = () => {
-    this.current_folder_id = null;
-    this.setState({ isShowAddExistFileDialog: false });
+    this.setState({ isShowAddNewPageDialog: true });
   };
 
   closeAddNewPageDialog = () => {
@@ -374,12 +357,6 @@ class SidePanel extends Component {
           <NewFolderDialog
             onAddFolder={this.addPageFolder}
             onToggleAddFolderDialog={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowAddExistFileDialog &&
-          <AddExistFileDialog
-            toggle={this.closeAddExistFileDialog}
-            onAddNewPage={this.onAddNewPage}
           />
         }
         {this.state.isShowAddNewPageDialog &&

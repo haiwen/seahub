@@ -11,14 +11,9 @@ class AddViewDropdownMenu extends Component {
     this.props.toggleDropdown();
   };
 
-  addExistingFile = event => {
-    this.onStopPropagation(event);
-    this.props.onToggleAddView(null, 'existing-file');
-  };
-
   addPage = event => {
     this.onStopPropagation(event);
-    this.props.onToggleAddView(null, 'new-page');
+    this.props.onToggleAddView(null);
   };
 
   onToggleAddFolder = event => {
@@ -36,12 +31,8 @@ class AddViewDropdownMenu extends Component {
         <DropdownToggle caret></DropdownToggle>
         <DropdownMenu container="body" className='dtable-dropdown-menu large mt-0'>
           <DropdownItem onClick={this.addPage}>
-            <Icon symbol={'main-view'}/>
-            <span className='item-text'>{gettext('Add page')}</span>
-          </DropdownItem>
-          <DropdownItem onClick={this.addExistingFile}>
             <Icon symbol={'file'}/>
-            <span className='item-text'>{gettext('Add existing file')}</span>
+            <span className='item-text'>{gettext('Add page')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.onToggleAddFolder}>
             <Icon symbol={'folders'}/>
