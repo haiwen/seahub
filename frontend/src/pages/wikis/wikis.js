@@ -80,23 +80,6 @@ class Wikis extends Component {
     });
   };
 
-  renameWiki = (wiki, newName) => {
-    seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
-      let wikis = this.state.wikis.map((item) => {
-        if (item.name === wiki.name) {
-          item = res.data;
-        }
-        return item;
-      });
-      this.setState({wikis: wikis});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
-  };
-
   deleteWiki = (wiki) => {
     seafileAPI.deleteWiki(wiki.slug).then(() => {
       let wikis = this.state.wikis.filter(item => {
@@ -148,14 +131,15 @@ class Wikis extends Component {
               {(this.state.loading || this.state.wikis.length !== 0) &&
                 <WikiListView
                   data={this.state}
-                  renameWiki={this.renameWiki}
                   deleteWiki={this.deleteWiki}
                 />
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
                 <EmptyTip>
-                  <h2>{gettext('No published libraries')}</h2>
-                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Add Wiki" button in the menu bar.')}</p>
+                  <h2>{gettext('No Wikis')}</h2>
+                  <p>{gettext('You have not any wikis yet.')}</p>
+                  <p>{gettext('A wiki can be accessed by anyone, not only users, via its URL.')}</p>
+                  <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu bar.')}</p>
                 </EmptyTip>
               }
             </div>
