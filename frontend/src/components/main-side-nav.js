@@ -18,7 +18,7 @@ class MainSideNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      FilesNavUnfolded: false,
+      filesNavUnfolded: false,
       sharedExtended: false,
       closeSideBar:false,
       groupItems: [],
@@ -26,6 +26,7 @@ class MainSideNav extends React.Component {
 
     this.listHeight = 24; //for caculate tabheight
     this.adminHeight = 0;
+    this.filesNavHeight = 0;
   }
 
   shExtend = () => {
@@ -42,6 +43,8 @@ class MainSideNav extends React.Component {
         return group;
       });
 
+      const groupItemHeight = 28;
+      this.filesNavHeight = (groupList.length + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * groupItemHeight;
       _this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -72,18 +75,22 @@ class MainSideNav extends React.Component {
 
   renderSharedGroups() {
     return (
-      <ul className={'nav sub-nav nav-pills flex-column grp-list'}>
+      <>
         {this.state.groupItems.map(item => {
           return (
             <li key={item.id} className="nav-item">
-              <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.name)}`} onClick={(e) => this.tabItemClick(e, item.name, item.id)}>
+              <Link
+                to={siteRoot + 'group/' + item.id + '/'}
+                className={`nav-link ellipsis ${this.getActiveClass(item.name)}`}
+                onClick={(e) => this.tabItemClick(e, item.name, item.id)}
+              >
                 <span className="sf3-font-group sf3-font nav-icon" aria-hidden="true"></span>
                 <span className="nav-text">{item.name}</span>
               </Link>
             </li>
           );
         })}
-      </ul>
+      </>
     );
   }
 
@@ -157,9 +164,9 @@ class MainSideNav extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     this.setState({
-      FilesNavUnfolded: !this.state.FilesNavUnfolded
+      filesNavUnfolded: !this.state.filesNavUnfolded
     }, () => {
-      if (this.state.FilesNavUnfolded) {
+      if (this.state.filesNavUnfolded) {
         this.loadGroups();
       }
     });
@@ -167,7 +174,7 @@ class MainSideNav extends React.Component {
 
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
-    const { FilesNavUnfolded } = this.state;
+    const { filesNavUnfolded } = this.state;
     return (
       <div className="side-nav">
         <div className="side-nav-con">
@@ -176,9 +183,9 @@ class MainSideNav extends React.Component {
               <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                 <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Files')}</span>
-                <span className={`toggle-icon fas ${FilesNavUnfolded ? 'fa-caret-down':'fa-caret-left'} ${this.getActiveClass('libraries') ? 'text-white' : ''}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
+                <span className={`toggle-icon fas ${filesNavUnfolded ? 'fa-caret-down':'fa-caret-left'} ${this.getActiveClass('libraries') ? 'text-white' : ''}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
               </Link>
-              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${FilesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`}>
+              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{height: filesNavUnfolded ? this.filesNavHeight : 0}}>
                 {canAddRepo && (
                   <li className="nav-item">
                     <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
@@ -201,9 +208,7 @@ class MainSideNav extends React.Component {
                   </Link>
                 </li>
                 }
-                <li className="nav-item flex-column" id="group-nav">
-                  {this.renderSharedGroups()}
-                </li>
+                {this.renderSharedGroups()}
               </ul>
             </li>
 
