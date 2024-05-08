@@ -9,8 +9,7 @@ import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
-import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
+import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
 
 const propTypes = {
@@ -26,8 +25,7 @@ class Wikis extends Component {
       errorMsg: '',
       wikis: [],
       isShowAddWikiMenu: false,
-      isShowSelectDialog: false,
-      isShowCreateDialog: false,
+      isShowAddDialog: false,
     };
   }
 
@@ -58,23 +56,27 @@ class Wikis extends Component {
     this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
   };
 
-  onSelectToggle = () => {
-    this.setState({isShowSelectDialog: !this.state.isShowSelectDialog});
+  toggelAddWikiDialog = () => {
+    this.setState({isShowAddDialog: !this.state.isShowAddDialog});
   };
 
-  onCreateToggle = () => {
-    this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
-  };
-
-  addWiki = (repoID) => {
-    seafileAPI.addWiki(repoID).then((res) => {
-      this.state.wikis.push(res.data);
-      this.setState({wikis: this.state.wikis});
+  addWiki = (wikiName) => {
+    const repo = { name: wikiName, passwd: '' };
+    seafileAPI.createMineRepo(repo).then((res) => {
+      const repoID = res.data.repo_id;
+      seafileAPI.addWiki(repoID).then((res) => {
+        let wikis = this.state.wikis.slice(0);
+        wikis.push(res.data);
+        this.setState({ wikis });
+      }).catch((error) => {
+        if (error.response) {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        }
+      });
     }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -119,10 +121,10 @@ class Wikis extends Component {
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Add Wiki')}</Button>
+                  <Button className="btn btn-secondary operation-item" onClick={this.toggelAddWikiDialog}>{gettext('Add Wiki')}</Button>
                 </MediaQuery>
                 <MediaQuery query="(max-width: 767.8px)">
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.onSelectToggle}></span>
+                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.toggelAddWikiDialog}></span>
                 </MediaQuery>
               </Fragment>
             </div>
@@ -130,6 +132,11 @@ class Wikis extends Component {
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
+        {this.state.isShowAddDialog &&
+          <ModalPortal>
+            <AddWikiDialog toggleCancel={this.toggelAddWikiDialog} addWiki={this.addWiki} />
+          </ModalPortal>
+        }
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
@@ -154,22 +161,6 @@ class Wikis extends Component {
             </div>
           </div>
         </div>
-        {this.state.isShowCreateDialog && (
-          <ModalPortal>
-            <NewWikiDialog
-              toggleCancel={this.onCreateToggle}
-              addWiki={this.addWiki}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShowSelectDialog && (
-          <ModalPortal>
-            <WikiSelectDialog
-              toggleCancel={this.onSelectToggle}
-              addWiki={this.addWiki}
-            />
-          </ModalPortal>
-        )}
       </Fragment>
     );
   }

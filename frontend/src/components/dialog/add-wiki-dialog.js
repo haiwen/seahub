@@ -1,34 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
 };
 
-class NewWikiDialog extends React.Component {
+class AddWikiDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isExist: false,
       name: '',
-      repoID: '',
       isSubmitBtnActive: false,
     };
   }
 
   inputNewName = (e) => {
-    if (!event.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
-    } else {
-      this.setState({isSubmitBtnActive: true});
-    }
-
     this.setState({
       name: e.target.value,
+      isSubmitBtnActive: !!e.target.value.trim(),
     });
   };
 
@@ -39,8 +32,9 @@ class NewWikiDialog extends React.Component {
   };
 
   handleSubmit = () => {
-    let { isExist, name, repoID } = this.state;
-    this.props.addWiki(isExist, name, repoID);
+    const wikiName = this.state.name.trim();
+    if (!wikiName) return;
+    this.props.addWiki(wikiName);
     this.props.toggleCancel();
   };
 
@@ -51,9 +45,9 @@ class NewWikiDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Add Wiki')}</ModalHeader>
         <ModalBody>
-          <label className="form-label">{gettext('Name')}</label>
+          <Label>{gettext('Name')}</Label>
           <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
@@ -65,6 +59,6 @@ class NewWikiDialog extends React.Component {
   }
 }
 
-NewWikiDialog.propTypes = propTypes;
+AddWikiDialog.propTypes = propTypes;
 
-export default NewWikiDialog;
+export default AddWikiDialog;
