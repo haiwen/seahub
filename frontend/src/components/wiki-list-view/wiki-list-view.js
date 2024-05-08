@@ -7,7 +7,6 @@ import LibsMobileThead from '../libs-mobile-thead';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
-  renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
 };
 
@@ -57,7 +56,6 @@ class WikiListView extends Component {
                 <WikiListItem
                   key={index}
                   wiki={wiki}
-                  renameWiki={this.props.renameWiki}
                   deleteWiki={this.props.deleteWiki}
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
