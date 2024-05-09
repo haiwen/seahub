@@ -1,0 +1,27 @@
+/* register user page*/
+.btn-primary {
+  color: #fff;
+  background-color: #ff9800;
+  border-color: #ff9800;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #d98100;
+  border-color: #cc7a00;
+}
+
+a {
+  color: #eb8205;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.popover-inner {
+  padding: 9px 14px
+}
+
+/* change password page*/
+#id_new_password1 {
+  margin-bottom: 5px;
+}

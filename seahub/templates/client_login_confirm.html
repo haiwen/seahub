@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
-{% endblock %}
-
 {% block main_content %}
 <div class="new-narrow-panel">
     <h2 class="hd">{% trans "Desktop Client Login Confirm" %}</h2>
@@ -15,6 +11,3 @@
 </div>
 {% endblock %}
 
-{% block extra_script %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
-{% endblock %}
