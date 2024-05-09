@@ -726,9 +726,15 @@ a, a:hover { color: #ec8000; }
     line-height: 1.5rem;
     height: auto;
 }
+
+.side-nav-con .sub-nav#share-admin-sub-nav .nav-item .nav-link,
+.side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link {
+    height: 28px;
+    line-height: 28px;
+}
+
 .side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link {
     padding-left: 2.25rem;
-    height: 28px;
     display: flex;
     align-items: center;
 }

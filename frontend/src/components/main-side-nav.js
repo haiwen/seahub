@@ -14,6 +14,8 @@ const propTypes = {
   tabItemClick: PropTypes.func.isRequired,
 };
 
+const SUB_NAV_ITEM_HEIGHT = 28;
+
 class MainSideNav extends React.Component {
   constructor(props) {
     super(props);
@@ -23,8 +25,6 @@ class MainSideNav extends React.Component {
       closeSideBar:false,
       groupItems: [],
     };
-
-    this.listHeight = 24; //for caculate tabheight
     this.adminHeight = 0;
     this.filesNavHeight = 0;
   }
@@ -43,8 +43,7 @@ class MainSideNav extends React.Component {
         return group;
       });
 
-      const groupItemHeight = 28;
-      this.filesNavHeight = (groupList.length + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * groupItemHeight;
+      this.filesNavHeight = (groupList.length + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
       _this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -98,7 +97,7 @@ class MainSideNav extends React.Component {
     let height = 0;
     if (this.state.sharedExtended) {
       if (!this.adminHeight) {
-        this.adminHeight = 3 * this.listHeight;
+        this.adminHeight = 3 * SUB_NAV_ITEM_HEIGHT;
       }
       height = this.adminHeight;
     }
@@ -125,7 +124,7 @@ class MainSideNav extends React.Component {
       );
     }
     return (
-      <ul className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
+      <ul id="share-admin-sub-nav" className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
         {canAddRepo && (
           <li className="nav-item">
             <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
