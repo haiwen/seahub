@@ -47,6 +47,7 @@ class GroupInviteLinkModel(models.Model):
         db_table = 'group_invite_link'
 
     def to_dict(self):
+        from seahub.base.templatetags.seahub_tags import email2nickname
         result = {
             'id': self.pk,
             'token': self.token,
@@ -280,34 +281,4 @@ def remove_user_for_inst_deleted(sender, **kwargs):
 
 
 
-from seahub.profile.settings import NICKNAME_CACHE_PREFIX
-from seahub.utils import normalize_cache_key
-from django import template
-
-register = template.Library()
-
-
-@register.filter(name='email2nickname')
-def email2nickname(value):
-    """
-    Return nickname if it exists and it's not an empty string,
-    otherwise return short email.
-    """
-    if not value:
-        return ''
-
-    key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
-    cached_nickname = cache.get(key)
-    if cached_nickname and cached_nickname.strip():
-        return cached_nickname.strip()
-
-    profile = get_first_object_or_none(Profile.objects.filter(user=value))
-    if profile is not None and profile.nickname and profile.nickname.strip():
-        nickname = profile.nickname.strip()
-    else:
-        contact_email = email2contact_email(value)
-        nickname = contact_email.split('@')[0]
-
-    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
-    return nickname
 

@@ -26,13 +26,13 @@ from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.base.accounts import User
 from seahub.group.signals import add_user_to_group
+from seahub.group.views import group_invite
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 from seahub.profile.models import Profile, GroupInviteLinkModel
 from .utils import api_check_group
 
-from seahub.settings import SERVICE_URL, MULTI_TENANCY
-from seahub.auth.decorators import login_required
+from seahub.settings import MULTI_TENANCY
 logger = logging.getLogger(__name__)
 
 
@@ -555,11 +555,6 @@ class GroupMembersImportExample(APIView):
         return response
 
 
-def is_group_owner_or_admin(group, email):
-    if email == group.creator_name:
-        return True
-    return ccnet_api.check_group_staff(group.id, email)
-
 
 class GroupInviteLinks(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -576,14 +571,18 @@ class GroupInviteLinks(APIView):
 
         group = ccnet_api.get_group(group_id)
         if MULTI_TENANCY:
-            error_msg = ' Multiple tenancy is not supported.'
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not group:
             error_msg = 'group not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not is_group_owner_or_admin(group, email):
+        if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -603,14 +602,18 @@ class GroupInviteLinks(APIView):
 
         group = ccnet_api.get_group(group_id)
         if MULTI_TENANCY:
-            error_msg = ' Multiple tenancy is not supported.'
+            error_msg = ' Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not group:
             error_msg = 'group not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not is_group_owner_or_admin(group, email):
+        if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -635,14 +638,18 @@ class GroupInviteLink(APIView):
 
         group = ccnet_api.get_group(group_id)
         if MULTI_TENANCY:
-            error_msg = ' Multiple tenancy is not supported.'
+            error_msg = ' Feature disabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if group.creator_name == "system admin":
+            error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not group:
             error_msg = 'group not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not is_group_owner_or_admin(group, email):
+        if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -655,29 +662,3 @@ class GroupInviteLink(APIView):
         return Response({'success': True})
 
 
-@login_required
-def group_invite(request, token):
-    """
-    registered user add to group
-    """
-    email = request.user.username
-    next_url = request.GET.get('next', '/')
-    redirect_to = SERVICE_URL.rstrip('/') + '/' + next_url.lstrip('/')
-    group_invite_link = GroupInviteLinkModel.objects.filter(token=token).first()
-    if not group_invite_link:
-        return render_error(request, _('Group invite link does not exist'))
-
-    if is_group_member(group_invite_link.group_id, email):
-
-        return HttpResponseRedirect(redirect_to)
-
-    if not group_invite_link.created_by:
-        return render_error(request, _('Group invite link broken'))
-
-    try:
-        ccnet_api.group_add_member(group_invite_link.group_id, group_invite_link.created_by, email)
-    except Exception as e:
-        logger.error(f'group invite add user failed. {e}')
-        return render_error(request, 'Internal Server Error')
-
-    return HttpResponseRedirect(redirect_to)

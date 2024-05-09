@@ -1,7 +1,7 @@
 import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, username, canAddRepo } from '../../utils/constants';
+import { gettext, username, canAddRepo, isMultiTenancy } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -482,7 +482,9 @@ class GroupView extends React.Component {
                             <ul className="sf-popover-list">
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
+                              {this.state.currentGroup.owner != 'system admin' && !isMultiTenancy &&
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleInviteMembersDialog} >{gettext('Invite Members')}</a></li>
+                              }
                             </ul>
                             }
                             {
