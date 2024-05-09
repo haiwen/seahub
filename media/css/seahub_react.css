@@ -744,12 +744,23 @@ a, a:hover { color: #ec8000; }
   margin-right: 6px;
 }
 
+/* files container height more than 200px, use 0.3s animation */
 .side-panel-slide {
     transition: all .3s ease-in-out;
 }
 
 .side-panel-slide-up {
     transition: all .3s ease-in-out;
+    height: 0;
+}
+
+/* share admin container height less than 100px, use 0.15s animation */
+.side-panel-slide-share-admin {
+    transition: all .15s ease-in-out;
+}
+
+.side-panel-slide-up-share-admin {
+    transition: all .15s ease-in-out;
     height: 0;
 }
 
