@@ -3,15 +3,12 @@
 {% load seahub_tags avatar_tags i18n static %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 {% render_bundle 'sdocRevisions' 'css'%}
 {% endblock %}
 
 {% block extra_script %}
     <script type="text/javascript">
         window.app.config.lang = '{{LANGUAGE_CODE}}';
-        console.log('{{page_next}}')
         window.sdocRevisions = {
             repo: { "id": "{{ repo.id }}", "name": "{{ repo.name }}" },
             revisions: '{{ revisions|escapejs }}',
