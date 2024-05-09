@@ -456,5 +456,6 @@
   "Print": "Печать",
   "Enter_more_character_start_search": "Введите больше символов, чтобы начать поиск",
   "Create_file_name_sdoc": "Создать {{file_name_sdoc}}",
-  "Source_document_changed_tip": "Исходный документ имеет параллельные изменения. Хотите объединить эти изменения в ревизию?"
+  "Source_document_changed_tip": "Исходный документ имеет параллельные изменения. Хотите объединить эти изменения в ревизию?",
+  "Fit_table_to_page_width": "Fit table to page width"
 }

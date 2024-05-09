@@ -456,5 +456,6 @@
   "Print": "打印",
   "Enter_more_character_start_search": "输入更多字符开始搜索",
   "Create_file_name_sdoc": "新建 {{file_name_sdoc}}",
-  "Source_document_changed_tip": "源文档有并发的改动。你需要合并这些改动到修订稿吗?"
+  "Source_document_changed_tip": "源文档有并发的改动。你需要合并这些改动到修订稿吗?",
+  "Fit_table_to_page_width": "自动适应页面宽度"
 }
