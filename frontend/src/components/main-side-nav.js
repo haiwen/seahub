@@ -124,7 +124,11 @@ class MainSideNav extends React.Component {
       );
     }
     return (
-      <ul id="share-admin-sub-nav" className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
+      <ul
+        id="share-admin-sub-nav"
+        className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide-share-admin' : 'side-panel-slide-up-share-admin'}`}
+        style={style}
+      >
         {canAddRepo && (
           <li className="nav-item">
             <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
