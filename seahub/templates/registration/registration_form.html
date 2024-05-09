@@ -3,7 +3,8 @@
 {% block sub_title %}{% trans "Signup" %} - {% endblock %}
 
 {% block extra_style %}{{block.super}}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.popover.min.css" />
 {% endblock %}
 
 {% block main_content %}
@@ -55,27 +56,30 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
 {% if strong_pwd_required %}
 {% include "snippets/password_strength_js.html" %}
+
 var passwd_tip = "{% blocktrans %}Passwords must have at least {{min_len}} characters and contain {{level}} of the following: uppercase letters, lowercase letters, numbers, and symbols.{% endblocktrans%}";
-$("#id_password1")
-.popover({ // bootstrap plugin 'popover'
+var element = document.getElementById('id_password1')
+var popover = new bootstrap.Popover(element, {
     container: 'body',
+    animation: false,
     content: passwd_tip,
-    template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
+    template: `<div class="popover" role="popover"><div class="popover-arrow"></div><div class="popover-inner">${passwd_tip}</div></div>`,
     trigger: 'focus'
-})
-.on('keyup', function() {
-    var pwd = $(this).val();
+});
+element.addEventListener('keyup', () => {
+    var pwd = $('#id_password1').val();
     if (pwd.trim()) {
         var level = getStrengthLevel(pwd);
         showStrength(level);
     } else {
         $("#pwd_strength").html("");
     }
-});
+})
 {% endif %}
 
 $('#signup-form').on('submit', function(){

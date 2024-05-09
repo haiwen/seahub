@@ -456,5 +456,6 @@
   "Print": "Print",
   "Enter_more_character_start_search": "Enter more characters to start search",
   "Create_file_name_sdoc": "Create {{file_name_sdoc}}",
-  "Source_document_changed_tip": "Original document has concurrent modifications. Do you like to merge these modifications to the revision?"
+  "Source_document_changed_tip": "Original document has concurrent modifications. Do you like to merge these modifications to the revision?",
+  "Fit_table_to_page_width": "Fit table to page width"
 }

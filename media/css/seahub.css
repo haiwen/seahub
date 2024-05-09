@@ -2048,7 +2048,7 @@ a.sf-popover-item {
 
 /* pwd strength */
 #pwd_strength {
-    margin:-15px 0 20px;
+    margin: 0px;
 }
 #pwd_strength span {
     display:inline-block;
