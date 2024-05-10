@@ -14,9 +14,6 @@ from registration.signals import user_registered
 from seahub.signals import institution_deleted
 from seahub.institutions.models import InstitutionAdmin
 
-import uuid
-from seahub.settings import SERVICE_URL
-from seahub.utils.timeutils import datetime_to_isoformat_timestr
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -243,3 +240,4 @@ def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
     InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
+
