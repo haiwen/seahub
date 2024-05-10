@@ -222,5 +222,6 @@
   "Font_style": "Стиль шрифта",
   "Open_link": "Открыть ссылку",
   "Image_is_uploading": "Изображение загружается",
-  "Image_loading_failed": "Image loading failed"
+  "Image_loading_failed": "Ошибка загрузки изображения",
+  "Expand_editor": "Развернуть редактор"
 }
