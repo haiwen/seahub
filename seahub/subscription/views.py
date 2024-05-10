@@ -49,7 +49,6 @@ def subscription_pay_view(request):
     count = request.GET.get('count')
     asset_quota = request.GET.get('asset_quota')
     total_amount = request.GET.get('total_amount')
-    coins = request.GET.get('coins')
 
     # main
     try:
@@ -67,9 +66,8 @@ def subscription_pay_view(request):
             data['count'] = count
         if asset_quota:
             data['asset_quota'] = asset_quota
-        if coins:
-            data['coins'] = coins
-        url = SUBSCRIPTION_SERVER_URL.rstrip('/') + '/api/subscription/pay/'
+
+        url = SUBSCRIPTION_SERVER_URL.rstrip('/') + '/api/seafile/subscription/pay/'
         response = requests.post(url, json=data, headers=headers)
         response = handler_subscription_api_response(response)
         response_dic = response.json()

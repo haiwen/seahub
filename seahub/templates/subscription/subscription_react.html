@@ -1,0 +1,19 @@
+{% extends 'base_for_react.html' %}
+{% load seahub_tags avatar_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}付费管理 - {% endblock %}
+
+{% block extra_style %}
+{% render_bundle 'subscription' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+};
+</script>
+{% render_bundle 'subscription' 'js' %}
+{% endblock %}

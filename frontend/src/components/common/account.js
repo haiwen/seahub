@@ -6,6 +6,10 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
 import toaster from '../toast';
 
+const {
+  isOrgContext,
+} = window.app.pageOptions;
+
 const propTypes = {
   isAdminPanel: PropTypes.bool,
 };
@@ -22,6 +26,7 @@ class Account extends Component {
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
+      enableSubscription: false,
     };
     this.isFirstMounted = true;
   }
@@ -81,6 +86,7 @@ class Account extends Component {
           isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
+          enableSubscription: resp.data.enable_subscription,
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -163,6 +169,7 @@ class Account extends Component {
               </div>
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
+            {(this.state.enableSubscription && !isOrgContext) && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
             {this.renderMenu()}
             {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
             <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>

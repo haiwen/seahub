@@ -38,6 +38,7 @@ const entryFiles = {
   sysAdmin: '/pages/sys-admin',
   search: '/pages/search',
   uploadLink: '/pages/upload-link',
+  subscription: "/subscription.js",
 };
 
 const getEntries = (isEnvDevelopment) => {

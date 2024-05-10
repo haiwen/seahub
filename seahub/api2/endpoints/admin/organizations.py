@@ -77,6 +77,9 @@ def get_org_detailed_info(org):
     users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
     org_info['users_count'] = len(users)
 
+    active_users_count = len([m for m in users if m.is_active])
+    org_info['active_users_count'] = active_users_count
+
     repos = seafile_api.get_org_repo_list(org_id, -1, -1)
     org_info['repos_count'] = len(repos)
 

@@ -2113,7 +2113,7 @@ class AdminUserList(APIView):
         for user_id in user_id_list:
             if not isinstance(user_id, str):
                 continue
-            user_info = get_user_common_info(user_id, include_contact_email=False)
+            user_info = get_user_common_info(user_id)
             user_list.append(user_info)
 
         return Response({'user_list': user_list})

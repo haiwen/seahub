@@ -1,0 +1,230 @@
+.content {
+    padding: 0rem 1rem 8rem;
+    overflow: auto;
+  }
+  
+  .content .dropdown .btn-outline-primary {
+    color: #f19645;
+    background-color: transparent;
+    background-image: none;
+    border-color: #f19645;
+  }
+  
+  .content .dropdown .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #f19645;
+    border-color: #f19645;
+  }
+  
+  .content .dropdown .btn-outline-primary:focus {
+    box-shadow: 0 0 0 2px rgba(241, 150, 69, 0.5);
+  }
+  
+  .content .dropdown .btn-outline-primary:active {
+    color: #fff;
+    background-color: #f19645;
+    border-color: #f19645;
+  }
+  
+  .content .dropdown .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+  .content .dropdown .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+  .content .dropdown .show > .btn-outline-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 2px rgba(241, 150, 69, 0.5);
+  }
+  
+  .subscription-info {
+    margin: 1em 0 3em;
+  }
+  
+  .subscription-info-heading {
+    font-size: 1rem;
+    font-weight: normal;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0.7em;
+  }
+  
+  .price-version-container-header {
+    max-width: 90%;
+    border-radius: 10px;
+    padding: 0 1rem 2rem;
+    box-shadow: 0 3px 8px 3px rgba(116, 129, 141, 0.15);
+    overflow: hidden;
+    margin: 0.5rem 1rem;
+  }
+  
+  .price-version-container-header .price-version-container-top {
+    height: 10px;
+    margin: 0 -1rem;
+  }
+  
+  .price-version-container-header .price-version-plan-name {
+    font-size: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ED7109;
+  }
+  
+  .price-version-container-header .price-table-btn-details {
+    color: #fff;
+    font-size: 1rem;
+  }
+  
+  .price-version-container-header .font-500 {
+    font-weight: 500;
+  }
+  
+  .price-version-container-header .price-version-plan-price {
+    font-size: 2rem;
+  }
+  
+  .price-version-container-header .price-version-plan-whole-price {
+    font-size: 24px;
+  }
+  
+  .price-version-container-header .price-version-plan-valid-day,
+  .price-version-container-header .price-version-plan-user-number {
+    font-size: 18px;
+  }
+  
+  .subscription-container {
+    width: 480px;
+    margin: 0.5rem auto;
+  }
+  
+  .price-version-container-header .user-quota-plan-name {
+    margin-bottom: 24px;
+    text-align: center;
+    border-bottom: 1px solid rgba(253, 150, 68, 0.4);
+  }
+  
+  .subscription-container .items-dl {
+    margin-top: 10px;
+  }
+  
+  .plan-description-item {
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    margin: 0 0 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    line-height: 3;
+    padding: 0 20px;
+    cursor: pointer;
+  }
+  
+  .plan-description-item.plan-selected {
+    background-color: #fff5eb;
+    border-color: #ED7109;
+    border-width: 2px;
+  }
+  
+  .plan-description-item .plan-name {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .plan-description-item .plan-description {
+    font-size: 20px;
+    font-weight: 500;
+    color: #ED7109;
+  }
+  
+  .order-item {
+    margin: 0px;
+    display: flex;
+    justify-content: space-between;
+    border-left: 1px solid #bdbdbd;
+    border-right: 1px solid #bdbdbd;
+    background-color: #f9f9f9;
+    padding: 5px 20px;
+    line-height: 2;
+  }
+  
+  .order-item.order-item-top {
+    border-top: 1px solid #bdbdbd;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  .order-item.order-item-middle {
+    border-bottom: 1px solid #bdbdbd;
+  }
+  
+  .order-item.order-item-bottom {
+    border-bottom: 1px solid #bdbdbd;
+    border-radius: 0 0 5px 5px;
+  }
+  
+  .order-item .order-into {
+    color: #666666;
+  }
+  
+  .order-item .order-value {
+    font-weight: 500;
+    color: #000;
+  }
+  
+  .order-item .order-value .input-group-append,
+  .order-item .order-value .input-group-prepend {
+    height: 38px;
+  }
+  
+  .order-item .order-price {
+    font-size: 26px;
+    font-weight: 500;
+    color: #ED7109;
+  }
+  
+  .order-item .order-price span:first-child {
+    font-size: 16px;
+  }
+  
+  .subscription-submit {
+    background-color: #ED7109;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    color: white;
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .subscription-notice {
+    font-size: 14px;
+    color: #9a9a9a;
+  }
+  
+  .subscription-container .subscription-subtitle {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .subscription-container .subscription-list.order-item-top.order-item-bottom {
+    border-radius: 5px;
+  }
+  
+  .subscription-container .subscription-list span {
+    height: 36px;
+    line-height: 36px;
+  }
+  
+  .subscription-container .text-orange {
+    color: #ED7109 !important;
+  }
+  
+  .user-numbers.input-group .input-group-prepend {
+    width: 50%;
+  }
+  
+  .space-quota .input-group .input-group-append,
+  .space-quota .input-group .input-group-prepend {
+    width: 33.33%;
+  }
+  
+  .subscription-add-space .input-group .input-group-append .input-group-text,
+  .price-version-container-header .input-group .input-group-prepend .input-group-text {
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    display: block;
+  }

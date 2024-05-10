@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
-import { gettext, siteRoot, enableMultiADFS } from '../../utils/constants';
+import { gettext, siteRoot, enableSubscription, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -80,6 +80,14 @@ class SidePanel extends React.Component {
                     <span className="nav-text">{gettext('Departments')}</span>
                   </Link>
                 </li>
+                {enableSubscription &&
+                  <li className="nav-item">
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('subscription')}`} to={siteRoot + 'org/subscription/'} onClick={() => this.tabItemClick('subscription')} >
+                      <span className=""></span>
+                      <span className="nav-text">{'付费管理'}</span>
+                    </Link>
+                  </li>
+                }
                 <li className="nav-item">
                   <Link className={`nav-link ellipsis ${this.getActiveClass('publinkadmin')}`} to={siteRoot + 'org/publinkadmin/'} onClick={() => this.tabItemClick('publinkadmin')} >
                     <span className="sf2-icon-link"></span>

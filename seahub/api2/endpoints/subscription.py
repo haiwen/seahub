@@ -44,7 +44,7 @@ class SubscriptionView(APIView):
             data = {
                 'customer_id': customer_id,
             }
-            url = SUBSCRIPTION_SERVER_URL.rstrip('/') + '/api/subscription/'
+            url = SUBSCRIPTION_SERVER_URL.rstrip('/') + '/api/seafile/subscription/'
             response = requests.get(url, params=data, headers=headers)
             response = handler_subscription_api_response(response)
         except Exception as e:
@@ -84,7 +84,7 @@ class SubscriptionPlansView(APIView):
                 'payment_type': payment_type,
             }
             url = SUBSCRIPTION_SERVER_URL.rstrip(
-                '/') + '/api/subscription/plans/'
+                '/') + '/api/seafile/subscription/plans/'
             response = requests.get(url, params=data, headers=headers)
             response = handler_subscription_api_response(response)
         except Exception as e:
@@ -121,7 +121,7 @@ class SubscriptionLogsView(APIView):
                 'customer_id': customer_id,
             }
             url = SUBSCRIPTION_SERVER_URL.rstrip(
-                '/') + '/api/subscription/logs/'
+                '/') + '/api/seafile/subscription/logs/'
             response = requests.get(url, params=data, headers=headers)
             response = handler_subscription_api_response(response)
         except Exception as e:

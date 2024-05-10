@@ -36,6 +36,7 @@ import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
 import OrgSAMLConfig from './org-saml-config';
+import OrgSubscription from './org-subscription';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
@@ -96,6 +97,7 @@ class Org extends React.Component {
             <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
             <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
             <OrgWebSettings path={siteRoot + 'org/web-settings'} />
+            <OrgSubscription path={siteRoot + 'org/subscription'} onCloseSidePanel={this.onCloseSidePanel} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
