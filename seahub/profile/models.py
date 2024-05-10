@@ -278,7 +278,3 @@ def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
     InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
-
-
-
-
