@@ -35,6 +35,7 @@ from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
         ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME, \
         ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.utils import get_or_create_invitation_link
+from seahub.subscription.utils import subscription_check
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -260,6 +261,7 @@ def react_fake_view(request, **kwargs):
         'group_id': group_id,
         'invitation_link': invitation_link,
         'enable_multi_adfs': ENABLE_MULTI_ADFS,
+        'enable_subscription': subscription_check(),
         })
 
 @login_required

@@ -105,7 +105,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
-
+from seahub.subscription.utils import subscription_check
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -331,6 +331,7 @@ class AccountInfo(APIView):
         info['contact_email'] = p.contact_email if p else ""
         info['institution'] = p.institution if p and p.institution else ""
         info['is_staff'] = request.user.is_staff
+        info['enable_subscription'] = subscription_check()
 
         if getattr(settings, 'MULTI_INSTITUTION', False):
             from seahub.institutions.models import InstitutionAdmin

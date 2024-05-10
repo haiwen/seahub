@@ -460,3 +460,30 @@ class AdminSearchOrganization(APIView):
             result.append(org_info)
 
         return Response({'organization_list': result})
+
+
+class AdminOrganizationsBaseInfo(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        '''
+        Get base info of organizations in bulk by ids
+        '''
+        if not MULTI_TENANCY:
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        org_ids = request.GET.getlist('org_ids',[])
+        orgs = []
+        for org_id in org_ids:
+            try:
+                org = ccnet_api.get_org_by_id(int(org_id))
+                if not org:
+                    continue
+            except:
+                continue
+            base_info = {'org_id': org.org_id, 'org_name': org.org_name}
+            orgs.append(base_info)
+        return Response({'organization_list': orgs})

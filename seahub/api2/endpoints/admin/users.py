@@ -23,7 +23,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info
 from seahub.api2.models import TokenV2
 from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
@@ -2092,3 +2092,28 @@ class AdminUpdateUserCcnetEmail(APIView):
             logger.error(e)
 
         return Response({'success': True})
+
+
+class AdminUserList(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        """return user_list by user_id_list
+        """
+        # argument check
+        user_id_list = request.data.get('user_id_list')
+        if not isinstance(user_id_list, list):
+            error_msg = 'user_id_list invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # main
+        user_list = list()
+        for user_id in user_id_list:
+            if not isinstance(user_id, str):
+                continue
+            user_info = get_user_common_info(user_id, include_contact_email=False)
+            user_list.append(user_info)
+
+        return Response({'user_list': user_list})
