@@ -2060,8 +2060,8 @@ def view_media_file_via_share_link(request):
 
 def view_media_file_via_public_wiki(request):
     image_path = request.GET.get('path', '')
-    slug = request.GET.get('slug', '')
-    if not image_path or not slug:
+    wiki_id = request.GET.get('wiki_id', '')
+    if not image_path or not wiki_id:
         return HttpResponseBadRequest('invalid params')
 
     # check file type
@@ -2073,7 +2073,7 @@ def view_media_file_via_public_wiki(request):
 
     # get wiki object or 404
     try:
-        wiki = Wiki.objects.get(slug=slug)
+        wiki = Wiki.objects.get(id=wiki_id)
     except Wiki.DoesNotExist:
         err_msg = "Wiki not found."
         return render_error(request, err_msg)

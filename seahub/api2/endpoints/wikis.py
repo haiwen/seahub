@@ -33,7 +33,7 @@ WIKI_CONFIG_FILE_NAME = 'index.json'
 
 
 logger = logging.getLogger(__name__)
-
+HTTP_520_OPERATION_FAILED = 520
 
 class WikisView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -94,46 +94,28 @@ class WikisView(APIView):
         """
         username = request.user.username
 
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+
+        wiki_name = request.data.get("name", None)
+        if not wiki_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
+
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        repo_id = request.POST.get('repo_id', '')
-        if not repo_id:
-            msg = 'Repo id is invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, msg)
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # check perm
-        if not (request.user.permissions.can_publish_repo() and request.user.permissions.can_generate_share_link()):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        is_owner = is_repo_owner(request, repo_id, username)
-
-        if not is_owner:
-            repo_admin = is_repo_admin(username, repo_id)
-
-            if not repo_admin:
-                is_group_repo_admin = is_group_repo_staff(request, repo_id, username)
-
-                if not is_group_repo_admin:
-                    error_msg = _('Permission denied.')
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         try:
-            wiki = Wiki.objects.add(wiki_name=repo.repo_name, username=username,
-                    repo_id=repo.repo_id, org_id=org_id, permission='public')
+            wiki = Wiki.objects.add(wiki_name=wiki_name, username=username, org_id=org_id, permission='public', version='v2')
         except DuplicateWikiNameError:
-            msg = _('%s is taken by others, please try another name.') % repo.repo_name
+            msg = _('%s is taken by others, please try another name.') % wiki_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
         except IntegrityError:
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+        repo_id = wiki.repo_id
 
         # create home page if not exist
         page_name = "home.md"
@@ -163,12 +145,12 @@ class WikiView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def delete(self, request, slug):
+    def delete(self, request, wiki_id):
         """Delete a wiki.
         """
         username = request.user.username
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = 'Wiki not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -177,9 +159,8 @@ class WikiView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        Wiki.objects.filter(slug=slug).delete()
+        Wiki.objects.filter(id=wiki_id).delete()
 
-        # file_name = os.path.basename(path)
         repo_id = wiki.repo_id
         file_name = WIKI_CONFIG_FILE_NAME
         try:
@@ -193,13 +174,13 @@ class WikiView(APIView):
 
         return Response()
 
-    def put(self, request, slug):
+    def put(self, request, wiki_id):
         """Edit a wiki permission
         """
         username = request.user.username
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -217,13 +198,13 @@ class WikiView(APIView):
         wiki.save()
         return Response(wiki.to_dict())
 
-    def post(self, request, slug):
+    def post(self, request, wiki_id):
         """Rename a Wiki
         """
         username = request.user.username
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(wiki_id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = _("Wiki not found.")
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -264,13 +245,13 @@ class WikiConfigView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def put(self, request, slug):
+    def put(self, request, wiki_id):
         """Edit a wiki config
         """
         username = request.user.username
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -309,10 +290,10 @@ class WikiConfigView(APIView):
         wiki['wiki_config'] = wiki_config
         return Response({'wiki': wiki})
 
-    def get(self, request, slug):
+    def get(self, request, wiki_id):
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)

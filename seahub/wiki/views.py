@@ -51,7 +51,7 @@ markdown_attrs = {
 }
 
 
-def format_markdown_file_content(slug, repo_id, file_path, token, file_response):
+def format_markdown_file_content(wiki_id, repo_id, file_path, token, file_response):
     # Convert a markdown string to HTML and parse the html
     try:
         html_content = markdown.markdown(file_response, extensions=['markdown.extensions.extra'], tab_length=2)
@@ -72,14 +72,14 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         img_url = img.attrib.get('src', '')
         if img_url_re.match(img_url) is not None:
             img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
-            new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (service_url, slug, img_path)
+            new_img_url = '%s/view-image-via-public-wiki/?wiki_id=%s&path=%s' % (service_url, wiki_id, img_path)
             html_content = html_content.replace(img_url, new_img_url)
         elif re.compile(r'^\.\./*|^\./').match(img_url):
             if img_url.startswith('../'):
                 img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
             else:
                 img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
-            new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (service_url, slug, img_path)
+            new_img_url = '%s/view-image-via-public-wiki/?wiki_id=%s&path=%s' % (service_url, wiki_id, img_path)
             html_content = html_content.replace(img_url, new_img_url)
 
     # Replace <a> href to wiki mode
@@ -92,7 +92,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         if file_url_re.match(old_href) is not None:
             path = old_href[old_href.find('/file/') + 5:].strip('/')
             if md_url_re.match(old_href) is not None:
-                new_href = '%s/published/%s/%s' % (service_url, slug, path)
+                new_href = '%s/published/%s/%s' % (service_url, wiki_id, path)
                 html_content = html_content.replace(old_href, new_href)
             else:
                 new_href = '%s/d/%s/files/?p=%s&dl=1' % (service_url, token, path)
@@ -100,7 +100,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         elif dir_url_re.match(old_href) is not None:
             url_path = dir_url_re.match(old_href).groups()[0].strip('/')
             path = url_path[url_path.find('/'):].strip('/')
-            new_href = '%s/published/%s/%s' % (service_url, slug, path)
+            new_href = '%s/published/%s/%s' % (service_url, wiki_id, path)
             html_content = html_content.replace(old_href, new_href)
 
     # Get markdown outlines and format <h> labels
@@ -127,11 +127,14 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
     return file_content, h1_head_content, outlines, None
 
 
-def slug(request, slug, file_path="home.md"):
+def slug(request, wiki_id, file_path="home.md"):
     """Show wiki page.
     """
+    if not file_path:
+        file_path = "home.md"
+
     # get wiki object or 404
-    wiki = get_object_or_404(Wiki, slug=slug)
+    wiki = get_object_or_404(Wiki, id=wiki_id)
     file_path = "/" + file_path
 
     is_dir = None
@@ -143,11 +146,11 @@ def slug(request, slug, file_path="home.md"):
     if dir_id:
         is_dir = True
 
-    # compatible with old wiki url
-    if is_dir is None:
-        if len(file_path.split('.')) == 1:
-            new_path = file_path[1:] + '.md'
-            return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
+    # # compatible with old wiki url
+    # if is_dir is None:
+    #     if len(file_path.split('.')) == 1:
+    #         new_path = file_path[1:] + '.md'
+    #         return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
 
     # perm check
     req_user = request.user.username
@@ -219,7 +222,7 @@ def slug(request, slug, file_path="home.md"):
         err_msg = None
         if file_response:
             file_content, h1_head_content, outlines, err_msg = format_markdown_file_content(
-                slug, wiki.repo_id, file_path, fs.token, file_response)
+                wiki_id, wiki.repo_id, file_path, fs.token, file_response)
 
         if err_msg:
             logger.error(err_msg)
@@ -261,11 +264,13 @@ def slug(request, slug, file_path="home.md"):
         "assets_url": assets_url,
     })
 
-def edit_slug(request, slug, file_path="home.md"):
+def edit_slug(request, wiki_id, file_path="home.md"):
     """ edit wiki page.
     """
+    if not file_path:
+        file_path = "home.md"
     # get wiki object or 404
-    wiki = get_object_or_404(Wiki, slug=slug)
+    wiki = get_object_or_404(Wiki, id=wiki_id)
     file_path = "/" + file_path
 
     # only wiki owner can edit wiki app
@@ -281,12 +286,12 @@ def edit_slug(request, slug, file_path="home.md"):
     if dir_id:
         is_dir = True
 
-    # compatible with old wiki url
-    if is_dir is None:
-        if len(file_path.split('.')) == 1:
-            new_path = file_path[1:] + '.md'
-            url = reverse('edit_slug', args=[slug, new_path])
-            return HttpResponseRedirect(url)
+    # # compatible with old wiki url
+    # if is_dir is None:
+    #     if len(file_path.split('.')) == 1:
+    #         new_path = file_path[1:] + '.md'
+    #         url = reverse('edit_slug', args=[wiki_id, new_path])
+    #         return HttpResponseRedirect(url)
 
     # perm check
     req_user = request.user.username
@@ -309,6 +314,11 @@ def edit_slug(request, slug, file_path="home.md"):
         user_can_write = True
     else:
         user_can_write = False
+
+    # print('user_can_write')
+    # print(user_can_write)
+    #
+    # user_can_write = False
 
     is_public_wiki = False
     if wiki.permission == 'public':
@@ -358,7 +368,7 @@ def edit_slug(request, slug, file_path="home.md"):
         err_msg = None
         if file_response:
             file_content, h1_head_content, outlines, err_msg = format_markdown_file_content(
-                slug, wiki.repo_id, file_path, fs.token, file_response)
+                wiki_id, wiki.repo_id, file_path, fs.token, file_response)
 
         if err_msg:
             logger.error(err_msg)

@@ -1014,6 +1014,7 @@ class Repos(APIView):
             # FIXME: according to the HTTP spec, need to return 201 code and
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
+            print(resp)
             return resp
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
@@ -1064,6 +1065,7 @@ class Repos(APIView):
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+        print('111')
         if not config.ENABLE_ENCRYPTED_LIBRARY:
             return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):

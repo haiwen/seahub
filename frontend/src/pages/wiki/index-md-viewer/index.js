@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { mdStringToSlate } from '@seafile/seafile-editor';
-import { isPublicWiki, repoID, serviceURL, slug } from '../../../utils/constants';
+import { isPublicWiki, repoID, serviceURL, wikiId } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { generateNavItems } from '../utils/generate-navs';
 import NavItem from './nav-item';
@@ -60,7 +60,7 @@ class IndexMdViewer extends React.Component {
         let index2 = url.indexOf('?');
         const imagePath = url.substring(index + 5, index2);
         // replace url
-        item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
+        item.data.src = serviceURL + '/view-image-via-public-wiki/?wiki_id=' + wikiId + '&path=' + imagePath;
       }
 
       else if (item.type == 'link') {
@@ -75,19 +75,19 @@ class IndexMdViewer extends React.Component {
           if (url.startsWith('./')) {
             url = url.slice(2);
           }
-          item.url = serviceURL + '/published/' + slug + '/' + url;
+          item.url = serviceURL + '/published/' + wikiId + '/' + url;
         }
         // change file url
         else if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
           // replace url
-          item.url = serviceURL + '/published/' + slug + path;
+          item.url = serviceURL + '/published/' + wikiId + path;
         }
         // change dir url
         else if (Utils.isInternalDirLink(url, repoID)) {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
-          item.url = serviceURL + '/published/' + slug + path;
+          item.url = serviceURL + '/published/' + wikiId + path;
         }
       }
     }

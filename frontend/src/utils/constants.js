@@ -110,6 +110,7 @@ export const enableSeaTableIntegration = window.app.pageOptions.enableSeaTableIn
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
+export const wikiId = window.wiki ? window.wiki.config.wikiId : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';

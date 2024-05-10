@@ -1,11 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.urls import path
+from django.urls import path, re_path
 
 from .views import slug
 from ..views import react_fake_view
 
 urlpatterns = [
     path('', react_fake_view, name='list'),
-    path('<str:slug>/', slug, name='slug'),
-    path('<str:slug>/<path:file_path>', slug, name='slug'),
+    # path('<str:slug>/', slug, name='slug'),
+    # path('<str:slug>/<path:file_path>', slug, name='slug'),
+    # re_path('(?P<wiki_id>\d+)/', slug, name='slug'),
+    re_path('(?P<wiki_id>\d+)/(?P<file_path>.*)$', slug, name='slug'),
 ]

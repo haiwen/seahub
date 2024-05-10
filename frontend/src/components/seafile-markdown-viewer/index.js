@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../_i18n/i18n-seafile-editor';
-import { gettext, mediaUrl, serviceURL, sharedToken, slug } from '../../utils/constants';
+import { gettext, mediaUrl, serviceURL, sharedToken, wikiId } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
@@ -54,14 +54,14 @@ class SeafileMarkdownViewer extends React.Component {
       } else {
         return;
       }
-      item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
+      item.data.src = serviceURL + '/view-image-via-public-wiki/?wiki_id=' + wikiId + '&path=' + imagePath;
     } else if (item.type == 'link') { // change link url
       url = item.url;
       if (Utils.isInternalFileLink(url, repoID)) { // change file url
         if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
           // replace url
-          item.url = serviceURL + '/published/' + slug + path;
+          item.url = serviceURL + '/published/' + wikiId + path;
         } else {
           item.url = url.replace(/(.*)lib\/([-0-9a-f]{36})\/file(.*)/g, (match, p1, p2, p3) => {
             return `${p1}d/${sharedToken}/files/?p=${p3}&dl=1`;
@@ -70,7 +70,7 @@ class SeafileMarkdownViewer extends React.Component {
       } else if (Utils.isInternalDirLink(url, repoID)) { // change dir url
         let path = Utils.getPathFromInternalDirLink(url, repoID);
         // replace url
-        item.url = serviceURL + '/published/' + slug + path;
+        item.url = serviceURL + '/published/' + wikiId + path;
       }
     }
 
