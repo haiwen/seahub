@@ -21,6 +21,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.group.models import GroupInviteLinkModel
 from seahub.utils import string2list, is_org_context, get_file_type_and_ext, render_error
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.error_msg import file_type_error_msg
@@ -29,7 +30,7 @@ from seahub.group.signals import add_user_to_group
 from seahub.group.views import group_invite
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
-from seahub.profile.models import Profile, GroupInviteLinkModel
+from seahub.profile.models import Profile
 from .utils import api_check_group
 
 from seahub.settings import MULTI_TENANCY

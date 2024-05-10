@@ -16,13 +16,14 @@ from seaserv import ccnet_threaded_rpc, ccnet_api, get_group
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
+from seahub.group.models import GroupInviteLinkModel
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError, is_group_member
 from seahub.settings import SITE_ROOT, SERVICE_URL, MULTI_TENANCY
 from seahub.utils import send_html_email, is_org_context, \
     get_site_name, render_error
 from seahub.share.models import ExtraGroupsSharePermission
-from seahub.profile.models import GroupInviteLinkModel
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
