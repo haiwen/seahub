@@ -568,19 +568,15 @@ class GroupInviteLinks(APIView):
         """
         group_id = int(group_id)
         email = request.user.username
-
-        group = ccnet_api.get_group(group_id)
+        
         if MULTI_TENANCY:
             error_msg = 'Feature disabled.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        group = ccnet_api.get_group(group_id)
         if group.creator_name == "system admin":
             error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not group:
-            error_msg = 'group not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'
@@ -599,19 +595,14 @@ class GroupInviteLinks(APIView):
     def post(self, request, group_id):
         group_id = int(group_id)
         email = request.user.username
-
-        group = ccnet_api.get_group(group_id)
         if MULTI_TENANCY:
-            error_msg = ' Feature disabled.'
+            error_msg = 'Feature disabled.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        group = ccnet_api.get_group(group_id)
         if group.creator_name == "system admin":
             error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not group:
-            error_msg = 'group not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'
@@ -635,19 +626,15 @@ class GroupInviteLink(APIView):
     def delete(self, request, group_id, token):
         group_id = int(group_id)
         email = request.user.username
-
-        group = ccnet_api.get_group(group_id)
+        
         if MULTI_TENANCY:
-            error_msg = ' Feature disabled.'
+            error_msg = 'Feature disabled.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        group = ccnet_api.get_group(group_id)
         if group.creator_name == "system admin":
             error_msg = 'Forbidden to operate department group'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not group:
-            error_msg = 'group not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if not is_group_admin_or_owner(group_id, email):
             error_msg = 'Permission denied.'

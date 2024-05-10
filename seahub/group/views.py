@@ -18,9 +18,9 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError, is_group_member
-from seahub.settings import SITE_ROOT, SERVICE_URL
+from seahub.settings import SITE_ROOT, SERVICE_URL, MULTI_TENANCY
 from seahub.utils import send_html_email, is_org_context, \
-    get_site_name
+    get_site_name, render_error
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.profile.models import GroupInviteLinkModel
 
@@ -176,6 +176,9 @@ def group_invite(request, token):
     """
     registered user add to group
     """
+    if MULTI_TENANCY:
+        return render_error(request, _('Feature disabled.'))
+    
     email = request.user.username
     next_url = request.GET.get('next', '/')
     redirect_to = SERVICE_URL.rstrip('/') + '/' + next_url.lstrip('/')
