@@ -237,8 +237,6 @@ urlpatterns = [
     re_path(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     re_path(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/$', repo_snapshot, name="repo_snapshot"),
-    re_path(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
-    re_path(r'^dir/recycle/(?P<repo_id>[-0-9a-f]{36})/$', dir_recycle_view, name='dir_recycle_view'),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/$', repo_folder_trash, name="repo_folder_trash"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/raw/(?P<file_path>.*)$', view_raw_file, name="view_raw_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
@@ -700,7 +698,6 @@ urlpatterns = [
 
     path('avatar/', include('seahub.avatar.urls')),
     path('notice/', include('seahub.notifications.urls')),
-    path('contacts/', include('seahub.contacts.urls')),
     path('group/', include('seahub.group.urls')),
     path('options/', include('seahub.options.urls')),
     path('profile/', include('seahub.profile.urls')),
