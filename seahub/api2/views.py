@@ -1571,18 +1571,32 @@ class DownloadRepo(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % repo_id
+            error_msg = f'Library {repo_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         perm = check_folder_permission(request, repo_id, '/')
         if not perm:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                    'You do not have permission to access this library.')
+            error_msg = 'You do not have permission to access this library.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        if not seafile_api.is_repo_syncable(repo_id, username, perm):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'unsyncable share permission')
+
+        resp = seafile_api.is_repo_syncable(repo_id, username, perm)
+
+        # example: {'forbidden_path': '/folder in lian lib', 'is_syncable': False}
+        # forbidden_path field will be returned ONLY when is_syncable is False
+        resp_json = json.loads(resp)
+        is_syncable = resp_json['is_syncable']
+        forbidden_path = resp_json.get('forbidden_path', '')
+
+        if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower() and \
+                not is_syncable and forbidden_path == '/':
+            error_msg = 'unsyncable share permission'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if not is_syncable:
+                error_msg = 'unsyncable share permission'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return repo_download_info(request, repo_id)
 
