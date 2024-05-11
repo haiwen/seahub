@@ -40,6 +40,7 @@
     window.wiki = {
         config: {
             slug: "{{ wiki.slug }}",
+            wikiId: "{{ wiki.id }}",
             repoId: "{{ wiki.repo_id }}",
             repoName: "{{ wiki.repo_name }}",
             sharedToken: "{{ shared_token }}",
@@ -123,5 +124,5 @@
     updateOutline(0);
 </script>
 
-{% render_bundle 'wiki' 'js' %}
+{% render_bundle 'wiki2' 'js' %}
 {% endblock %}

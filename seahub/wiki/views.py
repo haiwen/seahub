@@ -261,15 +261,20 @@ def slug(request, slug, file_path="home.md"):
         "assets_url": assets_url,
     })
 
-def edit_slug(request, slug, file_path="home.md"):
-    """ edit wiki page.
+from seahub.auth.decorators import login_required
+from seahub.constants import PERMISSION_READ_WRITE
+@login_required
+def edit_slug(request, wiki_id, file_path="home.md"):
+    """ edit wiki page. for wiki2
     """
     # get wiki object or 404
-    wiki = get_object_or_404(Wiki, slug=slug)
+    wiki = get_object_or_404(Wiki, id=wiki_id)
     file_path = "/" + file_path
 
-    # only wiki owner can edit wiki app
-    if not (request.user.username == wiki.username):
+    # # perm check
+    req_user = request.user.username
+    permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', req_user)
+    if permission != PERMISSION_READ_WRITE:
         return render_permission_error(request, 'Permission denied.')
 
     is_dir = None
@@ -280,22 +285,6 @@ def edit_slug(request, slug, file_path="home.md"):
     dir_id = seafile_api.get_dir_id_by_path(wiki.repo_id, file_path)
     if dir_id:
         is_dir = True
-
-    # compatible with old wiki url
-    if is_dir is None:
-        if len(file_path.split('.')) == 1:
-            new_path = file_path[1:] + '.md'
-            url = reverse('edit_slug', args=[slug, new_path])
-            return HttpResponseRedirect(url)
-
-    # perm check
-    req_user = request.user.username
-
-    if not req_user and not wiki.has_read_perm(request):
-        return redirect('auth_login')
-    else:
-        if not wiki.has_read_perm(request):
-            return render_permission_error(request, _('Unable to view Wiki'))
 
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     if file_type == IMAGE:
@@ -338,38 +327,6 @@ def edit_slug(request, slug, file_path="home.md"):
     latest_contributor = ''
     last_modified = 0
     assets_url = ''
-
-    if is_dir is False and file_type == MARKDOWN:
-        send_file_access_msg(request, repo, file_path, 'web')
-
-        file_name = os.path.basename(file_path)
-        token = seafile_api.get_fileserver_access_token(
-            repo.repo_id, file_id, 'download', request.user.username, 'False')
-        if not token:
-            return render_error(request, _('Internal Server Error'))
-
-        url = gen_inner_file_get_url(token, file_name)
-        try:
-            file_response = urllib.request.urlopen(url).read().decode()
-        except Exception as e:
-            logger.error(e)
-            return render_error(request, _('Internal Server Error'))
-
-        err_msg = None
-        if file_response:
-            file_content, h1_head_content, outlines, err_msg = format_markdown_file_content(
-                slug, wiki.repo_id, file_path, fs.token, file_response)
-
-        if err_msg:
-            logger.error(err_msg)
-            return render_error(request, _('Internal Server Error'))
-
-        try:
-            dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
-            if dirent:
-                latest_contributor, last_modified = dirent.modifier, dirent.mtime
-        except Exception as e:
-            logger.warning(e)
 
     if is_dir is False and file_type == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, file_path)

@@ -45,11 +45,11 @@ class WikiAPI {
     }
   }
 
-  listWikiDir(slug, dirPath, withParents) {
+  listWikiDir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
-    let url = this.server + '/api/v2.1/wikis/' + encodeURIComponent(slug) + '/dir/?p=' + path;
+    let url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path;
     if (withParents) {
-      url = this.server + '/api/v2.1/wikis/' + encodeURIComponent(slug) + '/dir/?p=' + path + '&with_parents=' + withParents;
+      url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
     }
     return this.req.get(url);
   }
@@ -92,43 +92,28 @@ class WikiAPI {
     });
   }
 
-  addWiki(repoID) {
+  addWiki(wikiName) {
     const url = this.server + '/api/v2.1/wikis/';
     let form = new FormData();
-    form.append('repo_id', repoID);
+    form.append('name', wikiName);
     return this._sendPostRequest(url, form);
   }
 
-  renameWiki(slug, name) {
-    const url = this.server + '/api/v2.1/wikis/' + slug + '/';
-    let form = new FormData();
-    form.append('wiki_name', name);
-    return this._sendPostRequest(url, form);
-  }
-
-  updateWikiPermission(wikiSlug, permission) {
-    const url = this.server + '/api/v2.1/wikis/' + wikiSlug + '/';
-    let params = {
-      permission: permission
-    };
-    return this.req.put(url, params);
-  }
-
-  deleteWiki(slug) {
-    const url = this.server + '/api/v2.1/wikis/' + slug + '/';
+  deleteWiki(wikiId) {
+    const url = this.server + '/api/v2.1/wikis/' + wikiId + '/';
     return this.req.delete(url);
   }
 
-  updateWikiConfig(wikiSlug, wikiConfig) {
-    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
+  updateWikiConfig(wikiId, wikiConfig) {
+    const url = this.server + '/api/v2.1/wiki-config/' + wikiId + '/';
     let params = {
       wiki_config: wikiConfig
     };
     return this.req.put(url, params);
   }
 
-  getWikiConfig(wikiSlug) {
-    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
+  getWikiConfig(wikiId) {
+    const url = this.server + '/api/v2.1/wiki-config/' + wikiId + '/';
     return this.req.get(url);
   }
 

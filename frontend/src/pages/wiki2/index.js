@@ -146,7 +146,7 @@ class Wiki extends Component {
 
     if (isDir === 'None') {
       this.setState({pathExist: false});
-      let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(initialPath);
+      let fileUrl = siteRoot + this.handlePath() + wikiId + Utils.encodePath(initialPath);
       window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
     }
   };
@@ -156,7 +156,7 @@ class Wiki extends Component {
       let tree = this.state.treeData;
       this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
       let indexNode = tree.getNodeByPath(this.indexPath);
-      wikiAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+      wikiAPI.getWikiFileContent(wikiId, indexNode.path).then(res => {
         this.setState({
           treeData: tree,
           indexNode: indexNode,
@@ -174,7 +174,7 @@ class Wiki extends Component {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(dirPath);
+    let fileUrl = siteRoot + this.handlePath() + wikiId + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   };
 
@@ -186,7 +186,7 @@ class Wiki extends Component {
     });
 
     this.removePythonWrapper();
-    wikiAPI.getWikiFileContent(slug, filePath).then(res => {
+    wikiAPI.getWikiFileContent(wikiId, filePath).then(res => {
       let data = res.data;
       this.setState({
         isDataLoading: false,
@@ -201,7 +201,7 @@ class Wiki extends Component {
     });
 
     const hash = window.location.hash;
-    let fileUrl = `${siteRoot}${this.handlePath()}${slug}${Utils.encodePath(filePath)}${hash}`;
+    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}${Utils.encodePath(filePath)}${hash}`;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {
