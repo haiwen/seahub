@@ -38,8 +38,10 @@ urlpatterns = [
 
     path('info/', react_fake_view, name='org_info'),
     path('settings/', react_fake_view, name='org_settings'),
-    path('departmentadmin/', react_fake_view, name='org_department_admin'),
+    path('departmentadmin/', react_fake_view, name='org_departments_admin'),
     re_path(r'^departmentadmin/groups/(?P<group_id>\d+)/', react_fake_view, name='org_department_admin'),
+    re_path(r'^departmentadmin/groups/(?P<group_id>\d+)/members', react_fake_view, name='org_department_members_admin'),
+    re_path(r'^departmentadmin/groups/(?P<group_id>\d+)/libraries', react_fake_view, name='org_department_libraries_admin'),
     path('associate/<path:token>/', org_associate, name='org_associate'),
 
     path('samlconfig/', react_fake_view, name='saml_config'),

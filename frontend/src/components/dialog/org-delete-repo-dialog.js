@@ -13,9 +13,10 @@ class DeleteRepoDialog extends React.Component {
   }
 
   deleteRepo = () => {
+    const { repo } = this.props;
     seafileAPI.orgAdminDeleteDepartmentRepo(orgID, this.props.groupID, this.props.repo.repo_id).then((res) => {
       if (res.data.success) {
-        this.props.onRepoChanged();
+        this.props.onDeleteRepo(repo.repo_id);
         this.props.toggle();
       }
     }).catch(error => {
@@ -34,8 +35,8 @@ class DeleteRepoDialog extends React.Component {
           <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.deleteRepo}>{gettext('Delete')}</Button>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.deleteRepo}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );
@@ -46,7 +47,7 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
   groupID: PropTypes.string,
-  onRepoChanged: PropTypes.func.isRequired
+  onDeleteRepo: PropTypes.func.isRequired
 };
 
 DeleteRepoDialog.propTypes = propTypes;

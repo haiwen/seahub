@@ -28,9 +28,13 @@ import OrgAllRepos from './libraries/org-all-repos';
 import OrgTrashRepos from './libraries/org-repo-trash';
 import OrgInfo from './org-info';
 import OrgLinks from './org-links';
-import OrgDepartments from './org-departments';
-import OrgDepartmentsList from './org-departments-list';
-import OrgDepartmentItem from './org-department-item';
+
+import Departments from './departments/departments';
+import DepartmentList from './departments/department-list';
+import SubDepartments from './departments/sub-departments';
+import DepartmentMembers from './departments/department-members';
+import DepartmentLibraries from './departments/department-libraries';
+
 import OrgLogs from './org-logs';
 import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
@@ -110,10 +114,12 @@ class Org extends React.Component {
             <OrgAllRepos path={siteRoot + 'org/repoadmin'}/>
             <OrgTrashRepos path={siteRoot + 'org/repoadmin-trash'}/>
             <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
-            <OrgDepartments path={siteRoot + 'org/departmentadmin'}>
-              <OrgDepartmentsList path='/'/>
-              <OrgDepartmentItem path='groups/:groupID'/>
-            </OrgDepartments>
+            <Departments path={siteRoot + 'org/departmentadmin'}>
+              <DepartmentList path='/' />
+              <SubDepartments path='groups/:groupID' />
+              <DepartmentMembers path='groups/:groupID/members' />
+              <DepartmentLibraries path='groups/:groupID/libraries' />
+            </Departments>
             <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
               <OrgLogsFileAudit path='/' />
               <OrgLogsFileUpdate path='file-update' />
