@@ -1,0 +1,27 @@
+{% extends 'base_for_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+{% render_bundle 'institutionAdmin' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  server: '{{ service_url }}',
+  username: '{{ user.username|escapejs }}',
+  userNickName: '{{request.user.username|email2nickname|escapejs}}',
+  inst: '{{inst}}',
+  users: '{{users}}'
+};
+
+window.app.userInfo = {
+  username: '{{ user.username }}',
+  name: '{{ user.username|email2nickname|escapejs }}',
+  contact_email: '{{ user.username|email2contact_email }}',
+}
+</script>
+{% render_bundle 'institutionAdmin' 'js' %}
+{% endblock %}

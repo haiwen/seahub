@@ -54,6 +54,16 @@ def info(request):
         'inst': inst,
     })
 
+@inst_admin_required
+def useradmin_react_fake_view(request):
+    """List users in the institution.
+    """
+    # Make sure page request is an int. If not, deliver first page.
+    inst = request.user.institution
+
+    return render(request, 'institutions/admin.html', {
+        'institution': inst.name,
+    })
 
 @inst_admin_required
 def useradmin(request):
