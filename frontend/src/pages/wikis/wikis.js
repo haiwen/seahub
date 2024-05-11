@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import MediaQuery from 'react-responsive';
-import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -11,6 +10,7 @@ import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
+import wikiAPI from '../../utils/wiki-api';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -34,7 +34,7 @@ class Wikis extends Component {
   }
 
   getWikis = () => {
-    seafileAPI.listWikis().then(res => {
+    wikiAPI.listWikis().then(res => {
       this.setState({
         loading: false,
         wikis: res.data.data
@@ -61,27 +61,20 @@ class Wikis extends Component {
   };
 
   addWiki = (wikiName) => {
-    const repo = { name: wikiName, passwd: '' };
-    seafileAPI.createMineRepo(repo).then((res) => {
-      const repoID = res.data.repo_id;
-      seafileAPI.addWiki(repoID).then((res) => {
-        let wikis = this.state.wikis.slice(0);
-        wikis.push(res.data);
-        this.setState({ wikis });
-      }).catch((error) => {
-        if (error.response) {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        }
-      });
+    wikiAPI.addWiki(wikiName).then((res) => {
+      let wikis = this.state.wikis.slice(0);
+      wikis.push(res.data);
+      this.setState({ wikis });
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      if (error.response) {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
     });
   };
 
   deleteWiki = (wiki) => {
-    seafileAPI.deleteWiki(wiki.slug).then(() => {
+    wikiAPI.deleteWiki(wiki.id).then(() => {
       let wikis = this.state.wikis.filter(item => {
         return item.name !== wiki.name;
       });

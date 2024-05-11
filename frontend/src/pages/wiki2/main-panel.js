@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
+import { gettext, repoID, siteRoot, username, isPro, isEditWiki } from '../../utils/constants';
 import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
@@ -82,7 +82,7 @@ class MainPanel extends Component {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
     return (
-      <div className="main-panel wiki-main-panel">
+      <div className="main-panel wiki-main-panel" style={{flex: isEditWiki ? '1 0 76%' : '1 0 80%'}}>
         <div className="main-panel-hide hide">{this.props.content}</div>
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&

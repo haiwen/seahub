@@ -70,6 +70,11 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
+    let isOldVersion = wiki.version !== 'v2';
+    // let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
+    let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
+    // let editUrl = `${siteRoot}edit-wiki/${encodeURIComponent(wiki.slug)}/`;
+    let editUrl = `${siteRoot}edit-wiki/${wiki.id}/`;
 
     const desktopItem = (
       <tr
@@ -80,7 +85,8 @@ class WikiListItem extends Component {
       >
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td className="name">
-          <a href={wiki.link.replace('/published/', '/edit-wiki/')}>{wiki.name}</a>
+          {isOldVersion && <a href={publishedUrl}>{wiki.name} (old version)</a>}
+          {!isOldVersion && <a href={editUrl}>{wiki.name}</a>}
         </td>
         <td><a href={userProfileURL} target='_blank' rel="noreferrer">{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
@@ -101,7 +107,8 @@ class WikiListItem extends Component {
       <tr>
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td>
-          <a href={wiki.link.replace('/published/', '/edit-wiki/')}>{wiki.name}</a><br />
+          {isOldVersion && <a href={publishedUrl}>{wiki.name} (old version)</a>}
+          {!isOldVersion && <a href={editUrl}>{wiki.name}</a>}<br />
           <a href={userProfileURL} target='_blank' className="item-meta-info" rel="noreferrer">{wiki.owner_nickname}</a>
           <span className="item-meta-info">{moment(wiki.updated_at).fromNow()}</span>
         </td>
