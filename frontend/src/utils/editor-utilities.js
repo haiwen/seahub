@@ -1,4 +1,4 @@
-import { slug, repoID, historyRepoID } from './constants';
+import { repoID, historyRepoID } from './constants';
 import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {

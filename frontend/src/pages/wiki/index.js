@@ -3,17 +3,13 @@ import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import wikiAPI from '../../utils/wiki-api';
-import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isEditWiki } from '../../utils/constants';
+import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
-import WikiConfig from './models/wiki-config';
 import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
-import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
-import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
-import PageUtils from './view-structure/page-utils';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -38,14 +34,10 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       isTreeDataLoading: true,
-      isConfigLoading: true,
       treeData: treeHelper.buildTree(),
       currentNode: null,
       indexNode: null,
       indexContent: '',
-      currentPageId: '',
-      config: {},
-      repoId: '',
     };
 
     window.onpopstate = this.onpopstate;
@@ -61,7 +53,6 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.getWikiConfig();
     this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
 
@@ -72,40 +63,6 @@ class Wiki extends Component {
   componentWillUnmount() {
     this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
   }
-
-  handlePath = () => {
-    return isEditWiki ? 'edit-wiki/' : 'published/';
-  };
-
-  getWikiConfig = () => {
-    wikiAPI.getWikiConfig(wikiId).then(res => {
-      const { wiki_config, repo_id } = res.data.wiki;
-      this.setState({
-        config: new WikiConfig(JSON.parse(wiki_config) || {}),
-        isConfigLoading: false,
-        repoId: repo_id,
-      });
-    }).catch((error) => {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-      this.setState({
-        isConfigLoading: false,
-      });
-    });
-  };
-
-  saveWikiConfig = (wikiConfig, onSuccess, onError) => {
-    wikiAPI.updateWikiConfig(wikiId, JSON.stringify(wikiConfig)).then(res => {
-      this.setState({
-        config: new WikiConfig(wikiConfig || {}),
-      });
-      onSuccess && onSuccess();
-    }).catch((error) => {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-      onError && onError();
-    });
-  };
 
   loadSidePanel = (initialPath) => {
     if (hasIndex) {
@@ -146,17 +103,17 @@ class Wiki extends Component {
 
     if (isDir === 'None') {
       this.setState({pathExist: false});
-      let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(initialPath);
+      let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
       window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
     }
   };
 
   loadIndexNode = () => {
-    wikiAPI.listWikiDir(wikiId, '/').then(res => {
+    seafileAPI.listWikiDir(wikiId, '/').then(res => {
       let tree = this.state.treeData;
       this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
       let indexNode = tree.getNodeByPath(this.indexPath);
-      wikiAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+      seafileAPI.getWikiFileContent(wikiId, indexNode.path).then(res => {
         this.setState({
           treeData: tree,
           indexNode: indexNode,
@@ -164,7 +121,7 @@ class Wiki extends Component {
           isTreeDataLoading: false,
         });
       });
-    }).catch(() => {
+    }).catch((error) => {
       this.setState({isLoadFailed: true});
     });
   };
@@ -174,7 +131,7 @@ class Wiki extends Component {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + this.handlePath() + slug + Utils.encodePath(dirPath);
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   };
 
@@ -186,7 +143,7 @@ class Wiki extends Component {
     });
 
     this.removePythonWrapper();
-    wikiAPI.getWikiFileContent(slug, filePath).then(res => {
+    seafileAPI.getWikiFileContent(wikiId, filePath).then(res => {
       let data = res.data;
       this.setState({
         isDataLoading: false,
@@ -195,13 +152,10 @@ class Wiki extends Component {
         lastModified: moment.unix(data.last_modified).fromNow(),
         latestContributor: data.latest_contributor,
       });
-    }).catch(error => {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
     });
 
     const hash = window.location.hash;
-    let fileUrl = `${siteRoot}${this.handlePath()}${slug}${Utils.encodePath(filePath)}${hash}`;
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(filePath) + hash;
     if (filePath === '/home.md') {
       window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
     } else {
@@ -211,7 +165,7 @@ class Wiki extends Component {
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
-    wikiAPI.listWikiDir(wikiId, dirPath).then(res => {
+    seafileAPI.listWikiDir(wikiId, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
         return dirent;
@@ -241,7 +195,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
-      wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+      seafileAPI.listWikiDir(wikiId, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
@@ -262,7 +216,7 @@ class Wiki extends Component {
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
     }
-    wikiAPI.listWikiDir(wikiId, path, true).then(res => {
+    seafileAPI.listWikiDir(wikiId, path, true).then(res => {
       let direntList = res.data.dirent_list;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
@@ -425,7 +379,7 @@ class Wiki extends Component {
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
-        wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+        seafileAPI.listWikiDir(wikiId, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
@@ -473,7 +427,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
-      wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+      seafileAPI.listWikiDir(wikiId, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });
@@ -518,45 +472,11 @@ class Wiki extends Component {
     node.addChildren(nodeList);
   };
 
-  setCurrentPage = (pageId, callback) => {
-    const { currentPageId, config } = this.state;
-    if (pageId === currentPageId) {
-      callback && callback();
-      return;
-    }
-    const { pages } = config;
-    const currentPage = PageUtils.getPageById(pages, pageId);
-    const path = currentPage.path;
-    if (Utils.isMarkdownFile(path) || Utils.isSdocFile(path)) {
-      if (path !== this.state.path) {
-        this.showFile(path);
-      }
-      this.onCloseSide();
-    } else {
-      const w = window.open('about:blank');
-      const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(path);
-      w.location.href = url;
-    }
-    this.setState({
-      currentPageId: pageId,
-      path: path,
-    }, () => {
-      callback && callback();
-    });
-  };
-
   render() {
     return (
       <div id="main" className="wiki-main">
-        {isEditWiki &&
-          <WikiLeftBar
-            config={this.state.config}
-            repoId={this.state.repoId}
-            updateConfig={(data) => this.saveWikiConfig(Object.assign({}, this.state.config, data))}
-          />
-        }
         <SidePanel
-          isLoading={this.state.isTreeDataLoading || this.state.isConfigLoading}
+          isTreeDataLoading={this.state.isTreeDataLoading}
           closeSideBar={this.state.closeSideBar}
           currentPath={this.state.path}
           treeData={this.state.treeData}
@@ -567,10 +487,6 @@ class Wiki extends Component {
           onNodeCollapse={this.onNodeCollapse}
           onNodeExpanded={this.onNodeExpanded}
           onLinkClick={this.onLinkClick}
-          config={this.state.config}
-          saveWikiConfig={this.saveWikiConfig}
-          setCurrentPage={this.setCurrentPage}
-          currentPageId={this.state.currentPageId}
         />
         <MainPanel
           path={this.state.path}

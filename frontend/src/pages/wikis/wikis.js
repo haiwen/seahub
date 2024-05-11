@@ -61,7 +61,6 @@ class Wikis extends Component {
   };
 
   addWiki = (wikiName) => {
-    const repo = { name: wikiName, passwd: '' };
     wikiAPI.addWiki(wikiName).then((res) => {
       let wikis = this.state.wikis.slice(0);
       wikis.push(res.data);
