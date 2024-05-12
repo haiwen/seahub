@@ -222,5 +222,6 @@
   "Font_style": "Schriftschnitt",
   "Open_link": "Open link",
   "Image_is_uploading": "Image is uploading",
-  "Image_loading_failed": "Image loading failed"
+  "Image_loading_failed": "Image loading failed",
+  "Expand_editor": "Expand editor"
 }

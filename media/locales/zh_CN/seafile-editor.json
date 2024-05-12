@@ -222,5 +222,6 @@
   "Font_style": "字体样式",
   "Open_link": "打开链接",
   "Image_is_uploading": "图片正在上传",
-  "Image_loading_failed": "图片加载失败"
+  "Image_loading_failed": "图片加载失败",
+  "Expand_editor": "展开编辑器"
 }
