@@ -22,7 +22,6 @@
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %} 
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
-
 <body>
     <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
@@ -38,7 +37,8 @@
             <a href="{{ SITE_ROOT }}" id="logo">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
             </a>
-            <span class="sf2-icon-menu side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
+            {% block side-panel-menu %}
+            {% endblock side-panel-menu %}
 
             {% block header_right %}
             {% if not request.user.is_authenticated %}
@@ -86,6 +86,9 @@
             <button id="confirm-yes">{% trans "Yes" %}</button>
             <button class="simplemodal-close">{% trans "No" %}</button>
         </div>
+        
+        {% block extra-hidden-dom %}
+        {% endblock %}
 </div><!-- wrapper -->
 <script type="text/javascript">
 var SEAFILE_GLOBAL = {
@@ -193,26 +196,6 @@ $('#info-bar .close').on('click', function() {
     });
 })();
 {% endif %}
-
-if ($('.side-nav').length) {
-    $('#logo').addClass('hidden-sm-down');
-    $('#js-toggle-side-nav').removeClass('hide');
-}
-$('#js-toggle-side-nav').on('click', function() {
-    $('.side-nav').addClass('side-nav-shown');
-    $('').modal({
-        overlayClose: true,
-        onClose: function() {
-            $('.side-nav').removeClass('side-nav-shown');
-            $.modal.close();
-        }});
-    $('#simplemodal-container').css({'display':'none'});
-    return false;
-});
-$('.js-close-side-nav').on('click', function() {
-    $('.side-nav').removeClass('side-nav-shown');
-    return false;
-});
 </script>
 {% block extra_script %}{% endblock %}
 </body>

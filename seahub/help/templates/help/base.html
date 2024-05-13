@@ -10,13 +10,35 @@
 .side-nav-con .first-hd {
     margin-top: 0;
 }
+.seafile-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+    background-color: #000;
+}
+.seafile-mask__shown {
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: block;
+    opacity: 0.5;
+}
 </style>
 {% endblock %}
+{% block side-panel-menu %}
+<span class="sf2-icon-menu side-nav-toggle d-block d-md-none" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
+{% endblock %}
 {% block main_class %}d-flex ovhd{% endblock %}
+
 {% block main_content %}
 <div class="row flex-1 d-flex">
     <div class="side-textnav col-md-3 side-nav help-side-nav">
-        <div class="hidden-md-up logo-container">
+        <div class="d-block d-md-none logo-container">
             <a href="{{ SITE_ROOT }}">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
             </a>
@@ -82,6 +104,11 @@
     <div class="help-con article col-md-9 ov-auto flex-1" id="right-panel">{% block help_con %}{% endblock %}</div>
 </div>
 {% endblock %}
+
+{% block extra-hidden-dom %}
+<div class="seafile-mask"></div>
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
 $('.side-nav li').each(function(index) {
@@ -106,6 +133,7 @@ $('.side-nav li').each(function(index) {
       }
     }
 });
+
 $('.help-side-nav .tab a').on('click', function() {
   var scrollTop = $('.side-nav').scrollTop();
   if (scrollTop > 0) {
@@ -115,6 +143,19 @@ $('.help-side-nav .tab a').on('click', function() {
       // do nothing
     }
   }
+});
+
+$('#logo').addClass('d-none d-md-block');
+
+$('#js-toggle-side-nav').on('click', function(event) {
+    $('.side-nav').toggleClass('side-nav-shown');
+    $('.seafile-mask').toggleClass('seafile-mask__shown');
+    return false;
+});
+
+$('.seafile-mask').on('click', function() {
+    $('.side-nav').toggleClass('side-nav-shown');
+    $('.seafile-mask').toggleClass('seafile-mask__shown');
 });
 </script>
 {% endblock %}
