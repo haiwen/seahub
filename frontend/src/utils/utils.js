@@ -1626,4 +1626,9 @@ export const Utils = {
     history.replaceState(null, '', origin + pathname + newSearch);
   },
 
+  isRelativePath(url) {
+    let RgExp = new RegExp('^(?:[a-z]+:)?//', 'i');
+    return !RgExp.test(url);
+  }
+
 };
