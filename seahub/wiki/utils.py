@@ -20,6 +20,7 @@ from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from .models import WikiPageMissing, WikiDoesNotExist
+from seahub.constants import PERMISSION_READ_WRITE
 
 logger = logging.getLogger(__name__)
 
@@ -83,3 +84,8 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
         all_dirs.append(entry)
 
     return all_dirs
+
+
+def can_edit_wiki(wiki, username):
+    permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
+    return permission == PERMISSION_READ_WRITE

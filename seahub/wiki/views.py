@@ -27,6 +27,8 @@ from seahub.utils import get_file_type_and_ext, render_permission_error, \
 from seahub.views.file import send_file_access_msg
 from seahub.utils.file_types import IMAGE, MARKDOWN, SEADOC
 from seahub.seadoc.utils import get_seadoc_file_uuid
+from seahub.auth.decorators import login_required
+from seahub.wiki.utils import can_edit_wiki
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -261,10 +263,9 @@ def slug(request, slug, file_path="home.md"):
         "assets_url": assets_url,
     })
 
-from seahub.auth.decorators import login_required
-from seahub.constants import PERMISSION_READ_WRITE
+
 @login_required
-def edit_slug(request, wiki_id, file_path="home.md"):
+def edit_slug(request, wiki_id, file_path):
     """ edit wiki page. for wiki2
     """
     # get wiki object or 404
@@ -273,8 +274,7 @@ def edit_slug(request, wiki_id, file_path="home.md"):
 
     # # perm check
     req_user = request.user.username
-    permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', req_user)
-    if permission != PERMISSION_READ_WRITE:
+    if not can_edit_wiki(wiki, req_user):
         return render_permission_error(request, 'Permission denied.')
 
     is_dir = None

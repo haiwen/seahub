@@ -20,7 +20,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
-from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
+from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name, can_edit_wiki
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.views import check_folder_permission
@@ -116,23 +116,6 @@ class WikisView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
         repo_id = wiki.repo_id
-
-        # 新版的应该不需要这个，因为新版的只能创建sdoc
-        # # create home page if not exist
-        # page_name = "home.md"
-        # if not seafile_api.get_file_id_by_path(repo_id, "/" + page_name):
-        #     try:
-        #         seafile_api.post_empty_file(repo_id, '/', page_name, username)
-        #     except Exception as e:
-        #         if str(e) == 'Too many files in library.':
-        #             error_msg = _("The number of files in library exceeds the limit")
-        #             from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
-        #             return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
-        #         else:
-        #             logger.error(e)
-        #             error_msg = 'Internal Server Error'
-        #             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, '/')
         if not fs:
             fs = FileShare.objects.create_dir_link(username, repo_id, '/',
@@ -259,7 +242,7 @@ class WikiConfigView(APIView):
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if wiki.username != username:
+        if not can_edit_wiki(wiki, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -301,7 +284,7 @@ class WikiConfigView(APIView):
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not wiki.has_read_perm(request):
+        if not can_edit_wiki(wiki, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
