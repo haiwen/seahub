@@ -8,7 +8,6 @@ import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import LibsMobileThead from '../../components/libs-mobile-thead';
@@ -406,19 +405,9 @@ class SharedLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type:'shared'}).then((res) => {
-      let repoList = res.data.repos.map((item) => {
-        return new Repo(item);
-      });
-      this.setState({
-        loading: false,
-        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
-      });
-    }).catch((error) => {
-      this.setState({
-        loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
+    this.setState({
+      loading: false,
+      items: Utils.sortRepos(this.props.repoList, this.state.sortBy, this.state.sortOrder)
     });
   }
 
@@ -514,7 +503,8 @@ class SharedLibraries extends Component {
 }
 
 SharedLibraries.propTypes = {
-  inAllLibs: PropTypes.bool
+  inAllLibs: PropTypes.bool,
+  repoList: PropTypes.array,
 };
 
 export default SharedLibraries;
