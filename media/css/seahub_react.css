@@ -669,7 +669,8 @@ a, a:hover { color: #ec8000; }
 }
 
 .side-nav-con [class^="sf2-icon-"],
-.side-nav-con [class^="sf3-font-"] {
+.side-nav-con [class^="sf3-font-"],
+.side-nav-con [class^="fas"] {
     display:inline-block;
     width:2.625rem;
     margin-right:0.325rem;
