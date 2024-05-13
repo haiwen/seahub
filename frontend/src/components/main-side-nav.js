@@ -83,7 +83,7 @@ class MainSideNav extends React.Component {
                 className={`nav-link ellipsis ${this.getActiveClass(item.name)}`}
                 onClick={(e) => this.tabItemClick(e, item.name, item.id)}
               >
-                <span className="sf3-font-group sf3-font nav-icon" aria-hidden="true"></span>
+                <span className={`${item.parent_group_id == 0 ? 'sf3-font-group sf3-font' : 'fas fa-building'} nav-icon`} aria-hidden="true"></span>
                 <span className="nav-text">{item.name}</span>
               </Link>
             </li>
