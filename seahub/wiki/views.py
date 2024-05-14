@@ -27,8 +27,6 @@ from seahub.utils import get_file_type_and_ext, render_permission_error, \
 from seahub.views.file import send_file_access_msg
 from seahub.utils.file_types import IMAGE, MARKDOWN, SEADOC
 from seahub.seadoc.utils import get_seadoc_file_uuid
-from seahub.auth.decorators import login_required
-from seahub.wiki.utils import can_edit_wiki
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -241,100 +239,6 @@ def slug(request, slug, file_path="home.md"):
     last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki.html", {
-        "wiki": wiki,
-        "repo_name": repo.name if repo else '',
-        "page_name": file_path,
-        "shared_token": fs.token,
-        "shared_type": fs.s_type,
-        "user_can_write": user_can_write,
-        "file_path": file_path,
-        "filename": os.path.splitext(os.path.basename(file_path))[0],
-        "h1_head_content": h1_head_content,
-        "file_content": file_content,
-        "outlines": outlines,
-        "modifier": latest_contributor,
-        "modify_time": last_modified,
-        "repo_id": wiki.repo_id,
-        "search_repo_id": wiki.repo_id,
-        "search_wiki": True,
-        "is_public_wiki": is_public_wiki,
-        "is_dir": is_dir,
-        "has_index": has_index,
-        "assets_url": assets_url,
-    })
-
-
-@login_required
-def edit_slug(request, wiki_id, file_path):
-    """ edit wiki page. for wiki2
-    """
-    # get wiki object or 404
-    wiki = get_object_or_404(Wiki, id=wiki_id)
-    file_path = "/" + file_path
-
-    # # perm check
-    req_user = request.user.username
-    if not can_edit_wiki(wiki, req_user):
-        return render_permission_error(request, 'Permission denied.')
-
-    is_dir = None
-    file_id = seafile_api.get_file_id_by_path(wiki.repo_id, file_path)
-    if file_id:
-        is_dir = False
-
-    dir_id = seafile_api.get_dir_id_by_path(wiki.repo_id, file_path)
-    if dir_id:
-        is_dir = True
-
-    file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
-    if file_type == IMAGE:
-        file_url = reverse('view_lib_file', args=[wiki.repo_id, file_path])
-        return HttpResponseRedirect(file_url + "?raw=1")
-
-    if not req_user:
-        user_can_write = False
-    elif req_user == wiki.username or check_folder_permission(
-            request, wiki.repo_id, '/') == 'rw':
-        user_can_write = True
-    else:
-        user_can_write = False
-
-    is_public_wiki = False
-    if wiki.permission == 'public':
-        is_public_wiki = True
-
-    has_index = False
-    dirs = seafile_api.list_dir_by_path(wiki.repo_id, '/')
-    for dir_obj in dirs:
-        if dir_obj.obj_name == 'index.md':
-            has_index = True
-            break
-
-    try:
-        fs = FileShare.objects.filter(repo_id=wiki.repo_id, path='/').first()
-    except FileShare.DoesNotExist:
-        fs = FileShare.objects.create_dir_link(wiki.username, wiki.repo_id, '/',
-                                               permission='view_download')
-        wiki.permission = 'public'
-        wiki.save()
-        is_public_wiki = True
-
-    repo = seafile_api.get_repo(wiki.repo_id)
-
-    file_content = ''
-    h1_head_content = ''
-    outlines = []
-    latest_contributor = ''
-    last_modified = 0
-    assets_url = ''
-
-    if is_dir is False and file_type == SEADOC:
-        file_uuid = get_seadoc_file_uuid(repo, file_path)
-        assets_url = '/api/v2.1/seadoc/download-image/' + file_uuid
-
-    last_modified = datetime.fromtimestamp(last_modified)
-
-    return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',
         "page_name": file_path,

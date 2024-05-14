@@ -86,7 +86,7 @@ from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
-from seahub.api2.endpoints.wikis import WikisView, WikiView, WikiConfigView
+from seahub.api2.endpoints.wikis import WikisView, WikiView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
 from seahub.api2.endpoints.draft_reviewer import DraftReviewerView
 from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
@@ -203,7 +203,8 @@ from seahub.ocm.settings import OCM_ENDPOINT
 
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
-from seahub.wiki.views import edit_slug
+from seahub.wiki2.views import edit_wiki
+from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesDirView, Wiki2PageContentView
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -516,9 +517,15 @@ urlpatterns = [
     re_path(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     re_path(r'^api/v2.1/wikis/(?P<wiki_id>\d+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
     re_path(r'^api/v2.1/wikis/(?P<wiki_id>\d+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
-    re_path(r'^api/v2.1/wiki-config/(?P<wiki_id>\d+)/$', WikiConfigView.as_view(), name='api-v2.1-wiki-config'),
     re_path(r'^api/v2.1/wikis/(?P<wiki_id>\d+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     path('view-image-via-public-wiki/', view_media_file_via_public_wiki, name='view_media_file_via_public_wiki'),
+
+    ## user::wiki2
+    re_path(r'^api/v2.1/wikis2/$', Wikis2View.as_view(), name='api-v2.1-wikis2'),
+    re_path(r'^api/v2.1/wikis2/(?P<wiki_id>\d+)/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
+    re_path(r'^api/v2.1/wikis2/(?P<wiki_id>\d+)/dir/$', Wiki2PagesDirView.as_view(), name='api-v2.1-wiki2-pages-dir'),
+    re_path(r'^api/v2.1/wiki2-config/(?P<wiki_id>\d+)/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
+    re_path(r'^api/v2.1/wikis2/(?P<wiki_id>\d+)/content/$', Wiki2PageContentView.as_view(), name='api-v2.1-wiki2-pages-content'),
 
     ## user::drafts
     re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
@@ -701,7 +708,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/invitations/$', AdminInvitations.as_view(), name='api-v2.1-admin-invitations'),
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
-    re_path(r'^edit-wiki/(?P<wiki_id>[^/]+)/(?P<file_path>.*)$', edit_slug, name='edit_slug'),
+    re_path(r'^edit-wiki/(?P<wiki_id>[^/]+)/(?P<file_path>.*)$', edit_wiki, name='edit_wiki'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('notice/', include('seahub.notifications.urls')),

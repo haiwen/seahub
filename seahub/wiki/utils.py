@@ -84,8 +84,3 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
         all_dirs.append(entry)
 
     return all_dirs
-
-
-def can_edit_wiki(wiki, username):
-    permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
-    return permission == PERMISSION_READ_WRITE

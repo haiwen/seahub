@@ -78,7 +78,7 @@ class Wiki extends Component {
   };
 
   getWikiConfig = () => {
-    wikiAPI.getWikiConfig(wikiId).then(res => {
+    wikiAPI.getWiki2Config(wikiId).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
       this.setState({
         config: new WikiConfig(JSON.parse(wiki_config) || {}),
@@ -95,7 +95,7 @@ class Wiki extends Component {
   };
 
   saveWikiConfig = (wikiConfig, onSuccess, onError) => {
-    wikiAPI.updateWikiConfig(wikiId, JSON.stringify(wikiConfig)).then(res => {
+    wikiAPI.updateWiki2Config(wikiId, JSON.stringify(wikiConfig)).then(res => {
       this.setState({
         config: new WikiConfig(wikiConfig || {}),
       });
@@ -152,11 +152,11 @@ class Wiki extends Component {
   };
 
   loadIndexNode = () => {
-    wikiAPI.listWikiDir(wikiId, '/').then(res => {
+    wikiAPI.listWiki2Dir(wikiId, '/').then(res => {
       let tree = this.state.treeData;
       this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
       let indexNode = tree.getNodeByPath(this.indexPath);
-      wikiAPI.getWikiFileContent(wikiId, indexNode.path).then(res => {
+      wikiAPI.getWiki2FileContent(wikiId, indexNode.path).then(res => {
         this.setState({
           treeData: tree,
           indexNode: indexNode,
@@ -186,7 +186,7 @@ class Wiki extends Component {
     });
 
     this.removePythonWrapper();
-    wikiAPI.getWikiFileContent(wikiId, filePath).then(res => {
+    wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
       let data = res.data;
       this.setState({
         isDataLoading: false,
@@ -211,7 +211,7 @@ class Wiki extends Component {
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
-    wikiAPI.listWikiDir(wikiId, dirPath).then(res => {
+    wikiAPI.listWiki2Dir(wikiId, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
         return dirent;
@@ -241,7 +241,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
     if (!node.isLoaded) {
-      wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+      wikiAPI.listWiki2Dir(wikiId, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         let parentNode = tree.getNodeByPath(node.parentNode.path);
         parentNode.isExpanded = true;
@@ -262,7 +262,7 @@ class Wiki extends Component {
     if (Utils.isMarkdownFile(path)) {
       path = Utils.getDirName(path);
     }
-    wikiAPI.listWikiDir(wikiId, path, true).then(res => {
+    wikiAPI.listWiki2Dir(wikiId, path, true).then(res => {
       let direntList = res.data.dirent_list;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
@@ -425,7 +425,7 @@ class Wiki extends Component {
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
-        wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+        wikiAPI.listWiki2Dir(wikiId, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
           this.setState({treeData: tree});
@@ -473,7 +473,7 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     node = tree.getNodeByPath(node.path);
     if (!node.isLoaded) {
-      wikiAPI.listWikiDir(wikiId, node.path).then(res => {
+      wikiAPI.listWiki2Dir(wikiId, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
         this.setState({treeData: tree});
       });

@@ -20,16 +20,12 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
-from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name, can_edit_wiki
+from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.views import check_folder_permission
 from seahub.share.utils import is_repo_admin
 from seahub.share.models import FileShare
-
-
-WIKI_CONFIG_PATH = '_Internal/Wiki'
-WIKI_CONFIG_FILE_NAME = 'index.json'
 
 
 logger = logging.getLogger(__name__)
@@ -107,7 +103,7 @@ class WikisView(APIView):
             org_id = request.user.org.org_id
 
         try:
-            wiki = Wiki.objects.add(wiki_name=wiki_name, username=username, org_id=org_id, permission='public', version='v2')
+            wiki = Wiki.objects.add(wiki_name=wiki_name, username=username, org_id=org_id, permission='public')
         except DuplicateWikiNameError:
             msg = _('%s is taken by others, please try another name.') % wiki_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
@@ -143,20 +139,7 @@ class WikiView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # Wiki.objects.filter(slug=slug).delete()
         wiki.delete()
-
-        # file_name = os.path.basename(path)
-        repo_id = wiki.repo_id
-        file_name = WIKI_CONFIG_FILE_NAME
-        try:
-            seafile_api.del_file(repo_id, WIKI_CONFIG_PATH,
-                                 json.dumps([file_name]),
-                                 request.user.username)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response()
 
@@ -224,102 +207,3 @@ class WikiView(APIView):
                              "Unable to rename wiki")
 
         return Response(wiki.to_dict())
-
-
-class WikiConfigView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def put(self, request, wiki_id):
-        """Edit a wiki config
-        """
-        username = request.user.username
-
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
-            error_msg = "Wiki not found."
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_edit_wiki(wiki, request.user.username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        repo_id = wiki.repo_id
-        obj_id = json.dumps({'parent_dir': WIKI_CONFIG_PATH})
-
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, WIKI_CONFIG_PATH)
-        if not dir_id:
-            seafile_api.mkdir_with_parents(repo_id, '/', WIKI_CONFIG_PATH, username)
-
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, obj_id, 'upload-link', username, use_onetime=False)
-        if not token:
-            return None
-        upload_link = gen_file_upload_url(token, 'upload-api')
-        upload_link = upload_link + '?replace=1'
-
-        wiki_config = request.data.get('wiki_config', '{}')
-
-        files = {
-            'file': (WIKI_CONFIG_FILE_NAME, wiki_config)
-        }
-        data = {'parent_dir': WIKI_CONFIG_PATH, 'relative_path': '', 'replace': 1}
-        resp = requests.post(upload_link, files=files, data=data)
-        if not resp.ok:
-            logger.error(resp.text)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        wiki = wiki.to_dict()
-        wiki['wiki_config'] = wiki_config
-        return Response({'wiki': wiki})
-
-    def get(self, request, wiki_id):
-
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
-            error_msg = "Wiki not found."
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_edit_wiki(wiki, request.user.username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
-        try:
-            repo = seafile_api.get_repo(wiki.repo_id)
-            if not repo:
-                error_msg = "Wiki library not found."
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        except SearpcError:
-            error_msg = _("Internal Server Error")
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        wiki = wiki.to_dict()
-        if not file_id:
-            wiki['wiki_config'] = '{}'
-            return Response({'wiki': wiki})
-
-        token = seafile_api.get_fileserver_access_token(repo.repo_id, file_id, 'download', request.user.username, use_onetime=True)
-
-        if not token:
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
-        resp = requests.get(url)
-        content = resp.content
-
-        wiki['wiki_config'] = content
-
-        return Response({'wiki': wiki})

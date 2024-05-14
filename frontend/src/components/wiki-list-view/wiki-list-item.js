@@ -71,9 +71,7 @@ class WikiListItem extends Component {
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
     let isOldVersion = wiki.version !== 'v2';
-    // let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
-    // let editUrl = `${siteRoot}edit-wiki/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}edit-wiki/${wiki.id}/`;
 
     const desktopItem = (

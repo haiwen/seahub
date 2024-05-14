@@ -39,17 +39,12 @@
 <script type="text/javascript">
     window.wiki = {
         config: {
-            slug: "{{ wiki.slug }}",
             wikiId: "{{ wiki.id }}",
             repoId: "{{ wiki.repo_id }}",
             repoName: "{{ wiki.repo_name }}",
-            sharedToken: "{{ shared_token }}",
-            sharedType: "{{ shared_type }}",
             initial_path: "{{ file_path|escapejs }}",
             permission: "{{ user_can_write }}",
-            isPublicWiki: "{{ is_public_wiki }}",
             isDir: "{{ is_dir }}",
-            hasIndex: {% if has_index %} true {% else %} false {% endif %},
             isEditWiki: true,
             assetsUrl: "{{ assets_url }}"
         }

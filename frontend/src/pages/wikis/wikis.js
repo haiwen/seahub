@@ -34,10 +34,30 @@ class Wikis extends Component {
   }
 
   getWikis = () => {
+    let wikis = [];
     wikiAPI.listWikis().then(res => {
+      wikis = wikis.concat(res.data.data);
+      wikis.map(wiki => {
+        return wiki['version'] = 'v1';
+      });
+      wikiAPI.listWikis2().then(res => {
+        let wikis2 = res.data.data;
+        wikis2.map(wiki => {
+          return wiki['version'] = 'v2';
+        });
+        this.setState({
+          loading: false,
+          wikis: wikis.concat(wikis2)
+        });
+      }).catch((error) => {
+        this.setState({
+          loading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
+      });
       this.setState({
         loading: false,
-        wikis: res.data.data
+        wikis: wikis
       });
     }).catch((error) => {
       this.setState({
@@ -61,9 +81,11 @@ class Wikis extends Component {
   };
 
   addWiki = (wikiName) => {
-    wikiAPI.addWiki(wikiName).then((res) => {
+    wikiAPI.addWiki2(wikiName).then((res) => {
       let wikis = this.state.wikis.slice(0);
-      wikis.push(res.data);
+      let new_wiki = res.data;
+      new_wiki['version'] = 'v2';
+      wikis.push(new_wiki);
       this.setState({ wikis });
     }).catch((error) => {
       if (error.response) {
@@ -74,17 +96,31 @@ class Wikis extends Component {
   };
 
   deleteWiki = (wiki) => {
-    wikiAPI.deleteWiki(wiki.id).then(() => {
-      let wikis = this.state.wikis.filter(item => {
-        return item.name !== wiki.name;
+    if (wiki.version === 'v1') {
+      wikiAPI.deleteWiki(wiki.id).then(() => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if(error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
       });
-      this.setState({wikis: wikis});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
+    } else {
+      wikiAPI.deleteWiki2(wiki.id).then(() => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if(error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
+      });
+    }
   };
 
   render() {

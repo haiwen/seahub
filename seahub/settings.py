@@ -245,6 +245,7 @@ INSTALLED_APPS = [
     'seahub.institutions',
     'seahub.invitations',
     'seahub.wiki',
+    'seahub.wiki2',
     'seahub.group',
     'seahub.notifications',
     'seahub.options',

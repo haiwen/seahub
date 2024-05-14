@@ -23,7 +23,7 @@ class DuplicateWikiNameError(Exception):
 
 class WikiManager(models.Manager):
     def add(self, wiki_name, username, permission='private', repo_id=None,
-            org_id=-1, version='v1'):
+            org_id=-1):
         if not permission:
             permission = 'private'
 
@@ -44,7 +44,7 @@ class WikiManager(models.Manager):
 
         wiki = self.model(username=username, name=wiki_name, slug=slug,
                           repo_id=repo.id, permission=permission,
-                          created_at=now, version=version)
+                          created_at=now)
         wiki.save(using=self._db)
         return wiki
 
@@ -64,7 +64,6 @@ class Wiki(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
     permission = models.CharField(max_length=50)  # private, public
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
-    version = models.CharField(max_length=10, default='v1')
     objects = WikiManager()
 
     class Meta:
@@ -110,7 +109,6 @@ class Wiki(models.Model):
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': timestamp_to_isoformat_timestr(self.updated_at),
             'repo_id': self.repo_id,
-            'version': self.version,
         }
 
 
