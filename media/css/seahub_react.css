@@ -653,6 +653,11 @@ a, a:hover { color: #ec8000; }
     margin-left:auto;
 }
 
+.side-nav-con .heading {
+  font-size: .9375rem;
+  color: #999999;
+}
+
 .side-nav-con>.nav {
     margin-bottom: 1rem;
 }
