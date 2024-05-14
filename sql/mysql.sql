@@ -1479,3 +1479,14 @@ CREATE TABLE `base_clientssotoken` (
   KEY `base_clientssotoken_updated_at_591fc2cd` (`updated_at`),
   KEY `base_clientssotoken_accessed_at_cdc66bf3` (`accessed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `group_invite_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(40) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_invite_link_group_id_4b619114` (`group_id`),
+  KEY `group_invite_link_token_7f96850` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

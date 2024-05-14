@@ -97,6 +97,8 @@ export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeCo
 
 export const canSetExProps = window.app.pageOptions.canSetExProps || false;
 
+export const isMultiTenancy = window.app.pageOptions.isMultiTenacy;
+
 // seafile_ai
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI || false;
 
