@@ -147,8 +147,8 @@ json_content_type = 'application/json; charset=utf-8'
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
 HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
-HTTP_442_TOO_MANY_FILES_IN_LIBRARY = 442
 HTTP_443_ABOVE_QUOTA = 443
+HTTP_447_TOO_MANY_FILES_IN_LIBRARY = 447
 HTTP_520_OPERATION_FAILED = 520
 
 ########## Test
@@ -1879,7 +1879,7 @@ class UploadLinkView(APIView):
         except Exception as e:
             if str(e) == 'Too many files in library.':
                 error_msg = _("The number of files in library exceeds the limit")
-                return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
             else:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
