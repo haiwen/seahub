@@ -4,19 +4,21 @@ import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, historyRepoID } from '../../../utils/constants';
+import { PER_PAGE, gettext, historyRepoID } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import GoBack from '../../../components/common/go-back';
 import SidePanel from './side-panel';
-import { Utils } from '../../../utils/utils';
+import { Utils, isMobile } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
 import '../../../css/layout.css';
 import './index.css';
+import moment from 'moment';
+import { getCurrentAndLastVersion, getLastVersion } from './helper';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
-const { repoID, fileName, filePath, docUuid, assetsUrl  } = window.fileHistory.pageOptions;
+const { repoID, fileName, filePath, docUuid, assetsUrl } = window.fileHistory.pageOptions;
 
 window.seafile = {
   repoID,
@@ -45,7 +47,14 @@ class SdocFileHistory extends React.Component {
       lastVersionContent: '',
       changes: [],
       currentDiffIndex: 0,
+      isMobile: isMobile,
+      sidePanelInitData: {},
+      showSidePanel: true,
     };
+  }
+
+  componentDidMount() {
+    this.firstLoadSdocHistory();
   }
 
   getInitContent = (firstChildren) => {
@@ -115,6 +124,7 @@ class SdocFileHistory extends React.Component {
 
   onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
+    console.log('currentVersion', currentVersion);
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
@@ -227,6 +237,10 @@ class SdocFileHistory extends React.Component {
     this.jumpToElement(currentDiffIndex + 1);
   };
 
+  changeSidePanelStatus = () => {
+    this.setState({ showSidePanel: !this.state.showSidePanel });
+  };
+
   renderChangesTip = () => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
     if (isLoading) return null;
@@ -271,24 +285,81 @@ class SdocFileHistory extends React.Component {
             {gettext('Next modification')}
           </UncontrolledTooltip>
         </div>
+        <div
+          className="sdoc-file-changes-switch d-flex align-items-center justify-content-center ml-2"
+          id="sdoc-file-changes-panel-switch"
+          onClick={this.changeSidePanelStatus}
+        >
+          <i className="sf3-font sf3-font-history"></i>
+        </div>
       </div>
     );
   };
 
-  render() {
-    const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading } = this.state;
+  formatHistories(histories) {
+    const oldHistoryGroups = []; // when init data, it will be []
+    if (!Array.isArray(histories) || histories.length === 0) return oldHistoryGroups;
+    const newHistoryGroups = oldHistoryGroups.slice(0);
+    histories.forEach(history => {
+      const { date } = history;
+      const momentDate = moment(date);
+      const month = momentDate.format('YYYY-MM');
+      const monthItem = newHistoryGroups.find(item => item.month === month);
+      if (monthItem) {
+        monthItem.children.push({ day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [history] });
+      } else {
+        newHistoryGroups.push({
+          month,
+          children: [
+            { day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [history] }
+          ]
+        });
+      }
+    });
+    return newHistoryGroups;
+  }
 
+  firstLoadSdocHistory() {
+    const currentPage = 1;
+    seafileAPI.listSdocHistory(docUuid, currentPage, PER_PAGE).then(res => {
+      const result = res.data;
+      const resultCount = result.histories.length;
+      const historyGroups = this.formatHistories(result.histories);
+      let hasMore = resultCount >= PER_PAGE;
+      const sidePanelInitData = {
+        historyGroups,
+        hasMore,
+        isLoading: false,
+      };
+      this.setState({ sidePanelInitData });
+
+      if (historyGroups.length > 0) {
+        const path = [0, 0, 0];
+        const { isShowChanges } = this.state;
+        this.onSelectHistoryVersion(...getCurrentAndLastVersion(path, historyGroups, isShowChanges));
+      }
+    }).catch((error) => {
+      const errorMessage = 'there has an error in server';
+      const isLoading = false;
+      this.setState({ isLoading });
+      this.setState({ sidePanelInitData: { isLoading, errorMessage } });
+      throw Error(errorMessage);
+    });
+  }
+
+  render() {
+    const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, isMobile, sidePanelInitData, showSidePanel } = this.state;
     return (
-      <div className="sdoc-file-history d-flex h-100 w-100 o-hidden">
+      <div className={`sdoc-file-history d-flex ${isMobile ? 'mobile' : ''}`}>
         <div className="sdoc-file-history-container d-flex flex-column">
-          <div className="sdoc-file-history-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
-            <div className={classnames('sdoc-file-history-header-left d-flex align-items-center o-hidden', { 'pr-4': isShowChanges })}>
+          <div className="sdoc-file-history-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100">
+            <div className={classnames('sdoc-file-history-header-left d-flex align-items-center', { 'pr-4': isShowChanges })}>
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>
             {this.renderChangesTip()}
           </div>
-          <div className="sdoc-file-history-content f-flex flex-column" ref={ref => this.historyContentRef = ref}>
+          <div className="sdoc-file-history-content f-flex" ref={ref => this.historyContentRef = ref}>
             {isLoading ? (
               <div className="sdoc-file-history-viewer d-flex align-items-center justify-content-center">
                 <Loading />
@@ -298,16 +369,20 @@ class SdocFileHistory extends React.Component {
                 currentContent={currentVersionContent}
                 lastContent={isShowChanges ? lastVersionContent : ''}
                 didMountCallback={this.setDiffCount}
+                rightSideDrawer={
+                  showSidePanel && <SidePanel
+                    isShowChanges={isShowChanges}
+                    currentVersion={currentVersion}
+                    onSelectHistoryVersion={this.onSelectHistoryVersion}
+                    onShowChanges={this.onShowChanges}
+                    sidePanelInitData={sidePanelInitData}
+                    onClose={this.changeSidePanelStatus}
+                  />
+                }
               />
             )}
           </div>
         </div>
-        <SidePanel
-          isShowChanges={isShowChanges}
-          currentVersion={currentVersion}
-          onSelectHistoryVersion={this.onSelectHistoryVersion}
-          onShowChanges={this.onShowChanges}
-        />
       </div>
     );
   }

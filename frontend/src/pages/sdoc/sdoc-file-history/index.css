@@ -1,6 +1,11 @@
+.sdoc-file-history .sdoc-content-wrapper {
+  flex: 1;
+  /* Header is 50px */
+  height: calc(100vh - 50px);
+}
+
 .sdoc-file-history .sdoc-file-history-container {
   flex: 1;
-  overflow-x: hidden;
 }
 
 .sdoc-file-history .sdoc-file-history-header {
@@ -36,8 +41,9 @@
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next {
-  padding:  0 8px;
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
+  padding: 0 8px;
   height: 100%;
 }
 
@@ -48,14 +54,17 @@
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover {
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
+
   cursor: pointer;
   opacity: .75;
   background-color: #F5F5F5;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .fas,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .fas {
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .fas,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
   opacity: .75;
 }
 
@@ -78,9 +87,17 @@
   padding: 20px 40px;
 }
 
+.sdoc-file-history.mobile .sdoc-file-history-container .sdoc-file-history-content .sdoc-editor-content {
+  padding: 0;
+}
+
 .sdoc-file-history .sdoc-file-history-content .sdoc-scroll-container {
   position: relative !important;
   width: 100%;
+}
+
+.sdoc-file-history .sdoc-file-history-content .sdoc-editor-container {
+  flex-direction: row;
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-article-container {
@@ -98,11 +115,15 @@
 .sdoc-file-history .sdoc-file-history-panel {
   width: 260px;
   border-left: 1px solid #e5e5e5;
+  height: calc(100vh - 50px);
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 18px;
-  height: 50px;;
+  height: 50px;
   border-bottom: 1px solid #e5e5e5;
   background-color: #fff;
 }
@@ -115,9 +136,14 @@
   line-height: 29px;
 }
 
+.sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-diff-switch {
   padding: 0 18px;
-  height: 50px;;
+  height: 50px;
   border-top: 1px solid #e5e5e5;
 }
 
@@ -138,7 +164,7 @@
 
 /* history versions */
 .sdoc-file-history-versions {
-  flex: 1; 
+  flex: 1;
   flex-direction: column;
   min-height: 0;
   overflow: auto;
@@ -179,7 +205,7 @@
   white-space: nowrap;
 }
 
-.sdoc-file-history-versions .history-list-item.item-active .history-info .name{
+.sdoc-file-history-versions .history-list-item.item-active .history-info .name {
   color: #ff8000;
 }
 
@@ -187,11 +213,11 @@
   cursor: pointer;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation a.fas  {
+.sdoc-file-history-versions .history-list-item .history-operation a.fas {
   color: #888;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation:hover a.fas  {
+.sdoc-file-history-versions .history-list-item .history-operation:hover a.fas {
   color: #333;
 }
 
@@ -199,7 +225,7 @@
   background-color: #FFECD9 !important;
 }
 
-.sdoc-file-history-versions .history-list-item.item-active .history-info .time  {
+.sdoc-file-history-versions .history-list-item.item-active .history-info .time {
   color: #ff8000;
 }
 
@@ -230,7 +256,7 @@
   line-height: 50px;
   font-size: 1rem;
   padding: 0 10px;
-  background-color: rgb(250,250,249);
+  background-color: rgb(250, 250, 249);
   font-weight: bolder;
 }
 
