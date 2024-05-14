@@ -4,7 +4,7 @@ import toaster from './toast';
 import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 import { gettext, serviceURL } from '../utils/constants';
 import { Utils } from '../utils/utils';
-import { seafileAPI } from '../utils/seafile-api';
+import { subscriptionAPI } from '../utils/subscription-api';
 import Loading from './loading';
 
 import '../css/layout.css';
@@ -292,7 +292,7 @@ class PlansDialog extends Component {
   }
 
   getPlans = () => {
-    seafileAPI.getSubscriptionPlans(this.props.paymentType).then((res) => {
+    subscriptionAPI.getSubscriptionPlans(this.props.paymentType).then((res) => {
       this.setState({
         planList: res.data.plan_list,
         paymentSourceList: res.data.payment_source_list,
@@ -408,7 +408,7 @@ class Subscription extends Component {
   }
 
   getSubscription = () => {
-    seafileAPI.getSubscription().then((res) => {
+    subscriptionAPI.getSubscription().then((res) => {
       const subscription = res.data.subscription;
       const paymentTypeList = res.data.payment_type_list;
       if (!subscription) {
