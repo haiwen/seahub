@@ -14,6 +14,7 @@ import ViewStructureFooter from './view-structure/view-structure-footer';
 import { generateUniqueId, getIconURL, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
+import { seafileAPI } from '../../utils/seafile-api';
 
 export const FOLDER = 'folder';
 export const PAGE = 'page';
@@ -98,9 +99,13 @@ class SidePanel extends Component {
     const config = deepCopy(this.props.config);
     const { pages, navigation } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
+    const pageIndex = pages.findIndex(item => item.id === pageId);
+    let path = pages[pageIndex].path
+
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
+    seafileAPI.deleteFile(repoID, path);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
     } else {
