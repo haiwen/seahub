@@ -6,7 +6,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 
 class Content extends Component {
@@ -20,10 +19,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No linked devices')}</h2>
-          <p>{gettext('You have not accessed your files with any client (desktop or mobile) yet. Configure clients on your devices to access your data more comfortably.')}</p>
-        </EmptyTip>
+        <p>{gettext('No linked devices. You have not accessed your files with any client (desktop or mobile) yet. Configure clients on your devices to access your data more comfortably.')}</p>
       );
 
       const desktopThead = (
