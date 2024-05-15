@@ -693,6 +693,13 @@ a, a:hover { color: #ec8000; }
     color:#999;
 }
 
+.side-nav-con [class^="sf3-font-"] {
+    font-size: 1.25rem;
+    line-height: 1;
+    color: #999;
+    margin-right: 0.5rem;
+}
+
 .side-nav-con .sharp {
     display:inline-block;
     width:2.625rem;
