@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
+import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { PER_PAGE, gettext, historyRepoID } from '../../../utils/constants';
 import Loading from '../../../components/loading';
@@ -10,11 +11,10 @@ import GoBack from '../../../components/common/go-back';
 import SidePanel from './side-panel';
 import { Utils, isMobile } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import { getCurrentAndLastVersion } from './helper';
 
 import '../../../css/layout.css';
 import './index.css';
-import moment from 'moment';
-import { getCurrentAndLastVersion, getLastVersion } from './helper';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
@@ -124,7 +124,6 @@ class SdocFileHistory extends React.Component {
 
   onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
-    console.log('currentVersion', currentVersion);
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
@@ -241,7 +240,7 @@ class SdocFileHistory extends React.Component {
     this.setState({ showSidePanel: !this.state.showSidePanel });
   };
 
-  renderChangesTip = () => {
+  renderChangesTip = ({onChangeSidePanelDisplay}) => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
     if (isLoading) return null;
     if (!isShowChanges) return null;
@@ -251,6 +250,9 @@ class SdocFileHistory extends React.Component {
         <div className="sdoc-file-history-header-right d-flex align-items-center">
           <div className="sdoc-file-changes-container d-flex align-items-center pl-2 pr-2">
             {gettext('No changes')}
+          </div>
+          <div className='sdoc-file-changes-switch ml-2'>
+            <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
           </div>
         </div>
       );
@@ -357,7 +359,7 @@ class SdocFileHistory extends React.Component {
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>
-            {this.renderChangesTip()}
+            {this.renderChangesTip({onChangeSidePanelDisplay: this.changeSidePanelStatus})}
           </div>
           <div className="sdoc-file-history-content f-flex" ref={ref => this.historyContentRef = ref}>
             {isLoading ? (

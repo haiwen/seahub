@@ -31,33 +31,6 @@ class SidePanel extends Component {
     this.currentPage = 1;
   }
 
-  // listSdocDailyHistoryDetail
-
-  componentDidMount() {
-    // this.firstLoadSdocHistory();
-  }
-
-  // firstLoadSdocHistory() {
-  //   this.currentPage = 1;
-  //   seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
-  //     const result = res.data;
-  //     const resultCount = result.histories.length;
-  //     const historyGroups = this.formatHistories(result.histories);
-  //     this.setState({
-  //       historyGroups: this.formatHistories(result.histories),
-  //       hasMore: resultCount >= PER_PAGE,
-  //       isLoading: false,
-  //     }, () => {
-  //       if (historyGroups.length > 0) {
-  //         this.onSelectHistoryVersion([0, 0, 0]);
-  //       }
-  //     });
-  //   }).catch((error) => {
-  //     this.setState({isLoading: false});
-  //     throw Error('there has an error in server');
-  //   });
-  // }
-
   formatHistories(histories) {
     const oldHistoryGroups = this.state.historyGroups;
     if (!Array.isArray(histories) || histories.length === 0) return oldHistoryGroups;
@@ -286,7 +259,7 @@ class SidePanel extends Component {
             {gettext('History Versions')}
           </div>
           <div className='sdoc-side-panel-close'>
-            <i className="sdoc-close" onClick={this.props.onClose}></i>
+            <i className="sf3-font sf3-font-close" onClick={this.props.onClose}></i>
           </div>
         </div>
         <div

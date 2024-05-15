@@ -26,6 +26,7 @@
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-history-header-right {
   height: 100%;
   min-width: 100px;
+  align-items: center;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-container {
@@ -40,11 +41,21 @@
   width: 1px;
 }
 
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
+  display: flex;
+  align-items: center;
+}
+
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last,
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next,
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
   padding: 0 8px;
   height: 100%;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
+  padding: 0;
+  margin-left: 8px;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .fas,
@@ -54,19 +65,27 @@
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
-
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover {
   cursor: pointer;
   opacity: .75;
   background-color: #F5F5F5;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .fas,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .fas,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .fas {
   opacity: .75;
 }
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sf3-font-history:hover {
+  cursor: pointer;
+  color: #000;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sf3-font-history {
+  font-size: 18px;
+  color: #666;
+}
+
 
 .sdoc-file-history .sdoc-file-history-content {
   height: 100%;
@@ -207,6 +226,22 @@
 
 .sdoc-file-history-versions .history-list-item.item-active .history-info .name {
   color: #ff8000;
+}
+
+/* mobile options modal */
+.sdoc-mobile-history-options-modal {
+  margin: 0;
+  transition: none;
+  transform: translateY(calc(100vh - 100%)) !important;
+}
+
+.sdoc-mobile-history-options-modal .sdoc-operation-mobile-modal-body .option-item {
+  padding: 10px 5px;
+}
+
+.sdoc-mobile-history-options-modal .sdoc-operation-mobile-modal-body .option-item a,
+.sdoc-mobile-history-options-modal .sdoc-operation-mobile-modal-body .option-item a:hover {
+  color: #212529;
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover {
