@@ -84,12 +84,12 @@ class ApiTestBase(unittest.TestCase):
         if expected is not None:
             if hasattr(expected, '__iter__'):
                 assert_in(resp.status_code, expected,
-                    "Expected http status in %s, received %s" % (expected,
-                        resp.status_code))
+                    "Expected http status in %s, received %s, %s, %s" % (expected,
+                        resp.status_code, resp.text, args))
             else:
                 assert_equal(resp.status_code, expected,
-                    "Expected http status %s, received %s" % (expected,
-                        resp.status_code))
+                    "Expected http status %s, received %s, %s, %s" % (expected,
+                        resp.status_code, resp.text, args))
         return resp
 
     def assertHasLen(self, lst, length):

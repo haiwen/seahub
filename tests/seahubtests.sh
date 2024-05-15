@@ -75,6 +75,7 @@ function run_tests() {
     #         echo
     #     done
     # fi
+    cat /tmp/logs/seahub.access.log
     exit $rvalue
 }
 
