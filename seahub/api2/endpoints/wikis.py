@@ -74,44 +74,72 @@ class WikisView(APIView):
             filter_repo_ids += ([r.id for r in public])
 
         filter_repo_ids = list(set(filter_repo_ids))
+        ret = [x.to_dict() for x in Wiki.objects.filter(
+            repo_id__in=filter_repo_ids)]
 
-        wikis = Wiki.objects.filter(repo_id__in=filter_repo_ids)
-
-        wiki_list = []
-        for wiki in wikis:
-            wiki_info = wiki.to_dict()
-            wiki_info['can_edit'] = (username == wiki.username)
-            wiki_list.append(wiki_info)
-
-        return Response({'data': wiki_list})
+        return Response({'data': ret})
 
     def post(self, request, format=None):
         """Add a new wiki.
         """
         username = request.user.username
 
-        if not request.user.permissions.can_add_repo():
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to create library.')
-
-        wiki_name = request.data.get("name", None)
-        if not wiki_name:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
-
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        repo_id = request.POST.get('repo_id', '')
+        if not repo_id:
+            msg = 'Repo id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check perm
+        if not (request.user.permissions.can_publish_repo() and request.user.permissions.can_generate_share_link()):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        is_owner = is_repo_owner(request, repo_id, username)
+
+        if not is_owner:
+            repo_admin = is_repo_admin(username, repo_id)
+
+            if not repo_admin:
+                is_group_repo_admin = is_group_repo_staff(request, repo_id, username)
+
+                if not is_group_repo_admin:
+                    error_msg = _('Permission denied.')
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
-            wiki = Wiki.objects.add(wiki_name=wiki_name, username=username, org_id=org_id, permission='public')
+            wiki = Wiki.objects.add(wiki_name=repo.repo_name, username=username,
+                    repo_id=repo.repo_id, org_id=org_id, permission='public')
         except DuplicateWikiNameError:
-            msg = _('%s is taken by others, please try another name.') % wiki_name
+            msg = _('%s is taken by others, please try another name.') % repo.repo_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
         except IntegrityError:
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
-        repo_id = wiki.repo_id
+        # create home page if not exist
+        page_name = "home.md"
+        if not seafile_api.get_file_id_by_path(repo_id, "/" + page_name):
+            try:
+                seafile_api.post_empty_file(repo_id, '/', page_name, username)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit")
+                    from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                    return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, '/')
         if not fs:
             fs = FileShare.objects.create_dir_link(username, repo_id, '/',
