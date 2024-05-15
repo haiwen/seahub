@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
 import { gettext, repoID } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+
+import '../css/add-new-page-dialog.css';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -53,6 +55,13 @@ class AddNewPageDialog extends React.Component {
     let value = event.target.value;
     if (value !== this.state.pageName) {
       this.setState({ pageName: value });
+    }
+  };
+
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.onSubmit();
     }
   };
 
@@ -111,15 +120,17 @@ class AddNewPageDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false} className='add-new-page-dialog'>
         <ModalHeader toggle={this.toggle}>{gettext('Add page')}</ModalHeader>
         <ModalBody className='pr-4'>
-          <Form>
-            <FormGroup>
-              <Label>{gettext('Page name')}</Label>
-              <Input value={this.state.pageName} onChange={this.handleChange} autoFocus={true} />
-            </FormGroup>
-          </Form>
+          <Label>{gettext('Page name')}</Label>
+          <Input
+            className="mb-4"
+            value={this.state.pageName}
+            onChange={this.handleChange}
+            autoFocus={true}
+            onKeyDown={this.handleKeyDown}
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
