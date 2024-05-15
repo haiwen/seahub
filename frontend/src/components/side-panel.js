@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
-import SideNavFooter from './side-nav-footer';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -21,9 +20,6 @@ class SidePanel extends React.Component {
         </div>
         <div className="side-panel-center">
           <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} />
-        </div>
-        <div className="side-panel-footer">
-          <SideNavFooter />
         </div>
       </div>
     );

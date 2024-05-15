@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../utils/constants';
+import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
+  enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks
+} from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -83,7 +85,7 @@ class MainSideNav extends React.Component {
                 className={`nav-link ellipsis ${this.getActiveClass(item.name)}`}
                 onClick={(e) => this.tabItemClick(e, item.name, item.id)}
               >
-                <span className={`${item.parent_group_id == 0 ? 'sf3-font-group sf3-font' : 'fas fa-building'} nav-icon`} aria-hidden="true"></span>
+                <span className={`${item.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
                 <span className="nav-text">{item.name}</span>
               </Link>
             </li>
@@ -181,6 +183,7 @@ class MainSideNav extends React.Component {
     return (
       <div className="side-nav">
         <div className="side-nav-con">
+          <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
           <ul className="nav nav-pills flex-column nav-container">
             <li className="nav-item flex-column" id="files">
               <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
@@ -235,19 +238,13 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Wikis')}</span>
               </Link>
             </li>
+            {canInvitePeople &&
             <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={(e) => this.tabItemClick(e, 'linked-devices')}>
-                <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Linked Devices')}</span>
+              <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Invite Guest')}</span>
               </Link>
             </li>
-            {canInvitePeople &&
-              <li className="nav-item">
-                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                  <span className="sf2-icon-invite" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Invite Guest')}</span>
-                </Link>
-              </li>
             }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
@@ -259,6 +256,47 @@ class MainSideNav extends React.Component {
             </li>
             {customNavItems && this.renderCustomNavItems()}
           </ul>
+
+          <h2 className="mb-2 pt-1 px-2 font-weight-normal heading">{gettext('Help and resources')}</h2>
+          {sideNavFooterCustomHtml ? (
+            <div className='side-nav-footer' dangerouslySetInnerHTML={{__html: sideNavFooterCustomHtml}}></div>
+          ) : (
+            <ul className="nav nav-pills flex-column nav-container">
+              <li className="nav-item">
+                <a className={'nav-link'} href={siteRoot + 'help/'} title={gettext('Help')}>
+                  <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Help')}</span>
+                </a>
+              </li>
+              {enableTC &&
+                <li className="nav-item">
+                  <a href={`${siteRoot}terms/`} className="nav-link">
+                    <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('Terms')}</span>
+                  </a>
+                </li>
+              }
+              {additionalAppBottomLinks && (
+                <>
+                  {Object.keys(additionalAppBottomLinks).map((key, index) => {
+                    return (
+                      <a className="nav-link" href={additionalAppBottomLinks[key]}>
+                        <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                        <span className="nav-text">{key}</span>
+                      </a>
+                    );
+                  })}
+                </>
+              )}
+              <li className="nav-item">
+                <a href={siteRoot + 'download_client_program/'} className="nav-link">
+                  <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Clients')}</span>
+                </a>
+              </li>
+            </ul>
+          )
+          }
         </div>
       </div>
     );

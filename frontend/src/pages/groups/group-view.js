@@ -429,7 +429,7 @@ class GroupView extends React.Component {
                     <span>{currentGroup.name}</span>
                     {isDepartmentGroup && (
                       <Fragment>
-                        <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
+                        <span className="department-group-icon sf3-font-department sf3-font" title={gettext('This is a special group representing a department.')}></span>
                         {currentGroup.group_quota > 0 &&
                           <span className="department-usage-container">
                             <div className="department-usage">
