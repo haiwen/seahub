@@ -8,6 +8,7 @@ import logging
 import subprocess
 from io import BytesIO
 import zipfile
+from fitz import open as fitz_open
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -18,7 +19,7 @@ from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, XMIND
+from seahub.utils.file_types import VIDEO, XMIND, PDF
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
@@ -117,7 +118,10 @@ def generate_thumbnail(request, repo_id, size, path):
                                            thumbnail_file, file_size)
         else:
             return (False, 400)
-
+    if filetype == PDF:
+        # pdf thumbnails
+        return create_pdf_thumbnails(repo, file_id, path, size,
+                                     thumbnail_file, file_size)
     if filetype == XMIND:
         return extract_xmind_image(repo_id, path, size)
 
@@ -179,6 +183,41 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     except Exception as e:
         logger.error(e)
         os.unlink(tmp_img_path)
+        return (False, 500)
+
+
+def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
+    t1 = timeit.default_timer()
+    token = seafile_api.get_fileserver_access_token(repo.id,
+            file_id, 'view', '', use_onetime=False)
+
+    if not token:
+        return (False, 500)
+
+    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
+    pdf_file = urllib.request.urlopen(inner_path)
+    pdf_stream = BytesIO(pdf_file.read())
+    try:
+        pdf_doc = fitz_open(stream=pdf_stream)
+        pdf_stream.close()
+        page = pdf_doc[0]
+        pix = page.get_pixmap()
+        pix.save(tmp_path)
+        pdf_doc.close()
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+    t2 = timeit.default_timer()
+    logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+
+    try:
+        ret = _create_thumbnail_common(tmp_path, thumbnail_file, size)
+        os.unlink(tmp_path)
+        return ret
+    except Exception as e:
+        logger.error(e)
+        os.unlink(tmp_path)
         return (False, 500)
 
 def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
