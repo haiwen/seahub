@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
 import MainPanelTopbar from '../main-panel-topbar';
