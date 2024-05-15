@@ -581,12 +581,10 @@ class Wiki extends Component {
           permission={this.state.permission}
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
-          direntList={this.state.direntList}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-          onDirentClick={this.onDirentClick}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, siteRoot, repoID, username, permission, isEditWiki } from '../../utils/constants';
+import { gettext, repoID, isEditWiki } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 // import TreeView from '../../components/tree-view/tree-view';
@@ -100,7 +100,7 @@ class SidePanel extends Component {
     const { pages, navigation } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
     const pageIndex = pages.findIndex(item => item.id === pageId);
-    let path = pages[pageIndex].path
+    let path = pages[pageIndex].path;
 
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
@@ -395,17 +395,10 @@ class SidePanel extends Component {
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           {src && <img src={src} width="32" height="32" alt='' className='mr-2' />}
-          <h4 className="ml-0 mb-0">{wiki_name}</h4>
+          <h4 className="ml-0 mb-0 text-truncate" title={wiki_name}>{wiki_name}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           {this.renderContent() }
-          {(username && permission) && (
-            <div className="text-left p-2">
-              <a href={siteRoot + 'library/' + repoID + '/'} className="text-dark text-decoration-underline">
-                {gettext('Go to Library')}
-              </a>
-            </div>
-          )}
         </div>
       </div>
     );
