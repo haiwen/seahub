@@ -238,19 +238,13 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Wikis')}</span>
               </Link>
             </li>
+            {canInvitePeople &&
             <li className="nav-item">
-              <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={(e) => this.tabItemClick(e, 'linked-devices')}>
-                <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
-                <span className="nav-text">{gettext('Linked Devices')}</span>
+              <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Invite Guest')}</span>
               </Link>
             </li>
-            {canInvitePeople &&
-              <li className="nav-item">
-                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                  <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Invite Guest')}</span>
-                </Link>
-              </li>
             }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
