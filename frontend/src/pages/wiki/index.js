@@ -268,7 +268,11 @@ class Wiki extends Component {
   };
 
   onLinkClick = (link) => {
-    const url = link;
+    let url = link;
+    if (Utils.isRelativePath(url)) {
+      url = window.location.href.replace('home.md', '');
+      url = url + link;
+    }
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
       this.showFile(path);
