@@ -87,7 +87,9 @@ class Wiki extends Component {
         repoId: repo_id,
       }, () => {
         const pageId = this.getFirstPageId(config);
-        this.setCurrentPage(pageId);
+        if (pageId) {
+          this.setCurrentPage(pageId);
+        }
       });
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
