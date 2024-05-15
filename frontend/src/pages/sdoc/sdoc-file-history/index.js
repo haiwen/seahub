@@ -240,7 +240,7 @@ class SdocFileHistory extends React.Component {
     this.setState({ showSidePanel: !this.state.showSidePanel });
   };
 
-  renderChangesTip = ({onChangeSidePanelDisplay}) => {
+  renderChangesTip = ({ onChangeSidePanelDisplay }) => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
     if (isLoading) return null;
     if (!isShowChanges) return null;
@@ -251,7 +251,7 @@ class SdocFileHistory extends React.Component {
           <div className="sdoc-file-changes-container d-flex align-items-center pl-2 pr-2">
             {gettext('No changes')}
           </div>
-          <div className='sdoc-file-changes-switch ml-2'>
+          <div className='sdoc-file-changes-switch ml-4'>
             <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
           </div>
         </div>
@@ -288,7 +288,7 @@ class SdocFileHistory extends React.Component {
           </UncontrolledTooltip>
         </div>
         <div
-          className="sdoc-file-changes-switch d-flex align-items-center justify-content-center ml-2"
+          className="sdoc-file-changes-switch d-flex align-items-center justify-content-center ml-4"
           id="sdoc-file-changes-panel-switch"
           onClick={this.changeSidePanelStatus}
         >
@@ -359,7 +359,7 @@ class SdocFileHistory extends React.Component {
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>
-            {this.renderChangesTip({onChangeSidePanelDisplay: this.changeSidePanelStatus})}
+            {this.renderChangesTip({ onChangeSidePanelDisplay: this.changeSidePanelStatus })}
           </div>
           <div className="sdoc-file-history-content f-flex" ref={ref => this.historyContentRef = ref}>
             {isLoading ? (
