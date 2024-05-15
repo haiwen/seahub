@@ -682,18 +682,8 @@ a, a:hover { color: #ec8000; }
 
 .side-nav-con .fas,
 .side-nav-con [class^="sf2-icon-"],
+.side-nav-con [class^="sf3-font-"],
 .side-nav-con [class^="fas"] {
-    display:inline-block;
-    width:2.625rem;
-    margin-right:0.325rem;
-    text-align:center;
-    vertical-align:middle;
-    font-size:1.5rem;
-    line-height:1;
-    color:#999;
-}
-
-.side-nav-con [class^="sf3-font-"] {
     font-size: 1.25rem;
     line-height: 1;
     color: #999;
@@ -701,11 +691,11 @@ a, a:hover { color: #ec8000; }
 }
 
 .side-nav-con .sharp {
-    display:inline-block;
-    width:2.625rem;
-    margin-right:0.325rem;
-    text-align:right;
-    color:#aaa;
+    display: inline-block;
+    width: 2.625rem;
+    margin-right: 0.325rem;
+    text-align: right;
+    color: #aaa;
 }
 
 .side-nav-con .toggle-icon {
