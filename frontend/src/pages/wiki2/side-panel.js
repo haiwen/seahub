@@ -11,13 +11,15 @@ import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddNewPageDialog from './view-structure/add-new-page-dialog';
 import ViewStructureFooter from './view-structure/view-structure-footer';
-import { generateUniqueId, getIconURL, isObjectNotEmpty } from './utils';
+import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
 import { seafileAPI } from '../../utils/seafile-api';
 
 export const FOLDER = 'folder';
 export const PAGE = 'page';
+
+const { repoName } = window.wiki.config;
 
 const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
@@ -389,13 +391,10 @@ class SidePanel extends Component {
   };
 
   render() {
-    const { wiki_name, wiki_icon } = this.props.config;
-    const src = getIconURL(repoID, wiki_icon);
     return (
       <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
-          {src && <img src={src} width="32" height="32" alt='' className='mr-2' />}
-          <h4 className="ml-0 mb-0 text-truncate" title={wiki_name}>{wiki_name}</h4>
+          <h4 className="ml-0 mb-0 text-truncate" title={repoName}>{repoName}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           {this.renderContent() }

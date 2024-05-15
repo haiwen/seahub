@@ -12,7 +12,7 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
-import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
+// import WikiLeftBar from './wiki-left-bar/wiki-left-bar';
 import PageUtils from './view-structure/page-utils';
 
 import '../../css/layout.css';
@@ -548,13 +548,13 @@ class Wiki extends Component {
   render() {
     return (
       <div id="main" className="wiki-main">
-        {isEditWiki &&
+        {/* {isEditWiki &&
           <WikiLeftBar
             config={this.state.config}
             repoId={this.state.repoId}
             updateConfig={(data) => this.saveWikiConfig(Object.assign({}, this.state.config, data))}
           />
-        }
+        } */}
         <SidePanel
           isLoading={this.state.isTreeDataLoading || this.state.isConfigLoading}
           closeSideBar={this.state.closeSideBar}
