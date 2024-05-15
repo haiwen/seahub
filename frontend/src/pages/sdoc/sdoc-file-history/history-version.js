@@ -111,8 +111,8 @@ class HistoryVersion extends React.Component {
         {path[2] > 0 && (<div className="daily-history-detail-no-more"></div>)}
         <div className="history-info">
           {this.state.isRenameShow ?
-            <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />
-            : <div className="name">{name}</div>
+            <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
+            :<div className="name">{name}</div>
           }
           <div className="time">{moment(ctime).format('YYYY-MM-DD HH:mm')}</div>
           <div className="owner">
@@ -170,7 +170,8 @@ class HistoryVersion extends React.Component {
                 {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
                 <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
               </DropdownMenu>
-            </Dropdown>)}
+            </Dropdown>
+            )}
         </div>
       </li>
     );
