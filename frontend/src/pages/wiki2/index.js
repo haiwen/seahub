@@ -80,10 +80,14 @@ class Wiki extends Component {
   getWikiConfig = () => {
     wikiAPI.getWiki2Config(wikiId).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
+      const config = new WikiConfig(JSON.parse(wiki_config) || {});
       this.setState({
-        config: new WikiConfig(JSON.parse(wiki_config) || {}),
+        config,
         isConfigLoading: false,
         repoId: repo_id,
+      }, () => {
+        const pageId = this.getFirstPageId(config);
+        this.setCurrentPage(pageId);
       });
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -105,6 +109,15 @@ class Wiki extends Component {
       toaster.danger(errorMsg);
       onError && onError();
     });
+  };
+
+  getFirstPageId = (config) => {
+    const item = config.navigation[0] || {};
+    if (item.type === 'page') {
+      return item.id;
+    } else if (item.type === 'folder') {
+      return item.children[0].id;
+    }
   };
 
   loadSidePanel = (initialPath) => {
