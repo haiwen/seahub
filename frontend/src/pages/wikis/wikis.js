@@ -2,16 +2,15 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import MediaQuery from 'react-responsive';
-import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
-import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
+import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
+import wikiAPI from '../../utils/wiki-api';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -26,8 +25,7 @@ class Wikis extends Component {
       errorMsg: '',
       wikis: [],
       isShowAddWikiMenu: false,
-      isShowSelectDialog: false,
-      isShowCreateDialog: false,
+      isShowAddDialog: false,
     };
   }
 
@@ -36,10 +34,30 @@ class Wikis extends Component {
   }
 
   getWikis = () => {
-    seafileAPI.listWikis().then(res => {
+    let wikis = [];
+    wikiAPI.listWikis().then(res => {
+      wikis = wikis.concat(res.data.data);
+      wikis.map(wiki => {
+        return wiki['version'] = 'v1';
+      });
+      wikiAPI.listWikis2().then(res => {
+        let wikis2 = res.data.data;
+        wikis2.map(wiki => {
+          return wiki['version'] = 'v2';
+        });
+        this.setState({
+          loading: false,
+          wikis: wikis.concat(wikis2)
+        });
+      }).catch((error) => {
+        this.setState({
+          loading: false,
+          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        });
+      });
       this.setState({
         loading: false,
-        wikis: res.data.data
+        wikis: wikis
       });
     }).catch((error) => {
       this.setState({
@@ -58,55 +76,51 @@ class Wikis extends Component {
     this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
   };
 
-  onSelectToggle = () => {
-    this.setState({isShowSelectDialog: !this.state.isShowSelectDialog});
+  toggelAddWikiDialog = () => {
+    this.setState({isShowAddDialog: !this.state.isShowAddDialog});
   };
 
-  onCreateToggle = () => {
-    this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
-  };
-
-  addWiki = (repoID) => {
-    seafileAPI.addWiki(repoID).then((res) => {
-      this.state.wikis.push(res.data);
-      this.setState({wikis: this.state.wikis});
+  addWiki = (wikiName) => {
+    wikiAPI.addWiki2(wikiName).then((res) => {
+      let wikis = this.state.wikis.slice(0);
+      let new_wiki = res.data;
+      new_wiki['version'] = 'v2';
+      wikis.push(new_wiki);
+      this.setState({ wikis });
     }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
-  };
-
-  renameWiki = (wiki, newName) => {
-    seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
-      let wikis = this.state.wikis.map((item) => {
-        if (item.name === wiki.name) {
-          item = res.data;
-        }
-        return item;
-      });
-      this.setState({wikis: wikis});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
+      if (error.response) {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       }
     });
   };
 
   deleteWiki = (wiki) => {
-    seafileAPI.deleteWiki(wiki.slug).then(() => {
-      let wikis = this.state.wikis.filter(item => {
-        return item.name !== wiki.name;
+    if (wiki.version === 'v1') {
+      wikiAPI.deleteWiki(wiki.id).then(() => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if(error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
       });
-      this.setState({wikis: wikis});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        toaster.danger(errorMsg);
-      }
-    });
+    } else {
+      wikiAPI.deleteWiki2(wiki.id).then(() => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if(error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
+      });
+    }
   };
 
   render() {
@@ -119,10 +133,10 @@ class Wikis extends Component {
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Add Wiki')}</Button>
+                  <Button className="btn btn-secondary operation-item" onClick={this.toggelAddWikiDialog}>{gettext('Add Wiki')}</Button>
                 </MediaQuery>
                 <MediaQuery query="(max-width: 767.8px)">
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.onSelectToggle}></span>
+                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.toggelAddWikiDialog}></span>
                 </MediaQuery>
               </Fragment>
             </div>
@@ -130,6 +144,11 @@ class Wikis extends Component {
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
+        {this.state.isShowAddDialog &&
+          <ModalPortal>
+            <AddWikiDialog toggleCancel={this.toggelAddWikiDialog} addWiki={this.addWiki} />
+          </ModalPortal>
+        }
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
@@ -141,35 +160,20 @@ class Wikis extends Component {
               {(this.state.loading || this.state.wikis.length !== 0) &&
                 <WikiListView
                   data={this.state}
-                  renameWiki={this.renameWiki}
                   deleteWiki={this.deleteWiki}
                 />
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
                 <EmptyTip>
-                  <h2>{gettext('No published libraries')}</h2>
-                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Add Wiki" button in the menu bar.')}</p>
+                  <h2>{gettext('No Wikis')}</h2>
+                  <p>{gettext('You have not any wikis yet.')}</p>
+                  <p>{gettext('A wiki can be accessed by anyone, not only users, via its URL.')}</p>
+                  <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu bar.')}</p>
                 </EmptyTip>
               }
             </div>
           </div>
         </div>
-        {this.state.isShowCreateDialog && (
-          <ModalPortal>
-            <NewWikiDialog
-              toggleCancel={this.onCreateToggle}
-              addWiki={this.addWiki}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShowSelectDialog && (
-          <ModalPortal>
-            <WikiSelectDialog
-              toggleCancel={this.onSelectToggle}
-              addWiki={this.addWiki}
-            />
-          </ModalPortal>
-        )}
       </Fragment>
     );
   }

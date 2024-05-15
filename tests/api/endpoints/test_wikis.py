@@ -105,7 +105,7 @@ class WikiViewTest(BaseTestCase):
         wiki = Wiki.objects.add('test wiki', self.user.username,
                                 repo_id=self.repo.id)
 
-        self.url = reverse('api-v2.1-wiki', args=[wiki.slug])
+        self.url = reverse('api-v2.1-wiki', args=[wiki.id])
         self.login_as(self.user)
 
     def test_can_delete(self):

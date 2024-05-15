@@ -203,10 +203,6 @@
   height: 100%;
 }
 
-.add-view-dropdown-menu {
-  margin-top: 0;
-}
-
 .view-structure-footer .dropdown button {
   position: absolute;
   top: 0;
@@ -357,6 +353,13 @@
 .dtable-dropdown-menu .dropdown-item:hover .item-icon,
 .dtable-dropdown-menu .dropdown-item:hover .seafile-multicolor-icon {
   color: #fff;
+}
+
+.dtable-dropdown-menu.large .dropdown-item {
+  min-height: 32px;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
 }
 
 /* dark mode */

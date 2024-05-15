@@ -67,10 +67,6 @@ class ViewStructure extends Component {
     this.idFoldedStatusMap = idFoldedStatusMap;
   };
 
-  onToggleAddView = (folderId) => {
-    this.props.onToggleAddView(folderId);
-  };
-
   onMoveViewToFolder = (source_view_folder_id, moved_view_id, target_view_folder_id) => {
     this.props.onMoveView({
       moved_view_id,
@@ -221,7 +217,7 @@ class ViewStructure extends Component {
         <StructureBody />
         {(this.props.isEditMode && !isSpecialInstance) &&
           <ViewStructureFooter
-            onToggleAddView={this.onToggleAddView.bind(this, null)}
+            onToggleAddView={this.props.onToggleAddView}
             onToggleAddFolder={this.props.onToggleAddFolder}
           />
         }

@@ -45,20 +45,20 @@ class WikiAPI {
     }
   }
 
-  listWikiDir(slug, dirPath, withParents) {
+  listWikiDir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
-    let url = this.server + '/api/v2.1/wikis/' + encodeURIComponent(slug) + '/dir/?p=' + path;
+    let url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path;
     if (withParents) {
-      url = this.server + '/api/v2.1/wikis/' + encodeURIComponent(slug) + '/dir/?p=' + path + '&with_parents=' + withParents;
+      url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
     }
     return this.req.get(url);
   }
 
 
-  getWikiFileContent(slug, filePath) {
+  getWikiFileContent(wikiId, filePath) {
     const path = encodeURIComponent(filePath);
     const time = new Date().getTime();
-    const url = this.server + '/api/v2.1/wikis/' + encodeURIComponent(slug) + '/content/' + '?p=' + path + '&_=' + time;
+    const url = this.server + '/api/v2.1/wikis/' + wikiId + '/content/' + '?p=' + path + '&_=' + time;
     return this.req.get(url);
   }
 
@@ -92,43 +92,89 @@ class WikiAPI {
     });
   }
 
-  addWiki(repoID) {
+  addWiki(wikiName) {
     const url = this.server + '/api/v2.1/wikis/';
     let form = new FormData();
-    form.append('repo_id', repoID);
+    form.append('name', wikiName);
     return this._sendPostRequest(url, form);
   }
 
-  renameWiki(slug, name) {
-    const url = this.server + '/api/v2.1/wikis/' + slug + '/';
-    let form = new FormData();
-    form.append('wiki_name', name);
-    return this._sendPostRequest(url, form);
-  }
-
-  updateWikiPermission(wikiSlug, permission) {
-    const url = this.server + '/api/v2.1/wikis/' + wikiSlug + '/';
-    let params = {
-      permission: permission
-    };
-    return this.req.put(url, params);
-  }
-
-  deleteWiki(slug) {
-    const url = this.server + '/api/v2.1/wikis/' + slug + '/';
+  deleteWiki(wikiId) {
+    const url = this.server + '/api/v2.1/wikis/' + wikiId + '/';
     return this.req.delete(url);
   }
 
-  updateWikiConfig(wikiSlug, wikiConfig) {
-    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
+
+  // for wiki2
+  listWiki2Dir(wikiId, dirPath, withParents) {
+    const path = encodeURIComponent(dirPath);
+    let url = this.server + '/api/v2.1/wikis2/' + wikiId + '/dir/?p=' + path;
+    if (withParents) {
+      url = this.server + '/api/v2.1/wikis2/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
+    }
+    return this.req.get(url);
+  }
+
+
+  getWiki2FileContent(wikiId, filePath) {
+    const path = encodeURIComponent(filePath);
+    const time = new Date().getTime();
+    const url = this.server + '/api/v2.1/wikis2/' + wikiId + '/content/' + '?p=' + path + '&_=' + time;
+    return this.req.get(url);
+  }
+
+
+  listWikis2(options) {
+    /*
+     * options: `{type: 'shared'}`, `{type: ['mine', 'shared', ...]}`
+     */
+    let url = this.server + '/api/v2.1/wikis2/';
+    if (!options) {
+      // fetch all types of wikis
+      return this.req.get(url);
+    }
+    return this.req.get(url, {
+      params: options,
+      paramsSerializer: {
+        serialize: function(params) {
+          let list = [];
+          for (let key in params) {
+            if (Array.isArray(params[key])) {
+              for (let i = 0, len = params[key].length; i < len; i++) {
+                list.push(key + '=' + encodeURIComponent(params[key][i]));
+              }
+            } else {
+              list.push(key + '=' + encodeURIComponent(params[key]));
+            }
+          }
+          return list.join('&');
+        }
+      }
+    });
+  }
+
+  addWiki2(wikiName) {
+    const url = this.server + '/api/v2.1/wikis2/';
+    let form = new FormData();
+    form.append('name', wikiName);
+    return this._sendPostRequest(url, form);
+  }
+
+  deleteWiki2(wikiId) {
+    const url = this.server + '/api/v2.1/wikis2/' + wikiId + '/';
+    return this.req.delete(url);
+  }
+
+  updateWiki2Config(wikiId, wikiConfig) {
+    const url = this.server + '/api/v2.1/wiki2-config/' + wikiId + '/';
     let params = {
       wiki_config: wikiConfig
     };
     return this.req.put(url, params);
   }
 
-  getWikiConfig(wikiSlug) {
-    const url = this.server + '/api/v2.1/wiki-config/' + wikiSlug + '/';
+  getWiki2Config(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2-config/' + wikiId + '/';
     return this.req.get(url);
   }
 

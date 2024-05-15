@@ -6,6 +6,7 @@ const entryFiles = {
   TCAccept: '/tc-accept.js',
   TCView: '/tc-view.js',
   wiki: '/wiki.js',
+  wiki2: '/wiki2.js',
   fileHistory: '/file-history.js',
   fileHistoryOld: '/file-history-old.js',
   sdocFileHistory: '/pages/sdoc/sdoc-file-history/index.js',

@@ -2,17 +2,13 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext, username } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-// import { seafileAPI } from '../../utils/seafile-api';
-// import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
-// import Rename from '../rename';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
-  // renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -25,9 +21,7 @@ class WikiListItem extends Component {
     this.state = {
       isOpMenuOpen: false, // for mobile
       isShowDeleteDialog: false,
-      // isRenameing: false,
       highlight: false,
-      // permission: this.props.wiki.permission,
     };
   }
 
@@ -36,30 +30,6 @@ class WikiListItem extends Component {
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
   };
-
-  // clickMenuToggle = (e) => {
-  //   e.preventDefault();
-  //   this.onMenuToggle(e);
-  // }
-
-  // onMenuToggle = (e) => {
-  //   let targetType = e.target.dataset.toggle;
-  //   if (targetType !== 'item') {
-  //     if (this.props.isItemFreezed) {
-  //       this.setState({
-  //         highlight: false,
-  //         isShowMenuControl: false,
-  //         isShowWikiMenu: !this.state.isShowWikiMenu
-  //       });
-  //       this.props.onUnfreezedItem();
-  //     } else {
-  //       this.setState({
-  //         isShowWikiMenu: !this.state.isShowWikiMenu
-  //       });
-  //       this.props.onFreezedItem();
-  //     }
-  //   }
-  // }
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -72,37 +42,6 @@ class WikiListItem extends Component {
       this.setState({ highlight: false });
     }
   };
-
-  // changePerm = (permission) => {
-  //   let wiki = this.props.wiki;
-  //   seafileAPI.updateWikiPermission(wiki.slug, permission).then(() => {
-  //     this.setState({permission: permission});
-  //   }).catch((error) => {
-  //     if(error.response) {
-  //       let errorMsg = error.response.data.error_msg;
-  //       Toast.danger(errorMsg);
-  //     }
-  //   });
-  // }
-
-  // onRenameToggle = (e) => {
-  //   this.props.onFreezedItem();
-  //   this.setState({
-  //     isShowWikiMenu: false,
-  //     isShowMenuControl: false,
-  //     isRenameing: true,
-  //   });
-  // }
-
-  // onRenameConfirm = (newName) => {
-  //   this.renameWiki(newName);
-  //   this.onRenameCancel();
-  // }
-
-  // onRenameCancel = () => {
-  //   this.props.onUnfreezedItem();
-  //   this.setState({isRenameing: false});
-  // }
 
   onDeleteToggle = (e) => {
     e.preventDefault();
@@ -119,11 +58,6 @@ class WikiListItem extends Component {
     });
   };
 
-  // renameWiki = (newName) => {
-  //   let wiki = this.props.wiki;
-  //   this.props.renameWiki(wiki, newName);
-  // }
-
   deleteWiki = () => {
     let wiki = this.props.wiki;
     this.props.deleteWiki(wiki);
@@ -136,7 +70,9 @@ class WikiListItem extends Component {
     let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     let fileIconUrl = Utils.getDefaultLibIconUrl(false);
-    const isWikiOwner = wiki.owner === username;
+    let isOldVersion = wiki.version !== 'v2';
+    let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
+    let editUrl = `${siteRoot}edit-wiki/${wiki.id}/`;
 
     const desktopItem = (
       <tr
@@ -147,24 +83,12 @@ class WikiListItem extends Component {
       >
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td className="name">
-          <a href={wiki.link}>{wiki.name}</a>
-          {/*this.state.isRenameing ?
-              <Rename wiki={wiki} name={wiki.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <a href={wiki.link}>{wiki.name}</a>
-            */}
+          {isOldVersion && <a href={publishedUrl}>{wiki.name} (old version)</a>}
+          {!isOldVersion && <a href={editUrl}>{wiki.name}</a>}
         </td>
         <td><a href={userProfileURL} target='_blank' rel="noreferrer">{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
         <td className="text-center cursor-pointer align-top">
-          {isWikiOwner &&
-          <span
-            className={`iconfont icon-edit mr-4 action-icon ${this.state.highlight ? '' : 'invisible'}`}
-            onClick={() => window.open(wiki.link.replace('/published/', '/edit-wiki/'))}
-            title={gettext('Edit')}
-            aria-label={gettext('Edit')}
-            style={{color: '#999', fontSize: '20px'}}
-          ></span>
-          }
           <a
             href="#"
             role="button"
@@ -181,7 +105,8 @@ class WikiListItem extends Component {
       <tr>
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td>
-          <a href={wiki.link}>{wiki.name}</a><br />
+          {isOldVersion && <a href={publishedUrl}>{wiki.name} (old version)</a>}
+          {!isOldVersion && <a href={editUrl}>{wiki.name}</a>}<br />
           <a href={userProfileURL} target='_blank' className="item-meta-info" rel="noreferrer">{wiki.owner_nickname}</a>
           <span className="item-meta-info">{moment(wiki.updated_at).fromNow()}</span>
         </td>

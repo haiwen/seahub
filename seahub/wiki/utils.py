@@ -20,6 +20,7 @@ from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from .models import WikiPageMissing, WikiDoesNotExist
+from seahub.constants import PERMISSION_READ_WRITE
 
 logger = logging.getLogger(__name__)
 

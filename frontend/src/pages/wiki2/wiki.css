@@ -1,5 +1,7 @@
 .wiki-side-panel .panel-top {
   background: #fff;
+  display: flex;
+  align-items: center;
 }
 
 .wiki-side-nav {

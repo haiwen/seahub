@@ -8,12 +8,12 @@ class AddViewDropdownMenu extends Component {
 
   toggle = event => {
     this.onStopPropagation(event);
-    this.props.onToggleAddViewDropdown();
+    this.props.toggleDropdown();
   };
 
-  onToggleAddView = event => {
+  addPage = event => {
     this.onStopPropagation(event);
-    this.props.onToggleAddView();
+    this.props.onToggleAddView(null);
   };
 
   onToggleAddFolder = event => {
@@ -29,9 +29,9 @@ class AddViewDropdownMenu extends Component {
     return (
       <Dropdown isOpen toggle={this.toggle}>
         <DropdownToggle caret></DropdownToggle>
-        <DropdownMenu container="body" className='dtable-dropdown-menu large add-view-dropdown-menu' style={{ zIndex: 1061 }}>
-          <DropdownItem onClick={this.onToggleAddView}>
-            <Icon symbol={'main-view'}/>
+        <DropdownMenu container="body" className='dtable-dropdown-menu large mt-0'>
+          <DropdownItem onClick={this.addPage}>
+            <Icon symbol={'file'}/>
             <span className='item-text'>{gettext('Add page')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.onToggleAddFolder}>
@@ -45,7 +45,7 @@ class AddViewDropdownMenu extends Component {
 }
 
 AddViewDropdownMenu.propTypes = {
-  onToggleAddViewDropdown: PropTypes.func,
+  toggleDropdown: PropTypes.func,
   onToggleAddView: PropTypes.func,
   onToggleAddFolder: PropTypes.func,
 };

@@ -9,41 +9,27 @@ class ViewStructureFooter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowAddViewDropdownMenu: false,
-      isAddToolHover: false,
+      isShowDropdownMenu: false,
     };
   }
 
-  onMouseEnter = () => {
-    this.setState({ isAddToolHover: true });
-  };
-
-  onMouseLeave = () => {
-    this.setState({ isAddToolHover: false });
-  };
-
-  onToggleAddViewDropdown = (event) => {
+  toggleDropdown = (event) => {
     event && event.stopPropagation();
-    this.setState({ isShowAddViewDropdownMenu: !this.state.isShowAddViewDropdownMenu });
+    this.setState({ isShowDropdownMenu: !this.state.isShowDropdownMenu });
   };
 
   render() {
     return (
-      <div
-        className='view-structure-footer'
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        ref={ref => this.viewFooterRef = ref}
-      >
+      <div className='view-structure-footer'>
         <div className='add-view-wrapper'>
           <CommonAddTool
             className='add-view-btn'
-            callBack={this.onToggleAddViewDropdown}
+            callBack={this.toggleDropdown}
             footerName={gettext('Add page or folder')}
           />
-          {this.state.isShowAddViewDropdownMenu &&
+          {this.state.isShowDropdownMenu &&
             <AddViewDropdownMenu
-              onToggleAddViewDropdown={this.onToggleAddViewDropdown}
+              toggleDropdown={this.toggleDropdown}
               onToggleAddView={this.props.onToggleAddView}
               onToggleAddFolder={this.props.onToggleAddFolder}
             />
