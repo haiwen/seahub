@@ -120,7 +120,7 @@ class Plans extends Component {
           })}
         </dl>
 
-        {paymentType === 'extend_time' && isOrgContext && boughtQuota > 0 &&
+        {paymentType === 'extend_time' && boughtQuota > 0 &&
           <Fragment>
             <span className="subscription-subtitle">{'增加空间'}</span>
             <dl className='items-dl'>
