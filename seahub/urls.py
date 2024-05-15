@@ -892,6 +892,11 @@ if getattr(settings, 'MULTI_TENANCY', False):
         path('org/', include('seahub.organizations.urls')),
     ]
 
+if getattr(settings, 'MULTI_INSTITUTION', False):
+    urlpatterns += [
+        re_path(r'^api/v2.1/institutions/', include('seahub.institutions.api_urls')),
+    ]
+
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += [
         re_path(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
