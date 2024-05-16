@@ -42,7 +42,15 @@ class Libraries extends Component {
       // for 'groups'
       isGroupsLoading: true,
       groupsErrorMsg: '',
-      groupList: []
+      groupList: [],
+
+      // for 'shared'
+      sharedRepoList:[],
+      isSharedLoading: true,
+
+      // for 'public'
+      publicRepoList: [],
+      isPublicLoading: true,
     };
   }
 
@@ -52,18 +60,34 @@ class Libraries extends Component {
   }
 
   listMyLibs = () => {
-    seafileAPI.listRepos({type: 'mine'}).then((res) => {
-      let repoList = res.data.repos.map((item) => {
+    seafileAPI.listRepos({'type':['mine', 'shared', 'public']}).then((res) => {
+      let allRepoList = res.data.repos.map((item) => {
         return new Repo(item);
+      });
+      let myRepoList = allRepoList.filter(item => {
+        return item.type === 'mine';
+      });
+      let sharedRepoList = allRepoList.filter(item => {
+        return item.type === 'shared';
+      });
+      let publicRepoList = allRepoList.filter(item => {
+        return item.type === 'public';
       });
       this.setState({
         isLoading: false,
-        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        sharedRepoList: sharedRepoList,
+        publicRepoList: publicRepoList,
+        repoList: Utils.sortRepos(myRepoList, this.state.sortBy, this.state.sortOrder),
+      },() => {
+        this.setState({
+          isSharedLoading: false,
+          isPublicLoading: false
+        });
       });
     }).catch((error) => {
       this.setState({
         isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errorMsg: Utils.getErrorMsg(error, true), // true: show login tip if 403
       });
     });
   };
@@ -256,12 +280,19 @@ class Libraries extends Component {
               )}
 
               <div className="pb-3">
-                <SharedLibs inAllLibs={true} />
+                {!this.state.isSharedLoading &&
+                  <SharedLibs
+                    inAllLibs={true}
+                    repoList={this.state.sharedRepoList} />
+                }
               </div>
 
-              {canViewOrg && (
+              {canViewOrg && !this.state.isPublicLoading && (
                 <div className="pb-3">
-                  <SharedWithAll inAllLibs={true} />
+                  <SharedWithAll
+                    inAllLibs={true}
+                    repoList={this.state.publicRepoList}
+                  />
                 </div>
               )}
 
