@@ -74,7 +74,7 @@ class Wiki extends Component {
   }
 
   handlePath = () => {
-    return isEditWiki ? 'edit-wiki/' : 'published/';
+    return isEditWiki ? 'wikis/' : 'published/';
   };
 
   getWikiConfig = () => {

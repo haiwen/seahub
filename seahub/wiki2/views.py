@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def edit_wiki(request, wiki_id, file_path):
+def wiki_view(request, wiki_id, file_path):
     """ edit wiki page. for wiki2
     """
     # get wiki object or 404
