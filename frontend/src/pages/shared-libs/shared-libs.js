@@ -54,14 +54,14 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, sortBy, sortOrder, theadHidden } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder, theadHidden, inAllLibs } = this.props;
 
-    const emptyTip = (
+    const emptyTip = inAllLibs ?
+      <p className="libraries-empty-tip">{gettext('No shared libraries')}</p> :
       <EmptyTip>
         <h2>{gettext('No shared libraries')}</h2>
         <p>{gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}</p>
-      </EmptyTip>
-    );
+      </EmptyTip>;
 
     if (loading) {
       return <Loading />;
@@ -113,6 +113,7 @@ class Content extends Component {
 }
 
 Content.propTypes = {
+  inAllLibs: PropTypes.bool.isRequired,
   theadHidden: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
@@ -460,6 +461,7 @@ class SharedLibraries extends Component {
         sortItems={this.sortItems}
         onMonitorRepo={this.onMonitorRepo}
         theadHidden={inAllLibs}
+        inAllLibs={inAllLibs}
       />
     );
   };

@@ -110,14 +110,15 @@ class PublicSharedView extends React.Component {
   };
 
   renderContent = () => {
-    const { errMessage } = this.state;
-    const emptyTip = (
-      <EmptyTip>
-        <h2>{gettext('No public libraries')}</h2>
-        <p>{gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}</p>
-      </EmptyTip>
-    );
     const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { errMessage } = this.state;
+    const emptyTip = inAllLibs ?
+      <p className="libraries-empty-tip">{gettext('No public libraries')}</p> : (
+        <EmptyTip>
+          <h2>{gettext('No public libraries')}</h2>
+          <p>{gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}</p>
+        </EmptyTip>
+      );
     return (
       <>
         {this.state.isLoading && <Loading />}
