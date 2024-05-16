@@ -16,7 +16,8 @@ import TopToolbar from './top-toolbar';
 const propTypes = {
   onShowSidePanel: PropTypes.func,
   onSearchedClick: PropTypes.func,
-  inAllLibs: PropTypes.bool
+  inAllLibs: PropTypes.bool,
+  repoList: PropTypes.array,
 };
 
 class PublicSharedView extends React.Component {
@@ -35,21 +36,27 @@ class PublicSharedView extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type: 'public'}).then((res) => {
-      let repoList = res.data.repos.map(item => {
-        let repo = new Repo(item);
-        return repo;
+    if (!this.props.repoList) {
+      seafileAPI.listRepos({type:'public'}).then((res) => {
+        let repoList = res.data.repos.map((item) => {
+          return new Repo(item);
+        });
+        this.setState({
+          isLoading: false,
+          repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errMessage: Utils.getErrorMsg(error, true)
+        });
       });
+    } else {
       this.setState({
         isLoading: false,
-        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        repoList: Utils.sortRepos(this.props.repoList, this.state.sortBy, this.state.sortOrder)
       });
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
-    });
+    }
   }
 
   onItemUnshare = (repo) => {

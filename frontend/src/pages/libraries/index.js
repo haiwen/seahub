@@ -47,7 +47,11 @@ class Libraries extends Component {
 
       // for 'shared'
       sharedRepoList:[],
-      isSharedLoading: true
+      isSharedLoading: true,
+
+      // for 'public'
+      publicRepoList: [],
+      isPublicLoading: true,
     };
   }
 
@@ -57,23 +61,28 @@ class Libraries extends Component {
   }
 
   listMyLibs = () => {
-    seafileAPI.listRepos().then((res) => {
+    seafileAPI.listRepos({'type':['mine', 'shared', 'public']}).then((res) => {
       let allRepoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
       let myRepoList = allRepoList.filter(item => {
-        return item.type == 'mine';
+        return item.type === 'mine';
       });
       let sharedRepoList = allRepoList.filter(item => {
-        return item.type == 'shared';
+        return item.type === 'shared';
+      });
+      let publicRepoList = allRepoList.filter(item => {
+        return item.type === 'public';
       });
       this.setState({
         isLoading: false,
         sharedRepoList: sharedRepoList,
+        publicRepoList: publicRepoList,
         repoList: Utils.sortRepos(myRepoList, this.state.sortBy, this.state.sortOrder),
       },() => {
         this.setState({
-          isSharedLoading: false
+          isSharedLoading: false,
+          isPublicLoading: false
         });
       });
     }).catch((error) => {
@@ -293,9 +302,12 @@ class Libraries extends Component {
                 }
               </div>
 
-              {canViewOrg && (
+              {canViewOrg && !this.state.isPublicLoading && (
                 <div className="pb-3">
-                  <SharedWithAll inAllLibs={true} />
+                  <SharedWithAll
+                    inAllLibs={true}
+                    repoList={this.state.publicRepoList}
+                  />
                 </div>
               )}
 
