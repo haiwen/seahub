@@ -17,6 +17,7 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   fileTags: PropTypes.array.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  toggleTreePanel: PropTypes.func.isRequired,
   direntList: PropTypes.array,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
@@ -51,6 +52,7 @@ class CurDirPath extends React.Component {
           repoID={this.props.repoID}
           isViewFile={this.props.isViewFile}
           fileTags={this.props.fileTags}
+          toggleTreePanel={this.props.toggleTreePanel}
         />
         {isDesktop &&
         <DirTool

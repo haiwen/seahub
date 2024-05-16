@@ -15,6 +15,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
   fileTags: PropTypes.array.isRequired,
+  toggleTreePanel: PropTypes.func.isRequired
 };
 
 class DirPath extends React.Component {
@@ -78,6 +79,7 @@ class DirPath extends React.Component {
 
     return (
       <div className="path-container">
+        <button className="op-btn mr-2" onClick={this.props.toggleTreePanel}><span className="sf3-font-side-bar sf3-font"></span></button>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>

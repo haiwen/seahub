@@ -1945,6 +1945,12 @@ class LibContentView extends React.Component {
     e.preventDefault();
   };
 
+  toggleTreePanel = () => {
+    this.setState({
+      isTreePanelShown: !this.state.isTreePanelShown
+    });
+  };
+
   render() {
     if (this.state.libNeedDecrypt) {
       return (
@@ -2046,6 +2052,7 @@ class LibContentView extends React.Component {
           <LibContentContainer
             pathPrefix={this.props.pathPrefix}
             isTreePanelShown={this.state.isTreePanelShown}
+            toggleTreePanel={this.toggleTreePanel}
             currentMode={this.state.currentMode}
             path={this.state.path}
             pathExist={this.state.pathExist}
