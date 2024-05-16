@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1715225728872'); /* IE9 */
-  src: url('iconfont.eot?t=1715225728872#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1715225728872') format('woff2'),
-       url('iconfont.woff?t=1715225728872') format('woff'),
-       url('iconfont.ttf?t=1715225728872') format('truetype'),
-       url('iconfont.svg?t=1715225728872#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1715742372894'); /* IE9 */
+  src: url('iconfont.eot?t=1715742372894#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1715742372894') format('woff2'),
+       url('iconfont.woff?t=1715742372894') format('woff'),
+       url('iconfont.ttf?t=1715742372894') format('truetype'),
+       url('iconfont.svg?t=1715742372894#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,66 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-new:before {
+  content: "\e816";
+}
+
+.sf3-font-drop-down:before {
+  content: "\e81f";
+}
+
+.sf3-font-tag:before {
+  content: "\e822";
+}
+
+.sf3-font-grid-view:before {
+  content: "\e813";
+}
+
+.sf3-font-download1:before {
+  content: "\e814";
+}
+
+.sf3-font-more:before {
+  content: "\e815";
+}
+
+.sf3-font-move1:before {
+  content: "\e817";
+}
+
+.sf3-font-side-bar:before {
+  content: "\e818";
+}
+
+.sf3-font-delete1:before {
+  content: "\e819";
+}
+
+.sf3-font-more-vertical:before {
+  content: "\e81a";
+}
+
+.sf3-font-list-view:before {
+  content: "\e81b";
+}
+
+.sf3-font-info:before {
+  content: "\e81c";
+}
+
+.sf3-font-copy1:before {
+  content: "\e81d";
+}
+
+.sf3-font-recycle1:before {
+  content: "\e81e";
+}
+
+.sf3-font-history:before {
+  content: "\e65a";
 }
 
 .sf3-font-clients:before {
