@@ -8,7 +8,6 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
-import EmptyTip from '../../components/empty-tip';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import MyLibsToolbar from '../../components/toolbar/my-libs-toolbar';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
@@ -193,22 +192,6 @@ class Libraries extends Component {
   };
 
   render() {
-    const emptyTip = (
-      <EmptyTip>
-        <h2>{gettext('No libraries')}</h2>
-        <p>{gettext('You have not created any libraries yet. A library is a container to organize your files and folders. A library can also be shared with others and synced to your connected devices. You can create a library by clicking the "New Library" button in the menu bar.')}</p>
-      </EmptyTip>
-    );
-
-    const groupsEmptyTip = (
-      <EmptyTip>
-        <h2>{gettext('No groups')}</h2>
-        {canAddGroup ?
-          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. You can create a group by clicking the "New Group" button in the menu bar.')}</p> :
-          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. Groups you join will be listed here.')}</p>
-        }
-      </EmptyTip>
-    );
 
     return (
       <Fragment>
@@ -253,7 +236,9 @@ class Libraries extends Component {
                   </div>
                   {this.state.isLoading ? <Loading /> : (
                     this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
-                      this.state.repoList.length === 0 ? emptyTip : (
+                      this.state.repoList.length === 0 ? (
+                        <p className="libraries-empty-tip">{gettext('No libraries')}</p>
+                      ) : (
                         <MylibRepoListView
                           sortBy={this.state.sortBy}
                           sortOrder={this.state.sortOrder}
@@ -283,7 +268,7 @@ class Libraries extends Component {
               <div className="group-list-panel">
                 {this.state.isGroupsLoading? <Loading /> : (
                   this.state.groupsErrorMsg ? <p className="error text-center mt-8">{this.state.groupsErrorMsg}</p> : (
-                    this.state.groupList.length === 0 ? groupsEmptyTip : (
+                    this.state.groupList.length > 0 && (
                       this.state.groupList.map((group, index) => {
                         return (
                           <GroupItem
