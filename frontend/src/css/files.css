@@ -2,4 +2,11 @@
   text-align: left!important;
   padding-left: 20px;
 }
+
+#files-content-container .libraries-empty-tip {
+  color: #a4a4a4;
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #e8e8e8;
+}
   
