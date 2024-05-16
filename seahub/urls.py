@@ -203,7 +203,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
-from seahub.wiki2.views import edit_wiki
+from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesDirView, Wiki2PageContentView
 
 urlpatterns = [
@@ -706,7 +706,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/invitations/$', AdminInvitations.as_view(), name='api-v2.1-admin-invitations'),
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
-    re_path(r'^edit-wiki/(?P<wiki_id>[^/]+)/(?P<file_path>.*)$', edit_wiki, name='edit_wiki'),
+    re_path(r'^wikis/(?P<wiki_id>[^/]+)/(?P<file_path>.*)$', wiki_view, name='wiki'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('notice/', include('seahub.notifications.urls')),
