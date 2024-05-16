@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import { LocationProvider, createHistory } from '@gatsbyjs/reach-router';
 import SidePanel from './side-panel';
-import Users from './users';
-import MainPanel from '../sys-admin/main-panel';
+import MainPanel from './main-panel';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
 
 export default function Institutions() {
+
+  const history = createHistory(window);
+
   return (
-    <div id="main">
-      <SidePanel></SidePanel>
-      <MainPanel>
-        <Users />
-      </MainPanel>
-    </div>
+    <LocationProvider history={history}>
+      <div id="main">
+        <SidePanel />
+        <MainPanel />
+      </div>
+    </LocationProvider>
   );
 }
 

@@ -55,7 +55,7 @@ def info(request):
     })
 
 @inst_admin_required
-def useradmin_react_fake_view(request):
+def useradmin_react_fake_view(request, **kwargs):
     """List users in the institution.
     """
     # Make sure page request is an int. If not, deliver first page.
@@ -258,6 +258,8 @@ def user_toggle_status(request, email):
     if not is_valid_username(email):
         return HttpResponse(json.dumps({'success': False}), status=400,
                             content_type=content_type)
+    
+    print('aa')
 
     try:
         user_status = int(request.POST.get('s', 0))

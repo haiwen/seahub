@@ -401,7 +401,7 @@ class InstAdminUserGroups(APIView):
             group_info['id'] = group.id
             group_info['name'] = group.group_name
             group_info['is_owner'] = group.creator_name == email
-            group_info['is_admin'] = ccnet_api.check_group_staff(group.id, email)
+            group_info['is_admin'] = 1 == ccnet_api.check_group_staff(group.id, email)
             group_info['created_at'] = timestamp_to_isoformat_timestr(group.timestamp)
 
             group_info_list.append(group_info)
