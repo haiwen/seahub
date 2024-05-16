@@ -101,14 +101,18 @@ class InstAdminUsers(APIView):
             user_info['email'] = email
             user_info['name'] = email2nickname(email)
             user_info['contact_email'] = email2contact_email(email)
-            user_info['is_admin'] = email in admin_emails
+            user_info['is_institution_admin'] = email in admin_emails
             user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
 
             try:
                 user_obj = User.objects.get(email=email)
                 user_info['is_active'] = user_obj.is_active
+                user_info['is_system_admin'] = user_obj.is_staff
+                user_info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
             except User.DoesNotExist:
                 user_info['is_active'] = ''
+                user_info['is_system_admin'] = ''
+                user_info['create_time'] = ''
 
             user_info['last_login'] = ''
             for last_login in last_logins:
@@ -284,14 +288,18 @@ class InstAdminSearchUser(APIView):
             user_info['email'] = email
             user_info['name'] = email2nickname(email)
             user_info['contact_email'] = email2contact_email(email)
-            user_info['is_admin'] = email in admin_emails
+            user_info['is_institution_admin'] = email in admin_emails
             user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
 
             try:
                 user_obj = User.objects.get(email=email)
                 user_info['is_active'] = user_obj.is_active
+                user_info['is_system_admin'] = user_obj.is_staff
+                user_info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
             except User.DoesNotExist:
                 user_info['is_active'] = ''
+                user_info['is_system_admin'] = ''
+                user_info['create_time'] = ''
 
             user_info['last_login'] = ''
             for last_login in last_logins:
