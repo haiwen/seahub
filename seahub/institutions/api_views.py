@@ -320,39 +320,34 @@ class InstAdminSearchUser(APIView):
         return Response({'user_list': result})
 
 
-class InstAdminLibraries(APIView):
+class InstAdminUserLibraries(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsProVersion, IsInstAdmin)
 
-    def get(self, request):
+    def get(self, request, email):
 
         """Get user repos.
         """
 
-        owner = request.GET.get('owner', '')
-        if not owner:
-            error_msg = 'owner invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         try:
-            User.objects.get(email=owner)
+            User.objects.get(email=email)
         except User.DoesNotExist:
-            error_msg = f'User {owner} not found.'
+            error_msg = f'User {email} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
         inst_admin = InstitutionAdmin.objects.get(user=username)
         inst = inst_admin.institution
-        profile = Profile.objects.get_profile_by_user(owner)
+        profile = Profile.objects.get_profile_by_user(email)
         if not profile or \
                 profile.institution != inst.name:
-            error_msg = f'User {owner} not found in {inst.name}.'
+            error_msg = f'User {email} not found in {inst.name}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_info_list = []
-        owned_repos = seafile_api.get_owned_repo_list(owner)
+        owned_repos = seafile_api.get_owned_repo_list(email)
 
         for repo in owned_repos:
 
@@ -370,47 +365,43 @@ class InstAdminLibraries(APIView):
         return Response({"repo_list": repo_info_list})
 
 
-class InstAdminGroups(APIView):
+class InstAdminUserGroups(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsProVersion, IsInstAdmin)
 
-    def get(self, request):
+    def get(self, request, email):
 
         """Get user repos.
         """
 
-        owner = request.GET.get('owner', '')
-        if not owner:
-            error_msg = 'owner invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         try:
-            User.objects.get(email=owner)
+            User.objects.get(email=email)
         except User.DoesNotExist:
-            error_msg = f'User {owner} not found.'
+            error_msg = f'User {email} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
         inst_admin = InstitutionAdmin.objects.get(user=username)
         inst = inst_admin.institution
-        profile = Profile.objects.get_profile_by_user(owner)
+
+        profile = Profile.objects.get_profile_by_user(email)
         if not profile or \
                 profile.institution != inst.name:
-            error_msg = f'User {owner} not found in {inst.name}.'
+            error_msg = f'User {email} not found in {inst.name}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         group_info_list = []
-        groups = ccnet_api.get_groups(owner)
+        groups = ccnet_api.get_groups(email)
 
         for group in groups:
 
             group_info = {}
             group_info['id'] = group.id
             group_info['name'] = group.group_name
-            group_info['is_owner'] = group.creator_name == owner
-            group_info['is_admin'] = ccnet_api.check_group_staff(group.id, owner)
+            group_info['is_owner'] = group.creator_name == email
+            group_info['is_admin'] = ccnet_api.check_group_staff(group.id, email)
             group_info['created_at'] = timestamp_to_isoformat_timestr(group.timestamp)
 
             group_info_list.append(group_info)
