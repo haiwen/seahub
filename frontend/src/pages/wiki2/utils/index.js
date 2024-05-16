@@ -9,7 +9,7 @@ const generatorBase64Code = (keyLength = 4) => {
   return key;
 };
 
-const generateUniqueId = (navigation, length = 4) => {
+const generateUniqueId = (navigation = [], length = 4) => {
   let idMap = {};
   function recurseItem(item) {
     if (!item) return;

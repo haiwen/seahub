@@ -3,6 +3,6 @@ export default class Folder {
     this.type = 'folder';
     this.id = object.id;
     this.name = object.name;
-    this.children = object.children || [];
+    this.children = Array.isArray(object.children) ? object.children : [];
   }
 }
