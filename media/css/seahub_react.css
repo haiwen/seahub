@@ -708,6 +708,21 @@ a, a:hover { color: #ec8000; }
     margin-left: auto;
 }
 
+.side-nav-con .toggle-icon.sf3-font-drop-down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    transform: scale(.8);
+}
+
+.side-nav-con .toggle-icon.sf3-font-drop-down.icon-rotate-90 {
+    transform: rotate(90deg) scale(.8);
+}
+
 #draft-num {
     font-size: 75%;
     color: #5B5F65;
