@@ -189,35 +189,36 @@ class Libraries extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
-            <div className="cur-view-content" id="files-content-container">
+            {isLoading ?
+              <Loading /> :
+              <div className="cur-view-content" id="files-content-container">
 
-              <table aria-hidden={true} className="my-3">
-                <thead>
-                  <tr>
-                    <th width="4%"></th>
-                    <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                    <th width="35%">{gettext('Name')}</th>
-                    <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                    <th width="14%">{gettext('Size')}</th>
-                    <th width="17%">{gettext('Last Update')}</th>
-                    <th width="17%">{gettext('Owner')}</th>
-                  </tr>
-                </thead>
-              </table>
+                <table aria-hidden={true} className="my-3">
+                  <thead>
+                    <tr>
+                      <th width="4%"></th>
+                      <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                      <th width="35%">{gettext('Name')}</th>
+                      <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                      <th width="14%">{gettext('Size')}</th>
+                      <th width="17%">{gettext('Last Update')}</th>
+                      <th width="17%">{gettext('Owner')}</th>
+                    </tr>
+                  </thead>
+                </table>
 
-              {canAddRepo && (
-                <div className="pb-3">
-                  <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
-                    <h4 className="sf-heading m-0">
-                      <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
-                      {gettext('My Libraries')}
-                    </h4>
-                    {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
-                      <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
-                    }
-                  </div>
-                  {isLoading ? <Loading /> : (
-                    this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
+                {canAddRepo && (
+                  <div className="pb-3">
+                    <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+                      <h4 className="sf-heading m-0">
+                        <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+                        {gettext('My Libraries')}
+                      </h4>
+                      {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
+                        <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                      }
+                    </div>
+                    {this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
                       this.state.repoList.length === 0 ? (
                         <p className="libraries-empty-tip">{gettext('No libraries')}</p>
                       ) : (
@@ -233,28 +234,20 @@ class Libraries extends Component {
                           sortRepoList={this.sortRepoList}
                           inAllLibs={true}
                         />
-                      )))}
-                </div>
-              )}
-              <div className="pb-3">
-                {!isLoading &&
-                  <SharedLibs
-                    inAllLibs={true}
-                    repoList={this.state.sharedRepoList}
-                  />
-                }
-              </div>
-              {canViewOrg && !isLoading && (
+                      ))
+                    }
+                  </div>
+                )}
                 <div className="pb-3">
-                  <SharedWithAll
-                    inAllLibs={true}
-                    repoList={this.state.publicRepoList}
-                  />
+                  <SharedLibs inAllLibs={true} repoList={this.state.sharedRepoList} />
                 </div>
-              )}
-              <div className="group-list-panel">
-                {!isLoading && (
-                  this.state.groupList.length > 0 && (
+                {canViewOrg &&
+                  <div className="pb-3">
+                    <SharedWithAll inAllLibs={true} repoList={this.state.publicRepoList} />
+                  </div>
+                }
+                <div className="group-list-panel">
+                  {this.state.groupList.length > 0 && (
                     this.state.groupList.map((group, index) => {
                       return (
                         <GroupItem
@@ -264,11 +257,10 @@ class Libraries extends Component {
                         />
                       );
                     })
-                  ))
-                }
+                  )}
+                </div>
               </div>
-
-            </div>
+            }
           </div>
           {!isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
             <GuideForNewDialog
