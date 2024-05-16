@@ -4,7 +4,7 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
-import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isEditWiki } from '../../utils/constants';
+import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isEditWiki, gettext } from '../../utils/constants';
 import Dirent from '../../models/dirent';
 import WikiConfig from './models/wiki-config';
 import TreeNode from '../../components/tree-view/tree-node';
@@ -44,7 +44,7 @@ class Wiki extends Component {
       indexNode: null,
       indexContent: '',
       currentPageId: '',
-      config: {},
+      config: new WikiConfig({}),
       repoId: '',
     };
 
@@ -80,6 +80,13 @@ class Wiki extends Component {
   getWikiConfig = () => {
     wikiAPI.getWiki2Config(wikiId).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
+      try {
+        JSON.parse(wiki_config);
+      } catch (error) {
+        toaster.danger(gettext('Wiki config error'));
+        this.setState({ isConfigLoading: false });
+        return;
+      }
       const config = new WikiConfig(JSON.parse(wiki_config) || {});
       this.setState({
         config,
@@ -114,11 +121,15 @@ class Wiki extends Component {
   };
 
   getFirstPageId = (config) => {
-    const item = config.navigation[0] || {};
-    if (item.type === 'page') {
-      return item.id;
-    } else if (item.type === 'folder') {
-      return item.children[0].id;
+    if (!config || !Array.isArray(config.navigation)) return '';
+    for (let i = 0; i < config.navigation.length; i++) {
+      const item = config.navigation[i] || {};
+      if (item.type === 'page') {
+        return item.id;
+      }
+      if (item.type === 'folder' && item.children[0]) {
+        return item.children[0].id;
+      }
     }
   };
 

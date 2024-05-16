@@ -29,6 +29,13 @@ class ViewEditPopover extends Component {
     this.props.toggleViewEditor();
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.props.toggleViewEditor();
+    }
+  };
+
   renderViewName = () => {
     const { viewName } = this.props;
     return (
@@ -40,6 +47,7 @@ class ViewEditPopover extends Component {
           onChange={this.onChangeName}
           autoFocus={true}
           ref={this.viewInputRef}
+          onKeyDown={this.handleKeyDown}
         />
       </div>
     );
@@ -55,6 +63,7 @@ class ViewEditPopover extends Component {
         onEnter={this.onEnter}
         hideArrow={true}
         popoverClassName="view-edit-popover"
+        boundariesElement={document.body}
       >
         <div className="view-edit-popover-header">
           <span className='header-text'>{gettext('Modify Name')}</span>
