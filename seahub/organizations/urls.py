@@ -43,4 +43,6 @@ urlpatterns = [
     path('associate/<path:token>/', org_associate, name='org_associate'),
 
     path('samlconfig/', react_fake_view, name='saml_config'),
+
+    re_path(r'^subscription/$', react_fake_view, name='org_subscription'),
 ]

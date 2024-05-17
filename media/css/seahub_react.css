@@ -668,6 +668,7 @@ a, a:hover { color: #ec8000; }
     color: #fff;
 }
 
+.side-nav-con .seafile-multicolor-icon,
 .side-nav-con [class^="sf2-icon-"],
 .side-nav-con [class^="sf3-font-"],
 .side-nav-con [class^="fas"] {
