@@ -3,5 +3,7 @@ export default class Page {
     this.id = object.id;
     this.name = object.name;
     this.path = object.path;
+    this.icon = object.icon;
+    this.docUuid = object.docUuid;
   }
 }

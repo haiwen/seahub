@@ -193,6 +193,10 @@ class ViewItem extends Component {
     }
   };
 
+  setDocUuid = (docUuid) => {
+    window.seafile['docUuid'] = docUuid;
+  };
+
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
@@ -200,7 +204,7 @@ class ViewItem extends Component {
     } = this.props;
     const { isShowViewEditor, viewName, viewIcon, isSelected } = this.state;
     const isOverView = isOver && canDrop;
-
+    if (isSelected) this.setDocUuid(view.docUuid);
     const isSpecialInstance = false;
 
     let viewCanDropTop;

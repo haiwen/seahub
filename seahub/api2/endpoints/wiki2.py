@@ -5,6 +5,7 @@ import json
 import logging
 import requests
 import posixpath
+import time
 import urllib.request, urllib.error, urllib.parse
 
 from rest_framework import status
@@ -21,10 +22,16 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path
-from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, normalize_dir_path
+from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
+    normalize_dir_path, is_pro_version
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
+from seahub.utils.repo import parse_repo_perm
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
+from seahub.settings import SEADOC_SERVER_URL
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
 
 
 WIKI_CONFIG_PATH = '_Internal/Wiki'
@@ -274,10 +281,6 @@ class Wiki2PagesDirView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         try:
             repo = seafile_api.get_repo(wiki.repo_id)
             if not repo:
@@ -355,7 +358,6 @@ class Wiki2PageContentView(APIView):
             error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        file_id = None
         try:
             file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
         except SearpcError as e:
@@ -368,17 +370,17 @@ class Wiki2PageContentView(APIView):
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
 
-        file_name = os.path.basename(path)
-        token = seafile_api.get_fileserver_access_token(repo.repo_id,
-                                                        file_id, 'download', request.user.username, 'False')
+        file_uuid = get_seadoc_file_uuid(repo, path)
+        filename = os.path.basename(path)
 
-        if not token:
+        try:
+            sdoc_server_api = SdocServerAPI(file_uuid, filename, request.user.username)
+            res = sdoc_server_api.get_doc()
+            content = json.dumps(res)
+        except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        url = gen_inner_file_get_url(token, file_name)
-        file_response = urllib.request.urlopen(url)
-        content = file_response.read()
 
         try:
             dirent = seafile_api.get_dirent_by_path(repo.repo_id, path)
@@ -390,9 +392,46 @@ class Wiki2PageContentView(APIView):
             logger.error(e)
             latest_contributor, last_modified = None, 0
 
+        assets_url = '/api/v2.1/seadoc/download-image/' + file_uuid
+
+        # check file lock info
+        try:
+            is_locked, locked_by_me = check_file_lock(wiki.repo_id, path, request.user.username)
+        except Exception as e:
+            logger.error(e)
+            is_locked = False
+            locked_by_me = False
+
+        locked_by_online_office = if_locked_by_online_office(wiki.repo_id, path)
+
+        can_edit_file = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_edit_file = False
+        elif is_locked and not locked_by_me:
+            can_edit_file = False
+
+        if is_pro_version() and can_edit_file:
+            try:
+                if not is_locked:
+                    seafile_api.lock_file(wiki.repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                          int(time.time()) + 40 * 60)
+                elif locked_by_online_office:
+                    seafile_api.refresh_file_lock(wiki.repo_id, path,
+                                                  int(time.time()) + 40 * 60)
+            except Exception as e:
+                logger.error(e)
+
+        seadoc_perm = 'rw' if can_edit_file else 'r'
+        filename = os.path.basename(path)
+        seadoc_access_token = gen_seadoc_access_token(file_uuid, filename, request.user.username, permission=seadoc_perm)
+
         return Response({
             "content": content,
             "latest_contributor": email2nickname(latest_contributor),
             "last_modified": last_modified,
             "permission": permission,
+            "seadoc_server_url": SEADOC_SERVER_URL,
+            "seadoc_access_token": seadoc_access_token,
+            "can_edit_file": can_edit_file,
+            "assets_url": assets_url,
         })

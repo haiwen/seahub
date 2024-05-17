@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { WikiViewer } from '@seafile/sdoc-editor';
 import { gettext, repoID, siteRoot, username, isEditWiki } from '../../utils/constants';
 import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import Loading from '../../components/loading';
@@ -22,9 +23,20 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
+  can_edit_file: PropTypes.bool,
+  seadoc_access_token: PropTypes.string,
+  assets_url: PropTypes.string,
 };
 
 class MainPanel extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      docUuid: '',
+    };
+  }
 
   onMenuClick = () => {
     this.props.onMenuClick();
@@ -73,19 +85,43 @@ class MainPanel extends Component {
     return pathElem;
   };
 
+  static getDerivedStateFromProps(props, state) {
+    const { can_edit_file, seadoc_access_token } = props;
+    const config = window.app.config;
+    const pageOptions = window.app.pageOptions;
+    const { assetsUrl, seadocServerUrl: sdocServer, } = window.wiki.config;
+    window.seafile = {
+      ...window.seafile, // need docUuid
+      ...config,
+      ...pageOptions,
+      sdocServer,
+      assetsUrl: assetsUrl || props.assets_url,
+      can_edit_file,
+      accessToken: seadoc_access_token,
+      serviceUrl: config.serviceURL,
+      assets_url: config.assetsUrl,
+    };
+    return { ...props, docUuid: window.seafile.docUuid };
+  }
 
   render() {
-    // let { onSearchedClick } = this.props;
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
+    const { content } = this.props;
+    const editorContent = content && JSON.parse(content);
     return (
-      <div className="main-panel wiki-main-panel" style={{flex: isEditWiki ? '1 0 76%' : '1 0 80%'}}>
+      <div className="main-panel wiki-main-panel" style={{ flex: isEditWiki ? '1 0 76%' : '1 0 80%' }}>
         <div className="main-panel-hide hide">{this.props.content}</div>
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&
             <Fragment>
               <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+                {this.props.permission == 'rw' && (
+                  Utils.isDesktop() ?
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit')} onClick={this.onEditClick}>{gettext('Edit')}</button> :
+                    <span className="fa fa-pencil-alt mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick} style={{ 'fontSize': '1.1rem' }}></span>
+                )}
               </div>
               <div className="common-toolbar">
                 {/* {isPro && (
@@ -98,11 +134,6 @@ class MainPanel extends Component {
             <Fragment>
               <div className="cur-view-toolbar">
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-                {this.props.permission == 'rw' && (
-                  Utils.isDesktop() ?
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit')} onClick={this.onEditClick}>{gettext('Edit')}</button> :
-                    <span className="fa fa-pencil-alt mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick} style={{'fontSize': '1.1rem'}}></span>
-                )}
               </div>
               <div className="common-toolbar">
                 {/* {isPro && (
@@ -118,28 +149,24 @@ class MainPanel extends Component {
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
-            {isViewingFile && Utils.isMarkdownFile(this.props.path) && (
+            {/* {isViewingFile && Utils.isMarkdownFile(this.props.path) && (
               <SeafileMarkdownViewer
                 isWiki={true}
                 path={this.props.path}
                 repoID={repoID}
-                markdownContent={this.props.content}
+                markdownContent={content}
                 isFileLoading={this.props.isDataLoading}
-                lastModified = {this.props.lastModified}
+                lastModified={this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
               />
-            )}
+            )} */}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <SdocWikiPageViewer
-                isWiki={true}
-                path={this.props.path}
-                repoID={repoID}
-                markdownContent={this.props.content}
-                isFileLoading={this.props.isDataLoading}
-                lastModified = {this.props.lastModified}
-                latestContributor={this.props.latestContributor}
-                onLinkClick={this.props.onLinkClick}
+              <WikiViewer
+                document={editorContent}
+                showOutline={false}
+                showToolbar={false}
+                docUuid={this.state.docUuid}
               />
             )}
           </div>

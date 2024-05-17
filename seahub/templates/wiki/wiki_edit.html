@@ -12,6 +12,7 @@
 {% endblock %}
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
 {% render_bundle 'wiki2' 'css' %}
 {% endblock %}
 
@@ -22,12 +23,14 @@
 <div id="wiki-file-content" class="{{ LANGUAGE_CODE }}">
     <div class="article">
         {{ file_content }}
-        <p id="wiki-page-last-modified">{% translate "Last modified by" %} {{modifier|email2nickname}}, <span>{{modify_time|translate_seahub_time_str}}</span></p>
+        <p id="wiki-page-last-modified">{% translate "Last modified by" %} {{modifier|email2nickname}},
+            <span>{{modify_time|translate_seahub_time_str}}</span>
+        </p>
     </div>
     <div class="seafile-markdown-outline">
         <div id="seafile-editor-outline" class="seafile-editor-outline">
             {% for outline in outlines %}
-                {{ outline }}
+            {{ outline }}
             {% endfor %}
         </div>
     </div>
@@ -46,7 +49,10 @@
             permission: "{{ user_can_write }}",
             isDir: "{{ is_dir }}",
             isEditWiki: true,
-            assetsUrl: "{{ assets_url }}"
+            assetsUrl: "{{ assets_url }}",
+            seadocServerUrl: "{{ seadoc_server_url }}",
+            seadocAccessToken: "{{ seadoc_access_token }}",
+            canEditFile: "{{ can_edit_file }}"
         }
     };
 </script>
@@ -55,7 +61,7 @@
     let titlesInfo = [];
     let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
     for (let i = 0; i < headingList.length; i++) {
-      titlesInfo.push(headingList[i].offsetTop);
+        titlesInfo.push(headingList[i].offsetTop);
     }
 
     // outline infos
@@ -67,7 +73,7 @@
     };
     const removeActiveClass = (item) => {
         const className = item.className;
-        if (className.indexOf('active') === -1) return; 
+        if (className.indexOf('active') === -1) return;
         item.className = className.replace(/(?:^|\s)active(?!\S)/g, '');
     };
     const updateOutline = (activeIndex) => {
@@ -98,17 +104,17 @@
         const contentScrollTop = container.scrollTop + 180;
         let activeTitleIndex;
         if (contentScrollTop <= titlesInfo[0]) {
-          activeTitleIndex = 0;
+            activeTitleIndex = 0;
         } else if (contentScrollTop > titlesInfo[titlesLength - 1]) {
-          activeTitleIndex = titlesInfo.length - 1;
+            activeTitleIndex = titlesInfo.length - 1;
         } else {
             for (let i = 0; i < titlesLength; i++) {
-              if (contentScrollTop > titlesInfo[i]) {
-                continue;
-              } else {
-                activeTitleIndex = i - 1;
-                break;
-              }
+                if (contentScrollTop > titlesInfo[i]) {
+                    continue;
+                } else {
+                    activeTitleIndex = i - 1;
+                    break;
+                }
             }
         }
 
