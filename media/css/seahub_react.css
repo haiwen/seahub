@@ -1268,3 +1268,10 @@ a.table-sort-op:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.word-break-all {
+    /* overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
+    word-break: break-all;
+}

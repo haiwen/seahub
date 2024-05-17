@@ -165,3 +165,6 @@ export const enableDingtalk = window.sysadmin ? window.sysadmin.pageOptions.enab
 export const enableSysAdminViewRepo = window.sysadmin ? window.sysadmin.pageOptions.enableSysAdminViewRepo : '';
 export const haveLDAP = window.sysadmin ? window.sysadmin.pageOptions.haveLDAP : '';
 export const enableShareLinkReportAbuse = window.sysadmin ? window.sysadmin.pageOptions.enable_share_link_report_abuse : '';
+
+// institution admin
+export const institutionName = window.app ? window.app.pageOptions.institutionName : '';
