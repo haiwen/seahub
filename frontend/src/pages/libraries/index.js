@@ -36,37 +36,41 @@ class Libraries extends Component {
       isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
-
       isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
-
-      // for 'groups'
-      isGroupsLoading: true,
-      groupsErrorMsg: '',
-      groupList: []
+      groupList: [],
+      sharedRepoList:[],
+      publicRepoList: [],
     };
   }
 
   componentDidMount() {
-    this.listMyLibs();
-    this.listGroups();
-  }
-
-  listMyLibs = () => {
-    seafileAPI.listRepos({type: 'mine'}).then((res) => {
-      let repoList = res.data.repos.map((item) => {
-        return new Repo(item);
-      });
+    const promiseListRepos = seafileAPI.listRepos({ 'type': ['mine', 'shared', 'public'] });
+    const promiseListGroups = seafileAPI.listGroups(true);
+    Promise.all([promiseListRepos, promiseListGroups]).then(res => {
+      const [resListRepos, resListGroups] = res;
+      const allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
+      const myRepoList = allRepoList.filter(item => item.type === 'mine');
+      const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
+      const publicRepoList = allRepoList.filter(item => item.type === 'public');
+      const groupList = resListGroups.data.map(item => {
+        let group = new Group(item);
+        group.repos = item.repos.map(item => new Repo(item));
+        return group;
+      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
       this.setState({
         isLoading: false,
-        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        groupList,
+        sharedRepoList,
+        publicRepoList,
+        repoList: Utils.sortRepos(myRepoList, this.state.sortBy, this.state.sortOrder),
       });
     }).catch((error) => {
       this.setState({
         isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errorMsg: Utils.getErrorMsg(error, true),
       });
     });
-  };
+  }
 
   toggleSortOptionsDialog = () => {
     this.setState({
@@ -146,30 +150,6 @@ class Libraries extends Component {
   };
 
   // the following are for 'groups'
-  listGroups = () => {
-    seafileAPI.listGroups(true).then((res) => {
-      // `{'with_repos': 1}`: list repos of every group
-      let groupList = res.data.map(item => {
-        let group = new Group(item);
-        group.repos = item.repos.map(item => {
-          return new Repo(item);
-        });
-        return group;
-      });
-      this.setState({
-        isGroupsLoading: false,
-        groupList: groupList.sort((a, b) => {
-          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-        })
-      });
-    }).catch((error) => {
-      this.setState({
-        isGroupsLoading: false,
-        groupsErrorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
-    });
-  };
-
   onCreateGroup = (groupData) => {
     const newGroup = new Group(groupData);
     const { groupList: newList } = this.state;
@@ -192,7 +172,7 @@ class Libraries extends Component {
   };
 
   render() {
-
+    const { isLoading } = this.state;
     return (
       <Fragment>
         <TopToolbar
@@ -209,33 +189,36 @@ class Libraries extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
             </div>
-            <div className="cur-view-content" id="files-content-container">
+            {isLoading ?
+              <Loading /> :
+              <div className="cur-view-content" id="files-content-container">
 
-              <table aria-hidden={true} className="my-3">
-                <thead>
-                  <tr>
-                    <th width="4%"></th>
-                    <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                    <th width="35%">{gettext('Name')}</th>
-                    <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                    <th width="14%">{gettext('Size')}</th>
-                    <th width="17%">{gettext('Last Update')}</th>
-                    <th width="17%">{gettext('Owner')}</th>
-                  </tr>
-                </thead>
-              </table>
+                <table aria-hidden={true} className="my-3">
+                  <thead>
+                    <tr>
+                      <th width="4%"></th>
+                      <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                      <th width="35%">{gettext('Name')}</th>
+                      <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                      <th width="14%">{gettext('Size')}</th>
+                      <th width="17%">{gettext('Last Update')}</th>
+                      <th width="17%">{gettext('Owner')}</th>
+                    </tr>
+                  </thead>
+                </table>
 
-              {canAddRepo && (
-                <div className="pb-3">
-                  <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
-                    <h4 className="sf-heading m-0">
-                      <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
-                      {gettext('My Libraries')}
-                    </h4>
-                    {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
-                  </div>
-                  {this.state.isLoading ? <Loading /> : (
-                    this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
+                {canAddRepo && (
+                  <div className="pb-3">
+                    <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+                      <h4 className="sf-heading m-0">
+                        <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+                        {gettext('My Libraries')}
+                      </h4>
+                      {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
+                        <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                      }
+                    </div>
+                    {this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
                       this.state.repoList.length === 0 ? (
                         <p className="libraries-empty-tip">{gettext('No libraries')}</p>
                       ) : (
@@ -251,39 +234,35 @@ class Libraries extends Component {
                           sortRepoList={this.sortRepoList}
                           inAllLibs={true}
                         />
-                      )))}
-                </div>
-              )}
-
-              <div className="pb-3">
-                <SharedLibs inAllLibs={true} />
-              </div>
-
-              {canViewOrg && (
+                      ))
+                    }
+                  </div>
+                )}
                 <div className="pb-3">
-                  <SharedWithAll inAllLibs={true} />
+                  <SharedLibs inAllLibs={true} repoList={this.state.sharedRepoList} />
                 </div>
-              )}
-
-              <div className="group-list-panel">
-                {this.state.isGroupsLoading? <Loading /> : (
-                  this.state.groupsErrorMsg ? <p className="error text-center mt-8">{this.state.groupsErrorMsg}</p> : (
-                    this.state.groupList.length > 0 && (
-                      this.state.groupList.map((group, index) => {
-                        return (
-                          <GroupItem
-                            key={index}
-                            group={group}
-                            updateGroup={this.updateGroup}
-                          />
-                        );
-                      })
-                    )))}
+                {canViewOrg &&
+                  <div className="pb-3">
+                    <SharedWithAll inAllLibs={true} repoList={this.state.publicRepoList} />
+                  </div>
+                }
+                <div className="group-list-panel">
+                  {this.state.groupList.length > 0 && (
+                    this.state.groupList.map((group, index) => {
+                      return (
+                        <GroupItem
+                          key={index}
+                          group={group}
+                          updateGroup={this.updateGroup}
+                        />
+                      );
+                    })
+                  )}
+                </div>
               </div>
-
-            </div>
+            }
           </div>
-          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
+          {!isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
             <GuideForNewDialog
               toggleDialog={this.toggleGuideForNewDialog}
             />

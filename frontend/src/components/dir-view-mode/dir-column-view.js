@@ -6,6 +6,7 @@ import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
 
 const propTypes = {
+  isTreePanelShown: PropTypes.bool.isRequired,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -146,35 +147,39 @@ class DirColumnView extends React.Component {
   }
 
   render() {
-    const { currentMode } = this.props;
+    const { currentMode, isTreePanelShown } = this.props;
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const select = this.state.inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
     return (
       <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
-        <DirColumnNav
-          currentPath={this.props.path}
-          userPerm={this.props.userPerm}
-          isTreeDataLoading={this.props.isTreeDataLoading}
-          treeData={this.props.treeData}
-          currentNode={this.props.currentNode}
-          onNodeClick={this.props.onNodeClick}
-          onNodeCollapse={this.props.onNodeCollapse}
-          onNodeExpanded={this.props.onNodeExpanded}
-          onAddFolderNode={this.props.onAddFolderNode}
-          onAddFileNode={this.props.onAddFileNode}
-          onRenameNode={this.props.onRenameNode}
-          onDeleteNode={this.props.onDeleteNode}
-          repoID={this.props.repoID}
-          navRate={this.state.navRate}
-          inResizing={this.state.inResizing}
-          currentRepoInfo={this.props.currentRepoInfo}
-          onItemMove={this.props.onItemMove}
-          onItemCopy={this.props.onItemCopy}
-          selectedDirentList={this.props.selectedDirentList}
-          onItemsMove={this.props.onItemsMove}
-        />
-        <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
+        {isTreePanelShown && (
+          <>
+            <DirColumnNav
+              currentPath={this.props.path}
+              userPerm={this.props.userPerm}
+              isTreeDataLoading={this.props.isTreeDataLoading}
+              treeData={this.props.treeData}
+              currentNode={this.props.currentNode}
+              onNodeClick={this.props.onNodeClick}
+              onNodeCollapse={this.props.onNodeCollapse}
+              onNodeExpanded={this.props.onNodeExpanded}
+              onAddFolderNode={this.props.onAddFolderNode}
+              onAddFileNode={this.props.onAddFileNode}
+              onRenameNode={this.props.onRenameNode}
+              onDeleteNode={this.props.onDeleteNode}
+              repoID={this.props.repoID}
+              navRate={this.state.navRate}
+              inResizing={this.state.inResizing}
+              currentRepoInfo={this.props.currentRepoInfo}
+              onItemMove={this.props.onItemMove}
+              onItemCopy={this.props.onItemCopy}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+            />
+            <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
+          </>
+        )}
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
           {this.props.isViewFile ? (
             <DirColumnFile

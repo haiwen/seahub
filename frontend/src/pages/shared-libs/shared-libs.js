@@ -407,20 +407,27 @@ class SharedLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type:'shared'}).then((res) => {
-      let repoList = res.data.repos.map((item) => {
-        return new Repo(item);
+    if (!this.props.repoList) {
+      seafileAPI.listRepos({type:'shared'}).then((res) => {
+        let repoList = res.data.repos.map((item) => {
+          return new Repo(item);
+        });
+        this.setState({
+          loading: false,
+          items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        });
+      }).catch((error) => {
+        this.setState({
+          loading: false,
+          errorMsg: Utils.getErrorMsg(error, true)
+        });
       });
+    } else {
       this.setState({
         loading: false,
-        items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        items: Utils.sortRepos(this.props.repoList, this.state.sortBy, this.state.sortOrder)
       });
-    }).catch((error) => {
-      this.setState({
-        loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
-    });
+    }
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -516,7 +523,8 @@ class SharedLibraries extends Component {
 }
 
 SharedLibraries.propTypes = {
-  inAllLibs: PropTypes.bool
+  inAllLibs: PropTypes.bool,
+  repoList: PropTypes.array,
 };
 
 export default SharedLibraries;

@@ -11,6 +11,7 @@ import '../../css/lib-content-view.css';
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
   isTreePanelShown: PropTypes.bool.isRequired,
+  toggleTreePanel: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
@@ -186,12 +187,14 @@ class LibContentContainer extends React.Component {
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
               sortItems={this.props.sortItems}
+              toggleTreePanel={this.props.toggleTreePanel}
             />
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <DirColumnView
+                isTreePanelShown={this.props.isTreePanelShown}
                 currentMode={this.props.currentMode}
                 path={this.props.path}
                 repoID={repoID}
