@@ -46,6 +46,9 @@ class Wiki extends Component {
       currentPageId: '',
       config: new WikiConfig({}),
       repoId: '',
+      can_edit_file: false,
+      seadoc_access_token: '',
+      docUuid: '',
     };
 
     window.onpopstate = this.onpopstate;
@@ -153,7 +156,7 @@ class Wiki extends Component {
 
     if (isDir === 'False') {
       // this.showFile(initialPath);
-      this.setState({path: initialPath});
+      this.setState({ path: initialPath });
       return;
     }
 
@@ -171,9 +174,9 @@ class Wiki extends Component {
     }
 
     if (isDir === 'None') {
-      this.setState({pathExist: false});
+      this.setState({ pathExist: false });
       let fileUrl = siteRoot + this.handlePath() + wikiId + Utils.encodePath(initialPath);
-      window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
+      window.history.pushState({ url: fileUrl, path: initialPath }, initialPath, fileUrl);
     }
   };
 
@@ -191,7 +194,7 @@ class Wiki extends Component {
         });
       });
     }).catch(() => {
-      this.setState({isLoadFailed: true});
+      this.setState({ isLoadFailed: true });
     });
   };
 
@@ -201,7 +204,7 @@ class Wiki extends Component {
 
     // update location url
     let fileUrl = siteRoot + this.handlePath() + wikiId + Utils.encodePath(dirPath);
-    window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
+    window.history.pushState({ url: fileUrl, path: dirPath }, dirPath, fileUrl);
   };
 
   showFile = (filePath) => {
@@ -220,6 +223,8 @@ class Wiki extends Component {
         permission: data.permission,
         lastModified: moment.unix(data.last_modified).fromNow(),
         latestContributor: data.latest_contributor,
+        can_edit_file: data.can_edit_file,
+        seadoc_access_token: data.seadoc_access_token,
       });
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -229,14 +234,14 @@ class Wiki extends Component {
     const hash = window.location.hash;
     let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}${Utils.encodePath(filePath)}${hash}`;
     if (filePath === '/home.md') {
-      window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
+      window.history.replaceState({ url: fileUrl, path: filePath }, filePath, fileUrl);
     } else {
-      window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+      window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
     }
   };
 
   loadDirentList = (dirPath) => {
-    this.setState({isDataLoading: true});
+    this.setState({ isDataLoading: true });
     wikiAPI.listWiki2Dir(wikiId, dirPath).then(res => {
       let direntList = res.data.dirent_list.map(item => {
         let dirent = new Dirent(item);
@@ -259,7 +264,7 @@ class Wiki extends Component {
         isDataLoading: false,
       });
     }).catch(() => {
-      this.setState({isLoadFailed: true});
+      this.setState({ isLoadFailed: true });
     });
   };
 
@@ -279,7 +284,7 @@ class Wiki extends Component {
     } else {
       let parentNode = tree.getNodeByPath(node.parentNode.path);
       parentNode.isExpanded = true;
-      this.setState({treeData: tree, currentNode: node}); //tree
+      this.setState({ treeData: tree, currentNode: node }); //tree
     }
   };
 
@@ -312,12 +317,12 @@ class Wiki extends Component {
         treeData: tree
       });
     }).catch(() => {
-      this.setState({isLoadFailed: true});
+      this.setState({ isLoadFailed: true });
     });
   };
 
   removePythonWrapper = () => {
-    if (this.pythonWrapper)  {
+    if (this.pythonWrapper) {
       document.body.removeChild(this.pythonWrapper);
       this.pythonWrapper = null;
     }
@@ -391,7 +396,7 @@ class Wiki extends Component {
       let tree = this.state.treeData.clone();
       let node = tree.getNodeByPath(item.path);
       treeHelper.expandNode(node);
-      this.setState({treeData: tree});
+      this.setState({ treeData: tree });
     } else {
       this.loadNodeAndParentsByPath(path);
     }
@@ -411,14 +416,14 @@ class Wiki extends Component {
   };
 
   onMenuClick = () => {
-    this.setState({closeSideBar: !this.state.closeSideBar});
+    this.setState({ closeSideBar: !this.state.closeSideBar });
   };
 
   onMainNavBarClick = (nodePath) => {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
-    this.setState({treeData: tree, currentNode: node});
+    this.setState({ treeData: tree, currentNode: node });
     this.showDir(node.path);
   };
 
@@ -431,7 +436,7 @@ class Wiki extends Component {
       if (Utils.isMarkdownFile(direntPath)) {
         this.showFile(direntPath);
       } else {
-        const w=window.open('about:blank');
+        const w = window.open('about:blank');
         const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(direntPath);
         w.location.href = url;
       }
@@ -439,12 +444,12 @@ class Wiki extends Component {
   };
 
   onCloseSide = () => {
-    this.setState({closeSideBar: !this.state.closeSideBar});
+    this.setState({ closeSideBar: !this.state.closeSideBar });
   };
 
   onNodeClick = (node) => {
     if (!this.state.pathExist) {
-      this.setState({pathExist: true});
+      this.setState({ pathExist: true });
     }
 
     if (node.object.isDir()) {
@@ -454,23 +459,23 @@ class Wiki extends Component {
         wikiAPI.listWiki2Dir(wikiId, node.path).then(res => {
           this.addResponseListToNode(res.data.dirent_list, node);
           tree.collapseNode(node);
-          this.setState({treeData: tree});
+          this.setState({ treeData: tree });
         });
       }
       if (node.path === this.state.path) {
         if (node.isExpanded) {
           let tree = treeHelper.collapseNode(this.state.treeData, node);
-          this.setState({treeData: tree});
+          this.setState({ treeData: tree });
         } else {
           let tree = this.state.treeData.clone();
           node = tree.getNodeByPath(node.path);
           tree.expandNode(node);
-          this.setState({treeData: tree});
+          this.setState({ treeData: tree });
         }
       }
     }
 
-    if (node.path === this.state.path ) {
+    if (node.path === this.state.path) {
       return;
     }
 
@@ -492,7 +497,7 @@ class Wiki extends Component {
 
   onNodeCollapse = (node) => {
     let tree = treeHelper.collapseNode(this.state.treeData, node);
-    this.setState({treeData: tree});
+    this.setState({ treeData: tree });
   };
 
   onNodeExpanded = (node) => {
@@ -501,11 +506,11 @@ class Wiki extends Component {
     if (!node.isLoaded) {
       wikiAPI.listWiki2Dir(wikiId, node.path).then(res => {
         this.addResponseListToNode(res.data.dirent_list, node);
-        this.setState({treeData: tree});
+        this.setState({ treeData: tree });
       });
     } else {
       tree.expandNode(node);
-      this.setState({treeData: tree});
+      this.setState({ treeData: tree });
     }
   };
 
@@ -525,7 +530,7 @@ class Wiki extends Component {
     direntList = Utils.sortDirents(direntList, 'name', 'asc');
 
     let nodeList = direntList.map(object => {
-      return new TreeNode({object});
+      return new TreeNode({ object });
     });
     node.addChildren(nodeList);
   };
@@ -539,7 +544,7 @@ class Wiki extends Component {
     direntList = Utils.sortDirents(direntList, 'name', 'asc');
 
     let nodeList = direntList.map(object => {
-      return new TreeNode({object});
+      return new TreeNode({ object });
     });
     node.addChildren(nodeList);
   };
@@ -598,7 +603,7 @@ class Wiki extends Component {
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
         />
-        <MainPanel
+        {<MainPanel
           path={this.state.path}
           pathExist={this.state.pathExist}
           isViewFile={this.state.isViewFile}
@@ -611,7 +616,9 @@ class Wiki extends Component {
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-        />
+          can_edit_file={this.state.can_edit_file}
+          seadoc_access_token={this.state.seadoc_access_token}
+        />}
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
         </MediaQuery>

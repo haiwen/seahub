@@ -95,11 +95,12 @@ class AddNewPageDialog extends React.Component {
 
   createFile = (pageName, filePath) => {
     seafileAPI.createFile(repoID, filePath).then(res => {
-      const { obj_name, parent_dir } = res.data;
+      const { obj_name, parent_dir,doc_uuid } = res.data;
       this.props.onAddNewPage({
         name: pageName,
         icon: '',
         path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+        docUuid:doc_uuid,
         successCallback: this.onSuccess,
         errorCallback: this.onError,
       });
@@ -135,7 +136,7 @@ class AddNewPageDialog extends React.Component {
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
           {this.state.isLoading ?
-            <Button color="primary" disabled><Loading/></Button> :
+            <Button color="primary" disabled><Loading /></Button> :
             <Button color="primary" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           }
         </ModalFooter>
