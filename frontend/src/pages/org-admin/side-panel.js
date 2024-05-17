@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
+import Icon from '../../components/icon';
 import { gettext, siteRoot, enableSubscription, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
@@ -83,7 +84,7 @@ class SidePanel extends React.Component {
                 {enableSubscription &&
                   <li className="nav-item">
                     <Link className={`nav-link ellipsis ${this.getActiveClass('subscription')}`} to={siteRoot + 'org/subscription/'} onClick={() => this.tabItemClick('subscription')} >
-                      <span className=""></span>
+                      <Icon symbol='currency' />
                       <span className="nav-text">{'付费管理'}</span>
                     </Link>
                   </li>
