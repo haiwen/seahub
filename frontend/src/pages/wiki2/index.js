@@ -49,6 +49,7 @@ class Wiki extends Component {
       can_edit_file: false,
       seadoc_access_token: '',
       docUuid: '',
+      assets_url: '',
     };
 
     window.onpopstate = this.onpopstate;
@@ -217,6 +218,7 @@ class Wiki extends Component {
     this.removePythonWrapper();
     wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
       let data = res.data;
+
       this.setState({
         isDataLoading: false,
         content: data.content,
@@ -225,6 +227,7 @@ class Wiki extends Component {
         latestContributor: data.latest_contributor,
         can_edit_file: data.can_edit_file,
         seadoc_access_token: data.seadoc_access_token,
+        assets_url: data.assets_url,
       });
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -603,7 +606,7 @@ class Wiki extends Component {
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
         />
-        {<MainPanel
+        <MainPanel
           path={this.state.path}
           pathExist={this.state.pathExist}
           isViewFile={this.state.isViewFile}
@@ -618,7 +621,8 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           can_edit_file={this.state.can_edit_file}
           seadoc_access_token={this.state.seadoc_access_token}
-        />}
+          assets_url={this.state.assets_url}
+        />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
         </MediaQuery>
