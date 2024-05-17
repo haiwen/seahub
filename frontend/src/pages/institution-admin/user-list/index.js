@@ -83,7 +83,7 @@ const UserList = ({ onUserLinkClick }) => {
   }, [deleteUser?.email, userList]);
 
   const updateInstUserStatus = useCallback((user) => {
-    const is_active = user.is_active ? 0 : 1;
+    const is_active = user.is_active ? false : true;
     instAdminAPI.updateInstitutionUserStatus(user.email, is_active).then(res => {
       const newUserList = userList.map(item => {
         if (item.email === user.email) {

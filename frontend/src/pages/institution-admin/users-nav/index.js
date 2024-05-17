@@ -21,7 +21,7 @@ const UsersNav = () => {
   let username = '';
   let nav = '';
   if (match1) {
-    username = match1.email;
+    username = decodeURIComponent(match1.email);
   }
   if (match2) {
     username = decodeURIComponent(match2.email);

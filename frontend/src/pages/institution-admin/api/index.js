@@ -104,12 +104,12 @@ class InstAdminAPI {
     return this.req.get(url);
   }
 
-  updateInstitutionUserStatus(email, status) {
-    const url = this.server + '/inst/useradmin/toggle_status/' + encodeURIComponent(email) + '/';
-    const params = {
-      s: status,
+  updateInstitutionUserStatus(email, is_active) {
+    const url = this.server + '/api/v2.1/institutions/admin/users/' + encodeURIComponent(email) + '/';
+    const data = {
+      is_active: is_active ? 'true' : 'false',
     };
-    return this.req.post(url, params);
+    return this.req.put(url, data);
   }
 
 }
