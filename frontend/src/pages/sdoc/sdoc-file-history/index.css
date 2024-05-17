@@ -87,6 +87,7 @@
 
 
 .sdoc-file-history .sdoc-file-history-content {
+  display: flex;
   height: 100%;
   width: 100%;
 }
@@ -107,6 +108,7 @@
 
 .sdoc-file-history.mobile .sdoc-file-history-container .sdoc-file-history-content .sdoc-editor-content {
   padding: 0;
+  min-width: auto;
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-scroll-container {
@@ -116,6 +118,10 @@
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-editor-container {
   flex-direction: row;
+}
+
+.sdoc-editor-container.mobile .sdoc-editor-content.readonly .sdoc-article-container {
+  width: 100%;
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-article-container {

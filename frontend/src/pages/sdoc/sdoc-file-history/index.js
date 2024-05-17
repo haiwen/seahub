@@ -367,21 +367,25 @@ class SdocFileHistory extends React.Component {
                 <Loading />
               </div>
             ) : (
-              <DiffViewer
-                currentContent={currentVersionContent}
-                lastContent={isShowChanges ? lastVersionContent : ''}
-                didMountCallback={this.setDiffCount}
-                rightSideDrawer={
-                  showSidePanel && <SidePanel
-                    isShowChanges={isShowChanges}
-                    currentVersion={currentVersion}
-                    onSelectHistoryVersion={this.onSelectHistoryVersion}
-                    onShowChanges={this.onShowChanges}
-                    sidePanelInitData={sidePanelInitData}
-                    onClose={this.changeSidePanelStatus}
-                  />
+              <>
+                <DiffViewer
+                  currentContent={currentVersionContent}
+                  lastContent={isShowChanges ? lastVersionContent : ''}
+                  didMountCallback={this.setDiffCount}
+                />
+                {
+                  showSidePanel && (
+                    <SidePanel
+                      isShowChanges={isShowChanges}
+                      currentVersion={currentVersion}
+                      onSelectHistoryVersion={this.onSelectHistoryVersion}
+                      onShowChanges={this.onShowChanges}
+                      sidePanelInitData={sidePanelInitData}
+                      onClose={this.changeSidePanelStatus}
+                    />
+                  )
                 }
-              />
+              </>
             )}
           </div>
         </div>
