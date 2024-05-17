@@ -1,7 +1,7 @@
 import React from 'react';
 import MainPanelTopbar from '../sys-admin/main-panel-topbar';
 import UserList from './user-list';
-import { LocationProvider, Router, createHistory, navigate } from '@gatsbyjs/reach-router';
+import { Router, navigate } from '@gatsbyjs/reach-router';
 import UserContent from './user-content';
 import UsersNav from './users-nav';
 import UserInfo from './user-content/user-info';
@@ -11,7 +11,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import Search from '../sys-admin/search';
 import UserListSearch from './user-list-search';
 
-export default function MainPanel() {
+export default function MainPanel(props) {
 
 
   const searchItems = (keyword) => {
@@ -25,7 +25,7 @@ export default function MainPanel() {
 
   return (
     <div className='main-panel'>
-      <MainPanelTopbar search={getSearch()}></MainPanelTopbar>
+      <MainPanelTopbar search={getSearch()} {...props}></MainPanelTopbar>
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <Router>

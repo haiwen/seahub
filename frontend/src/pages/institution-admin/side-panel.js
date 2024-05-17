@@ -7,8 +7,6 @@ import { gettext, siteRoot, institutionName } from '../../utils/constants';
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
-  currentTab: PropTypes.string.isRequired,
-  tabItemClick: PropTypes.func.isRequired
 };
 
 class SidePanel extends React.Component {
