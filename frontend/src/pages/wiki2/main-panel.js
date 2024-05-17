@@ -25,6 +25,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   can_edit_file: PropTypes.bool,
   seadoc_access_token: PropTypes.string,
+  assets_url: PropTypes.string,
 };
 
 class MainPanel extends Component {
@@ -94,10 +95,11 @@ class MainPanel extends Component {
       ...config,
       ...pageOptions,
       sdocServer,
-      assetsUrl,
+      assetsUrl: assetsUrl || props.assets_url,
       can_edit_file,
       accessToken: seadoc_access_token,
       serviceUrl: config.serviceURL,
+      assets_url: config.assetsUrl,
     };
     return { ...props, docUuid: window.seafile.docUuid };
   }
@@ -147,7 +149,7 @@ class MainPanel extends Component {
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
-            {isViewingFile && Utils.isMarkdownFile(this.props.path) && (
+            {/* {isViewingFile && Utils.isMarkdownFile(this.props.path) && (
               <SeafileMarkdownViewer
                 isWiki={true}
                 path={this.props.path}
@@ -158,8 +160,8 @@ class MainPanel extends Component {
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
               />
-            )}
-            {this.props.seadoc_access_token && this.state.docUuid && isViewingFile && Utils.isSdocFile(this.props.path) && (
+            )} */}
+            {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <WikiViewer
                 document={editorContent}
                 showOutline={false}
