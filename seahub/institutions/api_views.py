@@ -23,9 +23,11 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.profile.models import Profile
 from seahub.institutions.models import InstitutionAdmin
 from seahub.institutions.utils import get_institution_available_quota
+from seahub.utils import inactive_user
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.licenseparse import user_number_over_limit
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
@@ -144,7 +146,7 @@ class InstAdminUser(APIView):
 
     def put(self, request, email):
 
-        """ Set user info in institution.
+        """ Update user info in institution.
         """
 
         username = request.user.username
@@ -152,7 +154,7 @@ class InstAdminUser(APIView):
         inst = inst_admin.institution
 
         try:
-            User.objects.get(email=email)
+            user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             error_msg = f'User {email} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -165,29 +167,51 @@ class InstAdminUser(APIView):
 
         # set user quota
         quota_total_mb = request.data.get("quota_total", None)
-        if not quota_total_mb:
-            error_msg = 'quota_total invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        try:
-            quota_total_mb = int(quota_total_mb)
-        except ValueError:
-            error_msg = _("Must be an integer that is greater than or equal to 0.")
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if quota_total_mb < 0:
-            error_msg = _("Space quota is too low (minimum value is 0).")
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        quota = quota_total_mb * get_file_size_unit('MB')
-        available_quota = get_institution_available_quota(inst)
-        if available_quota is not None:
-            # None means has unlimit quota
-            if available_quota == 0 or available_quota < quota:
-                error_msg = _(f"Failed to set quota: maximum quota is {available_quota} MB")
+        if quota_total_mb is not None:
+            try:
+                quota_total_mb = int(quota_total_mb)
+            except ValueError:
+                error_msg = _("Must be an integer that is greater than or equal to 0.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        seafile_api.set_user_quota(email, quota)
+            if quota_total_mb < 0:
+                error_msg = _("Space quota is too low (minimum value is 0).")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            quota = quota_total_mb * get_file_size_unit('MB')
+            available_quota = get_institution_available_quota(inst)
+            if available_quota is not None:
+                # None means has unlimit quota
+                if available_quota == 0 or available_quota < quota:
+                    error_msg = _(f"Failed to set quota: maximum quota is {available_quota} MB")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            seafile_api.set_user_quota(email, quota)
+
+        is_active = request.data.get("is_active", None)
+        if is_active is not None:
+
+            is_active = is_active.lower()
+            if is_active not in ('true', 'false'):
+                error_msg = "is_active invalid."
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if is_active == 'true':
+
+                if user_number_over_limit(new_users=1):
+                    error_msg = _("The number of users exceeds the limit.")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                # del tokens and personal repo api tokens
+                try:
+                    inactive_user(email)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            user_obj.is_active = is_active == 'true'
+            user_obj.save()
 
         return Response({'success': True})
 
@@ -202,7 +226,7 @@ class InstAdminUser(APIView):
 
         # get user info
         try:
-            User.objects.get(email=email)
+            user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             error_msg = f'User {email} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -217,6 +241,7 @@ class InstAdminUser(APIView):
         user_info['email'] = email
         user_info['name'] = email2nickname(email)
         user_info['contact_email'] = email2contact_email(email)
+        user_info['is_active'] = user_obj.is_active
         user_info['avatar_url'], _, _ = api_avatar_url(email, 72)
         try:
             user_info['quota_total'] = seafile_api.get_user_quota(email)
