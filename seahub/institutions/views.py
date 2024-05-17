@@ -258,8 +258,6 @@ def user_toggle_status(request, email):
     if not is_valid_username(email):
         return HttpResponse(json.dumps({'success': False}), status=400,
                             content_type=content_type)
-    
-    print('aa')
 
     try:
         user_status = int(request.POST.get('s', 0))
