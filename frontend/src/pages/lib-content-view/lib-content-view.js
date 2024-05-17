@@ -33,9 +33,15 @@ class LibContentView extends React.Component {
 
   constructor(props) {
     super(props);
+
+    let isTreePanelShown = true;
+    const storedTreePanelState = localStorage.getItem('sf_dir_view_tree_panel_open');
+    if (storedTreePanelState != undefined) {
+      isTreePanelShown = storedTreePanelState == 'true';
+    }
     this.state = {
       currentMode: cookie.load('seafile_view_mode') || 'list',
-      isTreePanelShown: true, // display the 'dirent tree' side panel
+      isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
       path: '',
       pathExist: true,
       isViewFile: false,
@@ -1948,6 +1954,11 @@ class LibContentView extends React.Component {
   toggleTreePanel = () => {
     this.setState({
       isTreePanelShown: !this.state.isTreePanelShown
+    }, () => {
+      if (this.state.isTreePanelShown) {
+        this.loadSidePanel(this.state.path);
+      }
+      localStorage.setItem('sf_dir_view_tree_panel_open', String(this.state.isTreePanelShown));
     });
   };
 
