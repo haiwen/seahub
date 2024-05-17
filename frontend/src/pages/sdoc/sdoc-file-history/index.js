@@ -361,7 +361,7 @@ class SdocFileHistory extends React.Component {
             </div>
             {this.renderChangesTip({ onChangeSidePanelDisplay: this.changeSidePanelStatus })}
           </div>
-          <div className="sdoc-file-history-content f-flex" ref={ref => this.historyContentRef = ref}>
+          <div className="sdoc-file-history-content d-flex" ref={ref => this.historyContentRef = ref}>
             {isLoading ? (
               <div className="sdoc-file-history-viewer d-flex align-items-center justify-content-center">
                 <Loading />
