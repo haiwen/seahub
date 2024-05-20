@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1715742372894'); /* IE9 */
-  src: url('iconfont.eot?t=1715742372894#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1715742372894') format('woff2'),
-       url('iconfont.woff?t=1715742372894') format('woff'),
-       url('iconfont.ttf?t=1715742372894') format('truetype'),
-       url('iconfont.svg?t=1715742372894#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1715743130302'); /* IE9 */
+  src: url('iconfont.eot?t=1715743130302#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1715743130302') format('woff2'),
+       url('iconfont.woff?t=1715743130302') format('woff'),
+       url('iconfont.ttf?t=1715743130302') format('truetype'),
+       url('iconfont.svg?t=1715743130302#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-rename:before {
+  content: "\e65c";
+}
+
+.sf3-font-close:before {
+  content: "\e65b";
 }
 
 .sf3-font-new:before {
