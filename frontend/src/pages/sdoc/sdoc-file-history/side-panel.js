@@ -10,6 +10,7 @@ import editUtilities from '../../../utils/editor-utilities';
 import toaster from '../../../components/toast';
 import HistoryVersion from './history-version';
 import Switch from '../../../components/common/switch';
+import { getCurrentAndLastVersion, getLastVersion } from './helper';
 
 moment.locale(window.app.config.lang);
 
@@ -19,41 +20,15 @@ class SidePanel extends Component {
 
   constructor(props) {
     super(props);
+    const { sidePanelInitData } = props;
     this.state = {
-      isLoading: true,
-      historyGroups: [],
-      errorMessage: '',
-      hasMore: false,
+      isLoading: sidePanelInitData.isLoading ?? true,
+      historyGroups: sidePanelInitData.historyGroups || [],
+      errorMessage: sidePanelInitData.errorMessage || '',
+      hasMore: sidePanelInitData.hasMore || false,
       isReloadingData: false,
     };
     this.currentPage = 1;
-  }
-
-  // listSdocDailyHistoryDetail
-
-  componentDidMount() {
-    this.firstLoadSdocHistory();
-  }
-
-  firstLoadSdocHistory() {
-    this.currentPage = 1;
-    seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
-      const result = res.data;
-      const resultCount = result.histories.length;
-      const historyGroups = this.formatHistories(result.histories);
-      this.setState({
-        historyGroups: this.formatHistories(result.histories),
-        hasMore: resultCount >= PER_PAGE,
-        isLoading: false,
-      }, () => {
-        if (historyGroups.length > 0) {
-          this.onSelectHistoryVersion([0, 0, 0]);
-        }
-      });
-    }).catch((error) => {
-      this.setState({isLoading: false});
-      throw Error('there has an error in server');
-    });
   }
 
   formatHistories(histories) {
@@ -66,12 +41,12 @@ class SidePanel extends Component {
       const month = momentDate.format('YYYY-MM');
       const monthItem = newHistoryGroups.find(item => item.month === month);
       if (monthItem) {
-        monthItem.children.push({ day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [ history ] });
+        monthItem.children.push({ day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [history] });
       } else {
         newHistoryGroups.push({
           month,
           children: [
-            { day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [ history ] }
+            { day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [history] }
           ]
         });
       }
@@ -94,7 +69,7 @@ class SidePanel extends Component {
       this.setState({ isReloadingData: true }, () => {
         seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
           this.updateResultState(res.data);
-          this.setState({isReloadingData: false});
+          this.setState({ isReloadingData: false });
         });
       });
     }
@@ -130,7 +105,7 @@ class SidePanel extends Component {
     const { commit_id, path } = currentItem;
     editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
-        this.setState({isLoading: true}, () => {
+        this.setState({ isLoading: true }, () => {
           this.firstLoadSdocHistory();
         });
       }
@@ -142,38 +117,10 @@ class SidePanel extends Component {
     });
   };
 
-  getLastVersion = (path, isShowChanges) => {
-    const { historyGroups } = this.state;
-    const [monthIndex, dayIndex, dailyIndex] = path;
-    const monthHistoryGroup = historyGroups[monthIndex];
-    const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
-    let lastVersion = '';
-    if (isShowChanges) {
-      if (dayHistoryGroup.showDaily) {
-        lastVersion = dayHistoryGroup.children[dailyIndex + 1];
-      }
-      if (!lastVersion) {
-        lastVersion = monthHistoryGroup.children[dayIndex + 1]?.children[0];
-      }
-      if (!lastVersion) {
-        lastVersion = historyGroups[monthIndex + 1]?.children[0]?.children[0];
-      }
-      if (monthIndex === 0 && !lastVersion) {
-        lastVersion = 'init';
-      }
-    }
-    return lastVersion;
-  };
-
   onSelectHistoryVersion = (path) => {
     const { historyGroups } = this.state;
     const { isShowChanges } = this.props;
-    const [monthIndex, dayIndex, dailyIndex] = path;
-    const monthHistoryGroup = historyGroups[monthIndex];
-    const dayHistoryGroup = monthHistoryGroup.children[dayIndex];
-    const currentVersion = dayHistoryGroup.children[dailyIndex];
-    const lastVersion = this.getLastVersion(path, isShowChanges);
-    this.props.onSelectHistoryVersion(currentVersion, lastVersion);
+    this.props.onSelectHistoryVersion(...getCurrentAndLastVersion(path, historyGroups, isShowChanges));
   };
 
   copyHistoryFile = (historyVersion) => {
@@ -297,7 +244,7 @@ class SidePanel extends Component {
       const dayIndex = historyGroups[monthIndex].children.findIndex(item => item.day === day);
       const dailyIndex = historyGroups[monthIndex].children[dayIndex].children.findIndex(item => item.date === date);
       const path = [monthIndex, dayIndex, dailyIndex];
-      lastVersion = this.getLastVersion(path, nextShowChanges);
+      lastVersion = getLastVersion(path, nextShowChanges, this.state.historyGroups);
     }
     this.props.onShowChanges(nextShowChanges, lastVersion);
   };
@@ -306,14 +253,17 @@ class SidePanel extends Component {
     const { historyGroups } = this.state;
 
     return (
-      <div className="sdoc-file-history-panel h-100 o-hidden d-flex flex-column">
+      <div className="sdoc-file-history-panel d-flex flex-column">
         <div className="sdoc-file-history-select-range">
           <div className="sdoc-file-history-select-range-title">
             {gettext('History Versions')}
           </div>
+          <div className='sdoc-side-panel-close'>
+            <i className="sf3-font sf3-font-close" onClick={this.props.onClose}></i>
+          </div>
         </div>
         <div
-          className={classnames('sdoc-file-history-versions', { 'o-hidden': historyGroups.length === 0 } )}
+          className={classnames('sdoc-file-history-versions', { 'o-hidden': historyGroups.length === 0 })}
           onScroll={this.onScrollHandler}
         >
           {this.renderHistoryVersions()}
@@ -337,6 +287,13 @@ SidePanel.propTypes = {
   currentVersion: PropTypes.object,
   onSelectHistoryVersion: PropTypes.func,
   onShowChanges: PropTypes.func,
+  sidePanelInitData: PropTypes.shape({
+    isLoading: PropTypes.bool,
+    historyGroups: PropTypes.array,
+    hasMore: PropTypes.bool,
+    errorMessage: PropTypes.string,
+  }),
+  onClose: PropTypes.func,
 };
 
 export default SidePanel;

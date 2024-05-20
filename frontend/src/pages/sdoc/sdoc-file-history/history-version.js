@@ -1,11 +1,12 @@
 import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalBody } from 'reactstrap';
 import classnames from 'classnames';
 import { gettext, filePath } from '../../../utils/constants';
 import URLDecorator from '../../../utils/url-decorator';
 import Rename from '../../../components/rename';
+import { isMobile } from '../../../utils/utils';
 
 import '../../../css/history-record-item.css';
 
@@ -20,6 +21,7 @@ class HistoryVersion extends React.Component {
       isMenuShow: false,
       isRenameShow: false,
     };
+    this.isMobile = isMobile;
   }
 
   onMouseEnter = () => {
@@ -61,7 +63,8 @@ class HistoryVersion extends React.Component {
   };
 
   toggleRename = () => {
-    this.setState({isRenameShow: !this.state.isRenameShow});
+    this.isMobile && this.setState({ isMenuShow: false });
+    this.setState({ isRenameShow: !this.state.isRenameShow });
   };
 
   onRenameConfirm = (newName) => {
@@ -118,22 +121,57 @@ class HistoryVersion extends React.Component {
           </div>
         </div>
         <div className="history-operation">
-          <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-            <DropdownToggle
-              tag='a'
-              className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isMenuShow}
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-            />
-            <DropdownMenu>
-              {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
-              <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-              {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
-              <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          {this.isMobile
+            ? (
+              <>
+                <a
+                  className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  aria-expanded={this.state.isMenuShow}
+                  onClick={this.onToggleClick}
+                />
+                <Modal
+                  className='sdoc-mobile-history-options-modal'
+                  isOpen={this.state.isMenuShow}
+                  toggle={this.onToggleClick}
+                >
+                  <ModalBody className='sdoc-operation-mobile-modal-body'>
+                    <div className='option-item'>
+                      <i className='mr-3 sf3-font sf3-font-download'></i>
+                      <a href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</a>
+                    </div>
+                    {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
+                      <div className='option-item'>
+                        <i className='mr-3 sf3-font sf3-font-copy'></i>
+                        <span href={url} onClick={this.onItemCopy}>{gettext('Copy')}</span>
+                      </div>
+                    )}
+                    <div className='option-item' onClick={this.toggleRename}>
+                      <i className='mr-3 sf3-font sf3-font-rename'></i>
+                      <span>{gettext('Rename')}</span>
+                    </div>
+                  </ModalBody>
+                </Modal>
+              </>
+            )
+            : (<Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
+              <DropdownToggle
+                tag='a'
+                className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isMenuShow}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+              />
+              <DropdownMenu>
+                {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
+                <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
+                {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
+                <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            )}
         </div>
       </li>
     );
