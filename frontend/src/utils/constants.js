@@ -142,6 +142,7 @@ export const orgEnableAdminCustomLogo = window.org ? window.org.pageOptions.orgE
 export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgEnableAdminCustomName === 'True' : false;
 export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
+export const enableSubscription = window.org ? window.org.pageOptions.enableSubscription : false;
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';
@@ -166,3 +167,6 @@ export const enableDingtalk = window.sysadmin ? window.sysadmin.pageOptions.enab
 export const enableSysAdminViewRepo = window.sysadmin ? window.sysadmin.pageOptions.enableSysAdminViewRepo : '';
 export const haveLDAP = window.sysadmin ? window.sysadmin.pageOptions.haveLDAP : '';
 export const enableShareLinkReportAbuse = window.sysadmin ? window.sysadmin.pageOptions.enable_share_link_report_abuse : '';
+
+// institution admin
+export const institutionName = window.app ? window.app.pageOptions.institutionName : '';

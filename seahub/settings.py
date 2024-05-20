@@ -279,6 +279,7 @@ INSTALLED_APPS = [
     'seahub.krb5_auth',
     'seahub.django_cas_ng',
     'seahub.seadoc',
+    'seahub.subscription',
 ]
 
 
@@ -525,13 +526,6 @@ CACHES = {
         'OPTIONS': {
             'MAX_ENTRIES': 1000000
         }
-    },
-
-    # Compatible with existing `COMPRESS_CACHE_BACKEND` setting after
-    # upgrading to django-compressor v2.2.
-    # ref: https://manual.seafile.com/deploy_pro/deploy_in_a_cluster.html
-    'django.core.cache.backends.locmem.LocMemCache': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     },
 }
 

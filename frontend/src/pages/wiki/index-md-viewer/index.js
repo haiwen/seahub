@@ -40,7 +40,8 @@ class IndexMdViewer extends React.Component {
     if (node.path) {
       this.setState({ currentPath: node.path });
     }
-    if (node.href) this.props.onLinkClick(node.href);
+    const url = new URL(node.href);
+    if (node.href) this.props.onLinkClick(url.href);
   };
 
   changeInlineNode = (item) => {

@@ -18,6 +18,8 @@
          orgEnableAdminCustomName: '{{ org_enable_admin_custom_name }}',
          orgEnableAdminInviteUser: '{{ org_enable_admin_invite_user }}',
          enableMultiADFS: '{{ enable_multi_adfs }}',
+         isOrgContext: true,
+         enableSubscription: {% if enable_subscription %} true {% else %} false {% endif %},
        }
       }
     </script>

@@ -141,7 +141,7 @@ from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
-    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail
+    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -163,7 +163,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminU
         AdminImportUsers
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, \
-        AdminOrganization, AdminSearchOrganization
+        AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
 from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
@@ -205,6 +205,7 @@ from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskSta
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesDirView, Wiki2PageContentView
+from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -591,6 +592,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
     re_path(r'^api/v2.1/admin/search-user/$', AdminSearchUser.as_view(), name='api-v2.1-admin-search-user'),
     re_path(r'^api/v2.1/admin/update-user-ccnet-email/$', AdminUpdateUserCcnetEmail.as_view(), name='api-v2.1-admin-update-user-ccnet-email'),
+    re_path(r'^api/v2.1/admin/user-list/$', AdminUserList.as_view(), name='api-v2.1-admin-user-list'),
 
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible
@@ -682,6 +684,7 @@ urlpatterns = [
 
     ## admin::organizations
     re_path(r'^api/v2.1/admin/organizations/$', AdminOrganizations.as_view(), name='api-v2.1-admin-organizations'),
+    re_path(r'^api/v2.1/admin/organizations-basic-info/$', AdminOrganizationsBaseInfo.as_view(), name='api-v2.1-admin-organizations-basic-info'),
     re_path(r'^api/v2.1/admin/search-organization/$', AdminSearchOrganization.as_view(), name='api-v2.1-admin-Search-organization'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/$', AdminOrganization.as_view(), name='api-v2.1-admin-organization'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
@@ -901,6 +904,11 @@ if getattr(settings, 'MULTI_TENANCY', False):
         path('org/', include('seahub.organizations.urls')),
     ]
 
+if getattr(settings, 'MULTI_INSTITUTION', False):
+    urlpatterns += [
+        re_path(r'^api/v2.1/institutions/', include('seahub.institutions.api_urls')),
+    ]
+
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += [
         re_path(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
@@ -1001,4 +1009,12 @@ if getattr(settings, 'CLIENT_SSO_VIA_LOCAL_BROWSER', False):
     urlpatterns += [
         re_path(r'^client-sso/(?P<token>[^/]+)/$', client_sso, name="client_sso"),
         re_path(r'^client-sso/(?P<token>[^/]+)/complete/$', client_sso_complete, name="client_sso_complete"),
+    ]
+
+if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
+    urlpatterns += [
+        re_path(r'^subscription/', include('seahub.subscription.urls')),
+        re_path(r'^api/v2.1/subscription/$', SubscriptionView.as_view(), name='api-v2.1-subscription'),
+        re_path(r'^api/v2.1/subscription/plans/$', SubscriptionPlansView.as_view(), name='api-v2.1-subscription-plans'),
+        re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
     ]
