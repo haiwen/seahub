@@ -115,11 +115,11 @@ class SidePanel extends Component {
     }
   };
 
-  onAddNewPage = async ({ name, icon, path, docUuid,successCallback, errorCallback }) => {
+  onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback }) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
-    const newPage = new Page({ id: pageId, name, icon, path,docUuid });
+    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
     this.addPage(newPage, successCallback, errorCallback);
   };
 
