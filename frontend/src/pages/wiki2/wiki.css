@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 .wiki-side-panel .panel-top {
   background: #fff;
   display: flex;
@@ -8,7 +12,8 @@
   flex: auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* for ff */
+  overflow: hidden;
+  /* for ff */
   border-right: 1px solid #eee;
 }
 
@@ -152,20 +157,20 @@ img[src=""] {
   flex: 1;
   display: flex;
   min-height: 0;
-  /* background-color: hotpink; */
 }
 
-.sdoc-wiki-scroll-container {
+.sdoc-scroll-container {
   display: flex;
   overflow: auto;
 }
 
-.sdoc-wiki-scroll-container .sdoc-article-container {
-  padding-left: 10px;
+.sdoc-scroll-container .sdoc-article-container {
+  padding-top: 0;
+  padding-bottom: 0;
   width: 100%;
 }
 
-.sdoc-wiki-scroll-container .sdoc-article-container .article .sdoc-header-2 {
+.sdoc-scroll-container .sdoc-article-container .article .sdoc-header-2 {
   border-bottom: 1px solid #ccc;
 }
 
@@ -179,14 +184,14 @@ img[src=""] {
   width: 300px;
 }
 
-.wiki-editor {
+.sdoc-editor-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.wiki-editor .wiki-editor-header {
+.sdoc-editor-container .wiki-editor-header {
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
@@ -196,18 +201,18 @@ img[src=""] {
   z-index: 1000;
 }
 
-.wiki-editor .wiki-editor-header .doc-ops {
+.sdoc-editor-container .wiki-editor-header .doc-ops {
   display: flex;
 }
 
-.wiki-editor .wiki-viewer-container {
+.sdoc-editor-container .wiki-viewer-container {
   display: flex;
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
 
-.wiki-editor .wiki-viewer-container .side-file-bar {
+.sdoc-editor-container .wiki-viewer-container .side-file-bar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -215,22 +220,20 @@ img[src=""] {
   border-right: 1px solid #e5e5e5;
 }
 
-.wiki-editor .wiki-viewer-container .side-file-bar {
+.sdoc-editor-container .wiki-viewer-container .side-file-bar {
   padding: 20px;
 }
 
-.wiki-editor .wiki-viewer-container .side-file-bar .wiki-go-lib {}
-
-.wiki-editor .wiki-viewer-container .side-file-bar .file-list .file-item {
+.sdoc-editor-container .wiki-viewer-container .side-file-bar .file-list .file-item {
   padding: 20px;
 }
 
-.wiki-editor .wiki-viewer-container .side-file-bar .file-list .file-item.active {
+.sdoc-editor-container .wiki-viewer-container .side-file-bar .file-list .file-item.active {
   background-color: #e5e5e5;
   font-weight: bold;
 }
 
-.wiki-editor .sdoc-wiki-outline-container {
+.sdoc-editor-container .sdoc-wiki-outline-container {
   width: 280px;
 }
 
@@ -266,4 +269,9 @@ img[src=""] {
   /* position: absolute; */
   min-width: 1100px;
   width: 100%;
+}
+
+.sdoc-editor-container .sdoc-editor-content .article {
+  width: 100%;
+  border: none;
 }

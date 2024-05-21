@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { WikiViewer } from '@seafile/sdoc-editor';
+import { SdocWikiViewer } from '@seafile/sdoc-editor';
 import { gettext, repoID, siteRoot, username, isEditWiki } from '../../utils/constants';
 import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import Loading from '../../components/loading';
@@ -8,7 +8,8 @@ import { Utils } from '../../utils/utils';
 // import Search from '../../components/search/search';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
-import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
+
+import './wiki.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -162,7 +163,7 @@ class MainPanel extends Component {
               />
             )} */}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <WikiViewer
+              <SdocWikiViewer
                 document={editorContent}
                 showOutline={false}
                 showToolbar={false}
