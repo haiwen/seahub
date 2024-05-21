@@ -108,8 +108,9 @@ class MainPanel extends Component {
   render() {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
-    const { content } = this.props;
+    const { content, permission } = this.props;
     const editorContent = content && JSON.parse(content);
+    const isReadOnly = permission.indexOf('w') === -1 || !window.seafile.can_edit_file;
     return (
       <div className="main-panel wiki-main-panel" style={{ flex: isEditWiki ? '1 0 76%' : '1 0 80%' }}>
         <div className="main-panel-hide hide">{this.props.content}</div>
@@ -168,6 +169,7 @@ class MainPanel extends Component {
                 showOutline={false}
                 showToolbar={false}
                 docUuid={this.state.docUuid}
+                wikiReadOnly={isReadOnly}
               />
             )}
           </div>
