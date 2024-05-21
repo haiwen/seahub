@@ -12,7 +12,6 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../dialog/rename-dirent';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-import ViewModeToolbar from './view-mode-toolbar';
 
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -356,7 +355,6 @@ class MultipleDirOperationToolbar extends React.Component {
             </ButtonGroup>
           </div>
         </div>
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}

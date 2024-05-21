@@ -32,6 +32,7 @@ const TextTranslation = {
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},
   'PROPERTIES' : {key : 'Properties', value : gettext('Properties')},
   'TAGS': {key: 'Tags', value: gettext('Tags')},
+  'TRASH': {key: 'Trash', value: gettext('Trash')},
   'ONLYOFFICE_CONVERT': {key: 'Convert with ONLYOFFICE', value: gettext('Convert with ONLYOFFICE')}
 };
 

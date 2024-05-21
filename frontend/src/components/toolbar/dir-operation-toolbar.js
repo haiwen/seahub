@@ -7,7 +7,6 @@ import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
-import ViewModeToolbar from './view-mode-toolbar';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -244,7 +243,6 @@ class DirOperationToolbar extends React.Component {
             {content}
           </div>
         )}
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile
