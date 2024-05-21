@@ -169,7 +169,7 @@ class MainPanel extends Component {
                 showOutline={false}
                 showToolbar={false}
                 docUuid={this.state.docUuid}
-                wikiReadOnly={isReadOnly}
+                isWikiReadOnly={isReadOnly}
               />
             )}
           </div>
