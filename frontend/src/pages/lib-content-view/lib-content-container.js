@@ -9,6 +9,9 @@ import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import '../../css/lib-content-view.css';
 
 const propTypes = {
+  switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
+
   pathPrefix: PropTypes.array.isRequired,
   isTreePanelShown: PropTypes.bool.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
@@ -188,6 +191,9 @@ class LibContentContainer extends React.Component {
               sortOrder={this.props.sortOrder}
               sortItems={this.props.sortItems}
               toggleTreePanel={this.props.toggleTreePanel}
+              currentMode={this.props.currentMode}
+              switchViewMode={this.props.switchViewMode}
+              isCustomPermission={this.props.isCustomPermission}
             />
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>

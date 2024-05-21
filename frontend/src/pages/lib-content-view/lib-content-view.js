@@ -2054,6 +2054,8 @@ class LibContentView extends React.Component {
             isTreePanelShown={this.state.isTreePanelShown}
             toggleTreePanel={this.toggleTreePanel}
             currentMode={this.state.currentMode}
+            switchViewMode={this.switchViewMode}
+            isCustomPermission={isCustomPermission}
             path={this.state.path}
             pathExist={this.state.pathExist}
             currentRepoInfo={this.state.currentRepoInfo}

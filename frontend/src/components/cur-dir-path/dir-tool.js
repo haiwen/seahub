@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 
@@ -12,6 +13,9 @@ const propTypes = {
   currentPath: PropTypes.string.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
 };
 
 class DirTool extends React.Component {
@@ -19,18 +23,19 @@ class DirTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isListRepoTagShow: false,
+      isRepoTagDialogOpen: false,
+      isDropdownMenuOpen: false
     };
-    this.tagsIconID = `tags-icon-${uuidv4()}`;
   }
+
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
 
   onMouseDown = (e) => {
     e.stopPropagation();
-  };
-
-  toggleRepoTag = (e) => {
-    e.stopPropagation();
-    this.setState({ isListRepoTagShow: !this.state.isListRepoTagShow });
   };
 
   hidePopover = (e) => {
@@ -41,95 +46,136 @@ class DirTool extends React.Component {
         dom = dom.parentNode;
       }
     }
-    this.setState({ isListRepoTagShow: false });
+    this.setState({isRepoTagDialogOpen: false});
   };
 
   toggleCancel = () => {
-    this.setState({ isListRepoTagShow: false });
+    this.setState({isRepoTagDialogOpen: false});
   };
 
   isMarkdownFile(filePath) {
     return Utils.getFileName(filePath).includes('.md');
   }
 
-  render() {
-    let { repoID, userPerm, currentPath } = this.props;
+  getList2 = () => {
+    const list = [];
+    const { repoID, userPerm, currentPath } = this.props;
+    const { TAGS, TRASH, HISTORY } = TextTranslation;
     if (userPerm !== 'rw') {
-      return '';
+      return list;
     }
     if (this.isMarkdownFile(currentPath)) {
-      return '';
+      return list;
     }
-    let toolbarDom = null;
-    if (Utils.getFileName(currentPath)) { // name not '' is not root path
+
+    list.push(TAGS);
+
+    if (Utils.getFileName(currentPath)) {
       let trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
-      toolbarDom = (
-        <ul className="path-toolbar">
-          <li className="toolbar-item">
-            <a
-              className="op-link sf2-icon-tag"
-              href="#"
-              id={this.tagsIconID}
-              role="button"
-              onClick={this.toggleRepoTag}
-              onMouseDown={this.onMouseDown}
-              title={gettext('Tags')}
-              aria-label={gettext('Tags')}
-            ></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
-          </li>
-        </ul>
-      );
-    } else { // currentPath === '/' is root path
+      list.push({...TRASH, href: trashUrl});
+    } else {
       let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
+      list.push({...TRASH, href: trashUrl});
+
       let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-      toolbarDom = (
-        <ul className="path-toolbar">
-          <li className="toolbar-item">
-            <a
-              className="op-link sf2-icon-tag"
-              href="#"
-              id={this.tagsIconID}
-              role="button"
-              onClick={this.toggleRepoTag}
-              onMouseDown={this.onMouseDown}
-              title={gettext('Tags')}
-              aria-label={gettext('Tags')}
-            ></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a>
-          </li>
-        </ul>
-      );
+      list.push({...HISTORY, href: historyUrl});
     }
+
+    return list;
+  };
+
+  onMenuItemClick = (item) => {
+    const { key: operation, href } = item;
+    switch (operation) {
+      case 'Properties':
+        this.props.switchViewMode('detail');
+        break;
+      case 'Tags':
+        this.setState({ isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen });
+        break;
+      case 'Trash':
+        location.href = href;
+        break;
+      case 'History':
+        location.href = href;
+        break;
+    }
+  };
+
+  getMenuList = () => {
+    const list = [];
+    const list2 = this.getList2();
+    const { PROPERTIES, } = TextTranslation;
+    if (!this.props.isCustomPermission) {
+      list.push(PROPERTIES);
+    }
+    return list.concat(list2);
+  };
+
+  onMenuItemKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(e);
+    }
+  };
+
+  render() {
+    let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
+    const menuItems = this.getMenuList();
+    const { isDropdownMenuOpen } = this.state;
+    const { repoID } = this.props;
     return (
-      <>
-        {toolbarDom}
-        {this.state.isListRepoTagShow &&
-          <SeahubPopover
-            popoverClassName="list-tag-popover"
-            target={this.tagsIconID}
-            hideSeahubPopover={this.hidePopover}
-            hideSeahubPopoverWithEsc={this.hidePopover}
-            canHideSeahubPopover={true}
-            boundariesElement={document.body}
-            placement={'bottom-end'}
-          >
-            <ListTagPopover
-              repoID={repoID}
-              onListTagCancel={this.toggleCancel}
-            />
-          </SeahubPopover>
+      <React.Fragment>
+        <div>
+          <div className="view-mode btn-group">
+            <button className={`${baseClass} sf3-font-list-view sf3-font ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.props.switchViewMode.bind(this, 'list')}></button>
+            <button className={`${baseClass} sf3-font-grid-view sf3-font ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.props.switchViewMode.bind(this, 'grid')}></button>
+          </div>
+          {menuItems.length > 0 &&
+          <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+            <DropdownToggle
+              id="cur-folder-more-op-toggle"
+              className={'sf3-font-more sf3-font'}
+              data-toggle="dropdown"
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              aria-expanded={isDropdownMenuOpen}
+              onKeyDown={this.onDropdownToggleKeyDown}
+            >
+            </DropdownToggle>
+            <DropdownMenu right={true}>
+              {menuItems.map((menuItem, index) => {
+                if (menuItem === 'Divider') {
+                  return <DropdownItem key={index} divider />;
+                } else {
+                  return (
+                    <DropdownItem key={index} onClick={this.onMenuItemClick.bind(this, menuItem)} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
+                  );
+                }
+              })}
+            </DropdownMenu>
+          </Dropdown>
+          }
+        </div>
+        {this.state.isRepoTagDialogOpen &&
+        <SeahubPopover
+          popoverClassName="list-tag-popover"
+          target="cur-folder-more-op-toggle"
+          hideSeahubPopover={this.hidePopover}
+          hideSeahubPopoverWithEsc={this.hidePopover}
+          canHideSeahubPopover={true}
+          boundariesElement={document.body}
+          placement={'bottom-end'}
+        >
+          <ListTagPopover
+            repoID={repoID}
+            onListTagCancel={this.toggleCancel}
+          />
+        </SeahubPopover>
         }
-      </>
+      </React.Fragment>
     );
   }
+
 }
 
 DirTool.propTypes = propTypes;

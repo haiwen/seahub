@@ -51,29 +51,35 @@
 /* end file-operation toolbar */
 
 /* begin view-mode toolbar */
-.detail-btn button,
 .sf-view-mode-btn {
+  width: 44px;
+  height: 32px;
   padding: 0;
-  height: 30px;
-  min-width: 2rem;
-  color: #aaa;
-  background-color: #fff;
+  background-color: #e5e6e7;
+  color: #444;
+  font-size: 14px;
+  line-height: 30px;
   border: 1px solid #ccc;
-  line-height: 29px;
-  font-size: 18px;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
-.detail-btn button {
-  font-size: 15px;
-  padding-top: 1px;
+.sf-view-mode-btn:hover {
+  background-color: #d2d3d3;
 }
 
 .sf-view-mode-btn.current-mode {
-  background-color: #ccc !important;
-  color: #fff !important;
+  background-color: #fff;
 }
 /* end view-mode toolbar */
+
+#cur-folder-more-op-toggle {
+  color: #444;
+  font-size: 14px;
+  height: 32px;
+  padding: 0;
+  line-height: 30px;
+  margin-left: 10px;
+}
 
 /* begin common-toolbar */
 .common-toolbar {

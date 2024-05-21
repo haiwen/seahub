@@ -2,11 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MultipleDirOperationToolbar from '../../components/toolbar/multiple-dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
@@ -55,9 +53,6 @@ class LibContentToolbar extends React.Component {
 
   render() {
 
-    const { userPerm } = this.props;
-    const { isCustomPermission } = Utils.getUserPermission(userPerm);
-
     if (this.props.isViewFile) {
       return (
         <Fragment>
@@ -76,7 +71,6 @@ class LibContentToolbar extends React.Component {
               showShareBtn={this.props.showShareBtn}
               repoTags={this.props.repoTags}
             />
-            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />
           </div>
           <CommonToolbar
             isLibView={true}

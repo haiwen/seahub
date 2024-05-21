@@ -22,6 +22,9 @@ const propTypes = {
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
 };
 
 class CurDirPath extends React.Component {
@@ -62,6 +65,9 @@ class CurDirPath extends React.Component {
           currentPath={this.props.currentPath}
           updateUsedRepoTags={this.props.updateUsedRepoTags}
           onDeleteRepoTag={this.props.onDeleteRepoTag}
+          currentMode={this.props.currentMode}
+          switchViewMode={this.props.switchViewMode}
+          isCustomPermission={this.props.isCustomPermission}
         />}
         {!isDesktop && this.props.direntList.length > 0 &&
         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
