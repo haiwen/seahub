@@ -53,7 +53,7 @@ class SidePanel extends Component {
   renderIndexView = () => {
     return (
       <div className="wiki-pages-container">
-        <div style={{marginTop: '2px'}}></div>
+        <div style={{ marginTop: '2px' }}></div>
         <IndexMdViewer
           indexContent={this.props.indexContent}
           onLinkClick={this.props.onLinkClick}
@@ -115,11 +115,11 @@ class SidePanel extends Component {
     }
   };
 
-  onAddNewPage = async ({name, icon, path, successCallback, errorCallback}) => {
+  onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback }) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
-    const newPage = new Page({ id: pageId, name, icon, path});
+    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
     this.addPage(newPage, successCallback, errorCallback);
   };
 
@@ -392,12 +392,12 @@ class SidePanel extends Component {
 
   render() {
     return (
-      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
+      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '' : 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           <h4 className="ml-0 mb-0 text-truncate" title={repoName}>{repoName}</h4>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
-          {this.renderContent() }
+          {this.renderContent()}
         </div>
       </div>
     );
