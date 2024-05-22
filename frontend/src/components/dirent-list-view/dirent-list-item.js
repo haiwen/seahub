@@ -644,7 +644,6 @@ class DirentListItem extends React.Component {
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -668,7 +667,6 @@ class DirentListItem extends React.Component {
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}

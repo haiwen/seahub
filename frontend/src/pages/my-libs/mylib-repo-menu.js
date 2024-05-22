@@ -205,7 +205,7 @@ class MylibRepoMenu extends React.Component {
             tag="i"
             role="button"
             tabIndex="0"
-            className="sf-dropdown-toggle sf2-icon-caret-down"
+            className="sf-dropdown-toggle sf3-font-more sf3-font"
             title={gettext('More operations')}
             aria-label={gettext('More operations')}
             onClick={this.onDropdownToggleClick}

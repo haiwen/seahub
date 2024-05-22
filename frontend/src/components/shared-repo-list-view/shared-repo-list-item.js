@@ -509,7 +509,10 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
-              className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+              tag="i"
+              role="button"
+              tabIndex="0"
+              className="sf-dropdown-toggle sf3-font-more sf3-font"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -569,7 +572,10 @@ class SharedRepoListItem extends React.Component {
                 return (
                   <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
                     <DropdownToggle
-                      className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+                      tag="i"
+                      role="button"
+                      tabIndex="0"
+                      className="sf-dropdown-toggle sf3-font-more sf3-font"
                       title={gettext('More operations')}
                       aria-label={gettext('More operations')}
                       data-toggle="dropdown"
