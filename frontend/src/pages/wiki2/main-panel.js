@@ -107,8 +107,8 @@ class MainPanel extends Component {
 
   render() {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-    const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
-    const { content, permission } = this.props;
+    const { content, permission, pathExist, isDataLoading, isViewFile } = this.props;
+    const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const editorContent = content && JSON.parse(content);
     const isReadOnly = permission.indexOf('w') === -1 || !window.seafile.can_edit_file;
     return (

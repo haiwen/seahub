@@ -211,10 +211,7 @@ class Wiki extends Component {
   showFile = (filePath) => {
     this.setState({
       isDataLoading: true,
-      isViewFile: true,
-      path: filePath,
     });
-
     this.removePythonWrapper();
     wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
       let data = res.data;
@@ -228,6 +225,8 @@ class Wiki extends Component {
         can_edit_file: data.can_edit_file,
         seadoc_access_token: data.seadoc_access_token,
         assets_url: data.assets_url,
+        isViewFile: true,
+        path: filePath,
       });
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
