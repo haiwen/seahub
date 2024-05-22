@@ -34,10 +34,6 @@ class DirTool extends React.Component {
     });
   };
 
-  onMouseDown = (e) => {
-    e.stopPropagation();
-  };
-
   hidePopover = (e) => {
     if (e) {
       let dom = e.target;
@@ -85,13 +81,13 @@ class DirTool extends React.Component {
   };
 
   onMenuItemClick = (item) => {
-    const { key: operation, href } = item;
-    switch (operation) {
+    const { key, href } = item;
+    switch (key) {
       case 'Properties':
         this.props.switchViewMode('detail');
         break;
       case 'Tags':
-        this.setState({ isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen });
+        this.setState({isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen});
         break;
       case 'Trash':
         location.href = href;
@@ -112,9 +108,9 @@ class DirTool extends React.Component {
     return list.concat(list2);
   };
 
-  onMenuItemKeyDown = (e) => {
+  onMenuItemKeyDown = (e, item) => {
     if (e.key == 'Enter' || e.key == 'Space') {
-      this.onMenuItemClick(e);
+      this.onMenuItemClick(item);
     }
   };
 
@@ -125,8 +121,8 @@ class DirTool extends React.Component {
     const { repoID } = this.props;
     return (
       <React.Fragment>
-        <div>
-          <div className="view-mode btn-group">
+        <div className="d-flex">
+          <div className="view-modes">
             <button className={`${baseClass} sf3-font-list-view sf3-font ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.props.switchViewMode.bind(this, 'list')}></button>
             <button className={`${baseClass} sf3-font-grid-view sf3-font ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.props.switchViewMode.bind(this, 'grid')}></button>
           </div>
@@ -148,7 +144,7 @@ class DirTool extends React.Component {
                   return <DropdownItem key={index} divider />;
                 } else {
                   return (
-                    <DropdownItem key={index} onClick={this.onMenuItemClick.bind(this, menuItem)} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
+                    <DropdownItem key={index} onClick={this.onMenuItemClick.bind(this, menuItem)} onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}>{menuItem.value}</DropdownItem>
                   );
                 }
               })}
