@@ -38,7 +38,8 @@ def wiki_view(request, wiki_id, file_path):
 
     # perm check
     req_user = request.user.username
-    if not can_edit_wiki(wiki, req_user):
+    permission = check_folder_permission(request, wiki.repo_id, '/')
+    if not permission:
         return render_permission_error(request, 'Permission denied.')
 
     is_dir = None
@@ -55,16 +56,9 @@ def wiki_view(request, wiki_id, file_path):
     last_modified = 0
     assets_url = ''
     seadoc_access_token = ''
-    can_edit_file = False
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     repo = seafile_api.get_repo(wiki.repo_id)
     if is_dir is False and file_type == SEADOC:
-        parent_dir = os.path.dirname(file_path)
-
-        permission = check_folder_permission(request, wiki.repo_id, parent_dir)
-        if not permission:
-            return render_permission_error(request, 'Permission denied.')
-
         file_uuid = get_seadoc_file_uuid(repo, file_path)
         assets_url = '/api/v2.1/seadoc/download-image/' + file_uuid
         try:
@@ -74,43 +68,14 @@ def wiki_view(request, wiki_id, file_path):
         except Exception as e:
             logger.warning(e)
 
-        # check file lock info
-        try:
-            is_locked, locked_by_me = check_file_lock(wiki.repo_id, file_path, req_user)
-        except Exception as e:
-            logger.error(e)
-            is_locked = False
-            locked_by_me = False
-
-        locked_by_online_office = if_locked_by_online_office(wiki.repo_id, file_path)
-
-        can_edit_file = True
-        if parse_repo_perm(permission).can_edit_on_web is False:
-            can_edit_file = False
-        elif is_locked and not locked_by_me:
-            can_edit_file = False
-
-        if is_pro_version() and can_edit_file:
-            try:
-                if not is_locked:
-                    seafile_api.lock_file(wiki.repo_id, file_path, ONLINE_OFFICE_LOCK_OWNER,
-                                          int(time.time()) + 40 * 60)
-                elif locked_by_online_office:
-                    seafile_api.refresh_file_lock(wiki.repo_id, file_path,
-                                                  int(time.time()) + 40 * 60)
-            except Exception as e:
-                logger.error(e)
-
-        seadoc_perm = 'rw' if can_edit_file else 'r'
         filename = os.path.basename(file_path)
-        seadoc_access_token = gen_seadoc_access_token(file_uuid, filename, req_user, permission=seadoc_perm)
+        seadoc_access_token = gen_seadoc_access_token(file_uuid, filename, req_user, permission=permission)
 
     last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',
-        "user_can_write": True,
         "file_path": file_path,
         "filename": os.path.splitext(os.path.basename(file_path))[0],
         "outlines": outlines,
@@ -121,5 +86,5 @@ def wiki_view(request, wiki_id, file_path):
         "assets_url": assets_url,
         "seadoc_server_url": SEADOC_SERVER_URL,
         "seadoc_access_token": seadoc_access_token,
-        "can_edit_file": can_edit_file,
+        "permission": permission,
     })

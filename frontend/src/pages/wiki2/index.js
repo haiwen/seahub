@@ -4,7 +4,7 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
-import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isEditWiki, gettext } from '../../utils/constants';
+import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isWiki2, gettext } from '../../utils/constants';
 import Dirent from '../../models/dirent';
 import WikiConfig from './models/wiki-config';
 import TreeNode from '../../components/tree-view/tree-node';
@@ -46,7 +46,6 @@ class Wiki extends Component {
       currentPageId: '',
       config: new WikiConfig({}),
       repoId: '',
-      can_edit_file: false,
       seadoc_access_token: '',
       docUuid: '',
       assets_url: '',
@@ -78,7 +77,7 @@ class Wiki extends Component {
   }
 
   handlePath = () => {
-    return isEditWiki ? 'wikis/' : 'published/';
+    return isWiki2 ? 'wikis/' : 'published/';
   };
 
   getWikiConfig = () => {
@@ -222,7 +221,6 @@ class Wiki extends Component {
         permission: data.permission,
         lastModified: moment.unix(data.last_modified).fromNow(),
         latestContributor: data.latest_contributor,
-        can_edit_file: data.can_edit_file,
         seadoc_access_token: data.seadoc_access_token,
         assets_url: data.assets_url,
         isViewFile: true,
@@ -581,7 +579,7 @@ class Wiki extends Component {
   render() {
     return (
       <div id="main" className="wiki-main">
-        {/* {isEditWiki &&
+        {/* {isWiki2 &&
           <WikiLeftBar
             config={this.state.config}
             repoId={this.state.repoId}
@@ -618,7 +616,6 @@ class Wiki extends Component {
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-          can_edit_file={this.state.can_edit_file}
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
         />

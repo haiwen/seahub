@@ -46,13 +46,12 @@
             repoId: "{{ wiki.repo_id }}",
             repoName: "{{ wiki.name }}",
             initial_path: "{{ file_path|escapejs }}",
-            permission: "{{ user_can_write }}",
             isDir: "{{ is_dir }}",
-            isEditWiki: true,
+            isWiki2: true,
             assetsUrl: "{{ assets_url }}",
             seadocServerUrl: "{{ seadoc_server_url }}",
             seadocAccessToken: "{{ seadoc_access_token }}",
-            canEditFile: "{{ can_edit_file }}"
+            permission: "{{ permission }}",
         }
     };
 </script>
