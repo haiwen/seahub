@@ -202,7 +202,7 @@ class Item extends Component {
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
           <td>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
         </tr>
         {isDeleteDialogOpen &&

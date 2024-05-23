@@ -171,7 +171,7 @@ class Item extends Component {
           <td>{Utils.bytesToSize(repo.size)}</td>
           <td><Link to={`${siteRoot}org/useradmin/info/${encodeURIComponent(repo.shared_by)}/`}>{repo.shared_by_name}</Link></td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
+            <a href="#" className={`action-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
           </td>
         </tr>
         {isDeleteRepoDialogOpen && (

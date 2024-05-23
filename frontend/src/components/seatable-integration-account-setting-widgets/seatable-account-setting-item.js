@@ -59,7 +59,7 @@ class SeatableAccountItem extends Component {
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-            <i className="sf2-icon-delete" style={{color: '#999'}}></i>
+            <i className="sf3-font-delete1 sf3-font" style={{color: '#999'}}></i>
           </span>
         </td>
         {isShowDialog &&

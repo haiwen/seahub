@@ -326,7 +326,7 @@ class MultipleDirOperationToolbar extends React.Component {
                 <Fragment>
                   {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
                   {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
-                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
                   {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>}
                 </Fragment>
               )}
@@ -334,7 +334,7 @@ class MultipleDirOperationToolbar extends React.Component {
                 <Fragment>
                   {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
                   {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
-                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
                 </Fragment>
               )}
               {userPerm === 'r' && (

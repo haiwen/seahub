@@ -133,7 +133,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    let opClasses = 'sf2-icon-delete unlink-device action-icon';
+    let opClasses = 'sf3-font-delete1 sf3-font unlink-device action-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
 
     const desktopItem = (
