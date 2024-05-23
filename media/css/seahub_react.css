@@ -355,12 +355,12 @@ a, a:hover { color: #ec8000; }
 }
 
 .op-icon {
-    color: #ff9800;
+    color: #999;
 }
 
 .op-icon:focus,
 .op-icon:hover {
-    color: #d98100;
+    color: #333;
     text-decoration: none;
 }
 
