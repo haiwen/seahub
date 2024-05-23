@@ -195,7 +195,12 @@ a, a:hover { color: #ec8000; }
     font-size: 0.85rem;
     line-height: 1;
     cursor: pointer;
-    color: #888;
+    color: #999;
+}
+
+.sf-dropdown-toggle:focus,
+.sf-dropdown-toggle:hover {
+    color: #333;
 }
 
 .user-select-none {
