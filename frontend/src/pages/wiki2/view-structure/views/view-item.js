@@ -7,6 +7,7 @@ import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from './delete-dialog';
 import { DRAGGED_FOLDER_MODE, DRAGGED_VIEW_MODE } from '../constant';
 import Icon from '../../../../components/icon';
+import NavItemIcon from '../nav-item-icon';
 
 const dragSource = {
   beginDrag: props => {
@@ -217,8 +218,9 @@ class ViewItem extends Component {
       viewCanDrop = isOverView && !isDragging;
     }
     let viewEditorId = `view-editor-${view.id}`;
+    let fn = isEditMode ? connectDragSource : (argu) => {argu;};
 
-    return connectDropTarget(
+    return fn(connectDropTarget(
       connectDragPreview(
         <div
           className={classnames('view-item', 'view',
@@ -233,17 +235,9 @@ class ViewItem extends Component {
           id={viewEditorId}
         >
           <div className="view-item-main" onClick={isShowViewEditor ? () => {} : this.props.onSelectView}>
-            {(isEditMode && !isSpecialInstance) ?
-              connectDragSource(
-                <div className="rdg-drag-handle">
-                  <Icon symbol={'drag'}/>
-                </div>
-              )
-              :
-              <div className="rdg-drag-handle"></div>
-            }
             <div className='view-content' style={foldersStr ? { marginLeft: `${(foldersStr.split('-').length) * 24}px` } : {}}>
-              {this.renderIcon(view.icon)}
+              <NavItemIcon symbol={'file'} disable={true} />
+              {/* {this.renderIcon(view.icon)} */}
               <span className="view-title text-truncate" title={view.name}>{view.name}</span>
               {isShowViewEditor && (
                 <ViewEditPopover
@@ -290,7 +284,7 @@ class ViewItem extends Component {
           }
         </div>
       )
-    );
+    ));
   }
 }
 

@@ -1,0 +1,46 @@
+.wiki2-side-panel {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #F7F7F5;;
+  border-right: 1px solid #F1F1EF;
+}
+
+.wiki2-side-panel .wiki2-side-panel-top {
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 44px;
+}
+
+.wiki2-side-panel .wiki2-side-nav {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.wiki2-side-panel .wiki2-side-nav .wiki2-pages-container {
+  flex: 1;
+  overflow: hidden;
+  padding: 8px;
+  padding-top: 10px;
+}
+
+.wiki2-side-panel .wiki2-side-nav .wiki2-pages-container:hover {
+  overflow: auto;
+}
+
+.wiki2-side-panel .wiki2-side-nav .wiki2-pages-container .tree-view {
+  margin-left: -10px;
+  margin-top: 14px;
+  padding-left: 0;
+}
+
+@media (max-width: 767px) {
+  .wiki2-side-panel {
+    z-index: 1051;
+  }
+}

@@ -11,9 +11,6 @@ import { repoID } from '../../../utils/constants';
 
 import '../css/view-structure.css';
 
-export const FOLDER = 'folder';
-export const PAGE = 'page';
-
 class ViewStructure extends Component {
 
   static propTypes = {

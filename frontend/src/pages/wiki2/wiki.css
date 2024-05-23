@@ -2,33 +2,6 @@ body {
   overflow: hidden;
 }
 
-.wiki-side-panel .panel-top {
-  background: #fff;
-  display: flex;
-  align-items: center;
-}
-
-.wiki-side-nav {
-  flex: auto;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  /* for ff */
-  border-right: 1px solid #eee;
-}
-
-.wiki-pages-heading {
-  position: relative;
-  font-size: 1rem;
-  font-weight: normal;
-  padding: 0.5rem 0 0.5rem 2rem;
-  border-bottom: 1px solid #e8e8e8;
-  line-height: 1.5;
-  height: 40px;
-  background-color: #f9f9f9;
-  margin-bottom: 0;
-}
-
 .heading-icon {
   position: absolute;
   right: 1rem;
@@ -37,49 +10,25 @@ body {
   font-size: 0.8125rem;
 }
 
-.wiki-pages-container {
-  flex: 1;
-  overflow: hidden;
-  padding-bottom: 10px;
-}
-
-.wiki-pages-container:hover {
-  overflow: auto;
-}
-
-.wiki-pages-container .tree-view {
-  margin-left: -10px;
-  margin-top: 14px;
-  padding-left: 0;
-}
-
 img[src=""] {
   opacity: 0;
 }
 
-.wiki-side-panel {
-  flex: 0 0 20%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-@media (max-width: 767px) {
-  .wiki-side-panel {
-    z-index: 1051;
-  }
-}
-
-.wiki-main-panel {
-  flex: 1 0 80%;
+.wiki2-main-panel {
+  width: calc(100% - 300px);
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
 }
 
-.wiki-main-panel .main-panel-north {
-  background-color: #fff;
+.wiki2-main-panel .wiki2-main-panel-north {
+  height: 44px;
+  position: relative;
+  padding: 0.5rem 1rem;
+  display: flex;
+  z-index: 100;
+  justify-content: space-between;
 }
 
 .cur-view-content .wiki-page-container {
@@ -114,7 +63,7 @@ img[src=""] {
 
 
 /* reset article h1 */
-.wiki-main-panel .article h1 {
+.wiki2-main-panel .article h1 {
   margin-top: 0;
 }
 
@@ -278,4 +227,5 @@ img[src=""] {
   width: 100%;
   box-shadow: none;
   border: none;
+  padding: 52px 142px 0;
 }

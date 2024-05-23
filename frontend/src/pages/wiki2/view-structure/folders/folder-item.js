@@ -5,9 +5,8 @@ import FolderOperationDropdownMenu from './folder-operation-dropdownmenu';
 import ViewItem from '../views/view-item';
 import DraggedFolderItem from './dragged-folder-item';
 import ViewEditPopover from '../../view-structure/views/view-edit-popover';
-import Icon from '../../../../components/icon';
-
-const FOLDER = 'folder';
+import { FOLDER } from '../../constant';
+import NavItemIcon from '../nav-item-icon';
 
 class FolderItem extends Component {
 
@@ -18,6 +17,7 @@ class FolderItem extends Component {
       isEditing: false,
       icon: icon || '',
       name: name || '',
+      isMouseEnter: false,
     };
   }
 
@@ -178,43 +178,49 @@ class FolderItem extends Component {
     return height;
   };
 
+  onMouseEnter = () => {
+    this.setState({ isMouseEnter: true });
+  };
+
+  onMouseLeave = () => {
+    this.setState({ isMouseEnter: false });
+  };
+
   render() {
     const {
       connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop,
       isEditMode, folder, tableGridsLength, id_view_map, isOnlyOneView, layerDragProps,
     } = this.props;
     const { isEditing } = this.state;
-    const { id: folderId, name, children, icon } = folder;
+    const { id: folderId, name, children } = folder;
     const folded = this.props.getFolderState(folderId);
     let viewEditorId = `folder-item-${folderId}`;
+    let fn = isEditMode ? connectDragSource : (argu) => {argu;};
     return (
       <div
         className={classnames('view-folder', { 'readonly': !isEditMode })}
         ref={ref => this.foldRef = ref}
         onClick={this.onToggleExpandFolder}
       >
-        {connectDropTarget(
+        {fn(connectDropTarget(
           connectDragPreview(
             <div
               className={this.getFolderClassName(layerDragProps, isOver && canDrop)}
               ref={ref => this.foldWrapprRef = ref}
+              onMouseEnter={this.onMouseEnter}
+              onMouseLeave={this.onMouseLeave}
             >
               <div className='folder-main'>
-                {isEditMode ?
-                  connectDragSource(
-                    <div className="rdg-drag-handle">
-                      <Icon symbol={'drag'}/>
-                    </div>
-                  )
-                  :
-                  <div className="rdg-drag-handle"></div>
-                }
                 <div
                   className='folder-content'
                   style={{ marginLeft: `${(this.props.foldersStr.split('-').length - 1) * 16}px` }}
                   id={viewEditorId}
                 >
-                  {icon && <svg className="mr-2 svg-item"><use xlinkHref={`#${icon}`}/></svg>}
+                  {this.state.isMouseEnter ?
+                    <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
+                    :
+                    <NavItemIcon symbol={'wiki-folder'} disable={true} />
+                  }
                   <span className='folder-name text-truncate' title={name}>{name}</span>
                   {isEditing &&
                     <ViewEditPopover
@@ -237,10 +243,10 @@ class FolderItem extends Component {
                   folderId={folderId}
                 />
               }
-              <Icon className="icon-expand-folder" symbol={folded ? 'left-slide' : 'drop-down'}/>
             </div>
           )
-        )}
+        ))
+        }
         <div
           className="view-folder-children"
           style={{ height: this.getFolderChildrenHeight() }}
