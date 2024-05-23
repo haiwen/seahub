@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, repoID, isEditWiki } from '../../utils/constants';
+import { gettext, repoID, isWiki2 } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 // import TreeView from '../../components/tree-view/tree-view';
@@ -75,7 +75,7 @@ class SidePanel extends Component {
             onNodeExpanded={this.props.onNodeExpanded}
           />
         )} */}
-        {isEditWiki &&
+        {isWiki2 &&
           <ViewStructureFooter
             onToggleAddView={this.openAddPageDialog}
             onToggleAddFolder={this.onToggleAddFolder}
@@ -341,7 +341,7 @@ class SidePanel extends Component {
     return (
       <div className="wiki-pages-container">
         <ViewStructure
-          isEditMode={isEditWiki}
+          isEditMode={isWiki2}
           navigation={navigation}
           views={pages}
           onToggleAddView={this.openAddPageDialog}

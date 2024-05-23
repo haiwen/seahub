@@ -342,9 +342,7 @@ class Wiki2PageContentView(APIView):
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = os.path.dirname(path)
-        permission = check_folder_permission(request, wiki.repo_id, parent_dir)
-
+        permission = check_folder_permission(request, wiki.repo_id, '/')
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -393,37 +391,7 @@ class Wiki2PageContentView(APIView):
             latest_contributor, last_modified = None, 0
 
         assets_url = '/api/v2.1/seadoc/download-image/' + file_uuid
-
-        # check file lock info
-        try:
-            is_locked, locked_by_me = check_file_lock(wiki.repo_id, path, request.user.username)
-        except Exception as e:
-            logger.error(e)
-            is_locked = False
-            locked_by_me = False
-
-        locked_by_online_office = if_locked_by_online_office(wiki.repo_id, path)
-
-        can_edit_file = True
-        if parse_repo_perm(permission).can_edit_on_web is False:
-            can_edit_file = False
-        elif is_locked and not locked_by_me:
-            can_edit_file = False
-
-        if is_pro_version() and can_edit_file:
-            try:
-                if not is_locked:
-                    seafile_api.lock_file(wiki.repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
-                                          int(time.time()) + 40 * 60)
-                elif locked_by_online_office:
-                    seafile_api.refresh_file_lock(wiki.repo_id, path,
-                                                  int(time.time()) + 40 * 60)
-            except Exception as e:
-                logger.error(e)
-
-        seadoc_perm = 'rw' if can_edit_file else 'r'
-        filename = os.path.basename(path)
-        seadoc_access_token = gen_seadoc_access_token(file_uuid, filename, request.user.username, permission=seadoc_perm)
+        seadoc_access_token = gen_seadoc_access_token(file_uuid, filename, request.user.username, permission=permission)
 
         return Response({
             "content": content,
@@ -432,6 +400,5 @@ class Wiki2PageContentView(APIView):
             "permission": permission,
             "seadoc_server_url": SEADOC_SERVER_URL,
             "seadoc_access_token": seadoc_access_token,
-            "can_edit_file": can_edit_file,
             "assets_url": assets_url,
         })

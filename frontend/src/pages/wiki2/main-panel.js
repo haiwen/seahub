@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiViewer } from '@seafile/sdoc-editor';
-import { gettext, repoID, siteRoot, username, isEditWiki } from '../../utils/constants';
+import { gettext, repoID, siteRoot, username, isWiki2 } from '../../utils/constants';
 import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
@@ -24,7 +24,6 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  can_edit_file: PropTypes.bool,
   seadoc_access_token: PropTypes.string,
   assets_url: PropTypes.string,
 };
@@ -87,7 +86,7 @@ class MainPanel extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    const { can_edit_file, seadoc_access_token } = props;
+    const { seadoc_access_token } = props;
     const config = window.app.config;
     const pageOptions = window.app.pageOptions;
     const { assetsUrl, seadocServerUrl: sdocServer, } = window.wiki.config;
@@ -97,7 +96,6 @@ class MainPanel extends Component {
       ...pageOptions,
       sdocServer,
       assetsUrl: assetsUrl || props.assets_url,
-      can_edit_file,
       accessToken: seadoc_access_token,
       serviceUrl: config.serviceURL,
       assets_url: config.assetsUrl,
@@ -110,9 +108,9 @@ class MainPanel extends Component {
     const { content, permission, pathExist, isDataLoading, isViewFile } = this.props;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const editorContent = content && JSON.parse(content);
-    const isReadOnly = permission.indexOf('w') === -1 || !window.seafile.can_edit_file;
+    const isReadOnly = !(permission === 'rw');
     return (
-      <div className="main-panel wiki-main-panel" style={{ flex: isEditWiki ? '1 0 76%' : '1 0 80%' }}>
+      <div className="main-panel wiki-main-panel" style={{ flex: isWiki2 ? '1 0 76%' : '1 0 80%' }}>
         <div className="main-panel-hide hide">{this.props.content}</div>
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&
