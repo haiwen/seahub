@@ -167,7 +167,7 @@ class Item extends Component {
           <td>{Utils.bytesToSize(repo.size)}</td>
           <td title={moment(repo.last_modified).format('LLLL')}>{moment(repo.last_modified).format('YYYY-MM-DD')}</td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
+            <a href="#" className={`action-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
           </td>
         </tr>
         {isDeleteRepoDialogOpen && (

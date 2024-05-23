@@ -20,7 +20,7 @@ class ItemDropdownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
-    toggleClass: 'sf2-icon-caret-down'
+    toggleClass: 'sf3-font-more sf3-font'
   };
 
   constructor(props) {

@@ -296,7 +296,7 @@ class Item extends Component {
                 tag="i"
                 role="button"
                 tabIndex="0"
-                className={`sf-dropdown-toggle sf2-icon-caret-down${iconVisibility}`}
+                className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"

@@ -148,7 +148,7 @@ class Item extends Component {
             <span title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
           </td>
           <td>
-            <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
+            <a href="#" className={`sf3-font-delete1 sf3-font action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
           </td>
         </tr>
         {isUnlinkDeviceDialogOpen &&

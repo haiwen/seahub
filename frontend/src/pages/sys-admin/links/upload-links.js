@@ -133,7 +133,7 @@ class Item extends Component {
   render() {
     let { isOpIconShown } = this.state;
     let { item } = this.props;
-    let deleteIcon = `action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`;
+    let deleteIcon = `action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`;
     return (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>

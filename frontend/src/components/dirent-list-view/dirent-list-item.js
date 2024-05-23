@@ -640,11 +640,10 @@ class DirentListItem extends React.Component {
                   <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -664,11 +663,10 @@ class DirentListItem extends React.Component {
                   <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}

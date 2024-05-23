@@ -352,7 +352,7 @@ class MylibRepoListItem extends React.Component {
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div>
               <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
-              <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+              <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
               <MylibRepoMenu
                 isPC={true}
                 repo={this.props.repo}

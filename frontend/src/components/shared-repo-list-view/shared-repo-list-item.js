@@ -499,7 +499,7 @@ class SharedRepoListItem extends React.Component {
     }
     const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
+    const deleteOperation  = <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
 
     if (this.isDeparementOnwerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
@@ -509,7 +509,10 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
-              className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+              tag="i"
+              role="button"
+              tabIndex="0"
+              className="sf-dropdown-toggle sf3-font-more sf3-font"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -569,7 +572,10 @@ class SharedRepoListItem extends React.Component {
                 return (
                   <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
                     <DropdownToggle
-                      className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+                      tag="i"
+                      role="button"
+                      tabIndex="0"
+                      className="sf-dropdown-toggle sf3-font-more sf3-font"
                       title={gettext('More operations')}
                       aria-label={gettext('More operations')}
                       data-toggle="dropdown"

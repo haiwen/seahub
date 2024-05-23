@@ -114,7 +114,7 @@ class Item extends Component {
             }
           </td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
         </tr>
         {isDeleteDialogOpen &&
