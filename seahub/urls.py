@@ -123,6 +123,7 @@ from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadL
 from seahub.api2.endpoints.extended_properties import ExtendedPropertiesView, ApplyFolderExtendedPropertiesView
 
 # Admin
+from seahub.api2.endpoints.admin.logs_export import SysLogsExport, FileLogsExportStatus, sys_log_export_excel
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
 from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
@@ -900,12 +901,17 @@ if is_pro_version():
 
         re_path(r'^api/v2.1/admin/logs/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-logs-file-audit'),
         path('sys/log/fileaudit/export-excel/', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
-
         re_path(r'^api/v2.1/admin/logs/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-logs-file-update'),
         path('sys/log/fileupdate/export-excel/', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
 
         re_path(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
         path('sys/log/permaudit/export-excel/', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
+
+        re_path(r'^api/v2.1/admin/logs/export-excel/$', SysLogsExport.as_view(), name='api-v2.1-admin-logs-export-excel'),
+        re_path(r'^api/v2.1/query-export-status/$', FileLogsExportStatus.as_view(), name='api-v2.1-query-export-status'),
+        path('sys/log/export-excel/', sys_log_export_excel, name='sys_log_export_excel'),
+
+
     ]
 
 if getattr(settings, 'MULTI_TENANCY', False):

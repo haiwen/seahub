@@ -8,9 +8,9 @@ from django.utils.translation import gettext as _
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.exceptions import ValidationError
-
 from seahub.api2.endpoints.utils import check_time_period_valid, \
     get_log_events_by_type_and_time
+
 
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
