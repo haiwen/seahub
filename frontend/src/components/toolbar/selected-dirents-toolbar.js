@@ -337,49 +337,53 @@ class MultipleDirOperationToolbar extends React.Component {
       <Fragment>
         <ButtonGroup className="">
           <Fragment>
-            {canModify && <Button
-              className="op-btn selected-dirent-op-btn"
-              onClick={this.onMoveToggle}
-            >
-              <i
-                className="selected-dirent-op-btn-icon sf3-font-move1 sf3-font"
-                aria-hidden={true}
-              ></i>
-              <span className="selected-dirent-op-btn-text">{gettext('Move')}</span>
-            </Button>
+            {canModify &&
+              <Button
+                className="op-btn selected-dirent-op-btn"
+                onClick={this.onMoveToggle}
+              >
+                <i
+                  className="selected-dirent-op-btn-icon sf3-font-move1 sf3-font"
+                  aria-hidden={true}
+                ></i>
+                <span className="selected-dirent-op-btn-text">{gettext('Move')}</span>
+              </Button>
             }
-            {canCopy && <Button
-              className="op-btn selected-dirent-op-btn"
-              onClick={this.onCopyToggle}
-            >
-              <i
-                className="selected-dirent-op-btn-icon sf3-font-copy1 sf3-font"
-                aria-hidden={true}
-              ></i>
-              <span className="selected-dirent-op-btn-text">{gettext('Copy')}</span>
-            </Button>
+            {canCopy &&
+              <Button
+                className="op-btn selected-dirent-op-btn"
+                onClick={this.onCopyToggle}
+              >
+                <i
+                  className="selected-dirent-op-btn-icon sf3-font-copy1 sf3-font"
+                  aria-hidden={true}
+                ></i>
+                <span className="selected-dirent-op-btn-text">{gettext('Copy')}</span>
+              </Button>
             }
-            {canDelete && <Button
-              className="op-btn selected-dirent-op-btn"
-              onClick={this.onItemsDelete}
-            >
-              <i
-                className="selected-dirent-op-btn-icon sf3-font-delete1 sf3-font"
-                aria-hidden={true}
-              ></i>
-              <span className="selected-dirent-op-btn-text">{gettext('Delete')}</span>
-            </Button>
+            {canDelete &&
+              <Button
+                className="op-btn selected-dirent-op-btn"
+                onClick={this.onItemsDelete}
+              >
+                <i
+                  className="selected-dirent-op-btn-icon sf3-font-delete1 sf3-font"
+                  aria-hidden={true}
+                ></i>
+                <span className="selected-dirent-op-btn-text">{gettext('Delete')}</span>
+              </Button>
             }
-            {canDownload && <Button
-              className="op-btn selected-dirent-op-btn"
-              onClick={this.onItemsDownload}
-            >
-              <i
-                className="selected-dirent-op-btn-icon sf3-font-download1 sf3-font"
-                aria-hidden={true}
-              ></i>
-              <span className="selected-dirent-op-btn-text">{gettext('Download')}</span>
-            </Button>
+            {canDownload &&
+              <Button
+                className="op-btn selected-dirent-op-btn"
+                onClick={this.onItemsDownload}
+              >
+                <i
+                  className="selected-dirent-op-btn-icon sf3-font-download1 sf3-font"
+                  aria-hidden={true}
+                ></i>
+                <span className="selected-dirent-op-btn-text">{gettext('Download')}</span>
+              </Button>
             }
           </Fragment>
           {this.props.selectedDirentList.length === 1 &&
@@ -393,7 +397,6 @@ class MultipleDirOperationToolbar extends React.Component {
                 aria-hidden={true}
               ></i>
               <span className="selected-dirent-op-btn-text">{gettext('More')}</span>
-
             </>)}
             onMenuItemClick={this.onMenuItemClick}
             getMenuList={this.getDirentMenuList}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import listener from '../context-menu/globalEventListener';
-import { Dropdown, ButtonDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -9,6 +9,7 @@ const propTypes = {
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
   toggleClass: PropTypes.string,
+  toggleChildren: PropTypes.object,
   isHandleContextMenuEvent: PropTypes.bool,
   getMenuList: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -126,7 +127,7 @@ class ItemDropdownMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
           >
-          {toggleChildren}
+            {toggleChildren}
           </DropdownToggle>
           <DropdownMenu>
             {menuList.map((menuItem, index) => {
