@@ -7,17 +7,15 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import ShareDialog from '../dialog/share-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import ShareDialog from '../dialog/share-dialog';
 import Rename from '../dialog/rename-dirent';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
-
-import '../../css/dirents-menu.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -303,58 +301,105 @@ class MultipleDirOperationToolbar extends React.Component {
     const { repoID, repoTags, userPerm } = this.props;
     const dirent = this.props.selectedDirentList[0];
     const direntPath = this.getDirentPath(dirent);
-
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
-    let canDelete = true;
-    let canDownload = true;
-    let canCopy = true;
-    let canModify = true;
+
+    let canModify = false;
+    let canCopy = false;
+    let canDelete = false;
+    let canDownload = false;
+    switch (userPerm) {
+      case 'rw':
+      case 'admin':
+        canModify = true;
+        canCopy = true;
+        canDelete = true;
+        canDownload = true;
+        break;
+      case 'cloud-edit':
+        canModify = true;
+        canCopy = true;
+        canDelete = true;
+        break;
+      case 'r':
+        canCopy = true;
+        canDownload = true;
+        break;
+    }
     if (isCustomPermission) {
       const { permission } = customPermission;
-      canDelete = permission.delete;
-      canDownload = permission.download;
-      canCopy = permission.copy;
       canModify = permission.modify;
+      canCopy = permission.copy;
+      canDownload = permission.download;
+      canDelete = permission.delete;
     }
 
     return (
       <Fragment>
-        <div className="dir-operation">
-          <div className="d-flex">
-            <ButtonGroup className="flex-row group-operations">
-              {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
-                <Fragment>
-                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
-                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
-                  {canDelete && <Button className="secondary group-op-item action-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
-                  {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>}
-                </Fragment>
-              )}
-              {userPerm === 'cloud-edit' && (
-                <Fragment>
-                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
-                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
-                  {canDelete && <Button className="secondary group-op-item action-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
-                </Fragment>
-              )}
-              {userPerm === 'r' && (
-                <Fragment>
-                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-                  <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>
-                </Fragment>
-              )}
-              {this.props.selectedDirentList.length === 1 &&
-                <ItemDropdownMenu
-                  tagName={'button'}
-                  item={this.props.selectedDirentList[0]}
-                  toggleClass={'fas fa-ellipsis-v dirents-more-menu'}
-                  onMenuItemClick={this.onMenuItemClick}
-                  getMenuList={this.getDirentMenuList}
-                />
-              }
-            </ButtonGroup>
-          </div>
-        </div>
+        <ButtonGroup className="">
+          <Fragment>
+            {canModify && <Button
+              className="op-btn selected-dirent-op-btn"
+              onClick={this.onMoveToggle}
+            >
+              <i
+                className="selected-dirent-op-btn-icon sf3-font-move1 sf3-font"
+                aria-hidden={true}
+              ></i>
+              <span className="selected-dirent-op-btn-text">{gettext('Move')}</span>
+            </Button>
+            }
+            {canCopy && <Button
+              className="op-btn selected-dirent-op-btn"
+              onClick={this.onCopyToggle}
+            >
+              <i
+                className="selected-dirent-op-btn-icon sf3-font-copy1 sf3-font"
+                aria-hidden={true}
+              ></i>
+              <span className="selected-dirent-op-btn-text">{gettext('Copy')}</span>
+            </Button>
+            }
+            {canDelete && <Button
+              className="op-btn selected-dirent-op-btn"
+              onClick={this.onItemsDelete}
+            >
+              <i
+                className="selected-dirent-op-btn-icon sf3-font-delete1 sf3-font"
+                aria-hidden={true}
+              ></i>
+              <span className="selected-dirent-op-btn-text">{gettext('Delete')}</span>
+            </Button>
+            }
+            {canDownload && <Button
+              className="op-btn selected-dirent-op-btn"
+              onClick={this.onItemsDownload}
+            >
+              <i
+                className="selected-dirent-op-btn-icon sf3-font-download1 sf3-font"
+                aria-hidden={true}
+              ></i>
+              <span className="selected-dirent-op-btn-text">{gettext('Download')}</span>
+            </Button>
+            }
+          </Fragment>
+          {this.props.selectedDirentList.length === 1 &&
+          <ItemDropdownMenu
+            tagName={'button'}
+            item={this.props.selectedDirentList[0]}
+            toggleClass={'op-btn selected-dirent-op-btn selected-dirent-more-op-btn'}
+            toggleChildren={(<>
+              <i
+                className="selected-dirent-op-btn-icon sf3-font-more-vertical sf3-font"
+                aria-hidden={true}
+              ></i>
+              <span className="selected-dirent-op-btn-text">{gettext('More')}</span>
+
+            </>)}
+            onMenuItemClick={this.onMenuItemClick}
+            getMenuList={this.getDirentMenuList}
+          />
+          }
+        </ButtonGroup>
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}

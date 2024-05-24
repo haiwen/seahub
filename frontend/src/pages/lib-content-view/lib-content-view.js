@@ -2061,6 +2061,10 @@ class LibContentView extends React.Component {
         </div>
         <div className="main-panel-center flex-row">
           <LibContentContainer
+            repoEncrypted={this.state.repoEncrypted}
+            isRepoOwner={isRepoOwner}
+            onFilesTagChanged={this.onFileTagChanged}
+            unSelectDirent={this.unSelectDirent}
             pathPrefix={this.props.pathPrefix}
             isTreePanelShown={this.state.isTreePanelShown}
             toggleTreePanel={this.toggleTreePanel}

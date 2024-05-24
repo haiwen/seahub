@@ -107,7 +107,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     let menuList = this.state.menuList;
-    let { toggleClass, tagName } = this.props;
+    let { toggleClass, toggleChildren, tagName } = this.props;
     toggleClass = 'sf-dropdown-toggle ' + toggleClass;
 
     if (!menuList.length) {
@@ -116,9 +116,9 @@ class ItemDropdownMenu extends React.Component {
 
     if (tagName && tagName === 'button') {
       return (
-        <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
-            className={toggleClass}
+            className={this.props.toggleClass}
             data-toggle="dropdown"
             title={gettext('More operations')}
             aria-label={gettext('More operations')}
@@ -126,6 +126,7 @@ class ItemDropdownMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
           >
+          {toggleChildren}
           </DropdownToggle>
           <DropdownMenu>
             {menuList.map((menuItem, index) => {
@@ -138,7 +139,7 @@ class ItemDropdownMenu extends React.Component {
               }
             })}
           </DropdownMenu>
-        </ButtonDropdown>
+        </Dropdown>
       );
     }
 

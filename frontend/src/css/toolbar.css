@@ -33,21 +33,29 @@
   border-radius: 2px;
 }
 
-.group-operations {
-  margin-right: 0.25rem;
+.op-btn.selected-dirent-op-btn {
+  padding: 0 .75rem;
+  font-weight: normal;
 }
 
-.group-operations .group-op-item {
-  padding: 0 0.5rem;
-  height: 30px;
-  min-width: 46px;
-  background-color: #fff;
-  line-height: 29px;
-  font-weight: normal;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  font-size: 1.125rem;
+.op-btn.selected-dirent-more-op-btn {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
+
+.selected-dirent-op-btn .selected-dirent-op-btn-icon { /* overwrite styles from seafile-ui.css */
+  font-size: 1rem;
+  color: #444;
+  vertical-align: middle;
+}
+
+.selected-dirent-op-btn-text {
+  font-size: .875rem;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 /* end file-operation toolbar */
 
 /* begin view-mode toolbar */
