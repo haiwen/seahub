@@ -108,9 +108,9 @@ class WikiAPI {
   // for wiki2
   listWiki2Dir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
-    let url = this.server + '/api/v2.1/wikis2/' + wikiId + '/dir/?p=' + path;
+    let url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?p=' + path;
     if (withParents) {
-      url = this.server + '/api/v2.1/wikis2/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
+      url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
     }
     return this.req.get(url);
   }
@@ -119,7 +119,7 @@ class WikiAPI {
   getWiki2FileContent(wikiId, filePath) {
     const path = encodeURIComponent(filePath);
     const time = new Date().getTime();
-    const url = this.server + '/api/v2.1/wikis2/' + wikiId + '/content/' + '?p=' + path + '&_=' + time;
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/content/' + '?p=' + path + '&_=' + time;
     return this.req.get(url);
   }
 
@@ -161,12 +161,12 @@ class WikiAPI {
   }
 
   deleteWiki2(wikiId) {
-    const url = this.server + '/api/v2.1/wikis2/' + wikiId + '/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/';
     return this.req.delete(url);
   }
 
   updateWiki2Config(wikiId, wikiConfig) {
-    const url = this.server + '/api/v2.1/wiki2-config/' + wikiId + '/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/config/';
     let params = {
       wiki_config: wikiConfig
     };
@@ -174,8 +174,15 @@ class WikiAPI {
   }
 
   getWiki2Config(wikiId) {
-    const url = this.server + '/api/v2.1/wiki2-config/' + wikiId + '/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/config/';
     return this.req.get(url);
+  }
+
+  createWiki2Page(wikiId, pageName) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/pages/';
+    let form = new FormData();
+    form.append('page_name', pageName);
+    return this._sendPostRequest(url, form);
   }
 
 }

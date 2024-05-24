@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
-import { gettext, repoID } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext, wikiId } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+import wikiAPI from '../../../utils/wiki-api';
 
 import '../css/add-new-page-dialog.css';
 
@@ -14,7 +14,6 @@ const propTypes = {
   onAddNewPage: PropTypes.func,
 };
 
-const NEW_WIKI_FILE_PATH = '/wiki-pages/';
 
 class AddNewPageDialog extends React.Component {
 
@@ -22,33 +21,9 @@ class AddNewPageDialog extends React.Component {
     super(props);
     this.state = {
       pageName: '',
-      isLoading: true,
+      isLoading: false,
       errMessage: '',
     };
-  }
-
-  componentDidMount() {
-    seafileAPI.getDirInfo(repoID, NEW_WIKI_FILE_PATH).then((res) => {
-      if (res.data.path === NEW_WIKI_FILE_PATH) {
-        this.setState({ isLoading: false });
-      }
-    }).catch((error) => {
-      if (error.response.data.error_msg === 'Folder /wiki-pages/ not found.') {
-        seafileAPI.createDir(repoID, NEW_WIKI_FILE_PATH).then((res) => {
-          if (res.data === 'success') {
-            this.setState({ isLoading: false });
-          }
-        }).catch((error) => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-          this.setState({ isLoading: false });
-        });
-      } else {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-        this.setState({ isLoading: false });
-      }
-    });
   }
 
   handleChange = (event) => {
@@ -89,12 +64,12 @@ class AddNewPageDialog extends React.Component {
     const pageName = this.state.pageName.trim();
     if (this.checkName(pageName)) {
       this.setState({ isLoading: true });
-      this.createFile(pageName, `${NEW_WIKI_FILE_PATH}${pageName}.sdoc`);
+      this.createPage(pageName);
     }
   };
 
-  createFile = (pageName, filePath) => {
-    seafileAPI.createFile(repoID, filePath).then(res => {
+  createPage = (pageName) => {
+    wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
       const { obj_name, parent_dir, doc_uuid } = res.data;
       this.props.onAddNewPage({
         name: pageName,

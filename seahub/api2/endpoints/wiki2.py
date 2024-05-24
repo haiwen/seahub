@@ -6,11 +6,12 @@ import logging
 import requests
 import posixpath
 import time
+import uuid
 import urllib.request, urllib.error, urllib.parse
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, edit_repo
@@ -23,7 +24,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
-    normalize_dir_path, is_pro_version
+    normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -32,8 +33,10 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.tags.models import FileUUIDMap
 
-
+WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
 WIKI_CONFIG_FILE_NAME = 'index.json'
 HTTP_520_OPERATION_FAILED = 520
@@ -402,3 +405,92 @@ class Wiki2PageContentView(APIView):
             "seadoc_access_token": seadoc_access_token,
             "assets_url": assets_url,
         })
+
+
+class Wiki2PagesView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get_file_info(self, repo_id, file_path):
+
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        if file_obj:
+            file_name = file_obj.obj_name
+        else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+
+        file_info = {
+            'type': 'file',
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(file_path),
+            'obj_name': file_name,
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else ''
+        }
+
+        return file_info
+
+    def post(self, request, wiki_id):
+        page_name = request.data.get('page_name', None)
+
+        if not page_name or '/' in page_name or '\\' in page_name:
+            error_msg = 'page_name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_edit_wiki(wiki, request.user.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        sdoc_uuid = uuid.uuid4()
+        file_name = page_name + '.sdoc'
+        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+        path = os.path.join(parent_dir, file_name)
+
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
+        new_file_name = check_filename_with_rename(repo_id, parent_dir, file_name)
+
+        # create new empty file
+        if not is_valid_dirent_name(new_file_name):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+
+        new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+        try:
+            seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, request.user.username)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                from seahub.api2.views import HTTP_447_TOO_MANY_FILES_IN_LIBRARY
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        new_file_path = posixpath.join(parent_dir, new_file_name)
+        file_info = self.get_file_info(repo_id, new_file_path)
+        file_info['doc_uuid'] = sdoc_uuid
+        filename = os.path.basename(path)
+
+        try:
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename, is_dir=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(file_info)
