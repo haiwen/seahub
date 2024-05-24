@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import listener from '../context-menu/globalEventListener';
-import { Dropdown, ButtonDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -9,6 +9,7 @@ const propTypes = {
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
   toggleClass: PropTypes.string,
+  toggleChildren: PropTypes.object,
   isHandleContextMenuEvent: PropTypes.bool,
   getMenuList: PropTypes.func.isRequired,
   onMenuItemClick: PropTypes.func.isRequired,
@@ -107,7 +108,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     let menuList = this.state.menuList;
-    let { toggleClass, tagName } = this.props;
+    let { toggleClass, toggleChildren, tagName } = this.props;
     toggleClass = 'sf-dropdown-toggle ' + toggleClass;
 
     if (!menuList.length) {
@@ -116,9 +117,9 @@ class ItemDropdownMenu extends React.Component {
 
     if (tagName && tagName === 'button') {
       return (
-        <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
-            className={toggleClass}
+            className={this.props.toggleClass}
             data-toggle="dropdown"
             title={gettext('More operations')}
             aria-label={gettext('More operations')}
@@ -126,6 +127,7 @@ class ItemDropdownMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
           >
+            {toggleChildren}
           </DropdownToggle>
           <DropdownMenu>
             {menuList.map((menuItem, index) => {
@@ -138,7 +140,7 @@ class ItemDropdownMenu extends React.Component {
               }
             })}
           </DropdownMenu>
-        </ButtonDropdown>
+        </Dropdown>
       );
     }
 

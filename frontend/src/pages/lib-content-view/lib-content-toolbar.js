@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
-import MultipleDirOperationToolbar from '../../components/toolbar/multiple-dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 
 const propTypes = {
@@ -87,31 +86,7 @@ class LibContentToolbar extends React.Component {
       <Fragment>
         <div className="cur-view-toolbar">
           <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
-          {this.props.isDirentSelected ?
-            <MultipleDirOperationToolbar
-              repoID={this.props.repoID}
-              path={this.props.path}
-              userPerm={this.props.userPerm}
-              repoEncrypted={this.props.repoEncrypted}
-              repoTags={this.props.repoTags}
-              selectedDirentList={this.props.selectedDirentList}
-              direntList={this.props.direntList}
-              onItemsMove={this.props.onItemsMove}
-              onItemsCopy={this.props.onItemsCopy}
-              onItemsDelete={this.props.onItemsDelete}
-              onItemRename={this.props.onItemRename}
-              isRepoOwner={this.props.isRepoOwner}
-              currentRepoInfo={this.props.currentRepoInfo}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              updateDirent={this.props.updateDirent}
-              unSelectDirent={this.props.unSelectDirent}
-              onFilesTagChanged={this.props.onFilesTagChanged}
-              showShareBtn={this.props.showShareBtn}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              showDirentDetail={this.props.showDirentDetail}
-              currentMode={this.props.currentMode}
-              switchViewMode={this.props.switchViewMode}
-            /> :
+          {!this.props.isDirentSelected &&
             <DirOperationToolBar
               path={this.props.path}
               repoID={this.props.repoID}

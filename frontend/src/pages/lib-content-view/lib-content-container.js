@@ -5,6 +5,7 @@ import CurDirPath from '../../components/cur-dir-path';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
+import ToolbarForSelectedDirents from '../../components/toolbar/selected-dirents-toolbar';
 
 import '../../css/lib-content-view.css';
 
@@ -19,11 +20,13 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
   // repoinfo
+  repoEncrypted: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
+  isRepoOwner: PropTypes.bool.isRequired,
   // path func
   onTabNavClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -88,6 +91,10 @@ const propTypes = {
   direntDetailPanelTab: PropTypes.string,
   loadDirentList: PropTypes.func,
   fullDirentList: PropTypes.array,
+
+  unSelectDirent: PropTypes.func,
+  onFilesTagChanged: PropTypes.func.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -174,27 +181,53 @@ class LibContentContainer extends React.Component {
             </div>
           }
           <div className="cur-view-path">
-            <CurDirPath
-              repoID={repoID}
-              repoName={this.props.currentRepoInfo.repo_name}
-              pathPrefix={this.props.pathPrefix}
-              currentPath={this.props.path}
-              userPerm={this.props.userPerm}
-              isViewFile={this.props.isViewFile}
-              onTabNavClick={this.props.onTabNavClick}
-              onPathClick={this.onPathClick}
-              updateUsedRepoTags={this.props.updateUsedRepoTags}
-              fileTags={this.props.fileTags}
-              onDeleteRepoTag={this.props.onDeleteRepoTag}
-              direntList={this.props.direntList}
-              sortBy={this.props.sortBy}
-              sortOrder={this.props.sortOrder}
-              sortItems={this.props.sortItems}
-              toggleTreePanel={this.props.toggleTreePanel}
-              currentMode={this.props.currentMode}
-              switchViewMode={this.props.switchViewMode}
-              isCustomPermission={this.props.isCustomPermission}
-            />
+            {this.props.isDirentSelected ?
+              <ToolbarForSelectedDirents
+                repoID={this.props.repoID}
+                path={this.props.path}
+                userPerm={this.props.userPerm}
+                repoEncrypted={this.props.repoEncrypted}
+                repoTags={this.props.repoTags}
+                selectedDirentList={this.props.selectedDirentList}
+                direntList={this.props.direntList}
+                onItemsMove={this.props.onItemsMove}
+                onItemsCopy={this.props.onItemsCopy}
+                onItemsDelete={this.props.onItemsDelete}
+                onItemRename={this.props.onItemRename}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                updateDirent={this.props.updateDirent}
+                unSelectDirent={this.props.unSelectDirent}
+                onFilesTagChanged={this.props.onFilesTagChanged}
+                showShareBtn={this.props.showShareBtn}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                showDirentDetail={this.props.showDirentDetail}
+                currentMode={this.props.currentMode}
+                switchViewMode={this.props.switchViewMode}
+              /> :
+              <CurDirPath
+                repoID={repoID}
+                repoName={this.props.currentRepoInfo.repo_name}
+                pathPrefix={this.props.pathPrefix}
+                currentPath={this.props.path}
+                userPerm={this.props.userPerm}
+                isViewFile={this.props.isViewFile}
+                onTabNavClick={this.props.onTabNavClick}
+                onPathClick={this.onPathClick}
+                updateUsedRepoTags={this.props.updateUsedRepoTags}
+                fileTags={this.props.fileTags}
+                onDeleteRepoTag={this.props.onDeleteRepoTag}
+                direntList={this.props.direntList}
+                sortBy={this.props.sortBy}
+                sortOrder={this.props.sortOrder}
+                sortItems={this.props.sortItems}
+                toggleTreePanel={this.props.toggleTreePanel}
+                currentMode={this.props.currentMode}
+                switchViewMode={this.props.switchViewMode}
+                isCustomPermission={this.props.isCustomPermission}
+              />
+            }
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}
