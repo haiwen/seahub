@@ -35,7 +35,7 @@ export default class WikiLeftBar extends React.Component {
 
   render() {
     return (
-      <div className="seatable-app-universal-left-bar">
+      <div className="wiki-left-bar">
         <Icon onClick={this.openAppSettingsDialog} iconClass="wiki-settings" tipText={gettext('Settings')}/>
         <Icon onClick={this.openPreviewApp} iconClass="wiki-preview" tipText={gettext('Go to wiki page to preview')}/>
         {this.state.isShowSettingsDialog &&

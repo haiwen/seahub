@@ -214,7 +214,6 @@ class Wiki extends Component {
     this.removePythonWrapper();
     wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
       let data = res.data;
-
       this.setState({
         isDataLoading: false,
         content: data.content,
@@ -605,6 +604,8 @@ class Wiki extends Component {
         />
         <MainPanel
           path={this.state.path}
+          config={this.state.config}
+          currentPageId={this.state.currentPageId}
           pathExist={this.state.pathExist}
           isViewFile={this.state.isViewFile}
           isDataLoading={this.state.isDataLoading}

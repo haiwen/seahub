@@ -1,4 +1,4 @@
-.seatable-app-universal-left-bar {
+.wiki-left-bar {
   flex: 0 0 4%;
   width: 50px;
   background: #f5f5f5;
@@ -6,24 +6,24 @@
   z-index: 101;
 }
 
-.seatable-app-universal-left-bar .left-bar-button {
+.wiki-left-bar .left-bar-button {
   height: 50px;
   line-height: 50px;
   text-align: center;
 }
 
-.seatable-app-universal-left-bar .left-bar-button:hover {
+.wiki-left-bar .left-bar-button:hover {
   cursor: pointer;
 }
 
-.seatable-app-universal-left-bar .left-bar-button .seafile-multicolor-icon {
+.wiki-left-bar .left-bar-button .seafile-multicolor-icon {
   font-size: 22px;
 }
 
-.seatable-app-universal-left-bar .left-bar-button .seafile-multicolor-icon {
+.wiki-left-bar .left-bar-button .seafile-multicolor-icon {
   color: rgba(0, 0, 0, 0.8);
 }
 
-.seatable-app-universal-left-bar .left-bar-button:hover .seafile-multicolor-icon {
+.wiki-left-bar .left-bar-button:hover .seafile-multicolor-icon {
   color: rgba(0, 0, 0, 0.9);
 }

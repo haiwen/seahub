@@ -15,9 +15,9 @@ import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
 import { seafileAPI } from '../../utils/seafile-api';
+import { FOLDER } from './constant';
 
-export const FOLDER = 'folder';
-export const PAGE = 'page';
+import './side-panel.css';
 
 const { repoName } = window.wiki.config;
 
@@ -52,7 +52,7 @@ class SidePanel extends Component {
 
   renderIndexView = () => {
     return (
-      <div className="wiki-pages-container">
+      <div className="wiki2-pages-container">
         <div style={{ marginTop: '2px' }}></div>
         <IndexMdViewer
           indexContent={this.props.indexContent}
@@ -64,7 +64,7 @@ class SidePanel extends Component {
 
   renderTreeView = () => {
     return (
-      <div className="wiki-pages-container">
+      <div className="wiki2-pages-container">
         {/* {this.props.treeData && (
           <TreeView
             treeData={this.props.treeData}
@@ -339,7 +339,7 @@ class SidePanel extends Component {
     const { config } = this.props;
     const { pages, navigation } = config;
     return (
-      <div className="wiki-pages-container">
+      <div className="wiki2-pages-container">
         <ViewStructure
           isEditMode={isWiki2}
           navigation={navigation}
@@ -392,11 +392,11 @@ class SidePanel extends Component {
 
   render() {
     return (
-      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '' : 'left-zero'}`}>
-        <div className="side-panel-top panel-top">
-          <h4 className="ml-0 mb-0 text-truncate" title={repoName}>{repoName}</h4>
+      <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
+        <div className="wiki2-side-panel-top">
+          <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
         </div>
-        <div id="side-nav" className="wiki-side-nav" role="navigation">
+        <div className="wiki2-side-nav">
           {this.renderContent()}
         </div>
       </div>

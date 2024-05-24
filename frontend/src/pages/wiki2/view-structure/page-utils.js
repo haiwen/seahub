@@ -1,5 +1,4 @@
-const FOLDER = 'folder';
-const PAGE = 'page';
+import { FOLDER, PAGE } from '../constant';
 
 export default class PageUtils {
 
