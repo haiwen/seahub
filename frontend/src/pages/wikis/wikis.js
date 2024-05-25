@@ -80,8 +80,8 @@ class Wikis extends Component {
     this.setState({isShowAddDialog: !this.state.isShowAddDialog});
   };
 
-  addWiki = (wikiName) => {
-    wikiAPI.addWiki2(wikiName).then((res) => {
+  addWiki = (wikiName, departmentID) => {
+    wikiAPI.addWiki2(wikiName, departmentID).then((res) => {
       let wikis = this.state.wikis.slice(0);
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';

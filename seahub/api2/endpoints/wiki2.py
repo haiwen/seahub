@@ -111,6 +111,9 @@ class Wikis2View(APIView):
         if not wiki_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
 
+        department_id = request.data.get("department_id", None)
+        # TODO
+
         if not is_valid_wiki_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
