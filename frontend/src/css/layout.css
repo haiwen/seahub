@@ -287,18 +287,26 @@ img[src=""],img:not([src]){ /* for first loading img*/
   word-break: keep-all;
   max-width: 80%;
 }
+
 .path-container a, .path-container span {
   max-height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-} 
+}
+
 .path-container span, .path-container a {
   flex-shrink: 1;
-} 
+}
+
 .path-container span:first-child, .path-container span:last-child {
   flex-shrink: 0;
-} 
+}
+
 .path-container span.path-file-name, .path-container span.path-repo-name {
   flex-shrink: 1;
+}
+
+.path-container .op-btn .sf3-font {
+  color: #444;
 }

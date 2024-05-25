@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1715743130302'); /* IE9 */
-  src: url('iconfont.eot?t=1715743130302#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1715743130302') format('woff2'),
-       url('iconfont.woff?t=1715743130302') format('woff'),
-       url('iconfont.ttf?t=1715743130302') format('truetype'),
-       url('iconfont.svg?t=1715743130302#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1716614768424'); /* IE9 */
+  src: url('iconfont.eot?t=1716614768424#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1716614768424') format('woff2'),
+       url('iconfont.woff?t=1716614768424') format('woff'),
+       url('iconfont.ttf?t=1716614768424') format('truetype'),
+       url('iconfont.svg?t=1716614768424#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-share:before {
+  content: "\e820";
 }
 
 .sf3-font-rename:before {
@@ -180,16 +184,8 @@
   content: "\e7fa";
 }
 
-.sf3-font-download:before {
-  content: "\e7fb";
-}
-
 .sf3-font-entry:before {
   content: "\e7fc";
-}
-
-.sf3-font-delete:before {
-  content: "\e7fd";
 }
 
 .sf3-font-files1:before {
@@ -202,14 +198,6 @@
 
 .sf3-font-new-group:before {
   content: "\e7f3";
-}
-
-.sf3-font-copy:before {
-  content: "\e7f4";
-}
-
-.sf3-font-more-level1:before {
-  content: "\e7f5";
 }
 
 .sf3-font-sort1:before {
@@ -246,10 +234,6 @@
 
 .sf3-font-x-01:before {
   content: "\e7d8";
-}
-
-.sf3-font-more-level:before {
-  content: "\e7d7";
 }
 
 .sf3-font-desktop:before {
