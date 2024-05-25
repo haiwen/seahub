@@ -95,21 +95,20 @@ class TwoFactorVerifyView(SessionWizardView):
 
         self.reset_two_factor_session()
 
-        if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=self.request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=redirect_to,
+                                               allowed_hosts=self.request.get_host()):
             redirect_to = str(settings.LOGIN_REDIRECT_URL)
 
         res = HttpResponseRedirect(redirect_to)
-        if form_list[0].is_valid():
-            remember_me = form_list[0].cleaned_data['remember_me']
-            if remember_me:
-                s = remember_device(self.user.username)
-                res.set_cookie(
-                    'S2FA', s.session_key,
-                    max_age=settings.TWO_FACTOR_DEVICE_REMEMBER_DAYS * 24 * 60 * 60,
-                    domain=settings.SESSION_COOKIE_DOMAIN,
-                    path=settings.SESSION_COOKIE_PATH,
-                    secure=settings.SESSION_COOKIE_SECURE or None,
-                    httponly=settings.SESSION_COOKIE_HTTPONLY or None)
+        if kwargs.get('remember_me', False):
+            s = remember_device(self.user.username)
+            res.set_cookie(
+                'S2FA', s.session_key,
+                max_age=settings.TWO_FACTOR_DEVICE_REMEMBER_DAYS * 24 * 60 * 60,
+                domain=settings.SESSION_COOKIE_DOMAIN,
+                path=settings.SESSION_COOKIE_PATH,
+                secure=settings.SESSION_COOKIE_SECURE or None,
+                httponly=settings.SESSION_COOKIE_HTTPONLY or None)
         return res
 
     def get_form_kwargs(self, step=None):
@@ -188,6 +187,7 @@ class TwoFactorVerifyView(SessionWizardView):
             )
             final_form_list.append(form_obj)
 
+        kwargs['remember_me'] = form.cleaned_data['remember_me']
         done_response = self.done(final_form_list, **kwargs)
         self.storage.reset()
         return done_response
