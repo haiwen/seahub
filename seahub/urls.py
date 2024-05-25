@@ -204,7 +204,8 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
 from seahub.wiki2.views import wiki_view
-from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesDirView, Wiki2PageContentView, Wiki2PagesView
+from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesDirView, Wiki2PageContentView,\
+    Wiki2PagesView, Wiki2PageView, Wiki2DirView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 
 urlpatterns = [
@@ -522,10 +523,12 @@ urlpatterns = [
     ## user::wiki2
     re_path(r'^api/v2.1/wikis2/$', Wikis2View.as_view(), name='api-v2.1-wikis2'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/dir/$', Wiki2PagesDirView.as_view(), name='api-v2.1-wiki2-pages-dir'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/page-dir/$', Wiki2PagesDirView.as_view(), name='api-v2.1-wiki2-pages-dir'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/config/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/content/$', Wiki2PageContentView.as_view(), name='api-v2.1-wiki2-pages-content'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/page/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/dir/$', Wiki2DirView.as_view(), name='api-v2.1-wiki2-dir'),
 
     ## user::drafts
     re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),

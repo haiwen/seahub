@@ -22,7 +22,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path
+from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, get_page_dir_paths_in_folder
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name
 from seahub.views import check_folder_permission
@@ -35,6 +35,8 @@ from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.base.models import FileComment
 
 WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
@@ -494,3 +496,154 @@ class Wiki2PagesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(file_info)
+
+
+class Wiki2PageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, wiki_id):
+        # argument check
+        path = request.GET.get('p', None)
+        if not path or not path.endswith('.sdoc'):
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        parent_dir_path = os.path.dirname(path)
+        if parent_dir_path == '/' or parent_dir_path.rstrip('/') == WIKI_PAGES_DIR:
+            error_msg = 'Can not delete root path.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_edit_wiki(wiki, request.user.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+
+        # resource check
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir_path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir_path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, request.user.username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if is_locked and not locked_by_me:
+            error_msg = _("File is locked")
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        parent_dir_path = parent_dir_path.rstrip('/')
+        username = request.user.username
+        parent_dir = os.path.dirname(parent_dir_path)
+        dir_name = os.path.basename(parent_dir_path)
+        try:
+            seafile_api.del_file(repo_id, parent_dir, json.dumps([dir_name]), username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:  # rm sdoc fileuuid
+            file_name = os.path.basename(path)
+            file_uuid = get_seadoc_file_uuid(repo, path)
+            FileComment.objects.filter(uuid=file_uuid).delete()
+            FileUUIDMap.objects.delete_fileuuidmap_by_path(repo_id, parent_dir_path, file_name, is_dir=False)
+            SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
+            SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
+            SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+        except Exception as e:
+            logger.error(e)
+
+        return Response({'success': True})
+
+
+class Wiki2DirView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, wiki_id):
+        folder_id = request.GET.get('id')
+        if not folder_id:
+            error_msg = 'folder_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_edit_wiki(wiki, request.user.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
+        try:
+            repo = seafile_api.get_repo(wiki.repo_id)
+        except SearpcError:
+            error_msg = _("Internal Server Error")
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not repo:
+            error_msg = "Wiki library not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo.repo_id, config_path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not file_id:
+            error_msg = "Wiki config not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(repo.repo_id, file_id, 'download', request.user.username, use_onetime=True)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
+        resp = requests.get(url)
+        wiki_config = json.loads(resp.content)
+
+        navigation = wiki_config.get('navigation', [])
+
+        folder_info = next(filter(lambda t: t['id'] == folder_id, navigation), {})
+        pages = wiki_config.get('pages', [])
+        id_to_page = {page['id']: page for page in pages}
+
+        page_dir_paths = []
+        page_dir_paths = get_page_dir_paths_in_folder(folder_info, id_to_page, page_dir_paths)
+
+        parent_dir = WIKI_PAGES_DIR
+        if page_dir_paths:
+            try:
+                seafile_api.del_file(wiki.repo_id, parent_dir, json.dumps(page_dir_paths), request.user.username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

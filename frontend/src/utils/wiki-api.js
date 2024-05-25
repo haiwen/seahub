@@ -108,9 +108,9 @@ class WikiAPI {
   // for wiki2
   listWiki2Dir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
-    let url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?p=' + path;
+    let url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page-dir/?p=' + path;
     if (withParents) {
-      url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?p=' + path + '&with_parents=' + withParents;
+      url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page-dir/?p=' + path + '&with_parents=' + withParents;
     }
     return this.req.get(url);
   }
@@ -183,6 +183,17 @@ class WikiAPI {
     let form = new FormData();
     form.append('page_name', pageName);
     return this._sendPostRequest(url, form);
+  }
+
+  deleteWiki2Page(wikiId, pagePath) {
+    const path = encodeURIComponent(pagePath);
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/?p=' + path;
+    return this.req.delete(url);
+  }
+
+  deleteWiki2Dir(wikiId, dirId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?id=' + dirId;
+    return this.req.delete(url);
   }
 
 }

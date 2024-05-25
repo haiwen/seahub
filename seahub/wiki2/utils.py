@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import re
+import os
 import stat
 import logging
 
@@ -41,3 +42,20 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
 def can_edit_wiki(wiki, username):
     permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
     return permission == PERMISSION_READ_WRITE
+
+
+def get_page_dir_paths_in_folder(folder, id_to_page, page_dir_paths):
+    children = folder.get('children', [])
+    for child in children:
+        child_type = child.get('type')
+        if child_type == 'page':
+            page_id = child.get('id')
+            page = id_to_page.get(page_id, {})
+            page_path = page.get('path')
+            parent_dir = os.path.dirname(page_path)
+            sdoc_dir_name = os.path.basename(parent_dir)
+            page_dir_paths.append(sdoc_dir_name)
+        elif child_type == 'folder':
+            folder = child
+            get_page_dir_paths_in_folder(folder, id_to_page, page_dir_paths)
+    return page_dir_paths

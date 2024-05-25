@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, repoID, isWiki2 } from '../../utils/constants';
+import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 // import TreeView from '../../components/tree-view/tree-view';
@@ -14,6 +14,8 @@ import ViewStructureFooter from './view-structure/view-structure-footer';
 import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
+import wikiAPI from '../../utils/wiki-api';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { FOLDER } from './constant';
 
@@ -107,7 +109,7 @@ class SidePanel extends Component {
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
-    seafileAPI.deleteFile(repoID, path);
+    wikiAPI.deleteWiki2Page(wikiId, path);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
     } else {
@@ -225,7 +227,12 @@ class SidePanel extends Component {
     const { navigation, pages } = config;
     PageUtils.deleteFolder(navigation, pages, page_folder_id);
     config.navigation = navigation;
-    this.props.saveWikiConfig(config);
+    wikiAPI.deleteWiki2Dir(wikiId, page_folder_id).then((res) => {
+      this.props.saveWikiConfig(config);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   // Drag a folder to the front and back of another folder
