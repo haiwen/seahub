@@ -138,12 +138,12 @@ class HistoryVersion extends React.Component {
                 >
                   <ModalBody className='sdoc-operation-mobile-modal-body'>
                     <div className='option-item'>
-                      <i className='mr-3 sf3-font sf3-font-download'></i>
+                      <i className='mr-3 sf3-font sf3-font-download1'></i>
                       <a href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</a>
                     </div>
                     {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
                       <div className='option-item'>
-                        <i className='mr-3 sf3-font sf3-font-copy'></i>
+                        <i className='mr-3 sf3-font sf3-font-copy1'></i>
                         <span href={url} onClick={this.onItemCopy}>{gettext('Copy')}</span>
                       </div>
                     )}
