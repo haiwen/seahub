@@ -5,6 +5,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { InternalLinkOperation } from '../operations';
+import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -50,7 +51,23 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-file-name">{item}</span>
+            <DirOperationToolBar
+              path={this.props.currentPath}
+              repoID={this.props.repoID}
+              repoName={this.props.repoName}
+              repoEncrypted={this.props.repoEncrypted}
+              direntList={this.props.direntList}
+              showShareBtn={this.props.showShareBtn}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              userPerm={this.props.userPerm}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+              onAddFile={this.props.onAddFile}
+              onAddFolder={this.props.onAddFolder}
+              onUploadFile={this.props.onUploadFile}
+              onUploadFolder={this.props.onUploadFolder}
+            >
+              <span className="path-file-name">{item}</span>
+            </DirOperationToolBar>
           </Fragment>
         );
       } else {
@@ -58,7 +75,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <a className="path-link" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
+            <a className="path-link path-item" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
           </Fragment>
         );
       }
@@ -78,31 +95,47 @@ class DirPath extends React.Component {
     }
 
     return (
-      <div className="path-container">
+      <div className="path-container dir-view-path">
         <button className="op-btn mr-2" onClick={this.props.toggleTreePanel}><span className="sf3-font-side-bar sf3-font"></span></button>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>
-              <Link to={item.url} className="normal" onClick={(e) => this.onTabNavClick(e, item.name, item.id)}>{gettext(item.showName)}</Link>
+              <Link to={item.url} className="path-item normal" onClick={(e) => this.onTabNavClick(e, item.name, item.id)}>{gettext(item.showName)}</Link>
               <span className="path-split">/</span>
             </Fragment>
           );
         })}
         {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
           <Fragment>
-            <Link to={siteRoot + 'libraries/'} className="normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
+            <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
         {!this.props.pathPrefix && (
           <Fragment>
-            <Link to={siteRoot + 'libraries/'} className="normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
+            <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
           </Fragment>
         )}
         {(currentPath === '/' || currentPath === '') ?
-          <span className="path-repo-name">{repoName}</span>:
-          <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
+          <DirOperationToolBar
+            path={this.props.currentPath}
+            repoID={this.props.repoID}
+            repoName={this.props.repoName}
+            repoEncrypted={this.props.repoEncrypted}
+            direntList={this.props.direntList}
+            showShareBtn={this.props.showShareBtn}
+            enableDirPrivateShare={this.props.enableDirPrivateShare}
+            userPerm={this.props.userPerm}
+            isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+            onAddFile={this.props.onAddFile}
+            onAddFolder={this.props.onAddFolder}
+            onUploadFile={this.props.onUploadFile}
+            onUploadFolder={this.props.onUploadFolder}
+          >
+            <span className="path-repo-name">{repoName}</span>
+          </DirOperationToolBar> :
+          <a className="path-item" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
         {this.props.isViewFile && (
