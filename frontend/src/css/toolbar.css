@@ -75,6 +75,7 @@
   line-height: 2;
   border: 0;
   border-radius: 2px;
+  font-weight: normal;
 }
 
 .sf-view-mode-btn:hover {
