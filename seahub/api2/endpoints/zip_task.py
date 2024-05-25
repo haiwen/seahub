@@ -187,11 +187,6 @@ class ZipTaskView(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
-        repo_folder_permission = check_folder_permission(request, repo_id, parent_dir)
-        if parse_repo_perm(repo_folder_permission).can_download is False:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # get file server access token
         is_windows = 0
@@ -207,6 +202,11 @@ class ZipTaskView(APIView):
                 error_msg = 'Folder %s not found.' % full_dir_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            repo_folder_permission = check_folder_permission(request, repo_id, full_dir_path)
+            if parse_repo_perm(repo_folder_permission).can_download is False:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps([full_dir_path]), \
                     request.user.username, repo_folder_permission))['is_downloadable']:
                 error_msg = 'Permission denied.'
@@ -219,6 +219,10 @@ class ZipTaskView(APIView):
             }
 
         if download_type == 'download-multi':
+            repo_folder_permission = check_folder_permission(request, repo_id, parent_dir)
+            if parse_repo_perm(repo_folder_permission).can_download is False:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             dirent_list = []
             full_dirent_path_list = []
             for dirent_name in dirent_name_list:
