@@ -29,6 +29,7 @@ from saml2.client import Saml2Client
 from saml2.metadata import entity_descriptor
 from djangosaml2.cache import IdentityCache, OutstandingQueriesCache
 from djangosaml2.conf import get_config
+from djangosaml2.views import LogoutView
 
 from seaserv import ccnet_api, seafile_api
 
@@ -562,3 +563,7 @@ def adfs_compatible_view(request, url_prefix):
 
     org_id = str(org.org_id)
     return HttpResponsePermanentRedirect(request.path.replace(url_prefix, org_id))
+
+class SamlLogoutView(LogoutView):
+    def do_logout_service(self, request, data, binding, *args, **kwargs):
+        return super(SamlLogoutView, self).do_logout_service(request, data, binding)
