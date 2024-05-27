@@ -15,8 +15,6 @@ import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
 import wikiAPI from '../../utils/wiki-api';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
 import { FOLDER } from './constant';
 
 import './side-panel.css';
