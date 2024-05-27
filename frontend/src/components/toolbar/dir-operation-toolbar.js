@@ -33,21 +33,11 @@ class DirOperationToolbar extends React.Component {
       fileType: '.md',
       isCreateFileDialogShow: false,
       isCreateFolderDialogShow: false,
-      isUploadMenuShow: false,
-      isCreateMenuShow: false,
       isShareDialogShow: false,
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isMobileOpMenuOpen: false
     };
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.hideOperationMenu);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideOperationMenu);
   }
 
   toggleDesktopOpMenu = () => {
@@ -58,46 +48,12 @@ class DirOperationToolbar extends React.Component {
     this.setState({isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen});
   };
 
-  hideOperationMenu = () => {
-    this.setState({
-      isUploadMenuShow: false,
-      isCreateMenuShow: false,
-    });
-  };
-
-  toggleOperationMenu = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let targetRect = e.target.getBoundingClientRect();
-    let left = targetRect.left;
-    let top  = targetRect.bottom;
-    let style = {position: 'fixed', display: 'block', left: left, top: top};
-    this.setState({operationMenuStyle: style});
-  };
-
-  onUploadClick = (e) => {
-    this.toggleOperationMenu(e);
-    this.setState({
-      isUploadMenuShow: !this.state.isUploadMenuShow,
-      isCreateMenuShow: false,
-    });
-  };
-
   onUploadFile = (e) => {
-    this.setState({isUploadMenuShow: false});
     this.props.onUploadFile(e);
   };
 
   onUploadFolder = (e) => {
-    this.setState({isUploadMenuShow: false});
     this.props.onUploadFolder(e);
-  };
-
-  onCreateClick = (e) => {
-    this.toggleOperationMenu(e);
-    this.setState({
-      isCreateMenuShow: !this.state.isCreateMenuShow,
-      isUploadMenuShow: false,
-    });
   };
 
   onShareClick = () => {
@@ -196,7 +152,6 @@ class DirOperationToolbar extends React.Component {
 
   onMenuItemKeyDown = (item, e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
-      //e.target.click();
       item.onClick();
     }
   };
