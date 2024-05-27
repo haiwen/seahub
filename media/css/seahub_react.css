@@ -1027,7 +1027,24 @@ a.table-sort-op:hover {
   color: #fff;
   background-color: #20a0ff;
 }
-  
+
+.dropdown-item-icon,
+.btn .dropdown-item-icon {
+  color: #444;
+  font-size: 1rem;
+}
+
+.show>.btn-secondary.dropdown-toggle.dropdown-item .dropdown-item-icon {
+  color: #fff;
+}
+
+.dropdown-item:hover .dropdown-item-icon,
+.dropdown-item:hover .btn .dropdown-item-icon,
+.dropdown-item:focus .dropdown-item-icon,
+.dropdown-item:focus .btn .dropdown-item-icon {
+  color: #fff;
+}
+
 /* empty-tip */
 .empty-tip {
     margin: 5.5em 1em;

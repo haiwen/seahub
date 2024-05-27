@@ -47,15 +47,25 @@ class CurDirPath extends React.Component {
     return (
       <Fragment>
         <DirPath
+          repoID={this.props.repoID}
           repoName={this.props.repoName}
+          repoEncrypted={this.props.repoEncrypted}
+          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
           pathPrefix={this.props.pathPrefix}
           currentPath={this.props.currentPath}
+          userPerm={this.props.userPerm}
           onPathClick={this.props.onPathClick}
           onTabNavClick={this.props.onTabNavClick}
-          repoID={this.props.repoID}
           isViewFile={this.props.isViewFile}
           fileTags={this.props.fileTags}
           toggleTreePanel={this.props.toggleTreePanel}
+          enableDirPrivateShare={this.props.enableDirPrivateShare}
+          showShareBtn={this.props.showShareBtn}
+          onAddFolder={this.props.onAddFolder}
+          onAddFile={this.props.onAddFile}
+          onUploadFile={this.props.onUploadFile}
+          onUploadFolder={this.props.onUploadFolder}
+          direntList={this.props.fullDirentList}
         />
         {isDesktop &&
         <DirTool

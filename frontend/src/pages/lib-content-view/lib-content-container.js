@@ -209,6 +209,8 @@ class LibContentContainer extends React.Component {
               <CurDirPath
                 repoID={repoID}
                 repoName={this.props.currentRepoInfo.repo_name}
+                repoEncrypted={this.props.repoEncrypted}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                 pathPrefix={this.props.pathPrefix}
                 currentPath={this.props.path}
                 userPerm={this.props.userPerm}
@@ -226,6 +228,13 @@ class LibContentContainer extends React.Component {
                 currentMode={this.props.currentMode}
                 switchViewMode={this.props.switchViewMode}
                 isCustomPermission={this.props.isCustomPermission}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                showShareBtn={this.props.showShareBtn}
+                onAddFolder={this.props.onAddFolder}
+                onAddFile={this.props.onAddFile}
+                onUploadFile={this.props.onUploadFile}
+                onUploadFolder={this.props.onUploadFolder}
+                fullDirentList={this.props.fullDirentList}
               />
             }
           </div>

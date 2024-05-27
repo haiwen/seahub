@@ -237,3 +237,25 @@
 .op-btn:hover {
   background: #f5f5f5;
 }
+
+.dir-view-path .path-item {
+  min-width: 0; /* overwrite some styles */
+  padding: 0 6px;
+  font-size: 1rem;
+  color: inherit;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.dir-view-path .path-item:hover {
+  background: #efefef;
+}
+
+.dir-view-path .path-item-dropdown-toggle {
+  color: #999;
+  font-size: .6rem;
+}
+
+.dir-view-path .path-split {
+  padding: 0 2px;
+}
