@@ -75,7 +75,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <a className="path-link path-item" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
+            <span className="path-item" data-path={nodePath} onClick={this.onPathClick} role="button">{item}</span>
           </Fragment>
         );
       }
@@ -135,7 +135,7 @@ class DirPath extends React.Component {
           >
             <span className="path-repo-name">{repoName}</span>
           </DirOperationToolBar> :
-          <a className="path-item" data-path="/" onClick={this.onPathClick}>{repoName}</a>
+          <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
         }
         {pathElem}
         {this.props.isViewFile && (
