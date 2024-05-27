@@ -6,11 +6,12 @@ import logging
 import requests
 import posixpath
 import time
+import uuid
 import urllib.request, urllib.error, urllib.parse
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, edit_repo
@@ -21,9 +22,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path
+from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
+    get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
-    normalize_dir_path, is_pro_version
+    normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -32,10 +34,12 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.tags.models import FileUUIDMap
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.base.models import FileComment
+from seahub.api2.views import HTTP_447_TOO_MANY_FILES_IN_LIBRARY
 
-
-WIKI_CONFIG_PATH = '_Internal/Wiki'
-WIKI_CONFIG_FILE_NAME = 'index.json'
 HTTP_520_OPERATION_FAILED = 520
 
 
@@ -91,10 +95,9 @@ class Wikis2View(APIView):
         wiki_list = []
         for wiki in wikis:
             wiki_info = wiki.to_dict()
-            wiki_info['can_edit'] = (username == wiki.username)
             wiki_list.append(wiki_info)
 
-        return Response({'data': wiki_list})
+        return Response({'wikis': wiki_list})
 
     def post(self, request, format=None):
         """Add a new wiki.
@@ -169,8 +172,12 @@ class Wiki2ConfigView(APIView):
     def put(self, request, wiki_id):
         """Edit a wiki config
         """
-        username = request.user.username
+        wiki_config = request.data.get('wiki_config')
+        if not wiki_config:
+            error_msg = 'wiki_config invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        username = request.user.username
         try:
             wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
@@ -194,8 +201,6 @@ class Wiki2ConfigView(APIView):
             return None
         upload_link = gen_file_upload_url(token, 'upload-api')
         upload_link = upload_link + '?replace=1'
-
-        wiki_config = request.data.get('wiki_config', '{}')
 
         files = {
             'file': (WIKI_CONFIG_FILE_NAME, wiki_config)
@@ -223,7 +228,6 @@ class Wiki2ConfigView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
         try:
             repo = seafile_api.get_repo(wiki.repo_id)
             if not repo:
@@ -233,29 +237,10 @@ class Wiki2ConfigView(APIView):
             error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         wiki = wiki.to_dict()
-        if not file_id:
-            wiki['wiki_config'] = '{}'
-            return Response({'wiki': wiki})
+        wiki_config = get_wiki_config(repo.repo_id, request.user.username)
 
-        token = seafile_api.get_fileserver_access_token(repo.repo_id, file_id, 'download', request.user.username, use_onetime=True)
-
-        if not token:
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
-        resp = requests.get(url)
-        content = resp.content
-
-        wiki['wiki_config'] = content
+        wiki['wiki_config'] = wiki_config
 
         return Response({'wiki': wiki})
 
@@ -402,3 +387,155 @@ class Wiki2PageContentView(APIView):
             "seadoc_access_token": seadoc_access_token,
             "assets_url": assets_url,
         })
+
+
+class Wiki2PagesView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get_file_info(self, repo_id, file_path):
+
+        file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        if file_obj:
+            file_name = file_obj.obj_name
+        else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+
+        file_info = {
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(file_path),
+            'obj_name': file_name,
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else ''
+        }
+
+        return file_info
+
+    def post(self, request, wiki_id):
+        page_name = request.data.get('page_name', None)
+
+        if not page_name or '/' in page_name or '\\' in page_name:
+            error_msg = 'page_name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_edit_wiki(wiki, request.user.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        sdoc_uuid = uuid.uuid4()
+        file_name = page_name + '.sdoc'
+        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+        path = os.path.join(parent_dir, file_name)
+
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
+        new_file_name = check_filename_with_rename(repo_id, parent_dir, file_name)
+
+        # create new empty file
+        if not is_valid_dirent_name(new_file_name):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+
+        new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
+        try:
+            seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, request.user.username)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        new_file_path = posixpath.join(parent_dir, new_file_name)
+        file_info = self.get_file_info(repo_id, new_file_path)
+        file_info['doc_uuid'] = sdoc_uuid
+        filename = os.path.basename(path)
+
+        try:
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename, is_dir=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(file_info)
+
+
+class Wiki2PageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, wiki_id, page_id):
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not can_edit_wiki(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        pages = wiki_config.get('pages', [])
+        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+        path = page_info.get('path')
+
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if is_locked and not locked_by_me:
+            error_msg = _("File is locked")
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        sdoc_dir_path = os.path.dirname(path)
+        parent_dir = os.path.dirname(sdoc_dir_path)
+        dir_name = os.path.basename(sdoc_dir_path)
+
+        # delete the folder where the sdoc is located
+        try:
+            seafile_api.del_file(repo_id, parent_dir, json.dumps([dir_name]), username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:  # rm sdoc fileuuid
+            file_name = os.path.basename(path)
+            file_uuid = get_seadoc_file_uuid(repo, path)
+            FileComment.objects.filter(uuid=file_uuid).delete()
+            FileUUIDMap.objects.delete_fileuuidmap_by_path(repo_id, sdoc_dir_path, file_name, is_dir=False)
+            SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
+            SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
+            SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+        except Exception as e:
+            logger.error(e)
+
+        return Response({'success': True})

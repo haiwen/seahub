@@ -1,13 +1,23 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import re
+import os
 import stat
 import logging
+import json
+import requests
+import posixpath
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.utils import gen_inner_file_get_url
 
 logger = logging.getLogger(__name__)
+
+
+WIKI_PAGES_DIR = '/wiki-pages'
+WIKI_CONFIG_PATH = '_Internal/Wiki'
+WIKI_CONFIG_FILE_NAME = 'index.json'
 
 
 def is_valid_wiki_name(name):
@@ -41,3 +51,13 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
 def can_edit_wiki(wiki, username):
     permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
     return permission == PERMISSION_READ_WRITE
+
+
+def get_wiki_config(repo_id, username):
+    config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
+    file_id = seafile_api.get_file_id_by_path(repo_id, config_path)
+    token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
+    url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
+    resp = requests.get(url)
+    wiki_config = json.loads(resp.content)
+    return wiki_config

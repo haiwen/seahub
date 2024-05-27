@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { gettext, repoID, isWiki2 } from '../../utils/constants';
+import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 // import TreeView from '../../components/tree-view/tree-view';
@@ -14,7 +14,7 @@ import ViewStructureFooter from './view-structure/view-structure-footer';
 import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
-import { seafileAPI } from '../../utils/seafile-api';
+import wikiAPI from '../../utils/wiki-api';
 import { FOLDER } from './constant';
 
 import './side-panel.css';
@@ -101,13 +101,10 @@ class SidePanel extends Component {
     const config = deepCopy(this.props.config);
     const { pages, navigation } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
-    const pageIndex = pages.findIndex(item => item.id === pageId);
-    let path = pages[pageIndex].path;
-
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
-    seafileAPI.deleteFile(repoID, path);
+    wikiAPI.deleteWiki2Page(wikiId, pageId);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
     } else {
