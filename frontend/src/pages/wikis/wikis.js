@@ -41,7 +41,7 @@ class Wikis extends Component {
         return wiki['version'] = 'v1';
       });
       wikiAPI.listWikis2().then(res => {
-        let wikis2 = res.data.data;
+        let wikis2 = res.data.wikis;
         wikis2.map(wiki => {
           return wiki['version'] = 'v2';
         });

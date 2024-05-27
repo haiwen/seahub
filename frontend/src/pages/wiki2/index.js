@@ -83,14 +83,7 @@ class Wiki extends Component {
   getWikiConfig = () => {
     wikiAPI.getWiki2Config(wikiId).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
-      try {
-        JSON.parse(wiki_config);
-      } catch (error) {
-        toaster.danger(gettext('Wiki config error'));
-        this.setState({ isConfigLoading: false });
-        return;
-      }
-      const config = new WikiConfig(JSON.parse(wiki_config) || {});
+      const config = new WikiConfig(wiki_config || {});
       this.setState({
         config,
         isConfigLoading: false,

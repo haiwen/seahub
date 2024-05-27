@@ -4,11 +4,20 @@ import re
 import os
 import stat
 import logging
+import json
+import requests
+import posixpath
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.utils import gen_inner_file_get_url
 
 logger = logging.getLogger(__name__)
+
+
+WIKI_PAGES_DIR = '/wiki-pages'
+WIKI_CONFIG_PATH = '_Internal/Wiki'
+WIKI_CONFIG_FILE_NAME = 'index.json'
 
 
 def is_valid_wiki_name(name):
@@ -44,18 +53,11 @@ def can_edit_wiki(wiki, username):
     return permission == PERMISSION_READ_WRITE
 
 
-def get_page_dir_paths_in_folder(folder, id_to_page, page_dir_paths):
-    children = folder.get('children', [])
-    for child in children:
-        child_type = child.get('type')
-        if child_type == 'page':
-            page_id = child.get('id')
-            page = id_to_page.get(page_id, {})
-            page_path = page.get('path')
-            parent_dir = os.path.dirname(page_path)
-            sdoc_dir_name = os.path.basename(parent_dir)
-            page_dir_paths.append(sdoc_dir_name)
-        elif child_type == 'folder':
-            folder = child
-            get_page_dir_paths_in_folder(folder, id_to_page, page_dir_paths)
-    return page_dir_paths
+def get_wiki_config(repo_id, username):
+    config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
+    file_id = seafile_api.get_file_id_by_path(repo_id, config_path)
+    token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
+    url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
+    resp = requests.get(url)
+    wiki_config = json.loads(resp.content)
+    return wiki_config

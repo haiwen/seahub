@@ -103,13 +103,10 @@ class SidePanel extends Component {
     const config = deepCopy(this.props.config);
     const { pages, navigation } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
-    const pageIndex = pages.findIndex(item => item.id === pageId);
-    let path = pages[pageIndex].path;
-
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
-    wikiAPI.deleteWiki2Page(wikiId, path);
+    wikiAPI.deleteWiki2Page(wikiId, pageId);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
     } else {
@@ -227,12 +224,7 @@ class SidePanel extends Component {
     const { navigation, pages } = config;
     PageUtils.deleteFolder(navigation, pages, page_folder_id);
     config.navigation = navigation;
-    wikiAPI.deleteWiki2Dir(wikiId, page_folder_id).then((res) => {
-      this.props.saveWikiConfig(config);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    this.props.saveWikiConfig(config);
   };
 
   // Drag a folder to the front and back of another folder

@@ -185,14 +185,14 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
-  deleteWiki2Page(wikiId, pagePath) {
-    const path = encodeURIComponent(pagePath);
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/?p=' + path;
+  deleteWiki2Page(wikiId, pageId) {
+    // const path = encodeURIComponent(pagePath);
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/';
     return this.req.delete(url);
   }
 
-  deleteWiki2Dir(wikiId, dirId) {
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/dir/?id=' + dirId;
+  deleteWiki2Folder(wikiId, folderId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/folder/' + folderId + '/';
     return this.req.delete(url);
   }
 
