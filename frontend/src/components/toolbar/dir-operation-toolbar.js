@@ -178,7 +178,7 @@ class DirOperationToolbar extends React.Component {
       if (canUpload) {
         if (Utils.isSupportUploadFolder()) {
           opList.push({
-            'icon': 'upload',
+            'icon': 'upload-files',
             'text': gettext('Upload'),
             subOpList: [
               {'text': gettext('Upload Files'), 'onClick': this.onUploadFile},
@@ -234,7 +234,7 @@ class DirOperationToolbar extends React.Component {
               {this.props.children}
               <i className="sf3-font-drop-down sf3-font ml-1 path-item-dropdown-toggle"></i>
             </DropdownToggle>
-            <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
+            <DropdownMenu onMouseMove={this.onDropDownMouseMove} style={{'width': '200px'}}>
               {opList.map((item, index)=> {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
@@ -253,7 +253,7 @@ class DirOperationToolbar extends React.Component {
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
-                        <i className={`sf3-font-${item.icon} sf3-font mr-2`}></i>
+                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
                         <span className="mr-auto">{item.text}</span>
                       </DropdownToggle>
                       <DropdownMenu>
@@ -269,7 +269,7 @@ class DirOperationToolbar extends React.Component {
                   );
                 } else {
                   return (<DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
-                    <i className={`sf3-font-${item.icon} sf3-font mr-2`}></i>
+                    <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
                     {item.text}
                   </DropdownItem>);
                 }
