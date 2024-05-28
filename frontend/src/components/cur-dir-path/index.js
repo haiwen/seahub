@@ -25,6 +25,18 @@ const propTypes = {
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,
+  repoEncrypted: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
+  onAddFile: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
+  onUploadFile: PropTypes.func.isRequired,
+  onUploadFolder: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array.isRequired,
+  filePermission: PropTypes.string,
+  repoTags: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -66,6 +78,9 @@ class CurDirPath extends React.Component {
           onUploadFile={this.props.onUploadFile}
           onUploadFolder={this.props.onUploadFolder}
           direntList={this.props.fullDirentList}
+          filePermission={this.props.filePermission}
+          onFileTagChanged={this.props.onFileTagChanged}
+          repoTags={this.props.repoTags}
         />
         {isDesktop &&
         <DirTool
