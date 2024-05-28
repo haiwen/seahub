@@ -91,10 +91,12 @@ const propTypes = {
   direntDetailPanelTab: PropTypes.string,
   loadDirentList: PropTypes.func,
   fullDirentList: PropTypes.array,
-
   unSelectDirent: PropTypes.func,
   onFilesTagChanged: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
+  onUploadFile: PropTypes.func.isRequired,
+  onUploadFolder: PropTypes.func.isRequired,
+  onToolbarFileTagChanged: PropTypes.func.isRequired
 };
 
 class LibContentContainer extends React.Component {
@@ -235,6 +237,9 @@ class LibContentContainer extends React.Component {
                 onUploadFile={this.props.onUploadFile}
                 onUploadFolder={this.props.onUploadFolder}
                 fullDirentList={this.props.fullDirentList}
+                filePermission={this.props.filePermission}
+                onFileTagChanged={this.props.onToolbarFileTagChanged}
+                repoTags={this.props.repoTags}
               />
             }
           </div>

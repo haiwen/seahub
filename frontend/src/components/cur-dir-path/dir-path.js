@@ -6,17 +6,31 @@ import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { InternalLinkOperation } from '../operations';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
+import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
-  repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
   fileTags: PropTypes.array.isRequired,
-  toggleTreePanel: PropTypes.func.isRequired
+  toggleTreePanel: PropTypes.func.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
+  onAddFile: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
+  onUploadFile: PropTypes.func.isRequired,
+  onUploadFolder: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
+  repoTags: PropTypes.array.isRequired,
+  filePermission: PropTypes.string,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class DirPath extends React.Component {
@@ -51,23 +65,41 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <DirOperationToolBar
-              path={this.props.currentPath}
-              repoID={this.props.repoID}
-              repoName={this.props.repoName}
-              repoEncrypted={this.props.repoEncrypted}
-              direntList={this.props.direntList}
-              showShareBtn={this.props.showShareBtn}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              userPerm={this.props.userPerm}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              onAddFile={this.props.onAddFile}
-              onAddFolder={this.props.onAddFolder}
-              onUploadFile={this.props.onUploadFile}
-              onUploadFolder={this.props.onUploadFolder}
-            >
-              <span className="path-file-name">{item}</span>
-            </DirOperationToolBar>
+            {this.props.isViewFile ?
+              <ViewFileToolbar
+                path={this.props.currentPath}
+                repoID={this.props.repoID}
+                userPerm={this.props.userPerm}
+                repoEncrypted={this.props.repoEncrypted}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                filePermission={this.props.filePermission}
+                fileTags={this.props.fileTags}
+                onFileTagChanged={this.props.onFileTagChanged}
+                showShareBtn={this.props.showShareBtn}
+                repoTags={this.props.repoTags}
+              >
+                <span className="path-file-name">{item}</span>
+              </ViewFileToolbar>
+              :
+              <DirOperationToolBar
+                path={this.props.currentPath}
+                repoID={this.props.repoID}
+                repoName={this.props.repoName}
+                repoEncrypted={this.props.repoEncrypted}
+                direntList={this.props.direntList}
+                showShareBtn={this.props.showShareBtn}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                userPerm={this.props.userPerm}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                onAddFile={this.props.onAddFile}
+                onAddFolder={this.props.onAddFolder}
+                onUploadFile={this.props.onUploadFile}
+                onUploadFolder={this.props.onUploadFolder}
+              >
+                <span className="path-file-name">{item}</span>
+              </DirOperationToolBar>
+            }
           </Fragment>
         );
       } else {

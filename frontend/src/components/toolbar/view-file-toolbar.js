@@ -20,6 +20,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   dirent: PropTypes.object,
+  children: PropTypes.object
 };
 
 class ViewFileToolbar extends React.Component {
@@ -27,11 +28,51 @@ class ViewFileToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isDropdownMenuOpen: false,
       isMoreMenuShow: false,
       isShareDialogShow: false,
       isEditTagDialogShow: false,
     };
   }
+
+  toggleDropdownMenu = () => {
+    this.setState({isDropdownMenuOpen: !this.state.isDropdownMenuOpen});
+  };
+
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.toggleDropdownMenu();
+    }
+  };
+
+  onDropDownMouseMove = (e) => {
+    if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
+      this.setState({
+        isSubMenuShown: false
+      });
+    }
+  };
+
+  toggleSubMenu = (e) => {
+    e.stopPropagation();
+    this.setState({
+      isSubMenuShown: !this.state.isSubMenuShown}, () => {
+      this.toggleDropdownMenu();
+    });
+  };
+
+  toggleSubMenuShown = (item) => {
+    this.setState({
+      isSubMenuShown: true,
+      currentItem: item.text
+    });
+  };
+
+  onMenuItemKeyDown = (item, e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      item.onClick();
+    }
+  };
 
   onEditClick = (e) => {
     e.preventDefault();
@@ -58,30 +99,96 @@ class ViewFileToolbar extends React.Component {
   };
 
   render() {
-    let { filePermission } = this.props;
+    const { filePermission, showShareBtn } = this.props;
+    let opList = [];
+
+    if (filePermission === 'rw' || filePermission === 'cloud-edit') {
+      opList.push({
+        'icon': 'rename',
+        'text': gettext('Edit'),
+        'onClick': this.onEditClick
+      });
+    }
+    if (filePermission === 'rw') {
+      let newSubOpList = [];
+      if (showShareBtn) {
+        newSubOpList.push({
+          'text': gettext('Share'),
+          'onClick': this.onShareToggle
+        });
+      }
+      newSubOpList.push(
+        {'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle},
+        {'text': gettext('History'), 'onClick': this.onHistoryClick}
+      );
+
+      opList.push({
+        'icon': 'more-vertical',
+        'text': gettext('More'),
+        'subOpList': newSubOpList
+      });
+    }
+
     return (
       <Fragment>
-        <div className="dir-operation">
-          {(filePermission === 'rw' || filePermission === 'cloud-edit') && (
-            <Fragment>
-              <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-            </Fragment>
-          )}
-          {filePermission === 'rw' && (
-            <Dropdown isOpen={this.state.isMoreMenuShow} toggle={this.toggleMore}>
-              <DropdownToggle className='btn btn-secondary operation-item'>
-                {gettext('More')}
-              </DropdownToggle>
-              <DropdownMenu>
-                {this.props.showShareBtn &&
-                  <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
-                }
-                <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
-                <DropdownItem onClick={this.onHistoryClick}>{gettext('History')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          )}
-        </div>
+        {opList.length > 0 &&
+        <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+          <DropdownToggle
+            tag="div"
+            role="button"
+            className="path-item"
+            onClick={this.toggleDropdownMenu}
+            onKeyDown={this.onDropdownToggleKeyDown}
+            data-toggle="dropdown"
+          >
+            {this.props.children}
+            <i className="sf3-font-drop-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+          </DropdownToggle>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove} style={{'width': '200px'}}>
+            {opList.map((item, index)=> {
+              if (item == 'Divider') {
+                return <DropdownItem key={index} divider />;
+              } else if (item.subOpList) {
+                return (
+                  <Dropdown
+                    key={index}
+                    direction="right"
+                    className="w-100"
+                    isOpen={this.state.isSubMenuShown && this.state.currentItem == item.text}
+                    toggle={this.toggleSubMenu}
+                    onMouseMove={(e) => {e.stopPropagation();}}
+                  >
+                    <DropdownToggle
+                      caret
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+                      onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
+                    >
+                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                      <span className="mr-auto">{item.text}</span>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {item.subOpList.map((item, index)=> {
+                        if (item == 'Divider') {
+                          return <DropdownItem key={index} divider />;
+                        } else {
+                          return (<DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>{item.text}</DropdownItem>);
+                        }
+                      })}
+                    </DropdownMenu>
+                  </Dropdown>
+                );
+              } else {
+                return (
+                  <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
+                    <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                    {item.text}
+                  </DropdownItem>
+                );
+              }
+            })}
+          </DropdownMenu>
+        </Dropdown>
+        }
         {this.state.isShareDialogShow && (
           <ModalPotal>
             <ShareDialog
