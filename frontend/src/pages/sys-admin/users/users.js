@@ -44,8 +44,8 @@ class Users extends Component {
       isBatchSetQuotaDialogOpen: false,
       isBatchDeleteUserDialogOpen: false,
       isBatchAddAdminDialogOpen: false,
-      is_active: 'active',
-      role: 'default'
+      is_active: null,
+      role: null,
     };
   }
 
@@ -65,11 +65,7 @@ class Users extends Component {
         currentPage: parseInt(urlParams.get('page') || currentPage),
         sortBy: urlParams.get('order_by') || sortBy,
         sortOrder: urlParams.get('direction') || sortOrder,
-        is_active: sessionStorage.getItem('is_active') || is_active,
-        role: sessionStorage.getItem('role') || role,
       }, () => {
-        let is_active = sessionStorage.getItem('is_active') || this.state.is_active;
-        let role = sessionStorage.getItem('role') || this.state.role;
         this.getUsersListByPage(this.state.currentPage, is_active, role);
       });
     }
@@ -172,12 +168,10 @@ class Users extends Component {
     const { isLDAPImported } = this.props;
     seafileAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
-      sessionStorage.setItem('is_active', is_active);
-      sessionStorage.setItem('role', role);
       this.setState({
         userList: users,
         loading: false,
-        hasNextPage: Utils.hasNextPage(page, perPage, res.data.data.length),
+        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
         currentPage: page
       });
     }).catch((error) => {

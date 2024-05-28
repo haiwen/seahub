@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { gettext } from '../../utils/constants';
 import PropTypes from 'prop-types';
+const { availableRoles } = window.sysadmin.pageOptions;
 
 class DropdownComponent extends Component {
   constructor(props) {
@@ -14,6 +15,17 @@ class DropdownComponent extends Component {
 
   handleRoleChange = (event) => {
     this.props.handleFilterRole(event.target.value);
+  };
+
+  translateRole = (role) => {
+    switch (role) {
+      case 'default':
+        return gettext('Default');
+      case 'guest':
+        return gettext('Guest');
+      default:
+        return role;
+    }
   };
 
   render() {
@@ -40,21 +52,25 @@ class DropdownComponent extends Component {
         fontSize: '14px'
       }
     };
-
     return (
       <div style={styles.filterBar}>
         <div style={styles.filterContainer}>
           <label style={styles.filterLabel}>{gettext('Status')}</label>
           <select style={styles.filterSelect} onChange={this.handleStatusChange} value={this.props.isActive}>
-            <option value="active">Active</option>
-            <option value="inactive">Not active</option>
+            <option value="">{gettext('all')}</option>
+            <option value={1}>{gettext('Active')}</option>
+            <option value={0}>{gettext('Inactive')}</option>
           </select>
         </div>
         <div style={styles.filterContainer}>
           <label style={styles.filterLabel}>Role</label>
           <select style={styles.filterSelect} onChange={this.handleRoleChange} value={this.props.role}>
-            <option value="default">Default</option>
-            <option value="guest">Guest</option>
+              <option value=''>{gettext('all')}</option>
+              {availableRoles.map((item, index) => {
+                return (<option value={item}>{this.translateRole(item)}</option>)
+              })
+            }
+
           </select>
         </div>
       </div>
@@ -71,6 +87,7 @@ DropdownComponent.propTypes = {
   handleFilterActive: PropTypes.func,
   handleFilterRole: PropTypes.func,
   role: PropTypes.string,
-  isActive: PropTypes.string
+  isActive: PropTypes.string,
+  availableRoles: PropTypes.array,
 };
 export default DropdownComponent;

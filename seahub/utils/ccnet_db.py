@@ -89,20 +89,35 @@ class CcnetDB:
                 groups.append(group_obj)
         return groups
 
-    def list_eligible_users(self, start, limit, is_active='active', role='guest'):
+    def list_eligible_users(self, start, limit, is_active=None, role=None):
 
         def status(is_active):
-            if is_active == 'active':
-                is_active = 1
-            else:
-                is_active = 0
-            return is_active
+            return 'AND t1.is_active=%s ' % is_active
 
         def is_role(role):
             if role == 'default':
-                return 'AND (role is null or role = "default")'
+                return 'AND (t2.role is null or t2.role = "default")'
             else:
-                return 'AND role = "%s"' % role
+                return 'AND t2.role = "%s"' % role
+            
+        search_clause = ''
+        if is_active:
+            search_clause += status(is_active)
+        if role:
+            search_clause += is_role(role)
+            
+        count_sql = f"""
+        SELECT count(1)
+        FROM
+            `{self.db_name}`.`EmailUser` t1
+        LEFT JOIN
+            `{self.db_name}`.`UserRole` t2
+        ON
+            t1.email = t2.email
+        WHERE
+            t1.email NOT LIKE '%%@seafile_group' %s
+        ORDER BY t1.id
+        """ % search_clause
 
         sql = f"""
         SELECT t1.id, t1.email, t1.is_staff, t1.is_active, t1.ctime, t2.role, t1.passwd
@@ -113,13 +128,18 @@ class CcnetDB:
         ON
             t1.email = t2.email
         WHERE
-            t1.email NOT LIKE '%%@seafile_group' AND t1.is_active={status(is_active)} %s
+            t1.email NOT LIKE '%%@seafile_group' %s
         ORDER BY t1.id
         LIMIT {limit} OFFSET {start}
-        """ % is_role(role)
+        """ % search_clause
+        
         users = []
-
+        total = 0
         with connection.cursor() as cursor:
+            cursor.execute(count_sql)
+            cursor.execute(count_sql)
+            total_count = int(cursor.fetchone()[0])
+            
             cursor.execute(sql)
             for item in cursor.fetchall():
                 user_id = item[0]
@@ -141,4 +161,4 @@ class CcnetDB:
                 users_obj = CcnetUsers(**params)
                 users.append(users_obj)
 
-        return users
+        return users, total_count

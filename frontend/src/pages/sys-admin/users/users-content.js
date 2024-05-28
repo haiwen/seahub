@@ -72,7 +72,10 @@ class Content extends Component {
               isActive={this.props.is_active}
               role={this.props.role}
               handleFilterActive={this.props.handleFilterActive}
-              handleFilterRole={this.props.handleFilterRole}/>
+              handleFilterRole={this.props.handleFilterRole}
+              availableRoles={availableRoles}
+            />
+
           }
 
           <EmptyTip>
