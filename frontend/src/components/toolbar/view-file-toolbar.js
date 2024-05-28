@@ -110,6 +110,7 @@ class ViewFileToolbar extends React.Component {
       });
     }
     if (filePermission === 'rw') {
+      /*
       let newSubOpList = [];
       if (showShareBtn) {
         newSubOpList.push({
@@ -127,6 +128,19 @@ class ViewFileToolbar extends React.Component {
         'text': gettext('More'),
         'subOpList': newSubOpList
       });
+      */
+      if (showShareBtn) {
+        opList.push({
+          'icon': 'share',
+          'text': gettext('Share'),
+          'onClick': this.onShareToggle
+        });
+      }
+
+      opList.push(
+        {'icon': 'tag', 'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle},
+        {'icon': 'history', 'text': gettext('History'), 'onClick': this.onHistoryClick}
+      );
     }
 
     return (
