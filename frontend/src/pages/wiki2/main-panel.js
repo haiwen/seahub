@@ -12,7 +12,7 @@ const propTypes = {
   pathExist: PropTypes.bool.isRequired,
   isViewFile: PropTypes.bool.isRequired,
   isDataLoading: PropTypes.bool.isRequired,
-  content: PropTypes.string,
+  editorContent: PropTypes.object,
   permission: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
@@ -103,13 +103,11 @@ class MainPanel extends Component {
 
   render() {
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-    const { content, permission, pathExist, isDataLoading, isViewFile } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile } = this.props;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
-    const editorContent = content && JSON.parse(content);
     const isReadOnly = !(permission === 'rw');
     return (
       <div className="wiki2-main-panel">
-        <div className="main-panel-hide hide">{this.props.content}</div>
         <div className='wiki2-main-panel-north'>
           <WikiTopNav
             config={this.props.config}
@@ -125,7 +123,7 @@ class MainPanel extends Component {
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <SdocWikiViewer
-                document={editorContent}
+                document={this.props.editorContent}
                 showOutline={false}
                 showToolbar={false}
                 docUuid={this.state.docUuid}
