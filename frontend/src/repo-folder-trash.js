@@ -40,7 +40,8 @@ class RepoFolderTrash extends React.Component {
   }
 
   componentDidMount() {
-    this.getItems();
+    // this.getItems();
+    this.getItems2();
   }
 
   getItems = (scanStat) => {
@@ -60,6 +61,17 @@ class RepoFolderTrash extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  };
+
+  getItems2 = () => {
+    seafileAPI.getRepoFolderTrash2(repoID, path).then((res) => {
+      const { data } = res.data;
+      this.setState({
+        isLoading: false,
+        items: this.state.items.concat(data),
+        more: false
       });
     });
   };
@@ -106,7 +118,7 @@ class RepoFolderTrash extends React.Component {
       more: false,
       showFolder: false
     });
-    this.getItems();
+    this.getItems2();
   };
 
   renderFolder = (commitID, baseDir, folderPath) => {

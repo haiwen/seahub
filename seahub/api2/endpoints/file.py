@@ -5,6 +5,7 @@ import json
 import logging
 import posixpath
 import requests
+import datetime
 from pathlib import Path
 
 from rest_framework.authentication import SessionAuthentication
@@ -43,6 +44,7 @@ from seahub.drafts.utils import is_draft_file, get_file_draft
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
+from seafevents import seafevents_api
 
 logger = logging.getLogger(__name__)
 
@@ -860,10 +862,26 @@ class FileView(APIView):
 
         # delete file
         file_name = os.path.basename(path)
+        file_size = seafile_api.get_file_size(repo_id, repo.version, file_id)
+
+        record = {
+            'op_user': username,
+            'obj_type': 'file',
+            'obj_id': file_id,
+            'obj_name': file_name,
+            'timestamp': datetime.datetime.utcfromtimestamp(int(time.time())),
+            'repo_id': repo_id,
+            'path': parent_dir,
+            'commit_id': repo.head_cmmt_id,
+            'size': file_size
+        }
         try:
+            from seahub.utils import SeafEventsSession
+            session = SeafEventsSession()
             seafile_api.del_file(repo_id, parent_dir,
                                  json.dumps([file_name]),
                                  request.user.username)
+            seafevents_api.save_repo_trash(session, record)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

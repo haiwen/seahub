@@ -41,8 +41,7 @@ class CleanTrash extends React.Component {
     this.setState({
       submitBtnDisabled: true
     });
-
-    seafileAPI.deleteRepoTrash(repoID, inputValue.value).then((res) => {
+    seafileAPI.deleteRepoTrash2(repoID, inputValue.value).then((res) => {
       toaster.success(gettext('Clean succeeded.'));
       this.props.refreshTrash();
       this.props.toggleDialog();

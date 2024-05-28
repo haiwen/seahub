@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import stat
 import logging
+import os
+from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -20,6 +22,9 @@ from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 from seaserv import seafile_api
+from seafevents import seafevents_api
+from seahub.utils import SeafEventsSession
+
 from pysearpc import SearpcError
 from constance import config
 
@@ -303,3 +308,154 @@ class RepoTrashRevertDirents(APIView):
                 })
 
         return Response(result)
+
+
+class RepoTrash2(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get_item_info(self, trash_item):
+
+        item_info = {
+            'parent_dir': '/' if trash_item.path == '/' else trash_item.path + '/',
+            'obj_name': trash_item.obj_name,
+            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
+            'commit_id': trash_item.commit_id,
+        }
+
+        if trash_item.obj_type == 'dir':
+            is_dir = True
+        else:
+            is_dir = False
+
+        item_info['is_dir'] = is_dir
+        item_info['size'] = trash_item.size if not is_dir else ''
+        item_info['obj_id'] = trash_item.obj_id if not is_dir else ''
+
+        return item_info
+
+    def post(self, request, repo_id, format=None):
+        """ Return deleted files/dirs of a repo/folder
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        # argument check
+        path = request.data.get('path', '/')
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            show_days = int(request.GET.get('show_days', '0'))
+        except ValueError:
+            show_days = 0
+        if show_days < 0:
+            error_msg = 'show_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_history_limit = seafile_api.get_repo_history_limit(repo_id)
+        if repo_history_limit == -1 or repo_history_limit > show_days:
+            show_time = repo_history_limit
+        else:
+            show_time = show_days
+
+        try:
+            session = SeafEventsSession()
+            deleted_entries = seafevents_api.get_delete_records(session, repo_id, show_time, path)
+            session.close()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        items = []
+        if len(deleted_entries) >= 1:
+            # sort entry by delete time
+            deleted_entries.sort(
+                key=lambda x: x.delete_time, reverse=True)
+
+            for item in deleted_entries:
+                item_info = self.get_item_info(item)
+                items.append(item_info)
+
+        result = {
+            'data': items
+        }
+
+        return Response(result)
+
+    def delete(self, request, repo_id, format=None):
+        """ Clean library's trash.
+
+        Permission checking:
+        1. repo owner can perform this action.
+        2. is group admin.
+        """
+
+        # argument check
+        try:
+            keep_days = int(request.data.get('keep_days', 0))
+        except ValueError:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if keep_days < 0:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        if not config.ENABLE_USER_CLEAN_TRASH:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            session = SeafEventsSession()
+            seafevents_api.clean_up_repo_trash(session, repo_id, keep_days)
+            session.close()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

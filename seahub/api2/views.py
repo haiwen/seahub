@@ -143,6 +143,8 @@ from seaserv import seafserv_threaded_rpc, \
     create_org, ccnet_api
 
 from constance import config
+from seafevents import seafevents_api
+from seahub.utils import SeafEventsSession
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -3403,8 +3405,13 @@ class FileRevert(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
+        file_name = os.path.basename(path)
+        parent_path = os.path.dirname(path)
         try:
+            session = SeafEventsSession()
             seafile_api.revert_file(repo_id, commit_id, path, username)
+            seafevents_api.restore_repo_trash(session, repo_id, file_name, parent_path)
+            session.close()
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -3904,10 +3911,14 @@ class DirRevert(APIView):
         if check_folder_permission(request, repo_id, '/') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        parent_dir = os.path.dirname(path)
+        dir_name = os.path.basename(path)
         username = request.user.username
         try:
+            session = SeafEventsSession()
             seafile_api.revert_dir(repo_id, commit_id, path, username)
+            seafevents_api.restore_repo_trash(session, repo_id, dir_name, parent_dir)
+            session.close()
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
