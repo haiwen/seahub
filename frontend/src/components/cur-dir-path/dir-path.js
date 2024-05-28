@@ -16,7 +16,18 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   isViewFile: PropTypes.bool,
   fileTags: PropTypes.array.isRequired,
-  toggleTreePanel: PropTypes.func.isRequired
+  toggleTreePanel: PropTypes.func,
+  enableDirPrivateShare: PropTypes.bool,
+  showShareBtn: PropTypes.bool,
+  onAddFolder: PropTypes.func,
+  onAddFile: PropTypes.func,
+  onUploadFile: PropTypes.func,
+  onUploadFolder: PropTypes.func,
+  fullDirentList: PropTypes.array,
+  userPerm: PropTypes.string,
+  isGroupOwnedRepo: PropTypes.bool,
+  direntList: PropTypes.array.isRequired,
+  repoEncrypted: PropTypes.bool,
 };
 
 class DirPath extends React.Component {

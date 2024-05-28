@@ -95,6 +95,8 @@ const propTypes = {
   unSelectDirent: PropTypes.func,
   onFilesTagChanged: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
+  onUploadFile: PropTypes.func,
+  onUploadFolder: PropTypes.func,
 };
 
 class LibContentContainer extends React.Component {

@@ -25,6 +25,15 @@ const propTypes = {
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,
+  enableDirPrivateShare: PropTypes.bool,
+  showShareBtn: PropTypes.bool,
+  onAddFolder: PropTypes.func,
+  onAddFile: PropTypes.func,
+  onUploadFile: PropTypes.func,
+  onUploadFolder: PropTypes.func,
+  fullDirentList: PropTypes.array,
+  repoEncrypted: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class CurDirPath extends React.Component {
