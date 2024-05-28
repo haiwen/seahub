@@ -166,14 +166,11 @@ class TransferDialog extends React.Component {
       </Fragment>
     );
   };
+
   render() {
-
-
     const { itemName: repoName } = this.props;
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
-
-
     return (
       <Modal isOpen={true} style={{maxWidth: '720px'}} toggle={this.props.toggleDialog} className="transfer-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>

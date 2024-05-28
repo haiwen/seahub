@@ -4,7 +4,6 @@ from django.utils import timezone
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 
 
@@ -13,17 +12,9 @@ class WikiDoesNotExist(Exception):
 
 
 class WikiManager(models.Manager):
-    def add(self, wiki_name, username, org_id=-1):
+    def add(self, wiki_name, owner, repo_id):
         now = timezone.now()
-        if org_id and org_id > 0:
-            repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
-        else:
-            repo_id = seafile_api.create_repo(wiki_name, '', username)
-
-        repo = seafile_api.get_repo(repo_id)
-        assert repo is not None
-
-        wiki = self.model(username=username, name=wiki_name, repo_id=repo.id, created_at=now)
+        wiki = self.model(owner=owner, name=wiki_name, repo_id=repo_id, created_at=now)
         wiki.save(using=self._db)
         return wiki
 
@@ -33,7 +24,7 @@ class Wiki2(models.Model):
     personal wiki.
     """
 
-    username = LowerCaseCharField(max_length=255)
+    owner = LowerCaseCharField(max_length=255)
     name = models.CharField(max_length=255)
     repo_id = models.CharField(max_length=36, db_index=True)
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
@@ -41,7 +32,7 @@ class Wiki2(models.Model):
 
     class Meta:
         db_table = 'wiki_wiki2'
-        unique_together = (('username', 'repo_id'),)
+        unique_together = (('owner', 'repo_id'),)
         ordering = ["name"]
 
     @property
@@ -57,8 +48,7 @@ class Wiki2(models.Model):
     def to_dict(self):
         return {
             'id': self.pk,
-            'owner': self.username,
-            'owner_nickname': email2nickname(self.username),
+            'owner': self.owner,
             'name': self.name,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': timestamp_to_isoformat_timestr(self.updated_at),

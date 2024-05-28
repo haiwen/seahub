@@ -10,13 +10,13 @@ from rest_framework import status
 import seaserv
 from seaserv import ccnet_api
 
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
 from seahub.utils import is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import is_group_member
+from seahub.group.utils import is_group_member, is_group_admin
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 
 logger = logging.getLogger(__name__)
@@ -47,13 +47,24 @@ class Departments(APIView):
         except ValueError:
             avatar_size = GROUP_AVATAR_DEFAULT_SIZE
 
+        can_admin = request.GET.get('can_admin', 'false')
+
+        try:
+            can_admin = to_python_boolean(can_admin)
+        except:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'can_admin invalid')
+
         result = []
         for department in departments:
             department = seaserv.get_group(department.id)
 
             username = request.user.username
-            if not is_group_member(department.id, username):
-                continue
+            if can_admin:
+                if not is_group_admin(department.id, username):
+                    continue
+            else:
+                if not is_group_member(department.id, username):
+                    continue
 
             try:
                 avatar_url, is_default, date_uploaded = api_grp_avatar_url(department.id, avatar_size)

@@ -153,10 +153,13 @@ class WikiAPI {
     });
   }
 
-  addWiki2(wikiName) {
+  addWiki2(wikiName, owner) {
     const url = this.server + '/api/v2.1/wikis2/';
     let form = new FormData();
     form.append('name', wikiName);
+    if (owner) {
+      form.append('owner', owner);
+    }
     return this._sendPostRequest(url, form);
   }
 

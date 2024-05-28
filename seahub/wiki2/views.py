@@ -18,7 +18,7 @@ from seahub.utils import get_file_type_and_ext, render_permission_error, is_pro_
 from seahub.utils.file_types import IMAGE, SEADOC
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 from seahub.auth.decorators import login_required
-from seahub.wiki2.utils import can_edit_wiki
+from seahub.wiki2.utils import can_edit_wiki, check_wiki_permission
 
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.utils.repo import parse_repo_perm
@@ -38,6 +38,9 @@ def wiki_view(request, wiki_id, file_path):
 
     # perm check
     req_user = request.user.username
+    if not check_wiki_permission(wiki, req_user):
+        return render_permission_error(request, 'Permission denied.')
+
     permission = check_folder_permission(request, wiki.repo_id, '/')
     if not permission:
         return render_permission_error(request, 'Permission denied.')
