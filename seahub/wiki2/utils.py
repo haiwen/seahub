@@ -11,6 +11,7 @@ import posixpath
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils import gen_inner_file_get_url
+from seahub.group.utils import is_group_admin, is_group_member
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +57,34 @@ def can_edit_wiki(wiki, username):
 def get_wiki_config(repo_id, username):
     config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
     file_id = seafile_api.get_file_id_by_path(repo_id, config_path)
+    if not file_id:
+        return {}
     token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
     url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
     resp = requests.get(url)
     wiki_config = json.loads(resp.content)
     return wiki_config
+
+
+def is_group_wiki(wiki):
+    return not ('@' in wiki.owner)
+
+
+def check_wiki_admin_permission(wiki, username):
+    if is_group_wiki(wiki):
+        group_id = wiki.owner
+        return is_group_admin(group_id, username)
+    else:
+        if username == wiki.owner:
+            return True
+    return False
+
+
+def check_wiki_permission(wiki, username):
+    if is_group_wiki(wiki):
+        group_id = wiki.owner
+        return is_group_member(group_id, username)
+    else:
+        if username == wiki.owner:
+            return True
+    return False
