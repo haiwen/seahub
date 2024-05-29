@@ -6,16 +6,15 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from seaserv import seafile_api, ccnet_api
-
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.institutions.models import Institution, InstitutionQuota, InstitutionAdmin
+from seahub.institutions.models import Institution, InstitutionQuota
 from seahub.institutions.utils import get_institution_space_usage
 from seahub.signals import institution_deleted
 
@@ -25,7 +24,7 @@ logger = logging.getLogger(__name__)
 class AdminInstitutions(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
@@ -91,7 +90,7 @@ class AdminInstitutions(APIView):
 class AdminInstitution(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, institution_id):

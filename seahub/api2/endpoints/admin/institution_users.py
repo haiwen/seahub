@@ -7,10 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import gettext as _
 
-from seaserv import seafile_api, ccnet_api
-
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
@@ -54,7 +53,7 @@ def get_institution_user_info(user_obj, institution, is_check_admin=True):
 class AdminInstitutionUsers(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, institution_id):
@@ -185,7 +184,7 @@ class AdminInstitutionUsers(APIView):
 class AdminInstitutionUser(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, institution_id, email):
