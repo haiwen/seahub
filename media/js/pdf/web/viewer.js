@@ -182,7 +182,8 @@ const defaultOptions = {
     kind: OptionKind.API
   },
   isEvalSupported: {
-    value: true,
+    // CUSTOM_FOR_SEAFILE
+    value: false,
     kind: OptionKind.API
   },
   maxImageSize: {
