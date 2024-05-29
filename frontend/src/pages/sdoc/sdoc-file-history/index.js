@@ -243,7 +243,15 @@ class SdocFileHistory extends React.Component {
   renderChangesTip = ({ onChangeSidePanelDisplay }) => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
     if (isLoading) return null;
-    if (!isShowChanges) return null;
+    if (!isShowChanges) {
+      return (
+        <div className="sdoc-file-history-header-right d-flex align-items-center justify-content-end">
+          <div className='sdoc-file-changes-switch'>
+            <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
+          </div>
+        </div>
+      );
+    }
     const changesCount = changes ? changes.length : 0;
     if (changesCount === 0) {
       return (
