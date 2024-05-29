@@ -8,9 +8,9 @@ class SDocServerApi {
     this.accessToken = options.accessToken;
   }
 
-  getDocContent(docPath, docName) {
+  getDocContent() {
     const { server, docUuid, accessToken } = this;
-    const url = `${server}/api/v1/docs/${docUuid}/?doc_path=${encodeURIComponent(docPath)}&doc_name=${encodeURIComponent(docName)}`;
+    const url = `${server}/api/v1/docs/${docUuid}/`;
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
 

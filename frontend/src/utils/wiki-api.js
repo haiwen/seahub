@@ -189,7 +189,6 @@ class WikiAPI {
   }
 
   deleteWiki2Page(wikiId, pageId) {
-    // const path = encodeURIComponent(pagePath);
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/';
     return this.req.delete(url);
   }
@@ -197,6 +196,11 @@ class WikiAPI {
   deleteWiki2Folder(wikiId, folderId) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/folder/' + folderId + '/';
     return this.req.delete(url);
+  }
+
+  getWiki2Page(wikiId, pageId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/';
+    return this.req.get(url);
   }
 
 }

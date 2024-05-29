@@ -556,6 +556,70 @@ class Wiki2PageView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def get(self, request, wiki_id, page_id):
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        pages = wiki_config.get('pages', [])
+        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+        path = page_info.get('path')
+        doc_uuid = page_info.get('docUuid')
+
+        permission = check_folder_permission(request, wiki.repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        # send stats message
+        send_file_access_msg(request, repo, path, 'api')
+
+        filename = os.path.basename(path)
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo.repo_id, path)
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = None, 0
+        except SearpcError as e:
+            logger.error(e)
+            latest_contributor, last_modified = None, 0
+
+        assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
+        seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission)
+
+        return Response({
+            "latest_contributor": email2nickname(latest_contributor),
+            "last_modified": last_modified,
+            "permission": permission,
+            "seadoc_access_token": seadoc_access_token,
+            "assets_url": assets_url,
+        })
+
     def delete(self, request, wiki_id, page_id):
         try:
             wiki = Wiki.objects.get(id=wiki_id)

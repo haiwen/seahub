@@ -200,15 +200,14 @@ class Wiki extends Component {
     window.history.pushState({ url: fileUrl, path: dirPath }, dirPath, fileUrl);
   };
 
-  getSdocFileContent = (docUuid, filePath, accessToken) => {
+  getSdocFileContent = (docUuid, accessToken) => {
     const config = {
       docUuid,
       sdocServer: seadocServerUrl,
       accessToken,
     };
     const sdocServerApi = new SDocServerApi(config);
-    const docName = filePath.slice(filePath.lastIndexOf('/') + 1);
-    sdocServerApi.getDocContent(filePath, docName).then(res => {
+    sdocServerApi.getDocContent().then(res => {
       this.setState({
         isDataLoading: false,
         editorContent: res.data,
@@ -223,7 +222,6 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
     });
-    this.removePythonWrapper();
     wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
       const { permission, last_modified, latest_contributor, seadoc_access_token, assets_url } = res.data;
       this.setState({
@@ -236,7 +234,7 @@ class Wiki extends Component {
         path: filePath,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
-      this.getSdocFileContent(docUuid, filePath, seadoc_access_token);
+      this.getSdocFileContent(docUuid, seadoc_access_token);
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -560,6 +558,39 @@ class Wiki extends Component {
     node.addChildren(nodeList);
   };
 
+  showPage = (pageId, filePath) => {
+    this.setState({
+      isDataLoading: true,
+    });
+
+    this.removePythonWrapper();
+    wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
+      const { permission, last_modified, latest_contributor, seadoc_access_token, assets_url } = res.data;
+      this.setState({
+        permission,
+        lastModified: moment.unix(last_modified).fromNow(),
+        latestContributor: latest_contributor,
+        seadoc_access_token,
+        assets_url,
+        isViewFile: true,
+        path: filePath,
+      });
+      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+      this.getSdocFileContent(docUuid, seadoc_access_token);
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+
+    const hash = window.location.hash;
+    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}${Utils.encodePath(filePath)}${hash}`;
+    if (filePath === '/home.md') {
+      window.history.replaceState({ url: fileUrl, path: filePath }, filePath, fileUrl);
+    } else {
+      window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
+    }
+  };
+
   setCurrentPage = (pageId, callback) => {
     const { currentPageId, config } = this.state;
     if (pageId === currentPageId) {
@@ -571,7 +602,8 @@ class Wiki extends Component {
     const path = currentPage.path;
     if (Utils.isMarkdownFile(path) || Utils.isSdocFile(path)) {
       if (path !== this.state.path) {
-        this.showFile(path);
+        // this.showFile(path);
+        this.showPage(pageId, path);
       }
       this.onCloseSide();
     } else {
