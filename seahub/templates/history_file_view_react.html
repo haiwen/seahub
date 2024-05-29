@@ -6,9 +6,9 @@
 
 {% block extra_style %}
 {% if filetype == 'PDF' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/custom.css" />
-<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf4/web/viewer.css">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf4/web/custom.css">
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf4/web/locale/locale.json">
 {% endif %}
 {% render_bundle 'historyTrashFileView' 'css' %}
 {% endblock %}
@@ -41,9 +41,9 @@ window.app.pageOptions = {
 {% if filetype == 'PDF' %}
 <script type="text/javascript">
   var SEAFILE_FILE_URL = '{{ raw_path|escapejs }}';
-  var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
+  var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf4';
 </script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/web/viewer.js"></script>
+<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.mjs"></script>
+<script type="module" src="{{MEDIA_URL}}js/pdf4/web/viewer.mjs"></script>
 {% endif %}
 {% endblock %}
