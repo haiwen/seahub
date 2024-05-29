@@ -9,8 +9,8 @@ import ModalPortal from '../../components/modal-portal';
 import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
-import WikiListView from '../../components/wiki-list-view/wiki-list-view';
 import wikiAPI from '../../utils/wiki-api';
+import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -156,22 +156,24 @@ class Wikis extends Component {
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
               </div>
             </div>
-            <div className="cur-view-content">
-              {(this.state.loading || this.state.wikis.length !== 0) &&
-                <WikiListView
+            {(this.state.loading || this.state.wikis.length !== 0) &&
+              <div className="cur-view-content pb-4">
+                <WikiCardView
                   data={this.state}
                   deleteWiki={this.deleteWiki}
                 />
-              }
-              {(!this.state.loading && this.state.wikis.length === 0) &&
+              </div>
+            }
+            {(!this.state.loading && this.state.wikis.length === 0) &&
+              <div className="cur-view-content">
                 <EmptyTip>
                   <h2>{gettext('No Wikis')}</h2>
                   <p>{gettext('You have not any wikis yet.')}</p>
                   <p>{gettext('A wiki can be accessed by anyone, not only users, via its URL.')}</p>
                   <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu bar.')}</p>
                 </EmptyTip>
-              }
-            </div>
+              </div>
+            }
           </div>
         </div>
       </Fragment>
