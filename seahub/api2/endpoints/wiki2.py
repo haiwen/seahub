@@ -643,6 +643,10 @@ class Wiki2PageView(APIView):
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
         path = page_info.get('path')
 
+        if not page_info:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # check file lock
         try:
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)

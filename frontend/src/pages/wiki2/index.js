@@ -582,13 +582,10 @@ class Wiki extends Component {
       toaster.danger(errorMsg);
     });
 
-    const hash = window.location.hash;
-    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}${Utils.encodePath(filePath)}${hash}`;
-    if (filePath === '/home.md') {
-      window.history.replaceState({ url: fileUrl, path: filePath }, filePath, fileUrl);
-    } else {
-      window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
-    }
+    const params = new URLSearchParams(window.location.search);
+    params.set('page_id', pageId);
+    const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
 
   setCurrentPage = (pageId, callback) => {
@@ -602,7 +599,6 @@ class Wiki extends Component {
     const path = currentPage.path;
     if (Utils.isMarkdownFile(path) || Utils.isSdocFile(path)) {
       if (path !== this.state.path) {
-        // this.showFile(path);
         this.showPage(pageId, path);
       }
       this.onCloseSide();
