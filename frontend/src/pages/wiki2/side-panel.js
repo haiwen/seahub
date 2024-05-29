@@ -16,6 +16,8 @@ import wikiAPI from '../../utils/wiki-api';
 import { FOLDER } from './constant';
 
 import './side-panel.css';
+import { Utils } from '../../utils/utils';
+import { Tooltip, UncontrolledTooltip } from 'reactstrap';
 
 const { repoName } = window.wiki.config;
 
@@ -339,12 +341,46 @@ class SidePanel extends Component {
     );
   };
 
+  handleAddNewPage = () => {
+    // TODO 这里需要后端配合，创建新页面，pageName 需要后端生成
+    const pageName = 'New Page';
+    const voidFn = () => void 0;
+    wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
+      const { obj_name, parent_dir, doc_uuid } = res.data;
+      this.onAddNewPage({
+        name: pageName,
+        icon: '',
+        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+        docUuid: doc_uuid,
+        successCallback: voidFn,
+        errorCallback: voidFn,
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.onError();
+    });
+
+
+    // const { config } = this.props;
+    // const navigation = config.navigation;
+    // const pageId = generateUniqueId(navigation);
+    // const newPage = new Page({ id: pageId, name, icon, path, docUuid });
+    // this.onAddNewPage(newPage, successCallback, errorCallback);
+  };
+
   render() {
     const { isLoading, config } = this.props;
     return (
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
+          <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage}>
+            <i className='sf3-font sf3-font-new-page'></i>
+          </div>
+          <UncontrolledTooltip target="wiki-add-new-page">
+            {gettext('New page')}
+          </UncontrolledTooltip>
         </div>
         <div className="wiki2-side-nav">
           {isLoading ? <Loading /> : (isObjectNotEmpty(config) ? this.renderFolderView() : this.renderNoFolder())}
