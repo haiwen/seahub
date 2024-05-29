@@ -56,6 +56,7 @@ def wiki_view(request, wiki_id):
     latest_contributor = ''
     last_modified = 0
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
+    repo = seafile_api.get_repo(wiki.repo_id)
     if is_page and file_type == SEADOC:
         try:
             dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
@@ -69,6 +70,7 @@ def wiki_view(request, wiki_id):
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "file_path": file_path,
+        "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL
