@@ -122,6 +122,8 @@ export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 export const hasIndex = window.wiki ? window.wiki.config.hasIndex : '';
 export const assetsUrl = window.wiki ? window.wiki.config.assetsUrl : '';
 export const isWiki2 = window.wiki ? window.wiki.config.isWiki2 : false;
+export const seadocServerUrl = window.wiki ? window.wiki.config.seadocServerUrl : '';
+export const seadocAccessToken = window.wiki ? window.wiki.config.seadocAccessToken : '';
 
 // file history
 export const PER_PAGE = 25;

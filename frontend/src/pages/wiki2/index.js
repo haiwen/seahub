@@ -4,7 +4,8 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
-import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isWiki2, gettext } from '../../utils/constants';
+import SDocServerApi from '../../utils/sdoc-server-api';
+import { slug, wikiId, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, isWiki2, seadocServerUrl } from '../../utils/constants';
 import Dirent from '../../models/dirent';
 import WikiConfig from './models/wiki-config';
 import TreeNode from '../../components/tree-view/tree-node';
@@ -33,7 +34,7 @@ class Wiki extends Component {
       isViewFile: true,
       isDataLoading: false,
       direntList: [],
-      content: '',
+      editorContent: {},
       permission: '',
       lastModified: '',
       latestContributor: '',
@@ -47,7 +48,6 @@ class Wiki extends Component {
       config: new WikiConfig({}),
       repoId: '',
       seadoc_access_token: '',
-      docUuid: '',
       assets_url: '',
     };
 
@@ -200,24 +200,41 @@ class Wiki extends Component {
     window.history.pushState({ url: fileUrl, path: dirPath }, dirPath, fileUrl);
   };
 
+  getSdocFileContent = (docUuid, accessToken) => {
+    const config = {
+      docUuid,
+      sdocServer: seadocServerUrl,
+      accessToken,
+    };
+    const sdocServerApi = new SDocServerApi(config);
+    sdocServerApi.getDocContent().then(res => {
+      this.setState({
+        isDataLoading: false,
+        editorContent: res.data,
+      });
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   showFile = (filePath) => {
     this.setState({
       isDataLoading: true,
     });
-    this.removePythonWrapper();
     wikiAPI.getWiki2FileContent(wikiId, filePath).then(res => {
-      let data = res.data;
+      const { permission, last_modified, latest_contributor, seadoc_access_token, assets_url } = res.data;
       this.setState({
-        isDataLoading: false,
-        content: data.content,
-        permission: data.permission,
-        lastModified: moment.unix(data.last_modified).fromNow(),
-        latestContributor: data.latest_contributor,
-        seadoc_access_token: data.seadoc_access_token,
-        assets_url: data.assets_url,
+        permission,
+        lastModified: moment.unix(last_modified).fromNow(),
+        latestContributor: latest_contributor,
+        seadoc_access_token,
+        assets_url,
         isViewFile: true,
         path: filePath,
       });
+      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+      this.getSdocFileContent(docUuid, seadoc_access_token);
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -541,6 +558,36 @@ class Wiki extends Component {
     node.addChildren(nodeList);
   };
 
+  showPage = (pageId, filePath) => {
+    this.setState({
+      isDataLoading: true,
+    });
+
+    this.removePythonWrapper();
+    wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
+      const { permission, last_modified, latest_contributor, seadoc_access_token, assets_url } = res.data;
+      this.setState({
+        permission,
+        lastModified: moment.unix(last_modified).fromNow(),
+        latestContributor: latest_contributor,
+        seadoc_access_token,
+        assets_url,
+        isViewFile: true,
+        path: filePath,
+      });
+      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+      this.getSdocFileContent(docUuid, seadoc_access_token);
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    params.set('page_id', pageId);
+    const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
+  };
+
   setCurrentPage = (pageId, callback) => {
     const { currentPageId, config } = this.state;
     if (pageId === currentPageId) {
@@ -552,7 +599,7 @@ class Wiki extends Component {
     const path = currentPage.path;
     if (Utils.isMarkdownFile(path) || Utils.isSdocFile(path)) {
       if (path !== this.state.path) {
-        this.showFile(path);
+        this.showPage(pageId, path);
       }
       this.onCloseSide();
     } else {
@@ -602,7 +649,7 @@ class Wiki extends Component {
           pathExist={this.state.pathExist}
           isViewFile={this.state.isViewFile}
           isDataLoading={this.state.isDataLoading}
-          content={this.state.content}
+          editorContent={this.state.editorContent}
           permission={this.state.permission}
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
