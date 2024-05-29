@@ -106,24 +106,6 @@ class WikiAPI {
 
 
   // for wiki2
-  listWiki2Dir(wikiId, dirPath, withParents) {
-    const path = encodeURIComponent(dirPath);
-    let url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page-dir/?p=' + path;
-    if (withParents) {
-      url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page-dir/?p=' + path + '&with_parents=' + withParents;
-    }
-    return this.req.get(url);
-  }
-
-
-  getWiki2FileContent(wikiId, filePath) {
-    const path = encodeURIComponent(filePath);
-    const time = new Date().getTime();
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/content/' + '?p=' + path + '&_=' + time;
-    return this.req.get(url);
-  }
-
-
   listWikis2(options) {
     /*
      * options: `{type: 'shared'}`, `{type: ['mine', 'shared', ...]}`
