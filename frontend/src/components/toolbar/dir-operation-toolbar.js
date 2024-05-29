@@ -138,7 +138,8 @@ class DirOperationToolbar extends React.Component {
   toggleSubMenu = (e) => {
     e.stopPropagation();
     this.setState({
-      isSubMenuShown: !this.state.isSubMenuShown}, () => {
+      isSubMenuShown: !this.state.isSubMenuShown
+    }, () => {
       this.toggleDesktopOpMenu();
     });
   };
@@ -186,7 +187,11 @@ class DirOperationToolbar extends React.Component {
             ]
           });
         } else {
-          opList.push({'text': gettext('Upload'), 'onClick': this.onUploadFile});
+          opList.push({
+            'icon': 'upload-files',
+            'text': gettext('Upload'),
+            'onClick': this.onUploadFile
+          });
         }
       }
 
@@ -206,7 +211,7 @@ class DirOperationToolbar extends React.Component {
         opList.push({
           'icon': 'new',
           'text': gettext('New'),
-          subOpList: newSubOpList
+          'subOpList': newSubOpList
         });
       }
 
@@ -266,10 +271,12 @@ class DirOperationToolbar extends React.Component {
                     </Dropdown>
                   );
                 } else {
-                  return (<DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
-                    <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
-                    {item.text}
-                  </DropdownItem>);
+                  return (
+                    <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
+                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                      {item.text}
+                    </DropdownItem>
+                  );
                 }
               })}
             </DropdownMenu>
