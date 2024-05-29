@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiViewer } from '@seafile/sdoc-editor';
-import { gettext, repoID, siteRoot, username } from '../../utils/constants';
+import { gettext, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
@@ -14,12 +14,6 @@ const propTypes = {
   isDataLoading: PropTypes.bool.isRequired,
   editorContent: PropTypes.object,
   permission: PropTypes.string,
-  lastModified: PropTypes.string,
-  latestContributor: PropTypes.string,
-  onMenuClick: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-  onMainNavBarClick: PropTypes.func.isRequired,
-  onLinkClick: PropTypes.func.isRequired,
   seadoc_access_token: PropTypes.string,
   assets_url: PropTypes.string,
   config: PropTypes.object,
@@ -30,58 +24,10 @@ class MainPanel extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       docUuid: '',
     };
   }
-
-  onMenuClick = () => {
-    this.props.onMenuClick();
-  };
-
-  onEditClick = (e) => {
-    e.preventDefault();
-    let url = siteRoot + 'lib/' + repoID + '/file' + this.props.path + '?mode=edit';
-    window.open(url);
-  };
-
-  onMainNavBarClick = (e) => {
-    let path = Utils.getEventData(e, 'path');
-    this.props.onMainNavBarClick(path);
-  };
-
-  renderNavPath = () => {
-    let paths = this.props.path.split('/');
-    let nodePath = '';
-    let pathElem = paths.map((item, index) => {
-      if (item === '') {
-        return null;
-      }
-      if (index === (paths.length - 1)) {
-        return (
-          <Fragment key={index}>
-            <span className="path-split">/</span>
-            <span className="path-file-name">{item}</span>
-          </Fragment>
-        );
-      } else {
-        nodePath += '/' + item;
-        return (
-          <Fragment key={index} >
-            <span className="path-split">/</span>
-            <a
-              className="path-link"
-              data-path={nodePath}
-              onClick={this.onMainNavBarClick}>
-              {item}
-            </a>
-          </Fragment>
-        );
-      }
-    });
-    return pathElem;
-  };
 
   static getDerivedStateFromProps(props, state) {
     const { seadoc_access_token } = props;
@@ -102,7 +48,6 @@ class MainPanel extends Component {
   }
 
   render() {
-    const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     const { permission, pathExist, isDataLoading, isViewFile } = this.props;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
@@ -119,7 +64,9 @@ class MainPanel extends Component {
         </div>
         <div className="main-panel-center">
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
-            {!this.props.pathExist && errMessage}
+            {!this.props.pathExist &&
+              <div className="message err-tip">{gettext('Folder does not exist.')}</div>
+            }
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <SdocWikiViewer

@@ -4,9 +4,7 @@ import deepCopy from 'deep-copy';
 import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
-// import TreeView from '../../components/tree-view/tree-view';
 import ViewStructure from './view-structure';
-import IndexMdViewer from './index-md-viewer';
 import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddNewPageDialog from './view-structure/add-new-page-dialog';
@@ -24,15 +22,6 @@ const { repoName } = window.wiki.config;
 const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  treeData: PropTypes.object.isRequired,
-  indexNode: PropTypes.object,
-  indexContent: PropTypes.string.isRequired,
-  currentPath: PropTypes.string.isRequired,
-  onCloseSide: PropTypes.func.isRequired,
-  onNodeClick: PropTypes.func.isRequired,
-  onNodeCollapse: PropTypes.func.isRequired,
-  onNodeExpanded: PropTypes.func.isRequired,
-  onLinkClick: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   saveWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
@@ -43,59 +32,11 @@ class SidePanel extends Component {
 
   constructor(props) {
     super(props);
-    this.isNodeMenuShow = false;
     this.state = {
       isShowNewFolderDialog: false,
       isShowAddNewPageDialog: false,
     };
   }
-
-  renderIndexView = () => {
-    return (
-      <div className="wiki2-pages-container">
-        <div style={{ marginTop: '2px' }}></div>
-        <IndexMdViewer
-          indexContent={this.props.indexContent}
-          onLinkClick={this.props.onLinkClick}
-        />
-      </div>
-    );
-  };
-
-  renderTreeView = () => {
-    return (
-      <div className="wiki2-pages-container">
-        {/* {this.props.treeData && (
-          <TreeView
-            treeData={this.props.treeData}
-            currentPath={this.props.currentPath}
-            isNodeMenuShow={this.isNodeMenuShow}
-            onNodeClick={this.props.onNodeClick}
-            onNodeCollapse={this.props.onNodeCollapse}
-            onNodeExpanded={this.props.onNodeExpanded}
-          />
-        )} */}
-        {isWiki2 &&
-          <ViewStructureFooter
-            onToggleAddView={this.openAddPageDialog}
-            onToggleAddFolder={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowNewFolderDialog &&
-          <NewFolderDialog
-            onAddFolder={this.addPageFolder}
-            onToggleAddFolderDialog={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowAddNewPageDialog &&
-          <AddNewPageDialog
-            toggle={this.closeAddNewPageDialog}
-            onAddNewPage={this.onAddNewPage}
-          />
-        }
-      </div>
-    );
-  };
 
   confirmDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
@@ -373,28 +314,40 @@ class SidePanel extends Component {
     );
   };
 
-  renderContent = () => {
-    const { isLoading, indexNode, config } = this.props;
-    if (isLoading) {
-      return <Loading />;
-    }
-    if (indexNode) {
-      return this.renderIndexView();
-    }
-    if (isObjectNotEmpty(config)) {
-      return this.renderFolderView();
-    }
-    return this.renderTreeView();
+  renderNoFolder = () => {
+    return (
+      <div className="wiki2-pages-container">
+        {isWiki2 &&
+          <ViewStructureFooter
+            onToggleAddView={this.openAddPageDialog}
+            onToggleAddFolder={this.onToggleAddFolder}
+          />
+        }
+        {this.state.isShowNewFolderDialog &&
+          <NewFolderDialog
+            onAddFolder={this.addPageFolder}
+            onToggleAddFolderDialog={this.onToggleAddFolder}
+          />
+        }
+        {this.state.isShowAddNewPageDialog &&
+          <AddNewPageDialog
+            toggle={this.closeAddNewPageDialog}
+            onAddNewPage={this.onAddNewPage}
+          />
+        }
+      </div>
+    );
   };
 
   render() {
+    const { isLoading, config } = this.props;
     return (
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
         </div>
         <div className="wiki2-side-nav">
-          {this.renderContent()}
+          {isLoading ? <Loading /> : (isObjectNotEmpty(config) ? this.renderFolderView() : this.renderNoFolder())}
         </div>
       </div>
     );
