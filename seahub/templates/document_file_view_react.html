@@ -3,7 +3,7 @@
 {% load seahub_tags %}
 
 {% block extra_style %}
-<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf4/web/locale/locale.json">
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
 {% render_bundle 'viewFileDocument' 'css' %}
 {% endblock %}
 
@@ -16,7 +16,7 @@
 <script type="text/javascript">
 var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
 var SEAFILE_FILE_URL = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf';
-var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf4';
+var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
 </script>
-<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.mjs"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
 {% endblock %}

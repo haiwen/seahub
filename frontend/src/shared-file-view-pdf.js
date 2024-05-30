@@ -8,6 +8,12 @@ import './css/pdf-file-view.css';
 
 const { err } = window.shared.pageOptions;
 
+class SharedFileViewPDF extends React.Component {
+  render() {
+    return <SharedFileView content={<FileContent />} fileType="pdf" />;
+  }
+}
+
 class FileContent extends React.Component {
   render() {
     if (err) {
@@ -19,12 +25,6 @@ class FileContent extends React.Component {
         <PDFViewer />
       </div>
     );
-  }
-}
-
-class SharedFileViewPDF extends React.Component {
-  render() {
-    return <SharedFileView content={<FileContent />} fileType="pdf" />;
   }
 }
 
