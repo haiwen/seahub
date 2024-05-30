@@ -6,10 +6,12 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
+import RenameWikiDialog from '../dialog/rename-wiki-dialog';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
+  renameWiki: PropTypes.func.isRequired,
   isDepartment: PropTypes.bool.isRequired,
 };
 
@@ -18,6 +20,7 @@ class WikiCardItem extends Component {
     super(props);
     this.state = {
       isShowDeleteDialog: false,
+      isShowRenameDialog: false,
       isItemMenuShow: false,
       ownerAvatar: '',
     };
@@ -31,6 +34,12 @@ class WikiCardItem extends Component {
       });
     }
   }
+
+  onRenameToggle = (e) => {
+    this.setState({
+      isShowRenameDialog: !this.state.isShowRenameDialog,
+    });
+  };
 
   onDeleteToggle = (e) => {
     e.preventDefault();
@@ -51,6 +60,13 @@ class WikiCardItem extends Component {
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
+  };
+
+  renameWiki = (newName) => {
+    if (this.props.wiki.name !== newName) {
+      this.props.renameWiki(this.props.wiki, newName);
+    }
+    this.setState({ isShowDeleteDialog: false });
   };
 
   clickWikiCard = (link) => {
@@ -94,7 +110,10 @@ class WikiCardItem extends Component {
     let wikiName = isOldVersion ? `${wiki.name} (old version)` : wiki.name;
     return (
       <>
-        <div className="wiki-card-item" onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}>
+        <div
+          className={`wiki-card-item ${this.state.isItemMenuShow ? 'wiki-card-item-menu-open' : ''}`}
+          onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}
+        >
           <div className="wiki-card-item-top">
             <div className="d-flex align-items-center" style={{width: 'calc(100% - 46px)'}}>
               <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
@@ -114,7 +133,8 @@ class WikiCardItem extends Component {
                 style={{'minWidth': '0'}}
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
-                {/* <DropdownItem onClick={}>{gettext('Rename')}</DropdownItem> */}
+                {/* TODO renameWIki support wiki v1? */}
+                <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
                 <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -129,6 +149,15 @@ class WikiCardItem extends Component {
             <WikiDeleteDialog
               toggleCancel={this.onDeleteCancel}
               handleSubmit={this.deleteWiki}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowRenameDialog &&
+          <ModalPortal>
+            <RenameWikiDialog
+              toggleCancel={this.onRenameToggle}
+              onRename={this.renameWiki}
+              wiki={wiki}
             />
           </ModalPortal>
         }

@@ -123,6 +123,36 @@ class Wikis extends Component {
     }
   };
 
+  // TODO renameWIki support wiki v1?
+  renameWiki = (wiki, newName) => {
+    console.log(wiki, newName);
+    // if (wiki.version === 'v1') {
+    //   wikiAPI.renameWiki(wiki.id, newName).then(() => {
+    //     let wikis = this.state.wikis.filter(item => {
+    //       return item.name !== wiki.name;
+    //     });
+    //     this.setState({wikis: wikis});
+    //   }).catch((error) => {
+    //     if(error.response) {
+    //       let errorMsg = error.response.data.error_msg;
+    //       toaster.danger(errorMsg);
+    //     }
+    //   });
+    // } else {
+    //   wikiAPI.renameWiki2(wiki.id, newName).then(() => {
+    //     let wikis = this.state.wikis.filter(item => {
+    //       return item.name !== wiki.name;
+    //     });
+    //     this.setState({wikis: wikis});
+    //   }).catch((error) => {
+    //     if(error.response) {
+    //       let errorMsg = error.response.data.error_msg;
+    //       toaster.danger(errorMsg);
+    //     }
+    //   });
+    // }
+  };
+
   render() {
     return (
       <Fragment>
@@ -161,6 +191,7 @@ class Wikis extends Component {
                 <WikiCardView
                   data={this.state}
                   deleteWiki={this.deleteWiki}
+                  renameWiki={this.renameWiki}
                 />
               </div>
             }
