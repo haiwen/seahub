@@ -45,6 +45,12 @@ class WikiAPI {
     }
   }
 
+  listWikiDepartments() {
+    const url = this.server + '/api/v2.1/departments/';
+    const params = { can_admin: true };
+    return this.req.get(url, { params: params });
+  }
+
   listWikiDir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
     let url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path;

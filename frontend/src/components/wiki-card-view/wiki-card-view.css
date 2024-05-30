@@ -31,13 +31,18 @@
   color: #666;
 }
 
+.wiki-card-item .wiki-card-item-top .dropdown {
+  display: flex;
+  align-items: center;
+}
+
 .wiki-card-item .wiki-card-item-top .sf3-font-wiki.sf3-font {
   color: #FF8900;
   font-size: 24px;
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-card-item-name {
-  max-width: 250px;
+  max-width: 220px;
   font-size: 16px;
 }
 
