@@ -139,7 +139,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {multiInstitution && otherPermission &&
+                {isPro && multiInstitution && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('institutions')}`}
