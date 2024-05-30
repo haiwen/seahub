@@ -25,6 +25,7 @@ class WikiCardGroup extends Component {
                 key={index}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
+                isDepartment={isDepartment}
               />
             );
           })}
