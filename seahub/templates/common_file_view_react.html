@@ -37,7 +37,7 @@ rawPath: '{{ raw_path|escapejs }}'
   var SEAFILE_FILE_URL = '{{ raw_path|escapejs }}';
   var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf4';
 </script>
-<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.mjs"></script>
-<script type="module" src="{{MEDIA_URL}}js/pdf4/web/viewer.mjs"></script>
+<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.js"></script>
+<script type="module" src="{{MEDIA_URL}}js/pdf4/web/viewer.js"></script>
 {% endif %}
 {% endblock %}

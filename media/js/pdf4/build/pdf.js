@@ -8370,7 +8370,7 @@ const PDFWorkerUtil = {
 {
   if (_shared_util_js__WEBPACK_IMPORTED_MODULE_20__.isNodeJS) {
     PDFWorkerUtil.isWorkerDisabled = true;
-    _worker_options_js__WEBPACK_IMPORTED_MODULE_35__.GlobalWorkerOptions.workerSrc ||= "./pdf.worker.mjs";
+    _worker_options_js__WEBPACK_IMPORTED_MODULE_35__.GlobalWorkerOptions.workerSrc ||= "./pdf.worker.js";
   }
   PDFWorkerUtil.isSameOrigin = function (baseUrl, otherUrl) {
     let base;

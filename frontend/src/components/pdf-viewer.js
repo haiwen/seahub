@@ -232,19 +232,19 @@ class PDFViewer extends React.Component {
                     </button>
                     <div className="splitToolbarButton hiddenSmallView ml-2 d-flex align-items-center">
                       <div className="splitToolbarButtonSeparator mr-2"></div>
-                      <button id="firstPage" className="toolbarButton" title="Go to First Page" tabIndex="56" data-l10n-id="first_page">
-                        <span data-l10n-id="first_page_label">Go to First Page</span>
+                      <button id="firstPage" className="toolbarButton" title="Go to First Page" tabIndex="56" data-l10n-id="pdfjs-first-page-button">
+                        <span data-l10n-id="pdfjs-first-page-button-label">{gettext('Go to First Page')}</span>
                       </button>
                       <button className="toolbarButton" title="Previous Page" id="previous" tabIndex={13} data-l10n-id="pdfjs-previous-button">
-                        <span data-l10n-id="pdfjs-previous-button-label">Previous</span>
+                        <span data-l10n-id="pdfjs-previous-button-label">{gettext('Previous')}</span>
                       </button>
                       <input type="number" id="pageNumber" className="toolbarField" title="Page" defaultValue="1" min="1" tabIndex="15" data-l10n-id="page" autoComplete="off" />
                       <span id="numPages" className="toolbarLabel"></span>
                       <button className="toolbarButton" title="Next Page" id="next" tabIndex={14} data-l10n-id="pdfjs-next-button">
-                        <span data-l10n-id="pdfjs-next-button-label">Next</span>
+                        <span data-l10n-id="pdfjs-next-button-label">{gettext('Next')}</span>
                       </button>
-                      <button id="lastPage" className="toolbarButton" title="Go to Last Page" tabIndex="57" data-l10n-id="last_page">
-                        <span data-l10n-id="last_page_label">Go to Last Page</span>
+                      <button id="lastPage" className="toolbarButton" title="Go to Last Page" tabIndex="57" data-l10n-id="pdfjs-last-page-button">
+                        <span data-l10n-id="pdfjs-last-page-button-label">{gettext('Go to Last Page')}</span>
                       </button>
                     </div>
                   </div>
@@ -281,16 +281,16 @@ class PDFViewer extends React.Component {
                   <div id="toolbarViewerMiddle" className="d-flex align-items-center">
                     <div className="splitToolbarButton float-none">
                       <button id="zoomOut" className="toolbarButton" title="Zoom Out" tabIndex={21} data-l10n-id="pdfjs-zoom-out-button">
-                        <span data-l10n-id="pdfjs-zoom-out-button-label">Zoom Out</span>
+                        <span data-l10n-id="pdfjs-zoom-out-button-label">{gettext('Zoom Out')}</span>
                       </button>
                       <div className="splitToolbarButtonSeparator d-none" />
                     </div>
                     <span id="scaleSelectContainer" className="dropdownToolbarButton">
                       <select id="scaleSelect" title="Zoom" tabIndex={23} data-l10n-id="pdfjs-zoom-select">
-                        <option id="pageAutoOption" value="auto" defaultValue={'auto'} data-l10n-id="pdfjs-page-scale-auto">Automatic Zoom</option>
-                        <option id="pageActualOption" value="page-actual" data-l10n-id="pdfjs-page-scale-actual">Actual Size</option>
-                        <option id="pageFitOption" value="page-fit" data-l10n-id="pdfjs-page-scale-fit">Page Fit</option>
-                        <option id="pageWidthOption" value="page-width" data-l10n-id="pdfjs-page-scale-width">Page Width</option>
+                        <option id="pageAutoOption" value="auto" defaultValue={'auto'} data-l10n-id="pdfjs-page-scale-auto">{gettext('Automatic Zoom')}</option>
+                        <option id="pageActualOption" value="page-actual" data-l10n-id="pdfjs-page-scale-actual">{gettext('Actual Size')}</option>
+                        <option id="pageFitOption" value="page-fit" data-l10n-id="pdfjs-page-scale-fit">{gettext('Page Fit')}</option>
+                        <option id="pageWidthOption" value="page-width" data-l10n-id="pdfjs-page-scale-width">{gettext('Page Width')}</option>
                         <option id="customScaleOption" value="custom" disabled="disabled" hidden={true} data-l10n-id="pdfjs-page-scale-percent" data-l10n-args="{ scale: 0 }">0%</option>
                         <option value="0.5" data-l10n-id="pdfjs-page-scale-percent" data-l10n-args="{ scale: 50 }">50%</option>
                         <option value="0.75" data-l10n-id="pdfjs-page-scale-percent" data-l10n-args="{ scale: 75 }">75%</option>
@@ -303,7 +303,7 @@ class PDFViewer extends React.Component {
                       </select>
                     </span>
                     <button id="zoomIn" className="toolbarButton" title="Zoom In" tabIndex={22} data-l10n-id="pdfjs-zoom-in-button">
-                      <span data-l10n-id="pdfjs-zoom-in-button-label">Zoom In</span>
+                      <span data-l10n-id="pdfjs-zoom-in-button-label">{gettext('Zoom In')}</span>
                     </button>
                   </div>
                 </div>
@@ -442,14 +442,14 @@ class PDFViewer extends React.Component {
             </dialog>
             <dialog id="printServiceDialog" style={{minWidth: '200px'}}>
               <div className="row">
-                <span data-l10n-id="pdfjs-print-progress-message">Preparing document for printing…</span>
+                <span data-l10n-id="pdfjs-print-progress-message">{gettext('Preparing document for printing')}…</span>
               </div>
               <div className="row">
                 <progress value={0} max={100} />
                 <span data-l10n-id="pdfjs-print-progress-percent" data-l10n-args="{ progress: 0 }" className="relative-progress">0%</span>
               </div>
               <div className="buttonRow">
-                <button id="printCancel" className="dialogButton"><span data-l10n-id="pdfjs-print-progress-close-button">Cancel</span></button>
+                <button id="printCancel" className="dialogButton"><span data-l10n-id="pdfjs-print-progress-close-button">{gettext('Cancel')}</span></button>
               </div>
             </dialog>
           </div>  {/* dialogContainer */}

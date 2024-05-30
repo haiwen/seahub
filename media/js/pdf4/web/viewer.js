@@ -8574,7 +8574,7 @@ const defaultOptions = {
   },
   workerSrc: {
     // CUSTOM_FOR_SEAFILE
-    value: SEAFILE_PDFJS_DIR + "/build/pdf.worker.mjs",
+    value: SEAFILE_PDFJS_DIR + "/build/pdf.worker.js",
     kind: OptionKind.WORKER
   }
 };
@@ -8585,7 +8585,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER
   };
   defaultOptions.sandboxBundleSrc = {
-    value: "../build/pdf.sandbox.mjs",
+    value: "../build/pdf.sandbox.js",
     kind: OptionKind.VIEWER
   };
   defaultOptions.viewerCssTheme = {

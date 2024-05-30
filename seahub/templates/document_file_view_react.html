@@ -18,5 +18,5 @@ var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
 var SEAFILE_FILE_URL = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf';
 var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf4';
 </script>
-<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.mjs"></script>
+<script type="module" src="{{MEDIA_URL}}js/pdf4/build/pdf.js"></script>
 {% endblock %}
