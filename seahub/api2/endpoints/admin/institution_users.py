@@ -191,8 +191,8 @@ class AdminInstitutionUser(APIView):
         """ Update user of an institution
         """
 
-        if not request.user.admin_permissions.other_permission():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        # if not request.user.admin_permissions.other_permission():
+        #     return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             institution = Institution.objects.get(id=institution_id)
