@@ -7,7 +7,6 @@ import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
 
 const propTypes = {
-  owner: PropTypes.string.isRequired,
   wiki: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
 };
@@ -57,11 +56,10 @@ class WikiCardItem extends Component {
 
   renderAvatar = () => {
     const { wiki } = this.props;
-    // const userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
     return (
       <div className="wiki-card-item-avatar-container">
-        <img src={appAvatarURL} className="avatar mr-1" alt={gettext('Avatar')} />
-        <span title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
+        <img className="wiki-card-item-avatar" src={appAvatarURL} alt={wiki.owner_nickname}/>
+        <span className="wiki-card-item-owner text-truncate" title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
       </div>
     );
   };
@@ -70,14 +68,14 @@ class WikiCardItem extends Component {
     const { wiki } = this.props;
     return (
       <div className="wiki-card-item-avatar-container">
-        <span className='sf3-font-department sf3-font nav-icon mr-1'></span>
-        <span title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
+        <span className='sf3-font-department sf3-font nav-icon'></span>
+        <span className="wiki-card-item-owner text-truncate" title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
       </div>
     );
   };
 
   render() {
-    const { owner, wiki } = this.props;
+    const { wiki } = this.props;
     let isOldVersion = wiki.version !== 'v2';
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
@@ -86,7 +84,7 @@ class WikiCardItem extends Component {
       <>
         <div className="wiki-card-item" onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}>
           <div className="wiki-card-item-top">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center" style={{width: 'calc(100% - 46px)'}}>
               <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
               <span className="wiki-card-item-name ml-2 text-truncate" title={wikiName} aria-label={wikiName}>{wikiName}</span>
             </div>
@@ -110,7 +108,7 @@ class WikiCardItem extends Component {
             </Dropdown>
           </div>
           <div className="wiki-card-item-bottom">
-            {owner === username ? this.renderAvatar() : this.renderDept()}
+            {wiki.owner === username ? this.renderAvatar() : this.renderDept()}
             <span className="wiki-item-updated-time">{moment(wiki.updated_at).fromNow()}</span>
           </div>
         </div>

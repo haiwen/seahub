@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username } from '../../utils/constants';
 import WikiCardItem from './wiki-card-item';
 
 const propTypes = {
   wikis: PropTypes.array.isRequired,
   deleteWiki: PropTypes.func.isRequired,
-  owner: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  isDepartment: PropTypes.bool.isRequired,
 };
 
 class WikiCardGroup extends Component {
   render() {
-    let { wikis, owner } = this.props;
+    let { wikis, title, isDepartment } = this.props;
     return (
-      <div className='wiki-card-group'>
-        <h4 className="sf-heading my-4">
-          <span className={`sf3-font nav-icon sf3-font-${username === owner ? 'mine' : 'department'}`} aria-hidden="true"></span>
-          {username === owner ? gettext('My Wikis') : wikis[0].owner_nickname}
+      <div className='wiki-card-group mb-4'>
+        <h4 className="sf-heading">
+          <span className={`sf3-font nav-icon sf3-font-${isDepartment ? 'department' : 'mine'}`} aria-hidden="true"></span>
+          {title}
         </h4>
         <div className='wiki-card-group-items'>
           {wikis.map((wiki, index) => {
@@ -25,7 +25,6 @@ class WikiCardGroup extends Component {
                 key={index}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
-                owner={owner}
               />
             );
           })}

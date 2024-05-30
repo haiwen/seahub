@@ -217,7 +217,7 @@ form,input,textarea,select,button,img {
 body, input, textarea, button, select {
     font-size: 13px;
     line-height: 1.5;
-    color: #333;
+    color: #212529;
     word-wrap:break-word;
 }
 input, button, select { line-height:19px;/*for ff*/ }
@@ -226,7 +226,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 { font-size:1.9em; }
 h2 { font-size:1.5em; color:#222; font-weight:bold; }
-h3 { font-size:16px; color:#322; font-weight:normal;  }
+h3 { font-size:16px; color:#212529; font-weight:normal;  }
 h4 { font-size:1.1em; color:#222; font-weight:normal; }
 h5, h6 { font-size:1em; }
 ul { list-style:none; }
@@ -279,7 +279,7 @@ select {
 }
 .sf-btn-link {
     display:inline-block;
-    color:#333;
+    color:#212529;
     line-height:19px;
     text-decoration:none;
     font-weight:normal;
@@ -291,7 +291,7 @@ select {
     border-radius:3px;
 }
 .sf-btn-link:hover {
-    color:#333;
+    color:#212529;
     text-decoration:none;
 }
 input[type=radio] {
@@ -368,7 +368,7 @@ th, td {
     border-bottom:1px solid #eee;
 }
 td {
-    color: #333;
+    color: #212529;
     font-size:14px;
     word-break:break-all; /* mainly for lib/folder/file name */
 }
@@ -429,7 +429,7 @@ table img { vertical-align:middle; }
 .hl { background-color: #f8f8f8; } /* highlight */
 .tip { color:#808080; font-size:12px; }
 .tick-green { color:green; }
-.label { color:#333; font-size:12px; font-style:normal; }
+.label { color:#212529; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
 .cspt { cursor:pointer; }
@@ -831,7 +831,7 @@ textarea:-moz-placeholder {/* for FF */
     display:block;
     font-size:15px;
     padding:4px 4px 4px 0;
-    color:#333;
+    color:#212529;
     font-weight:normal;
 }
 .side-tabnav-tabs .tab a:focus {
@@ -1135,7 +1135,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:40px 200px 40px 60px;
     font-size:14px;
     line-height:1.6;
-    color:#333;
+    color:#212529;
 }
 .article h2,
 .article h3,
@@ -1143,7 +1143,7 @@ textarea:-moz-placeholder {/* for FF */
 .article h5,
 .article h6 {
     margin: 1.2em 0 0.4em;
-    color:#333;
+    color:#212529;
     font-weight:bold;
 }
 .article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p,
@@ -1312,7 +1312,7 @@ a.sf-popover-item {
 .wiki-nav .link {
     display:inline-block;
     font-size:15px;
-    color:#333;
+    color:#212529;
     line-height:1.5;
     font-weight:normal;
     padding: 4px 10px 9px;
@@ -1419,7 +1419,7 @@ a.sf-popover-item {
     border-bottom:1px solid #ddd;
 }
 .account-popup a.item {
-    color:#333;
+    color:#212529;
     font-weight:normal;
 }
 .account-popup a.item:hover {
@@ -1606,7 +1606,7 @@ a.sf-popover-item {
     color:#888;
 }
 #traffic-stat {
-    color: #333;
+    color: #212529;
     font-weight: normal;
 }
 #notices-loading,
@@ -1653,7 +1653,7 @@ a.sf-popover-item {
     margin-left:5px;
 }
 .commit-time {
-    color:#333;
+    color:#212529;
     font-size:13px;
     font-weight:normal;
     margin-top: 0em;
@@ -1673,7 +1673,7 @@ a.sf-popover-item {
 }
 .fileinput-button .icon-plus {
     font-size:13px;
-    color:#333;
+    color:#212529;
 }
 .fileinput-button input {
     position: absolute;

@@ -1,3 +1,7 @@
+.wiki-card-group .sf-heading {
+  margin: 16px 0 10px;
+}
+
 .wiki-card-group-items {
   display: grid;
   grid-template-columns: 32.5% 32.5% 32.5%;
@@ -7,8 +11,8 @@
 .wiki-card-item {
   height: 120px;
   width: 100%;
-  border: 1px solid #EEEEEE;
-  padding: 20px;
+  border: 1px solid #eee;
+  padding: 16px;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -37,12 +41,13 @@
 }
 
 .wiki-card-item .wiki-card-item-top .sf3-font-wiki.sf3-font {
-  color: #FF8900;
+  color: #FF9800;
   font-size: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-card-item-name {
-  max-width: 220px;
   font-size: 16px;
 }
 
@@ -52,6 +57,7 @@
   border-radius: 3px;
   opacity: 0;
   color: #444;
+  margin-left: 20px;
 }
 
 .wiki-card-item:hover .wiki-card-item-top .dropdown .sf-dropdown-toggle {
@@ -63,26 +69,30 @@
 }
 
 .wiki-card-item .wiki-card-item-avatar-container {
-  height: 20px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eee;
   border-radius: 10px;
-  padding: 2px;
+  height: 20px;
+  max-width: 50%;
+  padding: 0 8px 0 2px;
 }
 
-.wiki-card-item .wiki-card-item-avatar-container .avatar {
-  width: 16px;
+.wiki-card-item .wiki-card-item-avatar-container .wiki-card-item-avatar {
+  border-radius: 50%;
   height: 16px;
+  width: 16px;
 }
 
-.wiki-card-item .wiki-card-item-avatar-container span {
+.wiki-card-item .wiki-card-item-avatar-container .wiki-card-item-owner {
+  display: inline-block;
   font-size: 13px;
+  line-height: 20px;
+  margin-left: 5px;
 }
 
 .wiki-card-item .wiki-card-item-avatar-container .sf3-font-department {
-  font-size: 1rem;
-  line-height: 1;
+  font-size: 14px;
   color: #999;
 }
 

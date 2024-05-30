@@ -143,7 +143,7 @@ a, a:hover { color: #ec8000; }
 }
 .sf-heading {
     font-size: 1rem;
-    color: #322;
+    color: #212529;
     font-weight: normal;
     line-height: 1.5;
 }
@@ -200,7 +200,7 @@ a, a:hover { color: #ec8000; }
 
 .sf-dropdown-toggle:focus,
 .sf-dropdown-toggle:hover {
-    color: #333;
+    color: #212529;
 }
 
 .user-select-none {
@@ -366,7 +366,7 @@ a, a:hover { color: #ec8000; }
 
 .op-icon:focus,
 .op-icon:hover {
-    color: #333;
+    color: #212529;
     text-decoration: none;
 }
 
@@ -379,7 +379,7 @@ a, a:hover { color: #ec8000; }
 .action-icon:hover,
 .attr-action-icon:focus,
 .attr-action-icon:hover {
-    color: #333 !important;
+    color: #212529 !important;
     text-decoration: none;
 }
 
@@ -464,7 +464,7 @@ a, a:hover { color: #ec8000; }
 }
 
 .account-popup a.item {
-    color:#333;
+    color:#212529;
     font-weight:normal;
 }
 
@@ -557,7 +557,7 @@ a, a:hover { color: #ec8000; }
 
 .nav-pills .nav-item .nav-link {
     padding: 0.25rem;
-    color: #333;
+    color: #212529;
 }
 
 .nav-pills .nav-item .nav-link:hover {
@@ -919,7 +919,7 @@ table th {
 table td {
     padding: 0.5rem 0.1875rem;
     border-bottom: 1px solid #e8e8e8;
-    color: #333;
+    color: #212529;
     font-size: 0.875rem;
     word-break: break-all;
 }

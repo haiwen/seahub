@@ -53,14 +53,14 @@
   display: flex;
   flex-shrink: 0;
   background: #fff;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
   box-shadow: 0 2px 4px rgba(0,0,0, 10%);
   z-index: 100;
 }
 
 @media (max-width: 767px) {
   .side-panel-north {
-      border-right: 1px solid #eee;
+    border-right: 1px solid #eee;
   }
 
   .main-panel-north {
@@ -92,7 +92,6 @@
 }
 
 .cur-view-path {
-  position: relative; /* for the ':after' */
   padding: 8px 16px;
   max-height: 48px;
   background: #fff;
@@ -100,15 +99,7 @@
   align-items: center;
   flex-shrink: 0;
   justify-content: space-between;
-}
-
-.cur-view-path:after {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 0;
-  content: '';
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
 }
 
 .cur-view-content {

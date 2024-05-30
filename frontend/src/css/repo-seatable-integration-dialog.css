@@ -19,7 +19,7 @@
 
 .account-dialog .nav-pills .nav-item .nav-link {
   padding: .3125rem 1rem .3125rem 8px;
-  color: #333;
+  color: #212529;
 }
 
 .account-dialog .nav-pills .nav-item .nav-link:hover {
@@ -59,7 +59,7 @@
 
 .account-dialog table td {
   padding: 3px 0.1875rem;
-  color: #333;
+  color: #212529;
   font-size: 14px;
   word-break: break-all;
 }

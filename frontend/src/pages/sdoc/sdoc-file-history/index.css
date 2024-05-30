@@ -254,7 +254,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover a.fas {
-  color: #333;
+  color: #212529;
 }
 
 .sdoc-file-history-versions .history-list-item.item-active {
@@ -343,7 +343,7 @@
 }
 
 .sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle:hover {
-  color: #333;
+  color: #212529;
   cursor: pointer;
 }
 
