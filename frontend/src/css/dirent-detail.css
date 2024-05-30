@@ -40,7 +40,7 @@
   line-height: 1.5rem;
   vertical-align: middle;
   font-size: 1rem;
-  color: #322;
+  color: #212529;
 }
 
 .detail-body {
@@ -93,7 +93,7 @@
 
 .dirent-table-container td {
   font-size: 14px;
-  color: #333;
+  color: #212529;
   word-break: break-all;
 }
 
@@ -136,7 +136,7 @@
 
 .file-related-files ul li a,
 .list-related-file-table tr td a {
-  color: #333;
+  color: #212529;
 }
 
 .list-related-file-body {
