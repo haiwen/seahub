@@ -93,11 +93,7 @@
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-file-history-viewer {
   width: 100%;
-  min-height: 120px;
-  flex: 1;
-  background-color: #fff;
-  word-break: break-word;
-  border: 1px solid #e6e6dd;
+  height: calc(100vh - 50px);
 }
 
 .sdoc-file-history .sdoc-file-history-container .sdoc-file-history-content .sdoc-editor-content {
@@ -362,10 +358,6 @@
 
   .sdoc-file-history .sdoc-file-history-content {
     padding: 0;
-  }
-
-  .sdoc-file-history .sdoc-file-history-content .sdoc-file-history-viewer {
-    border: none;
   }
 
   .markdown-viewer-render-content {

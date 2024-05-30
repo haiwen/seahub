@@ -339,12 +339,15 @@ class SdocFileHistory extends React.Component {
         const path = [0, 0, 0];
         const { isShowChanges } = this.state;
         this.onSelectHistoryVersion(...getCurrentAndLastVersion(path, historyGroups, isShowChanges));
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch((error) => {
       const errorMessage = 'there has an error in server';
-      const isLoading = false;
-      this.setState({ isLoading });
-      this.setState({ sidePanelInitData: { isLoading, errorMessage } });
+      this.setState({
+        isLoading: false,
+        sidePanelInitData: { isLoading: false, errorMessage }
+      });
       throw Error(errorMessage);
     });
   }
