@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext, appAvatarURL, username } from '../../utils/constants';
+import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
+  isDepartment: PropTypes.bool.isRequired,
 };
 
 class WikiCardItem extends Component {
@@ -75,7 +76,7 @@ class WikiCardItem extends Component {
   };
 
   render() {
-    const { wiki } = this.props;
+    const { wiki, isDepartment } = this.props;
     let isOldVersion = wiki.version !== 'v2';
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
@@ -108,7 +109,7 @@ class WikiCardItem extends Component {
             </Dropdown>
           </div>
           <div className="wiki-card-item-bottom">
-            {wiki.owner === username ? this.renderAvatar() : this.renderDept()}
+            {isDepartment ? this.renderDept() : this.renderAvatar()}
             <span className="wiki-item-updated-time">{moment(wiki.updated_at).fromNow()}</span>
           </div>
         </div>
