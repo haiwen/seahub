@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { SeahubSelect } from '../common/select';
@@ -25,11 +25,7 @@ class AddWikiDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.listDepartments();
-  }
-
-  listDepartments = () => {
-    seafileAPI.listDepartments().then(res => {
+    wikiAPI.listWikiDepartments().then(res => {
       const departments = res.data.sort((a, b) => {
         return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
       });
@@ -46,7 +42,7 @@ class AddWikiDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  };
+  }
 
   inputNewName = (e) => {
     this.setState({
@@ -95,6 +91,7 @@ class AddWikiDialog extends React.Component {
             components={{ NoOptionsMessage: (
               <div style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('No department')}</div>
             ) }}
+            noOptionsMessage={() => {return gettext('No options available');}}
           />
         </ModalBody>
         <ModalFooter>

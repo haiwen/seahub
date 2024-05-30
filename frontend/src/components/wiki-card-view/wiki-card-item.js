@@ -81,14 +81,14 @@ class WikiCardItem extends Component {
     let isOldVersion = wiki.version !== 'v2';
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
-    let wikiName = isOldVersion ? <>{wiki.name} (old version)</> : <>{wiki.name}</>;
+    let wikiName = isOldVersion ? `${wiki.name} (old version)` : wiki.name;
     return (
       <>
         <div className="wiki-card-item" onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}>
           <div className="wiki-card-item-top">
             <div className="d-flex align-items-center">
               <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
-              <span className="wiki-card-item-name ml-2 text-truncate">{wikiName}</span>
+              <span className="wiki-card-item-name ml-2 text-truncate" title={wikiName} aria-label={wikiName}>{wikiName}</span>
             </div>
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown}>
               <DropdownToggle
