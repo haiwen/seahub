@@ -1,4 +1,4 @@
-{% load seahub_tags i18n static %}
+{% load seahub_tags avatar_tags i18n static %}
 
 <!DOCTYPE html>
 <html>
@@ -112,7 +112,8 @@ html, body { padding:0; margin:0; height:100%; }
             {% if request.user.is_authenticated %}
             "user": {
                 "id": "{{ username|escapejs }}",
-                "name": "{{ username|email2nickname|escapejs }}"
+                "name": "{{ username|email2nickname|escapejs }}",
+                "image": "{{ avatar_url }}",
             }
             {% endif %}
         }
