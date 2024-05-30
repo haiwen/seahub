@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
+import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
 import toaster from '../toast';
 
 const {
@@ -131,7 +131,7 @@ class Account extends Component {
           url: `${siteRoot}org/info/`,
           text: gettext('Organization Admin')
         };
-      } else if (isInstAdmin) {
+      } else if (isPro && isInstAdmin) {
         data = {
           url: `${siteRoot}inst/useradmin/`,
           text: gettext('Institution Admin')

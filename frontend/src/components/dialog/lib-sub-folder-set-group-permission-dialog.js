@@ -77,11 +77,8 @@ class GroupItem extends React.Component {
 GroupItem.propTypes = {
   item: PropTypes.object.isRequired,
   permissions: PropTypes.array.isRequired,
-  deleteUserFolderPermission: PropTypes.func.isRequired,
-  onChangeUserFolderPerm: PropTypes.func.isRequired,
   showPath: PropTypes.bool.isRequired,
   repoName: PropTypes.string.isRequired,
-  handleChange: PropTypes.func.isRequired,
   deleteGroupPermissionItem: PropTypes.func.isRequired,
   onChangeGroupPermission: PropTypes.func.isRequired,
 };
@@ -247,6 +244,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
 
   handleSubmit = () => {
     this.setState({
+      folderPath: this.state.folderPath || '/',
       showFileChooser: !this.state.showFileChooser
     });
   };

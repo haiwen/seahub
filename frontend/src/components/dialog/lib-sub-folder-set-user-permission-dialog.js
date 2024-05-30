@@ -82,14 +82,13 @@ UserItem.propTypes = {
   onChangeUserFolderPerm: PropTypes.func.isRequired,
   showPath: PropTypes.bool.isRequired,
   repoName: PropTypes.string.isRequired,
-  handleChange: PropTypes.func.isRequired,
 };
 
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   isDepartmentRepo: PropTypes.bool,
-  folderPath: PropTypes.string.isRequired,
+  folderPath: PropTypes.string,
   repoName: PropTypes.string,
 };
 
@@ -226,6 +225,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   handleFileChooserSubmit = () => {
     this.setState({
+      folderPath: this.state.folderPath || '/',
       showFileChooser: !this.state.showFileChooser
     });
   };
