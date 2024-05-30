@@ -3173,7 +3173,8 @@ const defaultOptions = {
     kind: OptionKind.API
   },
   isEvalSupported: {
-    value: true,
+    // custom for seafile
+    value: false,
     kind: OptionKind.API
   },
   isOffscreenCanvasSupported: {
