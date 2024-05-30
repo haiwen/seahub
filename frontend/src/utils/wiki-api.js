@@ -191,6 +191,14 @@ class WikiAPI {
     return this.req.get(url);
   }
 
+  renameWiki2(wikiId, wikiName) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/';
+    let params = {
+      wiki_name: wikiName
+    };
+    return this.req.put(url, params);
+  }
+
 }
 
 let wikiAPI = new WikiAPI();

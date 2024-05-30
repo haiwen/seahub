@@ -202,6 +202,67 @@ class Wiki2View(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def put(self, request, wiki_id):
+        wiki_name = request.data.get('wiki_name')
+        if not wiki_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
+
+        if not is_valid_dirent_name(wiki_name):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+
+        username = request.user.username
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = 'Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not check_wiki_admin_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if wiki_name == wiki.name:
+            return Response({"success": True})
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = "Wiki library not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not check_wiki_admin_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not is_group_wiki(wiki):
+            if is_org_context(request):
+                repo_owner = seafile_api.get_org_repo_owner(repo.id)
+            else:
+                repo_owner = seafile_api.get_repo_owner(repo.id)
+
+            is_owner = True if username == repo_owner else False
+            if not is_owner:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+            # check repo status
+            repo_status = repo.status
+            if repo_status != 0:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            # desc is ''
+            seafile_api.edit_repo(repo_id, wiki_name, '', username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        wiki.name = wiki_name
+        wiki.save()
+
+        return Response({"success": True})
+
     def delete(self, request, wiki_id):
         """Delete a wiki.
         """
@@ -431,6 +492,10 @@ class Wiki2PageView(APIView):
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
         path = page_info.get('path')
         doc_uuid = page_info.get('docUuid')
+
+        if not page_info:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         permission = check_folder_permission(request, wiki.repo_id, '/')
         if not permission:

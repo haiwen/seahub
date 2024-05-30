@@ -66,7 +66,7 @@ class WikiCardItem extends Component {
     if (this.props.wiki.name !== newName) {
       this.props.renameWiki(this.props.wiki, newName);
     }
-    this.setState({ isShowDeleteDialog: false });
+    this.setState({ isShowRenameDialog: false });
   };
 
   clickWikiCard = (link) => {
