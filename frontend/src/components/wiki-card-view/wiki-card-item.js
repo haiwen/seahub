@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
 
@@ -18,7 +19,17 @@ class WikiCardItem extends Component {
     this.state = {
       isShowDeleteDialog: false,
       isItemMenuShow: false,
+      ownerAvatar: '',
     };
+  }
+
+  componentDidMount() {
+    const { wiki, isDepartment } = this.props;
+    if (!isDepartment) {
+      seafileAPI.getUserAvatar(wiki.owner, 24).then(res => {
+        this.setState({ ownerAvatar: res.data.url });
+      });
+    }
   }
 
   onDeleteToggle = (e) => {
@@ -59,7 +70,7 @@ class WikiCardItem extends Component {
     const { wiki } = this.props;
     return (
       <div className="wiki-card-item-avatar-container">
-        <img className="wiki-card-item-avatar" src={appAvatarURL} alt={wiki.owner_nickname}/>
+        <img className="wiki-card-item-avatar" src={this.state.ownerAvatar} alt={wiki.owner_nickname}/>
         <span className="wiki-card-item-owner text-truncate" title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
       </div>
     );
