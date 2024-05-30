@@ -229,3 +229,7 @@ img[src=""] {
   border: none;
   padding: 52px 142px 0;
 }
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-side-toolbar-container {
+  left: 100px !important;
+}
