@@ -284,7 +284,7 @@ class MylibRepoListItem extends React.Component {
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
     }).catch(error => {
-      if (error.response){
+      if (error.response) {
         toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
       } else {
         toaster.danger(gettext('Failed. Please check the network.'), {duration: 3});

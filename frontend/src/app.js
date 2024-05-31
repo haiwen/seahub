@@ -75,7 +75,7 @@ class App extends Component {
   }
 
   navigateClientUrlToLib = () =>{
-    if (window.location.hash && window.location.hash.indexOf('common/lib') != -1){
+    if (window.location.hash && window.location.hash.indexOf('common/lib') != -1) {
       let splitUrlArray = window.location.hash.split('/');
       let repoID = splitUrlArray[splitUrlArray.length - 2];
       let url = siteRoot + 'library/' + repoID + '/';
@@ -129,7 +129,7 @@ class App extends Component {
   };
 
   onGroupChanged = (groupID) => {
-    setTimeout(function(){
+    setTimeout(function() {
       let url;
       if (groupID) {
         url = siteRoot + 'group/' + groupID + '/';

@@ -259,7 +259,7 @@ div[tabindex="-1"][role="group"] {
   box-shadow: 0 0 0 0;
 }
 
-img[src=""],img:not([src]){ /* for first loading img*/
+img[src=""],img:not([src]) { /* for first loading img*/
   opacity:0;
 }
 
