@@ -7,6 +7,7 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   isDepartment: PropTypes.bool.isRequired,
+  renameWiki: PropTypes.func.isRequired,
 };
 
 class WikiCardGroup extends Component {
@@ -22,10 +23,11 @@ class WikiCardGroup extends Component {
           {wikis.map((wiki, index) => {
             return (
               <WikiCardItem
-                key={index}
+                key={index + wiki.id}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
                 isDepartment={isDepartment}
+                renameWiki={this.props.renameWiki}
               />
             );
           })}

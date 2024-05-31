@@ -615,7 +615,7 @@ class FileUploader extends React.Component {
     resumableFile.bootstrap();
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
-      if(!firedRetry) {
+      if (!firedRetry) {
         seafileAPI.getFileUploadedBytes(repoID, path, fileName).then(res => {
           let uploadedBytes = res.data.uploadedBytes;
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;

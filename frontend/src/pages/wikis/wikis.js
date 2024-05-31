@@ -103,7 +103,7 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }
@@ -115,7 +115,41 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
+      });
+    }
+  };
+
+  renameWiki = (wiki, newName) => {
+    if (wiki.version === 'v1') {
+      wikiAPI.renameWiki(wiki.id, newName).then(() => {
+        let wikis = this.state.wikis.map(item => {
+          if (item.id === wiki.id && item.version === 'v1') {
+            item.name = newName;
+          }
+          return item;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if (error.response) {
+          let errorMsg = error.response.data.error_msg;
+          toaster.danger(errorMsg);
+        }
+      });
+    } else {
+      wikiAPI.renameWiki2(wiki.id, newName).then(() => {
+        let wikis = this.state.wikis.map(item => {
+          if (item.id === wiki.id && item.version === 'v2') {
+            item.name = newName;
+          }
+          return item;
+        });
+        this.setState({wikis: wikis});
+      }).catch((error) => {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }
@@ -161,6 +195,7 @@ class Wikis extends Component {
                 <WikiCardView
                   data={this.state}
                   deleteWiki={this.deleteWiki}
+                  renameWiki={this.renameWiki}
                 />
               </div>
             }

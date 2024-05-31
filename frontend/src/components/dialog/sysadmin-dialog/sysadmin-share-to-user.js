@@ -133,7 +133,7 @@ class SysAdminShareToUser extends React.Component {
   componentDidMount() {
     let repoID = this.props.repoID;
     seafileAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
-      if(res.data.length !== 0) {
+      if (res.data.length !== 0) {
         this.setState({sharedItems: res.data});
       }
     }).catch(error => {

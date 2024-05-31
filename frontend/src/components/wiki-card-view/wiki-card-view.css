@@ -59,6 +59,7 @@
   margin-left: 20px;
 }
 
+.wiki-card-item.wiki-card-item-menu-open .wiki-card-item-top .dropdown .sf-dropdown-toggle,
 .wiki-card-item:hover .wiki-card-item-top .dropdown .sf-dropdown-toggle {
   opacity: 1;
 }

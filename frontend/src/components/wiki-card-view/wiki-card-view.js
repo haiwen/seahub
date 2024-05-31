@@ -7,6 +7,7 @@ import './wiki-card-view.css';
 const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
+  renameWiki: PropTypes.func.isRequired,
 };
 
 class WikiCardView extends Component {
@@ -45,6 +46,7 @@ class WikiCardView extends Component {
       <WikiCardGroup
         key='my-Wikis'
         deleteWiki={this.props.deleteWiki}
+        renameWiki={this.props.renameWiki}
         wikis={myWikis}
         title={gettext('My Wikis')}
         isDepartment={false}
@@ -55,6 +57,7 @@ class WikiCardView extends Component {
         <WikiCardGroup
           key={'department-Wikis' + key}
           deleteWiki={this.props.deleteWiki}
+          renameWiki={this.props.renameWiki}
           wikis={department2WikisMap[key]}
           title={department2WikisMap[key][0].owner_nickname}
           isDepartment={true}
@@ -65,6 +68,7 @@ class WikiCardView extends Component {
       <WikiCardGroup
         key='old-Wikis'
         deleteWiki={this.props.deleteWiki}
+        renameWiki={this.props.renameWiki}
         wikis={v1Wikis}
         title={gettext('Old Wikis')}
         isDepartment={false}
