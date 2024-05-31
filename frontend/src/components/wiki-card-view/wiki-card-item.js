@@ -134,7 +134,11 @@ class WikiCardItem extends Component {
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
                 <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
-                <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
+                {isOldVersion ?
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
+                  :
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                }
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -145,10 +149,23 @@ class WikiCardItem extends Component {
         </div>
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
-            <WikiDeleteDialog
-              toggleCancel={this.onDeleteCancel}
-              handleSubmit={this.deleteWiki}
-            />
+            {isOldVersion ?
+              <WikiDeleteDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.deleteWiki}
+                title={gettext('Unpublish Wiki')}
+                content={gettext('Are you sure you want to unpublish this Wiki?')}
+                footer={gettext('Unpublish')}
+              />
+              :
+              <WikiDeleteDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.deleteWiki}
+                title={gettext('Delete Wiki')}
+                content={gettext('Are you sure you want to delete this Wiki?')}
+                footer={gettext('Delete')}
+              />
+            }
           </ModalPortal>
         }
         {this.state.isShowRenameDialog &&
