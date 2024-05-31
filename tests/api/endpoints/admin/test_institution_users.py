@@ -8,11 +8,6 @@ from seahub.test_utils import BaseTestCase
 from seahub.institutions.models import Institution
 from seahub.profile.models import Profile
 
-try:
-    from seahub.settings import LOCAL_PRO_DEV_ENV
-except ImportError:
-    LOCAL_PRO_DEV_ENV = False
-
 logger = logging.getLogger(__name__)
 
 
@@ -31,11 +26,8 @@ class AdminInstitutionUsersTest(BaseTestCase):
         except Exception as e:
             logger.error(e)
 
-    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_get(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -50,11 +42,8 @@ class AdminInstitutionUsersTest(BaseTestCase):
 
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_no_permission(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -66,11 +55,8 @@ class AdminInstitutionUsersTest(BaseTestCase):
 
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_create(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -111,11 +97,8 @@ class AdminInstitutionUserTest(BaseTestCase):
             profile.institution = inst_name
         profile.save()
 
-    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_update(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -133,11 +116,8 @@ class AdminInstitutionUserTest(BaseTestCase):
 
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_delete(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 

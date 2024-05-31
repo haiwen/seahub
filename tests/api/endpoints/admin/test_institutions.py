@@ -8,11 +8,6 @@ from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 from seahub.institutions.models import Institution
 
-try:
-    from seahub.settings import LOCAL_PRO_DEV_ENV
-except ImportError:
-    LOCAL_PRO_DEV_ENV = False
-
 logger = logging.getLogger(__name__)
 
 
@@ -31,11 +26,8 @@ class InstitutionsTest(BaseTestCase):
         except Exception as e:
             logger.error(e)
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_get(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -51,11 +43,8 @@ class InstitutionsTest(BaseTestCase):
 
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_no_permission(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -68,11 +57,8 @@ class InstitutionsTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_create(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -107,11 +93,8 @@ class InstitutionTest(BaseTestCase):
         except Exception as e:
             logger.error(e)
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_get(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -128,11 +111,8 @@ class InstitutionTest(BaseTestCase):
 
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_update(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
@@ -150,11 +130,8 @@ class InstitutionTest(BaseTestCase):
 
         inst.delete()
 
-    @patch('seahub.api2.endpoints.admin.institutions.IsProVersion')
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_delete(self, mock_is_pro_version):
-
-        if not LOCAL_PRO_DEV_ENV:
-            return
 
         mock_is_pro_version.return_value = True
 
