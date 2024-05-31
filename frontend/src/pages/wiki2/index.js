@@ -38,8 +38,6 @@ class Wiki extends Component {
       seadoc_access_token: '',
       assets_url: '',
     };
-
-    this.pythonWrapper = null;
   }
 
   UNSAFE_componentWillMount() {
@@ -123,13 +121,6 @@ class Wiki extends Component {
     });
   };
 
-  removePythonWrapper = () => {
-    if (this.pythonWrapper) {
-      document.body.removeChild(this.pythonWrapper);
-      this.pythonWrapper = null;
-    }
-  };
-
   onCloseSide = () => {
     this.setState({ closeSideBar: !this.state.closeSideBar });
   };
@@ -138,8 +129,6 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
     });
-
-    this.removePythonWrapper();
     wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
       this.setState({
