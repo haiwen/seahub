@@ -105,12 +105,33 @@ class ChangeRepoPasswordDialog extends React.Component {
         </ModalHeader>
         <ModalBody>
           <form id="repo-change-passwd-form" action="" method="post">
-            <label htmlFor="passwd">{gettext('Old Password')}</label><br />
-            <input type="password" name="old_passwd" className="form-control" id="passwd" value={this.state.oldPassword} onChange={this.handleOldPasswordInputChange} /><br />
-            <label htmlFor="new-passwd">{gettext('New Password')}</label><span className="tip">{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span><br />
-            <input type="password" name="new_passwd" className="form-control" id="new-passwd" value={this.state.newPassword} onChange={this.handleNewPasswordInputChange} /><br />
-            <label htmlFor="new-passwd-again">{gettext('New Password Again')}</label><br />
-            <input type="password" name="new_passwd_again" className="form-control" id="new-passwd-again" value={this.state.newPasswordAgain} onChange={this.handleNewPasswordAgainInputChange} /><br />
+            <label htmlFor="passwd">{gettext('Old Password')}</label>
+            <br />
+            <input
+              type="password"
+              name="old_passwd"
+              className="form-control"
+              id="passwd"
+              value={this.state.oldPassword}
+              onChange={this.handleOldPasswordInputChange}
+            />
+            <br />
+            <label htmlFor="new-passwd">{gettext('New Password')}</label>
+            <span className="tip">{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
+            <br />
+            <input
+              type="password"
+              name="new_passwd"
+              className="form-control"
+              id="new-passwd"
+              value={this.state.newPassword}
+              onChange={this.handleNewPasswordInputChange}
+            />
+            <br />
+            <label htmlFor="new-passwd-again">{gettext('New Password Again')}</label>
+            <br />
+            <input type="password" name="new_passwd_again" className="form-control" id="new-passwd-again" value={this.state.newPasswordAgain} onChange={this.handleNewPasswordAgainInputChange} />
+            <br />
             {this.state.errorMsg && <Alert color="danger">{this.state.errorMsg}</Alert>}
           </form>
         </ModalBody>

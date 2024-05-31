@@ -5,7 +5,7 @@ import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
-import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
+import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
 
 const propTypes = {
@@ -150,19 +150,19 @@ class WikiCardItem extends Component {
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
             {isOldVersion ?
-              <WikiDeleteDialog
+              <DeleteWikiDialog
                 toggleCancel={this.onDeleteCancel}
                 handleSubmit={this.deleteWiki}
                 title={gettext('Unpublish Wiki')}
-                content={gettext('Are you sure you want to unpublish this Wiki?')}
+                content={<p>{gettext('Are you sure you want to unpublish Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Unpublish')}
               />
               :
-              <WikiDeleteDialog
+              <DeleteWikiDialog
                 toggleCancel={this.onDeleteCancel}
                 handleSubmit={this.deleteWiki}
                 title={gettext('Delete Wiki')}
-                content={gettext('Are you sure you want to delete this Wiki?')}
+                content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Delete')}
               />
             }

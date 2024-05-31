@@ -19,7 +19,7 @@ export default class DeleteDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Delete page')}</ModalHeader>
         <ModalBody>
-          <p>{gettext('Are you sure to delete this page?')}</p>
+          <p>{gettext('Are you sure you want to delete this page?')}</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
