@@ -23,7 +23,7 @@ class WikiCardGroup extends Component {
           {wikis.map((wiki, index) => {
             return (
               <WikiCardItem
-                key={index}
+                key={index + wiki.id}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
                 isDepartment={isDepartment}

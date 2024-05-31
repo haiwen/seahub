@@ -127,7 +127,7 @@ class Wikis extends Component {
     if (wiki.version === 'v1') {
       wikiAPI.renameWiki(wiki.id, newName).then(() => {
         let wikis = this.state.wikis.map(item => {
-          if (item.id === wiki.id) {
+          if (item.id === wiki.id && item.version === 'v1') {
             item.name = newName;
           }
           return item;
@@ -142,7 +142,7 @@ class Wikis extends Component {
     } else {
       wikiAPI.renameWiki2(wiki.id, newName).then(() => {
         let wikis = this.state.wikis.map(item => {
-          if (item.id === wiki.id) {
+          if (item.id === wiki.id && item.version === 'v2') {
             item.name = newName;
           }
           return item;
