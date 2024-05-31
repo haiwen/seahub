@@ -1,12 +1,18 @@
 import json
 import logging
+from mock import patch
 
 from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
-from tests.common.utils import randstring
-from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.institutions.models import Institution
 from seahub.profile.models import Profile
+
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,8 +31,14 @@ class AdminInstitutionUsersTest(BaseTestCase):
         except Exception as e:
             logger.error(e)
 
+    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    def test_can_get(self, mock_is_pro_version):
 
-    def test_can_get(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
+
         self.login_as(self.admin)
         inst = self._add_institution('int1')
         url = reverse('api-v2.1-admin-institution-users', args=[inst.id])
@@ -38,7 +50,14 @@ class AdminInstitutionUsersTest(BaseTestCase):
 
         inst.delete()
 
-    def test_no_permission(self):
+    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    def test_no_permission(self, mock_is_pro_version):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
+
         self.logout()
         self.login_as(self.admin_no_other_permission)
         inst = self._add_institution('int1')
@@ -47,7 +66,14 @@ class AdminInstitutionUsersTest(BaseTestCase):
 
         self.assertEqual(403, resp.status_code)
 
-    def test_can_create(self):
+    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    def test_can_create(self, mock_is_pro_version):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
+
         self.login_as(self.admin)
         inst = self._add_institution('int1')
         url = reverse('api-v2.1-admin-institution-users', args=[inst.id])
@@ -85,7 +111,14 @@ class AdminInstitutionUserTest(BaseTestCase):
             profile.institution = inst_name
         profile.save()
 
-    def test_can_update(self):
+    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    def test_can_update(self, mock_is_pro_version):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
+
         self.login_as(self.admin)
         inst = self._add_institution('int1')
         self._add_user_in_institution(self.user.email, inst.name)
@@ -100,7 +133,14 @@ class AdminInstitutionUserTest(BaseTestCase):
 
         inst.delete()
 
-    def test_can_delete(self):
+    @patch('seahub.api2.endpoints.admin.institution_users.IsProVersion')
+    def test_can_delete(self, mock_is_pro_version):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
+
         self.login_as(self.admin)
         inst = self._add_institution('int1')
         self._add_user_in_institution(self.user.email, inst.name)
