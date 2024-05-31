@@ -5,7 +5,7 @@ import { Link, navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, enableVideoThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -79,7 +79,10 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
+      return (Utils.imageCheck(item.obj_name) ||
+          (enableVideoThumbnail && Utils.videoCheck(item.obj_name)) ||
+          (enablePDFThumbnail && Utils.pdfCheck(item.obj_name))) &&
+          !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
     });
     if (items.length == 0) {
       return ;

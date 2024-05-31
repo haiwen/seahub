@@ -765,6 +765,8 @@ def view_lib_file(request, repo_id, path):
         send_file_access_msg(request, repo, path, 'web')
         if filetype == VIDEO:
             return_dict['enable_video_thumbnail'] = settings.ENABLE_VIDEO_THUMBNAIL
+        if filetype == PDF:
+            return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
         return render(request, template, return_dict)
 
     elif filetype == XMIND:

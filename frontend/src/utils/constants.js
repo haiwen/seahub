@@ -91,6 +91,7 @@ export const curNoteID = window.app.pageOptions.curNoteID;
 export const enableTC = window.app.pageOptions.enableTC;
 
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
+export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
 
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];

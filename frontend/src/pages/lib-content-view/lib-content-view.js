@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, enableVideoThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -529,7 +529,7 @@ class LibContentView extends React.Component {
 
   getThumbnails = (repoID, path, direntList) => {
     let items = direntList.filter((item) => {
-      return (Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name)) || Utils.pdfCheck(item.name)) && !item.encoded_thumbnail_src;
+      return (Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name)) || (enablePDFThumbnail && Utils.pdfCheck(item.name))) && !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
       return ;

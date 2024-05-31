@@ -209,7 +209,7 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         logger.error(e)
         return (False, 500)
     t2 = timeit.default_timer()
-    logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+    logger.debug('Create PDF thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
 
     try:
         ret = _create_thumbnail_common(tmp_path, thumbnail_file, size)
