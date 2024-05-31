@@ -133,7 +133,6 @@ class WikiCardItem extends Component {
                 style={{'minWidth': '0'}}
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
-                {/* TODO renameWIki support wiki v1? */}
                 <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
                 <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
               </DropdownMenu>

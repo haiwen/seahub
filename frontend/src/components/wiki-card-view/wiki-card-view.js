@@ -68,6 +68,7 @@ class WikiCardView extends Component {
       <WikiCardGroup
         key='old-Wikis'
         deleteWiki={this.props.deleteWiki}
+        renameWiki={this.props.renameWiki}
         wikis={v1Wikis}
         title={gettext('Old Wikis')}
         isDepartment={false}

@@ -105,6 +105,13 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
+  renameWiki(wikiId, wikiName) {
+    const url = this.server + '/api/v2.1/wikis/' + wikiId + '/';
+    let form = new FormData();
+    form.append('wiki_name', wikiName);
+    return this._sendPostRequest(url, form);
+  }
+
   deleteWiki(wikiId) {
     const url = this.server + '/api/v2.1/wikis/' + wikiId + '/';
     return this.req.delete(url);

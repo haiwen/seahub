@@ -123,12 +123,14 @@ class Wikis extends Component {
     }
   };
 
-  // TODO renameWIki support wiki v1?
   renameWiki = (wiki, newName) => {
     if (wiki.version === 'v1') {
       wikiAPI.renameWiki(wiki.id, newName).then(() => {
-        let wikis = this.state.wikis.filter(item => {
-          return item.name !== wiki.name;
+        let wikis = this.state.wikis.map(item => {
+          if (item.id === wiki.id) {
+            item.name = newName;
+          }
+          return item;
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
@@ -141,7 +143,7 @@ class Wikis extends Component {
       wikiAPI.renameWiki2(wiki.id, newName).then(() => {
         let wikis = this.state.wikis.map(item => {
           if (item.id === wiki.id) {
-            item.name = newName
+            item.name = newName;
           }
           return item;
         });
