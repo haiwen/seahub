@@ -11,7 +11,7 @@
 .wiki-card-item {
   height: 120px;
   width: 100%;
-  border: 1px solid #eee;
+  box-shadow: 0 0 3px #0000001f;
   padding: 16px;
   border-radius: 6px;
   display: flex;
@@ -21,7 +21,7 @@
 }
 
 .wiki-card-item:hover {
-  border: 1px solid #DBDBDB;
+  box-shadow: 0 0 6px #0000002e;
 }
 
 .wiki-card-item .wiki-card-item-top,
@@ -52,11 +52,10 @@
 }
 
 .wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle {
-  border: 1px solid #dbdbdb;
   padding: 2px 4px;
   border-radius: 3px;
   opacity: 0;
-  color: #444;
+  color: #999;
   margin-left: 20px;
 }
 
@@ -64,14 +63,13 @@
   opacity: 1;
 }
 
-.wiki-card-item:hover .wiki-card-item-top .dropdown .sf-dropdown-toggle:hover {
-  background-color: #f5f5f5;
+.wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle:hover {
+  color: #333;
 }
 
 .wiki-card-item .wiki-card-item-avatar-container {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #eee;
   border-radius: 10px;
   height: 20px;
   max-width: 50%;
