@@ -179,7 +179,7 @@ class ShareToGroup extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     seafileAPI.listSharedItems(repoID, path, 'group').then((res) => {
-      if(res.data.length !== 0) {
+      if (res.data.length !== 0) {
         this.setState({
           sharedItems: res.data
         });

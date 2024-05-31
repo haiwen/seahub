@@ -103,7 +103,7 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }
@@ -115,7 +115,7 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }
@@ -134,7 +134,7 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }
@@ -149,7 +149,7 @@ class Wikis extends Component {
         });
         this.setState({wikis: wikis});
       }).catch((error) => {
-        if(error.response) {
+        if (error.response) {
           let errorMsg = error.response.data.error_msg;
           toaster.danger(errorMsg);
         }

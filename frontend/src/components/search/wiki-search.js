@@ -85,7 +85,7 @@ class Search extends Component {
 
   getSearchResult(queryData) {
 
-    if(this.source){
+    if (this.source){
       this.cancelRequest();
     }
     this.setState({

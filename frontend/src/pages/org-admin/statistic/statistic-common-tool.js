@@ -90,7 +90,7 @@ class StatisticCommonTool extends React.Component {
 
   onSubmit = () => {
     let { startValue, endValue } = this.state;
-    if(!startValue || !endValue) {
+    if (!startValue || !endValue) {
       return;
     }
     this.setState({
