@@ -742,7 +742,7 @@ THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
 # video thumbnails
-ENABLE_VIDEO_THUMBNAIL = True
+ENABLE_VIDEO_THUMBNAIL = False
 THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # pdf thumbnails
