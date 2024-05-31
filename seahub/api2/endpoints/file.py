@@ -44,7 +44,6 @@ from seahub.drafts.utils import is_draft_file, get_file_draft
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
-from seafevents import seafevents_api
 
 logger = logging.getLogger(__name__)
 
@@ -876,7 +875,7 @@ class FileView(APIView):
             'size': file_size
         }
         try:
-            from seahub.utils import SeafEventsSession
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             seafile_api.del_file(repo_id, parent_dir,
                                  json.dumps([file_name]),
@@ -886,6 +885,10 @@ class FileView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps([file_name]),
+                                 request.user.username)
 
         try:  # rm sdoc fileuuid
             filetype, fileext = get_file_type_and_ext(file_name)

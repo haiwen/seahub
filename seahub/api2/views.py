@@ -143,8 +143,7 @@ from seaserv import seafserv_threaded_rpc, \
     create_org, ccnet_api
 
 from constance import config
-from seafevents import seafevents_api
-from seahub.utils import SeafEventsSession
+
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -3408,6 +3407,7 @@ class FileRevert(APIView):
         file_name = os.path.basename(path)
         parent_path = os.path.dirname(path)
         try:
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             seafile_api.revert_file(repo_id, commit_id, path, username)
             seafevents_api.restore_repo_trash(session, repo_id, file_name, parent_path)
@@ -3416,6 +3416,8 @@ class FileRevert(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            seafile_api.revert_file(repo_id, commit_id, path, username)
 
         return Response({'success': True})
 
@@ -3915,6 +3917,7 @@ class DirRevert(APIView):
         dir_name = os.path.basename(path)
         username = request.user.username
         try:
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             seafile_api.revert_dir(repo_id, commit_id, path, username)
             seafevents_api.restore_repo_trash(session, repo_id, dir_name, parent_dir)
@@ -3923,6 +3926,8 @@ class DirRevert(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            seafile_api.revert_dir(repo_id, commit_id, path, username)
 
         return Response({'success': True})
 

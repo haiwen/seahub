@@ -36,7 +36,6 @@ from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
-from seafevents import seafevents_api
 logger = logging.getLogger(__name__)
 
 
@@ -577,7 +576,7 @@ class DirView(APIView):
             'size': dir_obj.size
         }
         try:
-            from seahub.utils import SeafEventsSession
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             seafile_api.del_file(repo_id, parent_dir,
                                  json.dumps([dir_name]), username)
@@ -586,6 +585,9 @@ class DirView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps([dir_name]), username)
 
         result = {}
         result['success'] = True

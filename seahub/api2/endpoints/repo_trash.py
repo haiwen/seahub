@@ -22,8 +22,6 @@ from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 from seaserv import seafile_api
-from seafevents import seafevents_api
-from seahub.utils import SeafEventsSession
 
 from pysearpc import SearpcError
 from constance import config
@@ -383,6 +381,7 @@ class RepoTrash2(APIView):
             show_time = show_days
 
         try:
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             deleted_entries = seafevents_api.get_delete_records(session, repo_id, show_time, path)
             session.close()
@@ -390,6 +389,8 @@ class RepoTrash2(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            pass
 
         items = []
         if len(deleted_entries) >= 1:
@@ -450,6 +451,7 @@ class RepoTrash2(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
+            from seahub.utils import SeafEventsSession, seafevents_api
             session = SeafEventsSession()
             seafevents_api.clean_up_repo_trash(session, repo_id, keep_days)
             session.close()
@@ -457,5 +459,7 @@ class RepoTrash2(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except ImportError:
+            pass
 
         return Response({'success': True})
