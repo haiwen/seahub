@@ -133,7 +133,7 @@ class EditorApi {
     return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays, permissions);
   }
 
-  deleteShareLink(token){
+  deleteShareLink(token) {
     return seafileAPI.deleteShareLink(token);
   }
 

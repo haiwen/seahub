@@ -321,7 +321,7 @@ class OrgAllRepos extends Component {
         return new OrgAdminRepo(item);
       });
       let page_info = {};
-      if (res.data.page_info === undefined){
+      if (res.data.page_info === undefined) {
         let page = res.data.page;
         let has_next_page = res.data.page_next;
         page_info = {

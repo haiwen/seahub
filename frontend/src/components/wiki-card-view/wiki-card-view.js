@@ -50,6 +50,7 @@ class WikiCardView extends Component {
         wikis={myWikis}
         title={gettext('My Wikis')}
         isDepartment={false}
+        isShowAvatar={false}
       />
     );
     for (let key in department2WikisMap) {
@@ -61,6 +62,7 @@ class WikiCardView extends Component {
           wikis={department2WikisMap[key]}
           title={department2WikisMap[key][0].owner_nickname}
           isDepartment={true}
+          isShowAvatar={false}
         />
       );
     }
@@ -72,6 +74,7 @@ class WikiCardView extends Component {
         wikis={v1Wikis}
         title={gettext('Old Wikis')}
         isDepartment={false}
+        isShowAvatar={true}
       />
     );
     return wikiCardGroups;

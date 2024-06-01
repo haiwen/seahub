@@ -1198,7 +1198,7 @@ export const Utils = {
   changeMarkdownNodes: function(nodes, fn) {
     nodes.forEach((item) => {
       fn(item);
-      if (item.children && item.children.length > 0){
+      if (item.children && item.children.length > 0) {
         Utils.changeMarkdownNodes(item.children, fn);
       }
     });
@@ -1525,7 +1525,7 @@ export const Utils = {
 
   calculateBitwise: function(num) {
     var level = 0;
-    for (var i = 0; i < 4; i++){
+    for (var i = 0; i < 4; i++) {
       // bitwise AND
       if (num&1) level++;
       // Right logical shift

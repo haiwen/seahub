@@ -273,7 +273,7 @@ class SearchViewPanel extends React.Component {
   getFileTypesList = () => {
     const fileTypeItems = ['Text', 'Document', 'Image', 'Video', 'Audio', 'PDF', 'Markdown'];
     let ftype = [];
-    for (let i = 0, len = this.state.fileTypeItemsStatus.length; i < len; i++){
+    for (let i = 0, len = this.state.fileTypeItemsStatus.length; i < len; i++) {
       if (this.state.fileTypeItemsStatus[i]) {
         ftype.push(fileTypeItems[i]);
       }

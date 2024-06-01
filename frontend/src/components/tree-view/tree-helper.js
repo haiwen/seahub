@@ -83,7 +83,7 @@ class TreeHelper {
       node.object.name = nodeName; // need not update path
       treeCopy.moveNode(node, destNode);
     }
-    if (!destNode && node){
+    if (!destNode && node) {
       treeCopy.deleteNode(node);
     }
     return treeCopy;

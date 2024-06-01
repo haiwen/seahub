@@ -5,7 +5,7 @@ import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
-import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
+import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
 
 const propTypes = {
@@ -13,6 +13,7 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
   isDepartment: PropTypes.bool.isRequired,
+  isShowAvatar: PropTypes.bool.isRequired,
 };
 
 class WikiCardItem extends Component {
@@ -103,7 +104,7 @@ class WikiCardItem extends Component {
   };
 
   render() {
-    const { wiki, isDepartment } = this.props;
+    const { wiki, isDepartment, isShowAvatar } = this.props;
     let isOldVersion = wiki.version !== 'v2';
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
@@ -115,10 +116,7 @@ class WikiCardItem extends Component {
           onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}
         >
           <div className="wiki-card-item-top">
-            <div className="d-flex align-items-center" style={{width: 'calc(100% - 46px)'}}>
-              <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
-              <span className="wiki-card-item-name ml-2 text-truncate" title={wikiName} aria-label={wikiName}>{wikiName}</span>
-            </div>
+            <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown}>
               <DropdownToggle
                 tag="i"
@@ -142,27 +140,28 @@ class WikiCardItem extends Component {
               </DropdownMenu>
             </Dropdown>
           </div>
-          <div className="wiki-card-item-bottom">
-            {isDepartment ? this.renderDept() : this.renderAvatar()}
-            <span className="wiki-item-updated-time">{moment(wiki.updated_at).fromNow()}</span>
+          <div className="wiki-item-name text-truncate" title={wikiName} aria-label={wikiName}>{wikiName}</div>
+          <div className="wiki-item-owner">
+            {isShowAvatar && (isDepartment ? this.renderDept() : this.renderAvatar())}
           </div>
+          <div className="wiki-item-updated-time">{moment(wiki.updated_at).fromNow()}</div>
         </div>
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
             {isOldVersion ?
-              <WikiDeleteDialog
+              <DeleteWikiDialog
                 toggleCancel={this.onDeleteCancel}
                 handleSubmit={this.deleteWiki}
                 title={gettext('Unpublish Wiki')}
-                content={gettext('Are you sure you want to unpublish this Wiki?')}
+                content={<p>{gettext('Are you sure you want to unpublish Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Unpublish')}
               />
               :
-              <WikiDeleteDialog
+              <DeleteWikiDialog
                 toggleCancel={this.onDeleteCancel}
                 handleSubmit={this.deleteWiki}
                 title={gettext('Delete Wiki')}
-                content={gettext('Are you sure you want to delete this Wiki?')}
+                content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Delete')}
               />
             }

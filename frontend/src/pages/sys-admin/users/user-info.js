@@ -45,10 +45,10 @@ class Content extends Component {
   };
 
   updateUploadDownloadRateLimit = (uploadOrDownload, value) => {
-    if (uploadOrDownload == 'upload'){
+    if (uploadOrDownload == 'upload') {
       this.props.updateUser('upload_rate_limit', value);
     }
-    if (uploadOrDownload == 'download'){
+    if (uploadOrDownload == 'download') {
       this.props.updateUser('download_rate_limit', value);
     }
   };

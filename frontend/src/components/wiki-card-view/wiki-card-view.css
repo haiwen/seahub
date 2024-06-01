@@ -4,19 +4,15 @@
 
 .wiki-card-group-items {
   display: grid;
-  grid-template-columns: 32.5% 32.5% 32.5%;
   gap: 16px 16px;
 }
 
 .wiki-card-item {
-  height: 120px;
+  height: 176px;
   width: 100%;
   box-shadow: 0 0 3px #0000001f;
-  padding: 16px;
+  padding: 14px;
   border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   cursor: pointer;
 }
 
@@ -24,15 +20,11 @@
   box-shadow: 0 0 6px #0000002e;
 }
 
-.wiki-card-item .wiki-card-item-top,
-.wiki-card-item .wiki-card-item-bottom {
+/* wiki-card-item-top */
+.wiki-card-item .wiki-card-item-top {
   display: flex;
   justify-content: space-between;
-}
-
-.wiki-card-item .wiki-item-updated-time {
-  font-size: 12px;
-  color: #666;
+  height: 24px;
 }
 
 .wiki-card-item .wiki-card-item-top .dropdown {
@@ -47,7 +39,7 @@
   line-height: 24px;
 }
 
-.wiki-card-item .wiki-card-item-top .wiki-card-item-name {
+.wiki-card-item .wiki-card-item-top .wiki-item-name {
   font-size: 16px;
 }
 
@@ -68,13 +60,30 @@
   color: #333;
 }
 
+/* wiki-item-name */
+.wiki-card-item .wiki-item-name {
+  padding-top: 8px;
+  margin-bottom: 38px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  height: 50px;
+}
+
+/* wiki-item-owner */
+.wiki-card-item .wiki-item-owner {
+  height: 16px;
+}
+
 .wiki-card-item .wiki-card-item-avatar-container {
   display: inline-flex;
   align-items: center;
   border-radius: 10px;
-  height: 20px;
-  max-width: 50%;
-  padding: 0 8px 0 2px;
+  height: 16px;
+  max-width: 100%;
 }
 
 .wiki-card-item .wiki-card-item-avatar-container .wiki-card-item-avatar {
@@ -95,11 +104,15 @@
   color: #999;
 }
 
+/* wiki-item-updated-time */
+.wiki-card-item .wiki-item-updated-time {
+  height: 20px;
+  font-size: 12px;
+  color: #666;
+  padding-top: 6px;
+}
+
 @media (max-width: 768px) {
-  .wiki-card-group-items {
-    display: grid;
-    grid-template-columns: 100%;
-  }
   .wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle {
     border: none;
     opacity: 1;
