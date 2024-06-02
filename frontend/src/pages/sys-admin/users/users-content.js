@@ -14,17 +14,20 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-
+import DropdownComponent from '../../../components/dialog/dropdown-dialog';
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
+
+
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isItemFreezed: false
+      isItemFreezed: false,
     };
   }
+
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
@@ -39,33 +42,47 @@ class Content extends Component {
   };
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1);
+    this.props.getListByPage(this.props.currentPage - 1, this.props.is_active, this.props.role);
   };
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1);
+    this.props.getListByPage(this.props.currentPage + 1, this.props.is_active, this.props.role);
   };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
   };
-
   render() {
     const {
       isAdmin, loading, errorMsg, items, isAllUsersSelected,
       curPerPage, hasNextPage, currentPage,
       sortBy, sortOrder
     } = this.props;
+
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No users')}</h2>
-        </EmptyTip>
+        <div>
+          {this.props.currentItem == 'database' &&
+            <DropdownComponent
+              isActive={this.props.is_active}
+              role={this.props.role}
+              handleFilterActive={this.props.handleFilterActive}
+              handleFilterRole={this.props.handleFilterRole}
+              availableRoles={availableRoles}
+            />
+
+          }
+
+          <EmptyTip>
+            <h2>{gettext('No users')}</h2>
+          </EmptyTip>
+        </div>
+
       );
 
 
@@ -116,6 +133,14 @@ class Content extends Component {
 
       const table = (
         <Fragment>
+          {this.props.currentItem=='database' &&
+            <DropdownComponent
+              isActive={this.props.is_active}
+              role={this.props.role}
+              handleFilterActive={this.props.handleFilterActive}
+              handleFilterRole={this.props.handleFilterRole}/>
+          }
+
           <table>
             <thead>
               <tr>
@@ -129,21 +154,24 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  toggleItemFreezed={this.toggleItemFreezed}
-                  updateUser={this.props.updateUser}
-                  deleteUser={this.props.deleteUser}
-                  updateAdminRole={this.props.updateAdminRole}
-                  revokeAdmin={this.props.revokeAdmin}
-                  onUserSelected={this.props.onUserSelected}
-                  isAdmin={this.props.isAdmin}
-                  isLDAPImported={this.props.isLDAPImported}
-                />);
+                if (index < this.props.curPerPage) {
+                  return (<Item
+                    key={index}
+                    item={item}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    toggleItemFreezed={this.toggleItemFreezed}
+                    updateUser={this.props.updateUser}
+                    deleteUser={this.props.deleteUser}
+                    updateAdminRole={this.props.updateAdminRole}
+                    revokeAdmin={this.props.revokeAdmin}
+                    onUserSelected={this.props.onUserSelected}
+                    isAdmin={this.props.isAdmin}
+                    isLDAPImported={this.props.isLDAPImported}
+                  />);
+                }
+                return null;
               })}
             </tbody>
           </table>
@@ -188,6 +216,11 @@ Content.propTypes = {
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
   sortOrder: PropTypes.string,
+  is_active: PropTypes.string,
+  role: PropTypes.string,
+  currentItem: PropTypes.string,
+  handleFilterActive: PropTypes.func,
+  handleFilterRole: PropTypes.func
 };
 
 class Item extends Component {
