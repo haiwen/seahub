@@ -23,6 +23,7 @@ import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import GroupInviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
 
 import '../../css/group-view.css';
 
@@ -64,6 +65,7 @@ class GroupView extends React.Component {
       showTransferGroupDialog: false,
       showImportMembersDialog: false,
       showManageMembersDialog: false,
+      showInviteMembersDialog: false,
       groupMembers: [],
       isShowDetails: false,
       isLeaveGroupDialogOpen: false,
@@ -74,6 +76,7 @@ class GroupView extends React.Component {
     let groupID = this.props.groupID;
     this.loadGroup(groupID);
   }
+
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.groupID !== this.props.groupID) {
@@ -318,6 +321,13 @@ class GroupView extends React.Component {
     });
   };
 
+  toggleInviteMembersDialog = () => {
+    this.setState({
+      showInviteMembersDialog: !this.state.showInviteMembersDialog,
+      showGroupDropdown: false,
+    });
+  };
+
   toggleLeaveGroupDialog = () => {
     this.setState({
       isLeaveGroupDialogOpen: !this.state.isLeaveGroupDialogOpen,
@@ -493,6 +503,7 @@ class GroupView extends React.Component {
                             <ul className="sf-popover-list">
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleInviteMembersDialog} >{gettext('Invite Members')}</a></li>
                             </ul>
                             }
                             {
@@ -644,6 +655,12 @@ class GroupView extends React.Component {
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
           />
+        }
+        {this.state.showInviteMembersDialog &&
+          <GroupInviteMembersDialog
+            groupID={this.props.groupID}
+            onGroupChanged={this.props.onGroupChanged}
+            toggleGroupInviteDialog={this.toggleInviteMembersDialog}/>
         }
       </Fragment>
     );

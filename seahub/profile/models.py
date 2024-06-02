@@ -14,11 +14,48 @@ from registration.signals import user_registered
 from seahub.signals import institution_deleted
 from seahub.institutions.models import InstitutionAdmin
 
+import uuid
+from seahub.settings import SERVICE_URL
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 class DuplicatedContactEmailError(Exception):
     pass
+
+
+class GroupInviteLinkModelManager(models.Manager):
+    def create_link(self, group_id, email):
+        token = uuid.uuid4().hex[:8]
+        while self.model.objects.filter(token=token).exists():
+            token = uuid.uuid4().hex[:8]
+
+        group_invite_link = super(GroupInviteLinkModelManager, self).create(
+            group_id=group_id, token=token, created_by=email)
+        return group_invite_link
+
+
+class GroupInviteLinkModel(models.Model):
+    token = models.CharField(max_length=40, db_index=True)
+    group_id = models.IntegerField(db_index=True, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.CharField(max_length=255)
+
+    objects = GroupInviteLinkModelManager()
+
+    class Meta:
+        db_table = 'group_invite_link'
+
+    def to_dict(self):
+        result = {
+            'id': self.pk,
+            'token': self.token,
+            'group_id': self.group_id,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'created_by': email2nickname(self.created_by),
+            'link': f"{SERVICE_URL.rstrip('/')}/group-invite/{self.token}/",
+        }
+        return result
 
 
 class ProfileManager(models.Manager):
@@ -240,4 +277,37 @@ def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
     InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
+
+
+
+from seahub.profile.settings import NICKNAME_CACHE_PREFIX
+from seahub.utils import normalize_cache_key
+from django import template
+
+register = template.Library()
+
+
+@register.filter(name='email2nickname')
+def email2nickname(value):
+    """
+    Return nickname if it exists and it's not an empty string,
+    otherwise return short email.
+    """
+    if not value:
+        return ''
+
+    key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
+    cached_nickname = cache.get(key)
+    if cached_nickname and cached_nickname.strip():
+        return cached_nickname.strip()
+
+    profile = get_first_object_or_none(Profile.objects.filter(user=value))
+    if profile is not None and profile.nickname and profile.nickname.strip():
+        nickname = profile.nickname.strip()
+    else:
+        contact_email = email2contact_email(value)
+        nickname = contact_email.split('@')[0]
+
+    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
+    return nickname
 
