@@ -14,6 +14,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
+import UsersFilterBar from './users-filter-bar';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 
@@ -39,11 +40,11 @@ class Content extends Component {
   };
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1);
+    this.props.getListByPage(this.props.currentPage - 1, this.props.is_active, this.props.role);
   };
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1);
+    this.props.getListByPage(this.props.currentPage + 1, this.props.is_active, this.props.role);
   };
 
   sortByQuotaUsage = (e) => {
@@ -57,6 +58,7 @@ class Content extends Component {
       curPerPage, hasNextPage, currentPage,
       sortBy, sortOrder
     } = this.props;
+
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -129,21 +131,26 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  toggleItemFreezed={this.toggleItemFreezed}
-                  updateUser={this.props.updateUser}
-                  deleteUser={this.props.deleteUser}
-                  updateAdminRole={this.props.updateAdminRole}
-                  revokeAdmin={this.props.revokeAdmin}
-                  onUserSelected={this.props.onUserSelected}
-                  isAdmin={this.props.isAdmin}
-                  isLDAPImported={this.props.isLDAPImported}
-                />);
+                if (index < this.props.curPerPage) {
+                  return (
+                    <Item
+                      key={index}
+                      item={item}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                      toggleItemFreezed={this.toggleItemFreezed}
+                      updateUser={this.props.updateUser}
+                      deleteUser={this.props.deleteUser}
+                      updateAdminRole={this.props.updateAdminRole}
+                      revokeAdmin={this.props.revokeAdmin}
+                      onUserSelected={this.props.onUserSelected}
+                      isAdmin={this.props.isAdmin}
+                      isLDAPImported={this.props.isLDAPImported}
+                    />
+                  );
+                }
+                return null;
               })}
             </tbody>
           </table>
@@ -160,7 +167,19 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip;
+      return (
+        <div>
+          {this.props.currentItem === 'database' &&
+            <UsersFilterBar
+              isActive={this.props.is_active}
+              role={this.props.role}
+              onStatusChange={this.props.onStatusChange}
+              onRoleChange={this.props.onRoleChange}
+            />
+          }
+          {items.length ? table : emptyTip}
+        </div>
+      );
     }
   }
 }
@@ -188,6 +207,11 @@ Content.propTypes = {
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
   sortOrder: PropTypes.string,
+  is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  role: PropTypes.string,
+  currentItem: PropTypes.string,
+  onStatusChange: PropTypes.func,
+  onRoleChange: PropTypes.func
 };
 
 class Item extends Component {
