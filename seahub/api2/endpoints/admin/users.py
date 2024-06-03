@@ -765,7 +765,8 @@ class AdminUsers(APIView):
                 info['last_access_time'] = get_user_last_access_time(user.email, '')
 
             if getattr(settings, 'MULTI_INSTITUTION', False):
-                if profile and profile.institution.lower() != "null":
+                if profile and profile.institution and \
+                        profile.institution.lower() != "null":
                     info['institution'] = profile.institution
                 else:
                     info['institution'] = ''
