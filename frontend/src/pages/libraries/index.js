@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddRepo, canViewOrg, canAddGroup } from '../../utils/constants';
+import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
@@ -10,7 +10,6 @@ import Group from '../../models/group';
 import Loading from '../../components/loading';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import MyLibsToolbar from '../../components/toolbar/my-libs-toolbar';
-import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
@@ -150,6 +149,7 @@ class Libraries extends Component {
   };
 
   // the following are for 'groups'
+  /*
   onCreateGroup = (groupData) => {
     const newGroup = new Group(groupData);
     const { groupList: newList } = this.state;
@@ -158,6 +158,7 @@ class Libraries extends Component {
       groupList: newList
     });
   };
+  */
 
   updateGroup = (group) => {
     const { groupList } = this.state;
@@ -181,7 +182,6 @@ class Libraries extends Component {
         >
           <>
             {canAddRepo && <MyLibsToolbar onCreateRepo={this.onCreateRepo} />}
-            {canAddGroup && <GroupsToolbar onCreateGroup={this.onCreateGroup} />}
           </>
         </TopToolbar>
         <div className="main-panel-center flex-row">
