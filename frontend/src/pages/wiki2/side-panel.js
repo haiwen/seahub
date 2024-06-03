@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
+import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
@@ -14,10 +15,9 @@ import Folder from './models/folder';
 import Page from './models/page';
 import wikiAPI from '../../utils/wiki-api';
 import { FOLDER } from './constant';
+import { Utils } from '../../utils/utils';
 
 import './side-panel.css';
-import { Utils } from '../../utils/utils';
-import { Tooltip, UncontrolledTooltip } from 'reactstrap';
 
 const { repoName } = window.wiki.config;
 
@@ -342,13 +342,12 @@ class SidePanel extends Component {
   };
 
   handleAddNewPage = () => {
-    // TODO 这里需要后端配合，创建新页面，pageName 需要后端生成
-    const pageName = 'New Page';
+    const pageName = 'Untitled'; // default page name
     const voidFn = () => void 0;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
-      const { obj_name, parent_dir, doc_uuid } = res.data;
+      const { obj_name, parent_dir, doc_uuid,page_name } = res.data;
       this.onAddNewPage({
-        name: pageName,
+        name: page_name,
         icon: '',
         path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
         docUuid: doc_uuid,
@@ -360,13 +359,6 @@ class SidePanel extends Component {
       toaster.danger(errMessage);
       this.onError();
     });
-
-
-    // const { config } = this.props;
-    // const navigation = config.navigation;
-    // const pageId = generateUniqueId(navigation);
-    // const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    // this.onAddNewPage(newPage, successCallback, errorCallback);
   };
 
   render() {
