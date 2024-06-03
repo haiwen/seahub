@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
-  enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks
+import {
+  gettext, siteRoot, canAddGroup,
+  canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
+  enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
+  canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
-import toaster from './toast';
 import Group from '../models/group';
-
-import { canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems } from '../utils/constants';
+import toaster from './toast';
+import CreateGroupDialog from '../components/dialog/create-group-dialog';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -26,6 +28,7 @@ class MainSideNav extends React.Component {
       sharedExtended: false,
       closeSideBar:false,
       groupItems: [],
+      isCreateGroupDialogOpen: false
     };
     this.adminHeight = 0;
     this.filesNavHeight = 0;
@@ -45,7 +48,7 @@ class MainSideNav extends React.Component {
         return group;
       });
 
-      this.filesNavHeight = (groupList.length + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
+      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
       _this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -74,6 +77,22 @@ class MainSideNav extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
+  onCreateGroup = (groupData) => {
+    const newGroup = new Group(groupData);
+    const { groupItems: newList } = this.state;
+    newList.push(newGroup);
+    this.filesNavHeight += SUB_NAV_ITEM_HEIGHT;
+    this.setState({
+      groupItems: newList
+    });
+  };
+
+  toggleCreateGroupDialog = () => {
+    this.setState({
+      isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen
+    });
+  };
+
   renderSharedGroups() {
     return (
       <>
@@ -91,6 +110,22 @@ class MainSideNav extends React.Component {
             </li>
           );
         })}
+        {canAddGroup && (
+          <>
+            <li className="nav-item" onClick={this.toggleCreateGroupDialog}>
+              <span className="nav-link" role="button">
+                <i className="sf2-icon-plus nav-icon" aria-hidden="true"></i>
+                {gettext('New Group')}
+              </span>
+            </li>
+            {this.state.isCreateGroupDialogOpen &&
+            <CreateGroupDialog
+              toggleDialog={this.toggleCreateGroupDialog}
+              onCreateGroup={this.onCreateGroup}
+            />
+            }
+          </>
+        )}
       </>
     );
   }
