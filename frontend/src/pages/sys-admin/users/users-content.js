@@ -18,17 +18,14 @@ import UsersFilterBar from './users-filter-bar';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 
-
-
 class Content extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isItemFreezed: false,
+      isItemFreezed: false
     };
   }
-
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
@@ -54,6 +51,7 @@ class Content extends Component {
     e.preventDefault();
     this.props.sortByQuotaUsage();
   };
+
   render() {
     const {
       isAdmin, loading, errorMsg, items, isAllUsersSelected,
@@ -71,6 +69,7 @@ class Content extends Component {
           <h2>{gettext('No users')}</h2>
         </EmptyTip>
       );
+
 
       let columns = [];
 
@@ -133,21 +132,23 @@ class Content extends Component {
             <tbody>
               {items.map((item, index) => {
                 if (index < this.props.curPerPage) {
-                  return (<Item
-                    key={index}
-                    item={item}
-                    isItemFreezed={this.state.isItemFreezed}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    toggleItemFreezed={this.toggleItemFreezed}
-                    updateUser={this.props.updateUser}
-                    deleteUser={this.props.deleteUser}
-                    updateAdminRole={this.props.updateAdminRole}
-                    revokeAdmin={this.props.revokeAdmin}
-                    onUserSelected={this.props.onUserSelected}
-                    isAdmin={this.props.isAdmin}
-                    isLDAPImported={this.props.isLDAPImported}
-                  />);
+                  return (
+                    <Item
+                      key={index}
+                      item={item}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                      toggleItemFreezed={this.toggleItemFreezed}
+                      updateUser={this.props.updateUser}
+                      deleteUser={this.props.deleteUser}
+                      updateAdminRole={this.props.updateAdminRole}
+                      revokeAdmin={this.props.revokeAdmin}
+                      onUserSelected={this.props.onUserSelected}
+                      isAdmin={this.props.isAdmin}
+                      isLDAPImported={this.props.isLDAPImported}
+                    />
+                  );
                 }
                 return null;
               })}

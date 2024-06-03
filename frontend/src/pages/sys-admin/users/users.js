@@ -59,7 +59,8 @@ class Users extends Component {
         currentPage, perPage,
         sortBy = '',
         sortOrder = 'asc',
-        is_active, role
+        is_active,
+        role,
       } = this.state;
       this.setState({
         perPage: parseInt(urlParams.get('per_page') || perPage),
