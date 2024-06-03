@@ -4,6 +4,7 @@ import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -166,7 +167,7 @@ class Users extends Component {
   getUsersListByPage = (page, is_active, role) => {
     const { perPage, sortBy, sortOrder } = this.state;
     const { isLDAPImported } = this.props;
-    seafileAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
+    systemAdminAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
       this.setState({
         userList: users,
@@ -182,16 +183,6 @@ class Users extends Component {
     });
   };
 
-  handleUserListSelect = (users, page, hasNextPage) => {
-    this.setState({
-      userList: users,
-      loading: false,
-      hasNextPage: hasNextPage,
-      currentPage: page
-    });
-  };
-
-
   updateURL = (page, perPage) => {
     let url = new URL(location.href);
     let searchParams = new URLSearchParams(url.search);
@@ -201,22 +192,24 @@ class Users extends Component {
     navigate(url.toString());
   };
 
-  handleFilterActive = (is_active) => {
+  // is_active: '1', '0', '' (active, inactive, all)
+  onStatusChange = (is_active) => {
     this.setState({
       is_active: is_active,
       currentPage: 1
-    }, ()=>{
+    }, () => {
       const { currentPage, perPage, is_active, role } = this.state;
       this.updateURL(currentPage, perPage);
       this.getUsersListByPage(currentPage, is_active, role);
     });
   };
 
-  handleFilterRole = (role) => {
+  // role: 'default', 'guest', ''
+  onRoleChange = (role) => {
     this.setState({
       role: role,
       currentPage: 1
-    }, ()=>{
+    }, () => {
       const { currentPage,perPage, is_active, role } = this.state;
       this.updateURL(currentPage, perPage);
       this.getUsersListByPage(currentPage, is_active, role);
@@ -523,9 +516,8 @@ class Users extends Component {
                 onUserSelected={this.onUserSelected}
                 isAllUsersSelected={this.isAllUsersSelected}
                 toggleSelectAllUsers={this.toggleSelectAllUsers}
-                handleUserListSelect={this.handleUserListSelect}
-                handleFilterRole={this.handleFilterRole}
-                handleFilterActive={this.handleFilterActive}
+                onRoleChange={this.onRoleChange}
+                onStatusChange={this.onStatusChange}
                 currentItem={this.getCurrentNavItem()}
               />
             </div>

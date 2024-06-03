@@ -14,7 +14,8 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-import DropdownComponent from '../../../components/dialog/dropdown-dialog';
+import UsersFilterBar from './users-filter-bar';
+
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 
 
@@ -66,25 +67,10 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <div>
-          {this.props.currentItem == 'database' &&
-            <DropdownComponent
-              isActive={this.props.is_active}
-              role={this.props.role}
-              handleFilterActive={this.props.handleFilterActive}
-              handleFilterRole={this.props.handleFilterRole}
-              availableRoles={availableRoles}
-            />
-
-          }
-
-          <EmptyTip>
-            <h2>{gettext('No users')}</h2>
-          </EmptyTip>
-        </div>
-
+        <EmptyTip>
+          <h2>{gettext('No users')}</h2>
+        </EmptyTip>
       );
-
 
       let columns = [];
 
@@ -133,14 +119,6 @@ class Content extends Component {
 
       const table = (
         <Fragment>
-          {this.props.currentItem=='database' &&
-            <DropdownComponent
-              isActive={this.props.is_active}
-              role={this.props.role}
-              handleFilterActive={this.props.handleFilterActive}
-              handleFilterRole={this.props.handleFilterRole}/>
-          }
-
           <table>
             <thead>
               <tr>
@@ -188,7 +166,19 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip;
+      return (
+        <div>
+          {this.props.currentItem === 'database' &&
+            <UsersFilterBar
+              isActive={this.props.is_active}
+              role={this.props.role}
+              onStatusChange={this.props.onStatusChange}
+              onRoleChange={this.props.onRoleChange}
+            />
+          }
+          {items.length ? table : emptyTip}
+        </div>
+      );
     }
   }
 }
@@ -216,11 +206,11 @@ Content.propTypes = {
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
   sortOrder: PropTypes.string,
-  is_active: PropTypes.string,
+  is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   role: PropTypes.string,
   currentItem: PropTypes.string,
-  handleFilterActive: PropTypes.func,
-  handleFilterRole: PropTypes.func
+  onStatusChange: PropTypes.func,
+  onRoleChange: PropTypes.func
 };
 
 class Item extends Component {
