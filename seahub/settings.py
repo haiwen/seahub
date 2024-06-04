@@ -747,6 +747,9 @@ THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 ENABLE_VIDEO_THUMBNAIL = False
 THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
+# pdf thumbnails
+ENABLE_PDF_THUMBNAIL = True
+
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 

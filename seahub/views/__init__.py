@@ -1089,6 +1089,7 @@ def react_fake_view(request, **kwargs):
         'ocm_remote_servers': OCM_REMOTE_SERVERS,
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
+        'enable_pdf_thumbnail': settings.ENABLE_PDF_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,

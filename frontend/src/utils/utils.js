@@ -124,6 +124,19 @@ export const Utils = {
     }
   },
 
+  pdfCheck: function(filename) {
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    var image_exts = ['pdf'];
+    if (image_exts.indexOf(file_ext) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview, custom-*
