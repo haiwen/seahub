@@ -94,7 +94,7 @@
   padding-left: 20px;
 }
 
-.view-structure .view-folder-wrapper .icon-expand-folder {
+.view-structure .icon-expand-folder {
   display: inline-block;
   font-size: 12px;
   transform: scale(0.8);
@@ -145,10 +145,13 @@
 }
 
 .view-structure .view-folder-wrapper .more-view-folder-operation .seafile-multicolor-icon-more-level,
+.view-structure .view-item .fas.fa-plus,
 .view-structure .view-item .more-view-operation .seafile-multicolor-icon-more-level {
+  cursor: pointer;
   opacity: 0;
 }
 
+.view-structure .view-item:hover .fas.fa-plus,
 .view-structure .view-folder-wrapper:hover .more-view-folder-operation .seafile-multicolor-icon-more-level,
 .view-structure .view-item:hover .more-view-operation .seafile-multicolor-icon-more-level {
   opacity: 1;
@@ -166,6 +169,7 @@
 }
 
 .view-structure .folder-list .view-folder.fold-freezed .btn-folder-operation,
+.view-structure .view-item.view-freezed .fas.fa-plus,
 .view-structure .view-item.view-freezed .seafile-multicolor-icon-more-level {
   opacity: 1;
 }
@@ -358,21 +362,24 @@
 
 /* dark mode */
 .view-structure-dark.view-structure,
-.view-structure-dark.view-structure .view-folder .icon-expand-folder {
+.view-structure-dark.view-structure .icon-expand-folder {
   color: #fff;
 }
 
 /* light mode */
 .view-structure-light.view-structure,
+.view-structure-light.view-structure .view-item .fas.fa-plus:hover,
 .view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level:hover,
 .view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level:hover,
-.view-structure-light.view-structure .view-folder .icon-expand-folder:hover {
+.view-structure-light.view-structure .icon-expand-folder:hover {
   color: #212529;
 }
 
+
+.view-structure-light.view-structure .view-item .fas.fa-plus,
 .view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level,
 .view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level,
-.view-structure-light.view-structure .view-folder .icon-expand-folder {
+.view-structure-light.view-structure .icon-expand-folder {
   color: #666;
 }
 

@@ -38,30 +38,30 @@ class ViewStructure extends Component {
   constructor(props) {
     super(props);
     this.folderClassNameCache = '';
-    this.idFoldedStatusMap = this.getFoldedFoldersFromBase();
+    this.idFoldedStatusMap = this.getFoldedFromLocal();
   }
 
-  getFoldedFoldersFromBase = () => {
-    const foldedFolders = window.localStorage.getItem(`wiki-folded-folders-${repoID}`);
-    return foldedFolders ? JSON.parse(foldedFolders) : {};
+  getFoldedFromLocal = () => {
+    const items = window.localStorage.getItem(`wiki-folded-${repoID}`);
+    return items ? JSON.parse(items) : {};
   };
 
-  setFoldedFolders = (foldedFolders) => {
-    window.localStorage.setItem(`wiki-folded-folders-${repoID}`, JSON.stringify(foldedFolders));
+  saveFoldedToLocal = (items) => {
+    window.localStorage.setItem(`wiki-folded-${repoID}`, JSON.stringify(items));
   };
 
-  getFolderState = (folderId) => {
+  getFoldState = (folderId) => {
     return this.idFoldedStatusMap[folderId];
   };
 
-  onToggleExpandFolder = (folderId) => {
-    const idFoldedStatusMap = this.getFoldedFoldersFromBase();
+  toggleExpand = (folderId) => {
+    const idFoldedStatusMap = this.getFoldedFromLocal();
     if (idFoldedStatusMap[folderId]) {
       delete idFoldedStatusMap[folderId];
     } else {
       idFoldedStatusMap[folderId] = true;
     }
-    this.setFoldedFolders(idFoldedStatusMap);
+    this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
   };
 
@@ -110,7 +110,7 @@ class ViewStructure extends Component {
         isOnlyOneView={isOnlyOneView}
         id_view_map={id_view_map}
         renderFolderMenuItems={this.renderFolderMenuItems}
-        onToggleExpandFolder={this.onToggleExpandFolder}
+        toggleExpand={this.toggleExpand}
         onToggleAddView={this.props.onToggleAddView}
         onDeleteFolder={this.props.onDeleteFolder}
         onMoveFolder={this.props.onMoveFolder}
@@ -123,13 +123,13 @@ class ViewStructure extends Component {
         onMoveView={this.props.onMoveView}
         views={views}
         moveFolderToFolder={this.props.moveFolderToFolder}
-        foldersStr={folderId}
+        pathStr={folderId}
         layerDragProps={layerDragProps}
         setClassName={this.setClassName}
         getClassName={this.getClassName}
         movePageOut={this.props.movePageOut}
         onModifyFolder={this.props.onModifyFolder}
-        getFolderState={this.getFolderState}
+        getFoldState={this.getFoldState}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
       />
@@ -155,7 +155,7 @@ class ViewStructure extends Component {
         renderFolderMenuItems={this.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onSelectView={() => this.props.onSelectView(id)}
+        onSelectView={this.props.onSelectView}
         onUpdatePage={this.props.onUpdatePage}
         onDeleteView={this.props.onDeleteView}
         onMoveViewToFolder={(targetFolderId) => {
@@ -163,9 +163,11 @@ class ViewStructure extends Component {
         }}
         onMoveView={this.props.onMoveView}
         onMoveFolder={this.props.onMoveFolder}
-        foldersStr={''}
+        pathStr={view.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
+        getFoldState={this.getFoldState}
+        toggleExpand={this.toggleExpand}
       />
     );
   };

@@ -74,7 +74,7 @@ const dropTarget = {
       const targetViewId = targetView.id;
       const sourceIndex = sourceRow.idx;
       // Drag the parent folder to the child page, return
-      if (props.foldersStr.split('-').includes(draggedFolderId)) return;
+      if (props.pathStr.split('-').includes(draggedFolderId)) return;
       props.onMoveFolder(
         draggedFolderId,
         targetViewId,
@@ -110,15 +110,18 @@ class ViewItem extends Component {
       viewName: props.view.name || '',
       viewIcon: props.view.icon,
       isSelected: props.currentPageId === props.view.id,
+      isMouseEnter: false,
     };
     this.viewItemRef = React.createRef();
   }
 
   onMouseEnter = () => {
+    this.setState({ isMouseEnter: true });
     if (this.state.isSelected) return;
   };
 
   onMouseLeave = () => {
+    this.setState({ isMouseEnter: false });
     if (this.state.isSelected) return;
   };
 
@@ -205,8 +208,19 @@ class ViewItem extends Component {
     window.seafile['docUuid'] = docUuid;
   };
 
+  getFolderChildrenHeight = () => {
+    const folded = this.props.getFoldState(this.props.view.id);
+    if (folded) return 0;
+    return 'auto';
+  };
+
+  onClickFolderChildren = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  };
+
   renderView = (view, index, tableGridsLength, isOnlyOneView) => {
-    const { isEditMode, views, folder, foldersStr } = this.props;
+    const { isEditMode, views, folder, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     const ViewWrapper = DropTarget('ViewStructure', dropTarget, dropCollect)(
@@ -225,7 +239,7 @@ class ViewItem extends Component {
         renderFolderMenuItems={this.props.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onSelectView={() => this.props.onSelectView(id)}
+        onSelectView={this.props.onSelectView}
         onUpdatePage={this.props.onUpdatePage}
         onDeleteView={this.props.onDeleteView}
         onMoveViewToFolder={(targetFolderId) => {
@@ -234,17 +248,25 @@ class ViewItem extends Component {
         onMoveView={this.props.onMoveView}
         onMoveFolder={this.props.onMoveFolder}
         views={views}
-        foldersStr={foldersStr}
+        pathStr={pathStr + '-' + view.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
+        getFoldState={this.props.getFoldState}
+        toggleExpand={this.props.toggleExpand}
       />
     );
+  };
+
+  toggleExpand = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.props.toggleExpand(this.props.view.id);
+    this.forceUpdate();
   };
 
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      infolder, view, tableGridsLength, isEditMode, folderId, isOnlyOneView, foldersStr,
+      infolder, view, tableGridsLength, isEditMode, folderId, isOnlyOneView, pathStr,
     } = this.props;
     const { isShowViewEditor, viewName, viewIcon, isSelected } = this.state;
     const isOverView = isOver && canDrop;
@@ -263,8 +285,9 @@ class ViewItem extends Component {
     let viewEditorId = `view-editor-${view.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
 
+    const folded = this.props.getFoldState(view.id);
     return (
-      <div>
+      <div onClick={this.toggleExpand}>
         {
           fn(connectDropTarget(
             connectDragPreview(
@@ -280,9 +303,13 @@ class ViewItem extends Component {
                 onMouseLeave={this.onMouseLeave}
                 id={viewEditorId}
               >
-                <div className="view-item-main" onClick={isShowViewEditor ? () => {} : this.props.onSelectView}>
-                  <div className='view-content' style={foldersStr ? { marginLeft: `${(foldersStr.split('-').length) * 24}px` } : {}}>
-                    <NavItemIcon symbol={'file'} disable={true} />
+                <div className="view-item-main" onClick={isShowViewEditor ? () => {} : (e) => this.props.onSelectView(view.id)}>
+                  <div className='view-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
+                    {(this.state.isMouseEnter && view.children.length > 0) ?
+                      <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
+                      :
+                      <NavItemIcon symbol={'file'} disable={true} />
+                    }
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
                     {isShowViewEditor && (
@@ -346,8 +373,8 @@ class ViewItem extends Component {
         }
         <div
           className="view-folder-children"
-          // style={{ height: this.getFolderChildrenHeight() }}
-          // onClick={this.onClickFolderChildren}
+          style={{ height: this.getFolderChildrenHeight() }}
+          onClick={this.onClickFolderChildren}
         >
           {view.children &&
             view.children.map((item, index) => {
@@ -386,9 +413,11 @@ ViewItem.propTypes = {
   onMoveView: PropTypes.func,
   isOnlyOneView: PropTypes.bool,
   onMoveFolder: PropTypes.func,
-  foldersStr: PropTypes.string,
+  pathStr: PropTypes.string,
   currentPageId: PropTypes.string,
   addPageInside: PropTypes.func,
+  getFoldState: PropTypes.func,
+  toggleExpand: PropTypes.func,
 };
 
 export default DropTarget('ViewStructure', dropTarget, dropCollect)(

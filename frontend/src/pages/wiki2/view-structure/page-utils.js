@@ -53,29 +53,6 @@ export default class PageUtils {
     return pages.find((page) => page.id === page_id) || null;
   };
 
-  static getPageFromNavigationById = (navigation, page_id) => {
-    if (!page_id || !Array.isArray(navigation)) return null;
-    let page_index = navigation.indexOf(item => item.id === page_id);
-    if (page_index > -1) {
-      return navigation[page_index];
-    }
-    for (let i = 0; i < navigation.length; i++) {
-      const currNavigation = navigation[i];
-      if (currNavigation.id === page_id) {
-        return currNavigation;
-      }
-
-      if (Array.isArray(currNavigation.children)) {
-        for (let j = 0; j < currNavigation.children.length; j++) {
-          if (currNavigation.children[j].id === page_id) {
-            return currNavigation.children[j];
-          }
-        }
-      }
-    }
-    return null;
-  };
-
   static getPageIndexById = (pageId, pages) => {
     return pages.findIndex(page => page.id === pageId);
   };
