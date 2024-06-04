@@ -6,6 +6,8 @@ import ViewEditPopover from './view-edit-popover';
 import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from './delete-dialog';
 import { DRAGGED_FOLDER_MODE, DRAGGED_VIEW_MODE } from '../constant';
+import { gettext } from '../../../../utils/constants';
+import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
 import NavItemIcon from '../nav-item-icon';
 
@@ -104,6 +106,7 @@ class ViewItem extends Component {
       isShowViewEditor: false,
       isShowViewOperationDropdown: false,
       isShowDeleteDialog: false,
+      isShowInsertPage: false,
       viewName: props.view.name || '',
       viewIcon: props.view.icon,
       isSelected: props.currentPageId === props.view.id,
@@ -135,6 +138,10 @@ class ViewItem extends Component {
         this.saveViewProperties();
       }
     });
+  };
+
+  toggleInsertPage = () => {
+    this.setState({ isShowInsertPage: !this.state.isShowInsertPage });
   };
 
   saveViewProperties = () => {
@@ -198,6 +205,42 @@ class ViewItem extends Component {
     window.seafile['docUuid'] = docUuid;
   };
 
+  renderView = (view, index, tableGridsLength, isOnlyOneView) => {
+    const { isEditMode, views, folder, foldersStr } = this.props;
+    const id = view.id;
+    if (!views.find(item => item.id === id)) return;
+    const ViewWrapper = DropTarget('ViewStructure', dropTarget, dropCollect)(
+      DragSource('ViewStructure', dragSource, dragCollect)(ViewItem)
+    );
+    return (
+      <ViewWrapper
+        key={id}
+        tableGridsLength={tableGridsLength}
+        isOnlyOneView={isOnlyOneView}
+        infolder={false}
+        view={Object.assign({}, views.find(item => item.id === id), view)}
+        viewIndex={index}
+        folderId={folder ? folder.id : ''}
+        isEditMode={isEditMode}
+        renderFolderMenuItems={this.props.renderFolderMenuItems}
+        duplicatePage={this.props.duplicatePage}
+        onSetFolderId={this.props.onSetFolderId}
+        onSelectView={() => this.props.onSelectView(id)}
+        onUpdatePage={this.props.onUpdatePage}
+        onDeleteView={this.props.onDeleteView}
+        onMoveViewToFolder={(targetFolderId) => {
+          this.props.onMoveViewToFolder(folder ? folder.id : '', view.id, targetFolderId);
+        }}
+        onMoveView={this.props.onMoveView}
+        onMoveFolder={this.props.onMoveFolder}
+        views={views}
+        foldersStr={foldersStr}
+        currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
+      />
+    );
+  };
+
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
@@ -220,71 +263,100 @@ class ViewItem extends Component {
     let viewEditorId = `view-editor-${view.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
 
-    return fn(connectDropTarget(
-      connectDragPreview(
-        <div
-          className={classnames('view-item', 'view',
-            { 'selected-view': isSelected },
-            { 'view-can-drop-top': viewCanDropTop },
-            { 'view-can-drop': viewCanDrop },
-            { 'readonly': !isEditMode },
-          )}
-          ref={ref => this.viewItemRef = ref}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          id={viewEditorId}
-        >
-          <div className="view-item-main" onClick={isShowViewEditor ? () => {} : this.props.onSelectView}>
-            <div className='view-content' style={foldersStr ? { marginLeft: `${(foldersStr.split('-').length) * 24}px` } : {}}>
-              <NavItemIcon symbol={'file'} disable={true} />
-              {/* {this.renderIcon(view.icon)} */}
-              <span className="view-title text-truncate" title={view.name}>{view.name}</span>
-              {isShowViewEditor && (
-                <ViewEditPopover
-                  viewName={viewName}
-                  viewIcon={viewIcon}
-                  viewEditorId={viewEditorId}
-                  onChangeName={this.onChangeName}
-                  onChangeIcon={this.onChangeIcon}
-                  toggleViewEditor={this.toggleViewEditor}
-                />
-              )}
-            </div>
-          </div>
-          <div className="d-flex">
-            {isEditMode &&
-              <div className="more-view-operation" onClick={this.onViewOperationDropdownToggle}>
-                <Icon symbol={'more-level'}/>
-                {this.state.isShowViewOperationDropdown &&
-                  <PageDropdownMenu
-                    view={view}
-                    views={this.props.views}
-                    tableGridsLength={tableGridsLength}
-                    isOnlyOneView={isOnlyOneView}
-                    folderId={folderId}
-                    canDelete={!isSpecialInstance}
-                    canDuplicate={!isSpecialInstance}
-                    toggle={this.onViewOperationDropdownToggle}
-                    renderFolderMenuItems={this.props.renderFolderMenuItems}
-                    toggleViewEditor={this.toggleViewEditor}
-                    duplicatePage={this.props.duplicatePage}
-                    onSetFolderId={this.props.onSetFolderId}
-                    onDeleteView={this.openDeleteDialog}
-                    onMoveViewToFolder={this.props.onMoveViewToFolder}
+    return (
+      <div>
+        {
+          fn(connectDropTarget(
+            connectDragPreview(
+              <div
+                className={classnames('view-item', 'view',
+                  { 'selected-view': isSelected },
+                  { 'view-can-drop-top': viewCanDropTop },
+                  { 'view-can-drop': viewCanDrop },
+                  { 'readonly': !isEditMode },
+                )}
+                ref={ref => this.viewItemRef = ref}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
+                id={viewEditorId}
+              >
+                <div className="view-item-main" onClick={isShowViewEditor ? () => {} : this.props.onSelectView}>
+                  <div className='view-content' style={foldersStr ? { marginLeft: `${(foldersStr.split('-').length) * 24}px` } : {}}>
+                    <NavItemIcon symbol={'file'} disable={true} />
+                    {/* {this.renderIcon(view.icon)} */}
+                    <span className="view-title text-truncate" title={view.name}>{view.name}</span>
+                    {isShowViewEditor && (
+                      <ViewEditPopover
+                        viewName={viewName}
+                        viewIcon={viewIcon}
+                        viewEditorId={viewEditorId}
+                        onChangeName={this.onChangeName}
+                        onChangeIcon={this.onChangeIcon}
+                        toggleViewEditor={this.toggleViewEditor}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="d-flex">
+                  {isEditMode &&
+                    <>
+                      <div className="more-view-operation" onClick={this.onViewOperationDropdownToggle}>
+                        <Icon symbol={'more-level'}/>
+                        {this.state.isShowViewOperationDropdown &&
+                          <PageDropdownMenu
+                            view={view}
+                            views={this.props.views}
+                            tableGridsLength={tableGridsLength}
+                            isOnlyOneView={isOnlyOneView}
+                            folderId={folderId}
+                            canDelete={!isSpecialInstance}
+                            canDuplicate={!isSpecialInstance}
+                            toggle={this.onViewOperationDropdownToggle}
+                            renderFolderMenuItems={this.props.renderFolderMenuItems}
+                            toggleViewEditor={this.toggleViewEditor}
+                            duplicatePage={this.props.duplicatePage}
+                            onSetFolderId={this.props.onSetFolderId}
+                            onDeleteView={this.openDeleteDialog}
+                            onMoveViewToFolder={this.props.onMoveViewToFolder}
+                          />
+                        }
+                      </div>
+                      <div className="ml-2" onClick={this.toggleInsertPage}>
+                        <span className='fas fa-plus'></span>
+                      </div>
+                    </>
+                  }
+                </div>
+                {this.state.isShowDeleteDialog &&
+                  <DeleteDialog
+                    closeDeleteDialog={this.closeDeleteDialog}
+                    handleSubmit={this.props.onDeleteView.bind(this, view.id)}
+                  />
+                }
+                {this.state.isShowInsertPage &&
+                  <AddNewPageDialog
+                    toggle={this.toggleInsertPage}
+                    onAddNewPage={(obj) => this.props.addPageInside(Object.assign({ parentPageId: view.id }, obj))}
+                    title={gettext('Add page inside')}
                   />
                 }
               </div>
-            }
-          </div>
-          {this.state.isShowDeleteDialog &&
-            <DeleteDialog
-              closeDeleteDialog={this.closeDeleteDialog}
-              handleSubmit={this.props.onDeleteView}
-            />
+            )
+          ))
+        }
+        <div
+          className="view-folder-children"
+          // style={{ height: this.getFolderChildrenHeight() }}
+          // onClick={this.onClickFolderChildren}
+        >
+          {view.children &&
+            view.children.map((item, index) => {
+              return this.renderView(item, index, tableGridsLength, isOnlyOneView);
+            })
           }
         </div>
-      )
-    ));
+      </div>
+    );
   }
 }
 
@@ -296,6 +368,7 @@ ViewItem.propTypes = {
   isEditMode: PropTypes.bool,
   infolder: PropTypes.bool,
   view: PropTypes.object,
+  folder: PropTypes.object,
   views: PropTypes.array,
   viewIndex: PropTypes.number,
   folderId: PropTypes.string,
@@ -315,6 +388,7 @@ ViewItem.propTypes = {
   onMoveFolder: PropTypes.func,
   foldersStr: PropTypes.string,
   currentPageId: PropTypes.string,
+  addPageInside: PropTypes.func,
 };
 
 export default DropTarget('ViewStructure', dropTarget, dropCollect)(

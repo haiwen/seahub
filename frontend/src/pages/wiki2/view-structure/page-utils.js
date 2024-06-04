@@ -2,6 +2,52 @@ import { FOLDER, PAGE } from '../constant';
 
 export default class PageUtils {
 
+  static addPage(navigation, page_id, parentId) {
+    if (!parentId) {
+      navigation.push({ id: page_id, type: PAGE });
+    } else {
+      navigation.forEach(item => {
+        this._addPageRecursion(page_id, item, parentId);
+      });
+    }
+  }
+
+  static _addPageRecursion(page_id, item, parentId) {
+    if (!Array.isArray(item.children)) {
+      item.children = [];
+    }
+    if (item.id === parentId) {
+      item.children.push({ id: page_id, type: PAGE });
+      return true;
+    }
+    item.children.forEach(item => {
+      this._addPageRecursion(page_id, item, parentId);
+    });
+  }
+
+  static deletePage(navigation, page_id) {
+    const pageIndex = navigation.findIndex(item => item.id === page_id);
+    if (pageIndex > -1) {
+      navigation.splice(pageIndex, 1);
+      return true;
+    }
+    navigation.forEach(item => {
+      this._deletePageRecursion(item, page_id);
+    });
+  }
+
+  static _deletePageRecursion(item, page_id) {
+    if (!item || !Array.isArray(item.children)) return;
+    let pageIndex = item.children.findIndex(item => item.id === page_id);
+    if (pageIndex > -1) {
+      item.children.splice(pageIndex, 1);
+      return true;
+    }
+    item.children.forEach(item => {
+      this._deletePageRecursion(item, page_id);
+    });
+  }
+
   static getPageById = (pages, page_id) => {
     if (!page_id || !Array.isArray(pages)) return null;
     return pages.find((page) => page.id === page_id) || null;
@@ -102,33 +148,6 @@ export default class PageUtils {
     });
   }
 
-  static addPage(navigation, page_id, target_folder_id) {
-    // 1. Add pages directly under the root directory
-    if (!target_folder_id) {
-      navigation.push({ id: page_id, type: PAGE });
-      return;
-    } else {
-      // 2. Add pages to the folder
-      navigation.forEach(item => {
-        if (item.type === FOLDER) {
-          this._addPageInFolder(page_id, item, target_folder_id);
-        }
-      });
-    }
-  }
-
-  static _addPageInFolder(page_id, folder, target_folder_id) {
-    if (folder.id === target_folder_id) {
-      folder.children.push({ id: page_id, type: PAGE });
-      return true;
-    }
-    folder.children.forEach(item => {
-      if (item.type === FOLDER) {
-        this._addPageInFolder(page_id, item, target_folder_id);
-      }
-    });
-  }
-
   static insertPage(navigation, page_id, target_page_id, folder_id, move_position) {
     // 1. No folder, insert page in root directory
     if (!folder_id) {
@@ -187,34 +206,6 @@ export default class PageUtils {
         }
       });
     }
-  }
-
-  static deletePage(navigation, page_id) {
-    // 1. Delete pages directly under the root directory
-    const pageIndex = navigation.findIndex(item => item.id === page_id);
-    if (pageIndex > -1) {
-      navigation.splice(pageIndex, 1);
-      return true;
-    }
-    // 2. Delete Page in Folder
-    navigation.forEach(item => {
-      if (item.type === FOLDER) {
-        this._deletePageInFolder(item, page_id);
-      }
-    });
-  }
-
-  static _deletePageInFolder(folder, page_id) {
-    let pageIndex = folder.children.findIndex(item => item.id === page_id);
-    if (pageIndex > -1) {
-      folder.children.splice(pageIndex, 1);
-      return true;
-    }
-    folder.children.forEach(item => {
-      if (item.type === FOLDER) {
-        this._deletePageInFolder(item, page_id);
-      }
-    });
   }
 
   // movePageintoFolder

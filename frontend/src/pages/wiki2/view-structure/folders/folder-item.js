@@ -100,6 +100,7 @@ class FolderItem extends Component {
         layerDragProps={this.props.layerDragProps}
         getFolderState={this.props.getFolderState}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
       />
     );
   };
@@ -114,7 +115,7 @@ class FolderItem extends Component {
         tableGridsLength={tableGridsLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
-        view={views.find(item => item.id === id)}
+        view={Object.assign({}, views.find(item => item.id === id), view)}
         viewIndex={index}
         folderId={folder.id}
         isEditMode={isEditMode}
@@ -132,6 +133,7 @@ class FolderItem extends Component {
         views={views}
         foldersStr={foldersStr}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
       />
     );
   };
@@ -299,6 +301,7 @@ FolderItem.propTypes = {
   layerDragProps: PropTypes.object,
   getFolderState: PropTypes.func,
   currentPageId: PropTypes.string,
+  addPageInside: PropTypes.func,
 };
 
 export default FolderItem;

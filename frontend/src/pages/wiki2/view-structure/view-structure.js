@@ -32,6 +32,7 @@ class ViewStructure extends Component {
     duplicatePage: PropTypes.func,
     onSetFolderId: PropTypes.func,
     currentPageId: PropTypes.string,
+    addPageInside: PropTypes.func,
   };
 
   constructor(props) {
@@ -130,6 +131,7 @@ class ViewStructure extends Component {
         onModifyFolder={this.props.onModifyFolder}
         getFolderState={this.getFolderState}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
       />
     );
   };
@@ -145,7 +147,7 @@ class ViewStructure extends Component {
         tableGridsLength={tableGridsLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
-        view={views.find(item => item.id === id)}
+        view={Object.assign({}, views.find(item => item.id === id), view)}
         views={views}
         viewIndex={index}
         folderId={folderId}
@@ -155,7 +157,7 @@ class ViewStructure extends Component {
         onSetFolderId={this.props.onSetFolderId}
         onSelectView={() => this.props.onSelectView(id)}
         onUpdatePage={this.props.onUpdatePage}
-        onDeleteView={this.props.onDeleteView.bind(this, id)}
+        onDeleteView={this.props.onDeleteView}
         onMoveViewToFolder={(targetFolderId) => {
           this.onMoveViewToFolder(folderId, view.id, targetFolderId);
         }}
@@ -163,6 +165,7 @@ class ViewStructure extends Component {
         onMoveFolder={this.props.onMoveFolder}
         foldersStr={''}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
       />
     );
   };

@@ -55,12 +55,20 @@ class SidePanel extends Component {
     }
   };
 
+  addPageInside = async ({ parentPageId, name, icon, path, docUuid, successCallback, errorCallback }) => {
+    const { config } = this.props;
+    const navigation = config.navigation;
+    const pageId = generateUniqueId(navigation);
+    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
+    this.addPage(newPage, parentPageId, successCallback, errorCallback);
+  };
+
   onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback }) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
     const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, successCallback, errorCallback);
+    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -75,15 +83,15 @@ class SidePanel extends Component {
       name,
     };
     const newPage = new Page({ ...newPageConfig });
-    this.addPage(newPage, successCallback, errorCallback);
+    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
-  addPage = (page, successCallback, errorCallback) => {
+  addPage = (page, parentId, successCallback, errorCallback) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = page.id;
     config.pages.push(page);
-    PageUtils.addPage(navigation, pageId, this.current_folder_id);
+    PageUtils.addPage(navigation, pageId, parentId);
     config.navigation = navigation;
     const onSuccess = () => {
       this.props.setCurrentPage(pageId, successCallback);
@@ -299,6 +307,7 @@ class SidePanel extends Component {
           duplicatePage={this.duplicatePage}
           onSetFolderId={this.onSetFolderId}
           currentPageId={this.props.currentPageId}
+          addPageInside={this.addPageInside}
         />
         {this.state.isShowNewFolderDialog &&
           <NewFolderDialog
@@ -310,6 +319,7 @@ class SidePanel extends Component {
           <AddNewPageDialog
             toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
+            title={gettext('Add page')}
           />
         }
       </div>
@@ -335,6 +345,7 @@ class SidePanel extends Component {
           <AddNewPageDialog
             toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
+            title={gettext('Add page')}
           />
         }
       </div>
