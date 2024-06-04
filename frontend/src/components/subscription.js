@@ -484,7 +484,7 @@ class Subscription extends Component {
           <div id="product-price" className="subscription-info">
             <h3 className="subscription-info-heading">{'云服务付费方案'}</h3>
             <p className="mb-2">
-              <a rel="noopener noreferrer" target="_blank" href="https://www.seafile.com/product/private_server/">{'查看详情'}</a>
+              <a rel="noopener noreferrer" target="_blank" href="https://www.seafile.com/seafile-docs/home/">{'查看详情'}</a>
             </p>
           </div>
           {paymentTypeList.map((item, index) => {
