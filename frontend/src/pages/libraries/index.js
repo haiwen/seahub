@@ -9,9 +9,10 @@ import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
 import TopToolbar from '../../components/toolbar/top-toolbar';
-import MyLibsToolbar from '../../components/toolbar/my-libs-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibs from '../../pages/shared-libs/shared-libs.js';
 import SharedWithAll from '../../pages/shared-with-all';
@@ -39,6 +40,7 @@ class Libraries extends Component {
       groupList: [],
       sharedRepoList:[],
       publicRepoList: [],
+      isCreateRepoDialogOpen: false
     };
   }
 
@@ -78,6 +80,7 @@ class Libraries extends Component {
   };
 
   onCreateRepo = (repo) => {
+    this.toggleCreateRepoDialog();
     seafileAPI.createMineRepo(repo).then((res) => {
       const newRepo = new Repo({
         repo_id: res.data.repo_id,
@@ -172,6 +175,12 @@ class Libraries extends Component {
     });
   };
 
+  toggleCreateRepoDialog = () => {
+    this.setState({
+      isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen
+    });
+  };
+
   render() {
     const { isLoading } = this.state;
     return (
@@ -180,9 +189,6 @@ class Libraries extends Component {
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
         >
-          <>
-            {canAddRepo && <MyLibsToolbar onCreateRepo={this.onCreateRepo} />}
-          </>
         </TopToolbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -210,9 +216,12 @@ class Libraries extends Component {
                 {canAddRepo && (
                   <div className="pb-3">
                     <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
-                      <h4 className="sf-heading m-0">
+                      <h4 className="sf-heading m-0 d-flex align-items-center">
                         <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                         {gettext('My Libraries')}
+                        <SingleDropdownToolbar
+                          opList={[{'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog}]}
+                        />
                       </h4>
                       {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
                         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
@@ -275,6 +284,13 @@ class Libraries extends Component {
               sortItems={this.sortRepoList}
             />
           }
+          {this.state.isCreateRepoDialogOpen && (
+            <CreateRepoDialog
+              libraryType='mine'
+              onCreateRepo={this.onCreateRepo}
+              onCreateToggle={this.toggleCreateRepoDialog}
+            />
+          )}
         </div>
       </Fragment>
     );
