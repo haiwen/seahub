@@ -125,12 +125,12 @@ export default class PageUtils {
     });
   }
 
-  static insertPage(navigation, page_id, target_page_id, folder_id, move_position) {
+  static insertPage(navigation, page_id, target_page_id, target_id, move_position) {
     // 1. No folder, insert page in root directory
-    if (!folder_id) {
+    if (!target_id) {
       let insertIndex = target_page_id ? navigation.findIndex(item => item.id === target_page_id) : -1;
       if (insertIndex < 0) {
-        this.addPage(navigation, page_id, folder_id);
+        this.addPage(navigation, page_id, target_id);
         return true;
       }
       if (move_position === 'move_below') {
@@ -142,13 +142,13 @@ export default class PageUtils {
     // 2. If there is a folder, find it and insert it
     navigation.forEach(item => {
       if (item.type === FOLDER) {
-        this._insertPageIntoFolder(item, page_id, target_page_id, folder_id, move_position);
+        this._insertPageIntoFolder(item, page_id, target_page_id, target_id, move_position);
       }
     });
   }
 
-  static _insertPageIntoFolder(folder, page_id, target_page_id, folder_id, move_position) {
-    if (folder.id === folder_id) {
+  static _insertPageIntoFolder(folder, page_id, target_page_id, target_id, move_position) {
+    if (folder.id === target_id) {
       let insertIndex = target_page_id ? folder.children.findIndex(item => item.id === target_page_id) : -1;
       if (move_position === 'move_below') {
         insertIndex++;
@@ -158,25 +158,25 @@ export default class PageUtils {
     }
     folder.children.forEach(item => {
       if (item.type === FOLDER) {
-        this._insertPageIntoFolder(item, page_id, target_page_id, folder_id, move_position);
+        this._insertPageIntoFolder(item, page_id, target_page_id, target_id, move_position);
       }
     });
   }
 
   // Move the page to the top or bottom of the folder
-  static insertPageOut(navigation, page_id, folder_id, move_position) {
+  static insertPageOut(navigation, page_id, target_id, move_position) {
     let indexOffset = 0;
     if (move_position === 'move_below') {
       indexOffset++;
     }
     let page = { id: page_id, type: PAGE };
-    let folder_index = this.getFolderIndexById(navigation, folder_id);
+    let folder_index = this.getFolderIndexById(navigation, target_id);
     if (folder_index > -1) {
       navigation.splice(folder_index + indexOffset, 0, page);
     } else {
       navigation.forEach((item) => {
         if (item.type === FOLDER) {
-          let folder_index = this.getFolderIndexById(item.children, folder_id);
+          let folder_index = this.getFolderIndexById(item.children, target_id);
           if (folder_index > -1) {
             item.children.splice(folder_index + indexOffset, 0, page);
           }
@@ -186,14 +186,14 @@ export default class PageUtils {
   }
 
   // movePageintoFolder
-  static movePage(navigation, moved_page_id, target_page_id, source_folder_id, target_folder_id, move_position) {
-    this.deletePage(navigation, moved_page_id, source_folder_id);
-    this.insertPage(navigation, moved_page_id, target_page_id, target_folder_id, move_position);
+  static movePage(navigation, moved_page_id, target_page_id, source_id, target_id, move_position) {
+    this.deletePage(navigation, moved_page_id, source_id);
+    this.insertPage(navigation, moved_page_id, target_page_id, target_id, move_position);
   }
 
   // movePageOutsideFolder
-  static movePageOut(navigation, moved_page_id, source_folder_id, target_folder_id, move_position) {
-    this.deletePage(navigation, moved_page_id, source_folder_id);
-    this.insertPageOut(navigation, moved_page_id, target_folder_id, move_position);
+  static movePageOut(navigation, moved_page_id, source_id, target_id, move_position) {
+    this.deletePage(navigation, moved_page_id, source_id);
+    this.insertPageOut(navigation, moved_page_id, target_id, move_position);
   }
 }

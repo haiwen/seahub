@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FolderOperationDropdownMenu from './folder-operation-dropdownmenu';
-import ViewItem from '../views/view-item';
+import DraggedViewItem from '../views/dragged-view-item';
 import DraggedFolderItem from './dragged-folder-item';
 import ViewEditPopover from '../../view-structure/views/view-edit-popover';
 import NavItemIcon from '../nav-item-icon';
@@ -60,7 +60,7 @@ class FolderItem extends Component {
     // }
   };
 
-  renderFolder = (folder, index, tableGridsLength, isOnlyOneView, id_view_map) => {
+  renderFolder = (folder, index, pagesLength, isOnlyOneView, id_view_map) => {
     const { isEditMode, views, pathStr } = this.props;
     const { id: folderId } = folder;
     return (
@@ -69,7 +69,7 @@ class FolderItem extends Component {
         isEditMode={isEditMode}
         folder={folder}
         folderIndex={index}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         id_view_map={id_view_map}
         renderFolderMenuItems={this.props.renderFolderMenuItems}
@@ -99,14 +99,14 @@ class FolderItem extends Component {
     );
   };
 
-  renderView = (view, index, tableGridsLength, isOnlyOneView) => {
+  renderView = (view, index, pagesLength, isOnlyOneView) => {
     const { isEditMode, views, folder, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     return (
-      <ViewItem
+      <DraggedViewItem
         key={id}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
         view={Object.assign({}, views.find(item => item.id === id), view)}
@@ -174,7 +174,7 @@ class FolderItem extends Component {
   render() {
     const {
       connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop,
-      isEditMode, folder, tableGridsLength, id_view_map, isOnlyOneView, layerDragProps,
+      isEditMode, folder, pagesLength, id_view_map, isOnlyOneView, layerDragProps,
     } = this.props;
     const { isEditing } = this.state;
     const { id: folderId, name, children } = folder;
@@ -239,7 +239,7 @@ class FolderItem extends Component {
         >
           {!folded && children &&
             children.map((item, index) => {
-              return item.type === 'folder' ? this.renderFolder(item, index, tableGridsLength, isOnlyOneView, id_view_map) : this.renderView(item, index, tableGridsLength, isOnlyOneView);
+              return item.type === 'folder' ? this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map) : this.renderView(item, index, pagesLength, isOnlyOneView);
             })
           }
         </div>
@@ -252,12 +252,11 @@ FolderItem.propTypes = {
   isEditMode: PropTypes.bool,
   folder: PropTypes.object,
   folderIndex: PropTypes.number,
-  tableGridsLength: PropTypes.number,
+  pagesLength: PropTypes.number,
   id_view_map: PropTypes.object,
   isOver: PropTypes.bool,
   canDrop: PropTypes.bool,
   isDragging: PropTypes.bool,
-  draggedRow: PropTypes.object,
   connectDropTarget: PropTypes.func,
   connectDragPreview: PropTypes.func,
   connectDragSource: PropTypes.func,

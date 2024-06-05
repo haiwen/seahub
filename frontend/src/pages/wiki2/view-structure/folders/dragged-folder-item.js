@@ -1,5 +1,5 @@
 import { DragSource, DropTarget } from 'react-dnd';
-import { DRAGGED_FOLDER_MODE, DRAGGED_VIEW_MODE } from '../constant';
+import { DRAGGED_FOLDER_MODE, DRAGGED_PAGE_MODE } from '../constant';
 import FolderItem from './folder-item';
 
 const dragSource = {
@@ -20,8 +20,8 @@ const dragSource = {
     }
   },
   isDragging(props, monitor) {
-    const { folderIndex: currentIndex, draggedRow } = props;
-    const { idx } = draggedRow;
+    const { folderIndex: currentIndex, draggedPage } = props;
+    const { idx } = draggedPage;
     return idx > currentIndex;
   },
 };
@@ -43,7 +43,7 @@ const dropTarget = {
     let moveInto = className.includes('dragged-view-over');
 
     // 1. drag source is page
-    if (sourceRow.mode === DRAGGED_VIEW_MODE) {
+    if (sourceRow.mode === DRAGGED_PAGE_MODE) {
       const sourceFolderId = sourceRow.folderId;
       const draggedViewId = sourceRow.data.id;
       // 1.1 move page into folder
@@ -93,7 +93,7 @@ const dropCollect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
-  draggedRow: monitor.getItem(),
+  draggedPage: monitor.getItem(),
   connect,
   monitor,
 });

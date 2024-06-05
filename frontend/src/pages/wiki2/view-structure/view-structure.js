@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { DropdownItem } from 'reactstrap';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedFolderItem from './folders/dragged-folder-item';
-import ViewItem from './views/view-item';
+import DraggedViewItem from './views/dragged-view-item';
 import ViewStructureFooter from './view-structure-footer';
 import { repoID } from '../../../utils/constants';
 
@@ -97,7 +96,7 @@ class ViewStructure extends Component {
     return this.folderClassNameCache;
   };
 
-  renderFolder = (folder, index, tableGridsLength, isOnlyOneView, id_view_map, layerDragProps) => {
+  renderFolder = (folder, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) => {
     const { isEditMode, views } = this.props;
     const folderId = folder.id;
     return (
@@ -106,7 +105,7 @@ class ViewStructure extends Component {
         isEditMode={isEditMode}
         folder={folder}
         folderIndex={index}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         id_view_map={id_view_map}
         renderFolderMenuItems={this.renderFolderMenuItems}
@@ -136,15 +135,15 @@ class ViewStructure extends Component {
     );
   };
 
-  renderView = (view, index, tableGridsLength, isOnlyOneView, id_view_map) => {
+  renderView = (view, index, pagesLength, isOnlyOneView, id_view_map) => {
     const { isEditMode, views } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     const folderId = null; // Pages in the root directory, no folders, use null
     return (
-      <ViewItem
+      <DraggedViewItem
         key={id}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
         view={Object.assign({}, views.find(item => item.id === id), view)}
@@ -179,7 +178,7 @@ class ViewStructure extends Component {
     if (views.length === 1) {
       isOnlyOneView = true;
     }
-    const tableGridsLength = views.length;
+    const pagesLength = views.length;
     let id_view_map = {};
     views.forEach(view => id_view_map[view.id] = view);
     const style = { maxHeight: isEditMode ? 'calc(100% - 40px)' : '100%' };
@@ -187,8 +186,8 @@ class ViewStructure extends Component {
       <div className='view-structure-body' style={style}>
         {navigation.map((item, index) => {
           return item.type === 'folder' ?
-            this.renderFolder(item, index, tableGridsLength, isOnlyOneView, id_view_map, layerDragProps) :
-            this.renderView(item, index, tableGridsLength, isOnlyOneView, id_view_map);
+            this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) :
+            this.renderView(item, index, pagesLength, isOnlyOneView, id_view_map);
         })}
       </div>
     );
@@ -209,15 +208,10 @@ class ViewStructure extends Component {
         connectDropTarget: connect.dropTarget()
       }))(DragLayer(this.collect)(this.renderStructureBody))
     );
-    const isSpecialInstance = false;
-    const isDarkMode = false;
     return (
-      <div className={classnames('view-structure',
-        { 'view-structure-dark': isDarkMode },
-        { 'view-structure-light': !isDarkMode },
-      )}>
+      <div className='view-structure view-structure-light'>
         <StructureBody />
-        {(this.props.isEditMode && !isSpecialInstance) &&
+        {(this.props.isEditMode) &&
           <ViewStructureFooter
             onToggleAddView={this.props.onToggleAddView}
             onToggleAddFolder={this.props.onToggleAddFolder}

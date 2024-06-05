@@ -10,7 +10,7 @@ export default class PageDropdownMenu extends Component {
   static propTypes = {
     view: PropTypes.object.isRequired,
     views: PropTypes.array,
-    tableGridsLength: PropTypes.number,
+    pagesLength: PropTypes.number,
     folderId: PropTypes.string,
     canDelete: PropTypes.bool,
     canDuplicate: PropTypes.bool,
@@ -105,7 +105,7 @@ export default class PageDropdownMenu extends Component {
 
   render() {
     const {
-      folderId, canDelete, canDuplicate, renderFolderMenuItems, tableGridsLength, isOnlyOneView,
+      folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOneView,
     } = this.props;
     const folderMenuItems = renderFolderMenuItems && renderFolderMenuItems({ currentFolderId: folderId, onMoveViewToFolder: this.onMoveViewToFolder });
     return (
@@ -132,7 +132,7 @@ export default class PageDropdownMenu extends Component {
               <span className="item-text">{gettext('Duplicate page')}</span>
             </DropdownItem>
           }
-          {(isOnlyOneView || tableGridsLength === 1 || !canDelete) ? '' : (
+          {(isOnlyOneView || pagesLength === 1 || !canDelete) ? '' : (
             <DropdownItem onClick={this.onDeleteView}>
               <Icon symbol={'delete'}/>
               <span className="item-text">{gettext('Delete page')}</span>

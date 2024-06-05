@@ -1,102 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DragSource, DropTarget } from 'react-dnd';
 import ViewEditPopover from './view-edit-popover';
 import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from './delete-dialog';
-import { DRAGGED_FOLDER_MODE, DRAGGED_VIEW_MODE } from '../constant';
 import { gettext } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
 import NavItemIcon from '../nav-item-icon';
-
-const dragSource = {
-  beginDrag: props => {
-    return {
-      idx: props.viewIndex,
-      data: { ...props.view, index: props.viewIndex },
-      folderId: props.folderId,
-      mode: DRAGGED_VIEW_MODE,
-    };
-  },
-  endDrag(props, monitor) {
-    const viewSource = monitor.getItem();
-    const didDrop = monitor.didDrop();
-    let viewTarget = {};
-    if (!didDrop) {
-      return { viewSource, viewTarget };
-    }
-  },
-  isDragging(props) {
-    const { draggedRow, infolder, viewIndex: targetIndex } = props;
-    if (infolder) {
-      return false;
-    }
-    const { idx } = draggedRow;
-    return idx > targetIndex;
-  }
-};
-
-const dropTarget = {
-  drop(props, monitor) {
-    const sourceRow = monitor.getItem();
-    // 1 drag page
-    if (sourceRow.mode === DRAGGED_VIEW_MODE) {
-      const { infolder, viewIndex: targetIndex, view: targetView, folderId: targetFolderId } = props;
-      const sourceFolderId = sourceRow.folderId;
-      const draggedViewId = sourceRow.data.id;
-      const targetViewId = targetView.id;
-
-      if (draggedViewId !== targetViewId) {
-        const sourceIndex = sourceRow.idx;
-        let move_position;
-        if (infolder) {
-          move_position = 'move_below';
-        } else {
-          move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
-        }
-
-        props.onMoveView({
-          moved_view_id: draggedViewId,
-          target_view_id: targetViewId,
-          source_view_folder_id: sourceFolderId,
-          target_view_folder_id: targetFolderId,
-          move_position,
-        });
-      }
-      return;
-    }
-    // 1 drag folder
-    if (sourceRow.mode === DRAGGED_FOLDER_MODE) {
-      const { viewIndex: targetIndex, view: targetView } = props;
-      const draggedFolderId = sourceRow.data.id;
-      const targetViewId = targetView.id;
-      const sourceIndex = sourceRow.idx;
-      // Drag the parent folder to the child page, return
-      if (props.pathStr.split('-').includes(draggedFolderId)) return;
-      props.onMoveFolder(
-        draggedFolderId,
-        targetViewId,
-        sourceIndex > targetIndex ? 'move_above' : 'move_below',
-      );
-      return;
-    }
-  }
-};
-
-const dragCollect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging()
-});
-
-const dropCollect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  draggedRow: monitor.getItem()
-});
+import DraggedViewItem from '../views/dragged-view-item';
 
 class ViewItem extends Component {
 
@@ -219,22 +131,19 @@ class ViewItem extends Component {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  renderView = (view, index, tableGridsLength, isOnlyOneView) => {
-    const { isEditMode, views, folder, pathStr } = this.props;
+  renderView = (view, index, pagesLength, isOnlyOneView) => {
+    const { isEditMode, views, folderId, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
-    const ViewWrapper = DropTarget('ViewStructure', dropTarget, dropCollect)(
-      DragSource('ViewStructure', dragSource, dragCollect)(ViewItem)
-    );
     return (
-      <ViewWrapper
+      <DraggedViewItem
         key={id}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
         view={Object.assign({}, views.find(item => item.id === id), view)}
         viewIndex={index}
-        folderId={folder ? folder.id : ''}
+        folderId={folderId}
         isEditMode={isEditMode}
         renderFolderMenuItems={this.props.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
@@ -243,7 +152,7 @@ class ViewItem extends Component {
         onUpdatePage={this.props.onUpdatePage}
         onDeleteView={this.props.onDeleteView}
         onMoveViewToFolder={(targetFolderId) => {
-          this.props.onMoveViewToFolder(folder ? folder.id : '', view.id, targetFolderId);
+          this.props.onMoveViewToFolder(folderId, view.id, targetFolderId);
         }}
         onMoveView={this.props.onMoveView}
         onMoveFolder={this.props.onMoveFolder}
@@ -266,12 +175,11 @@ class ViewItem extends Component {
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      infolder, view, tableGridsLength, isEditMode, folderId, isOnlyOneView, pathStr,
+      infolder, view, pagesLength, isEditMode, folderId, isOnlyOneView, pathStr,
     } = this.props;
     const { isShowViewEditor, viewName, viewIcon, isSelected } = this.state;
     const isOverView = isOver && canDrop;
     if (isSelected) this.setDocUuid(view.docUuid);
-    const isSpecialInstance = false;
 
     let viewCanDropTop;
     let viewCanDrop;
@@ -284,6 +192,7 @@ class ViewItem extends Component {
     }
     let viewEditorId = `view-editor-${view.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
+    let childNumber = Array.isArray(view.children) ? view.children.length : 0;
 
     const folded = this.props.getFoldState(view.id);
     return (
@@ -305,10 +214,14 @@ class ViewItem extends Component {
               >
                 <div className="view-item-main" onClick={isShowViewEditor ? () => {} : (e) => this.props.onSelectView(view.id)}>
                   <div className='view-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
-                    {(this.state.isMouseEnter && view.children.length > 0) ?
-                      <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
-                      :
+                    {childNumber === 0 &&
                       <NavItemIcon symbol={'file'} disable={true} />
+                    }
+                    {(!this.state.isMouseEnter && childNumber > 0) &&
+                      <NavItemIcon symbol={'files'} disable={true} />
+                    }
+                    {(this.state.isMouseEnter && childNumber > 0) &&
+                      <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
                     }
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
@@ -333,11 +246,11 @@ class ViewItem extends Component {
                           <PageDropdownMenu
                             view={view}
                             views={this.props.views}
-                            tableGridsLength={tableGridsLength}
+                            pagesLength={pagesLength}
                             isOnlyOneView={isOnlyOneView}
                             folderId={folderId}
-                            canDelete={!isSpecialInstance}
-                            canDuplicate={!isSpecialInstance}
+                            canDelete={true}
+                            canDuplicate={true}
                             toggle={this.onViewOperationDropdownToggle}
                             renderFolderMenuItems={this.props.renderFolderMenuItems}
                             toggleViewEditor={this.toggleViewEditor}
@@ -378,7 +291,7 @@ class ViewItem extends Component {
         >
           {view.children &&
             view.children.map((item, index) => {
-              return this.renderView(item, index, tableGridsLength, isOnlyOneView);
+              return this.renderView(item, index, pagesLength, isOnlyOneView);
             })
           }
         </div>
@@ -391,7 +304,7 @@ ViewItem.propTypes = {
   isOver: PropTypes.bool,
   canDrop: PropTypes.bool,
   isDragging: PropTypes.bool,
-  draggedRow: PropTypes.object,
+  draggedPage: PropTypes.object,
   isEditMode: PropTypes.bool,
   infolder: PropTypes.bool,
   view: PropTypes.object,
@@ -399,7 +312,7 @@ ViewItem.propTypes = {
   views: PropTypes.array,
   viewIndex: PropTypes.number,
   folderId: PropTypes.string,
-  tableGridsLength: PropTypes.number,
+  pagesLength: PropTypes.number,
   connectDragSource: PropTypes.func,
   connectDragPreview: PropTypes.func,
   connectDropTarget: PropTypes.func,
@@ -420,6 +333,4 @@ ViewItem.propTypes = {
   toggleExpand: PropTypes.func,
 };
 
-export default DropTarget('ViewStructure', dropTarget, dropCollect)(
-  DragSource('ViewStructure', dragSource, dragCollect)(ViewItem)
-);
+export default ViewItem;
