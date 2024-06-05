@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
@@ -23,17 +22,7 @@ class WikiCardItem extends Component {
       isShowDeleteDialog: false,
       isShowRenameDialog: false,
       isItemMenuShow: false,
-      ownerAvatar: '',
     };
-  }
-
-  componentDidMount() {
-    const { wiki, isDepartment } = this.props;
-    if (!isDepartment) {
-      seafileAPI.getUserAvatar(wiki.owner, 24).then(res => {
-        this.setState({ ownerAvatar: res.data.url });
-      });
-    }
   }
 
   onRenameToggle = (e) => {
@@ -84,11 +73,11 @@ class WikiCardItem extends Component {
   };
 
   renderAvatar = () => {
-    const { wiki } = this.props;
+    const { owner_nickname, owner_avatar_url } = this.props.wiki;
     return (
       <div className="wiki-card-item-avatar-container">
-        <img className="wiki-card-item-avatar" src={this.state.ownerAvatar} alt={wiki.owner_nickname}/>
-        <span className="wiki-card-item-owner text-truncate" title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
+        <img className="wiki-card-item-avatar" src={owner_avatar_url} alt={owner_nickname}/>
+        <span className="wiki-card-item-owner text-truncate" title={owner_nickname}>{owner_nickname}</span>
       </div>
     );
   };
