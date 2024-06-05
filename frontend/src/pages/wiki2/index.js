@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
@@ -172,6 +172,19 @@ class Wiki extends Component {
     });
   };
 
+  onUpdatePage = (pageId, newPage) => {
+    if (newPage.name === '') {
+      toaster.danger(gettext('Page name cannot be empty'));
+      return;
+    }
+    const { config } = this.state
+    let pages = config.pages;
+    let currentPage = pages.find(page => page.id === pageId);
+    Object.assign(currentPage, newPage);
+    config.pages = pages;
+    this.saveWikiConfig(config);
+  };
+
   render() {
     return (
       <div id="main" className="wiki-main">
@@ -183,6 +196,7 @@ class Wiki extends Component {
           saveWikiConfig={this.saveWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
+          onUpdatePage={this.onUpdatePage}
         />
         <MainPanel
           path={this.state.path}
@@ -195,6 +209,7 @@ class Wiki extends Component {
           permission={this.state.permission}
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
+          onUpdatePage={this.onUpdatePage}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
