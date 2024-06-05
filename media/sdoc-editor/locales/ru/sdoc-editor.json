@@ -457,5 +457,8 @@
   "Enter_more_character_start_search": "Введите больше символов, чтобы начать поиск",
   "Create_file_name_sdoc": "Создать {{file_name_sdoc}}",
   "Source_document_changed_tip": "Исходный документ имеет параллельные изменения. Хотите объединить эти изменения в ревизию?",
-  "Fit_table_to_page_width": "Подогнать таблицу по ширине страницы"
+  "Fit_table_to_page_width": "Подогнать таблицу по ширине страницы",
+  "Enter_text_or_press_forward_slash_to_insert_element": "Enter text or press '/' to insert element",
+  "Vertical_align": "Vertical alignment",
+  "Horizontal_align": "Horizontal alignment"
 }
