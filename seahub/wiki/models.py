@@ -7,6 +7,7 @@ from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import get_site_scheme_and_netloc
 from seahub.utils.timeutils import (timestamp_to_isoformat_timestr,
                                     datetime_to_isoformat_timestr)
@@ -98,10 +99,12 @@ class Wiki(models.Model):
             return True
 
     def to_dict(self):
+        avatar_url, is_default, date_uploaded = api_avatar_url(self.username, int(32))
         return {
             'id': self.pk,
             'owner': self.username,
             'owner_nickname': email2nickname(self.username),
+            'owner_avatar_url': avatar_url,
             'name': self.name,
             'slug': self.slug,
             'link': self.link,
