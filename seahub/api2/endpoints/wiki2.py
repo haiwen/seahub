@@ -24,9 +24,9 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
-    check_wiki_admin_permission, check_wiki_permission
+    check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
-    normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name
+    normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -424,19 +424,29 @@ class Wiki2PagesView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        sdoc_uuid = uuid.uuid4()
-        file_name = page_name + '.sdoc'
-        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
-        path = os.path.join(parent_dir, file_name)
+        folder_id = request.data.get('folder_id', None)
+        wiki_config = get_wiki_config(repo_id, request.user.username)
 
+        navigation = wiki_config.get('navigation')
+        if not folder_id:
+            page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
+        else:
+            page_ids = get_page_ids_in_folder(navigation, folder_id)
+
+        pages = wiki_config.get('pages', [])
+        exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
+        page_name = get_no_duplicate_obj_name(page_name, exist_page_names)
+
+        sdoc_uuid = uuid.uuid4()
+        new_file_name = page_name + '.sdoc'
+        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+        path = os.path.join(parent_dir, new_file_name)
         seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
-        new_file_name = check_filename_with_rename(repo_id, parent_dir, file_name)
 
         # create new empty file
         if not is_valid_dirent_name(new_file_name):
             return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
 
-        new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
         try:
             seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, request.user.username)
         except Exception as e:
@@ -451,6 +461,7 @@ class Wiki2PagesView(APIView):
         new_file_path = posixpath.join(parent_dir, new_file_name)
         file_info = self.get_file_info(repo_id, new_file_path)
         file_info['doc_uuid'] = sdoc_uuid
+        file_info['page_name'] = page_name
         filename = os.path.basename(path)
 
         try:
