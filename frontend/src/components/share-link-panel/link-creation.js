@@ -2,12 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import SetLinkExpiration from '../set-link-expiration';
+import UserSelect from '../user-select';
+import { shareLinkAPI } from '../../utils/share-link-api';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -42,7 +44,14 @@ class LinkCreation extends React.Component {
       password: '',
       passwdnew: '',
       errorInfo: '',
-      currentPermission: props.currentPermission
+      currentPermission: props.currentPermission,
+
+      currentScope: 'all_users',
+      selectedOption: null,
+      isSpecificUserChecked: false,
+      isScopeOpIconShown: false,
+
+      inputEmails: null,
     };
   }
 
@@ -108,7 +117,7 @@ class LinkCreation extends React.Component {
 
       let expirationTime = '';
       if (isExpireChecked) {
-        if (expType == 'by-days') {
+        if (expType === 'by-days') {
           expirationTime = moment().add(parseInt(expireDays), 'days').format();
         } else {
           expirationTime = expDate.format();
@@ -116,15 +125,23 @@ class LinkCreation extends React.Component {
       }
 
       let request;
-      if (type == 'batch') {
+      let users;
+      if (type === 'batch') {
         const autoGeneratePassword = shareLinkForceUsePassword || isShowPasswordInput;
         request = seafileAPI.batchCreateMultiShareLink(repoID, itemPath, linkAmount, autoGeneratePassword, expirationTime, permissions);
       } else {
-        request = seafileAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions);
+        const { currentScope, selectedOption, inputEmails } = this.state;
+        if ( currentScope === 'specific_users' && selectedOption ) {
+          users = selectedOption.map((item, index) => item.email);
+        }
+        if (currentScope === 'specific_emails' && inputEmails) {
+          users = inputEmails;
+        }
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
       }
 
       request.then((res) => {
-        if (type == 'batch') {
+        if (type === 'batch') {
           const newLinks = res.data.map(item => new ShareLink(item));
           this.props.updateAfterCreation(newLinks);
         } else {
@@ -157,7 +174,7 @@ class LinkCreation extends React.Component {
     const { type } = this.props;
     let { linkAmount, isShowPasswordInput, password, passwdnew, isExpireChecked, expType, expireDays, expDate } = this.state;
 
-    if (type == 'batch') {
+    if (type === 'batch') {
       if (!Number.isInteger(parseInt(linkAmount)) || parseInt(linkAmount) <= 1) {
         this.setState({ errorInfo: gettext('Please enter an integer bigger than 1 as number of links.') });
         return false;
@@ -168,7 +185,7 @@ class LinkCreation extends React.Component {
       }
     }
 
-    if (type == 'single' && isShowPasswordInput) {
+    if (type === 'single' && isShowPasswordInput) {
       if (password.length === 0) {
         this.setState({ errorInfo: gettext('Please enter a password.') });
         return false;
@@ -188,7 +205,7 @@ class LinkCreation extends React.Component {
     }
 
     if (isExpireChecked) {
-      if (expType == 'by-date') {
+      if (expType === 'by-date') {
         if (!expDate) {
           this.setState({ errorInfo: gettext('Please select an expiration time') });
           return false;
@@ -211,7 +228,7 @@ class LinkCreation extends React.Component {
       let minDays = shareLinkExpireDaysMin;
       let maxDays = shareLinkExpireDaysMax;
 
-      if (minDays !== 0 && maxDays == 0) {
+      if (minDays !== 0 && maxDays === 0) {
         if (expireDays < minDays) {
           this.setState({ errorInfo: 'Please enter valid days' });
           return false;
@@ -248,6 +265,20 @@ class LinkCreation extends React.Component {
     this.props.setMode('');
   };
 
+  setScope = (e) => {
+    this.setState({currentScope: e.target.value, selectedOption: null, inputEmails: null});
+  };
+
+  handleSelectChange = (option) => {
+    this.setState({selectedOption: option});
+  };
+
+  handleInputChange = (e) => {
+    this.setState({
+      inputEmails: e.target.value
+    });
+  };
+
   render() {
     const { userPerm, type, permissionOptions } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
@@ -257,11 +288,10 @@ class LinkCreation extends React.Component {
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
             <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
-            {type == 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}
-          </h6>
+            {type === 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}</h6>
         </div>
         <Form className="pt-4">
-          {type == 'batch' && (
+          {type === 'batch' && (
             <FormGroup>
               <Label for="link-number" className="p-0">{gettext('Number of links')}</Label>
               <Input type="number" id="link-number" value={this.state.linkAmount} onChange={this.onLinkAmountChange} style={{ width: inputWidth }} />
@@ -279,7 +309,7 @@ class LinkCreation extends React.Component {
                 <span>{gettext('Add password protection')}</span>
               </Label>
             )}
-            {type != 'batch' && this.state.isShowPasswordInput &&
+            {type !== 'batch' && this.state.isShowPasswordInput &&
               <div className="ml-4">
                 <FormGroup>
                   <Label for="passwd">{gettext('Password')}</Label>
@@ -343,6 +373,50 @@ class LinkCreation extends React.Component {
                   </FormGroup>
                 );
               })}
+
+            </FormGroup>
+          )}
+          {type !== 'batch' && (
+            <FormGroup check>
+              <Label check>
+                <span>{'Set scope'}</span>
+              </Label>
+              <FormGroup check className="ml-4">
+                <Label check>
+                  <Input type="radio" name='scope' value={'all_users'} checked={this.state.currentScope === 'all_users'} onChange={this.setScope} className="mr-1" />
+                  {gettext('Anyone with the link')}
+                </Label>
+              </FormGroup>
+              <FormGroup check className="ml-4">
+                <Label check>
+                  <Input type="radio" name='scope' value = {'specific_users'} checked={this.state.currentScope === 'specific_users'} onChange={this.setScope} className="mr-1" />
+                  {gettext('Specific users in the team')}
+                </Label>
+              </FormGroup>
+              {isEmailConfigured && (
+                <FormGroup check className="ml-4">
+                  <Label check>
+                    <Input type="radio" name='scope' value = {'specific_emails'} checked={this.state.currentScope === 'specific_emails'} onChange={this.setScope} className="mr-1" />
+                    {gettext('Specific people with email address')}
+                  </Label>
+                </FormGroup>
+              )}
+              {this.state.currentScope === 'specific_users' &&
+                <div className="ml-4" style={{marginBottom:'50px'}}>
+                  <UserSelect
+                    ref="userSelect"
+                    isMulti={true}
+                    className="reviewer-select"
+                    placeholder={gettext('Search users')}
+                    onSelectChange={this.handleSelectChange}
+                  />
+                </div>
+              }
+              {this.state.currentScope === 'specific_emails' &&
+                <div className="ml-4" style={{marginBottom:'50px'}}>
+                  <input type="text" className="form-control" value={this.state.inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')}/>
+                </div>
+              }
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}

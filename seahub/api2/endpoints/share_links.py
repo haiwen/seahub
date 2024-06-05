@@ -24,18 +24,21 @@ from urllib.parse import quote
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, send_share_link_emails
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
+from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
 from seahub.share.decorators import check_share_link_count
+from seahub.share.utils import VALID_SHARE_LINK_SCOPE, SCOPE_SPECIFIC_USERS, SCOPE_SPECIFIC_EMAILS
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
-        normalize_dir_path, is_pro_version, get_file_type_and_ext, \
-        check_filename_with_rename, gen_file_upload_url, \
-        get_password_strength_level, is_valid_password
+    normalize_dir_path, is_pro_version, get_file_type_and_ext, \
+    check_filename_with_rename, gen_file_upload_url, \
+    get_password_strength_level, is_valid_password, is_valid_email, string2list
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
@@ -111,7 +114,7 @@ def get_share_link_info(fileshare):
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
     data['password'] = fileshare.get_password()
-
+    data['user_scope'] = fileshare.user_scope
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
         try:
@@ -287,6 +290,7 @@ class ShareLinks(APIView):
             link_info['is_expired'] = fs.is_expired()
             link_info['permissions'] = fs.get_permissions()
             link_info['password'] = fs.get_password()
+            link_info['user_scope'] = fs.user_scope
 
             tmp_key = f"{repo_id}_{path}"
             link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")
@@ -486,6 +490,37 @@ class ShareLinks(APIView):
                                                    password, expire_date,
                                                    permission=perm, org_id=org_id)
 
+        user_scope = request.data.get('user_scope', '')
+        emails_list = []
+        if user_scope and user_scope in VALID_SHARE_LINK_SCOPE:
+            if user_scope == SCOPE_SPECIFIC_USERS:
+
+                emails = request.data.get('emails', [])
+                emails_to_add = []
+
+                for username in emails:
+                    try:
+                        User.objects.get(email=username)
+                    except User.DoesNotExist:
+                        continue
+                    emails_to_add.append(username)
+        
+                fs.authed_details = json.dumps(
+                    {'authed_users': emails_to_add}
+                )
+            elif user_scope == SCOPE_SPECIFIC_EMAILS:
+                emails_str = request.data.get('emails', '')
+                emails_list = string2list(emails_str)
+                emails_list = [e for e in emails_list if is_valid_email(e)]
+                fs.authed_details = json.dumps(
+                    {'authed_emails': emails_list}
+                )
+                
+            fs.user_scope = user_scope
+            fs.save()
+        if emails_list:
+            shared_from = email2nickname(username)
+            send_share_link_emails(emails_list, fs, shared_from)
         link_info = get_share_link_info(fs)
         return Response(link_info)
 
@@ -719,6 +754,12 @@ class ShareLink(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             fs.expire_date = expire_date
+            fs.save()
+
+        user_scope = request.data.get('user_scope', '')
+        if user_scope and user_scope in VALID_SHARE_LINK_SCOPE:
+            fs.user_scope = user_scope
+            fs.authed_details = None
             fs.save()
 
         link_info = get_share_link_info(fs)

@@ -13,6 +13,8 @@ import toaster from '../toast';
 import SendLink from '../send-link';
 import SharedLink from '../shared-link';
 import SetLinkExpiration from '../set-link-expiration';
+import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
+import { shareLinkAPI } from '../../utils/share-link-api';
 
 const propTypes = {
   sharedLinkInfo: PropTypes.object.isRequired,
@@ -24,7 +26,8 @@ const propTypes = {
   showLinkDetails: PropTypes.func.isRequired,
   updateLink: PropTypes.func.isRequired,
   deleteLink: PropTypes.func.isRequired,
-  closeShareDialog: PropTypes.func.isRequired
+  closeShareDialog: PropTypes.func.isRequired,
+  setMode: PropTypes.func,
 };
 
 class LinkDetails extends React.Component {
@@ -40,7 +43,12 @@ class LinkDetails extends React.Component {
       expDate: null,
       isOpIconShown: false,
       isLinkDeleteDialogOpen: false,
-      isSendLinkShown: false
+      isSendLinkShown: false,
+
+      isScopeOpIconShown: false,
+      currentScope: this.props.sharedLinkInfo.user_scope,  // all_users, specific_users, spcific_emails
+      selectedOption: null,
+      isSpecificUserChecked: false,
     };
   }
 
@@ -95,7 +103,7 @@ class LinkDetails extends React.Component {
     const { sharedLinkInfo } = this.props;
     const { expType, expireDays, expDate } = this.state;
     let expirationTime = '';
-    if (expType == 'by-days') {
+    if (expType === 'by-days') {
       expirationTime = moment().add(parseInt(expireDays), 'days').format();
     } else {
       expirationTime = expDate.format();
@@ -117,6 +125,14 @@ class LinkDetails extends React.Component {
 
   handleMouseOut = () => {
     this.setState({ isOpIconShown: false });
+  };
+
+  handleMouseOverScope = () => {
+    this.setState({isScopeOpIconShown: true});
+  };
+
+  handleMouseOutScope = () => {
+    this.setState({isScopeOpIconShown: false});
   };
 
   changePerm = (permOption) => {
@@ -148,15 +164,36 @@ class LinkDetails extends React.Component {
     this.props.showLinkDetails(null);
   };
 
+  changeScope = (scope) => {
+    shareLinkAPI.updateShareLinkScope(this.props.sharedLinkInfo.token, scope).then((res) => {
+      let sharedLinkInfo = new ShareLink(res.data);
+      this.setState({sharedLinkInfo: sharedLinkInfo, currentScope: sharedLinkInfo.user_scope});
+      let message = gettext('Success');
+      toaster.success(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onUserAuth  = () => {
+    this.props.setMode('linkUserAuth', this.state.sharedLinkInfo);
+  };
+
+  onEmailAuth  = () => {
+    this.props.setMode('linkEmailAuth', this.state.sharedLinkInfo);
+  };
+
+
   render() {
     const { sharedLinkInfo, permissionOptions } = this.props;
-    const { isOpIconShown } = this.state;
+    const { isOpIconShown, isScopeOpIconShown, currentScope } = this.state;
     const currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
     this.permOptions = permissionOptions.map(item => {
       return {
         value: item,
         text: Utils.getShareLinkPermissionObject(item).text,
-        isSelected: item == currentPermission
+        isSelected: item === currentPermission
       };
     });
     const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0];
@@ -225,7 +262,7 @@ class LinkDetails extends React.Component {
                     expDate={this.state.expDate}
                     onExpDateChanged={this.onExpDateChanged}
                   />
-                  <div className={this.state.expType == 'by-days' ? 'mt-2' : 'mt-3'}>
+                  <div className={this.state.expType === 'by-days' ? 'mt-2' : 'mt-3'}>
                     <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
                     <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
                   </div>
@@ -247,6 +284,17 @@ class LinkDetails extends React.Component {
               </dd>
             </>
           )}
+          <>
+            <dt className="text-secondary font-weight-normal">{gettext('Scope')}</dt>
+            <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverScope} onMouseLeave={this.handleMouseOutScope}>
+              <ShareLinkScopeEditor
+                isTextMode={true}
+                isEditIconShow={isScopeOpIconShown}
+                currentScope={currentScope}
+                onScopeChanged={this.changeScope}
+              />
+            </dd>
+          </>
         </dl>
         {(canSendShareLinkEmail && !this.state.isSendLinkShown) &&
         <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
@@ -270,6 +318,12 @@ class LinkDetails extends React.Component {
           confirmBtnText={gettext('Delete')}
           toggleDialog={this.toggleLinkDeleteDialog}
         />
+        }
+        {currentScope === 'specific_users' && !this.state.isSendLinkShown &&
+          <Button onClick={this.onUserAuth} style={{'marginLeft': '5px'}}>{gettext('Authed users')}</Button>
+        }
+        {currentScope === 'specific_emails' && !this.state.isSendLinkShown &&
+          <Button onClick={this.onEmailAuth} style={{'marginLeft': '5px'}}>{gettext('Authed emails')}</Button>
         }
       </div>
     );

@@ -9,6 +9,8 @@ import Loading from '../loading';
 import LinkDetails from './link-details';
 import LinkCreation from './link-creation';
 import LinkList from './link-list';
+import LinkUserAuth from './link-user-auth';
+import LinkEmailAuth from './link-email-auth';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -162,8 +164,11 @@ class ShareLinkPanel extends React.Component {
     }
   };
 
-  setMode = (mode) => {
-    this.setState({ mode: mode });
+  setMode = (mode, link=null) => {
+    this.setState({ mode: mode});
+    if (link) {
+      this.setState({sharedLinkInfo: link});
+    }
   };
 
   toggleSelectAllLinks = (isSelected) => {
@@ -240,6 +245,7 @@ class ShareLinkPanel extends React.Component {
             updateLink={this.updateLink}
             deleteLink={this.deleteLink}
             closeShareDialog={this.props.closeShareDialog}
+            setMode={this.setMode}
           />
         );
       case 'singleLinkCreation':
@@ -266,6 +272,24 @@ class ShareLinkPanel extends React.Component {
             currentPermission={currentPermission}
             setMode={this.setMode}
             updateAfterCreation={this.updateAfterCreation}
+          />
+        );
+      case 'linkUserAuth':
+        return (
+          <LinkUserAuth
+            repoID={repoID}
+            linkToken={sharedLinkInfo.token}
+            setMode={this.setMode}
+            path={itemPath}
+          />
+        );
+      case 'linkEmailAuth':
+        return (
+          <LinkEmailAuth
+            repoID={repoID}
+            linkToken={sharedLinkInfo.token}
+            setMode={this.setMode}
+            path={itemPath}
           />
         );
       default:
