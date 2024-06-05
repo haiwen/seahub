@@ -163,37 +163,113 @@ export default class PageUtils {
     });
   }
 
-  // Move the page to the top or bottom of the folder
-  static insertPageOut(navigation, page_id, target_id, move_position) {
-    let indexOffset = 0;
-    if (move_position === 'move_below') {
-      indexOffset++;
+  // move page into folder or page(已解决)
+  static movePage(navigation, moved_page_id, target_page_id, source_id, target_id, move_position) {
+    let movedPage = null;
+    function _cutPageRecursion(item, page_id) {
+      if (!item || !Array.isArray(item.children) || movedPage) return;
+      let pageIndex = item.children.findIndex(item => item.id === page_id);
+      if (pageIndex > -1) {
+        movedPage = item.children.splice(pageIndex, 1)[0];
+      } else {
+        item.children.forEach(item => {
+          _cutPageRecursion(item, page_id);
+        });
+      }
     }
-    let page = { id: page_id, type: PAGE };
-    let folder_index = this.getFolderIndexById(navigation, target_id);
-    if (folder_index > -1) {
-      navigation.splice(folder_index + indexOffset, 0, page);
-    } else {
-      navigation.forEach((item) => {
-        if (item.type === FOLDER) {
-          let folder_index = this.getFolderIndexById(item.children, target_id);
-          if (folder_index > -1) {
-            item.children.splice(folder_index + indexOffset, 0, page);
-          }
+    function _cutPage(navigation, page_id) {
+      const pageIndex = navigation.findIndex(item => item.id === page_id);
+      if (pageIndex > -1) {
+        movedPage = navigation.splice(pageIndex, 1)[0];
+      } else {
+        navigation.forEach(item => {
+          _cutPageRecursion(item, page_id);
+        });
+      }
+    }
+    function _insertPageRecursion(item, page_id, target_page_id, target_id, move_position) {
+      if (item.id === target_id) {
+        let insertIndex = target_page_id ? item.children.findIndex(item => item.id === target_page_id) : -1;
+        if (move_position === 'move_below') {
+          insertIndex++;
         }
+        item.children.splice(insertIndex, 0, movedPage);
+        return;
+      }
+      item.children.forEach(item => {
+        _insertPageRecursion(item, page_id, target_page_id, target_id, move_position);
       });
     }
+    function _insertPage(navigation, page_id, target_page_id, target_id, move_position) {
+      if (!target_id) {
+        let insertIndex = target_page_id ? navigation.findIndex(item => item.id === target_page_id) : -1;
+        if (insertIndex < 0) {
+          navigation.splice(0, 0, movedPage);
+          return;
+        }
+        if (move_position === 'move_below') {
+          insertIndex++;
+        }
+        navigation.splice(insertIndex, 0, movedPage);
+        return;
+      }
+      navigation.forEach(item => {
+        _insertPageRecursion(item, page_id, target_page_id, target_id, move_position);
+      });
+    }
+    _cutPage(navigation, moved_page_id);
+    _insertPage(navigation, moved_page_id, target_page_id, target_id, move_position);
   }
 
-  // movePageintoFolder
-  static movePage(navigation, moved_page_id, target_page_id, source_id, target_id, move_position) {
-    this.deletePage(navigation, moved_page_id, source_id);
-    this.insertPage(navigation, moved_page_id, target_page_id, target_id, move_position);
-  }
-
-  // movePageOutsideFolder
+  // move Page Outside Folder
   static movePageOut(navigation, moved_page_id, source_id, target_id, move_position) {
-    this.deletePage(navigation, moved_page_id, source_id);
-    this.insertPageOut(navigation, moved_page_id, target_id, move_position);
+    let movedPage = null;
+    function getFolderIndexById(list, folder_id) {
+      if (!folder_id || !Array.isArray(list)) return -1;
+      return list.findIndex(folder => folder.id === folder_id);
+    }
+    // Move the page to the top or bottom of the folder
+    function _insertPage(navigation, page_id, target_id, move_position) {
+      let indexOffset = 0;
+      if (move_position === 'move_below') {
+        indexOffset++;
+      }
+      let folder_index = getFolderIndexById(navigation, target_id);
+      if (folder_index > -1) {
+        navigation.splice(folder_index + indexOffset, 0, movedPage);
+      } else {
+        navigation.forEach((item) => {
+          if (item.type === FOLDER) {
+            let folder_index = getFolderIndexById(item.children, target_id);
+            if (folder_index > -1) {
+              item.children.splice(folder_index + indexOffset, 0, movedPage);
+            }
+          }
+        });
+      }
+    }
+    function _cutPageRecursion(item, page_id) {
+      if (!item || !Array.isArray(item.children) || movedPage) return;
+      let pageIndex = item.children.findIndex(item => item.id === page_id);
+      if (pageIndex > -1) {
+        movedPage = item.children.splice(pageIndex, 1)[0];
+      } else {
+        item.children.forEach(item => {
+          _cutPageRecursion(item, page_id);
+        });
+      }
+    }
+    function _cutPage(navigation, page_id) {
+      const pageIndex = navigation.findIndex(item => item.id === page_id);
+      if (pageIndex > -1) {
+        movedPage = navigation.splice(pageIndex, 1)[0];
+      } else {
+        navigation.forEach(item => {
+          _cutPageRecursion(item, page_id);
+        });
+      }
+    }
+    _cutPage(navigation, moved_page_id, source_id);
+    _insertPage(navigation, moved_page_id, target_id, move_position);
   }
 }
