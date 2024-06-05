@@ -158,6 +158,10 @@ a, a:hover { color: #ec8000; }
   color: #999;
 }
 
+.sf-heading .sf-dropdown-toggle {
+  font-size: .75rem;
+}
+
 .sf-link {
     color: #ee8204 !important;
     cursor: pointer;
