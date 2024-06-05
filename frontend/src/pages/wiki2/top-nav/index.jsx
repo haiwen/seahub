@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import NavItemIcon from '../view-structure/nav-item-icon';
 import './index.css';
@@ -42,13 +42,13 @@ function WikiTopNav({ config, currentPageId }) {
     <div className="wiki2-top-nav d-flex">
       {paths.map((item, index) => {
         return (
-          <>
+          <Fragment key={item.id}>
             <div className='wiki2-top-nav-item d-flex'>
               <NavItemIcon symbol={item.type === 'folder' ? 'wiki-folder' : 'file'} disable={true} />
               {item.name}
             </div>
             {index !== paths.length - 1 && <div>/</div>}
-          </>
+          </Fragment>
         );
       })}
     </div>

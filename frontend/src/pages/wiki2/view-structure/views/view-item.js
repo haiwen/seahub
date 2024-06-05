@@ -32,6 +32,10 @@ class ViewItem extends Component {
     if (this.state.isSelected) return;
   };
 
+  onMouseMove = () => {
+    if (!this.state.isMouseEnter) this.setState({ isMouseEnter: true });
+  };
+
   onMouseLeave = () => {
     this.setState({ isMouseEnter: false });
     if (this.state.isSelected) return;
@@ -172,6 +176,11 @@ class ViewItem extends Component {
     this.forceUpdate();
   };
 
+  onAddNewPage = (newPage) => {
+    const { view } = this.props;
+    this.props.addPageInside(Object.assign({ parentPageId: view.id }, newPage));
+  };
+
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
@@ -196,7 +205,7 @@ class ViewItem extends Component {
 
     const folded = this.props.getFoldState(view.id);
     return (
-      <div onClick={this.toggleExpand}>
+      <div>
         {
           fn(connectDropTarget(
             connectDragPreview(
@@ -209,6 +218,7 @@ class ViewItem extends Component {
                 )}
                 ref={ref => this.viewItemRef = ref}
                 onMouseEnter={this.onMouseEnter}
+                onMouseMove={this.onMouseMove}
                 onMouseLeave={this.onMouseLeave}
                 id={viewEditorId}
               >
@@ -221,7 +231,11 @@ class ViewItem extends Component {
                       <NavItemIcon symbol={'files'} disable={true} />
                     }
                     {(this.state.isMouseEnter && childNumber > 0) &&
-                      <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
+                      <NavItemIcon
+                        className="icon-expand-folder"
+                        symbol={folded ? 'right-slide' : 'drop-down'}
+                        onClick={this.toggleExpand}
+                      />
                     }
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
@@ -276,7 +290,7 @@ class ViewItem extends Component {
                 {this.state.isShowInsertPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertPage}
-                    onAddNewPage={(obj) => this.props.addPageInside(Object.assign({ parentPageId: view.id }, obj))}
+                    onAddNewPage={this.onAddNewPage}
                     title={gettext('Add page inside')}
                   />
                 }
