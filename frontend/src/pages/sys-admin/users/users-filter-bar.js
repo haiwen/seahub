@@ -76,7 +76,7 @@ class UsersFilterBar extends Component {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <Dropdown isOpen={this.state.isRoleOpen} toggle={this.toggleRoleDropdown}>
+        <Dropdown isOpen={this.state.isRoleOpen} toggle={this.toggleRoleDropdown} className="ml-4">
           <DropdownToggle
             tag="div"
             data-toggle="dropdown"
