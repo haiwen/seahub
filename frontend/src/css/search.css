@@ -400,6 +400,8 @@
   border-radius: 4px;
 }
 
+.search-types .search-types-highlight,
+.search-types>div:focus,
 .search-types>div:hover {
   background-color: rgb(245, 245, 245);
 }
