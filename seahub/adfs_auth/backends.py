@@ -194,6 +194,10 @@ class Saml2Backend(ModelBackend):
         if not seafile_groups:
             return
 
+        # support a list of comma-separated IDs as seafile_groups claim
+        if len(seafile_groups) == 1 and ',' in seafile_groups[0]:
+            seafile_groups = seafile_groups[0].split(',')
+
         saml_group_ids = [int(group_id) for group_id in seafile_groups]
 
         joined_groups = ccnet_api.get_groups(user.username)
