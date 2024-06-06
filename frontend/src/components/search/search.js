@@ -8,6 +8,7 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import Loading from '../loading';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -19,6 +20,10 @@ const propTypes = {
 
 const PER_PAGE = 10;
 const controlKey = isMac() ? '⌘' : 'Ctrl';
+
+const isEnter = isHotkey('enter');
+const isUp = isHotkey('up');
+const isDown = isHotkey('down');
 
 class Search extends Component {
 
@@ -40,6 +45,8 @@ class Search extends Component {
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
+      searchTypesMax: 0,
+      highlightSearchTypesIndex: 0,
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -59,6 +66,7 @@ class Search extends Component {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
+    this.isChineseInput = false;
   }
 
   onCompositionStart = () => {
@@ -80,17 +88,18 @@ class Search extends Component {
       e.preventDefault();
       this.inputRef && this.inputRef.current && this.inputRef.current.blur();
       this.resetToDefault();
-    } else if (isHotkey('enter', e)) {
+    } else if (isEnter(e)) {
       this.onEnter(e);
-    } else if (isHotkey('up', e)) {
+    } else if (isUp(e)) {
       this.onUp(e);
-    } else if (isHotkey('down', e)) {
+    } else if (isDown(e)) {
       this.onDown(e);
     }
   };
 
   onFocusHandler = () => {
     this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.calculateHighlightType();
   };
 
   onCloseHandler = () => {
@@ -100,6 +109,14 @@ class Search extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!this.state.isResultGetted) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
+      if (highlightSearchTypesIndex < 0) {
+        highlightSearchTypesIndex = this.state.searchTypesMax;
+      }
+      this.setState({ highlightSearchTypesIndex });
+      return;
+    }
     const { highlightIndex } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
@@ -116,6 +133,14 @@ class Search extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!this.state.isResultGetted) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
+      if (highlightSearchTypesIndex > this.state.searchTypesMax) {
+        highlightSearchTypesIndex = 0;
+      }
+      this.setState({ highlightSearchTypesIndex });
+      return;
+    }
     const { highlightIndex, resultItems } = this.state;
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
@@ -132,6 +157,21 @@ class Search extends Component {
 
   onEnter = (e) => {
     e.preventDefault();
+    if (!this.state.isResultGetted) {
+      let highlightDom = document.querySelector('.search-types-highlight');
+      if (highlightDom) {
+        if (highlightDom.classList.contains('search-types-folder')) {
+          this.searchFolder();
+        }
+        else if (highlightDom.classList.contains('search-types-repo')) {
+          this.searchRepo();
+        }
+        else if (highlightDom.classList.contains('search-types-repos')) {
+          this.searchAllRepos();
+        }
+        return;
+      }
+    }
     let item = this.state.resultItems[this.state.highlightIndex];
     if (item) {
       if (document.activeElement) {
@@ -145,6 +185,21 @@ class Search extends Component {
     this.resetToDefault();
     this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
+  };
+
+  calculateHighlightType = () => {
+    let searchTypesMax = 0;
+    const { repoID, path } = this.props;
+    if (repoID) {
+      searchTypesMax++;
+    }
+    if (path && path !== '/') {
+      searchTypesMax++;
+    }
+    this.setState({
+      searchTypesMax,
+      highlightSearchTypesIndex: 0,
+    });
   };
 
   keepVisitedItem = (targetItem) => {
@@ -185,11 +240,10 @@ class Search extends Component {
     }, 1);
   };
 
-  onKeydownHandler = (event) => {
-    if (isHotkey('enter', event)) {
-      this.searchRepo();
-    } else {
+  onKeydownHandler = (e) => {
+    if (!isEnter(e) && !isUp(e) && !isDown(e)) {
       this.setState({
+        isLoading: false,
         highlightIndex: 0,
         resultItems: [],
         isResultGetted: false
@@ -202,6 +256,7 @@ class Search extends Component {
       this.source.cancel('prev request is cancelled');
     }
     this.setState({
+      isLoading: true,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -330,7 +385,7 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, width, showRecent, isResultGetted } = this.state;
+    const { resultItems, width, showRecent, isResultGetted, isLoading } = this.state;
     if (!width || width === 'default') return null;
 
     if (showRecent) {
@@ -345,6 +400,9 @@ class Search extends Component {
       }
     }
 
+    if (isLoading) {
+      return <Loading />;
+    }
     if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
@@ -360,29 +418,56 @@ class Search extends Component {
   }
 
   renderSearchTypes = (inputValue) => {
-    return (
-      <div className="search-types">
-        {this.props.repoID &&
-          <div className="search-types-repo" onClick={this.searchRepo}>
+    const highlightIndex = this.state.highlightSearchTypesIndex;
+    if (!this.props.repoID) {
+      return (
+        <div className="search-types">
+          <div className="search-types-repos search-types-highlight" onClick={this.searchAllRepos} tabIndex={0}>
             <i className="search-icon-left input-icon-addon fas fa-search"></i>
             {inputValue}
-            <span className="search-types-text">{gettext('in this library')}</span>
+            <span className="search-types-text">{gettext('in all libraries')}</span>
           </div>
-        }
-        {(this.props.path && this.props.path !== '/') &&
-          <div className="search-types-folder" onClick={this.searchFolder}>
-            <i className="search-icon-left input-icon-addon fas fa-search"></i>
-            {inputValue}
-            <span className="search-types-text">{gettext('in this folder')}</span>
-          </div>
-        }
-        <div className="search-types-repos" onClick={this.searchAllRepos}>
-          <i className="search-icon-left input-icon-addon fas fa-search"></i>
-          {inputValue}
-          <span className="search-types-text">{gettext('in all libraries')}</span>
         </div>
-      </div>
-    );
+      );
+    }
+    if (this.props.repoID) {
+      if (this.props.path && this.props.path !== '/') {
+        return (
+          <div className="search-types">
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this library')}</span>
+            </div>
+            <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this folder')}</span>
+            </div>
+            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all libraries')}</span>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="search-types">
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this library')}</span>
+            </div>
+            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all libraries')}</span>
+            </div>
+          </div>
+        );
+      }
+    }
   }
 
   searchRepo = () => {
