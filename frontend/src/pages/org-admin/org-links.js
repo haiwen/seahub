@@ -24,7 +24,7 @@ class OrgLinks extends React.Component {
   }
 
   listOrgLinks = (page) => {
-    seafileAPI.orgAdminListOrgLinks(this.state.page).then(res => {
+    seafileAPI.orgAdminListOrgLinks(page).then(res => {
       const data = res.data;
       this.setState({
         linkList: data.link_list,

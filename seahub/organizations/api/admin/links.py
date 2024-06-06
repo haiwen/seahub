@@ -43,8 +43,8 @@ class OrgAdminLinks(APIView):
         offset = per_page * (current_page - 1)
         limit = per_page + 1
         org_id = request.user.org.org_id
-
-        ofs = OrgFileShare.objects.filter(org_id=org_id)[offset:offset + limit]
+        ofs = OrgFileShare.objects.filter(org_id=org_id).order_by('-file_share__ctime')[offset:offset + limit]
+        # ofs = OrgFileShare.objects.filter(org_id=org_id)[offset:offset + limit]
         publinks = [ x.file_share for x in ofs ]
 
         if len(publinks) == per_page + 1:
