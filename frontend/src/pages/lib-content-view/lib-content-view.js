@@ -932,6 +932,9 @@ class LibContentView extends React.Component {
   };
 
   onSearchedClick = (item) => {
+    if (item.repo_id !== this.props.repoID) {
+      this.openSearchedNewTab(item);
+    }
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
     if (this.state.currentPath === path) {
       return;
@@ -962,29 +965,27 @@ class LibContentView extends React.Component {
         if (Utils.isMarkdownFile(path)) {
           this.showFile(path);
         } else {
-          let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
-          let isWeChat = Utils.isWeChat();
-          if (!isWeChat) {
-            let newWindow = window.open('about:blank');
-            newWindow.location.href = url;
-          } else {
-            location.href = url;
-          }
+          this.openSearchedNewTab(item);
         }
       }
     } else {
       if (item.is_dir) {
         this.showDir(path);
       } else {
-        let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
-        let isWeChat = Utils.isWeChat();
-        if (!isWeChat) {
-          let newWindow = window.open('about:blank');
-          newWindow.location.href = url;
-        } else {
-          location.href = url;
-        }
+        this.openSearchedNewTab(item);
       }
+    }
+  };
+
+  openSearchedNewTab = (item) => {
+    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
+    let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+    let isWeChat = Utils.isWeChat();
+    if (!isWeChat) {
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    } else {
+      location.href = url;
     }
   };
 
