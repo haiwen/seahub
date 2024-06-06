@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon, enableSeafileAI } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
 import Search from '../search/search';
-import AISearch from '../search/ai-search';
+// import AISearch from '../search/ai-search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
 import Account from '../common/account';
@@ -10,6 +10,7 @@ import Logout from '../common/logout';
 
 const propTypes = {
   repoID: PropTypes.string,
+  path: PropTypes.string,
   repoName: PropTypes.string,
   isLibView: PropTypes.bool,
   onSearchedClick: PropTypes.func.isRequired,
@@ -20,30 +21,30 @@ const propTypes = {
 class CommonToolbar extends React.Component {
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, searchPlaceholder } = this.props;
+    const { repoID, repoName, isLibView, searchPlaceholder, path } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
-      if (enableSeafileAI && isLibView) {
-        return (
-          <AISearch
-            repoID={repoID}
-            placeholder={placeholder}
-            onSearchedClick={this.props.onSearchedClick}
-            repoName={repoName}
-            currentRepoInfo={this.props.currentRepoInfo}
-          />
-        );
-      } else {
-        return (
-          <Search
-            repoID={repoID}
-            placeholder={placeholder}
-            onSearchedClick={this.props.onSearchedClick}
-            isPublic={false}
-          />
-        );
-      }
+      return (
+        <Search
+          repoID={repoID}
+          placeholder={placeholder}
+          onSearchedClick={this.props.onSearchedClick}
+          isPublic={false}
+          path={path}
+        />
+      );
+      // if (enableSeafileAI && isLibView) {
+      //   return (
+      //     <AISearch
+      //       repoID={repoID}
+      //       placeholder={placeholder}
+      //       onSearchedClick={this.props.onSearchedClick}
+      //       repoName={repoName}
+      //       currentRepoInfo={this.props.currentRepoInfo}
+      //     />
+      //   );
+      // }
     } else {
       if (isLibView) {
         return (

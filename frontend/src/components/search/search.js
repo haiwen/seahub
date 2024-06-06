@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { enableSeafileAI, gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
-import { SEARCH_DELAY_TIME, getValueLength } from './constant';
 
 const propTypes = {
   repoID: PropTypes.string,
+  path: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
@@ -28,6 +28,7 @@ class Search extends Component {
     this.state = {
       width: 'default',
       value: '',
+      inputValue: '',
       resultItems: [],
       highlightIndex: 0,
       page: 0,
@@ -40,13 +41,11 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
     };
-    this.inputValue = '';
     this.highlightRef = null;
     this.source = null; // used to cancel request;
     this.inputRef = React.createRef();
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
-    this.timer = null;
     this.isChineseInput = false;
   }
 
@@ -60,33 +59,14 @@ class Search extends Component {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-    this.isChineseInput = false;
   }
 
   onCompositionStart = () => {
     this.isChineseInput = true;
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
   };
 
   onCompositionEnd = () => {
     this.isChineseInput = false;
-    // chrome：compositionstart -> onChange -> compositionend
-    // not chrome：compositionstart -> compositionend -> onChange
-    // The onChange event will setState and change input value, then setTimeout to initiate the search
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-    this.timer = setTimeout(() => {
-      this.onSearch();
-    }, SEARCH_DELAY_TIME);
   };
 
   onDocumentKeydown = (e) => {
@@ -197,45 +177,24 @@ class Search extends Component {
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    const newValue = event.target.value;
-    this.setState({ value: newValue }, () => {
-      if (this.inputValue === newValue.trim()) return;
-      this.inputValue = newValue.trim();
-      if (!this.isChineseInput) {
-        if (this.timer) {
-          clearTimeout(this.timer);
-          this.timer = null;
-        }
-        this.timer = setTimeout(() => {
-          this.onSearch();
-        }, SEARCH_DELAY_TIME);
+    this.setState({ value: event.target.value });
+    setTimeout(() => {
+      if (this.isChineseInput === false) {
+        this.setState({ inputValue: event.target.value });
       }
-    });
+    }, 1);
   };
 
   onKeydownHandler = (event) => {
     if (isHotkey('enter', event)) {
-      this.onSearch();
-    }
-  };
-
-  onSearch = () => {
-    const { value } = this.state;
-    const { repoID } = this.props;
-    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
+      this.searchRepo();
+    } else {
       this.setState({
         highlightIndex: 0,
         resultItems: [],
         isResultGetted: false
       });
-      return;
     }
-    const queryData = {
-      q: value,
-      search_repo: repoID ? repoID : 'all',
-      search_ftypes: 'all',
-    };
-    this.getSearchResult(queryData);
   };
 
   getSearchResult = (queryData) => {
@@ -281,11 +240,7 @@ class Search extends Component {
         this.setState({ isLoading: false });
       });
     } else {
-      if (enableSeafileAI) {
-        this.onAiSearch(queryData, cancelToken);
-      } else {
-        this.onNormalSearch(queryData, cancelToken, page);
-      }
+      this.onNormalSearch(queryData, cancelToken, page);
     }
   };
 
@@ -318,23 +273,6 @@ class Search extends Component {
       this.setState({ isLoading: false });
     });
   }
-
-  onAiSearch = (params, cancelToken) => {
-    let results = [];
-    seafileAPI.aiSearchFiles(params, cancelToken).then(res => {
-      results = [...results, ...this.formatResultItems(res.data.results)];
-      this.setState({
-          resultItems: results,
-          isResultGetted: true,
-          isLoading: false,
-          hasMore: false,
-        });
-    }).catch(error => {
-      /* eslint-disable */
-      console.log(error);
-      this.setState({ isLoading: false });
-    });
-  };
 
   onResultListScroll = (e) => {
     // Load less than 100 results
@@ -377,10 +315,10 @@ class Search extends Component {
   }
 
   resetToDefault() {
-    this.inputValue = '';
     this.setState({
       width: '',
       value: '',
+      inputValue: '',
       isMaskShow: false,
       isCloseShow: false,
       isResultGetted: false,
@@ -407,16 +345,11 @@ class Search extends Component {
       }
     }
 
-    const searchStrLength = getValueLength(this.inputValue);
-
-    if (searchStrLength === 0) {
+    if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
-    else if (searchStrLength < 3) {
-      return <div className="search-result-none">{gettext('Type more characters to start search')}</div>;
-    }
     else if (!isResultGetted) {
-      return <span className="loading-icon loading-tip"></span>;
+      return this.renderSearchTypes(this.state.inputValue.trim());
     }
     else if (resultItems.length > 0) {
       return this.renderResults(resultItems);
@@ -425,6 +358,63 @@ class Search extends Component {
       return <div className="search-result-none">{gettext('No results matching')}</div>;
     }
   }
+
+  renderSearchTypes = (inputValue) => {
+    return (
+      <div className="search-types">
+        {this.props.repoID &&
+          <div className="search-types-repo" onClick={this.searchRepo}>
+            <i className="search-icon-left input-icon-addon fas fa-search"></i>
+            {inputValue}
+            <span className="search-types-text">{gettext('in this library')}</span>
+          </div>
+        }
+        {(this.props.path && this.props.path !== '/') &&
+          <div className="search-types-folder" onClick={this.searchFolder}>
+            <i className="search-icon-left input-icon-addon fas fa-search"></i>
+            {inputValue}
+            <span className="search-types-text">{gettext('in this folder')}</span>
+          </div>
+        }
+        <div className="search-types-repos" onClick={this.searchAllRepos}>
+          <i className="search-icon-left input-icon-addon fas fa-search"></i>
+          {inputValue}
+          <span className="search-types-text">{gettext('in all libraries')}</span>
+        </div>
+      </div>
+    );
+  }
+
+  searchRepo = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: this.props.repoID,
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(queryData);
+  };
+
+  searchFolder = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: this.props.repoID,
+      search_ftypes: 'all',
+      search_path: this.props.path,
+    };
+    this.getSearchResult(queryData);
+  };
+
+  searchAllRepos = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: 'all',
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(queryData);
+  };
 
   renderResults = (resultItems, isVisited) => {
     const { highlightIndex } = this.state;
