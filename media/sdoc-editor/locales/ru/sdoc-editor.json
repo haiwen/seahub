@@ -458,7 +458,7 @@
   "Create_file_name_sdoc": "Создать {{file_name_sdoc}}",
   "Source_document_changed_tip": "Исходный документ имеет параллельные изменения. Хотите объединить эти изменения в ревизию?",
   "Fit_table_to_page_width": "Подогнать таблицу по ширине страницы",
-  "Enter_text_or_press_forward_slash_to_insert_element": "Enter text or press '/' to insert element",
-  "Vertical_align": "Vertical alignment",
-  "Horizontal_align": "Horizontal alignment"
+  "Enter_text_or_press_forward_slash_to_insert_element": "Введите текст или нажмите '/', чтобы вставить элемент",
+  "Vertical_align": "Вертикальное выравнивание",
+  "Horizontal_align": "Горизонтальное выравнивание"
 }
