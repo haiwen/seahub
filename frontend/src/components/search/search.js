@@ -8,6 +8,7 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import Loading from '../loading';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -190,6 +191,7 @@ class Search extends Component {
       this.searchRepo();
     } else {
       this.setState({
+        isLoading: false,
         highlightIndex: 0,
         resultItems: [],
         isResultGetted: false
@@ -202,6 +204,7 @@ class Search extends Component {
       this.source.cancel('prev request is cancelled');
     }
     this.setState({
+      isLoading: true,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -330,7 +333,7 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, width, showRecent, isResultGetted } = this.state;
+    const { resultItems, width, showRecent, isResultGetted, isLoading } = this.state;
     if (!width || width === 'default') return null;
 
     if (showRecent) {
@@ -345,6 +348,9 @@ class Search extends Component {
       }
     }
 
+    if (isLoading) {
+      return <Loading />;
+    }
     if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
