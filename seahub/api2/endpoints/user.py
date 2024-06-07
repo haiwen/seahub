@@ -186,8 +186,6 @@ class UserConvertToTeamView(APIView):
             # 2. Update org-settings
             new_org = ccnet_api.get_org_by_id(org_id)
             OrgSettings.objects.add_or_update(new_org, org_role)
-
-            
             # 3. Add user's repo to OrgRepo
             owned_repos = seafile_api.get_owned_repo_list(username, ret_corrupted=True)
             owned_repo_ids = [item.repo_id for item in owned_repos]
