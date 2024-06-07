@@ -16,6 +16,7 @@ const propTypes = {
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
+  isViewFile: PropTypes.bool,
 };
 
 const PER_PAGE = 10;
@@ -189,11 +190,11 @@ class Search extends Component {
 
   calculateHighlightType = () => {
     let searchTypesMax = 0;
-    const { repoID, path } = this.props;
+    const { repoID, path, isViewFile } = this.props;
     if (repoID) {
       searchTypesMax++;
     }
-    if (path && path !== '/') {
+    if (path && path !== '/' && !isViewFile) {
       searchTypesMax++;
     }
     this.setState({
@@ -229,26 +230,22 @@ class Search extends Component {
   };
 
   onChangeHandler = (event) => {
+    const newValue = event.target.value;
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    this.setState({ value: event.target.value });
+    this.setState({ value: newValue });
     setTimeout(() => {
-      if (this.isChineseInput === false) {
-        this.setState({ inputValue: event.target.value });
+      if (this.isChineseInput === false && this.state.inputValue !== newValue) {
+        this.setState({
+          inputValue: newValue,
+          isLoading: false,
+          highlightIndex: 0,
+          resultItems: [],
+          isResultGetted: false,
+        });
       }
     }, 1);
-  };
-
-  onKeydownHandler = (e) => {
-    if (!isEnter(e) && !isUp(e) && !isDown(e)) {
-      this.setState({
-        isLoading: false,
-        highlightIndex: 0,
-        resultItems: [],
-        isResultGetted: false
-      });
-    }
   };
 
   getSearchResult = (queryData) => {
@@ -327,7 +324,7 @@ class Search extends Component {
       console.log(error);
       this.setState({ isLoading: false });
     });
-  }
+  };
 
   onResultListScroll = (e) => {
     // Load less than 100 results
@@ -403,7 +400,7 @@ class Search extends Component {
     if (isLoading) {
       return <Loading />;
     }
-    if (this.state.inputValue.trim().length === 0) {
+    else if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
     else if (!isResultGetted) {
@@ -431,7 +428,7 @@ class Search extends Component {
       );
     }
     if (this.props.repoID) {
-      if (this.props.path && this.props.path !== '/') {
+      if (this.props.path && this.props.path !== '/' && !this.props.isViewFile) {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
@@ -566,7 +563,6 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  onKeyDown={this.onKeydownHandler}
                 />
                 {this.state.isCloseShow &&
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>

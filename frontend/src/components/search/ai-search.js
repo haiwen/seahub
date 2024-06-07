@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
-import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import Icon from '../icon';
@@ -10,20 +9,13 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import Loading from '../loading';
 import Switch from '../common/switch';
-import { SEARCH_DELAY_TIME, getValueLength } from './constant';
-import AISearchAsk from './ai-search-ask';
-import AISearchRobot from './ai-search-widgets/ai-search-robot';
 
 const INDEX_STATE = {
   RUNNING: 'running',
   UNCREATED: 'uncreated',
   FINISHED: 'finished'
-};
-
-const SEARCH_MODE = {
-  QA: 'question-answering',
-  COMBINED: 'combined-search',
 };
 
 const PER_PAGE = 10;
@@ -33,10 +25,13 @@ export default class AISearch extends Component {
 
   static propTypes = {
     repoID: PropTypes.string,
+    path: PropTypes.string,
     placeholder: PropTypes.string,
     onSearchedClick: PropTypes.func.isRequired,
     repoName: PropTypes.string,
     currentRepoInfo: PropTypes.object,
+    isViewFile: PropTypes.bool,
+    isLibView: PropTypes.bool,
   };
 
   constructor(props) {
@@ -45,6 +40,7 @@ export default class AISearch extends Component {
     this.state = {
       width: 'default',
       value: '',
+      inputValue: '',
       resultItems: [],
       highlightIndex: 0,
       page: 0,
@@ -58,19 +54,23 @@ export default class AISearch extends Component {
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
-      searchMode: SEARCH_MODE.COMBINED,
+      searchTypesMax: 0,
+      highlightSearchTypesIndex: 0,
     };
-    this.inputValue = '';
     this.highlightRef = null;
     this.source = null; // used to cancel request;
     this.inputRef = React.createRef();
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
     this.indexStateTimer = null;
-    this.timer = null;
     this.isChineseInput = false;
-    this.isRepoOwner = props.currentRepoInfo.owner_email === username;
-    this.isAdmin = props.currentRepoInfo.is_admin;
+    if (props.isLibView && props.currentRepoInfo) {
+      this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+      this.isAdmin = props.currentRepoInfo.is_admin;
+    } else {
+      this.isRepoOwner = false;
+      this.isAdmin = false;
+    }
   }
 
   componentDidMount() {
@@ -100,34 +100,18 @@ export default class AISearch extends Component {
     document.removeEventListener('compositionend', this.onCompositionEnd);
     document.removeEventListener('click', this.handleOutsideClick);
     this.isChineseInput = false;
-    this.clearTimer();
     if (this.indexStateTimer) {
       clearInterval(this.indexStateTimer);
       this.indexStateTimer = null;
     }
   }
 
-  clearTimer = () => {
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-  };
-
   onCompositionStart = () => {
     this.isChineseInput = true;
-    this.clearTimer();
   };
 
   onCompositionEnd = () => {
     this.isChineseInput = false;
-    // chrome：compositionstart -> onChange -> compositionend
-    // not chrome：compositionstart -> compositionend -> onChange
-    // The onChange event will setState and change input value, then setTimeout to initiate the search
-    this.clearTimer();
-    this.timer = setTimeout(() => {
-      this.onSearch();
-    }, SEARCH_DELAY_TIME);
   };
 
   onDocumentKeydown = (e) => {
@@ -152,6 +136,7 @@ export default class AISearch extends Component {
 
   onFocusHandler = () => {
     this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.calculateHighlightType();
   };
 
   onCloseHandler = () => {
@@ -161,6 +146,14 @@ export default class AISearch extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!this.state.isResultGetted) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
+      if (highlightSearchTypesIndex < 0) {
+        highlightSearchTypesIndex = this.state.searchTypesMax;
+      }
+      this.setState({ highlightSearchTypesIndex });
+      return;
+    }
     const { highlightIndex } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
@@ -177,6 +170,14 @@ export default class AISearch extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!this.state.isResultGetted) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
+      if (highlightSearchTypesIndex > this.state.searchTypesMax) {
+        highlightSearchTypesIndex = 0;
+      }
+      this.setState({ highlightSearchTypesIndex });
+      return;
+    }
     const { highlightIndex, resultItems } = this.state;
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
@@ -193,6 +194,21 @@ export default class AISearch extends Component {
 
   onEnter = (e) => {
     e.preventDefault();
+    if (!this.state.isResultGetted) {
+      let highlightDom = document.querySelector('.search-types-highlight');
+      if (highlightDom) {
+        if (highlightDom.classList.contains('search-types-folder')) {
+          this.searchFolder();
+        }
+        else if (highlightDom.classList.contains('search-types-repo')) {
+          this.searchRepo();
+        }
+        else if (highlightDom.classList.contains('search-types-repos')) {
+          this.searchAllRepos();
+        }
+        return;
+      }
+    }
     let item = this.state.resultItems[this.state.highlightIndex];
     if (item) {
       if (document.activeElement) {
@@ -206,6 +222,21 @@ export default class AISearch extends Component {
     this.resetToDefault();
     this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
+  };
+
+  calculateHighlightType = () => {
+    let searchTypesMax = 0;
+    const { repoID, path, isViewFile } = this.props;
+    if (repoID) {
+      searchTypesMax++;
+    }
+    if (path && path !== '/' && !isViewFile) {
+      searchTypesMax++;
+    }
+    this.setState({
+      searchTypesMax,
+      highlightSearchTypesIndex: 0,
+    });
   };
 
   keepVisitedItem = (targetItem) => {
@@ -235,45 +266,22 @@ export default class AISearch extends Component {
   };
 
   onChangeHandler = (event) => {
+    const newValue = event.target.value;
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    const newValue = event.target.value;
-    this.setState({ value: newValue }, () => {
-      if (this.inputValue === newValue.trim()) return;
-      this.inputValue = newValue.trim();
-      if (!this.isChineseInput) {
-        this.clearTimer();
-        this.timer = setTimeout(() => {
-          this.onSearch();
-        }, SEARCH_DELAY_TIME);
+    this.setState({ value: newValue });
+    setTimeout(() => {
+      if (this.isChineseInput === false && this.state.inputValue !== newValue) {
+        this.setState({
+          inputValue: newValue,
+          isLoading: false,
+          highlightIndex: 0,
+          resultItems: [],
+          isResultGetted: false,
+        });
       }
-    });
-  };
-
-  onKeydownHandler = (event) => {
-    if (isHotkey('enter', event)) {
-      this.onSearch();
-    }
-  };
-
-  onSearch = () => {
-    const { value } = this.state;
-    const { repoID } = this.props;
-    if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
-      this.setState({
-        highlightIndex: 0,
-        resultItems: [],
-        isResultGetted: false
-      });
-      return;
-    }
-    const queryData = {
-      q: value,
-      search_repo: repoID ? repoID : 'all',
-      search_ftypes: 'all',
-    };
-    this.getSearchResult(queryData);
+    }, 1);
   };
 
   getSearchResult = (queryData) => {
@@ -281,6 +289,7 @@ export default class AISearch extends Component {
       this.source.cancel('prev request is cancelled');
     }
     this.setState({
+      isLoading: true,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -355,10 +364,10 @@ export default class AISearch extends Component {
   }
 
   resetToDefault() {
-    this.inputValue = '';
     this.setState({
       width: '',
       value: '',
+      inputValue: '',
       isMaskShow: false,
       isCloseShow: false,
       isSettingsShown: false,
@@ -368,16 +377,6 @@ export default class AISearch extends Component {
       isSearchInputShow: false,
       showRecent: true,
     });
-  }
-
-  openAsk = () => {
-    this.clearTimer();
-    this.setState({ searchMode: SEARCH_MODE.QA });
-  }
-
-  closeAsk = () => {
-    this.clearTimer();
-    this.setState({ searchMode: SEARCH_MODE.COMBINED });
   }
 
   renderVisitedItems = (items) => {
@@ -390,11 +389,11 @@ export default class AISearch extends Component {
             const isHighlight = index === highlightIndex;
             return (
               <SearchResultItem
-              key={index}
-              item={item}
-              onItemClickHandler={this.onItemClickHandler}
-              isHighlight={isHighlight}
-              setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
+                key={index}
+                item={item}
+                onItemClickHandler={this.onItemClickHandler}
+                isHighlight={isHighlight}
+                setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
               />
             );
           })}
@@ -412,10 +411,94 @@ export default class AISearch extends Component {
         </MediaQuery>
       </>
     );
-  }
+  };
+
+  renderSearchTypes = (inputValue) => {
+    const highlightIndex = this.state.highlightSearchTypesIndex;
+    if (!this.props.repoID) {
+      return (
+        <div className="search-types">
+          <div className="search-types-repos search-types-highlight" onClick={this.searchAllRepos} tabIndex={0}>
+            <i className="search-icon-left input-icon-addon fas fa-search"></i>
+            {inputValue}
+            <span className="search-types-text">{gettext('in all libraries')}</span>
+          </div>
+        </div>
+      );
+    }
+    if (this.props.repoID) {
+      if (this.props.path && this.props.path !== '/' && !this.props.isViewFile) {
+        return (
+          <div className="search-types">
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this library')}</span>
+            </div>
+            <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this folder')}</span>
+            </div>
+            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all libraries')}</span>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="search-types">
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in this library')}</span>
+            </div>
+            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all libraries')}</span>
+            </div>
+          </div>
+        );
+      }
+    }
+  };
+
+  searchRepo = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: this.props.repoID,
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(queryData);
+  };
+
+  searchFolder = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: this.props.repoID,
+      search_ftypes: 'all',
+      search_path: this.props.path,
+    };
+    this.getSearchResult(queryData);
+  };
+
+  searchAllRepos = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: 'all',
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(queryData);
+  };
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, width, isResultGetted } = this.state;
+    const { resultItems, highlightIndex, width, isResultGetted, isLoading } = this.state;
     if (!width || width === 'default') return null;
 
     if (this.state.showRecent) {
@@ -430,46 +513,23 @@ export default class AISearch extends Component {
       }
     }
 
-    const searchStrLength = getValueLength(this.inputValue);
-
-    if (searchStrLength === 0) {
+    if (isLoading) {
+      return <Loading />;
+    }
+    else if (this.state.inputValue.trim().length === 0) {
       return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
     }
-    else if (searchStrLength < 3) {
-      return <div className="search-result-none">{gettext('Type more characters to start search')}</div>;
-    }
     else if (!isResultGetted) {
-      return <span className="loading-icon loading-tip"></span>;
+      return this.renderSearchTypes(this.state.inputValue.trim());
     }
-    else if (!resultItems.length) {
-      return (
-        <>
-          <li className='search-result-item align-items-center' onClick={this.openAsk}>
-            <AISearchRobot />
-            <div className="item-content">
-              <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
-            </div>
-          </li>
-          <div className="search-result-none">{gettext('No results matching')}</div>
-        </>
-      );
+    else if (resultItems.length === 0) {
+      return <div className="search-result-none">{gettext('No results matching')}</div>;
     }
 
     const results = (
       <ul className="search-result-list" ref={this.searchResultListRef}>
-        <li
-          className={classnames('search-result-item align-items-center py-3', {'search-result-item-highlight': highlightIndex === 0 })}
-          onClick={this.openAsk}
-        >
-          <AISearchRobot style={{width: 36}}/>
-          <div className="item-content">
-            <div className="item-name ellipsis">
-            {gettext('Ask AI')}{': '}{this.state.value.trim()}
-            </div>
-          </div>
-        </li>
         {resultItems.map((item, index) => {
-          const isHighlight = (index + 1) === highlightIndex;
+          const isHighlight = index === highlightIndex;
           return (
             <SearchResultItem
               key={index}
@@ -547,7 +607,7 @@ export default class AISearch extends Component {
 
   setSettingsContainerRef = (ref) => {
     this.settingsContainer = ref;
-  }
+  };
 
   renderSwitch = () => {
     const { indexState } = this.state;
@@ -589,7 +649,7 @@ export default class AISearch extends Component {
       );
     }
     return null;
-  }
+  };
 
   renderSearchIcon = () => {
     const { indexState } = this.state;
@@ -598,13 +658,13 @@ export default class AISearch extends Component {
     } else {
       return <Icon symbol='search' className='input-icon-addon' />;
     }
-  }
+  };
 
   toggleSettingsShown = () => {
     this.setState({
       isSettingsShown: !this.state.isSettingsShown
     });
-  }
+  };
 
   handleOutsideClick = (e) => {
     const { isSettingsShown } = this.state;
@@ -618,21 +678,8 @@ export default class AISearch extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow, searchMode } = this.state;
+    const { isMaskShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
-
-    if (searchMode === SEARCH_MODE.QA) {
-      return (
-        <AISearchAsk
-          token={this.source ? this.source.token : null}
-          indexState={this.state.indexState}
-          repoID={this.props.repoID}
-          value={this.state.value.trim()}
-          closeAsk={this.closeAsk}
-          onItemClickHandler={this.onItemClickHandler}
-        />
-      );
-    }
 
     return (
       <Fragment>
@@ -653,14 +700,24 @@ export default class AISearch extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  onKeyDown={this.onKeydownHandler}
                 />
                 {this.state.isCloseShow &&
                   <>
-                  {(this.isRepoOwner || this.isAdmin) &&
-                    <button type="button" className="search-icon-right input-icon-addon sf3-font-set-up sf3-font border-0 bg-transparent mr-3" onClick={this.toggleSettingsShown} aria-label={gettext('Settings')} ref={ref => this.settingIcon = ref}></button>
-                  }
-                  <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                    {(this.isRepoOwner || this.isAdmin) &&
+                    <button
+                      type="button"
+                      className="search-icon-right input-icon-addon sf3-font-set-up sf3-font border-0 bg-transparent mr-3"
+                      onClick={this.toggleSettingsShown}
+                      aria-label={gettext('Settings')}
+                      ref={ref => this.settingIcon = ref}
+                    ></button>
+                    }
+                    <button
+                      type="button"
+                      className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4"
+                      onClick={this.onCloseHandler}
+                      aria-label={gettext('Close')}
+                    ></button>
                   </>
                 }
               </div>

@@ -1,5 +1,3 @@
-const SEARCH_DELAY_TIME = 1000;
-
 const getValueLength = (str) => {
   let code;
   let len = 0;
@@ -18,4 +16,4 @@ const getValueLength = (str) => {
   return len;
 };
 
-export { SEARCH_DELAY_TIME, getValueLength };
+export { getValueLength };
