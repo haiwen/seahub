@@ -14,7 +14,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
-import SharedLibs from '../../pages/shared-libs/shared-libs.js';
+import SharedLibs from '../../pages/shared-libs/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 
@@ -40,7 +40,8 @@ class Libraries extends Component {
       groupList: [],
       sharedRepoList:[],
       publicRepoList: [],
-      isCreateRepoDialogOpen: false
+      isCreateRepoDialogOpen: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list'
     };
   }
 
@@ -181,8 +182,17 @@ class Libraries extends Component {
     });
   };
 
+  switchViewMode = (newMode) => {
+     this.setState({
+       currentViewMode: newMode
+     }, () => {
+       localStorage.setItem('sf_repo_list_view_mode', newMode);
+     });
+  }
+
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, currentViewMode } = this.state;
+    const baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
     return (
       <Fragment>
         <TopToolbar
@@ -194,11 +204,18 @@ class Libraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
+              <div>
+          <div className="view-modes">
+             <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
+             <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
+           </div>
+              </div>
             </div>
             {isLoading ?
               <Loading /> :
               <div className="cur-view-content" id="files-content-container">
 
+              {(Utils.isDesktop() && currentViewMode == 'list') && (
                 <table aria-hidden={true} className="my-3">
                   <thead>
                     <tr>
@@ -212,10 +229,11 @@ class Libraries extends Component {
                     </tr>
                   </thead>
                 </table>
+              )}
 
                 {canAddRepo && (
                   <div className="pb-3">
-                    <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+                    <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
                       <h4 className="sf-heading m-0 d-flex align-items-center">
                         <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                         {gettext('My Libraries')}
@@ -242,13 +260,18 @@ class Libraries extends Component {
                           onRepoClick={this.onRepoClick}
                           sortRepoList={this.sortRepoList}
                           inAllLibs={true}
+                          currentViewMode={currentViewMode}
                         />
                       ))
                     }
                   </div>
                 )}
                 <div className="pb-3">
-                  <SharedLibs inAllLibs={true} repoList={this.state.sharedRepoList} />
+                  <SharedLibs
+              repoList={this.state.sharedRepoList}
+              inAllLibs={true}
+                          currentViewMode={currentViewMode}
+              />
                 </div>
                 {canViewOrg &&
                   <div className="pb-3">

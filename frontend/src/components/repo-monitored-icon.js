@@ -5,16 +5,17 @@ import Icon from '../components/icon';
 import { gettext } from '../utils/constants';
 
 const propTypes = {
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  className: PropTypes.string
 };
 
 class RepoMonitoredIcon extends React.Component {
 
   render() {
-    const { repoID } = this.props;
+    const { repoID, className } = this.props;
     return (
       <Fragment>
-        <span id={`watching-${repoID}`} className="ml-1">
+        <span id={`watching-${repoID}`} className={`ml-1 ${className ? className : ''}`}>
           <Icon symbol='monitor' />
         </span>
         <UncontrolledTooltip

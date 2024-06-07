@@ -318,11 +318,12 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    let repo = this.props.repo;
-    let iconUrl = Utils.getLibIconUrl(repo);
+    const { repo, currentViewMode = 'list' } = this.props;
+    let useBigLibaryIcon = currentViewMode == 'grid';
+    let iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
-    return (
+    return currentViewMode == 'list' ? (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus}>
         <td className="text-center">
           <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
@@ -367,6 +368,47 @@ class MylibRepoListItem extends React.Component {
         {storages.length > 0 && <td>{repo.storage_name}</td>}
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
       </tr>
+    ) : (
+        <div
+      className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+ onMouseEnter={this.onMouseEnter}
+      onMouseLeave={this.onMouseLeave}
+      onFocus={this.onFocus}
+      >
+        <div className="d-flex align-items-center">
+        <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
+          {this.state.isRenaming && (
+            <Rename
+              name={repo.repo_name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          )}
+          {!this.state.isRenaming && repo.repo_name && (
+            <Fragment>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+            <i className={`op-icon library-grid-item-icon fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`} role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}></i>
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="library-grid-item-icon" />}
+            </Fragment>
+          )}
+          {!this.state.isRenaming && !repo.repo_name &&
+            (<span>{gettext('Broken (please contact your administrator to fix this library)')}</span>)
+          }
+      </div>
+        {(repo.repo_name && this.state.isOpIconShow) && (
+            <div>
+              <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
+              <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+              <MylibRepoMenu
+                isPC={true}
+                repo={this.props.repo}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.props.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+              />
+            </div>
+          )}
+      </div>
     );
   };
 

@@ -54,7 +54,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, sortBy, sortOrder, theadHidden, inAllLibs } = this.props;
+    const { loading, errorMsg, items, sortBy, sortOrder, theadHidden, inAllLibs, currentViewMode } = this.props;
 
     const emptyTip = inAllLibs ?
       <p className="libraries-empty-tip">{gettext('No shared libraries')}</p> :
@@ -89,11 +89,9 @@ class Content extends Component {
       );
 
       const isDesktop = Utils.isDesktop();
-      const table = (
-        <table className={(isDesktop && !theadHidden)? '' : 'table-thead-hidden'}>
-          {isDesktop ? desktopThead : <LibsMobileThead />}
-          <tbody>
-            {items.map((item, index) => {
+      const itemsContent = (
+        <>
+           {items.map((item, index) => {
               return <Item
                 key={index}
                 data={item}
@@ -101,13 +99,25 @@ class Content extends Component {
                 isItemFreezed={this.state.isItemFreezed}
                 freezeItem={this.freezeItem}
                 onMonitorRepo={this.props.onMonitorRepo}
+             currentViewMode={currentViewMode}
               />;
             })}
-          </tbody>
+        </>
+      );
+      const content = currentViewMode == 'list' ? (
+        <table className={(isDesktop && !theadHidden)? '' : 'table-thead-hidden'}>
+          {isDesktop ? desktopThead : <LibsMobileThead />}
+          <tbody>
+        {itemsContent}
+           </tbody>
         </table>
+      ) : (
+        <div className="d-flex justify-content-between flex-wrap">
+        {itemsContent}
+        </div>
       );
 
-      return items.length ? table : emptyTip;
+      return items.length ? content : emptyTip;
     }
   }
 }
@@ -257,7 +267,7 @@ class Item extends Component {
       return null;
     }
 
-    const data = this.props.data;
+    const { data, currentViewMode = 'list' } = this.props;
 
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
@@ -272,6 +282,7 @@ class Item extends Component {
 
     const desktopItem = (
       <Fragment>
+      {currentViewMode == 'list' ? (
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <td className="text-center">
             <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
@@ -312,6 +323,47 @@ class Item extends Component {
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
           <td title={data.owner_contact_email}>{data.owner_name}</td>
         </tr>
+        ): (
+        <div
+      className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+onMouseOver={this.handleMouseOver}
+          onMouseOut={this.handleMouseOut}
+          onFocus={this.handleMouseOver}
+          >
+       <div className="d-flex align-items-center">
+          <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
+              <Link to={shareRepoUrl}>{data.repo_name}</Link>
+            <a className="library-grid-item-icon" href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
+              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
+            </a>
+              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="library-grid-item-icon" />}
+          </div>
+
+          <div>
+ {(isPro && data.is_admin) &&
+              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+            }
+            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+            {enableMonitorRepo &&
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                role="button"
+                tabIndex="0"
+                className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            }
+          </div>
+        </div>
+        )}
         {this.state.isShowSharedDialog && (
           <ModalPotal>
             <ShareDialog
@@ -457,7 +509,7 @@ class SharedLibraries extends Component {
   };
 
   renderContent = () => {
-    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
     return (
       <Content
         loading={this.state.loading}
@@ -469,6 +521,7 @@ class SharedLibraries extends Component {
         onMonitorRepo={this.onMonitorRepo}
         theadHidden={inAllLibs}
         inAllLibs={inAllLibs}
+      currentViewMode={currentViewMode}
       />
     );
   };
@@ -482,14 +535,14 @@ class SharedLibraries extends Component {
   };
 
   render() {
-    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
     return (
       <Fragment>
         {inAllLibs ? (
           <>
-            <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
               <h4 className="sf-heading m-0">
-                {inAllLibs && <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>}
+                <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
                 {gettext('Shared with me')}
               </h4>
               {this.renderSortIconInMobile()}
