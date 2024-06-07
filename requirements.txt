@@ -26,3 +26,4 @@ Markdown==3.4.*
 bleach==5.0.*
 python-ldap==3.4.*
 pypinyin==0.50.*
+django_ratelimit==4.1.*

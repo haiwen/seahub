@@ -15,8 +15,10 @@ from urllib.parse import quote
 from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
+
 from saml2.ident import decode
 from seaserv import seafile_api, ccnet_api
+from django_ratelimit.decorators import ratelimit
 
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
@@ -348,11 +350,15 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
 #   prompts for a new password
 # - password_reset_complete shows a success message for the above
 
+
 @csrf_protect
-def password_reset(request, is_admin_site=False, template_name='registration/password_reset_form.html',
-        email_template_name='registration/password_reset_email.html',
-        password_reset_form=PasswordResetForm, token_generator=default_token_generator,
-        post_reset_redirect=None):
+@ratelimit(key=settings.DJANGO_RATELIMIT_KEY, rate=settings.DJANGO_RATELIMIT_RATE)
+def password_reset(request, is_admin_site=False,
+                   template_name='registration/password_reset_form.html',
+                   email_template_name='registration/password_reset_email.html',
+                   password_reset_form=PasswordResetForm,
+                   token_generator=default_token_generator,
+                   post_reset_redirect=None):
 
     has_bind_social_auth = False
     if SocialAuthUser.objects.filter(username=request.user.username).exists():

@@ -280,6 +280,8 @@ INSTALLED_APPS = [
     'seahub.subscription',
 ]
 
+DJANGO_RATELIMIT_KEY = 'user_or_ip'
+DJANGO_RATELIMIT_RATE = '1000/h'
 
 # Enable or disable view File Scan
 ENABLE_FILE_SCAN = False
@@ -1028,5 +1030,3 @@ if ENABLE_LDAP:
 # ]
 
 # settings.py
-
-
