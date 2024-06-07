@@ -119,10 +119,6 @@ img[src=""] {
   width: 100%;
 }
 
-.sdoc-scroll-container .sdoc-article-container .article .sdoc-header-2 {
-  border-bottom: 1px solid #ccc;
-}
-
 .sdoc-wiki-outline-container {
   height: 80%;
   overflow-y: auto;
