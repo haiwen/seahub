@@ -206,6 +206,8 @@ from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskSta
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
+from seahub.api2.endpoints.metadata_manager import MetadataManagerRecords, MetadataManager, MetadataManagerRecord
+
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -434,6 +436,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManager.as_view(), name='api-v2.1-metadata'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataManagerRecords.as_view(), name='api-v2.1-metadata-records'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_]+)/$', MetadataManagerRecord.as_view(), name='api-v2.1-metadata-record'),
 
     ## user:file:extended-props
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/extended-properties/$', ExtendedPropertiesView.as_view(), name='api-v2.1-extended-properties'),
