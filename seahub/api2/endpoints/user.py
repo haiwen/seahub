@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import gettext as _
 
+from seahub.constants import DEFAULT_ORG
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
 from seahub.organizations.views import gen_org_url_prefix
@@ -157,7 +158,7 @@ class UserConvertToTeamView(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        org_role = 'default'
+        org_role = DEFAULT_ORG
         
         if request.user.org:
             error_msg = 'User is already in team.'
