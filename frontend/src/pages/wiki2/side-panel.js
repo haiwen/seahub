@@ -47,6 +47,7 @@ class SidePanel extends Component {
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
+    // TODO: To delete a page, do you need to delete all subpages at once (requires a new API)
     wikiAPI.deleteWiki2Page(wikiId, pageId);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
@@ -55,12 +56,20 @@ class SidePanel extends Component {
     }
   };
 
+  addPageInside = async ({ parentPageId, name, icon, path, docUuid, successCallback, errorCallback }) => {
+    const { config } = this.props;
+    const navigation = config.navigation;
+    const pageId = generateUniqueId(navigation);
+    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
+    this.addPage(newPage, parentPageId, successCallback, errorCallback);
+  };
+
   onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback }) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
     const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, successCallback, errorCallback);
+    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -75,15 +84,15 @@ class SidePanel extends Component {
       name,
     };
     const newPage = new Page({ ...newPageConfig });
-    this.addPage(newPage, successCallback, errorCallback);
+    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
-  addPage = (page, successCallback, errorCallback) => {
+  addPage = (page, parentId, successCallback, errorCallback) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = page.id;
     config.pages.push(page);
-    PageUtils.addPage(navigation, pageId, this.current_folder_id);
+    PageUtils.addPage(navigation, pageId, parentId);
     config.navigation = navigation;
     const onSuccess = () => {
       this.props.setCurrentPage(pageId, successCallback);
@@ -113,10 +122,10 @@ class SidePanel extends Component {
     this.props.saveWikiConfig(config);
   };
 
-  movePageOut = (moved_page_id, source_folder_id, target_folder_id, move_position) => {
+  movePageOut = (moved_page_id, source_id, target_id, move_position) => {
     let config = deepCopy(this.props.config);
     let { navigation } = config;
-    PageUtils.movePageOut(navigation, moved_page_id, source_folder_id, target_folder_id, move_position);
+    PageUtils.movePageOut(navigation, moved_page_id, source_id, target_id, move_position);
     config.navigation = navigation;
     this.props.saveWikiConfig(config);
   };
@@ -164,12 +173,13 @@ class SidePanel extends Component {
     const { config } = this.props;
     const { navigation, pages } = config;
     PageUtils.deleteFolder(navigation, pages, page_folder_id);
+    // TODO: delete all pages inside the folder, A new API is required
     config.navigation = navigation;
     this.props.saveWikiConfig(config);
   };
 
   // Drag a folder to the front and back of another folder
-  onMoveFolder = (moved_folder_id, target_folder_id, move_position) => {
+  onMoveFolder = (moved_folder_id, target_id, move_position) => {
     const { config } = this.props;
     const { navigation } = config;
     let updatedNavigation = deepCopy(navigation);
@@ -196,11 +206,11 @@ class SidePanel extends Component {
       indexOffset++;
     }
     // Get the location of the release
-    let target_folder_index = PageUtils.getFolderIndexById(updatedNavigation, target_folder_id);
+    let target_folder_index = PageUtils.getFolderIndexById(updatedNavigation, target_id);
     if (target_folder_index === -1) {
       updatedNavigation.forEach(item => {
         if (item.type === FOLDER) {
-          target_folder_index = PageUtils.getFolderIndexById(item.children, target_folder_id);
+          target_folder_index = PageUtils.getFolderIndexById(item.children, target_id);
           if (target_folder_index > -1) {
             item.children.splice(target_folder_index + indexOffset, 0, moved_folder);
           }
@@ -217,12 +227,12 @@ class SidePanel extends Component {
   };
 
   // Not support yet: Move a folder into another folder
-  moveFolderToFolder = (moved_folder_id, target_folder_id) => {
+  moveFolderToFolder = (moved_folder_id, target_id) => {
     let { config } = this.props;
     let { navigation } = config;
 
     // Find the folder and move it to this new folder
-    let target_folder = PageUtils.getFolderById(navigation, target_folder_id);
+    let target_folder = PageUtils.getFolderById(navigation, target_id);
     if (!target_folder) {
       toaster.danger('Only_support_two_level_folders');
       return;
@@ -299,6 +309,7 @@ class SidePanel extends Component {
           duplicatePage={this.duplicatePage}
           onSetFolderId={this.onSetFolderId}
           currentPageId={this.props.currentPageId}
+          addPageInside={this.addPageInside}
         />
         {this.state.isShowNewFolderDialog &&
           <NewFolderDialog
@@ -310,6 +321,7 @@ class SidePanel extends Component {
           <AddNewPageDialog
             toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
+            title={gettext('Add page')}
           />
         }
       </div>
@@ -335,6 +347,7 @@ class SidePanel extends Component {
           <AddNewPageDialog
             toggle={this.closeAddNewPageDialog}
             onAddNewPage={this.onAddNewPage}
+            title={gettext('Add page')}
           />
         }
       </div>

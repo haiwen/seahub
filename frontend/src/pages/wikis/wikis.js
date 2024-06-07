@@ -55,10 +55,6 @@ class Wikis extends Component {
           errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
         });
       });
-      this.setState({
-        loading: false,
-        wikis: wikis
-      });
     }).catch((error) => {
       this.setState({
         loading: false,

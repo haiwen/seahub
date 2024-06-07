@@ -4,9 +4,9 @@ import Icon from '../../../components/icon';
 import classNames from 'classnames';
 import './nav-item-icon.css';
 
-function NavItemIcon({ symbol, className, disable }) {
+function NavItemIcon({ symbol, className, disable, onClick }) {
   return (
-    <div className={classNames('nav-item-icon', {'nav-item-icon-disable': disable})}>
+    <div onClick={onClick} className={classNames('nav-item-icon', {'nav-item-icon-disable': disable})}>
       <Icon symbol={symbol} className={className} />
     </div>
   );
@@ -16,6 +16,7 @@ NavItemIcon.propTypes = {
   symbol: PropTypes.string.isRequired,
   className: PropTypes.string,
   disable: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default NavItemIcon;

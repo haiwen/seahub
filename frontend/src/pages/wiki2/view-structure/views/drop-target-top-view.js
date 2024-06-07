@@ -8,15 +8,15 @@ const DropTargetTopView = (Placeholder) => class extends React.Component {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool,
     canDrop: PropTypes.bool,
-    draggedRow: PropTypes.object,
+    draggedPage: PropTypes.object,
     targetFolderId: PropTypes.string,
     targetViewId: PropTypes.string,
     onMoveView: PropTypes.func,
   };
 
   render() {
-    const { connectDropTarget, isOver, canDrop, draggedRow } = this.props;
-    const { mode } = draggedRow || {};
+    const { connectDropTarget, isOver, canDrop, draggedPage } = this.props;
+    const { mode } = draggedPage || {};
     if (mode !== 'view') {
       return null;
     }
@@ -61,7 +61,7 @@ function collect(connect, monitor) {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop(),
-    draggedRow: monitor.getItem(),
+    draggedPage: monitor.getItem(),
   };
 }
 
