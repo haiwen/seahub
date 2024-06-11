@@ -48,7 +48,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
 
         self.request.META = {}
         self.request.META['Shibboleth-eppn'] = 'sampledeveloper@school.edu'
-        self.request.META['REMOTE_USER'] = 'sampledeveloper@school.edu'
+        self.request.META['HTTP_REMOTE_USER'] = 'sampledeveloper@school.edu'
         self.request.META['givenname'] = 'test_gname'
         self.request.META['surname'] = 'test_sname'
         self.request.META['Shibboleth-displayName'] = 'Sample Developer'
