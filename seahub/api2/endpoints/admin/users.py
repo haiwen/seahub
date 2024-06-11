@@ -2137,9 +2137,7 @@ class AdminUserConvertToTeamView(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        
         username = request.data.get('email')
-        
         if not username:
             return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
         
@@ -2149,7 +2147,6 @@ class AdminUserConvertToTeamView(APIView):
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % username
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
 
         if is_org_user(username):
             error_msg = 'User is already in team.'
