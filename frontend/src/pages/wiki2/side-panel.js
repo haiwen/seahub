@@ -28,7 +28,6 @@ const propTypes = {
   saveWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
-  onUpdatePage: PropTypes.func.isRequired,
 };
 
 class SidePanel extends Component {
@@ -100,6 +99,19 @@ class SidePanel extends Component {
       successCallback();
     };
     this.props.saveWikiConfig(config, onSuccess, errorCallback);
+  };
+
+  onUpdatePage = (pageId, newPage) => {
+    if (newPage.name === '') {
+      toaster.danger(gettext('Page name cannot be empty'));
+      return;
+    }
+    const { config } = this.props;
+    let pages = config.pages;
+    let currentPage = pages.find(page => page.id === pageId);
+    Object.assign(currentPage, newPage);
+    config.pages = pages;
+    this.props.saveWikiConfig(config);
   };
 
   movePage = ({ moved_view_id, target_view_id, source_view_folder_id, target_view_folder_id, move_position }) => {
@@ -274,7 +286,7 @@ class SidePanel extends Component {
   };
 
   renderFolderView = () => {
-    const { config, onUpdatePage } = this.props;
+    const { config } = this.props;
     const { pages, navigation } = config;
     return (
       <div className="wiki2-pages-container">
@@ -284,7 +296,7 @@ class SidePanel extends Component {
           views={pages}
           onToggleAddView={this.openAddPageDialog}
           onDeleteView={this.confirmDeletePage}
-          onUpdatePage={onUpdatePage}
+          onUpdatePage={this.onUpdatePage}
           onSelectView={this.props.setCurrentPage}
           onMoveView={this.movePage}
           movePageOut={this.movePageOut}

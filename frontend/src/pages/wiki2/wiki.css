@@ -61,13 +61,6 @@ img[src=""] {
   }
 }
 
-.main-panel-center .cur-view-content .sf-wiki-title {
-  border: none;
-  padding: 0 50px;
-  padding-left: 142px;
-  font-weight: bold;
-  font-size: 26pt;
-}
 
 /* reset article h1 */
 .wiki2-main-panel .article h1 {
@@ -226,15 +219,11 @@ img[src=""] {
   width: 100%;
 }
 
-.sdoc-editor-container .sdoc-editor-content {
-  flex-direction: column;
-}
-
 .sdoc-editor-container .sdoc-editor-content .article {
-  padding: 15px 142px 0px 142px;
   width: 100%;
   box-shadow: none;
   border: none;
+  padding: 52px 142px 0;
 }
 
 .sdoc-editor-container .sdoc-editor-content .sdoc-side-toolbar-container {
