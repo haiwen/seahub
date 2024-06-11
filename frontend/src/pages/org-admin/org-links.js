@@ -45,7 +45,7 @@ class OrgLinks extends React.Component {
   onChangePageNum = (event, num) => {
     event.preventDefault();
     let page = this.state.page;
-    if (num == 1) {
+    if (num === 1) {
       page = page + 1;
     } else {
       page = page - 1;
@@ -122,8 +122,8 @@ class OrgLinks extends React.Component {
                 </tbody>
               </table>
               <div className="paginator">
-                {this.state.page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
-                {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
+                {this.state.page !== 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+                {(this.state.page !== 1 && this.state.pageNext) && <span> | </span>}
                 {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
               </div>
             </div>
