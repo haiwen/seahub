@@ -141,7 +141,7 @@ from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
-    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList
+    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList, AdminUserConvertToTeamView
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -586,6 +586,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/search-user/$', AdminSearchUser.as_view(), name='api-v2.1-admin-search-user'),
     re_path(r'^api/v2.1/admin/update-user-ccnet-email/$', AdminUpdateUserCcnetEmail.as_view(), name='api-v2.1-admin-update-user-ccnet-email'),
     re_path(r'^api/v2.1/admin/user-list/$', AdminUserList.as_view(), name='api-v2.1-admin-user-list'),
+    re_path(r'^api/v2.1/admin/user-convert-to-team/$', AdminUserConvertToTeamView.as_view(), name='api-v2.1-admin-user-list'),
 
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible
