@@ -35,6 +35,8 @@ from seahub.two_factor.forms import (MethodForm, TOTPDeviceForm,
 from seahub.two_factor.views.utils import (class_view_decorator,
                                                  CheckTwoFactorEnabledMixin,
                                                  IdempotentSessionWizardView)
+from seahub.base.templatetags.seahub_tags import email2nickname
+
 
 logger = logging.getLogger(__name__)
 
@@ -277,9 +279,9 @@ class QRGeneratorView(View):
                                        self.default_qr_factory)
         image_factory = import_string(image_factory_string)
         content_type = self.image_content_types[image_factory.kind]
-
+        nickname = email2nickname(self.request.user.username)
         otpauth_url = get_otpauth_url(
-            accountname=self.request.user.username,
+            accountname=nickname,
             issuer=config.SITE_NAME,
             secret=key,
             digits=totp_digits())
