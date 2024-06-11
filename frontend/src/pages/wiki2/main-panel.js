@@ -92,7 +92,7 @@ class MainPanel extends Component {
                   document={this.props.editorContent}
                   docUuid={this.state.docUuid}
                   isWikiReadOnly={isReadOnly}
-                  topSlot={<Input className='sf-wiki-title' bsSize="lg" onBlur={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
+                  topSlot={<Input className='sf-wiki-title' bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
                 />
               </div>
             )}
