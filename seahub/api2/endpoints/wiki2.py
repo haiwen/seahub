@@ -427,7 +427,7 @@ class Wiki2PagesView(APIView):
         folder_id = request.data.get('folder_id', None)
         wiki_config = get_wiki_config(repo_id, request.user.username)
 
-        navigation = wiki_config.get('navigation')
+        navigation = wiki_config.get('navigation', [])
         if not folder_id:
             page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
         else:
