@@ -43,4 +43,8 @@ const getIconURL = (repoId, fileName) => {
   return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
 };
 
-export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL };
+const getCurrentPageConfig = (pages,pageId) => {
+  return pages.filter(page => page.id === pageId)[0]
+}
+
+export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL, getCurrentPageConfig };

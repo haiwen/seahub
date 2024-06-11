@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiViewer } from '@seafile/sdoc-editor';
+import { Input } from 'reactstrap';
 import { gettext, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
+import { getCurrentPageConfig } from './utils';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -18,6 +20,7 @@ const propTypes = {
   assets_url: PropTypes.string,
   config: PropTypes.object,
   currentPageId: PropTypes.string,
+  onUpdatePage: PropTypes.func,
 };
 
 class MainPanel extends Component {
@@ -26,36 +29,51 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       docUuid: '',
+      currentPageConfig: {},
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { seadoc_access_token } = props;
-    const config = window.app.config;
+    const { seadoc_access_token, currentPageId, config } = props;
+    const appConfig = window.app.config;
     const pageOptions = window.app.pageOptions;
     const { assetsUrl, seadocServerUrl: sdocServer, } = window.wiki.config;
     window.seafile = {
       ...window.seafile, // need docUuid
-      ...config,
+      ...appConfig,
       ...pageOptions,
       sdocServer,
       assetsUrl: assetsUrl || props.assets_url,
       accessToken: seadoc_access_token,
-      serviceUrl: config.serviceURL,
-      assets_url: config.assetsUrl,
+      serviceUrl: appConfig.serviceURL,
+      assets_url: appConfig.assetsUrl,
     };
-    return { ...props, docUuid: window.seafile.docUuid };
+    const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId)
+    return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
+  }
+
+  handleRenameDocument = (e) => {
+    const newName = e.target.value.trim()
+    const { currentPageConfig } = this.state
+    const { id, name, icon } = currentPageConfig
+    if (newName === name) return;
+    const pageConfig = { name: newName, icon }
+    this.props.onUpdatePage(id, pageConfig)
+    // Reset title if name is empty
+    if (!newName) e.target.value = name;
   }
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile, config } = this.props;
+    const { currentPageConfig } = this.state
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
+
     return (
       <div className="wiki2-main-panel">
         <div className='wiki2-main-panel-north'>
           <WikiTopNav
-            config={this.props.config}
+            config={config}
             currentPageId={this.props.currentPageId}
           />
           {username &&
@@ -69,13 +87,14 @@ class MainPanel extends Component {
             }
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <SdocWikiViewer
-                document={this.props.editorContent}
-                showOutline={false}
-                showToolbar={false}
-                docUuid={this.state.docUuid}
-                isWikiReadOnly={isReadOnly}
-              />
+              <div>
+                <SdocWikiViewer
+                  document={this.props.editorContent}
+                  docUuid={this.state.docUuid}
+                  isWikiReadOnly={isReadOnly}
+                  topSlot={<Input className='sf-wiki-title' bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
+                />
+              </div>
             )}
           </div>
         </div>
