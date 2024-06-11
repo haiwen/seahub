@@ -269,7 +269,7 @@ INSTALLED_APPS = [
     'seahub.dingtalk',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
-    'seahub.repo_metadata_enable',
+    'seahub.repo_metadata',
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',

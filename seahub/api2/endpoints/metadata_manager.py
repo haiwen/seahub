@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.repo_metadata_enable.models import RepoMetadataEnable
+from seahub.repo_metadata.models import RepoMetadata
 from seahub.settings import ENABLE_METADATA_MANAGEMENT, MATEDATA_SERVER_URL, METEDATA_SERVER_SECRET_KEY
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -176,14 +176,22 @@ def initial_metadata_base(repo_id):
     if err := check_and_rollback(response, repo_id, headers):
         return err
 
-class MetadataManager(APIView):
+def check_repo_metadata_is_enable(repo_id, require_record=False):
+    records = RepoMetadata.objects.filter(repo_id=repo_id)
+    if not records:
+        return False
+    
+    record = records.first()
+    return (record.enabled, record) if require_record else record.enabled
+
+class MetadataManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id):
         '''
-            check the repo has enabled the metadata manager or not
+            check the repo has enabled the metadata manage or not
         '''
         if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
                 error_msg = "Function is not supported"
@@ -203,7 +211,7 @@ class MetadataManager(APIView):
         
         try:
             return Response({
-                'enable': True if RepoMetadataEnable.objects.filter(repo_id=repo_id) else False
+                'enabled': check_repo_metadata_is_enable(repo_id)
             })
         except Exception as e:
             logger.error(e)
@@ -212,16 +220,16 @@ class MetadataManager(APIView):
             
     def post(self, request, repo_id):
         '''
-            enable a new repo's metadata manager
+            enable a new repo's metadata manage
         '''
 
         if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        # check dose the repo have opened metadata manager
-        if RepoMetadataEnable.objects.filter(repo_id=repo_id):
-            error_msg = f'The metadata module is enable for repo {repo_id}.'
+        # check dose the repo have opened metadata manage
+        if check_repo_metadata_is_enable(repo_id):
+            error_msg = f'The metadata module is enabled for repo {repo_id}.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
         # recource check
@@ -243,8 +251,8 @@ class MetadataManager(APIView):
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code  {status_code}: {reason}')
         
         try:
-            repo_metadata_enable = RepoMetadataEnable(repo_id=repo_id)
-            repo_metadata_enable.save()
+            repo_metadata = RepoMetadata(repo_id=repo_id, enabled=True)
+            repo_metadata.save()
             return Response({
                 'success': True
             })
@@ -260,7 +268,7 @@ class MetadataManager(APIView):
 
     def delete(self, request, repo_id):
         '''
-            remove a repo's metadata manager
+            remove a repo's metadata manage
         '''
         if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
                 error_msg = "Function is not supported"
@@ -278,10 +286,10 @@ class MetadataManager(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        # check dose the repo have opened metadata manager
-        enable_recode = RepoMetadataEnable.objects.filter(repo_id=repo_id)
-        if not enable_recode:
-            error_msg = f'The repo {repo_id} has not enable the metadata manager.'
+        # check dose the repo have opened metadata manage
+        enabled, record = check_repo_metadata_is_enable(repo_id, True)
+        if not enabled:
+            error_msg = f'The repo {repo_id} has not enabled the metadata manage.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         try:
@@ -291,7 +299,8 @@ class MetadataManager(APIView):
             if response.status_code < 200 or response.status_code > 299:
                 return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {response.status_code}: {response.reason}')
             
-            enable_recode.delete()
+            record.enabled = False
+            record.save()
             return Response({
                 'success': True
             })
@@ -300,7 +309,7 @@ class MetadataManager(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-class MetadataManagerRecords(APIView):
+class MetadataManageRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
@@ -321,11 +330,11 @@ class MetadataManagerRecords(APIView):
         
         
         #args check
-        parent_dir = request.data.get('parent_dir')
-        name = request.data.get('name')
-        page = request.data.get('page')
-        perpage = request.data.get('perpage')
-        is_dir = request.data.get('is_dir')
+        parent_dir = request.GET.get('parent_dir')
+        name = request.GET.get('name')
+        page = request.GET.get('page')
+        perpage = request.GET.get('perpage')
+        is_dir = request.GET.get('is_dir')
 
         if page:
             try:
@@ -352,7 +361,7 @@ class MetadataManagerRecords(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # metadata enable check
-        if not RepoMetadataEnable.objects.filter(repo_id=repo_id):
+        if not check_repo_metadata_is_enable(repo_id):
             error_msg = f'The metadata module is not enable for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -370,29 +379,47 @@ class MetadataManagerRecords(APIView):
         
         sql = f'SELECT `{COLUMN_ID.name}`, `{COLUMN_CREATOR.name}`, `{COLUMN_CREATE_TIME.name}`, `{COLUMN_MODIFIER.name}`, `{COLUMN_MODIFY_TIME.name}`, `{COLUMN_CURRENT_DIR.name}`, `{COLUMN_NAME.name}`, `{COLUMN_IS_DIR.name}` FROM `{TABLE.name}`'
 
+        parameters = []
+
         if parent_dir:
-            sql += f' WHERE `{COLUMN_CURRENT_DIR.name}` = "{parent_dir}"'
+            sql += f' WHERE `{COLUMN_CURRENT_DIR.name}` LIKE ?'
+            parameters.append(parent_dir)
             if name:
-                sql += f' AND `{COLUMN_NAME.name}` = "{name}"'
+                sql += f' AND `{COLUMN_NAME.name}` LIKE ?'
+                parameters.append(name)
 
             if is_dir:
-                    sql += f' AND `{COLUMN_IS_DIR.name}` = "{is_dir}"'
+                sql += f' AND `{COLUMN_IS_DIR.name}` LIKE ?'
+                parameters.append(str(is_dir))
         elif name:
-            sql += f' WHERE `{COLUMN_NAME.name}` = "{name}"'
+            sql += f' WHERE `{COLUMN_NAME.name}` LIKE ?'
+            parameters.append(name)
+
             if is_dir:
-                    sql += f' AND `{COLUMN_IS_DIR.name}` = "{is_dir}"'
+                sql += f' AND `{COLUMN_IS_DIR.name}` LIKE ?'
+                parameters.append(str(is_dir))
         elif is_dir:
-            sql += f' WHERE `{COLUMN_IS_DIR.name}` = "{is_dir}"'
+            sql += f' WHERE `{COLUMN_IS_DIR.name}` LIKE ?'
+            parameters.append(str(is_dir))
+
+        sql += f' ORDER BY `{COLUMN_CURRENT_DIR.name}` ASC, `{COLUMN_IS_DIR.name}` DESC, `{COLUMN_NAME.name}` ASC'
 
         if page:
             sql += f' LIMIT {(page - 1) * perpage}, {page * perpage}'
 
         sql += ';'
 
+        post_data = {
+            'sql': sql
+        }
+
+        if parameters:
+            post_data['params'] = parameters
+
         #query_result
         url = f'{MATEDATA_SERVER_URL}/api/v1/base/{repo_id}/query'
         headers = gen_headers(repo_id)
-        response = requests.post(url, json={'sql': sql}, headers=headers)
+        response = requests.post(url, json=post_data, headers=headers)
         if response.status_code < 200 or response.status_code > 299:
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {response.status_code}: {response.reason}')
         
@@ -441,7 +468,7 @@ class MetadataManagerRecords(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # metadata enable check
-        if not RepoMetadataEnable.objects.filter(repo_id=repo_id):
+        if not check_repo_metadata_is_enable(repo_id):
             error_msg = f'The metadata module is not enable for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -510,7 +537,7 @@ class MetadataManagerRecords(APIView):
         else:
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {response.status_code}: {response.reason}')
         
-class MetadataManagerRecord(APIView):
+class MetadataManageRecord(APIView):
     #authentication_classes = (TokenAuthentication, SessionAuthentication)
     #permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
@@ -546,7 +573,7 @@ class MetadataManagerRecord(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # metadata enable check
-        if not RepoMetadataEnable.objects.filter(repo_id=repo_id):
+        if not check_repo_metadata_is_enable(repo_id):
             error_msg = f'The metadata module is not enable for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -635,7 +662,7 @@ class MetadataManagerRecord(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # metadata enable check
-        if not RepoMetadataEnable.objects.filter(repo_id=repo_id):
+        if not check_repo_metadata_is_enable(repo_id):
             error_msg = f'The metadata module is not enable for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 

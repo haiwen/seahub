@@ -265,6 +265,7 @@ class DirColumnNav extends React.Component {
               currentRepoInfo={this.props.currentRepoInfo}
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
+              repoID={this.props.repoID}
             />)
           }
         </div>
