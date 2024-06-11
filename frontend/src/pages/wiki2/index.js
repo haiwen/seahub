@@ -172,7 +172,25 @@ class Wiki extends Component {
     });
   };
 
+  onUpdatePage = (pageId, newPage) => {
+    if (newPage.name === '') {
+      toaster.danger(gettext('Page name cannot be empty'));
+      return;
+    }
+    const { config } = this.state
+    let pages = config.pages;
+    let newPages = pages.map(page => {
+      if (page.id === pageId) {
+        return { ...page, ...newPage };
+      }
+      return page;
+    });
+    const newConfig = { ...config, pages: newPages };
+    this.saveWikiConfig(newConfig);
+  };
+  
   render() {
+
     return (
       <div id="main" className="wiki-main">
         <SidePanel

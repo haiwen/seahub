@@ -69,13 +69,14 @@ class MainPanel extends Component {
             }
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <SdocWikiViewer
-                document={this.props.editorContent}
-                showOutline={false}
-                showToolbar={false}
-                docUuid={this.state.docUuid}
-                isWikiReadOnly={isReadOnly}
-              />
+              <div>
+                <SdocWikiViewer
+                  document={this.props.editorContent}
+                  docUuid={this.state.docUuid}
+                  isWikiReadOnly={isReadOnly}
+                  topSlot={<Input className='sf-wiki-title' bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
+                />
+              </div>
             )}
           </div>
         </div>
