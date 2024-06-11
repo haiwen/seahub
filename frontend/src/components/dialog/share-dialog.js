@@ -307,7 +307,7 @@ class ShareDialog extends React.Component {
       return (
         <div className="external-share-message mt-2">
           <h6>{additionalShareDialogNote.title}</h6>
-          <div style={{fontSize: '14px', color: '#666'}}>{additionalShareDialogNote.content}</div>
+          <p style={{fontSize: '14px', color: '#666'}} className="text-wrap m-0">{additionalShareDialogNote.content}</p>
         </div>
       );
     }
@@ -319,8 +319,8 @@ class ShareDialog extends React.Component {
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '760px'}} className="share-dialog" toggle={this.props.toggleDialog}>
-          <ModalHeader toggle={this.props.toggleDialog}>
-            {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
+          <ModalHeader toggle={this.props.toggleDialog} tag="div">
+            <h5 className="text-truncate">{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></h5>
             {this.renderExternalShareMessage()}
           </ModalHeader>
           <ModalBody className="share-dialog-content" role="tablist">
