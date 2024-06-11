@@ -47,4 +47,4 @@ const getCurrentPageConfig = (pages,pageId) => {
   return pages.filter(page => page.id === pageId)[0]
 }
 
-export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL,getCurrentPageConfig };
+export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL, getCurrentPageConfig };

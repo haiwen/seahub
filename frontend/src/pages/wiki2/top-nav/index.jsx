@@ -36,7 +36,6 @@ function getPaths(navigation, currentPageId, pages) {
 }
 
 function WikiTopNav({ config, currentPageId }) {
-  console.log('config in wiki top nav',config)
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
   return (

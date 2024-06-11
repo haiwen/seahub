@@ -39,17 +39,21 @@ class Wiki extends Component {
       assets_url: '',
     };
   }
+
   UNSAFE_componentWillMount() {
     if (!Utils.isDesktop()) {
       this.setState({ closeSideBar: true });
     }
   }
+
   componentDidMount() {
     this.getWikiConfig();
   }
+
   handlePath = () => {
     return isWiki2 ? 'wikis/' : 'published/';
   };
+
   getWikiConfig = () => {
     wikiAPI.getWiki2Config(wikiId).then(res => {
       const { wiki_config, repo_id } = res.data.wiki;
@@ -85,6 +89,7 @@ class Wiki extends Component {
       onError && onError();
     });
   };
+
   getFirstPageId = (config) => {
     if (!config || !Array.isArray(config.navigation)) return '';
     for (let i = 0; i < config.navigation.length; i++) {
@@ -97,6 +102,7 @@ class Wiki extends Component {
       }
     }
   };
+
   getSdocFileContent = (docUuid, accessToken) => {
     const config = {
       docUuid,
@@ -114,9 +120,11 @@ class Wiki extends Component {
       toaster.danger(errorMsg);
     });
   };
+
   onCloseSide = () => {
     this.setState({ closeSideBar: !this.state.closeSideBar });
   };
+
   showPage = (pageId, filePath) => {
     this.setState({
       isDataLoading: true,
@@ -142,6 +150,7 @@ class Wiki extends Component {
     const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
     window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
+
   setCurrentPage = (pageId, callback) => {
     const { currentPageId, config } = this.state;
     if (pageId === currentPageId) {
@@ -162,6 +171,7 @@ class Wiki extends Component {
       callback && callback();
     });
   };
+  
   onUpdatePage = (pageId, newPage) => {
     if (newPage.name === '') {
       toaster.danger(gettext('Page name cannot be empty'));
