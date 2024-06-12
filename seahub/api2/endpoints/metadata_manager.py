@@ -218,7 +218,7 @@ class MetadataManage(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             
-    def post(self, request, repo_id):
+    def put(self, request, repo_id):
         '''
             enable a new repo's metadata manage
         '''
@@ -309,7 +309,7 @@ class MetadataManage(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-class MetadataManageRecords(APIView):
+class MetadataRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
@@ -321,7 +321,7 @@ class MetadataManageRecords(APIView):
                 parent_dir: optional, if not specify, search from all dirs
                 name: optional, if not specify, search from all objects
                 page: optional, the current page
-                perpage: optional, if use page, default is 25
+                per_page: optional, if use page, default is 25
                 is_dir: optional, True or False
         '''
         if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
@@ -333,7 +333,7 @@ class MetadataManageRecords(APIView):
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
         page = request.GET.get('page')
-        perpage = request.GET.get('perpage')
+        per_page = request.GET.get('per_page')
         is_dir = request.GET.get('is_dir')
 
         if page:
@@ -343,15 +343,15 @@ class MetadataManageRecords(APIView):
                 error_msg = 'Page is not vaild.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
-            if perpage:
+            if per_page:
                 try:
-                    perpage = int(perpage)
+                    per_page = int(per_page)
                 except ValueError:
                     error_msg = 'Perpage is not vaild.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 
             else:
-                perpage = 25
+                per_page = 25
 
         if is_dir:
             try:
@@ -405,7 +405,7 @@ class MetadataManageRecords(APIView):
         sql += f' ORDER BY `{COLUMN_CURRENT_DIR.name}` ASC, `{COLUMN_IS_DIR.name}` DESC, `{COLUMN_NAME.name}` ASC'
 
         if page:
-            sql += f' LIMIT {(page - 1) * perpage}, {page * perpage}'
+            sql += f' LIMIT {(page - 1) * per_page}, {page * per_page}'
 
         sql += ';'
 
@@ -537,7 +537,7 @@ class MetadataManageRecords(APIView):
         else:
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {response.status_code}: {response.reason}')
         
-class MetadataManageRecord(APIView):
+class MetadataRecord(APIView):
     #authentication_classes = (TokenAuthentication, SessionAuthentication)
     #permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )

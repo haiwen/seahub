@@ -2,7 +2,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { siteRoot } from '../../utils/constants';
 
-class SeahubManageAPI {
+class SeahubMetadataAPI {
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
@@ -50,7 +50,7 @@ class SeahubManageAPI {
 
   enableMetadataManagement(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
-    return this.req.post(url);
+    return this.req.put(url);
   }
 
   disableMetadataManagement(repoID) {
@@ -91,8 +91,8 @@ class SeahubManageAPI {
   }
 }
 
-const seahubManageAPI = new SeahubManageAPI();
+const seahubMetadataAPI = new SeahubMetadataAPI();
 const xcsrfHeaders = cookie.load('sfcsrftoken');
-seahubManageAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+seahubMetadataAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export default seahubManageAPI;
+export default seahubMetadataAPI;

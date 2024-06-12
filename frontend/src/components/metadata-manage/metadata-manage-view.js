@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
-import seahubManageAPI from './seahub-manage-api';
+import seahubMetadataAPI from './seahub-metadata-api';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -48,11 +48,11 @@ class MetadataManageView extends React.Component {
   };
 
   onClick = () => {
-    seahubManageAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
+    seahubMetadataAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
       if (res.data.enabled){
         this.viewMetadata();
       } else if (confirm(gettext('Enable-Metadata-Manage?'))){
-        seahubManageAPI.enableMetadataManagement(this.props.repoID).then((res) => {
+        seahubMetadataAPI.enableMetadataManagement(this.props.repoID).then((res) => {
           this.viewMetadata();
         }).catch((error) => {
           let errMessage = Utils.getErrorMsg(error);
