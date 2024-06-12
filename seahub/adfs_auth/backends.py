@@ -200,8 +200,7 @@ class Saml2Backend(ModelBackend):
         if len(seafile_groups) == 1 and ',' in seafile_groups[0]:
             seafile_groups = [group.strip() for group in seafile_groups[0].split(',')]
 
-        saml_group_ids = []
-        if all(group_id.isdigit() for group_id in seafile_groups):
+        if all(str(group_id).isdigit() for group_id in seafile_groups):
             # all groups are provided as numeric IDs
             saml_group_ids = [int(group_id) for group_id in seafile_groups]
         else:
