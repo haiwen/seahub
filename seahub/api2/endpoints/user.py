@@ -181,7 +181,8 @@ class UserConvertToTeamView(APIView):
         org_name = ''.join(nickname_characters)
         
         try:
-            # 1. Create a new org
+            # 1. Create a new org, and add the current to org as a team admin
+            #    by ccnet_api.create_org
             org_id = ccnet_api.create_org(org_name, url_prefix, username)
             # 2. Update org-settings
             new_org = ccnet_api.get_org_by_id(org_id)

@@ -2133,10 +2133,6 @@ class AdminUserConvertToTeamView(APIView):
     throttle_classes = (UserRateThrottle,)
     
     def post(self, request):
-        if not settings.ENABLE_CONVERT_TO_TEAM_ACCOUNT:
-            error_msg = 'Feature is not enabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
         username = request.data.get('email')
         if not username:
             return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
@@ -2170,7 +2166,8 @@ class AdminUserConvertToTeamView(APIView):
         org_name = ''.join(nickname_characters)
         
         try:
-            # 1. Create a new org
+            # 1. Create a new org, and add the user(username) to org as a team admin
+            #    by ccnet_api.create_org
             org_id = ccnet_api.create_org(org_name, url_prefix, username)
             # 2. Update org-settings
             new_org = ccnet_api.get_org_by_id(org_id)
