@@ -204,8 +204,12 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -239,8 +243,12 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -281,8 +289,12 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -372,8 +384,12 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -479,8 +495,12 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -538,8 +558,8 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {response.status_code}: {response.reason}')
         
 class MetadataRecord(APIView):
-    #authentication_classes = (TokenAuthentication, SessionAuthentication)
-    #permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, record_id):
@@ -584,8 +604,12 @@ class MetadataRecord(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
@@ -673,11 +697,15 @@ class MetadataRecord(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        '''permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        try:
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        '''
+        
 
         url = f'{MATEDATA_SERVER_URL}/api/v1/base/{repo_id}/rows'
         data = {
