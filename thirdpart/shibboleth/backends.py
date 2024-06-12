@@ -38,7 +38,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
             user = None
         return user
 
-    def authenticate(self, remote_user, shib_meta):
+    def authenticate(self, remote_user, shib_meta, second_uid=''):
         """
         The username passed as ``remote_user`` is considered trusted.  This
         method simply returns the ``User`` object with the given username,
@@ -69,10 +69,21 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
             except User.DoesNotExist:
                 user = None
 
+        if user and second_uid:
+            SocialAuthUser.objects.add_if_not_exists(user.username,
+                                                     SHIBBOLETH_PROVIDER_IDENTIFIER,
+                                                     second_uid)
+
         if not user and self.create_unknown_user:
             try:
                 user = User.objects.create_shib_user(is_active=self.activate_after_creation)
-                SocialAuthUser.objects.add(user.username, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+                SocialAuthUser.objects.add_if_not_exists(user.username,
+                                                         SHIBBOLETH_PROVIDER_IDENTIFIER,
+                                                         remote_user)
+                if second_uid:
+                    SocialAuthUser.objects.add_if_not_exists(user.username,
+                                                             SHIBBOLETH_PROVIDER_IDENTIFIER,
+                                                             second_uid)
             except Exception as e:
                 logger.error('create shib user failed: %s' % e)
                 return None
