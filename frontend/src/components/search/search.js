@@ -10,6 +10,11 @@ import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
 import { SEARCH_DELAY_TIME, getValueLength } from './constant';
 
+const SEARCH_TAB = {
+  GLOBAL: 'global',
+  LIBRARY: 'library',
+};
+
 const propTypes = {
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
@@ -39,6 +44,8 @@ class Search extends Component {
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
+      selectedSearchTab: SEARCH_TAB.GLOBAL,
+      isFocused: false,
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -110,7 +117,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true, isFocused: true });
   };
 
   onCloseHandler = () => {
@@ -169,8 +176,9 @@ class Search extends Component {
 
   keepVisitedItem = (targetItem) => {
     const { repoID } = this.props;
+    const { selectedSearchTab } = this.state;
     let targetIndex;
-    let storeKey = 'sfVisitedSearchItems';
+    let storeKey = selectedSearchTab === 'global' ? 'sfVisitedSearchItems' : 'sfVisitedLibraryItems';
     if (repoID) {
       storeKey += repoID;
     }
@@ -220,7 +228,7 @@ class Search extends Component {
   };
 
   onSearch = () => {
-    const { value } = this.state;
+    const { value, selectedSearchTab } = this.state;
     const { repoID } = this.props;
     if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
@@ -235,7 +243,11 @@ class Search extends Component {
       search_repo: repoID ? repoID : 'all',
       search_ftypes: 'all',
     };
-    this.getSearchResult(queryData);
+    if (selectedSearchTab === SEARCH_TAB.GLOBAL) {
+      this.getSearchResult(queryData);
+    } else if (selectedSearchTab === SEARCH_TAB.LIBRARY) {
+      this.getRepoSearchResult(value);
+    }
   };
 
   getSearchResult = (queryData) => {
@@ -319,16 +331,44 @@ class Search extends Component {
     });
   }
 
+  getRepoSearchResult = (query_str) => {
+    if (this.source) {
+      this.source.cancel('prev request is cancelled');
+    }
+    this.setState({
+      isResultGetted: false,
+      resultItems: [],
+      highlightIndex: 0,
+    });
+    this.source = seafileAPI.getSource();
+
+    const query_type = SEARCH_TAB.LIBRARY
+    let results = [];
+    seafileAPI.searchItems(query_str, query_type, this.source.token).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        hasMore: false,
+      });      
+    }).catch(error => {
+        /* eslint-disable */
+        console.log(error);
+        this.setState({ isLoading: false });
+      });
+  };
+
   onAiSearch = (params, cancelToken) => {
     let results = [];
     seafileAPI.aiSearchFiles(params, cancelToken).then(res => {
       results = [...results, ...this.formatResultItems(res.data.results)];
       this.setState({
-          resultItems: results,
-          isResultGetted: true,
-          isLoading: false,
-          hasMore: false,
-        });
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        hasMore: false,
+      });
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
@@ -388,16 +428,46 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
+      isFocused: false
     });
   }
 
+  onTabChange = (selectedSearchTab) => {
+    this.setState({ selectedSearchTab, resultItems: [], isResultGetted: false }, () => {
+      this.onSearch();
+    });
+  };
+
+  renderTabs() {
+    const { selectedSearchTab } = this.state;
+    return (
+      <div className="search-tabs">
+        <div
+          key='global'
+          className={`search-tab ${selectedSearchTab === 'global' ? 'active' : ''}`}
+          onClick={() => this.onTabChange('global')}
+        >
+          Global
+        </div>
+        <div
+          key='library'
+          className={`search-tab ${selectedSearchTab === 'library' ? 'active' : ''}`}
+          onClick={() => this.onTabChange('library')}
+        >
+          Library
+        </div>
+      </div>
+    );
+  }
+  
+
   renderSearchResult() {
-    const { resultItems, width, showRecent, isResultGetted } = this.state;
+    const { resultItems, width, showRecent, isResultGetted, selectedSearchTab } = this.state;
     if (!width || width === 'default') return null;
 
-    if (showRecent) {
+    if ((selectedSearchTab === SEARCH_TAB.GLOBAL || selectedSearchTab === SEARCH_TAB.LIBRARY) && showRecent) {
       const { repoID } = this.props;
-      let storeKey = 'sfVisitedSearchItems';
+      let storeKey = selectedSearchTab === 'global' ? 'sfVisitedSearchItems' : 'sfVisitedLibraryItems';
       if (repoID) {
         storeKey += repoID;
       }
@@ -470,7 +540,7 @@ class Search extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow } = this.state;
+    const { isMaskShow, isFocused } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
     return (
       <Fragment>
@@ -497,6 +567,7 @@ class Search extends Component {
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                 }
               </div>
+              {!this.props.isPublic && isFocused && enableSeafileAI && this.renderTabs()}
               <div
                 className="search-result-container dropdown-search-result-container"
                 onScroll={this.onResultListScroll}
@@ -532,6 +603,7 @@ class Search extends Component {
                     <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
                 </div>
+                {!this.props.isPublic && isFocused && enableSeafileAI && this.renderTabs()}
                 <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
                   {this.renderSearchResult()}
                 </div>

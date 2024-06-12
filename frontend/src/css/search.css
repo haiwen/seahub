@@ -139,6 +139,23 @@
   background-color: #f0f0f0;
 }
 
+.search-tabs {
+  display: flex;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 10px;
+}
+
+.search-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.search-tab.active {
+  color: orange;
+  border-bottom-color: orange;
+}
+
 .search-result-item .item-img {
   width: 36px;
   height: 36px;

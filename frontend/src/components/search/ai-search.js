@@ -26,6 +26,11 @@ const SEARCH_MODE = {
   COMBINED: 'combined-search',
 };
 
+const SEARCH_TAB = {
+  GLOBAL: 'global',
+  LIBRARY: 'library',
+};
+
 const PER_PAGE = 10;
 const controlKey = isMac() ? '⌘' : 'Ctrl';
 
@@ -59,6 +64,8 @@ export default class AISearch extends Component {
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
       searchMode: SEARCH_MODE.COMBINED,
+      selectedSearchTab: SEARCH_TAB.GLOBAL,
+      isFocused: false,
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -151,7 +158,7 @@ export default class AISearch extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true, isFocused: true });
   };
 
   onCloseHandler = () => {
@@ -210,8 +217,9 @@ export default class AISearch extends Component {
 
   keepVisitedItem = (targetItem) => {
     const { repoID } = this.props;
+    const { selectedSearchTab } = this.state;
     let targetIndex;
-    let storeKey = 'sfVisitedAISearchItems';
+    let storeKey = selectedSearchTab === 'global' ? 'sfVisitedSearchItems' : 'sfVisitedLibraryItems';
     if (repoID) {
       storeKey += repoID;
     }
@@ -258,7 +266,7 @@ export default class AISearch extends Component {
   };
 
   onSearch = () => {
-    const { value } = this.state;
+    const { value, selectedSearchTab } = this.state;
     const { repoID } = this.props;
     if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
@@ -273,8 +281,11 @@ export default class AISearch extends Component {
       search_repo: repoID ? repoID : 'all',
       search_ftypes: 'all',
     };
-    this.getSearchResult(queryData);
-  };
+    if (selectedSearchTab === SEARCH_TAB.GLOBAL) {
+      this.getSearchResult(queryData);
+    } else if (selectedSearchTab === SEARCH_TAB.LIBRARY) {
+      this.getRepoSearchResult(value);
+    }  };
 
   getSearchResult = (queryData) => {
     if (this.source) {
@@ -313,6 +324,34 @@ export default class AISearch extends Component {
       console.log(error);
       this.setState({ isLoading: false });
     });
+  };
+
+  getRepoSearchResult = (query_str) => {
+    if (this.source) {
+      this.source.cancel('prev request is cancelled');
+    }
+    this.setState({
+      isResultGetted: false,
+      resultItems: [],
+      highlightIndex: 0,
+    });
+    this.source = seafileAPI.getSource();
+
+    const query_type = SEARCH_TAB.LIBRARY
+    let results = [];
+    seafileAPI.searchItems(query_str, query_type, this.source.token).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+        resultItems: results,
+        isResultGetted: true,
+        isLoading: false,
+        hasMore: false,
+      });      
+    }).catch(error => {
+        /* eslint-disable */
+        console.log(error);
+        this.setState({ isLoading: false });
+      });
   };
 
   onResultListScroll = (e) => {
@@ -367,7 +406,36 @@ export default class AISearch extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
+      isFocused: false
     });
+  }
+
+  onTabChange = (selectedSearchTab) => {
+    this.setState({ selectedSearchTab, resultItems: [], isResultGetted: false }, () => {
+      this.onSearch();
+    });
+  };
+
+  renderTabs() {
+    const { selectedSearchTab } = this.state;
+    return (
+      <div className="search-tabs">
+        <div
+          key='global'
+          className={`search-tab ${selectedSearchTab === 'global' ? 'active' : ''}`}
+          onClick={() => this.onTabChange('global')}
+        >
+          Global
+        </div>
+        <div
+          key='library'
+          className={`search-tab ${selectedSearchTab === 'library' ? 'active' : ''}`}
+          onClick={() => this.onTabChange('library')}
+        >
+          Library
+        </div>
+      </div>
+    );
   }
 
   openAsk = () => {
@@ -415,12 +483,12 @@ export default class AISearch extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, width, isResultGetted } = this.state;
+    const { resultItems, highlightIndex, width, isResultGetted, selectedSearchTab } = this.state;
     if (!width || width === 'default') return null;
 
-    if (this.state.showRecent) {
+    if ((selectedSearchTab === SEARCH_TAB.GLOBAL || selectedSearchTab === SEARCH_TAB.LIBRARY) && this.state.showRecent) {
       const { repoID } = this.props;
-      let storeKey = 'sfVisitedAISearchItems';
+      let storeKey = selectedSearchTab === 'global' ? 'sfVisitedSearchItems' : 'sfVisitedLibraryItems';
       if (repoID) {
         storeKey += repoID;
       }
@@ -444,12 +512,13 @@ export default class AISearch extends Component {
     else if (!resultItems.length) {
       return (
         <>
-          <li className='search-result-item align-items-center' onClick={this.openAsk}>
-            <AISearchRobot />
-            <div className="item-content">
-              <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
-            </div>
-          </li>
+          {selectedSearchTab === SEARCH_TAB.GLOBAL && (
+            <li className='search-result-item align-items-center' onClick={this.openAsk}>
+              <AISearchRobot />
+              <div className="item-content">
+                <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
+              </div>
+            </li>)}
           <div className="search-result-none">{gettext('No results matching')}</div>
         </>
       );
@@ -457,6 +526,7 @@ export default class AISearch extends Component {
 
     const results = (
       <ul className="search-result-list" ref={this.searchResultListRef}>
+      {selectedSearchTab === SEARCH_TAB.GLOBAL && (
         <li
           className={classnames('search-result-item align-items-center py-3', {'search-result-item-highlight': highlightIndex === 0 })}
           onClick={this.openAsk}
@@ -464,10 +534,11 @@ export default class AISearch extends Component {
           <AISearchRobot style={{width: 36}}/>
           <div className="item-content">
             <div className="item-name ellipsis">
-            {gettext('Ask AI')}{': '}{this.state.value.trim()}
+              {gettext('Ask AI')}{': '}{this.state.value.trim()}
             </div>
           </div>
         </li>
+      )}
         {resultItems.map((item, index) => {
           const isHighlight = (index + 1) === highlightIndex;
           return (
@@ -618,7 +689,7 @@ export default class AISearch extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow, searchMode } = this.state;
+    const { isMaskShow, searchMode, isFocused } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
 
     if (searchMode === SEARCH_MODE.QA) {
@@ -665,6 +736,7 @@ export default class AISearch extends Component {
                 }
               </div>
               {this.state.isSettingsShown && this.renderSwitch()}
+              {isFocused && this.renderTabs()}
               <div
                 className="search-result-container dropdown-search-result-container"
                 onScroll={this.onResultListScroll}
@@ -700,6 +772,7 @@ export default class AISearch extends Component {
                     <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
                 </div>
+                {isFocused && this.renderTabs()}
                 <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
                   {this.renderSearchResult()}
                 </div>
