@@ -68,6 +68,12 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
     def test_can_process(self):
         assert len(Profile.objects.all()) == 0
 
+        # logout first
+        from seahub.auth.models import AnonymousUser
+        self.request.session.flush()
+        self.request.user = AnonymousUser()
+
+        # then login user via thibboleth
         self.middleware.process_request(self.request)
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(
             SHIBBOLETH_PROVIDER_IDENTIFIER, 'sampledeveloper@school.edu')
@@ -95,6 +101,12 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
     def test_can_process_user_role(self):
         assert len(Profile.objects.all()) == 0
 
+        # logout first
+        from seahub.auth.models import AnonymousUser
+        self.request.session.flush()
+        self.request.user = AnonymousUser()
+
+        # then login user via thibboleth
         self.middleware.process_request(self.request)
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(
             SHIBBOLETH_PROVIDER_IDENTIFIER, 'sampledeveloper@school.edu')
@@ -191,4 +203,3 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         assert obj._get_role_by_affiliation('student1@school.edu') == 'student'
         assert obj._get_role_by_affiliation('a@x.edu') == 'aaa'
         assert obj._get_role_by_affiliation('a@x.com') == 'guest'
-
