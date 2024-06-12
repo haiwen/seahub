@@ -93,7 +93,7 @@ from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
-from seahub.api2.endpoints.user import User
+from seahub.api2.endpoints.user import User, UserConvertToTeamView
 from seahub.api2.endpoints.auth_token_by_session import AuthTokenBySession
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
 from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
@@ -141,7 +141,7 @@ from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
-    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList
+    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList, AdminUserConvertToTeamView
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -310,6 +310,9 @@ urlpatterns = [
 
     ## user
     re_path(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
+    
+    # user:convert to team account
+    re_path(r'^api/v2.1/user/convert-to-team/$', UserConvertToTeamView.as_view(), name="api-v2.1-user-convert-to-team"),
 
     ## obtain auth token by login session
     re_path(r'^api/v2.1/auth-token-by-session/$', AuthTokenBySession.as_view(), name="api-v2.1-auth-token-by-session"),
@@ -583,6 +586,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/search-user/$', AdminSearchUser.as_view(), name='api-v2.1-admin-search-user'),
     re_path(r'^api/v2.1/admin/update-user-ccnet-email/$', AdminUpdateUserCcnetEmail.as_view(), name='api-v2.1-admin-update-user-ccnet-email'),
     re_path(r'^api/v2.1/admin/user-list/$', AdminUserList.as_view(), name='api-v2.1-admin-user-list'),
+    re_path(r'^api/v2.1/admin/user-convert-to-team/$', AdminUserConvertToTeamView.as_view(), name='api-v2.1-admin-user-list'),
 
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible

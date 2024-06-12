@@ -486,6 +486,8 @@ ENABLE_SEAFILE_DOCS = False
 # enable integration seatbale
 ENABLE_SEATABLE_INTEGRATION = False
 
+ENABLE_CONVERT_TO_TEAM_ACCOUNT = False
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
