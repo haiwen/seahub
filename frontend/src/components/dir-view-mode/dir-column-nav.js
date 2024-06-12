@@ -10,7 +10,10 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import { siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
+import seahubMetadataAPI from '../metadata-manage/seahub-metadata-api';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -98,6 +101,22 @@ class DirColumnNav extends React.Component {
         break;
       case 'Open in New Tab':
         this.onOpenFile(node);
+        break;
+      case 'Enable Metadata':
+        if (confirm(gettext('Enable metadata management?'))){
+          seahubMetadataAPI.enableMetadataManagement(this.props.repoID).catch((error) => {
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
+        break;
+      case 'Disable Metadata':
+        if (confirm(gettext('Disable metadata management?'))){
+          seahubMetadataAPI.disableMetadataManagement(this.props.repoID).catch((error) => {
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
         break;
     }
   };
