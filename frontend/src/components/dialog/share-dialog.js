@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro, canShareRepo } from '../../utils/constants';
 import ShareLinkPanel from '../share-link-panel';
 import GenerateUploadLink from './generate-upload-link';
 import ShareToUser from './share-to-user';
@@ -131,17 +131,21 @@ class ShareDialog extends React.Component {
             }
             {enableDirPrivateShare &&
               <Fragment>
-                <NavItem role="tab" aria-selected={activeTab === 'shareToUser'} aria-controls="share-to-user-panel">
-                  <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
-                    {gettext('Share to user')}
-                  </NavLink>
-                </NavItem>
-                <NavItem role="tab" aria-selected={activeTab === 'shareToGroup'} aria-controls="share-to-group-panel">
-                  <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
-                    {gettext('Share to group')}
-                  </NavLink>
-                </NavItem>
-                {isPro && !isCustomPermission && (
+                { canShareRepo && (
+                  <NavItem role="tab" aria-selected={activeTab === 'shareToUser'} aria-controls="share-to-user-panel">
+                    <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                      {gettext('Share to user')}
+                    </NavLink>
+                  </NavItem>
+                )}
+                { canShareRepo && (
+                  <NavItem role="tab" aria-selected={activeTab === 'shareToGroup'} aria-controls="share-to-group-panel">
+                    <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                      {gettext('Share to group')}
+                    </NavLink>
+                  </NavItem>
+                )}
+                {isPro && !isCustomPermission && canShareRepo && (
                   <NavItem role="tab" aria-selected={activeTab === 'customSharePermission'} aria-controls="custom-share-perm-panel">
                     <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                       {gettext('Custom sharing permissions')}
