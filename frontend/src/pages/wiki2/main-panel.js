@@ -53,14 +53,15 @@ class MainPanel extends Component {
   }
 
   handleRenameDocument = (e) => {
+    const { nativeEvent: { isComposing } } = e;
+    if (isComposing) return;
+
     const newName = e.target.value.trim();
     const { currentPageConfig } = this.state;
     const { id, name, icon } = currentPageConfig;
     if (newName === name) return;
     const pageConfig = { name: newName, icon };
     this.props.onUpdatePage(id, pageConfig);
-    // Reset title if name is empty
-    if (!newName) e.target.value = name;
   };
 
   render() {
@@ -92,7 +93,7 @@ class MainPanel extends Component {
                   document={this.props.editorContent}
                   docUuid={this.state.docUuid}
                   isWikiReadOnly={isReadOnly}
-                  topSlot={<Input className='sf-wiki-title' bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
+                  topSlot={<Input className='sf-wiki-title' onCompositionEnd={this.handleRenameDocument} bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
                 />
               </div>
             )}
