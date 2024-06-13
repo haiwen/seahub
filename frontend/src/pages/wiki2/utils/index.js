@@ -44,7 +44,7 @@ const getIconURL = (repoId, fileName) => {
 };
 
 const getCurrentPageConfig = (pages,pageId) => {
-  return pages.filter(page => page.id === pageId)[0]
-}
+  return pages.filter(page => page.id === pageId)[0];
+};
 
 export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL, getCurrentPageConfig };
