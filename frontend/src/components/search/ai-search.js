@@ -78,7 +78,9 @@ export default class AISearch extends Component {
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
     document.addEventListener('click', this.handleOutsideClick);
-    this.queryLibraryIndexState();
+    if (this.props.isLibView) {
+      this.queryLibraryIndexState();
+    }
   }
 
   queryLibraryIndexState() {
