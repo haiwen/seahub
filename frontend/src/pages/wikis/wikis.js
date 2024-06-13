@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
-import MediaQuery from 'react-responsive';
-import { gettext, canPublishRepo } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
@@ -72,12 +70,13 @@ class Wikis extends Component {
     this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
   };
 
-  toggelAddWikiDialog = () => {
+  toggelAddWikiDialog = (currentDeptID) => {
+    this.currentDeptID = currentDeptID;
     this.setState({isShowAddDialog: !this.state.isShowAddDialog});
   };
 
-  addWiki = (wikiName, departmentID) => {
-    wikiAPI.addWiki2(wikiName, departmentID).then((res) => {
+  addWiki = (wikiName) => {
+    wikiAPI.addWiki2(wikiName, this.currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';
@@ -159,18 +158,6 @@ class Wikis extends Component {
         <div className="main-panel-north border-left-show">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            {canPublishRepo &&
-            <div className="operation">
-              <Fragment>
-                <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.toggelAddWikiDialog}>{gettext('Add Wiki')}</Button>
-                </MediaQuery>
-                <MediaQuery query="(max-width: 767.8px)">
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.toggelAddWikiDialog}></span>
-                </MediaQuery>
-              </Fragment>
-            </div>
-            }
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
@@ -192,6 +179,7 @@ class Wikis extends Component {
                   data={this.state}
                   deleteWiki={this.deleteWiki}
                   renameWiki={this.renameWiki}
+                  toggelAddWikiDialog={this.toggelAddWikiDialog}
                 />
               </div>
             }

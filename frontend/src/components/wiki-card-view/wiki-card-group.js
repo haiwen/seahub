@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WikiCardItem from './wiki-card-item';
+import WikiCardItemAdd from './wiki-card-item-add';
 import { isMobile } from '../../utils/utils';
 
 const propTypes = {
@@ -10,6 +11,7 @@ const propTypes = {
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  toggelAddWikiDialog: PropTypes.func,
 };
 
 class WikiCardGroup extends Component {
@@ -37,7 +39,7 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment } = this.props;
+    const { wikis, title, isDepartment, toggelAddWikiDialog } = this.props;
     const numberOfWiki = Math.floor((window.innerWidth * 0.78 / 180));
     const grids = (Math.floor((window.innerWidth * 0.78 - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     return (
@@ -59,6 +61,9 @@ class WikiCardGroup extends Component {
               />
             );
           })}
+          {toggelAddWikiDialog &&
+            <WikiCardItemAdd toggelAddWikiDialog={toggelAddWikiDialog}/>
+          }
         </div>
       </div>
     );
