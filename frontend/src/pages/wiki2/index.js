@@ -171,13 +171,13 @@ class Wiki extends Component {
       callback && callback();
     });
   };
-  
+
   onUpdatePage = (pageId, newPage) => {
     if (newPage.name === '') {
       toaster.danger(gettext('Page name cannot be empty'));
       return;
     }
-    const { config } = this.state
+    const { config } = this.state;
     let pages = config.pages;
     let newPages = pages.map(page => {
       if (page.id === pageId) {
@@ -188,8 +188,8 @@ class Wiki extends Component {
     const newConfig = { ...config, pages: newPages };
     this.saveWikiConfig(newConfig);
   };
-  render() {
 
+  render() {
     return (
       <div id="main" className="wiki-main">
         <SidePanel

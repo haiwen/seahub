@@ -58,42 +58,23 @@
 
 /* end file-operation toolbar */
 
-/* begin view-mode toolbar */
-.view-modes {
-  padding: 2px;
-  background-color: #e5e6e7;
-  border-radius: 3px;
-  height: 32px;
-}
-.sf-view-mode-btn {
-  width: 44px;
-  height: 28px;
-  padding: 0;
-  background-color: transparent;
-  color: #444;
-  font-size: 14px;
-  line-height: 2;
-  border: 0;
-  border-radius: 2px;
-  font-weight: normal;
-}
-
-.sf-view-mode-btn:hover {
-  background-color: #d2d3d3;
-}
-
-.sf-view-mode-btn.current-mode {
-  background-color: #fff;
-}
-/* end view-mode toolbar */
-
 #cur-folder-more-op-toggle {
-  color: #444;
-  font-size: 14px;
-  height: 32px;
-  padding: 0;
-  line-height: 30px;
   margin-left: 10px;
+  margin-right: -4px;
+}
+
+#cur-view-change-mode-dropdown .dropdown-item {
+  padding: 4px 16px;
+}
+
+#cur-view-change-mode-dropdown .dropdown-item .fas,
+#cur-view-change-mode-dropdown .dropdown-item .sf3-font {
+  color: #666;
+}
+
+#cur-view-change-mode-dropdown .dropdown-item:hover .fas,
+#cur-view-change-mode-dropdown .dropdown-item:hover .sf3-font {
+  color: #fff;
 }
 
 /* begin common-toolbar */

@@ -48,24 +48,24 @@ class MainPanel extends Component {
       serviceUrl: appConfig.serviceURL,
       assets_url: appConfig.assetsUrl,
     };
-    const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId)
+    const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
   handleRenameDocument = (e) => {
-    const newName = e.target.value.trim()
-    const { currentPageConfig } = this.state
-    const { id, name, icon } = currentPageConfig
+    const newName = e.target.value.trim();
+    const { currentPageConfig } = this.state;
+    const { id, name, icon } = currentPageConfig;
     if (newName === name) return;
-    const pageConfig = { name: newName, icon }
-    this.props.onUpdatePage(id, pageConfig)
+    const pageConfig = { name: newName, icon };
+    this.props.onUpdatePage(id, pageConfig);
     // Reset title if name is empty
     if (!newName) e.target.value = name;
-  }
+  };
 
   render() {
     const { permission, pathExist, isDataLoading, isViewFile, config } = this.props;
-    const { currentPageConfig } = this.state
+    const { currentPageConfig } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
 
