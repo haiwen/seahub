@@ -38,6 +38,7 @@ class Wiki extends Component {
       seadoc_access_token: '',
       assets_url: '',
     };
+    this.addNewPageRef = React.createRef();
   }
 
   UNSAFE_componentWillMount() {
@@ -201,6 +202,7 @@ class Wiki extends Component {
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
           onUpdatePage={this.onUpdatePage}
+          addNewPageRef={this.addNewPageRef}
         />
         <MainPanel
           path={this.state.path}
@@ -214,6 +216,7 @@ class Wiki extends Component {
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
+          onAddWikiPage={this.addNewPageRef.current}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
