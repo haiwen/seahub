@@ -206,7 +206,7 @@ from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskSta
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
-from seahub.api2.endpoints.metadata_manager import MetadataRecords, MetadataManage, MetadataRecord
+from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord
 
 
 urlpatterns = [
