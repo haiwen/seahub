@@ -103,7 +103,7 @@ class MetadataManageView extends React.Component {
   };
 
   viewMetadata = () => {
-
+    
   };
 
   render() {
@@ -120,7 +120,7 @@ class MetadataManageView extends React.Component {
           onClick={this.onClick}
           onContextMenu={this.onItemContextMenu}
         >
-          <div className="tree-node-text">{gettext('Metadata View')}
+          <div className="tree-node-text">{gettext('Metadata Views')}
             <div className="left-icon">
               <i className="tree-node-icon">
                 <span class="sf2-icon-cog2" aria-hidden="true" />
