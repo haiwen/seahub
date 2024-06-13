@@ -223,5 +223,9 @@
   "Open_link": "Открыть ссылку",
   "Image_is_uploading": "Изображение загружается",
   "Image_loading_failed": "Ошибка загрузки изображения",
-  "Expand_editor": "Развернуть редактор"
+  "Expand_editor": "Развернуть редактор",
+  "Insert_below": "Вставить ниже",
+  "Insert_above": "Вставить выше",
+  "Insert_on_the_right": "Вставить справа",
+  "Insert_on_the_left": "Вставить слева"
 }
