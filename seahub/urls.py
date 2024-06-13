@@ -204,9 +204,10 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskStatus, \
     LibraryIndexState, QuestionAnsweringSearchInLibrary, FileDownloadToken
 from seahub.wiki2.views import wiki_view
+from seahub.repo_metadata.views import view_metadata
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
-from data.dev.seahub.seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord
+from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord
 
 
 urlpatterns = [
@@ -248,6 +249,7 @@ urlpatterns = [
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
+    re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/metadata/table-view/$', view_metadata, name='view_metadata'),
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),

@@ -6,6 +6,7 @@ import toaster from '../../components/toast';
 import seahubMetadataAPI from './seahub-metadata-api';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import TextTranslation from '../../utils/text-translation';
+import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -103,7 +104,8 @@ class MetadataManageView extends React.Component {
   };
 
   viewMetadata = () => {
-    
+    let server = siteRoot.substring(0, siteRoot.length-1);
+    window.open(server + '/repos/' + this.props.repoID + '/metadata/table-view/', '_blank');
   };
 
   render() {
