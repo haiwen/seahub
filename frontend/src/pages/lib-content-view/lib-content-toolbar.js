@@ -10,6 +10,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object,
   path: PropTypes.string,
+  isViewFile: PropTypes.bool,
 };
 
 class LibContentToolbar extends React.Component {
@@ -23,6 +24,7 @@ class LibContentToolbar extends React.Component {
         <CommonToolbar
           isLibView={true}
           path={this.props.path}
+          isViewFile={this.props.isViewFile}
           repoID={this.props.repoID}
           repoName={this.props.repoName}
           currentRepoInfo={this.props.currentRepoInfo}
