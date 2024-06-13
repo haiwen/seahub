@@ -14,9 +14,13 @@ const propTypes = {
 
 class WikiCardGroup extends Component {
 
+  constructor(props) {
+    super(props);
+    this.groupItemsRef = React.createRef();
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
-    this.groupItemsRef = React.createRef();
   }
 
   componentWillUnmount() {
