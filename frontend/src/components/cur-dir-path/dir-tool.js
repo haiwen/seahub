@@ -24,6 +24,7 @@ class DirTool extends React.Component {
     super(props);
     this.state = {
       isRepoTagDialogOpen: false,
+      isSwitchModeDropdownMenuOpen: false,
       isDropdownMenuOpen: false
     };
   }
@@ -31,6 +32,12 @@ class DirTool extends React.Component {
   toggleDropdownMenu = () => {
     this.setState({
       isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
+
+  toggleSwitchModeDropdownMenu = () => {
+    this.setState({
+      isSwitchModeDropdownMenuOpen: !this.state.isSwitchModeDropdownMenuOpen
     });
   };
 
@@ -115,27 +122,66 @@ class DirTool extends React.Component {
   };
 
   render() {
-    let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
     const menuItems = this.getMenuList();
-    const { isDropdownMenuOpen } = this.state;
+    const { isDropdownMenuOpen, isSwitchModeDropdownMenuOpen } = this.state;
     const { repoID } = this.props;
     return (
       <React.Fragment>
         <div className="d-flex">
-          <div className="view-modes">
-            <button className={`${baseClass} sf3-font-list-view sf3-font ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.props.switchViewMode.bind(this, 'list')}></button>
-            <button className={`${baseClass} sf3-font-grid-view sf3-font ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.props.switchViewMode.bind(this, 'grid')}></button>
-          </div>
+          <Dropdown
+            isOpen={isSwitchModeDropdownMenuOpen}
+            toggle={this.toggleSwitchModeDropdownMenu}
+            id="cur-view-change-mode-dropdown"
+          >
+            <DropdownToggle
+              tag="i"
+              children={
+                <span className='cur-view-path-btn px-1'>
+                  <span className={`sf3-font sf3-font-${this.props.currentMode === 'list' ? 'list-view' : 'grid-view'}`}></span>
+                  <span className={'sf3-font sf3-font-down'}></span>
+                </span>
+              }
+              data-toggle="dropdown"
+              title={gettext('Change view mode')}
+              aria-label={gettext('Change view mode')}
+              aria-expanded={isSwitchModeDropdownMenuOpen}
+            >
+            </DropdownToggle>
+            <DropdownMenu right={true}>
+              <DropdownItem key={0} onClick={this.props.switchViewMode.bind(this, 'list')}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="mr-8 d-flex justify-content-between align-items-center">
+                    <span className={'sf3-font-list-view sf3-font mr-2'}></span>
+                    <span>{gettext('List view')}</span>
+                  </span>
+                  <span>
+                    {this.props.currentMode === 'list' && <i className="fas fa-check color-selected"></i>}
+                  </span>
+                </div>
+              </DropdownItem>
+              <DropdownItem key={1} onClick={this.props.switchViewMode.bind(this, 'grid')}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="mr-8 d-flex justify-content-between align-items-center">
+                    <span className={'sf3-font-grid-view sf3-font mr-2'}></span>
+                    <span>{gettext('Grid view')}</span>
+                  </span>
+                  <span>
+                    {this.props.currentMode === 'grid' && <i className="fas fa-check color-selected"></i>}
+                  </span>
+                </div>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           {menuItems.length > 0 &&
           <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
             <DropdownToggle
+              tag="i"
               id="cur-folder-more-op-toggle"
-              className={'sf3-font-more sf3-font'}
+              className={'cur-view-path-btn sf3-font-more sf3-font'}
               data-toggle="dropdown"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               aria-expanded={isDropdownMenuOpen}
-              onKeyDown={this.onDropdownToggleKeyDown}
             >
             </DropdownToggle>
             <DropdownMenu right={true}>
