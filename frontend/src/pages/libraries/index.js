@@ -183,12 +183,12 @@ class Libraries extends Component {
   };
 
   switchViewMode = (newMode) => {
-     this.setState({
-       currentViewMode: newMode
-     }, () => {
-       localStorage.setItem('sf_repo_list_view_mode', newMode);
-     });
-  }
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
 
   render() {
     const { isLoading, currentViewMode } = this.state;
@@ -205,31 +205,31 @@ class Libraries extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
               <div>
-          <div className="view-modes">
-             <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
-             <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
-           </div>
+                <div className="view-modes">
+                  <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
+                  <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
+                </div>
               </div>
             </div>
             {isLoading ?
               <Loading /> :
               <div className="cur-view-content" id="files-content-container">
 
-              {(Utils.isDesktop() && currentViewMode == 'list') && (
-                <table aria-hidden={true} className="my-3">
-                  <thead>
-                    <tr>
-                      <th width="4%"></th>
-                      <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                      <th width="35%">{gettext('Name')}</th>
-                      <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                      <th width="14%">{gettext('Size')}</th>
-                      <th width="17%">{gettext('Last Update')}</th>
-                      <th width="17%">{gettext('Owner')}</th>
-                    </tr>
-                  </thead>
-                </table>
-              )}
+                {(Utils.isDesktop() && currentViewMode == 'list') && (
+                  <table aria-hidden={true} className="my-3">
+                    <thead>
+                      <tr>
+                        <th width="4%"></th>
+                        <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                        <th width="35%">{gettext('Name')}</th>
+                        <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                        <th width="14%">{gettext('Size')}</th>
+                        <th width="17%">{gettext('Last Update')}</th>
+                        <th width="17%">{gettext('Owner')}</th>
+                      </tr>
+                    </thead>
+                  </table>
+                )}
 
                 {canAddRepo && (
                   <div className="pb-3">
@@ -247,7 +247,7 @@ class Libraries extends Component {
                     </div>
                     {this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
                       this.state.repoList.length === 0 ? (
-                        <p className="libraries-empty-tip">{gettext('No libraries')}</p>
+                        <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>
                       ) : (
                         <MylibRepoListView
                           sortBy={this.state.sortBy}
@@ -268,14 +268,18 @@ class Libraries extends Component {
                 )}
                 <div className="pb-3">
                   <SharedLibs
-              repoList={this.state.sharedRepoList}
-              inAllLibs={true}
-                          currentViewMode={currentViewMode}
-              />
+                    repoList={this.state.sharedRepoList}
+                    inAllLibs={true}
+                    currentViewMode={currentViewMode}
+                  />
                 </div>
                 {canViewOrg &&
                   <div className="pb-3">
-                    <SharedWithAll inAllLibs={true} repoList={this.state.publicRepoList} />
+                    <SharedWithAll
+                      repoList={this.state.publicRepoList}
+                      inAllLibs={true}
+                      currentViewMode={currentViewMode}
+                    />
                   </div>
                 }
                 <div className="group-list-panel">
@@ -286,6 +290,7 @@ class Libraries extends Component {
                           key={index}
                           group={group}
                           updateGroup={this.updateGroup}
+                          currentViewMode={currentViewMode}
                         />
                       );
                     })

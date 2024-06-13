@@ -79,7 +79,7 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { inAllLibs, currentViewMode='list' } = this.props;
+    const { inAllLibs, currentViewMode = 'list' } = this.props;
     const showStorageBackend = !inAllLibs && storages.length > 0;
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 

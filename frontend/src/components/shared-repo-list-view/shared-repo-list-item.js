@@ -22,6 +22,7 @@ import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 const propTypes = {
+  currentViewMode: PropTypes.string,
   currentGroup: PropTypes.object,
   libraryType: PropTypes.string,
   repo: PropTypes.object.isRequired,
@@ -140,9 +141,10 @@ class SharedRepoListItem extends React.Component {
   };
 
   getRepoComputeParams = () => {
-    let repo = this.props.repo;
+    const { repo, currentViewMode } = this.props;
 
-    let iconUrl = Utils.getLibIconUrl(repo);
+    const useBigLibaryIcon = currentViewMode == 'grid';
+    const iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
@@ -630,31 +632,63 @@ class SharedRepoListItem extends React.Component {
 
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo } = this.props;
-    return (
-      <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-          <td className="text-center">
-            <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
-              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
-            </a>
-          </td>
-          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>
-            {this.state.isRenaming ?
-              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <Fragment>
-                <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
-              </Fragment>
-            }
-          </td>
-          <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
-          <td>{repo.size}</td>
-          <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
-          <td title={repo.owner_contact_email}>{repo.owner_name}</td>
-        </tr>
-      </Fragment>
+    const { repo, currentViewMode } = this.props;
+    return currentViewMode == 'list' ? (
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        <td className="text-center">
+          <i
+            role="button"
+            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            onClick={this.onToggleStarRepo}
+            className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+          >
+          </i>
+        </td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td>
+          {this.state.isRenaming ?
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <Fragment>
+              <Link to={libPath}>{repo.repo_name}</Link>
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
+            </Fragment>
+          }
+        </td>
+        <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
+        <td>{repo.size}</td>
+        <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
+        <td title={repo.owner_contact_email}>{repo.owner_name}</td>
+      </tr>
+    ) : (
+      <div
+        className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
+        <div className="d-flex align-items-center">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
+          {this.state.isRenaming ?
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <Fragment>
+              <Link to={libPath}>{repo.repo_name}</Link>
+              <i
+                role="button"
+                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                onClick={this.onToggleStarRepo}
+                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+              >
+              </i>
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
+            </Fragment>
+          }
+        </div>
+        <div>
+          {this.state.isOperationShow && this.generatorPCMenu()}
+        </div>
+      </div>
     );
   };
 

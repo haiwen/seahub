@@ -57,7 +57,7 @@ class Content extends Component {
     const { loading, errorMsg, items, sortBy, sortOrder, theadHidden, inAllLibs, currentViewMode } = this.props;
 
     const emptyTip = inAllLibs ?
-      <p className="libraries-empty-tip">{gettext('No shared libraries')}</p> :
+      <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No shared libraries')}</p> :
       <EmptyTip>
         <h2>{gettext('No shared libraries')}</h2>
         <p>{gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}</p>
@@ -91,29 +91,29 @@ class Content extends Component {
       const isDesktop = Utils.isDesktop();
       const itemsContent = (
         <>
-           {items.map((item, index) => {
-              return <Item
-                key={index}
-                data={item}
-                isDesktop={isDesktop}
-                isItemFreezed={this.state.isItemFreezed}
-                freezeItem={this.freezeItem}
-                onMonitorRepo={this.props.onMonitorRepo}
-             currentViewMode={currentViewMode}
-              />;
-            })}
+          {items.map((item, index) => {
+            return <Item
+              key={index}
+              data={item}
+              isDesktop={isDesktop}
+              isItemFreezed={this.state.isItemFreezed}
+              freezeItem={this.freezeItem}
+              onMonitorRepo={this.props.onMonitorRepo}
+              currentViewMode={currentViewMode}
+            />;
+          })}
         </>
       );
       const content = currentViewMode == 'list' ? (
         <table className={(isDesktop && !theadHidden)? '' : 'table-thead-hidden'}>
           {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
-        {itemsContent}
-           </tbody>
+            {itemsContent}
+          </tbody>
         </table>
       ) : (
         <div className="d-flex justify-content-between flex-wrap">
-        {itemsContent}
+          {itemsContent}
         </div>
       );
 
@@ -123,6 +123,7 @@ class Content extends Component {
 }
 
 Content.propTypes = {
+  currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool.isRequired,
   theadHidden: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -268,8 +269,8 @@ class Item extends Component {
     }
 
     const { data, currentViewMode = 'list' } = this.props;
-
-    data.icon_url = Utils.getLibIconUrl(data);
+    const useBigLibaryIcon = currentViewMode == 'grid';
+    data.icon_url = Utils.getLibIconUrl(data, useBigLibaryIcon);
     data.icon_title = Utils.getLibIconTitle(data);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
@@ -282,87 +283,95 @@ class Item extends Component {
 
     const desktopItem = (
       <Fragment>
-      {currentViewMode == 'list' ? (
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-          <td className="text-center">
-            <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
-              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
-            </a>
-          </td>
-          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td>
-            <Fragment>
-              <Link to={shareRepoUrl}>{data.repo_name}</Link>
-              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} />}
-            </Fragment>
-          </td>
-          <td>
-            {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
-            }
-            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-            {enableMonitorRepo &&
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
+        {currentViewMode == 'list' ? (
+          <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+            <td className="text-center">
+              <i
                 role="button"
-                tabIndex="0"
-                className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <DropdownMenu>
-                <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            }
-          </td>
-          <td>{data.size}</td>
-          <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
-          <td title={data.owner_contact_email}>{data.owner_name}</td>
-        </tr>
+                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                onClick={this.onToggleStarRepo}
+                className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+              ></i>
+            </td>
+            <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+            <td>
+              <Fragment>
+                <Link to={shareRepoUrl}>{data.repo_name}</Link>
+                {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
+              </Fragment>
+            </td>
+            <td>
+              {(isPro && data.is_admin) &&
+              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+              }
+              <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+              {enableMonitorRepo &&
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  role="button"
+                  tabIndex="0"
+                  className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <DropdownMenu>
+                  <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              }
+            </td>
+            <td>{data.size}</td>
+            <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
+            <td title={data.owner_contact_email}>{data.owner_name}</td>
+          </tr>
         ): (
-        <div
-      className="library-grid-item px-3 d-flex justify-content-between align-items-center"
-onMouseOver={this.handleMouseOver}
-          onMouseOut={this.handleMouseOut}
-          onFocus={this.handleMouseOver}
+          <div
+            className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+            onMouseOver={this.handleMouseOver}
+            onMouseOut={this.handleMouseOut}
+            onFocus={this.handleMouseOver}
           >
-       <div className="d-flex align-items-center">
-          <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
+            <div className="d-flex align-items-center">
+              <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
               <Link to={shareRepoUrl}>{data.repo_name}</Link>
-            <a className="library-grid-item-icon" href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
-              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
-            </a>
-              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="library-grid-item-icon" />}
-          </div>
-
-          <div>
- {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
-            }
-            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-            {enableMonitorRepo &&
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
+              <i
                 role="button"
-                tabIndex="0"
-                className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <DropdownMenu>
-                <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            }
+                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                onClick={this.onToggleStarRepo}
+                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+              ></i>
+              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
+            </div>
+
+            <div>
+              {(isPro && data.is_admin) &&
+              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+              }
+              <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+              {enableMonitorRepo &&
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  role="button"
+                  tabIndex="0"
+                  className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <DropdownMenu>
+                  <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              }
+            </div>
           </div>
-        </div>
         )}
         {this.state.isShowSharedDialog && (
           <ModalPotal>
@@ -438,6 +447,7 @@ onMouseOver={this.handleMouseOver}
 }
 
 Item.propTypes = {
+  currentViewMode: PropTypes.string,
   isDesktop: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
@@ -521,7 +531,7 @@ class SharedLibraries extends Component {
         onMonitorRepo={this.onMonitorRepo}
         theadHidden={inAllLibs}
         inAllLibs={inAllLibs}
-      currentViewMode={currentViewMode}
+        currentViewMode={currentViewMode}
       />
     );
   };
@@ -540,7 +550,7 @@ class SharedLibraries extends Component {
       <Fragment>
         {inAllLibs ? (
           <>
-          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
+            <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
               <h4 className="sf-heading m-0">
                 <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
                 {gettext('Shared with me')}
@@ -576,6 +586,7 @@ class SharedLibraries extends Component {
 }
 
 SharedLibraries.propTypes = {
+  currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool,
   repoList: PropTypes.array,
 };
