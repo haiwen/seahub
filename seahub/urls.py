@@ -436,9 +436,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_-]+)/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record'),
 
     ## user:file:extended-props
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/extended-properties/$', ExtendedPropertiesView.as_view(), name='api-v2.1-extended-properties'),
@@ -1024,4 +1021,11 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/$', SubscriptionView.as_view(), name='api-v2.1-subscription'),
         re_path(r'^api/v2.1/subscription/plans/$', SubscriptionPlansView.as_view(), name='api-v2.1-subscription-plans'),
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
+    ]
+
+if settings.ENABLE_METADATA_MANAGEMENT:
+    urlpatterns += [
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_-]+)/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record'),
     ]
