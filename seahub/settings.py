@@ -269,6 +269,7 @@ INSTALLED_APPS = [
     'seahub.dingtalk',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
+    'seahub.repo_metadata',
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',
@@ -886,6 +887,13 @@ if os.environ.get('SEAFILE_DOCS', None):
 SEATABLE_EX_PROPS_BASE_API_TOKEN = ''
 EX_PROPS_TABLE = ''
 EX_EDITABLE_COLUMNS = []
+
+##############################
+# metadata server properties #
+##############################
+ENABLE_METADATA_MANAGEMENT = False
+METADATA_SERVER_URL = ''
+METADATA_SERVER_SECRET_KEY = ''
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(

@@ -206,6 +206,8 @@ from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskSta
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
+from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord
+
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -1019,4 +1021,11 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/$', SubscriptionView.as_view(), name='api-v2.1-subscription'),
         re_path(r'^api/v2.1/subscription/plans/$', SubscriptionPlansView.as_view(), name='api-v2.1-subscription-plans'),
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
+    ]
+
+if settings.ENABLE_METADATA_MANAGEMENT:
+    urlpatterns += [
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_-]+)/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record'),
     ]

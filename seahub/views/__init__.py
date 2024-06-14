@@ -1093,5 +1093,6 @@ def react_fake_view(request, **kwargs):
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
-        'can_set_ex_props': DTABLE_WEB_SERVER and SEATABLE_EX_PROPS_BASE_API_TOKEN and EX_PROPS_TABLE and EX_EDITABLE_COLUMNS
+        'can_set_ex_props': DTABLE_WEB_SERVER and SEATABLE_EX_PROPS_BASE_API_TOKEN and EX_PROPS_TABLE and EX_EDITABLE_COLUMNS,
+        'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT
     })
