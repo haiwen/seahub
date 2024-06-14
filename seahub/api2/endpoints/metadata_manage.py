@@ -37,13 +37,6 @@ def scan_library(repo_id, parent_dir = '/'):
             scan_result += scan_library(repo_id, posixpath.join(parent_dir, dirent.obj_name))
     return scan_result
 
-def check_repo_metadata_is_enable(repo_id):
-    record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-    if record and record.enabled:
-        return True
-    
-    return False
-
 def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, page=None, per_page=25, order_by=None):
     sql = f'SELECT \
         `{METADATA_COLUMN_ID.name}`, \
@@ -134,7 +127,11 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            is_enabled = check_repo_metadata_is_enable(repo_id)
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            if record and record.enabled:
+                is_enabled = True
+            else:
+                is_enabled = False
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -260,20 +257,20 @@ class MetadataManage(APIView):
         if not record or not record.enabled:
             error_msg = f'The repo {repo_id} has disabledd the metadata manage.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
-        
+       
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
-            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-            try:
-                metadata_server_api.delete_base()
-            except ConnectionError as err:
-                logger.error(err)
-                status_code, reason = err
-                return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
-            except Exception as err:
-                logger.error(err)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            metadata_server_api.delete_base()
+        except ConnectionError as err:
+            logger.error(err)
+            status_code, reason = err
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             
+        try:
             record.enabled = False
             record.save()
         except Exception as e:
@@ -331,7 +328,8 @@ class MetadataRecords(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # metadata enable check
-        if not check_repo_metadata_is_enable(repo_id):
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -381,7 +379,8 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # metadata enable check
-        if not check_repo_metadata_is_enable(repo_id):
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -476,7 +475,8 @@ class MetadataRecord(APIView):
         name = request.data.get('name')        
 
         # metadata enable check
-        if not check_repo_metadata_is_enable(repo_id):
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
@@ -594,7 +594,8 @@ class MetadataRecord(APIView):
 
     def delete(self, request, repo_id, record_id):
         # metadata enable check
-        if not check_repo_metadata_is_enable(repo_id):
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
