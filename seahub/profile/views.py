@@ -26,6 +26,7 @@ from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from constance import config
 try:
     from seahub.settings import SAML_PROVIDER_IDENTIFIER
 except ImportError as e:
@@ -138,6 +139,9 @@ def edit_profile(request):
     show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
 
     resp_dict = {
+            'user_strong_password_required': config.USER_STRONG_PASSWORD_REQUIRED,
+            'user_password_min_length': config.USER_PASSWORD_MIN_LENGTH,
+            'user_password_strength_level': config.USER_PASSWORD_STRENGTH_LEVEL,
             'form': form,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,

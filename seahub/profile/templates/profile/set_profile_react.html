@@ -22,7 +22,11 @@ window.app.pageOptions = {
 
   canUpdatePassword: {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %} true {% else %} false {% endif %},
   {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
+  passwordOperationType: {% if user_unusable_password %}"Set Password"{% else %}"Update"{% endif %},
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
+  userStrongPasswordRequired: {% if user_strong_password_required %} true {% else %} false {% endif %},
+  userPasswordMinLength: {{user_password_min_length}},
+  userPasswordStrengthLevel: {{user_password_strength_level}},
   {% endif %}
 
   enableGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
