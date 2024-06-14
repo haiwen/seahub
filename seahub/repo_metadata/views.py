@@ -1,11 +1,10 @@
-from seahub.settings import ENABLE_METADATA_MANAGEMENT, MATEDATA_SERVER_URL
+from seahub.settings import ENABLE_METADATA_MANAGEMENT, METADATA_SERVER_URL
 from seahub.views import check_folder_permission
 from seaserv import seafile_api
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseServerError
 from seahub.api2.endpoints.metadata_manage import check_repo_metadata_is_enable, list_metadata_records
-from seahub.utils.metadata_server_api import gen_headers
 from django.shortcuts import render
 
 
@@ -14,7 +13,7 @@ from django.shortcuts import render
 def view_metadata(request, repo_id):
     template = 'metadata_table.html'
 
-    if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+    if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
         return HttpResponseBadRequest('Function is not supported')
     
     # metadata enable check
@@ -31,9 +30,8 @@ def view_metadata(request, repo_id):
     if not permission:
         return HttpResponseForbidden('Permission denied.')
     
-    headers = gen_headers(repo_id, request.user.email)
     try:
-        results = list_metadata_records(repo_id, headers, page=1, per_page=1000)
+        results = list_metadata_records(repo_id, request.user.username)
     except Exception as err:
         return HttpResponseServerError(repr(err))
     
