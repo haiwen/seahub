@@ -30,12 +30,13 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.utils import get_user_repos
+from seahub.utils import get_user_repos, send_html_email, get_site_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
+
 
 logger = logging.getLogger(__name__)
 
@@ -209,6 +210,17 @@ def get_token_v2(request, username, platform, device_id, device_name,
             raise serializers.ValidationError('invalid device id')
     else:
         raise serializers.ValidationError('invalid platform')
+    
+    try:
+        TokenV2.objects.get(user=username, device_id=device_id)
+    except TokenV2.DoesNotExist:
+        email_template_name='registration/new_device_login_email.html'
+        send_to = email2contact_email(username)
+        site_name = get_site_name()
+        c = {'email': send_to}
+        send_html_email(_("New Device Login on %s") % site_name,
+                        email_template_name, c, None,
+                        [send_to])
 
     return TokenV2.objects.get_or_create_token(
         username, platform, device_id, device_name,

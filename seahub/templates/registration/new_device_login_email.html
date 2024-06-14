@@ -1,0 +1,22 @@
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans with account=email %}You are attempting to log in to your account {{ account }} on {{ site_name }} using a new device{% endblocktrans %}
+</p>
+
+
+<p style="font-size:14px;color:#434144;">
+{% trans "If you have not attempted to login with a new device, please change your password as soon as possible." %}
+</p>
+
+{% endautoescape %}
+
+{% endblock %}

@@ -50,6 +50,10 @@ from seahub.password_session import update_session_auth_hash
 
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
+from seahub.utils import send_html_email
+from django.utils.translation import gettext_lazy as _
+from seahub.base.templatetags.seahub_tags import email2contact_email
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -106,7 +110,8 @@ def login(request, template_name='registration/login.html',
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
     ip = get_remote_ip(request)
-
+    print('ip',ip)
+    print(request.headers.get('User-Agent',None))
     if request.method == "POST":
         login = request.POST.get('login', '').strip()
         failed_attempt = get_login_failed_attempts(username=login, ip=ip)
@@ -482,6 +487,16 @@ def password_change(request, template_name='registration/password_change_form.ht
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
+
+            email_template_name = 'registration/password_change_email.html'
+            send_to = email2contact_email(request.user.username)
+            site_name = get_site_name()
+            c = {
+                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+            send_html_email(_("Successfully Changed Password on %s") % site_name,
+                            email_template_name, c, None,
+                            [send_to])
 
             if request.session.get('force_passwd_change', False):
                 del request.session['force_passwd_change']
