@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup } from 'reactstrap';
 import { gettext, siteRoot, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -12,10 +11,10 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import Rename from '../dialog/rename-dirent';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
+import '../../css/selected-dirents-toolbar.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -335,74 +334,36 @@ class MultipleDirOperationToolbar extends React.Component {
 
     return (
       <Fragment>
-        <ButtonGroup className="">
-          <Fragment>
-            {canModify &&
-              <Button
-                className="op-btn selected-dirent-op-btn"
-                onClick={this.onMoveToggle}
-              >
-                <i
-                  className="selected-dirent-op-btn-icon sf3-font-move1 sf3-font"
-                  aria-hidden={true}
-                ></i>
-                <span className="selected-dirent-op-btn-text">{gettext('Move')}</span>
-              </Button>
-            }
-            {canCopy &&
-              <Button
-                className="op-btn selected-dirent-op-btn"
-                onClick={this.onCopyToggle}
-              >
-                <i
-                  className="selected-dirent-op-btn-icon sf3-font-copy1 sf3-font"
-                  aria-hidden={true}
-                ></i>
-                <span className="selected-dirent-op-btn-text">{gettext('Copy')}</span>
-              </Button>
-            }
-            {canDelete &&
-              <Button
-                className="op-btn selected-dirent-op-btn"
-                onClick={this.onItemsDelete}
-              >
-                <i
-                  className="selected-dirent-op-btn-icon sf3-font-delete1 sf3-font"
-                  aria-hidden={true}
-                ></i>
-                <span className="selected-dirent-op-btn-text">{gettext('Delete')}</span>
-              </Button>
-            }
-            {canDownload &&
-              <Button
-                className="op-btn selected-dirent-op-btn"
-                onClick={this.onItemsDownload}
-              >
-                <i
-                  className="selected-dirent-op-btn-icon sf3-font-download1 sf3-font"
-                  aria-hidden={true}
-                ></i>
-                <span className="selected-dirent-op-btn-text">{gettext('Download')}</span>
-              </Button>
-            }
-          </Fragment>
-          {this.props.selectedDirentList.length === 1 &&
-          <ItemDropdownMenu
-            tagName={'button'}
-            item={this.props.selectedDirentList[0]}
-            toggleClass={'op-btn selected-dirent-op-btn selected-dirent-more-op-btn'}
-            toggleChildren={(<>
-              <i
-                className="selected-dirent-op-btn-icon sf3-font-more-vertical sf3-font"
-                aria-hidden={true}
-              ></i>
-              <span className="selected-dirent-op-btn-text">{gettext('More')}</span>
-            </>)}
-            onMenuItemClick={this.onMenuItemClick}
-            getMenuList={this.getDirentMenuList}
-          />
+        <div className="selected-dirents-toolbar">
+          {canModify &&
+            <span className="cur-view-path-btn" onClick={this.onMoveToggle}>
+              <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
+            </span>
           }
-        </ButtonGroup>
+          {canCopy &&
+            <span className="cur-view-path-btn" onClick={this.onCopyToggle}>
+              <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')}></span>
+            </span>
+          }
+          {canDelete &&
+            <span className="cur-view-path-btn" onClick={this.onItemsDelete}>
+              <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+            </span>
+          }
+          {canDownload &&
+            <span className="cur-view-path-btn" onClick={this.onItemsDownload}>
+              <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
+            </span>
+          }
+          {this.props.selectedDirentList.length === 1 &&
+            <ItemDropdownMenu
+              item={this.props.selectedDirentList[0]}
+              toggleClass={'cur-view-path-btn sf3-font-more-vertical sf3-font'}
+              onMenuItemClick={this.onMenuItemClick}
+              getMenuList={this.getDirentMenuList}
+            />
+          }
+        </div>
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}
