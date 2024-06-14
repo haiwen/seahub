@@ -16,7 +16,7 @@ class TrafficTableBody extends React.Component {
       case 'user':
         if (userTrafficItem.name) {
           return (
-            <a href={siteRoot + 'useradmin/info/' + userTrafficItem.email + '/'}>{userTrafficItem.name}</a>
+            <a href={siteRoot + 'org/useradmin/info/' + userTrafficItem.email + '/'}>{userTrafficItem.name}</a>
           );
         }
         return(<span>{'--'}</span>);
