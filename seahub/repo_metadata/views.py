@@ -1,4 +1,3 @@
-from seahub.settings import ENABLE_METADATA_MANAGEMENT, METADATA_SERVER_URL
 from seahub.views import check_folder_permission
 from seaserv import seafile_api
 from seahub.auth.decorators import login_required
@@ -12,9 +11,6 @@ from django.shortcuts import render
 @repo_passwd_set_required
 def view_metadata(request, repo_id):
     template = 'metadata_table.html'
-
-    if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
-        return HttpResponseBadRequest('Function is not supported')
     
     # metadata enable check
     if not check_repo_metadata_is_enable(repo_id):

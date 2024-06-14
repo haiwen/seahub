@@ -33,3 +33,21 @@
     </table>  
 </div>  
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+window.app.metadatas = [];
+{% for record in metadata_records %}
+window.app.metadatas.push({
+    id: '{{ record.id }}',
+    creator: '{{ record.creator }}',
+    createdTime: '{{ record.created_time }}',
+    modifier: '{{ record.creator }}',
+    modifiedTime: '{{ record.modified_time }}',
+    parentDir: '{{ record.parent_dir }}',
+    name: '{{ record.name }}',
+    isDir: '{{ record.is_dir }}',
+});
+{% endfor %} 
+</script>
+{% endblock %}
