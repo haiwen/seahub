@@ -16,6 +16,7 @@ import Page from './models/page';
 import wikiAPI from '../../utils/wiki-api';
 import { FOLDER } from './constant';
 import { Utils } from '../../utils/utils';
+import WikiExternalOperations from './wiki-external-operations';
 
 import './side-panel.css';
 
@@ -29,7 +30,6 @@ const propTypes = {
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
   onUpdatePage: PropTypes.func.isRequired,
-  addNewPageRef: PropTypes.object.isRequired,
 };
 
 class SidePanel extends Component {
@@ -40,7 +40,6 @@ class SidePanel extends Component {
       isShowNewFolderDialog: false,
       isShowAddNewPageDialog: false,
     };
-    this.props.addNewPageRef.current = this.handleAddNewPage;
   }
 
   confirmDeletePage = (pageId) => {
@@ -381,6 +380,7 @@ class SidePanel extends Component {
         <div className="wiki2-side-nav">
           {isLoading ? <Loading /> : (isObjectNotEmpty(config) ? this.renderFolderView() : this.renderNoFolder())}
         </div>
+        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
       </div>
     );
   }

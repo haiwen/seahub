@@ -22,7 +22,6 @@ const propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
   onUpdatePage: PropTypes.func,
-  onAddWikiPage: PropTypes.func,
 };
 
 class MainPanel extends Component {
@@ -67,7 +66,7 @@ class MainPanel extends Component {
   };
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile, config, onAddWikiPage } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile, config } = this.props;
     const { currentPageConfig = {}, } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
@@ -97,7 +96,6 @@ class MainPanel extends Component {
                   isWikiReadOnly={isReadOnly}
                   topSlot={<Input className='sf-wiki-title' onCompositionEnd={this.handleRenameDocument} bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
                 />
-                <WikiExternalOperations onAddWikiPage={onAddWikiPage} />
               </>
             )}
           </div>
