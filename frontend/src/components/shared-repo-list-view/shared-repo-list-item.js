@@ -711,7 +711,7 @@ class SharedRepoListItem extends React.Component {
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
               <Fragment>
                 <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
+                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
               </Fragment>
             }
             <br />

@@ -397,7 +397,7 @@ class Item extends Component {
           <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td onClick={this.visitRepo}>
             <Link to={shareRepoUrl}>{data.repo_name}</Link>
-            {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} />}
+            {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
             <br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>

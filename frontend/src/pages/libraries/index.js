@@ -8,6 +8,7 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
+import Selector from '../../components/single-selector';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -28,20 +29,27 @@ const propTypes = {
 class Libraries extends Component {
   constructor(props) {
     super(props);
+    this.sortOptions = this.props.sortOptions || [
+       {value: 'name-asc', text: gettext('By name ascending')},
+       {value: 'name-desc', text: gettext('By name descending')},
+       {value: 'time-asc', text: gettext('By time ascending')},
+       {value: 'time-desc', text: gettext('By time descending')}
+     ];
+
     this.state = {
       // for 'my libs'
       errorMsg: '',
       isLoading: true,
       repoList: [],
       isSortOptionsDialogOpen: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       groupList: [],
       sharedRepoList:[],
       publicRepoList: [],
       isCreateRepoDialogOpen: false,
-      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list'
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list',
+      sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
+      sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
     };
   }
 
@@ -50,21 +58,34 @@ class Libraries extends Component {
     const promiseListGroups = seafileAPI.listGroups(true);
     Promise.all([promiseListRepos, promiseListGroups]).then(res => {
       const [resListRepos, resListGroups] = res;
-      const allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
+      /*
+      let allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
+      allRepoList = Utils.sortRepos(allRepoList, this.state.sortBy, this.state.sortOrder);
       const myRepoList = allRepoList.filter(item => item.type === 'mine');
       const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
       const publicRepoList = allRepoList.filter(item => item.type === 'public');
       const groupList = resListGroups.data.map(item => {
         let group = new Group(item);
-        group.repos = item.repos.map(item => new Repo(item));
+        const groupRepos = item.repos.map(item => new Repo(item));
+        group.repos = Utils.sortRepos(groupRepos, this.state.sortBy, this.state.sortOrder);
         return group;
       }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
+      */
+      let allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
+      const groupList = resListGroups.data.map(item => {
+        let group = new Group(item);
+        const groupRepos = item.repos.map(item => new Repo(item));
+        group.repos = Utils.sortRepos(groupRepos, this.state.sortBy, this.state.sortOrder);
+        return group;
+      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
+      const { myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(allRepoList, groupList, sortBy, sortOrder);
       this.setState({
         isLoading: false,
+        allRepoList,
         groupList,
         sharedRepoList,
         publicRepoList,
-        repoList: Utils.sortRepos(myRepoList, this.state.sortBy, this.state.sortOrder),
+        repoList: myRepoList
       });
     }).catch((error) => {
       this.setState({
@@ -72,6 +93,9 @@ class Libraries extends Component {
         errorMsg: Utils.getErrorMsg(error, true),
       });
     });
+  }
+
+  sortRepos = (sortBy, sortOrder) => {
   }
 
   toggleSortOptionsDialog = () => {
@@ -100,6 +124,15 @@ class Libraries extends Component {
       toaster.danger(errMessage);
     });
   };
+
+  onSelectSortOption = (sortOption) => {
+      const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({sortBy, sortOrder}, () => {
+      localStorage.setItem('sf_repos_sort_by', sortBy);
+      localStorage.setItem('sf_repos_sort_order', sortOrder);
+      this.sortRepos(sortBy, sortOrder);
+    });
+  }
 
   sortRepoList = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -191,8 +224,24 @@ class Libraries extends Component {
   };
 
   render() {
-    const { isLoading, currentViewMode } = this.state;
+    const { isLoading, currentViewMode, sortBy, sortOrder } = this.state;
     const baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
+    const isDesktop = Utils.isDesktop();
+
+    const sortOptions = this.sortOptions.map(item => {
+       return {
+         ...item,
+         isSelected: item.value == `${sortBy}-${sortOrder}`
+       };
+     });
+
+    const customSelectorToggle = (
+        <>
+      <i className="sf3-font-sort2 sf3-font"></i>
+      <i className="sf3-font-down sf3-font sf-dropdown-toggle"></i>
+        </>
+    );
+
     return (
       <Fragment>
         <TopToolbar
@@ -204,12 +253,21 @@ class Libraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
-              <div>
-                <div className="view-modes">
+              {isDesktop &&
+              <div className="d-flex align-items-center">
+                <div className="view-modes mr-2">
                   <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
                   <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
                 </div>
+
+                <Selector
+                    customSelectorToggle={customSelectorToggle}
+                   options={sortOptions}
+                   selectOption={this.onSelectSortOption}
+                    menuCustomClass='dropdown-menu-right'
+                 />
               </div>
+              }
             </div>
             {isLoading ?
               <Loading /> :

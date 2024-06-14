@@ -444,7 +444,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
