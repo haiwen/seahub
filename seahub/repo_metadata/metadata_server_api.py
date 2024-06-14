@@ -38,13 +38,15 @@ def parse_response(response):
             pass
 
 class MetadataServerAPI:
-    def __init__(self, base_id, user):
+    def __init__(self, base_id, user, timeout=30):
         self.base_id = base_id
         self.user = user
+        self.headers = self.gen_headers()
+        self.timeout = timeout
 
     def gen_headers(self):
         payload = {
-            'exp': int(time.time()) + 300, 
+            'exp': int(time.time()) + 3600, 
             'base_id': self.base_id,
             'user': self.user
         }
@@ -52,73 +54,62 @@ class MetadataServerAPI:
         return {"Authorization": "Bearer %s" % token}
 
     def create_base(self):
-        headers = self.gen_headers()
         #create a metadata base for base_id
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}'
-        response = requests.post(url, headers=headers)
+        response = requests.post(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
     def delete_base(self):
-        headers = self.gen_headers()
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}'
-        response = requests.delete(url, headers=headers)
+        response = requests.delete(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
     
 
     def add_column(self, table, column):
-        headers = self.gen_headers()
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {
             'table_id': table.id,
             'column': column.to_build_column_dict()
         }
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
     
     def insert_rows(self, table, columns, rows):
-        headers = self.gen_headers()
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
                 'table_id': table.id,
                 'column_keys': [column.key for column in columns],
                 'rows': rows
             }
-        
-        response = requests.post(url, json=data, headers=headers)
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
     
     def update_rows(self, table, columns, rows):
-        headers = self.gen_headers()
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
                 'table_id': table.id,
                 'column_keys': [column.key for column in columns],
                 'rows': rows
             }
-        
-
-        response = requests.put(url, json=data, headers=headers)
+        response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
     def delete_rows(self, table, row_ids):
-        headers = self.gen_headers()
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
                 'table_id': table.id,
                 'row_ids': row_ids
             }
-        response = requests.delete(url, json=data, headers=headers)
+        response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
     def query_rows(self, sql, params=[]):
-        headers = self.gen_headers()
         post_data = {
             'sql': sql
         }
 
         if params:
             post_data['params'] = params
-            
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/query'
-        response = requests.post(url, json=post_data, headers=headers)
+        response = requests.post(url, json=post_data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
