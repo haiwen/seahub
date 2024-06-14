@@ -3,7 +3,8 @@ from seaserv import seafile_api
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseServerError
-from seahub.api2.endpoints.metadata_manage import check_repo_metadata_is_enable, list_metadata_records
+from seahub.api2.endpoints.metadata_manage import list_metadata_records
+from seahub.repo_metadata.models import RepoMetadata
 from django.shortcuts import render
 
 
@@ -13,7 +14,8 @@ def view_metadata(request, repo_id):
     template = 'metadata_table.html'
     
     # metadata enable check
-    if not check_repo_metadata_is_enable(repo_id):
+    record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+    if not record or not record.enabled:
         return HttpResponseBadRequest(f'The metadata module is not enable for repo {repo_id}.')
 
     # recource check
