@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
-import WikiExternalOperations from './wiki-external-operations';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

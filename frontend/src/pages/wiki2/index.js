@@ -11,6 +11,7 @@ import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import PageUtils from './view-structure/page-utils';
+import LocalStorage from '../../utils/local-storage-utils';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -37,6 +38,7 @@ class Wiki extends Component {
       repoId: '',
       seadoc_access_token: '',
       assets_url: '',
+      wikiRepoId: null,
     };
   }
 
@@ -56,14 +58,19 @@ class Wiki extends Component {
 
   getWikiConfig = () => {
     wikiAPI.getWiki2Config(wikiId).then(res => {
-      const { wiki_config, repo_id } = res.data.wiki;
+      const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
       const config = new WikiConfig(wiki_config || {});
       this.setState({
         config,
         isConfigLoading: false,
         repoId: repo_id,
+        wikiRepoId,
       }, () => {
-        const pageId = this.getFirstPageId(config);
+        let pageId = this.getFirstPageId(config);
+        // opened by url
+        const urlSearchParams = new URLSearchParams(location.search);
+        const urlPageId = urlSearchParams.get('page_id');
+        if (urlPageId) pageId = urlPageId;
         if (pageId) {
           this.setCurrentPage(pageId);
         }
@@ -151,6 +158,27 @@ class Wiki extends Component {
     window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
 
+  cacheHistoryFiles = (docUuid, name, pageId) => {
+    let arr = [];
+    const { wikiRepoId } = this.state; // different from repoId
+    const recentFiles = LocalStorage.getItem('wiki-recent-files', []);
+    const newFile = { doc_uuid: docUuid, name: name, wikiRepoId, pageId };
+    if (recentFiles.length) {
+      const isExist = recentFiles.find((item) => item.doc_uuid === docUuid);
+      if (isExist) return;
+      if (!isExist) {
+        let newRecentFiles = recentFiles.slice(0);
+        if (recentFiles.length === 10) {
+          newRecentFiles.shift();
+        }
+        arr = [newFile, ...newRecentFiles];
+      }
+    } else {
+      arr.push(newFile);
+    }
+    LocalStorage.setItem('wiki-recent-files', arr);
+  };
+
   setCurrentPage = (pageId, callback) => {
     const { currentPageId, config } = this.state;
     if (pageId === currentPageId) {
@@ -159,10 +187,8 @@ class Wiki extends Component {
     }
     const { pages } = config;
     const currentPage = PageUtils.getPageById(pages, pageId);
-    const path = currentPage.path;
-    if (path !== this.state.path) {
-      this.showPage(pageId, path);
-    }
+    const { path, id, name, docUuid } = currentPage;
+    if (path !== this.state.path) this.showPage(pageId, path);
     this.onCloseSide();
     this.setState({
       currentPageId: pageId,
@@ -170,6 +196,7 @@ class Wiki extends Component {
     }, () => {
       callback && callback();
     });
+    this.cacheHistoryFiles(docUuid,name,id);
   };
 
   onUpdatePage = (pageId, newPage) => {
