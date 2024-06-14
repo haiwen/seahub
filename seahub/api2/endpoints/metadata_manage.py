@@ -1,4 +1,4 @@
-import logging, requests, stat, posixpath, time
+import logging, stat, posixpath, time
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,11 +8,10 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.settings import ENABLE_METADATA_MANAGEMENT, MATEDATA_SERVER_URL
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, METADATA_TABLE, METADATA_COLUMN_ID, METADATA_COLUMN_CREATOR, METADATA_COLUMN_CREATED_TIME, METADATA_COLUMN_MODIFIER, METADATA_COLUMN_MODIFIED_TIME, METADATA_COLUMN_PARENT_DIR, METADATA_COLUMN_NAME, METADATA_COLUMN_IS_DIR
+from seahub.settings import ENABLE_METADATA_MANAGEMENT, METADATA_SERVER_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils.metadata_server_api import create_base, delete_base, add_column, insert_rows, update_rows, delete_rows, query_rows, gen_headers
-from seahub.constants import METADATA_TABLE, METADATA_COLUMN_ID, METADATA_COLUMN_CREATOR, METADATA_COLUMN_CREATED_TIME, METADATA_COLUMN_MODIFIER, METADATA_COLUMN_MODIFIED_TIME, METADATA_COLUMN_PARENT_DIR, METADATA_COLUMN_NAME, METADATA_COLUMN_IS_DIR
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
@@ -39,62 +38,31 @@ def scan_library(repo_id, parent_dir = '/'):
             scan_result += scan_library(repo_id, posixpath.join(parent_dir, dirent.obj_name))
     return scan_result
 
-def check_and_rollback(response, headers=None, repo_id=None):
-    if response.status_code >= 200 and response.status_code < 300:
-        return
-    else:
-        if headers and repo_id:
-            delete_base(repo_id, headers)
-        if isinstance(response.reason, bytes):
-            try:
-                reason = response.reason.decode("utf-8")
-            except UnicodeDecodeError:
-                reason = response.reason.decode("iso-8859-1")
-        else:
-            reason = response.reason
-        logger.error(f'Metadata initial err, {response.status_code}: {reason}')
-        return response.status_code, reason
-
-def initial_metadata_base(repo_id, headers): 
+def initial_metadata_base(repo_id, user): 
+    metadata_server_api = MetadataServerAPI(repo_id, user)
     #create a metadata base for repo_id
-    response = create_base(repo_id, headers)
-    if err := check_and_rollback(response):
-        return err
+    metadata_server_api.create_base()
 
     # Add columns: creator, created_time, modifier, modified_time, parent_dir, name
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_CREATOR, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_CREATOR)
 
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_CREATED_TIME, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_CREATED_TIME)
     
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_MODIFIER, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_MODIFIER)
     
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_MODIFIED_TIME, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_MODIFIED_TIME)
     
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_PARENT_DIR, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_PARENT_DIR)
     
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_NAME, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_NAME)
     
-    response = add_column(repo_id, METADATA_TABLE, METADATA_COLUMN_IS_DIR, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    metadata_server_api.add_column(METADATA_TABLE, METADATA_COLUMN_IS_DIR)
 
     #scan files and dirs
     rows = scan_library(repo_id)
 
     #insert current metadata to md server from root dir
-    response = insert_rows(repo_id, METADATA_TABLE, [
+    metadata_server_api.insert_rows(METADATA_TABLE, [
         METADATA_COLUMN_CREATOR,
         METADATA_COLUMN_CREATED_TIME,
         METADATA_COLUMN_MODIFIER,
@@ -102,9 +70,7 @@ def initial_metadata_base(repo_id, headers):
         METADATA_COLUMN_PARENT_DIR,
         METADATA_COLUMN_NAME,
         METADATA_COLUMN_IS_DIR
-    ], rows, headers)
-    if err := check_and_rollback(response, headers, repo_id):
-        return err
+    ], rows)
 
 def check_repo_metadata_is_enable(repo_id):
     records = RepoMetadata.objects.filter(repo_id=repo_id)
@@ -114,7 +80,7 @@ def check_repo_metadata_is_enable(repo_id):
     record = records.first()
     return record.enabled
 
-def list_metadata_records(repo_id, headers, parent_dir=None, name=None, is_dir=None, page=None, per_page=25, order_by=None):
+def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, page=None, per_page=25, order_by=None):
     sql = f'SELECT `{METADATA_COLUMN_ID.name}`, `{METADATA_COLUMN_CREATOR.name}`, `{METADATA_COLUMN_CREATED_TIME.name}`, `{METADATA_COLUMN_MODIFIER.name}`, `{METADATA_COLUMN_MODIFIED_TIME.name}`, `{METADATA_COLUMN_PARENT_DIR.name}`, `{METADATA_COLUMN_NAME.name}`, `{METADATA_COLUMN_IS_DIR.name}` FROM `{METADATA_TABLE.name}`'
 
     parameters = []
@@ -148,12 +114,9 @@ def list_metadata_records(repo_id, headers, parent_dir=None, name=None, is_dir=N
     sql += ';'
 
     #query_result
-    response = query_rows(repo_id, sql, headers, parameters)
-    if err := check_and_rollback(response) :
-        status_code, reason = err
-        raise requests.HTTPError(f'metadata server query error with code {status_code}: {reason}')
-    
-    response_results = response.json()['results']
+    metadata_server_api = MetadataServerAPI(repo_id, user)
+
+    response_results = metadata_server_api.query_rows(sql, parameters)['results']
     if response_results:
         results = [
             {
@@ -182,7 +145,7 @@ class MetadataManage(APIView):
         """
             check the repo has enabled the metadata manage or not
         """
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -199,30 +162,28 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            return Response({
-                'enabled': check_repo_metadata_is_enable(repo_id)
-            })
+            is_enabled = check_repo_metadata_is_enable(repo_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'enabled': is_enabled})
             
     def put(self, request, repo_id):
         """
             enable a new repo's metadata manage
         """
 
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # check dose the repo have opened metadata manage
-        records = RepoMetadata.objects.filter(repo_id=repo_id)
-        if records:
-            record = records.first()
-            if record.enabled:
-                error_msg = f'The metadata module is enabled for repo {repo_id}.'
-                return api_error(status.HTTP_409_CONFLICT, error_msg)
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if record and record.enabled:
+            error_msg = f'The metadata module is enabled for repo {repo_id}.'
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
 
         # recource check
         repo = seafile_api.get_repo(repo_id)
@@ -235,36 +196,53 @@ class MetadataManage(APIView):
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        headers = gen_headers(repo_id, request.user.email)
-        err = initial_metadata_base(repo_id, headers)
-        if err:
-            status_code, reason = err
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code  {status_code}: {reason}')
-        
+
         try:
-            if records:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            try:
+                initial_metadata_base(repo_id, request.user.username)
+            except ConnectionError as err:
+                try:
+                    metadata_server_api.delete_base()
+                except:
+                    pass
+                logger.error(err)
+                status_code, reason = err
+                return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+            except Exception as err:
+                try:
+                    metadata_server_api.delete_base()
+                except:
+                    pass
+                logger.error(err)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if record:
                 record.enabled = True
                 record.save()
             else:
                 repo_metadata = RepoMetadata(repo_id=repo_id, enabled=True)
                 repo_metadata.save()
-            return Response({
-                'success': True
-            })
+            
         except Exception as e:
             #rollback
-            delete_base(repo_id, headers)
+            try:
+                metadata_server_api.delete_base()
+            except:
+                pass
 
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'success': True})
 
     def delete(self, request, repo_id):
         """
             remove a repo's metadata manage
         """
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -281,32 +259,32 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         # check dose the repo have opened metadata manage
-        records = RepoMetadata.objects.filter(repo_id=repo_id)
-        if records:
-            record = records.first()
-            if not record.enabled:
-                error_msg = f'The repo {repo_id} has not enabled the metadata manage.'
-                return api_error(status.HTTP_409_CONFLICT, error_msg)
-        else:
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
             error_msg = f'The repo {repo_id} has not enabled the metadata manage.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
         
         try:
-            headers = gen_headers(repo_id, request.user.email)
-            response = delete_base(repo_id, headers)
-            if err := check_and_rollback(response):
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            try:
+                metadata_server_api.delete_base()
+            except ConnectionError as err:
+                logger.error(err)
                 status_code, reason = err
                 return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+            except Exception as err:
+                logger.error(err)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             
             record.enabled = False
             record.save()
-            return Response({
-                'success': True
-            })
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'success': True})
         
 class MetadataRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -324,7 +302,7 @@ class MetadataRecords(APIView):
                 is_dir: optional, True or False
                 order_by: list with string, like ['`parent_dir` ASC']
         """
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -332,33 +310,23 @@ class MetadataRecords(APIView):
         #args check
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
-        page = request.GET.get('page')
-        per_page = request.GET.get('per_page')
+        page = request.GET.get('page', '1')
+        per_page = request.GET.get('per_page', '1000')
         is_dir = request.GET.get('is_dir')
         order_by = request.GET.get('order_by')
 
-        if page:
-            try:
-                page = int(page)
-            except ValueError:
-                error_msg = 'Page is not vaild.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            
-            if per_page:
-                try:
-                    per_page = int(per_page)
-                except ValueError:
-                    error_msg = 'per_page is not vaild.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                
-            else:
-                per_page = 25
+        try:
+            page = int(page)
+            per_page = int(per_page)
+        except:
+            page = 1
+            per_page = 1000
 
         if is_dir:
             try:
                 is_dir = to_python_boolean(is_dir)
             except:
-                error_msg = 'is_dir is not vaild.'
+                error_msg = 'is_dir is invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # metadata enable check
@@ -379,15 +347,17 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            headers = gen_headers(repo_id, request.user.email)
-            results = list_metadata_records(repo_id, headers, parent_dir, name, is_dir, page, per_page, order_by)
-        except requests.HTTPError as err:
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, repr(err))
+            results = list_metadata_records(repo_id, request.user.username, parent_dir, name, is_dir, page, per_page, order_by)
+        except ConnectionError as err:
+            logger.error(err)
+            status_code, reason = err
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
         except Exception as err:
-            return api_error(status.HTTP_400_BAD_REQUEST, repr(err))
-        return Response({
-            'results': results
-        })
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'results': results})
 
     def post(self, request, repo_id):
         """
@@ -396,7 +366,7 @@ class MetadataRecords(APIView):
                 parent_dir: required, if not specify, search from all dirs
                 name: required, if not specify, search from all objects
         """
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -437,46 +407,56 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         # check the current dirent exists or not
-        headers = gen_headers(repo_id, request.user.email)
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         is_dir = stat.S_ISDIR(dirent.mode)
         sql = f'SELECT `{METADATA_COLUMN_ID.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_COLUMN_PARENT_DIR.name}` = "{parent_dir}" AND `{METADATA_COLUMN_NAME.name}` = "{name}" AND `{METADATA_COLUMN_IS_DIR.name}` = "{True if is_dir else False}";'
 
-        response = query_rows(repo_id, sql, headers)
-        if err := check_and_rollback(response):
+        try:
+            query_result = metadata_server_api.query_rows(sql)['results']
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        query_result = response.json().get('results')
         if query_result:
             error_msg = 'dirent %s has inserted in metadata base.' % dirent_path
             return api_error(status.HTTP_409_CONFLICT, error_msg)
         
-        response = insert_rows(repo_id, METADATA_TABLE, [
-            METADATA_COLUMN_CREATOR,
-            METADATA_COLUMN_CREATED_TIME,
-            METADATA_COLUMN_MODIFIER,
-            METADATA_COLUMN_MODIFIED_TIME, 
-            METADATA_COLUMN_PARENT_DIR,
-            METADATA_COLUMN_NAME,
-            METADATA_COLUMN_IS_DIR
-        ], [
-                [
-                    '' if is_dir else dirent.modifier, #creator, the dir has not creator
-                    timestamp_to_isoformat_timestr(dirent.mtime), #ctime
-                    '' if is_dir else dirent.modifier, #modifier, the dir has not modifier
-                    timestamp_to_isoformat_timestr(dirent.mtime), #mtime
-                    parent_dir, 
-                    dirent.obj_name, #name
-                    'True' if is_dir else 'False'
-                ]
-        ], headers)
-        if err := check_and_rollback(response):
+
+        try:
+            metadata_server_api.insert_rows(METADATA_TABLE, [
+                METADATA_COLUMN_CREATOR,
+                METADATA_COLUMN_CREATED_TIME,
+                METADATA_COLUMN_MODIFIER,
+                METADATA_COLUMN_MODIFIED_TIME, 
+                METADATA_COLUMN_PARENT_DIR,
+                METADATA_COLUMN_NAME,
+                METADATA_COLUMN_IS_DIR
+            ], [
+                    [
+                        '' if is_dir else dirent.modifier, #creator, the dir has not creator
+                        timestamp_to_isoformat_timestr(dirent.mtime), #ctime
+                        '' if is_dir else dirent.modifier, #modifier, the dir has not modifier
+                        timestamp_to_isoformat_timestr(dirent.mtime), #mtime
+                        parent_dir, 
+                        dirent.obj_name, #name
+                        'True' if is_dir else 'False'
+                    ]
+            ])
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
-        else:
-            return Response({
-                'success': True
-            })
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
         
 class MetadataRecord(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -492,7 +472,7 @@ class MetadataRecord(APIView):
                 name, required
         """
 
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -532,16 +512,21 @@ class MetadataRecord(APIView):
         # check the current dirent exists or not
         is_dir = stat.S_ISDIR(dirent.mode)
 
-        headers = gen_headers(repo_id, request.user.email)
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         sql = f'SELECT `{METADATA_COLUMN_ID.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_COLUMN_PARENT_DIR.name}` = "{parent_dir}" AND `{METADATA_COLUMN_NAME.name}` = "{name}" AND `{METADATA_COLUMN_ID.name}` != "{record_id}" AND `{METADATA_COLUMN_IS_DIR.name}` = "{True if is_dir else False}";'
 
-        response = query_rows(repo_id, sql, headers)
-        if err := check_and_rollback(response):
+        try:
+            query_result = metadata_server_api.query_rows(sql)['results']
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        query_result = response.json().get('results')
         if query_result:
             error_msg = f'The {"folder" if is_dir else "file"} {dirent_path} is exists in the metadata base'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
@@ -549,44 +534,55 @@ class MetadataRecord(APIView):
         # dirent type originality check
         sql = f'SELECT `{METADATA_COLUMN_ID.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_COLUMN_ID.name}` = "{record_id}" AND `{METADATA_COLUMN_IS_DIR.name}` != "{True if is_dir else False}";'
         
-        response = query_rows(repo_id, sql, headers)
-        if err := check_and_rollback(response):
+        try:
+            query_result = metadata_server_api.query_rows(sql)['results']
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        query_result = response.json().get('results')
         if query_result:
             error_msg = f'The type of new dirent {dirent_path} is not matched with the original type'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        modifier = request.user.email
+        modifier = request.user.username
         modify_time = timestamp_to_isoformat_timestr(int(time.time()))
 
-        response = update_rows(repo_id, METADATA_TABLE, [
-            METADATA_COLUMN_ID,
-            METADATA_COLUMN_MODIFIER,
-            METADATA_COLUMN_MODIFIED_TIME, 
-            METADATA_COLUMN_PARENT_DIR,
-            METADATA_COLUMN_NAME
-        ], [
-            [
-                record_id,
-                modifier,
-                modify_time,
-                parent_dir, 
-                name
-            ]
-        ], headers)
-        if err := check_and_rollback(response):
+        try:
+            metadata_server_api.update_rows(METADATA_TABLE, [
+                METADATA_COLUMN_ID,
+                METADATA_COLUMN_MODIFIER,
+                METADATA_COLUMN_MODIFIED_TIME, 
+                METADATA_COLUMN_PARENT_DIR,
+                METADATA_COLUMN_NAME
+            ], [
+                [
+                    record_id,
+                    modifier,
+                    modify_time,
+                    parent_dir, 
+                    name
+                ]
+            ])
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
-        else:
-            return Response({
-                'success': True
-            })
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({
+            'success': True
+        })
 
     def delete(self, request, repo_id, record_id):
-        if not ENABLE_METADATA_MANAGEMENT or not MATEDATA_SERVER_URL:
+        if not ENABLE_METADATA_MANAGEMENT or not METADATA_SERVER_URL:
                 error_msg = "Function is not supported"
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -607,13 +603,18 @@ class MetadataRecord(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-
-        headers = gen_headers(repo_id, request.user.email)
-        response = delete_rows(repo_id, METADATA_TABLE, [record_id], headers)
-        if err := check_and_rollback(response):
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        try:
+            metadata_server_api.delete_rows(METADATA_TABLE, [record_id])
+        except ConnectionError as err:
+            logger.error(err)
             status_code, reason = err
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
-        else:
-            return Response({
-                'success': True
-            })
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({
+            'success': True
+        })

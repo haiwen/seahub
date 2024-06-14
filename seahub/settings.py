@@ -892,8 +892,8 @@ EX_EDITABLE_COLUMNS = []
 # metadata server properties #
 ##############################
 ENABLE_METADATA_MANAGEMENT = False
-MATEDATA_SERVER_URL = None
-METEDATA_SERVER_SECRET_KEY = ''
+METADATA_SERVER_URL = ''
+METADATA_SERVER_SECRET_KEY = ''
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
