@@ -322,6 +322,14 @@ class MetadataRecords(APIView):
             page = 1
             per_page = 1000
 
+        if page <= 0:
+            error_msg = 'page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if per_page <= 0:
+            error_msg = 'per_page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if is_dir:
             try:
                 is_dir = to_python_boolean(is_dir)
