@@ -296,9 +296,9 @@ class MultipleDirOperationToolbar extends React.Component {
   };
 
   render() {
-
-    const { repoID, repoTags, userPerm } = this.props;
-    const dirent = this.props.selectedDirentList[0];
+    const { repoID, repoTags, userPerm, selectedDirentList } = this.props;
+    const dirent = selectedDirentList[0];
+    const selectedLen = selectedDirentList.length;
     const direntPath = this.getDirentPath(dirent);
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
 
@@ -335,6 +335,12 @@ class MultipleDirOperationToolbar extends React.Component {
     return (
       <Fragment>
         <div className="selected-dirents-toolbar">
+          {selectedLen > 0 &&
+            <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
+              <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+              <span>{selectedLen}{' '}{gettext('selected')}</span>
+            </span>
+          }
           {canModify &&
             <span className="cur-view-path-btn" onClick={this.onMoveToggle}>
               <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
@@ -355,7 +361,7 @@ class MultipleDirOperationToolbar extends React.Component {
               <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
             </span>
           }
-          {this.props.selectedDirentList.length === 1 &&
+          {selectedLen === 1 &&
             <ItemDropdownMenu
               item={this.props.selectedDirentList[0]}
               toggleClass={'cur-view-path-btn sf3-font-more-vertical sf3-font'}
