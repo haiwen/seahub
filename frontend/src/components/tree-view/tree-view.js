@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextTranslation from '../../utils/text-translation';
 import TreeNodeView from './tree-node-view';
+import MetadataManage from '../metadata-manage/metadata-manage';
 import MetadataManageView from '../metadata-manage/metadata-manage-view';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
@@ -343,6 +344,9 @@ class TreeView extends React.Component {
           onNodeDragLeave={this.onNodeDragLeave}
           handleContextClick={this.handleContextClick}
         />
+        {window.app.pageOptions.enableMetadataManagement && <MetadataManage
+          repoID={this.props.repoID}
+        />}
         {window.app.pageOptions.enableMetadataManagement && <MetadataManageView
           repoID={this.props.repoID}
         />}

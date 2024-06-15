@@ -4,16 +4,14 @@ import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
 import seahubMetadataAPI from './seahub-metadata-api';
-import { siteRoot } from '../../utils/constants';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import TextTranslation from '../../utils/text-translation';
-import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-class MetadataManageView extends React.Component {
+class MetadataManage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -86,21 +84,16 @@ class MetadataManageView extends React.Component {
 
   onClick = () => {
     seahubMetadataAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
-      if (res.data.enabled){
-        this.viewMetadata();
-      } else {
-        let message = gettext('This repo has not enabled metadata management, please enabled firstly');
-        toaster.notify(message);
+      if (!res.data.enabled && confirm(gettext('Enable metadata management?'))){
+        seahubMetadataAPI.enableMetadataManagement(this.props.repoID).catch((error) => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  };
-
-  viewMetadata = () => {
-    let server = siteRoot.substring(0, siteRoot.length-1);
-    window.open(server + '/repos/' + this.props.repoID + '/metadata/table-view/', '_blank');
   };
 
   render() {
@@ -109,7 +102,7 @@ class MetadataManageView extends React.Component {
       <div className="tree-node">
         <div
           className={`tree-node-inner text-nowrap ${hlClass}`}
-          title="Metadata Views"
+          title="Metadata"
           onMouseEnter={this.onMouseEnter}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
@@ -117,7 +110,12 @@ class MetadataManageView extends React.Component {
           onClick={this.onClick}
           onContextMenu={this.onItemContextMenu}
         >
-          <div style={{ paddingLeft: 44.8 }}>{gettext('Metadata Views')}
+          <div className="tree-node-text">{gettext('Metadata')}
+            <div className="left-icon">
+              <i className="tree-node-icon">
+                <span class="sf2-icon-cog2" aria-hidden="true" />
+              </i>
+            </div>
           </div>
         </div>
       </div>
@@ -125,6 +123,6 @@ class MetadataManageView extends React.Component {
   }
 }
 
-MetadataManageView.propTypes = propTypes;
+MetadataManage.propTypes = propTypes;
 
-export default MetadataManageView;
+export default MetadataManage;
