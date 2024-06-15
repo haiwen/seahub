@@ -7,7 +7,6 @@ import seahubMetadataAPI from './seahub-metadata-api';
 import { siteRoot } from '../../utils/constants';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import TextTranslation from '../../utils/text-translation';
-import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
