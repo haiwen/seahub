@@ -1,3 +1,7 @@
+.cur-view-path .selected-dirents-toolbar {
+  height: 24px;
+}
+
 .cur-view-path .selected-dirents-toolbar .cur-view-path-btn {
   margin-left: 0;
   margin-right: 20px;
