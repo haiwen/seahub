@@ -36,6 +36,7 @@ class DirOperationToolbar extends React.Component {
       isShareDialogShow: false,
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
+      isSubMenuShown: false,
       isMobileOpMenuOpen: false
     };
   }
@@ -139,8 +140,6 @@ class DirOperationToolbar extends React.Component {
     e.stopPropagation();
     this.setState({
       isSubMenuShown: !this.state.isSubMenuShown
-    }, () => {
-      this.toggleDesktopOpMenu();
     });
   };
 
