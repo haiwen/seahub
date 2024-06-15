@@ -1914,8 +1914,13 @@ class LibContentView extends React.Component {
   };
 
   unSelectDirent = () => {
+    const direntList = this.state.direntList.map(item => {
+      item.isSelected = false;
+      return item;
+    });
     this.setState({
       isDirentSelected: false,
+      direntList,
       selectedDirentList: []
     });
     const dirent = {};
