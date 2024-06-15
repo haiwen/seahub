@@ -158,6 +158,10 @@ a, a:hover { color: #ec8000; }
   color: #999;
 }
 
+.sf-heading .sf-dropdown-toggle {
+  font-size: .75rem;
+}
+
 .sf-link {
     color: #ee8204 !important;
     cursor: pointer;
@@ -684,6 +688,7 @@ a, a:hover { color: #ec8000; }
     font-weight: bold;
 }
 
+.side-nav-con .active .seafile-multicolor-icon, 
 .side-nav-con .active [class^="sf2-icon-"],
 .side-nav-con .active [class^="sf3-font-"],
 .side-nav-con .active .nav-icon,

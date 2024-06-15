@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FolderOperationDropdownMenu from './folder-operation-dropdownmenu';
-import ViewItem from '../views/view-item';
+import DraggedViewItem from '../views/dragged-view-item';
 import DraggedFolderItem from './dragged-folder-item';
 import ViewEditPopover from '../../view-structure/views/view-edit-popover';
-import { FOLDER } from '../../constant';
 import NavItemIcon from '../nav-item-icon';
 
 class FolderItem extends Component {
@@ -21,14 +20,9 @@ class FolderItem extends Component {
     };
   }
 
-  onToggleExpandFolder = (e) => {
+  toggleExpand = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    this.props.onToggleExpandFolder(this.props.folder.id);
-    this.forceUpdate();
-  };
-
-  onToggleExpandSubfolder = (subfolderId) => {
-    this.props.onToggleExpandFolder(subfolderId);
+    this.props.toggleExpand(this.props.folder.id);
     this.forceUpdate();
   };
 
@@ -66,8 +60,8 @@ class FolderItem extends Component {
     // }
   };
 
-  renderFolder = (folder, index, tableGridsLength, isOnlyOneView, id_view_map) => {
-    const { isEditMode, views, foldersStr } = this.props;
+  renderFolder = (folder, index, pagesLength, isOnlyOneView, id_view_map) => {
+    const { isEditMode, views, pathStr } = this.props;
     const { id: folderId } = folder;
     return (
       <DraggedFolderItem
@@ -75,11 +69,11 @@ class FolderItem extends Component {
         isEditMode={isEditMode}
         folder={folder}
         folderIndex={index}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         id_view_map={id_view_map}
         renderFolderMenuItems={this.props.renderFolderMenuItems}
-        onToggleExpandFolder={this.onToggleExpandSubfolder}
+        toggleExpand={this.props.toggleExpand}
         onToggleAddView={this.props.onToggleAddView}
         onModifyFolder={this.props.onModifyFolder}
         onDeleteFolder={this.props.onDeleteFolder}
@@ -93,45 +87,49 @@ class FolderItem extends Component {
         onMoveView={this.props.onMoveView}
         moveFolderToFolder={this.props.moveFolderToFolder}
         views={views}
-        foldersStr={foldersStr + '-' + folderId}
+        pathStr={pathStr + '-' + folderId}
         setClassName={this.props.setClassName}
         getClassName={this.props.getClassName}
         movePageOut={this.props.movePageOut}
         layerDragProps={this.props.layerDragProps}
-        getFolderState={this.props.getFolderState}
+        getFoldState={this.props.getFoldState}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
       />
     );
   };
 
-  renderView = (view, index, tableGridsLength, isOnlyOneView) => {
-    const { isEditMode, views, folder, foldersStr } = this.props;
+  renderView = (view, index, pagesLength, isOnlyOneView) => {
+    const { isEditMode, views, folder, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     return (
-      <ViewItem
+      <DraggedViewItem
         key={id}
-        tableGridsLength={tableGridsLength}
+        pagesLength={pagesLength}
         isOnlyOneView={isOnlyOneView}
         infolder={false}
-        view={views.find(item => item.id === id)}
+        view={Object.assign({}, views.find(item => item.id === id), view)}
         viewIndex={index}
         folderId={folder.id}
         isEditMode={isEditMode}
         renderFolderMenuItems={this.props.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onSelectView={() => this.props.onSelectView(id)}
+        onSelectView={this.props.onSelectView}
         onUpdatePage={this.props.onUpdatePage}
-        onDeleteView={this.props.onDeleteView.bind(this, id)}
+        onDeleteView={this.props.onDeleteView}
         onMoveViewToFolder={(targetFolderId) => {
           this.props.onMoveViewToFolder(folder.id, view.id, targetFolderId);
         }}
         onMoveView={this.props.onMoveView}
         onMoveFolder={this.props.onMoveFolder}
         views={views}
-        foldersStr={foldersStr}
+        pathStr={pathStr + '-' + view.id}
         currentPageId={this.props.currentPageId}
+        addPageInside={this.props.addPageInside}
+        getFoldState={this.props.getFoldState}
+        toggleExpand={this.props.toggleExpand}
       />
     );
   };
@@ -160,22 +158,9 @@ class FolderItem extends Component {
   };
 
   getFolderChildrenHeight = () => {
-    const { id: folderId, children } = this.props.folder;
-    const folded = this.props.getFolderState(folderId);
+    const folded = this.props.getFoldState(this.props.folder.id);
     if (folded) return 0;
-
-    let height = 0;
-    children.forEach((child) => {
-      // just support two levels
-      const { type, id: childId, children } = child;
-      if (type === FOLDER) {
-        height += (this.props.getFolderState(childId) || !Array.isArray(children))
-          ? 40 : (children.length + 1) * 40;
-      } else {
-        height += 40;
-      }
-    });
-    return height;
+    return 'auto';
   };
 
   onMouseEnter = () => {
@@ -189,18 +174,18 @@ class FolderItem extends Component {
   render() {
     const {
       connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop,
-      isEditMode, folder, tableGridsLength, id_view_map, isOnlyOneView, layerDragProps,
+      isEditMode, folder, pagesLength, id_view_map, isOnlyOneView, layerDragProps,
     } = this.props;
     const { isEditing } = this.state;
     const { id: folderId, name, children } = folder;
-    const folded = this.props.getFolderState(folderId);
+    const folded = this.props.getFoldState(folderId);
     let viewEditorId = `folder-item-${folderId}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
     return (
       <div
         className={classnames('view-folder', { 'readonly': !isEditMode })}
         ref={ref => this.foldRef = ref}
-        onClick={this.onToggleExpandFolder}
+        onClick={this.toggleExpand}
       >
         {fn(connectDropTarget(
           connectDragPreview(
@@ -213,7 +198,7 @@ class FolderItem extends Component {
               <div className='folder-main'>
                 <div
                   className='folder-content'
-                  style={{ marginLeft: `${(this.props.foldersStr.split('-').length - 1) * 16}px` }}
+                  style={{ marginLeft: `${(this.props.pathStr.split('-').length - 1) * 16}px` }}
                   id={viewEditorId}
                 >
                   {this.state.isMouseEnter ?
@@ -254,7 +239,7 @@ class FolderItem extends Component {
         >
           {!folded && children &&
             children.map((item, index) => {
-              return item.type === 'folder' ? this.renderFolder(item, index, tableGridsLength, isOnlyOneView, id_view_map) : this.renderView(item, index, tableGridsLength, isOnlyOneView);
+              return item.type === 'folder' ? this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map) : this.renderView(item, index, pagesLength, isOnlyOneView);
             })
           }
         </div>
@@ -267,19 +252,18 @@ FolderItem.propTypes = {
   isEditMode: PropTypes.bool,
   folder: PropTypes.object,
   folderIndex: PropTypes.number,
-  tableGridsLength: PropTypes.number,
+  pagesLength: PropTypes.number,
   id_view_map: PropTypes.object,
   isOver: PropTypes.bool,
   canDrop: PropTypes.bool,
   isDragging: PropTypes.bool,
-  draggedRow: PropTypes.object,
   connectDropTarget: PropTypes.func,
   connectDragPreview: PropTypes.func,
   connectDragSource: PropTypes.func,
   renderFolderMenuItems: PropTypes.func,
   duplicatePage: PropTypes.func,
   onSetFolderId: PropTypes.func,
-  onToggleExpandFolder: PropTypes.func,
+  toggleExpand: PropTypes.func,
   onToggleAddView: PropTypes.func,
   onModifyFolder: PropTypes.func,
   onDeleteFolder: PropTypes.func,
@@ -292,13 +276,14 @@ FolderItem.propTypes = {
   views: PropTypes.array,
   onMoveFolder: PropTypes.func,
   moveFolderToFolder: PropTypes.func,
-  foldersStr: PropTypes.string,
+  pathStr: PropTypes.string,
   setClassName: PropTypes.func,
   getClassName: PropTypes.func,
   movePageOut: PropTypes.func,
   layerDragProps: PropTypes.object,
-  getFolderState: PropTypes.func,
+  getFoldState: PropTypes.func,
   currentPageId: PropTypes.string,
+  addPageInside: PropTypes.func,
 };
 
 export default FolderItem;

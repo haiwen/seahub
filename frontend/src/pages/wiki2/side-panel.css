@@ -3,16 +3,27 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #F7F7F5;;
+  background-color: #F7F7F5;
   border-right: 1px solid #F1F1EF;
 }
 
 .wiki2-side-panel .wiki2-side-panel-top {
   padding: 8px 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
   height: 44px;
+}
+
+.wiki2-side-panel .wiki2-side-panel-top .add-new-page {
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.wiki2-side-panel .wiki2-side-panel-top .add-new-page:hover {
+  background-color: #DFDFDD;
 }
 
 .wiki2-side-panel .wiki2-side-nav {

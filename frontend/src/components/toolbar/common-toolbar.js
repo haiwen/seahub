@@ -10,28 +10,33 @@ import Logout from '../common/logout';
 
 const propTypes = {
   repoID: PropTypes.string,
+  path: PropTypes.string,
   repoName: PropTypes.string,
   isLibView: PropTypes.bool,
   onSearchedClick: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string,
   currentRepoInfo: PropTypes.object,
+  isViewFile: PropTypes.bool,
 };
 
 class CommonToolbar extends React.Component {
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, searchPlaceholder } = this.props;
+    const { repoID, repoName, isLibView, searchPlaceholder, path, isViewFile } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
-      if (enableSeafileAI && isLibView) {
+      if (enableSeafileAI) {
         return (
           <AISearch
             repoID={repoID}
+            path={path}
+            isViewFile={isViewFile}
             placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
             repoName={repoName}
             currentRepoInfo={this.props.currentRepoInfo}
+            isLibView={isLibView}
           />
         );
       } else {
@@ -40,7 +45,9 @@ class CommonToolbar extends React.Component {
             repoID={repoID}
             placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
+            isViewFile={isViewFile}
             isPublic={false}
+            path={path}
           />
         );
       }

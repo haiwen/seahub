@@ -385,3 +385,28 @@
   font-weight: normal;
   margin: 7px 0 10px;
 }
+
+.search-types {
+  padding-right: 16px;
+  padding-top: 6px;
+}
+
+.search-types>div {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  cursor: pointer;
+  padding: 0px 40px;
+  border-radius: 4px;
+}
+
+.search-types .search-types-highlight,
+.search-types>div:focus,
+.search-types>div:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+.search-types .search-types-text {
+  margin-left: 6px;
+  color: #666;
+}

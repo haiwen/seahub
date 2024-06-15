@@ -10,6 +10,7 @@ import wikiAPI from '../../../utils/wiki-api';
 import '../css/add-new-page-dialog.css';
 
 const propTypes = {
+  title: PropTypes.node,
   toggle: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func,
 };
@@ -95,9 +96,10 @@ class AddNewPageDialog extends React.Component {
   };
 
   render() {
+    const { title } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false} className='add-new-page-dialog'>
-        <ModalHeader toggle={this.toggle}>{gettext('Add page')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody className='pr-4'>
           <Label>{gettext('Page name')}</Label>
           <Input

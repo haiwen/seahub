@@ -12,11 +12,6 @@ const propTypes = {
 };
 
 class MainPanel extends React.Component {
-
-  onSearchedClick = () => {
-    //todos;
-  };
-
   render() {
     const { renderingContent, newMarkdownContent } = this.props;
     return (

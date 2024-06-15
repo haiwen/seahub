@@ -88,3 +88,14 @@ def check_wiki_permission(wiki, username):
         if username == wiki.owner:
             return True
     return False
+
+
+def get_page_ids_in_folder(navigation, folder_id):
+    for directory in navigation:
+        if directory.get('type') == 'folder' and directory.get('id') == folder_id:
+            children = directory.get('children', [])
+            page_ids = {child.get('id') for child in children if child.get('type') == 'page'}
+            return page_ids
+        elif directory.get('type') == 'folder':
+            navigation = directory.get('children', [])
+            return get_page_ids_in_folder(navigation, folder_id)

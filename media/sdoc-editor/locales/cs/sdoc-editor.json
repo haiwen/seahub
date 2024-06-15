@@ -457,5 +457,8 @@
   "Enter_more_character_start_search": "Enter more characters to start search",
   "Create_file_name_sdoc": "Create {{file_name_sdoc}}",
   "Source_document_changed_tip": "Original document has concurrent modifications. Do you like to merge these modifications to the revision?",
-  "Fit_table_to_page_width": "Fit table to page width"
+  "Fit_table_to_page_width": "Fit table to page width",
+  "Enter_text_or_press_forward_slash_to_insert_element": "Enter text or press '/' to insert element",
+  "Vertical_align": "Vertical alignment",
+  "Horizontal_align": "Horizontal alignment"
 }

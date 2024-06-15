@@ -11,6 +11,7 @@ export default class WikiConfig {
         return {
           id: item.id,
           type: item.type,
+          children: item.children || [],
         };
       }
       return null;
