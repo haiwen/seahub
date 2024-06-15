@@ -5,6 +5,8 @@ import { gettext } from '../../utils/constants';
 import toaster from '../toast';
 import seahubMetadataAPI from './seahub-metadata-api';
 import { siteRoot } from '../../utils/constants';
+import { hideMenu, showMenu } from '../context-menu/actions';
+import TextTranslation from '../../utils/text-translation';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -16,6 +18,7 @@ class MetadataManageView extends React.Component {
     super(props);
     this.state = {
       isHighlight: false,
+      menuList: []
     };
   }
 
@@ -42,6 +45,42 @@ class MetadataManageView extends React.Component {
     if (event.button === 2) {
       return;
     }
+  };
+
+  getMenuList = () => {
+    let { ENABLE_METADATA, DISABLE_METADATA } =  TextTranslation;
+    seahubMetadataAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
+      if (res.data.enabled){
+        this.setState({ menuList: [DISABLE_METADATA] });
+      } else {
+        this.setState({ menuList: [ENABLE_METADATA] });
+      }
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.setState({ menuList: [] });
+    });
+  };
+
+  onItemContextMenu = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    hideMenu();
+
+    this.getMenuList();
+
+    let showMenuConfig = {
+      id: 'tree-node-contextmenu',
+      position: { x, y },
+      target: event.target,
+      menuList: this.state.menuList,
+    };
+
+    showMenu(showMenuConfig);
   };
 
   onClick = () => {

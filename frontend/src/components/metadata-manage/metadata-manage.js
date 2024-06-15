@@ -6,7 +6,6 @@ import toaster from '../toast';
 import seahubMetadataAPI from './seahub-metadata-api';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import TextTranslation from '../../utils/text-translation';
-import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -85,7 +84,7 @@ class MetadataManage extends React.Component {
 
   onClick = () => {
     seahubMetadataAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
-      if (res.data.enabled && confirm(gettext('Enable metadata management?'))){
+      if (!res.data.enabled && confirm(gettext('Enable metadata management?'))){
         seahubMetadataAPI.enableMetadataManagement(this.props.repoID).catch((error) => {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
@@ -95,25 +94,6 @@ class MetadataManage extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  };
-
-  onView = () => {
-    seahubMetadataAPI.getMetadataManagementEnabledStatus(this.props.repoID).then((res) => {
-      if (res.data.enabled){
-        this.viewMetadata();
-      } else {
-        let message = gettext('This repo has not enabled metadata management, please enabled firstly');
-        toaster.notify(message);
-      }
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  viewMetadata = () => {
-    let server = siteRoot.substring(0, siteRoot.length-1);
-    window.open(server + '/repos/' + this.props.repoID + '/metadata/table-view/', '_blank');
   };
 
   render() {
@@ -127,7 +107,7 @@ class MetadataManage extends React.Component {
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
           onMouseDown={this.onItemMouseDown}
-          onClick={this.onEnable}
+          onClick={this.onClick}
           onContextMenu={this.onItemContextMenu}
         >
           <div className="tree-node-text">{gettext('Metadata')}
