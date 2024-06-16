@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import '../css/single-selector.css';
 
 const propTypes = {
+  customSelectorToggle: PropTypes.object,
+  menuCustomClass: PropTypes.string,
   isDropdownToggleShown: PropTypes.bool,
   currentSelectedOption: PropTypes.object,
   options: PropTypes.array.isRequired,
@@ -68,14 +70,14 @@ class Selector extends Component {
     } = this.props;
     return (
       <div className="sf-single-selector position-relative">
-        <span className="cur-option" onClick={this.onToggleClick}>
+        <div onClick={this.onToggleClick}>
           {customSelectorToggle ? customSelectorToggle : (
-            <>
-          {currentSelectedOption.text}
-          {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
-            </>
+            <span className="cur-option">
+              {currentSelectedOption.text}
+              {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
+            </span>
           )}
-        </span>
+        </div>
         {isPopoverOpen && (
           <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
             <ul className="option-list list-unstyled py-3 o-auto">

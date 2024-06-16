@@ -29,12 +29,12 @@ const propTypes = {
 class Libraries extends Component {
   constructor(props) {
     super(props);
-    this.sortOptions = this.props.sortOptions || [
-       {value: 'name-asc', text: gettext('By name ascending')},
-       {value: 'name-desc', text: gettext('By name descending')},
-       {value: 'time-asc', text: gettext('By time ascending')},
-       {value: 'time-desc', text: gettext('By time descending')}
-     ];
+    this.sortOptions = [
+      {value: 'name-asc', text: gettext('By name ascending')},
+      {value: 'name-desc', text: gettext('By name descending')},
+      {value: 'time-asc', text: gettext('By time ascending')},
+      {value: 'time-desc', text: gettext('By time descending')}
+    ];
 
     this.state = {
       // for 'my libs'
@@ -58,27 +58,13 @@ class Libraries extends Component {
     const promiseListGroups = seafileAPI.listGroups(true);
     Promise.all([promiseListRepos, promiseListGroups]).then(res => {
       const [resListRepos, resListGroups] = res;
-      /*
-      let allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
-      allRepoList = Utils.sortRepos(allRepoList, this.state.sortBy, this.state.sortOrder);
-      const myRepoList = allRepoList.filter(item => item.type === 'mine');
-      const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
-      const publicRepoList = allRepoList.filter(item => item.type === 'public');
-      const groupList = resListGroups.data.map(item => {
+      const repoList = resListRepos.data.repos.map((item) => new Repo(item));
+      const groups = resListGroups.data.map(item => {
         let group = new Group(item);
-        const groupRepos = item.repos.map(item => new Repo(item));
-        group.repos = Utils.sortRepos(groupRepos, this.state.sortBy, this.state.sortOrder);
+        group.repos = item.repos.map(item => new Repo(item));
         return group;
       }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
-      */
-      let allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
-      const groupList = resListGroups.data.map(item => {
-        let group = new Group(item);
-        const groupRepos = item.repos.map(item => new Repo(item));
-        group.repos = Utils.sortRepos(groupRepos, this.state.sortBy, this.state.sortOrder);
-        return group;
-      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
-      const { myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(allRepoList, groupList, sortBy, sortOrder);
+      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
       this.setState({
         isLoading: false,
         allRepoList,
@@ -95,8 +81,17 @@ class Libraries extends Component {
     });
   }
 
-  sortRepos = (sortBy, sortOrder) => {
-  }
+  sortRepos = (repoList, groups) => {
+    const allRepoList = Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder);
+    const myRepoList = allRepoList.filter(item => item.type === 'mine');
+    const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
+    const publicRepoList = allRepoList.filter(item => item.type === 'public');
+    const groupList = groups.map(item => {
+      item.repos = Utils.sortRepos(item.repos, this.state.sortBy, this.state.sortOrder);
+      return item;
+    });
+    return { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList };
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
@@ -126,13 +121,21 @@ class Libraries extends Component {
   };
 
   onSelectSortOption = (sortOption) => {
-      const [sortBy, sortOrder] = sortOption.value.split('-');
+    const [sortBy, sortOrder] = sortOption.value.split('-');
     this.setState({sortBy, sortOrder}, () => {
       localStorage.setItem('sf_repos_sort_by', sortBy);
       localStorage.setItem('sf_repos_sort_order', sortOrder);
-      this.sortRepos(sortBy, sortOrder);
+      const { allRepoList: repoList, groupList: groups } = this.state;
+      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
+      this.setState({
+        allRepoList,
+        groupList,
+        sharedRepoList,
+        publicRepoList,
+        repoList: myRepoList
+      });
     });
-  }
+  };
 
   sortRepoList = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -229,17 +232,17 @@ class Libraries extends Component {
     const isDesktop = Utils.isDesktop();
 
     const sortOptions = this.sortOptions.map(item => {
-       return {
-         ...item,
-         isSelected: item.value == `${sortBy}-${sortOrder}`
-       };
-     });
+      return {
+        ...item,
+        isSelected: item.value == `${sortBy}-${sortOrder}`
+      };
+    });
 
     const customSelectorToggle = (
-        <>
-      <i className="sf3-font-sort2 sf3-font"></i>
-      <i className="sf3-font-down sf3-font sf-dropdown-toggle"></i>
-        </>
+      <button className="btn btn-secondary border-0 op-btn repos-sort-menu-toggle">
+        <i className="sf3-font-sort2 sf3-font"></i>
+        <i className="sf3-font-down sf3-font ml-1"></i>
+      </button>
     );
 
     return (
@@ -261,11 +264,11 @@ class Libraries extends Component {
                 </div>
 
                 <Selector
-                    customSelectorToggle={customSelectorToggle}
-                   options={sortOptions}
-                   selectOption={this.onSelectSortOption}
-                    menuCustomClass='dropdown-menu-right'
-                 />
+                  customSelectorToggle={customSelectorToggle}
+                  options={sortOptions}
+                  selectOption={this.onSelectSortOption}
+                  menuCustomClass='repos-sort-menu dropdown-menu-right'
+                />
               </div>
               }
             </div>

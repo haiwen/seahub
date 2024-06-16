@@ -1,3 +1,11 @@
+.repos-sort-menu-toggle:hover {
+  background: #e5e6e7;
+}
+
+.sf-single-selector .options-container.repos-sort-menu {
+   min-width: 215px;
+}
+
 #files-content-container td:first-child {
   text-align: left!important;
   padding-left: 20px;

@@ -487,7 +487,7 @@ class SharedLibraries extends Component {
     } else {
       this.setState({
         loading: false,
-        items: Utils.sortRepos(this.props.repoList, this.state.sortBy, this.state.sortOrder)
+        items: this.props.repoList
       });
     }
   }
@@ -519,12 +519,13 @@ class SharedLibraries extends Component {
   };
 
   renderContent = () => {
-    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = 'list', repoList } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { items } = this.state;
     return (
       <Content
         loading={this.state.loading}
         errorMsg={this.state.errorMsg}
-        items={this.state.items}
+        items={inAllLibs ? repoList : items}
         sortBy={this.state.sortBy}
         sortOrder={this.state.sortOrder}
         sortItems={this.sortItems}
