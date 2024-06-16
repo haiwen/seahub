@@ -19,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from django.core.cache import cache
 from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.sites.shortcuts import get_current_site
@@ -39,6 +40,7 @@ from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.api2.utils import get_search_repos
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -71,7 +73,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
+    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, \
+    normalize_cache_key
 
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -640,6 +643,58 @@ class Search(APIView):
 
         has_more = True if total > current_page * per_page else False
         return Response({"total":total, "results":results, "has_more":has_more})
+
+
+class ItemsSearch(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    USER_REPOS_CACHE_PREFIX = 'user_repos_'
+    USER_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
+    def get(self, request):
+        """search items"""
+        QUERY_TYPES = [
+            'library',
+        ]
+
+        query_str = request.GET.get('query_str', '')
+        query_type = request.GET.get('query_type', '')
+
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if query_type not in QUERY_TYPES:
+            error_msg = 'query type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else None
+
+        if query_type == 'library':
+            cache_key = normalize_cache_key(username, self.USER_REPOS_CACHE_PREFIX)
+            all_repos = cache.get(cache_key)
+            if not all_repos:
+                all_repos = get_search_repos(username, org_id)
+                cache.set(cache_key, all_repos, self.USER_REPOS_CACHE_TIMEOUT)
+
+            query_result = []
+            # Iterator avoids loading all memory at once
+            query_result = [
+                {
+                    "fullpath": "/",
+                    "is_dir": True,
+                    "repo_name": repo_info[3],
+                    "repo_id": repo_info[0],
+                    "name": repo_info[3]
+                }
+                for repo_info in all_repos
+                if query_str in repo_info[3]
+            ]
+        return Response({'results': query_result})
+
 
 ########## Repo related
 def repo_download_info(request, repo_id, gen_sync_token=True):

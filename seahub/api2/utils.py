@@ -27,6 +27,7 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.utils import get_user_repos
 
 logger = logging.getLogger(__name__)
 
@@ -282,4 +283,21 @@ def is_web_request(request):
     
 def is_wiki_repo(repo):
     return repo.repo_type == REPO_TYPE_WIKI
-    
+
+def get_search_repos(username, org_id):
+    repos = []
+    owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
+    repo_list = owned_repos + public_repos + shared_repos + group_repos
+
+    repo_id_set = set()
+    for repo in repo_list:
+        repo_id = repo.id
+        if repo.origin_repo_id:
+            repo_id = repo.origin_repo_id
+
+        if repo_id in repo_id_set:
+            continue
+        repo_id_set.add(repo_id)
+        repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
+
+    return repos
