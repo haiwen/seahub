@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
@@ -197,20 +197,22 @@ class Wikis extends Component {
             <div className="cur-view-path">
               <div className="path-container">
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
-                <Dropdown
-                  direction="down"
-                  className="add-wiki-dropdown"
-                  isOpen={this.state.isDropdownMenuShown}
-                  toggle={this.toggleDropdownMenu}
-                  onMouseMove={(e) => {e.stopPropagation();}}
-                >
-                  <DropdownToggle tag="i" className="px-1">
-                    <span className="sf3-font sf3-font-drop-down" aria-hidden="true"></span>
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem onClick={() => {this.toggelAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                {canPublishRepo &&
+                  <Dropdown
+                    direction="down"
+                    className="add-wiki-dropdown"
+                    isOpen={this.state.isDropdownMenuShown}
+                    toggle={this.toggleDropdownMenu}
+                    onMouseMove={(e) => {e.stopPropagation();}}
+                  >
+                    <DropdownToggle tag="i" className="px-1">
+                      <span className="sf3-font sf3-font-drop-down" aria-hidden="true"></span>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem onClick={() => {this.toggelAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                }
               </div>
             </div>
             {(this.state.loading || this.state.wikis.length !== 0) &&
