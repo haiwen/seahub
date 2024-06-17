@@ -173,6 +173,10 @@ class LibContentContainer extends React.Component {
         isRepoInfoBarShow = true;
       }
     }
+    let curViewPathStyle = { 'borderBottom': 'none' };
+    if (this.props.isDirentSelected) {
+      curViewPathStyle.transform = 'translateY(-50px)';
+    }
 
     return (
       <Fragment>
@@ -182,7 +186,7 @@ class LibContentContainer extends React.Component {
               {gettext('This library has been set to read-only by admin and cannot be updated.')}
             </div>
           }
-          <div className="cur-view-path d-block" style={{ transform: this.props.isDirentSelected ? 'translateY(-50px)' : '' }}>
+          <div className="cur-view-path d-block" style={curViewPathStyle}>
             <div className="d-flex justify-content-between align-items-center CurDirPath" style={{height: '32px'}}>
               <CurDirPath
                 repoID={repoID}

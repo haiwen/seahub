@@ -8,6 +8,7 @@
   position: absolute;
   top: 48px;
   z-index: 2;
+  width: 100%;
   border-top: 1px solid #e8e8e8;
 }
 
@@ -46,7 +47,7 @@
 
 /*tree view */
 .tree-view {
-  margin-left: -9px;
+  margin-left: -12px;
   padding: 12px 12px 12px 0;
   line-height: 1.5;
   flex: 1;
