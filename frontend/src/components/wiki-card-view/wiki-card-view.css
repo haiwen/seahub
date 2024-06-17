@@ -112,6 +112,18 @@
   padding-top: 6px;
 }
 
+.wiki-card-item-add span:first-child {
+  color: #999;
+  line-height: 24px;
+  height: 24px;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.wiki-card-item-add span:last-child {
+  font-size: 14px;
+}
+
 @media (max-width: 768px) {
   .wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle {
     border: none;

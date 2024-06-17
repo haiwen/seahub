@@ -1,16 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username } from '../../utils/constants';
+import { gettext, username, canPublishRepo } from '../../utils/constants';
 import WikiCardGroup from './wiki-card-group';
+import wikiAPI from '../../utils/wiki-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+
 import './wiki-card-view.css';
 
 const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  toggelAddWikiDialog: PropTypes.func,
 };
 
 class WikiCardView extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      departmentMap: {},
+    };
+  }
+
+  componentDidMount() {
+    if (!canPublishRepo) return;
+    let departmentMap = {};
+    wikiAPI.listWikiDepartments().then(res => {
+      res.data.forEach(item => departmentMap[item.id] = true);
+      this.setState({ departmentMap });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
 
   classifyWikis = (wikis) => {
     let v1Wikis = [];
@@ -33,6 +57,7 @@ class WikiCardView extends Component {
 
   render() {
     let { loading, errorMsg, wikis } = this.props.data;
+    const { toggelAddWikiDialog } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -51,18 +76,20 @@ class WikiCardView extends Component {
         title={gettext('My Wikis')}
         isDepartment={false}
         isShowAvatar={false}
+        toggelAddWikiDialog={canPublishRepo ? toggelAddWikiDialog.bind(this, null) : null}
       />
     );
-    for (let key in department2WikisMap) {
+    for (let deptID in department2WikisMap) {
       wikiCardGroups.push(
         <WikiCardGroup
-          key={'department-Wikis' + key}
+          key={'department-Wikis-' + deptID}
           deleteWiki={this.props.deleteWiki}
           renameWiki={this.props.renameWiki}
-          wikis={department2WikisMap[key]}
-          title={department2WikisMap[key][0].owner_nickname}
+          wikis={department2WikisMap[deptID]}
+          title={department2WikisMap[deptID][0].owner_nickname}
           isDepartment={true}
           isShowAvatar={false}
+          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[deptID]) ? toggelAddWikiDialog.bind(this, deptID) : null}
         />
       );
     }

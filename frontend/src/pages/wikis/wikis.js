@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
-import MediaQuery from 'react-responsive';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -23,9 +22,11 @@ class Wikis extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
+      currentDeptID: '',
       wikis: [],
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
+      isDropdownMenuShown: false,
     };
   }
 
@@ -69,20 +70,33 @@ class Wikis extends Component {
   };
 
   onMenuToggle = () => {
-    this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
+    this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggelAddWikiDialog = () => {
-    this.setState({isShowAddDialog: !this.state.isShowAddDialog});
+  toggelAddWikiDialog = (currentDeptID) => {
+    if (this.state.isShowAddDialog) {
+      this.setState({
+        isShowAddDialog: false,
+        currentDeptID: '',
+      });
+    } else {
+      this.setState({
+        isShowAddDialog: true,
+        currentDeptID
+      });
+    }
   };
 
-  addWiki = (wikiName, departmentID) => {
-    wikiAPI.addWiki2(wikiName, departmentID).then((res) => {
+  addWiki = (wikiName, currentDeptID) => {
+    wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';
       wikis.push(new_wiki);
-      this.setState({ wikis });
+      this.setState({
+        wikis,
+        currentDeptID: '',
+      });
     }).catch((error) => {
       if (error.response) {
         let errMessage = Utils.getErrorMsg(error);
@@ -153,30 +167,29 @@ class Wikis extends Component {
     }
   };
 
+  toggleDropdownMenu = (e) => {
+    e.stopPropagation();
+    this.setState({
+      isDropdownMenuShown: !this.state.isDropdownMenuShown
+    });
+  };
+
   render() {
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            {canPublishRepo &&
-            <div className="operation">
-              <Fragment>
-                <MediaQuery query="(min-width: 768px)">
-                  <Button className="btn btn-secondary operation-item" onClick={this.toggelAddWikiDialog}>{gettext('Add Wiki')}</Button>
-                </MediaQuery>
-                <MediaQuery query="(max-width: 767.8px)">
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Add Wiki')} onClick={this.toggelAddWikiDialog}></span>
-                </MediaQuery>
-              </Fragment>
-            </div>
-            }
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         {this.state.isShowAddDialog &&
           <ModalPortal>
-            <AddWikiDialog toggleCancel={this.toggelAddWikiDialog} addWiki={this.addWiki} />
+            <AddWikiDialog
+              toggleCancel={this.toggelAddWikiDialog}
+              addWiki={this.addWiki}
+              currentDeptID={this.state.currentDeptID}
+            />
           </ModalPortal>
         }
         <div className="main-panel-center">
@@ -184,6 +197,22 @@ class Wikis extends Component {
             <div className="cur-view-path">
               <div className="path-container">
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
+                {canPublishRepo &&
+                  <Dropdown
+                    direction="down"
+                    className="add-wiki-dropdown"
+                    isOpen={this.state.isDropdownMenuShown}
+                    toggle={this.toggleDropdownMenu}
+                    onMouseMove={(e) => {e.stopPropagation();}}
+                  >
+                    <DropdownToggle tag="i" className="px-1">
+                      <span className="sf3-font sf3-font-drop-down" aria-hidden="true"></span>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem onClick={() => {this.toggelAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                }
               </div>
             </div>
             {(this.state.loading || this.state.wikis.length !== 0) &&
@@ -192,6 +221,7 @@ class Wikis extends Component {
                   data={this.state}
                   deleteWiki={this.deleteWiki}
                   renameWiki={this.renameWiki}
+                  toggelAddWikiDialog={this.toggelAddWikiDialog}
                 />
               </div>
             }

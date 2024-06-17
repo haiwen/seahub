@@ -10,6 +10,7 @@ import { SeahubSelect } from '../common/select';
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
+  currentDeptID: PropTypes.string,
 };
 
 class AddWikiDialog extends React.Component {
@@ -37,7 +38,11 @@ class AddWikiDialog extends React.Component {
         obj.label = departments[i].name;
         options.push(obj);
       }
-      this.setState({options: options});
+      this.setState({ options });
+      if (this.props.currentDeptID) {
+        const selectedOption = options.find(op => op.id == this.props.currentDeptID);
+        this.setState({ selectedOption });
+      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -47,7 +52,6 @@ class AddWikiDialog extends React.Component {
   inputNewName = (e) => {
     this.setState({
       name: e.target.value,
-      isSubmitBtnActive: !!e.target.value.trim(),
     });
   };
 
@@ -96,7 +100,7 @@ class AddWikiDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.name.trim()}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

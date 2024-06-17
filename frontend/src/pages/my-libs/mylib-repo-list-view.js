@@ -15,6 +15,7 @@ const propTypes = {
   onTransferRepo: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
   inAllLibs: PropTypes.bool, // for 'My Libraries' in 'Files' page
+  currentViewMode: PropTypes.string,
 };
 
 class MylibRepoListView extends React.Component {
@@ -102,7 +103,7 @@ class MylibRepoListView extends React.Component {
       </table>
     ) : (
       <div className="d-flex justify-content-between flex-wrap">
-      {this.renderRepoListView()}
+        {this.renderRepoListView()}
       </div>
     );
   };
