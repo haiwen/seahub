@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
+import ViewModes from '../../components/view-modes';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -24,7 +25,6 @@ class DirTool extends React.Component {
     super(props);
     this.state = {
       isRepoTagDialogOpen: false,
-      isSwitchModeDropdownMenuOpen: false,
       isDropdownMenuOpen: false
     };
   }
@@ -32,12 +32,6 @@ class DirTool extends React.Component {
   toggleDropdownMenu = () => {
     this.setState({
       isDropdownMenuOpen: !this.state.isDropdownMenuOpen
-    });
-  };
-
-  toggleSwitchModeDropdownMenu = () => {
-    this.setState({
-      isSwitchModeDropdownMenuOpen: !this.state.isSwitchModeDropdownMenuOpen
     });
   };
 
@@ -123,55 +117,12 @@ class DirTool extends React.Component {
 
   render() {
     const menuItems = this.getMenuList();
-    const { isDropdownMenuOpen, isSwitchModeDropdownMenuOpen } = this.state;
-    const { repoID } = this.props;
+    const { isDropdownMenuOpen } = this.state;
+    const { repoID, currentMode } = this.props;
     return (
       <React.Fragment>
         <div className="d-flex">
-          <Dropdown
-            isOpen={isSwitchModeDropdownMenuOpen}
-            toggle={this.toggleSwitchModeDropdownMenu}
-            id="cur-view-change-mode-dropdown"
-          >
-            <DropdownToggle
-              tag="i"
-              children={
-                <span className='cur-view-path-btn px-1'>
-                  <span className={`sf3-font sf3-font-${this.props.currentMode === 'list' ? 'list-view' : 'grid-view'}`}></span>
-                  <span className={'sf3-font sf3-font-down'}></span>
-                </span>
-              }
-              data-toggle="dropdown"
-              title={gettext('Change view mode')}
-              aria-label={gettext('Change view mode')}
-              aria-expanded={isSwitchModeDropdownMenuOpen}
-            >
-            </DropdownToggle>
-            <DropdownMenu right={true}>
-              <DropdownItem key={0} onClick={this.props.switchViewMode.bind(this, 'list')}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span className="mr-8 d-flex justify-content-between align-items-center">
-                    <span className={'sf3-font-list-view sf3-font mr-2'}></span>
-                    <span>{gettext('List view')}</span>
-                  </span>
-                  <span>
-                    {this.props.currentMode === 'list' && <i className="fas fa-check color-selected"></i>}
-                  </span>
-                </div>
-              </DropdownItem>
-              <DropdownItem key={1} onClick={this.props.switchViewMode.bind(this, 'grid')}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span className="mr-8 d-flex justify-content-between align-items-center">
-                    <span className={'sf3-font-grid-view sf3-font mr-2'}></span>
-                    <span>{gettext('Grid view')}</span>
-                  </span>
-                  <span>
-                    {this.props.currentMode === 'grid' && <i className="fas fa-check color-selected"></i>}
-                  </span>
-                </div>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
           {menuItems.length > 0 &&
           <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
             <DropdownToggle
