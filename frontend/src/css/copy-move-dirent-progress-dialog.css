@@ -1,0 +1,7 @@
+.copy-move-dirent-progress-dialog .modal-body {
+  min-height: 80px;
+}
+
+.copy-move-dirent-progress-dialog .modal-body .progress {
+  height: 40px;
+}

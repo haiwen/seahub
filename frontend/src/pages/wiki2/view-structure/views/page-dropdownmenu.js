@@ -141,7 +141,6 @@ export default class PageDropdownMenu extends Component {
           flip={false}
           modifiers={{ preventOverflow: { boundariesElement: document.body } }}
           positionFixed={true}
-          style={{ zIndex: 1051 }}
         >
           <DropdownItem onClick={this.handleCopyLink}>
             <i className="sf3-font sf3-font-sdoc-link" />

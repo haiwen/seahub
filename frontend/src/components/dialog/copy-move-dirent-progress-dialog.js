@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import '../../css/copy-move-dirent-progress-dialog.css';
 
 const propTypes = {
   type: PropTypes.oneOf(['move', 'copy']).isRequired,
@@ -13,7 +14,6 @@ const propTypes = {
 class CopyMoveDirentProgressDialog extends React.Component {
 
   render() {
-
     let { type , asyncOperationProgress, asyncOperatedFilesLength } = this.props;
     let title = type === 'move' ? gettext('Move {num} items') : gettext('Copy {num} items');
     title = title.replace('{num}', asyncOperatedFilesLength);
@@ -23,10 +23,10 @@ class CopyMoveDirentProgressDialog extends React.Component {
       textAlign: 'left',
     };
     return (
-      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog} className="copy-move-dirent-progress-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>{title}</ModalHeader>
-        <ModalBody style={{minHeight: '80px'}}>
-          <div className="progress" style={{height: '40px'}}>
+        <ModalBody>
+          <div className="progress">
             <div
               className="progress-bar pl-2"
               role="progressbar"
