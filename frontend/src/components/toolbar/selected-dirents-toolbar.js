@@ -336,7 +336,7 @@ class MultipleDirOperationToolbar extends React.Component {
       <Fragment>
         <div className="selected-dirents-toolbar">
           {selectedLen > 0 &&
-            <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
+            <span className="cur-view-path-btn px-2" style={{ marginLeft: '-10px' }} onClick={this.props.unSelectDirent}>
               <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
               <span>{selectedLen}{' '}{gettext('selected')}</span>
             </span>

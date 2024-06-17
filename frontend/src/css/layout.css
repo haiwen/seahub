@@ -129,6 +129,20 @@
   margin-left: 2px;
 }
 
+.cur-view-path:after {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  content: '';
+}
+
+.cur-view-path {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
 .cur-view-content {
   padding: 0rem 1rem;
   flex: 1;

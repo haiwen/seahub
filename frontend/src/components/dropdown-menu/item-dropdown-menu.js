@@ -4,6 +4,7 @@ import listener from '../context-menu/globalEventListener';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import ModalPortal from '../modal-portal';
 
 const propTypes = {
   tagName: PropTypes.string,
@@ -158,17 +159,19 @@ class ItemDropdownMenu extends React.Component {
           onKeyDown={this.onDropdownToggleKeyDown}
           // onClick={this.onDropdownToggleClick}
         />
-        <DropdownMenu>
-          {menuList.map((menuItem, index) => {
-            if (menuItem === 'Divider') {
-              return <DropdownItem key={index} divider />;
-            } else {
-              return (
-                <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
-              );
-            }
-          })}
-        </DropdownMenu>
+        <ModalPortal>
+          <DropdownMenu>
+            {menuList.map((menuItem, index) => {
+              if (menuItem === 'Divider') {
+                return <DropdownItem key={index} divider />;
+              } else {
+                return (
+                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
+                );
+              }
+            })}
+          </DropdownMenu>
+        </ModalPortal>
       </Dropdown>
     );
   }
