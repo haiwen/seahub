@@ -164,7 +164,7 @@ def edit_profile(request):
             'enable_dingtalk': enable_dingtalk,
             'social_connected_dingtalk': social_connected_dingtalk,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
-            'ENABLE_USER_SET_NICKNAME': settings.ENABLE_USER_SET_NICKNAME,
+            'ENABLE_USER_SET_NAME': settings.ENABLE_USER_SET_NAME,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
             'enable_adfs': enable_adfs,
             'saml_connected': saml_connected,

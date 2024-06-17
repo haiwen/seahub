@@ -6,7 +6,7 @@ const {
   nameLabel,
   enableUpdateUserInfo,
   enableUserSetContactEmail,
-  enableUserSetNickname
+  enableUserSetName
 } = window.app.pageOptions;
 
 class UserBasicInfoForm extends React.Component {
@@ -40,7 +40,7 @@ class UserBasicInfoForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let data = {};
-    if (enableUserSetNickname) {
+    if (enableUserSetName) {
       data.name = this.state.name;
     }
     if (enableUserSetContactEmail) {
@@ -62,7 +62,7 @@ class UserBasicInfoForm extends React.Component {
         <div className="form-group row">
           <label className="col-sm-1 col-form-label" htmlFor="name">{nameLabel}</label>
           <div className="col-sm-5">
-            <input className="form-control" id="name" type="text" name="nickname" value={name} disabled={!enableUpdateUserInfo || !enableUserSetNickname} onChange={this.handleNameInputChange} />
+            <input className="form-control" id="name" type="text" name="nickname" value={name} disabled={!enableUpdateUserInfo || !enableUserSetName} onChange={this.handleNameInputChange} />
           </div>
         </div>
 

@@ -20,7 +20,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMAIL, ENABLE_CONVERT_TO_TEAM_ACCOUNT, \
-    ENABLE_USER_SET_NICKNAME
+    ENABLE_USER_SET_NAME
 
 import seaserv
 from seaserv import ccnet_api, seafile_api
@@ -86,7 +86,7 @@ class User(APIView):
         # argument check for name
         name = request.data.get("name", None)
         if name:
-            if not ENABLE_USER_SET_NICKNAME:
+            if not ENABLE_USER_SET_NAME:
                 error_msg = _('Feature disabled.')
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             name = name.strip()
