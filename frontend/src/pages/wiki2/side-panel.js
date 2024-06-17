@@ -16,6 +16,7 @@ import Page from './models/page';
 import wikiAPI from '../../utils/wiki-api';
 import { FOLDER } from './constant';
 import { Utils } from '../../utils/utils';
+import WikiExternalOperations from './wiki-external-operations';
 
 import './side-panel.css';
 
@@ -65,12 +66,12 @@ class SidePanel extends Component {
     this.addPage(newPage, parentPageId, successCallback, errorCallback);
   };
 
-  onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback }) => {
+  onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback, jumpToNewPage = true }) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
     const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
+    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback, jumpToNewPage);
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -88,7 +89,7 @@ class SidePanel extends Component {
     this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
-  addPage = (page, parentId, successCallback, errorCallback) => {
+  addPage = (page, parentId, successCallback, errorCallback, jumpToNewPage = true) => {
     const { config } = this.props;
     const navigation = config.navigation;
     const pageId = page.id;
@@ -96,7 +97,7 @@ class SidePanel extends Component {
     PageUtils.addPage(navigation, pageId, parentId);
     config.navigation = navigation;
     const onSuccess = () => {
-      this.props.setCurrentPage(pageId, successCallback);
+      jumpToNewPage && this.props.setCurrentPage(pageId, successCallback);
       successCallback();
     };
     this.props.saveWikiConfig(config, onSuccess, errorCallback);
@@ -342,11 +343,11 @@ class SidePanel extends Component {
     );
   };
 
-  handleAddNewPage = () => {
-    const pageName = 'Untitled'; // default page name
+  // default page name
+  handleAddNewPage = (jumpToNewPage = true, pageName = 'Untitled') => {
     const voidFn = () => void 0;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
-      const { obj_name, parent_dir, doc_uuid,page_name } = res.data;
+      const { obj_name, parent_dir, doc_uuid, page_name } = res.data;
       this.onAddNewPage({
         name: page_name,
         icon: '',
@@ -354,6 +355,7 @@ class SidePanel extends Component {
         docUuid: doc_uuid,
         successCallback: voidFn,
         errorCallback: voidFn,
+        jumpToNewPage,
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -368,7 +370,7 @@ class SidePanel extends Component {
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
-          <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage}>
+          <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
             <i className='sf3-font sf3-font-new-page'></i>
           </div>
           <UncontrolledTooltip target="wiki-add-new-page">
@@ -378,6 +380,7 @@ class SidePanel extends Component {
         <div className="wiki2-side-nav">
           {isLoading ? <Loading /> : (isObjectNotEmpty(config) ? this.renderFolderView() : this.renderNoFolder())}
         </div>
+        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
       </div>
     );
   }

@@ -2871,11 +2871,11 @@ msgstr "заблокирован"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:730
 msgid "Unselect this item"
-msgstr ""
+msgstr "Отменить выбор этого элемента"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:730
 msgid "Select this item"
-msgstr ""
+msgstr "Выбрать этот элемент"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:734
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:818
@@ -2903,11 +2903,11 @@ msgstr "Отметить"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:623
 msgid "Unselect all items"
-msgstr ""
+msgstr "Отменить выбор всех элементов"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:623
 msgid "Select all items"
-msgstr ""
+msgstr "Выбрать все элементы"
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:54
 msgid "This folder has no content at this time."
@@ -5087,7 +5087,7 @@ msgstr "Не активный"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:230
 #: frontend/src/pages/sys-admin/users/users-content.js:406
 msgid "Are you sure you want to set {user_placeholder} inactive?"
-msgstr ""
+msgstr "Вы уверены, что хотите сделать пользователя {user_placeholder} неактивным?"
 
 #: frontend/src/pages/org-admin/org-user-item.js:195
 msgid "ResetPwd"
@@ -5105,13 +5105,13 @@ msgstr "Отозвать Администратора"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:313
 #: frontend/src/pages/sys-admin/users/users-content.js:584
 msgid "Set user inactive"
-msgstr ""
+msgstr "Сделать пользователя неактивным"
 
 #: frontend/src/pages/org-admin/org-user-item.js:207
 #: frontend/src/pages/sys-admin/orgs/org-users.js:316
 #: frontend/src/pages/sys-admin/users/users-content.js:587
 msgid "Set"
-msgstr ""
+msgstr "Сделать"
 
 #: frontend/src/pages/org-admin/org-user-profile.js:128
 msgid "Avatar"

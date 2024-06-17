@@ -223,5 +223,9 @@
   "Open_link": "Ouvrir le lien",
   "Image_is_uploading": "Image is uploading",
   "Image_loading_failed": "Image loading failed",
-  "Expand_editor": "Expand editor"
+  "Expand_editor": "Expand editor",
+  "Insert_below": "Insérer en-dessous",
+  "Insert_above": "Insérer au-dessus",
+  "Insert_on_the_right": "Insérer à droite",
+  "Insert_on_the_left": "Insérer à gauche"
 }
