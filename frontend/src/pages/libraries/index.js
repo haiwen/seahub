@@ -9,6 +9,7 @@ import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
 import Selector from '../../components/single-selector';
+import ViewModes from '../../components/view-modes';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -228,7 +229,6 @@ class Libraries extends Component {
 
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder } = this.state;
-    const baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
     const isDesktop = Utils.isDesktop();
 
     const sortOptions = this.sortOptions.map(item => {
@@ -239,10 +239,10 @@ class Libraries extends Component {
     });
 
     const customSelectorToggle = (
-      <button className="btn btn-secondary border-0 op-btn repos-sort-menu-toggle">
+      <span className="cur-view-path-btn px-1" role="button">
         <i className="sf3-font-sort2 sf3-font"></i>
-        <i className="sf3-font-down sf3-font ml-1"></i>
-      </button>
+        <i className="sf3-font-down sf3-font"></i>
+      </span>
     );
 
     return (
@@ -259,10 +259,8 @@ class Libraries extends Component {
               {isDesktop &&
               <div className="d-flex align-items-center">
                 <div className="view-modes mr-2">
-                  <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
-                  <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
+                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
                 </div>
-
                 <Selector
                   customSelectorToggle={customSelectorToggle}
                   options={sortOptions}
