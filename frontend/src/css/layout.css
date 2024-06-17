@@ -329,3 +329,10 @@ img[src=""],img:not([src]) { /* for first loading img*/
 .path-container .op-btn .sf3-font {
   color: #444;
 }
+
+.path-container .add-wiki-dropdown .sf3-font-drop-down {
+  color: #999;
+  cursor: pointer;
+  font-size: 12px;
+  transform: scale(.8);
+}
