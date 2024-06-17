@@ -1,20 +1,19 @@
-import os
+import pytest
 import openpyxl
 from io import BytesIO
 from mock import patch
 from django.urls import reverse
 
+from seaserv import ccnet_api
 from seahub.base.accounts import User
-from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE)
 from seahub.test_utils import BaseTestCase
 from seahub.utils.ms_excel import write_xls as real_write_xls
 
-import pytest
 pytestmark = pytest.mark.django_db
 
-from seaserv import ccnet_threaded_rpc
 
 class BatchUserMakeAdminTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
 
@@ -53,6 +52,7 @@ class BatchUserMakeAdminTest(BaseTestCase):
 
 
 class UserRemoveTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
 
@@ -65,10 +65,11 @@ class UserRemoveTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        assert len(ccnet_threaded_rpc.search_emailusers('DB', username, -1, -1))  == 0
+        assert len(ccnet_api.search_emailusers('DB', username, -1, -1)) == 0
 
 
 class SudoModeTest(BaseTestCase):
+
     def test_normal_user_raise_404(self):
         self.login_as(self.user)
 
@@ -94,6 +95,7 @@ class SudoModeTest(BaseTestCase):
 
 
 class SysGroupAdminExportExcelTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
 
@@ -104,8 +106,15 @@ class SysGroupAdminExportExcelTest(BaseTestCase):
 
 
 class SysUserAdminExportExcelTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
+
+        orgs = ccnet_api.get_all_orgs(-1, -1)
+        for org in orgs:
+            users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+            for user in users:
+                ccnet_api.remove_org_user(org.org_id, user.email)
 
     def test_can_export_excel(self):
         resp = self.client.get(reverse('sys_useradmin_export_excel'))
@@ -127,7 +136,9 @@ class SysUserAdminExportExcelTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert 'application/ms-excel' in resp.headers['content-type']
 
+
 class BatchAddUserHelpTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
 
