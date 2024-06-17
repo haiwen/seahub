@@ -29,7 +29,6 @@ class AddWikiPageDialog extends React.Component {
 
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) return;
-
     // first param set false to prevent redirect to new page
     this.props.onAddPage(false, this.state.wikiPageName);
     this.props.handleClose();
