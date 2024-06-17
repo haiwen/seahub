@@ -182,32 +182,8 @@ class LibContentContainer extends React.Component {
               {gettext('This library has been set to read-only by admin and cannot be updated.')}
             </div>
           }
-          <div className="cur-view-path">
-            {this.props.isDirentSelected ?
-              <ToolbarForSelectedDirents
-                repoID={this.props.repoID}
-                path={this.props.path}
-                userPerm={this.props.userPerm}
-                repoEncrypted={this.props.repoEncrypted}
-                repoTags={this.props.repoTags}
-                selectedDirentList={this.props.selectedDirentList}
-                direntList={this.props.direntList}
-                onItemsMove={this.props.onItemsMove}
-                onItemsCopy={this.props.onItemsCopy}
-                onItemsDelete={this.props.onItemsDelete}
-                onItemRename={this.props.onItemRename}
-                isRepoOwner={this.props.isRepoOwner}
-                currentRepoInfo={this.props.currentRepoInfo}
-                enableDirPrivateShare={this.props.enableDirPrivateShare}
-                updateDirent={this.props.updateDirent}
-                unSelectDirent={this.props.unSelectDirent}
-                onFilesTagChanged={this.props.onFilesTagChanged}
-                showShareBtn={this.props.showShareBtn}
-                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                showDirentDetail={this.props.showDirentDetail}
-                currentMode={this.props.currentMode}
-                switchViewMode={this.props.switchViewMode}
-              /> :
+          <div className="cur-view-path d-block" style={{ transform: this.props.isDirentSelected ? 'translateY(-50px)' : '' }}>
+            <div className="d-flex justify-content-between align-items-center CurDirPath" style={{height: '32px'}}>
               <CurDirPath
                 repoID={repoID}
                 repoName={this.props.currentRepoInfo.repo_name}
@@ -241,7 +217,33 @@ class LibContentContainer extends React.Component {
                 onFileTagChanged={this.props.onToolbarFileTagChanged}
                 repoTags={this.props.repoTags}
               />
-            }
+            </div>
+            <div style={{marginTop: '24px'}}>
+              <ToolbarForSelectedDirents
+                repoID={this.props.repoID}
+                path={this.props.path}
+                userPerm={this.props.userPerm}
+                repoEncrypted={this.props.repoEncrypted}
+                repoTags={this.props.repoTags}
+                selectedDirentList={this.props.selectedDirentList}
+                direntList={this.props.direntList}
+                onItemsMove={this.props.onItemsMove}
+                onItemsCopy={this.props.onItemsCopy}
+                onItemsDelete={this.props.onItemsDelete}
+                onItemRename={this.props.onItemRename}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                updateDirent={this.props.updateDirent}
+                unSelectDirent={this.props.unSelectDirent}
+                onFilesTagChanged={this.props.onFilesTagChanged}
+                showShareBtn={this.props.showShareBtn}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                showDirentDetail={this.props.showDirentDetail}
+                currentMode={this.props.currentMode}
+                switchViewMode={this.props.switchViewMode}
+              />
+            </div>
           </div>
           <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
             {!this.props.pathExist && this.errMessage}

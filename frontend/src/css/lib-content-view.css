@@ -4,6 +4,11 @@
 
 .cur-view-content.lib-content-container {
   padding: 0;
+  background-color: #fff;
+  position: absolute;
+  top: 48px;
+  z-index: 2;
+  border-top: 1px solid #e8e8e8;
 }
 
 .view-mode-container {
