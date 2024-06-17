@@ -335,12 +335,10 @@ class MultipleDirOperationToolbar extends React.Component {
     return (
       <Fragment>
         <div className="selected-dirents-toolbar">
-          {selectedLen > 0 &&
-            <span className="cur-view-path-btn px-2" style={{ marginLeft: '-10px' }} onClick={this.props.unSelectDirent}>
-              <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
-              <span>{selectedLen}{' '}{gettext('selected')}</span>
-            </span>
-          }
+          <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
+            <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+            <span>{selectedLen}{' '}{gettext('selected')}</span>
+          </span>
           {canModify &&
             <span className="cur-view-path-btn" onClick={this.onMoveToggle}>
               <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>

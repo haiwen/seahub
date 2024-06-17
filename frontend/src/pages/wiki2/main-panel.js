@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
-import WikiExternalOperations from './wiki-external-operations';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -67,7 +66,7 @@ class MainPanel extends Component {
   };
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile, config, onAddWikiPage } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile, config } = this.props;
     const { currentPageConfig = {}, } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');

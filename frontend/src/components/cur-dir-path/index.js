@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -57,7 +57,7 @@ class CurDirPath extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     return (
-      <Fragment>
+      <div className="cur-dir-path d-flex justify-content-between align-items-center">
         <DirPath
           repoID={this.props.repoID}
           repoName={this.props.repoName}
@@ -104,7 +104,7 @@ class CurDirPath extends React.Component {
           sortItems={this.props.sortItems}
         />
         }
-      </Fragment>
+      </div>
     );
   }
 }

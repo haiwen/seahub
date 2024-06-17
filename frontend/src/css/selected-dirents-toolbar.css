@@ -1,10 +1,15 @@
 .cur-view-path .selected-dirents-toolbar {
+  margin-top: 24px;
   height: 24px;
 }
 
 .cur-view-path .selected-dirents-toolbar .cur-view-path-btn {
   margin-left: 0;
   margin-right: 20px;
+}
+
+.cur-view-path .selected-dirents-toolbar .cur-view-path-btn:first-child {
+  margin-left: -10px;
 }
 
 .cur-view-path .selected-dirents-toolbar .dropdown {

@@ -138,4 +138,7 @@ img[src=""] {
   .wiki-page-container .article {
     padding: 0 !important;
   }
+  .wiki-main-panel .mobile-toolbar-icon {
+    font-size: 1.1rem;
+  }
 }

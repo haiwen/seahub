@@ -102,6 +102,10 @@
   border-bottom: 1px solid #eee;
 }
 
+.cur-view-path .cur-dir-path {
+  height: 32px;
+}
+
 .cur-view-path .cur-view-path-btn {
   cursor: pointer;
   font-size: 14px;

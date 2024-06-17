@@ -245,6 +245,10 @@
   background: #f5f5f5;
 }
 
+.dir-view-path .cur-view-path-btn {
+  margin-left: -4px;
+}
+
 .dir-view-path .path-item {
   min-width: 0; /* overwrite some styles */
   padding: 0 6px;
