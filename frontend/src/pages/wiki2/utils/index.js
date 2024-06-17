@@ -43,8 +43,21 @@ const getIconURL = (repoId, fileName) => {
   return serviceURL + '/lib/' + repoId + '/file/_Internal/Wiki/Icon/' + fileName + '?raw=1';
 };
 
-const getCurrentPageConfig = (pages,pageId) => {
+const getCurrentPageConfig = (pages, pageId) => {
   return pages.filter(page => page.id === pageId)[0];
 };
 
-export { generatorBase64Code, generateUniqueId, isObjectNotEmpty, getIconURL, getCurrentPageConfig };
+const getWikPageLink = (pageId) => {
+  const { origin, pathname } = window.location;
+
+  return `${origin}${pathname}?page_id=${pageId}`;
+};
+
+export {
+  generatorBase64Code,
+  generateUniqueId,
+  isObjectNotEmpty,
+  getIconURL,
+  getCurrentPageConfig,
+  getWikPageLink,
+};

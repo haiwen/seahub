@@ -4,6 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
+import { getWikPageLink } from '../../utils';
 
 export default class PageDropdownMenu extends Component {
 
@@ -103,11 +104,31 @@ export default class PageDropdownMenu extends Component {
     this.setState({ isShowMenu: false });
   };
 
+  handleCopyLink = () => {
+    const { view } = this.props;
+    const wikiLink = getWikPageLink(view.id);
+    const successText = gettext('Copied link to clipboard');
+    const failedText = gettext('Copy failed');
+
+    navigator.clipboard.writeText(wikiLink).then(() => {
+      toaster.success(successText);
+    }, () => {
+      toaster.error(failedText);
+    }).catch(void 0);
+  };
+
+  handleOpenInNewTab = () => {
+    const { view } = this.props;
+    const wikiLink = getWikPageLink(view.id);
+    window.open(wikiLink);
+  };
+
   render() {
     const {
       folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOneView,
     } = this.props;
     const folderMenuItems = renderFolderMenuItems && renderFolderMenuItems({ currentFolderId: folderId, onMoveViewToFolder: this.onMoveViewToFolder });
+
     return (
       <Dropdown
         isOpen={true}
@@ -122,6 +143,10 @@ export default class PageDropdownMenu extends Component {
           positionFixed={true}
           style={{ zIndex: 1051 }}
         >
+          <DropdownItem onClick={this.handleCopyLink}>
+            <i className="sf3-font sf3-font-sdoc-link" />
+            <span className="item-text">{gettext('Copy link')}</span>
+          </DropdownItem>
           <DropdownItem onClick={this.onRenameView}>
             <Icon symbol={'edit'}/>
             <span className="item-text">{gettext('Modify name')}</span>
@@ -183,6 +208,11 @@ export default class PageDropdownMenu extends Component {
               </Dropdown>
             </DropdownItem>
           }
+          < hr className='divider' />
+          <DropdownItem onClick={this.handleOpenInNewTab}>
+            <i className='sf3-font sf3-font-open-in-new-tab' />
+            <span className="item-text">{gettext('Open in new tab')}</span>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );

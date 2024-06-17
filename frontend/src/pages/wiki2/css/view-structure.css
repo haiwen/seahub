@@ -248,6 +248,15 @@
   margin-top: 4px;
 }
 
+.view-operation-dropdown-menu .sf3-font {
+  font-size: 10px;
+  margin-right: 10px;
+}
+
+.view-operation-dropdown-menu .divider {
+  margin: 0.2rem 0;
+}
+
 /* folders dropdown */
 .view-structure .more-view-operation .btn-move-to-folder {
   display: flex;
@@ -264,7 +273,7 @@
 
 .view-structure .more-view-operation .folders-dropdown-menu {
   margin-top: -16px;
-  margin-left: -12px;
+  margin-left: 10px;
 }
 
 .view-structure .folders-dropdown-menu .dropdown-item {
@@ -299,7 +308,7 @@
 .view-structure .folders-dropdown .dropdown-menu {
   max-width: 180px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .view-structure .folders-dropdown .dropdown-menu .folder-name {
