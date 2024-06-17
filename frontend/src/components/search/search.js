@@ -467,14 +467,11 @@ class Search extends Component {
                 ref={this.searchResultListRef}
               >
                 {resultItems.map((item, index) => {
-                  const isHighlight = index === highlightIndex;
                   return (
                     <SearchResultItem
                       key={index}
                       item={item}
                       onItemClickHandler={this.onItemClickHandler}
-                      isHighlight={isHighlight}
-                      setRef={isHighlight ? (ref) => { this.highlightRef = ref; } : () => { }}
                     />
                   );
                 })}
