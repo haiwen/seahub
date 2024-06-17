@@ -8,6 +8,7 @@ import LibsMobileThead from '../libs-mobile-thead';
 import Loading from '../loading';
 
 const propTypes = {
+  currentViewMode: PropTypes.string,
   libraryType: PropTypes.string,
   currentGroup: PropTypes.object,
   isShowTableThread: PropTypes.bool,
@@ -84,6 +85,7 @@ class SharedRepoListView extends React.Component {
   };
 
   renderRepoListView = () => {
+    const { currentViewMode = 'list' } = this.props;
     return (
       <Fragment>
         {this.props.repoList.map(repo => {
@@ -100,6 +102,7 @@ class SharedRepoListView extends React.Component {
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}
               onMonitorRepo={this.props.onMonitorRepo}
+              currentViewMode={currentViewMode}
             />
           );
         })}
@@ -108,10 +111,10 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { theadHidden = false } = this.props;
+    const { theadHidden = false, currentViewMode = 'list' } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
-    return (
+    return currentViewMode == 'list' ? (
       <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
@@ -128,6 +131,10 @@ class SharedRepoListView extends React.Component {
           {this.renderRepoListView()}
         </tbody>
       </table>
+    ) : (
+      <div className="d-flex justify-content-between flex-wrap">
+        {this.renderRepoListView()}
+      </div>
     );
   };
 

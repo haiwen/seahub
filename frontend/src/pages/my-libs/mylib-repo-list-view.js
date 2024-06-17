@@ -70,6 +70,7 @@ class MylibRepoListView extends React.Component {
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
               onMonitorRepo={this.props.onMonitorRepo}
+              currentViewMode={this.props.currentViewMode}
             />
           );
         })}
@@ -78,11 +79,11 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { inAllLibs } = this.props;
+    const { inAllLibs, currentViewMode = 'list' } = this.props;
     const showStorageBackend = !inAllLibs && storages.length > 0;
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
-    return (
+    return currentViewMode == 'list' ? (
       <table className={inAllLibs ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
@@ -99,6 +100,10 @@ class MylibRepoListView extends React.Component {
           {this.renderRepoListView()}
         </tbody>
       </table>
+    ) : (
+      <div className="d-flex justify-content-between flex-wrap">
+      {this.renderRepoListView()}
+      </div>
     );
   };
 

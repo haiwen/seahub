@@ -25,6 +25,7 @@ import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 const propTypes = {
+  currentViewMode: PropTypes.string,
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -318,16 +319,21 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    let repo = this.props.repo;
-    let iconUrl = Utils.getLibIconUrl(repo);
+    const { repo, currentViewMode = 'list' } = this.props;
+    let useBigLibaryIcon = currentViewMode == 'grid';
+    let iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
-    return (
+    return currentViewMode == 'list' ? (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus}>
         <td className="text-center">
-          <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
-            <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
-          </a>
+          <i
+            role="button"
+            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            onClick={this.onToggleStarRepo}
+            className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+          ></i>
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
@@ -341,7 +347,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </Fragment>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -367,6 +373,54 @@ class MylibRepoListItem extends React.Component {
         {storages.length > 0 && <td>{repo.storage_name}</td>}
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
       </tr>
+    ) : (
+      <div
+        className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onFocus}
+      >
+        <div className="d-flex align-items-center">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
+          {this.state.isRenaming && (
+            <Rename
+              name={repo.repo_name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          )}
+          {!this.state.isRenaming && repo.repo_name && (
+            <Fragment>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              <i
+                role="button"
+                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+                onClick={this.onToggleStarRepo}
+              >
+              </i>
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
+            </Fragment>
+          )}
+          {!this.state.isRenaming && !repo.repo_name &&
+            (<span>{gettext('Broken (please contact your administrator to fix this library)')}</span>)
+          }
+        </div>
+        {(repo.repo_name && this.state.isOpIconShow) && (
+          <div>
+            <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
+            <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+            <MylibRepoMenu
+              isPC={true}
+              repo={this.props.repo}
+              onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
+            />
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -390,7 +444,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&

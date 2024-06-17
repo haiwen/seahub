@@ -16,6 +16,7 @@ import TopToolbar from './top-toolbar';
 const propTypes = {
   onShowSidePanel: PropTypes.func,
   onSearchedClick: PropTypes.func,
+  currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool,
   repoList: PropTypes.array,
 };
@@ -117,10 +118,10 @@ class PublicSharedView extends React.Component {
   };
 
   renderContent = () => {
-    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
     const { errMessage } = this.state;
     const emptyTip = inAllLibs ?
-      <p className="libraries-empty-tip">{gettext('No public libraries')}</p> : (
+      <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p> : (
         <EmptyTip>
           <h2>{gettext('No public libraries')}</h2>
           <p>{gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}</p>
@@ -141,6 +142,7 @@ class PublicSharedView extends React.Component {
           onItemUnshare={this.onItemUnshare}
           onItemDelete={this.onItemDelete}
           theadHidden={inAllLibs}
+          currentViewMode={currentViewMode}
         />
         }
       </>
@@ -157,12 +159,12 @@ class PublicSharedView extends React.Component {
   };
 
   render() {
-    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
 
     if (inAllLibs) {
       return (
         <>
-          <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
             <h4 className="sf-heading m-0">
               <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
               {gettext('Shared with all')}

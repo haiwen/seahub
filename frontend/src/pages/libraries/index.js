@@ -8,13 +8,14 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
+import Selector from '../../components/single-selector';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
-import SharedLibs from '../../pages/shared-libs/shared-libs.js';
+import SharedLibs from '../../pages/shared-libs/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 
@@ -28,19 +29,27 @@ const propTypes = {
 class Libraries extends Component {
   constructor(props) {
     super(props);
+    this.sortOptions = [
+      {value: 'name-asc', text: gettext('By name ascending')},
+      {value: 'name-desc', text: gettext('By name descending')},
+      {value: 'time-asc', text: gettext('By time ascending')},
+      {value: 'time-desc', text: gettext('By time descending')}
+    ];
+
     this.state = {
       // for 'my libs'
       errorMsg: '',
       isLoading: true,
       repoList: [],
       isSortOptionsDialogOpen: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       groupList: [],
       sharedRepoList:[],
       publicRepoList: [],
-      isCreateRepoDialogOpen: false
+      isCreateRepoDialogOpen: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list',
+      sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
+      sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
     };
   }
 
@@ -49,21 +58,20 @@ class Libraries extends Component {
     const promiseListGroups = seafileAPI.listGroups(true);
     Promise.all([promiseListRepos, promiseListGroups]).then(res => {
       const [resListRepos, resListGroups] = res;
-      const allRepoList = resListRepos.data.repos.map((item) => new Repo(item));
-      const myRepoList = allRepoList.filter(item => item.type === 'mine');
-      const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
-      const publicRepoList = allRepoList.filter(item => item.type === 'public');
-      const groupList = resListGroups.data.map(item => {
+      const repoList = resListRepos.data.repos.map((item) => new Repo(item));
+      const groups = resListGroups.data.map(item => {
         let group = new Group(item);
         group.repos = item.repos.map(item => new Repo(item));
         return group;
       }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
+      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
       this.setState({
         isLoading: false,
+        allRepoList,
         groupList,
         sharedRepoList,
         publicRepoList,
-        repoList: Utils.sortRepos(myRepoList, this.state.sortBy, this.state.sortOrder),
+        repoList: myRepoList
       });
     }).catch((error) => {
       this.setState({
@@ -72,6 +80,18 @@ class Libraries extends Component {
       });
     });
   }
+
+  sortRepos = (repoList, groups) => {
+    const allRepoList = Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder);
+    const myRepoList = allRepoList.filter(item => item.type === 'mine');
+    const sharedRepoList = allRepoList.filter(item => item.type === 'shared');
+    const publicRepoList = allRepoList.filter(item => item.type === 'public');
+    const groupList = groups.map(item => {
+      item.repos = Utils.sortRepos(item.repos, this.state.sortBy, this.state.sortOrder);
+      return item;
+    });
+    return { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList };
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
@@ -97,6 +117,23 @@ class Libraries extends Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({sortBy, sortOrder}, () => {
+      localStorage.setItem('sf_repos_sort_by', sortBy);
+      localStorage.setItem('sf_repos_sort_order', sortOrder);
+      const { allRepoList: repoList, groupList: groups } = this.state;
+      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
+      this.setState({
+        allRepoList,
+        groupList,
+        sharedRepoList,
+        publicRepoList,
+        repoList: myRepoList
+      });
     });
   };
 
@@ -181,8 +218,33 @@ class Libraries extends Component {
     });
   };
 
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, currentViewMode, sortBy, sortOrder } = this.state;
+    const baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
+    const isDesktop = Utils.isDesktop();
+
+    const sortOptions = this.sortOptions.map(item => {
+      return {
+        ...item,
+        isSelected: item.value == `${sortBy}-${sortOrder}`
+      };
+    });
+
+    const customSelectorToggle = (
+      <button className="btn btn-secondary border-0 op-btn repos-sort-menu-toggle">
+        <i className="sf3-font-sort2 sf3-font"></i>
+        <i className="sf3-font-down sf3-font ml-1"></i>
+      </button>
+    );
+
     return (
       <Fragment>
         <TopToolbar
@@ -194,28 +256,45 @@ class Libraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
+              {isDesktop &&
+              <div className="d-flex align-items-center">
+                <div className="view-modes mr-2">
+                  <button className={`${baseClass} sf3-font-list-view sf3-font ${currentViewMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} aria-label={gettext('List')} onClick={this.switchViewMode.bind(this, 'list')}></button>
+                  <button className={`${baseClass} sf3-font-grid-view sf3-font ${currentViewMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} aria-label={gettext('Grid')} onClick={this.switchViewMode.bind(this, 'grid')}></button>
+                </div>
+
+                <Selector
+                  customSelectorToggle={customSelectorToggle}
+                  options={sortOptions}
+                  selectOption={this.onSelectSortOption}
+                  menuCustomClass='repos-sort-menu dropdown-menu-right'
+                />
+              </div>
+              }
             </div>
             {isLoading ?
               <Loading /> :
               <div className="cur-view-content" id="files-content-container">
 
-                <table aria-hidden={true} className="my-3">
-                  <thead>
-                    <tr>
-                      <th width="4%"></th>
-                      <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                      <th width="35%">{gettext('Name')}</th>
-                      <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                      <th width="14%">{gettext('Size')}</th>
-                      <th width="17%">{gettext('Last Update')}</th>
-                      <th width="17%">{gettext('Owner')}</th>
-                    </tr>
-                  </thead>
-                </table>
+                {(Utils.isDesktop() && currentViewMode == 'list') && (
+                  <table aria-hidden={true} className="my-3">
+                    <thead>
+                      <tr>
+                        <th width="4%"></th>
+                        <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+                        <th width="35%">{gettext('Name')}</th>
+                        <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+                        <th width="14%">{gettext('Size')}</th>
+                        <th width="17%">{gettext('Last Update')}</th>
+                        <th width="17%">{gettext('Owner')}</th>
+                      </tr>
+                    </thead>
+                  </table>
+                )}
 
                 {canAddRepo && (
                   <div className="pb-3">
-                    <div className="d-flex justify-content-between mt-3 py-1 sf-border-bottom">
+                    <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
                       <h4 className="sf-heading m-0 d-flex align-items-center">
                         <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                         {gettext('My Libraries')}
@@ -229,7 +308,7 @@ class Libraries extends Component {
                     </div>
                     {this.state.errorMsg ? <p className="error text-center mt-8">{this.state.errorMsg}</p> : (
                       this.state.repoList.length === 0 ? (
-                        <p className="libraries-empty-tip">{gettext('No libraries')}</p>
+                        <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>
                       ) : (
                         <MylibRepoListView
                           sortBy={this.state.sortBy}
@@ -242,17 +321,26 @@ class Libraries extends Component {
                           onRepoClick={this.onRepoClick}
                           sortRepoList={this.sortRepoList}
                           inAllLibs={true}
+                          currentViewMode={currentViewMode}
                         />
                       ))
                     }
                   </div>
                 )}
                 <div className="pb-3">
-                  <SharedLibs inAllLibs={true} repoList={this.state.sharedRepoList} />
+                  <SharedLibs
+                    repoList={this.state.sharedRepoList}
+                    inAllLibs={true}
+                    currentViewMode={currentViewMode}
+                  />
                 </div>
                 {canViewOrg &&
                   <div className="pb-3">
-                    <SharedWithAll inAllLibs={true} repoList={this.state.publicRepoList} />
+                    <SharedWithAll
+                      repoList={this.state.publicRepoList}
+                      inAllLibs={true}
+                      currentViewMode={currentViewMode}
+                    />
                   </div>
                 }
                 <div className="group-list-panel">
@@ -263,6 +351,7 @@ class Libraries extends Component {
                           key={index}
                           group={group}
                           updateGroup={this.updateGroup}
+                          currentViewMode={currentViewMode}
                         />
                       );
                     })

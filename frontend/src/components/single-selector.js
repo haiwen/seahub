@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import '../css/single-selector.css';
 
 const propTypes = {
-  isDropdownToggleShown: PropTypes.bool.isRequired,
-  currentSelectedOption: PropTypes.object.isRequired,
+  customSelectorToggle: PropTypes.object,
+  menuCustomClass: PropTypes.string,
+  isDropdownToggleShown: PropTypes.bool,
+  currentSelectedOption: PropTypes.object,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,
   operationBeforeSelect: PropTypes.func,
@@ -63,15 +65,21 @@ class Selector extends Component {
 
   render() {
     const { isPopoverOpen } = this.state;
-    const { currentSelectedOption, options, isDropdownToggleShown } = this.props;
+    const { currentSelectedOption, options, isDropdownToggleShown, menuCustomClass = '',
+      customSelectorToggle = null
+    } = this.props;
     return (
       <div className="sf-single-selector position-relative">
-        <span className="cur-option" onClick={this.onToggleClick}>
-          {currentSelectedOption.text}
-          {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
-        </span>
+        <div onClick={this.onToggleClick}>
+          {customSelectorToggle ? customSelectorToggle : (
+            <span className="cur-option">
+              {currentSelectedOption.text}
+              {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
+            </span>
+          )}
+        </div>
         {isPopoverOpen && (
-          <div className="options-container position-absolute rounded shadow mt-1" ref={ref => this.selector = ref}>
+          <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
             <ul className="option-list list-unstyled py-3 o-auto">
               {options.map((item, index) => {
                 return (
