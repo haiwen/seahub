@@ -128,7 +128,7 @@ class DirPath extends React.Component {
 
     return (
       <div className="path-container dir-view-path">
-        <span className="cur-view-path-btn mr-1" style={{marginLeft: '-4px'}} onClick={this.props.toggleTreePanel}>
+        <span className="cur-view-path-btn mr-1" onClick={this.props.toggleTreePanel}>
           <span className="sf3-font-side-bar sf3-font"></span>
         </span>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
