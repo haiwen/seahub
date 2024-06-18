@@ -537,7 +537,7 @@ class Wiki2PageView(APIView):
             latest_contributor, last_modified = None, 0
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
-        seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission)
+        seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission, default_title='')
 
         return Response({
             "latest_contributor": email2nickname(latest_contributor),
