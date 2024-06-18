@@ -85,7 +85,7 @@ class UploadProgressDialog extends React.Component {
           </div>
         </div>
         <div className="uploader-list-content">
-          <div className="d-flex justify-content-between align-items-center border-bottom">
+          <div className="d-flex justify-content-between align-items-center border-bottom uploader-content-bar">
             {uploadFileList.length > 0 && <span>{filesUploadedMsg}</span>}
             <div className="ml-auto">
               <button

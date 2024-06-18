@@ -59,6 +59,10 @@
   overflow: auto;
 }
 
+.uploader-content-bar .btn {
+  font-size: .875rem;
+}
+
 .file-upload-item {
   height: 44px;
 }
