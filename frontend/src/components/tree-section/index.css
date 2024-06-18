@@ -1,0 +1,82 @@
+.tree-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  padding: 0 8px;
+  margin-top: 10px;
+}
+
+.tree-section .tree-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  height: 32px;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.tree-section .tree-section-header.tree-section-header-hover,
+.tree-section .tree-section-header:not(.tree-section-header-hover):hover {
+  background-color: #F0F0F0;
+}
+
+.tree-section .tree-section-header .tree-section-header-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+  color: #666;
+  font-size: 14px;
+}
+
+.tree-section .tree-section-header .tree-section-header-operations {
+  height: 20px;
+  width: auto;
+  flex-shrink: 0;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.tree-section .tree-section-header .tree-section-header-operation {
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
+.tree-section .tree-section-header .tree-section-header-operation:hover {
+  background-color: #BDBDBD;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.tree-section .tree-section-header .sf3-font-drop-down {
+  font-size: 12px;
+  color: #666;
+  transform: scale(.8);
+}
+
+.tree-section .tree-section-header .sf3-font-drop-down.icon-rotate-90 {
+  transform: rotate(90deg) scale(.8);
+}
+
+.tree-section .tree-section-header-operation .dropdown {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-section .tree-section-header-operation .dropdown .sf-dropdown-toggle {
+  margin-left: 0;
+  line-height: 1.5;
+  font-size: 12px;
+  color: #666 !important;
+}

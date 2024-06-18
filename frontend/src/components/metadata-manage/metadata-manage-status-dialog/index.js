@@ -1,0 +1,70 @@
+import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
+import Switch from '../../common/switch';
+import metadataManagerAPI from '../api';
+import { Utils } from '../../../utils/utils';
+
+import './index.css';
+import toaster from '../../toast';
+
+const MetadataManagementStatusDialog = ({ value: oldValue, repoID, toggle, submit }) => {
+  const [value, setValue] = useState(oldValue);
+  const [submitting, setSubmitting] = useState(false);
+
+  const onToggle = useCallback(() => {
+    if (submitting) return;
+    toggle && toggle();
+  }, [submitting, toggle]);
+
+  const onSubmit = useCallback(() => {
+    setSubmitting(true);
+    const apiName = value ? 'openRepoMetadataManagement' : 'closeRepoMetadataManagement';
+    metadataManagerAPI[apiName](repoID).then(res => {
+      submit(value);
+      toggle();
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID, value, submit, toggle]);
+
+  const onValueChange = useCallback(() => {
+    const nextValue = !value;
+    setValue(nextValue);
+  }, [value]);
+
+  return (
+    <Modal className="metadata-management-status-dialog" isOpen={true} toggle={onToggle}>
+      <ModalHeader toggle={onToggle}>{gettext('Extended properties')}</ModalHeader>
+      <ModalBody>
+        <Switch
+          checked={value}
+          disabled={submitting}
+          size="large"
+          textPosition="right"
+          className="change-metadata-status-management w-100"
+          onChange={onValueChange}
+          placeholder={gettext('Enable extended properties' )}
+        />
+        <div className="tip">
+          {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
+        </div>
+      </ModalBody>
+      <ModalFooter>
+        <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
+        <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+      </ModalFooter>
+    </Modal>
+  );
+};
+
+MetadataManagementStatusDialog.propTypes = {
+  value: PropTypes.bool,
+  repoID: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
+};
+
+export default MetadataManagementStatusDialog;

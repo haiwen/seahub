@@ -1,0 +1,14 @@
+.metadata-views-tree-node-icon {
+  height: 100%;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-1px);
+}
+
+.metadata-views-tree-node-icon .metadata-views-icon {
+  height: 14px;
+  width: 14px;
+  line-height: 1.5;
+}
