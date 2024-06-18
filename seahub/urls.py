@@ -92,7 +92,8 @@ from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchV
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.repo_share_invitations import RepoShareInvitationsView, RepoShareInvitationsBatchView
 from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
-from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, AllNotificationsView
+from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, \
+    SysUserNotificationSeenView, AllNotificationsView, SysUserNotificationUnseenView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -192,7 +193,8 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
 from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
-from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
+from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView, \
+    AdminSysUserNotificationView, AdminSysUserNotificationsView
 from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
     AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs, AdminLogGroupMemberAuditLogs
 from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
@@ -530,6 +532,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/sdoc-notification/$', SdocNotificationView.as_view(), name='api-v2.1-notification'),
     re_path(r'^api/v2.1/all-notifications/$', AllNotificationsView.as_view(), name='api-v2.1-all-notification'),
 
+    re_path(r'^api/v2.1/sys-user-notifications/(?P<nid>\d+)/seen/$', SysUserNotificationSeenView.as_view(), name='api-v2.1-notification-seen'),
+    re_path(r'^api/v2.1/sys-user-notifications/unseen/$', SysUserNotificationUnseenView.as_view(), name='api-v2.1-notification-unseen'),
     ## user::invitations
     re_path(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     re_path(r'^api/v2.1/invitations/batch/$', InvitationsBatchView.as_view()),
@@ -796,7 +800,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
     re_path(r'^api/v2.1/admin/sys-notifications/$', AdminSysNotificationsView.as_view(), name='api-2.1-admin-sys-notifications'),
     re_path(r'^api/v2.1/admin/sys-notifications/(?P<nid>\d+)/$', AdminSysNotificationView.as_view(),name='api-2.1-admin-sys-notification'),
-
+    re_path(r'^api/v2.1/admin/sys-user-notifications/$', AdminSysUserNotificationsView.as_view(), name='api-2.1-admin-sys-user-notifications'),
+    re_path(r'^api/v2.1/admin/sys-user-notifications/(?P<nid>\d+)/$', AdminSysUserNotificationView.as_view(), name='api-2.1-admin-sys-user-notification'),
     ## admin::terms and conditions
     re_path(r'^api/v2.1/admin/terms-and-conditions/$', AdminTermsAndConditions.as_view(), name='api-v2.1-admin-terms-and-conditions'),
     re_path(r'^api/v2.1/admin/terms-and-conditions/(?P<term_id>\d+)/$', AdminTermAndCondition.as_view(), name='api-v2.1-admin-term-and-condition'),
