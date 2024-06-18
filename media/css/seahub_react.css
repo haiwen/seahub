@@ -550,12 +550,17 @@ a, a:hover { color: #ec8000; }
     color: #8A948F;
     font-weight: normal;
     transition: none;
+    border-bottom: 0.125rem solid transparent;
+}
+
+.cur-view-path .nav .nav-item .nav-link {
+    padding: 11px 0;
 }
 
 .nav .nav-item .nav-link.active {
     color: #eb8205;
     text-decoration: none;
-    border-bottom: 0.125rem solid #eb8205;
+    border-bottom-color: #eb8205;
     z-index: 1;
 }
 
