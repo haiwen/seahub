@@ -34,8 +34,6 @@ const TextTranslation = {
   'TAGS': {key: 'Tags', value: gettext('Tags')},
   'TRASH': {key: 'Trash', value: gettext('Trash')},
   'ONLYOFFICE_CONVERT': {key: 'Convert with ONLYOFFICE', value: gettext('Convert with ONLYOFFICE')},
-  'ENABLE_METADATA': {key: 'Enable Metadata', value: gettext('Enable Metadata')},
-  'DISABLE_METADATA': {key: 'Disable Metadata', value: gettext('Disable Metadata')}
 };
 
 export default TextTranslation;

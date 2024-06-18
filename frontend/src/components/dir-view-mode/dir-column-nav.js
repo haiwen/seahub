@@ -10,10 +10,10 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import { siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
-import seahubMetadataAPI from '../metadata-manage/seahub-metadata-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
+import TreeSection from '../../components/tree-section';
+import DirViews from './dir-views';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -101,22 +101,6 @@ class DirColumnNav extends React.Component {
         break;
       case 'Open in New Tab':
         this.onOpenFile(node);
-        break;
-      case 'Enable Metadata':
-        if (confirm(gettext('Enable metadata management?'))){
-          seahubMetadataAPI.enableMetadataManagement(this.props.repoID).catch((error) => {
-            let errMessage = Utils.getErrorMsg(error);
-            toaster.danger(errMessage);
-          });
-        }
-        break;
-      case 'Disable Metadata':
-        if (confirm(gettext('Disable metadata management?'))){
-          seahubMetadataAPI.disableMetadataManagement(this.props.repoID).catch((error) => {
-            let errMessage = Utils.getErrorMsg(error);
-            toaster.danger(errMessage);
-          });
-        }
         break;
     }
   };
@@ -261,32 +245,41 @@ class DirColumnNav extends React.Component {
     e.stopPropagation();
   };
 
+  renderContent = () => {
+    if (this.props.isTreeDataLoading) return (<Loading/>);
+    return (
+      <>
+        <TreeSection title={gettext('Files')}>
+          <TreeView
+            userPerm={this.props.userPerm}
+            isNodeMenuShow={this.isNodeMenuShow}
+            treeData={this.props.treeData}
+            currentPath={this.props.currentPath}
+            onNodeClick={this.onNodeClick}
+            onNodeExpanded={this.props.onNodeExpanded}
+            onNodeCollapse={this.props.onNodeCollapse}
+            onMenuItemClick={this.onMenuItemClick}
+            onFreezedItem={this.onFreezedItem}
+            onUnFreezedItem={this.onUnFreezedItem}
+            onItemMove={this.props.onItemMove}
+            currentRepoInfo={this.props.currentRepoInfo}
+            selectedDirentList={this.props.selectedDirentList}
+            onItemsMove={this.props.onItemsMove}
+            repoID={this.props.repoID}
+          />
+        </TreeSection>
+        <DirViews repoID={this.props.repoID} userPerm={this.props.userPerm} />
+      </>
+    );
+  };
+
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
     return (
       <Fragment>
         <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}} onScroll={this.stopTreeScrollPropagation}>
-          {this.props.isTreeDataLoading ?
-            (<Loading/>) :
-            (<TreeView
-              userPerm={this.props.userPerm}
-              isNodeMenuShow={this.isNodeMenuShow}
-              treeData={this.props.treeData}
-              currentPath={this.props.currentPath}
-              onNodeClick={this.onNodeClick}
-              onNodeExpanded={this.props.onNodeExpanded}
-              onNodeCollapse={this.props.onNodeCollapse}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.onFreezedItem}
-              onUnFreezedItem={this.onUnFreezedItem}
-              onItemMove={this.props.onItemMove}
-              currentRepoInfo={this.props.currentRepoInfo}
-              selectedDirentList={this.props.selectedDirentList}
-              onItemsMove={this.props.onItemsMove}
-              repoID={this.props.repoID}
-            />)
-          }
+          {this.renderContent()}
         </div>
         {this.state.isAddFolderDialogShow && (
           <ModalPortal>
