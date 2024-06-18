@@ -8,6 +8,7 @@ import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import EventBus from './components/common/event-bus';
 import Header from './components/header';
+import SystemUserNotification from './components/system-user-notification';
 import SidePanel from './components/side-panel';
 import ResizeBar from './components/resize-bar';
 import {
@@ -267,6 +268,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <SystemNotification />
+        <SystemUserNotification />
         <Header
           isSidePanelClosed={isSidePanelClosed}
           onCloseSidePanel={this.onCloseSidePanel}
