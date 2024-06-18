@@ -380,7 +380,7 @@ class MylibRepoListItem extends React.Component {
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onFocus}
       >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center text-truncate">
           <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
           {this.state.isRenaming && (
             <Rename
@@ -391,7 +391,7 @@ class MylibRepoListItem extends React.Component {
           )}
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
-              <Link to={repoURL}>{repo.repo_name}</Link>
+              <Link to={repoURL} className="text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
@@ -408,7 +408,7 @@ class MylibRepoListItem extends React.Component {
           }
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
-          <div>
+          <div className="flex-shrink-0">
             <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
             <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
             <MylibRepoMenu

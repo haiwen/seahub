@@ -634,7 +634,13 @@ class SharedRepoListItem extends React.Component {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     const { repo, currentViewMode } = this.props;
     return currentViewMode == 'list' ? (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+      <tr
+        className={this.state.highlight ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
         <td className="text-center">
           <i
             role="button"
@@ -667,12 +673,12 @@ class SharedRepoListItem extends React.Component {
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
       >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center text-truncate">
           <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
           {this.state.isRenaming ?
-            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
             <Fragment>
-              <Link to={libPath}>{repo.repo_name}</Link>
+              <Link to={libPath} className="text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
@@ -685,7 +691,7 @@ class SharedRepoListItem extends React.Component {
             </Fragment>
           }
         </div>
-        <div>
+        <div className="flex-shrink-0">
           {this.state.isOperationShow && this.generatorPCMenu()}
         </div>
       </div>

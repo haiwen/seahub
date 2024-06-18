@@ -335,9 +335,9 @@ class Item extends Component {
             onMouseOut={this.handleMouseOut}
             onFocus={this.handleMouseOver}
           >
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center text-truncate">
               <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
-              <Link to={shareRepoUrl}>{data.repo_name}</Link>
+              <Link to={shareRepoUrl} className="text-truncate" title={data.repo_name}>{data.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
@@ -348,7 +348,7 @@ class Item extends Component {
               {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
             </div>
 
-            <div>
+            <div className="flex-shrink-0">
               {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
               }
