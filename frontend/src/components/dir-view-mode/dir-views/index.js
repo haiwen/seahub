@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
-import MetadataManagementStatusDialog from '../../metadata-manage/metadata-manage-status-dialog';
+import MetadataStatusManagementDialog from '../../metadata-manage/metadata-status-manage-dialog';
 import metadataManagerAPI from '../../metadata-manage/api';
 import toaster from '../../toast';
-import MetadataManage from '../../metadata-manage/metadata-manage';
+import MetadataViews from '../../metadata-manage/metadata-views';
 
 const DirViews = ({ userPerm, repoID }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -15,11 +15,11 @@ const DirViews = ({ userPerm, repoID }) => {
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [loading, setLoading] = useState(true);
-  const [showMetadataManagementStatusDialog, setShowMetadataManagementStatusDialog] = useState(false);
-  const [metadataManagementState, setMetadataManagementState] = useState(false);
+  const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
+  const [metadataStatus, setMetadataStatus] = useState(false);
   const moreOperations = useMemo(() => {
     if (!enableMetadataManagement) return [];
-    if (userPerm !== 'rw') return [];
+    if (userPerm !== 'rw' && userPerm !== 'admin') return [];
     return [
       { key: 'extended-properties', value: gettext('Extended properties') }
     ];
@@ -29,7 +29,7 @@ const DirViews = ({ userPerm, repoID }) => {
     const repoMetadataManagementEnabledStatusRes = metadataManagerAPI.getRepoMetadataManagementEnabledStatus(repoID);
     Promise.all([repoMetadataManagementEnabledStatusRes]).then(results => {
       const [repoMetadataManagementEnabledStatusRes] = results;
-      setMetadataManagementState(repoMetadataManagementEnabledStatusRes.data.enabled);
+      setMetadataStatus(repoMetadataManagementEnabledStatusRes.data.enabled);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error, true);
@@ -41,27 +41,27 @@ const DirViews = ({ userPerm, repoID }) => {
 
   const moreOperationClick = useCallback((operationKey) => {
     if (operationKey === 'extended-properties') {
-      setShowMetadataManagementStatusDialog(true);
+      setShowMetadataStatusManagementDialog(true);
       return;
     }
   }, []);
 
   const closeMetadataManagementDialog = useCallback(() => {
-    setShowMetadataManagementStatusDialog(false);
+    setShowMetadataStatusManagementDialog(false);
   }, []);
 
-  const toggleMetadataManagement = useCallback((value) => {
-    if (metadataManagementState === value) return;
-    setMetadataManagementState(value);
-  }, [metadataManagementState]);
+  const toggleMetadataStatus = useCallback((value) => {
+    if (metadataStatus === value) return;
+    setMetadataStatus(value);
+  }, [metadataStatus]);
 
   return (
     <>
       <TreeSection title={gettext('Views')} moreKey={{ name: 'views' }} moreOperations={moreOperations} moreOperationClick={moreOperationClick}>
-        {!loading && metadataManagementState && (<MetadataManage repoID={repoID} />)}
+        {!loading && metadataStatus && (<MetadataViews repoID={repoID} />)}
       </TreeSection>
-      {showMetadataManagementStatusDialog && (
-        <MetadataManagementStatusDialog value={metadataManagementState} repoID={repoID} toggle={closeMetadataManagementDialog} submit={toggleMetadataManagement} />
+      {showMetadataStatusManagementDialog && (
+        <MetadataStatusManagementDialog value={metadataStatus} repoID={repoID} toggle={closeMetadataManagementDialog} submit={toggleMetadataStatus} />
       )}
     </>
   );

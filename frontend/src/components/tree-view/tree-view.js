@@ -342,12 +342,6 @@ class TreeView extends React.Component {
           onNodeDragLeave={this.onNodeDragLeave}
           handleContextClick={this.handleContextClick}
         />
-        {/* {window.app.pageOptions.enableMetadataManagement && <MetadataManage
-          repoID={this.props.repoID}
-        />}
-        {window.app.pageOptions.enableMetadataManagement && <MetadataManageView
-          repoID={this.props.repoID}
-        />} */}
         <ContextMenu
           id={'tree-node-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}

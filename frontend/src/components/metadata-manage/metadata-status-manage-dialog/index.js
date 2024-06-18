@@ -5,11 +5,11 @@ import { gettext } from '../../../utils/constants';
 import Switch from '../../common/switch';
 import metadataManagerAPI from '../api';
 import { Utils } from '../../../utils/utils';
-
-import './index.css';
 import toaster from '../../toast';
 
-const MetadataManagementStatusDialog = ({ value: oldValue, repoID, toggle, submit }) => {
+import './index.css';
+
+const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submit }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
 
@@ -27,6 +27,7 @@ const MetadataManagementStatusDialog = ({ value: oldValue, repoID, toggle, submi
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
+      setSubmitting(false);
     });
   }, [repoID, value, submit, toggle]);
 
@@ -36,8 +37,8 @@ const MetadataManagementStatusDialog = ({ value: oldValue, repoID, toggle, submi
   }, [value]);
 
   return (
-    <Modal className="metadata-management-status-dialog" isOpen={true} toggle={onToggle}>
-      <ModalHeader toggle={onToggle}>{gettext('Extended properties')}</ModalHeader>
+    <Modal className="metadata-status-management-dialog" isOpen={true} toggle={onToggle}>
+      <ModalHeader toggle={onToggle}>{gettext('Extended properties management')}</ModalHeader>
       <ModalBody>
         <Switch
           checked={value}
@@ -60,11 +61,11 @@ const MetadataManagementStatusDialog = ({ value: oldValue, repoID, toggle, submi
   );
 };
 
-MetadataManagementStatusDialog.propTypes = {
+MetadataStatusManagementDialog.propTypes = {
   value: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
 
-export default MetadataManagementStatusDialog;
+export default MetadataStatusManagementDialog;

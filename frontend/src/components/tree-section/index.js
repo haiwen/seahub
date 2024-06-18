@@ -49,7 +49,7 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
         <div className="tree-section-header-operations">
           {validMoreOperations.length > 0 && (
             <>
-              <div className="tree-section-header-operation">
+              <div className="tree-section-header-operation tree-section-more-operation">
                 <ItemDropdownMenu
                   item={moreKey}
                   toggleClass="sf3-font sf3-font-more"

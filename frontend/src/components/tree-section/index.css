@@ -51,14 +51,14 @@
 }
 
 .tree-section .tree-section-header .tree-section-header-operation:hover {
-  background-color: #BDBDBD;
+  background-color: #DBDBDB;
   cursor: pointer;
   border-radius: 3px;
 }
 
 .tree-section .tree-section-header .sf3-font-drop-down {
   font-size: 12px;
-  color: #666;
+  color: #999;
   transform: scale(.8);
 }
 
@@ -77,6 +77,20 @@
 .tree-section .tree-section-header-operation .dropdown .sf-dropdown-toggle {
   margin-left: 0;
   line-height: 1.5;
-  font-size: 12px;
-  color: #666 !important;
+  font-size: 16px;
+  color: #999 !important;
+}
+
+.tree-section .tree-section-header .tree-section-more-operation {
+  display: none;
+}
+
+.tree-section .tree-section-header.tree-section-header-hover .tree-section-more-operation,
+.tree-section .tree-section-header:not(.tree-section-header-hover):hover .tree-section-more-operation {
+  display: flex;
+}
+
+.tree-section .tree-section-body .tree-view {
+  padding-top: 0;
+  padding-bottom: 0;
 }

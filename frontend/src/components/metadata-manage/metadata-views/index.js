@@ -6,7 +6,7 @@ import Icon from '../../icon';
 
 import './index.css';
 
-const MetadataManage = ({ repoID }) => {
+const MetadataViews = ({ repoID }) => {
   const [highlight, setHighlight] = useState(false);
 
   const onMouseEnter = useCallback(() => {
@@ -27,20 +27,20 @@ const MetadataManage = ({ repoID }) => {
   }, [repoID]);
 
   return (
-    <div className="tree-view tree">
+    <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
         <div className="children" style={{ paddingLeft: 20 }}>
           <div
             className={`tree-node-inner text-nowrap${highlight ? ' tree-node-inner-hover' : ''}`}
-            title={gettext('Metadata Views')}
+            title={gettext('File extended properties')}
             onMouseEnter={onMouseEnter}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
             onClick={openView}
           >
-            <div className="tree-node-text">{gettext('Metadata Views')}</div>
+            <div className="tree-node-text">{gettext('File extended properties')}</div>
             <div className="left-icon">
-              <div className="tree-node-icon metadata-views-tree-node-icon">
+              <div className="tree-node-icon">
                 <Icon symbol="table" className="metadata-views-icon" />
               </div>
             </div>
@@ -51,8 +51,8 @@ const MetadataManage = ({ repoID }) => {
   );
 };
 
-MetadataManage.propTypes = {
+MetadataViews.propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-export default MetadataManage;
+export default MetadataViews;
