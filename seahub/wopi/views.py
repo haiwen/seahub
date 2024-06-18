@@ -261,7 +261,7 @@ class WOPIFilesView(APIView):
         result['ReadOnly'] = True if not can_edit else False
 
         avatar_url, _, _ = api_avatar_url(request_user, int(72))
-        result['UserExtraInfo'] = { 'avatar': avatar_url, 'mail': request_user }
+        result['UserExtraInfo'] = {'avatar': avatar_url, 'mail': request_user}
 
         # new file creation feature is not implemented on wopi host(seahub)
         # hide save as button on view/edit file page

@@ -2,8 +2,9 @@
 import os
 import re
 import time
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
 import urllib.parse
+import urllib.error
 import requests
 import hashlib
 import logging
@@ -30,11 +31,13 @@ from seahub.settings import ENABLE_WATERMARK
 
 logger = logging.getLogger(__name__)
 
+
 def generate_access_token_cache_key(token):
     """ Generate cache key for WOPI access token
     """
 
     return 'wopi_access_token_' + str(token)
+
 
 def get_file_info_by_token(token):
     """ Get file info from cache by access token
@@ -50,6 +53,7 @@ def get_file_info_by_token(token):
 
     return value if value else None
 
+
 def generate_discovery_cache_key(name, ext):
     """ Generate cache key for office web app hosting discovery
 
@@ -59,9 +63,10 @@ def generate_discovery_cache_key(name, ext):
 
     return 'wopi_' + name + '_' + ext
 
+
 def get_wopi_dict(request_user, repo_id, file_path,
-        action_name='view', can_download=True,
-        language_code='en', obj_id=''):
+                  action_name='view', can_download=True,
+                  language_code='en', obj_id=''):
     """ Prepare dict data for WOPI host page
     """
 
@@ -82,6 +87,14 @@ def get_wopi_dict(request_user, repo_id, file_path,
             file_ext = 'xlsx'
 
     wopi_key = generate_discovery_cache_key(action_name, file_ext)
+
+    if OFFICE_SERVER_TYPE.lower() == 'collaboraoffice':
+        # Since the hosting discover page of Collabora Online does not provide
+        # a URL with the action set to "view" for some common file formats,
+        # we always use "edit" here.
+        # Preview file is achieved by setting `UserCanWrite` to `False` in `CheckFileInfo`.
+        wopi_key = generate_discovery_cache_key('edit', file_ext)
+
     action_url = cache.get(wopi_key)
 
     if not action_url:
@@ -90,12 +103,13 @@ def get_wopi_dict(request_user, repo_id, file_path,
         try:
             if OFFICE_WEB_APP_CLIENT_CERT and OFFICE_WEB_APP_CLIENT_KEY:
                 xml = requests.get(OFFICE_WEB_APP_BASE_URL,
-                    cert=(OFFICE_WEB_APP_CLIENT_CERT, OFFICE_WEB_APP_CLIENT_KEY),
-                    verify=OFFICE_WEB_APP_SERVER_CA)
+                                   cert=(OFFICE_WEB_APP_CLIENT_CERT,
+                                         OFFICE_WEB_APP_CLIENT_KEY),
+                                   verify=OFFICE_WEB_APP_SERVER_CA)
             elif OFFICE_WEB_APP_CLIENT_PEM:
                 xml = requests.get(OFFICE_WEB_APP_BASE_URL,
-                    cert=OFFICE_WEB_APP_CLIENT_PEM,
-                    verify=OFFICE_WEB_APP_SERVER_CA)
+                                   cert=OFFICE_WEB_APP_CLIENT_PEM,
+                                   verify=OFFICE_WEB_APP_SERVER_CA)
             else:
                 xml = requests.get(OFFICE_WEB_APP_BASE_URL, verify=OFFICE_WEB_APP_SERVER_CA)
         except Exception as e:
@@ -119,7 +133,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
                 tmp_action_url = re.sub(r'<.*>', '', urlsrc)
                 tmp_wopi_key = generate_discovery_cache_key(name, ext)
                 cache.set(tmp_wopi_key, tmp_action_url,
-                        OFFICE_WEB_APP_DISCOVERY_EXPIRATION)
+                          OFFICE_WEB_APP_DISCOVERY_EXPIRATION)
 
                 if wopi_key == tmp_wopi_key:
                     action_url = tmp_action_url
