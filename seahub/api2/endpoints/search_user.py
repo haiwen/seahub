@@ -27,7 +27,7 @@ from seahub.contacts.models import Contact
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
-    ENABLE_SEARCH_FROM_LDAP_DIRECTLY
+    ENABLE_SEARCH_FROM_LDAP_DIRECTLY, ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER
 
 logger = logging.getLogger(__name__)
 
@@ -175,15 +175,21 @@ class SearchUser(APIView):
 
 def format_searched_user_result(request, users, size):
     results = []
+    if ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER:
+        profile_queryset = Profile.objects.filter(user__in=users)
+        profile_dict = { p.user: p.login_id for p in profile_queryset if p.login_id }
 
     for email in users:
         url, is_default, date_uploaded = api_avatar_url(email, size)
-        results.append({
+        user_info = {
             "email": email,
             "avatar_url": url,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
-        })
+        }
+        if ENABLE_SHOW_LOGIN_ID_WHEN_SEARCH_USER:
+            user_info['login_id'] = profile_dict.get(email, '')
+        results.append(user_info)
 
     return results
 
