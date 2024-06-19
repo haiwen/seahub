@@ -1,0 +1,7 @@
+.dir-content-nav .tree-section:first-child {
+  margin-top: 12px;
+}
+
+.dir-content-nav .tree-section:last-child {
+  margin-bottom: 28px;
+}

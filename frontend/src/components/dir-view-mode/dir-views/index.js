@@ -8,6 +8,8 @@ import metadataManagerAPI from '../../metadata-manage/api';
 import toaster from '../../toast';
 import MetadataViews from '../../metadata-manage/metadata-views';
 
+import './index.css';
+
 const DirViews = ({ userPerm, repoID }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
