@@ -1,5 +1,10 @@
+.metadata-tree-view .tree-node-inner {
+  height: 28px;
+  padding: 2px 0;
+}
+
 .metadata-tree-view .tree-node-inner .left-icon {
-  top: 8px;
+  top: 6px;
   padding-left: 8px;
 }
 
