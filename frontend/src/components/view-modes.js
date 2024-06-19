@@ -58,7 +58,7 @@ class ViewModes extends React.Component {
                     <span>{item.text}</span>
                   </span>
                   <span>
-                    {currentViewMode === item.value && <i className="fas fa-check color-selected"></i>}
+                    {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
                   </span>
                 </div>
               </DropdownItem>

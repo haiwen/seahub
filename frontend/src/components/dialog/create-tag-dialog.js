@@ -91,7 +91,7 @@ class CreateTagDialog extends React.Component {
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
                         <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{backgroundColor:item}}>
-                          <i className="fas fa-check color-selected"></i>
+                          <i className="sf2-icon-tick color-selected"></i>
                         </span>
                       </label>
                     </div>

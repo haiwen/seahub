@@ -91,7 +91,7 @@ class TagItem extends React.Component {
           <span className="tag-color w-4 h-4 rounded-circle" style={{backgroundColor: repoTag.color}}></span>
           <span className="tag-name mx-2">{repoTag.name}</span>
         </div>
-        {isTagSelected && <i className="fas fa-check tag-selected-icon"></i>}
+        {isTagSelected && <i className="sf2-icon-tick tag-selected-icon"></i>}
       </li>
     );
   }
