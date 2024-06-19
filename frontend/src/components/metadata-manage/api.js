@@ -2,7 +2,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { siteRoot } from '../../utils/constants';
 
-class SeahubMetadataAPI {
+class MetadataManagerAPI {
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
@@ -43,17 +43,17 @@ class SeahubMetadataAPI {
     }
   }
 
-  getMetadataManagementEnabledStatus(repoID) {
+  getRepoMetadataManagementEnabledStatus(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.get(url);
   }
 
-  enableMetadataManagement(repoID) {
+  openRepoMetadataManagement(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.put(url);
   }
 
-  disableMetadataManagement(repoID) {
+  closeRepoMetadataManagement(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.delete(url);
   }
@@ -91,8 +91,8 @@ class SeahubMetadataAPI {
   }
 }
 
-const seahubMetadataAPI = new SeahubMetadataAPI();
+const metadataManagerAPI = new MetadataManagerAPI();
 const xcsrfHeaders = cookie.load('sfcsrftoken');
-seahubMetadataAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+metadataManagerAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export default seahubMetadataAPI;
+export default metadataManagerAPI;

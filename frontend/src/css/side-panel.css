@@ -98,7 +98,8 @@
 
 .tree-node-inner {
   position: relative;
-  height: 24px;
+  height: 32px;
+  padding: 4px 0;
   cursor: pointer;
   line-height: 1.625;
 }
@@ -123,7 +124,7 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  top: 0;
+  top: 4px;
   left: 0;
   padding-left: 1.5rem;
 }
@@ -148,7 +149,7 @@
 
 .tree-node-inner .right-icon {
   position: absolute;
-  top: 0;
+  top: 4px;
   right: 1rem;
   bottom: 0;
   width: 1.5rem;

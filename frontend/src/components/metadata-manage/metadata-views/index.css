@@ -1,0 +1,23 @@
+.metadata-tree-view .tree-node-inner .left-icon {
+  top: 8px;
+  padding-left: 8px;
+}
+
+.metadata-tree-view .tree-node-inner .tree-node-text {
+  padding-left: 28.8px;
+}
+
+.metadata-tree-view .tree-node-icon {
+  height: 100%;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(1px);
+}
+
+.metadata-tree-view .metadata-views-icon {
+  height: 14px;
+  width: 14px;
+  line-height: 1.5;
+}
