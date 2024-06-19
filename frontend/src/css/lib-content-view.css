@@ -52,15 +52,15 @@
   padding: 12px 12px 12px 0;
   line-height: 1.5;
   flex: 1;
-  border: 1px solid rgba(69,170,242,0);
+  border: 1px solid rgba(69, 170, 242, 0);
 }
 
 .tree-view-drop {
-  border: 1px solid rgba(69,170,242);
+  border: 1px solid rgba(69, 170, 242);
 }
 
 .tree-view-drop::before {
-  border-left: 1px solid rgba(69,170,242);
+  border-left: 1px solid rgba(69, 170, 242);
   content: '';
   margin-left: 8px;
   height: calc(100% + 24px);
