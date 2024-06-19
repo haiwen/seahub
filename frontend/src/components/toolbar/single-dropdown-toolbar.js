@@ -46,7 +46,7 @@ class SingleDropdownToolbar extends React.Component {
             data-toggle="dropdown"
           >
           </DropdownToggle>
-          <DropdownMenu style={{'width': '200px'}}>
+          <DropdownMenu>
             {opList.map((item, index)=> {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
