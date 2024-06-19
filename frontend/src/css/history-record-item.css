@@ -37,10 +37,6 @@
   margin-right: 0.25rem;
 }
 
-.history-body .dropdown-menu {
-  min-width: 8rem;
-}
-
 .history-body .dropdown-menu a {
   text-decoration: none;
   color: #6e7687;

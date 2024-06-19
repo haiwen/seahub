@@ -306,7 +306,6 @@
 }
 
 .view-structure .folders-dropdown .dropdown-menu {
-  max-width: 180px;
   max-height: 300px;
   overflow-y: auto;
 }

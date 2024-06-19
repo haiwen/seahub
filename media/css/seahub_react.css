@@ -1052,7 +1052,7 @@ a.table-sort-op:hover {
 }
 
 .dropdown-menu {
-  min-width: 8rem;
+  min-width: 200px;
 }
 
 .dropdown-item {
