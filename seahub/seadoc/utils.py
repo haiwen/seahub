@@ -35,9 +35,11 @@ def uuid_str_to_36_chars(file_uuid):
         return file_uuid
 
 
-def gen_seadoc_access_token(file_uuid, filename, username, permission='rw'):
+def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', default_title=None):
     name = email2nickname(username)
     url, is_default, date_uploaded = api_avatar_url(username, 72)
+    if default_title is None:
+        default_title = filename
     access_token = jwt.encode({
         'file_uuid': file_uuid,
         'filename': filename,
@@ -45,6 +47,7 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw'):
         'name': name,
         'avatar_url': url,
         'permission': permission,
+        'default_title': default_title,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,
