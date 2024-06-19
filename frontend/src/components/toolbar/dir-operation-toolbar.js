@@ -252,7 +252,7 @@ class DirOperationToolbar extends React.Component {
                     >
                       <DropdownToggle
                         caret
-                        className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+                        className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
                         <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
