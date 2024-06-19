@@ -43,7 +43,6 @@
   "Delete_row": "Delete row",
   "Delete_column": "Delete column",
   "Insert_row": "Insert row",
-  "Insert_column": "Insert column",
   "Set_align": "Set align",
   "Left": "Left",
   "Center": "Center",
@@ -461,5 +460,7 @@
   "Fit_table_to_page_width": "Fit table to page width",
   "Enter_text_or_press_forward_slash_to_insert_element": "Enter text or press '/' to insert element",
   "Vertical_align": "Vertical alignment",
-  "Horizontal_align": "Horizontal alignment"
+  "Horizontal_align": "Horizontal alignment",
+  "SeaTable_column": "SeaTable column",
+  "SeaTable_view": "SeaTable view"
 }

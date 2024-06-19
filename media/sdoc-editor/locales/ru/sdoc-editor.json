@@ -43,7 +43,6 @@
   "Delete_row": "Удалить строку",
   "Delete_column": "Удалить столбец",
   "Insert_row": "Вставить строку",
-  "Insert_column": "Вставить столбец",
   "Set_align": "Установить выравнивание",
   "Left": "Слева",
   "Center": "По центру",
@@ -461,5 +460,7 @@
   "Fit_table_to_page_width": "Подогнать таблицу по ширине страницы",
   "Enter_text_or_press_forward_slash_to_insert_element": "Введите текст или нажмите '/', чтобы вставить элемент",
   "Vertical_align": "Вертикальное выравнивание",
-  "Horizontal_align": "Горизонтальное выравнивание"
+  "Horizontal_align": "Горизонтальное выравнивание",
+  "SeaTable_column": "Столбец SeaTable",
+  "SeaTable_view": "Вид SeaTable"
 }

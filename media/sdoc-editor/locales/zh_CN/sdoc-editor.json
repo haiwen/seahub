@@ -43,7 +43,6 @@
   "Delete_row": "删除当前行",
   "Delete_column": "删除当前列",
   "Insert_row": "插入行",
-  "Insert_column": "插入列",
   "Set_align": "对齐方式",
   "Left": "左对齐",
   "Center": "居中",
@@ -461,5 +460,7 @@
   "Fit_table_to_page_width": "自动适应页面宽度",
   "Enter_text_or_press_forward_slash_to_insert_element": "输入文本或按下 '/' 插入元素",
   "Vertical_align": "垂直对齐",
-  "Horizontal_align": "水平对齐"
+  "Horizontal_align": "水平对齐",
+  "SeaTable_column": "SeaTable 列",
+  "SeaTable_view": "SeaTable 视图"
 }
