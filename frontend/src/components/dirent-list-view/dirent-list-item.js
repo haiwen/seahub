@@ -695,10 +695,11 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
+    let isActive = (activeDirent && activeDirent.name === dirent.name) || dirent.isSelected;
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
-    trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
-    trClass += dirent.isSelected? 'tr-active' : '';
+    trClass += isActive  ? 'tr-active' : '';
+    trClass += isActive ? 'tr-active' : '';
 
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}'): gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
@@ -725,7 +726,13 @@ class DirentListItem extends React.Component {
         onContextMenu={this.onItemContextMenu}
       >
         <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected} aria-label={dirent.isSelected ?gettext('Unselect this item') : gettext('Select this item')} />
+          <input
+            type="checkbox"
+            className="vam"
+            onChange={this.onItemSelected}
+            checked={isActive}
+            aria-label={isActive ? gettext('Unselect this item') : gettext('Select this item')}
+          />
         </td>
         <td className="pl10">
           {dirent.starred !== undefined &&
