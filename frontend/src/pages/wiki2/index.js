@@ -197,7 +197,7 @@ class Wiki extends Component {
     }, () => {
       callback && callback();
     });
-    this.cacheHistoryFiles(docUuid,name,id);
+    this.cacheHistoryFiles(docUuid, name, id);
   };
 
   onUpdatePage = (pageId, newPage) => {

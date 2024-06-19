@@ -37,16 +37,26 @@ function getPaths(navigation, currentPageId, pages) {
   return pathStr.split('-').map(id => idPageMap[id]);
 }
 
-function WikiTopNav({ config, currentPageId }) {
+function WikiTopNav({ config, currentPageId, currentPageConfig }) {
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
+  const customIcon = currentPageConfig.icon;
   return (
     <div className="wiki2-top-nav d-flex">
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
             <div className='wiki2-top-nav-item d-flex'>
-              <NavItemIcon symbol={'file'} disable={true} />
+              {
+                item.type === 'folder' && (<NavItemIcon symbol={'wiki-folder'} disable={true} />)
+              }
+              {
+                item.type !== 'folder' && (
+                  customIcon
+                    ? <span className='nav-item-icon nav-item-icon-disable'>{customIcon}</span>
+                    : <NavItemIcon symbol={'file'} disable={true} />
+                )
+              }
               {item.name}
             </div>
             {index !== paths.length - 1 && <div>/</div>}
@@ -60,6 +70,7 @@ function WikiTopNav({ config, currentPageId }) {
 WikiTopNav.propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
+  currentPageConfig: PropTypes.object,
 };
 
 export default WikiTopNav;
