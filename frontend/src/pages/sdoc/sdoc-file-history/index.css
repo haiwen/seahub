@@ -269,10 +269,6 @@
   min-height: 22.5px;
 }
 
-.sdoc-file-history-versions .dropdown-menu {
-  min-width: 8rem;
-}
-
 .history-content .main-panel {
   flex: 1 1 auto;
 }

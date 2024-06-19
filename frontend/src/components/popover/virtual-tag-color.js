@@ -80,7 +80,7 @@ export default class VirtualTagColor extends React.Component {
                     <label className="colorinput">
                       <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked={item == tagColor} onClick={this.selectTagColor} />
                       <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{backgroundColor: item}}>
-                        <i className="fas fa-check color-selected"></i>
+                        <i className="sf2-icon-tick color-selected"></i>
                       </span>
                     </label>
                   </div>

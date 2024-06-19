@@ -8,8 +8,8 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import Loading from '../../components/loading';
-import Selector from '../../components/single-selector';
 import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/repos-sort-menu';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -237,14 +237,6 @@ class Libraries extends Component {
         isSelected: item.value == `${sortBy}-${sortOrder}`
       };
     });
-
-    const customSelectorToggle = (
-      <span className="cur-view-path-btn px-1" role="button">
-        <i className="sf3-font-sort2 sf3-font"></i>
-        <i className="sf3-font-down sf3-font"></i>
-      </span>
-    );
-
     return (
       <Fragment>
         <TopToolbar
@@ -258,15 +250,10 @@ class Libraries extends Component {
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
               {isDesktop &&
               <div className="d-flex align-items-center">
-                <div className="view-modes mr-2">
+                <div className="mr-2">
                   <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
                 </div>
-                <Selector
-                  customSelectorToggle={customSelectorToggle}
-                  options={sortOptions}
-                  selectOption={this.onSelectSortOption}
-                  menuCustomClass='repos-sort-menu dropdown-menu-right'
-                />
+                <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
               </div>
               }
             </div>

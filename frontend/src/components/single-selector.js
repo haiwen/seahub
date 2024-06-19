@@ -85,7 +85,7 @@ class Selector extends Component {
                 return (
                   <li key={index} className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center" onClick={(e) => {this.selectItem(e, item);}}>
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
-                    <i className={`sf2-icon-tick text-gray font-weight-bold ${item.isSelected ? '' : 'invisible'}`}></i>
+                    <i className={`sf2-icon-tick ${item.isSelected ? '' : 'invisible'}`}></i>
                   </li>
                 );
               })}

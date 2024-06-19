@@ -158,7 +158,7 @@ class ViewFileToolbar extends React.Component {
             {this.props.children}
             <i className="sf3-font-drop-down sf3-font ml-1 path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu onMouseMove={this.onDropDownMouseMove} style={{'width': '200px'}}>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
             {opList.map((item, index)=> {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
@@ -174,7 +174,7 @@ class ViewFileToolbar extends React.Component {
                   >
                     <DropdownToggle
                       caret
-                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                     >
                       <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>

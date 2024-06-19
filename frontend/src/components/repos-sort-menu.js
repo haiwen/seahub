@@ -4,11 +4,11 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext } from '../utils/constants';
 
 const propTypes = {
-  currentViewMode: PropTypes.string.isRequired,
-  switchViewMode: PropTypes.func.isRequired
+  sortOptions: PropTypes.array,
+  onSelectSortOption: PropTypes.func.isRequired
 };
 
-class ViewModes extends React.Component {
+class ReposSortMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -25,16 +25,11 @@ class ViewModes extends React.Component {
 
   render() {
     const { isDropdownMenuOpen } = this.state;
-    const { currentViewMode } = this.props;
-    const options = [
-      {'icon': 'list-view', 'text': gettext('List view'), 'value': 'list'},
-      {'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid'}
-    ];
+    const { sortOptions } = this.props;
     return (
       <Dropdown
         isOpen={isDropdownMenuOpen}
         toggle={this.toggleDropdownMenu}
-        id="cur-view-change-mode-dropdown"
       >
         <DropdownToggle
           tag="div"
@@ -43,23 +38,18 @@ class ViewModes extends React.Component {
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <span className='cur-view-path-btn px-1'>
-            <span className={`sf3-font sf3-font-${currentViewMode}-view`}></span>
-            <span className={'sf3-font sf3-font-down'}></span>
+          <span className="cur-view-path-btn px-1" role="button">
+            <i className="sf3-font-sort2 sf3-font"></i>
+            <i className="sf3-font-down sf3-font"></i>
           </span>
         </DropdownToggle>
         <DropdownMenu right={true} className="mt-1">
-          {options.map((item, index) => {
+          {sortOptions.map((item, index) => {
             return (
-              <DropdownItem key={index} onClick={this.props.switchViewMode.bind(this, item.value)}>
+              <DropdownItem key={index} onClick={this.props.onSelectSortOption.bind(this, item)}>
                 <div className="d-flex justify-content-between align-items-center">
-                  <span className="mr-8 d-flex justify-content-between align-items-center">
-                    <span className={`sf3-font-${item.icon} sf3-font mr-2`}></span>
-                    <span>{item.text}</span>
-                  </span>
-                  <span>
-                    {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
-                  </span>
+                  <span className="mr-8">{item.text}</span>
+                  <span>{item.isSelected && <i className="sf2-icon-tick"></i>}</span>
                 </div>
               </DropdownItem>
             );
@@ -71,6 +61,6 @@ class ViewModes extends React.Component {
 
 }
 
-ViewModes.propTypes = propTypes;
+ReposSortMenu.propTypes = propTypes;
 
-export default ViewModes;
+export default ReposSortMenu;

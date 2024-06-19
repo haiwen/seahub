@@ -39,20 +39,6 @@
   margin-right: -4px;
 }
 
-#cur-view-change-mode-dropdown .dropdown-item {
-  padding: 4px 16px;
-}
-
-#cur-view-change-mode-dropdown .dropdown-item .fas,
-#cur-view-change-mode-dropdown .dropdown-item .sf3-font {
-  color: #666;
-}
-
-#cur-view-change-mode-dropdown .dropdown-item:hover .fas,
-#cur-view-change-mode-dropdown .dropdown-item:hover .sf3-font {
-  color: #fff;
-}
-
 /* begin common-toolbar */
 .common-toolbar {
   display: flex;
