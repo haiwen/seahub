@@ -15,7 +15,8 @@ window.app.pageOptions = {
   repoID: '{{repo.id}}',
   repoFolderName: '{{repo_folder_name|escapejs}}',
   path: '{{path|escapejs}}',
-  enableClean: {% if enable_clean %} true {% else %} false {% endif %}
+  enableClean: {% if enable_clean %} true {% else %} false {% endif %},
+  isAdmin: {% if is_admin %} true {% else %} false {% endif %}
 };
 </script>
 {% render_bundle 'repoFolderTrash' 'js' %}

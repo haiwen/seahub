@@ -22,7 +22,7 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, is_repo_owner, \
-    get_file_size, seafile_api
+    get_file_size, seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -302,6 +302,18 @@ def repo_folder_trash(request, repo_id):
     if not repo:
         raise Http404
 
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+    is_admin = True
+    if '@seafile_group' in repo_owner:
+        group_id = int(repo_owner.split('@')[0])
+        is_admin = ccnet_api.check_group_staff(int(group_id), request.user.username)
+    else:
+        if request.user.username != repo_owner:
+            is_admin = False
+
     if path == '/':
         name = repo.name
     else:
@@ -312,6 +324,7 @@ def repo_folder_trash(request, repo_id):
             'repo_folder_name': name,
             'path': path,
             'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
+            'is_admin': is_admin
             })
 
 def can_access_repo_setting(request, repo_id, username):
