@@ -116,7 +116,7 @@ class ViewItem extends Component {
     if (icon.includes('dtable-icon')) {
       return <span className={`mr-2 dtable-font ${icon}`}></span>;
     } else {
-      return <Icon className="mr-2" symbol={icon}/>;
+      return <Icon className="mr-2" symbol={icon} />;
     }
   };
 
@@ -200,7 +200,7 @@ class ViewItem extends Component {
       viewCanDrop = isOverView && !isDragging;
     }
     let viewEditorId = `view-editor-${view.id}`;
-    let fn = isEditMode ? connectDragSource : (argu) => {argu;};
+    let fn = isEditMode ? connectDragSource : (argu) => { argu; };
     let childNumber = Array.isArray(view.children) ? view.children.length : 0;
 
     const folded = this.props.getFoldState(view.id);
@@ -222,10 +222,12 @@ class ViewItem extends Component {
                 onMouseLeave={this.onMouseLeave}
                 id={viewEditorId}
               >
-                <div className="view-item-main" onClick={isShowViewEditor ? () => {} : (e) => this.props.onSelectView(view.id)}>
+                <div className="view-item-main" onClick={isShowViewEditor ? () => { } : (e) => this.props.onSelectView(view.id)}>
                   <div className='view-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
-                    {childNumber === 0 &&
-                      <NavItemIcon symbol={'file'} disable={true} />
+                    {childNumber === 0 && (
+                      view.icon
+                        ? <span className='nav-item-icon nav-item-icon-disable'>{view.icon}</span>
+                        : <NavItemIcon symbol={'file'} disable={true} />)
                     }
                     {(!this.state.isMouseEnter && childNumber > 0) &&
                       <NavItemIcon symbol={'files'} disable={true} />
@@ -255,7 +257,7 @@ class ViewItem extends Component {
                   {isEditMode &&
                     <>
                       <div className="more-view-operation" onClick={this.onViewOperationDropdownToggle}>
-                        <Icon symbol={'more-level'}/>
+                        <Icon symbol={'more-level'} />
                         {this.state.isShowViewOperationDropdown &&
                           <PageDropdownMenu
                             view={view}
