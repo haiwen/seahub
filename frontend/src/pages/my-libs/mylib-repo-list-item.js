@@ -391,7 +391,7 @@ class MylibRepoListItem extends React.Component {
           )}
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
-              <Link to={repoURL} className="text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
