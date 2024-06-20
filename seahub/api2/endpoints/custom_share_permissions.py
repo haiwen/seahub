@@ -29,6 +29,9 @@ class CustomSharePermissionsView(APIView):
         """List custom share permissions
         """
         # permission check
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -53,6 +56,9 @@ class CustomSharePermissionsView(APIView):
     def post(self, request, repo_id):
         """Add a custom share permission
         """
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         username = request.user.username
         # argument check
         permission = request.data.get('permission', None)
@@ -98,6 +104,9 @@ class CustomSharePermissionView(APIView):
         """get a custom share permission
         """
         # permission check
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -122,6 +131,9 @@ class CustomSharePermissionView(APIView):
         """Update a custom share permission
         """
         # argument check
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         permission = request.data.get('permission', None)
         if not permission:
             error_msg = 'permission invalid.'
@@ -170,6 +182,9 @@ class CustomSharePermissionView(APIView):
     def delete(self, request, repo_id, permission_id):
         """Delete a custom share permission
         """
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         username = request.user.username
 
         # permission check
