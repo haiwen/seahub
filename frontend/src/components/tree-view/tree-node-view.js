@@ -5,11 +5,13 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils } from '../../utils/utils';
 
+const LEFT_INDENT = 20;
+
 const propTypes = {
   userPerm: PropTypes.string,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
-  paddingLeft: PropTypes.number.isRequired,
+  leftIndent: PropTypes.number.isRequired,
   isNodeMenuShow: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onNodeClick: PropTypes.func.isRequired,
@@ -234,18 +236,18 @@ class TreeNodeView extends React.Component {
   };
 
   renderChildren = () => {
-    let { node, paddingLeft } = this.props;
+    let { node } = this.props;
     if (!node.hasChildren()) {
       return '';
     }
     return (
-      <div className="children" style={{paddingLeft: paddingLeft}}>
+      <div className="children">
         {node.children.map(item => {
           return (
             <TreeNodeView
               key={item.path}
               node={item}
-              paddingLeft={paddingLeft}
+              leftIndent={this.props.leftIndent + LEFT_INDENT}
               userPerm={this.props.userPerm}
               currentPath={this.props.currentPath}
               isNodeMenuShow={this.props.isNodeMenuShow}
@@ -270,7 +272,7 @@ class TreeNodeView extends React.Component {
   };
 
   render() {
-    let { currentPath, node, isNodeMenuShow, userPerm } = this.props;
+    let { currentPath, node, isNodeMenuShow, userPerm, leftIndent } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
@@ -291,8 +293,17 @@ class TreeNodeView extends React.Component {
           onContextMenu={this.onItemContextMenu}
           onClick={this.onNodeClick}
         >
-          <div className="tree-node-text" draggable={this.canDrag} onDragStart={this.onNodeDragStart} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
-          <div className="left-icon">
+          <div
+            className="tree-node-text"
+            draggable={this.canDrag}
+            onDragStart={this.onNodeDragStart}
+            onDragEnter={this.onNodeDragEnter}
+            onDragLeave={this.onNodeDragLeave}
+            onDragOver={this.onNodeDragMove}
+            onDrop={this.onNodeDrop}
+            style={{paddingLeft: leftIndent}}
+          >{node.object.name}</div>
+          <div className="left-icon" style={{left: leftIndent - 45}}>
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i
                 className={`folder-toggle-icon fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`}
