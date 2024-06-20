@@ -973,6 +973,10 @@ table td {
   font-size: 0;
 }
 
+.table-thead-hidden thead .sf3-font {
+  display: none !important;
+}
+
 .tr-highlight {
   background-color: #f8f8f8;
 }
