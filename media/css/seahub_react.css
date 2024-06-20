@@ -950,6 +950,10 @@ table th {
   color: #9c9c9c;
 }
 
+table th .sf3-font {
+  font-size: 0.8125rem;
+}
+
 table td {
   padding: 0.5rem 0.1875rem;
   border-bottom: 1px solid #e8e8e8;
@@ -1479,6 +1483,10 @@ a.table-sort-op:hover {
 
 .rotate-90 {
   transform: rotate(90deg);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
 }
 
 .rotate-270 {

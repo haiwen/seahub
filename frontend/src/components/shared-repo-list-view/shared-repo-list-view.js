@@ -59,7 +59,7 @@ class SharedRepoListView extends React.Component {
       sortByName: this.props.sortBy == 'name',
       sortByTime: this.props.sortBy == 'time',
       sortBySize: this.props.sortBy == 'size',
-      sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
+      sortIcon: this.props.sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>
     };
   };
 

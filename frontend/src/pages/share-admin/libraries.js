@@ -37,7 +37,7 @@ class Content extends Component {
 
       // sort
       const sortByName = sortBy == 'name';
-      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
       const isDesktop = Utils.isDesktop();
       const table = (
