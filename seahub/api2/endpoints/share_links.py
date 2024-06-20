@@ -1461,6 +1461,7 @@ class ShareLinksCleanInvalid(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def delete(self, request):
+        print(1)
         """ Clean invalid share links.
         """
 
