@@ -24,7 +24,7 @@ const propTypes = {
   posY: PropTypes.number,
 };
 
-const PADDING_LEFT = 20;
+const LEFT_INDENT = 20;
 
 class TreeView extends React.Component {
 
@@ -326,7 +326,7 @@ class TreeView extends React.Component {
           userPerm={this.props.userPerm}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
-          paddingLeft={PADDING_LEFT}
+          leftIndent={LEFT_INDENT}
           isNodeMenuShow={this.props.isNodeMenuShow}
           isItemFreezed={this.state.isItemFreezed}
           onNodeClick={this.onNodeClick}

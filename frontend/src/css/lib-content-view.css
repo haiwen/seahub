@@ -78,7 +78,7 @@
 }
 
 .tree-node-inner-hover {
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   border-radius: 0.25rem;
 }
 
@@ -144,13 +144,21 @@
 }
 
 .tree-node-hight-light {
-  color: #fff;
   border-radius: 4px;
-  background-color: #ff9800 !important;
+  background-color: #f5f5f5 !important;
 }
 
-.tree-node-hight-light i {
-  color:#fff;
+.tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 24px;
+  left: -8px;
+  top: 2px;
+  background-color: #FF8000;
+  border-radius: 2px;
+  z-index: 0;
 }
 
 .parent-path {

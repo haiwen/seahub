@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 100%;
   height: auto;
-  padding: 0 8px;
+  padding: 0 16px;
   margin-top: 10px;
 }
 
@@ -91,6 +91,30 @@
 }
 
 .tree-section .tree-section-body .tree-view {
-  padding-top: 0;
-  padding-bottom: 0;
+  margin-left: 0px;
+  padding: 0px;
+}
+
+.tree-section .tree-section-body .right-icon {
+  width: 20px;
+  height: 20px;
+  top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-section .tree-section-body .right-icon:hover {
+  background-color: #DBDBDB;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.tree-section .tree-section-body  .right-icon i {
+  margin-left: 0;
+}
+
+.tree-section .tree-section-body .sf-dropdown-toggle:focus,
+.tree-section .tree-section-body .sf-dropdown-toggle:hover {
+  color: #999;
 }
