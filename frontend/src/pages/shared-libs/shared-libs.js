@@ -268,6 +268,7 @@ class Item extends Component {
       return null;
     }
 
+    const { isStarred } = this.state;
     const { data, currentViewMode = 'list' } = this.props;
     const useBigLibaryIcon = currentViewMode == 'grid';
     data.icon_url = Utils.getLibIconUrl(data, useBigLibaryIcon);
@@ -338,13 +339,15 @@ class Item extends Component {
             <div className="d-flex align-items-center text-truncate">
               <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
               <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
-              <i
-                role="button"
-                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                onClick={this.onToggleStarRepo}
-                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-              ></i>
+              {isStarred &&
+                <i
+                  role="button"
+                  title={gettext('Unstar')}
+                  aria-label={gettext('Unstar')}
+                  onClick={this.onToggleStarRepo}
+                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                ></i>
+              }
               {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
             </div>
 
