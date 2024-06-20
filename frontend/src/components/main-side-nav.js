@@ -138,7 +138,7 @@ class MainSideNav extends React.Component {
       }
       height = this.adminHeight;
     }
-    let style = {height: height};
+    let style = { height, opacity: height === 0 ? 0 : 1 };
 
     let linksNavItem = null;
     if (canGenerateShareLink) {
