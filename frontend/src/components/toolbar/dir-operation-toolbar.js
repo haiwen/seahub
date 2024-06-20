@@ -252,6 +252,7 @@ class DirOperationToolbar extends React.Component {
                     >
                       <DropdownToggle
                         caret
+                        tag='div'
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
