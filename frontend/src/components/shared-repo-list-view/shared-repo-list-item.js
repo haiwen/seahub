@@ -678,7 +678,7 @@ class SharedRepoListItem extends React.Component {
           {this.state.isRenaming ?
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
             <Fragment>
-              <Link to={libPath} className="text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}

@@ -37,7 +37,18 @@
   background: #f5f5f5;
 }
 
-.library-grid-item-icon {
+.library-grid-item .library-name {
+  color: #212529;
+}
+
+.library-grid-item .library-grid-item-icon {
   margin-left: 6px;
 }
-  
+
+.library-grid-item .library-grid-item-icon.sf3-font-star-empty {
+  opacity: 0;
+}
+
+.library-grid-item:hover .library-grid-item-icon.sf3-font-star-empty {
+  opacity: 1;
+}

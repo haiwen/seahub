@@ -337,7 +337,7 @@ class Item extends Component {
           >
             <div className="d-flex align-items-center text-truncate">
               <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
-              <Link to={shareRepoUrl} className="text-truncate" title={data.repo_name}>{data.repo_name}</Link>
+              <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
               <i
                 role="button"
                 title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
