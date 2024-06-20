@@ -319,6 +319,7 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
+    const { isStarred } = this.state;
     const { repo, currentViewMode = 'list' } = this.props;
     let useBigLibaryIcon = currentViewMode == 'grid';
     let iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
@@ -392,14 +393,16 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
               <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-              <i
-                role="button"
-                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-                onClick={this.onToggleStarRepo}
-              >
-              </i>
+              {isStarred &&
+                <i
+                  role="button"
+                  title={gettext('Unstar')}
+                  aria-label={gettext('Unstar')}
+                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                  onClick={this.onToggleStarRepo}
+                >
+                </i>
+              }
               {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
             </Fragment>
           )}

@@ -631,6 +631,7 @@ class SharedRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
+    const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     const { repo, currentViewMode } = this.props;
     return currentViewMode == 'list' ? (
@@ -679,14 +680,16 @@ class SharedRepoListItem extends React.Component {
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
             <Fragment>
               <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-              <i
-                role="button"
-                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                onClick={this.onToggleStarRepo}
-                className={`op-icon library-grid-item-icon ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-              >
-              </i>
+              {isStarred &&
+                <i
+                  role="button"
+                  title={gettext('Unstar')}
+                  aria-label={gettext('Unstar')}
+                  onClick={this.onToggleStarRepo}
+                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                >
+                </i>
+              }
               {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
             </Fragment>
           }
