@@ -17,7 +17,13 @@ const propTypes = {
 const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
   const [isShowController, setIsShowController] = useState(false);
   const [isShowIconPanel, setIsShowIconPanel] = useState(false);
+  const [isShowCoverController, setIsShowCoverController] = useState(false);
+  const [isShowCoverPanel, setIsShowCoverPanel] = useState(false);
+  const [coverImgUrl, setCoverImgUrl] = useState('');
   const iconPanelPopoverRef = useRef(null);
+  const coverPanelPopoverRef = useRef(null);
+
+  // currentPageConfig.coverImgUrl = 'https://img2.baidu.com/it/u=2061573580,1495285204&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500';
 
   console.log('currentPageConfig', currentPageConfig);
 
@@ -50,6 +56,7 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
 
   const handleIconPanelDisplayedChange = useCallback(() => {
     setIsShowIconPanel(!isShowIconPanel);
+    setIsShowCoverPanel(false);
   }, [isShowIconPanel]);
 
   const handleClickAddIcon = useCallback(() => {
@@ -61,6 +68,16 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
     const isClickInPopover = iconPanelPopoverRef.current.contains(e.target);
     if (!isClickInPopover) handleIconPanelDisplayedChange();
   }, [handleIconPanelDisplayedChange]);
+
+  const handleCoverPanelDisplayedChange = useCallback(() => {
+    setIsShowCoverPanel(!isShowCoverPanel);
+    setIsShowIconPanel(false);
+  }, [isShowCoverPanel]);
+
+  const handleCoverPanelListener = useCallback((e) => {
+    const isClickInPopover = coverPanelPopoverRef.current.contains(e.target);
+    if (!isClickInPopover) handleCoverPanelDisplayedChange();
+  }, [handleCoverPanelDisplayedChange]);
 
   // Update current page favicon
   useEffect(() => {
@@ -82,35 +99,97 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
       }, 0);
     }
     if (!isShowIconPanel) removeEventListener('click', handleIconPanelListener);
+    if (isShowCoverPanel) {
+      setTimeout(() => {
+        // Avoid open behavior closing popover
+        addEventListener('click', handleCoverPanelListener);
+      }, 0);
+    }
+    if (!isShowCoverPanel) removeEventListener('click', handleCoverPanelListener);
 
     return () => {
       removeEventListener('click', handleIconPanelListener);
+      removeEventListener('click', handleCoverPanelListener);
     };
-  }, [handleIconPanelListener, isShowIconPanel]);
+  }, [handleCoverPanelListener, handleIconPanelListener, isShowCoverPanel, isShowIconPanel]);
 
   const handleIconRemove = () => {
     handleSetIcon('');
     handleIconPanelDisplayedChange();
-
   };
 
   const handleAddCover = useCallback(() => { }, []);
 
+  const showCoverController = useCallback(() => {
+    setIsShowCoverController(true);
+  }, []);
 
+  const hideCoverController = useCallback(() => {
+    setIsShowCoverController(false);
+  }, []);
+
+
+
+  const handleSetCoverImage = (e) => {
+    // TODO set cover image
+    setCoverImgUrl(e.target.src);
+    handleCoverPanelDisplayedChange();
+  };
 
   return (
     <div
       className='wiki-page-header-wrapper'
     >
-      <div className='wiki-cover'></div>
+      {currentPageConfig.coverImgUrl && (
+        <div
+          className='wiki-cover'
+          onMouseMove={showCoverController}
+        // onMouseLeave={hideCoverController}
+        >
+          <img className='wiki-cover-img' alt={gettext('Cover')} src={coverImgUrl} />
+          {isShowCoverController && (
+            <div className='wiki-cover-controller'>
+              <div onClick={handleCoverPanelDisplayedChange} className='wiki-cover-controller-btn' id='wiki-change-cover-btn'>{gettext('Change cover')}</div>
+              <Popover
+                flip
+                target="wiki-change-cover-btn"
+                toggle={() => void 0}
+                placement="bottom"
+                isOpen={isShowCoverPanel && currentPageConfig.coverImgUrl}
+                innerClassName='wiki-cover-panel'
+                hideArrow={true}
+                popperClassName='wiki-cover-popover'
+              >
+                <div ref={coverPanelPopoverRef}>
+                  <div className='wiki-icon-panel-header popover-header'>
+                    <span>{gettext('Gallery')}</span>
+                    <span onClick={handleIconRemove} className='wiki-remove-icon-btn'>{gettext('Remove')}</span>
+                  </div>
+                  <PopoverBody className='wiki-cover-panel-body'>
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=1182742047,3628923944&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2015_Website_appreciate/2015-09-10/20150910002714.jpg' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img1.baidu.com/it/u=3504078124,2689803181&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img2.baidu.com/it/u=1882437344,2360797937&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2014_Website_appreciate/2015-01-08/20150108181231.jpg' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img2.baidu.com/it/u=1031726174,3597184508&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=2265212344,3361529340&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2012_Website_appreciate/2012-06-26/20120626041901.jpg' />
+                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=794065552,1847631001&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800' />
+                  </PopoverBody>
+                </div>
+              </Popover>
+            </div>
+          )}
+
+        </div>
+      )}
       <div className='wiki-page-gap-container'>
         <div
           className='wiki-editor-header'
           onMouseEnter={changeControllerDisplayed}
           onMouseLeave={changeControllerDisplayed}
         >
-
-          <div className='wiki-icon-container'>
+          <div className={classnames('wiki-icon-container', { gap: currentPageConfig.icon && !currentPageConfig.coverImgUrl })}>
             <div className={classnames('wiki-icon-wrapper', { show: currentPageConfig.icon })} id='wiki-icon-wrapper' onClick={handleIconPanelDisplayedChange}>
               <span>{currentPageConfig.icon}</span>
             </div>
@@ -120,8 +199,8 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
             target="wiki-icon-wrapper"
             toggle={() => void 0}
             placement="bottom"
-            isOpen={currentPageConfig.icon && isShowIconPanel}
-            innerClassName='wiki-icon-panel'
+            isOpen={isShowIconPanel && currentPageConfig.icon}
+            popperClassName='wiki-icon-popover'
             hideArrow={true}
           >
             <div ref={iconPanelPopoverRef}>
@@ -148,13 +227,16 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
                 <span className='text'>{gettext('Add icon')}</span>
               </div>
             )}
-            <div className='wiki-page-controller-item'>
-              <i className='fa fa-save'></i>
-              <span className='text'>{gettext('Add cover')}</span>
-            </div>
+            {!currentPageConfig.coverImgUrl && (
+              <div className='wiki-page-controller-item'>
+                <i className='fa fa-save'></i>
+                <span className='text'>{gettext('Add cover')}</span>
+              </div>
+            )}
           </div>
           <Input className='sf-wiki-title' onCompositionEnd={handleRenameDocument} bsSize="lg" onChange={handleRenameDocument} defaultValue={currentPageConfig.name} />
         </div>
+
       </div>
     </div>
   );
