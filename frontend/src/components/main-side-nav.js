@@ -224,7 +224,7 @@ class MainSideNav extends React.Component {
               <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                 <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Files')}</span>
-                <span className={`toggle-icon sf3-font sf3-font-drop-down ${filesNavUnfolded ? '' : 'icon-rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
+                <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
               </Link>
               <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0}}>
                 {canAddRepo && (
@@ -285,7 +285,7 @@ class MainSideNav extends React.Component {
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
                 <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Share Admin')}</span>
-                <span className={`toggle-icon sf3-font sf3-font-drop-down ${this.state.sharedExtended ? '' : 'icon-rotate-90'}`} aria-hidden="true"></span>
+                <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`} aria-hidden="true"></span>
               </a>
               {this.renderSharedAdmin()}
             </li>

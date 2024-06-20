@@ -742,19 +742,13 @@ a, a:hover { color: #ec8000; }
   margin-left: auto;
 }
 
-.side-nav-con .toggle-icon.sf3-font-drop-down {
+.side-nav-con .toggle-icon.sf3-font-down {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 12px;
   width: 24px;
   height: 24px;
-  transform: scale(.8);
-}
-
-.side-nav-con .toggle-icon.sf3-font-drop-down.icon-rotate-90 {
-  transform: rotate(90deg) scale(.8);
 }
 
 #draft-num {
@@ -1481,4 +1475,12 @@ a.table-sort-op:hover {
   .side-panel .side-nav .side-nav-con .nav-item {
     background-color: #f8f8f8;
   }
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.rotate-270 {
+  transform: rotate(270deg);
 }

@@ -86,8 +86,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
     let toggleClass = classNames({
-      'folder-toggle-icon fa fa-caret-down': department.children && this.state.isChildrenShow,
-      'folder-toggle-icon fa fa-caret-right': department.children && !this.state.isChildrenShow,
+      'folder-toggle-icon sf3-font sf3-font-down rotate-270': department.children && this.state.isChildrenShow,
+      'folder-toggle-icon sf3-font sf3-font-down': department.children && !this.state.isChildrenShow,
     });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,

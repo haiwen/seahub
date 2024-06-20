@@ -6,7 +6,7 @@
   border-radius: 5px;
 }
 
-.users-filter-bar .users-filter-bar-dropdown-toggle .sf3-font-drop-down {
+.users-filter-bar .users-filter-bar-dropdown-toggle .sf3-font-down {
   color: #999;
   margin-left: auto;
   display: inline-flex;
@@ -15,7 +15,6 @@
   font-size: 12px;
   width: 24px;
   height: 24px;
-  transform: scale(.8);
 }
 
 .users-filter-bar .users-filter-bar-dropdown-toggle:hover {

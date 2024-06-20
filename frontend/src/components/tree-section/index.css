@@ -56,14 +56,9 @@
   border-radius: 3px;
 }
 
-.tree-section .tree-section-header .sf3-font-drop-down {
+.tree-section .tree-section-header .sf3-font-down {
   font-size: 12px;
   color: #999;
-  transform: scale(.8);
-}
-
-.tree-section .tree-section-header .sf3-font-drop-down.icon-rotate-90 {
-  transform: rotate(90deg) scale(.8);
 }
 
 .tree-section .tree-section-header-operation .dropdown {
