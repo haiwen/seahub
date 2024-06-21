@@ -107,7 +107,7 @@ class TreeViewItem extends React.Component {
             <div className="item-left-icon">
               {
                 node.object.type !== 'file' &&
-                <span className={`icon item-toggle fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+                <span className={`icon item-toggle sf3-font ${node.isExpanded ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
               }
               <i className="tree-node-icon">
                 <span className={`icon far ${node.object.type === 'dir' ? 'fa-folder' : 'fa-file'}`}></span>

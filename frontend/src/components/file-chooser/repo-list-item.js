@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TreeListView from './tree-list-view';
-
 import TreeNode from '../../components/tree-view/tree-node';
 import Dirent from '../../models/dirent';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -206,7 +205,7 @@ class RepoListItem extends React.Component {
               <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
             </div>
             <div className="item-left-icon">
-              <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
+              <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
               <i className="tree-node-icon">
                 <span className="icon far fa-folder tree-node-icon"></span>
               </i>

@@ -304,9 +304,9 @@ class TreeNodeView extends React.Component {
             style={{paddingLeft: leftIndent}}
           >{node.object.name}</div>
           <div className="left-icon" style={{left: leftIndent - 45}}>
-            {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
+            {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
               <i
-                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? 'rotate-270' : ''}`}
+                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
               ></i>

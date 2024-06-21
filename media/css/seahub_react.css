@@ -266,10 +266,10 @@ a, a:hover { color: #ec8000; }
 /* for 'extra small' */
 @media (max-width: 575px) {
   .w-xs-200 {
-  width: 200%;
+    width: 200%;
   }
   .w-xs-250 {
-  width: 250%;
+    width: 250%;
   }
 }
 
@@ -1038,9 +1038,13 @@ a.table-sort-op {
 
 @media (max-width:767px) {
   a.table-sort-op {
-  display: inline-block;
-  margin-left: 15px;
+    display: inline-block;
+    margin-left: 15px;
   }
+}
+
+a.table-sort-op.sf3-font {
+  font-size: 13px;
 }
 
 a.table-sort-op:hover {
@@ -1099,7 +1103,7 @@ a.table-sort-op:hover {
 
 @media (min-width: 768px) {
   .empty-tip {
-  padding: 30px 80px;
+    padding: 30px 80px;
   }
 }
 

@@ -55,7 +55,7 @@ class Content extends Component {
       );
 
       const initialSortIcon = <span className="fas fa-sort"></span>;
-      const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       const table = (
         <Fragment>
           <table className="table-hover">
