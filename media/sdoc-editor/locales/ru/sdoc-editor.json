@@ -352,8 +352,8 @@
   "Default_font": "Шрифт по умолчанию",
   "Pending_operations_exceed_limit": "Несколько операций не синхронизированы с сервером. Проверьте подключение к сети.",
   "Recently_saved": "Недавно сохранено",
-  "Text_Link": "Текстовая ссылка",
-  "Icon_and_text_Link": "Значок и текстовая ссылка",
+  "Text_link": "Текстовая ссылка",
+  "Icon_and_text_link": "Значок и текстовая ссылка",
   "Card": "Карта",
   "Select_sdoc_document": "Выбрать документ sdoc",
   "Select_file": "Выбрать файл",
@@ -462,5 +462,5 @@
   "Vertical_align": "Вертикальное выравнивание",
   "Horizontal_align": "Горизонтальное выравнивание",
   "SeaTable_column": "Столбец SeaTable",
-  "SeaTable_view": "Вид SeaTable"
+  "SeaTable_table": "Таблица SeaTable"
 }

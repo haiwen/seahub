@@ -352,8 +352,8 @@
   "Default_font": "默认字体",
   "Pending_operations_exceed_limit": "有多个操作未同步到服务器。请检查你的网络。",
   "Recently_saved": "最近保存",
-  "Text_Link": "文字链",
-  "Icon_and_text_Link": "图标+文字链",
+  "Text_link": "文字链",
+  "Icon_and_text_link": "图标+文字链",
   "Card": "卡片",
   "Select_sdoc_document": "选择 sdoc 文档",
   "Select_file": "选择文件",
@@ -462,5 +462,5 @@
   "Vertical_align": "垂直对齐",
   "Horizontal_align": "水平对齐",
   "SeaTable_column": "SeaTable 列",
-  "SeaTable_view": "SeaTable 视图"
+  "SeaTable_table": "SeaTable 子表"
 }
