@@ -15,6 +15,7 @@
   height: 28px;
   width: 100%;
   border-radius: 3px;
+  border: 1px solid rgba(69, 170, 242, 0);
 }
 
 .tree-section .tree-section-header.tree-section-header-hover,
@@ -57,7 +58,6 @@
 }
 
 .tree-section .tree-section-header .sf3-font-down {
-  font-size: 12px;
   color: #666666;
 }
 

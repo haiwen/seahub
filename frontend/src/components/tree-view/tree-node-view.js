@@ -301,9 +301,9 @@ class TreeNodeView extends React.Component {
             onDragLeave={this.onNodeDragLeave}
             onDragOver={this.onNodeDragMove}
             onDrop={this.onNodeDrop}
-            style={{paddingLeft: leftIndent}}
+            style={{paddingLeft: leftIndent + 5}}
           >{node.object.name}</div>
-          <div className="left-icon" style={{left: leftIndent - 45}}>
+          <div className="left-icon" style={{left: leftIndent - 40}}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
               <i
                 className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
