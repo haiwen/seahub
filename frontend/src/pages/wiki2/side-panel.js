@@ -373,7 +373,7 @@ class SidePanel extends Component {
           <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
             <i className='sf3-font sf3-font-new-page'></i>
           </div>
-          <UncontrolledTooltip target="wiki-add-new-page">
+          <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
             {gettext('New page')}
           </UncontrolledTooltip>
         </div>
