@@ -16,6 +16,10 @@
   height: 44px;
 }
 
+.wiki2-side-panel .wiki2-side-panel-top .wiki-new-page-tooltip {
+  z-index: 1001;
+}
+
 .wiki2-side-panel .wiki2-side-panel-top .add-new-page {
   padding: 0 4px;
   cursor: pointer;
