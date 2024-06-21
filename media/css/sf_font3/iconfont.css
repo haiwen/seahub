@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1718430387468'); /* IE9 */
-  src: url('iconfont.eot?t=1718430387468#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1718430387468') format('woff2'),
-       url('iconfont.woff?t=1718430387468') format('woff'),
-       url('iconfont.ttf?t=1718430387468') format('truetype'),
-       url('iconfont.svg?t=1718430387468#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1718690041029'); /* IE9 */
+  src: url('iconfont.eot?t=1718690041029#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1718690041029') format('woff2'),
+       url('iconfont.woff?t=1718690041029') format('woff'),
+       url('iconfont.ttf?t=1718690041029') format('truetype'),
+       url('iconfont.svg?t=1718690041029#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-folder:before {
+  content: "\e82c";
+}
+
+.sf3-font-duplicate-page:before {
+  content: "\e82a";
+}
+
+.sf3-font-move-to:before {
+  content: "\e82b";
 }
 
 .sf3-font-open-in-new-tab:before {
@@ -210,10 +222,6 @@
 
 .sf3-font-file-lock:before {
   content: "\e7f1";
-}
-
-.sf3-font-x-011:before {
-  content: "\e7f8";
 }
 
 .sf3-font-list:before {
