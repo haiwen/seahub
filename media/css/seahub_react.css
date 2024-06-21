@@ -524,13 +524,13 @@ a, a:hover { color: #ec8000; }
 .department-usage-container {
   display: inline-block;
   vertical-align: middle;
+  margin-left: 0.75rem;
 }
 
 .department-usage {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0.75rem;
 }
 
 .department-usage .department-quota-bar {
