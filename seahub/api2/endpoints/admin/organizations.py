@@ -488,5 +488,11 @@ class AdminOrganizationsBaseInfo(APIView):
             except:
                 continue
             base_info = {'org_id': org.org_id, 'org_name': org.org_name}
+
+            users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+            base_info['users_count'] = len(users)
+            active_users_count = len([u for u in users if u.is_active])
+            base_info['active_users_count'] = active_users_count
+
             orgs.append(base_info)
         return Response({'organization_list': orgs})
