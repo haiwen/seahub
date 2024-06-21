@@ -227,5 +227,7 @@
   "Insert_below": "Insert below",
   "Insert_above": "Insert above",
   "Insert_on_the_right": "Insert on the right",
-  "Insert_on_the_left": "Insert on the left"
+  "Insert_on_the_left": "Insert on the left",
+  "Row(s)": "row(s)",
+  "Column(s)": "column(s)"
 }

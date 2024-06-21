@@ -227,5 +227,7 @@
   "Insert_below": "Insérer en-dessous",
   "Insert_above": "Insérer au-dessus",
   "Insert_on_the_right": "Insérer à droite",
-  "Insert_on_the_left": "Insérer à gauche"
+  "Insert_on_the_left": "Insérer à gauche",
+  "Row(s)": "ligne(s)",
+  "Column(s)": "colonne(s)"
 }

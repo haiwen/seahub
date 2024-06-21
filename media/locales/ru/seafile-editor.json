@@ -227,5 +227,7 @@
   "Insert_below": "Вставить ниже",
   "Insert_above": "Вставить выше",
   "Insert_on_the_right": "Вставить справа",
-  "Insert_on_the_left": "Вставить слева"
+  "Insert_on_the_left": "Вставить слева",
+  "Row(s)": "строк",
+  "Column(s)": "столбцов"
 }
