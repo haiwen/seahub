@@ -70,7 +70,7 @@ class NavItem extends React.Component {
       return (
         <div className="pl-4 position-relative">
           <span className="switch-btn" onClick={this.toggleExpanded}>
-            {<i className={`fa fa-caret-${expanded ? 'down': 'right'}`}></i>}
+            <i className={`sf3-font sf3-font-down ${expanded ? '': 'rotate-270 d-inline-block'}`}></i>
           </span>
           {this.renderLink(node)}
           {expanded && node.children.map((child, index) => {

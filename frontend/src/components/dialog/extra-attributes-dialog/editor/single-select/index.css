@@ -22,11 +22,6 @@
   cursor: pointer;
 }
 
-.extra-attributes-dialog .selected-single-select-container .fa-caret-down {
-  font-size: 16px;
-  color: #949494;
-}
-
 .extra-attributes-dialog .selected-single-select-container .single-select-option {
   text-align: center;
   width: min-content;

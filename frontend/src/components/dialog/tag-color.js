@@ -71,7 +71,7 @@ class TagColor extends React.Component {
           style={{backgroundColor: tagColor}}
           onClick={this.togglePopover}
         >
-          <i className="fas fa-caret-down text-white"></i>
+          <i className="sf3-font sf3-font-down text-white"></i>
         </span>
         <Popover
           target={`tag-${id}-color`}

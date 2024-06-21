@@ -62,7 +62,7 @@ class UsersFilterBar extends Component {
             className="users-filter-bar-dropdown-toggle"
           >
             <span>{gettext('Status')}{': '}{this.translateStatus(this.props.isActive)}</span>
-            <span className='sf3-font-drop-down sf3-font'></span>
+            <span className='sf3-font-down sf3-font'></span>
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem key={0} onClick={() => { onStatusChange(''); }}>
@@ -84,7 +84,7 @@ class UsersFilterBar extends Component {
             className="users-filter-bar-dropdown-toggle"
           >
             <span>{gettext('Role')}{': '}{this.translateRole(this.props.role)}</span>
-            <span className='sf3-font-drop-down sf3-font'></span>
+            <span className='sf3-font-down sf3-font'></span>
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem key={0} onClick={() => { onRoleChange(''); }}>

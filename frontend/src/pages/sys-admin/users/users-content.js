@@ -78,7 +78,7 @@ class Content extends Component {
         // initial sort icon
         sortIcon = <span className="fas fa-sort"></span>;
       } else {
-        sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+        sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       }
       const spaceText = gettext('Space Used');
       const spaceEl =

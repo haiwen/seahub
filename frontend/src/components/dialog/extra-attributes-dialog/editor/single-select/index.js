@@ -55,7 +55,7 @@ class SingleSelect extends Component {
               )}
             </div>
             {column.editable && (
-              <i className="fas fa-caret-down"></i>
+              <i className="sf3-font sf3-font-down"></i>
             )}
           </div>
         </div>

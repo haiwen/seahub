@@ -281,14 +281,7 @@
   align-items: center;
 }
 
-.view-structure .more-view-operation .folders-dropdown .dtable-icon-right-slide {
-  display: inline-flex;
-  font-size: 12px;
-  transform: scale(0.8);
-}
-
-.view-structure .more-view-operation .btn-move-to-folder:focus .dtable-icon-insert-right,
-.view-structure .more-view-operation .btn-move-to-folder:focus .dtable-icon-right-slide {
+.view-structure .more-view-operation .btn-move-to-folder:focus .dtable-icon-insert-right {
   color: #fff;
 }
 
@@ -348,12 +341,6 @@
   font-size: 14px;
   margin-right: 10px;
   color: #8c8c8c;
-}
-
-.dtable-dropdown-menu .dropdown-item .seafile-multicolor-icon.seafile-multicolor-icon-right-slide {
-  font-size: 12px;
-  transform: scale(0.8);
-  color: #666;
 }
 
 .dtable-dropdown-menu .dropdown-item:hover .item-icon,

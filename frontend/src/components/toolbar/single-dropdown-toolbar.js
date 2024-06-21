@@ -40,7 +40,7 @@ class SingleDropdownToolbar extends React.Component {
           <DropdownToggle
             tag="i"
             role="button"
-            className="sf3-font-drop-down sf3-font ml-1 sf-dropdown-toggle"
+            className="sf3-font-down sf3-font ml-1 sf-dropdown-toggle"
             onClick={this.toggleDropdownMenu}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"

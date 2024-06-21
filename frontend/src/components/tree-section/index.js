@@ -62,7 +62,7 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
             </>
           )}
           <div className="tree-section-header-operation" onClick={toggleShowChildren}>
-            <i className={`sf3-font sf3-font-drop-down${showChildren ? '' : ' icon-rotate-90'}`}></i>
+            <i className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
           </div>
         </div>
       </div>

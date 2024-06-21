@@ -202,7 +202,9 @@ class FolderItem extends Component {
                   id={viewEditorId}
                 >
                   {this.state.isMouseEnter ?
-                    <NavItemIcon className="icon-expand-folder" symbol={folded ? 'right-slide' : 'drop-down'}/>
+                    <div className='nav-item-icon'>
+                      <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`}></i>
+                    </div>
                     :
                     <NavItemIcon symbol={'wiki-folder'} disable={true} />
                   }

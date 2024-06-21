@@ -190,7 +190,7 @@ export default class PageDropdownMenu extends Component {
                   <Icon symbol={'move-to'}/>
                   <span className="item-text">{gettext('Move to')}</span>
                   <span className="icon-dropdown-toggle">
-                    <Icon className="mr-0" symbol={'right-slide'}/>
+                    <i className="sf3-font-down sf3-font rotate-270"></i>
                   </span>
                   <DropdownToggle className="move-to-folders-toggle"></DropdownToggle>
                 </div>

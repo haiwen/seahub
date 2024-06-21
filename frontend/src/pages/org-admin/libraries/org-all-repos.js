@@ -65,7 +65,7 @@ class Content extends Component {
         </EmptyTip>
       );
       const initialSortIcon = <span className="fas fa-sort"></span>;
-      const sortIcon = <span className="fas fa-caret-down"></span>;
+      const sortIcon = <span className="sf3-font sf3-font-down"></span>;
       const table = (
         <Fragment>
           <table>

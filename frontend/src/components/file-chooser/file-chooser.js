@@ -378,7 +378,7 @@ class FileChooser extends React.Component {
           <Fragment>
             <div className="list-view">
               <div className="list-view-header">
-                <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
+                <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
                 <span className="library">{gettext('Current Library')}</span>
               </div>
               {
@@ -399,7 +399,7 @@ class FileChooser extends React.Component {
             </div>
             <div className="list-view">
               <div className="list-view-header">
-                <span className={`item-toggle fa ${this.state.isOtherRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
+                <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
               {
@@ -423,7 +423,7 @@ class FileChooser extends React.Component {
           <div className="list-view">
             {!this.props.hideLibraryName &&
             <div className="list-view-header">
-              <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
+              <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
               <span className="library">{gettext('Current Library')}</span>
             </div>
             }
@@ -449,7 +449,7 @@ class FileChooser extends React.Component {
           <div className="file-chooser-container">
             <div className="list-view">
               <div className="list-view-header">
-                <span className="item-toggle fa fa-caret-down"></span>
+                <span className="item-toggle sf3-font sf3-font-down"></span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
               <RepoListView

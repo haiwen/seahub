@@ -648,7 +648,7 @@ class Content extends React.Component {
       );
     }
 
-    const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+    const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
     return mode == 'list' ? (
       <table className="table-hover">
         <thead>

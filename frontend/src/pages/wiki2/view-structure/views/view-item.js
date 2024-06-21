@@ -231,11 +231,9 @@ class ViewItem extends Component {
                       <NavItemIcon symbol={'files'} disable={true} />
                     }
                     {(this.state.isMouseEnter && childNumber > 0) &&
-                      <NavItemIcon
-                        className="icon-expand-folder"
-                        symbol={folded ? 'right-slide' : 'drop-down'}
-                        onClick={this.toggleExpand}
-                      />
+                      <div className='nav-item-icon' onClick={this.toggleExpand}>
+                        <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`}></i>
+                      </div>
                     }
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
