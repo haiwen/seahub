@@ -110,7 +110,6 @@
   display: flex;
   align-content: center;
   justify-content: center;
-  font-size: 13px;
 }
 
 .tree-node-drop {
@@ -263,6 +262,8 @@
   color: inherit;
   border-radius: 3px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .dir-view-path .path-item:hover {
@@ -271,7 +272,6 @@
 
 .dir-view-path .path-item-dropdown-toggle {
   color: #666;
-  font-size: .6rem;
 }
 
 .dir-view-path .path-split {
