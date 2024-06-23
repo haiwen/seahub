@@ -63,7 +63,7 @@ class DirColumnNav extends React.Component {
 
   onNodeClick = (node) => {
     this.setState({opNode: node});
-    if (Utils.imageCheck(node.object.name)) {
+    if (Utils.imageCheck(node?.object?.name || '')) {
       this.showNodeImagePopup(node);
       return;
     }
@@ -268,7 +268,7 @@ class DirColumnNav extends React.Component {
             repoID={this.props.repoID}
           />
         </TreeSection>
-        <DirViews repoID={this.props.repoID} userPerm={this.props.userPerm} />
+        <DirViews repoID={this.props.repoID} userPerm={this.props.userPerm} onNodeClick={this.onNodeClick}/>
       </>
     );
   };

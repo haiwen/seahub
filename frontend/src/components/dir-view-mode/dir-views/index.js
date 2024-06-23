@@ -10,7 +10,7 @@ import MetadataViews from '../../metadata-manage/metadata-views';
 
 import './index.css';
 
-const DirViews = ({ userPerm, repoID }) => {
+const DirViews = ({ userPerm, repoID, onNodeClick }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +65,7 @@ const DirViews = ({ userPerm, repoID }) => {
   return (
     <>
       <TreeSection title={gettext('Views')} moreKey={{ name: 'views' }} moreOperations={moreOperations} moreOperationClick={moreOperationClick}>
-        {!loading && metadataStatus && (<MetadataViews repoID={repoID} />)}
+        {!loading && metadataStatus && (<MetadataViews repoID={repoID} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog value={metadataStatus} repoID={repoID} toggle={closeMetadataManagementDialog} submit={toggleMetadataStatus} />
@@ -77,6 +77,7 @@ const DirViews = ({ userPerm, repoID }) => {
 DirViews.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
+  onNodeClick: PropTypes.func,
 };
 
 export default DirViews;

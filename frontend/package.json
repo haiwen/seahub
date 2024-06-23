@@ -12,6 +12,7 @@
     "@seafile/sdoc-editor": "1.0.4",
     "@seafile/seafile-calendar": "0.0.12",
     "@seafile/seafile-editor": "1.0.99",
+    "@seafile/seafile-metadata": "0.0.2",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/react-codemirror": "^4.19.4",
     "chart.js": "2.9.4",

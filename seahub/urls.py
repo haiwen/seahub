@@ -208,6 +208,7 @@ from seahub.repo_metadata.views import view_metadata
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage
+from seahub.api2.endpoints.user_list import UserListView
 
 
 urlpatterns = [
@@ -319,6 +320,9 @@ urlpatterns = [
     
     # user:convert to team account
     re_path(r'^api/v2.1/user/convert-to-team/$', UserConvertToTeamView.as_view(), name="api-v2.1-user-convert-to-team"),
+
+    # user list
+    re_path(r'^api/v2.1/user-list/$', UserListView.as_view(), name='api-v2.1-user-list'),
 
     ## obtain auth token by login session
     re_path(r'^api/v2.1/auth-token-by-session/$', AuthTokenBySession.as_view(), name="api-v2.1-auth-token-by-session"),

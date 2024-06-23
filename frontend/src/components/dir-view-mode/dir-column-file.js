@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SeafileMetadata from '@seafile/seafile-metadata';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
 const propTypes = {
@@ -48,6 +49,22 @@ class DirColumnFile extends React.Component {
         <div className="message err-tip">{gettext('File does not exist.')}</div>
       );
     }
+
+    if (this.props.content === '__sf-metadata') {
+      window.sfMetadata = {
+        siteRoot,
+        lang,
+        mediaUrl,
+      };
+
+      return (
+        <div className="w-100 h-100 o-hidden d-flex" style={{ paddingRight: 10, flexDirection: 'column', alignItems: 'center' }}>
+          <div className="" style={{ width: '100%', height: 10, zIndex: 7, transform: 'translateZ(1000px)', position: 'relative', background: '#fff' }}></div>
+          <SeafileMetadata repoID={this.props.repoID} />
+        </div>
+      );
+    }
+
     return (
       <SeafileMarkdownViewer
         isTOCShow={false}

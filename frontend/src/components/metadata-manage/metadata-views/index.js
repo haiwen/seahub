@@ -6,7 +6,7 @@ import Icon from '../../icon';
 
 import './index.css';
 
-const MetadataViews = ({ repoID }) => {
+const MetadataViews = ({ repoID, onNodeClick }) => {
   const [highlight, setHighlight] = useState(false);
 
   const onMouseEnter = useCallback(() => {
@@ -21,10 +21,10 @@ const MetadataViews = ({ repoID }) => {
     setHighlight(false);
   }, []);
 
-  const openView = useCallback(() => {
-    const server = siteRoot.substring(0, siteRoot.length-1);
-    window.open(server + '/repos/' + repoID + '/metadata/table-view/', '_blank');
-  }, [repoID]);
+  // const openView = useCallback(() => {
+  //   const server = siteRoot.substring(0, siteRoot.length-1);
+  //   window.open(server + '/repos/' + repoID + '/metadata/table-view/', '_blank');
+  // }, [repoID]);
 
   return (
     <div className="tree-view tree metadata-tree-view">
@@ -36,7 +36,7 @@ const MetadataViews = ({ repoID }) => {
             onMouseEnter={onMouseEnter}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            onClick={openView}
+            onClick={() => onNodeClick({ repoID, type: 'sf-metadata' })}
           >
             <div className="tree-node-text">{gettext('File extended properties')}</div>
             <div className="left-icon">
@@ -53,6 +53,7 @@ const MetadataViews = ({ repoID }) => {
 
 MetadataViews.propTypes = {
   repoID: PropTypes.string.isRequired,
+  onNodeClick: PropTypes.func,
 };
 
 export default MetadataViews;

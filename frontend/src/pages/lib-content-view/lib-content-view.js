@@ -1653,6 +1653,11 @@ class LibContentView extends React.Component {
       this.setState({pathExist: true});
     }
 
+    if (node.type === 'sf-metadata') {
+      this.setState({ isFileLoading: false, isViewFile: true, content: '__sf-metadata', currentPath: '' });
+      return;
+    }
+
     if (node.object.isDir()) {
       let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
