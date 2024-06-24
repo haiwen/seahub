@@ -43,7 +43,7 @@ body {
 }
 .setting-item {
   font-size: 0.875rem;
-  margin: 1em 0 3em;
+  padding: 1em 0 3em;
 }
 .setting-item-heading {
   font-size: 0.9375rem;
@@ -73,6 +73,7 @@ body {
   flex: auto;
   margin: 0;
   padding-left: 1em;
+  border: 0;
   border-left: 2px solid transparent;
   color: #212529;
 }

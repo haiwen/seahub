@@ -21,6 +21,7 @@ import SocialLoginSAML from './components/user-settings/social-login-saml';
 import LinkedDevices from './components/user-settings/linked-devices';
 import DeleteAccount from './components/user-settings/delete-account';
 
+import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';
 
@@ -124,7 +125,9 @@ class Settings extends React.Component {
               <SideNav data={this.sideNavItems} curItemID={this.state.curItemID} />
             </div>
             <div className="main-panel d-flex flex-column">
-              <h2 className="heading">{gettext('Settings')}</h2>
+              <div className="cur-view-path">
+                <h2 className="sf-heading">{gettext('Settings')}</h2>
+              </div>
               <div className="content position-relative" onScroll={this.handleContentScroll}>
                 <div id="user-basic-info" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Profile Setting')}</h3>
