@@ -4,6 +4,7 @@ import React from 'react';
 import toaster from '../components/toast';
 import PermissionDeniedTip from '../components/permission-denied-tip';
 import { compareTwoString } from './compare-two-string';
+import { PRIVATE_FILE_TYPE } from '../constants';
 
 export const Utils = {
 
@@ -870,6 +871,10 @@ export const Utils = {
         return false;
       }
     }
+  },
+
+  isFileMetadata: function(type) {
+    return type === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
   },
 
   isInternalFileLink: function(url, repoID) {

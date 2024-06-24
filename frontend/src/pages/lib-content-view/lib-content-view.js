@@ -461,6 +461,14 @@ class LibContentView extends React.Component {
     window.history.pushState({url: url, path: filePath}, filePath, url);
   };
 
+  showFileMetadata = (filePath) => {
+    const repoID = this.props.repoID;
+    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata' });
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name);
+    window.history.pushState({url: url, path: ''}, '', url);
+  };
+
   loadDirentList = (path) => {
     let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
@@ -1649,13 +1657,9 @@ class LibContentView extends React.Component {
   onTreeNodeClick = (node) => {
     this.resetSelected();
     let repoID = this.props.repoID;
+
     if (!this.state.pathExist) {
       this.setState({pathExist: true});
-    }
-
-    if (node.type === 'sf-metadata') {
-      this.setState({ isFileLoading: false, isViewFile: true, content: '__sf-metadata', currentPath: '' });
-      return;
     }
 
     if (node.object.isDir()) {
@@ -1685,7 +1689,7 @@ class LibContentView extends React.Component {
       }
     }
 
-    if (node.path === this.state.path ) {
+    if (node.path === this.state.path) {
       return;
     }
 
@@ -1695,6 +1699,10 @@ class LibContentView extends React.Component {
       if (Utils.isMarkdownFile(node.path)) {
         if (node.path !== this.state.path) {
           this.showColumnMarkdownFile(node.path);
+        }
+      } else if (Utils.isFileMetadata(node?.object?.type)) {
+        if (node.path !== this.state.path) {
+          this.showFileMetadata(node.path);
         }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);

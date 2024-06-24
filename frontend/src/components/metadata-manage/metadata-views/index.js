@@ -1,12 +1,31 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
-import { siteRoot } from '../../../utils/constants';
 import Icon from '../../icon';
+import { PRIVATE_FILE_TYPE } from '../../../constants';
 
 import './index.css';
 
-const MetadataViews = ({ repoID, onNodeClick }) => {
+const MetadataViews = ({ repoID, currentPath, onNodeClick }) => {
+  const node = useMemo(() => {
+    return {
+      children: [],
+      path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+      isExpanded: false,
+      isLoaded: true,
+      isPreload: true,
+      object: {
+        file_tags: [],
+        id: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        name: gettext('File extended properties'),
+        type: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        isDir: () => false,
+      },
+      parentNode: {},
+      key: repoID,
+    };
+  }, [repoID]);
   const [highlight, setHighlight] = useState(false);
 
   const onMouseEnter = useCallback(() => {
@@ -21,22 +40,17 @@ const MetadataViews = ({ repoID, onNodeClick }) => {
     setHighlight(false);
   }, []);
 
-  // const openView = useCallback(() => {
-  //   const server = siteRoot.substring(0, siteRoot.length-1);
-  //   window.open(server + '/repos/' + repoID + '/metadata/table-view/', '_blank');
-  // }, [repoID]);
-
   return (
     <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
         <div className="children" style={{ paddingLeft: 20 }}>
           <div
-            className={`tree-node-inner text-nowrap${highlight ? ' tree-node-inner-hover' : ''}`}
+            className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': currentPath === node.path })}
             title={gettext('File extended properties')}
             onMouseEnter={onMouseEnter}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            onClick={() => onNodeClick({ repoID, type: 'sf-metadata' })}
+            onClick={() => onNodeClick(node)}
           >
             <div className="tree-node-text">{gettext('File extended properties')}</div>
             <div className="left-icon">
@@ -53,6 +67,7 @@ const MetadataViews = ({ repoID, onNodeClick }) => {
 
 MetadataViews.propTypes = {
   repoID: PropTypes.string.isRequired,
+  currentPath: PropTypes.string,
   onNodeClick: PropTypes.func,
 };
 

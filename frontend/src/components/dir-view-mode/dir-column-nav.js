@@ -268,7 +268,7 @@ class DirColumnNav extends React.Component {
             repoID={this.props.repoID}
           />
         </TreeSection>
-        <DirViews repoID={this.props.repoID} userPerm={this.props.userPerm} onNodeClick={this.onNodeClick}/>
+        <DirViews repoID={this.props.repoID} currentPath={this.props.currentPath} userPerm={this.props.userPerm} onNodeClick={this.onNodeClick}/>
       </>
     );
   };
