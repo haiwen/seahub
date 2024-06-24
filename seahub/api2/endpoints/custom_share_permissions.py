@@ -29,9 +29,6 @@ class CustomSharePermissionsView(APIView):
         """List custom share permissions
         """
         # permission check
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        
         if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -104,9 +101,6 @@ class CustomSharePermissionView(APIView):
         """get a custom share permission
         """
         # permission check
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        
         if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

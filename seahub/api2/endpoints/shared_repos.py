@@ -38,9 +38,6 @@ class SharedRepos(APIView):
         Permission checking:
         1. all authenticated user can perform this action.
         """
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
         shared_repos = []
         username = request.user.username
         try:
