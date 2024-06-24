@@ -41,3 +41,22 @@ jobs:
           cd $GITHUB_WORKSPACE
           export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+
+      - name: Set up tmate session
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tmate
+          tmate -S /tmp/tmate.sock new-session -d
+          tmate -S /tmp/tmate.sock wait tmate-ready
+          tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' > /tmp/tmate-ssh
+          tmate -S /tmp/tmate.sock display -p '#{tmate_web}' > /tmp/tmate-web
+        shell: bash
+
+      - name: Get tmate SSH connection string
+        run: cat /tmp/tmate-ssh
+
+      - name: Get tmate Web connection string
+        run: cat /tmp/tmate-web
+
+      - name: Keep the job alive
+        run: sleep infinity
