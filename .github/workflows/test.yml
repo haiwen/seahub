@@ -26,8 +26,8 @@ jobs:
 
       - name: clone and build
         run: |
-          git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
-          cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
+          git clone --depth=1 --branch=lian-test https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+          cd /tmp/seafile-test-deploy && git fetch origin lian-test:lian-test && git checkout lian-test
           ./bootstrap.sh
 
       - name: pip install
