@@ -202,9 +202,6 @@ class DirSharedItemsEndpoint(APIView):
     def get(self, request, repo_id, format=None):
         """List shared items(shared to users/groups) for a folder/library.
         """
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
