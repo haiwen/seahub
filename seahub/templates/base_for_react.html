@@ -62,6 +62,7 @@
             guideEnabled: {% if guide_enabled %} true {% else %} false {% endif %},
             trashReposExpireDays: {% if trash_repos_expire_days >= 0 %} {{ trash_repos_expire_days }} {% else %} null {% endif %},
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+            canShareRepo: {% if user.permissions.can_share_repo %} true {% else %} false {% endif %},
             canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
             groupImportMembersExtraMsg: "{{group_import_members_extra_msg}}",
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},

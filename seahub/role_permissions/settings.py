@@ -27,6 +27,7 @@ def merge_roles(default, custom):
 DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     DEFAULT_USER: {
         'can_add_repo': True,
+        'can_share_repo': True,
         'can_add_group': True,
         'can_view_org': True,
         'can_add_public_repo': False,
@@ -48,6 +49,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     },
     GUEST_USER: {
         'can_add_repo': False,
+        'can_share_repo': False,
         'can_add_group': False,
         'can_view_org': False,
         'can_add_public_repo': False,

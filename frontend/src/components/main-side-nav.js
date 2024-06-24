@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM, enableOCMViaWebdav } from '../utils/constants';
+import { gettext, siteRoot, canAddRepo, canShareRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, enableOCM, enableOCMViaWebdav } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -138,7 +138,7 @@ class MainSideNav extends React.Component {
     }
     return (
       <ul className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
-        {canAddRepo && (
+        {canAddRepo && canShareRepo && (
           <li className="nav-item">
             <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
               <span aria-hidden="true" className="sharp">#</span>
@@ -146,12 +146,14 @@ class MainSideNav extends React.Component {
             </Link>
           </li>
         )}
-        <li className="nav-item">
-          <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
-            <span aria-hidden="true" className="sharp">#</span>
-            <span className="nav-text">{gettext('Folders')}</span>
-          </Link>
-        </li>
+        {canShareRepo && (
+          <li className="nav-item">
+            <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
+              <span aria-hidden="true" className="sharp">#</span>
+              <span className="nav-text">{gettext('Folders')}</span>
+            </Link>
+          </li>
+        )}
         {linksNavItem}
       </ul>
     );
