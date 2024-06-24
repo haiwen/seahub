@@ -38,6 +38,8 @@ class SharedRepos(APIView):
         Permission checking:
         1. all authenticated user can perform this action.
         """
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         shared_repos = []
         username = request.user.username
@@ -128,6 +130,9 @@ class SharedRepo(APIView):
         Permission checking:
         1. Only repo owner can update.
         """
+        
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         permission = request.data.get('permission', None)
@@ -244,7 +249,9 @@ class SharedRepo(APIView):
         Permission checking:
         1. Only repo owner and system admin can unshare a publib library.
         """
-
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
         # argument check
         share_type = request.GET.get('share_type', None)
         if not share_type:

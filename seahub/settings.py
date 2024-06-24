@@ -349,6 +349,9 @@ LOGOUT_REDIRECT_URL = None
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+REQUEST_RATE_LIMIT_NUMBER = 3
+REQUEST_RATE_LIMIT_PERIOD = 60  # seconds
+
 # allow seafile admin view user's repo
 ENABLE_SYS_ADMIN_VIEW_REPO = False
 
@@ -488,6 +491,8 @@ ENABLE_SEAFILE_DOCS = False
 
 # enable integration seatbale
 ENABLE_SEATABLE_INTEGRATION = False
+
+ENABLE_CONVERT_TO_TEAM_ACCOUNT = False
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024

@@ -1,17 +1,12 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import datetime
 import hashlib
-import urllib.request, urllib.parse, urllib.error
 import logging
-
-# import auth
-from django.core.exceptions import ImproperlyConfigured
+from registration.signals import user_deleted
 from django.db import models
-from django.db.models.manager import EmptyManager
-from django.contrib.contenttypes.models import ContentType
-from django.utils.encoding import smart_str
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.dispatch import receiver
+from django.utils.encoding import smart_str
+from django.db.models.manager import EmptyManager
 
 logger = logging.getLogger(__name__)
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
@@ -130,14 +125,25 @@ class AnonymousUser(object):
 
 
 class SocialAuthUserManager(models.Manager):
+
     def add(self, username, provider, uid, extra_data=''):
         try:
-            social_auth_user = self.model(username=username, provider=provider, uid=uid, extra_data=extra_data)
+            social_auth_user = self.model(username=username, provider=provider,
+                                          uid=uid, extra_data=extra_data)
             social_auth_user.save()
             return social_auth_user
         except Exception as e:
             logger.error(e)
             return None
+
+    def add_if_not_exists(self, username, provider, uid, extra_data=''):
+
+        social_auth_user = self.get_by_provider_and_uid(provider, uid)
+        if not social_auth_user:
+            social_auth_user = self.add(username, provider,
+                                        uid, extra_data=extra_data)
+
+        return social_auth_user
 
     def get_by_provider_and_uid(self, provider, uid):
         try:
@@ -186,11 +192,7 @@ class ExternalDepartment(models.Model):
         db_table = 'external_department'
 
 
-# # handle signals
-from django.dispatch import receiver
-from registration.signals import user_deleted
-
-
+# handle signals
 @receiver(user_deleted)
 def user_deleted_cb(sender, **kwargs):
     username = kwargs['username']

@@ -112,7 +112,11 @@ log "Start Monitor"
 
 while [ 1 ]; do
 
-    monitor_seafevents
+    if [ $CLUSTER_MODE ] && [ $CLUSTER_MODE = "backend" ]; then
+       :
+    else
+        monitor_seafevents
+    fi
 
     if [ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
         monitor_notification_server

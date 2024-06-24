@@ -35,6 +35,7 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils import render_error, get_site_name, is_valid_email
+from seahub.utils.http import rate_limit
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
@@ -195,10 +196,8 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
-                 getattr(settings, 'ENABLE_DINGTALK', False) or \
                  getattr(settings, 'ENABLE_CAS', False) or \
-                 getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False) or \
-                 getattr(settings, 'ENABLE_WORK_WEIXIN', False)
+                 getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
 
     login_bg_image_path = get_login_bg_image_path()
 
@@ -348,11 +347,15 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
 #   prompts for a new password
 # - password_reset_complete shows a success message for the above
 
+
 @csrf_protect
-def password_reset(request, is_admin_site=False, template_name='registration/password_reset_form.html',
-        email_template_name='registration/password_reset_email.html',
-        password_reset_form=PasswordResetForm, token_generator=default_token_generator,
-        post_reset_redirect=None):
+@rate_limit()
+def password_reset(request, is_admin_site=False,
+                   template_name='registration/password_reset_form.html',
+                   email_template_name='registration/password_reset_email.html',
+                   password_reset_form=PasswordResetForm,
+                   token_generator=default_token_generator,
+                   post_reset_redirect=None):
 
     has_bind_social_auth = False
     if SocialAuthUser.objects.filter(username=request.user.username).exists():

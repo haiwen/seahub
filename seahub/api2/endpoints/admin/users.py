@@ -22,9 +22,12 @@ from ldap.controls.libldap import SimplePagedResultsControl
 from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.endpoints.utils import is_org_user
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info
 from seahub.api2.models import TokenV2
+from seahub.organizations.models import OrgSettings
+from seahub.organizations.views import gen_org_url_prefix
 from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -40,6 +43,7 @@ from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
+from seahub.utils.db_api import SeafileDB
 
 from seahub.utils.file_size import get_file_size_unit, byte_to_kb
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
@@ -48,6 +52,7 @@ from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.constants import DEFAULT_ADMIN
+from seahub.constants import DEFAULT_ADMIN, DEFAULT_ORG
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.licenseparse import user_number_over_limit
@@ -2139,3 +2144,61 @@ class AdminUserList(APIView):
             user_list.append(user_info)
 
         return Response({'user_list': user_list})
+
+
+class AdminUserConvertToTeamView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+    
+    def post(self, request):
+        username = request.data.get('email')
+        if not username:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
+        
+        # resource check
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % username
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if is_org_user(username):
+            error_msg = 'User is already in team.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org_role = DEFAULT_ORG
+
+        url_prefix = gen_org_url_prefix(3)
+        if url_prefix is None:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # Use the nickname as the org_name, but the org_name does not support emoji
+        nickname = email2nickname(username)
+        nickname_characters = []
+        for character in nickname:
+            if len(character.encode('utf-8')) > 3:
+                nickname_characters.append('_')
+            else:
+                nickname_characters.append(character)
+        org_name = ''.join(nickname_characters)
+        
+        try:
+            # 1. Create a new org, and add the user(username) to org as a team admin
+            #    by ccnet_api.create_org
+            org_id = ccnet_api.create_org(org_name, url_prefix, username)
+            # 2. Update org-settings
+            new_org = ccnet_api.get_org_by_id(org_id)
+            OrgSettings.objects.add_or_update(new_org, org_role)
+            # 3. Add user's repo to OrgRepo
+            owned_repos = seafile_api.get_owned_repo_list(username, ret_corrupted=True)
+            owned_repo_ids = [item.repo_id for item in owned_repos]
+            seafile_db = SeafileDB()
+            seafile_db.add_repos_to_org_user(org_id, username, owned_repo_ids)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'success': True})

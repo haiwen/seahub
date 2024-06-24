@@ -11,7 +11,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from seaserv import seafile_api, ccnet_api
 
-from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
+from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, \
+        SHIB_USER_HEADER, SHIB_USER_HEADER_SECOND_UID
 
 from seahub import auth
 from seahub.base.accounts import User
@@ -40,8 +41,7 @@ SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFI
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
-    Authentication Middleware for use with Shibboleth.  Uses the recommended pattern
-    for remote authentication from: http://code.djangoproject.com/svn/django/tags/releases/1.3/django/contrib/auth/middleware.py
+    Authentication Middleware for use with Shibboleth.
     """
     def process_request(self, request):
         if request.path.rstrip('/') != settings.SITE_ROOT + 'sso':
@@ -74,19 +74,13 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # AuthenticationMiddleware).
             return
 
+        second_uid = request.META.get(SHIB_USER_HEADER_SECOND_UID, '')
+
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
-            # If user is already authenticated, the value of request.user.username should be random ID of user,
-            # not the SHIB_USER_HEADER in the request header
-            shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
-            if shib_user:
-                remote_user = shib_user.username
-            if request.user.username == remote_user:
-                if request.user.is_staff:
-                    update_sudo_mode_ts(request)
-                return
+            return
 
         # Make sure we have all required Shiboleth elements before proceeding.
         shib_meta, error = self.parse_attributes(request)
@@ -98,7 +92,9 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         # We are seeing this user for the first time in this session, attempt
         # to authenticate the user.
-        user = auth.authenticate(remote_user=remote_user, shib_meta=shib_meta)
+        user = auth.authenticate(remote_user=remote_user,
+                                 shib_meta=shib_meta,
+                                 second_uid=second_uid)
         if user:
             if not user.is_active:
                 return HttpResponseRedirect(reverse('shib_complete'))

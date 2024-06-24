@@ -359,6 +359,9 @@ class UserPermissions(object):
     def can_add_repo(self):
         return self._get_perm_by_roles('can_add_repo')
 
+    def can_share_repo(self):
+        return self._get_perm_by_roles('can_share_repo')
+
     def can_add_group(self):
         return self._get_perm_by_roles('can_add_group')
 

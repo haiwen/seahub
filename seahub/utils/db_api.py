@@ -348,3 +348,12 @@ class SeafileDB:
                 repo_ids.append(repo_id)
             del_repo_trash(cursor, repo_ids)
             cursor.close()
+    
+    def add_repos_to_org_user(self, org_id, username, repo_ids):
+        for repo_id in repo_ids:
+            sql = f"""
+            INSERT INTO `{self.db_name}`.`OrgRepo` (org_id, repo_id, user)
+            VALUES ({org_id}, "{repo_id}", "{username}");
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
