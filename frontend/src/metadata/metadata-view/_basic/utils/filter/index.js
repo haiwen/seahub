@@ -17,5 +17,4 @@ export {
 export {
   filterRow,
   filterRows,
-  getFilteredRowsWithoutFormulaCalculation,
 } from './filter-row';

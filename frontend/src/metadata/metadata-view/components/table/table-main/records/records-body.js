@@ -472,8 +472,7 @@ class RecordsBody extends Component {
     this.frozenBtnAddRecordRefs = [];
     const {
       recordsCount, columns, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
-      recordMetrics, formulaRows, showCellColoring, columnColors,
-      commentRowList, onShowCommentList,
+      recordMetrics, showCellColoring, columnColors
     } = this.props;
     const { startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     const cellMetaData = this.getCellMetaData();
@@ -498,13 +497,10 @@ class RecordsBody extends Component {
           index={recordIndex}
           isLastRecord={isLastRecord}
           record={record}
-          commentRowList={commentRowList}
-          onShowCommentList={onShowCommentList}
           columns={columns}
           colOverScanStartIdx={colOverScanStartIdx}
           colOverScanEndIdx={colOverScanEndIdx}
           lastFrozenColumnKey={lastFrozenColumnKey}
-          formulaRows={formulaRows}
           scrollLeft={scrollLeft}
           height={rowHeight}
           cellMetaData={cellMetaData}
@@ -597,14 +593,12 @@ RecordsBody.propTypes = {
   gridUtils: PropTypes.object,
   table: PropTypes.object,
   recordIds: PropTypes.array,
-  commentRowList: PropTypes.array,
   recordsCount: PropTypes.number,
   columns: PropTypes.array.isRequired,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   lastFrozenColumnKey: PropTypes.string,
   hasSelectedRecord: PropTypes.bool,
-  formulaRows: PropTypes.object,
   recordMetrics: PropTypes.object,
   totalWidth: PropTypes.number,
   getScrollLeft: PropTypes.func,
@@ -616,7 +610,6 @@ RecordsBody.propTypes = {
   getMobileFloatIconStyle: PropTypes.func,
   onToggleMobileMoreOperations: PropTypes.func,
   onToggleInsertRecordDialog: PropTypes.func,
-  onShowCommentList: PropTypes.func,
   onDeleteRecords: PropTypes.func,
   duplicateRecord: PropTypes.func,
   duplicateRecords: PropTypes.func,

@@ -139,8 +139,8 @@ class Records extends Component {
   };
 
   getScrollPosition = () => {
-    let scrollLeft = window.sfMetadataContext.localStorage.getItem('scroll_left');
-    let scrollTop = window.sfMetadataContext.localStorage.getItem('scroll_top');
+    let scrollLeft = window.sfMetadataContext.localStorage.getItem('scroll_left') + '';
+    let scrollTop = window.sfMetadataContext.localStorage.getItem('scroll_top') + '';
     if (scrollLeft && scrollTop) {
       if (this.bodyRef) {
         scrollLeft = Number(scrollLeft);
@@ -164,7 +164,7 @@ class Records extends Component {
   };
 
   storeScrollTop = (scrollTop) => {
-    window.sfMetadataContext.localStorage.setItem('_scroll_top', scrollTop);
+    window.sfMetadataContext.localStorage.setItem('scroll_top', scrollTop);
   };
 
   onContentScroll = (e) => {

@@ -1,5 +1,4 @@
 import {
-  deleteInvalidFilter,
   getFormattedFilters,
 } from './core';
 import {
@@ -65,10 +64,8 @@ const filterRow = (row, filterConjunction, filters, { username = '', userId } = 
  * @param {string} filterConjunction e.g. 'And' | 'Or'
  * @param {array} filters e.g. [{ column_key, filter_predicate, ... }, ...]
  * @param {array} rows e.g. [{ _id, .... }, ...]
- * @param {object} formulaRows
  * @param {string} username
  * @param {string} userId
- * @param {object} userDepartmentIdsMap e.g. { current_user_department_ids: [8, 10], current_user_department_and_sub_ids: [8, 10, 12, 34] }
  * @returns filtered rows ids, array
  */
 const filterRows = (filterConjunction, filters, rows, { username, userId }) => {
@@ -83,40 +80,7 @@ const filterRows = (filterConjunction, filters, rows, { username, userId }) => {
   return filteredRows;
 };
 
-/**
- * Filter rows without formula calculation
- * The "formulaRows" need to be provided if you want to filter formula, link columns etc.
- * @param {string} filterConjunction e.g. 'And' | 'Or'
- * @param {array} filters e.g. [{ column_key, filter_predicate, ... }, ...]
- * @param {array} rows e.g. [{ _id, .... }, ...]
- * @param {object} table e.g. { columns, ... }
- * @param {object} formulaRows
- * @param {string} username
- * @param {string} userId
- * @param {object} userDepartmentIdsMap e.g. { current_user_department_ids: [8, 10], current_user_department_and_sub_ids: [8, 10, 12, 34] }
- * @returns filtered rows: row_ids and error message: error_message, object
- */
-const getFilteredRowsWithoutFormulaCalculation = (filterConjunction, filters, rows, table, { username = null, userId = null } = {}) => {
-  const { columns } = table;
-  let validFilters = [];
-  try {
-    validFilters = deleteInvalidFilter(filters, columns);
-  } catch (err) {
-    return { row_ids: [], error_message: err.message };
-  }
-
-  let filteredRows = [];
-  if (validFilters.length === 0) {
-    filteredRows = rows.map((row) => row._id);
-  } else {
-    filteredRows = filterRows(filterConjunction, validFilters, rows, { username, userId });
-  }
-
-  return { row_ids: filteredRows, error_message: null };
-};
-
 export {
   filterRow,
   filterRows,
-  getFilteredRowsWithoutFormulaCalculation,
 };

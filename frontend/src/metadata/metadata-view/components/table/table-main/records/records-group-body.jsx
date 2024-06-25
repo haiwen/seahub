@@ -10,7 +10,7 @@ import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../
 import RecordMetrics from '../../../../utils/record-metrics';
 import { isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column-utils';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
-import { getRecordsFromSelectedRange, isSelectedCellSupportOpenEditor } from '../../../../utils/selected-cell-utils';
+import { isSelectedCellSupportOpenEditor } from '../../../../utils/selected-cell-utils';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../../utils/records-body-utils';
 import { isFrozen, isNameColumn } from '../../../../utils/column-utils';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../constants';
@@ -490,40 +490,6 @@ class RecordsGroupBody extends Component {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_END);
   };
 
-  onOpenContextMenu = (event, record, column, groupRecordIndex, recordIndex, columnIndex) => {
-    const { hasSelectedRecord, recordMetrics, recordGetterByIndex } = this.props;
-    const { clientX, clientY } = event;
-    const menuPosition = { left: clientX, top: clientY };
-    let activeRecords = [record];
-    if (this.interactionMask) {
-      if (hasSelectedRecord) {
-        const selectedIds = Object.keys(recordMetrics.idSelectedRecordMap);
-        if (selectedIds.includes(record._id)) {
-          activeRecords = selectedIds.map(recordId => this.props.recordGetterById(recordId));
-        } else {
-          this.props.selectNone();
-        }
-        this.interactionMask.selectCell(groupRecordIndex, recordIndex, columnIndex);
-      }
-      const { top, bottom, left, right } = this.interactionMask.getSelectedPosition();
-      // If clicked cell in selected range, set interactionMask selected records as activeRecords
-      // else select none, set clicked cell to be selected cell, set clicked row as activeRecords
-      if (recordIndex >= top && recordIndex <= bottom && columnIndex >= left && columnIndex <= right) {
-        const selectedRange = this.interactionMask.getSelectedRange();
-        activeRecords = getRecordsFromSelectedRange({ selectedRange, isGroupView: true, recordGetterByIndex });
-      } else {
-        this.interactionMask.selectNone();
-        this.interactionMask.selectCell(groupRecordIndex, recordIndex, columnIndex);
-      }
-    }
-    this.setState({
-      column,
-      menuPosition,
-      activeRecords,
-      isContextMenuShow: true,
-    });
-  };
-
   onCloseContextMenu = () => {
     this.setState({
       isContextMenuShow: false,
@@ -819,9 +785,8 @@ class RecordsGroupBody extends Component {
   renderGroups = () => {
     const {
       totalWidth: columnsWidth, containerWidth, appPage,
-      columns, colOverScanStartIdx, colOverScanEndIdx, formulaRows, groupOffsetLeft,
+      columns, colOverScanStartIdx, colOverScanEndIdx, groupOffsetLeft,
       recordMetrics, summaryConfigs, lastFrozenColumnKey, showCellColoring, columnColors,
-      commentRowList, onShowCommentList,
     } = this.props;
     this.recordFrozenRefs = [];
     this.frozenBtnAddRecordRefs = [];
@@ -891,11 +856,8 @@ class RecordsGroupBody extends Component {
             lastFrozenColumnKey={lastFrozenColumnKey}
             record={record}
             columns={columns}
-            commentRowList={commentRowList}
-            onShowCommentList={onShowCommentList}
             colOverScanStartIdx={colOverScanStartIdx}
             colOverScanEndIdx={colOverScanEndIdx}
-            formulaRows={formulaRows}
             left={left}
             top={top}
             height={height}
@@ -911,7 +873,6 @@ class RecordsGroupBody extends Component {
             lockRecordViaButton={this.props.lockRecordViaButton}
             modifyRecordViaButton={this.props.modifyRecordViaButton}
             reloadRecords={this.props.reloadRecords}
-            onOpenContextMenu={this.onOpenContextMenu}
             appPage={appPage}
             columnColor={columnColor}
           />
@@ -1021,7 +982,6 @@ RecordsGroupBody.propTypes = {
   table: PropTypes.object,
   allColumns: PropTypes.array,
   columns: PropTypes.array,
-  commentRowList: PropTypes.array,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   tableContentWidth: PropTypes.number,
@@ -1031,7 +991,6 @@ RecordsGroupBody.propTypes = {
   groupbys: PropTypes.array,
   recordsCount: PropTypes.number,
   recordMetrics: PropTypes.object,
-  formulaRows: PropTypes.object,
   groupOffsetLeft: PropTypes.number,
   frozenColumnsWidth: PropTypes.number,
   summaryConfigs: PropTypes.object,
@@ -1070,7 +1029,6 @@ RecordsGroupBody.propTypes = {
   editMobileCell: PropTypes.func,
   insertRecords: PropTypes.func,
   reloadRecords: PropTypes.func,
-  onShowCommentList: PropTypes.func,
   appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,
   columnColors: PropTypes.object,

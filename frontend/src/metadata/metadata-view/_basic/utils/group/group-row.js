@@ -121,7 +121,7 @@ const getSortedGroups = (groups, groupbys, level) => {
   return groups;
 };
 
-const groupRowsWithMultipleGroupbys = (groupbys, rows, formulaRows, value) => {
+const groupRowsWithMultipleGroupbys = (groupbys, rows, value) => {
   const validGroupbys = groupbys.length > MAX_GROUP_LEVEL
     ? groupbys.slice(0, MAX_GROUP_LEVEL)
     : [...groupbys];
@@ -135,7 +135,7 @@ const groupRowsWithMultipleGroupbys = (groupbys, rows, formulaRows, value) => {
       const currentGroupby = validGroupbys[level];
       const { column, column_key } = currentGroupby;
       const { type: columnType } = column;
-      const cellValue = _getCellValue(row, formulaRows, currentGroupby);
+      const cellValue = _getCellValue(row, currentGroupby);
       const formattedValue = _getFormattedCellValue(cellValue, currentGroupby);
       const sCellValue = _getStrCellValue(formattedValue, columnType);
       const group = {
@@ -186,7 +186,6 @@ const groupRowsWithMultipleGroupbys = (groupbys, rows, formulaRows, value) => {
  * Group table rows
  * @param {array} groupbys e.g. [{ column_key, count_type, column, ... }, ...]
  * @param {array} rows e.g. [{ _id, ... }, ...]
- * @param {object} formulaRows computed value of formula, link-formula, link etc.
  * @param {object} value e.g. { collaborators, ... }
  * @returns groups: [{
  *    cell_value, original_cell_value, column_key,
@@ -234,7 +233,6 @@ const groupTableRows = (groupbys, rows) => {
  * @param {array} groupbys e.g. [{ column_key, count_type, column, ... }, ...]
  * @param {object} table e.g. { id_row_map, ... }
  * @param {array} rowsIds e.g. [ row._id, ...]
- * @param {object} formulaRows computed value of formula, link-formula, link etc.
  * @param {object} value e.g. { collaborators, ... }
  * @returns groups: [{
  *    cell_value, original_cell_value, column_key,
@@ -248,28 +246,7 @@ const groupViewRows = (groupbys, table, rowsIds) => {
   return groupTableRows(groupbys, rowsData);
 };
 
-/**
- * Group rows
- * The "formulaRows" must be supplied if you want group rows by formula/link-formula/link columns
- * @param {array} groupbys e.g. [{ column_key, count_type, ... }, ...]
- * @param {array} rows e.g. table rows: [{ _id, ... }, ...] | view rows: [ row._id, ...]
- * @param {object} table e.g. { id_row_map, columns, ... }
- * @param {object} value e.g. { collaborators, ... }
- * @param {object} formulaRows computed value of formula, link-formula, link etc.
- * @returns groups: [{
- *    cell_value, original_cell_value, column_key,
-      row_ids, subgroups, summaries, ...}, ...], array
- */
-const getGroupedRowsWithoutFormulaCalculation = (groupbys, rows, table) => {
-  const { columns } = table;
-  const validGroupbys = deleteInvalidGroupby(groupbys, columns);
-  return isTableRows(rows)
-    ? groupTableRows(validGroupbys, rows)
-    : groupViewRows(validGroupbys, table, rows);
-};
-
 export {
-  getGroupedRowsWithoutFormulaCalculation,
   groupTableRows,
   groupViewRows,
 };

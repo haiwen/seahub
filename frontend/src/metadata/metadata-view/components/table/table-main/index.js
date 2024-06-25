@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Records from './widgets';
+import Records from './records';
 import { GROUP_VIEW_OFFSET } from '../../../constants';
 import GridUtils from '../../../utils/grid-utils';
 import { useRecordDetails } from '../../../hooks';

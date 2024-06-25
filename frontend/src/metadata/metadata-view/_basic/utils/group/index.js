@@ -5,7 +5,6 @@ export {
 } from './core';
 
 export {
-  getGroupedRowsWithoutFormulaCalculation,
   groupTableRows,
   groupViewRows,
 } from './group-row';

@@ -9,7 +9,6 @@ import { DATE_COLUMN_OPTIONS } from '../../constants/column';
  * Sort rows with multiple sorts
  * @param {array} tableRows e.g. [{ _id, [column.key]: '', ...}, ...]
  * @param {array} sorts e.g. [{ column_key, sort_type, column, ... }, ...]
- * @param {object} formulaRows computed value of formula, link-formula, link etc.
  * @param {object} value e.g. { collaborators, ... }
  */
 const sortRowsWithMultiSorts = (tableRows, sorts) => {
@@ -35,7 +34,6 @@ const sortRowsWithMultiSorts = (tableRows, sorts) => {
  * @param {array} sorts e.g. [{ column_key, sort_type, column, ... }, ...]
  * @param {array} rows e.g. [{ _id, [column.key]: '', ...}, ...]
  * @param {array} columns e.g. [{ key, type, ... }, ...]
- * @param {object} formulaRows computed value of formula, link-formula, link etc.
  * @param {object} value e.g. { collaborators, ... }
  * @returns sorted rows ids, array
  */

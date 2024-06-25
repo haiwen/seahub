@@ -24,8 +24,8 @@ class Context {
     this.metadataAPI = metadataAPI;
 
     // init localStorage
-    const { localStorageName } = this.settings;
-    this.localStorage = new LocalStorage(localStorageName);
+    const { repoID } = this.settings;
+    this.localStorage = new LocalStorage(`sf-metadata-${repoID}`);
 
     // init userService
     this.userService = new UserService({ mediaUrl, api: this.metadataAPI.listUserInfo });

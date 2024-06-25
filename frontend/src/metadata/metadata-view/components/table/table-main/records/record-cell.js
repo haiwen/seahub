@@ -18,7 +18,7 @@ class RecordCell extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
       record: oldRecord, column, isCellSelected, isLastCell, highlightClassName,
-      height, bgColor, commentRowList,
+      height, bgColor,
     } = this.props;
     const { record: newRecord, highlightClassName: newHighlightClassName, height: newHeight, column: newColumn, bgColor: newBgColor } = nextProps;
     // the modification of column is not currently supported, only the modification of cell data is considered
@@ -29,7 +29,6 @@ class RecordCell extends React.Component {
       oldRecord._last_modifier !== newRecord._last_modifier ||
       isCellSelected !== nextProps.isCellSelected ||
       isLastCell !== nextProps.isLastCell ||
-      commentRowList !== nextProps.commentRowList ||
       highlightClassName !== newHighlightClassName ||
       height !== newHeight ||
       column.left !== newColumn.left ||
@@ -187,9 +186,7 @@ RecordCell.propTypes = {
   isCellSelected: PropTypes.bool,
   isLastCell: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
-  commentRowList: PropTypes.array,
   cellMetaData: PropTypes.object,
-  formulaRows: PropTypes.object,
   record: PropTypes.object.isRequired,
   groupRecordIndex: PropTypes.number,
   recordIndex: PropTypes.number.isRequired,
@@ -197,11 +194,9 @@ RecordCell.propTypes = {
   height: PropTypes.number,
   needBindEvents: PropTypes.bool,
   modifyRecord: PropTypes.func,
-  onShowCommentList: PropTypes.func,
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   reloadCurrentRecord: PropTypes.func,
-  onOpenContextMenu: PropTypes.func,
   highlightClassName: PropTypes.string,
   bgColor: PropTypes.string,
 };

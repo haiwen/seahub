@@ -28,13 +28,11 @@ class Record extends React.Component {
       nextProps.colOverScanStartIdx !== this.props.colOverScanStartIdx ||
       nextProps.colOverScanEndIdx !== this.props.colOverScanEndIdx ||
       nextProps.record !== this.props.record ||
-      nextProps.formulaRows !== this.props.formulaRows ||
       nextProps.top !== this.props.top ||
       nextProps.left !== this.props.left ||
       nextProps.height !== this.props.height ||
       nextProps.searchResult !== this.props.searchResult ||
-      nextProps.columnColor !== this.props.columnColor ||
-      nextProps.commentRowList !== this.props.commentRowList
+      nextProps.columnColor !== this.props.columnColor
     );
   }
 
@@ -64,16 +62,6 @@ class Record extends React.Component {
     this.props.onRowExpand(record);
   };
 
-  onOpenContextMenu = (e, record, column) => {
-    const { columns, groupRecordIndex, index: recordIndex } = this.props;
-    const columnIndex = columns.findIndex(col => col.key === column.key);
-    this.props.onOpenContextMenu(e, record, column, groupRecordIndex, recordIndex, columnIndex);
-  };
-
-  onCloseContextMenu = () => {
-    this.setState({ isContextMenuShow: false });
-  };
-
   isCellSelected = (columnIdx) => {
     const { hasSelectedCell, selectedPosition } = this.props;
     if (!selectedPosition) return false;
@@ -91,8 +79,7 @@ class Record extends React.Component {
   getFrozenCells = () => {
     const {
       columns, lastFrozenColumnKey, groupRecordIndex, index: recordIndex, record,
-      cellMetaData, formulaRows, isGroupView, height, columnColor, commentRowList,
-      onShowCommentList,
+      cellMetaData, isGroupView, height, columnColor
     } = this.props;
     const frozenColumns = getFrozenColumns(columns);
     if (frozenColumns.length === 0) return null;
@@ -111,8 +98,6 @@ class Record extends React.Component {
           frozen
           key={column.key}
           record={record}
-          commentRowList={commentRowList}
-          onShowCommentList={onShowCommentList}
           groupRecordIndex={groupRecordIndex}
           recordIndex={recordIndex}
           isCellSelected={isCellSelected}
@@ -120,9 +105,7 @@ class Record extends React.Component {
           isLastFrozenCell={isLastFrozenCell}
           height={isGroupView ? height : height - 1}
           column={column}
-          formulaRows={formulaRows}
           cellMetaData={cellMetaData}
-          onOpenContextMenu={this.onOpenContextMenu}
           modifyRecord={this.props.modifyRecord}
           lockRecordViaButton={this.props.lockRecordViaButton}
           modifyRecordViaButton={this.props.modifyRecordViaButton}
@@ -160,8 +143,7 @@ class Record extends React.Component {
   getColumnCells = () => {
     const {
       columns, colOverScanStartIdx, colOverScanEndIdx, groupRecordIndex, index: recordIndex,
-      record, cellMetaData, formulaRows, isGroupView, height, columnColor, commentRowList,
-      onShowCommentList,
+      record, cellMetaData, isGroupView, height, columnColor
     } = this.props;
     const recordId = record._id;
     const rendererColumns = columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -178,8 +160,6 @@ class Record extends React.Component {
         <RecordCell
           key={column.key}
           record={record}
-          commentRowList={commentRowList}
-          onShowCommentList={onShowCommentList}
           groupRecordIndex={groupRecordIndex}
           recordIndex={recordIndex}
           isCellSelected={isCellSelected}
@@ -187,9 +167,7 @@ class Record extends React.Component {
           height={isGroupView ? height : height - 1}
           column={column}
           needBindEvents={needBindEvents}
-          formulaRows={formulaRows}
           cellMetaData={cellMetaData}
-          onOpenContextMenu={this.onOpenContextMenu}
           modifyRecord={this.props.modifyRecord}
           lockRecordViaButton={this.props.lockRecordViaButton}
           modifyRecordViaButton={this.props.modifyRecordViaButton}
@@ -304,7 +282,6 @@ Record.propTypes = {
   index: PropTypes.number.isRequired,
   isLastRecord: PropTypes.bool,
   lastFrozenColumnKey: PropTypes.string,
-  formulaRows: PropTypes.object,
   cellMetaData: PropTypes.object,
   selectedPosition: PropTypes.object,
   record: PropTypes.object.isRequired,
@@ -315,7 +292,6 @@ Record.propTypes = {
   top: PropTypes.number,
   left: PropTypes.number,
   height: PropTypes.number,
-  onOpenContextMenu: PropTypes.func,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
   onRowExpand: PropTypes.func,
@@ -323,10 +299,8 @@ Record.propTypes = {
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   reloadRecords: PropTypes.func,
-  onShowCommentList: PropTypes.func,
   searchResult: PropTypes.object,
   columnColor: PropTypes.object,
-  commentRowList: PropTypes.array,
 };
 
 export default Record;

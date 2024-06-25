@@ -20,13 +20,11 @@ export {
   textFilter,
   filterRow,
   filterRows,
-  getFilteredRowsWithoutFormulaCalculation,
 } from './filter';
 export {
   deleteInvalidGroupby,
   isValidGroupby,
   getValidGroupbys,
-  getGroupedRowsWithoutFormulaCalculation,
   groupTableRows,
   groupViewRows,
 } from './group';
