@@ -126,6 +126,7 @@ body {
   background-color: #F5F5F5;
   color: #212529;
   border: none;
+  border-radius: 3px;
 }
 
 .user-setting-nav .nav-item .nav-link.active:hover {
