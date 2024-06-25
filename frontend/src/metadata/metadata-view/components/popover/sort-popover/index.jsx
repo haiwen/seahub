@@ -1,0 +1,283 @@
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import intl from 'react-intl-universal';
+import isHotkey from 'is-hotkey';
+import { Button, UncontrolledPopover } from 'reactstrap';
+import {
+  COLUMNS_ICON_CONFIG,
+  SORT_COLUMN_OPTIONS,
+  SORT_TYPE,
+} from 'sf-metadata-utils';
+import { DTableCustomizeSelect } from 'sf-metadata-ui-component';
+import CommonAddTool from '../../common/common-add-tool';
+import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from '../sort-popover-widgets/sort-utils';
+import { getEventClassName } from '../../utils/utils';
+import { getColumnByKey } from '../../../utils/column-utils';
+import eventBus from '../../../utils/event-bus';
+import { EVENT_BUS_TYPE } from '../../../constants';
+
+import './index.css';
+
+const SORT_TYPES = [SORT_TYPE.UP, SORT_TYPE.DOWN];
+
+const propTypes = {
+  target: PropTypes.string.isRequired,
+  isNeedSubmit: PropTypes.bool,
+  sorts: PropTypes.array,
+  columns: PropTypes.array.isRequired,
+  onSortComponentToggle: PropTypes.func,
+  update: PropTypes.func,
+  readonly: PropTypes.bool,
+};
+
+class SortPopover extends Component {
+
+  static defaultProps = {
+    readonly: false,
+  };
+
+  constructor(props) {
+    super(props);
+    const { sorts, columns } = this.props;
+    this.sortTypeOptions = this.createSortTypeOptions();
+    this.columnsOptions = this.createColumnsOptions(columns);
+    this.state = {
+      sorts: getDisplaySorts(sorts, columns),
+    };
+    this.isSelectOpen = false;
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.hideDTablePopover, true);
+    document.addEventListener('keydown', this.onHotKey);
+    this.unsubscribeOpenSelect = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_SELECT, this.setSelectStatus);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideDTablePopover, true);
+    document.removeEventListener('keydown', this.onHotKey);
+    this.unsubscribeOpenSelect();
+  }
+
+  hideDTablePopover = (e) => {
+    if (this.sortPopoverRef && !getEventClassName(e).includes('popover') && !this.sortPopoverRef.contains(e.target)) {
+      this.props.onSortComponentToggle(e);
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  };
+
+  isNeedSubmit = () => {
+    return this.props.isNeedSubmit;
+  };
+
+  onHotKey = (e) => {
+    if (isHotkey('esc', e) && !this.isSelectOpen) {
+      e.preventDefault();
+      this.props.onSortComponentToggle();
+    }
+  };
+
+  setSelectStatus = (status) => {
+    this.isSelectOpen = status;
+  };
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const newColumns = nextProps.columns;
+    if (newColumns !== this.props.columns) {
+      this.columnsOptions = this.createColumnsOptions(newColumns);
+    }
+  }
+
+  addSort = () => {
+    const { sorts } = this.state;
+    const newSorts = execSortsOperation(SORT_OPERATION.ADD_SORT, { sorts });
+    this.updateSorts(newSorts);
+  };
+
+  deleteSort = (event, index) => {
+    event.nativeEvent.stopImmediatePropagation();
+    const sorts = this.state.sorts.slice(0);
+    const newSorts = execSortsOperation(SORT_OPERATION.DELETE_SORT, { sorts, index });
+    this.updateSorts(newSorts);
+  };
+
+  onSelectColumn = (value, index) => {
+    const sorts = this.state.sorts.slice(0);
+    const newColumnKey = value.column.key;
+    if (newColumnKey === sorts[index].column_key) {
+      return;
+    }
+    const newSorts = execSortsOperation(SORT_OPERATION.MODIFY_SORT_COLUMN, { sorts, index, column_key: newColumnKey });
+    this.updateSorts(newSorts);
+  };
+
+  onSelectSortType = (value, index) => {
+    const sorts = this.state.sorts.slice(0);
+    const newSortType = value.sortType;
+    if (newSortType === sorts[index].sort_type) {
+      return;
+    }
+    const newSorts = execSortsOperation(SORT_OPERATION.MODIFY_SORT_TYPE, { sorts, index, sort_type: newSortType });
+    this.updateSorts(newSorts);
+  };
+
+  updateSorts = (sorts) => {
+    if (this.isNeedSubmit()) {
+      const isSubmitDisabled = false;
+      this.setState({ sorts, isSubmitDisabled });
+      return;
+    }
+    this.setState({ sorts }, () => {
+      this.handleSortAnimation();
+    });
+  };
+
+  handleSortAnimation = () => {
+    const update = { sorts: this.state.sorts };
+    this.props.update(update);
+  };
+
+  onClosePopover = () => {
+    this.props.onSortComponentToggle();
+  };
+
+  onSubmitSorts = () => {
+    const { sorts } = this.state;
+    const update = { sorts: sorts };
+    this.props.update(update);
+    this.props.onSortComponentToggle();
+  };
+
+  createColumnsOptions = (columns = []) => {
+    const sortableColumns = columns.filter(column => SORT_COLUMN_OPTIONS.includes(column.type));
+    return sortableColumns.map((column) => {
+      const { type, name } = column;
+      return {
+        value: { column },
+        label: (
+          <Fragment>
+            <span className="filter-header-icon"><i className={COLUMNS_ICON_CONFIG[type]}></i></span>
+            <span className='select-option-name'>{name}</span>
+          </Fragment>
+        )
+      };
+    });
+  };
+
+  createSortTypeOptions = () => {
+    return SORT_TYPES.map(sortType => {
+      return {
+        value: { sortType },
+        label: <span className='select-option-name'>{intl.get(sortType)}</span>
+      };
+    });
+  };
+
+  renderSortsList = () => {
+    const { columns } = this.props;
+    const { sorts } = this.state;
+    return sorts.map((sort, index) => {
+      const column = getColumnByKey(sort.column_key, columns) || {};
+      return this.renderSortItem(column, sort, index);
+    });
+  };
+
+  renderSortItem = (column, sort, index) => {
+    let { name, type } = column;
+    const { readonly } = this.props;
+    let selectedColumn = {
+      label: (
+        <Fragment>
+          <span className="filter-header-icon"><i className={COLUMNS_ICON_CONFIG[type]}></i></span>
+          <span className='select-option-name' title={name} aria-label={name}>{name}</span>
+        </Fragment>
+      )
+    };
+
+    let selectedTypeShow = sort.sort_type;
+    let selectedSortType = selectedTypeShow && {
+      label: <span className='select-option-name'>{intl.get(selectedTypeShow)}</span>
+    };
+
+    return (
+      <div key={'sort-item-' + index} className="sort-item">
+        {!readonly &&
+          <div className="delete-sort" onClick={(event) => this.deleteSort(event, index)}>
+            <i className="sf-metadata-font sf-metadata-icon-fork-number"></i>
+          </div>
+        }
+        <div className="condition">
+          <div className="sort-column">
+            <DTableCustomizeSelect
+              isLocked={readonly}
+              value={selectedColumn}
+              onSelectOption={(value) => this.onSelectColumn(value, index)}
+              options={this.columnsOptions}
+              searchable={true}
+              searchPlaceholder={intl.get('Search_column')}
+              noOptionsPlaceholder={intl.get('No_results')}
+            />
+          </div>
+          <div className="sort-predicate ml-2">
+            <DTableCustomizeSelect
+              isLocked={readonly}
+              value={selectedSortType}
+              onSelectOption={(value) => this.onSelectSortType(value, index)}
+              options={this.sortTypeOptions}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  onPopoverInsideClick = (e) => {
+    e.stopPropagation();
+  };
+
+  render() {
+    const { target, readonly } = this.props;
+    const { sorts } = this.state;
+    const isEmpty = isSortsEmpty(sorts);
+    return (
+      <UncontrolledPopover
+        placement="auto-start"
+        isOpen={true}
+        target={target}
+        fade={false}
+        hideArrow={true}
+        className="sort-popover"
+        boundariesElement={document.body}
+      >
+        <div ref={ref => this.sortPopoverRef = ref} onClick={this.onPopoverInsideClick}>
+          <div className={`sorts-list ${isEmpty ? 'empty-sorts-container' : ''}`} >
+            {isEmpty ?
+              <div className="empty-sorts-list">{intl.get('No_sorts')}</div> :
+              this.renderSortsList()
+            }
+          </div>
+          {!readonly &&
+            <CommonAddTool
+              callBack={this.addSort}
+              footerName={intl.get('Add_sort')}
+              className="popover-add-tool"
+              addIconClassName="popover-add-icon"
+            />
+          }
+          {(this.isNeedSubmit() && !readonly) && (
+            <div className='sort-popover-footer'>
+              <Button className='mr-2' onClick={this.onClosePopover}>{intl.get('Cancel')}</Button>
+              <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{intl.get('Submit')}</Button>
+            </div>
+          )}
+        </div>
+      </UncontrolledPopover>
+    );
+  }
+}
+
+SortPopover.propTypes = propTypes;
+
+export default SortPopover;

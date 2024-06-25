@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SeafileMetadata from '@seafile/seafile-metadata';
+import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';

@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
-import MetadataStatusManagementDialog from '../../metadata-manage/metadata-status-manage-dialog';
-import metadataManagerAPI from '../../metadata-manage/api';
+import { MetadataStatusManagementDialog, MetadataTreeView } from '../../../metadata';
+import metadataAPI from '../../../metadata/api';
 import toaster from '../../toast';
-import MetadataViews from '../../metadata-manage/metadata-views';
 
 import './index.css';
 
@@ -33,7 +32,7 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       return;
     }
 
-    const repoMetadataManagementEnabledStatusRes = metadataManagerAPI.getRepoMetadataManagementEnabledStatus(repoID);
+    const repoMetadataManagementEnabledStatusRes = metadataAPI.getMetadataStatus(repoID);
     Promise.all([repoMetadataManagementEnabledStatusRes]).then(results => {
       const [repoMetadataManagementEnabledStatusRes] = results;
       setMetadataStatus(repoMetadataManagementEnabledStatusRes.data.enabled);
@@ -65,7 +64,7 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   return (
     <>
       <TreeSection title={gettext('Views')} moreKey={{ name: 'views' }} moreOperations={moreOperations} moreOperationClick={moreOperationClick}>
-        {!loading && metadataStatus && (<MetadataViews repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
+        {!loading && metadataStatus && (<MetadataTreeView repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog value={metadataStatus} repoID={repoID} toggle={closeMetadataManagementDialog} submit={toggleMetadataStatus} />
