@@ -13,10 +13,11 @@ const propTypes = {
   path: PropTypes.string,
   repoName: PropTypes.string,
   isLibView: PropTypes.bool,
-  onSearchedClick: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   currentRepoInfo: PropTypes.object,
   isViewFile: PropTypes.bool,
+  showSearch: PropTypes.bool
 };
 
 class CommonToolbar extends React.Component {
@@ -62,9 +63,10 @@ class CommonToolbar extends React.Component {
   };
 
   render() {
+    const { showSearch = true } = this.props;
     return (
       <div className="common-toolbar">
-        {this.renderSearch()}
+        {showSearch && this.renderSearch()}
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
