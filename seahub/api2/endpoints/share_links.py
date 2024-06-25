@@ -1462,6 +1462,7 @@ class ShareLinksCleanInvalid(APIView):
 
     def delete(self, request):
         """ Clean invalid share links.
+
         """
 
         username = request.user.username
