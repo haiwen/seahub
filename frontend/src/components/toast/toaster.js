@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import ToastManager from './toastManager';
 
-const isBrowser =
-    typeof window !== 'undefined' && typeof window.document !== 'undefined';
+import './toaster.css';
+
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 /**
  * The Toaster manages the interactionsb between
@@ -17,7 +18,7 @@ export default class Toaster {
     container.setAttribute('data-evergreen-toaster-container', '');
     document.body.appendChild(container);
 
-    ReactDom.render(
+    ReactDOM.render(
       <ToastManager
         bindNotify={this._bindNotify}
         bindGetToasts={this._bindGetToasts}
@@ -49,10 +50,6 @@ export default class Toaster {
 
   notify = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'none' });
-  };
-
-  notifyInProgress = (title, settings = {}) => {
-    return this.notifyHandler(title, { ...settings, intent: 'notify-in-progress' });
   };
 
   success = (title, settings = {}) => {
