@@ -40,8 +40,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
-          sudo rm /tmp/logs/*.log
-          if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+          if ./tests/test_seahub_changes.sh; then sudo ./tests/seahubtests.sh init && sudo ./tests/seahubtests.sh runserver && sudo ./tests/seahubtests.sh test; else true; fi
         continue-on-error: true
 
       - name: Set up tmate session
