@@ -64,9 +64,9 @@ class FileHistory extends React.Component {
   initNewRecords(result) {
     if (result.total_count < 5) {
       if (result.data.length) {
-        let commitID = result.data[result.data.length-1].commit_id;
-        let path = result.data[result.data.length-1].path;
-        let oldPath = result.data[result.data.length-1].old_path;
+        let commitID = result.data[result.data.length - 1].commit_id;
+        let path = result.data[result.data.length - 1].path;
+        let oldPath = result.data[result.data.length - 1].old_path;
         path = oldPath ? oldPath : path;
         seafileAPI.listOldFileHistoryRecords(historyRepoID, path, commitID).then((res) => {
           if (!res.data) {
@@ -105,8 +105,8 @@ class FileHistory extends React.Component {
       this.setState({
         historyList: result.data,
         nextCommit: result.next_start_commit,
-        filePath: result.data[result.data.length-1].path,
-        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        filePath: result.data[result.data.length - 1].path,
+        oldFilePath: result.data[result.data.length - 1].rev_renamed_old_path,
         isLoading: false,
       });
     } else {
@@ -175,8 +175,8 @@ class FileHistory extends React.Component {
       this.setState({
         historyList: [...this.state.historyList, ...result.data],
         nextCommit: result.next_start_commit,
-        filePath: result.data[result.data.length-1].path,
-        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
+        filePath: result.data[result.data.length - 1].path,
+        oldFilePath: result.data[result.data.length - 1].rev_renamed_old_path,
         isReloadingData: false,
       });
     } else {

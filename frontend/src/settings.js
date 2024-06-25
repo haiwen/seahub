@@ -104,7 +104,7 @@ class Settings extends React.Component {
     });
     if (scrolled.length) {
       this.setState({
-        curItemID: scrolled[scrolled.length -1].href.substr(1)
+        curItemID: scrolled[scrolled.length - 1].href.substr(1)
       });
     }
   };

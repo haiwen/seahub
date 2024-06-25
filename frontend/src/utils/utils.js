@@ -325,7 +325,7 @@ export const Utils = {
   },
 
   joinPath: function(pathA, pathB) {
-    if (pathA[pathA.length-1] === '/') {
+    if (pathA[pathA.length - 1] === '/') {
       return pathA + pathB;
     } else {
       return pathA + '/' + pathB;
