@@ -225,7 +225,7 @@ class LinkedDevices extends Component {
     return (
       <div className="setting-item" id="linked-devices">
         <h3 className="setting-item-heading">{gettext('Linked Devices')}</h3>
-        <div className="cur-view-content">
+        <div>
           <Content
             loading={loading}
             errorMsg={errorMsg}
