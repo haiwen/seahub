@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
-import Icon from '../../../../components/icon';
 import { getWikPageLink } from '../../utils';
 
 export default class PageDropdownMenu extends Component {
@@ -143,28 +142,28 @@ export default class PageDropdownMenu extends Component {
           positionFixed={true}
         >
           <DropdownItem onClick={this.handleCopyLink}>
-            <i className="sf3-font sf3-font-sdoc-link" />
+            <i className="sf3-font sf3-font-link" />
             <span className="item-text">{gettext('Copy link')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.onRenameView}>
-            <Icon symbol={'edit'}/>
+            <i className="sf3-font sf3-font-rename" />
             <span className="item-text">{gettext('Modify name')}</span>
           </DropdownItem>
           {canDuplicate &&
             <DropdownItem onClick={this.duplicatePage}>
-              <Icon symbol={'copy'}/>
+              <i className="sf3-font sf3-font-copy1" />
               <span className="item-text">{gettext('Duplicate page')}</span>
             </DropdownItem>
           }
           {(isOnlyOneView || pagesLength === 1 || !canDelete) ? '' : (
             <DropdownItem onClick={this.onDeleteView}>
-              <Icon symbol={'delete'}/>
+              <i className="sf3-font sf3-font-delete1" />
               <span className="item-text">{gettext('Delete page')}</span>
             </DropdownItem>
           )}
           {folderId &&
             <DropdownItem onClick={this.onRemoveFromFolder}>
-              <Icon symbol={'remove-from-folder'}/>
+              <i className="sf3-font sf3-font-move" />
               <span className="item-text">{gettext('Remove from folder')}</span>
             </DropdownItem>
           }
@@ -187,7 +186,7 @@ export default class PageDropdownMenu extends Component {
                 toggle={this.onToggleFoldersMenu}
               >
                 <div className="folders-dropdown-toggle" ref={ref => this.foldersDropdownToggle = ref}>
-                  <Icon symbol={'move-to'}/>
+                  <i className="sf3-font sf3-font-move" />
                   <span className="item-text">{gettext('Move to')}</span>
                   <span className="icon-dropdown-toggle">
                     <i className="sf3-font-down sf3-font rotate-270"></i>

@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1718690041029'); /* IE9 */
-  src: url('iconfont.eot?t=1718690041029#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1718690041029') format('woff2'),
-       url('iconfont.woff?t=1718690041029') format('woff'),
-       url('iconfont.ttf?t=1718690041029') format('truetype'),
-       url('iconfont.svg?t=1718690041029#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1719282050936'); /* IE9 */
+  src: url('iconfont.eot?t=1719282050936#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1719282050936') format('woff2'),
+       url('iconfont.woff?t=1719282050936') format('woff'),
+       url('iconfont.ttf?t=1719282050936') format('truetype'),
+       url('iconfont.svg?t=1719282050936#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-image:before {
+  content: "\e82d";
 }
 
 .sf3-font-folder:before {
@@ -32,7 +36,7 @@
   content: "\e620";
 }
 
-.sf3-font-sdoc-link:before {
+.sf3-font-link:before {
   content: "\e61f";
 }
 

@@ -57,15 +57,15 @@ export default class FolderOperationDropdownMenu extends Component {
             positionFixed={true}
           >
             <DropdownItem onClick={this.props.onToggleAddView.bind(this, this.props.folderId)}>
-              <Icon symbol={'file'}/>
+              <i className="sf3-font sf3-font-file" />
               <span className="item-text">{gettext('Add page')}</span>
             </DropdownItem>
             <DropdownItem onClick={this.openFolderEditor}>
-              <Icon symbol={'edit'}/>
+              <i className="sf3-font sf3-font-rename" />
               <span className="item-text">{gettext('Modify name')}</span>
             </DropdownItem>
             <DropdownItem onMouseDown={this.onDeleteFolder}>
-              <Icon symbol={'delete'}/>
+              <i className="sf3-font sf3-font-delete1" />
               <span className="item-text">{gettext('Delete folder')}</span>
             </DropdownItem>
           </DropdownMenu>
