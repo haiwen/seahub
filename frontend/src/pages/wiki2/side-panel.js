@@ -78,15 +78,38 @@ class SidePanel extends Component {
     const { config } = this.props;
     const { name, from_page_id } = fromPageConfig;
     const { navigation, pages } = config;
-    const fromPage = PageUtils.getPageById(pages, from_page_id);
-    const newPageId = generateUniqueId(navigation);
-    let newPageConfig = {
-      ...fromPage,
-      id: newPageId,
-      name,
-    };
-    const newPage = new Page({ ...newPageConfig });
-    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
+
+    const { page: oldPage, parentId } = PageUtils.findPage(navigation, from_page_id);
+    if (!oldPage) {
+      errorCallback();
+      return;
+    }
+    const newPage = deepCopy(oldPage);
+    newPage.name = name;
+    function rebuildNewPage(newPage) {
+      const page = PageUtils.getPageById(pages, newPage.id);
+      const newPageId = generateUniqueId(navigation);
+      config.pages.push(new Page({
+        id: newPageId,
+        name: newPage.id === from_page_id ? name : page.name,
+        children: newPage.children,
+        // TODO: create new sdoc file then use new path and docUuid
+        path: page.path,
+        docUuid: page.docUuid,
+      }));
+      newPage.id = newPageId;
+      if (newPage.children) {
+        newPage.children = newPage.children.map(item => {
+          return rebuildNewPage(item);
+        });
+      }
+      return newPage;
+    }
+    rebuildNewPage(newPage);
+    PageUtils.duplicatePage(navigation, newPage, parentId, from_page_id);
+    const onSuccess = () => { successCallback(); };
+    config.navigation = navigation;
+    this.props.saveWikiConfig(config, onSuccess, errorCallback);
   };
 
   addPage = (page, parentId, successCallback, errorCallback, jumpToNewPage = true) => {

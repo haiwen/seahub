@@ -2,6 +2,58 @@ import { FOLDER, PAGE } from '../constant';
 
 export default class PageUtils {
 
+  static _generatePage(page) {
+    if (page && page.type === PAGE) {
+      return page;
+    } else {
+      return { id: page, type: PAGE };
+    }
+  }
+
+  static findPage(navigation, page_id) {
+    let page = null;
+    let parentId = null;
+    function _findPageRecursion(node, page_id) {
+      if (!node || !node.children) return;
+      node.children.forEach(item => {
+        if (item.id === page_id) {
+          page = item;
+          parentId = node.id;
+        }
+        _findPageRecursion(item, page_id);
+      });
+    }
+    let root = {};
+    root.children = navigation;
+    _findPageRecursion(root, page_id);
+    return { page, parentId };
+  }
+
+  static duplicatePage(navigation, page, parentId, from_page_id) {
+    if (!parentId) {
+      const from_page_index = navigation.findIndex(item => item.id === from_page_id);
+      navigation.splice(from_page_index + 1, 0, this._generatePage(page));
+    } else {
+      navigation.forEach(item => {
+        this._duplicatePageRecursion(page, item, parentId, from_page_id);
+      });
+    }
+  }
+
+  static _duplicatePageRecursion(page, item, parentId, from_page_id) {
+    if (!Array.isArray(item.children)) {
+      item.children = [];
+    }
+    if (item.id === parentId) {
+      const from_page_index = item.children.findIndex(item => item.id === from_page_id);
+      item.children.splice(from_page_index + 1, 0, this._generatePage(page));
+      return true;
+    }
+    item.children.forEach(item => {
+      this._duplicatePageRecursion(page, item, parentId, from_page_id);
+    });
+  }
+
   static addPage(navigation, page_id, parentId) {
     if (!parentId) {
       navigation.push({ id: page_id, type: PAGE });
