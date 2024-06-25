@@ -19,7 +19,6 @@ export default class PageDropdownMenu extends Component {
     toggle: PropTypes.func,
     toggleViewEditor: PropTypes.func,
     duplicatePage: PropTypes.func,
-    onSetFolderId: PropTypes.func,
     onDeleteView: PropTypes.func,
     onModifyViewType: PropTypes.func,
     onMoveViewToFolder: PropTypes.func,
@@ -79,7 +78,7 @@ export default class PageDropdownMenu extends Component {
   };
 
   duplicatePage = () => {
-    const { view, folderId } = this.props;
+    const { view } = this.props;
     const { id: from_page_id, name } = view;
     let duplicateCount = 1;
     let newName = name + '(copy)';
@@ -88,7 +87,6 @@ export default class PageDropdownMenu extends Component {
       duplicateCount++;
     }
     const onsuccess = () => {};
-    this.props.onSetFolderId(folderId);
     this.props.duplicatePage({ name: newName, from_page_id }, onsuccess, this.duplicatePageFailure);
   };
 
