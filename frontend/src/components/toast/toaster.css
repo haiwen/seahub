@@ -1,0 +1,116 @@
+.seahub-toast-manager {
+  position: fixed;
+  margin: 0 auto;
+  max-width: 560px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+}
+
+.seahub-toast-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 0;
+  transition: all 240ms cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+@keyframes openAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(-120%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes closeAnimation {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.seahub-toast-container.entering,
+.seahub-toast-container.entered {
+  animation: openAnimation 240ms cubic-bezier(0.175, 0.885, 0.320, 1.175) both;
+}
+
+.seahub-toast-container.exiting {
+  animation: closeAnimation 120ms cubic-bezier(0.4, 0.0, 1, 1) both;
+}
+
+.seahub-toast-alert-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 3px;
+  box-shadow: rgba(67, 90, 111, 0.3) 0px 0px 1px, rgba(67, 90, 111, 0.47) 0px 8px 10px -4px;
+  padding: 10px 16px;
+  background-color: #fff;
+}
+
+.seahub-toast-alert-container.success {
+  border-left: 3px solid rgb(71, 184, 129);
+  color: rgb(71, 184, 129);
+}
+
+.seahub-toast-alert-container.warning {
+  border-left: 3px solid rgb(217, 130, 43);
+  color: rgb(217, 130, 43);
+}
+
+.seahub-toast-alert-container.none {
+  border-left: 3px solid rgb(16, 112, 202);
+  color: rgb(16, 112, 202);
+}
+
+.seahub-toast-alert-container.danger {
+  border-left: 3px solid rgb(236, 76, 71);
+  color: rgb(236, 76, 71);
+}
+
+.seahub-toast-alert-container .toast-alert-icon {
+  margin-right: 10px;
+  width: 14px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.seahub-toast-alert-container .toast-text-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #435a6f;
+}
+
+.seahub-toast-alert-container .toast-text-child {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.seahub-toast-alert-container .toast-close {
+  text-align: center;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  margin-left: 15px;
+  line-height: 22px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #000;
+  opacity: 0.5;
+}
+
+.seahub-toast-alert-container .toast-close:hover { 
+  opacity: 1;
+}
