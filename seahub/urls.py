@@ -892,20 +892,11 @@ if HAS_FILE_SEARCH:
 
 from seahub.utils import is_pro_version
 if is_pro_version():
-    from seahub.sysadmin_extra.views import \
-        sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
-        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += [
         re_path(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
-        path('sys/loginadmin/export-excel/', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
-
         re_path(r'^api/v2.1/admin/logs/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-logs-file-audit'),
-        path('sys/log/fileaudit/export-excel/', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
         re_path(r'^api/v2.1/admin/logs/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-logs-file-update'),
-        path('sys/log/fileupdate/export-excel/', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
-
         re_path(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
-        path('sys/log/permaudit/export-excel/', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
 
         re_path(r'^api/v2.1/admin/logs/export-excel/$', SysLogsExport.as_view(), name='api-v2.1-admin-logs-export-excel'),
         re_path(r'^api/v2.1/query-export-status/$', FileLogsExportStatus.as_view(), name='api-v2.1-query-export-status'),
