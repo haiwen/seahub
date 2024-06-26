@@ -1,5 +1,7 @@
 import json
 import os
+import logging
+from shutil import rmtree
 from django.contrib import messages
 from django.http import HttpResponseRedirect, FileResponse
 from django.utils.translation import gettext as _
@@ -18,6 +20,8 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
 from seahub.utils import is_pro_version, query_export_status
 from seahub.settings import SITE_ROOT
+
+logger = logging.getLogger(__name__)
 
 
 class SysLogsExport(APIView):
@@ -65,7 +69,7 @@ class FileLogsExportStatus(APIView):
         resp = query_export_status(task_id)
 
         if resp.status_code == 500:
-            logger.error('seafile io query status error: %s, %s' % (task_id, resp.text))
+            logger.error('seafile io query status error: %s, %s' % (task_id, resp.content))
             return api_error(500, 'Internal Server Error')
         if not resp.status_code == 200:
             return api_error(resp.status_code, resp.content)
@@ -85,24 +89,27 @@ def sys_log_export_excel(request):
         return api_error(400, error_msg)
 
     if log_type == 'loginadmin':
-        excel_name = task_id + 'login-logs.xlsx'
+        excel_name = 'login-logs.xlsx'
     elif log_type == 'fileaudit':
-        excel_name = task_id + 'file-access-logs.xlsx'
+        excel_name = 'file-access-logs.xlsx'
     elif log_type == 'fileupdate':
-        excel_name = task_id + 'file-update-logs.xlsx'
+        excel_name = 'file-update-logs.xlsx'
     elif log_type == 'permaudit':
-        excel_name = task_id + 'perm-audit-logs.xlsx'
+        excel_name = 'perm-audit-logs.xlsx'
     else:
         error_msg = 'log_type invalid'
         return api_error(400, error_msg)
 
-    target_dir = '/tmp/seafile_events/'
+    target_dir = os.path.join('/tmp/seafile_events/', task_id)
     tmp_excel_path = os.path.join(target_dir, excel_name)
     if not os.path.isfile(tmp_excel_path):
         return api_error(400, excel_name + ' not found.')
 
     response = FileResponse(open(tmp_excel_path, 'rb'), content_type='application/ms-excel', as_attachment=True)
-    os.remove(tmp_excel_path)
+    try:
+        rmtree(target_dir)
+    except OSError:
+        pass
     response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(excel_name)
 
     return response
