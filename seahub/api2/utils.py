@@ -10,6 +10,8 @@ import logging
 
 from collections import defaultdict
 from functools import wraps
+from django.core.cache import cache
+
 
 from django.http import HttpResponse
 from rest_framework.authentication import SessionAuthentication
@@ -26,6 +28,8 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.utils import gen_token, normalize_cache_key
+from seahub.utils.mail import send_html_email_with_dj_template
 
 logger = logging.getLogger(__name__)
 
@@ -278,3 +282,18 @@ def is_web_request(request):
         return True
     else:
         return False
+    
+    
+def send_share_link_emails(emails, fs, shared_from):
+    subject = "Share links"
+    for email in emails:
+        c = {'url': "%s?email=%s" % (fs.get_full_url(), email), 'shared_from': shared_from}
+        send_success = send_html_email_with_dj_template(
+            email,
+            subject=subject,
+            dj_template='share/share_link_email.html',
+            context=c)
+        if not send_success:
+            logger.error('Failed to send code via email to %s' % email)
+            continue
+    

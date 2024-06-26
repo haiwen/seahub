@@ -30,8 +30,8 @@ from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
-        ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
-        SHARE_LINK_AUDIT_CODE_TIMEOUT
+    ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
+    SHARE_LINK_AUDIT_CODE_TIMEOUT
 from seahub.profile.models import Profile
 
 # Get an instance of a logger
@@ -542,6 +542,52 @@ def ajax_get_link_audit_code(request):
     cache_key = normalize_cache_key(email, 'share_link_audit_')
     code = gen_token(max_length=6)
     cache.set(cache_key, code, SHARE_LINK_AUDIT_CODE_TIMEOUT)
+
+    # send code to user via email
+    subject = _("Verification code for visiting share links")
+    c = {'code': code}
+
+    send_success = send_html_email_with_dj_template(email,
+                                                    subject=subject,
+                                                    dj_template='share/audit_code_email.html',
+                                                    context=c)
+
+    if not send_success:
+        logger.error('Failed to send audit code via email to %s')
+        return HttpResponse(json.dumps({
+            "error": _("Failed to send a verification code, please try again later.")
+        }), status=500, content_type=content_type)
+
+    return HttpResponse(json.dumps({'success': True}), status=200,
+                        content_type=content_type)
+
+
+def ajax_get_link_email_audit_code(request):
+    content_type = 'application/json; charset=utf-8'
+
+    token = request.POST.get('token')
+    email = request.POST.get('email')
+    if not is_valid_email(email):
+        return HttpResponse(json.dumps({
+            'error': _('Email address is not valid')
+        }), status=400, content_type=content_type)
+
+    fs = FileShare.objects.get_valid_file_link_by_token(token)
+    if fs is None:
+        return HttpResponse(json.dumps({
+            'error': _('Share link is not found')
+        }), status=400, content_type=content_type)
+
+    authed_details = json.loads(fs.authed_details)
+    authed_emails = authed_details.get('authed_emails', [])
+    if email not in authed_emails:
+        return HttpResponse(json.dumps({
+            'error': _('Email address is not valid')
+        }), status=400, content_type=content_type)
+
+    code = gen_token(max_length=6)
+    cache_key = normalize_cache_key(email, 'share_link_email_auth_', token=fs.token)
+    cache.set(cache_key, code, 60 * 60)
 
     # send code to user via email
     subject = _("Verification code for visiting share links")

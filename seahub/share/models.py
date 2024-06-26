@@ -345,6 +345,9 @@ class FileShare(models.Model):
                                   choices=PERMISSION_CHOICES,
                                   default=PERM_VIEW_DL)
 
+    user_scope = models.CharField(max_length=255, default='all_users')
+    authed_details = models.TextField(default='')
+
     objects = FileShareManager()
 
     def is_file_share_link(self):

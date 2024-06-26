@@ -2,6 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
 from seahub.views.mobile import mobile_login
@@ -388,6 +389,8 @@ urlpatterns = [
 
     re_path(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/repo-tags/$', ShareLinkRepoTags.as_view(), name='api-v2.1-share-link-repo-tags'),
     re_path(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/tagged-files/(?P<tag_id>\d+)/$', ShareLinkRepoTagsTaggedFiles.as_view(), name='api-v2.1-share-link-repo-tags-tagged-files'),
+    re_path(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/user-auth/$', ShareLinkUserAuthView.as_view(), name='api-v2.1-share-link-user-auth'),
+    re_path(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/email-auth/$', ShareLinkEmailAuthView.as_view(), name='api-v2.1-share-link-user-auth'),
 
     ## user::shared-upload-links
     re_path(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),

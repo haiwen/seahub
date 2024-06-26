@@ -37,6 +37,7 @@ from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc
 
 from seahub.settings import SITE_ROOT
+from seahub.share.utils import check_share_link_user_access
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -1158,8 +1159,13 @@ def view_shared_file(request, fileshare):
     Download share file if `dl` in request param.
     View raw share file if `raw` in request param.
     """
-
+    from seahub.utils import redirect_to_login
     token = fileshare.token
+    if not check_share_link_user_access(fileshare, request.user.username):
+        if not request.user.username:
+            return redirect_to_login(request)
+        error_msg = _('Permission denied')
+        return render_error(request, error_msg)
 
     # check if share link is encrypted
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
@@ -1387,8 +1393,14 @@ def view_shared_file(request, fileshare):
 @share_link_audit
 @share_link_login_required
 def view_file_via_shared_dir(request, fileshare):
-
+    from seahub.utils import redirect_to_login
     token = fileshare.token
+    
+    if not check_share_link_user_access(fileshare, request.user.username):
+        if not request.user.username:
+            return redirect_to_login(request)
+        error_msg = _('Permission denied')
+        return render_error(request, error_msg)
 
     # argument check
     req_path = request.GET.get('p', '')
