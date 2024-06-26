@@ -352,8 +352,8 @@
   "Default_font": "Default font",
   "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
   "Recently_saved": "Recently saved",
-  "Text_link": "Text link",
-  "Icon_and_text_link": "Icon and text link",
+  "Text_Link": "Text Link",
+  "Icon_and_text_Link": "Icon and text Link",
   "Card": "Card",
   "Select_sdoc_document": "Select sdoc document",
   "Select_file": "Select file",
@@ -462,5 +462,7 @@
   "Vertical_align": "Vertical alignment",
   "Horizontal_align": "Horizontal alignment",
   "SeaTable_column": "SeaTable column",
-  "SeaTable_table": "SeaTable table"
+  "SeaTable_table": "SeaTable table",
+  "And_x_more_records": "and {{count}} more records",
+  "Print_limit_exceeded": "Exceeding the print limit, only the first 200 lines will be printed"
 }
