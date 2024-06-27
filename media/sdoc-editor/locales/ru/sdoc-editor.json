@@ -463,6 +463,6 @@
   "Horizontal_align": "Горизонтальное выравнивание",
   "SeaTable_column": "Столбец SeaTable",
   "SeaTable_table": "Таблица SeaTable",
-  "And_x_more_records": "and {{count}} more records",
-  "Print_limit_exceeded": "Exceeding the print limit, only the first 200 lines will be printed"
+  "And_x_more_records": "и ещё {{count}} записей",
+  "Print_limit_exceeded": "При превышении лимита печати будут напечатаны только первые 200 строк"
 }
