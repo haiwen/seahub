@@ -6,11 +6,13 @@ import moment from 'moment';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
+import { repotrashAPI } from './utils/repo-trash-api';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CleanTrash from './components/dialog/clean-trash';
+import SelectTrash from './components/dialog/select-trash';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -35,7 +37,9 @@ class RepoFolderTrash extends React.Component {
       items: [],
       scanStat: null,
       more: false,
-      isCleanTrashDialogOpen: false
+      isCleanTrashDialogOpen: false,
+      trashType: 0,
+      isOldTrashDialogOpen: false,
     };
   }
 
@@ -43,6 +47,12 @@ class RepoFolderTrash extends React.Component {
     // this.getItems();
     this.getItems2();
   }
+
+  changeTrashType = (type) =>{
+    this.setState({
+      trashType: type
+    });
+  };
 
   getItems = (scanStat) => {
     seafileAPI.getRepoFolderTrash(repoID, path, scanStat).then((res) => {
@@ -66,7 +76,7 @@ class RepoFolderTrash extends React.Component {
   };
 
   getItems2 = () => {
-    seafileAPI.getRepoFolderTrash2(repoID, path).then((res) => {
+    repotrashAPI.getRepoFolderTrash2(repoID, path).then((res) => {
       const { data } = res.data;
       this.setState({
         isLoading: false,
@@ -99,6 +109,16 @@ class RepoFolderTrash extends React.Component {
     window.history.back();
   };
 
+  getOldTrash = ()=> {
+    this.toggleOldTrashDialog();
+  };
+
+  toggleOldTrashDialog = () => {
+    this.setState({
+      isOldTrashDialogOpen: !this.state.isOldTrashDialogOpen
+    });
+  };
+
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
   };
@@ -110,6 +130,18 @@ class RepoFolderTrash extends React.Component {
   };
 
   refreshTrash = () => {
+    this.setState({
+      isLoading: true,
+      errorMsg: '',
+      items: [],
+      scanStat: null,
+      more: false,
+      showFolder: false
+    });
+    this.getItems();
+  };
+
+  refreshTrash2 = () => {
     this.setState({
       isLoading: true,
       errorMsg: '',
@@ -193,7 +225,7 @@ class RepoFolderTrash extends React.Component {
   };
 
   render() {
-    const { isCleanTrashDialogOpen, showFolder } = this.state;
+    const { isCleanTrashDialogOpen, isOldTrashDialogOpen, showFolder } = this.state;
 
     let title = gettext('{placeholder} Trash');
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
@@ -216,8 +248,12 @@ class RepoFolderTrash extends React.Component {
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>
+
+                  <button className="btn btn-secondary clean flex-shrink-0 ml-4"
+                    onClick={this.getOldTrash}>{gettext('Select Trash')}</button>
                   {(path == '/' && enableClean && !showFolder && isRepoAdmin) &&
-                  <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                    <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+
                   }
                 </div>
                 <Content
@@ -229,11 +265,25 @@ class RepoFolderTrash extends React.Component {
             </div>
           </div>
         </div>
+        {isOldTrashDialogOpen &&
+        <ModalPortal>
+          <SelectTrash
+            repoID={repoID}
+            trashType={this.state.trashType}
+            refreshTrash={this.refreshTrash}
+            refreshTrash2={this.refreshTrash2}
+            changeTrash={this.changeTrashType}
+            toggleDialog={this.toggleOldTrashDialog}
+          />
+        </ModalPortal>
+        }
         {isCleanTrashDialogOpen &&
         <ModalPortal>
           <CleanTrash
             repoID={repoID}
+            trashType={this.state.trashType}
             refreshTrash={this.refreshTrash}
+            refreshTrash2={this.refreshTrash2}
             toggleDialog={this.toggleCleanTrashDialog}
           />
         </ModalPortal>
