@@ -192,7 +192,13 @@ class RepoFolderTrash extends React.Component {
 
   clickRoot = (e) => {
     e.preventDefault();
-    this.refreshTrash();
+    if (this.state.trashType === 0){
+      this.refreshTrash2();
+    }
+    if (this.state.trashType === 1){
+      this.refreshTrash();
+    }
+
   };
 
   clickFolderPath = (folderPath, e) => {
