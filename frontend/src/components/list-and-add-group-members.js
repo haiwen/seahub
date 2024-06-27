@@ -192,7 +192,7 @@ class ManageMembersDialog extends React.Component {
         {groupMembers.length > 10 &&
           <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
             <InputGroupText>
-              <i className="fas fa-search" aria-hidden={true}></i>
+              <i className="sf3-font sf3-font-search" aria-hidden={true}></i>
             </InputGroupText>
             <Input
               type="text"

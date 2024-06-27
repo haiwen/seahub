@@ -86,7 +86,7 @@ class Item extends Component {
                   role="button"
                   aria-label={gettext('Edit')}
                   title={gettext('Edit')}
-                  className="fa fa-pencil-alt attr-action-icon"
+                  className="sf3-font sf3-font-rename attr-action-icon"
                   onClick={this.onEditPermission}>
                 </a>
               )}

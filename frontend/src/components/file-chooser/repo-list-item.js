@@ -207,7 +207,7 @@ class RepoListItem extends React.Component {
             <div className="item-left-icon">
               <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
               <i className="tree-node-icon">
-                <span className="icon far fa-folder tree-node-icon"></span>
+                <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
               </i>
             </div>
           </div>

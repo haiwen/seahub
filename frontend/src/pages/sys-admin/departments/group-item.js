@@ -117,7 +117,7 @@ class GroupItem extends React.Component {
           <td>{moment(group.created_at).fromNow()}</td>
           <td>
             {Utils.bytesToSize(group.quota)}{' '}
-            <span onClick={this.toggleSetQuotaDialog} title={gettext('Edit')} className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
+            <span onClick={this.toggleSetQuotaDialog} title={gettext('Edit')} className={`sf3-font sf3-font-rename attr-action-icon ${highlight ? '' : 'vh'}`}></span>
           </td>
           <td>
             {isOpIconShown &&

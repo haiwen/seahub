@@ -39,7 +39,7 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon fas fa-search"></i>
+        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"

@@ -21,7 +21,8 @@ class SidePanel extends React.Component {
           <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
-          {children ? children :
+          {children ?
+            children :
             <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} />
           }
         </div>

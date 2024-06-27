@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1719282050936'); /* IE9 */
-  src: url('iconfont.eot?t=1719282050936#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1719282050936') format('woff2'),
-       url('iconfont.woff?t=1719282050936') format('woff'),
-       url('iconfont.ttf?t=1719282050936') format('truetype'),
-       url('iconfont.svg?t=1719282050936#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1719381808514'); /* IE9 */
+  src: url('iconfont.eot?t=1719381808514#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1719381808514') format('woff2'),
+       url('iconfont.woff?t=1719381808514') format('woff'),
+       url('iconfont.ttf?t=1719381808514') format('truetype'),
+       url('iconfont.svg?t=1719381808514#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,90 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-exclamation-triangle:before {
+  content: "\e840";
+}
+
+.sf3-font-check-circle:before {
+  content: "\e841";
+}
+
+.sf3-font-exclamation-circle:before {
+  content: "\e842";
+}
+
+.sf3-font-print:before {
+  content: "\e832";
+}
+
+.sf3-font-spinner:before {
+  content: "\e833";
+}
+
+.sf3-font-info1:before {
+  content: "\e834";
+}
+
+.sf3-font-lock:before {
+  content: "\e835";
+}
+
+.sf3-font-save:before {
+  content: "\e836";
+}
+
+.sf3-font-eye:before {
+  content: "\e837";
+}
+
+.sf3-font-folder-open:before {
+  content: "\e838";
+}
+
+.sf3-font-expand-arrows-alt:before {
+  content: "\e839";
+}
+
+.sf3-font-eye-slash:before {
+  content: "\e83a";
+}
+
+.sf3-font-calendar-alt:before {
+  content: "\e83b";
+}
+
+.sf3-font-ellipsis-v:before {
+  content: "\e83c";
+}
+
+.sf3-font-download:before {
+  content: "\e83d";
+}
+
+.sf3-font-angles-down:before {
+  content: "\e83e";
+}
+
+.sf3-font-angles-up:before {
+  content: "\e83f";
+}
+
+.sf3-font-unlock:before {
+  content: "\e82e";
+}
+
+.sf3-font-magic:before {
+  content: "\e82f";
+}
+
+.sf3-font-share-alt:before {
+  content: "\e830";
+}
+
+.sf3-font-sort3:before {
+  content: "\e831";
 }
 
 .sf3-font-image:before {

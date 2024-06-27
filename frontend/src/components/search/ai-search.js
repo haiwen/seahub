@@ -421,7 +421,7 @@ export default class AISearch extends Component {
       return (
         <div className="search-types">
           <div className="search-types-repos search-types-highlight" onClick={this.searchAllRepos} tabIndex={0}>
-            <i className="search-icon-left input-icon-addon fas fa-search"></i>
+            <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
             {inputValue}
             <span className="search-types-text">{gettext('in all libraries')}</span>
           </div>
@@ -433,17 +433,17 @@ export default class AISearch extends Component {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
             </div>
             <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
             </div>
             <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
             </div>
@@ -453,12 +453,12 @@ export default class AISearch extends Component {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
             </div>
             <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
             </div>
@@ -716,7 +716,7 @@ export default class AISearch extends Component {
                     }
                     <button
                       type="button"
-                      className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4"
+                      className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent mr-4"
                       onClick={this.onCloseHandler}
                       aria-label={gettext('Close')}
                     ></button>
@@ -756,7 +756,7 @@ export default class AISearch extends Component {
                     autoComplete="off"
                   />
                   {this.state.isCloseShow &&
-                    <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                    <button type="button" className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>

@@ -14,15 +14,15 @@ class Alert extends React.PureComponent {
   getIconClass(intent) {
     switch (intent) {
       case 'success':
-        return 'fa fa-check-circle';
+        return 'sf3-font sf3-font-check-circle';
       case 'warning':
-        return 'fa fa-exclamation-triangle';
+        return 'sf3-font sf3-font-exclamation-triangle';
       case 'none':
-        return 'fa fa-exclamation-circle';
+        return 'sf3-font sf3-font-exclamation-circle';
       case 'danger':
-        return 'fa fa-exclamation-circle';
+        return 'sf3-font sf3-font-exclamation-circle';
       default:
-        return 'fa fa-check-circle';
+        return 'sf3-font sf3-font-check-circle';
     }
   }
 

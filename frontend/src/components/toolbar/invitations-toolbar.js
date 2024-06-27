@@ -28,7 +28,7 @@ class InvitationsToolbar extends React.Component {
           {Utils.isDesktop() ? (
             <div className="operation">
               <Button color="btn btn-secondary operation-item" onClick={toggleInvitePeopleDialog}>
-                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite Guest')}
+                <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Invite Guest')}
               </Button>
             </div>
           ) : (

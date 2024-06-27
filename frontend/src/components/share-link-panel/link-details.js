@@ -163,7 +163,7 @@ class LinkDetails extends React.Component {
 
     return (
       <div>
-        <button className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
+        <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
         <dl>
           <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
           <dd>
@@ -190,7 +190,7 @@ class LinkDetails extends React.Component {
               <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
               <dd className="d-flex align-items-center">
                 <span className="mr-1">{this.state.storedPasswordVisible ? sharedLinkInfo.password : '***************'}</span>
-                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}></span>
               </dd>
             </>
           )}
@@ -205,7 +205,7 @@ class LinkDetails extends React.Component {
                     role="button"
                     aria-label={gettext('Edit')}
                     title={gettext('Edit')}
-                    className="fa fa-pencil-alt attr-action-icon"
+                    className="sf3-font sf3-font-rename attr-action-icon"
                     onClick={this.editingExpirationToggle}>
                   </a>
                 )}

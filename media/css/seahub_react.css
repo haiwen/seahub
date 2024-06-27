@@ -1039,6 +1039,10 @@ a.table-sort-op {
   }
 }
 
+a.table-sort-op .sf3-font.sf3-font-sort3 {
+  font-size: 12px;
+}
+
 a.table-sort-op.sf3-font {
   font-size: 13px;
 }

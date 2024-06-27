@@ -104,7 +104,7 @@ class MainPanel extends Component {
                 {this.props.permission == 'rw' && (
                   Utils.isDesktop() ?
                     <button className="btn btn-secondary operation-item" title={gettext('Edit')} onClick={this.onEditClick}>{gettext('Edit')}</button> :
-                    <span className="fa fa-pencil-alt mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick}></span>
+                    <span className="sf3-font sf3-font-rename mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick}></span>
                 )}
               </div>
               <div className="common-toolbar">

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import Icon from '../../../components/icon';
 
 class AddViewDropdownMenu extends Component {
 
@@ -31,11 +30,11 @@ class AddViewDropdownMenu extends Component {
         <DropdownToggle caret></DropdownToggle>
         <DropdownMenu container="body" className='dtable-dropdown-menu large mt-0'>
           <DropdownItem onClick={this.addPage}>
-            <Icon symbol={'file'}/>
+            <i className="sf3-font sf3-font-file" />
             <span className='item-text'>{gettext('Add page')}</span>
           </DropdownItem>
           <DropdownItem onClick={this.onToggleAddFolder}>
-            <Icon symbol={'folders'}/>
+            <i className="sf3-font sf3-font-folder" />
             <span className='item-text'>{gettext('Add folder')}</span>
           </DropdownItem>
         </DropdownMenu>

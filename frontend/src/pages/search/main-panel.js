@@ -331,8 +331,8 @@ class SearchViewPanel extends React.Component {
               onChange={this.handleSearchInput}
               onKeyDown={this.handleKeyDown}
             />
-            <i className="search-icon-right input-icon-addon fas fa-search" onClick={this.handleSubmit}></i>
-            <i className={`fas action-icon fa-angle-double-${isCollapseOpen ? 'up' : 'down'}`} onClick={this.toggleCollapse}></i>
+            <i className="search-icon-right input-icon-addon sf3-font sf3-font-search" onClick={this.handleSubmit}></i>
+            <i className={`action-icon sf3-font sf3-font-angles-${isCollapseOpen ? 'up' : 'down'}`} onClick={this.toggleCollapse}></i>
           </div>
           {this.state.errorMsg && <div className="error">{this.state.errorMsg}</div>}
           <AdvancedSearch

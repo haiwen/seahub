@@ -150,7 +150,7 @@ class AllRepos extends Component {
       <Fragment>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
-            <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+            <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
           </Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

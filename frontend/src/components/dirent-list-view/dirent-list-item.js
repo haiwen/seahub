@@ -737,7 +737,7 @@ class DirentListItem extends React.Component {
         <td className="pl10">
           {dirent.starred !== undefined &&
           <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
-            <i className={`fa-star ${dirent.starred ? 'fas' : 'far star-empty'}`}></i>
+            <i className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}></i>
           </a>
           }
         </td>
@@ -810,7 +810,7 @@ class DirentListItem extends React.Component {
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
-              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"

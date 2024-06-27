@@ -1528,8 +1528,9 @@ a.sf-popover-item {
     font-size: 13px;
 }
 #toggle-show-password {
+    height: 40px;
+    line-height: 40px;
     position: absolute;
-    top: 13px;
     right: 10px;
     cursor: pointer;
     color: #999;

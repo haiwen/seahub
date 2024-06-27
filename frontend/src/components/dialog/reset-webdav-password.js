@@ -74,8 +74,12 @@ class ResetWebdavPassword extends Component {
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <InputGroupAddon addonType="append">
-              <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-              <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
+              <Button onClick={this.togglePasswordVisible}>
+                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '': '-slash'}`}></i>
+              </Button>
+              <Button onClick={this.generatePassword}>
+                <i className="sf3-font sf3-font-magic"></i>
+              </Button>
             </InputGroupAddon>
           </InputGroup>
           <p className="form-text text-muted m-0">{passwordTip}</p>

@@ -183,7 +183,7 @@ class UserItem extends React.Component {
               <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
                 <DropdownToggle
                   tag="a"
-                  className="attr-action-icon fas fa-ellipsis-v"
+                  className="attr-action-icon sf3-font sf3-font-more-vertical"
                   title={gettext('More operations')}
                   aria-label={gettext('More operations')}
                   data-toggle="dropdown"

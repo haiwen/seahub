@@ -204,7 +204,7 @@ class AdvancedSearch extends React.Component {
                     onChange={this.props.handleTimeFromInput}
                     showHourAndMinute={false}
                   />
-                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
+                  <span className="select-data-icon"><i className="sf3-font sf3-font-calendar-alt"></i></span>
                 </Col>
                 <div className="mt-2">-</div>
                 <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
@@ -215,7 +215,7 @@ class AdvancedSearch extends React.Component {
                     onChange={this.props.handleTimeToInput}
                     showHourAndMinute={false}
                   />
-                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
+                  <span className="select-data-icon"><i className="sf3-font sf3-font-calendar-alt"></i></span>
                 </Col>
               </Row>
               {errorDateMsg && <Row><Col md="2" lg="2"></Col><Col md="8" className="error mt-2">{errorDateMsg}</Col></Row>}

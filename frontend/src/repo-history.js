@@ -110,7 +110,7 @@ class RepoHistory extends React.Component {
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
-                  <span className="fas fa-chevron-left"></span>
+                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content
@@ -303,7 +303,7 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <a href="#" role="button" className={`attr-action-icon fa fa-pencil-alt ${isIconShown ? '': 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
+            <a href="#" role="button" className={`attr-action-icon sf3-font sf3-font-rename ${isIconShown ? '': 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
             }
           </td>
           }

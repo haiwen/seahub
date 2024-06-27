@@ -194,8 +194,8 @@
   padding-left: 0.5rem;
   width: 30rem;
 }
-.search-page .search-page-container .fa-angle-double-up,
-.search-page .search-page-container .fa-angle-double-down {
+.search-page .search-page-container .sf3-font-angles-up,
+.search-page .search-page-container .sf3-font-angles-down {
   font-size: 1rem;
 }
 .search-page .advanced-search .search-file-types .search-input {

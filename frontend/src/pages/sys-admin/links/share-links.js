@@ -54,7 +54,7 @@ class Content extends Component {
         </EmptyTip>
       );
 
-      const initialSortIcon = <span className="fas fa-sort"></span>;
+      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       const table = (
         <Fragment>

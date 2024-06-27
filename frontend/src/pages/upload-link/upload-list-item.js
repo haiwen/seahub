@@ -133,7 +133,7 @@ class UploadListItem extends React.Component {
           )}
           {this.state.uploadState === UPLOAD_ERROR && (
             <div className="d-flex align-items-center">
-              <span className="upload-failure-icon fas fa-exclamation mr-2"></span>
+              <span className="upload-failure-icon sf3-font sf3-font-info mr-2"></span>
               <span className="upload-failure-msg" dangerouslySetInnerHTML={{__html: error}}></span>
             </div>
           )}

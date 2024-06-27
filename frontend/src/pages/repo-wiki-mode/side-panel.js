@@ -164,7 +164,7 @@ class SidePanel extends Component {
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
                   <DropdownToggle
                     tag="i"
-                    className="fas fa-ellipsis-v"
+                    className="sf3-font sf3-font-more-vertical"
                     title={gettext('More operations')}
                     aria-label={gettext('More operations')}
                     data-toggle="dropdown"

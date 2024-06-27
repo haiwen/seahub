@@ -48,7 +48,7 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon fas fa-search"></i>
+        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
@@ -269,14 +269,14 @@ class OrgUsers extends Component {
       <Fragment>
         <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import users')}</button>
         <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add user')}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add user')}</button>
         {orgEnableAdminInviteUser &&
         <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite users')}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Invite users')}</button>
         }
         {invitationLink &&
         <button className={topBtn} title={'通过微信邀请用户'} onClick={this.toggleInviteUserViaWeiXinDialog}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{'通过微信邀请用户'}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{'通过微信邀请用户'}</button>
         }
         {this.state.isImportOrgUsersDialogOpen &&
         <ModalPortal>

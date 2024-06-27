@@ -199,7 +199,7 @@ class RepoFolderTrash extends React.Component {
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role={gettext('Back')}>
-                  <span className="fas fa-chevron-left"></span>
+                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>

@@ -191,6 +191,8 @@
 .dir-content-main .wiki-open-file {
   width: 40px;
   height: 40px;
+  line-height: 40px;
+  text-align: center;
   font-size: 16px;
   border-radius: 50%;
   box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
@@ -202,12 +204,6 @@
   z-index: 1050;
   background-color: #fff;
   cursor: pointer;
-}
-
-.dir-content-main .wiki-open-file i {
-  position: absolute;
-  top: 12px;
-  left: 12px;
 }
 
 .dir-content-main .wiki-open-file:hover {
