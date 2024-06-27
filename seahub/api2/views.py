@@ -746,7 +746,6 @@ class Repos(APIView):
             owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
                 # do not return virtual repos
-                print(r.repo_type, 'sfsfsfsfsf')
                 if r.is_virtual:
                     continue
 
