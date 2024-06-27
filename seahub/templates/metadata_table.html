@@ -8,7 +8,7 @@
             <tr>  
                 <th style="border: 1px solid black; padding: 8px; text-align: center;">id</th>  
                 <th style="border: 1px solid black; padding: 8px; text-align: center;">Creator</th>  
-                <th style="border: 1px solid black; padding: 8px; text-align: center;">Created Time</th>  
+                <th style="border: 1px solid black; padding: 8px; text-align: center;">Created Time</th>
                 <th style="border: 1px solid black; padding: 8px; text-align: center;">Modifier</th>  
                 <th style="border: 1px solid black; padding: 8px; text-align: center;">Modified Time</th>  
                 <th style="border: 1px solid black; padding: 8px; text-align: center;">Parent Folder</th>  
@@ -21,12 +21,12 @@
             <tr>  
                 <td style="border: 1px solid black; padding: 8px;">{{ record.id }}</td>  
                 <td style="border: 1px solid black; padding: 8px;">{{ record.creator }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.created_time }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.modifier }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.modified_time }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.parent_dir }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.name }}</td>  
-                <td style="border: 1px solid black; padding: 8px;">{{ record.is_dir|yesno:"Yes,No" }}</td>  
+                <td style="border: 1px solid black; padding: 8px;">{{ record.file_ctime }}</td>
+                <td style="border: 1px solid black; padding: 8px;">{{ record.modifier }}</td>
+                <td style="border: 1px solid black; padding: 8px;">{{ record.file_mtime }}</td>
+                <td style="border: 1px solid black; padding: 8px;">{{ record.parent_dir }}</td>
+                <td style="border: 1px solid black; padding: 8px;">{{ record.name }}</td>
+                <td style="border: 1px solid black; padding: 8px;">{{ record.is_dir|yesno:"Yes,No" }}</td>
             </tr>  
             {% endfor %}  
         </tbody>  
@@ -41,9 +41,9 @@ window.app.metadatas = [];
 window.app.metadatas.push({
     id: '{{ record.id }}',
     creator: '{{ record.creator }}',
-    createdTime: '{{ record.created_time }}',
-    modifier: '{{ record.creator }}',
-    modifiedTime: '{{ record.modified_time }}',
+    createdTime: '{{ record.file_ctime }}',
+    modifier: '{{ record.modifier }}',
+    modifiedTime: '{{ record.file_mtime }}',
     parentDir: '{{ record.parent_dir }}',
     name: '{{ record.name }}',
     isDir: '{{ record.is_dir }}',

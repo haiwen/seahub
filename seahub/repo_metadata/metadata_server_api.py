@@ -11,22 +11,25 @@ class structure_column(object):
         self.key = key
         self.name = name
         self.type = type
+
     def to_build_column_dict(self):
         return {
+            'key': self.key,
             'name': self.name,
             'type': self.type
         }
     
 #metadata base
 METADATA_TABLE = structure_table('0001', 'Table1')
-METADATA_COLUMN_ID = structure_column('0', '_id', 'text')
-METADATA_COLUMN_CREATOR = structure_column('16', 'creator', 'text')
-METADATA_COLUMN_CREATED_TIME = structure_column('17', 'created_time', 'date')
-METADATA_COLUMN_MODIFIER = structure_column('18', 'modifier', 'text')
-METADATA_COLUMN_MODIFIED_TIME = structure_column('19', 'modified_time', 'date')
-METADATA_COLUMN_PARENT_DIR = structure_column('20', 'parent_dir', 'text')
-METADATA_COLUMN_NAME = structure_column('21', 'name', 'text')
-METADATA_COLUMN_IS_DIR = structure_column('22', 'is_dir', 'text')
+METADATA_COLUMN_ID = structure_column('_id', '_id', 'text')
+METADATA_COLUMN_CREATOR = structure_column('_file_creator', '_file_creator', 'text')
+METADATA_COLUMN_CREATED_TIME = structure_column('_file_ctime', '_file_ctime', 'date')
+METADATA_COLUMN_MODIFIER = structure_column('_file_modifier', '_file_modifier', 'text')
+METADATA_COLUMN_MODIFIED_TIME = structure_column('_file_mtime', '_file_mtime', 'date')
+METADATA_COLUMN_PARENT_DIR = structure_column('_parent_dir', '_parent_dir', 'text')
+METADATA_COLUMN_NAME = structure_column('_name', '_name', 'text')
+METADATA_COLUMN_IS_DIR = structure_column('_is_dir', '_is_dir', 'text')
+
 
 def parse_response(response):
     if response.status_code >= 300 or response.status_code < 200:
@@ -54,7 +57,6 @@ class MetadataServerAPI:
         return {"Authorization": "Bearer %s" % token}
 
     def create_base(self):
-        #create a metadata base for base_id
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}'
         response = requests.post(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
@@ -62,42 +64,42 @@ class MetadataServerAPI:
     def delete_base(self):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}'
         response = requests.delete(url, headers=self.headers, timeout=self.timeout)
+        if response.status_code == 404:
+            return {'success': True}
         return parse_response(response)
     
 
-    def add_column(self, table, column):
+    def add_column(self, table_id, column):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {
-            'table_id': table.id,
-            'column': column.to_build_column_dict()
+            'table_id': table_id,
+            'column': column
         }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
     
-    def insert_rows(self, table, columns, rows):
+    def insert_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table.id,
-                'column_keys': [column.key for column in columns],
+                'table_id': table_id,
                 'rows': rows
             }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
     
-    def update_rows(self, table, columns, rows):
+    def update_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table.id,
-                'column_keys': [column.key for column in columns],
+                'table_id': table_id,
                 'rows': rows
             }
         response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def delete_rows(self, table, row_ids):
+    def delete_rows(self, table_id, row_ids):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
         data = {
-                'table_id': table.id,
+                'table_id': table_id,
                 'row_ids': row_ids
             }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
