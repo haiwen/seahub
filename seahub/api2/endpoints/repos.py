@@ -10,7 +10,7 @@ from rest_framework import status
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, is_wiki_repo
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
@@ -31,6 +31,8 @@ from seahub.settings import ENABLE_STORAGE_CLASSES
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
+
+
 
 
 class ReposView(APIView):
@@ -113,6 +115,10 @@ class ReposView(APIView):
                 # do not return virtual repos
                 if r.is_virtual:
                     continue
+                    
+                if is_wiki_repo(r):
+                    continue
+                    
 
                 repo_info = {
                     "type": "mine",
@@ -170,6 +176,9 @@ class ReposView(APIView):
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
+                
+                if is_wiki_repo(r):
+                    continue
 
                 owner_email = r.user
 
@@ -238,6 +247,11 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             for r in group_repos:
+                
+                if is_wiki_repo(r):
+                    continue
+                
+                
                 repo_info = {
                     "type": "group",
                     "group_id": r.group_id,
@@ -282,6 +296,10 @@ class ReposView(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
+                
+                if is_wiki_repo(r):
+                    continue
+                
                 repo_owner = repo_id_owner_dict[r.repo_id]
                 repo_info = {
                     "type": "public",

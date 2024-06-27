@@ -357,3 +357,23 @@ class SeafileDB:
             """
             with connection.cursor() as cursor:
                 cursor.execute(sql)
+
+    def set_repo_type(self, repo_id, repo_type):
+        sql = f"""
+            UPDATE `{self.db_name}`. `RepoInfo`
+            SET `type`= '%s'
+            WHERE  `repo_id`='%s'
+        """ % (repo_type, repo_id)
+    
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+
+    def unset_repo_type(self, repo_id):
+        sql = f"""
+            UPDATE `{self.db_name}`. `RepoInfo`
+            SET `type`= NULL
+            WHERE  `repo_id`='%s'
+        """ % repo_id
+    
+        with connection.cursor() as cursor:
+            cursor.execute(sql)

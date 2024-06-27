@@ -21,6 +21,7 @@ from django.utils.translation import gettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
@@ -183,6 +184,8 @@ class Wikis2View(APIView):
 
         try:
             wiki = Wiki.objects.add(wiki_name=wiki_name, owner=wiki_owner, repo_id=repo_id)
+            seafile_db_api = SeafileDB()
+            seafile_db_api.set_repo_type(repo_id, 'wiki')
         except Exception as e:
             logger.error(e)
             msg = 'Internal Server Error'

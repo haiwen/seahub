@@ -21,6 +21,7 @@ from pysearpc import SearpcError
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter, email2contact_email
+from seahub.constants import REPO_TYPE_WIKI
 from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
@@ -278,3 +279,7 @@ def is_web_request(request):
         return True
     else:
         return False
+    
+def is_wiki_repo(repo):
+    return repo.repo_type == REPO_TYPE_WIKI
+    
