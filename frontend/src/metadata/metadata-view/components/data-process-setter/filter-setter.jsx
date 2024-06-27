@@ -58,11 +58,11 @@ class FilterSetter extends React.Component {
     // const { isShowFilterSetter } = this.state;
     const validFilters = deepCopy(getValidFilters(filters || [], columns));
     const filtersLength = validFilters ? validFilters.length : 0;
-    let filterMessage = isNeedSubmit ? gettext('Preset_filter') : gettext('Filter');
+    let filterMessage = isNeedSubmit ? gettext('Preset filter') : gettext('Filter');
     if (filtersLength === 1) {
-      filterMessage = isNeedSubmit ? gettext('1_preset_filter') : gettext('1_filter');
+      filterMessage = isNeedSubmit ? gettext('1 preset filter') : gettext('1 filter');
     } else if (filtersLength > 1) {
-      filterMessage = isNeedSubmit ? gettext('Preset_filters') : gettext('Filters');
+      filterMessage = isNeedSubmit ? gettext('Preset filters') : gettext('Filters');
       filterMessage = filtersLength + ' ' + filterMessage;
     }
     let labelClass = wrapperClass || '';

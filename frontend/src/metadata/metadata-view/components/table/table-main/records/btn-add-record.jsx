@@ -74,7 +74,7 @@ class BtnAddRecord extends React.Component {
             placement="bottom"
             target={btnId}
           >
-            {gettext('Add_record')}
+            {gettext('Add record')}
           </UncontrolledTooltip>
         </div>
         <div

@@ -120,7 +120,7 @@ class HeaderCell extends Component {
                 placement='bottom'
                 fade={false}
               >
-                {gettext('No_editing_permission')}
+                {gettext('No editing permission')}
               </UncontrolledTooltip>
             </span>
           }

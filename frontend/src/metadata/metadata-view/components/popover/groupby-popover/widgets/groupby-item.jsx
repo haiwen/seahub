@@ -45,7 +45,7 @@ class GroupbyItem extends Component {
       <div className="ml-2">
         <span ref={this.filterToolTip} className="sf-metadata-font sf-metadata-icon-exclamation-triangle"></span>
         <Tooltip placement="bottom" isOpen={tooltipOpen} target={this.filterToolTip} toggle={this.toggleTipMessage}>
-          {gettext('Group_tip_message')}
+          {gettext('Group tip message')}
         </Tooltip>
       </div>
     );
@@ -78,8 +78,8 @@ class GroupbyItem extends Component {
               onSelectOption={(value) => this.props.onSelectColumn(value, index)}
               options={columnsOptions}
               searchable={true}
-              searchPlaceholder={gettext('Search_column')}
-              noOptionsPlaceholder={gettext('No_results')}
+              searchPlaceholder={gettext('Search column')}
+              noOptionsPlaceholder={gettext('No results')}
             />
           </div>
           {isShowGroupCountType(column) && (

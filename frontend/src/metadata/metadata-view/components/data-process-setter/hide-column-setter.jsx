@@ -24,13 +24,13 @@ class HideColumnSetter extends Component {
   render() {
     const { columns, wrapperClass, target, localShownColumnKeys } = this.props;
     if (!columns) return null;
-    let message = gettext('Hide_columns');
+    let message = gettext('Hide columns');
     const hiddenColumns = columns.filter((column) => !localShownColumnKeys.includes(column.key));
     const hiddenColumnsLength = hiddenColumns.length;
     if (hiddenColumnsLength === 1) {
-      message = gettext('1_hidden_column');
+      message = gettext('1 hidden column');
     } else if (hiddenColumnsLength > 1) {
-      message = gettext('xxx_hidden_columns', { count: hiddenColumnsLength });
+      message = gettext('xxx hidden columns').replace('xxx', hiddenColumnsLength);
     }
     let labelClass = wrapperClass || '';
     labelClass = (labelClass && hiddenColumnsLength > 0) ? labelClass + ' active' : labelClass;

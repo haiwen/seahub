@@ -13,8 +13,8 @@ class LoadAllTip extends React.Component {
   render() {
     return (
       <div className="load-all-tip">
-        <span>{gettext('Loaded_records_tip')}</span>
-        <div className="load-all ml-2" onClick={this.onClick}>{gettext('Click_to_load_more')}</div>
+        <span>{gettext('Loaded 50,000 records.')}</span>
+        <div className="load-all ml-2" onClick={this.onClick}>{gettext('Click to load more')}</div>
       </div>
     );
   }

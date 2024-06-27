@@ -44,7 +44,7 @@ class ActionsCell extends Component {
         hideArrow={true}
         className="readonly-cell-tooltip"
       >
-        {gettext('The_row_is_locked_and_cannot_be_modified')}
+        {gettext('The row is locked and cannot be modified')}
       </Tooltip>
     );
   };

@@ -35,9 +35,9 @@ class GroupbySetter extends Component {
     const activated = groupbysLength > 0;
     let groupbyMessage = gettext('Group');
     if (groupbysLength === 1) {
-      groupbyMessage = gettext('Grouped_by_1_column');
+      groupbyMessage = gettext('Grouped by 1 column');
     } else if (groupbysLength > 1) {
-      groupbyMessage = gettext('Grouped_by_xxx_columns', { count: groupbysLength });
+      groupbyMessage = gettext('Grouped by xxx columns').replace('xxx', groupbysLength);
     }
     let labelClass = wrapperClass || '';
     labelClass = (labelClass && activated) ? labelClass + ' active' : labelClass;

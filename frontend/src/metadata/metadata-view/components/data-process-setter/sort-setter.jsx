@@ -47,11 +47,12 @@ class SortSetter extends Component {
     const validSorts = getValidSorts(sorts || [], columns);
     const sortsLength = validSorts ? validSorts.length : 0;
 
-    let sortMessage = isNeedSubmit ? gettext('Preset_sort') : gettext('Sort');
+    let sortMessage = isNeedSubmit ? gettext('Preset sort') : gettext('Sort');
     if (sortsLength === 1) {
-      sortMessage = isNeedSubmit ? gettext('1_preset_sort') : gettext('1_sort');
+      sortMessage = isNeedSubmit ? gettext('1 preset sort') : gettext('1 sort');
     } else if (sortsLength > 1) {
-      sortMessage = isNeedSubmit ? gettext('xxx_preset_sorts', { count: sortsLength }) : gettext('xxx_sorts', { count: sortsLength });
+      sortMessage = isNeedSubmit ? gettext('xxx preset sorts') : gettext('xxx sorts');
+      sortMessage = sortMessage.replace('xxx', sortsLength);
     }
     let labelClass = wrapperClass || '';
     labelClass = (labelClass && sortsLength > 0) ? labelClass + ' active' : labelClass;

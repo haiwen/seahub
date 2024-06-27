@@ -43,11 +43,11 @@ class PreHideColumnSetter extends React.Component {
     const shown_column_keys = shownColumnKeys || [];
     const hiddenColumns = columns.filter((column) => !shown_column_keys.includes(column.key));
     const hiddenColumnsLength = hiddenColumns.length;
-    let message = gettext('Preset_hide_columns');
+    let message = gettext('Preset hide columns');
     if (hiddenColumnsLength === 1) {
-      message = gettext('1_preset_hidden_column');
+      message = gettext('1 preset hidden column');
     } else if (hiddenColumnsLength > 1) {
-      message = gettext('xxx_preset_hidden_columns', { count: hiddenColumnsLength });
+      message = gettext('xxx preset hidden columns').replace('xxx', hiddenColumnsLength);
     }
     let settingClass = wrapperClass || '';
     settingClass = (settingClass && hiddenColumnsLength > 0) ? settingClass + ' active' : settingClass;

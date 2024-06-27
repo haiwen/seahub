@@ -1,3 +1,5 @@
+import { gettext } from '../../../../../utils/constants';
+
 const FILTER_TERM_MODIFIER_TYPE = {
   TODAY: 'today',
   TOMORROW: 'tomorrow',
@@ -23,27 +25,27 @@ const FILTER_TERM_MODIFIER_TYPE = {
 };
 
 const FILTER_TERM_MODIFIER_SHOW = {
-  [FILTER_TERM_MODIFIER_TYPE.TODAY]: 'Today',
-  [FILTER_TERM_MODIFIER_TYPE.TOMORROW]: 'Tomorrow',
-  [FILTER_TERM_MODIFIER_TYPE.YESTERDAY]: 'Yesterday',
-  [FILTER_TERM_MODIFIER_TYPE.ONE_WEEK_AGO]: 'One_week_ago',
-  [FILTER_TERM_MODIFIER_TYPE.ONE_WEEK_FROM_NOW]: 'One_week_from_now',
-  [FILTER_TERM_MODIFIER_TYPE.ONE_MONTH_AGO]: 'One_month_ago',
-  [FILTER_TERM_MODIFIER_TYPE.ONE_MONTH_FROM_NOW]: 'One_month_from_now',
-  [FILTER_TERM_MODIFIER_TYPE.NUMBER_OF_DAYS_AGO]: 'Number_of_days_ago',
-  [FILTER_TERM_MODIFIER_TYPE.NUMBER_OF_DAYS_FROM_NOW]: 'Number_of_days_from_now',
-  [FILTER_TERM_MODIFIER_TYPE.EXACT_DATE]: 'Exact_date',
-  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_WEEK]: 'The_past_week',
-  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_MONTH]: 'The_past_month',
-  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_YEAR]: 'The_past_year',
-  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_WEEK]: 'The_next_week',
-  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_MONTH]: 'The_next_month',
-  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_YEAR]: 'The_next_year',
-  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_NUMBERS_OF_DAYS]: 'The_next_numbers_of_days',
-  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_NUMBERS_OF_DAYS]: 'The_past_numbers_of_days',
-  [FILTER_TERM_MODIFIER_TYPE.THIS_WEEK]: 'This_week',
-  [FILTER_TERM_MODIFIER_TYPE.THIS_MONTH]: 'This_month',
-  [FILTER_TERM_MODIFIER_TYPE.THIS_YEAR]: 'This_year',
+  [FILTER_TERM_MODIFIER_TYPE.TODAY]: gettext('Today'),
+  [FILTER_TERM_MODIFIER_TYPE.TOMORROW]: gettext('Tomorrow'),
+  [FILTER_TERM_MODIFIER_TYPE.YESTERDAY]: gettext('Yesterday'),
+  [FILTER_TERM_MODIFIER_TYPE.ONE_WEEK_AGO]: gettext('One_week_ago'),
+  [FILTER_TERM_MODIFIER_TYPE.ONE_WEEK_FROM_NOW]: gettext('One_week_from_now'),
+  [FILTER_TERM_MODIFIER_TYPE.ONE_MONTH_AGO]: gettext('One_month_ago'),
+  [FILTER_TERM_MODIFIER_TYPE.ONE_MONTH_FROM_NOW]: gettext('One_month_from_now'),
+  [FILTER_TERM_MODIFIER_TYPE.NUMBER_OF_DAYS_AGO]: gettext('Number_of_days_ago'),
+  [FILTER_TERM_MODIFIER_TYPE.NUMBER_OF_DAYS_FROM_NOW]: gettext('Number_of_days_from_now'),
+  [FILTER_TERM_MODIFIER_TYPE.EXACT_DATE]: gettext('Exact_date'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_WEEK]: gettext('The_past_week'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_MONTH]: gettext('The_past_month'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_YEAR]: gettext('The_past_year'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_WEEK]: gettext('The_next_week'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_MONTH]: gettext('The_next_month'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_YEAR]: gettext('The_next_year'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_NEXT_NUMBERS_OF_DAYS]: gettext('The_next_numbers_of_days'),
+  [FILTER_TERM_MODIFIER_TYPE.THE_PAST_NUMBERS_OF_DAYS]: gettext('The_past_numbers_of_days'),
+  [FILTER_TERM_MODIFIER_TYPE.THIS_WEEK]: gettext('This_week'),
+  [FILTER_TERM_MODIFIER_TYPE.THIS_MONTH]: gettext('This_month'),
+  [FILTER_TERM_MODIFIER_TYPE.THIS_YEAR]: gettext('This_year'),
 };
 
 export {

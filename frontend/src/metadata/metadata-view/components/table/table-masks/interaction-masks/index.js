@@ -701,7 +701,7 @@ class InteractionMasks extends React.Component {
     const { table, columns, recordGetterById, isGroupView, getCopiedRecordsAndColumnsFromRange } = this.props;
     const copiedRowsCount = selectedRecordIds.length;
     toaster.success(
-      copiedRowsCount > 1 ? gettext('xxx_rows_are_copied', { count: copiedRowsCount }) : gettext('1_row_is_copied')
+      copiedRowsCount > 1 ? gettext('xxx rows are copied.').replace('xxx', copiedRowsCount) : gettext('1 row is copied.')
     );
     const type = TRANSFER_TYPES.DTABLE_FRAGMENT;
     const copied = { selectedRecordIds };
@@ -733,7 +733,7 @@ class InteractionMasks extends React.Component {
     const type = TRANSFER_TYPES.DTABLE_FRAGMENT;
     const copiedCellsCount = (bottomRight.rowIdx - topLeft.rowIdx + 1) * (bottomRight.idx - topLeft.idx + 1);
     toaster.success(
-      copiedCellsCount > 1 ? gettext('xxx_cells_copied', { count: copiedCellsCount }) : gettext('1_cell_copied')
+      copiedCellsCount > 1 ? gettext('xxx cells copied').replace('xxx', copiedCellsCount) : gettext('1 cell copied')
     );
     const copied = { copiedRange: selectedRange };
     const { copiedRecords, copiedColumns } = getCopiedRecordsAndColumnsFromRange({ type, copied, isGroupView });

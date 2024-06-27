@@ -29,7 +29,7 @@ class FilterItemUtils {
   static generatorTermModifierOption(filterTermModifier) {
     return {
       value: { filterTermModifier },
-      label: <span className='select-option-name'>{gettext(FILTER_TERM_MODIFIER_SHOW[filterTermModifier])}</span>
+      label: <span className='select-option-name'>{FILTER_TERM_MODIFIER_SHOW[filterTermModifier]}</span>
     };
   }
 

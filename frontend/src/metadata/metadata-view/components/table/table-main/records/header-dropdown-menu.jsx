@@ -82,8 +82,8 @@ class HeaderDropdownMenu extends React.Component {
           role="button"
           data-toggle="dropdown"
           aria-expanded={isMenuShow}
-          title={gettext('More_operations')}
-          aria-label={gettext('More_operations')}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
           tabIndex={0}
         >
           <i className="toggle-icon small sf-metadata-font sf-metadata-icon-drop-down"></i>

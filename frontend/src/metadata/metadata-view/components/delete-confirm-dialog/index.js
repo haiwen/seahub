@@ -8,7 +8,7 @@ const DeleteConfirmDialog = ({ title, content, onToggle, onSubmit }) => {
     <Modal isOpen={true} toggle={onToggle}>
       <ModalHeader toggle={onToggle}>{title}</ModalHeader>
       <ModalBody>
-        <p>{gettext('Delete_confirm', { content })}</p>
+        <p>{gettext('Are you sure to delete ') + content}</p>
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>

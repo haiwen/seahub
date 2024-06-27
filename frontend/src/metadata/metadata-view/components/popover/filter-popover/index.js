@@ -165,7 +165,7 @@ class FilterPopover extends Component {
               filterConjunction={filterConjunction}
               filters={filters}
               columns={columns}
-              emptyPlaceholder={gettext('No_filters')}
+              emptyPlaceholder={gettext('No filters')}
               updateFilter={this.updateFilter}
               deleteFilter={this.deleteFilter}
               updateFilterConjunction={this.updateFilterConjunction}
@@ -177,7 +177,7 @@ class FilterPopover extends Component {
             <CustomizeAddTool
               className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
               callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
-              footerName={gettext('Add_filter')}
+              footerName={gettext('Add filter')}
               addIconClassName="popover-add-icon"
             />
             {this.isNeedSubmit() && (

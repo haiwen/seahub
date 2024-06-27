@@ -21,7 +21,7 @@ class RecordsFooter extends React.Component {
       if (hasMore) {
         toaster.success(<LoadAllTip clickToLoadMore={this.props.clickToLoadMore} />, { duration: 5 });
       } else {
-        toaster.success(gettext('All_records_loaded'));
+        toaster.success(gettext('All records loaded'));
       }
     });
   };
@@ -79,18 +79,18 @@ class RecordsFooter extends React.Component {
     const { hasMore, hasSelectedRecord, recordMetrics, selectedRange, recordsCount } = this.props;
     if (hasSelectedRecord) {
       const selectedRecordsCount = RecordMetrics.getSelectedIds(recordMetrics).length;
-      return selectedRecordsCount > 1 ? gettext('xxx_records_selected', { count: selectedRecordsCount }) : gettext('1_record_selected');
+      return selectedRecordsCount > 1 ? gettext('xxx_records_selected').replace('xxx', selectedRecordsCount) : gettext('1 record selected');
     }
     const selectedCellsCount = this.getSelectedCellsCount(selectedRange);
     if (selectedCellsCount > 1) {
-      return gettext('xxx_cells_selected', { count: selectedCellsCount });
+      return gettext('xxx cells selected').replace('xxx', selectedCellsCount);
     }
 
-    let recordsCountText = gettext('No_record');
+    let recordsCountText = gettext('No record');
     if (recordsCount > 1) {
-      recordsCountText = gettext('xxx_records', { count: recordsCount });
+      recordsCountText = gettext('xxx records').replace('xxx', recordsCount);
     } else if (recordsCount === 1) {
-      recordsCountText = gettext('1_record');
+      recordsCountText = gettext('1 record');
     }
     if (hasMore) {
       recordsCountText += ' +';

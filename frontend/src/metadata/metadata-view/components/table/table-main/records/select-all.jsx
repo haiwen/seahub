@@ -63,16 +63,16 @@ class SelectAll extends Component {
               <input
                 className='select-all-checkbox'
                 type='checkbox'
-                name={gettext('Select_all')}
-                title={gettext('Select_all')}
-                aria-label={gettext('Select_all')}
+                name={gettext('Select all')}
+                title={gettext('Select all')}
+                aria-label={gettext('Select all')}
                 checked={isSelectedAll}
                 readOnly
               />
             }
           </>
         }
-        <label htmlFor="select-all-checkbox" name={gettext('Select_all')} title={gettext('Select_all')} aria-label={gettext('Select_all')}></label>
+        <label htmlFor="select-all-checkbox" name={gettext('Select all')} title={gettext('Select all')} aria-label={gettext('Select all')}></label>
       </div>
     );
   }

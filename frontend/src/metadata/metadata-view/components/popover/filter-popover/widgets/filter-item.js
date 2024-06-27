@@ -334,10 +334,10 @@ class FilterItem extends React.Component {
         value={selectedOptionNames}
         options={dataOptions}
         onSelectOption={this.onSelectMultiple}
-        placeholder={gettext('Select_option(s)')}
+        placeholder={gettext('Select option(s)')}
         searchable={true}
-        searchPlaceholder={gettext('Search_option')}
-        noOptionsPlaceholder={gettext('No_options_available')}
+        searchPlaceholder={gettext('Search option')}
+        noOptionsPlaceholder={gettext('No options available')}
         supportMultipleSelect={isSupportMultipleSelect}
       />
     );
@@ -426,7 +426,7 @@ class FilterItem extends React.Component {
           placement='bottom'
           fade={false}
         >
-          {gettext('Invalid_filter')}
+          {gettext('Invalid filter')}
         </UncontrolledTooltip>
       </div>
     );
@@ -468,8 +468,8 @@ class FilterItem extends React.Component {
                 options={filterColumnOptions}
                 onSelectOption={this.onSelectColumn}
                 searchable={true}
-                searchPlaceholder={gettext('Search_column')}
-                noOptionsPlaceholder={gettext('No_results')}
+                searchPlaceholder={gettext('Search column')}
+                noOptionsPlaceholder={gettext('No results')}
               />
             </div>
             <div className={`filter-predicate ml-2 ${_isCheckboxColumn ? 'filter-checkbox-predicate' : ''}`}>
@@ -495,7 +495,7 @@ class FilterItem extends React.Component {
             <div className="ml-2">
               <span ref={this.filterToolTip} id="filter_tool_tip" aria-hidden="true" className="sf-metadata-font sf-metadata-icon-exclamation-triangle" style={{ color: '#FFC92C' }}></span>
               <UncontrolledTooltip placement="bottom" target={this.filterToolTip} >
-                {gettext('filter_tip_message')}
+                {gettext('Filter tip message')}
               </UncontrolledTooltip>
             </div>
             }
