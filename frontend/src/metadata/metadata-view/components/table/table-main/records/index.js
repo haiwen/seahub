@@ -449,7 +449,7 @@ class Records extends Component {
   };
 
   selectRecordWithShift = ({ groupRecordIndex, recordIndex }) => {
-    const { row_ids, isGroupView } = this.props;
+    const { recordIds, isGroupView } = this.props;
     const { lastRowIdxUiSelected, recordMetrics } = this.state;
     let selectedRecordIds = [];
     if (isGroupView) {
@@ -468,7 +468,7 @@ class Records extends Component {
         selectedRecordIds.push(groupRow.rowId);
       }
     } else {
-      const operateRecordId = row_ids[recordIndex];
+      const operateRecordId = recordIds[recordIndex];
       if (!operateRecordId) {
         return;
       }
@@ -494,12 +494,12 @@ class Records extends Component {
   };
 
   getRecordIdsBetweenRange = ({ start, end }) => {
-    const { row_ids } = this.props;
+    const { recordIds: propsRecordIds } = this.props;
     const startIndex = Math.min(start, end);
     const endIndex = Math.max(start, end);
     let recordIds = [];
     for (let i = startIndex; i <= endIndex; i++) {
-      const recordId = row_ids[i];
+      const recordId = propsRecordIds[i];
       if (recordId) {
         recordIds.push(recordId);
       }
@@ -545,7 +545,7 @@ class Records extends Component {
   };
 
   selectAllRecords = () => {
-    const { row_ids, isGroupView } = this.props;
+    const { recordIds, isGroupView } = this.props;
     const { recordMetrics } = this.state;
     let updatedRecordMetrics = { ...recordMetrics };
     let selectedRowIds = [];
@@ -563,7 +563,7 @@ class Records extends Component {
         selectedRowIds.push(groupRow.rowId);
       });
     } else {
-      selectedRowIds = row_ids;
+      selectedRowIds = recordIds;
     }
     RecordMetrics.selectRecordsById(selectedRowIds, updatedRecordMetrics);
     this.setState({
@@ -758,7 +758,6 @@ Records.propTypes = {
   groupOffsetLeft: PropTypes.number,
   gridUtils: PropTypes.object,
   recordIds: PropTypes.array,
-  row_ids: PropTypes.array,
   recordsCount: PropTypes.number,
   groups: PropTypes.array,
   groupbys: PropTypes.array,
