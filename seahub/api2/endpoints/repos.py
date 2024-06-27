@@ -33,8 +33,6 @@ from seaserv import seafile_api
 logger = logging.getLogger(__name__)
 
 
-
-
 class ReposView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
