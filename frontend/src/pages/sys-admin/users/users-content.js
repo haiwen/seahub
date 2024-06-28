@@ -389,6 +389,7 @@ class Item extends Component {
 
   render() {
     const { item, isAdmin } = this.props;
+    if (!item) return null;
     const {
       highlight,
       isOpIconShown,

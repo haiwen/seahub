@@ -5,7 +5,7 @@ import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   email: PropTypes.string,
-  name: PropTypes.string.isRequired
+  name: PropTypes.string,
 };
 
 class UserLink extends Component {

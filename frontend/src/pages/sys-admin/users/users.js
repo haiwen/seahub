@@ -164,11 +164,14 @@ class Users extends Component {
     const { perPage, sortBy, sortOrder } = this.state;
     const { isLDAPImported } = this.props;
     seafileAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder).then(res => {
-      let users = res.data.data.map(user => {return new SysAdminUser(user);});
+      const { data = [], total_count = 0 } = res.data || {};
+      let users = data.map(user => {
+        return new SysAdminUser(user);
+      });
       this.setState({
         userList: users,
         loading: false,
-        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
+        hasNextPage: Utils.hasNextPage(page, perPage, total_count),
         currentPage: page
       });
     }).catch((error) => {
