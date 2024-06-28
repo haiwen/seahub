@@ -97,7 +97,7 @@ class OrgUsers extends Component {
     topbarChildren = (
       <Fragment>
         <button className={topBtn} title={gettext('Add admin')} onClick={this.toggleAddOrgAdmin}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add admin')}
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add admin')}
         </button>
         {this.state.isShowAddOrgAdminDialog &&
         <ModalPortal>

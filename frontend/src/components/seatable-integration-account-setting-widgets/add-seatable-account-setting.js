@@ -148,7 +148,7 @@ class AddSeatableAccountSetting extends Component {
               <InputGroup>
                 <Input value={seatable_api_token} type={passwordType} onChange={this.onChangeSeatableApiToken}/>
                 <InputGroupText>
-                  <i className={`fas ${passwordType === 'password' ? 'fa-eye-slash' : 'fa-eye'} cursor-pointer`} onClick={this.togglePasswordShow} />
+                  <i className={`sf3-font sf3-font-eye${passwordType === 'password' ? '-slash' : ''} cursor-pointer`} onClick={this.togglePasswordShow} />
                 </InputGroupText>
               </InputGroup>
             </FormGroup>

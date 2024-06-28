@@ -178,25 +178,25 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.type === 'dir') {
-      icon = <i className="far fa-folder"></i>;
+      icon = <i className="sf3-font sf3-font-folder"></i>;
       type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="far fa-file"></i>;
+        icon = <i className="sf3-font sf3-font-file"></i>;
         type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
-          icon = <i className="far fa-image"></i>;
+          icon = <i className="sf3-font sf3-font-image"></i>;
           type = 'image';
         }
         else if (suffix === '.md' || suffix === '.markdown') {
-          icon = <i className="far fa-file-alt"></i>;
+          icon = <i className="sf3-font sf3-font-files2"></i>;
           type = 'file';
         }
         else {
-          icon = <i className="far fa-file"></i>;
+          icon = <i className="sf3-font sf3-font-file"></i>;
           type = 'file';
         }
       }
@@ -318,7 +318,7 @@ class TreeNodeView extends React.Component {
               {((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
                 <ItemDropdownMenu
                   item={this.props.node}
-                  toggleClass={'fas fa-ellipsis-v'}
+                  toggleClass={'sf3-font sf3-font-more-vertical'}
                   getMenuList={this.calculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}

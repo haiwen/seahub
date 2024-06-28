@@ -56,7 +56,7 @@ class Paginator extends Component {
           disabled={currentPage == 1}
           onClick={this.goToPrevious}
         >
-          <span className="fas fa-chevron-left"></span>
+          <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
         </button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
         <button
@@ -64,7 +64,7 @@ class Paginator extends Component {
           disabled={!this.props.hasNextPage}
           onClick={this.goToNext}
         >
-          <span className="fas fa-chevron-right"></span>
+          <span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
         </button>
 
         <select

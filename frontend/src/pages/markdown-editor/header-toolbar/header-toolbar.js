@@ -79,14 +79,14 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 <ButtonItem
                   text={gettext('Open parent directory')}
-                  id={'parentDirectory'}
-                  icon={'fa fa-folder-open'}
+                  id='parentDirectory'
+                  icon='sf3-font sf3-font-folder-open'
                   onMouseDown={this.openParentDirectory}
                 />
                 {(canLockUnlockFile && !isLocked) && (
                   <ButtonItem
                     id="lock-unlock-file"
-                    icon='fa fa-lock'
+                    icon='sf3-font sf3-font-lock'
                     text={gettext('Lock')}
                     onMouseDown={this.props.toggleLockFile}
                   />
@@ -94,31 +94,31 @@ class HeaderToolbar extends React.Component {
                 {(canLockUnlockFile && lockedByMe) && (
                   <ButtonItem
                     id="lock-unlock-file"
-                    icon='fa fa-unlock'
+                    icon='sf3-font sf3-font-unlock'
                     text={gettext('Unlock')}
                     onMouseDown={this.props.toggleLockFile}
                   />
                 )}
                 {canGenerateShareLink && (
                   <ButtonItem
-                    id={'shareBtn'}
+                    id='shareBtn'
                     text={gettext('Share')}
-                    icon={'fa fa-share-alt'}
+                    icon='sf3-font sf3-font-share'
                     onMouseDown={this.props.toggleShareLinkDialog}
                   />
                 )}
                 {saving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/>
+                    <i className='sf3-font sf3-font-spinner'/>
                   </button>
                   :
-                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'} disabled={!contentChanged}
+                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon='sf3-font sf3-font-save' disabled={!contentChanged}
                     onMouseDown={this.props.onSaveEditorContent} isActive={contentChanged}/>
                 }
                 {canDownloadFile && (
                   <ButtonItem
                     id="download-file"
-                    icon="fa fa-download"
+                    icon="sf3-font sf3-font-download1"
                     text={gettext('Download')}
                     onClick={this.downloadFile}
                   />
@@ -153,9 +153,9 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/></button>
+                    <i className='sf3-font sf3-font-spinner'/></button>
                   :
-                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
+                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon='sf3-font sf3-font-save'  disabled={!contentChanged}
                     onMouseDown={this.props.onSaveEditorContent} isActive={contentChanged}/>
                 }
               </ButtonGroup>
@@ -193,10 +193,10 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/>
+                    <i className='sf3-font sf3-font-spinner'/>
                   </button>
                   :
-                  <ButtonItem id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={this.props.onSaveEditorContent} disabled={!contentChanged} isActive={contentChanged} />
+                  <ButtonItem id={'saveButton'} text={gettext('Save')} icon='sf3-font sf3-font-save' onMouseDown={this.props.onSaveEditorContent} disabled={!contentChanged} isActive={contentChanged} />
                 }
               </ButtonGroup>
               <MoreMenu
@@ -215,12 +215,12 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/></button>
+                    <i className='sf3-font sf3-font-spinner'/></button>
                   :
                   <ButtonItem
                     id={'saveButton'}
                     text={gettext('Save')}
-                    icon={'fa fa-save'}
+                    icon='sf3-font sf3-font-save'
                     onMouseDown={this.props.onSaveEditorContent}
                     disabled={!contentChanged}
                     isActive={contentChanged}

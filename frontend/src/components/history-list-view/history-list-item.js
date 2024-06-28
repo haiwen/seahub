@@ -93,7 +93,7 @@ class HistoryListItem extends React.Component {
           <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
             <DropdownToggle
               tag='a'
-              className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
+              className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
               data-toggle="dropdown"
               aria-expanded={this.state.isMenuShow}
               title={gettext('More operations')}

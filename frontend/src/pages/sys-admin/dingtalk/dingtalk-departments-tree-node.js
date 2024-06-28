@@ -116,7 +116,7 @@ class DingtalkDepartmentsTreeNode extends Component {
             >
               <DropdownToggle
                 tag='i'
-                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
+                className='sf3-font sf3-font-more-vertical cursor-pointer attr-action-icon'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"

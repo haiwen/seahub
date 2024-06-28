@@ -59,7 +59,7 @@ export default function UserInfo() {
           {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
           <span
             title={gettext('Edit')}
-            className="fa fa-pencil-alt attr-action-icon"
+            className="sf3-font sf3-font-rename attr-action-icon"
             onClick={toggleSetQuotaDialog}>
           </span>
         </dd>

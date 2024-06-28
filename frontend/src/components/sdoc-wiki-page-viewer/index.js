@@ -124,13 +124,15 @@ class SdocWikiPageViewer extends React.Component {
     const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
-    const contentClassName = `wiki-page-content ${!isWiki ?  + 'w-100' : ''}`;
+    const contentClassName = `wiki-page-content ${isWiki ? '' : 'w-100'}`;
     return (
       <div ref={this.scrollRef} className={containerClass}>
         <div className={contentClassName}>
           {this.props.children}
           {this.renderMarkdown()}
-          <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          <p id="wiki-page-last-modified">
+            {gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span>
+          </p>
         </div>
       </div>
     );

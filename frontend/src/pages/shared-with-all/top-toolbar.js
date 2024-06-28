@@ -81,7 +81,7 @@ class TopToolbar extends React.Component {
             <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
               <MediaQuery query="(min-width: 768px)">
                 <DropdownToggle className='btn btn-secondary operation-item'>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
+                  <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add Library')}
                 </DropdownToggle>
               </MediaQuery>
               <MediaQuery query="(max-width: 767.8px)">

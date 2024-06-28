@@ -90,11 +90,11 @@ class FileToolbar extends React.Component {
       if (!isLocked) {
         showLockUnlockBtn = true;
         lockUnlockText = gettext('Lock');
-        lockUnlockIcon = 'fa fa-lock';
+        lockUnlockIcon = 'sf3-font sf3-font-lock';
       } else if (lockedByMe) {
         showLockUnlockBtn = true;
         lockUnlockText = gettext('Unlock');
-        lockUnlockIcon = 'fa fa-unlock';
+        lockUnlockIcon = 'sf3-font sf3-font-unlock';
       }
     }
 
@@ -117,13 +117,13 @@ class FileToolbar extends React.Component {
           {fileType == 'PDF' && (
             <IconButton
               id="seafile-pdf-print"
-              icon="fa fa-print"
+              icon="sf3-font sf3-font-print"
               text={gettext('Print')}
             />
           )}
           <IconButton
             id="open-parent-folder"
-            icon="fa fa-folder-open"
+            icon="sf3-font sf3-font-folder-open"
             text={gettext('Open parent folder')}
             tag="a"
             href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
@@ -139,35 +139,34 @@ class FileToolbar extends React.Component {
           {showShareBtn && (
             <IconButton
               id="share-file"
-              icon='fa fa-share-alt'
+              icon='sf3-font sf3-font-share'
               text={gettext('Share')}
               onClick={this.toggleShareDialog}
             />
           )}
 
           {(canEditFile && fileType != 'SDoc' && !err) &&
-            ( this.props.isSaving ?
-              <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                <i className={'fa fa-spin fa-spinner'}/></button> :
-              (
-                this.props.needSave ?
-                  <IconButton
-                    text={gettext('Save')}
-                    id={'saveButton'}
-                    icon={'fa fa-save'}
-                    // button imported in this file does not have functionalities of
-                    // isActive as button imported in markdowneditor has
-                    //isActive={!isContentChanged}
-                    onClick={this.props.onSave}
-                  /> :
-                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
-                    <i className={'fa fa-save'}/></button>
-              )
-            )}
+            (this.props.isSaving ?
+              <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
+                <i className='sf3-font sf3-font-spinner'/>
+              </button>
+              :
+              (this.props.needSave ?
+                <IconButton
+                  text={gettext('Save')}
+                  id={'saveButton'}
+                  icon='sf3-font sf3-font-save'
+                  onClick={this.props.onSave}
+                />
+                :
+                <button type='button' className='btn btn-icon btn-secondary btn-active' disabled>
+                  <i className='sf3-font sf3-font-save'/>
+                </button>
+              ))}
           {canDownloadFile && (
             <IconButton
               id="download-file"
-              icon="fa fa-download"
+              icon="sf3-font sf3-font-download1"
               text={gettext('Download')}
               tag="a"
               href="?dl=1"
@@ -175,7 +174,7 @@ class FileToolbar extends React.Component {
           )}
           <IconButton
             id="file-details"
-            icon='fas fa-info'
+            icon='sf3-font sf3-font-info1'
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
@@ -189,8 +188,8 @@ class FileToolbar extends React.Component {
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle aria-label={gettext('More operations')}>
-              <span className="fas fa-ellipsis-v"></span>
+            <DropdownToggle className="file-toolbar-more-operations" aria-label={gettext('More operations')}>
+              <span className="sf3-font sf3-font-more-vertical"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
               {filePerm == 'rw' && (
@@ -206,23 +205,22 @@ class FileToolbar extends React.Component {
           <ButtonGroup >
             {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?
-                  <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className={'fa fa-spin fa-spinner'}/></button> :
-                  (
-                    this.props.needSave ?
-                      <IconButton
-                        text={gettext('Save')}
-                        id={'saveButton'}
-                        icon={'fa fa-save'}
-                        // button imported in this file does not have functionalities of
-                        // isActive as button imported in markdowneditor has
-                        //isActive={!isContentChanged}
-                        onClick={this.props.onSave}
-                      /> :
-                      <button type={'button'} className={'btn btn-icon btn-secondary btn-active'} disabled>
-                        <i className={'fa fa-save'}/></button>
-                  )
-                )}
+                  <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
+                    <i className='sf3-font sf3-font-spinner'/>
+                  </button>
+                  :
+                  (this.props.needSave ?
+                    <IconButton
+                      text={gettext('Save')}
+                      id={'saveButton'}
+                      icon='sf3-font sf3-font-save'
+                      onClick={this.props.onSave}
+                    />
+                    :
+                    <button type='button' className={'btn btn-icon btn-secondary btn-active'} disabled>
+                      <i className={'sf3-font sf3-font-save'}/>
+                    </button>
+                  ))}
           </ButtonGroup>
 
           <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More operations')}></DropdownToggle>

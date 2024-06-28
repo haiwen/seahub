@@ -299,7 +299,14 @@ class GenerateUploadLink extends React.Component {
                 <dd className="d-flex">
                   <div className="d-flex align-items-center">
                     <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedUploadInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedUploadInfo.password.length, 10)} />
-                    <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                    <span
+                      tabIndex="0"
+                      role="button"
+                      aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
+                      onKeyDown={this.onIconKeyDown}
+                      onClick={this.toggleStoredPasswordVisible}
+                      className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}
+                    ></span>
                   </div>
                 </dd>
               </FormGroup>
@@ -316,7 +323,7 @@ class GenerateUploadLink extends React.Component {
                         role="button"
                         aria-label={gettext('Edit')}
                         title={gettext('Edit')}
-                        className="fa fa-pencil-alt attr-action-icon"
+                        className="sf3-font sf3-font-rename attr-action-icon"
                         onClick={this.editExpirationToggle}>
                       </a>
                     )}
@@ -381,8 +388,12 @@ class GenerateUploadLink extends React.Component {
               <InputGroup style={{width: inputWidth}}>
                 <Input id="passwd" type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword} />
                 <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                  <Button onClick={this.togglePasswordVisible}>
+                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.passwordVisible ? '': '-slash'}`}></i>
+                  </Button>
+                  <Button onClick={this.generatePassword}>
+                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  </Button>
                 </InputGroupAddon>
               </InputGroup>
             </FormGroup>

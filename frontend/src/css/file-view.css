@@ -1,42 +1,56 @@
 body {
   overflow: hidden;
 }
+
 #wrapper {
   height: 100%;
 }
+
 .file-view-header {
   padding: 4px 10px;
   background: #fff;
   border-bottom: 1px solid #c9c9c9;
   flex-shrink: 0;
 }
+
+.file-view-header .file-toolbar-more-operations {
+  height: 38px;
+  padding: 0;
+}
+
 .file-title {
   font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.5;
   margin-bottom: 0;
 }
+
 .file-star {
   font-size: .875rem;
   color: #999; 
   margin-left: .5rem;
 }
+
 .file-star:hover,
 .file-star:focus {
   text-decoration: none;
   color: #999;
 }
+
 .file-locked-icon {
   margin-left: .5rem;
 }
+
 .meta-info {
   font-size: .8125rem;
 }
+
 .file-view-content {
   padding: 30px 0;
   background: #f4f4f4;
   border-right: 4px solid transparent;
 }
+
 .tip {
   color: #808080;
 }
@@ -51,6 +65,7 @@ body {
   animation: move .5s ease-in-out 1;
   z-index: 50;
 }
+
 @keyframes move {
   from {
     right: -500px;
@@ -61,10 +76,12 @@ body {
     opacity: 1;
   }
 }
- /* for mobile */
+
+/* for mobile */
 .file-view-body .seafile-comment {
   width: 100%;
 }
+
 @media (min-width: 768px) {
   .file-view-body .seafile-comment {
     width: 300px;

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -59,11 +59,9 @@ class DirColumnFile extends React.Component {
         repoID={this.props.repoID}
         path={this.props.path}
       >
-        <Fragment>
-          <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
-            <i className="fas fa-expand-arrows-alt"></i>
-          </span>
-        </Fragment>
+        <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
+          <i className="sf3-font sf3-font-expand-arrows-alt"></i>
+        </span>
       </SeafileMarkdownViewer>
     );
   }

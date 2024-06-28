@@ -26,7 +26,7 @@ class Content extends Component {
     return (
       <span
         title={gettext('Edit')}
-        className="fa fa-pencil-alt attr-action-icon"
+        className="sf3-font sf3-font-rename attr-action-icon"
         onClick={action}>
       </span>
     );

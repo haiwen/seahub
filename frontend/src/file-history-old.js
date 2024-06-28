@@ -232,7 +232,7 @@ class FileHistory extends React.Component {
           <div className="old-history-main">
             <Fragment>
               <a href="#" className="go-back" title="Back" onClick={this.goBack}>
-                <span className="fas fa-chevron-left"></span>
+                <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
             </Fragment>

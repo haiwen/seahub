@@ -59,7 +59,7 @@ class OrgUsersList extends React.Component {
     let sortIcon;
     if (sortBy == '') {
       // initial sort icon
-      sortIcon = <span className="fas fa-sort"></span>;
+      sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
     } else {
       sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
     }

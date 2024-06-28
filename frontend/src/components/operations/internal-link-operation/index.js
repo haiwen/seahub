@@ -28,7 +28,7 @@ class InternalLinkOperation extends React.Component {
     return (
       <Fragment>
         <span className='dialog-operation'>
-          <i className="file-internal-link fa fa-link" title={title} aria-label={title} onClick={this.onInternalLinkDialogToggle}/>
+          <i className="file-internal-link sf3-font sf3-font-link" title={title} aria-label={title} onClick={this.onInternalLinkDialogToggle}/>
         </span>
         {isShowInternalLinkDialog && (
           <InternalLinkDialog

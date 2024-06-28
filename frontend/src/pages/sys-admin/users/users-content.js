@@ -76,7 +76,7 @@ class Content extends Component {
       let sortIcon;
       if (sortBy == '') {
         // initial sort icon
-        sortIcon = <span className="fas fa-sort"></span>;
+        sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       } else {
         sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       }
@@ -536,7 +536,7 @@ class Item extends Component {
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
             <span
               title={gettext('Edit')}
-              className={`fa fa-pencil-alt attr-action-icon ${isOpIconShown ? '' : 'invisible'}`}
+              className={`sf3-font sf3-font-rename attr-action-icon ${isOpIconShown ? '' : 'invisible'}`}
               onClick={this.toggleSetQuotaDialog}>
             </span>
           </td>

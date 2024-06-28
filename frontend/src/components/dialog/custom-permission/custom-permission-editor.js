@@ -119,7 +119,7 @@ class CustomPermissionEditor extends React.Component {
         <div className="permission-header">
           <div className="d-flex align-items-center">
             <OpIcon
-              className="fa fa-arrow-left back-icon"
+              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon"
               op={this.props.onChangeMode}
               title={gettext('Back')}
             />
@@ -167,7 +167,7 @@ class CustomPermissionEditor extends React.Component {
                   <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
-                    <span id="modify-tip" className="fa fa-question-circle ml-2" style={{color: '#999'}}></span>
+                    <span id="modify-tip" className="sf3-font sf3-font-tips ml-2" style={{color: '#999'}}></span>
                     <Tooltip
                       toggle={this.toggle}
                       delay={{show: 0, hide: 0}}

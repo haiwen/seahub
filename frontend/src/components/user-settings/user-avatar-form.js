@@ -94,7 +94,7 @@ class UserAvatarForm extends React.Component {
         <div className="col-auto position-relative" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver} tabIndex="0">
           <img src={this.state.avatarSrc} width="80" height="80" alt="" className="user-avatar" />
           <input type="file" name="avatar" className="d-none" onChange={this.fileInputChange} ref={this.fileInput} />
-          <span className={`avatar-edit fas fa-edit ${!this.state.isEditShown && 'd-none'}`} onClick={this.openFileInput} role="button" aria-label={gettext('Edit')} tabIndex="0" onKeyDown={this.onEditIconKeyDown}></span>
+          <span className={`avatar-edit sf3-font sf3-font-rename ${!this.state.isEditShown && 'd-none'}`} onClick={this.openFileInput} role="button" aria-label={gettext('Edit')} tabIndex="0" onKeyDown={this.onEditIconKeyDown}></span>
         </div>
       </form>
     );

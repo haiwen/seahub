@@ -256,7 +256,7 @@ class LinkCreation extends React.Component {
       <Fragment>
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
-            <button className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
+            <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
             {type == 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}</h6>
         </div>
         <Form className="pt-4">
@@ -286,8 +286,12 @@ class LinkCreation extends React.Component {
                   <InputGroup style={{width: inputWidth}}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
                     <InputGroupAddon addonType="append">
-                      <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                      <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                      <Button onClick={this.togglePasswordVisible}>
+                        <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '': '-slash'}`}></i>
+                      </Button>
+                      <Button onClick={this.generatePassword}>
+                        <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                      </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>

@@ -70,7 +70,7 @@ class CreateTagDialog extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          <span className="tag-dialog-back sf3-font sf3-font-arrow rotate-180 d-inline-block" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('New Tag')}
         </ModalHeader>
         <ModalBody>

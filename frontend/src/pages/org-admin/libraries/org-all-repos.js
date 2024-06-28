@@ -64,7 +64,7 @@ class Content extends Component {
           <h2>{gettext('No libraries')}</h2>
         </EmptyTip>
       );
-      const initialSortIcon = <span className="fas fa-sort"></span>;
+      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       const sortIcon = <span className="sf3-font sf3-font-down"></span>;
       const table = (
         <Fragment>
@@ -256,7 +256,7 @@ class RepoItem extends React.Component {
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
                 tag="a"
-                className="attr-action-icon fas fa-ellipsis-v"
+                className="attr-action-icon sf3-font sf3-font-more-vertical"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"

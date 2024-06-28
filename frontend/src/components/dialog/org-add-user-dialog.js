@@ -146,8 +146,12 @@ class AddOrgUserDialog extends React.Component {
               <InputGroup className="passwd">
                 <Input id="userPwd" innerRef={input => {this.passwdInput = input;}} value={this.state.password || ''} onChange={this.inputPassword} />
                 <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye-slash' : 'fa-eye'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                  <Button onClick={this.togglePasswordVisible}>
+                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '-slash' : ''}`}></i>
+                  </Button>
+                  <Button onClick={this.generatePassword}>
+                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  </Button>
                 </InputGroupAddon>
               </InputGroup>
             </FormGroup>

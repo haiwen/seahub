@@ -312,7 +312,8 @@ img[src=""],img:not([src]) { /* for first loading img*/
   padding: 0 1rem;
 }
 
-.cur-view-container .fa-star.fas {
+.cur-view-container .sf3-font-star-empty.sf3-font,
+.cur-view-container .sf3-font-star.sf3-font {
   color: #999;
 }
 

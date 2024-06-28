@@ -6,7 +6,7 @@ function CommonAddTool(props) {
   const { callBack, footerName, className, addIconClassName } = props;
   return (
     <div className={`add-item-btn ${className ? className : ''}`} onClick={(e) => {callBack(e);}}>
-      <span className={`fas fa-plus mr-2 ${addIconClassName || ''}`}></span>
+      <span className={`sf3-font sf3-font-enlarge mr-2 ${addIconClassName || ''}`}></span>
       <span className='add-new-option' title={footerName}>{footerName}</span>
     </div>
   );

@@ -10,7 +10,7 @@ class MenuControl extends React.Component {
 
   render() {
     return (
-      <i className={`fas fa-ellipsis-v ${this.props.isShow ? '' : 'invisible'}`} onClick={this.props.onClick}></i>
+      <i className={`sf3-font sf3-font-more-vertical ${this.props.isShow ? '' : 'invisible'}`} onClick={this.props.onClick}></i>
     );
   }
 }

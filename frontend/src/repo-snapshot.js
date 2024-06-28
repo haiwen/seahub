@@ -148,7 +148,7 @@ class RepoSnapshot extends React.Component {
                   <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
-                  <span className="fas fa-chevron-left"></span>
+                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">

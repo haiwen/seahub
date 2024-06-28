@@ -278,7 +278,7 @@ class SdocFileHistory extends React.Component {
             id="sdoc-file-changes-last"
             onClick={this.lastChange}
           >
-            <span className="fas fa-chevron-up"></span>
+            <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
           </div>
           <div className="sdoc-file-changes-divider"></div>
           <div
@@ -286,7 +286,7 @@ class SdocFileHistory extends React.Component {
             id="sdoc-file-changes-next"
             onClick={this.nextChange}
           >
-            <span className="fas fa-chevron-down"></span>
+            <span className="sf3-font sf3-font-down"></span>
           </div>
           <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last" delay={0} fade={false}>
             {gettext('Last modification')}

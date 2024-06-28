@@ -274,7 +274,7 @@ class ViewItem extends Component {
                         }
                       </div>
                       <div className="ml-2" onClick={this.toggleInsertPage}>
-                        <span className='fas fa-plus'></span>
+                        <span className='sf3-font sf3-font-enlarge'></span>
                       </div>
                     </>
                   }

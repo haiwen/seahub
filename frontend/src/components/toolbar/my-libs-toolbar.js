@@ -54,7 +54,7 @@ class MyLibsToolbar extends React.Component {
         {Utils.isDesktop() ? (
           <div className="operation">
             <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateToggle}>
-              <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+              <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
             </button>
             {moreShown &&
               <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>

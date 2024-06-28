@@ -52,7 +52,7 @@ class FileHistory extends React.Component {
           <div className="history-header file-history-header flex-shrink-0">
             <div className="title d-flex mw-100">
               <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
-                <span className="fas fa-chevron-left"></span>
+                <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
               </a>
               <span className="name text-truncate" title={fileName}>{fileName}</span>
             </div>

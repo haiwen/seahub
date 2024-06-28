@@ -66,10 +66,10 @@ class FileContent extends React.Component {
     return (
       <div className="file-view-content flex-1 image-file-view">
         {previousImage && (
-          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="fas fa-chevron-left"></span></a>
+          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span></a>
         )}
         {nextImage && (
-          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
+          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
         )}
         <img src={xmindSrc || thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} />
       </div>
