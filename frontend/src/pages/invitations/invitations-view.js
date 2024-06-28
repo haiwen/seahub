@@ -5,7 +5,7 @@ import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
 import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import Loading from '../../components/loading';
@@ -159,7 +159,6 @@ class Item extends React.Component {
 }
 
 const ItemPropTypes = {
-  data: PropTypes.object.isRequired,
   invitation: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
 };
@@ -271,15 +270,15 @@ class InvitationsView extends React.Component {
   render() {
     return (
       <Fragment>
-        <InvitationsToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-          toggleInvitePeopleDialog={this.toggleInvitePeopleDialog}
-        />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
+              <h3 className="sf-heading">
+                {gettext('Invite Guest')}
+                <SingleDropdownToolbar
+                  opList={[{'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog}]}
+                />
+              </h3>
             </div>
             <div className="cur-view-content">
               <Content data={this.state} />

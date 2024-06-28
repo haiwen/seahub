@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -16,6 +16,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import TopToolbar from '../../components/toolbar/top-toolbar';
 import Selector from '../../components/single-selector';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -543,15 +544,18 @@ class ShareAdminShareLinks extends Component {
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
         >
-
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidShareLinksDialog}>{gettext('Clean invalid share links')}</Button>
         </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
               <ul className="nav">
                 <li className="nav-item">
-                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
+                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
+                    {gettext('Share Links')}
+                    <SingleDropdownToolbar
+                      opList={[{'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog}]}
+                    />
+                  </Link>
                 </li>
                 {canGenerateUploadLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>

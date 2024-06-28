@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -13,6 +13,7 @@ import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import TopToolbar from '../../components/toolbar/top-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -275,9 +276,7 @@ class ShareAdminUploadLinks extends Component {
         <TopToolbar
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
-        >
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidUploadLinksDialog}>{gettext('Clean invalid upload links')}</Button>
-        </TopToolbar>
+        />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -285,7 +284,14 @@ class ShareAdminUploadLinks extends Component {
                 {canGenerateShareLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
                 )}
-                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
+                <li className="nav-item">
+                  <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
+                    {gettext('Upload Links')}
+                    <SingleDropdownToolbar
+                      opList={[{'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog}]}
+                    />
+                  </Link>
+                </li>
               </ul>
             </div>
             <div className="cur-view-content">

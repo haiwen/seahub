@@ -6,6 +6,7 @@ import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
+import Header from './components/header';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';
@@ -42,6 +43,7 @@ const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
 const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
 const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
 const OCMViaWebdavWrapper = MainContentWrapper(OCMViaWebdav);
+const InvitationsViewWrapper = MainContentWrapper(InvitationsView);
 const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 
@@ -50,8 +52,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
       isSidePanelClosed: false,
+      isSidePanelFolded: localStorage.getItem('sf_user_side_nav_folded') == 'true' || false,
       currentTab: '',
       pathPrefix: [],
     };
@@ -203,14 +205,36 @@ class App extends Component {
     });
   };
 
+  toggleFoldSideNav = () => {
+    this.setState({
+      isSidePanelFolded: !this.state.isSidePanelFolded
+    }, () => {
+      localStorage.setItem('sf_user_side_nav_folded', this.state.isSidePanelFolded);
+    });
+  };
+
   render() {
-    let { currentTab, isSidePanelClosed } = this.state;
+    const { currentTab, isSidePanelClosed, isSidePanelFolded } = this.state;
 
     return (
       <React.Fragment>
         <SystemNotification />
+        <Header
+          isSidePanelClosed={isSidePanelClosed}
+          onCloseSidePanel={this.onCloseSidePanel}
+          onShowSidePanel={this.onShowSidePanel}
+          onSearchedClick={this.onSearchedClick}
+        />
         <div id="main">
-          <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
+          <SidePanel
+            isSidePanelClosed={isSidePanelClosed}
+            isSidePanelFolded={isSidePanelFolded}
+            onCloseSidePanel={this.onCloseSidePanel}
+            currentTab={currentTab}
+            tabItemClick={this.tabItemClick}
+            showLogoOnlyInMobile={true}
+            toggleFoldSideNav={this.toggleFoldSideNav}
+          />
           <MainPanel>
             <Router className="reach-router">
               <Libraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
@@ -239,7 +263,7 @@ class App extends Component {
               />
               <Wikis path={siteRoot + 'published'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
-              <InvitationsView path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <InvitationsViewWrapper path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             </Router>
           </MainPanel>
           <MediaQuery query="(max-width: 767.8px)">

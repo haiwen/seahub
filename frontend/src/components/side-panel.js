@@ -8,22 +8,29 @@ const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onCloseSidePanel: PropTypes.func,
   tabItemClick: PropTypes.func,
-  children: PropTypes.object
+  children: PropTypes.object,
+  showLogoOnlyInMobile: PropTypes.bool,
+  isSidePanelFolded: PropTypes.bool,
+  toggleFoldSideNav: PropTypes.func
 };
 
 class SidePanel extends React.Component {
 
   render() {
-    const { children } = this.props;
+    const { children, isSidePanelFolded, showLogoOnlyInMobile = false } = this.props;
     return (
-      <div className={`side-panel ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
-        <div className="side-panel-north">
-          <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
+      <div className={`side-panel ${isSidePanelFolded ? 'side-panel-folded' : ''} ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
+        <div className={`side-panel-north ${showLogoOnlyInMobile ? 'd-md-none' : ''}`}>
+          <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
         </div>
         <div className="side-panel-center">
-          {children ?
-            children :
-            <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} />
+          {children ? children :
+            <MainSideNav
+              tabItemClick={this.props.tabItemClick}
+              currentTab={this.props.currentTab}
+              isSidePanelFolded={isSidePanelFolded}
+              toggleFoldSideNav={this.props.toggleFoldSideNav}
+            />
           }
         </div>
       </div>

@@ -108,10 +108,10 @@ class ShareRepoDialog extends React.Component {
     }
 
     this.props.onRepoSelectedHandler(this.state.selectedRepoList);
-    this.onCloseDialog();
+    this.toggle();
   };
 
-  onCloseDialog = () => {
+  toggle = () => {
     this.props.onShareRepoDialogClose();
   };
 
@@ -146,7 +146,7 @@ class ShareRepoDialog extends React.Component {
         </ModalBody>
         {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         <ModalFooter>
-          <Button color="secondary" onClick={this.onCloseDialog}>{gettext('Close')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
