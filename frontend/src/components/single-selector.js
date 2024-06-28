@@ -5,7 +5,7 @@ import '../css/single-selector.css';
 
 const propTypes = {
   isDropdownToggleShown: PropTypes.bool.isRequired,
-  currentSelectedOption: PropTypes.object.isRequired,
+  currentSelectedOption: PropTypes.object,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,
   operationBeforeSelect: PropTypes.func,
@@ -67,7 +67,7 @@ class Selector extends Component {
     return (
       <div className="sf-single-selector position-relative">
         <span className="cur-option" onClick={this.onToggleClick}>
-          {currentSelectedOption.text}
+          {currentSelectedOption ? currentSelectedOption.text : ''}
           {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
         </span>
         {isPopoverOpen && (
