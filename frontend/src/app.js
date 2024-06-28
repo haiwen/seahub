@@ -6,6 +6,7 @@ import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
+import SystemUserNotification from "./components/system-user-notification";
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';
@@ -209,6 +210,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <SystemNotification />
+        <SystemUserNotification />
         <div id="main">
           <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} />
           <MainPanel>
