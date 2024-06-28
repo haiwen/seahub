@@ -59,13 +59,7 @@ class UserItem extends React.Component {
     const { email, name } = this.props.user;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
     seafileAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
-      let msg;
-      msg = gettext('Successfully reset password to %(passwd)s for user %(user)s.');
-      msg = msg.replace('%(passwd)s', res.data.new_password);
-      msg = msg.replace('%(user)s', name);
-      toaster.success(msg, {
-        duration: 15
-      });
+      toaster.success(res.data.reset_tip);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
