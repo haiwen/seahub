@@ -1,34 +1,60 @@
 import requests, jwt, time
 from seahub.settings import METADATA_SERVER_URL, METADATA_SERVER_SECRET_KEY
 
-class structure_table(object):
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
 
-class structure_column(object):
-    def __init__(self, key, name, type):
-        self.key = key
-        self.name = name
-        self.type = type
+def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, page=None, per_page=25, order_by=None):
+    from seafevents.repo_metadata.metadata_server_api import METADATA_TABLE, METADATA_COLUMN_ID, \
+        METADATA_COLUMN_CREATOR, METADATA_COLUMN_CREATED_TIME, METADATA_COLUMN_MODIFIER, METADATA_COLUMN_MODIFIED_TIME, \
+        METADATA_COLUMN_PARENT_DIR, METADATA_COLUMN_NAME, METADATA_COLUMN_IS_DIR
 
-    def to_build_column_dict(self):
-        return {
-            'key': self.key,
-            'name': self.name,
-            'type': self.type
-        }
-    
-#metadata base
-METADATA_TABLE = structure_table('0001', 'Table1')
-METADATA_COLUMN_ID = structure_column('_id', '_id', 'text')
-METADATA_COLUMN_CREATOR = structure_column('_file_creator', '_file_creator', 'text')
-METADATA_COLUMN_CREATED_TIME = structure_column('_file_ctime', '_file_ctime', 'date')
-METADATA_COLUMN_MODIFIER = structure_column('_file_modifier', '_file_modifier', 'text')
-METADATA_COLUMN_MODIFIED_TIME = structure_column('_file_mtime', '_file_mtime', 'date')
-METADATA_COLUMN_PARENT_DIR = structure_column('_parent_dir', '_parent_dir', 'text')
-METADATA_COLUMN_NAME = structure_column('_name', '_name', 'text')
-METADATA_COLUMN_IS_DIR = structure_column('_is_dir', '_is_dir', 'text')
+    sql = f'SELECT \
+        `{METADATA_COLUMN_ID.name}`, \
+        `{METADATA_COLUMN_CREATOR.name}`, \
+        `{METADATA_COLUMN_CREATED_TIME.name}`, \
+        `{METADATA_COLUMN_MODIFIER.name}`, \
+        `{METADATA_COLUMN_MODIFIED_TIME.name}`, \
+        `{METADATA_COLUMN_PARENT_DIR.name}`, \
+        `{METADATA_COLUMN_NAME.name}`, \
+        `{METADATA_COLUMN_IS_DIR.name}` FROM `{METADATA_TABLE.name}`'
+
+    parameters = []
+
+    if parent_dir:
+        sql += f' WHERE `{METADATA_COLUMN_PARENT_DIR.name}` LIKE ?'
+        parameters.append(parent_dir)
+        if name:
+            sql += f' AND `{METADATA_COLUMN_NAME.name}` LIKE ?'
+            parameters.append(name)
+
+        if is_dir:
+            sql += f' AND `{METADATA_COLUMN_IS_DIR.name}` LIKE ?'
+            parameters.append(str(is_dir))
+    elif name:
+        sql += f' WHERE `{METADATA_COLUMN_NAME.name}` LIKE ?'
+        parameters.append(name)
+
+        if is_dir:
+            sql += f' AND `{METADATA_COLUMN_IS_DIR.name}` LIKE ?'
+            parameters.append(str(is_dir))
+    elif is_dir:
+        sql += f' WHERE `{METADATA_COLUMN_IS_DIR.name}` LIKE ?'
+        parameters.append(str(is_dir))
+
+    sql += f' ORDER BY {order_by}' if order_by else \
+        f' ORDER BY \
+            `{METADATA_COLUMN_PARENT_DIR.name}` ASC, \
+            `{METADATA_COLUMN_IS_DIR.name}` DESC, \
+            `{METADATA_COLUMN_NAME.name}` ASC'
+
+    if page:
+        sql += f' LIMIT {(page - 1) * per_page}, {page * per_page}'
+
+    sql += ';'
+
+    metadata_server_api = MetadataServerAPI(repo_id, user)
+    response_results = metadata_server_api.query_rows(sql, parameters)['results']
+
+    return response_results
 
 
 def parse_response(response):
@@ -39,6 +65,7 @@ def parse_response(response):
             return response.json()
         except:
             pass
+
 
 class MetadataServerAPI:
     def __init__(self, base_id, user, timeout=30):
@@ -67,7 +94,6 @@ class MetadataServerAPI:
         if response.status_code == 404:
             return {'success': True}
         return parse_response(response)
-    
 
     def add_column(self, table_id, column):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'

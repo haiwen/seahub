@@ -207,7 +207,7 @@ from seahub.wiki2.views import wiki_view
 from seahub.repo_metadata.views import view_metadata
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
-from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord
+from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage
 
 
 urlpatterns = [
@@ -1032,6 +1032,5 @@ if settings.ENABLE_METADATA_MANAGEMENT:
     urlpatterns += [
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_-]+)/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record'),
         re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/metadata/table-view/$', view_metadata, name='view_metadata'),
     ]
