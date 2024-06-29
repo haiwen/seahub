@@ -1,0 +1,56 @@
+.sf-metadata-tool {
+  background-color: #fff;
+  border-bottom: 1px solid #e4e4e4;
+  border-top: 1px solid #ddd;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  height: 48px;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: relative;
+  border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.sf-metadata-tool .sf-metadata-tool-left-operations,
+.sf-metadata-tool .sf-metadata-tool-right-operations {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-tool .sf-metadata-tool-left-operations .setting-item {
+  margin-right: 0 !important;
+  margin-left: .5rem;
+}
+
+.sf-metadata-tool .sf-metadata-tool-left-operations .setting-item:first-child {
+  margin-left: 0 !important;
+}
+
+.sf-metadata-tool .custom-filter-label {
+  padding: 0 .5rem;
+}
+
+.sf-metadata-tool .setting-item-btn {
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 3px 4px;
+  width: 100%;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-metadata-tool .setting-item-btn:hover {
+  background-color: #efefef;
+}
+
+.sf-metadata-tool .custom-tool-label .sf-metadata-icon {
+  color: #666;
+  font-size: 14px;
+  margin-right: 8px;
+}

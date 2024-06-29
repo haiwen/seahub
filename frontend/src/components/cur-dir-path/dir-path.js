@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import { InternalLinkOperation } from '../operations';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -62,6 +63,15 @@ class DirPath extends React.Component {
         return null;
       }
       if (index === (pathList.length - 1)) {
+        if (item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+          return (
+            <Fragment key={index}>
+              <span className="path-split">/</span>
+              <span className="path-item">{gettext('File extended properties')}</span>
+            </Fragment>
+          );
+        }
+
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
@@ -113,6 +123,13 @@ class DirPath extends React.Component {
       }
     });
     return pathElem;
+  };
+
+  isViewMetadata = () => {
+    const { currentPath } = this.props;
+    const path = currentPath[currentPath.length - 1] === '/' ? currentPath.slice(0, currentPath.length - 1) : currentPath;
+    const pathList = path.split('/');
+    return pathList[pathList.length - 1] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
   };
 
   render() {
@@ -172,7 +189,7 @@ class DirPath extends React.Component {
           <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
         }
         {pathElem}
-        {this.props.isViewFile && (
+        {this.props.isViewFile && !this.isViewMetadata() && (
           <InternalLinkOperation repoID={this.props.repoID} path={this.props.currentPath}/>
         )}
         {(this.props.isViewFile && fileTags.length !== 0) &&

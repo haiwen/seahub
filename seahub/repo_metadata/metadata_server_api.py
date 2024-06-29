@@ -50,7 +50,7 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
     sql += ';'
 
     metadata_server_api = MetadataServerAPI(repo_id, user)
-    response_results = metadata_server_api.query_rows(sql, parameters)['results']
+    response_results = metadata_server_api.query_rows(sql, parameters)
 
     return response_results
 

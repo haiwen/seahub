@@ -153,8 +153,8 @@ class MetadataRecords(APIView):
         #args check
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
-        page = request.GET.get('page', '1')
-        per_page = request.GET.get('per_page', '1000')
+        page = request.GET.get('page', 1)
+        per_page = request.GET.get('per_page', 1000)
         is_dir = request.GET.get('is_dir')
         order_by = request.GET.get('order_by')
 
@@ -186,7 +186,7 @@ class MetadataRecords(APIView):
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -209,4 +209,4 @@ class MetadataRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        return Response({'results': results})
+        return Response(results)

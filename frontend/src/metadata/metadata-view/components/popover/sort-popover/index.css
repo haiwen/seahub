@@ -1,0 +1,83 @@
+.sort-popover .popover {
+  max-width: none;
+  min-width: 400px;
+}
+
+.sort-popover .sorts-list {
+  min-height: 120px;
+  max-height: 100%;
+  padding: 15px;
+}
+
+.sort-popover .sorts-list .option-group {
+  overflow: auto;
+  max-height: 360px;
+}
+
+.sort-popover .empty-sorts-container {
+  min-height: 80px;
+  padding: 16px;
+}
+
+.sorts-list .sort-item {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.sort-item .condition {
+  display: flex;
+  flex: 1 1;
+}
+
+.sort-item .condition > div {
+  height: 38px;
+  line-height: 38px;
+}
+
+.sort-item .sort-column {
+  width: 150px;
+}
+
+.sort-item .sort-predicate {
+  width: 130px;
+}
+
+.sorts-list .delete-sort {
+  width: 12px;
+  height: 20px;
+  margin-right: 14px;
+  text-align: center;
+}
+
+.sorts-list .empty-sorts-list {
+  color: #666666;
+}
+
+.delete-sort .sf-metadata-icon-fork-number {
+  display: inline-block;
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+}
+
+.sorts-list .delete-sort .sf-metadata-icon-fork-number:hover {
+  color: #666666;
+}
+
+.sort-popover .popover-add-tool {
+  border-top: none;
+  color: #666666;
+}
+
+.sort-popover .popover-add-tool .popover-add-icon {
+  margin-right: 14px;
+}
+
+.sort-popover .sort-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+}

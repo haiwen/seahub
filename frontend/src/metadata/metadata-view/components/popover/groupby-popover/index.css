@@ -1,0 +1,110 @@
+.groupby-popover .popover {
+  max-width: none;
+  min-width: 400px;
+}
+
+.groupby-popover .groupbys {
+  min-height: 80px;
+  max-height: 300px;
+  padding: 15px;
+}
+
+.groupby-popover .empty-groupbys-container {
+  min-height: 80px;
+  padding: 16px;
+}
+
+.groupby-popover .groupbys .groupby-item {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.groupby-popover .groupby-item .option-group {
+  overflow: auto;
+  max-height: 360px;
+}
+
+.groupby-popover .groupby-item .condition {
+  display: flex;
+  flex: 1 1;
+}
+
+.groupby-popover .groupby-item .condition > div {
+  height: 38px;
+  line-height: 38px;
+}
+
+.groupby-popover .groupby-item .groupby-column {
+  width: 150px;
+}
+
+.groupby-popover .groupby-item .groupby-count-type,
+.groupby-popover .groupby-item .groupby-predicate {
+  width: 130px;
+}
+
+.groupby-popover .groupby-item .sf-metadata-icon-exclamation-triangle {
+  color: rgb(205, 32, 31);
+}
+
+.groupby-popover .column-icon {
+  display: inline-block;
+  padding: 0 0.3125rem;
+  margin-left: -0.3125rem;
+}
+
+.groupby-popover .column-icon .sf-metadata-font {
+  font-size: 14px;
+  color: #aaa;
+  cursor: default;
+}
+
+.groupby-popover .delete-groupby {
+  width: 12px;
+  height: 20px;
+  margin-right: 14px;
+  text-align: center;
+}
+
+.groupby-popover .empty-groupbys {
+  color: #666666;
+}
+
+.groupby-popover .delete-groupby .sf-metadata-icon-fork-number {
+  display: inline-block;
+  font-size: 12px;
+  color: #999;
+  cursor: pointer;
+}
+
+.groupby-popover .delete-groupby .sf-metadata-icon-fork-number:hover {
+  color: #666666;
+}
+
+.groupby-popover .popover-add-tool {
+  border-top: none;
+  color: #666666;
+}
+
+.groupby-popover .popover-add-tool .popover-add-icon {
+  margin-right: 14px;
+}
+
+.groupby-popover .groupbys-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 0 15px 15px;
+  font-size: 14px;
+  color: #666666;
+}
+
+.groupby-popover .groupbys-tools .groupbys-tool-item:first-child {
+  margin-right: 20px;
+}
+
+.groupby-popover .groupbys-tools .groupbys-tool-item:hover {
+  cursor: pointer;
+  color: #666666;
+}
