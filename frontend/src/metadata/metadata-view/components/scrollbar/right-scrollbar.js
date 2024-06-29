@@ -60,8 +60,9 @@ class RightScrollbar extends React.Component {
       style.height = component.resultContentRef.clientHeight;
       style.zIndex = Z_INDEX.SCROLL_BAR;
     }
-    /* page-header + seatable-app-header + table-header-top + first row(grid-header) */
-    style.top = 50 + 10 + 48 + this.getGridHeaderHeight();
+
+    // sf-metadata footer have 20px height
+    style.bottom = 30;
     /* sf-metadata-wrapper have 10px margin */
     style.right = '10px';
     return style;

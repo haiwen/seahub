@@ -11,9 +11,9 @@ const COLUMNS_ICON_CONFIG = {
 
 const COLUMNS_ICON_NAME = {
   [CellType.CREATOR]: 'Creator',
-  [CellType.LAST_MODIFIER]: 'Last_modifier',
+  [CellType.LAST_MODIFIER]: 'Last modifier',
   [CellType.CTIME]: 'CTime',
-  [CellType.MTIME]: 'Last_modified_time',
+  [CellType.MTIME]: 'Last modified time',
   [CellType.DEFAULT]: 'Text',
   [CellType.TEXT]: 'Text',
 };
