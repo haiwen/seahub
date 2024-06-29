@@ -3,8 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { toaster } from '@seafile/sf-metadata-ui-component';
 import { Metadata } from '../model';
 import { gettext } from '../../../utils/constants';
-import { getErrorMsg } from '../_basic';
-import { DEFAULT_COLUMNS } from '../constants';
+import { getErrorMsg, CellType } from '../_basic';
 import Context from '../context';
 
 const MetadataContext = React.createContext(null);
@@ -15,6 +14,67 @@ export const MetadataProvider = ({
 }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ records: [], columns: [] });
+
+  const getColumnName = useCallback((key, name) => {
+    switch (key) {
+      case '_ctime':
+        return gettext('Created time');
+      case '_mtime':
+        return gettext('Last modified time');
+      case '_creator':
+        return gettext('Creator');
+      case '_last_modifier':
+        return gettext('Last modifier');
+      case '_file_creator':
+        return gettext('File creator');
+      case '_file_modifier':
+        return gettext('File modifier');
+      case '_file_ctime':
+        return gettext('File created time');
+      case '_file_mtime':
+        return gettext('File last modified time');
+      case '_is_dir':
+        return gettext('Is dir');
+      case '_parent_dir':
+        return gettext('Parent dir');
+      case '_name':
+        return gettext('File name');
+      default:
+        return name;
+    }
+  }, []);
+
+  const getColumnType = useCallback((key, type) => {
+    switch (key) {
+      case '_ctime':
+      case '_file_ctime':
+        return CellType.CTIME;
+      case '_mtime':
+      case '_file_mtime':
+        return CellType.MTIME;
+      case '_creator':
+      case '_file_creator':
+        return CellType.CREATOR;
+      case '_last_modifier':
+      case '_file_modifier':
+        return CellType.LAST_MODIFIER;
+      default:
+        return type;
+    }
+  }, []);
+
+  const getColumns = useCallback((columns) => {
+    if (!Array.isArray(columns) || columns.length === 0) return [];
+    return columns.map((column) => {
+      const { type, key, name, ...params } = column;
+      return {
+        key,
+        type: getColumnType(key, type),
+        name: getColumnName(key, name),
+        ...params
+      };
+    }).filter(column => !['_id', '_ctime', '_mtime', '_creator', '_last_modifier'].includes(column.key));
+  }, [getColumnType, getColumnName]);
 
   // init
   useEffect(() => {
@@ -27,13 +87,7 @@ export const MetadataProvider = ({
 
       const repoID = window.sfMetadataContext.getSetting('repoID');
       window.sfMetadataContext.getMetadata(repoID).then(res => {
-        const defaultColumns = DEFAULT_COLUMNS.map(item => {
-          return {
-            ...item,
-            name: gettext(item.name)
-          };
-        });
-        setMetadata(new Metadata({ rows: res?.data?.results || [], columns: res?.data?.columns || defaultColumns }));
+        setMetadata(new Metadata({ rows: res?.data?.results || [], columns: getColumns(res?.data?.metadata) }));
         setLoading(false);
       }).catch(error => {
         const errorMsg = getErrorMsg(error);
