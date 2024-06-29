@@ -71,6 +71,7 @@ export const MetadataProvider = ({
         key,
         type: getColumnType(key, type),
         name: getColumnName(key, name),
+        width: 200,
         ...params
       };
     }).filter(column => !['_id', '_ctime', '_mtime', '_creator', '_last_modifier'].includes(column.key));
