@@ -28,6 +28,11 @@ const DirViews = ({ userPerm, repoID }) => {
   }, [enableMetadataManagement, userPerm]);
 
   useEffect(() => {
+    if (!enableMetadataManagement) {
+      setLoading(false);
+      return;
+    }
+
     const repoMetadataManagementEnabledStatusRes = metadataManagerAPI.getRepoMetadataManagementEnabledStatus(repoID);
     Promise.all([repoMetadataManagementEnabledStatusRes]).then(results => {
       const [repoMetadataManagementEnabledStatusRes] = results;
