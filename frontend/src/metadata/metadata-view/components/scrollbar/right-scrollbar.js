@@ -53,7 +53,7 @@ class RightScrollbar extends React.Component {
       style.zIndex = Z_INDEX.SCROLL_BAR;
     }
 
-    /* sf-metadata footer have 30px height */
+    /* sf-metadata-footer have 30px height */
     style.bottom = 30;
     /* sf-metadata-wrapper have 10px margin */
     style.right = '10px';
