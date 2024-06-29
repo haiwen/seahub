@@ -12,7 +12,7 @@ from seaserv import seafile_api, ccnet_api
 from constance import config
 
 from seahub import settings
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
@@ -85,7 +85,8 @@ class GroupLibraries(APIView):
             group_repos = seafile_api.get_repos_by_group(group_id)
 
         group_repos.sort(key=lambda x: x.last_modified, reverse=True)
-
+        group_repos = [gr for gr in group_repos if not is_wiki_repo(gr)]
+        
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
