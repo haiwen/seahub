@@ -32,20 +32,25 @@ def view_metadata(request, repo_id):
         results = list_metadata_records(repo_id, request.user.username)
     except Exception as err:
         return HttpResponseServerError(repr(err))
+
+    return_results = []
     
     for result in results:
-        #preprocess creator and modifier
-        if result['creator'] == '':
-            result['creator'] = '-----------'
 
-        if result['modifier'] == '':
-            result['modifier'] = '-----------'
-
-        #preprocess _id
-        result['id'] = result['_id']
-        del result['_id']
+        result_info = {
+            'id': result['_id'],
+            'creator': result['_file_creator'],
+            'file_ctime': result['_file_ctime'],
+            'modifier': result['_file_modifier'],
+            'file_mtime': result['_file_mtime'],
+            'parent_dir': result['_parent_dir'],
+            'name': result['_name'],
+            'is_dir': result['_is_dir'],
+        }
+        return_results.append(result_info)
 
     return_dict = {
-        'metadata_records': results
+        'metadata_records': return_results
     }
+
     return render(request, template, return_dict)

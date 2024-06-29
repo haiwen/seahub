@@ -969,6 +969,8 @@ sys.path.pop(0)
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
+SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
+
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
     'SERVICE_URL': (SERVICE_URL, ''),
