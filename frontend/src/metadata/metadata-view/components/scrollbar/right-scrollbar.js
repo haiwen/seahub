@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { HEADER_HEIGHT_TYPE, isEmptyObject, Z_INDEX } from '../../_basic';
-import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../constants';
+import { Z_INDEX } from '../../_basic';
 
 const propTypes = {
   table: PropTypes.object.isRequired,
@@ -46,13 +45,6 @@ class RightScrollbar extends React.Component {
     return {};
   };
 
-  getGridHeaderHeight = () => {
-    const headerSettings = this.props.table.header_settings || {};
-    const headerHeight = isEmptyObject(headerSettings) ? HEADER_HEIGHT_TYPE.DEFAULT : headerSettings.header_height;
-    const height = headerHeight === HEADER_HEIGHT_TYPE.DOUBLE ? GRID_HEADER_DOUBLE_HEIGHT : GRID_HEADER_DEFAULT_HEIGHT;
-    return height;
-  };
-
   getContainerStyle = () => {
     const style = {};
     const component = window.sfMetadataBody;
@@ -60,8 +52,9 @@ class RightScrollbar extends React.Component {
       style.height = component.resultContentRef.clientHeight;
       style.zIndex = Z_INDEX.SCROLL_BAR;
     }
-    /* page-header + seatable-app-header + table-header-top + first row(grid-header) */
-    style.top = 50 + 10 + 48 + this.getGridHeaderHeight();
+
+    /* sf-metadata-footer have 30px height */
+    style.bottom = 30;
     /* sf-metadata-wrapper have 10px margin */
     style.right = '10px';
     return style;
