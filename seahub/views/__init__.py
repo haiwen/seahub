@@ -1,23 +1,24 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
-import hashlib
 import os
 import stat
 import json
-import mimetypes
+import hashlib
 import logging
+import mimetypes
 import posixpath
+from constance import config
+from urllib.parse import quote
 
 from django.core.cache import cache
-from django.urls import reverse, resolve
 from django.contrib import messages
-from django.http import HttpResponse, Http404, \
-    HttpResponseRedirect
-from django.shortcuts import render, redirect
-from urllib.parse import quote
 from django.utils.html import escape
+from django.urls import reverse, resolve
+from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
+from django.http import HttpResponse, Http404, \
+    HttpResponseRedirect
 
 import seaserv
 from seaserv import get_repo, get_commits, \
@@ -41,10 +42,10 @@ from seahub.utils import render_permission_error, render_error, \
     gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
-    new_merge_with_no_conflict, get_max_upload_file_size, \
+    new_merge_with_no_conflict, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
-    normalize_file_path
+    normalize_file_path, normalize_dir_path
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -52,17 +53,16 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
-    UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
     DTABLE_WEB_SERVER, EX_PROPS_TABLE, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_EDITABLE_COLUMNS
 
-from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
-from seahub.constants import HASH_URLS, PERMISSION_READ
+from seahub.constants import PERMISSION_READ
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -71,10 +71,10 @@ from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
-from constance import config
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 def validate_owner(request, repo_id):
     """
@@ -84,6 +84,7 @@ def validate_owner(request, repo_id):
     ret = is_repo_owner(request.user.username, repo_id)
 
     return True if ret else False
+
 
 def is_registered_user(email):
     """
@@ -97,6 +98,7 @@ def is_registered_user(email):
 
     return True if user else False
 
+
 _default_repo_id = None
 def get_system_default_repo_id():
     global _default_repo_id
@@ -106,6 +108,7 @@ def get_system_default_repo_id():
         except SearpcError as e:
             logger.error(e)
     return _default_repo_id
+
 
 def check_folder_permission(request, repo_id, path):
     """Check repo/folder/file access permission of a user.
@@ -295,7 +298,7 @@ def repo_folder_trash(request, repo_id):
     path = request.GET.get('path', '/')
 
     if not seafile_api.get_dir_id_by_path(repo_id, path) or \
-        check_folder_permission(request, repo_id, path) != 'rw':
+            check_folder_permission(request, repo_id, path) != 'rw':
         return render_permission_error(request, _('Unable to view recycle page'))
 
     repo = get_repo(repo_id)
@@ -374,7 +377,7 @@ def repo_history(request, repo_id):
         current_page = 1
 
     per_page = 100
-    commits_all = get_commits(repo_id, per_page * (current_page -1),
+    commits_all = get_commits(repo_id, per_page * (current_page - 1),
                               per_page + 1)
     commits = commits_all[:per_page]
     for c in commits:
@@ -399,7 +402,6 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    #template = 'repo_history.html'
     template = 'repo_history_react.html'
 
     return render(request, template, {
@@ -556,6 +558,7 @@ def create_default_library(request):
     UserOptions.objects.set_default_repo(username, default_repo)
     return default_repo
 
+
 def get_owned_repo_list(request):
     """List owned repos.
     """
@@ -575,10 +578,11 @@ def repo_set_access_property(request, repo_id):
 
     return HttpResponseRedirect(reverse_url)
 
+
 @login_required
 def validate_filename(request):
-    repo_id     = request.GET.get('repo_id')
-    filename    = request.GET.get('filename')
+    repo_id = request.GET.get('repo_id')
+    filename = request.GET.get('filename')
 
     if not (repo_id and filename):
         return render_error(request)
@@ -907,6 +911,7 @@ def convert_cmmt_desc_link(request):
 
     raise Http404
 
+
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
     try:
@@ -914,6 +919,7 @@ def latest_entry(request, filename):
     except Exception as e:
         logger.error(e)
         return None
+
 
 @condition(last_modified_func=latest_entry)
 def image_view(request, filename):
@@ -1005,12 +1011,21 @@ def react_fake_view(request, **kwargs):
 
         repo_id = kwargs.get('repo_id', '')
         repo_name = kwargs.get('repo_name', '')
-        path = kwargs.get('path', '')
-        if repo_id and repo_name and not path:
-            path = '/'
+        if not repo_id or not repo_name:
+            raise Http404
 
-        if repo_id and path and \
-                not check_folder_permission(request, repo_id, path):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return render_error(request, error_msg)
+
+        path = kwargs.get('path', '/')
+        path = normalize_dir_path(path)
+        if path != '/' and not seafile_api.get_dirent_by_path(repo_id, path):
+            error_msg = f'Dirent {path} not found.'
+            return render_error(request, error_msg)
+
+        if not check_folder_permission(request, repo_id, path):
 
             converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
             if not converted_repo_path:
@@ -1026,8 +1041,8 @@ def react_fake_view(request, **kwargs):
                 return render_error(request, error_msg)
 
             converted_path = repo_path_dict['path']
-            if converted_path != '/' and not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
-
+            if converted_path != '/' and \
+                    not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
                 error_msg = 'Dirent %s not found.' % converted_path
                 return render_error(request, error_msg)
 
@@ -1045,13 +1060,15 @@ def react_fake_view(request, **kwargs):
         create_default_library(request)
 
     try:
-        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+        expire_days = seafile_api.get_server_config_int('library_trash',
+                                                        'expire_days')
     except Exception as e:
         logger.error(e)
         expire_days = -1
 
     try:
-        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver',
+                                                                 'max_upload_size')
     except Exception as e:
         logger.error(e)
         max_upload_file_size = -1
