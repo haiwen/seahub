@@ -54,7 +54,7 @@ class DirTool extends React.Component {
     return Utils.getFileName(filePath).includes('.md');
   }
 
-  getList2 = () => {
+  getMenu = () => {
     const list = [];
     const { repoID, userPerm, currentPath } = this.props;
     const { TAGS, TRASH, HISTORY } = TextTranslation;
@@ -73,20 +73,15 @@ class DirTool extends React.Component {
     } else {
       let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
       list.push({...TRASH, href: trashUrl});
-
       let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
       list.push({...HISTORY, href: historyUrl});
     }
-
     return list;
   };
 
   onMenuItemClick = (item) => {
     const { key, href } = item;
     switch (key) {
-      case 'Properties':
-        this.props.switchViewMode('detail');
-        break;
       case 'Tags':
         this.setState({isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen});
         break;
@@ -99,16 +94,6 @@ class DirTool extends React.Component {
     }
   };
 
-  getMenuList = () => {
-    const list = [];
-    const list2 = this.getList2();
-    const { PROPERTIES, } = TextTranslation;
-    if (!this.props.isCustomPermission) {
-      list.push(PROPERTIES);
-    }
-    return list.concat(list2);
-  };
-
   onMenuItemKeyDown = (e, item) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onMenuItemClick(item);
@@ -116,19 +101,25 @@ class DirTool extends React.Component {
   };
 
   render() {
-    const menuItems = this.getMenuList();
+    const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
     const { repoID, currentMode } = this.props;
+    const propertiesText = TextTranslation.PROPERTIES.value;
     return (
       <React.Fragment>
         <div className="d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+          {!this.props.isCustomPermission &&
+            <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
+              <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
+            </span>
+          }
           {menuItems.length > 0 &&
           <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
             <DropdownToggle
               tag="i"
               id="cur-folder-more-op-toggle"
-              className={'cur-view-path-btn sf3-font-more sf3-font'}
+              className='cur-view-path-btn sf3-font-more sf3-font ml-2'
               data-toggle="dropdown"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
@@ -141,7 +132,12 @@ class DirTool extends React.Component {
                   return <DropdownItem key={index} divider />;
                 } else {
                   return (
-                    <DropdownItem key={index} onClick={this.onMenuItemClick.bind(this, menuItem)} onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}>{menuItem.value}</DropdownItem>
+                    <DropdownItem
+                      key={index}
+                      onClick={this.onMenuItemClick.bind(this, menuItem)}
+                      onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
+                    >{menuItem.value}
+                    </DropdownItem>
                   );
                 }
               })}
