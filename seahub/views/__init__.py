@@ -22,7 +22,7 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, is_repo_owner, \
-    get_file_size, seafile_api
+    get_file_size, seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -46,7 +46,7 @@ from seahub.utils import render_permission_error, render_error, \
     is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
     normalize_file_path
 from seahub.utils.star import get_dir_starred_files
-from seahub.utils.repo import get_library_storages, parse_repo_perm
+from seahub.utils.repo import get_library_storages, parse_repo_perm, is_repo_admin
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
@@ -293,6 +293,7 @@ def get_unencry_rw_repos_by_user(request):
 @login_required
 def repo_folder_trash(request, repo_id):
     path = request.GET.get('path', '/')
+    username = request.user.username
 
     if not seafile_api.get_dir_id_by_path(repo_id, path) or \
         check_folder_permission(request, repo_id, path) != 'rw':
@@ -301,6 +302,8 @@ def repo_folder_trash(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    repo_admin = is_repo_admin(username, repo_id)
 
     if path == '/':
         name = repo.name
@@ -312,6 +315,7 @@ def repo_folder_trash(request, repo_id):
             'repo_folder_name': name,
             'path': path,
             'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
+            'is_repo_admin': repo_admin
             })
 
 def can_access_repo_setting(request, repo_id, username):
