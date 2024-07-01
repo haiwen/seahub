@@ -56,7 +56,7 @@ class UserItem extends React.Component {
   };
 
   toggleResetPW = () => {
-    const { email, name } = this.props.user;
+    const { email } = this.props.user;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
     seafileAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
       toaster.success(res.data.reset_tip);
