@@ -21,7 +21,15 @@ export {
 } from './format';
 
 export {
+  PRIVATE_COLUMN_KEY
+} from './private';
+
+export {
   CellType,
   COLUMNS_ICON_CONFIG,
   COLUMNS_ICON_NAME,
 };
+
+export {
+  NOT_DISPLAY_COLUMN_KEYS
+} from './common';

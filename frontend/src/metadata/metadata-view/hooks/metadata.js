@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { toaster } from '@seafile/sf-metadata-ui-component';
 import { Metadata } from '../model';
 import { gettext } from '../../../utils/constants';
-import { getErrorMsg, CellType } from '../_basic';
+import { getErrorMsg, CellType, PRIVATE_COLUMN_KEY, NOT_DISPLAY_COLUMN_KEYS } from '../_basic';
 import Context from '../context';
 
 const MetadataContext = React.createContext(null);
@@ -46,18 +46,20 @@ export const MetadataProvider = ({
 
   const getColumnType = useCallback((key, type) => {
     switch (key) {
-      case '_ctime':
-      case '_file_ctime':
+      case PRIVATE_COLUMN_KEY.CTIME:
+      case PRIVATE_COLUMN_KEY.FILE_CTIME:
         return CellType.CTIME;
-      case '_mtime':
-      case '_file_mtime':
+      case PRIVATE_COLUMN_KEY.MTIME:
+      case PRIVATE_COLUMN_KEY.FILE_MTIME:
         return CellType.MTIME;
-      case '_creator':
-      case '_file_creator':
+      case PRIVATE_COLUMN_KEY.CREATOR:
+      case PRIVATE_COLUMN_KEY.FILE_CREATOR:
         return CellType.CREATOR;
-      case '_last_modifier':
-      case '_file_modifier':
+      case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
+      case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
         return CellType.LAST_MODIFIER;
+      case PRIVATE_COLUMN_KEY.FILE_NAME:
+        return CellType.FILE_NAME;
       default:
         return type;
     }
@@ -65,7 +67,7 @@ export const MetadataProvider = ({
 
   const getColumns = useCallback((columns) => {
     if (!Array.isArray(columns) || columns.length === 0) return [];
-    return columns.map((column) => {
+    const validColumns = columns.map((column) => {
       const { type, key, name, ...params } = column;
       return {
         key,
@@ -74,7 +76,23 @@ export const MetadataProvider = ({
         ...params,
         width: 200,
       };
-    }).filter(column => !['_id', '_ctime', '_mtime', '_creator', '_last_modifier'].includes(column.key));
+    }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
+    let displayColumns = [];
+    validColumns.forEach(column => {
+      if (column.key === '_name') {
+        displayColumns.unshift(column);
+      } else if (column.key === PRIVATE_COLUMN_KEY.PARENT_DIR) {
+        const nameColumnIndex = displayColumns.findIndex(column => column.key === PRIVATE_COLUMN_KEY.PARENT_DIR);
+        if (nameColumnIndex === -1) {
+          displayColumns.unshift(column);
+        } else {
+          displayColumns.splice(nameColumnIndex, 0, column);
+        }
+      } else {
+        displayColumns.push(column);
+      }
+    });
+    return displayColumns;
   }, [getColumnType, getColumnName]);
 
   // init
