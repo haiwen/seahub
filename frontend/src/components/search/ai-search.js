@@ -59,6 +59,7 @@ export default class AISearch extends Component {
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
       searchMode: SEARCH_MODE.COMBINED,
+      onlySearchCurrentSubFolders: false,
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -258,8 +259,8 @@ export default class AISearch extends Component {
   };
 
   onSearch = () => {
-    const { value } = this.state;
-    const { repoID } = this.props;
+    const { value, onlySearchCurrentSubFolders } = this.state;
+    const { repoID, path } = this.props;
     if (this.inputValue === '' || getValueLength(this.inputValue) < 3) {
       this.setState({
         highlightIndex: 0,
@@ -273,6 +274,11 @@ export default class AISearch extends Component {
       search_repo: repoID ? repoID : 'all',
       search_ftypes: 'all',
     };
+
+    if (onlySearchCurrentSubFolders) {
+      queryData.cur_path = path;
+    }
+
     this.getSearchResult(queryData);
   };
 
@@ -384,6 +390,17 @@ export default class AISearch extends Component {
     const { highlightIndex } = this.state;
     const results = (
       <>
+        <div className='searching-in-current-dic'>
+          <Switch
+            checked={this.state.onlySearchCurrentSubFolders}
+            onChange={this.onSearchSettings}
+            placeholder={gettext('Only search current folder and subfolders')}
+            className="search-settings-container"
+            size='large'
+            textPosition='right'
+            setRef={this.setSettingsContainerRef}
+          />
+        </div>
         <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>
         <ul className="search-result-list" ref={this.searchResultListRef}>
           {items.map((item, index) => {
@@ -433,10 +450,38 @@ export default class AISearch extends Component {
     const searchStrLength = getValueLength(this.inputValue);
 
     if (searchStrLength === 0) {
-      return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
+      return (<>
+                <div className='searching-in-current-dic'>
+                  <Switch
+                    checked={this.state.onlySearchCurrentSubFolders}
+                    onChange={this.onSearchSettings}
+                    placeholder={gettext('Only search current folder and subfolders')}
+                    className="search-settings-container"
+                    size='large'
+                    textPosition='right'
+                    setRef={this.setSettingsContainerRef}
+                  />
+                </div>
+                <div className="search-result-none">{gettext('Type characters to start search')}</div>
+              </>
+      );
     }
     else if (searchStrLength < 3) {
-      return <div className="search-result-none">{gettext('Type more characters to start search')}</div>;
+      return (<>
+                <div className='searching-in-current-dic'>
+                  <Switch
+                    checked={this.state.onlySearchCurrentSubFolders}
+                    onChange={this.onSearchSettings}
+                    placeholder={gettext('Only search current folder and subfolders')}
+                    className="search-settings-container"
+                    size='large'
+                    textPosition='right'
+                    setRef={this.setSettingsContainerRef}
+                  />
+                </div>
+                <div className="search-result-none">{gettext('Type more characters to start search')}</div>
+              </>
+      );
     }
     else if (!isResultGetted) {
       return <span className="loading-icon loading-tip"></span>;
@@ -444,6 +489,17 @@ export default class AISearch extends Component {
     else if (!resultItems.length) {
       return (
         <>
+          <div className='searching-in-current-dic'>
+            <Switch
+              checked={this.state.onlySearchCurrentSubFolders}
+              onChange={this.onSearchSettings}
+              placeholder={gettext('Only search current folder and subfolders')}
+              className="search-settings-container"
+              size='large'
+              textPosition='right'
+              setRef={this.setSettingsContainerRef}
+            />
+          </div>
           <li className='search-result-item align-items-center' onClick={this.openAsk}>
             <AISearchRobot />
             <div className="item-content">
@@ -457,6 +513,17 @@ export default class AISearch extends Component {
 
     const results = (
       <ul className="search-result-list" ref={this.searchResultListRef}>
+        <div className='searching-in-current-dic'>
+          <Switch
+            checked={this.state.onlySearchCurrentSubFolders}
+            onChange={this.onSearchSettings}
+            placeholder={gettext('Only search current folder and subfolders')}
+            className="search-settings-container"
+            size='large'
+            textPosition='right'
+            setRef={this.setSettingsContainerRef}
+          />
+        </div>
         <li
           className={classnames('search-result-item align-items-center py-3', {'search-result-item-highlight': highlightIndex === 0 })}
           onClick={this.openAsk}
@@ -501,6 +568,12 @@ export default class AISearch extends Component {
       isMaskShow: !this.state.isMaskShow,
     });
   };
+
+  onSearchSettings = () => {
+    this.setState({
+      onlySearchCurrentSubFolders: !this.state.onlySearchCurrentSubFolders
+    })
+  }
 
   queryIndexTaskStatus = (taskId) => {
     if (!taskId) return;
