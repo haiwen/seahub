@@ -7,6 +7,7 @@ import searchAPI from '../../utils/search-api';
 import Icon from '../icon';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
+import SearchResultLibrary from './search-result-library';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
@@ -471,10 +472,10 @@ export default class AISearch extends Component {
               >
                 {resultItems.map((item, index) => {
                   return (
-                    <SearchResultItem
+                    <SearchResultLibrary
                       key={index}
                       item={item}
-                      onItemClickHandler={this.onItemClickHandler}
+                      onClick={this.onItemClickHandler}
                     />
                   );
                 })}

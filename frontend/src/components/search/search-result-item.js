@@ -17,8 +17,7 @@ class SearchResultItem extends React.Component {
   };
 
   onClickHandler = () => {
-    var item = this.props.item;
-    this.props.onItemClickHandler(item);
+    this.props.onItemClickHandler(this.props.item);
   };
 
   render() {
@@ -27,7 +26,6 @@ class SearchResultItem extends React.Component {
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
     let showName = item.repo_name + '/' + item.link_content;
     showName = showName.endsWith('/') ? showName.slice(0, showName.length - 1) : showName;
-
 
     if (item.thumbnail_url) {
       fileIconUrl = item.thumbnail_url;
