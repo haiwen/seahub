@@ -19,4 +19,4 @@ SearchResultLibrary.propTypes = {
   isHighlight: PropTypes.bool,
 };
 
-export default SearchResultLibrary
+export default SearchResultLibrary;
