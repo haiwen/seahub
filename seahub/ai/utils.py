@@ -15,7 +15,9 @@ logger = logging.getLogger(__name__)
 
 SEARCH_REPOS_LIMIT = 200
 RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
+USER_REPOS_CACHE_PREFIX = 'user_repos_'
 RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+USER_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
 
 
 def gen_headers():
