@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
+import searchAPI from '../../utils/search-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
@@ -260,9 +261,9 @@ class Search extends Component {
 
     this.source = seafileAPI.getSource();
 
-    const query_type = 'library'
+    const query_type = 'library';
     let results = [];
-    seafileAPI.searchItems(query_str, query_type, this.source.token).then(res => {
+    searchAPI.searchItems(query_str, query_type, this.source.token).then(res => {
       results = [...results, ...this.formatResultItems(res.data.results)];
       this.setState({
         resultItems: results,
@@ -270,6 +271,7 @@ class Search extends Component {
         hasMore: false,
       });
     }).catch(error => {
+      // eslint-disable-next-line no-console
       console.log(error);
       this.setState({ isLoading: false });
     });
@@ -453,7 +455,7 @@ class Search extends Component {
               onClick={this.searchAllRepos}
               tabIndex={0}
             >
-              <i className="search-icon-left input-icon-addon fas fa-search"></i>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
             </div>
