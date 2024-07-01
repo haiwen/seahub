@@ -243,7 +243,7 @@ class Search extends Component {
           inputValue: newValue,
           isLoading: false,
           highlightIndex: 0,
-          resultItems: [],
+          // resultItems: [],
           isResultGetted: false,
         }, () => {
           if (trimmedValue !== '') {
