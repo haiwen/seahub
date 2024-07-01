@@ -691,7 +691,7 @@ class ItemsSearch(APIView):
                     "name": repo_info[3]
                 }
                 for repo_info in all_repos
-                if query_str in repo_info[3]
+                if re.search(query_str, repo_info[3], re.IGNORECASE)
             ]
         return Response({'results': query_result})
 
