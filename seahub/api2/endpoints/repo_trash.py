@@ -317,7 +317,7 @@ class RepoTrash2(APIView):
     def get_item_info(self, trash_item):
 
         item_info = {
-            'parent_dir': '/' if trash_item.path == '/' else trash_item.path + '/',
+            'parent_dir': '/' if trash_item.path == '/' else trash_item.path,
             'obj_name': trash_item.obj_name,
             'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
             'commit_id': trash_item.commit_id,

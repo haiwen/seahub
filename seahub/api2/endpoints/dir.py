@@ -562,32 +562,15 @@ class DirView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
         dir_name = os.path.basename(path)
-        dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
 
-        record = {
-            'op_user': username,
-            'obj_type': 'dir',
-            'obj_id': dir_obj.obj_id,
-            'obj_name': dir_name,
-            'timestamp': datetime.utcfromtimestamp(dir_obj.mtime),
-            'repo_id': repo_id,
-            'path': parent_dir,
-            'commit_id': repo.head_cmmt_id,
-            'size': dir_obj.size
-        }
         try:
-            from seahub.utils import SeafEventsSession, seafevents_api
-            session = SeafEventsSession()
+
             seafile_api.del_file(repo_id, parent_dir,
                                  json.dumps([dir_name]), username)
-            seafevents_api.save_repo_trash(session, record)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        except ImportError:
-            seafile_api.del_file(repo_id, parent_dir,
-                                 json.dumps([dir_name]), username)
 
         result = {}
         result['success'] = True
