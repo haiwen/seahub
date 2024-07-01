@@ -410,3 +410,17 @@
   margin-left: 6px;
   color: #666;
 }
+
+.library-result-container {
+  margin-bottom: 16px;
+}
+
+.library-result-divider {
+  margin: 10px 0 16px;
+}
+
+.library-result-header {
+  color: #666666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}

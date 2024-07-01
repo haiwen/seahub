@@ -34,6 +34,7 @@ urlpatterns = [
     path('account/info/', AccountInfo.as_view()),
     path('regdevice/', RegDevice.as_view(), name="regdevice"),
     path('search/', Search.as_view(), name='api_search'),
+    path('items-search/', ItemsSearch.as_view(), name='api-items-search'),
     path('search-user/', SearchUser.as_view(), name='search-user'),
     path('repos/', Repos.as_view(), name="api2-repos"),
     path('repos/public/', PubRepos.as_view(), name="api2-pub-repos"),

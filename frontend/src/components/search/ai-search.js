@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
+import searchAPI from '../../utils/search-api';
 import Icon from '../icon';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
@@ -274,6 +275,7 @@ export default class AISearch extends Component {
     }
     this.setState({ value: newValue });
     setTimeout(() => {
+      const trimmedValue = newValue.trim();
       if (this.isChineseInput === false && this.state.inputValue !== newValue) {
         this.setState({
           inputValue: newValue,
@@ -281,9 +283,36 @@ export default class AISearch extends Component {
           highlightIndex: 0,
           resultItems: [],
           isResultGetted: false,
+        }, () => {
+          if (trimmedValue !== '') {
+            this.getRepoSearchResult(newValue);
+          }
         });
       }
     }, 1);
+  };
+
+  getRepoSearchResult = (query_str) => {
+    if (this.source) {
+      this.source.cancel('prev request is cancelled');
+    }
+
+    this.source = seafileAPI.getSource();
+
+    const query_type = 'library';
+    let results = [];
+    searchAPI.searchItems(query_str, query_type, this.source.token).then(res => {
+      results = [...results, ...this.formatResultItems(res.data.results)];
+      this.setState({
+        resultItems: results,
+        isLoading: false,
+        hasMore: false,
+      });
+    }).catch(error => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
   };
 
   getSearchResult = (queryData) => {
@@ -417,14 +446,41 @@ export default class AISearch extends Component {
 
   renderSearchTypes = (inputValue) => {
     const highlightIndex = this.state.highlightSearchTypesIndex;
+    const { resultItems } = this.state;
     if (!this.props.repoID) {
       return (
-        <div className="search-types">
-          <div className="search-types-repos search-types-highlight" onClick={this.searchAllRepos} tabIndex={0}>
-            <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
-            {inputValue}
-            <span className="search-types-text">{gettext('in all libraries')}</span>
+        <div>
+          <div className="search-types">
+            <div
+              className="search-types-repos search-types-highlight"
+              onClick={this.searchAllRepos}
+              tabIndex={0}
+            >
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all libraries')}</span>
+            </div>
           </div>
+          {resultItems.length > 0 && (
+            <div className="library-result-container">
+              <hr className="library-result-divider" />
+              <div className="library-result-header">{gettext('Libraries')}</div>
+              <ul
+                className="library-result-list"
+                ref={this.searchResultListRef}
+              >
+                {resultItems.map((item, index) => {
+                  return (
+                    <SearchResultItem
+                      key={index}
+                      item={item}
+                      onItemClickHandler={this.onItemClickHandler}
+                    />
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         </div>
       );
     }
