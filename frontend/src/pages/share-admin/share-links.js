@@ -293,8 +293,8 @@ class Item extends Component {
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-          <a href="#" className={`sf3-font-delete1 sf3-font action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
     );

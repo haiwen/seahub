@@ -634,7 +634,7 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
                 )}
                 {showShareBtn && (
                   <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
@@ -657,7 +657,7 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
                 )}
                 {showShareBtn && (
                   <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>

@@ -326,7 +326,7 @@ export const Utils = {
   },
 
   joinPath: function(pathA, pathB) {
-    if (pathA[pathA.length-1] === '/') {
+    if (pathA[pathA.length - 1] === '/') {
       return pathA + pathB;
     } else {
       return pathA + '/' + pathB;
@@ -1389,7 +1389,7 @@ export const Utils = {
     // 91~96：[~`
     // 97~122：a~z
     // 123~127：{~
-    for (var i = 0; i < length-4; i++) {
+    for (var i = 0; i < length - 4; i++) {
       var num = Math.floor((Math.random() * (127-33)) + 33);
       password += String.fromCharCode(num);
     }

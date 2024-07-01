@@ -108,8 +108,3 @@
 .tree-section .tree-section-body  .right-icon i {
   margin-left: 0;
 }
-
-.tree-section .tree-section-body .sf-dropdown-toggle:focus,
-.tree-section .tree-section-body .sf-dropdown-toggle:hover {
-  color: #999;
-}

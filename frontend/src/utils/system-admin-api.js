@@ -19,8 +19,8 @@ class SystemAdminAPI {
   }
 
   initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
-    if (siteRoot && siteRoot.charAt(siteRoot.length-1) === '/') {
-      var server = siteRoot.substring(0, siteRoot.length-1);
+    if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
+      var server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
     } else {
       this.server = siteRoot;
