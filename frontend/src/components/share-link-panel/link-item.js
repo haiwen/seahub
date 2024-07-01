@@ -38,7 +38,7 @@ class LinkItem extends React.Component {
 
   cutLink = (link) => {
     let length = link.length;
-    return link.slice(0, 9) + '...' + link.slice(length-5);
+    return link.slice(0, 9) + '...' + link.slice(length - 5);
   };
 
   onDeleteIconClicked = (e) => {
@@ -109,8 +109,8 @@ class LinkItem extends React.Component {
             {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
           </td>
         </tr>
         {this.state.isDeleteShareLinkDialogOpen && (
