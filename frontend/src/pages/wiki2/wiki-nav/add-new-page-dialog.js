@@ -13,6 +13,9 @@ const propTypes = {
   title: PropTypes.node,
   toggle: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func,
+  updateWikiConfig: PropTypes.func.isRequired,
+  currentPageId: PropTypes.number,
+
 };
 
 
@@ -70,13 +73,13 @@ class AddNewPageDialog extends React.Component {
   };
 
   createPage = (pageName) => {
-    wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
-      const { obj_name, parent_dir, doc_uuid } = res.data;
+    wikiAPI.createWiki2Page(wikiId, pageName, this.props.currentPageId).then(res => {
+      const { page_id } = res.data.file_info;
+      const newConfig = JSON.parse(res.data.wiki.wiki_config);
       this.props.onAddNewPage({
+        page_id: page_id,
         name: pageName,
-        icon: '',
-        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
-        docUuid: doc_uuid,
+        newConfig: newConfig,
         successCallback: this.onSuccess,
         errorCallback: this.onError,
       });

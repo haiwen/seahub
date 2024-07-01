@@ -252,6 +252,7 @@ class PageItem extends Component {
                 {this.state.isShowInsertPage &&
                   <AddNewPageDialog
                     toggle={this.toggleInsertPage}
+                    currentPageId={this.props.page.id}
                     onAddNewPage={this.onAddNewPage}
                     title={gettext('Add page inside')}
                   />

@@ -50,20 +50,14 @@ class SidePanel extends Component {
     }
   };
 
-  addPageInside = async ({ parentPageId, name, icon, path, docUuid, successCallback, errorCallback }) => {
-    const { config } = this.props;
-    const navigation = config.navigation;
-    const pageId = generateUniqueId(navigation);
-    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, parentPageId, successCallback, errorCallback);
+  addPageInside = async ({ newConfig }) => {
+    this.props.updateWikiConfig(newConfig);
   };
 
-  onAddNewPage = async ({ name, icon, path, docUuid, successCallback, errorCallback, jumpToNewPage = true }) => {
-    const { config } = this.props;
-    const navigation = config.navigation;
-    const pageId = generateUniqueId(navigation);
-    const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
+  onAddNewPage = async ({ page_id, newConfig, successCallback, jumpToNewPage = true }) => {
+    this.props.updateWikiConfig(newConfig);
+    jumpToNewPage && this.props.setCurrentPage(page_id, successCallback);
+    successCallback();
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -129,15 +123,13 @@ class SidePanel extends Component {
   handleAddNewPage = (jumpToNewPage = true, pageName = 'Untitled') => {
     const voidFn = () => void 0;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
-      const { obj_name, parent_dir, doc_uuid, page_name } = res.data;
+      const { page_id } = res.data.file_info;
+      const newConfig = JSON.parse(res.data.wiki.wiki_config);
       this.onAddNewPage({
-        name: page_name,
-        icon: '',
-        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
-        docUuid: doc_uuid,
-        successCallback: voidFn,
-        errorCallback: voidFn,
-        jumpToNewPage,
+        page_id: page_id,
+        name: pageName,
+        newConfig: newConfig,
+        successCallback: voidFn(),
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

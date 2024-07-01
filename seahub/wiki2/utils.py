@@ -16,7 +16,6 @@ from seahub.group.utils import is_group_admin, is_group_member
 
 logger = logging.getLogger(__name__)
 
-
 WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
 WIKI_CONFIG_FILE_NAME = 'index.json'
@@ -173,6 +172,33 @@ def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
             get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
 
 
+def select_page_nav():
+    for key, value in nested_dict.items():
+        if key == target_key:
+            return True
+        elif isinstance(value, dict):
+            if key_exists_in_nested_dict(value, target_key):
+                return True
+    return False
+
+def gen_new_page_nav_by_id(navigation, page_id, current_id):
+    new_nav = {
+        'id': page_id,
+        'type': 'page',
+    }
+    if current_id:
+        for nav in navigation:
+            if nav.get('type') == 'page' and nav.get('id') == current_id:
+                sub_nav = nav.get('children', [])
+                sub_nav.append(new_nav)
+                nav['children'] = sub_nav
+                return
+            else:
+                gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id)
+    else:
+        navigation.append(new_nav)
+
+
 def get_current_level_page_ids(navigation, page_id, ids=[]):
     for item in navigation:
         if item.get('id') == page_id:
@@ -182,6 +208,29 @@ def get_current_level_page_ids(navigation, page_id, ids=[]):
             children = item.get('children') or []
             get_current_level_page_ids(children, page_id, ids)
 
+
+
+
+def add_page(navigation, page_id, parent_id=None):
+    if not parent_id:
+        navigation.append({'id': page_id, 'type': 'page'})
+        if len(navigation) > 1:
+            navigation[-2]['children'] = []
+            navigation[-2]['_path'] = ""
+        else:
+            navigation[0]['children'] = []
+            navigation[0]['_path'] = ""
+    else:
+        _add_page_recursion(page_id, navigation, parent_id)
+
+    return navigation
+
+
+def _add_page_recursion(page_id, items, parent_id):
+    for item in items:
+        if item['id'] == parent_id:
+            item['children'].append({'id': page_id, 'type': 'PAGE'})
+            return
 
 def save_wiki_config(wiki, username, wiki_config):
     repo_id = wiki.repo_id

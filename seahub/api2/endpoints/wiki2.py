@@ -27,7 +27,9 @@ from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder, get_all_wiki_ids, \
-    get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config
+    get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config, add_page, \
+    gen_unique_id, gen_new_page_nav_by_id
+
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
 from seahub.views import check_folder_permission
@@ -415,14 +417,12 @@ class Wiki2PagesView(APIView):
 
         current_id = request.data.get('current_id', None)
         wiki_config = get_wiki_config(repo_id, request.user.username)
-
         navigation = wiki_config.get('navigation', [])
         if not current_id:
             page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
         else:
             page_ids = []
             get_current_level_page_ids(navigation, current_id, page_ids)
-
         pages = wiki_config.get('pages', [])
         exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
         page_name = get_no_duplicate_obj_name(page_name, exist_page_names)
@@ -432,7 +432,6 @@ class Wiki2PagesView(APIView):
         parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
         path = os.path.join(parent_dir, new_file_name)
         seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
-
         # create new empty file
         if not is_valid_dirent_name(new_file_name):
             return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
@@ -456,12 +455,73 @@ class Wiki2PagesView(APIView):
 
         try:
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename, is_dir=False)
+            '''obj_name,parent_dir,doc_uuid
+            name: pageName,
+            icon: '',
+            path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+            docUuid: doc_uuid,
+            
+            {"version":1,"navigation": [
+            {"id":"ygmo","type":"page","children":[],"_path":""}
+            {"id":"xxx","type":"page","children":[],"_path":""}
+            ],
+            "pages": [
+            {"id":"ygmo","name":"Untitled","path":"/wiki-pages/repo_id/Untitled.sdoc","icon":"","docUuid":"xx","children":[]}
+            {"id":"xxx","name":"111","path":"/wiki-pages/repo_id/Untitled.sdoc","icon":"","docUuid":"xx","children":[]}          
+            ]}
+  
+  
+            {"version":1,"navigation":[
+            {"id":"X2DO","type":"page","children":[{"id":"vmvj","type":"page"}],"_path":""},
+            {"id":"U82c","type":"page","children":[],"_path":""}
+            ],"pages":[
+            {"id":"X2DO","name":"wiki","path":"/wiki-pages/3ab8589f-5c51-4707-a28d-68937605aec2/wiki.sdoc","icon":"","docUuid":"3ab8589f-5c51-4707-a28d-68937605aec2","children":[]},
+            {"id":"U82c","name":"wiki2","path":"/wiki-pages/9d230217-ebe7-408a-9fe4-10d548dcadc0/wiki2.sdoc","icon":"","docUuid":"9d230217-ebe7-408a-9fe4-10d548dcadc0","children":[]},
+            {"id":"vmvj","name":"a","path":"/wiki-pages/e2ba4e84-c85a-4cd4-a60a-90afb95eb3b3/a.sdoc","icon":"","docUuid":"e2ba4e84-c85a-4cd4-a60a-90afb95eb3b3","children":[]}]}
+            
+            id: pageId, name, icon, path, docUuid
+            '''
+            # current_exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
+
+            id_set = get_all_wiki_ids(navigation)
+            new_page_id = gen_unique_id(id_set)
+            file_info['page_id'] = new_page_id
+            gen_new_page_nav_by_id(navigation, new_page_id, current_id)
+            new_page = {
+                'id': new_page_id,
+                'name': page_name,
+                'path': path,
+                'icon': '',
+                'docUuid': str(sdoc_uuid)
+            }
+            pages.append(new_page)
+            if len(wiki_config) == 0:
+                wiki_config['version'] = 1
+
+            wiki_config['navigation'] = navigation
+            wiki_config['pages'] = pages
+            wiki_config = json.dumps(wiki_config)
+
+            save_wiki_config(wiki, request.user.username, wiki_config)
+
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(file_info)
+        '''
+        created_at: "2024-07-03T05:17:30+00:00"
+        id: 27
+        name: "3"
+        owner: "e40151bbbe184577b11ed818a49f97f3@auth.local"
+        repo_id: "68e8e35f-e31a-49be-90ee-4a7082c1486e"
+        updated_at: "2024-07-03T05:39:11+00:00"
+        wiki_config: xxx
+          '''
+        wiki = wiki.to_dict()
+        wiki['wiki_config'] = wiki_config
+
+        return Response({'wiki': wiki, 'file_info': file_info})
 
 
 class Wiki2PageView(APIView):
@@ -646,7 +706,6 @@ class Wiki2DuplicatePageView(APIView):
         # old page to new page
         old_to_new = {}
         get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new)
-
         # page_id not exist in wiki
         if not old_to_new:
             error_msg = 'page %s not found.' % page_id
