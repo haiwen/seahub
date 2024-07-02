@@ -144,6 +144,13 @@
   justify-content: center;
 }
 
+.view-structure .wiki-add-page-btn:hover,
+.view-structure .more-view-folder-operation:hover,
+.view-structure .more-view-operation:hover {
+  border-radius: 3px;
+  background-color: #DFDFDD;
+}
+
 .view-structure .view-folder-wrapper .more-view-folder-operation .seafile-multicolor-icon-more-level,
 .view-structure .view-item .sf3-font.sf3-font-enlarge,
 .view-structure .view-item .more-view-operation .seafile-multicolor-icon-more-level {
@@ -355,13 +362,9 @@
 
 /* light mode */
 .view-structure-light.view-structure,
-.view-structure-light.view-structure .view-item .sf3-font.sf3-font-enlarge:hover,
-.view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level:hover,
-.view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level:hover,
 .view-structure-light.view-structure .icon-expand-folder:hover {
   color: #212529;
 }
-
 
 .view-structure-light.view-structure .view-item .sf3-font.sf3-font-enlarge,
 .view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level,

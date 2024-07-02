@@ -273,7 +273,7 @@ class ViewItem extends Component {
                           />
                         }
                       </div>
-                      <div className="ml-2" onClick={this.toggleInsertPage}>
+                      <div className="wiki-add-page-btn ml-1 px-1" onClick={this.toggleInsertPage}>
                         <span className='sf3-font sf3-font-enlarge'></span>
                       </div>
                     </>
