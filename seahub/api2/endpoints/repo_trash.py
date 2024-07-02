@@ -15,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.signals import clean_up_repo_trash
+from seahub.utils import get_trash_records
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission
@@ -382,17 +383,12 @@ class RepoTrash2(APIView):
             show_time = show_days
 
         try:
-            from seahub.utils import SeafEventsSession, seafevents_api
-            session = SeafEventsSession()
-            deleted_entries = seafevents_api.get_delete_records(session, repo_id, show_time, path)
-            session.close()
+            deleted_entries = get_trash_records(repo_id, show_time, path)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        except ImportError:
-            pass
-
+        
         items = []
         if len(deleted_entries) >= 1:
             # sort entry by delete time
