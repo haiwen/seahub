@@ -199,6 +199,8 @@ img[src=""] {
   flex: 1;
   min-height: 800px;
   padding: 40px 40px 40px 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .sdoc-editor-container .article>div {
@@ -238,6 +240,6 @@ img[src=""] {
   border: none;
 }
 
-.sdoc-editor-container .sdoc-editor-content .sdoc-side-toolbar-container {
-  left: 100px !important;
+.sdoc-editor-container .sdoc-editor-content .article #sdoc-editor {
+  width: 100%;
 }
