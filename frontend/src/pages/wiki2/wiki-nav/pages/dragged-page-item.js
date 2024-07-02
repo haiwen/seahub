@@ -5,8 +5,8 @@ import PageItem from './page-item';
 const dragSource = {
   beginDrag: props => {
     return {
-      idx: props.viewIndex,
-      data: { ...props.view, index: props.viewIndex },
+      idx: props.pageIndex,
+      data: { ...props.page, index: props.pageIndex },
       folderId: props.folderId,
       mode: DRAGGED_PAGE_MODE,
     };
@@ -20,7 +20,7 @@ const dragSource = {
     }
   },
   isDragging(props) {
-    const { draggedPage, viewIndex: targetIndex } = props;
+    const { draggedPage, pageIndex: targetIndex } = props;
     const { idx } = draggedPage;
     return idx > targetIndex;
   }
@@ -31,12 +31,12 @@ const dropTarget = {
     const sourceRow = monitor.getItem();
     // 1 drag page
     if (sourceRow.mode === DRAGGED_PAGE_MODE) {
-      const { infolder, viewIndex: targetIndex, view: targetView, folderId: targetFolderId } = props;
+      const { infolder, pageIndex: targetIndex, page: targetPage, folderId: targetFolderId } = props;
       const sourceFolderId = sourceRow.folderId;
-      const draggedViewId = sourceRow.data.id;
-      const targetViewId = targetView.id;
+      const draggedPageId = sourceRow.data.id;
+      const targetPageId = targetPage.id;
 
-      if (draggedViewId !== targetViewId) {
+      if (draggedPageId !== targetPageId) {
         const sourceIndex = sourceRow.idx;
         let move_position;
         if (infolder) {
@@ -45,11 +45,11 @@ const dropTarget = {
           move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
         }
 
-        props.onMoveView({
-          moved_view_id: draggedViewId,
-          target_view_id: targetViewId,
-          source_view_folder_id: sourceFolderId,
-          target_view_folder_id: targetFolderId,
+        props.onMovePage({
+          moved_page_id: draggedPageId,
+          target_page_id: targetPageId,
+          source_page_folder_id: sourceFolderId,
+          target_page_folder_id: targetFolderId,
           move_position,
         });
       }
@@ -57,15 +57,15 @@ const dropTarget = {
     }
     // 1 drag folder
     if (sourceRow.mode === DRAGGED_FOLDER_MODE) {
-      const { viewIndex: targetIndex, view: targetView } = props;
+      const { pageIndex: targetIndex, page: targetPage } = props;
       const draggedFolderId = sourceRow.data.id;
-      const targetViewId = targetView.id;
+      const targetPageId = targetPage.id;
       const sourceIndex = sourceRow.idx;
       // Drag the parent folder to the child page, return
       if (props.pathStr.split('-').includes(draggedFolderId)) return;
       props.onMoveFolder(
         draggedFolderId,
-        targetViewId,
+        targetPageId,
         sourceIndex > targetIndex ? 'move_above' : 'move_below',
       );
       return;

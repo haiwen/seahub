@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CommonAddTool from '../../../components/common/common-add-tool';
-import AddViewDropdownMenu from './add-view-dropdownmenu';
+import AddPageDropdownMenu from './add-page-dropdownmenu';
 import { gettext } from '../../../utils/constants';
 
 class WikiNavFooter extends Component {
@@ -21,16 +21,16 @@ class WikiNavFooter extends Component {
   render() {
     return (
       <div className='wiki-nav-footer'>
-        <div className='add-view-wrapper'>
+        <div className='add-wiki-page-wrapper'>
           <CommonAddTool
-            className='add-view-btn'
+            className='add-wiki-page-btn'
             callBack={this.toggleDropdown}
             footerName={gettext('Add page or folder')}
           />
           {this.state.isShowDropdownMenu &&
-            <AddViewDropdownMenu
+            <AddPageDropdownMenu
               toggleDropdown={this.toggleDropdown}
-              onToggleAddView={this.props.onToggleAddView}
+              onToggleAddPage={this.props.onToggleAddPage}
               onToggleAddFolder={this.props.onToggleAddFolder}
             />
           }
@@ -41,7 +41,7 @@ class WikiNavFooter extends Component {
 }
 
 WikiNavFooter.propTypes = {
-  onToggleAddView: PropTypes.func,
+  onToggleAddPage: PropTypes.func,
   onToggleAddFolder: PropTypes.func,
 };
 
