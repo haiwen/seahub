@@ -459,6 +459,7 @@ class Search extends Component {
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
+              <i className="sf3-font sf3-font-enter"></i>
             </div>
           </div>
           {resultItems.length > 0 && (
@@ -492,16 +493,19 @@ class Search extends Component {
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
+              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
             <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
+              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
             <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
+              {highlightIndex === 2 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
           </div>
         );
@@ -512,11 +516,13 @@ class Search extends Component {
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
+              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
             <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
+              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
           </div>
         );
