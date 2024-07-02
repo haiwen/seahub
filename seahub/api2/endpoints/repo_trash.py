@@ -237,11 +237,15 @@ class RepoTrash(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
+            from seahub.utils import SeafEventsSession, seafevents_api
             seafile_api.clean_up_repo_history(repo_id, keep_days)
             org_id = None if not request.user.org else request.user.org.org_id
             clean_up_repo_trash.send(sender=None, org_id=org_id,
                                      operator=username, repo_id=repo_id, repo_name=repo.name,
                                      repo_owner=repo_owner, days=keep_days)
+            session = SeafEventsSession()
+            seafevents_api.clean_up_repo_trash(session, repo_id, keep_days)
+            session.close()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -407,59 +411,3 @@ class RepoTrash2(APIView):
         }
 
         return Response(result)
-
-    def delete(self, request, repo_id, format=None):
-        """ Clean library's trash.
-
-        Permission checking:
-        1. repo owner can perform this action.
-        2. is group admin.
-        """
-
-        # argument check
-        try:
-            keep_days = int(request.data.get('keep_days', 0))
-        except ValueError:
-            error_msg = 'keep_days invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if keep_days < 0:
-            error_msg = 'keep_days invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        repo_owner = get_repo_owner(request, repo_id)
-        if not config.ENABLE_USER_CLEAN_TRASH:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if '@seafile_group' in repo_owner:
-            group_id = get_group_id_by_repo_owner(repo_owner)
-            if not is_group_admin(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != repo_owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            from seahub.utils import SeafEventsSession, seafevents_api
-            session = SeafEventsSession()
-            seafevents_api.clean_up_repo_trash(session, repo_id, keep_days)
-            session.close()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        except ImportError:
-            pass
-
-        return Response({'success': True})

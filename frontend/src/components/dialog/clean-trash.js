@@ -4,7 +4,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { repotrashAPI } from '../../utils/repo-trash-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
@@ -52,14 +51,7 @@ class CleanTrash extends React.Component {
         submitBtnDisabled: false
       });
     });
-    repotrashAPI.deleteRepoTrash2(repoID, inputValue.value).then((res) => {
-    }).catch((error) => {
-      let errorMsg = Utils.getErrorMsg(error);
-      this.setState({
-        formErrorMsg: errorMsg,
-        submitBtnDisabled: false
-      });
-    });
+
     if (this.props.trashType === 0){
       this.props.refreshTrash2();
     }
