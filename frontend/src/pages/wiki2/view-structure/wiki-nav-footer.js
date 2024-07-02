@@ -4,7 +4,7 @@ import CommonAddTool from '../../../components/common/common-add-tool';
 import AddViewDropdownMenu from './add-view-dropdownmenu';
 import { gettext } from '../../../utils/constants';
 
-class ViewStructureFooter extends Component {
+class WikiNavFooter extends Component {
 
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ class ViewStructureFooter extends Component {
 
   render() {
     return (
-      <div className='view-structure-footer'>
+      <div className='wiki-nav-footer'>
         <div className='add-view-wrapper'>
           <CommonAddTool
             className='add-view-btn'
@@ -40,9 +40,9 @@ class ViewStructureFooter extends Component {
   }
 }
 
-ViewStructureFooter.propTypes = {
+WikiNavFooter.propTypes = {
   onToggleAddView: PropTypes.func,
   onToggleAddFolder: PropTypes.func,
 };
 
-export default ViewStructureFooter;
+export default WikiNavFooter;

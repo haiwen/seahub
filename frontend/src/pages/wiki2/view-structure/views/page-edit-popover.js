@@ -4,10 +4,10 @@ import { PopoverBody } from 'reactstrap';
 import SeahubPopover from '../../../../components/common/seahub-popover';
 import { gettext } from '../../../../utils/constants';
 
-import '../../css/view-edit-popover.css';
+import '../../css/page-edit-popover.css';
 
 
-class ViewEditPopover extends Component {
+class PageEditPopover extends Component {
 
   constructor(props) {
     super(props);
@@ -39,10 +39,10 @@ class ViewEditPopover extends Component {
   renderViewName = () => {
     const { viewName } = this.props;
     return (
-      <div className="view-name-editor">
+      <div className="page-name-editor">
         <input
           type="text"
-          className="form-control view-name-editor-input"
+          className="form-control page-name-editor-input"
           value={viewName}
           onChange={this.onChangeName}
           autoFocus={true}
@@ -65,10 +65,10 @@ class ViewEditPopover extends Component {
         popoverClassName="view-edit-popover"
         boundariesElement={document.body}
       >
-        <div className="view-edit-popover-header">
+        <div className="page-edit-popover-header">
           <span className='header-text'>{gettext('Modify Name')}</span>
         </div>
-        <PopoverBody className="view-edit-content">
+        <PopoverBody className="page-edit-content">
           {this.renderViewName()}
         </PopoverBody>
       </SeahubPopover>
@@ -76,11 +76,11 @@ class ViewEditPopover extends Component {
   }
 }
 
-ViewEditPopover.propTypes = {
+PageEditPopover.propTypes = {
   viewName: PropTypes.string,
   onChangeName: PropTypes.func,
   toggleViewEditor: PropTypes.func,
   viewEditorId: PropTypes.string,
 };
 
-export default ViewEditPopover;
+export default PageEditPopover;

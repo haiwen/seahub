@@ -5,7 +5,7 @@ import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedFolderItem from './folders/dragged-folder-item';
 import DraggedViewItem from './views/dragged-view-item';
-import ViewStructureFooter from './view-structure-footer';
+import WikiNavFooter from './wiki-nav-footer';
 import { repoID } from '../../../utils/constants';
 
 import '../css/view-structure.css';
@@ -183,7 +183,7 @@ class ViewStructure extends Component {
     views.forEach(view => id_view_map[view.id] = view);
     const style = { maxHeight: isEditMode ? 'calc(100% - 40px)' : '100%' };
     return (
-      <div className='view-structure-body' style={style}>
+      <div className='wiki-nav-body' style={style}>
         {navigation.map((item, index) => {
           return item.type === 'folder' ?
             this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) :
@@ -212,7 +212,7 @@ class ViewStructure extends Component {
       <div className='view-structure view-structure-light'>
         <StructureBody />
         {(this.props.isEditMode) &&
-          <ViewStructureFooter
+          <WikiNavFooter
             onToggleAddView={this.props.onToggleAddView}
             onToggleAddFolder={this.props.onToggleAddFolder}
           />

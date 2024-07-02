@@ -9,7 +9,7 @@ import ViewStructure from './view-structure';
 import PageUtils from './view-structure/page-utils';
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddNewPageDialog from './view-structure/add-new-page-dialog';
-import ViewStructureFooter from './view-structure/view-structure-footer';
+import WikiNavFooter from './view-structure/wiki-nav-footer';
 import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
@@ -321,7 +321,7 @@ class SidePanel extends Component {
     return (
       <div className="wiki2-pages-container">
         {isWiki2 &&
-          <ViewStructureFooter
+          <WikiNavFooter
             onToggleAddView={this.openAddPageDialog}
             onToggleAddFolder={this.onToggleAddFolder}
           />

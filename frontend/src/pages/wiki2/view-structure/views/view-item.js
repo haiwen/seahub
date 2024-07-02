@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ViewEditPopover from './view-edit-popover';
+import PageEditPopover from './page-edit-popover';
 import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from './delete-dialog';
 import { gettext } from '../../../../utils/constants';
@@ -238,7 +238,7 @@ class ViewItem extends Component {
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
                     {isShowViewEditor && (
-                      <ViewEditPopover
+                      <PageEditPopover
                         viewName={viewName}
                         viewIcon={viewIcon}
                         viewEditorId={viewEditorId}

@@ -132,11 +132,11 @@ export default class PageDropdownMenu extends Component {
       <Dropdown
         isOpen={true}
         toggle={this.onDropdownToggle}
-        className="view-operation-dropdown"
+        className="page-operation-dropdown"
       >
-        <DropdownToggle className="view-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
+        <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
         <DropdownMenu
-          className="view-operation-dropdown-menu dtable-dropdown-menu large"
+          className="page-operation-dropdown-menu dtable-dropdown-menu large"
           flip={false}
           modifiers={{ preventOverflow: { boundariesElement: document.body } }}
           positionFixed={true}

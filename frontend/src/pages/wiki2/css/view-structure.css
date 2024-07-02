@@ -4,14 +4,14 @@
   flex-direction: column;
 }
 
-.views-structure-header {
+.wiki-nav-header {
   height: 30px;
   min-height: 30px;
   padding: 0.25rem 10px;
   display: flex;
 }
 
-.view-structure-body {
+.wiki-nav-body {
   padding-bottom: 0.5rem;
   overflow: auto;
   user-select: none;
@@ -88,10 +88,6 @@
   align-items: center;
   height: 100%;
   overflow: hidden;
-}
-
-.view-structure .more-views .folder-main {
-  padding-left: 20px;
 }
 
 .view-structure .icon-expand-folder {
@@ -181,15 +177,15 @@
   opacity: 1;
 }
 
-.view-structure-footer {
+.wiki-nav-footer {
   user-select: none;
 }
 
-.view-structure-footer:hover {
+.wiki-nav-footer:hover {
   background-color: #EFEFED;
 }
 
-.view-structure-footer.return-to-app {
+.wiki-nav-footer.return-to-app {
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -199,7 +195,7 @@
   position: relative;
 }
 
-.view-structure-footer .dropdown {
+.wiki-nav-footer .dropdown {
   position: absolute;
   top: 0;
   left: 0;
@@ -207,7 +203,7 @@
   height: 100%;
 }
 
-.view-structure-footer .dropdown button {
+.wiki-nav-footer .dropdown button {
   position: absolute;
   top: 0;
   left: 0;
@@ -217,45 +213,45 @@
   background-color: transparent !important;
 }
 
-.view-structure-footer .dropdown button::after {
+.wiki-nav-footer .dropdown button::after {
   display: none !important;
 }
 
-.view-structure-footer .dropdown button:focus {
+.wiki-nav-footer .dropdown button:focus {
   box-shadow: none !important;
 }
 
-.view-structure-footer .add-view-btn {
+.wiki-nav-footer .add-view-btn {
   padding: 0 12px;
   height: 40px;
   border-top: none;
   background-color: transparent;
 }
 
-.view-structure-footer .add-view-btn .dtable-icon-add-table {
+.wiki-nav-footer .add-view-btn .dtable-icon-add-table {
   margin-left: 1px;
   margin-right: 0.5rem;
   transform: unset;
 }
 
-.view-sidebar .view-structure-footer .add-view-btn {
+.wiki-sidebar .wiki-nav-footer .add-view-btn {
   border-top: none;
 }
 
 /* view operation dropdown */
-.view-structure .view-operation-dropdown-toggle {
+.view-structure .page-operation-dropdown-toggle {
   display: inline-block;
   width: 0;
   height: 0;
   opacity: 0;
 }
 
-.view-structure .view-operation-dropdown .view-operation-dropdown-menu {
+.view-structure .page-operation-dropdown .page-operation-dropdown-menu {
   margin-left: -15px;
   margin-top: 4px;
 }
 
-.view-operation-dropdown-menu .divider {
+.page-operation-dropdown-menu .divider {
   margin: 0.2rem 0;
 }
 

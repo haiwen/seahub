@@ -4,15 +4,15 @@
   left: 140px !important;
 }
 
-.view-edit-popover .view-edit-content {
+.view-edit-popover .page-edit-content {
   padding: 8px 12px;
 }
 
-.view-edit-popover .view-name-editor {
+.view-edit-popover .page-name-editor {
   margin-bottom: 7px;
 }
 
-.view-edit-popover .view-name-editor-input {
+.view-edit-popover .page-name-editor-input {
   height: 36px;
 }
 
@@ -53,7 +53,7 @@
   cursor: pointer;
 }
 
-.view-edit-popover-header {
+.page-edit-popover-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,14 +63,14 @@
   font-size: 14px;
 }
 
-.view-edit-popover-header .header-text {
+.page-edit-popover-header .header-text {
   color: #212529;
 }
 
-.view-edit-popover-header .remove-icon-button {
+.page-edit-popover-header .remove-icon-button {
   color: #ff8000;
 }
 
-.view-edit-popover-header .remove-icon-button:hover {
+.page-edit-popover-header .remove-icon-button:hover {
   cursor: pointer;
 }
