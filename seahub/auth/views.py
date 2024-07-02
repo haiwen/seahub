@@ -34,7 +34,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import render_error, get_site_name, is_valid_email
+from seahub.utils import render_error, get_site_name, is_valid_email, get_service_url
 from seahub.utils.http import rate_limit
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
@@ -264,9 +264,9 @@ def logout(request, next_page=None,
                 from seahub.utils import is_org_context
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    response = HttpResponseRedirect('/org/custom/%s/saml2/logout/' % str(org_id))
+                    response = HttpResponseRedirect(get_service_url().rstrip('/') + '/org/custom/%s/saml2/logout/' % str(org_id))
                 else:
-                    response = HttpResponseRedirect('/saml2/logout/')
+                    response = HttpResponseRedirect(get_service_url().rstrip('/') + '/saml2/logout/')
                 response.delete_cookie('seahub_auth')
                 return response
         except Exception as e:
@@ -538,7 +538,7 @@ def multi_adfs_sso(request):
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
-        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % str(org_id))
+        return HttpResponseRedirect(get_service_url().rstrip('/') + '/org/custom/%s/saml2/login/' % str(org_id))
 
     if request.method == "GET":
         return render(request, template_name, render_data)
