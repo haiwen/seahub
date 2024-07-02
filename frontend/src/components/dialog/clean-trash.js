@@ -9,7 +9,9 @@ import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
+  trashType: PropTypes.number.isRequired,
   refreshTrash: PropTypes.func.isRequired,
+  refreshTrash2: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func.isRequired
 };
 
@@ -41,11 +43,15 @@ class CleanTrash extends React.Component {
     this.setState({
       submitBtnDisabled: true
     });
-
     seafileAPI.deleteRepoTrash(repoID, inputValue.value).then((res) => {
-      toaster.success(gettext('Clean succeeded.'));
-      this.props.refreshTrash();
+      if (this.props.trashType === 0) {
+        this.props.refreshTrash2();
+      }
+      if (this.props.trashType === 1) {
+        this.props.refreshTrash();
+      }
       this.props.toggleDialog();
+      toaster.success(gettext('Clean succeeded.'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
@@ -53,6 +59,7 @@ class CleanTrash extends React.Component {
         submitBtnDisabled: false
       });
     });
+
   };
 
   render() {
