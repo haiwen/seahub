@@ -10,7 +10,7 @@ import posixpath
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.utils import gen_inner_file_get_url
+from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
 
 logger = logging.getLogger(__name__)
@@ -99,3 +99,109 @@ def get_page_ids_in_folder(navigation, folder_id):
         elif directory.get('type') == 'folder':
             navigation = directory.get('children', [])
             return get_page_ids_in_folder(navigation, folder_id)
+
+
+def generator_base64_code(length=4):
+    possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'
+    import random
+    ids = random.sample(possible, length)
+    return ''.join(ids)
+
+
+def get_all_wiki_ids(navigation):
+    id_set = set()
+
+    def recurse_item(item):
+        id_set.add(item.get('id'))
+        children = item.get('children')
+        if children:
+            for child in children:
+                recurse_item(child)
+
+    for nav in navigation:
+        recurse_item(nav)
+    return id_set
+
+
+def gen_unique_id(id_set, length=4):
+    _id = generator_base64_code(length)
+
+    while True:
+        if _id not in id_set:
+            return _id
+        _id = generator_base64_code(length)
+
+
+def duplicate_children(id_set, children, old_to_new):
+    old_children = []
+    for child in children:
+        old_id = child.get('id')
+        old_path = child.get('_path')
+        old_type = child.get('type')
+        sub_old_children = child.get('children', [])
+        new_id = gen_unique_id(id_set)
+        old_to_new[old_id] = new_id
+        id_set.add(new_id)
+        new_child = {
+            'id': new_id,
+            '_path': old_path,
+            'type': old_type,
+            'children': duplicate_children(id_set, sub_old_children, old_to_new),
+        }
+
+        old_children.append(new_child)
+    return old_children
+
+
+def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
+    for nav in navigation:
+        if nav.get('type') == 'page' and nav.get('id') == page_id:
+            new_id = gen_unique_id(id_set)
+            id_set.add(new_id)
+            old_to_new[page_id] = new_id
+            children = nav.get('children', [])
+            new_nav = {
+                'id': new_id,
+                'type': 'page',
+                '_path': nav.get('_path'),
+                'children': duplicate_children(id_set, children, old_to_new),
+            }
+            navigation.append(new_nav)
+        else:
+            new_navigation = nav.get('children', [])
+            get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
+
+
+def get_current_level_page_ids(navigation, page_id, ids=[]):
+    for item in navigation:
+        if item.get('id') == page_id:
+            ids.extend([child.get('id') for child in navigation if child.get('type') == 'page'])
+        else:
+            children = item.get('children') or []
+            get_current_level_page_ids(children, page_id, ids)
+
+
+def save_wiki_config(wiki, username, wiki_config):
+    repo_id = wiki.repo_id
+    obj_id = json.dumps({'parent_dir': WIKI_CONFIG_PATH})
+
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, WIKI_CONFIG_PATH)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(repo_id, '/', WIKI_CONFIG_PATH, username)
+
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, obj_id, 'upload-link', username, use_onetime=False)
+
+    if not token:
+        raise Exception('upload token invalid')
+
+    upload_link = gen_file_upload_url(token, 'upload-api')
+    upload_link = upload_link + '?replace=1'
+
+    files = {
+        'file': (WIKI_CONFIG_FILE_NAME, wiki_config)
+    }
+    data = {'parent_dir': WIKI_CONFIG_PATH, 'relative_path': '', 'replace': 1}
+    resp = requests.post(upload_link, files=files, data=data)
+    if not resp.ok:
+        raise Exception(resp.text)
