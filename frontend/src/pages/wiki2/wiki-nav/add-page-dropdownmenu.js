@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 
-class AddViewDropdownMenu extends Component {
+class AddPageDropdownMenu extends Component {
 
   toggle = event => {
     this.onStopPropagation(event);
@@ -12,7 +12,7 @@ class AddViewDropdownMenu extends Component {
 
   addPage = event => {
     this.onStopPropagation(event);
-    this.props.onToggleAddView(null);
+    this.props.onToggleAddPage(null);
   };
 
   onToggleAddFolder = event => {
@@ -43,10 +43,10 @@ class AddViewDropdownMenu extends Component {
   }
 }
 
-AddViewDropdownMenu.propTypes = {
+AddPageDropdownMenu.propTypes = {
   toggleDropdown: PropTypes.func,
-  onToggleAddView: PropTypes.func,
+  onToggleAddPage: PropTypes.func,
   onToggleAddFolder: PropTypes.func,
 };
 
-export default AddViewDropdownMenu;
+export default AddPageDropdownMenu;

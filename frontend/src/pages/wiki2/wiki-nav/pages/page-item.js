@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ViewEditPopover from './view-edit-popover';
+import NameEditPopover from '../../common/name-edit-popover';
+import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
-import DeleteDialog from './delete-dialog';
+import DeleteDialog from '../../common/delete-dialog';
 import { gettext } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
-import NavItemIcon from '../nav-item-icon';
-import DraggedViewItem from '../views/dragged-view-item';
+import DraggedPageItem from './dragged-page-item';
 
-class ViewItem extends Component {
+class PageItem extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isShowViewEditor: false,
-      isShowViewOperationDropdown: false,
+      isShowNameEditor: false,
+      isShowOperationDropdown: false,
       isShowDeleteDialog: false,
       isShowInsertPage: false,
-      viewName: props.view.name || '',
-      viewIcon: props.view.icon,
-      isSelected: props.currentPageId === props.view.id,
+      pageName: props.page.name || '',
+      pageIcon: props.page.icon,
+      isSelected: props.currentPageId === props.page.id,
       isMouseEnter: false,
     };
-    this.viewItemRef = React.createRef();
+    this.pageItemRef = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -43,18 +43,18 @@ class ViewItem extends Component {
 
   onCurrentPageChanged = (currentPageId) => {
     const { isSelected } = this.state;
-    if (currentPageId === this.props.view.id && isSelected === false) {
+    if (currentPageId === this.props.page.id && isSelected === false) {
       this.setState({ isSelected: true });
-    } else if (currentPageId !== this.props.view.id && isSelected === true) {
+    } else if (currentPageId !== this.props.page.id && isSelected === true) {
       this.setState({ isSelected: false });
     }
   };
 
-  toggleViewEditor = (e) => {
+  toggleNameEditor = (e) => {
     if (e) e.stopPropagation();
-    this.setState({ isShowViewEditor: !this.state.isShowViewEditor }, () => {
-      if (!this.state.isShowViewEditor) {
-        this.saveViewProperties();
+    this.setState({ isShowNameEditor: !this.state.isShowNameEditor }, () => {
+      if (!this.state.isShowNameEditor) {
+        this.savePageProperties();
       }
     });
   };
@@ -63,28 +63,28 @@ class ViewItem extends Component {
     this.setState({ isShowInsertPage: !this.state.isShowInsertPage });
   };
 
-  saveViewProperties = () => {
-    const { name, icon, id } = this.props.view;
-    const { viewIcon } = this.state;
-    let viewName = this.state.viewName.trim();
-    if (viewIcon !== icon || viewName !== name) {
+  savePageProperties = () => {
+    const { name, icon, id } = this.props.page;
+    const { pageIcon } = this.state;
+    let pageName = this.state.pageName.trim();
+    if (pageIcon !== icon || pageName !== name) {
       let newView = {};
-      if (viewName !== name) {
-        newView.name = viewName;
+      if (pageName !== name) {
+        newView.name = pageName;
       }
-      if (viewIcon !== icon) {
-        newView.icon = viewIcon;
+      if (pageIcon !== icon) {
+        newView.icon = pageIcon;
       }
       this.props.onUpdatePage(id, newView);
     }
   };
 
-  onChangeName = (newViewName) => {
-    this.setState({ viewName: newViewName });
+  onChangeName = (newName) => {
+    this.setState({ pageName: newName });
   };
 
-  onChangeIcon = (newViewIcon) => {
-    this.setState({ viewIcon: newViewIcon });
+  onChangeIcon = (newIcon) => {
+    this.setState({ pageIcon: newIcon });
   };
 
   openDeleteDialog = () => {
@@ -95,28 +95,17 @@ class ViewItem extends Component {
     this.setState({ isShowDeleteDialog: false });
   };
 
-  onViewOperationDropdownToggle = () => {
-    const isShowViewOperationDropdown = !this.state.isShowViewOperationDropdown;
-    this.setState({ isShowViewOperationDropdown });
-    this.changeItemFreeze(isShowViewOperationDropdown);
+  toggleDropdown = () => {
+    const isShowOperationDropdown = !this.state.isShowOperationDropdown;
+    this.setState({ isShowOperationDropdown });
+    this.changeItemFreeze(isShowOperationDropdown);
   };
 
   changeItemFreeze = (isFreeze) => {
     if (isFreeze) {
-      this.viewItemRef.classList.add('view-freezed');
+      this.pageItemRef.classList.add('wiki-page-freezed');
     } else {
-      this.viewItemRef.classList.remove('view-freezed');
-    }
-  };
-
-  renderIcon = (icon) => {
-    if (!icon) {
-      return null;
-    }
-    if (icon.includes('dtable-icon')) {
-      return <span className={`mr-2 dtable-font ${icon}`}></span>;
-    } else {
-      return <Icon className="mr-2" symbol={icon}/>;
+      this.pageItemRef.classList.remove('wiki-page-freezed');
     }
   };
 
@@ -125,7 +114,7 @@ class ViewItem extends Component {
   };
 
   getFolderChildrenHeight = () => {
-    const folded = this.props.getFoldState(this.props.view.id);
+    const folded = this.props.getFoldState(this.props.page.id);
     if (folded) return 0;
     return 'auto';
   };
@@ -135,33 +124,33 @@ class ViewItem extends Component {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  renderView = (view, index, pagesLength, isOnlyOneView) => {
-    const { isEditMode, views, folderId, pathStr } = this.props;
-    const id = view.id;
-    if (!views.find(item => item.id === id)) return;
+  renderPage = (page, index, pagesLength, isOnlyOnePage) => {
+    const { isEditMode, pages, folderId, pathStr } = this.props;
+    const id = page.id;
+    if (!pages.find(item => item.id === id)) return;
     return (
-      <DraggedViewItem
+      <DraggedPageItem
         key={id}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
+        isOnlyOnePage={isOnlyOnePage}
         infolder={false}
-        view={Object.assign({}, views.find(item => item.id === id), view)}
-        viewIndex={index}
+        page={Object.assign({}, pages.find(item => item.id === id), page)}
+        pageIndex={index}
         folderId={folderId}
         isEditMode={isEditMode}
         renderFolderMenuItems={this.props.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onSelectView={this.props.onSelectView}
+        setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
-        onDeleteView={this.props.onDeleteView}
-        onMoveViewToFolder={(targetFolderId) => {
-          this.props.onMoveViewToFolder(folderId, view.id, targetFolderId);
+        onDeletePage={this.props.onDeletePage}
+        onMovePageToFolder={(targetFolderId) => {
+          this.props.onMovePageToFolder(folderId, page.id, targetFolderId);
         }}
-        onMoveView={this.props.onMoveView}
+        onMovePage={this.props.onMovePage}
         onMoveFolder={this.props.onMoveFolder}
-        views={views}
-        pathStr={pathStr + '-' + view.id}
+        pages={pages}
+        pathStr={pathStr + '-' + page.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
         getFoldState={this.props.getFoldState}
@@ -172,58 +161,57 @@ class ViewItem extends Component {
 
   toggleExpand = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    this.props.toggleExpand(this.props.view.id);
+    this.props.toggleExpand(this.props.page.id);
     this.forceUpdate();
   };
 
   onAddNewPage = (newPage) => {
-    const { view } = this.props;
-    this.props.addPageInside(Object.assign({ parentPageId: view.id }, newPage));
+    this.props.addPageInside(Object.assign({ parentPageId: this.props.page.id }, newPage));
   };
 
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      infolder, view, pagesLength, isEditMode, folderId, isOnlyOneView, pathStr,
+      infolder, page, pagesLength, isEditMode, folderId, isOnlyOnePage, pathStr,
     } = this.props;
-    const { isShowViewEditor, viewName, viewIcon, isSelected } = this.state;
-    const isOverView = isOver && canDrop;
-    if (isSelected) this.setDocUuid(view.docUuid);
+    const { isShowNameEditor, pageName, isSelected } = this.state;
+    const isOverPage = isOver && canDrop;
+    if (isSelected) this.setDocUuid(page.docUuid);
 
-    let viewCanDropTop;
-    let viewCanDrop;
+    let pageCanDropTop;
+    let pageCanDrop;
     if (infolder) {
-      viewCanDropTop = false;
-      viewCanDrop = isOverView;
+      pageCanDropTop = false;
+      pageCanDrop = isOverPage;
     } else {
-      viewCanDropTop = isOverView && isDragging;
-      viewCanDrop = isOverView && !isDragging;
+      pageCanDropTop = isOverPage && isDragging;
+      pageCanDrop = isOverPage && !isDragging;
     }
-    let viewEditorId = `view-editor-${view.id}`;
+    let navItemId = `page-editor-${page.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
-    let childNumber = Array.isArray(view.children) ? view.children.length : 0;
+    let childNumber = Array.isArray(page.children) ? page.children.length : 0;
 
-    const folded = this.props.getFoldState(view.id);
+    const folded = this.props.getFoldState(page.id);
     return (
       <div>
         {
           fn(connectDropTarget(
             connectDragPreview(
               <div
-                className={classnames('view-item', 'view',
-                  { 'selected-view': isSelected },
-                  { 'view-can-drop-top': viewCanDropTop },
-                  { 'view-can-drop': viewCanDrop },
+                className={classnames('wiki-page-item',
+                  { 'selected-page': isSelected },
+                  { 'page-can-drop-top': pageCanDropTop },
+                  { 'page-can-drop': pageCanDrop },
                   { 'readonly': !isEditMode },
                 )}
-                ref={ref => this.viewItemRef = ref}
+                ref={ref => this.pageItemRef = ref}
                 onMouseEnter={this.onMouseEnter}
                 onMouseMove={this.onMouseMove}
                 onMouseLeave={this.onMouseLeave}
-                id={viewEditorId}
+                id={navItemId}
               >
-                <div className="view-item-main" onClick={isShowViewEditor ? () => {} : (e) => this.props.onSelectView(view.id)}>
-                  <div className='view-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
+                <div className="wiki-page-item-main" onClick={isShowNameEditor ? () => {} : (e) => this.props.setCurrentPage(page.id)}>
+                  <div className='wiki-page-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
                     {childNumber === 0 &&
                       <NavItemIcon symbol={'file'} disable={true} />
                     }
@@ -235,16 +223,13 @@ class ViewItem extends Component {
                         <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`}></i>
                       </div>
                     }
-                    {/* {this.renderIcon(view.icon)} */}
-                    <span className="view-title text-truncate" title={view.name}>{view.name}</span>
-                    {isShowViewEditor && (
-                      <ViewEditPopover
-                        viewName={viewName}
-                        viewIcon={viewIcon}
-                        viewEditorId={viewEditorId}
+                    <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
+                    {isShowNameEditor && (
+                      <NameEditPopover
+                        oldName={pageName}
+                        targetId={navItemId}
                         onChangeName={this.onChangeName}
-                        onChangeIcon={this.onChangeIcon}
-                        toggleViewEditor={this.toggleViewEditor}
+                        toggleEditor={this.toggleNameEditor}
                       />
                     )}
                   </div>
@@ -252,24 +237,24 @@ class ViewItem extends Component {
                 <div className="d-flex">
                   {isEditMode &&
                     <>
-                      <div className="more-view-operation" onClick={this.onViewOperationDropdownToggle}>
+                      <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
                         <Icon symbol={'more-level'}/>
-                        {this.state.isShowViewOperationDropdown &&
+                        {this.state.isShowOperationDropdown &&
                           <PageDropdownMenu
-                            view={view}
-                            views={this.props.views}
+                            page={page}
+                            pages={this.props.pages}
                             pagesLength={pagesLength}
-                            isOnlyOneView={isOnlyOneView}
+                            isOnlyOnePage={isOnlyOnePage}
                             folderId={folderId}
                             canDelete={true}
                             canDuplicate={true}
-                            toggle={this.onViewOperationDropdownToggle}
+                            toggle={this.toggleDropdown}
                             renderFolderMenuItems={this.props.renderFolderMenuItems}
-                            toggleViewEditor={this.toggleViewEditor}
+                            toggleNameEditor={this.toggleNameEditor}
                             duplicatePage={this.props.duplicatePage}
                             onSetFolderId={this.props.onSetFolderId}
-                            onDeleteView={this.openDeleteDialog}
-                            onMoveViewToFolder={this.props.onMoveViewToFolder}
+                            onDeletePage={this.openDeleteDialog}
+                            onMovePageToFolder={this.props.onMovePageToFolder}
                           />
                         }
                       </div>
@@ -282,7 +267,7 @@ class ViewItem extends Component {
                 {this.state.isShowDeleteDialog &&
                   <DeleteDialog
                     closeDeleteDialog={this.closeDeleteDialog}
-                    handleSubmit={this.props.onDeleteView.bind(this, view.id)}
+                    handleSubmit={this.props.onDeletePage.bind(this, page.id)}
                   />
                 }
                 {this.state.isShowInsertPage &&
@@ -297,13 +282,13 @@ class ViewItem extends Component {
           ))
         }
         <div
-          className="view-folder-children"
+          className="page-folder-children"
           style={{ height: this.getFolderChildrenHeight() }}
           onClick={this.onClickFolderChildren}
         >
-          {view.children &&
-            view.children.map((item, index) => {
-              return this.renderView(item, index, pagesLength, isOnlyOneView);
+          {page.children &&
+            page.children.map((item, index) => {
+              return this.renderPage(item, index, pagesLength, isOnlyOnePage);
             })
           }
         </div>
@@ -312,17 +297,17 @@ class ViewItem extends Component {
   }
 }
 
-ViewItem.propTypes = {
+PageItem.propTypes = {
   isOver: PropTypes.bool,
   canDrop: PropTypes.bool,
   isDragging: PropTypes.bool,
   draggedPage: PropTypes.object,
   isEditMode: PropTypes.bool,
   infolder: PropTypes.bool,
-  view: PropTypes.object,
+  page: PropTypes.object,
   folder: PropTypes.object,
-  views: PropTypes.array,
-  viewIndex: PropTypes.number,
+  pages: PropTypes.array,
+  pageIndex: PropTypes.number,
   folderId: PropTypes.string,
   pagesLength: PropTypes.number,
   connectDragSource: PropTypes.func,
@@ -331,12 +316,12 @@ ViewItem.propTypes = {
   renderFolderMenuItems: PropTypes.func,
   duplicatePage: PropTypes.func,
   onSetFolderId: PropTypes.func,
-  onSelectView: PropTypes.func,
+  setCurrentPage: PropTypes.func,
   onUpdatePage: PropTypes.func,
-  onDeleteView: PropTypes.func,
-  onMoveViewToFolder: PropTypes.func,
-  onMoveView: PropTypes.func,
-  isOnlyOneView: PropTypes.bool,
+  onDeletePage: PropTypes.func,
+  onMovePageToFolder: PropTypes.func,
+  onMovePage: PropTypes.func,
+  isOnlyOnePage: PropTypes.bool,
   onMoveFolder: PropTypes.func,
   pathStr: PropTypes.string,
   currentPageId: PropTypes.string,
@@ -345,4 +330,4 @@ ViewItem.propTypes = {
   toggleExpand: PropTypes.func,
 };
 
-export default ViewItem;
+export default PageItem;

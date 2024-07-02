@@ -4,28 +4,28 @@ import { DropdownItem } from 'reactstrap';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedFolderItem from './folders/dragged-folder-item';
-import DraggedViewItem from './views/dragged-view-item';
-import ViewStructureFooter from './view-structure-footer';
+import DraggedPageItem from './pages/dragged-page-item';
+import WikiNavFooter from './wiki-nav-footer';
 import { repoID } from '../../../utils/constants';
 
-import '../css/view-structure.css';
+import '../css/wiki-nav.css';
 
-class ViewStructure extends Component {
+class WikiNav extends Component {
 
   static propTypes = {
     isEditMode: PropTypes.bool,
     navigation: PropTypes.array,
-    views: PropTypes.array,
+    pages: PropTypes.array,
     onTogglePinViewList: PropTypes.func,
-    onToggleAddView: PropTypes.func,
+    onToggleAddPage: PropTypes.func,
     onToggleAddFolder: PropTypes.func,
     onModifyFolder: PropTypes.func,
     onDeleteFolder: PropTypes.func,
     onMoveFolder: PropTypes.func,
-    onSelectView: PropTypes.func,
+    setCurrentPage: PropTypes.func,
     onUpdatePage: PropTypes.func,
-    onDeleteView: PropTypes.func,
-    onMoveView: PropTypes.func,
+    onDeletePage: PropTypes.func,
+    onMovePage: PropTypes.func,
     moveFolderToFolder: PropTypes.func,
     movePageOut: PropTypes.func,
     duplicatePage: PropTypes.func,
@@ -64,24 +64,24 @@ class ViewStructure extends Component {
     this.idFoldedStatusMap = idFoldedStatusMap;
   };
 
-  onMoveViewToFolder = (source_view_folder_id, moved_view_id, target_view_folder_id) => {
-    this.props.onMoveView({
-      moved_view_id,
-      source_view_folder_id,
-      target_view_folder_id,
-      target_view_id: null,
+  onMovePageToFolder = (source_page_folder_id, moved_page_id, target_page_folder_id) => {
+    this.props.onMovePage({
+      moved_page_id,
+      source_page_folder_id,
+      target_page_folder_id,
+      target_page_id: null,
       move_position: 'move_below'
     });
   };
 
-  renderFolderMenuItems = ({ currentFolderId, onMoveViewToFolder }) => {
+  renderFolderMenuItems = ({ currentFolderId, onMovePageToFolder }) => {
     // folder lists (in the root directory)
     const { navigation } = this.props;
     let renderFolders = navigation.filter(item => item.type === 'folder' && item.id !== currentFolderId);
     return renderFolders.map(folder => {
       const { id, name } = folder;
       return (
-        <DropdownItem key={`move-to-folder-${id}`} onClick={onMoveViewToFolder.bind(this, id)}>
+        <DropdownItem key={`move-to-folder-${id}`} onClick={onMovePageToFolder.bind(this, id)}>
           <span className="folder-name text-truncate" title={name}>{name}</span>
         </DropdownItem>
       );
@@ -96,31 +96,31 @@ class ViewStructure extends Component {
     return this.folderClassNameCache;
   };
 
-  renderFolder = (folder, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) => {
-    const { isEditMode, views } = this.props;
+  renderFolder = (folder, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
+    const { isEditMode, pages } = this.props;
     const folderId = folder.id;
     return (
       <DraggedFolderItem
-        key={`view-folder-${folderId}`}
+        key={`page-folder-${folderId}`}
         isEditMode={isEditMode}
         folder={folder}
         folderIndex={index}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
-        id_view_map={id_view_map}
+        isOnlyOnePage={isOnlyOnePage}
+        id_page_map={id_page_map}
         renderFolderMenuItems={this.renderFolderMenuItems}
         toggleExpand={this.toggleExpand}
-        onToggleAddView={this.props.onToggleAddView}
+        onToggleAddPage={this.props.onToggleAddPage}
         onDeleteFolder={this.props.onDeleteFolder}
         onMoveFolder={this.props.onMoveFolder}
-        onSelectView={this.props.onSelectView}
+        setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onDeleteView={this.props.onDeleteView}
-        onMoveViewToFolder={this.onMoveViewToFolder}
-        onMoveView={this.props.onMoveView}
-        views={views}
+        onDeletePage={this.props.onDeletePage}
+        onMovePageToFolder={this.onMovePageToFolder}
+        onMovePage={this.props.onMovePage}
+        pages={pages}
         moveFolderToFolder={this.props.moveFolderToFolder}
         pathStr={folderId}
         layerDragProps={layerDragProps}
@@ -135,34 +135,34 @@ class ViewStructure extends Component {
     );
   };
 
-  renderView = (view, index, pagesLength, isOnlyOneView, id_view_map) => {
-    const { isEditMode, views } = this.props;
-    const id = view.id;
-    if (!views.find(item => item.id === id)) return;
+  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map) => {
+    const { isEditMode, pages } = this.props;
+    const id = page.id;
+    if (!pages.find(item => item.id === id)) return;
     const folderId = null; // Pages in the root directory, no folders, use null
     return (
-      <DraggedViewItem
+      <DraggedPageItem
         key={id}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
+        isOnlyOnePage={isOnlyOnePage}
         infolder={false}
-        view={Object.assign({}, views.find(item => item.id === id), view)}
-        views={views}
-        viewIndex={index}
+        page={Object.assign({}, pages.find(item => item.id === id), page)}
+        pages={pages}
+        pageIndex={index}
         folderId={folderId}
         isEditMode={isEditMode}
         renderFolderMenuItems={this.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
         onSetFolderId={this.props.onSetFolderId}
-        onSelectView={this.props.onSelectView}
+        setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
-        onDeleteView={this.props.onDeleteView}
-        onMoveViewToFolder={(targetFolderId) => {
-          this.onMoveViewToFolder(folderId, view.id, targetFolderId);
+        onDeletePage={this.props.onDeletePage}
+        onMovePageToFolder={(targetFolderId) => {
+          this.onMovePageToFolder(folderId, page.id, targetFolderId);
         }}
-        onMoveView={this.props.onMoveView}
+        onMovePage={this.props.onMovePage}
         onMoveFolder={this.props.onMoveFolder}
-        pathStr={view.id}
+        pathStr={page.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
         getFoldState={this.getFoldState}
@@ -173,21 +173,21 @@ class ViewStructure extends Component {
 
   // eslint-disable-next-line
   renderStructureBody = React.forwardRef((layerDragProps, ref) => {
-    const { navigation, views, isEditMode } = this.props;
-    let isOnlyOneView = false;
-    if (views.length === 1) {
-      isOnlyOneView = true;
+    const { navigation, pages, isEditMode } = this.props;
+    let isOnlyOnePage = false;
+    if (pages.length === 1) {
+      isOnlyOnePage = true;
     }
-    const pagesLength = views.length;
-    let id_view_map = {};
-    views.forEach(view => id_view_map[view.id] = view);
+    const pagesLength = pages.length;
+    let id_page_map = {};
+    pages.forEach(page => id_page_map[page.id] = page);
     const style = { maxHeight: isEditMode ? 'calc(100% - 40px)' : '100%' };
     return (
-      <div className='view-structure-body' style={style}>
+      <div className='wiki-nav-body' style={style}>
         {navigation.map((item, index) => {
           return item.type === 'folder' ?
-            this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) :
-            this.renderView(item, index, pagesLength, isOnlyOneView, id_view_map);
+            this.renderFolder(item, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) :
+            this.renderPage(item, index, pagesLength, isOnlyOnePage, id_page_map);
         })}
       </div>
     );
@@ -204,16 +204,16 @@ class ViewStructure extends Component {
 
   render() {
     const StructureBody = html5DragDropContext(
-      DropTarget('ViewStructure', {}, connect => ({
+      DropTarget('WikiNav', {}, connect => ({
         connectDropTarget: connect.dropTarget()
       }))(DragLayer(this.collect)(this.renderStructureBody))
     );
     return (
-      <div className='view-structure view-structure-light'>
+      <div className='wiki-nav'>
         <StructureBody />
         {(this.props.isEditMode) &&
-          <ViewStructureFooter
-            onToggleAddView={this.props.onToggleAddView}
+          <WikiNavFooter
+            onToggleAddPage={this.props.onToggleAddPage}
             onToggleAddFolder={this.props.onToggleAddFolder}
           />
         }
@@ -222,4 +222,4 @@ class ViewStructure extends Component {
   }
 }
 
-export default ViewStructure;
+export default WikiNav;

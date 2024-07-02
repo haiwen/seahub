@@ -5,11 +5,11 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
-import ViewStructure from './view-structure';
-import PageUtils from './view-structure/page-utils';
-import NewFolderDialog from './view-structure/new-folder-dialog';
-import AddNewPageDialog from './view-structure/add-new-page-dialog';
-import ViewStructureFooter from './view-structure/view-structure-footer';
+import WikiNav from './wiki-nav/index';
+import PageUtils from './wiki-nav/page-utils';
+import NewFolderDialog from './wiki-nav/new-folder-dialog';
+import AddNewPageDialog from './wiki-nav/add-new-page-dialog';
+import WikiNavFooter from './wiki-nav/wiki-nav-footer';
 import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';
@@ -103,10 +103,10 @@ class SidePanel extends Component {
     this.props.saveWikiConfig(config, onSuccess, errorCallback);
   };
 
-  movePage = ({ moved_view_id, target_view_id, source_view_folder_id, target_view_folder_id, move_position }) => {
+  movePage = ({ moved_page_id, target_page_id, source_page_folder_id, target_page_folder_id, move_position }) => {
     let config = deepCopy(this.props.config);
     let { navigation } = config;
-    PageUtils.movePage(navigation, moved_view_id, target_view_id, source_view_folder_id, target_view_folder_id, move_position);
+    PageUtils.movePage(navigation, moved_page_id, target_page_id, source_page_folder_id, target_page_folder_id, move_position);
     config.navigation = navigation;
     this.props.saveWikiConfig(config);
   };
@@ -279,15 +279,15 @@ class SidePanel extends Component {
     const { pages, navigation } = config;
     return (
       <div className="wiki2-pages-container">
-        <ViewStructure
+        <WikiNav
           isEditMode={isWiki2}
           navigation={navigation}
-          views={pages}
-          onToggleAddView={this.openAddPageDialog}
-          onDeleteView={this.confirmDeletePage}
+          pages={pages}
+          onToggleAddPage={this.openAddPageDialog}
+          onDeletePage={this.confirmDeletePage}
           onUpdatePage={onUpdatePage}
-          onSelectView={this.props.setCurrentPage}
-          onMoveView={this.movePage}
+          setCurrentPage={this.props.setCurrentPage}
+          onMovePage={this.movePage}
           movePageOut={this.movePageOut}
           onToggleAddFolder={this.onToggleAddFolder}
           onModifyFolder={this.onModifyFolder}
@@ -321,8 +321,8 @@ class SidePanel extends Component {
     return (
       <div className="wiki2-pages-container">
         {isWiki2 &&
-          <ViewStructureFooter
-            onToggleAddView={this.openAddPageDialog}
+          <WikiNavFooter
+            onToggleAddPage={this.openAddPageDialog}
             onToggleAddFolder={this.onToggleAddFolder}
           />
         }

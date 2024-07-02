@@ -8,21 +8,20 @@ import { getWikPageLink } from '../../utils';
 export default class PageDropdownMenu extends Component {
 
   static propTypes = {
-    view: PropTypes.object.isRequired,
-    views: PropTypes.array,
+    page: PropTypes.object.isRequired,
+    pages: PropTypes.array,
     pagesLength: PropTypes.number,
     folderId: PropTypes.string,
     canDelete: PropTypes.bool,
     canDuplicate: PropTypes.bool,
     renderFolderMenuItems: PropTypes.func,
     toggle: PropTypes.func,
-    toggleViewEditor: PropTypes.func,
+    toggleNameEditor: PropTypes.func,
     duplicatePage: PropTypes.func,
     onSetFolderId: PropTypes.func,
-    onDeleteView: PropTypes.func,
-    onModifyViewType: PropTypes.func,
-    onMoveViewToFolder: PropTypes.func,
-    isOnlyOneView: PropTypes.bool,
+    onDeletePage: PropTypes.func,
+    onMovePageToFolder: PropTypes.func,
+    isOnlyOnePage: PropTypes.bool,
   };
 
   constructor(props) {
@@ -34,9 +33,9 @@ export default class PageDropdownMenu extends Component {
   }
 
   calculateNameMap = () => {
-    const { views } = this.props;
-    return views.reduce((map, view) => {
-      map[view.name] = true;
+    const { pages } = this.props;
+    return pages.reduce((map, page) => {
+      map[page.name] = true;
       return map;
     }, {});
   };
@@ -49,28 +48,23 @@ export default class PageDropdownMenu extends Component {
     this.props.toggle();
   };
 
-  onRenameView = (event) => {
+  onRename = (event) => {
     event.nativeEvent.stopImmediatePropagation();
-    this.props.toggleViewEditor();
+    this.props.toggleNameEditor();
   };
 
-  onDeleteView = (event) => {
+  onDeletePage = (event) => {
     event.nativeEvent.stopImmediatePropagation();
-    this.props.onDeleteView();
+    this.props.onDeletePage();
   };
 
-  onModifyViewType = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.props.onModifyViewType();
-  };
-
-  onMoveViewToFolder = (targetFolderId) => {
-    this.props.onMoveViewToFolder(targetFolderId);
+  onMovePageToFolder = (targetFolderId) => {
+    this.props.onMovePageToFolder(targetFolderId);
   };
 
   onRemoveFromFolder = (evt) => {
     evt.nativeEvent.stopImmediatePropagation();
-    this.props.onMoveViewToFolder(null);
+    this.props.onMovePageToFolder(null);
   };
 
   onToggleFoldersMenu = () => {
@@ -78,8 +72,8 @@ export default class PageDropdownMenu extends Component {
   };
 
   duplicatePage = () => {
-    const { view, folderId } = this.props;
-    const { id: from_page_id, name } = view;
+    const { page, folderId } = this.props;
+    const { id: from_page_id, name } = page;
     let duplicateCount = 1;
     let newName = name + '(copy)';
     while (this.pageNameMap[newName]) {
@@ -104,8 +98,8 @@ export default class PageDropdownMenu extends Component {
   };
 
   handleCopyLink = () => {
-    const { view } = this.props;
-    const wikiLink = getWikPageLink(view.id);
+    const { page } = this.props;
+    const wikiLink = getWikPageLink(page.id);
     const successText = gettext('Copied link to clipboard');
     const failedText = gettext('Copy failed');
 
@@ -117,26 +111,26 @@ export default class PageDropdownMenu extends Component {
   };
 
   handleOpenInNewTab = () => {
-    const { view } = this.props;
-    const wikiLink = getWikPageLink(view.id);
+    const { page } = this.props;
+    const wikiLink = getWikPageLink(page.id);
     window.open(wikiLink);
   };
 
   render() {
     const {
-      folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOneView,
+      folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOnePage,
     } = this.props;
-    const folderMenuItems = renderFolderMenuItems && renderFolderMenuItems({ currentFolderId: folderId, onMoveViewToFolder: this.onMoveViewToFolder });
+    const folderMenuItems = renderFolderMenuItems && renderFolderMenuItems({ currentFolderId: folderId, onMovePageToFolder: this.onMovePageToFolder });
 
     return (
       <Dropdown
         isOpen={true}
         toggle={this.onDropdownToggle}
-        className="view-operation-dropdown"
+        className="page-operation-dropdown"
       >
-        <DropdownToggle className="view-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
+        <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
         <DropdownMenu
-          className="view-operation-dropdown-menu dtable-dropdown-menu large"
+          className="page-operation-dropdown-menu dtable-dropdown-menu large"
           flip={false}
           modifiers={{ preventOverflow: { boundariesElement: document.body } }}
           positionFixed={true}
@@ -145,7 +139,7 @@ export default class PageDropdownMenu extends Component {
             <i className="sf3-font sf3-font-link" />
             <span className="item-text">{gettext('Copy link')}</span>
           </DropdownItem>
-          <DropdownItem onClick={this.onRenameView}>
+          <DropdownItem onClick={this.onRename}>
             <i className="sf3-font sf3-font-rename" />
             <span className="item-text">{gettext('Modify name')}</span>
           </DropdownItem>
@@ -155,8 +149,8 @@ export default class PageDropdownMenu extends Component {
               <span className="item-text">{gettext('Duplicate page')}</span>
             </DropdownItem>
           }
-          {(isOnlyOneView || pagesLength === 1 || !canDelete) ? '' : (
-            <DropdownItem onClick={this.onDeleteView}>
+          {(isOnlyOnePage || pagesLength === 1 || !canDelete) ? '' : (
+            <DropdownItem onClick={this.onDeletePage}>
               <i className="sf3-font sf3-font-delete1" />
               <span className="item-text">{gettext('Delete page')}</span>
             </DropdownItem>

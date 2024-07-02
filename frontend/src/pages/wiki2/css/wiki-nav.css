@@ -1,0 +1,392 @@
+.wiki-nav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-nav-header {
+  height: 30px;
+  min-height: 30px;
+  padding: 0.25rem 10px;
+  display: flex;
+}
+
+.wiki-nav-body {
+  padding-bottom: 0.5rem;
+  overflow: auto;
+  user-select: none;
+}
+
+.wiki-nav .page-folder {
+  position: relative;
+}
+
+.wiki-nav .page-folder.can-drop::after,
+.wiki-nav .page-folder.can-drop-top::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 40px;
+  background-color: #666;
+}
+
+.wiki-nav .page-folder .page-folder-children {
+  transition: height 0.25s ease-in-out 0s;
+}
+
+.wiki-nav .page-drop-target {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  border-bottom: 1px solid #666;
+}
+
+.wiki-nav .page-folder.can-drop::after {
+  top: unset;
+  bottom: 0;
+}
+
+.wiki-nav .page-folder.can-drop-top::after {
+  top: 0;
+}
+
+.wiki-nav .page-folder-wrapper,
+.wiki-nav .wiki-page-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background-color: #F7F7F5;
+}
+
+.wiki-nav .wiki-page-item.selected-page {
+  background-color: #EDEDEA;
+}
+
+.wiki-nav .page-folder-wrapper:hover,
+.wiki-nav .wiki-page-item:hover {
+  background-color: #EFEFED;
+}
+
+.wiki-nav .wiki-page-item.selected-page:hover {
+  background-color: #E6E6E4;
+}
+
+.wiki-nav .folder-main,
+.wiki-nav .wiki-page-item-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wiki-nav .icon-expand-folder {
+  display: inline-block;
+  font-size: 12px;
+  transform: scale(0.8);
+  color: #b5b5b5;
+  cursor: pointer;
+}
+
+.wiki-nav .folder-content,
+.wiki-nav .wiki-page-content {
+  height: 100%;
+  padding-right: 8px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.wiki-nav .in-folder .wiki-page-content {
+  padding-left: calc(12 * 0.8px + 0.5rem);
+}
+
+.wiki-nav .folder-content:hover,
+.wiki-nav .wiki-page-content:hover {
+  cursor: pointer;
+}
+
+.wiki-nav .folder-content .dtable-font,
+.wiki-nav .wiki-page-content .dtable-font {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.wiki-nav .folder-content .folder-name,
+.wiki-nav .wiki-page-content .wiki-page-title {
+  height: 40px;
+  line-height: 40px;
+  flex: 1;
+}
+
+.wiki-nav .folder-operation-dropdownmenu,
+.wiki-nav .more-wiki-page-operation {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wiki-nav .wiki-add-page-btn:hover,
+.wiki-nav .folder-operation:hover,
+.wiki-nav .more-wiki-page-operation:hover {
+  border-radius: 3px;
+  background-color: #DFDFDD;
+}
+
+.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
+.wiki-nav .page-folder-wrapper .folder-operation-dropdownmenu .seafile-multicolor-icon-more-level,
+.wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
+  cursor: pointer;
+  opacity: 0;
+}
+
+.wiki-nav .wiki-page-item:hover .sf3-font.sf3-font-enlarge,
+.wiki-nav .page-folder-wrapper:hover .folder-operation-dropdownmenu .seafile-multicolor-icon-more-level,
+.wiki-nav .wiki-page-item:hover .more-wiki-page-operation .seafile-multicolor-icon-more-level {
+  opacity: 1;
+}
+
+.wiki-nav .folder-operation-dropdownmenu:hover,
+.wiki-nav .more-wiki-page-operation:hover {
+  cursor: pointer;
+}
+
+.wiki-nav .folder-operation-dropdownmenu .dtable-font,
+.wiki-nav .more-wiki-page-operation .dtable-font {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.wiki-nav .folder-list .page-folder.fold-freezed .btn-folder-operation,
+.wiki-nav .wiki-page-item.wiki-page-freezed .sf3-font.sf3-font-enlarge,
+.wiki-nav .wiki-page-item.wiki-page-freezed .seafile-multicolor-icon-more-level {
+  opacity: 1;
+}
+
+.wiki-nav-footer {
+  user-select: none;
+}
+
+.wiki-nav-footer:hover {
+  background-color: #EFEFED;
+}
+
+.wiki-nav-footer.return-to-app {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.add-wiki-page-wrapper {
+  position: relative;
+}
+
+.wiki-nav-footer .dropdown {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wiki-nav-footer .dropdown button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent !important;
+}
+
+.wiki-nav-footer .dropdown button::after {
+  display: none !important;
+}
+
+.wiki-nav-footer .dropdown button:focus {
+  box-shadow: none !important;
+}
+
+.wiki-nav-footer .add-wiki-page-btn {
+  padding: 0 12px;
+  height: 40px;
+  border-top: none;
+  background-color: transparent;
+}
+
+.wiki-nav-footer .add-wiki-page-btn .dtable-icon-add-table {
+  margin-left: 1px;
+  margin-right: 0.5rem;
+  transform: unset;
+}
+
+.wiki-sidebar .wiki-nav-footer .add-wiki-page-btn {
+  border-top: none;
+}
+
+.wiki-nav .page-operation-dropdown-toggle {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.wiki-nav .page-operation-dropdown .page-operation-dropdown-menu {
+  margin-left: -15px;
+  margin-top: 4px;
+}
+
+.page-operation-dropdown-menu .divider {
+  margin: 0.2rem 0;
+}
+
+/* folders dropdown */
+.wiki-nav .more-wiki-page-operation .btn-move-to-folder {
+  display: flex;
+  align-items: center;
+}
+
+.wiki-nav .more-wiki-page-operation .move-to-folders-toggle {
+  opacity: 0;
+  width: 0;
+  min-width: 0;
+  margin-left: -12px;
+  padding: 0;
+}
+
+.wiki-nav .more-wiki-page-operation .folders-dropdown-menu {
+  margin-top: -16px;
+  margin-left: 10px;
+}
+
+.wiki-nav .folders-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.wiki-nav .more-wiki-page-operation .btn-move-to-folder:focus .dtable-icon-insert-right {
+  color: #fff;
+}
+
+.wiki-nav .folders-dropdown {
+  width: 100%;
+}
+
+.wiki-nav .folders-dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.wiki-nav .folders-dropdown .item-text {
+  flex: 1;
+}
+
+.wiki-nav .folders-dropdown .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.wiki-nav .folders-dropdown .dropdown-menu .folder-name {
+  display: inline-block;
+  width: 100%;
+}
+
+.wiki-nav .folders-dropdown .icon-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  margin-right: 12px;
+}
+
+.wiki-nav .folders-dropdown .icon-dropdown-toggle .item-icon {
+  transform: scale(0.8);
+}
+
+.wiki-nav .wiki-page-item.page-can-drop::after,
+.wiki-nav .wiki-page-item.page-can-drop-top::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 39px;
+  background-color: #666 !important;
+}
+
+.wiki-nav .wiki-page-item.page-can-drop-top::after {
+  top: 0;
+}
+
+.dtable-dropdown-menu .dropdown-item .sf3-font {
+  font-size: 14px;
+  margin-right: 10px;
+  color: #8c8c8c;
+}
+
+.dtable-dropdown-menu .dropdown-item:hover .sf3-font {
+  color: #fff;
+}
+
+.dtable-dropdown-menu.large .dropdown-item {
+  min-height: 32px;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.wiki-nav,
+.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge:hover,
+.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover,
+.wiki-nav .page-folder .seafile-multicolor-icon-more-level:hover,
+.wiki-nav .icon-expand-folder:hover {
+  color: #212529;
+}
+
+.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
+.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level,
+.wiki-nav .page-folder .seafile-multicolor-icon-more-level,
+.wiki-nav .icon-expand-folder {
+  color: #666;
+}
+
+.wiki-nav .page-folder-wrapper.can-drop-top::before {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #666;
+}
+
+.wiki-nav .page-folder-wrapper.can-drop::after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  background-color: #666;
+  top: unset;
+  bottom: 0;
+}
+
+.svg-item {
+  width: 1em;
+  height: 1em;
+  font-size: 16px;
+}

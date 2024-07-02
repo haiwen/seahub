@@ -10,7 +10,7 @@ import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
-import PageUtils from './view-structure/page-utils';
+import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
 
 import '../../css/layout.css';

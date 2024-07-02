@@ -10,8 +10,7 @@ export default class FolderOperationDropdownMenu extends Component {
     changeItemFreeze: PropTypes.func,
     openFolderEditor: PropTypes.func,
     onDeleteFolder: PropTypes.func,
-    onToggleAddView: PropTypes.func,
-    onToggleAddArchiveView: PropTypes.func,
+    onToggleAddPage: PropTypes.func,
     folderId: PropTypes.string,
   };
 
@@ -45,7 +44,7 @@ export default class FolderOperationDropdownMenu extends Component {
         <Dropdown
           isOpen={this.state.isMenuShow}
           toggle={this.onDropdownToggle}
-          className="more-view-folder-operation"
+          className="folder-operation-dropdownmenu"
         >
           <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isMenuShow}>
             <Icon symbol={'more-level'}/>
@@ -56,7 +55,7 @@ export default class FolderOperationDropdownMenu extends Component {
             modifiers={{ preventOverflow: { boundariesElement: document.body } }}
             positionFixed={true}
           >
-            <DropdownItem onClick={this.props.onToggleAddView.bind(this, this.props.folderId)}>
+            <DropdownItem onClick={this.props.onToggleAddPage.bind(this, this.props.folderId)}>
               <i className="sf3-font sf3-font-file" />
               <span className="item-text">{gettext('Add page')}</span>
             </DropdownItem>

@@ -40,24 +40,24 @@ const dropTarget = {
     if (className.includes('can-drop-top')) {
       move_position = 'move_above';
     }
-    let moveInto = className.includes('dragged-view-over');
+    let moveInto = className.includes('dragged-page-over');
 
     // 1. drag source is page
     if (sourceRow.mode === DRAGGED_PAGE_MODE) {
       const sourceFolderId = sourceRow.folderId;
-      const draggedViewId = sourceRow.data.id;
+      const draggedPageId = sourceRow.data.id;
       // 1.1 move page into folder
       if (moveInto) {
-        props.onMoveView({
-          moved_view_id: draggedViewId,
-          target_view_id: null,
-          source_view_folder_id: sourceFolderId,
-          target_view_folder_id: targetFolderId,
+        props.onMovePage({
+          moved_page_id: draggedPageId,
+          target_page_id: null,
+          source_page_folder_id: sourceFolderId,
+          target_page_folder_id: targetFolderId,
           move_position,
         });
         return;
       } else { // 1.2 Drag the page above or below the folder
-        props.movePageOut(draggedViewId, sourceFolderId, targetFolderId, move_position);
+        props.movePageOut(draggedPageId, sourceFolderId, targetFolderId, move_position);
         return;
       }
     }
@@ -98,6 +98,6 @@ const dropCollect = (connect, monitor) => ({
   monitor,
 });
 
-export default DropTarget('ViewStructure', dropTarget, dropCollect)(
-  DragSource('ViewStructure', dragSource, dragCollect)(FolderItem)
+export default DropTarget('WikiNav', dropTarget, dropCollect)(
+  DragSource('WikiNav', dragSource, dragCollect)(FolderItem)
 );
