@@ -136,6 +136,7 @@ class ViewItem extends Component {
   };
 
   renderView = (view, index, pagesLength, isOnlyOneView) => {
+    if (!view) return;
     const { isEditMode, views, folderId, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;

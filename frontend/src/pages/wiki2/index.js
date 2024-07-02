@@ -187,6 +187,10 @@ class Wiki extends Component {
     }
     const { pages } = config;
     const currentPage = PageUtils.getPageById(pages, pageId);
+    if (!currentPage) {
+      callback && callback();
+      return;
+    }
     const { path, id, name, docUuid } = currentPage;
     if (path !== this.state.path) this.showPage(pageId, path);
     this.onCloseSide();

@@ -21,8 +21,10 @@ function getPaths(navigation, currentPageId, pages) {
     }
     if (node.children) {
       node.children.forEach(child => {
-        child._path = newPath;
-        runNode(child);
+        if (child) {
+          child._path = newPath;
+          runNode(child);
+        }
       });
     }
   }
