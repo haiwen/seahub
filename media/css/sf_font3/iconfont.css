@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1719381808514'); /* IE9 */
-  src: url('iconfont.eot?t=1719381808514#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1719381808514') format('woff2'),
-       url('iconfont.woff?t=1719381808514') format('woff'),
-       url('iconfont.ttf?t=1719381808514') format('truetype'),
-       url('iconfont.svg?t=1719381808514#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1719885081769'); /* IE9 */
+  src: url('iconfont.eot?t=1719885081769#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1719885081769') format('woff2'),
+       url('iconfont.woff?t=1719885081769') format('woff'),
+       url('iconfont.ttf?t=1719885081769') format('truetype'),
+       url('iconfont.svg?t=1719885081769#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-enter:before {
+  content: "\e845";
+}
+
+.sf3-font-open-sidebar:before {
+  content: "\e843";
+}
+
+.sf3-font-close-sidebar:before {
+  content: "\e844";
 }
 
 .sf3-font-exclamation-triangle:before {

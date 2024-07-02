@@ -411,6 +411,12 @@
   color: #666;
 }
 
+.search-types .sf3-font-enter {
+  position: absolute;
+  right: 6px;
+  color: #999999;
+}
+
 .library-result-container {
   margin-bottom: 16px;
 }
