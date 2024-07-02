@@ -140,16 +140,16 @@
   justify-content: center;
 }
 
-.view-structure .wiki-add-page-btn:hover,
-.view-structure .more-view-folder-operation:hover,
-.view-structure .more-view-operation:hover {
+.wiki-nav .wiki-add-page-btn:hover,
+.wiki-nav .folder-operation:hover,
+.wiki-nav .more-wiki-page-operation:hover {
   border-radius: 3px;
   background-color: #DFDFDD;
 }
 
-.view-structure .view-folder-wrapper .more-view-folder-operation .seafile-multicolor-icon-more-level,
-.view-structure .view-item .sf3-font.sf3-font-enlarge,
-.view-structure .view-item .more-view-operation .seafile-multicolor-icon-more-level {
+.wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
+.wiki-nav .page-folder-wrapper .folder-operation-dropdownmenu .seafile-multicolor-icon-more-level,
+.wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
   cursor: pointer;
   opacity: 0;
 }
