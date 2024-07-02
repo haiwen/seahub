@@ -86,6 +86,9 @@
   color: #666;
 }
 
+.sdoc-file-history .sdoc-file-history-header .go-back .sf3-font-down {
+  font-size: 1.25rem !important;
+}
 
 .sdoc-file-history .sdoc-file-history-content {
   height: 100%;
