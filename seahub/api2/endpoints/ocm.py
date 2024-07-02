@@ -20,6 +20,8 @@ from seaserv import seafile_api
 from seahub.utils.repo import get_available_repo_perms, get_repo_owner
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+
+from seahub.profile.models import Profile
 from seahub.ocm.models import OCMShareReceived, OCMShare
 from seahub.ocm.settings import ENABLE_OCM, SUPPORTED_OCM_PROTOCOLS, \
     OCM_SEAFILE_PROTOCOL, OCM_RESOURCE_TYPE_LIBRARY, OCM_API_VERSION, \
@@ -198,10 +200,11 @@ class OCMSharesView(APIView):
         else:
             permission = PERMISSION_READ
 
+        share_with_ccnet_email = Profile.objects.get_username_by_contact_email(share_with)
         OCMShareReceived.objects.add(
             shared_secret=shared_secret,
             from_user=sender,
-            to_user=share_with,
+            to_user=share_with_ccnet_email or share_with,
             from_server_url=from_server_url,
             repo_id=repo_id,
             repo_name=repo_name,
