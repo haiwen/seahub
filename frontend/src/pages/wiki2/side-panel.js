@@ -77,16 +77,20 @@ class SidePanel extends Component {
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
     const { config } = this.props;
     const { name, from_page_id } = fromPageConfig;
-    const { navigation, pages } = config;
-    const fromPage = PageUtils.getPageById(pages, from_page_id);
-    const newPageId = generateUniqueId(navigation);
-    let newPageConfig = {
-      ...fromPage,
-      id: newPageId,
-      name,
-    };
-    const newPage = new Page({ ...newPageConfig });
-    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
+
+    wikiAPI.duplicateWiki2Page(wikiId, from_page_id)
+
+    //
+    // const { navigation, pages } = config;
+    // const fromPage = PageUtils.getPageById(pages, from_page_id);
+    // const newPageId = generateUniqueId(navigation);
+    // let newPageConfig = {
+    //   ...fromPage,
+    //   id: newPageId,
+    //   name,
+    // };
+    // const newPage = new Page({ ...newPageConfig });
+    // this.addPage(newPage, this.current_folder_id, successCallback, errorCallback);
   };
 
   addPage = (page, parentId, successCallback, errorCallback, jumpToNewPage = true) => {

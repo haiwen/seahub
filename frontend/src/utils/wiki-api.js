@@ -176,10 +176,13 @@ class WikiAPI {
     return this.req.get(url);
   }
 
-  createWiki2Page(wikiId, pageName) {
+  createWiki2Page(wikiId, pageName, currentId) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/pages/';
     let form = new FormData();
     form.append('page_name', pageName);
+    if (currentId) {
+      form.append('current_id', currentId);
+    }
     return this._sendPostRequest(url, form);
   }
 
@@ -204,6 +207,13 @@ class WikiAPI {
       wiki_name: wikiName
     };
     return this.req.put(url, params);
+  }
+
+  duplicateWiki2Page(wikiId, pageId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/duplicate-page/';
+    let form = new FormData();
+    form.append('page_id', pageId);
+    return this._sendPostRequest(url, form);
   }
 
 }
