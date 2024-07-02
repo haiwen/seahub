@@ -45,6 +45,8 @@ export {
   Z_INDEX,
   GROUPBY_DATE_GRANULARITY_LIST,
   HEADER_HEIGHT_TYPE,
+  PRIVATE_COLUMN_KEY,
+  NOT_DISPLAY_COLUMN_KEYS,
 } from './constants';
 
 export {

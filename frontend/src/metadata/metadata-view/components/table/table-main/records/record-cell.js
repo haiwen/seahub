@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { toaster } from '@seafile/sf-metadata-ui-component';
 import { isFunction } from '../../../../_basic';
 import { isNameColumn } from '../../../../utils/column-utils';
@@ -42,28 +43,16 @@ class RecordCell extends React.Component {
     const { column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected } = this.props;
     const { isFileTipShow } = this.state;
     const { type } = column;
-    let className = `sf-metadata-result-table-cell sf-metadata-result-table-${type}-cell `;
     const canEditable = window.sfMetadataContext.canModifyCell(column);
-    className = `${className}${(canEditable || !TABLE_SUPPORT_EDIT_TYPE_MAP[type]) ? '' : 'table-cell-uneditable '}`;
-    if (highlightClassName) {
-      className += `${highlightClassName} `;
-    }
-    if (isLastCell) {
-      className += 'last-cell ';
-    }
-    if (isLastFrozenCell) {
-      className += 'table-last--frozen ';
-    }
-    if (isCellSelected) {
-      className += 'cell-selected ';
-    }
-    if (isFileTipShow) {
-      className += 'draging-file-to-cell ';
-    }
-    if (hasComment) {
-      className += 'row-comment-cell';
-    }
-    return className;
+    return classnames('sf-metadata-result-table-cell', `sf-metadata-result-table-${type}-cell`, {
+      'table-cell-uneditable': !canEditable && TABLE_SUPPORT_EDIT_TYPE_MAP[type],
+      [highlightClassName]: highlightClassName,
+      'last-cell': isLastCell,
+      'table-last--frozen': isLastFrozenCell,
+      'cell-selected': isCellSelected,
+      'draging-file-to-cell': isFileTipShow,
+      'row-comment-cell': hasComment,
+    });
   };
 
   onCellClick = (e) => {
@@ -170,7 +159,7 @@ class RecordCell extends React.Component {
       ...cellEvents,
     };
     const cellContent = (
-      <CellFormatter readonly={readonly} value={cellValue} field={column} />
+      <CellFormatter readonly={readonly} value={cellValue} field={column} isDir={record['_is_dir'] === 'True'} />
     );
 
     return (

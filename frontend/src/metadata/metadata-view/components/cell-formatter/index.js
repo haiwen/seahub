@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
 import { useCollaborators } from '../../hooks';
 
-const CellFormatter = ({ readonly, value, field, }) => {
+const CellFormatter = ({ readonly, value, field, ...params }) => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache } = useCollaborators();
   return (
     <Formatter
@@ -14,6 +14,7 @@ const CellFormatter = ({ readonly, value, field, }) => {
       collaboratorsCache={collaboratorsCache}
       updateCollaboratorsCache={updateCollaboratorsCache}
       queryUserAPI={window.sfMetadataContext.userService.queryUser}
+      { ...params }
     />
   );
 };

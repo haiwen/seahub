@@ -7,6 +7,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.MTIME]: 'creation-time',
   [CellType.DEFAULT]: 'text',
   [CellType.TEXT]: 'text',
+  [CellType.FILE_NAME]: 'text',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -16,6 +17,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.MTIME]: 'Last modified time',
   [CellType.DEFAULT]: 'Text',
   [CellType.TEXT]: 'Text',
+  [CellType.FILE_NAME]: 'File name',
 };
 
 export {
