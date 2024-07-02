@@ -73,6 +73,13 @@ export default class AISearch extends Component {
       this.isRepoOwner = false;
       this.isAdmin = false;
     }
+    this.searchResultListContainerRef = React.createRef();
+    const { repoID } = props;
+    let storeKey = 'sfVisitedAISearchItems';
+    if (repoID) {
+      storeKey += repoID;
+    }
+    this.storeKey = storeKey;
   }
 
   componentDidMount() {
@@ -150,6 +157,22 @@ export default class AISearch extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (this.state.showRecent) {
+      const { highlightIndex } = this.state;
+      if (highlightIndex > 0) {
+        this.setState({ highlightIndex: highlightIndex - 1 }, () => {
+          if (this.highlightRef) {
+            const { top, height } = this.highlightRef.getBoundingClientRect();
+            if (top - height < 0) {
+              this.searchResultListContainerRef.current.scrollTop -= height;
+            }
+          }
+        });
+      }
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
@@ -158,13 +181,14 @@ export default class AISearch extends Component {
       this.setState({ highlightSearchTypesIndex });
       return;
     }
+
     const { highlightIndex } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
         if (this.highlightRef) {
           const { top, height } = this.highlightRef.getBoundingClientRect();
           if (top - height < 0) {
-            this.searchContainer.current.scrollTop -= height;
+            this.searchResultListContainerRef.current.scrollTop -= height;
           }
         }
       });
@@ -174,6 +198,25 @@ export default class AISearch extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (this.state.showRecent) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+      const { highlightIndex } = this.state;
+      if (highlightIndex < visitedItems.length - 1) {
+        this.setState({ highlightIndex: highlightIndex + 1 }, () => {
+          if (this.highlightRef) {
+            const { top, height } = this.highlightRef.getBoundingClientRect();
+            const outerHeight = 300;
+            if (top > outerHeight) {
+              const newScrollTop = this.searchResultListContainerRef.current.scrollTop + height;
+              this.searchResultListContainerRef.current.scrollTop = newScrollTop;
+            }
+          }
+        });
+      }
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > this.state.searchTypesMax) {
@@ -182,6 +225,7 @@ export default class AISearch extends Component {
       this.setState({ highlightSearchTypesIndex });
       return;
     }
+
     const { highlightIndex, resultItems } = this.state;
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
@@ -189,7 +233,8 @@ export default class AISearch extends Component {
           const { top, height } = this.highlightRef.getBoundingClientRect();
           const outerHeight = 300;
           if (top > outerHeight) {
-            this.searchContainer.current.scrollTop += height;
+            const newScrollTop = this.searchResultListContainerRef.current.scrollTop + height;
+            this.searchResultListContainerRef.current.scrollTop = newScrollTop;
           }
         }
       });
@@ -198,6 +243,19 @@ export default class AISearch extends Component {
 
   onEnter = (e) => {
     e.preventDefault();
+
+    if (this.state.showRecent) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+      const item = visitedItems[this.state.highlightIndex];
+      if (item) {
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+        this.onItemClickHandler(item);
+      }
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightDom = document.querySelector('.search-types-highlight');
       if (highlightDom) {
@@ -213,6 +271,7 @@ export default class AISearch extends Component {
         return;
       }
     }
+
     let item = this.state.resultItems[this.state.highlightIndex];
     if (item) {
       if (document.activeElement) {
@@ -244,13 +303,8 @@ export default class AISearch extends Component {
   };
 
   keepVisitedItem = (targetItem) => {
-    const { repoID } = this.props;
     let targetIndex;
-    let storeKey = 'sfVisitedAISearchItems';
-    if (repoID) {
-      storeKey += repoID;
-    }
-    const items = JSON.parse(localStorage.getItem(storeKey)) || [];
+    const items = JSON.parse(localStorage.getItem(this.storeKey)) || [];
     for (let i = 0, len = items.length; i < len; i++) {
       const { repo_id, path } = items[i];
       const { repo_id: targetRepoID, path: targetPath } = targetItem;
@@ -266,7 +320,7 @@ export default class AISearch extends Component {
     if (items.length > 50) { // keep 50 items at most
       items.pop();
     }
-    localStorage.setItem(storeKey, JSON.stringify(items));
+    localStorage.setItem(this.storeKey, JSON.stringify(items));
   };
 
   onChangeHandler = (event) => {
@@ -436,7 +490,7 @@ export default class AISearch extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
-          <div className="search-result-list-container">{results}</div>
+          <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           {results}
@@ -567,12 +621,7 @@ export default class AISearch extends Component {
     if (!width || width === 'default') return null;
 
     if (this.state.showRecent) {
-      const { repoID } = this.props;
-      let storeKey = 'sfVisitedAISearchItems';
-      if (repoID) {
-        storeKey += repoID;
-      }
-      const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
       if (visitedItems.length) {
         return this.renderVisitedItems(visitedItems);
       }

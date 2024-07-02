@@ -57,6 +57,13 @@ class Search extends Component {
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
     this.isChineseInput = false;
+    this.searchResultListContainerRef = React.createRef();
+    const { repoID } = props;
+    let storeKey = 'sfVisitedSearchItems';
+    if (repoID) {
+      storeKey += repoID;
+    }
+    this.storeKey = storeKey;
   }
 
   componentDidMount() {
@@ -112,6 +119,22 @@ class Search extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (this.state.showRecent) {
+      const { highlightIndex } = this.state;
+      if (highlightIndex > 0) {
+        this.setState({ highlightIndex: highlightIndex - 1 }, () => {
+          if (this.highlightRef) {
+            const { top, height } = this.highlightRef.getBoundingClientRect();
+            if (top - height < 0) {
+              this.searchResultListContainerRef.current.scrollTop -= height;
+            }
+          }
+        });
+      }
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
@@ -120,13 +143,14 @@ class Search extends Component {
       this.setState({ highlightSearchTypesIndex });
       return;
     }
+
     const { highlightIndex } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
         if (this.highlightRef) {
           const { top, height } = this.highlightRef.getBoundingClientRect();
           if (top - height < 0) {
-            this.searchContainer.current.scrollTop -= height;
+            this.searchResultListContainerRef.current.scrollTop -= height;
           }
         }
       });
@@ -136,6 +160,25 @@ class Search extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (this.state.showRecent) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+      const { highlightIndex } = this.state;
+      if (highlightIndex < visitedItems.length - 1) {
+        this.setState({ highlightIndex: highlightIndex + 1 }, () => {
+          if (this.highlightRef) {
+            const { top, height } = this.highlightRef.getBoundingClientRect();
+            const outerHeight = 300;
+            if (top > outerHeight) {
+              const newScrollTop = this.searchResultListContainerRef.current.scrollTop + height;
+              this.searchResultListContainerRef.current.scrollTop = newScrollTop;
+            }
+          }
+        });
+      }
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > this.state.searchTypesMax) {
@@ -144,6 +187,7 @@ class Search extends Component {
       this.setState({ highlightSearchTypesIndex });
       return;
     }
+
     const { highlightIndex, resultItems } = this.state;
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
@@ -151,7 +195,8 @@ class Search extends Component {
           const { top, height } = this.highlightRef.getBoundingClientRect();
           const outerHeight = 300;
           if (top > outerHeight) {
-            this.searchContainer.current.scrollTop += height;
+            const newScrollTop = this.searchResultListContainerRef.current.scrollTop + height;
+            this.searchResultListContainerRef.current.scrollTop = newScrollTop;
           }
         }
       });
@@ -160,6 +205,17 @@ class Search extends Component {
 
   onEnter = (e) => {
     e.preventDefault();
+    if (this.state.showRecent) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+      const item = visitedItems[this.state.highlightIndex];
+      if (item) {
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+        this.onItemClickHandler(item);
+      }
+      return;
+    }
     if (!this.state.isResultGetted) {
       let highlightDom = document.querySelector('.search-types-highlight');
       if (highlightDom) {
@@ -206,12 +262,8 @@ class Search extends Component {
   };
 
   keepVisitedItem = (targetItem) => {
-    const { repoID } = this.props;
     let targetIndex;
-    let storeKey = 'sfVisitedSearchItems';
-    if (repoID) {
-      storeKey += repoID;
-    }
+    const storeKey = this.storeKey;
     const items = JSON.parse(localStorage.getItem(storeKey)) || [];
     for (let i = 0, len = items.length; i < len; i++) {
       const { repo_id, path } = items[i];
@@ -416,12 +468,7 @@ class Search extends Component {
     if (!width || width === 'default') return null;
 
     if (showRecent) {
-      const { repoID } = this.props;
-      let storeKey = 'sfVisitedSearchItems';
-      if (repoID) {
-        storeKey += repoID;
-      }
-      const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
       if (visitedItems.length > 0) {
         return this.renderResults(visitedItems, true);
       }
@@ -586,7 +633,7 @@ class Search extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
-          <div className="search-result-list-container">{results}</div>
+          <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           {results}
