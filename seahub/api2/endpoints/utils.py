@@ -16,10 +16,10 @@ from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context, \
-                        get_sys_logs_task
+from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
-from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL
+from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
+                            SEAFEVENTS_SERVER_URL
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -293,6 +293,11 @@ def export_logs_to_excel(start, end, log_type):
     end_timestamp = time.mktime(end_struct_time.timetuple())
     end_timestamp += 24 * 60 * 60
 
-    task_id = get_sys_logs_task(start_timestamp, end_timestamp, log_type)
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
+    params = {'tstart': start_timestamp, 'tend': end_timestamp, 'log_type': log_type}
+    task_id = requests.get(url, params=params, headers=headers)
     task_id = task_id if task_id else None
     return task_id

@@ -1,6 +1,9 @@
 import json
 import os
 import logging
+import requests
+import jwt
+import time
 from shutil import rmtree
 from django.contrib import messages
 from django.http import HttpResponseRedirect, FileResponse
@@ -9,7 +12,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from urllib.parse import quote
+from urllib.parse import quote, urljoin
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel
@@ -19,7 +22,7 @@ from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
 from seahub.utils import is_pro_version, query_export_status
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, SEAFEVENTS_SERVER_URL, SECRET_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +49,7 @@ class SysLogsExport(APIView):
             messages.error(request, _('Failed to export excel, invalid start or end date'))
             return HttpResponseRedirect(next_page)
 
+
         task_id = export_logs_to_excel(start, end, log_type)
         res_data = {'task_id': task_id}
         return Response(res_data)
@@ -66,7 +70,13 @@ class FileLogsExportStatus(APIView):
         if not task_id:
             error_msg = 'task_id invalid.'
             return api_error(400, error_msg)
-        resp = query_export_status(task_id)
+
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token}
+        url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
+        params = {'task_id': task_id}
+        resp = requests.get(url, params=params, headers=headers)
 
         if resp.status_code == 500:
             logger.error('seafile io query status error: %s, %s' % (task_id, resp.content))
