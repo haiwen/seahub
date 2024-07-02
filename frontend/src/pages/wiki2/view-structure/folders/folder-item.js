@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import FolderOperationDropdownMenu from './folder-operation-dropdownmenu';
 import DraggedViewItem from '../views/dragged-view-item';
 import DraggedFolderItem from './dragged-folder-item';
-import PageEditPopover from '../../view-structure/views/page-edit-popover';
-import NavItemIcon from '../nav-item-icon';
+import NameEditPopover from '../../common/name-edit-popover';
+import NavItemIcon from '../../common/nav-item-icon';
 
 class FolderItem extends Component {
 
@@ -210,13 +210,11 @@ class FolderItem extends Component {
                   }
                   <span className='folder-name text-truncate' title={name}>{name}</span>
                   {isEditing &&
-                    <PageEditPopover
-                      viewName={this.state.name}
-                      viewEditorId={viewEditorId}
-                      viewIcon={this.state.icon}
+                    <NameEditPopover
+                      oldName={this.state.name}
+                      targetId={viewEditorId}
                       onChangeName={this.onChangeName}
-                      onChangeIcon={this.onChangeIcon}
-                      toggleViewEditor={this.closeFolderEditor}
+                      toggleEditor={this.closeFolderEditor}
                     />
                   }
                 </div>

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import PageEditPopover from './page-edit-popover';
+import NameEditPopover from '../../common/name-edit-popover';
+import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from './delete-dialog';
 import { gettext } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
-import NavItemIcon from '../nav-item-icon';
 import DraggedViewItem from '../views/dragged-view-item';
 
 class ViewItem extends Component {
@@ -186,7 +186,7 @@ class ViewItem extends Component {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
       infolder, view, pagesLength, isEditMode, folderId, isOnlyOneView, pathStr,
     } = this.props;
-    const { isShowViewEditor, viewName, viewIcon, isSelected } = this.state;
+    const { isShowViewEditor, viewName, isSelected } = this.state;
     const isOverView = isOver && canDrop;
     if (isSelected) this.setDocUuid(view.docUuid);
 
@@ -238,13 +238,11 @@ class ViewItem extends Component {
                     {/* {this.renderIcon(view.icon)} */}
                     <span className="view-title text-truncate" title={view.name}>{view.name}</span>
                     {isShowViewEditor && (
-                      <PageEditPopover
-                        viewName={viewName}
-                        viewIcon={viewIcon}
-                        viewEditorId={viewEditorId}
+                      <NameEditPopover
+                        oldName={viewName}
+                        targetId={viewEditorId}
                         onChangeName={this.onChangeName}
-                        onChangeIcon={this.onChangeIcon}
-                        toggleViewEditor={this.toggleViewEditor}
+                        toggleEditor={this.toggleViewEditor}
                       />
                     )}
                   </div>

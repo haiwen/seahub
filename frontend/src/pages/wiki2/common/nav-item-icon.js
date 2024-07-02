@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../../components/icon';
 import classNames from 'classnames';
-import './nav-item-icon.css';
+
+import '../css/nav-item-icon.css';
 
 function NavItemIcon({ symbol, className, disable, onClick }) {
   return (

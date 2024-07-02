@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import NavItemIcon from '../view-structure/nav-item-icon';
+import NavItemIcon from '../common/nav-item-icon';
 import './index.css';
 
 // Find the path array from the root to the leaf based on the currentPageId (leaf)
