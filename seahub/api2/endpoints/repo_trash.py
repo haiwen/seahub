@@ -237,15 +237,12 @@ class RepoTrash(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            from seahub.utils import SeafEventsSession, seafevents_api
             seafile_api.clean_up_repo_history(repo_id, keep_days)
             org_id = None if not request.user.org else request.user.org.org_id
             clean_up_repo_trash.send(sender=None, org_id=org_id,
                                      operator=username, repo_id=repo_id, repo_name=repo.name,
                                      repo_owner=repo_owner, days=keep_days)
-            session = SeafEventsSession()
-            seafevents_api.clean_up_repo_trash(session, repo_id, keep_days)
-            session.close()
+            
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

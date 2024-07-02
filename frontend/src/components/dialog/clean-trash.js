@@ -44,6 +44,14 @@ class CleanTrash extends React.Component {
       submitBtnDisabled: true
     });
     seafileAPI.deleteRepoTrash(repoID, inputValue.value).then((res) => {
+      if (this.props.trashType === 0) {
+        this.props.refreshTrash2();
+      }
+      if (this.props.trashType === 1) {
+        this.props.refreshTrash();
+      }
+      this.props.toggleDialog();
+      toaster.success(gettext('Clean succeeded.'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
@@ -52,14 +60,6 @@ class CleanTrash extends React.Component {
       });
     });
 
-    if (this.props.trashType === 0){
-      this.props.refreshTrash2();
-    }
-    if (this.props.trashType === 1){
-      this.props.refreshTrash();
-    }
-    this.props.toggleDialog();
-    toaster.success(gettext('Clean succeeded.'));
   };
 
   render() {

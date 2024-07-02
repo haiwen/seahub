@@ -35,19 +35,20 @@ class SelectTrash extends React.Component {
   formSubmit = ()=>{
     const inputValue = this.state.inputValue;
     if (inputValue.value === 1){
-      this.OldTrash();
+      this.listOldTrash();
     }
     if (inputValue.value === 0){
-      this.NewTrash();
+      this.listNewTrash();
     }
     this.props.changeTrash(this.state.inputValue.value);
   };
 
-  OldTrash = ()=>{
+  listOldTrash = ()=>{
     this.props.refreshTrash();
     this.props.toggleDialog();
   };
-  NewTrash = () => {
+
+  listNewTrash = () => {
     this.props.refreshTrash2();
     this.props.toggleDialog();
   };
@@ -55,10 +56,9 @@ class SelectTrash extends React.Component {
   render() {
     return (
       <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Old Trash')}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Select trash')}</ModalHeader>
         <ModalBody>
           <React.Fragment>
-            <p>{gettext('Select Trash')}</p>
             <CreatableSelect
               defaultValue={this.options[this.props.trashType]}
               options={this.options}

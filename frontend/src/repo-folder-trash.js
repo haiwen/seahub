@@ -254,13 +254,13 @@ class RepoFolderTrash extends React.Component {
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>
-
-                  <button className="btn btn-secondary clean flex-shrink-0 ml-4"
-                    onClick={this.getOldTrash}>{gettext('Select Trash')}</button>
-                  {(path == '/' && enableClean && !showFolder && isRepoAdmin) &&
-                    <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
-
-                  }
+                  <div className="d-flex">
+                    <button className="btn btn-secondary clean flex-shrink-0 ml-4"
+                      onClick={this.getOldTrash}>{gettext('Select trash')}</button>
+                    {(path == '/' && enableClean && !showFolder && isRepoAdmin) &&
+                      <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                    }
+                  </div>
                 </div>
                 <Content
                   data={this.state}
