@@ -263,6 +263,34 @@ def copy_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
     return
 
 
+def copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_file_uuid, dst_repo_id, dst_file_uuid, username, is_async=True):
+    src_image_parent_path = SDOC_IMAGES_DIR + src_file_uuid + '/'
+    src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_image_parent_path)
+    if not src_dir_id:
+        return
+
+    dst_image_parent_path = gen_seadoc_image_parent_path(
+        dst_file_uuid, dst_repo_id, username=username)
+    image_dirents = seafile_api.list_dir_by_path(src_repo_id, src_image_parent_path)
+    image_names = [item.obj_name for item in image_dirents]
+
+    if is_async:
+        need_progress=1
+        synchronous=0
+    else:
+        need_progress=0
+        synchronous=1
+    seafile_api.copy_file(
+        src_repo_id, src_image_parent_path,
+        json.dumps(image_names),
+        dst_repo_id, dst_image_parent_path,
+        json.dumps(image_names),
+        username=username,
+        need_progress=need_progress, synchronous=synchronous,
+    )
+    return
+
+
 def move_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
     src_repo = seafile_api.get_repo(src_repo_id)
     src_file_uuid = get_seadoc_file_uuid(src_repo, src_path)

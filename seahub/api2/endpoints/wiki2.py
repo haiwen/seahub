@@ -8,6 +8,7 @@ import posixpath
 import time
 import uuid
 import urllib.request, urllib.error, urllib.parse
+from copy import deepcopy
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -25,7 +26,8 @@ from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
-    check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder
+    check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder, get_all_wiki_ids, \
+    get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
 from seahub.views import check_folder_permission
@@ -33,7 +35,7 @@ from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.utils.repo import parse_repo_perm
-from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
@@ -324,27 +326,11 @@ class Wiki2ConfigView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        repo_id = wiki.repo_id
-        obj_id = json.dumps({'parent_dir': WIKI_CONFIG_PATH})
-
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, WIKI_CONFIG_PATH)
-        if not dir_id:
-            seafile_api.mkdir_with_parents(repo_id, '/', WIKI_CONFIG_PATH, username)
-
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, obj_id, 'upload-link', username, use_onetime=False)
-        if not token:
-            return None
-        upload_link = gen_file_upload_url(token, 'upload-api')
-        upload_link = upload_link + '?replace=1'
-
-        files = {
-            'file': (WIKI_CONFIG_FILE_NAME, wiki_config)
-        }
-        data = {'parent_dir': WIKI_CONFIG_PATH, 'relative_path': '', 'replace': 1}
-        resp = requests.post(upload_link, files=files, data=data)
-        if not resp.ok:
-            logger.error(resp.text)
+        # save config
+        try:
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
@@ -427,14 +413,15 @@ class Wiki2PagesView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        folder_id = request.data.get('folder_id', None)
+        current_id = request.data.get('current_id', None)
         wiki_config = get_wiki_config(repo_id, request.user.username)
 
         navigation = wiki_config.get('navigation', [])
-        if not folder_id:
+        if not current_id:
             page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
         else:
-            page_ids = get_page_ids_in_folder(navigation, folder_id)
+            page_ids = []
+            get_current_level_page_ids(navigation, current_id, page_ids)
 
         pages = wiki_config.get('pages', [])
         exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
@@ -613,3 +600,126 @@ class Wiki2PageView(APIView):
             logger.error(e)
 
         return Response({'success': True})
+
+
+class Wiki2DuplicatePageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, wiki_id):
+        page_id = request.data.get('page_id', None)
+
+        if not page_id:
+            error_msg = 'page_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        navigation = wiki_config.get('navigation', [])
+        pages = wiki_config.get('pages', [])
+
+        page_ids = []
+        get_current_level_page_ids(navigation, page_id, page_ids)
+
+        current_exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
+        id_set = get_all_wiki_ids(navigation)  # get all id for generate different page id
+
+        # old page to new page
+        old_to_new = {}
+        get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new)
+
+        # page_id not exist in wiki
+        if not old_to_new:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        src_repo_id = repo_id
+        dst_repo_id = repo_id
+        new_pages = deepcopy(pages)
+        for page in pages:
+            src_dirents = []
+            dst_dirents = []
+            old_page_id = page.get('id')
+            new_page_id = old_to_new.get(old_page_id)
+            if not new_page_id:
+                continue
+
+            page_name = page.get('name')
+            dst_sdoc_uuid = uuid.uuid4()
+
+            src_path = page.get('path')
+            src_file_name = os.path.basename(src_path)
+
+            new_file_name = src_file_name
+            parent_dir = os.path.join(WIKI_PAGES_DIR, str(dst_sdoc_uuid))
+            path = os.path.join(parent_dir, new_file_name)
+            seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
+
+            new_page_name = page_name
+            if old_page_id == page_id:
+                # only need rename current level page name
+                new_page_name = get_no_duplicate_obj_name(page_name, current_exist_page_names)
+
+            new_page = {
+              'id': new_page_id,
+              'name': new_page_name,
+              'path': path,
+              'icon': '',
+              'docUuid': str(dst_sdoc_uuid)
+            }
+            new_pages.append(new_page)
+
+            src_dirent = src_file_name
+            dst_dirent = src_dirent
+            src_dirents.append(src_dirent)
+            dst_dirents.append(dst_dirent)
+
+            src_doc_uuid = page.get('docUuid')
+            src_parent_dir = os.path.join(WIKI_PAGES_DIR, str(src_doc_uuid))
+            dst_parent_dir = parent_dir
+
+            seafile_api.copy_file(src_repo_id,
+                                  src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  dst_repo_id,
+                                  dst_parent_dir,
+                                  json.dumps(dst_dirents),
+                                  username=username,
+                                  need_progress=1,
+                                  synchronous=0
+                                  )
+
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(dst_sdoc_uuid, dst_repo_id, parent_dir, dst_dirent, is_dir=False)
+            copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_doc_uuid, dst_repo_id, dst_sdoc_uuid, username, is_async=False)
+
+        wiki_config['pages'] = new_pages
+        wiki_config = json.dumps(wiki_config)
+
+        # save config
+        try:
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'wiki_config': wiki_config})
