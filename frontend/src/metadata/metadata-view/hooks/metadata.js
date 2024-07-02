@@ -17,27 +17,27 @@ export const MetadataProvider = ({
 
   const getColumnName = useCallback((key, name) => {
     switch (key) {
-      case '_ctime':
+      case PRIVATE_COLUMN_KEY.CTIME:
         return gettext('Created time');
-      case '_mtime':
+      case PRIVATE_COLUMN_KEY.MTIME:
         return gettext('Last modified time');
-      case '_creator':
+      case PRIVATE_COLUMN_KEY.CREATOR:
         return gettext('Creator');
-      case '_last_modifier':
+      case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
         return gettext('Last modifier');
-      case '_file_creator':
+      case PRIVATE_COLUMN_KEY.FILE_CREATOR:
         return gettext('File creator');
-      case '_file_modifier':
+      case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
         return gettext('File modifier');
-      case '_file_ctime':
+      case PRIVATE_COLUMN_KEY.FILE_CTIME:
         return gettext('File created time');
-      case '_file_mtime':
+      case PRIVATE_COLUMN_KEY.FILE_MTIME:
         return gettext('File last modified time');
-      case '_is_dir':
+      case PRIVATE_COLUMN_KEY.IS_DIR:
         return gettext('Is dir');
-      case '_parent_dir':
+      case PRIVATE_COLUMN_KEY.PARENT_DIR:
         return gettext('Parent dir');
-      case '_name':
+      case PRIVATE_COLUMN_KEY.FILE_NAME:
         return gettext('File name');
       default:
         return name;
