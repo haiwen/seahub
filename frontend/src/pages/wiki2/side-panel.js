@@ -5,11 +5,14 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, isWiki2, wikiId } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
+
 import ViewStructure from './view-structure';
 import PageUtils from './view-structure/page-utils';
+
 import NewFolderDialog from './view-structure/new-folder-dialog';
 import AddNewPageDialog from './view-structure/add-new-page-dialog';
 import WikiNavFooter from './view-structure/wiki-nav-footer';
+
 import { generateUniqueId, isObjectNotEmpty } from './utils';
 import Folder from './models/folder';
 import Page from './models/page';

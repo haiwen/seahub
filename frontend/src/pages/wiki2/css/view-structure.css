@@ -350,22 +350,18 @@
   align-items: center;
 }
 
-/* dark mode */
-.view-structure-dark.view-structure,
-.view-structure-dark.view-structure .icon-expand-folder {
-  color: #fff;
-}
-
-/* light mode */
-.view-structure-light.view-structure,
-.view-structure-light.view-structure .icon-expand-folder:hover {
+.view-structure,
+.view-structure .view-item .sf3-font.sf3-font-enlarge:hover,
+.view-structure .view-item .seafile-multicolor-icon-more-level:hover,
+.view-structure .view-folder .seafile-multicolor-icon-more-level:hover,
+.view-structure .icon-expand-folder:hover {
   color: #212529;
 }
 
-.view-structure-light.view-structure .view-item .sf3-font.sf3-font-enlarge,
-.view-structure-light.view-structure .view-item .seafile-multicolor-icon-more-level,
-.view-structure-light.view-structure .view-folder .seafile-multicolor-icon-more-level,
-.view-structure-light.view-structure .icon-expand-folder {
+.view-structure .view-item .sf3-font.sf3-font-enlarge,
+.view-structure .view-item .seafile-multicolor-icon-more-level,
+.view-structure .view-folder .seafile-multicolor-icon-more-level,
+.view-structure .icon-expand-folder {
   color: #666;
 }
 

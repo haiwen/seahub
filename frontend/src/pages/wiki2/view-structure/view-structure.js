@@ -4,7 +4,7 @@ import { DropdownItem } from 'reactstrap';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedFolderItem from './folders/dragged-folder-item';
-import DraggedViewItem from './views/dragged-view-item';
+import DraggedPageItem from './views/dragged-page-item';
 import WikiNavFooter from './wiki-nav-footer';
 import { repoID } from '../../../utils/constants';
 
@@ -96,7 +96,7 @@ class ViewStructure extends Component {
     return this.folderClassNameCache;
   };
 
-  renderFolder = (folder, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) => {
+  renderFolder = (folder, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
     const { isEditMode, views } = this.props;
     const folderId = folder.id;
     return (
@@ -106,8 +106,8 @@ class ViewStructure extends Component {
         folder={folder}
         folderIndex={index}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
-        id_view_map={id_view_map}
+        isOnlyOnePage={isOnlyOnePage}
+        id_page_map={id_page_map}
         renderFolderMenuItems={this.renderFolderMenuItems}
         toggleExpand={this.toggleExpand}
         onToggleAddView={this.props.onToggleAddView}
@@ -135,16 +135,16 @@ class ViewStructure extends Component {
     );
   };
 
-  renderView = (view, index, pagesLength, isOnlyOneView, id_view_map) => {
+  renderView = (view, index, pagesLength, isOnlyOnePage, id_page_map) => {
     const { isEditMode, views } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     const folderId = null; // Pages in the root directory, no folders, use null
     return (
-      <DraggedViewItem
+      <DraggedPageItem
         key={id}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
+        isOnlyOnePage={isOnlyOnePage}
         infolder={false}
         view={Object.assign({}, views.find(item => item.id === id), view)}
         views={views}
@@ -174,20 +174,20 @@ class ViewStructure extends Component {
   // eslint-disable-next-line
   renderStructureBody = React.forwardRef((layerDragProps, ref) => {
     const { navigation, views, isEditMode } = this.props;
-    let isOnlyOneView = false;
+    let isOnlyOnePage = false;
     if (views.length === 1) {
-      isOnlyOneView = true;
+      isOnlyOnePage = true;
     }
     const pagesLength = views.length;
-    let id_view_map = {};
-    views.forEach(view => id_view_map[view.id] = view);
+    let id_page_map = {};
+    views.forEach(view => id_page_map[view.id] = view);
     const style = { maxHeight: isEditMode ? 'calc(100% - 40px)' : '100%' };
     return (
       <div className='wiki-nav-body' style={style}>
         {navigation.map((item, index) => {
           return item.type === 'folder' ?
-            this.renderFolder(item, index, pagesLength, isOnlyOneView, id_view_map, layerDragProps) :
-            this.renderView(item, index, pagesLength, isOnlyOneView, id_view_map);
+            this.renderFolder(item, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) :
+            this.renderView(item, index, pagesLength, isOnlyOnePage, id_page_map);
         })}
       </div>
     );
@@ -204,12 +204,12 @@ class ViewStructure extends Component {
 
   render() {
     const StructureBody = html5DragDropContext(
-      DropTarget('ViewStructure', {}, connect => ({
+      DropTarget('WikiNav', {}, connect => ({
         connectDropTarget: connect.dropTarget()
       }))(DragLayer(this.collect)(this.renderStructureBody))
     );
     return (
-      <div className='view-structure view-structure-light'>
+      <div className='view-structure'>
         <StructureBody />
         {(this.props.isEditMode) &&
           <WikiNavFooter

@@ -20,9 +20,8 @@ export default class PageDropdownMenu extends Component {
     duplicatePage: PropTypes.func,
     onSetFolderId: PropTypes.func,
     onDeleteView: PropTypes.func,
-    onModifyViewType: PropTypes.func,
     onMoveViewToFolder: PropTypes.func,
-    isOnlyOneView: PropTypes.bool,
+    isOnlyOnePage: PropTypes.bool,
   };
 
   constructor(props) {
@@ -57,11 +56,6 @@ export default class PageDropdownMenu extends Component {
   onDeleteView = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.props.onDeleteView();
-  };
-
-  onModifyViewType = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.props.onModifyViewType();
   };
 
   onMoveViewToFolder = (targetFolderId) => {
@@ -124,7 +118,7 @@ export default class PageDropdownMenu extends Component {
 
   render() {
     const {
-      folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOneView,
+      folderId, canDelete, canDuplicate, renderFolderMenuItems, pagesLength, isOnlyOnePage,
     } = this.props;
     const folderMenuItems = renderFolderMenuItems && renderFolderMenuItems({ currentFolderId: folderId, onMoveViewToFolder: this.onMoveViewToFolder });
 
@@ -155,7 +149,7 @@ export default class PageDropdownMenu extends Component {
               <span className="item-text">{gettext('Duplicate page')}</span>
             </DropdownItem>
           }
-          {(isOnlyOneView || pagesLength === 1 || !canDelete) ? '' : (
+          {(isOnlyOnePage || pagesLength === 1 || !canDelete) ? '' : (
             <DropdownItem onClick={this.onDeleteView}>
               <i className="sf3-font sf3-font-delete1" />
               <span className="item-text">{gettext('Delete page')}</span>

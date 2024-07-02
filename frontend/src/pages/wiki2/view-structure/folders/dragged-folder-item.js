@@ -40,7 +40,7 @@ const dropTarget = {
     if (className.includes('can-drop-top')) {
       move_position = 'move_above';
     }
-    let moveInto = className.includes('dragged-view-over');
+    let moveInto = className.includes('dragged-page-over');
 
     // 1. drag source is page
     if (sourceRow.mode === DRAGGED_PAGE_MODE) {
@@ -98,6 +98,6 @@ const dropCollect = (connect, monitor) => ({
   monitor,
 });
 
-export default DropTarget('ViewStructure', dropTarget, dropCollect)(
-  DragSource('ViewStructure', dragSource, dragCollect)(FolderItem)
+export default DropTarget('WikiNav', dropTarget, dropCollect)(
+  DragSource('WikiNav', dragSource, dragCollect)(FolderItem)
 );

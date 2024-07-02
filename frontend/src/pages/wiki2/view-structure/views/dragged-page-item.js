@@ -1,6 +1,6 @@
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAGGED_FOLDER_MODE, DRAGGED_PAGE_MODE } from '../constant';
-import ViewItem from './view-item';
+import PageItem from './page-item';
 
 const dragSource = {
   beginDrag: props => {
@@ -86,6 +86,6 @@ const dropCollect = (connect, monitor) => ({
   draggedPage: monitor.getItem()
 });
 
-export default DropTarget('ViewStructure', dropTarget, dropCollect)(
-  DragSource('ViewStructure', dragSource, dragCollect)(ViewItem)
+export default DropTarget('WikiNav', dropTarget, dropCollect)(
+  DragSource('WikiNav', dragSource, dragCollect)(PageItem)
 );

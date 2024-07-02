@@ -4,13 +4,13 @@ import classnames from 'classnames';
 import NameEditPopover from '../../common/name-edit-popover';
 import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
-import DeleteDialog from './delete-dialog';
+import DeleteDialog from '../../common/delete-dialog';
 import { gettext } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
-import DraggedViewItem from '../views/dragged-view-item';
+import DraggedPageItem from './dragged-page-item';
 
-class ViewItem extends Component {
+class PageItem extends Component {
 
   constructor(props) {
     super(props);
@@ -135,15 +135,15 @@ class ViewItem extends Component {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  renderView = (view, index, pagesLength, isOnlyOneView) => {
+  renderView = (view, index, pagesLength, isOnlyOnePage) => {
     const { isEditMode, views, folderId, pathStr } = this.props;
     const id = view.id;
     if (!views.find(item => item.id === id)) return;
     return (
-      <DraggedViewItem
+      <DraggedPageItem
         key={id}
         pagesLength={pagesLength}
-        isOnlyOneView={isOnlyOneView}
+        isOnlyOnePage={isOnlyOnePage}
         infolder={false}
         view={Object.assign({}, views.find(item => item.id === id), view)}
         viewIndex={index}
@@ -184,7 +184,7 @@ class ViewItem extends Component {
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      infolder, view, pagesLength, isEditMode, folderId, isOnlyOneView, pathStr,
+      infolder, view, pagesLength, isEditMode, folderId, isOnlyOnePage, pathStr,
     } = this.props;
     const { isShowViewEditor, viewName, isSelected } = this.state;
     const isOverView = isOver && canDrop;
@@ -257,7 +257,7 @@ class ViewItem extends Component {
                             view={view}
                             views={this.props.views}
                             pagesLength={pagesLength}
-                            isOnlyOneView={isOnlyOneView}
+                            isOnlyOnePage={isOnlyOnePage}
                             folderId={folderId}
                             canDelete={true}
                             canDuplicate={true}
@@ -301,7 +301,7 @@ class ViewItem extends Component {
         >
           {view.children &&
             view.children.map((item, index) => {
-              return this.renderView(item, index, pagesLength, isOnlyOneView);
+              return this.renderView(item, index, pagesLength, isOnlyOnePage);
             })
           }
         </div>
@@ -310,7 +310,7 @@ class ViewItem extends Component {
   }
 }
 
-ViewItem.propTypes = {
+PageItem.propTypes = {
   isOver: PropTypes.bool,
   canDrop: PropTypes.bool,
   isDragging: PropTypes.bool,
@@ -334,7 +334,7 @@ ViewItem.propTypes = {
   onDeleteView: PropTypes.func,
   onMoveViewToFolder: PropTypes.func,
   onMoveView: PropTypes.func,
-  isOnlyOneView: PropTypes.bool,
+  isOnlyOnePage: PropTypes.bool,
   onMoveFolder: PropTypes.func,
   pathStr: PropTypes.string,
   currentPageId: PropTypes.string,
@@ -343,4 +343,4 @@ ViewItem.propTypes = {
   toggleExpand: PropTypes.func,
 };
 
-export default ViewItem;
+export default PageItem;
