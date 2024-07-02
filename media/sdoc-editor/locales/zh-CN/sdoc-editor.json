@@ -464,5 +464,8 @@
   "SeaTable_column": "SeaTable 列",
   "SeaTable_table": "SeaTable 子表",
   "And_x_more_records": "以及另外 {{count}} 条记录",
-  "Print_limit_exceeded": "超过打印限制, 只会打印前 200 行"
+  "Print_limit_exceeded": "超过打印限制, 只会打印前 200 行",
+  "Show_record_numbers": "显示记录编号",
+  "Alternate_color": "单双行不同背景色",
+  "Select_column_display_option_color_tip": "单选列和多选列显示选项颜色"
 }

@@ -464,5 +464,8 @@
   "SeaTable_column": "Столбец SeaTable",
   "SeaTable_table": "Таблица SeaTable",
   "And_x_more_records": "и ещё {{count}} записей",
-  "Print_limit_exceeded": "При превышении лимита печати будут напечатаны только первые 200 строк"
+  "Print_limit_exceeded": "При превышении лимита печати будут напечатаны только первые 200 строк",
+  "Show_record_numbers": "Показывать номера записей",
+  "Alternate_color": "Альтернативный цвет",
+  "Select_column_display_option_color_tip": "Цвета параметров отображения столбцов с одиночным и множественным выбором"
 }
