@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DropdownItem } from 'reactstrap';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
-import DraggedFolderItem from './folders/dragged-folder-item';
 import DraggedPageItem from './pages/dragged-page-item';
-import WikiNavFooter from './wiki-nav-footer';
 import { repoID } from '../../../utils/constants';
 
 import '../css/wiki-nav.css';
@@ -17,19 +14,11 @@ class WikiNav extends Component {
     navigation: PropTypes.array,
     pages: PropTypes.array,
     onTogglePinViewList: PropTypes.func,
-    onToggleAddPage: PropTypes.func,
-    onToggleAddFolder: PropTypes.func,
-    onModifyFolder: PropTypes.func,
-    onDeleteFolder: PropTypes.func,
-    onMoveFolder: PropTypes.func,
     setCurrentPage: PropTypes.func,
     onUpdatePage: PropTypes.func,
     onDeletePage: PropTypes.func,
     onMovePage: PropTypes.func,
-    moveFolderToFolder: PropTypes.func,
-    movePageOut: PropTypes.func,
     duplicatePage: PropTypes.func,
-    onSetFolderId: PropTypes.func,
     currentPageId: PropTypes.string,
     addPageInside: PropTypes.func,
   };
@@ -64,30 +53,6 @@ class WikiNav extends Component {
     this.idFoldedStatusMap = idFoldedStatusMap;
   };
 
-  onMovePageToFolder = (source_page_folder_id, moved_page_id, target_page_folder_id) => {
-    this.props.onMovePage({
-      moved_page_id,
-      source_page_folder_id,
-      target_page_folder_id,
-      target_page_id: null,
-      move_position: 'move_below'
-    });
-  };
-
-  renderFolderMenuItems = ({ currentFolderId, onMovePageToFolder }) => {
-    // folder lists (in the root directory)
-    const { navigation } = this.props;
-    let renderFolders = navigation.filter(item => item.type === 'folder' && item.id !== currentFolderId);
-    return renderFolders.map(folder => {
-      const { id, name } = folder;
-      return (
-        <DropdownItem key={`move-to-folder-${id}`} onClick={onMovePageToFolder.bind(this, id)}>
-          <span className="folder-name text-truncate" title={name}>{name}</span>
-        </DropdownItem>
-      );
-    });
-  };
-
   setClassName = (name) => {
     this.folderClassNameCache = name;
   };
@@ -96,46 +61,7 @@ class WikiNav extends Component {
     return this.folderClassNameCache;
   };
 
-  renderFolder = (folder, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
-    const { isEditMode, pages } = this.props;
-    const folderId = folder.id;
-    return (
-      <DraggedFolderItem
-        key={`page-folder-${folderId}`}
-        isEditMode={isEditMode}
-        folder={folder}
-        folderIndex={index}
-        pagesLength={pagesLength}
-        isOnlyOnePage={isOnlyOnePage}
-        id_page_map={id_page_map}
-        renderFolderMenuItems={this.renderFolderMenuItems}
-        toggleExpand={this.toggleExpand}
-        onToggleAddPage={this.props.onToggleAddPage}
-        onDeleteFolder={this.props.onDeleteFolder}
-        onMoveFolder={this.props.onMoveFolder}
-        setCurrentPage={this.props.setCurrentPage}
-        onUpdatePage={this.props.onUpdatePage}
-        duplicatePage={this.props.duplicatePage}
-        onSetFolderId={this.props.onSetFolderId}
-        onDeletePage={this.props.onDeletePage}
-        onMovePageToFolder={this.onMovePageToFolder}
-        onMovePage={this.props.onMovePage}
-        pages={pages}
-        moveFolderToFolder={this.props.moveFolderToFolder}
-        pathStr={folderId}
-        layerDragProps={layerDragProps}
-        setClassName={this.setClassName}
-        getClassName={this.getClassName}
-        movePageOut={this.props.movePageOut}
-        onModifyFolder={this.props.onModifyFolder}
-        getFoldState={this.getFoldState}
-        currentPageId={this.props.currentPageId}
-        addPageInside={this.props.addPageInside}
-      />
-    );
-  };
-
-  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map) => {
+  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
     const { isEditMode, pages } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
@@ -151,22 +77,18 @@ class WikiNav extends Component {
         pageIndex={index}
         folderId={folderId}
         isEditMode={isEditMode}
-        renderFolderMenuItems={this.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
-        onSetFolderId={this.props.onSetFolderId}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}
-        onMovePageToFolder={(targetFolderId) => {
-          this.onMovePageToFolder(folderId, page.id, targetFolderId);
-        }}
         onMovePage={this.props.onMovePage}
-        onMoveFolder={this.props.onMoveFolder}
         pathStr={page.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}
         getFoldState={this.getFoldState}
         toggleExpand={this.toggleExpand}
+        id_page_map={id_page_map}
+        layerDragProps={layerDragProps}
       />
     );
   };
@@ -185,9 +107,7 @@ class WikiNav extends Component {
     return (
       <div className='wiki-nav-body' style={style}>
         {navigation.map((item, index) => {
-          return item.type === 'folder' ?
-            this.renderFolder(item, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) :
-            this.renderPage(item, index, pagesLength, isOnlyOnePage, id_page_map);
+          return item.type === 'page' ? this.renderPage(item, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps): null;
         })}
       </div>
     );
@@ -211,12 +131,6 @@ class WikiNav extends Component {
     return (
       <div className='wiki-nav'>
         <StructureBody />
-        {(this.props.isEditMode) &&
-          <WikiNavFooter
-            onToggleAddPage={this.props.onToggleAddPage}
-            onToggleAddFolder={this.props.onToggleAddFolder}
-          />
-        }
       </div>
     );
   }

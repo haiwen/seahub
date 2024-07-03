@@ -139,17 +139,11 @@ class PageItem extends Component {
         pageIndex={index}
         folderId={folderId}
         isEditMode={isEditMode}
-        renderFolderMenuItems={this.props.renderFolderMenuItems}
         duplicatePage={this.props.duplicatePage}
-        onSetFolderId={this.props.onSetFolderId}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}
-        onMovePageToFolder={(targetFolderId) => {
-          this.props.onMovePageToFolder(folderId, page.id, targetFolderId);
-        }}
         onMovePage={this.props.onMovePage}
-        onMoveFolder={this.props.onMoveFolder}
         pages={pages}
         pathStr={pathStr + '-' + page.id}
         currentPageId={this.props.currentPageId}
@@ -247,15 +241,10 @@ class PageItem extends Component {
                             pagesLength={pagesLength}
                             isOnlyOnePage={isOnlyOnePage}
                             folderId={folderId}
-                            canDelete={true}
-                            canDuplicate={true}
                             toggle={this.toggleDropdown}
-                            renderFolderMenuItems={this.props.renderFolderMenuItems}
                             toggleNameEditor={this.toggleNameEditor}
                             duplicatePage={this.props.duplicatePage}
-                            onSetFolderId={this.props.onSetFolderId}
                             onDeletePage={this.openDeleteDialog}
-                            onMovePageToFolder={this.props.onMovePageToFolder}
                           />
                         }
                       </div>
@@ -314,16 +303,12 @@ PageItem.propTypes = {
   connectDragSource: PropTypes.func,
   connectDragPreview: PropTypes.func,
   connectDropTarget: PropTypes.func,
-  renderFolderMenuItems: PropTypes.func,
   duplicatePage: PropTypes.func,
-  onSetFolderId: PropTypes.func,
   setCurrentPage: PropTypes.func,
   onUpdatePage: PropTypes.func,
   onDeletePage: PropTypes.func,
-  onMovePageToFolder: PropTypes.func,
   onMovePage: PropTypes.func,
   isOnlyOnePage: PropTypes.bool,
-  onMoveFolder: PropTypes.func,
   pathStr: PropTypes.string,
   currentPageId: PropTypes.string,
   addPageInside: PropTypes.func,

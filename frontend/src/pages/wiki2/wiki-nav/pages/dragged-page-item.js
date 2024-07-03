@@ -1,6 +1,7 @@
 import { DragSource, DropTarget } from 'react-dnd';
-import { DRAGGED_FOLDER_MODE, DRAGGED_PAGE_MODE } from '../constant';
 import PageItem from './page-item';
+
+const DRAGGED_PAGE_MODE = 'wiki-page';
 
 const dragSource = {
   beginDrag: props => {
@@ -53,21 +54,6 @@ const dropTarget = {
           move_position,
         });
       }
-      return;
-    }
-    // 1 drag folder
-    if (sourceRow.mode === DRAGGED_FOLDER_MODE) {
-      const { pageIndex: targetIndex, page: targetPage } = props;
-      const draggedFolderId = sourceRow.data.id;
-      const targetPageId = targetPage.id;
-      const sourceIndex = sourceRow.idx;
-      // Drag the parent folder to the child page, return
-      if (props.pathStr.split('-').includes(draggedFolderId)) return;
-      props.onMoveFolder(
-        draggedFolderId,
-        targetPageId,
-        sourceIndex > targetIndex ? 'move_above' : 'move_below',
-      );
       return;
     }
   }

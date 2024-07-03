@@ -7,14 +7,9 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
 import PageUtils from './wiki-nav/page-utils';
-import NewFolderDialog from './wiki-nav/new-folder-dialog';
-import AddNewPageDialog from './wiki-nav/add-new-page-dialog';
-import WikiNavFooter from './wiki-nav/wiki-nav-footer';
 import { generateUniqueId, isObjectNotEmpty } from './utils';
-import Folder from './models/folder';
 import Page from './models/page';
 import wikiAPI from '../../utils/wiki-api';
-import { FOLDER } from './constant';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
 
@@ -37,10 +32,6 @@ class SidePanel extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isShowNewFolderDialog: false,
-      isShowAddNewPageDialog: false,
-    };
   }
 
   confirmDeletePage = (pageId) => {
@@ -72,7 +63,7 @@ class SidePanel extends Component {
     const navigation = config.navigation;
     const pageId = generateUniqueId(navigation);
     const newPage = new Page({ id: pageId, name, icon, path, docUuid });
-    this.addPage(newPage, this.current_folder_id, successCallback, errorCallback, jumpToNewPage);
+    this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -110,232 +101,24 @@ class SidePanel extends Component {
     this.props.saveWikiConfig(config);
   };
 
-  movePageOut = (moved_page_id, source_id, target_id, move_position) => {
-    let config = deepCopy(this.props.config);
-    let { navigation } = config;
-    PageUtils.movePageOut(navigation, moved_page_id, source_id, target_id, move_position);
-    config.navigation = navigation;
-    this.props.saveWikiConfig(config);
-  };
-
-  // Create a new folder in the root directory (not supported to create a new subfolder in the folder)
-  addPageFolder = (folder_data, parent_folder_id) => {
-    const { config } = this.props;
-    const { navigation } = config;
-    let folder_id = generateUniqueId(navigation);
-    let newFolder = new Folder({ id: folder_id, ...folder_data });
-    // No parent folder, directly add to the root directory
-    if (!parent_folder_id) {
-      config.navigation.push(newFolder);
-    } else { // Recursively find the parent folder and add
-      navigation.forEach(item => {
-        if (item.type === FOLDER) {
-          this._addFolder(item, newFolder, parent_folder_id);
-        }
-      });
-    }
-    this.props.saveWikiConfig(config);
-  };
-
-  _addFolder(folder, newFolder, parent_folder_id) {
-    if (folder.id === parent_folder_id) {
-      folder.children.push(newFolder);
-      return;
-    }
-    folder.children.forEach(item => {
-      if (item.type === FOLDER) {
-        this._addFolder(item, newFolder, parent_folder_id);
-      }
-    });
-  }
-
-  onModifyFolder = (folder_id, folder_data) => {
-    const { config } = this.props;
-    const { navigation } = config;
-    PageUtils.modifyFolder(navigation, folder_id, folder_data);
-    config.navigation = navigation;
-    this.props.saveWikiConfig(config);
-  };
-
-  onDeleteFolder = (page_folder_id) => {
-    const { config } = this.props;
-    const { navigation, pages } = config;
-    PageUtils.deleteFolder(navigation, pages, page_folder_id);
-    // TODO: delete all pages inside the folder, A new API is required
-    config.navigation = navigation;
-    this.props.saveWikiConfig(config);
-  };
-
-  // Drag a folder to the front and back of another folder
-  onMoveFolder = (moved_folder_id, target_id, move_position) => {
-    const { config } = this.props;
-    const { navigation } = config;
-    let updatedNavigation = deepCopy(navigation);
-
-    // Get the moved folder first and delete the original location
-    let moved_folder;
-    let moved_folder_index = PageUtils.getFolderIndexById(updatedNavigation, moved_folder_id);
-    if (moved_folder_index === -1) {
-      updatedNavigation.forEach(item => {
-        if (item.type === FOLDER) {
-          moved_folder_index = PageUtils.getFolderIndexById(item.children, moved_folder_id);
-          if (moved_folder_index > -1) {
-            moved_folder = item.children[moved_folder_index];
-            item.children.splice(moved_folder_index, 1);
-          }
-        }
-      });
-    } else {
-      moved_folder = updatedNavigation[moved_folder_index];
-      updatedNavigation.splice(moved_folder_index, 1);
-    }
-    let indexOffset = 0;
-    if (move_position === 'move_below') {
-      indexOffset++;
-    }
-    // Get the location of the release
-    let target_folder_index = PageUtils.getFolderIndexById(updatedNavigation, target_id);
-    if (target_folder_index === -1) {
-      updatedNavigation.forEach(item => {
-        if (item.type === FOLDER) {
-          target_folder_index = PageUtils.getFolderIndexById(item.children, target_id);
-          if (target_folder_index > -1) {
-            item.children.splice(target_folder_index + indexOffset, 0, moved_folder);
-          }
-        } else {
-          // not changed
-          updatedNavigation = navigation;
-        }
-      });
-    } else {
-      updatedNavigation.splice(target_folder_index + indexOffset, 0, moved_folder);
-    }
-    config.navigation = updatedNavigation;
-    this.props.saveWikiConfig(config);
-  };
-
-  // Not support yet: Move a folder into another folder
-  moveFolderToFolder = (moved_folder_id, target_id) => {
-    let { config } = this.props;
-    let { navigation } = config;
-
-    // Find the folder and move it to this new folder
-    let target_folder = PageUtils.getFolderById(navigation, target_id);
-    if (!target_folder) {
-      toaster.danger('Only_support_two_level_folders');
-      return;
-    }
-
-    let moved_folder;
-    let moved_folder_index = PageUtils.getFolderIndexById(navigation, moved_folder_id);
-
-    // The original directory is in the root directory
-    if (moved_folder_index > -1) {
-      moved_folder = PageUtils.getFolderById(navigation, moved_folder_id);
-      // If moved folder There are other directories under the ID, and dragging is not supported
-      if (moved_folder.children.some(item => item.type === FOLDER)) {
-        toaster.danger('Only_support_two_level_folders');
-        return;
-      }
-      target_folder.children.push(moved_folder);
-      navigation.splice(moved_folder_index, 1);
-    } else { // The original directory is not in the root directory
-      navigation.forEach(item => {
-        if (item.type === FOLDER) {
-          let moved_folder_index = PageUtils.getFolderIndexById(item.children, moved_folder_id);
-          if (moved_folder_index > -1) {
-            moved_folder = item.children[moved_folder_index];
-            target_folder.children.push(moved_folder);
-            item.children.splice(moved_folder_index, 1);
-          }
-        }
-      });
-    }
-    config.navigation = navigation;
-    this.props.saveWikiConfig(config);
-  };
-
-  onToggleAddFolder = () => {
-    this.setState({ isShowNewFolderDialog: !this.state.isShowNewFolderDialog });
-  };
-
-  openAddPageDialog = (folder_id) => {
-    this.current_folder_id = folder_id;
-    this.setState({ isShowAddNewPageDialog: true });
-  };
-
-  closeAddNewPageDialog = () => {
-    this.current_folder_id = null;
-    this.setState({ isShowAddNewPageDialog: false });
-  };
-
-  onSetFolderId = (folder_id) => {
-    this.current_folder_id = folder_id;
-  };
-
-  renderFolderView = () => {
+  renderWikiNav = () => {
     const { config, onUpdatePage } = this.props;
     const { pages, navigation } = config;
     return (
       <div className="wiki2-pages-container">
-        <WikiNav
-          isEditMode={isWiki2}
-          navigation={navigation}
-          pages={pages}
-          onToggleAddPage={this.openAddPageDialog}
-          onDeletePage={this.confirmDeletePage}
-          onUpdatePage={onUpdatePage}
-          setCurrentPage={this.props.setCurrentPage}
-          onMovePage={this.movePage}
-          movePageOut={this.movePageOut}
-          onToggleAddFolder={this.onToggleAddFolder}
-          onModifyFolder={this.onModifyFolder}
-          onDeleteFolder={this.onDeleteFolder}
-          onMoveFolder={this.onMoveFolder}
-          moveFolderToFolder={this.moveFolderToFolder}
-          onAddNewPage={this.onAddNewPage}
-          duplicatePage={this.duplicatePage}
-          onSetFolderId={this.onSetFolderId}
-          currentPageId={this.props.currentPageId}
-          addPageInside={this.addPageInside}
-        />
-        {this.state.isShowNewFolderDialog &&
-          <NewFolderDialog
-            onAddFolder={this.addPageFolder}
-            onToggleAddFolderDialog={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowAddNewPageDialog &&
-          <AddNewPageDialog
-            toggle={this.closeAddNewPageDialog}
+        {isObjectNotEmpty(config) &&
+          <WikiNav
+            isEditMode={isWiki2}
+            navigation={navigation}
+            pages={pages}
+            onDeletePage={this.confirmDeletePage}
+            onUpdatePage={onUpdatePage}
+            setCurrentPage={this.props.setCurrentPage}
+            onMovePage={this.movePage}
             onAddNewPage={this.onAddNewPage}
-            title={gettext('Add page')}
-          />
-        }
-      </div>
-    );
-  };
-
-  renderNoFolder = () => {
-    return (
-      <div className="wiki2-pages-container">
-        {isWiki2 &&
-          <WikiNavFooter
-            onToggleAddPage={this.openAddPageDialog}
-            onToggleAddFolder={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowNewFolderDialog &&
-          <NewFolderDialog
-            onAddFolder={this.addPageFolder}
-            onToggleAddFolderDialog={this.onToggleAddFolder}
-          />
-        }
-        {this.state.isShowAddNewPageDialog &&
-          <AddNewPageDialog
-            toggle={this.closeAddNewPageDialog}
-            onAddNewPage={this.onAddNewPage}
-            title={gettext('Add page')}
+            duplicatePage={this.duplicatePage}
+            currentPageId={this.props.currentPageId}
+            addPageInside={this.addPageInside}
           />
         }
       </div>
@@ -364,7 +147,7 @@ class SidePanel extends Component {
   };
 
   render() {
-    const { isLoading, config } = this.props;
+    const { isLoading } = this.props;
     return (
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
@@ -377,7 +160,7 @@ class SidePanel extends Component {
           </UncontrolledTooltip>
         </div>
         <div className="wiki2-side-nav">
-          {isLoading ? <Loading /> : (isObjectNotEmpty(config) ? this.renderFolderView() : this.renderNoFolder())}
+          {isLoading ? <Loading /> : this.renderWikiNav()}
         </div>
         <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
       </div>

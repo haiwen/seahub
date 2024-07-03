@@ -1,13 +1,10 @@
 import Page from './page';
-import Folder from './folder';
 
 export default class WikiConfig {
   constructor(object) {
     this.version = object.version || 1;
     this.navigation = (Array.isArray(object.navigation) ? object.navigation : []).map(item => {
-      if (item.type === 'folder') {
-        return new Folder(item);
-      } else if (item.type === 'page') {
+      if (item.type === 'page') {
         return {
           id: item.id,
           type: item.type,
