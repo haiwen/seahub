@@ -103,15 +103,8 @@ class Wiki extends Component {
 
   getFirstPageId = (config) => {
     if (!config || !Array.isArray(config.navigation)) return '';
-    for (let i = 0; i < config.navigation.length; i++) {
-      const item = config.navigation[i] || {};
-      if (item.type === 'page') {
-        return item.id;
-      }
-      if (item.type === 'folder' && item.children[0]) {
-        return item.children[0].id;
-      }
-    }
+    const firstPage = config.navigation[0] || {};
+    return firstPage.id;
   };
 
   getSdocFileContent = (docUuid, accessToken) => {

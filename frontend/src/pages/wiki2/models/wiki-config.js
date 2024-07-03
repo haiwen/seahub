@@ -1,21 +1,37 @@
 import Page from './page';
-import Folder from './folder';
 
 export default class WikiConfig {
   constructor(object) {
-    this.version = object.version || 1;
-    this.navigation = (Array.isArray(object.navigation) ? object.navigation : []).map(item => {
-      if (item.type === 'folder') {
-        return new Folder(item);
-      } else if (item.type === 'page') {
-        return {
-          id: item.id,
-          type: item.type,
-          children: item.children || [],
-        };
+    const { version = 1, pages = [], navigation = [] } = object;
+    this.version = version;
+    this.pages = pages.map(page => new Page(page));
+    this.navigation = navigation.filter(item => {
+      return item.type === 'page';
+    });
+    // Render pages in folder to navigation root
+    const page_id_map = {};
+    this.pages.forEach(page => {
+      page_id_map[page.id] = false;
+    });
+    function traversePage(node) {
+      if (!node) return;
+      if (node.id) {
+        page_id_map[node.id] = true;
       }
-      return null;
-    }).filter(item => !!item);
-    this.pages = Array.isArray(object.pages) ? object.pages.map(page => new Page(page)) : [];
+      if (Array.isArray(node.children)) {
+        node.children.forEach(child => traversePage(child));
+      }
+    }
+    traversePage({ children: this.navigation });
+    for (let key in page_id_map) {
+      if (page_id_map[key] === false) {
+        const page = this.pages.find(item => item.id === key);
+        this.navigation.push({
+          id: page.id,
+          type: 'page',
+          children: page.children || [],
+        });
+      }
+    }
   }
 }

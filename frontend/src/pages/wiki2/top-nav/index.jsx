@@ -46,7 +46,7 @@ function WikiTopNav({ config, currentPageId }) {
         return (
           <Fragment key={item.id}>
             <div className='wiki2-top-nav-item d-flex'>
-              <NavItemIcon symbol={item.type === 'folder' ? 'wiki-folder' : 'file'} disable={true} />
+              <NavItemIcon symbol={'file'} disable={true} />
               {item.name}
             </div>
             {index !== paths.length - 1 && <div>/</div>}
