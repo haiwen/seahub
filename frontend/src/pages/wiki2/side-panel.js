@@ -27,6 +27,7 @@ const propTypes = {
   isLoading: PropTypes.bool.isRequired,
   config: PropTypes.object.isRequired,
   saveWikiConfig: PropTypes.func.isRequired,
+  updateWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
   onUpdatePage: PropTypes.func.isRequired,
@@ -78,11 +79,12 @@ class SidePanel extends Component {
     const { from_page_id } = fromPageConfig;
     wikiAPI.duplicateWiki2Page(wikiId, from_page_id).then(res => {
       const newConfig = JSON.parse(res.data.wiki_config);
-      this.props.saveWikiConfig(newConfig, successCallback, errorCallback);
+      this.props.updateWikiConfig(newConfig);
+      successCallback && successCallback();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.onError();
+      errorCallback && errorCallback();
     });
   };
 

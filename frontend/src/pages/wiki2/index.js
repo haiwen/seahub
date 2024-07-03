@@ -84,11 +84,15 @@ class Wiki extends Component {
     });
   };
 
+  updateWikiConfig = (wikiConfig) => {
+    this.setState({
+      config: new WikiConfig(wikiConfig || {}),
+    });
+  };
+
   saveWikiConfig = (wikiConfig, onSuccess, onError) => {
     wikiAPI.updateWiki2Config(wikiId, JSON.stringify(wikiConfig)).then(res => {
-      this.setState({
-        config: new WikiConfig(wikiConfig || {}),
-      });
+      this.updateWikiConfig(wikiConfig);
       onSuccess && onSuccess();
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -229,6 +233,7 @@ class Wiki extends Component {
           onCloseSide={this.onCloseSide}
           config={this.state.config}
           saveWikiConfig={this.saveWikiConfig}
+          updateWikiConfig={this.updateWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
           onUpdatePage={this.onUpdatePage}
