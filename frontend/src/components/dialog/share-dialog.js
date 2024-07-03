@@ -203,7 +203,7 @@ class ShareDialog extends React.Component {
             }
             {enableDirPrivateShare &&
               <Fragment>
-                {activeTab === 'shareToUser' &&
+                {(activeTab === 'shareToUser' && canShareRepo) &&
                   <TabPane tabId="shareToUser" role="tabpanel" id="share-to-user-panel">
                     <ShareToUser
                       itemType={this.props.itemType}
@@ -215,7 +215,7 @@ class ShareDialog extends React.Component {
                     />
                   </TabPane>
                 }
-                {activeTab === 'shareToGroup' &&
+                {(activeTab === 'shareToGroup' && canShareRepo) &&
                   <TabPane tabId="shareToGroup" role="tabpanel" id="share-to-group-panel">
                     <ShareToGroup
                       itemType={this.props.itemType}
@@ -227,7 +227,7 @@ class ShareDialog extends React.Component {
                     />
                   </TabPane>
                 }
-                {isPro && activeTab === 'customSharePermission' && (
+                {(isPro && activeTab === 'customSharePermission' && canShareRepo) && (
                   <TabPane tabId="customSharePermission" role="tabpanel" id="custom-share-perm-panel">
                     <CustomPermissionManager repoID={this.props.repoID} />
                   </TabPane>
