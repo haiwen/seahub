@@ -57,27 +57,10 @@
 .delete-sort .sf-metadata-icon-fork-number {
   display: inline-block;
   font-size: 12px;
-  color: #999;
+  fill: #999;
   cursor: pointer;
 }
 
 .sorts-list .delete-sort .sf-metadata-icon-fork-number:hover {
-  color: #666666;
-}
-
-.sort-popover .popover-add-tool {
-  border-top: none;
-  color: #666666;
-}
-
-.sort-popover .popover-add-tool .popover-add-icon {
-  margin-right: 14px;
-}
-
-.sort-popover .sort-popover-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 1rem;
-  border-top: 1px solid #e9ecef;
+  fill: #666666;
 }

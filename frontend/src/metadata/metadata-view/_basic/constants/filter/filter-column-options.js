@@ -41,6 +41,9 @@ const FILTER_COLUMN_OPTIONS = {
   [CellType.TEXT]: {
     filterPredicateList: textPredicates,
   },
+  [CellType.FILE_NAME]: {
+    filterPredicateList: textPredicates,
+  },
   [CellType.CTIME]: {
     filterPredicateList: datePredicates,
     filterTermModifierList: dateTermModifiers,

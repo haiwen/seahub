@@ -1,11 +1,11 @@
-import { getColumnByKey } from './column-utils';
+import { getColumnByKey } from '../_basic';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, INSERT_ROW_HEIGHT } from '../constants';
 
 export const createGroupMetrics = (groups, groupbys, pathFoldedGroupMap, columns, rowHeight, includeInsertRow) => {
   let groupbyColumnsMap = {};
   groupbys.forEach(groupby => {
     const columnKey = groupby.column_key;
-    const column = getColumnByKey(columnKey, columns);
+    const column = getColumnByKey(columns, columnKey);
     groupbyColumnsMap[columnKey] = column;
   });
   const maxLevel = groupbys.length;

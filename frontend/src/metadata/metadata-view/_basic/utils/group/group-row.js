@@ -16,6 +16,10 @@ import {
   SORT_TYPE,
   TEXT_SORTER_COLUMN_TYPES,
 } from '../../constants/sort';
+import {
+  getColumnByKey,
+} from '../column';
+import { deleteInvalidGroupby } from './core';
 
 const _getCellValue = (row, groupby) => {
   const { column_key } = groupby;
@@ -236,15 +240,19 @@ const groupTableRows = (groupbys, rows) => {
  *    cell_value, original_cell_value, column_key,
       row_ids, subgroups, summaries, ...}, ...], array
  */
-const groupViewRows = (groupbys, table, rowsIds) => {
-  if (rowsIds.length === 0) {
-    return [];
+const getGroupRows = (table, rows, groupbys) => {
+  if (rows.length === 0) return [];
+  if (groupbys.length === 0) return rows;
+  let validGroupbys = [];
+  try {
+    validGroupbys = deleteInvalidGroupby(groupbys, table.columns);
+  } catch (err) {
+    validGroupbys = [];
   }
-  let rowsData = getRowsByIds(table, rowsIds);
-  return groupTableRows(groupbys, rowsData);
+  return groupTableRows(validGroupbys, rows);
 };
 
 export {
   groupTableRows,
-  groupViewRows,
+  getGroupRows,
 };

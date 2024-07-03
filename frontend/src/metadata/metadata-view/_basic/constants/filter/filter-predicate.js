@@ -1,3 +1,5 @@
+import { gettext } from '../../../../../utils/constants';
+
 const FILTER_PREDICATE_TYPE = {
   CONTAINS: 'contains',
   NOT_CONTAIN: 'does_not_contain',
@@ -27,28 +29,29 @@ const FILTER_PREDICATE_TYPE = {
 };
 
 const FILTER_PREDICATE_SHOW = {
-  [FILTER_PREDICATE_TYPE.CONTAINS]: 'contains',
-  [FILTER_PREDICATE_TYPE.NOT_CONTAIN]: 'does not contain',
-  [FILTER_PREDICATE_TYPE.IS]: 'is',
-  [FILTER_PREDICATE_TYPE.IS_NOT]: 'is not',
+  [FILTER_PREDICATE_TYPE.CONTAINS]: gettext('contains'),
+  [FILTER_PREDICATE_TYPE.NOT_CONTAIN]: gettext('does not contain'),
+  [FILTER_PREDICATE_TYPE.IS]: gettext('is'),
+  [FILTER_PREDICATE_TYPE.IS_NOT]: gettext('is not'),
   [FILTER_PREDICATE_TYPE.EQUAL]: '\u003d',
   [FILTER_PREDICATE_TYPE.NOT_EQUAL]: '\u2260',
   [FILTER_PREDICATE_TYPE.LESS]: '\u003C',
   [FILTER_PREDICATE_TYPE.GREATER]: '\u003E',
   [FILTER_PREDICATE_TYPE.LESS_OR_EQUAL]: '\u2264',
   [FILTER_PREDICATE_TYPE.GREATER_OR_EQUAL]: '\u2265',
-  [FILTER_PREDICATE_TYPE.EMPTY]: 'is empty',
-  [FILTER_PREDICATE_TYPE.NOT_EMPTY]: 'is not empty',
-  [FILTER_PREDICATE_TYPE.IS_WITHIN]: 'is within...',
-  [FILTER_PREDICATE_TYPE.IS_BEFORE]: 'is before...',
-  [FILTER_PREDICATE_TYPE.IS_AFTER]: 'is after...',
-  [FILTER_PREDICATE_TYPE.IS_ON_OR_BEFORE]: 'is on or before...',
-  [FILTER_PREDICATE_TYPE.IS_ON_OR_AFTER]: 'is on or after...',
-  [FILTER_PREDICATE_TYPE.HAS_ANY_OF]: 'has any of...',
-  [FILTER_PREDICATE_TYPE.HAS_ALL_OF]: 'has all of...',
-  [FILTER_PREDICATE_TYPE.HAS_NONE_OF]: 'has none of...',
-  [FILTER_PREDICATE_TYPE.IS_EXACTLY]: 'is exactly...',
-  [FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID]: 'is current user\'s ID',
+  [FILTER_PREDICATE_TYPE.EMPTY]: gettext('is empty'),
+  [FILTER_PREDICATE_TYPE.NOT_EMPTY]: gettext('is not empty'),
+  [FILTER_PREDICATE_TYPE.IS_WITHIN]: gettext('is within...'),
+  [FILTER_PREDICATE_TYPE.IS_BEFORE]: gettext('is before...'),
+  [FILTER_PREDICATE_TYPE.IS_AFTER]: gettext('is after...'),
+  [FILTER_PREDICATE_TYPE.IS_ON_OR_BEFORE]: gettext('is on or before...'),
+  [FILTER_PREDICATE_TYPE.IS_ON_OR_AFTER]: gettext('is on or after...'),
+  [FILTER_PREDICATE_TYPE.HAS_ANY_OF]: gettext('has any of...'),
+  [FILTER_PREDICATE_TYPE.HAS_ALL_OF]: gettext('has all of...'),
+  [FILTER_PREDICATE_TYPE.HAS_NONE_OF]: gettext('has none of...'),
+  [FILTER_PREDICATE_TYPE.IS_EXACTLY]: gettext('is exactly...'),
+  [FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID]: gettext('is current user\'s ID'),
+  [FILTER_PREDICATE_TYPE.INCLUDE_ME]: gettext('include the current user')
 };
 
 export {

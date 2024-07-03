@@ -97,6 +97,8 @@ export const DEFAULT_COLUMNS = [
   { name: 'Is_dir', type: CellType.TEXT, width: 200, editable: false, key: 'is_dir' },
 ];
 
+export const PER_PAGE_COUNT = 1000;
+
 export {
   EVENT_BUS_TYPE,
   TRANSFER_TYPES,

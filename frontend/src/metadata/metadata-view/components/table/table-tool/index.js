@@ -4,10 +4,13 @@ import classnames from 'classnames';
 import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../../data-process-setter';
 import { Z_INDEX } from '../../../_basic';
 import { EVENT_BUS_TYPE } from '../../../constants';
+import { useCollaborators } from '../../../hooks';
 
 import './index.css';
 
-const TableTool = ({ searcherActive, onFiltersChange, onSortsChange, modifyGroupbys, modifyHiddenColumns }) => {
+const TableTool = ({ searcherActive, view, columns, modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns }) => {
+
+  const { collaborators } = useCollaborators();
 
   const onHeaderClick = useCallback(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
@@ -21,21 +24,21 @@ const TableTool = ({ searcherActive, onFiltersChange, onSortsChange, modifyGroup
     >
       <div className="sf-metadata-tool-left-operations">
         <FilterSetter
-          wrapperClass={'custom-tool-label custom-filter-label'}
+          wrapperClass="custom-tool-label custom-filter-label"
           filtersClassName="sf-metadata-filters"
-          target={'sf-metadata-filter-popover'}
-          filterConjunction={''}
-          filters={[]}
-          columns={[]}
-          onFiltersChange={onFiltersChange}
-          collaborators={[]}
+          target="sf-metadata-filter-popover"
+          filterConjunction={view.filter_conjunction}
+          filters={view.filters}
+          columns={columns}
+          modifyFilters={modifyFilters}
+          collaborators={collaborators}
         />
         <SortSetter
-          wrapperClass={'custom-tool-label custom-sort-label'}
-          target={'sf-metadata-sort-popover'}
-          sorts={[]}
-          columns={[]}
-          onSortsChange={onSortsChange}
+          wrapperClass="custom-tool-label custom-sort-label"
+          target="sf-metadata-sort-popover"
+          sorts={view.sorts}
+          columns={columns}
+          modifySorts={modifySorts}
         />
         <GroupbySetter
           wrapperClass={'custom-tool-label custom-groupby-label'}
@@ -58,8 +61,10 @@ const TableTool = ({ searcherActive, onFiltersChange, onSortsChange, modifyGroup
 
 TableTool.propTypes = {
   searcherActive: PropTypes.bool,
-  onFiltersChange: PropTypes.func,
-  onSortsChange: PropTypes.func,
+  view: PropTypes.object,
+  columns: PropTypes.array,
+  modifyFilters: PropTypes.func,
+  modifySorts: PropTypes.func,
   modifyGroupbys: PropTypes.func,
   modifyHiddenColumns: PropTypes.func,
 };

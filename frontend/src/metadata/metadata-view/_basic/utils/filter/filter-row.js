@@ -1,5 +1,6 @@
 import {
   getFormattedFilters,
+  deleteInvalidFilter,
 } from './core';
 import {
   creatorFilter,
@@ -21,6 +22,7 @@ const getFilterResult = (row, filter, { username, userId }) => {
       cellValue = DateUtils.format(cellValue, DATE_FORMAT_MAP.YYYY_MM_DD_HH_MM_SS);
       return dateFilter(cellValue, filter);
     }
+    case CellType.FILE_NAME:
     case CellType.TEXT: {
       return textFilter(cellValue, filter, userId);
     }
@@ -80,7 +82,38 @@ const filterRows = (filterConjunction, filters, rows, { username, userId }) => {
   return filteredRows;
 };
 
+/**
+ * Filter rows without formula calculation
+ * The "formulaRows" need to be provided if you want to filter formula, link columns etc.
+ * @param {object} table e.g. { columns, ... }
+ * @param {array} rows e.g. [{ _id, .... }, ...]
+ * @param {string} filterConjunction e.g. 'And' | 'Or'
+ * @param {array} filters e.g. [{ column_key, filter_predicate, ... }, ...]
+ * @param {string} username
+ * @param {string} userId
+ * @returns filtered rows: row_ids and error message: error_message, object
+ */
+const getFilteredRows = (table, rows, filterConjunction, filters, { username = null, userId = null } = {}) => {
+  const { columns } = table;
+  let validFilters = [];
+  try {
+    validFilters = deleteInvalidFilter(filters, columns);
+  } catch (err) {
+    return { row_ids: [], error_message: err.message };
+  }
+
+  let filteredRows = [];
+  if (validFilters.length === 0) {
+    filteredRows = rows.map((row) => row._id);
+  } else {
+    filteredRows = filterRows(filterConjunction, validFilters, rows, { username, userId });
+  }
+
+  return { row_ids: filteredRows, error_message: null };
+};
+
 export {
   filterRow,
   filterRows,
+  getFilteredRows,
 };

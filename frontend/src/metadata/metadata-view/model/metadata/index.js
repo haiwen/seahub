@@ -1,3 +1,6 @@
+import { PER_PAGE_COUNT } from '../../constants';
+import View from './view';
+
 class Metadata {
   constructor(object) {
     this.columns = object.columns || [];
@@ -9,24 +12,11 @@ class Metadata {
       this.id_row_map[record._id] = record;
     });
 
-    this.hasMore = object.hasMore || false;
+    this.hasMore = this.rows.length === PER_PAGE_COUNT;
+
     this.recordsCount = object.recordsCount || this.row_ids.length;
-    this.page = 1;
-    this.perPageCount = 1000;
+    this.view = new View(object.view || {});
   }
-
-  extendRows = (rows) => {
-    if (!Array.isArray(rows) || rows.length === 0) {
-      this.hasMore = false;
-      return;
-    }
-
-    this.rows.push(...rows);
-    rows.forEach(record => {
-      this.row_ids.push(record._id);
-      this.id_row_map[record._id] = record;
-    });
-  };
 
 }
 

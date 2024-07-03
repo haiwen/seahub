@@ -6,5 +6,5 @@ export {
 
 export {
   groupTableRows,
-  groupViewRows,
+  getGroupRows,
 } from './group-row';

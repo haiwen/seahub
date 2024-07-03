@@ -44,7 +44,7 @@
   max-width: 300px;
 }
 
-.filters-list .filter-item .filter-term .option-group-content .option.option-active .sf-metadata-font {
+.filters-list .filter-item .filter-term .option-group-content .option.option-active .sf-metadata-icon {
   color: #798d99;
 }
 
@@ -64,11 +64,13 @@
 .filters-list .sf-metadata-select .selected-option-show {
   width: calc(100% - 20px);
   height: 20px;
+  line-height: 20px;
 }
 
 .filters-list .sf-metadata-select .selected-option {
   width: auto;
   overflow-x: auto;
+  line-height: 1.5;
 }
 
 .filters-list .sf-metadata-select .sf-metadata-icon-drop-down {
@@ -202,10 +204,14 @@
   cursor: pointer;
 }
 
-.filters-list .delete-filter .sf-metadata-icon-fork-number {
+.delete-filter .sf-metadata-icon-fork-number {
   display: inline-block;
   font-size: 12px;
-  color: #999;
+  fill: #999;
+}
+
+.delete-filter .sf-metadata-icon-fork-number:hover {
+  fill: #666;
 }
 
 .filters-list .multiple-option-name {
@@ -246,17 +252,15 @@
 
 .filters-list .collaborator-avatar-container {
   width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .filters-list .collaborator-avatar {
   width: 16px;
   height: 16px;
-  transform: translateY(-1px);
   border-radius: 50%;
-}
-
-.filters-list .option .collaborator-avatar {
-  transform: translateY(-2px);
 }
 
 .filters-list .collaborator-name {
@@ -270,6 +274,8 @@
 
 .filters-list .collaborator-container {
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .filters-list .popover-add-tool {
@@ -284,10 +290,6 @@
 .filters-list .option-group {
   max-height: 360px;
   overflow: auto;
-}
-
-.filters-list .filter-item .sf-metadata-icon-fork-number:hover {
-  color: #666666;
 }
 
 .filters-list .filter-container-readonly .sf-metadata-select .selected-option-show,
@@ -314,8 +316,17 @@
   margin-left: -0.3125rem;
 }
 
-.filter-header-icon .sf-metadata-font {
+.filter-header-icon .sf-metadata-icon {
   font-size: 14px;
-  color: #aaa;
+  fill: #aaa;
   cursor: default;
+}
+
+.option:hover .filter-header-icon .sf-metadata-icon,
+.option.option-active .filter-header-icon .sf-metadata-icon {
+  fill: #fff;
+}
+
+.option:not(.option-active):hover .filter-header-icon .sf-metadata-icon {
+  fill: #aaa;
 }
