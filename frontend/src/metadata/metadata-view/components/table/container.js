@@ -12,7 +12,7 @@ import './index.css';
 
 const Container = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
-  const { metadata, errorMsg, extendMetadataRows } = useMetadata();
+  const { metadata, errorMsg, store } = useMetadata();
   const containerRef = useRef(null);
 
   const onKeyDown = useCallback((event) => {
@@ -33,26 +33,21 @@ const Container = () => {
     // todo
   }, []);
 
-  const tableChanged = useCallback(() => {
-    // todo
-  }, []);
-
-  const handleTableError = useCallback((error) => {
-    const errorMsg = getErrorMsg(error);
-    toaster.danger(gettext(errorMsg));
-  }, []);
-
-  const updateMetadata = useCallback(() => {
-    // todo
-  }, []);
-
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback(async () => {
     if (!metadata.hasMore) return;
     setLoadingMore(true);
-    extendMetadataRows((flag) => {
+
+    try {
+      await store.loadMore();
       setLoadingMore(false);
-    });
-  }, [metadata, extendMetadataRows]);
+    } catch (error) {
+      const errorMsg = getErrorMsg(error);
+      toaster.danger(gettext(errorMsg));
+      setLoadingMore(false);
+      return;
+    }
+
+  }, [metadata, store]);
 
   const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
     // todo: store op
@@ -88,12 +83,14 @@ const Container = () => {
   }, [metadata]);
 
   const modifyFilters = useCallback((filters, filterConjunction) => {
-    // modifyFilters
-  }, []);
+    store.modifyFilters(filterConjunction, filters);
+    store.saveView();
+  }, [store]);
 
   const modifySorts = useCallback((sorts) => {
-    // modifySorts
-  }, []);
+    store.modifySorts(sorts);
+    store.saveView();
+  }, [store]);
 
   const modifyGroupbys = useCallback(() => {
     // modifyGroupbys
@@ -137,17 +134,9 @@ const Container = () => {
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
     const unsubscribeSelectCell = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, onSelectCell);
-    const unsubscribeServerTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);
-    const unsubscribeTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
-    const unsubscribeHandleTableError = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
-    const unsubscribeUpdateRows = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       unsubscribeSelectCell();
-      unsubscribeServerTableChanged();
-      unsubscribeTableChanged();
-      unsubscribeHandleTableError();
-      unsubscribeUpdateRows();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -155,7 +144,7 @@ const Container = () => {
   return (
     <>
       <div className="sf-metadata-wrapper">
-        <TableTool modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} />
+        <TableTool view={metadata.view} columns={metadata.columns} modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} />
         <div className="sf-metadata-main">
           {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
           {!errorMsg && (

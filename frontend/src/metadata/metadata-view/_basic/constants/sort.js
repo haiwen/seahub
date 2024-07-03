@@ -6,6 +6,7 @@ const SORT_TYPE = {
 };
 
 const SORT_COLUMN_OPTIONS = [
+  CellType.FILE_NAME,
   CellType.CTIME,
   CellType.MTIME,
   CellType.TEXT,

@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { toaster } from '@seafile/sf-metadata-ui-component';
-import { Metadata } from '../model';
 import { gettext } from '../../../utils/constants';
-import { getErrorMsg, CellType, PRIVATE_COLUMN_KEY, NOT_DISPLAY_COLUMN_KEYS } from '../_basic';
+import { getErrorMsg } from '../_basic';
 import Context from '../context';
+import Store from '../store';
+import { EVENT_BUS_TYPE } from '../constants';
 
 const MetadataContext = React.createContext(null);
 
@@ -13,132 +14,56 @@ export const MetadataProvider = ({
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
-  const [metadata, setMetadata] = useState({ records: [], columns: [] });
+  const [metadata, setMetadata] = useState({ rows: [], columns: [] });
+  const storeRef = useRef(null);
 
-  const getColumnName = useCallback((key, name) => {
-    switch (key) {
-      case PRIVATE_COLUMN_KEY.CTIME:
-        return gettext('Created time');
-      case PRIVATE_COLUMN_KEY.MTIME:
-        return gettext('Last modified time');
-      case PRIVATE_COLUMN_KEY.CREATOR:
-        return gettext('Creator');
-      case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
-        return gettext('Last modifier');
-      case PRIVATE_COLUMN_KEY.FILE_CREATOR:
-        return gettext('File creator');
-      case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
-        return gettext('File modifier');
-      case PRIVATE_COLUMN_KEY.FILE_CTIME:
-        return gettext('File created time');
-      case PRIVATE_COLUMN_KEY.FILE_MTIME:
-        return gettext('File last modified time');
-      case PRIVATE_COLUMN_KEY.IS_DIR:
-        return gettext('Is dir');
-      case PRIVATE_COLUMN_KEY.PARENT_DIR:
-        return gettext('Parent dir');
-      case PRIVATE_COLUMN_KEY.FILE_NAME:
-        return gettext('File name');
-      default:
-        return name;
-    }
+  const tableChanged = useCallback(() => {
+    setMetadata(storeRef.current.data);
   }, []);
 
-  const getColumnType = useCallback((key, type) => {
-    switch (key) {
-      case PRIVATE_COLUMN_KEY.CTIME:
-      case PRIVATE_COLUMN_KEY.FILE_CTIME:
-        return CellType.CTIME;
-      case PRIVATE_COLUMN_KEY.MTIME:
-      case PRIVATE_COLUMN_KEY.FILE_MTIME:
-        return CellType.MTIME;
-      case PRIVATE_COLUMN_KEY.CREATOR:
-      case PRIVATE_COLUMN_KEY.FILE_CREATOR:
-        return CellType.CREATOR;
-      case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
-      case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
-        return CellType.LAST_MODIFIER;
-      case PRIVATE_COLUMN_KEY.FILE_NAME:
-        return CellType.FILE_NAME;
-      default:
-        return type;
-    }
+  const handleTableError = useCallback((error) => {
+    const errorMsg = getErrorMsg(error);
+    toaster.danger(gettext(errorMsg));
   }, []);
 
-  const getColumns = useCallback((columns) => {
-    if (!Array.isArray(columns) || columns.length === 0) return [];
-    const validColumns = columns.map((column) => {
-      const { type, key, name, ...params } = column;
-      return {
-        key,
-        type: getColumnType(key, type),
-        name: getColumnName(key, name),
-        ...params,
-        width: 200,
-      };
-    }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
-    let displayColumns = [];
-    validColumns.forEach(column => {
-      if (column.key === '_name') {
-        displayColumns.unshift(column);
-      } else if (column.key === PRIVATE_COLUMN_KEY.PARENT_DIR) {
-        const nameColumnIndex = displayColumns.findIndex(column => column.key === PRIVATE_COLUMN_KEY.PARENT_DIR);
-        if (nameColumnIndex === -1) {
-          displayColumns.unshift(column);
-        } else {
-          displayColumns.splice(nameColumnIndex, 0, column);
-        }
-      } else {
-        displayColumns.push(column);
-      }
-    });
-    return displayColumns;
-  }, [getColumnType, getColumnName]);
+  const updateMetadata = useCallback((data) => {
+    setMetadata(data);
+  }, []);
 
   // init
   useEffect(() => {
-    const init = async () => {
+    // init context
+    const context = new Context();
+    window.sfMetadataContext = context;
+    window.sfMetadataContext.init({ otherSettings: params });
+    const repoId = window.sfMetadataContext.getSetting('repoID');
+    storeRef.current = new Store({ context: window.sfMetadataContext, repoId });
+    storeRef.current.initStartIndex();
+    storeRef.current.loadData().then(() => {
+      setMetadata(storeRef.current.data);
+      setLoading(false);
+    }).catch(error => {
+      const errorMsg = getErrorMsg(error);
+      toaster.danger(gettext(errorMsg));
+    });
 
-      // init context
-      const context = new Context();
-      window.sfMetadataContext = context;
-      await window.sfMetadataContext.init({ otherSettings: params });
-
-      const repoID = window.sfMetadataContext.getSetting('repoID');
-      window.sfMetadataContext.getMetadata(repoID).then(res => {
-        setMetadata(new Metadata({ rows: res?.data?.results || [], columns: getColumns(res?.data?.metadata) }));
-        setLoading(false);
-      }).catch(error => {
-        const errorMsg = getErrorMsg(error);
-        toaster.danger(gettext(errorMsg));
-      });
-    };
-
-    init();
+    const unsubscribeServerTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);
+    const unsubscribeTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
+    const unsubscribeHandleTableError = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
+    const unsubscribeUpdateRows = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
 
     return () => {
       window.sfMetadataContext.destroy();
+      unsubscribeServerTableChanged();
+      unsubscribeTableChanged();
+      unsubscribeHandleTableError();
+      unsubscribeUpdateRows();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const extendMetadataRows = useCallback((callback) => {
-    const repoID = window.sfMetadataContext.getSetting('repoID');
-    window.sfMetadataContext.getMetadata(repoID).then(res => {
-      const rows = res?.data?.results || [];
-      metadata.extendRows(rows);
-      setMetadata(metadata);
-      callback && callback(true);
-    }).catch(error => {
-      const errorMsg = getErrorMsg(error);
-      toaster.danger(gettext(errorMsg));
-      callback && callback(false);
-    });
-
-  }, [metadata]);
-
   return (
-    <MetadataContext.Provider value={{ isLoading, metadata, extendMetadataRows }}>
+    <MetadataContext.Provider value={{ isLoading, metadata, store: storeRef.current }}>
       {children}
     </MetadataContext.Provider>
   );
@@ -149,6 +74,6 @@ export const useMetadata = () => {
   if (!context) {
     throw new Error('\'MetadataContext\' is null');
   }
-  const { isLoading, metadata, extendMetadataRows } = context;
-  return { isLoading, metadata, extendMetadataRows };
+  const { isLoading, metadata, store } = context;
+  return { isLoading, metadata, store };
 };

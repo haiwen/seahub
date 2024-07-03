@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
-import { CustomizeSelect, IconBtn, SearchInput } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect, IconBtn, SearchInput, Icon } from '@seafile/sf-metadata-ui-component';
 import {
   CellType,
   FILTER_PREDICATE_TYPE,
@@ -381,6 +381,7 @@ class FilterItem extends React.Component {
     }
 
     switch (type) {
+      case CellType.FILE_NAME:
       case CellType.TEXT:
       case CellType.URL: { // The data in the formula column is a date type that has been excluded
         if (filter_predicate === FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID) {
@@ -455,7 +456,7 @@ class FilterItem extends React.Component {
     return (
       <div className="filter-item">
         <div className="delete-filter" onClick={this.onDeleteFilter}>
-          <i className="sf-metadata-font sf-metadata-icon-fork-number"></i>
+          <Icon iconName="fork-number"/>
         </div>
         <div className="condition">
           <div className="filter-conjunction">

@@ -1,6 +1,7 @@
 import metadataAPI from '../api';
 import { UserService, LocalStorage } from './_basic';
 import EventBus from './utils/event-bus';
+import { username } from '../../utils/constants';
 
 class Context {
 
@@ -54,9 +55,20 @@ class Context {
     this.settings[key] = value;
   };
 
+  getUsername = () => {
+    return username;
+  };
+
+  // collaborators
+  getCollaborators = () => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.getCollaborators(repoID);
+  };
+
   // metadata
-  getMetadata = (repoID) => {
-    return this.metadataAPI.getMetadata(repoID);
+  getMetadata = (params) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.getMetadata(repoID, params);
   };
 
   canModifyCell = (column) => {
@@ -74,6 +86,27 @@ class Context {
   getCollaboratorsFromCache = () => {
     //
   };
+
+  restoreRows = () => {
+    // todo
+  };
+
+  updateRows = () => {
+    // todo
+  };
+
+  lockRowViaButton = () => {
+    // todo
+  };
+
+  updateRowViaButton = () => {
+    // todo
+  };
+
+  getRowsByIds = () => {
+    // todo
+  };
+
 }
 
 export default Context;

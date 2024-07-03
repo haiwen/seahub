@@ -1,10 +1,15 @@
 import {
   CellType,
   DEFAULT_DATE_FORMAT,
+  PRIVATE_COLUMN_KEY,
+  NOT_DISPLAY_COLUMN_KEYS,
 } from '../_basic';
 import {
   SEQUENCE_COLUMN_WIDTH
 } from '../constants';
+import {
+  gettext
+} from '../../../utils/constants';
 
 export function getSelectColumnOptions(column) {
   if (!column || !column.data || !Array.isArray(column.data.options)) {
@@ -22,13 +27,6 @@ export function getDateColumnFormat(column) {
 export function isCheckboxColumn(column) {
   let { type } = column;
   return type === CellType.CHECKBOX;
-}
-
-export function getColumnByKey(columnKey, columns) {
-  if (!columnKey || !Array.isArray(columns)) {
-    return null;
-  }
-  return columns.find(column => column.key === columnKey);
 }
 
 export function getColumnByName(columnName, columns) {
@@ -173,4 +171,84 @@ export const recalculate = (columns, allColumns, tableId) => {
     columns: newColumns,
     allColumns: displayAllColumns,
   };
+};
+
+export const getColumnName = (key, name) => {
+  switch (key) {
+    case PRIVATE_COLUMN_KEY.CTIME:
+      return gettext('Created time');
+    case PRIVATE_COLUMN_KEY.MTIME:
+      return gettext('Last modified time');
+    case PRIVATE_COLUMN_KEY.CREATOR:
+      return gettext('Creator');
+    case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
+      return gettext('Last modifier');
+    case PRIVATE_COLUMN_KEY.FILE_CREATOR:
+      return gettext('File creator');
+    case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
+      return gettext('File modifier');
+    case PRIVATE_COLUMN_KEY.FILE_CTIME:
+      return gettext('File created time');
+    case PRIVATE_COLUMN_KEY.FILE_MTIME:
+      return gettext('File last modified time');
+    case PRIVATE_COLUMN_KEY.IS_DIR:
+      return gettext('Is dir');
+    case PRIVATE_COLUMN_KEY.PARENT_DIR:
+      return gettext('Parent dir');
+    case PRIVATE_COLUMN_KEY.FILE_NAME:
+      return gettext('File name');
+    default:
+      return name;
+  }
+};
+
+const getColumnType = (key, type) => {
+  switch (key) {
+    case PRIVATE_COLUMN_KEY.CTIME:
+    case PRIVATE_COLUMN_KEY.FILE_CTIME:
+      return CellType.CTIME;
+    case PRIVATE_COLUMN_KEY.MTIME:
+    case PRIVATE_COLUMN_KEY.FILE_MTIME:
+      return CellType.MTIME;
+    case PRIVATE_COLUMN_KEY.CREATOR:
+    case PRIVATE_COLUMN_KEY.FILE_CREATOR:
+      return CellType.CREATOR;
+    case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
+    case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
+      return CellType.LAST_MODIFIER;
+    case PRIVATE_COLUMN_KEY.FILE_NAME:
+      return CellType.FILE_NAME;
+    default:
+      return type;
+  }
+};
+
+export const getColumns = (columns) => {
+  if (!Array.isArray(columns) || columns.length === 0) return [];
+  const validColumns = columns.map((column) => {
+    const { type, key, name, ...params } = column;
+    return {
+      key,
+      type: getColumnType(key, type),
+      name: getColumnName(key, name),
+      ...params,
+      width: 200,
+    };
+  }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
+  let displayColumns = [];
+  validColumns.forEach(column => {
+    if (column.key === '_name') {
+      displayColumns.unshift(column);
+    } else if (column.key === PRIVATE_COLUMN_KEY.PARENT_DIR) {
+      const nameColumnIndex = displayColumns.findIndex(column => column.key === PRIVATE_COLUMN_KEY.PARENT_DIR);
+      if (nameColumnIndex === -1) {
+        displayColumns.unshift(column);
+      } else {
+        displayColumns.splice(nameColumnIndex, 0, column);
+      }
+    } else {
+      displayColumns.push(column);
+    }
+  });
+  return displayColumns;
 };

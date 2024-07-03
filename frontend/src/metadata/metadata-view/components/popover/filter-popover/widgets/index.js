@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import {
   FILTER_COLUMN_OPTIONS,
   ValidateFilter,
+  getColumnByKey,
 } from '../../../../_basic';
 import FilterItemUtils from './filter-item-utils';
 import FilterItem from './filter-item';
-import { getColumnByKey } from '../../../../utils/column-utils';
 
 import './index.css';
 
@@ -115,7 +115,7 @@ class FiltersList extends Component {
           filters.map((filter, index) => {
             const { column_key } = filter;
             const { error_message } = ValidateFilter.validate(filter, columns);
-            const filterColumn = getColumnByKey(column_key, columns) || {};
+            const filterColumn = getColumnByKey(columns, column_key) || {};
             return this.renderFilterItem(filter, index, error_message, filterColumn);
           })
         }

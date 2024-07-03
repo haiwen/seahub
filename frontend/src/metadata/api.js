@@ -43,6 +43,11 @@ class MetadataManagerAPI {
     }
   }
 
+  getCollaborators = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/related-users/';
+    return this.req.get(url);
+  };
+
   getMetadataStatus(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.get(url);
@@ -60,7 +65,7 @@ class MetadataManagerAPI {
 
   getMetadata(repoID, params) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
-    return this.req.get(url, {params: params});
+    return this.req.get(url, { params: params });
   }
 
   addMetadataRecords(repoID, parentDir, name) {

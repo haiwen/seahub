@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { COLUMNS_ICON_CONFIG, FILTER_TERM_MODIFIER_SHOW } from '../../../../_basic';
+import { COLUMNS_ICON_CONFIG, FILTER_PREDICATE_SHOW, FILTER_TERM_MODIFIER_SHOW } from '../../../../_basic';
 import { gettext } from '../../../../utils';
 
 class FilterItemUtils {
@@ -22,7 +22,7 @@ class FilterItemUtils {
   static generatorPredicateOption(filterPredicate) {
     return {
       value: { filterPredicate },
-      label: <span className='select-option-name'>{gettext(filterPredicate)}</span>
+      label: <span className='select-option-name'>{FILTER_PREDICATE_SHOW[filterPredicate]}</span>
     };
   }
 

@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import intl from 'react-intl-universal';
 import { UncontrolledPopover, Button } from 'reactstrap';
 import {
   COLUMNS_ICON_CONFIG,
@@ -8,17 +7,18 @@ import {
   DISPLAY_GROUP_GEOLOCATION_GRANULARITY,
   MAX_GROUP_LEVEL,
   SORT_TYPE,
+  getColumnByKey,
 } from 'sf-metadata-utils';
 import CommonAddTool from '../../common/common-add-tool';
 import GroupbyItem from '../groupby-popover-widgets/groupby-item';
 import GroupbyService from '../../services/groupby-service';
 import { isEsc } from '../../utils/hotkey';
-import { getColumnByKey } from '../../../utils/column-utils';
 import { getEventClassName } from '../../utils/utils';
 import { generateDefaultGroupby, getDefaultCountType, getGroupbyColumns } from '../../../utils/groupby-utils';
 import eventBus from '../../../utils/event-bus';
 import { GROUPBY_ACTION_TYPE, GROUPBY_DATE_GRANULARITY_LIST, GROUPBY_GEOLOCATION_GRANULARITY_LIST } from '../../constants/groupby';
 import { EVENT_BUS_TYPE } from '../../../constants';
+import { gettext } from '../../../utils';
 
 import './index.css';
 
@@ -101,7 +101,7 @@ class GroupbyPopover extends Component {
       }
       return {
         value: { countType: granularity },
-        label: <span className='select-option-name'>{intl.get(displayGranularity)}</span>,
+        label: <span className='select-option-name'>{gettext(displayGranularity)}</span>,
       };
     }).filter(Boolean);
   };
@@ -114,7 +114,7 @@ class GroupbyPopover extends Component {
       }
       return {
         value: { countType: granularity },
-        label: <span className='select-option-name'>{intl.get(DISPLAY_GROUP_DATE_GRANULARITY[granularity])}</span>,
+        label: <span className='select-option-name'>{gettext(DISPLAY_GROUP_DATE_GRANULARITY[granularity])}</span>,
       };
     }).filter(Boolean);
   };
@@ -123,11 +123,11 @@ class GroupbyPopover extends Component {
     return [
       {
         value: { sortType: SORT_TYPE.UP },
-        label: <span className='select-option-name'>{intl.get(SORT_TYPE.UP)}</span>
+        label: <span className='select-option-name'>{gettext(SORT_TYPE.UP)}</span>
       },
       {
         value: { sortType: SORT_TYPE.DOWN },
-        label: <span className='select-option-name'>{intl.get(SORT_TYPE.DOWN)}</span>
+        label: <span className='select-option-name'>{gettext(SORT_TYPE.DOWN)}</span>
       },
     ];
   };
@@ -223,7 +223,7 @@ class GroupbyPopover extends Component {
     const { columns } = this.props;
     const { groupbys } = this.state;
     return groupbys.map((groupby, index) => {
-      const column = getColumnByKey(groupby.column_key, columns) || {};
+      const column = getColumnByKey(columns, groupby.column_key) || {};
       return (
         <GroupbyItem
           key={'groupby-item-' + index}
@@ -274,28 +274,28 @@ class GroupbyPopover extends Component {
           >
             <div className={`groupbys ${isEmpty ? 'empty-groupbys-container' : ''}`} >
               {isEmpty ?
-                <div className="empty-groupbys">{intl.get('No_groupings')}</div> :
+                <div className="empty-groupbys">{gettext('No_groupings')}</div> :
                 this.renderGroupbys(scheduleUpdate)
               }
             </div>
             {groupbysLen < MAX_GROUP_LEVEL &&
             <CommonAddTool
               callBack={() => this.addGroupby(scheduleUpdate)}
-              footerName={intl.get('Add_group')}
+              footerName={gettext('Add group')}
               className='popover-add-tool'
               addIconClassName='popover-add-icon'
             />
             }
             {!isEmpty &&
             <div className="groupbys-tools">
-              <span className="groupbys-tool-item" onClick={this.onHideAllGroups}>{intl.get('Collapse_all')}</span>
-              <span className="groupbys-tool-item" onClick={this.onShowAllGroups}>{intl.get('Expand_all')}</span>
+              <span className="groupbys-tool-item" onClick={this.onHideAllGroups}>{gettext('Collapse all')}</span>
+              <span className="groupbys-tool-item" onClick={this.onShowAllGroups}>{gettext('Expand all')}</span>
             </div>
             }
             {this.isNeedSubmit() && (
               <div className="d-flex align-items-center justify-content-end p-4 border-top">
-                <Button className="mr-2" onClick={this.props.onGroupbyPopoverToggle}>{intl.get('Cancel')}</Button>
-                <Button color='primary' onClick={this.submitDefaultGroupbys}>{intl.get('Submit')}</Button>
+                <Button className="mr-2" onClick={this.props.onGroupbyPopoverToggle}>{gettext('Cancel')}</Button>
+                <Button color='primary' onClick={this.submitDefaultGroupbys}>{gettext('Submit')}</Button>
               </div>
             )}
           </div>

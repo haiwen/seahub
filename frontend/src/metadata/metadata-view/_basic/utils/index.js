@@ -4,6 +4,7 @@ import LocalStorage from './local-storage';
 export {
   getColumnType,
   getColumnsByType,
+  getColumnByKey,
   isDateColumn,
   isSupportDateColumnFormat,
 } from './column';
@@ -20,13 +21,14 @@ export {
   textFilter,
   filterRow,
   filterRows,
+  getFilteredRows,
 } from './filter';
 export {
   deleteInvalidGroupby,
   isValidGroupby,
   getValidGroupbys,
   groupTableRows,
-  groupViewRows,
+  getGroupRows,
 } from './group';
 export {
   isTableRows,

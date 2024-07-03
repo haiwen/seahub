@@ -1,32 +1,25 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import intl from 'react-intl-universal';
-import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
+import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import { FILTER_PREDICATE_TYPE } from '../../../../_basic';
+import { gettext } from '../../../../utils';
 
-const propTypes = {
-  filterIndex: PropTypes.number,
-  filterTerm: PropTypes.oneOfType([PropTypes.array, PropTypes.string]), // Make the current bug execution the correct code, this can restore in this Component
-  filter_predicate: PropTypes.string,
-  collaborators: PropTypes.array,
-  onSelectCollaborator: PropTypes.func,
-  isLocked: PropTypes.bool,
-  placeholder: PropTypes.string,
-};
-
-class CollaboratorFilter extends Component {
-
-  constructor(props) {
-    super(props);
-    this.supportMultipleSelectOptions = [
+const CollaboratorFilter = ({ isLocked, filterIndex, filterTerm, collaborators, placeholder, filter_predicate, onSelectCollaborator }) => {
+  const supportMultipleSelectOptions = useMemo(() => {
+    return [
       FILTER_PREDICATE_TYPE.HAS_ANY_OF,
       FILTER_PREDICATE_TYPE.HAS_ALL_OF,
       FILTER_PREDICATE_TYPE.HAS_NONE_OF,
       FILTER_PREDICATE_TYPE.IS_EXACTLY,
     ];
-  }
+  }, []);
 
-  createCollaboratorOptions = (filterIndex, collaborators, filterTerm) => {
+  const isSupportMultipleSelect = useMemo(() => {
+    return supportMultipleSelectOptions.indexOf(filter_predicate) > -1 ? true : false;
+  }, [supportMultipleSelectOptions, filter_predicate]);
+
+  const options = useMemo(() => {
+    if (!Array.isArray(filterTerm)) return [];
     return collaborators.map((collaborator) => {
       let isSelected = filterTerm.findIndex(item => item === collaborator.email) > -1;
       return {
@@ -49,24 +42,17 @@ class CollaboratorFilter extends Component {
                 </div>
               </div>
               <div className='collaborator-check-icon'>
-                {isSelected && <i className="option-edit sf-metadata-font sf-metadata-icon-check-mark"></i>}
+                {isSelected && (<Icon iconName="check-mark" />)}
               </div>
             </div>
           </Fragment>
         )
       };
     });
-  };
+  }, [filterIndex, collaborators, filterTerm]);
 
-  onClick = (e, collaborator) => {
-    e.stopPropagation();
-    this.props.onSelectCollaborator({ columnOption: collaborator });
-  };
-
-  render() {
-    let { filterIndex, filterTerm, collaborators, placeholder, filter_predicate } = this.props;
-    let isSupportMultipleSelect = this.supportMultipleSelectOptions.indexOf(filter_predicate) > -1 ? true : false;
-    let selectedCollaborators = Array.isArray(filterTerm) && filterTerm.length > 0 && filterTerm.map((item) => {
+  const selectValue = useMemo(() => {
+    return Array.isArray(filterTerm) && filterTerm.length > 0 && filterTerm.map((item) => {
       let collaborator = collaborators.find(c => c.email === item);
       if (!collaborator) return null;
       return (
@@ -80,35 +66,36 @@ class CollaboratorFilter extends Component {
             aria-label={collaborator.name}
           >{collaborator.name}
           </span>
-          <span className="remove-container">
-            <span className="remove-icon" onClick={(e) => {
-              this.onClick(e, collaborator);
-            }}>
-              <i className="sf-metadata-font sf-metadata-icon-fork-number"></i>
-            </span>
-          </span>
         </div>
       );
     });
-    let value = selectedCollaborators ? { label: (<>{selectedCollaborators}</>) } : {};
-    let options = Array.isArray(filterTerm) ? this.createCollaboratorOptions(filterIndex, collaborators, filterTerm) : [];
-    return (
-      <CustomizeSelect
-        className="selector-collaborator"
-        value={value}
-        onSelectOption={this.props.onSelectCollaborator}
-        options={options}
-        placeholder={placeholder}
-        isLocked={this.props.isLocked}
-        supportMultipleSelect={isSupportMultipleSelect}
-        searchable={true}
-        searchPlaceholder={intl.get('Search_collaborator')}
-        isShowSelected={false}
-      />
-    );
-  }
-}
+  }, [filterTerm, collaborators]);
 
-CollaboratorFilter.propTypes = propTypes;
+  return (
+    <CustomizeSelect
+      className="selector-collaborator"
+      value={selectValue ? { label: selectValue } : {}}
+      onSelectOption={onSelectCollaborator}
+      options={options}
+      placeholder={placeholder}
+      isLocked={isLocked}
+      supportMultipleSelect={isSupportMultipleSelect}
+      searchable={true}
+      searchPlaceholder={gettext('Search collaborator')}
+      isShowSelected={false}
+      noOptionsPlaceholder={gettext('No collaborators')}
+    />
+  );
+};
+
+CollaboratorFilter.propTypes = {
+  filterIndex: PropTypes.number,
+  filterTerm: PropTypes.oneOfType([PropTypes.array, PropTypes.string]), // Make the current bug execution the correct code, this can restore in this Component
+  filter_predicate: PropTypes.string,
+  collaborators: PropTypes.array,
+  onSelectCollaborator: PropTypes.func,
+  isLocked: PropTypes.bool,
+  placeholder: PropTypes.string,
+};
 
 export default CollaboratorFilter;

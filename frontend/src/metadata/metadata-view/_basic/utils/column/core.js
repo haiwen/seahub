@@ -21,7 +21,13 @@ const getColumnsByType = (columns, columnType) => {
   return columns.filter((column) => column.type === columnType);
 };
 
+const getColumnByKey = (columns, columnKey) => {
+  if (!Array.isArray(columns) || !columnKey) return null;
+  return columns.find((column) => column.key === columnKey);
+};
+
 export {
   getColumnType,
   getColumnsByType,
+  getColumnByKey,
 };

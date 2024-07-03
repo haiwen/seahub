@@ -1,19 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import intl from 'react-intl-universal';
 import isHotkey from 'is-hotkey';
 import { Button, UncontrolledPopover } from 'reactstrap';
+import { CustomizeAddTool, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import {
   COLUMNS_ICON_CONFIG,
   SORT_COLUMN_OPTIONS,
   SORT_TYPE,
-} from 'sf-metadata-utils';
-import { DTableCustomizeSelect } from 'sf-metadata-ui-component';
-import CommonAddTool from '../../common/common-add-tool';
-import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from '../sort-popover-widgets/sort-utils';
-import { getEventClassName } from '../../utils/utils';
-import { getColumnByKey } from '../../../utils/column-utils';
-import eventBus from '../../../utils/event-bus';
+  getColumnByKey,
+} from '../../../_basic';
+import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
+import { getEventClassName, gettext } from '../../../utils';
 import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
@@ -50,7 +47,7 @@ class SortPopover extends Component {
   componentDidMount() {
     document.addEventListener('click', this.hideDTablePopover, true);
     document.addEventListener('keydown', this.onHotKey);
-    this.unsubscribeOpenSelect = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_SELECT, this.setSelectStatus);
+    this.unsubscribeOpenSelect = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_SELECT, this.setSelectStatus);
   }
 
   componentWillUnmount() {
@@ -158,7 +155,7 @@ class SortPopover extends Component {
         value: { column },
         label: (
           <Fragment>
-            <span className="filter-header-icon"><i className={COLUMNS_ICON_CONFIG[type]}></i></span>
+            <span className="filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
             <span className='select-option-name'>{name}</span>
           </Fragment>
         )
@@ -170,7 +167,7 @@ class SortPopover extends Component {
     return SORT_TYPES.map(sortType => {
       return {
         value: { sortType },
-        label: <span className='select-option-name'>{intl.get(sortType)}</span>
+        label: <span className='select-option-name'>{gettext(sortType)}</span>
       };
     });
   };
@@ -179,7 +176,7 @@ class SortPopover extends Component {
     const { columns } = this.props;
     const { sorts } = this.state;
     return sorts.map((sort, index) => {
-      const column = getColumnByKey(sort.column_key, columns) || {};
+      const column = getColumnByKey(columns, sort.column_key) || {};
       return this.renderSortItem(column, sort, index);
     });
   };
@@ -190,7 +187,7 @@ class SortPopover extends Component {
     let selectedColumn = {
       label: (
         <Fragment>
-          <span className="filter-header-icon"><i className={COLUMNS_ICON_CONFIG[type]}></i></span>
+          <span className="filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
           <span className='select-option-name' title={name} aria-label={name}>{name}</span>
         </Fragment>
       )
@@ -198,30 +195,30 @@ class SortPopover extends Component {
 
     let selectedTypeShow = sort.sort_type;
     let selectedSortType = selectedTypeShow && {
-      label: <span className='select-option-name'>{intl.get(selectedTypeShow)}</span>
+      label: <span className='select-option-name'>{gettext(selectedTypeShow)}</span>
     };
 
     return (
       <div key={'sort-item-' + index} className="sort-item">
         {!readonly &&
           <div className="delete-sort" onClick={(event) => this.deleteSort(event, index)}>
-            <i className="sf-metadata-font sf-metadata-icon-fork-number"></i>
+            <Icon iconName="fork-number"/>
           </div>
         }
         <div className="condition">
           <div className="sort-column">
-            <DTableCustomizeSelect
+            <CustomizeSelect
               isLocked={readonly}
               value={selectedColumn}
               onSelectOption={(value) => this.onSelectColumn(value, index)}
               options={this.columnsOptions}
               searchable={true}
-              searchPlaceholder={intl.get('Search_column')}
-              noOptionsPlaceholder={intl.get('No_results')}
+              searchPlaceholder={gettext('Search column')}
+              noOptionsPlaceholder={gettext('No results')}
             />
           </div>
           <div className="sort-predicate ml-2">
-            <DTableCustomizeSelect
+            <CustomizeSelect
               isLocked={readonly}
               value={selectedSortType}
               onSelectOption={(value) => this.onSelectSortType(value, index)}
@@ -254,22 +251,22 @@ class SortPopover extends Component {
         <div ref={ref => this.sortPopoverRef = ref} onClick={this.onPopoverInsideClick}>
           <div className={`sorts-list ${isEmpty ? 'empty-sorts-container' : ''}`} >
             {isEmpty ?
-              <div className="empty-sorts-list">{intl.get('No_sorts')}</div> :
+              <div className="empty-sorts-list">{gettext('No sorts')}</div> :
               this.renderSortsList()
             }
           </div>
           {!readonly &&
-            <CommonAddTool
+            <CustomizeAddTool
               callBack={this.addSort}
-              footerName={intl.get('Add_sort')}
+              footerName={gettext('Add sort')}
               className="popover-add-tool"
               addIconClassName="popover-add-icon"
             />
           }
           {(this.isNeedSubmit() && !readonly) && (
             <div className='sort-popover-footer'>
-              <Button className='mr-2' onClick={this.onClosePopover}>{intl.get('Cancel')}</Button>
-              <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{intl.get('Submit')}</Button>
+              <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
+              <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{gettext('Submit')}</Button>
             </div>
           )}
         </div>

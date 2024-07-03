@@ -33,10 +33,10 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
     <div className={classnames('table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0 })}>
       <Records
         columns={metadata.columns}
-        recordIds={metadata.row_ids || []}
+        recordIds={metadata.view.rows || []}
         groups={metadata.groups}
         groupbys={metadata.groupbys}
-        recordsCount={metadata.recordsCount}
+        recordsCount={metadata?.view?.rows?.length || 0}
         table={metadata}
         hasMore={metadata.hasMore}
         gridUtils={gridUtils}

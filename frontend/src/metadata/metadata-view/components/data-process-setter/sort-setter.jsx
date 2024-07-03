@@ -1,8 +1,73 @@
-import React, { Component } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { getValidSorts, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
+import { SortPopover } from '../popover';
+
+const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperClass, modifySorts }) => {
+  const [isShowSetter, setShowSetter] = useState(false);
+
+  const sorts = useMemo(() => {
+    return getValidSorts(propsSorts || [], columns);
+  }, [propsSorts, columns]);
+
+  const sortMessage = useMemo(() => {
+    const sortsLength = sorts.length;
+    if (sortsLength === 1) return isNeedSubmit ? gettext('1 preset sort') : gettext('1 sort');
+    if (sortsLength > 1) return sortsLength + ' ' + (isNeedSubmit ? gettext('preset sorts') : gettext('sorts'));
+    return isNeedSubmit ? gettext('Preset sort') : gettext('Sort');
+  }, [isNeedSubmit, sorts]);
+
+  const onSetterToggle = useCallback(() => {
+    setShowSetter(!isShowSetter);
+  }, [isShowSetter]);
+
+  const onKeyDown = useCallback((event) => {
+    event.stopPropagation();
+    if (CommonlyUsedHotkey.isEnter(event) || CommonlyUsedHotkey.isSpace(event)) onSetterToggle();
+  }, [onSetterToggle]);
+
+  const onChange = useCallback((update) => {
+    const { sorts } = update || {};
+    modifySorts(sorts);
+  }, [modifySorts]);
+
+  if (!columns) return null;
+  const className = classnames(wrapperClass, { 'active': sorts.length > 0 });
+  return (
+    <>
+      <div className={classnames('setting-item', { 'mb-1': !className })}>
+        <div
+          className={classnames('mr-2 setting-item-btn filters-setting-btn', className)}
+          onClick={onSetterToggle}
+          role="button"
+          onKeyDown={onKeyDown}
+          title={sortMessage}
+          aria-label={sortMessage}
+          tabIndex={0}
+          id={target}
+        >
+          <Icon iconName="sort" />
+          <span>{sortMessage}</span>
+        </div>
+      </div>
+      {isShowSetter && (
+        <SortPopover
+          isNeedSubmit={isNeedSubmit}
+          target={target}
+          columns={columns}
+          sorts={sorts}
+          onSortComponentToggle={onSetterToggle}
+          update={onChange}
+        />
+      )}
+    </>
+  );
+
+};
+
 
 const propTypes = {
   wrapperClass: PropTypes.string,
@@ -10,75 +75,14 @@ const propTypes = {
   isNeedSubmit: PropTypes.bool,
   sorts: PropTypes.array,
   columns: PropTypes.array,
-  onSortsChange: PropTypes.func,
+  modifySorts: PropTypes.func,
 };
 
-class SortSetter extends Component {
-
-  static defaultProps = {
-    target: 'sf-metadata-sort-popover',
-    isNeedSubmit: false,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isSortPopoverShow: false,
-    };
-  }
-
-  onSortToggle = () => {
-    this.setState({ isSortPopoverShow: !this.state.isSortPopoverShow });
-  };
-
-  onKeyDown = (e) => {
-    e.stopPropagation();
-    if (CommonlyUsedHotkey.isEnter(e) || CommonlyUsedHotkey.isSpace(e)) this.onSortToggle();
-  };
-
-  update = (update) => {
-    const { sorts } = update || {};
-    this.props.onSortsChange(sorts);
-  };
-
-  render() {
-    const { sorts, columns, isNeedSubmit, wrapperClass } = this.props;
-    if (!columns) return null;
-    const validSorts = getValidSorts(sorts || [], columns);
-    const sortsLength = validSorts ? validSorts.length : 0;
-
-    let sortMessage = isNeedSubmit ? gettext('Preset sort') : gettext('Sort');
-    if (sortsLength === 1) {
-      sortMessage = isNeedSubmit ? gettext('1 preset sort') : gettext('1 sort');
-    } else if (sortsLength > 1) {
-      sortMessage = isNeedSubmit ? gettext('xxx preset sorts') : gettext('xxx sorts');
-      sortMessage = sortMessage.replace('xxx', sortsLength);
-    }
-    let labelClass = wrapperClass || '';
-    labelClass = (labelClass && sortsLength > 0) ? labelClass + ' active' : labelClass;
-
-    return (
-      <>
-        <div className={`setting-item ${labelClass ? '' : 'mb-1'}`}>
-          <div
-            className={`mr-2 setting-item-btn filters-setting-btn ${labelClass}`}
-            onClick={this.onSortToggle}
-            role="button"
-            onKeyDown={this.onKeyDown}
-            title={sortMessage}
-            aria-label={sortMessage}
-            tabIndex={0}
-            id={this.props.target}
-          >
-            <Icon iconName="sort" />
-            <span>{sortMessage}</span>
-          </div>
-        </div>
-      </>
-    );
-  }
-}
-
 SortSetter.propTypes = propTypes;
+
+SortSetter.defaultProps = {
+  target: 'sf-metadata-sort-popover',
+  isNeedSubmit: false,
+};
 
 export default SortSetter;

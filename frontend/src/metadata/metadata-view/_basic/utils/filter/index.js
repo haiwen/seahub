@@ -17,4 +17,5 @@ export {
 export {
   filterRow,
   filterRows,
+  getFilteredRows,
 } from './filter-row';

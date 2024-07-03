@@ -16,7 +16,7 @@ const TERM_TYPE_MAP = {
   ARRAY: 'array',
 };
 
-const TEXT_COLUMN_TYPES = [CellType.TEXT, CellType.STRING];
+const TEXT_COLUMN_TYPES = [CellType.TEXT, CellType.FILE_NAME];
 
 const CHECK_EMPTY_PREDICATES = [FILTER_PREDICATE_TYPE.EMPTY, FILTER_PREDICATE_TYPE.NOT_EMPTY];
 
@@ -222,7 +222,8 @@ class ValidateFilter {
 
   static isValidTerm(term, predicate, modifier, filterColumn) {
     switch (filterColumn.type) {
-      case CellType.TEXT: {
+      case CellType.TEXT:
+      case CellType.FILE_NAME: {
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
       }
 

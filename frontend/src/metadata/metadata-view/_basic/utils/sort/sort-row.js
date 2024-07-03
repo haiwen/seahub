@@ -37,7 +37,8 @@ const sortRowsWithMultiSorts = (tableRows, sorts) => {
  * @param {object} value e.g. { collaborators, ... }
  * @returns sorted rows ids, array
  */
-const sortTableRows = (sorts, rows, columns) => {
+const sortTableRows = (table, rows, sorts) => {
+  const { columns } = table;
   if (!Array.isArray(rows) || rows.length === 0) return [];
   const sortRows = rows.slice(0);
   const validSorts = deleteInvalidSort(sorts, columns);

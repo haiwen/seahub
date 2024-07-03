@@ -1,23 +1,27 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState, useRef, useCallback } from 'react';
+import React, { useContext, useState, useRef, useCallback, useEffect } from 'react';
+import { useMetadata } from './metadata';
 
 const CollaboratorsContext = React.createContext(null);
 
 export const CollaboratorsProvider = ({
-  collaborators,
-  collaboratorsCache: propsCollaboratorsCache,
-  updateCollaboratorsCache: propsUpdateCollaboratorsCache,
   children,
 }) => {
-  const collaboratorsCacheRef = useRef(propsCollaboratorsCache || {});
-  const [collaboratorsCache, setCollaboratorsCache] = useState(propsCollaboratorsCache || {});
+  const collaboratorsCacheRef = useRef({});
+  const [collaboratorsCache, setCollaboratorsCache] = useState({});
+  const [collaborators, setCollaborators ] = useState([]);
+
+  const { store } = useMetadata();
+
+  useEffect(() => {
+    setCollaborators(store?.collaborators || []);
+  }, [store?.collaborators]);
 
   const updateCollaboratorsCache = useCallback((user) => {
     const newCollaboratorsCache = { ...collaboratorsCacheRef.current, [user.email]: user };
     collaboratorsCacheRef.current = newCollaboratorsCache;
     setCollaboratorsCache(newCollaboratorsCache);
-    propsUpdateCollaboratorsCache && propsUpdateCollaboratorsCache(user);
-  }, [propsUpdateCollaboratorsCache]);
+  }, []);
 
   return (
     <CollaboratorsContext.Provider value={{ collaborators, collaboratorsCache, updateCollaboratorsCache }}>
