@@ -163,7 +163,6 @@ export default class PageUtils {
     });
   }
 
-  // move page into folder or page(已解决)
   static movePage(navigation, moved_page_id, target_page_id, source_id, target_id, move_position) {
     let movedPage = null;
     function _cutPageRecursion(item, page_id) {
