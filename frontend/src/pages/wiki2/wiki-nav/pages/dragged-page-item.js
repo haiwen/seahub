@@ -32,7 +32,7 @@ const dropTarget = {
     const sourceRow = monitor.getItem();
     // 1 drag page
     if (sourceRow.mode === DRAGGED_PAGE_MODE) {
-      const { infolder, pageIndex: targetIndex, page: targetPage, folderId: targetFolderId } = props;
+      const { pageIndex: targetIndex, page: targetPage, folderId: targetFolderId } = props;
       const sourceFolderId = sourceRow.folderId;
       const draggedPageId = sourceRow.data.id;
       const targetPageId = targetPage.id;
@@ -40,11 +40,7 @@ const dropTarget = {
       if (draggedPageId !== targetPageId) {
         const sourceIndex = sourceRow.idx;
         let move_position;
-        if (infolder) {
-          move_position = 'move_below';
-        } else {
-          move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
-        }
+        move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
 
         props.onMovePage({
           moved_page_id: draggedPageId,

@@ -25,7 +25,6 @@ class WikiNav extends Component {
 
   constructor(props) {
     super(props);
-    this.folderClassNameCache = '';
     this.idFoldedStatusMap = this.getFoldedFromLocal();
   }
 
@@ -42,6 +41,7 @@ class WikiNav extends Component {
     return this.idFoldedStatusMap[folderId];
   };
 
+  // TODO change folderId to pageId
   toggleExpand = (folderId) => {
     const idFoldedStatusMap = this.getFoldedFromLocal();
     if (idFoldedStatusMap[folderId]) {
@@ -51,14 +51,6 @@ class WikiNav extends Component {
     }
     this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
-  };
-
-  setClassName = (name) => {
-    this.folderClassNameCache = name;
-  };
-
-  getClassName = () => {
-    return this.folderClassNameCache;
   };
 
   renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps) => {
@@ -71,7 +63,6 @@ class WikiNav extends Component {
         key={id}
         pagesLength={pagesLength}
         isOnlyOnePage={isOnlyOnePage}
-        infolder={false}
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pages={pages}
         pageIndex={index}

@@ -108,9 +108,6 @@ class Wiki extends Component {
       if (item.type === 'page') {
         return item.id;
       }
-      if (item.type === 'folder' && item.children[0]) {
-        return item.children[0].id;
-      }
     }
   };
 

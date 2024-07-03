@@ -20,9 +20,6 @@ export default class PageDropdownMenu extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isShowMenu: false,
-    };
     this.pageNameMap = this.calculateNameMap();
   }
 
@@ -52,10 +49,6 @@ export default class PageDropdownMenu extends Component {
     this.props.onDeletePage();
   };
 
-  onToggleFoldersMenu = () => {
-    this.setState({ isShowMenu: !this.state.isShowMenu });
-  };
-
   duplicatePage = () => {
     const { page } = this.props;
     this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
@@ -63,14 +56,6 @@ export default class PageDropdownMenu extends Component {
 
   duplicatePageFailure = () => {
     toaster.danger(gettext('Failed_to_duplicate_page'));
-  };
-
-  showMenu = () => {
-    this.setState({ isShowMenu: true });
-  };
-
-  hideMenu = () => {
-    this.setState({ isShowMenu: false });
   };
 
   handleCopyLink = () => {

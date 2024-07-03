@@ -113,13 +113,13 @@ class PageItem extends Component {
     window.seafile['docUuid'] = docUuid;
   };
 
-  getFolderChildrenHeight = () => {
+  getPageChildrenHeight = () => {
     const folded = this.props.getFoldState(this.props.page.id);
     if (folded) return 0;
     return 'auto';
   };
 
-  onClickFolderChildren = (e) => {
+  onClickPageChildren = (e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
   };
@@ -134,7 +134,6 @@ class PageItem extends Component {
         key={id}
         pagesLength={pagesLength}
         isOnlyOnePage={isOnlyOnePage}
-        infolder={false}
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pageIndex={index}
         folderId={folderId}
@@ -167,21 +166,14 @@ class PageItem extends Component {
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      infolder, page, pagesLength, isEditMode, folderId, isOnlyOnePage, pathStr,
+      page, pagesLength, isEditMode, folderId, isOnlyOnePage, pathStr,
     } = this.props;
     const { isShowNameEditor, pageName, isSelected } = this.state;
     const isOverPage = isOver && canDrop;
     if (isSelected) this.setDocUuid(page.docUuid);
 
-    let pageCanDropTop;
-    let pageCanDrop;
-    if (infolder) {
-      pageCanDropTop = false;
-      pageCanDrop = isOverPage;
-    } else {
-      pageCanDropTop = isOverPage && isDragging;
-      pageCanDrop = isOverPage && !isDragging;
-    }
+    let pageCanDropTop = isOverPage && isDragging;
+    let pageCanDrop = isOverPage && !isDragging;
     let navItemId = `page-editor-${page.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => {argu;};
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
@@ -273,8 +265,8 @@ class PageItem extends Component {
         }
         <div
           className="page-folder-children"
-          style={{ height: this.getFolderChildrenHeight() }}
-          onClick={this.onClickFolderChildren}
+          style={{ height: this.getPageChildrenHeight() }}
+          onClick={this.onClickPageChildren}
         >
           {page.children &&
             page.children.map((item, index) => {
@@ -293,7 +285,6 @@ PageItem.propTypes = {
   isDragging: PropTypes.bool,
   draggedPage: PropTypes.object,
   isEditMode: PropTypes.bool,
-  infolder: PropTypes.bool,
   page: PropTypes.object,
   folder: PropTypes.object,
   pages: PropTypes.array,

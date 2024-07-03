@@ -57,11 +57,6 @@ export default class PageUtils {
     return pages.findIndex(page => page.id === pageId);
   };
 
-  static getFolderIndexById = (list, folder_id) => {
-    if (!folder_id || !Array.isArray(list)) return -1;
-    return list.findIndex(folder => folder.id === folder_id);
-  };
-
   static insertPage(navigation, page_id, target_page_id, target_id, move_position) {
     // 1. No folder, insert page in root directory
     if (!target_id) {
