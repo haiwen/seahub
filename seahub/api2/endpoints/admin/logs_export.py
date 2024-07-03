@@ -21,7 +21,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
-from seahub.utils import is_pro_version, query_export_status
+from seahub.utils import is_pro_version
 from seahub.settings import SITE_ROOT, SEAFEVENTS_SERVER_URL, SECRET_KEY
 
 logger = logging.getLogger(__name__)
