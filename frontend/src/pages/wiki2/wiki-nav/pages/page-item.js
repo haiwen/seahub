@@ -125,6 +125,7 @@ class PageItem extends Component {
   };
 
   renderPage = (page, index, pagesLength, isOnlyOnePage) => {
+    if (!page) return;
     const { isEditMode, pages, folderId, pathStr } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;

@@ -73,16 +73,8 @@ export default class PageDropdownMenu extends Component {
 
   duplicatePage = () => {
     const { page, folderId } = this.props;
-    const { id: from_page_id, name } = page;
-    let duplicateCount = 1;
-    let newName = name + '(copy)';
-    while (this.pageNameMap[newName]) {
-      newName = `${name}(copy${duplicateCount})`;
-      duplicateCount++;
-    }
-    const onsuccess = () => {};
     this.props.onSetFolderId(folderId);
-    this.props.duplicatePage({ name: newName, from_page_id }, onsuccess, this.duplicatePageFailure);
+    this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
   };
 
   duplicatePageFailure = () => {
