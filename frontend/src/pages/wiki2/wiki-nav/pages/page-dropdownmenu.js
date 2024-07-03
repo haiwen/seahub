@@ -32,9 +32,6 @@ export default class PageDropdownMenu extends Component {
   };
 
   onDropdownToggle = (evt) => {
-    if (evt.target && this.foldersDropdownToggle && this.foldersDropdownToggle.contains(evt.target)) {
-      return;
-    }
     evt.stopPropagation();
     this.props.toggle();
   };

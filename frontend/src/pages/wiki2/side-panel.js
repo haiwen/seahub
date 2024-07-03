@@ -41,7 +41,7 @@ class SidePanel extends Component {
     config.pages.splice(index, 1);
     PageUtils.deletePage(navigation, pageId);
     this.props.saveWikiConfig(config);
-    // TODO: To delete a page, do you need to delete all subpages at once (requires a new API)
+    // TODO: delete a page, then delete all subpages
     wikiAPI.deleteWiki2Page(wikiId, pageId);
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
@@ -93,10 +93,10 @@ class SidePanel extends Component {
     this.props.saveWikiConfig(config, onSuccess, errorCallback);
   };
 
-  movePage = ({ moved_page_id, target_page_id, source_page_folder_id, target_page_folder_id, move_position }) => {
+  movePage = ({ moved_page_id, target_page_id, move_position }) => {
     let config = deepCopy(this.props.config);
     let { navigation } = config;
-    PageUtils.movePage(navigation, moved_page_id, target_page_id, source_page_folder_id, target_page_folder_id, move_position);
+    PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
     config.navigation = navigation;
     this.props.saveWikiConfig(config);
   };

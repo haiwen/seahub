@@ -37,17 +37,16 @@ class WikiNav extends Component {
     window.localStorage.setItem(`wiki-folded-${repoID}`, JSON.stringify(items));
   };
 
-  getFoldState = (folderId) => {
-    return this.idFoldedStatusMap[folderId];
+  getFoldState = (pageId) => {
+    return this.idFoldedStatusMap[pageId];
   };
 
-  // TODO change folderId to pageId
-  toggleExpand = (folderId) => {
+  toggleExpand = (pageId) => {
     const idFoldedStatusMap = this.getFoldedFromLocal();
-    if (idFoldedStatusMap[folderId]) {
-      delete idFoldedStatusMap[folderId];
+    if (idFoldedStatusMap[pageId]) {
+      delete idFoldedStatusMap[pageId];
     } else {
-      idFoldedStatusMap[folderId] = true;
+      idFoldedStatusMap[pageId] = true;
     }
     this.saveFoldedToLocal(idFoldedStatusMap);
     this.idFoldedStatusMap = idFoldedStatusMap;
@@ -57,7 +56,6 @@ class WikiNav extends Component {
     const { isEditMode, pages } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
-    const folderId = null; // Pages in the root directory, no folders, use null
     return (
       <DraggedPageItem
         key={id}
@@ -66,7 +64,6 @@ class WikiNav extends Component {
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pages={pages}
         pageIndex={index}
-        folderId={folderId}
         isEditMode={isEditMode}
         duplicatePage={this.props.duplicatePage}
         setCurrentPage={this.props.setCurrentPage}

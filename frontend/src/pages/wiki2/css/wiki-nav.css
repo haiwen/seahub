@@ -17,12 +17,8 @@
   user-select: none;
 }
 
-.wiki-nav .page-folder {
-  position: relative;
-}
-
-.wiki-nav .page-folder.can-drop::after,
-.wiki-nav .page-folder.can-drop-top::after {
+.wiki-nav .can-drop::after,
+.wiki-nav .can-drop-top::after {
   content: '';
   width: 100%;
   height: 1px;
@@ -32,7 +28,16 @@
   background-color: #666;
 }
 
-.wiki-nav .page-folder .page-folder-children {
+.wiki-nav .can-drop::after {
+  top: unset;
+  bottom: 0;
+}
+
+.wiki-nav .can-drop-top::after {
+  top: 0;
+}
+
+.wiki-nav .page-children {
   transition: height 0.25s ease-in-out 0s;
 }
 
@@ -44,16 +49,6 @@
   border-bottom: 1px solid #666;
 }
 
-.wiki-nav .page-folder.can-drop::after {
-  top: unset;
-  bottom: 0;
-}
-
-.wiki-nav .page-folder.can-drop-top::after {
-  top: 0;
-}
-
-.wiki-nav .page-folder-wrapper,
 .wiki-nav .wiki-page-item {
   position: relative;
   display: flex;
@@ -72,7 +67,6 @@
   background-color: #EDEDEA;
 }
 
-.wiki-nav .page-folder-wrapper:hover,
 .wiki-nav .wiki-page-item:hover {
   background-color: #EFEFED;
 }
@@ -81,7 +75,6 @@
   background-color: #E6E6E4;
 }
 
-.wiki-nav .folder-main,
 .wiki-nav .wiki-page-item-main {
   flex: 1;
   display: flex;
@@ -90,15 +83,6 @@
   overflow: hidden;
 }
 
-.wiki-nav .icon-expand-folder {
-  display: inline-block;
-  font-size: 12px;
-  transform: scale(0.8);
-  color: #b5b5b5;
-  cursor: pointer;
-}
-
-.wiki-nav .folder-content,
 .wiki-nav .wiki-page-content {
   height: 100%;
   padding-right: 8px;
@@ -109,29 +93,25 @@
   overflow: hidden;
 }
 
-.wiki-nav .in-folder .wiki-page-content {
+.wiki-nav .wiki-page-content {
   padding-left: calc(12 * 0.8px + 0.5rem);
 }
 
-.wiki-nav .folder-content:hover,
 .wiki-nav .wiki-page-content:hover {
   cursor: pointer;
 }
 
-.wiki-nav .folder-content .dtable-font,
 .wiki-nav .wiki-page-content .dtable-font {
   margin-right: 6px;
   font-size: 14px;
 }
 
-.wiki-nav .folder-content .folder-name,
 .wiki-nav .wiki-page-content .wiki-page-title {
   height: 40px;
   line-height: 40px;
   flex: 1;
 }
 
-.wiki-nav .folder-operation-dropdownmenu,
 .wiki-nav .more-wiki-page-operation {
   width: 24px;
   height: 24px;
@@ -141,37 +121,31 @@
 }
 
 .wiki-nav .wiki-add-page-btn:hover,
-.wiki-nav .folder-operation:hover,
 .wiki-nav .more-wiki-page-operation:hover {
   border-radius: 3px;
   background-color: #DFDFDD;
 }
 
 .wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
-.wiki-nav .page-folder-wrapper .folder-operation-dropdownmenu .seafile-multicolor-icon-more-level,
 .wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
   cursor: pointer;
   opacity: 0;
 }
 
 .wiki-nav .wiki-page-item:hover .sf3-font.sf3-font-enlarge,
-.wiki-nav .page-folder-wrapper:hover .folder-operation-dropdownmenu .seafile-multicolor-icon-more-level,
 .wiki-nav .wiki-page-item:hover .more-wiki-page-operation .seafile-multicolor-icon-more-level {
   opacity: 1;
 }
 
-.wiki-nav .folder-operation-dropdownmenu:hover,
 .wiki-nav .more-wiki-page-operation:hover {
   cursor: pointer;
 }
 
-.wiki-nav .folder-operation-dropdownmenu .dtable-font,
 .wiki-nav .more-wiki-page-operation .dtable-font {
   font-size: 14px;
   margin-right: 10px;
 }
 
-.wiki-nav .folder-list .page-folder.fold-freezed .btn-folder-operation,
 .wiki-nav .wiki-page-item.wiki-page-freezed .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item.wiki-page-freezed .seafile-multicolor-icon-more-level {
   opacity: 1;
@@ -254,69 +228,6 @@
   margin: 0.2rem 0;
 }
 
-/* folders dropdown */
-.wiki-nav .more-wiki-page-operation .btn-move-to-folder {
-  display: flex;
-  align-items: center;
-}
-
-.wiki-nav .more-wiki-page-operation .move-to-folders-toggle {
-  opacity: 0;
-  width: 0;
-  min-width: 0;
-  margin-left: -12px;
-  padding: 0;
-}
-
-.wiki-nav .more-wiki-page-operation .folders-dropdown-menu {
-  margin-top: -16px;
-  margin-left: 10px;
-}
-
-.wiki-nav .folders-dropdown-menu .dropdown-item {
-  display: flex;
-  align-items: center;
-}
-
-.wiki-nav .more-wiki-page-operation .btn-move-to-folder:focus .dtable-icon-insert-right {
-  color: #fff;
-}
-
-.wiki-nav .folders-dropdown {
-  width: 100%;
-}
-
-.wiki-nav .folders-dropdown-toggle {
-  display: flex;
-  align-items: center;
-}
-
-.wiki-nav .folders-dropdown .item-text {
-  flex: 1;
-}
-
-.wiki-nav .folders-dropdown .dropdown-menu {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.wiki-nav .folders-dropdown .dropdown-menu .folder-name {
-  display: inline-block;
-  width: 100%;
-}
-
-.wiki-nav .folders-dropdown .icon-dropdown-toggle {
-  display: inline-flex;
-  align-items: center;
-  width: 12px;
-  height: 12px;
-  margin-right: 12px;
-}
-
-.wiki-nav .folders-dropdown .icon-dropdown-toggle .item-icon {
-  transform: scale(0.8);
-}
-
 .wiki-nav .wiki-page-item.page-can-drop::after,
 .wiki-nav .wiki-page-item.page-can-drop-top::after {
   content: '';
@@ -351,38 +262,13 @@
 
 .wiki-nav,
 .wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge:hover,
-.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover,
-.wiki-nav .page-folder .seafile-multicolor-icon-more-level:hover,
-.wiki-nav .icon-expand-folder:hover {
+.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover {
   color: #212529;
 }
 
 .wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
-.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level,
-.wiki-nav .page-folder .seafile-multicolor-icon-more-level,
-.wiki-nav .icon-expand-folder {
+.wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level {
   color: #666;
-}
-
-.wiki-nav .page-folder-wrapper.can-drop-top::before {
-  content: '';
-  width: 100%;
-  height: 1px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: #666;
-}
-
-.wiki-nav .page-folder-wrapper.can-drop::after {
-  content: '';
-  width: 100%;
-  height: 1px;
-  position: absolute;
-  left: 0;
-  background-color: #666;
-  top: unset;
-  bottom: 0;
 }
 
 .svg-item {

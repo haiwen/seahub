@@ -126,7 +126,7 @@ class PageItem extends Component {
 
   renderPage = (page, index, pagesLength, isOnlyOnePage) => {
     if (!page) return;
-    const { isEditMode, pages, folderId, pathStr } = this.props;
+    const { isEditMode, pages, pathStr } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
     return (
@@ -136,7 +136,6 @@ class PageItem extends Component {
         isOnlyOnePage={isOnlyOnePage}
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pageIndex={index}
-        folderId={folderId}
         isEditMode={isEditMode}
         duplicatePage={this.props.duplicatePage}
         setCurrentPage={this.props.setCurrentPage}
@@ -166,7 +165,7 @@ class PageItem extends Component {
   render() {
     const {
       connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      page, pagesLength, isEditMode, folderId, isOnlyOnePage, pathStr,
+      page, pagesLength, isEditMode, isOnlyOnePage, pathStr,
     } = this.props;
     const { isShowNameEditor, pageName, isSelected } = this.state;
     const isOverPage = isOver && canDrop;
@@ -232,7 +231,6 @@ class PageItem extends Component {
                             pages={this.props.pages}
                             pagesLength={pagesLength}
                             isOnlyOnePage={isOnlyOnePage}
-                            folderId={folderId}
                             toggle={this.toggleDropdown}
                             toggleNameEditor={this.toggleNameEditor}
                             duplicatePage={this.props.duplicatePage}
@@ -264,7 +262,7 @@ class PageItem extends Component {
           ))
         }
         <div
-          className="page-folder-children"
+          className="page-children"
           style={{ height: this.getPageChildrenHeight() }}
           onClick={this.onClickPageChildren}
         >
@@ -286,10 +284,8 @@ PageItem.propTypes = {
   draggedPage: PropTypes.object,
   isEditMode: PropTypes.bool,
   page: PropTypes.object,
-  folder: PropTypes.object,
   pages: PropTypes.array,
   pageIndex: PropTypes.number,
-  folderId: PropTypes.string,
   pagesLength: PropTypes.number,
   connectDragSource: PropTypes.func,
   connectDragPreview: PropTypes.func,

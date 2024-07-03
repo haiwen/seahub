@@ -58,7 +58,6 @@ export default class PageUtils {
   };
 
   static insertPage(navigation, page_id, target_page_id, target_id, move_position) {
-    // 1. No folder, insert page in root directory
     if (!target_id) {
       let insertIndex = target_page_id ? navigation.findIndex(item => item.id === target_page_id) : -1;
       if (insertIndex < 0) {
@@ -73,7 +72,7 @@ export default class PageUtils {
     }
   }
 
-  static movePage(navigation, moved_page_id, target_page_id, source_id, target_id, move_position) {
+  static movePage(navigation, moved_page_id, target_page_id, move_position) {
     let movedPage = null;
     function _cutPageRecursion(item, page_id) {
       if (!item || !Array.isArray(item.children) || movedPage) return;
@@ -127,6 +126,6 @@ export default class PageUtils {
       });
     }
     _cutPage(navigation, moved_page_id);
-    _insertPage(navigation, moved_page_id, target_page_id, target_id, move_position);
+    _insertPage(navigation, moved_page_id, target_page_id, target_page_id, move_position);
   }
 }
