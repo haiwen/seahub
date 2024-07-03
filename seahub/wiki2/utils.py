@@ -172,15 +172,6 @@ def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
             get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
 
 
-def select_page_nav():
-    for key, value in nested_dict.items():
-        if key == target_key:
-            return True
-        elif isinstance(value, dict):
-            if key_exists_in_nested_dict(value, target_key):
-                return True
-    return False
-
 def gen_new_page_nav_by_id(navigation, page_id, current_id):
     new_nav = {
         'id': page_id,
@@ -256,3 +247,15 @@ def save_wiki_config(wiki, username, wiki_config):
     resp = requests.post(upload_link, files=files, data=data)
     if not resp.ok:
         raise Exception(resp.text)
+
+
+def delete_page(navigation, page_id):
+    for nav in navigation:
+        if nav['id'] == page_id:
+            navigation.remove(nav)
+            return
+        else:
+            delete_page(nav.get('children', []), page_id)
+
+
+

@@ -27,7 +27,7 @@ from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder, get_all_wiki_ids, \
-    get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config, add_page, \
+    get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config, delete_page, \
     gen_unique_id, gen_new_page_nav_by_id
 
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
@@ -659,7 +659,24 @@ class Wiki2PageView(APIView):
         except Exception as e:
             logger.error(e)
 
-        return Response({'success': True})
+        try: # update wiki_config
+            navigation = wiki_config.get('navigation', [])
+            id_set = get_all_wiki_ids(navigation)
+            if page_id not in id_set:
+                error_msg = 'Page not found'
+                logger.error('Page not found')
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            pages.remove(next(page for page in pages if page['id'] == page_id))
+            delete_page(navigation, page_id)
+            wiki_config['navigation'] = navigation
+            wiki_config['pages'] = pages
+            wiki_config = json.dumps(wiki_config)
+            save_wiki_config(wiki, request.user.username, wiki_config)
+
+        except Exception as e:
+                print(e)
+
+        return Response({'wiki_config': wiki_config})
 
 
 class Wiki2DuplicatePageView(APIView):
