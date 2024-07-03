@@ -7,6 +7,7 @@ import logging
 import json
 import requests
 import posixpath
+import random
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
@@ -103,7 +104,6 @@ def get_page_ids_in_folder(navigation, folder_id):
 
 def generator_base64_code(length=4):
     possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'
-    import random
     ids = random.sample(possible, length)
     return ''.join(ids)
 
@@ -167,6 +167,7 @@ def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
                 'children': duplicate_children(id_set, children, old_to_new),
             }
             navigation.append(new_nav)
+            return
         else:
             new_navigation = nav.get('children', [])
             get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
@@ -176,6 +177,7 @@ def get_current_level_page_ids(navigation, page_id, ids=[]):
     for item in navigation:
         if item.get('id') == page_id:
             ids.extend([child.get('id') for child in navigation if child.get('type') == 'page'])
+            return
         else:
             children = item.get('children') or []
             get_current_level_page_ids(children, page_id, ids)
