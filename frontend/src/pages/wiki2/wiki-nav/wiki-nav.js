@@ -83,19 +83,17 @@ class WikiNav extends Component {
 
   // eslint-disable-next-line
   renderStructureBody = React.forwardRef((layerDragProps, ref) => {
-    const { navigation, pages, isEditMode } = this.props;
+    const { navigation, pages } = this.props;
     let isOnlyOnePage = false;
     if (pages.length === 1) {
       isOnlyOnePage = true;
     }
-    const pagesLength = pages.length;
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
-    const style = { maxHeight: isEditMode ? 'calc(100% - 40px)' : '100%' };
     return (
-      <div className='wiki-nav-body' style={style}>
+      <div className='wiki-nav-body'>
         {navigation.map((item, index) => {
-          return item.type === 'page' ? this.renderPage(item, index, pagesLength, isOnlyOnePage, id_page_map, layerDragProps): null;
+          return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
       </div>
     );

@@ -1,10 +1,16 @@
-import { PAGE } from '../constant';
+class NewPage {
+  constructor(id) {
+    this.id = id;
+    this.type = 'page';
+    this.children = [];
+  }
+}
 
 export default class PageUtils {
 
   static addPage(navigation, page_id, parentId) {
     if (!parentId) {
-      navigation.push({ id: page_id, type: PAGE });
+      navigation.push(new NewPage(page_id));
     } else {
       navigation.forEach(item => {
         this._addPageRecursion(page_id, item, parentId);
@@ -17,10 +23,10 @@ export default class PageUtils {
       item.children = [];
     }
     if (item.id === parentId) {
-      item.children.push({ id: page_id, type: PAGE });
+      item.children.push(new NewPage(page_id));
       return true;
     }
-    item.children.forEach(item => {
+    item.children && item.children.forEach(item => {
       this._addPageRecursion(page_id, item, parentId);
     });
   }
@@ -43,7 +49,7 @@ export default class PageUtils {
       item.children.splice(pageIndex, 1);
       return true;
     }
-    item.children.forEach(item => {
+    item.children && item.children.forEach(item => {
       this._deletePageRecursion(item, page_id);
     });
   }
@@ -67,7 +73,7 @@ export default class PageUtils {
       if (move_position === 'move_below') {
         insertIndex++;
       }
-      navigation.splice(insertIndex, 0, { id: page_id, type: PAGE });
+      navigation.splice(insertIndex, 0, new NewPage(page_id));
       return;
     }
   }
@@ -80,7 +86,7 @@ export default class PageUtils {
       if (pageIndex > -1) {
         movedPage = item.children.splice(pageIndex, 1)[0];
       } else {
-        item.children.forEach(item => {
+        item.children && item.children.forEach(item => {
           _cutPageRecursion(item, page_id);
         });
       }
@@ -104,7 +110,7 @@ export default class PageUtils {
         item.children.splice(insertIndex, 0, movedPage);
         return;
       }
-      item.children.forEach(item => {
+      item.children && item.children.forEach(item => {
         _insertPageRecursion(item, page_id, target_page_id, target_id, move_position);
       });
     }

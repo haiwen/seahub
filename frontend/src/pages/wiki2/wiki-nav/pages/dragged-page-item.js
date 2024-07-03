@@ -1,14 +1,12 @@
 import { DragSource, DropTarget } from 'react-dnd';
 import PageItem from './page-item';
 
-const DRAGGED_PAGE_MODE = 'wiki-page';
-
 const dragSource = {
   beginDrag: props => {
     return {
       idx: props.pageIndex,
       data: { ...props.page, index: props.pageIndex },
-      mode: DRAGGED_PAGE_MODE,
+      mode: 'wiki-page',
     };
   },
   endDrag(props, monitor) {
@@ -29,7 +27,7 @@ const dragSource = {
 const dropTarget = {
   drop(props, monitor) {
     const dragSource = monitor.getItem();
-    if (dragSource.mode === DRAGGED_PAGE_MODE) {
+    if (dragSource.mode === 'wiki-page') {
       const { pageIndex: targetIndex, page: targetPage } = props;
       const draggedPageId = dragSource.data.id;
       const targetPageId = targetPage.id;
