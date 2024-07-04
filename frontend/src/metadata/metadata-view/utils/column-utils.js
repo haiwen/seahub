@@ -188,7 +188,7 @@ export const getColumnName = (key, name) => {
     case PRIVATE_COLUMN_KEY.FILE_MTIME:
       return gettext('File last modified time');
     case PRIVATE_COLUMN_KEY.IS_DIR:
-      return gettext('Is dir');
+      return gettext('Is folder');
     case PRIVATE_COLUMN_KEY.PARENT_DIR:
       return gettext('Parent folder');
     case PRIVATE_COLUMN_KEY.FILE_NAME:
