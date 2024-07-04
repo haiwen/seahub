@@ -9,7 +9,7 @@ import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import { getColumns } from '../utils/column-utils';
 import { Metadata, User } from '../model';
-import { PER_PAGE_COUNT } from '../constants';
+import { PER_LOAD_NUMBER } from '../constants';
 
 class Store {
 
@@ -17,7 +17,7 @@ class Store {
     this.repoId = props.repoId;
     this.data = null;
     this.context = props.context;
-    this.startIndex = 1;
+    this.startIndex = 0;
     this.redos = [];
     this.undos = [];
     this.pendingOperations = [];
@@ -28,7 +28,7 @@ class Store {
   }
 
   initStartIndex = () => {
-    this.startIndex = 1;
+    this.startIndex = 0;
   };
 
   saveView = () => {
@@ -37,21 +37,25 @@ class Store {
     this.context.localStorage.setItem('view', view);
   };
 
-  async loadData() {
-    const res = await this.context.getMetadata({ page: this.startIndex });
+  async loadData(limit = PER_LOAD_NUMBER) {
+    const res = await this.context.getMetadata({ start: this.startIndex, limit });
     const view = this.context.localStorage.getItem('view');
-    let data = new Metadata({ rows: res?.data?.results || [], columns: getColumns(res?.data?.metadata), view });
+    const rows = res?.data?.results || [];
+    const columns = getColumns(res?.data?.metadata);
+    let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
+    const loadedCount = rows.length;
+    data.hasMore = loadedCount === limit;
     this.data = data;
-    this.startIndex += 1;
+    this.startIndex += loadedCount;
     const collaboratorsRes = await this.context.getCollaborators();
     this.collaborators = Array.isArray(collaboratorsRes?.data?.user_list) ? collaboratorsRes.data.user_list.map(user => new User(user)) : [];
     DataProcessor.run(this.data);
   }
 
-  async loadMore() {
+  async loadMore(limit) {
     if (!this.data) return;
-    const res = await this.context.getMetadata(this.repoId, { page: this.startIndex });
+    const res = await this.context.getMetadata({ start: this.startIndex, limit });
     const rows = res?.data?.results || [];
     if (!Array.isArray(rows) || rows.length === 0) {
       this.hasMore = false;
@@ -63,8 +67,10 @@ class Store {
       this.data.row_ids.push(record._id);
       this.data.id_row_map[record._id] = record;
     });
-    this.data.hasMore = rows.length === PER_PAGE_COUNT;
-    this.startIndex += 1;
+    const loadedCount = rows.length;
+    this.data.hasMore = loadedCount === limit;
+    this.data.recordsCount = this.data.row_ids.length;
+    this.startIndex = this.startIndex + loadedCount;
     DataProcessor.run(this.data);
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
   }

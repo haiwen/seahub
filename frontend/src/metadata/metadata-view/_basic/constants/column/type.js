@@ -6,6 +6,7 @@ const CellType = {
   LAST_MODIFIER: 'last-modifier',
   MTIME: 'mtime',
   FILE_NAME: 'file-name',
+  CHECKBOX: 'checkbox',
 };
 
 export default CellType;

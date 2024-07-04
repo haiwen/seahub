@@ -2,7 +2,7 @@ import requests, jwt, time
 from seahub.settings import METADATA_SERVER_URL, METADATA_SERVER_SECRET_KEY
 
 
-def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, page=None, per_page=25, order_by=None):
+def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, start=0, limit=1000, order_by=None):
     from seafevents.repo_metadata.metadata_server_api import METADATA_TABLE
 
     sql = f'SELECT \
@@ -44,10 +44,7 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
             `{METADATA_TABLE.columns.is_dir.name}` DESC, \
             `{METADATA_TABLE.columns.file_name.name}` ASC'
 
-    if page:
-        sql += f' LIMIT {(page - 1) * per_page}, {page * per_page}'
-
-    sql += ';'
+    sql += f' LIMIT {start}, {limit};'
 
     metadata_server_api = MetadataServerAPI(repo_id, user)
     response_results = metadata_server_api.query_rows(sql, parameters)

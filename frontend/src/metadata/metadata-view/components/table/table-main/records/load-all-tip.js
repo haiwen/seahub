@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { toaster } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../../../components/toast';
 import { gettext } from '../../../../../../utils/constants';
 
 class LoadAllTip extends React.Component {
 
   onClick = () => {
     toaster.closeAll();
-    this.props.clickToLoadMore(100000);
+    this.props.load(100000);
   };
 
   render() {
@@ -21,7 +21,7 @@ class LoadAllTip extends React.Component {
 }
 
 LoadAllTip.propTypes = {
-  clickToLoadMore: PropTypes.func
+  load: PropTypes.func
 };
 
 export default LoadAllTip;

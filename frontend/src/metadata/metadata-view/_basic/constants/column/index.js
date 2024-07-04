@@ -31,5 +31,6 @@ export {
 };
 
 export {
-  NOT_DISPLAY_COLUMN_KEYS
+  NOT_DISPLAY_COLUMN_KEYS,
+  VIEW_NOT_DISPLAY_COLUMN_KEYS,
 } from './common';

@@ -70,6 +70,11 @@ const FILTER_COLUMN_OPTIONS = {
       FILTER_PREDICATE_TYPE.IS_NOT,
     ],
   },
+  [CellType.CHECKBOX]: {
+    filterPredicateList: [
+      FILTER_PREDICATE_TYPE.IS,
+    ],
+  },
   [CellType.URL]: {
     filterPredicateList: [
       FILTER_PREDICATE_TYPE.CONTAINS,

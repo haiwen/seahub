@@ -14,7 +14,7 @@ const RecordDetailsDialog = () => {
     updateCollaboratorsCache,
     queryUserAPI: window.sfMetadataContext.userService.queryUser,
     record: recordDetails,
-    fields: metadata.columns,
+    fields: metadata.view.columns,
     fieldIconConfig: COLUMNS_ICON_CONFIG,
     onToggle: closeRecordDetails,
   };

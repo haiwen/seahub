@@ -74,7 +74,6 @@ export {
   isMac,
   base64ToFile,
   bytesToSize,
-  getErrorMsg,
   isFunction,
   isEmpty,
   isEmptyObject,

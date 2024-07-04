@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loading, toaster } from '@seafile/sf-metadata-ui-component';
+import { Loading } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../../../../components/toast';
 import { Z_INDEX } from '../../../../../_basic';
 import LoadAllTip from '../load-all-tip';
 import RecordMetrics from '../../../../../utils/record-metrics';
@@ -17,9 +18,9 @@ class RecordsFooter extends React.Component {
       return;
     }
     const loadNumber = this.props.recordsCount < 50000 ? 50000 : 100000;
-    this.props.clickToLoadMore(loadNumber, (hasMore) => {
+    this.props.loadAll(loadNumber, (hasMore) => {
       if (hasMore) {
-        toaster.success(<LoadAllTip clickToLoadMore={this.props.clickToLoadMore} />, { duration: 5 });
+        toaster.success(<LoadAllTip load={this.props.loadAll} />, { duration: 5 });
       } else {
         toaster.success(gettext('All records loaded'));
       }
@@ -108,7 +109,7 @@ class RecordsFooter extends React.Component {
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
           {!isLoadingMore && hasMore &&
-            <span className="load-all ml-4" onClick={this.onClick}>{gettext('Load_all')}</span>
+            <span className="load-all ml-4" onClick={this.onClick}>{gettext('Load all')}</span>
           }
           {isLoadingMore &&
             <span className="loading-message ml-4">
@@ -144,7 +145,7 @@ RecordsFooter.propTypes = {
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   getRecordsSummaries: PropTypes.func,
-  clickToLoadMore: PropTypes.func,
+  loadAll: PropTypes.func,
 };
 
 export default RecordsFooter;

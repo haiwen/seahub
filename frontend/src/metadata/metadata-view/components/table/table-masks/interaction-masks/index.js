@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import { toaster } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../../../components/toast';
 import {
   CellType,
   NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP,

@@ -8,6 +8,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.DEFAULT]: 'text',
   [CellType.TEXT]: 'text',
   [CellType.FILE_NAME]: 'text',
+  [CellType.CHECKBOX]: 'checkbox',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -18,6 +19,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.DEFAULT]: 'Text',
   [CellType.TEXT]: 'Text',
   [CellType.FILE_NAME]: 'File name',
+  [CellType.CHECKBOX]: 'Checkbox',
 };
 
 export {

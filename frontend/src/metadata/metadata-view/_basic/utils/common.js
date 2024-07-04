@@ -36,23 +36,6 @@ export const bytesToSize = (bytes) => {
   return (bytes / (1000 ** i)).toFixed(1) + ' ' + sizes[i];
 };
 
-export const getErrorMsg = (error) => {
-  let errorMsg = '';
-  if (error.response) {
-    if (error.response.status === 403) {
-      errorMsg = 'Permission_denied';
-    } else if (error.response.data &&
-      error.response.data['error_msg']) {
-      errorMsg = error.response.data['error_msg'];
-    } else {
-      errorMsg = 'Error';
-    }
-  } else {
-    errorMsg = 'Please_check_the_network';
-  }
-  return errorMsg;
-};
-
 export const isFunction = (functionToCheck) => {
   const getType = {};
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';

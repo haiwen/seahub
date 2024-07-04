@@ -404,6 +404,9 @@ class FilterItem extends React.Component {
           />
         );
       }
+      case CellType.CHECKBOX: {
+        return this.getInputComponent('checkbox');
+      }
       default: {
         return null;
       }

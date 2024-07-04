@@ -115,26 +115,17 @@ class Records extends Component {
 
   resizeColumnWidth = (column, width) => {
     if (width < 50) return;
-    const { table, columns, } = this.props;
+    const { columns } = this.props;
     const newColumn = Object.assign({}, column, { width });
     const index = columns.findIndex(item => item.key === column.key);
     let updateColumns = columns.slice(0);
     updateColumns[index] = newColumn;
     updateColumns = setColumnOffsets(updateColumns);
-    const columnMetrics = recalculate(updateColumns, columns, table._id);
+    const columnMetrics = recalculate(updateColumns, columns);
     this.setState({ columnMetrics }, () => {
-      const oldValue = localStorage.getItem('pages_columns_width');
-      let pagesColumnsWidth = {};
-      if (oldValue) {
-        pagesColumnsWidth = JSON.parse(oldValue);
-      }
-      const page = window.app.getPage();
-      const { id: pageId } = page;
-      let pageColumnsWidth = pagesColumnsWidth[pageId] || {};
-      const key = `${table._id}-${column.key}`;
-      pageColumnsWidth[key] = width;
-      const updated = Object.assign({}, pagesColumnsWidth, { [pageId]: pageColumnsWidth });
-      localStorage.setItem('pages_columns_width', JSON.stringify(updated));
+      const oldValue = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
+      window.sfMetadataContext.localStorage.setItem('columns_width', { ...oldValue, [column.key]: width });
+
     });
   };
 
@@ -742,7 +733,7 @@ class Records extends Component {
           recordGetterById={this.props.recordGetterById}
           recordGetterByIndex={this.props.recordGetterByIndex}
           getRecordsSummaries={() => {}}
-          clickToLoadMore={this.props.clickToLoadMore}
+          loadAll={this.props.loadAll}
         />
       </Fragment>
     );
@@ -768,7 +759,7 @@ Records.propTypes = {
   updateRecords: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
-  clickToLoadMore: PropTypes.func,
+  loadAll: PropTypes.func,
 };
 
 export default Records;

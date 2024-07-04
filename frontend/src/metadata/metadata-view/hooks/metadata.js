@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
-import { toaster } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../utils/constants';
-import { getErrorMsg } from '../_basic';
+import toaster from '../../../components/toast';
 import Context from '../context';
 import Store from '../store';
-import { EVENT_BUS_TYPE } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
+import { Utils } from '../../../utils/utils';
 
 const MetadataContext = React.createContext(null);
 
@@ -22,8 +21,8 @@ export const MetadataProvider = ({
   }, []);
 
   const handleTableError = useCallback((error) => {
-    const errorMsg = getErrorMsg(error);
-    toaster.danger(gettext(errorMsg));
+    const errorMsg = Utils.getErrorMsg(error);
+    toaster.danger(errorMsg);
   }, []);
 
   const updateMetadata = useCallback((data) => {
@@ -39,12 +38,12 @@ export const MetadataProvider = ({
     const repoId = window.sfMetadataContext.getSetting('repoID');
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId });
     storeRef.current.initStartIndex();
-    storeRef.current.loadData().then(() => {
+    storeRef.current.loadData(PER_LOAD_NUMBER).then(() => {
       setMetadata(storeRef.current.data);
       setLoading(false);
     }).catch(error => {
-      const errorMsg = getErrorMsg(error);
-      toaster.danger(gettext(errorMsg));
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
     });
 
     const unsubscribeServerTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);

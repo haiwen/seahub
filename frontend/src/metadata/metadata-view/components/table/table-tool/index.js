@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../../data-process-setter';
@@ -8,7 +8,11 @@ import { useCollaborators } from '../../../hooks';
 
 import './index.css';
 
-const TableTool = ({ searcherActive, view, columns, modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns }) => {
+const TableTool = ({ searcherActive, view, modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns }) => {
+
+  const columns = useMemo(() => {
+    return view.available_columns;
+  }, [view]);
 
   const { collaborators } = useCollaborators();
 
@@ -62,7 +66,6 @@ const TableTool = ({ searcherActive, view, columns, modifyFilters, modifySorts, 
 TableTool.propTypes = {
   searcherActive: PropTypes.bool,
   view: PropTypes.object,
-  columns: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   modifyGroupbys: PropTypes.func,
