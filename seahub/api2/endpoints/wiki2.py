@@ -28,7 +28,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_page_ids_in_folder, get_all_wiki_ids, \
     get_and_gen_page_nav_by_id, get_current_level_page_ids, save_wiki_config, delete_nav_by_id, \
-    gen_unique_id, gen_new_page_nav_by_id, delete_page
+    gen_unique_id, gen_new_page_nav_by_id, delete_page, pop_nav, move_nav, same_level_move_nav
 
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
@@ -523,6 +523,66 @@ class Wiki2PagesView(APIView):
 
         return Response({'wiki': wiki, 'file_info': file_info})
 
+    def put(self, request, wiki_id):
+
+        try:
+            wiki = Wiki.objects.get(id=wiki_id)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        navigation = wiki_config.get('navigation', [])
+
+        id_set = get_all_wiki_ids(navigation)
+        position = request.data.get('position', None)
+        target_page_id = request.data.get('target_id', '')
+        moved_page_id = request.data.get('moved_id', '')
+        if (target_page_id not in id_set) or (moved_page_id not in id_set):
+            error_msg = 'Page not found'
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        current_ids = []
+        get_current_level_page_ids(navigation, moved_page_id, current_ids)
+        if target_page_id in current_ids:
+            pass
+        # Moves under the same level
+        if target_page_id in current_ids:
+            target_index = current_ids.index(target_page_id)
+            moved_nav = pop_nav(navigation, moved_page_id)
+            same_level_move_nav(navigation, target_index, target_page_id, moved_nav)
+            wiki_config['navigation'] = navigation
+            wiki_config = json.dumps(wiki_config)
+            save_wiki_config(wiki, username, wiki_config)
+            return Response({'wiki_config': wiki_config})
+
+        moved_nav = pop_nav(navigation, moved_page_id)
+        judge_navs = get_all_wiki_ids([moved_nav])
+        if target_page_id in judge_navs:
+            error_msg = 'Internal Server Error'
+            logger.error(error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        move_nav(navigation, target_page_id, moved_nav)
+        wiki_config['navigation'] = navigation
+        wiki_config = json.dumps(wiki_config)
+        try:
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        return Response({'wiki_config': wiki_config})
 
 class Wiki2PageView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -662,7 +722,6 @@ class Wiki2PageView(APIView):
         try:  # update wiki_config
             navigation = wiki_config.get('navigation', [])
             id_set = get_all_wiki_ids(navigation)
-            print(id_set)
             if page_id not in id_set:
                 error_msg = 'Page not found'
                 logger.error('Page not found')

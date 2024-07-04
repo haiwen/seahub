@@ -268,3 +268,37 @@ def delete_page(pages, id_set):
 
     return new_pages
 
+
+def pop_nav(navigation, page_id):
+    for nav in navigation:
+        if nav['id'] == page_id:
+            navigation.remove(nav)
+            return nav
+        if 'children' in nav and nav['children']:
+            result = pop_nav(nav['children'], page_id)
+            if result:
+                return result
+    return None
+
+
+def move_nav(navigation, target_id, moved_nav):
+    for nav in navigation:
+        if nav['id'] == target_id:
+            if 'children' in nav:
+                nav['children'].append(moved_nav)
+            else:
+                nav['children'] = [moved_nav]
+            return
+        if 'children' in nav:
+            move_nav(nav['children'], target_id, moved_nav)
+
+
+def same_level_move_nav(navigation, index, target_id, moved_nav):
+    for nav in navigation:
+        if nav['id'] == target_id:
+            navigation.insert(index, moved_nav)
+            return
+        if 'children' in nav:
+            if target_id in nav['children']:
+                nav['children'].insert(index, moved_nav)
+            same_level_move_nav(nav['children'], index, target_id, moved_nav)

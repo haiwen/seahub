@@ -21,6 +21,7 @@ class WikiNav extends Component {
     duplicatePage: PropTypes.func,
     currentPageId: PropTypes.string,
     addPageInside: PropTypes.func,
+    updateWikiConfig: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -70,6 +71,7 @@ class WikiNav extends Component {
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}
         onMovePage={this.props.onMovePage}
+        updateWikiConfig={this.props.updateWikiConfig}
         pathStr={page.id}
         currentPageId={this.props.currentPageId}
         addPageInside={this.props.addPageInside}

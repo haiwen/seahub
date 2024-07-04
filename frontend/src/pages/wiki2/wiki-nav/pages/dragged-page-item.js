@@ -1,5 +1,9 @@
 import { DragSource, DropTarget } from 'react-dnd';
+import wikiAPI from '../../../../utils/wiki-api';
+import { wikiId } from '../../../../utils/constants';
 import PageItem from './page-item';
+import {Utils} from '../../../../utils/utils';
+import toaster from '../../../../components/toast';
 
 const dragSource = {
   beginDrag: props => {
@@ -32,12 +36,12 @@ const dropTarget = {
       const draggedPageId = dragSource.data.id;
       const targetPageId = targetPage.id;
       if (draggedPageId !== targetPageId) {
-        const sourceIndex = dragSource.idx;
-        const move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
-        props.onMovePage({
-          moved_page_id: draggedPageId,
-          target_page_id: targetPageId,
-          move_position,
+        wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId).then(res => {
+          const newConfig = JSON.parse(res.data.wiki_config);
+          props.updateWikiConfig(newConfig);
+        }).catch((error) => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       }
       return;

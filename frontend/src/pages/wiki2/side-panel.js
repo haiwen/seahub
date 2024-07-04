@@ -7,8 +7,7 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
 import PageUtils from './wiki-nav/page-utils';
-import { generateUniqueId, isObjectNotEmpty } from './utils';
-import Page from './models/page';
+import { isObjectNotEmpty } from './utils';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
@@ -44,6 +43,9 @@ class SidePanel extends Component {
     wikiAPI.deleteWiki2Page(wikiId, pageId).then(res=>{
       const newConfig = JSON.parse(res.data.wiki_config);
       this.props.updateWikiConfig(newConfig);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     if (config.pages.length > 0) {
       this.props.setCurrentPage(config.pages[0].id);
@@ -111,6 +113,7 @@ class SidePanel extends Component {
             onUpdatePage={onUpdatePage}
             setCurrentPage={this.props.setCurrentPage}
             onMovePage={this.movePage}
+            updateWikiConfig={this.props.updateWikiConfig}
             onAddNewPage={this.onAddNewPage}
             duplicatePage={this.duplicatePage}
             currentPageId={this.props.currentPageId}
