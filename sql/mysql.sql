@@ -1490,4 +1490,4 @@ CREATE TABLE `notifications_sysusernotification` (
   KEY `notifications_sysusernotification_to_user_e0c9101e` (`to_user`),
   KEY `notifications_sysusernotification_seen_9d851bf7` (`seen`),
   KEY `notifications_sysusernotification_created_at_56ffd2a0` (`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
