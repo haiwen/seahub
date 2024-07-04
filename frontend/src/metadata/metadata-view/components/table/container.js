@@ -168,7 +168,7 @@ const Container = () => {
   return (
     <>
       <div className="sf-metadata-wrapper">
-        <TableTool view={metadata.view} columns={metadata.columns} modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} />
+        <TableTool view={metadata.view} modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} />
         <div className="sf-metadata-main">
           {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
           {!errorMsg && (

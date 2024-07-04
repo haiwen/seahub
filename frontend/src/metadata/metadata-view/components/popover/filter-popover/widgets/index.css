@@ -297,10 +297,6 @@
   width: 100%;
 }
 
-.filters-list .filter-checkbox-predicate .sf-metadata-select .selected-option-show {
-  width: 100%;
-}
-
 .dropdown-item .collaborator,
 .filters-list .option-group .option-group-content .collaborator {
   background-color: unset;

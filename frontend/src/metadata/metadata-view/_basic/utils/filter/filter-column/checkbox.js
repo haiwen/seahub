@@ -6,7 +6,7 @@
  */
 const checkboxFilter = (checked, { filter_term }) => {
   const filterTerm = filter_term || false;
-  const normalizedChecked = checked || false;
+  const normalizedChecked = typeof checked === 'string' ? checked.toLocaleUpperCase() === 'TRUE' : checked || false;
   return normalizedChecked === filterTerm;
 };
 

@@ -214,6 +214,8 @@ const getColumnType = (key, type) => {
       return CellType.LAST_MODIFIER;
     case PRIVATE_COLUMN_KEY.FILE_NAME:
       return CellType.FILE_NAME;
+    case PRIVATE_COLUMN_KEY.IS_DIR:
+      return CellType.CHECKBOX;
     default:
       return type;
   }
