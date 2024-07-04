@@ -249,13 +249,22 @@ def save_wiki_config(wiki, username, wiki_config):
         raise Exception(resp.text)
 
 
-def delete_page(navigation, page_id):
-    for nav in navigation:
-        if nav['id'] == page_id:
-            navigation.remove(nav)
-            return
-        else:
-            delete_page(nav.get('children', []), page_id)
+def delete_nav_by_id(navigation, page_id):
+    def delete_nav(items, page_id):
+        for item in items[:]:
+            if item['id'] == page_id:
+                items.remove(item)
+            elif 'children' in item:
+                delete_nav(item['children'], page_id)
+
+    delete_nav(navigation, page_id)
 
 
+def delete_page(pages, id_set):
+    new_pages = []
+    for page in pages:
+        if page['id'] in id_set:
+            new_pages.append(page)
+
+    return new_pages
 
