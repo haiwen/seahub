@@ -6,7 +6,7 @@ import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
-import SystemUserNotification from "./components/system-user-notification";
+import SystemUserNotification from './components/system-user-notification';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';

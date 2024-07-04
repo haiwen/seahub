@@ -1,8 +1,8 @@
 import React from 'react';
 import { gettext } from '../utils/constants';
-import { seafileAPI } from '../utils/seafile-api';
+import { notificationAPI } from '../utils/notification-api';
 import '../css/system-notification.css';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 class SystemUserNotificationItem extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class SystemUserNotificationItem extends React.Component {
 
   close = () => {
     this.setState({isClosed: true});
-    seafileAPI.setSysUserNotificationToSeen(this.props.notificationID);
+    notificationAPI.setSysUserNotificationToSeen(this.props.notificationID);
   };
 
   render() {

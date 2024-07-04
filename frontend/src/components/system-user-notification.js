@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/system-notification.css';
 import SystemUserNotificationItem from './system-user-notification-item';
-import { seafileAPI } from '../utils/seafile-api';
+import { notificationAPI } from '../utils/notification-api';
 
 
 class SystemUserNotification extends React.Component {
@@ -14,7 +14,7 @@ class SystemUserNotification extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.listSysUserUnseenNotifications().then((res) => {
+    notificationAPI.listSysUserUnseenNotifications().then((res) => {
       this.setState({
         userNoteMsgs: res.data.notifications
       });
