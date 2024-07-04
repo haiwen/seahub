@@ -6,8 +6,10 @@ import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { init } from 'emoji-mart';
 import { gettext } from '../../../utils/constants';
+import { WIKI_COVER_LIST } from '../constant';
 
-init({ data }); // init data for emoji-mart, used in Picker and `getRandomEmoji` method
+// init data for emoji-mart, used in Picker and `getRandomEmoji` method
+init({ data });
 
 const propTypes = {
   currentPageConfig: PropTypes.object.isRequired,
@@ -19,13 +21,14 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
   const [isShowIconPanel, setIsShowIconPanel] = useState(false);
   const [isShowCoverController, setIsShowCoverController] = useState(false);
   const [isShowCoverPanel, setIsShowCoverPanel] = useState(false);
-  const [coverImgUrl, setCoverImgUrl] = useState('');
   const iconPanelPopoverRef = useRef(null);
   const coverPanelPopoverRef = useRef(null);
+  const headerWrapperRef = useRef(null);
 
-  // currentPageConfig.coverImgUrl = 'https://img2.baidu.com/it/u=2061573580,1495285204&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500';
-
-  console.log('currentPageConfig', currentPageConfig);
+  const getCoverImgUrl = useCallback((imageName) => {
+    const { serviceUrl, mediaUrl } = window.seafile;
+    return `${serviceUrl}${mediaUrl}img/wiki/cover/${imageName}`;
+  }, []);
 
   const handleRenameDocument = useCallback((e) => {
     const { nativeEvent: { isComposing } } = e;
@@ -38,9 +41,10 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
     onUpdatePage && onUpdatePage(id, pageConfig);
   }, [currentPageConfig, onUpdatePage]);
 
-  const changeControllerDisplayed = useCallback(() => {
-    setIsShowController(!isShowController);
-  }, [isShowController]);
+  const changeControllerDisplayed = useCallback((isShowController) => {
+    if(isShowCoverPanel) return;
+    setIsShowController(isShowController);
+  }, [isShowCoverPanel]);
 
   const handleSetIcon = useCallback((emoji, cb) => {
     onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: emoji });
@@ -54,29 +58,29 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
     handleSetIcon(emoji);
   }, [handleSetIcon]);
 
-  const handleIconPanelDisplayedChange = useCallback(() => {
-    setIsShowIconPanel(!isShowIconPanel);
+  const handleIconPanelDisplayedChange = useCallback((isShowIconPanel) => {
+    setIsShowIconPanel(isShowIconPanel);
     setIsShowCoverPanel(false);
-  }, [isShowIconPanel]);
+  }, []);
 
   const handleClickAddIcon = useCallback(() => {
     setRandomEmoji();
-    handleIconPanelDisplayedChange();
+    handleIconPanelDisplayedChange(false);
   }, [handleIconPanelDisplayedChange, setRandomEmoji]);
 
   const handleIconPanelListener = useCallback((e) => {
     const isClickInPopover = iconPanelPopoverRef.current.contains(e.target);
-    if (!isClickInPopover) handleIconPanelDisplayedChange();
+    if (!isClickInPopover) handleIconPanelDisplayedChange(false);
   }, [handleIconPanelDisplayedChange]);
 
-  const handleCoverPanelDisplayedChange = useCallback(() => {
-    setIsShowCoverPanel(!isShowCoverPanel);
+  const handleCoverPanelDisplayedChange = useCallback((isShowCoverPanel) => {
+    setIsShowCoverPanel(isShowCoverPanel);
     setIsShowIconPanel(false);
-  }, [isShowCoverPanel]);
+  }, []);
 
   const handleCoverPanelListener = useCallback((e) => {
     const isClickInPopover = coverPanelPopoverRef.current.contains(e.target);
-    if (!isClickInPopover) handleCoverPanelDisplayedChange();
+    if (!isClickInPopover) handleCoverPanelDisplayedChange(false);
   }, [handleCoverPanelDisplayedChange]);
 
   // Update current page favicon
@@ -115,47 +119,59 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
 
   const handleIconRemove = () => {
     handleSetIcon('');
-    handleIconPanelDisplayedChange();
+    handleIconPanelDisplayedChange(false);
   };
 
-  const handleAddCover = useCallback(() => { }, []);
+  const handleAddCover = useCallback(() => {
+    const coverName = WIKI_COVER_LIST[Math.floor(Math.random() * WIKI_COVER_LIST.length)];
+    const coverImgUrl = `${coverName}`;
+    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, coverImgUrl });
+  }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
 
   const showCoverController = useCallback(() => {
     setIsShowCoverController(true);
   }, []);
 
-  const hideCoverController = useCallback(() => {
+  const hideCoverController = useCallback((e) => {
+    if(isShowCoverPanel) return;
     setIsShowCoverController(false);
-  }, []);
+  }, [isShowCoverPanel]);
 
+  const handleSetCoverImage = (coverName) => {
+    const coverImgUrl = `${coverName}`;
+    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, coverImgUrl });
+    handleCoverPanelDisplayedChange(false);
+  };
 
-
-  const handleSetCoverImage = (e) => {
-    // TODO set cover image
-    setCoverImgUrl(e.target.src);
-    handleCoverPanelDisplayedChange();
+  const handleCoverRemove = () => {
+    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, coverImgUrl: '' });
+    handleCoverPanelDisplayedChange(false);
   };
 
   return (
     <div
       className='wiki-page-header-wrapper'
+      ref={headerWrapperRef}
+      onMouseEnter={changeControllerDisplayed.bind(null, true)}
+      onMouseLeave={changeControllerDisplayed.bind(null, false)}
+
     >
       {currentPageConfig.coverImgUrl && (
         <div
           className='wiki-cover'
           onMouseMove={showCoverController}
-        // onMouseLeave={hideCoverController}
+          onMouseLeave={hideCoverController}
         >
-          <img className='wiki-cover-img' alt={gettext('Cover')} src={coverImgUrl} />
+          <img className='wiki-cover-img' alt={gettext('Cover')} src={getCoverImgUrl(currentPageConfig.coverImgUrl)} />
           {isShowCoverController && (
             <div className='wiki-cover-controller'>
-              <div onClick={handleCoverPanelDisplayedChange} className='wiki-cover-controller-btn' id='wiki-change-cover-btn'>{gettext('Change cover')}</div>
+              <div onClick={handleCoverPanelDisplayedChange.bind(true)} className='wiki-cover-controller-btn' id='wiki-change-cover-btn'>{gettext('Change cover')}</div>
               <Popover
                 flip
                 target="wiki-change-cover-btn"
                 toggle={() => void 0}
                 placement="bottom"
-                isOpen={isShowCoverPanel && currentPageConfig.coverImgUrl}
+                isOpen={!!(isShowCoverPanel && currentPageConfig.coverImgUrl)}
                 innerClassName='wiki-cover-panel'
                 hideArrow={true}
                 popperClassName='wiki-cover-popover'
@@ -163,18 +179,14 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
                 <div ref={coverPanelPopoverRef}>
                   <div className='wiki-icon-panel-header popover-header'>
                     <span>{gettext('Gallery')}</span>
-                    <span onClick={handleIconRemove} className='wiki-remove-icon-btn'>{gettext('Remove')}</span>
+                    <span onClick={handleCoverRemove} className='wiki-remove-icon-btn'>{gettext('Remove')}</span>
                   </div>
                   <PopoverBody className='wiki-cover-panel-body'>
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=1182742047,3628923944&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2015_Website_appreciate/2015-09-10/20150910002714.jpg' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img1.baidu.com/it/u=3504078124,2689803181&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img2.baidu.com/it/u=1882437344,2360797937&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2014_Website_appreciate/2015-01-08/20150108181231.jpg' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img2.baidu.com/it/u=1031726174,3597184508&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=2265212344,3361529340&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://www.2008php.com/2012_Website_appreciate/2012-06-26/20120626041901.jpg' />
-                    <img onClick={handleSetCoverImage} className='wiki-cover-gallery-img' alt={gettext('Cover')} src='https://img0.baidu.com/it/u=794065552,1847631001&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800' />
+                    {
+                      WIKI_COVER_LIST.map(imgName => (
+                        <img key={imgName} onClick={handleSetCoverImage.bind(null,imgName)} className='wiki-cover-gallery-img' alt={gettext('Cover')} src={getCoverImgUrl(`${imgName}`)} />
+                      ))
+                    }
                   </PopoverBody>
                 </div>
               </Popover>
@@ -186,11 +198,9 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
       <div className='wiki-page-gap-container'>
         <div
           className='wiki-editor-header'
-          onMouseEnter={changeControllerDisplayed}
-          onMouseLeave={changeControllerDisplayed}
         >
           <div className={classnames('wiki-icon-container', { gap: currentPageConfig.icon && !currentPageConfig.coverImgUrl })}>
-            <div className={classnames('wiki-icon-wrapper', { show: currentPageConfig.icon })} id='wiki-icon-wrapper' onClick={handleIconPanelDisplayedChange}>
+            <div className={classnames('wiki-icon-wrapper', { show: currentPageConfig.icon })} id='wiki-icon-wrapper' onClick={handleIconPanelDisplayedChange.bind(null,!isShowIconPanel)}>
               <span>{currentPageConfig.icon}</span>
             </div>
           </div>
@@ -199,7 +209,7 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
             target="wiki-icon-wrapper"
             toggle={() => void 0}
             placement="bottom"
-            isOpen={isShowIconPanel && currentPageConfig.icon}
+            isOpen={!!(isShowIconPanel && !!currentPageConfig.icon)}
             popperClassName='wiki-icon-popover'
             hideArrow={true}
           >
@@ -211,11 +221,12 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
               <PopoverBody className='wiki-icon-panel-body'>
                 <Picker
                   data={data}
-                  onEmojiSelect={(emoji) => handleSetIcon(emoji.native, handleIconPanelDisplayedChange)}
+                  onEmojiSelect={(emoji) => handleSetIcon(emoji.native, handleIconPanelDisplayedChange.bind(null,false))}
                   previewPosition="none"
                   skinTonePosition="none"
                   locale={window.seafile.lang.slice(0, 2)}
                   maxFrequentRows={2}
+                  theme="light"
                 />
               </PopoverBody>
             </div>
@@ -223,13 +234,13 @@ const PageHeader = ({ currentPageConfig, onUpdatePage }) => {
           <div className={classnames('wiki-page-controller', { show: isShowController })}>
             {!currentPageConfig.icon && (
               <div className='wiki-page-controller-item' onClick={handleClickAddIcon}>
-                <i className='fa fa-save'></i>
+                <i className='sf3-font sf3-font-icon'></i>
                 <span className='text'>{gettext('Add icon')}</span>
               </div>
             )}
             {!currentPageConfig.coverImgUrl && (
-              <div className='wiki-page-controller-item'>
-                <i className='fa fa-save'></i>
+              <div onClick={handleAddCover} className='wiki-page-controller-item'>
+                <i className='sf3-font sf3-font-image'></i>
                 <span className='text'>{gettext('Add cover')}</span>
               </div>
             )}

@@ -264,6 +264,7 @@ img[src=""] {
 .wiki-page-controller {
   display: flex;
   visibility: hidden;
+  margin-top: 10px;
 }
 
 .wiki-page-controller.show {
@@ -273,9 +274,25 @@ img[src=""] {
 .wiki-page-controller-item {
   display: flex;
   align-items: center;
-  padding: 6px;
+  margin-left: 6px;
+  padding: 2px 8px;
   border-radius: 4px;
   cursor: pointer;
+  color: #949491;
+}
+
+.wiki-page-controller-item:first-of-type {
+  margin-left: 0;
+}
+
+.wiki-page-controller-item:hover {
+  background-color: #efefef;
+  border-radius: 4px;
+}
+
+.wiki-page-controller-item .text {
+  margin-left: 4px;
+  font-size: 14px;
 }
 
 .wiki-icon-container {
@@ -306,15 +323,6 @@ img[src=""] {
   display: block;
 }
 
-.wiki-page-controller-item .text {
-  margin-left: 6px;
-}
-
-.wiki-page-controller-item:hover {
-  background-color: #efefef;
-  border-radius: 4px;
-}
-
 /* Icon */
 .wiki-icon-popover {
   max-width: max-content;
@@ -341,6 +349,10 @@ img[src=""] {
 .wiki-icon-panel-body {
   padding: 0;
   background-color: #fff;
+}
+
+.wiki-icon-panel-body em-emoji-picker {
+  height: 337px;
 }
 
 /* Cover */
