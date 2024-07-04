@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { toaster } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../components/toast';
 import { EVENT_BUS_TYPE } from '../../constants';
-import { CommonlyUsedHotkey, getErrorMsg } from '../../_basic';
+import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
 import TableTool from './table-tool';
 import TableMain from  './table-main';
 import RecordDetailsDialog from '../record-details-dialog';
+import { PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -38,15 +40,37 @@ const Container = () => {
     setLoadingMore(true);
 
     try {
-      await store.loadMore();
+      await store.loadMore(PER_LOAD_NUMBER);
       setLoadingMore(false);
     } catch (error) {
-      const errorMsg = getErrorMsg(error);
-      toaster.danger(gettext(errorMsg));
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
       setLoadingMore(false);
       return;
     }
 
+  }, [metadata, store]);
+
+  const loadAll = useCallback(async (maxLoadNumber, callback) => {
+    if (!metadata.hasMore) return;
+    setLoadingMore(true);
+    const rowsCount = metadata.row_ids.length;
+    const loadNumber = rowsCount % MAX_LOAD_NUMBER !== 0 ? MAX_LOAD_NUMBER - rowsCount % MAX_LOAD_NUMBER : MAX_LOAD_NUMBER;
+    try {
+      await store.loadMore(loadNumber);
+      setLoadingMore(false);
+    } catch (error) {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setLoadingMore(false);
+      return;
+    }
+    if (store.data.hasMore && store.data.row_ids.length < maxLoadNumber) {
+      loadAll(maxLoadNumber, callback);
+    } else {
+      typeof callback === 'function' && callback(store.data.hasMore);
+      setLoadingMore(false);
+    }
   }, [metadata, store]);
 
   const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
@@ -161,6 +185,7 @@ const Container = () => {
                 getTableContentWidth={getTableContentWidth}
                 getTableContentLeft={getTableContentLeft}
                 getAdjacentRowsIds={getAdjacentRowsIds}
+                loadAll={loadAll}
               />
             </div>
           )}

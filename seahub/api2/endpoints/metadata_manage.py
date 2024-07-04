@@ -153,24 +153,24 @@ class MetadataRecords(APIView):
         #args check
         parent_dir = request.GET.get('parent_dir')
         name = request.GET.get('name')
-        page = request.GET.get('page', 1)
-        per_page = request.GET.get('per_page', 1000)
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 100)
         is_dir = request.GET.get('is_dir')
         order_by = request.GET.get('order_by')
 
         try:
-            page = int(page)
-            per_page = int(per_page)
+            start = int(start)
+            limit = int(limit)
         except:
-            page = 1
-            per_page = 1000
+            start = 0
+            limit = 1000
 
-        if page <= 0:
-            error_msg = 'page invalid'
+        if start < 0:
+            error_msg = 'start invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        if per_page <= 0:
-            error_msg = 'per_page invalid'
+        if limit < 0:
+            error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if is_dir:
@@ -199,7 +199,7 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            results = list_metadata_records(repo_id, request.user.username, parent_dir, name, is_dir, page, per_page, order_by)
+            results = list_metadata_records(repo_id, request.user.username, parent_dir, name, is_dir, start, limit, order_by)
         except ConnectionError as err:
             logger.error(err)
             status_code, reason = err

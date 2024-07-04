@@ -1,13 +1,15 @@
 import CellType from './type';
 
 const DATE_COLUMN_OPTIONS = [
-  CellType.CTIME, CellType.MTIME,
+  CellType.CTIME,
+  CellType.MTIME,
 ];
 const NUMERIC_COLUMNS_TYPES = [
 
 ];
 const COLLABORATOR_COLUMN_TYPES = [
-  CellType.CREATOR, CellType.LAST_MODIFIER,
+  CellType.CREATOR,
+  CellType.LAST_MODIFIER,
 ];
 
 // date

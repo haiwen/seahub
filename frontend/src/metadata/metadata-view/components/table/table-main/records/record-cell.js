@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { toaster } from '@seafile/sf-metadata-ui-component';
+import toaster from '../../../../../../components/toast';
 import { isFunction } from '../../../../_basic';
 import { isNameColumn } from '../../../../utils/column-utils';
 import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../constants';

@@ -47,6 +47,7 @@ export {
   HEADER_HEIGHT_TYPE,
   PRIVATE_COLUMN_KEY,
   NOT_DISPLAY_COLUMN_KEYS,
+  VIEW_NOT_DISPLAY_COLUMN_KEYS,
 } from './constants';
 
 export {
@@ -106,7 +107,6 @@ export {
   isMac,
   base64ToFile,
   bytesToSize,
-  getErrorMsg,
   DateUtils,
   CommonlyUsedHotkey,
   LocalStorage,

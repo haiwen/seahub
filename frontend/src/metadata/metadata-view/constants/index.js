@@ -97,7 +97,10 @@ export const DEFAULT_COLUMNS = [
   { name: 'Is_dir', type: CellType.TEXT, width: 200, editable: false, key: 'is_dir' },
 ];
 
-export const PER_PAGE_COUNT = 1000;
+export const PER_LOAD_NUMBER = 1000;
+
+// dtable-db limit loads up to 10,000 rows at a time
+export const MAX_LOAD_NUMBER = 10000;
 
 export {
   EVENT_BUS_TYPE,

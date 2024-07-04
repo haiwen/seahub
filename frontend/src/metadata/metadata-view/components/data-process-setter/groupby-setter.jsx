@@ -33,7 +33,9 @@ class GroupbySetter extends Component {
 
     const groupbysLength = groupbys ? groupbys.length : 0;
     const activated = groupbysLength > 0;
-    let groupbyMessage = gettext('Group');
+
+    // need to translate to Group
+    let groupbyMessage = gettext('Group_by');
     if (groupbysLength === 1) {
       groupbyMessage = gettext('Grouped by 1 column');
     } else if (groupbysLength > 1) {

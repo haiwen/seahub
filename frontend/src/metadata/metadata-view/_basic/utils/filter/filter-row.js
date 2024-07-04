@@ -6,6 +6,7 @@ import {
   creatorFilter,
   dateFilter,
   textFilter,
+  checkboxFilter,
 } from './filter-column';
 import {
   FILTER_CONJUNCTION_TYPE,
@@ -29,6 +30,9 @@ const getFilterResult = (row, filter, { username, userId }) => {
     case CellType.LAST_MODIFIER:
     case CellType.CREATOR: {
       return creatorFilter(cellValue, filter, username);
+    }
+    case CellType.CHECKBOX: {
+      return checkboxFilter(cellValue, filter);
     }
     default: {
       return false;

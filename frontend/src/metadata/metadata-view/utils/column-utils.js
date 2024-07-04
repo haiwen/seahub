@@ -132,31 +132,27 @@ export function isColumnSupportDirectEdit(cell, columns) {
 }
 
 const _getCustomColumnsWidth = () => {
-  // todo
-  return {};
+  return window.sfMetadataContext.localStorage.getItem('columns_width') || {};
 };
 
-export const recalculate = (columns, allColumns, tableId) => {
+export const recalculate = (columns, allColumns) => {
   const displayColumns = columns;
   const displayAllColumns = allColumns;
   const pageColumnsWidth = _getCustomColumnsWidth(); // get columns width from local storage
   const totalWidth = displayColumns.reduce((total, column) => {
-    const key = `${tableId}-${column.key}`;
-    const width = pageColumnsWidth[key] || column.width;
+    const width = pageColumnsWidth[column.key] || column.width;
     total += width;
     return total;
   }, 0);
   let left = SEQUENCE_COLUMN_WIDTH;
   const frozenColumns = displayColumns.filter(c => isFrozen(c));
   const frozenColumnsWidth = frozenColumns.reduce((w, column) => {
-    const key = `${tableId}-${column.key}`;
-    const width = pageColumnsWidth[key] || column.width;
+    const width = pageColumnsWidth[column.key] || column.width;
     return w + width;
   }, 0);
   const lastFrozenColumnKey = frozenColumnsWidth > 0 ? frozenColumns[frozenColumns.length - 1].key : null;
   const newColumns = displayColumns.map((column, index) => {
-    const key = `${tableId}-${column.key}`;
-    const width = pageColumnsWidth[key] || column.width;
+    const width = pageColumnsWidth[column.key] || column.width;
     column.idx = index; // set column idx
     column.left = left; // set column offset
     column.width = width;
@@ -194,7 +190,7 @@ export const getColumnName = (key, name) => {
     case PRIVATE_COLUMN_KEY.IS_DIR:
       return gettext('Is dir');
     case PRIVATE_COLUMN_KEY.PARENT_DIR:
-      return gettext('Parent dir');
+      return gettext('Parent folder');
     case PRIVATE_COLUMN_KEY.FILE_NAME:
       return gettext('File name');
     default:
@@ -225,6 +221,7 @@ const getColumnType = (key, type) => {
 
 export const getColumns = (columns) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
+  const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
     const { type, key, name, ...params } = column;
     return {
@@ -232,7 +229,7 @@ export const getColumns = (columns) => {
       type: getColumnType(key, type),
       name: getColumnName(key, name),
       ...params,
-      width: 200,
+      width: columnsWidth[key] || 200,
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
