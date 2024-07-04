@@ -1527,10 +1527,7 @@ class LibContentView extends React.Component {
       let direntList = this.state.direntList.filter(item => {
         return item.name !== name;
       });
-
-      // Recalculate the state of the selection
-      this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
-
+      this.recalculateSelectedDirents([name], direntList);
       this.setState({direntList: direntList});
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // the deleted item is ancester of the current item
@@ -1545,10 +1542,7 @@ class LibContentView extends React.Component {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
     });
-
-    // Recalculate the state of the selection
-    this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
-
+    this.recalculateSelectedDirents(direntNames, direntList);
     this.setState({direntList: direntList});
   };
 
@@ -1561,10 +1555,7 @@ class LibContentView extends React.Component {
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
     });
-
-    // Recalculate the state of the selection
-    this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
-
+    this.recalculateSelectedDirents([name], direntList);
     this.setState({direntList: direntList});
   };
 
@@ -1573,10 +1564,7 @@ class LibContentView extends React.Component {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
     });
-
-    // Recalculate the state of the selection
-    //this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
-
+    this.recalculateSelectedDirents(direntNames, direntList);
     this.setState({
       direntList: direntList,
       selectedDirentList: [],
@@ -1847,11 +1835,11 @@ class LibContentView extends React.Component {
     });
   };
 
-  recaculateSelectedStateAfterDirentDeleted = (name, newDirentList) => {
+  recalculateSelectedDirents = (unSelectNames, newDirentList) => {
     let selectedDirentList = this.state.selectedDirentList.slice(0);
     if (selectedDirentList.length > 0) {
       selectedDirentList = selectedDirentList.filter(item => {
-        return item.name !== name;
+        return !unSelectNames.includes(item.name);
       });
     }
     this.setState({
