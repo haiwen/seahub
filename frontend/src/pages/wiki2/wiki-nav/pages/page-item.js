@@ -9,6 +9,7 @@ import { gettext } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
 import DraggedPageItem from './dragged-page-item';
+import CustomIcon from '../../custom-icon';
 
 class PageItem extends Component {
 
@@ -174,10 +175,11 @@ class PageItem extends Component {
     let pageCanDropTop = isOverPage && isDragging;
     let pageCanDrop = isOverPage && !isDragging;
     let navItemId = `page-editor-${page.id}`;
-    let fn = isEditMode ? connectDragSource : (argu) => {argu;};
+    let fn = isEditMode ? connectDragSource : (argu) => { argu; };
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
-
+    const customIcon = page.icon;
     const folded = this.props.getFoldState(page.id);
+
     return (
       <div>
         {
@@ -196,14 +198,11 @@ class PageItem extends Component {
                 onMouseLeave={this.onMouseLeave}
                 id={navItemId}
               >
-                <div className="wiki-page-item-main" onClick={isShowNameEditor ? () => {} : (e) => this.props.setCurrentPage(page.id)}>
+                <div className="wiki-page-item-main" onClick={isShowNameEditor ? () => { } : (e) => this.props.setCurrentPage(page.id)}>
                   <div className='wiki-page-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
-                    {childNumber === 0 &&
-                      <NavItemIcon symbol={'file'} disable={true} />
+                    {childNumber === 0 && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'file'} disable={true} />)
                     }
-                    {(!this.state.isMouseEnter && childNumber > 0) &&
-                      <NavItemIcon symbol={'files'} disable={true} />
-                    }
+                    {(!this.state.isMouseEnter && childNumber > 0) && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'files'} disable={true} />)}
                     {(this.state.isMouseEnter && childNumber > 0) &&
                       <div className='nav-item-icon' onClick={this.toggleExpand}>
                         <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`}></i>
@@ -224,7 +223,7 @@ class PageItem extends Component {
                   {isEditMode &&
                     <>
                       <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
-                        <Icon symbol={'more-level'}/>
+                        <Icon symbol={'more-level'} />
                         {this.state.isShowOperationDropdown &&
                           <PageDropdownMenu
                             page={page}
