@@ -94,16 +94,19 @@ class Search extends Component {
       if (this.inputRef && this.inputRef.current) {
         this.inputRef.current.focus();
       }
-    } else if (isHotkey('esc', e)) {
-      e.preventDefault();
-      this.inputRef && this.inputRef.current && this.inputRef.current.blur();
-      this.resetToDefault();
-    } else if (isEnter(e)) {
-      this.onEnter(e);
-    } else if (isUp(e)) {
-      this.onUp(e);
-    } else if (isDown(e)) {
-      this.onDown(e);
+    }
+    if (this.state.isMaskShow) {
+      if (isHotkey('esc', e)) {
+        e.preventDefault();
+        this.inputRef && this.inputRef.current && this.inputRef.current.blur();
+        this.resetToDefault();
+      } else if (isEnter(e)) {
+        this.onEnter(e);
+      } else if (isUp(e)) {
+        this.onUp(e);
+      } else if (isDown(e)) {
+        this.onDown(e);
+      }
     }
   };
 
