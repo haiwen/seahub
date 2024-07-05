@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import toaster from '../../../../../../components/toast';
-import { isFunction } from '../../../../_basic';
+import { PRIVATE_COLUMN_KEY, isFunction } from '../../../../_basic';
 import { isNameColumn } from '../../../../utils/column-utils';
 import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../constants';
 import { isCellValueChanged } from '../../../../utils/cell-comparer';
@@ -75,9 +75,7 @@ class RecordCell extends React.Component {
   };
 
   onCellMouseDown = (e) => {
-    if (e.button === 2) {
-      return;
-    }
+    if (e.button === 2) return;
     const { column, groupRecordIndex, recordIndex, cellMetaData } = this.props;
     const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
 
@@ -133,9 +131,16 @@ class RecordCell extends React.Component {
     toaster.warning(message);
   };
 
+  isDir = () => {
+    const { record } = this.props;
+    const isDirValue = record[PRIVATE_COLUMN_KEY.IS_DIR];
+    if (typeof isDirValue === 'string') return isDirValue.toUpperCase() === 'TRUE';
+    return isDirValue;
+  };
+
   render = () => {
     const { frozen, record, column, needBindEvents, height, bgColor } = this.props;
-    const { key, name, left, width } = column;
+    const { key, left, width } = column;
     const readonly = true;
     const commentCount = isNameColumn(column) && this.getCommentCount();
     const hasComment = !!commentCount;
@@ -151,7 +156,7 @@ class RecordCell extends React.Component {
       cellStyle['backgroundColor'] = bgColor;
     }
 
-    let cellValue = record[name] || record[key];
+    let cellValue = record[key];
     const cellEvents = needBindEvents && this.getEvents();
     const props = {
       className,
@@ -159,7 +164,7 @@ class RecordCell extends React.Component {
       ...cellEvents,
     };
     const cellContent = (
-      <CellFormatter readonly={readonly} value={cellValue} field={column} isDir={record['_is_dir'] === 'True'} />
+      <CellFormatter readonly={readonly} value={cellValue} field={column} isDir={this.isDir()} />
     );
 
     return (
