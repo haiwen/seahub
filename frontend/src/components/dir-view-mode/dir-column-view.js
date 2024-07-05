@@ -190,6 +190,7 @@ class DirColumnView extends React.Component {
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
               content={this.props.content}
+              currentRepoInfo={this.props.currentRepoInfo}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}

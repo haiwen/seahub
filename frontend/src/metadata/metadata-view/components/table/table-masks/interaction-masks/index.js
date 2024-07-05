@@ -25,6 +25,7 @@ import { getGroupRecordByIndex } from '../../../../utils/group-metrics';
 import DragMask from '../drag-mask';
 import DragHandler from '../drag-handler';
 import { gettext } from '../../../../../../utils/constants';
+import { EditorPortal, EditorContainer } from '../../../cell-editor';
 
 import './index.css';
 
@@ -32,53 +33,6 @@ const READONLY_PREVIEW_COLUMNS = [
 
 ];
 
-const propTypes = {
-  table: PropTypes.object,
-  columns: PropTypes.array,
-  canAddRow: PropTypes.bool,
-  isGroupView: PropTypes.bool,
-  recordsCount: PropTypes.number,
-  recordMetrics: PropTypes.object,
-  groups: PropTypes.array,
-  groupMetrics: PropTypes.object,
-  rowHeight: PropTypes.number,
-  groupOffsetLeft: PropTypes.number,
-  frozenColumnsWidth: PropTypes.number,
-  enableCellSelect: PropTypes.bool,
-  getRowTop: PropTypes.func,
-  scrollTop: PropTypes.number,
-  getScrollLeft: PropTypes.func,
-  getTableContentRect: PropTypes.func,
-  getMobileFloatIconStyle: PropTypes.func,
-  onToggleMobileMoreOperations: PropTypes.func,
-  onToggleInsertRecordDialog: PropTypes.func,
-  onCellRangeSelectionStarted: PropTypes.func,
-  onCellRangeSelectionUpdated: PropTypes.func,
-  onCellRangeSelectionCompleted: PropTypes.func,
-  selectNone: PropTypes.func,
-  onCheckCellIsEditable: PropTypes.func,
-  editorPortalTarget: PropTypes.instanceOf(Element).isRequired,
-  modifyRecord: PropTypes.func.isRequired,
-  recordGetterByIndex: PropTypes.func,
-  recordGetterById: PropTypes.func,
-  updateRecords: PropTypes.func,
-  deleteRecordsLinks: PropTypes.func,
-  paste: PropTypes.func,
-  editMobileCell: PropTypes.func,
-  getVisibleIndex: PropTypes.func,
-  onHitBottomBoundary: PropTypes.func,
-  onHitTopBoundary: PropTypes.func,
-  onCellClick: PropTypes.func,
-  scrollToColumn: PropTypes.func,
-  setRecordsScrollLeft: PropTypes.func,
-  getGroupCanvasScrollTop: PropTypes.func,
-  setGroupCanvasScrollTop: PropTypes.func,
-  appPage: PropTypes.object,
-  onFillingDragRows: PropTypes.func,
-  onCellsDragged: PropTypes.func,
-  gridUtils: PropTypes.object,
-  getCopiedRecordsAndColumnsFromRange: PropTypes.func,
-};
 class InteractionMasks extends React.Component {
 
 
@@ -478,7 +432,7 @@ class InteractionMasks extends React.Component {
     }
   };
 
-  modifyRecord = (updated, closeEditor = true) => {
+  onCommit = (updated, closeEditor = true) => {
     this.props.modifyRecord(updated);
     if (closeEditor) {
       this.closeEditor();
@@ -1057,7 +1011,6 @@ class InteractionMasks extends React.Component {
     }
   };
 
-
   renderSingleCellSelectView = () => {
     const { columns } = this.props;
     const {
@@ -1157,7 +1110,8 @@ class InteractionMasks extends React.Component {
   };
 
   render() {
-    const { selectedRange, draggedRange } = this.state;
+    const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition } = this.state;
+    const { table, columns, isGroupView, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div
@@ -1178,11 +1132,81 @@ class InteractionMasks extends React.Component {
         )}
         {isSelectedSingleCell && this.renderSingleCellSelectView()}
         {!isSelectedSingleCell && this.renderCellRangeSelectView()}
+        {isEditorEnabled && (
+          <EditorPortal target={editorPortalTarget}>
+            <EditorContainer
+              table={table}
+              columns={columns}
+              isGroupView={isGroupView}
+              scrollTop={scrollTop}
+              firstEditorKeyDown={firstEditorKeyDown}
+              openEditorMode={openEditorMode}
+              portalTarget={editorPortalTarget}
+              scrollLeft={getScrollLeft()}
+              record={getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex })}
+              column={getSelectedColumn({ selectedPosition, columns })}
+              onCommit={this.onCommit}
+              onCommitCancel={this.onCommitCancel}
+              editorPosition={editorPosition}
+              {...{
+                ...this.getSelectedDimensions(selectedPosition),
+                ...this.state.editorPosition
+              }}
+            />
+          </EditorPortal>
+        )}
       </div>
     );
   }
 }
 
-InteractionMasks.propTypes = propTypes;
+InteractionMasks.propTypes = {
+  table: PropTypes.object,
+  columns: PropTypes.array,
+  canAddRow: PropTypes.bool,
+  isGroupView: PropTypes.bool,
+  recordsCount: PropTypes.number,
+  recordMetrics: PropTypes.object,
+  groups: PropTypes.array,
+  groupMetrics: PropTypes.object,
+  rowHeight: PropTypes.number,
+  groupOffsetLeft: PropTypes.number,
+  frozenColumnsWidth: PropTypes.number,
+  enableCellSelect: PropTypes.bool,
+  getRowTop: PropTypes.func,
+  scrollTop: PropTypes.number,
+  getScrollLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
+  getMobileFloatIconStyle: PropTypes.func,
+  onToggleMobileMoreOperations: PropTypes.func,
+  onToggleInsertRecordDialog: PropTypes.func,
+  onCellRangeSelectionStarted: PropTypes.func,
+  onCellRangeSelectionUpdated: PropTypes.func,
+  onCellRangeSelectionCompleted: PropTypes.func,
+  selectNone: PropTypes.func,
+  onCheckCellIsEditable: PropTypes.func,
+  editorPortalTarget: PropTypes.instanceOf(Element).isRequired,
+  modifyRecord: PropTypes.func.isRequired,
+  recordGetterByIndex: PropTypes.func,
+  recordGetterById: PropTypes.func,
+  updateRecords: PropTypes.func,
+  deleteRecordsLinks: PropTypes.func,
+  paste: PropTypes.func,
+  editMobileCell: PropTypes.func,
+  getVisibleIndex: PropTypes.func,
+  onHitBottomBoundary: PropTypes.func,
+  onHitTopBoundary: PropTypes.func,
+  onCellClick: PropTypes.func,
+  scrollToColumn: PropTypes.func,
+  setRecordsScrollLeft: PropTypes.func,
+  getGroupCanvasScrollTop: PropTypes.func,
+  setGroupCanvasScrollTop: PropTypes.func,
+  appPage: PropTypes.object,
+  onFillingDragRows: PropTypes.func,
+  onCellsDragged: PropTypes.func,
+  gridUtils: PropTypes.object,
+  getCopiedRecordsAndColumnsFromRange: PropTypes.func,
+  onCommit: PropTypes.func,
+};
 
 export default InteractionMasks;

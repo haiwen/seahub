@@ -120,15 +120,13 @@ export const setColumnOffsets = (columns) => {
 
 export function isColumnSupportEdit(cell, columns) {
   const column = columns[cell.idx];
-  if (column?.type === CellType.LINK_FORMULA && [CellType.IMAGE, CellType.FILE].includes(column?.data?.array_type)) {
-    return true;
-  }
+  if (column.type === CellType.FILE_NAME) return true;
   return false;
 }
 
 export function isColumnSupportDirectEdit(cell, columns) {
   const column = columns[cell.idx];
-  return [].includes(column?.type);
+  return [CellType.CHECKBOX].includes(column?.type);
 }
 
 const _getCustomColumnsWidth = () => {
@@ -172,21 +170,17 @@ export const recalculate = (columns, allColumns) => {
 export const getColumnName = (key, name) => {
   switch (key) {
     case PRIVATE_COLUMN_KEY.CTIME:
+    case PRIVATE_COLUMN_KEY.FILE_CTIME:
       return gettext('Created time');
     case PRIVATE_COLUMN_KEY.MTIME:
+    case PRIVATE_COLUMN_KEY.FILE_MTIME:
       return gettext('Last modified time');
     case PRIVATE_COLUMN_KEY.CREATOR:
+    case PRIVATE_COLUMN_KEY.FILE_CREATOR:
       return gettext('Creator');
     case PRIVATE_COLUMN_KEY.LAST_MODIFIER:
-      return gettext('Last modifier');
-    case PRIVATE_COLUMN_KEY.FILE_CREATOR:
-      return gettext('File creator');
     case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
-      return gettext('File modifier');
-    case PRIVATE_COLUMN_KEY.FILE_CTIME:
-      return gettext('File created time');
-    case PRIVATE_COLUMN_KEY.FILE_MTIME:
-      return gettext('File last modified time');
+      return gettext('Last modifier');
     case PRIVATE_COLUMN_KEY.IS_DIR:
       return gettext('Is folder');
     case PRIVATE_COLUMN_KEY.PARENT_DIR:

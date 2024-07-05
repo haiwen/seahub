@@ -76,7 +76,7 @@ class Context {
   };
 
   canModifyRow = (row) => {
-    return false;
+    return true;
   };
 
   getPermission = () => {
