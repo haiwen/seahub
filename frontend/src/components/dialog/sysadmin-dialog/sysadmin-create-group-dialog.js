@@ -76,7 +76,6 @@ class SysAdminCreateGroupDialog extends React.Component {
               </Label>
               <UserSelect
                 isMulti={false}
-                className="reviewer-select"
                 placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
               />

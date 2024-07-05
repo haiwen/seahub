@@ -58,7 +58,6 @@ class TransferGroupDialog extends React.Component {
           <UserSelect
             ref="userSelect"
             isMulti={false}
-            className="reviewer-select"
             placeholder={gettext('Please enter 1 or more character')}
             onSelectChange={this.handleSelectChange}
           />

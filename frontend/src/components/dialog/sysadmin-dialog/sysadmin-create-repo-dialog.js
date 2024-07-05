@@ -77,7 +77,6 @@ class SysAdminCreateRepoDialog extends React.Component {
               <UserSelect
                 id="userSelect"
                 isMulti={false}
-                className="reviewer-select"
                 placeholder={gettext('Select a user')}
                 onSelectChange={this.handleSelectChange}
               />
