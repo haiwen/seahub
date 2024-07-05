@@ -7,8 +7,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { SeahubSelect } from '../common/select';
 
-const { multiTenancy, cloudMode } = window.app.pageOptions;
-
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
@@ -25,11 +23,10 @@ class AddWikiDialog extends React.Component {
       selectedOption: null,
       options: [],
     };
-    this.isDepartment = isPro && multiTenancy && cloudMode;
   }
 
   componentDidMount() {
-    if (!this.isDepartment) return;
+    if (!isPro) return;
     wikiAPI.listWikiDepartments().then(res => {
       const departments = res.data.sort((a, b) => {
         return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -88,7 +85,7 @@ class AddWikiDialog extends React.Component {
         <ModalBody>
           <Label>{gettext('Name')}</Label>
           <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
-          {this.isDepartment &&
+          {isPro &&
             <>
               <Label className='mt-4'>{gettext('Wiki owner')} ({gettext('Optional')})</Label>
               <SeahubSelect

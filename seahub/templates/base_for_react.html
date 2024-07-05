@@ -67,8 +67,6 @@
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
             canShareRepo: {% if user.permissions.can_share_repo %} true {% else %} false {% endif %},
             canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
-            multiTenancy: {% if multi_tenancy %} true {% else %} false {% endif %},
-            cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
             groupImportMembersExtraMsg: "{{group_import_members_extra_msg}}",
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
