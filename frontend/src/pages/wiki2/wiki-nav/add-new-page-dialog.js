@@ -13,8 +13,7 @@ const propTypes = {
   title: PropTypes.node,
   toggle: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func,
-  updateWikiConfig: PropTypes.func.isRequired,
-  currentPageId: PropTypes.number,
+  currentPageId: PropTypes.string,
 
 };
 

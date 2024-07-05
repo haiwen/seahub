@@ -32,7 +32,7 @@ const dropTarget = {
   drop(props, monitor) {
     const dragSource = monitor.getItem();
     if (dragSource.mode === 'wiki-page') {
-      const { pageIndex: targetIndex, page: targetPage } = props;
+      const { page: targetPage } = props;
       const draggedPageId = dragSource.data.id;
       const targetPageId = targetPage.id;
       if (draggedPageId !== targetPageId) {

@@ -200,29 +200,6 @@ def get_current_level_page_ids(navigation, page_id, ids=[]):
             get_current_level_page_ids(children, page_id, ids)
 
 
-
-
-def add_page(navigation, page_id, parent_id=None):
-    if not parent_id:
-        navigation.append({'id': page_id, 'type': 'page'})
-        if len(navigation) > 1:
-            navigation[-2]['children'] = []
-            navigation[-2]['_path'] = ""
-        else:
-            navigation[0]['children'] = []
-            navigation[0]['_path'] = ""
-    else:
-        _add_page_recursion(page_id, navigation, parent_id)
-
-    return navigation
-
-
-def _add_page_recursion(page_id, items, parent_id):
-    for item in items:
-        if item['id'] == parent_id:
-            item['children'].append({'id': page_id, 'type': 'PAGE'})
-            return
-
 def save_wiki_config(wiki, username, wiki_config):
     repo_id = wiki.repo_id
     obj_id = json.dumps({'parent_dir': WIKI_CONFIG_PATH})

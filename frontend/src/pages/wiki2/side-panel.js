@@ -35,14 +35,12 @@ class SidePanel extends Component {
 
   confirmDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
-    // const index = PageUtils.getPageIndexById(pageId, pages);
-    // config.pages.splice(index, 1);
-    // PageUtils.deletePage(navigation, pageId);
-    // this.props.saveWikiConfig(config);
+    const { pages } = config;
+    const index = PageUtils.getPageIndexById(pageId, pages);
+    config.pages.splice(index, 1);
     // TODO: To delete a page, do you need to delete all subpages at once (requires a new API)
     wikiAPI.deleteWiki2Page(wikiId, pageId).then(res=>{
-      const newConfig = JSON.parse(res.data.wiki_config);
-      this.props.updateWikiConfig(newConfig);
+      this.props.updateWikiConfig(config);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -134,7 +132,7 @@ class SidePanel extends Component {
         page_id: page_id,
         name: pageName,
         newConfig: newConfig,
-        successCallback: voidFn(),
+        successCallback: voidFn,
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

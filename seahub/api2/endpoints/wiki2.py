@@ -455,34 +455,7 @@ class Wiki2PagesView(APIView):
 
         try:
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename, is_dir=False)
-            '''obj_name,parent_dir,doc_uuid
-            name: pageName,
-            icon: '',
-            path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
-            docUuid: doc_uuid,
-            
-            {"version":1,"navigation": [
-            {"id":"ygmo","type":"page","children":[],"_path":""}
-            {"id":"xxx","type":"page","children":[],"_path":""}
-            ],
-            "pages": [
-            {"id":"ygmo","name":"Untitled","path":"/wiki-pages/repo_id/Untitled.sdoc","icon":"","docUuid":"xx","children":[]}
-            {"id":"xxx","name":"111","path":"/wiki-pages/repo_id/Untitled.sdoc","icon":"","docUuid":"xx","children":[]}          
-            ]}
-  
-  
-            {"version":1,"navigation":[
-            {"id":"X2DO","type":"page","children":[{"id":"vmvj","type":"page"}],"_path":""},
-            {"id":"U82c","type":"page","children":[],"_path":""}
-            ],"pages":[
-            {"id":"X2DO","name":"wiki","path":"/wiki-pages/3ab8589f-5c51-4707-a28d-68937605aec2/wiki.sdoc","icon":"","docUuid":"3ab8589f-5c51-4707-a28d-68937605aec2","children":[]},
-            {"id":"U82c","name":"wiki2","path":"/wiki-pages/9d230217-ebe7-408a-9fe4-10d548dcadc0/wiki2.sdoc","icon":"","docUuid":"9d230217-ebe7-408a-9fe4-10d548dcadc0","children":[]},
-            {"id":"vmvj","name":"a","path":"/wiki-pages/e2ba4e84-c85a-4cd4-a60a-90afb95eb3b3/a.sdoc","icon":"","docUuid":"e2ba4e84-c85a-4cd4-a60a-90afb95eb3b3","children":[]}]}
-            
-            id: pageId, name, icon, path, docUuid
-            '''
-            # current_exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
-
+            # update wiki_config
             id_set = get_all_wiki_ids(navigation)
             new_page_id = gen_unique_id(id_set)
             file_info['page_id'] = new_page_id
@@ -495,36 +468,25 @@ class Wiki2PagesView(APIView):
                 'docUuid': str(sdoc_uuid)
             }
             pages.append(new_page)
+
             if len(wiki_config) == 0:
                 wiki_config['version'] = 1
 
             wiki_config['navigation'] = navigation
             wiki_config['pages'] = pages
             wiki_config = json.dumps(wiki_config)
-
             save_wiki_config(wiki, request.user.username, wiki_config)
-
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        '''
-        created_at: "2024-07-03T05:17:30+00:00"
-        id: 27
-        name: "3"
-        owner: "e40151bbbe184577b11ed818a49f97f3@auth.local"
-        repo_id: "68e8e35f-e31a-49be-90ee-4a7082c1486e"
-        updated_at: "2024-07-03T05:39:11+00:00"
-        wiki_config: xxx
-          '''
         wiki = wiki.to_dict()
         wiki['wiki_config'] = wiki_config
 
         return Response({'wiki': wiki, 'file_info': file_info})
 
     def put(self, request, wiki_id):
-
         try:
             wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
@@ -546,7 +508,6 @@ class Wiki2PagesView(APIView):
         navigation = wiki_config.get('navigation', [])
 
         id_set = get_all_wiki_ids(navigation)
-        position = request.data.get('position', None)
         target_page_id = request.data.get('target_id', '')
         moved_page_id = request.data.get('moved_id', '')
         if (target_page_id not in id_set) or (moved_page_id not in id_set):
@@ -555,34 +516,35 @@ class Wiki2PagesView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         current_ids = []
         get_current_level_page_ids(navigation, moved_page_id, current_ids)
-        if target_page_id in current_ids:
-            pass
         # Moves under the same level
+        moved_nav = pop_nav(navigation, moved_page_id)
         if target_page_id in current_ids:
             target_index = current_ids.index(target_page_id)
-            moved_nav = pop_nav(navigation, moved_page_id)
             same_level_move_nav(navigation, target_index, target_page_id, moved_nav)
             wiki_config['navigation'] = navigation
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, username, wiki_config)
             return Response({'wiki_config': wiki_config})
 
-        moved_nav = pop_nav(navigation, moved_page_id)
         judge_navs = get_all_wiki_ids([moved_nav])
         if target_page_id in judge_navs:
             error_msg = 'Internal Server Error'
             logger.error(error_msg)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         move_nav(navigation, target_page_id, moved_nav)
         wiki_config['navigation'] = navigation
         wiki_config = json.dumps(wiki_config)
+
         try:
             save_wiki_config(wiki, username, wiki_config)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         return Response({'wiki_config': wiki_config})
+
 
 class Wiki2PageView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -696,6 +658,14 @@ class Wiki2PageView(APIView):
             error_msg = _("File is locked")
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # check page
+        navigation = wiki_config.get('navigation', [])
+        id_set = get_all_wiki_ids(navigation)
+        if page_id not in id_set:
+            error_msg = 'Page not found'
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         sdoc_dir_path = os.path.dirname(path)
         parent_dir = os.path.dirname(sdoc_dir_path)
         dir_name = os.path.basename(sdoc_dir_path)
@@ -719,26 +689,23 @@ class Wiki2PageView(APIView):
         except Exception as e:
             logger.error(e)
 
-        try:  # update wiki_config
-            navigation = wiki_config.get('navigation', [])
-            id_set = get_all_wiki_ids(navigation)
-            if page_id not in id_set:
-                error_msg = 'Page not found'
-                logger.error('Page not found')
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        # update wiki_config
+        try:
             delete_nav_by_id(navigation, page_id)
             id_set = get_all_wiki_ids(navigation)
             pages = delete_page(pages, id_set)
+
             wiki_config['navigation'] = navigation
             wiki_config['pages'] = pages
             wiki_config = json.dumps(wiki_config)
+
             save_wiki_config(wiki, request.user.username, wiki_config)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        return Response({'wiki_config': wiki_config})
+        return Response({'success': True})
 
 
 class Wiki2DuplicatePageView(APIView):
