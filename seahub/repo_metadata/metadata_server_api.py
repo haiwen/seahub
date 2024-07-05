@@ -139,3 +139,11 @@ class MetadataServerAPI:
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/query'
         response = requests.post(url, json=post_data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+    def list_columns(self, table_id):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
+        data = {
+            'table_id': table_id
+        }
+        response = requests.get(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)

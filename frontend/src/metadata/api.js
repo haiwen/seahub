@@ -72,22 +72,33 @@ class MetadataManagerAPI {
     return this.req.post(url, data);
   }
 
-  updateMetadataRecord = (repoID, recordID, creator, createTime, modifier, modifyTime, parentDir, name) => {
+  addMetadataColumn(repoID, column_name) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    let data = {
+      'column_name': column_name
+    };
+    return this.req.post(url, data);
+  }
+
+  getMetadataRecordInfo(repoID, parentDir, name) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
+    let params = {};
+    if (parentDir) {
+      params['parent_dir'] = parentDir;
+    }
+    if (name) {
+      params['name'] = name;
+    }
+    return this.req.get(url, {params: params});
+  }
+
+  updateMetadataRecord = (repoID, recordID, columnName, newValue) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/' + recordID + '/';
     const data = {
-      'creator': creator,
-      'create_time': createTime,
-      'modifier': modifier,
-      'modify_time': modifyTime,
-      'current_dir': parentDir,
-      'name': name,
+      'column_name': columnName,
+      'value': newValue,
     };
     return this.req.put(url, data);
-  };
-
-  deleteMetadataRecord = (repoID, recordID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/' + recordID + '/';
-    return this.req.delete(url);
   };
 
   listUserInfo = (userIds) => {

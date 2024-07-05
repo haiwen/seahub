@@ -9,6 +9,7 @@ import EditFileTagPopover from '../popover/edit-filetag-popover';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 import FileTagList from '../file-tag-list';
 import ConfirmApplyFolderPropertiesDialog from '../dialog/confirm-apply-folder-properties-dialog';
+import ExtraMetadataAttributesDialog from '../dialog/extra-metadata-attributes-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -29,7 +30,8 @@ class DetailListView extends React.Component {
     this.state = {
       isEditFileTagShow: false,
       isShowExtraProperties: false,
-      isShowApplyProperties: false
+      isShowApplyProperties: false,
+      isShowMetadataExtraProperties: false,
     };
     this.tagListTitleID = `detail-list-view-tags-${uuidv4()}`;
   }
@@ -67,6 +69,10 @@ class DetailListView extends React.Component {
 
   toggleExtraPropertiesDialog = () => {
     this.setState({ isShowExtraProperties: !this.state.isShowExtraProperties });
+  };
+
+  toggleExtraMetadataPropertiesDialog = () => {
+    this.setState({ isShowMetadataExtraProperties: !this.state.isShowMetadataExtraProperties });
   };
 
   toggleApplyPropertiesDialog = () => {
@@ -107,6 +113,17 @@ class DetailListView extends React.Component {
                 </tr>
               </Fragment>
             )}
+            {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
+              <Fragment>
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraMetadataPropertiesDialog}>
+                      {gettext('Edit metadata properties')}
+                    </div>
+                  </th>
+                </tr>
+              </Fragment>
+            )}
           </tbody>
         </table>
       );
@@ -132,6 +149,15 @@ class DetailListView extends React.Component {
               <th colSpan={2}>
                 <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
                   {gettext('Edit extra properties')}
+                </div>
+              </th>
+            </tr>
+          )}
+          {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
+            <tr className="file-extra-attributes">
+              <th colSpan={2}>
+                <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraMetadataPropertiesDialog}>
+                  {gettext('Edit metadata properties')}
                 </div>
               </th>
             </tr>
@@ -174,6 +200,15 @@ class DetailListView extends React.Component {
             toggle={this.toggleApplyPropertiesDialog}
             repoID={this.props.repoID}
             path={direntPath}
+          />
+        )}
+        {this.state.isShowMetadataExtraProperties && (
+          <ExtraMetadataAttributesDialog
+            repoID={this.props.repoID}
+            filePath={direntPath}
+            direntType={direntType}
+            direntDetail={direntDetail}
+            onToggle={this.toggleExtraMetadataPropertiesDialog}
           />
         )}
       </Fragment>
