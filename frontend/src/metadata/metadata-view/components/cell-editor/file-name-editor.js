@@ -22,7 +22,7 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
     if (_isDir) return 'folder';
     if (!fileName) return '';
     const index = fileName.lastIndexOf('.');
-    if (index === -1) return 'file';
+    if (index === -1) return '';
     const suffix = fileName.slice(index).toLowerCase();
     if (Utils.imageCheck(fileName)) return 'image';
     if (suffix === '.sdoc') return 'sdoc';
@@ -52,8 +52,6 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
     onCommitCancel && onCommitCancel();
   }, [fileType, onCommitCancel]);
 
-  if (!fileName) return null;
-
   if (fileType === 'image') {
     const fileExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
     const isGIF = fileExt === 'gif';
@@ -80,7 +78,7 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
     );
   }
 
-  if (fileType === 'sdoc') {
+  if (!fileType || fileType === 'sdoc') {
     window.open(serviceURL + url);
   } else {
     window.open(window.location.href + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
