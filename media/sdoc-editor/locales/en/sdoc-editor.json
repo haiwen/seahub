@@ -467,6 +467,5 @@
   "Print_limit_exceeded": "Exceeding the print limit, only the first 200 lines will be printed",
   "Show_record_numbers": "Show record numbers",
   "Alternate_color": "Alternate color",
-  "Select_column_display_option_color_tip": "Single-select and multi-select columns display option colors",
-  "Header": "Header"
+  "Select_column_display_option_color_tip": "Single-select and multi-select columns display option colors"
 }
