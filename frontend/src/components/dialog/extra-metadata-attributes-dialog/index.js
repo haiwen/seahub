@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import { zIndexes, DIALOG_MAX_HEIGHT, EXTRA_ATTRIBUTES_COLUMN_TYPE } from '../../../constants';
+import { zIndexes, DIALOG_MAX_HEIGHT } from '../../../constants';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import { getSelectColumnOptions, getValidColumns } from '../../../utils/extra-attributes';
+import { getValidColumns } from '../../../utils/extra-attributes';
 import Column from './column';
 import Loading from '../../loading';
 import toaster from '../../toast';
+import metadataAPI from '../../../metadata/api';
 
 import './index.css';
 
-class ExtraAttributesDialog extends Component {
+
+class ExtraMetadataAttributesDialog extends Component {
 
   constructor(props) {
     super(props);
@@ -71,64 +72,43 @@ class ExtraAttributesDialog extends Component {
     }, 1);
   };
 
-  getFormatUpdateData = (update = {}) => {
-    const { columns } = this.state;
-    const updateData = {};
-    for (let key in update) {
-      const column = columns.find(column => column.key === key);
-      if (column && column.editable) {
-        const { type, name } = column;
-        const value = update[key];
-        if (type === EXTRA_ATTRIBUTES_COLUMN_TYPE.SINGLE_SELECT) {
-          const options = getSelectColumnOptions(column);
-          const option = options.find(item => item.id === value);
-          updateData[name] = option ? option.name : '';
-        } else {
-          updateData[column.name] = update[key];
-        }
-      }
-    }
-    return updateData;
-  };
-
   getData = () => {
-    const { repoID, filePath } = this.props;
-    seafileAPI.getFileExtendedProperties(repoID, filePath).then(res => {
+    const { repoID, filePath, direntType } = this.props;
+
+    let dirName = Utils.getDirName(filePath);
+    let fileName = Utils.getFileName(filePath);
+    let parentDir = direntType === 'file' ?  dirName : dirName.slice(0, dirName.length - fileName.length - 1);
+
+    if (!parentDir.startsWith('/')) {
+      parentDir = '/' + parentDir;
+    }
+
+    metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
       const { row, metadata, editable_columns } = res.data;
       this.isExist = Boolean(row._id);
       this.setState({ row: row, columns: getValidColumns(metadata, editable_columns, this.isEmptyFile), isLoading: false, errorMsg: '' });
     }).catch(error => {
-      const errorMsg =Utils.getErrorMsg(error);
+      const errorMsg = Utils.getErrorMsg(error);
       this.setState({ isLoading: false, errorMsg });
-    });
-  };
-
-  createData = (data) => {
-    const { repoID, filePath } = this.props;
-    seafileAPI.newFileExtendedProperties(repoID, filePath, data).then(res => {
-      this.isExist = true;
-      const { row } = res.data;
-      this.setState({ row: row, isLoading: false, errorMsg: '' });
-    }).catch(error => {
-      const errorMsg =Utils.getErrorMsg(error);
-      toaster.danger(gettext(errorMsg));
     });
   };
 
   updateData = (update, column) => {
     const newRow = { ...this.state.row, ...update };
     this.setState({ row: newRow }, () => {
-      const data = this.getFormatUpdateData(update);
       const { repoID, filePath } = this.props;
+
+      let newValue = update[column.key];
+      let recordID = this.state.row._id;
       if (this.isExist) {
-        seafileAPI.updateFileExtendedProperties(repoID, filePath, data).then(res => {
+        metadataAPI.updateMetadataRecord(repoID, recordID, column.name, newValue).then(res => {
           this.setState({ update: {}, row: res.data.row });
         }).catch(error => {
           const errorMsg = Utils.getErrorMsg(error);
           toaster.danger(gettext(errorMsg));
         });
       } else {
-        this.createData(data);
+        // this.createData(data);
       }
     });
   };
@@ -244,7 +224,7 @@ class ExtraAttributesDialog extends Component {
   }
 }
 
-ExtraAttributesDialog.propTypes = {
+ExtraMetadataAttributesDialog.propTypes = {
   repoID: PropTypes.string,
   filePath: PropTypes.string,
   direntType: PropTypes.string,
@@ -252,4 +232,4 @@ ExtraAttributesDialog.propTypes = {
   onToggle: PropTypes.func,
 };
 
-export default ExtraAttributesDialog;
+export default ExtraMetadataAttributesDialog;

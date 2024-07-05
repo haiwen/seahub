@@ -120,8 +120,6 @@ from seahub.ocm_via_webdav.ocm_api import OCMProviderView
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
 
-from seahub.api2.endpoints.extended_properties import ExtendedPropertiesView, ApplyFolderExtendedPropertiesView
-
 # Admin
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -206,7 +204,7 @@ from seahub.ai.apis import LibrarySdocIndexes, Search, LibrarySdocIndex, TaskSta
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, Wiki2DuplicatePageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
-from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage
+from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataRecord, MetadataColumns, MetadataRecordInfo
 from seahub.api2.endpoints.user_list import UserListView
 
 
@@ -443,10 +441,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
-
-    ## user:file:extended-props
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/extended-properties/$', ExtendedPropertiesView.as_view(), name='api-v2.1-extended-properties'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/apply-folder-extended-properties/$', ApplyFolderExtendedPropertiesView.as_view(), name='api-v2.1-apply-folder-extended-properties'),
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-delete/$', RepoAutoDeleteView.as_view(), name='api-v2.1-repo-auto-delete'),
 
@@ -1036,4 +1030,8 @@ if settings.ENABLE_METADATA_MANAGEMENT:
     urlpatterns += [
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/$', MetadataManage.as_view(), name='api-v2.1-metadata'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/records/(?P<record_id>[A-Za-z0-9_-]+)/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/record/$', MetadataRecordInfo.as_view(), name='api-v2.1-metadata-record-info'),
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/columns/$', MetadataColumns.as_view(), name='api-v2.1-metadata-columns'),
+
     ]
