@@ -57,7 +57,7 @@ class GroupHeaderRight extends Component {
           isExpanded={isExpanded}
           summary={summary}
           summaryMethod={summaryMethod}
-          getTableContentLeft={this.props.getTableContentLeft}
+          getTableContentRect={this.props.getTableContentRect}
         />
       );
     });
@@ -79,7 +79,7 @@ GroupHeaderRight.propTypes = {
   lastFrozenColumnKey: PropTypes.string,
   columns: PropTypes.array,
   summaryConfigs: PropTypes.object,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
 };
 
 export default GroupHeaderRight;

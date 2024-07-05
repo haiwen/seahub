@@ -168,7 +168,8 @@ class RecordsGroupBody extends Component {
   };
 
   setColumnVisibleEnd = () => {
-    const { columns, getScrollLeft, tableContentWidth } = this.props;
+    const { columns, getScrollLeft, getTableContentRect } = this.props;
+    const { width: tableContentWidth } = getTableContentRect();
     let columnVisibleEnd = 0;
     const contentScrollLeft = getScrollLeft();
     let endColumnWidth = tableContentWidth + contentScrollLeft;
@@ -208,7 +209,8 @@ class RecordsGroupBody extends Component {
   };
 
   scrollToColumn = (idx) => {
-    const { columns, tableContentWidth } = this.props;
+    const { columns, getTableContentRect } = this.props;
+    const { width: tableContentWidth } = getTableContentRect();
     const newScrollLeft = getColumnScrollPosition(columns, idx, tableContentWidth);
     if (newScrollLeft !== null) {
       this.props.setRecordsScrollLeft(newScrollLeft);
@@ -822,13 +824,12 @@ class RecordsGroupBody extends Component {
             maxLevel={maxLevel}
             groupOffsetLeft={groupOffsetLeft}
             scrollLeft={scrollLeft}
-            leftBarWidth={0}
             columns={columns}
             summaryConfigs={summaryConfigs}
             isExpanded={isExpanded}
             folding={folding}
             lastFrozenColumnKey={lastFrozenColumnKey}
-            getTableContentLeft={this.props.getTableContentLeft}
+            getTableContentRect={this.props.getTableContentRect}
             onExpandGroupToggle={this.onExpandGroupToggle}
           />
         );
@@ -923,7 +924,7 @@ class RecordsGroupBody extends Component {
             scrollTop={this.oldScrollTop}
             getRowTop={this.getRowTop}
             getScrollLeft={this.props.getScrollLeft}
-            getTableContentLeft={this.props.getTableContentLeft}
+            getTableContentRect={this.props.getTableContentRect}
             getMobileFloatIconStyle={this.props.getMobileFloatIconStyle}
             onToggleMobileMoreOperations={this.props.onToggleMobileMoreOperations}
             onToggleInsertRecordDialog={this.props.onToggleInsertRecordDialog}
@@ -983,7 +984,6 @@ RecordsGroupBody.propTypes = {
   columns: PropTypes.array,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
-  tableContentWidth: PropTypes.number,
   totalWidth: PropTypes.number,
   containerWidth: PropTypes.number,
   groups: PropTypes.array,
@@ -1003,7 +1003,7 @@ RecordsGroupBody.propTypes = {
   hasSelectedCell: PropTypes.func,
   cacheScrollTop: PropTypes.func,
   scrollToLoadMore: PropTypes.func,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
   getMobileFloatIconStyle: PropTypes.func,
   onToggleMobileMoreOperations: PropTypes.func,
   onToggleInsertRecordDialog: PropTypes.func,

@@ -32,10 +32,9 @@ class GroupbyItem extends Component {
   };
 
   renderTipMessage = () => {
-    const { column } = this.props;
+    const { column, view } = this.props;
     const { tooltipOpen } = this.state;
-    const page = window.app.getPage();
-    const { shown_column_keys } = page || {};
+    const { shown_column_keys } = view || {};
 
     if (!shown_column_keys || !Array.isArray(shown_column_keys) || shown_column_keys.includes(column.key)) {
       return null;
@@ -110,6 +109,7 @@ class GroupbyItem extends Component {
 GroupbyItem.propTypes = {
   index: PropTypes.number,
   column: PropTypes.object,
+  view: PropTypes.object,
   groupby: PropTypes.object,
   columnsOptions: PropTypes.array,
   geoCountTypeOptions: PropTypes.array,

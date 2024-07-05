@@ -10,7 +10,7 @@ class GroupHeaderCell extends React.PureComponent {
   fixedFrozenDOMs = (scrollLeft, scrollTop) => {
     if (this.headerCell) {
       const { firstColumnWidth, groupOffsetLeft } = this.props;
-      const tableContentLeft = this.props.getTableContentLeft();
+      const tableContentLeft = this.props.getTableContentRect();
       this.headerCell.style.position = 'fixed';
       this.headerCell.style.marginLeft = (SEQUENCE_COLUMN_WIDTH + firstColumnWidth + groupOffsetLeft + tableContentLeft) + 'px';
       this.headerCell.style.marginTop = (-scrollTop) + 'px';
@@ -64,7 +64,7 @@ GroupHeaderCell.propTypes = {
   groupOffsetLeft: PropTypes.number,
   summary: PropTypes.object,
   summaryMethod: PropTypes.string,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
 };
 
 export default GroupHeaderCell;

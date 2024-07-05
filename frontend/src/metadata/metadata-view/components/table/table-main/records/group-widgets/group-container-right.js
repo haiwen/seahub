@@ -33,7 +33,7 @@ class GroupContainerRight extends Component {
           isExpanded={isExpanded}
           columns={columns}
           summaryConfigs={summaryConfigs}
-          getTableContentLeft={this.props.getTableContentLeft}
+          getTableContentRect={this.props.getTableContentRect}
         />
       </div>
     );
@@ -50,7 +50,7 @@ GroupContainerRight.propTypes = {
   height: PropTypes.number,
   groupOffsetLeft: PropTypes.number,
   lastFrozenColumnKey: PropTypes.string,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
 };
 
 export default GroupContainerRight;

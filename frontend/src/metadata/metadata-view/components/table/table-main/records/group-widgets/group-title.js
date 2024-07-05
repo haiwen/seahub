@@ -19,11 +19,6 @@ class GroupTitle extends Component {
     this.collaborators = window.sfMetadataContext.getCollaboratorsFromCache();
   }
 
-  getOptionColors = () => {
-    const { dtableUtils } = window.app;
-    return dtableUtils.getOptionColors();
-  };
-
   renderCollaborator = (collaborator) => {
     const { email, avatar_url, name } = collaborator || {};
     return (
