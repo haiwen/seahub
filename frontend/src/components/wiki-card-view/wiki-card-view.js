@@ -8,8 +8,6 @@ import toaster from '../toast';
 
 import './wiki-card-view.css';
 
-const { multiTenancy, cloudMode } = window.app.pageOptions;
-
 const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
@@ -24,11 +22,10 @@ class WikiCardView extends Component {
     this.state = {
       departmentMap: {},
     };
-    this.isDepartment = isPro && multiTenancy && cloudMode;
   }
 
   componentDidMount() {
-    if (!canPublishRepo || !this.isDepartment) return;
+    if (!canPublishRepo || !isPro) return;
     let departmentMap = {};
     wikiAPI.listWikiDepartments().then(res => {
       res.data.forEach(item => departmentMap[item.id] = true);
