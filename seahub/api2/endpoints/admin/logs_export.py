@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from urllib.parse import quote, urljoin
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel
+from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel, event_export_status
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -49,7 +49,6 @@ class SysLogsExport(APIView):
             messages.error(request, _('Failed to export excel, invalid start or end date'))
             return HttpResponseRedirect(next_page)
 
-
         task_id = export_logs_to_excel(start, end, log_type)
         res_data = {'task_id': task_id}
         return Response(res_data)
@@ -63,28 +62,14 @@ class FileLogsExportStatus(APIView):
     def get(self, request):
         """
         Get task status by task id
-        :param request:
-        :return:
         """
         task_id = request.GET.get('task_id', '')
         if not task_id:
             error_msg = 'task_id invalid.'
             return api_error(400, error_msg)
 
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
-        params = {'task_id': task_id}
-        resp = requests.get(url, params=params, headers=headers)
+        is_finished = event_export_status(task_id)
 
-        if resp.status_code == 500:
-            logger.error('seafile io query status error: %s, %s' % (task_id, resp.content))
-            return api_error(500, 'Internal Server Error')
-        if not resp.status_code == 200:
-            return api_error(resp.status_code, resp.content)
-
-        is_finished = json.loads(resp.content)['is_finished']
         return Response({'is_finished': is_finished})
 
 

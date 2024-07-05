@@ -4,6 +4,7 @@ import jwt
 import time
 import logging
 import requests
+import json
 import datetime
 import urllib.request
 import urllib.parse
@@ -299,5 +300,22 @@ def export_logs_to_excel(start, end, log_type):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
     params = {'tstart': start_timestamp, 'tend': end_timestamp, 'log_type': log_type}
     task_id = requests.get(url, params=params, headers=headers)
+    print(task_id)
     task_id = task_id if task_id else None
     return task_id
+
+
+def event_export_status(task_id):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
+    params = {'task_id': task_id}
+    resp = requests.get(url, params=params, headers=headers)
+    if resp.status_code == 500:
+        logger.error('seafile io query status error: %s, %s' % (task_id, resp.content))
+        return api_error(500, 'Internal Server Error')
+    if not resp.status_code == 200:
+        return api_error(resp.status_code, resp.content)
+    is_finished = json.loads(resp.content)['is_finished']
+    return is_finished
