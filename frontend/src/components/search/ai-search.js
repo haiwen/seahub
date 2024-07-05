@@ -660,7 +660,7 @@ export default class AISearch extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
-          <div className="search-result-list-container">{results}</div>
+          <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           {results}
