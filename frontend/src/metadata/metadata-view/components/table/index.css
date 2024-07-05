@@ -634,6 +634,7 @@
   width: 16px;
   margin-left: 0;
   transform: translateY(0px);
+  flex-shrink: 0;
 }
 
 .sf-metadata-result-table-cell .select-all-checkbox-container .sf-metadata-icon-partially-selected {

@@ -28,7 +28,8 @@ class Records extends Component {
     this.lastScrollLeft = this.scrollLeft;
     this.initPosition = { idx: -1, rowIdx: -1, groupRecordIndex: -1 };
     const columnMetrics = this.createColumnMetrics(props);
-    const initHorizontalScrollState = this.getHorizontalScrollState({ gridWidth: props.tableContentWidth, columnMetrics, scrollLeft: 0 });
+    const { width: tableContentWidth } = props.getTableContentRect();
+    const initHorizontalScrollState = this.getHorizontalScrollState({ gridWidth: tableContentWidth, columnMetrics, scrollLeft: 0 });
     this.state = {
       columnMetrics,
       recordMetrics: this.createRowMetrics(),
@@ -45,7 +46,6 @@ class Records extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('popstate', this.onPopState);
     document.addEventListener('copy', this.onCopyCells);
     document.addEventListener('paste', this.onPasteCells);
     if (window.isMobile) {
@@ -56,11 +56,11 @@ class Records extends Component {
     }
     this.unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, this.selectNone);
     this.getScrollPosition();
-    this.checkExpandRow();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { columns, tableContentWidth } = nextProps;
+    const { columns, getTableContentRect } = nextProps;
+    const { width: tableContentWidth } = getTableContentRect();
     if (
       this.props.columns !== columns
     ) {
@@ -71,7 +71,7 @@ class Records extends Component {
         gridWidth: tableContentWidth,
       });
       this.setState({ columnMetrics });
-    } else if (this.props.tableContentWidth !== tableContentWidth) {
+    } else if (this.props.getTableContentRect()?.width !== tableContentWidth) {
       this.updateHorizontalScrollState({
         columnMetrics: this.state.columnMetrics,
         scrollLeft: this.lastScrollLeft,
@@ -82,7 +82,6 @@ class Records extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('popstate', this.onPopState);
     document.removeEventListener('copy', this.onCopyCells);
     document.removeEventListener('paste', this.onPasteCells);
     if (window.isMobile) {
@@ -143,10 +142,6 @@ class Records extends Component {
     }
   };
 
-  checkExpandRow = async () => {
-    // todo
-  };
-
   storeScrollPosition = () => {
     const scrollTop = this.bodyRef.getScrollTop();
     const scrollLeft = this.getScrollLeft();
@@ -177,11 +172,12 @@ class Records extends Component {
   };
 
   handleHorizontalScroll = (scrollLeft, scrollTop) => {
+    const { width: tableContentWidth } = this.props.getTableContentRect();
     if (isMobile) {
       this.updateHorizontalScrollState({
         scrollLeft,
         columnMetrics: this.state.columnMetrics,
-        gridWidth: this.props.tableContentWidth,
+        gridWidth: tableContentWidth,
       });
       return;
     }
@@ -213,7 +209,7 @@ class Records extends Component {
     this.updateHorizontalScrollState({
       scrollLeft,
       columnMetrics: this.state.columnMetrics,
-      gridWidth: this.props.tableContentWidth,
+      gridWidth: tableContentWidth,
     });
   };
 
@@ -357,10 +353,6 @@ class Records extends Component {
   onCellRangeSelectionUpdated = (selectedRange) => {
     this.onCellClick();
     this.updateSelectedRange(selectedRange);
-  };
-
-  onPopState = () => {
-    this.checkExpandRow();
   };
 
   onCopyCells = (e) => {
@@ -753,7 +745,7 @@ Records.propTypes = {
   groups: PropTypes.array,
   groupbys: PropTypes.array,
   searchResult: PropTypes.object,
-  tableContentWidth: PropTypes.number,
+  getTableContentRect: PropTypes.func,
   scrollToLoadMore: PropTypes.func,
   updateRecord: PropTypes.func,
   updateRecords: PropTypes.func,

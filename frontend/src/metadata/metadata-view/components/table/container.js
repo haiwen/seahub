@@ -147,12 +147,8 @@ const Container = () => {
     return recordGetter(recordIndex);
   }, [groupRecordGetter, recordGetter]);
 
-  const getTableContentWidth = useCallback(() => {
-    return containerRef?.current?.offsetWidth || 0;
-  }, [containerRef]);
-
-  const getTableContentLeft = useCallback(() => {
-    return containerRef?.current?.getBoundingClientRect()?.left || 0;
+  const getTableContentRect = useCallback(() => {
+    return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
 
   useEffect(() => {
@@ -182,8 +178,7 @@ const Container = () => {
                 modifyRecords={modifyRecords}
                 recordGetterById={recordGetterById}
                 recordGetterByIndex={recordGetterByIndex}
-                getTableContentWidth={getTableContentWidth}
-                getTableContentLeft={getTableContentLeft}
+                getTableContentRect={getTableContentRect}
                 getAdjacentRowsIds={getAdjacentRowsIds}
                 loadAll={loadAll}
               />

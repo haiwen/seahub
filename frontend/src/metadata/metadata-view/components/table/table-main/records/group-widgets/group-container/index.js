@@ -41,7 +41,7 @@ class GroupContainer extends Component {
 
   fixedFrozenDOMs = (scrollLeft, scrollTop) => {
     if (this.backDrop) {
-      const tableContentLeft = this.props.getTableContentLeft();
+      const tableContentLeft = this.props.getTableContentRect();
       this.backDrop.style.position = 'fixed';
       this.backDrop.style.marginLeft = tableContentLeft + 'px';
       this.backDrop.style.marginTop = (-scrollTop) + 'px';
@@ -134,7 +134,7 @@ class GroupContainer extends Component {
           lastFrozenColumnKey={lastFrozenColumnKey}
           columns={columns}
           summaryConfigs={summaryConfigs}
-          getTableContentLeft={this.props.getTableContentLeft}
+          getTableContentRect={this.props.getTableContentRect}
         />
       </div>
     );
@@ -158,7 +158,7 @@ GroupContainer.propTypes = {
   scrollLeft: PropTypes.number,
   maxLevel: PropTypes.number,
   summaryConfigs: PropTypes.object,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
   onExpandGroupToggle: PropTypes.func,
   updateSummaryConfig: PropTypes.func,
 };

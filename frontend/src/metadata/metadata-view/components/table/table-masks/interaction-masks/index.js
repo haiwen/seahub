@@ -29,7 +29,7 @@ import { gettext } from '../../../../../../utils/constants';
 import './index.css';
 
 const READONLY_PREVIEW_COLUMNS = [
-  CellType.LONG_TEXT, CellType.IMAGE, CellType.FILE, CellType.LINK, CellType.DIGITAL_SIGN, CellType.LINK_FORMULA,
+
 ];
 
 const propTypes = {
@@ -48,7 +48,7 @@ const propTypes = {
   getRowTop: PropTypes.func,
   scrollTop: PropTypes.number,
   getScrollLeft: PropTypes.func,
-  getTableContentLeft: PropTypes.func,
+  getTableContentRect: PropTypes.func,
   getMobileFloatIconStyle: PropTypes.func,
   onToggleMobileMoreOperations: PropTypes.func,
   onToggleInsertRecordDialog: PropTypes.func,
@@ -427,7 +427,7 @@ class InteractionMasks extends React.Component {
         if (frozen) {
           // use fixed
           const { top: containerTop } = this.container.getClientRects()[0];
-          const tableContentLeft = this.props.getTableContentLeft();
+          const { left: tableContentLeft } = this.props.getTableContentRect();
           let top = containerTop + getRowTop(isGroupView ? groupRecordIndex : rowIdx);
           let left = tableContentLeft + column.left;
           if (isGroupView) {
@@ -869,12 +869,15 @@ class InteractionMasks extends React.Component {
     const rect = cellContainer.getBoundingClientRect();
     const leftInterval = this.getLeftInterval();
     const nextColumnWidth = columns[current.idx - 1] ? columns[current.idx - 1].width : 0;
+    const { left: tableContentLeft, right } = this.props.getTableContentRect();
+    const viewLeft = tableContentLeft + 130;
+
     // selectMask is outside the viewport, scroll to next column
-    if (rect.x < 0 || rect.x > window.innerWidth) {
+    if (rect.x < 0 || rect.x > right) {
       this.props.scrollToColumn(current.idx - 1);
-    } else if (nextColumnWidth > rect.x - leftInterval) {
+    } else if (nextColumnWidth > rect.x - leftInterval - viewLeft) {
       // selectMask is part of the viewport, newScrollLeft = columnWidth - visibleWidth
-      const newScrollLeft = nextColumnWidth - (rect.x - leftInterval);
+      const newScrollLeft = nextColumnWidth - (rect.x - leftInterval - viewLeft);
       this.props.setRecordsScrollLeft(this.props.getScrollLeft() - newScrollLeft);
     }
     return ({ ...current, idx: current.idx === 0 ? 0 : current.idx - 1 });
@@ -890,13 +893,14 @@ class InteractionMasks extends React.Component {
     if (columnIdx === 1 && column.frozen === true) {
       this.props.scrollToColumn(1);
     } else {
+      const { right: tableContentRight } = this.props.getTableContentRect();
       const nextColumnWidth = columns[columnIdx + 1] ? columns[columnIdx + 1].width : 0;
       // selectMask is outside the viewport, scroll to next column
-      if (rect.x < 0 || rect.x > window.innerWidth) {
+      if (rect.x < 0 || rect.x > tableContentRight) {
         this.props.scrollToColumn(columnIdx + 1);
-      } else if (rect.x + rect.width + nextColumnWidth > window.innerWidth) {
+      } else if (rect.x + rect.width + nextColumnWidth > tableContentRight) {
         // selectMask is part of the viewport, newScrollLeft = columnWidth - visibleWidth
-        const newScrollLeft = nextColumnWidth - (window.innerWidth - rect.x - rect.width);
+        const newScrollLeft = nextColumnWidth - (tableContentRight - rect.x - rect.width);
         this.props.setRecordsScrollLeft(this.props.getScrollLeft() + newScrollLeft);
       }
     }
