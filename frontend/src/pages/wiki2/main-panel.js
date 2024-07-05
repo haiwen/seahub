@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiViewer } from '@seafile/sdoc-editor';
-import { Input } from 'reactstrap';
 import { gettext, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
+import PageHeader from './editor-component/page-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -32,6 +32,7 @@ class MainPanel extends Component {
       docUuid: '',
       currentPageConfig: {},
     };
+    this.scrollRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -53,20 +54,10 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
-  handleRenameDocument = (e) => {
-    const { nativeEvent: { isComposing } } = e;
-    if (isComposing) return;
 
-    const newName = e.target.value.trim();
-    const { currentPageConfig } = this.state;
-    const { id, name, icon } = currentPageConfig;
-    if (newName === name) return;
-    const pageConfig = { name: newName, icon };
-    this.props.onUpdatePage(id, pageConfig);
-  };
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile, config } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage } = this.props;
     const { currentPageConfig = {}, } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
@@ -77,6 +68,7 @@ class MainPanel extends Component {
           <WikiTopNav
             config={config}
             currentPageId={this.props.currentPageId}
+            currentPageConfig={currentPageConfig}
           />
           {username &&
             <Account />
@@ -89,14 +81,17 @@ class MainPanel extends Component {
             }
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
-              <>
-                <SdocWikiViewer
-                  document={this.props.editorContent}
-                  docUuid={this.state.docUuid}
-                  isWikiReadOnly={isReadOnly}
-                  topSlot={<Input className='sf-wiki-title' onCompositionEnd={this.handleRenameDocument} bsSize="lg" onChange={this.handleRenameDocument} defaultValue={currentPageConfig.name} />}
-                />
-              </>
+              <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
+                <div className='wiki-editor-container'>
+                  <PageHeader onUpdatePage={onUpdatePage} currentPageConfig={currentPageConfig} />
+                  <SdocWikiViewer
+                    document={this.props.editorContent}
+                    docUuid={this.state.docUuid}
+                    isWikiReadOnly={isReadOnly}
+                    scrollRef={this.scrollRef}
+                  />
+                </div>
+              </div>
             )}
           </div>
         </div>

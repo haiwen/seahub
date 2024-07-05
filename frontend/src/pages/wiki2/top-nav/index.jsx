@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import NavItemIcon from '../common/nav-item-icon';
+import CustomIcon from '../custom-icon';
+
 import './index.css';
 
 // Find the path array from the root to the leaf based on the currentPageId (leaf)
@@ -40,13 +42,14 @@ function getPaths(navigation, currentPageId, pages) {
 function WikiTopNav({ config, currentPageId }) {
   const { navigation, pages } = config;
   const paths = getPaths(navigation, currentPageId, pages);
+
   return (
     <div className="wiki2-top-nav d-flex">
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
             <div className='wiki2-top-nav-item d-flex'>
-              <NavItemIcon symbol={'file'} disable={true} />
+              {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               {item.name}
             </div>
             {index !== paths.length - 1 && <div>/</div>}
