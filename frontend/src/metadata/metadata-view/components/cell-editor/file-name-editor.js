@@ -4,7 +4,7 @@ import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { PRIVATE_COLUMN_KEY } from '../../_basic';
 import { Utils } from '../../../../utils/utils';
 import ImageDialog from '../../../../components/dialog/image-dialog';
-import { serviceURL, siteRoot, thumbnailSizeForOriginal } from '../../../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal } from '../../../../utils/constants';
 
 const FileNameEditor = ({ column, record, onCommitCancel }) => {
   const _isDir = useMemo(() => {
@@ -24,6 +24,7 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
     const index = fileName.lastIndexOf('.');
     if (index === -1) return '';
     const suffix = fileName.slice(index).toLowerCase();
+    if (suffix.indexOf(' ') > -1) return '';
     if (Utils.imageCheck(fileName)) return 'image';
     if (suffix === '.sdoc') return 'sdoc';
     return 'file';
@@ -79,7 +80,7 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
   }
 
   if (!fileType || fileType === 'sdoc') {
-    window.open(serviceURL + url);
+    window.open(url);
   } else {
     window.open(window.location.href + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
   }
