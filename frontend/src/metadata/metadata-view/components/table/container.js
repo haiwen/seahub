@@ -129,7 +129,7 @@ const Container = () => {
   }, [metadata]);
 
   const recordGetter = useCallback((recordIndex) => {
-    const recordId = metadata.row_ids[recordIndex];
+    const recordId = metadata.view.rows[recordIndex];
     return recordId && recordGetterById(recordId);
   }, [metadata, recordGetterById]);
 
