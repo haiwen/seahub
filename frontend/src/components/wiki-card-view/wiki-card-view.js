@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, canPublishRepo } from '../../utils/constants';
+import { gettext, username, canPublishRepo, isPro } from '../../utils/constants';
 import WikiCardGroup from './wiki-card-group';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 import './wiki-card-view.css';
+
+const { multiTenancy, cloudMode } = window.app.pageOptions;
 
 const propTypes = {
   data: PropTypes.object.isRequired,
@@ -22,10 +24,11 @@ class WikiCardView extends Component {
     this.state = {
       departmentMap: {},
     };
+    this.isDepartment = isPro && multiTenancy && cloudMode;
   }
 
   componentDidMount() {
-    if (!canPublishRepo) return;
+    if (!canPublishRepo || !this.isDepartment) return;
     let departmentMap = {};
     wikiAPI.listWikiDepartments().then(res => {
       res.data.forEach(item => departmentMap[item.id] = true);
