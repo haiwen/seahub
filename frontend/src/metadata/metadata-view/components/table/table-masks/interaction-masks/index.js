@@ -489,11 +489,6 @@ class InteractionMasks extends React.Component {
     this.closeEditor();
   };
 
-  getEditorContainer = () => {
-    // todo
-    return null;
-  };
-
   onKeyDown = (e) => {
     const keyCode = e.keyCode;
     if (isCtrlKeyHeldDown(e)) {
@@ -874,14 +869,12 @@ class InteractionMasks extends React.Component {
     const rect = cellContainer.getBoundingClientRect();
     const leftInterval = this.getLeftInterval();
     const nextColumnWidth = columns[current.idx - 1] ? columns[current.idx - 1].width : 0;
-    const appNavWidth = window.app.state.appNavWidth || 0;
-    const appLeftBarWidth = parseInt(appNavWidth) + 130;
     // selectMask is outside the viewport, scroll to next column
     if (rect.x < 0 || rect.x > window.innerWidth) {
       this.props.scrollToColumn(current.idx - 1);
-    } else if (nextColumnWidth > rect.x - leftInterval - appLeftBarWidth) {
+    } else if (nextColumnWidth > rect.x - leftInterval) {
       // selectMask is part of the viewport, newScrollLeft = columnWidth - visibleWidth
-      const newScrollLeft = nextColumnWidth - (rect.x - leftInterval - appLeftBarWidth);
+      const newScrollLeft = nextColumnWidth - (rect.x - leftInterval);
       this.props.setRecordsScrollLeft(this.props.getScrollLeft() - newScrollLeft);
     }
     return ({ ...current, idx: current.idx === 0 ? 0 : current.idx - 1 });

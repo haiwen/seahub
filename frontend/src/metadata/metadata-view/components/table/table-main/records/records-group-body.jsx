@@ -823,7 +823,6 @@ class RecordsGroupBody extends Component {
             groupOffsetLeft={groupOffsetLeft}
             scrollLeft={scrollLeft}
             leftBarWidth={0}
-            appNavWidth={0}
             columns={columns}
             summaryConfigs={summaryConfigs}
             isExpanded={isExpanded}
