@@ -132,16 +132,19 @@ export default class AISearch extends Component {
       if (this.inputRef && this.inputRef.current) {
         this.inputRef.current.focus();
       }
-    } else if (isHotkey('esc', e)) {
-      e.preventDefault();
-      this.inputRef && this.inputRef.current && this.inputRef.current.blur();
-      this.resetToDefault();
-    } else if (isHotkey('enter', e)) {
-      this.onEnter(e);
-    } else if (isHotkey('up', e)) {
-      this.onUp(e);
-    } else if (isHotkey('down', e)) {
-      this.onDown(e);
+    }
+    if (this.state.isMaskShow) {
+      if (isHotkey('esc', e)) {
+        e.preventDefault();
+        this.inputRef && this.inputRef.current && this.inputRef.current.blur();
+        this.resetToDefault();
+      } else if (isHotkey('enter', e)) {
+        this.onEnter(e);
+      } else if (isHotkey('up', e)) {
+        this.onUp(e);
+      } else if (isHotkey('down', e)) {
+        this.onDown(e);
+      }
     }
   };
 
