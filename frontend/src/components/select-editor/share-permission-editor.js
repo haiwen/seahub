@@ -11,6 +11,7 @@ const propTypes = {
   repoID: PropTypes.string,
   isTextMode: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
+  isWiki: PropTypes.bool,
   autoFocus: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
@@ -136,6 +137,7 @@ class SharePermissionEditor extends React.Component {
         translateOption={this.translatePermission}
         translateExplanation={this.translateExplanation}
         enableAddCustomPermission={this.props.enableAddCustomPermission}
+        isWiki={this.props.isWiki}
         onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
       />
     );

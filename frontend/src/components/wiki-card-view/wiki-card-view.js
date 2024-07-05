@@ -12,6 +12,8 @@ const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  leaveSharedWiki: PropTypes.func.isRequired,
+  unshareGroupWiki: PropTypes.func.isRequired,
   toggelAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
@@ -30,7 +32,7 @@ class WikiCardView extends Component {
     if (!canPublishRepo || !isPro) return;
     let departmentMap = {};
     wikiAPI.listWikiDepartments().then(res => {
-      res.data.forEach(item => departmentMap[item.email] = true);
+      res.data.forEach(item => departmentMap[item.id] = true);
       this.setState({ departmentMap });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -41,12 +43,15 @@ class WikiCardView extends Component {
   classifyWikis = (wikis) => {
     let v1Wikis = [];
     let myWikis = [];
+    let sharedWikis = [];
     let department2WikisMap = {};
     for (let i = 0; i < wikis.length; i++) {
       if (wikis[i].version === 'v1') {
         v1Wikis.push(wikis[i]);
       } else if (wikis[i].owner === username) {
         myWikis.push(wikis[i]);
+      } else if (wikis[i].type === 'shared') {
+        sharedWikis.push(wikis[i]);
       } else {
         if (!department2WikisMap[wikis[i].owner]) {
           department2WikisMap[wikis[i].owner] = [];
@@ -54,11 +59,12 @@ class WikiCardView extends Component {
         department2WikisMap[wikis[i].owner].push(wikis[i]);
       }
     }
-    return { department2WikisMap, myWikis, v1Wikis };
+    return { department2WikisMap, myWikis, v1Wikis, sharedWikis };
   };
 
+
   render() {
-    let { loading, errorMsg, wikis } = this.props.data;
+    let { loading, errorMsg, wikis, groupWikis } = this.props.data;
     const { toggelAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
 
     if (loading) {
@@ -67,13 +73,14 @@ class WikiCardView extends Component {
     if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     }
-    const { v1Wikis, myWikis, department2WikisMap } = this.classifyWikis(wikis);
+    const { v1Wikis, myWikis, sharedWikis } = this.classifyWikis(wikis);
     let wikiCardGroups = [];
     wikiCardGroups.push(
       <WikiCardGroup
         key='my-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        unshareGroupWiki={this.props.unshareGroupWiki}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
         wikis={myWikis}
@@ -83,19 +90,37 @@ class WikiCardView extends Component {
         toggelAddWikiDialog={canPublishRepo ? toggelAddWikiDialog.bind(this, null) : null}
       />
     );
-    for (let deptEmail in department2WikisMap) {
+    wikiCardGroups.push(
+      <WikiCardGroup
+        key='shared-Wikis'
+        deleteWiki={this.props.leaveSharedWiki}
+        renameWiki={this.props.renameWiki}
+        unshareGroupWiki={this.props.unshareGroupWiki}
+        wikis={sharedWikis}
+        title={gettext('Shared with me')}
+        isDepartment={false}
+        isShowAvatar={false}
+        sidePanelRate={sidePanelRate}
+        isSidePanelFolded={isSidePanelFolded}
+        toggelAddWikiDialog={null}
+      />
+    );
+    for (let deptID in groupWikis) {
+      groupWikis[deptID].wiki_info.length !== 0 &&
       wikiCardGroups.push(
         <WikiCardGroup
-          key={'department-Wikis-' + deptEmail}
+          key={'group-Wikis-' + deptID}
           deleteWiki={this.props.deleteWiki}
+          unshareGroupWiki={this.props.unshareGroupWiki}
           renameWiki={this.props.renameWiki}
           sidePanelRate={sidePanelRate}
           isSidePanelFolded={isSidePanelFolded}
-          wikis={department2WikisMap[deptEmail]}
-          title={department2WikisMap[deptEmail][0].owner_nickname}
+          group={groupWikis[deptID]}
+          wikis={groupWikis[deptID].wiki_info}
+          title={groupWikis[deptID].group_name}
           isDepartment={true}
           isShowAvatar={false}
-          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[deptEmail]) ? toggelAddWikiDialog.bind(this, deptEmail) : null}
+          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWikis[deptID]['group_id']]) ? toggelAddWikiDialog.bind(this, deptID) : null}
         />
       );
     }
@@ -104,6 +129,7 @@ class WikiCardView extends Component {
         key='old-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        unshareGroupWiki={this.props.unshareGroupWiki}
         isSidePanelFolded={isSidePanelFolded}
         sidePanelRate={sidePanelRate}
         wikis={v1Wikis}
