@@ -299,9 +299,8 @@ def export_logs_to_excel(start, end, log_type):
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
     params = {'tstart': start_timestamp, 'tend': end_timestamp, 'log_type': log_type}
-    task_id = requests.get(url, params=params, headers=headers)
-    task_id = task_id if task_id else None
-    return task_id
+    resp = requests.get(url, params=params, headers=headers)
+    return json.loads(resp.content)['task_id']
 
 
 def event_export_status(task_id):
