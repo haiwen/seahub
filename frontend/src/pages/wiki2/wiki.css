@@ -114,10 +114,10 @@ img[src=""] {
 }
 
 /* wiki editor */
-.sdoc-content-wrapper {
+.wiki-editor-container .sdoc-content-wrapper {
   height: auto;
 }
-.sdoc-editor-container {
+.wiki-editor-container .sdoc-editor-container {
   flex: 1;
   display: flex;
   min-height: 0;
@@ -144,14 +144,14 @@ img[src=""] {
   width: 300px;
 }
 
-.sdoc-editor-container {
+.wiki-editor-container .sdoc-editor-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: auto;
 }
 
-.sdoc-editor-container .wiki-viewer-container {
+.wiki-editor-container .sdoc-editor-container .wiki-viewer-container {
   display: flex;
   height: 100%;
   width: 100%;
