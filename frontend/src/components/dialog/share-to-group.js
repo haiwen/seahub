@@ -113,6 +113,7 @@ const propTypes = {
   itemPath: PropTypes.string.isRequired,
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  repoType: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   onAddCustomPermissionToggle: PropTypes.func,
 };
@@ -126,7 +127,8 @@ class ShareToGroup extends React.Component {
       selectedOption: null,
       errorMsg: [],
       permission: 'rw',
-      sharedItems: []
+      sharedItems: [],
+      isWiki: this.props.repoType === 'wiki'
     };
     this.permissions = [];
     let { itemType, isRepoOwner } = props;
@@ -140,6 +142,9 @@ class ShareToGroup extends React.Component {
     }
     if (this.props.isGroupOwnedRepo) {
       this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+    }
+    if (this.state.isWiki) {
+      this.permissions = ['rw', 'r'];
     }
   }
 
@@ -344,6 +349,7 @@ class ShareToGroup extends React.Component {
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
                   enableAddCustomPermission={isPro}
+                  isWiki={this.state.isWiki}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />
               </td>

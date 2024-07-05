@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, username } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
+import ShareWikiDialog from '../dialog/share-wiki-dialog';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
+  group: PropTypes.object,
   deleteWiki: PropTypes.func.isRequired,
+  unshareGroupWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
@@ -22,12 +25,19 @@ class WikiCardItem extends Component {
       isShowDeleteDialog: false,
       isShowRenameDialog: false,
       isItemMenuShow: false,
+      isShowShareDialog: false,
     };
   }
 
   onRenameToggle = (e) => {
     this.setState({
       isShowRenameDialog: !this.state.isShowRenameDialog,
+    });
+  };
+
+  onShareToggle = (e) => {
+    this.setState({
+      isShowShareDialog: !this.state.isShowShareDialog,
     });
   };
 
@@ -47,6 +57,14 @@ class WikiCardItem extends Component {
   deleteWiki = () => {
     let wiki = this.props.wiki;
     this.props.deleteWiki(wiki);
+    this.setState({
+      isShowDeleteDialog: !this.state.isShowDeleteDialog,
+    });
+  };
+
+  onItemUnshare = () => {
+    let wiki = this.props.wiki;
+    this.props.unshareGroupWiki(wiki, this.props.group.group_id);
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
@@ -94,7 +112,17 @@ class WikiCardItem extends Component {
 
   render() {
     const { wiki, isDepartment, isShowAvatar } = this.props;
+    let isAdmin = false;
+    if (wiki.admins){
+      isAdmin = wiki.admins.includes(username);
+    }
+    let isGroupOwner = false;
+    if (this.props.group){
+      isGroupOwner = wiki.owner.split('@')[0] === this.props.group.group_id.toString();
+    }
+    let isWikiOwner = username === wiki.owner;
     let isOldVersion = wiki.version !== 'v2';
+    let enableShare = username === wiki.owner || isAdmin;
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
     let wikiName = isOldVersion ? `${wiki.name} (old version)` : wiki.name;
@@ -120,11 +148,23 @@ class WikiCardItem extends Component {
                 style={{ 'minWidth': '0' }}
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
-                <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
+                {(isWikiOwner || isAdmin) &&
+                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
+                }
+                {enableShare &&
+                  <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                }
                 {isOldVersion ?
                   <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
-                  :
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                  : ((isDepartment && isGroupOwner) ?
+                    <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem> :
+                    (isDepartment ?
+                      <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem> :
+                      (isWikiOwner ?
+                        <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem> :
+                        <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
+                      ))
+                  )
                 }
               </DropdownMenu>
             </Dropdown>
@@ -145,14 +185,34 @@ class WikiCardItem extends Component {
                 content={<p>{gettext('Are you sure you want to unpublish Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Unpublish')}
               />
-              :
-              <DeleteWikiDialog
-                toggleCancel={this.onDeleteCancel}
-                handleSubmit={this.deleteWiki}
-                title={gettext('Delete Wiki')}
-                content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
-                footer={gettext('Delete')}
-              />
+              : ((isDepartment && isGroupOwner) ?
+                <DeleteWikiDialog
+                  toggleCancel={this.onDeleteCancel}
+                  handleSubmit={this.deleteWiki}
+                  title={gettext('Delete Wiki')}
+                  content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                  footer={gettext('Delete')}
+                /> : isDepartment ? <DeleteWikiDialog
+                  toggleCancel={this.onDeleteCancel}
+                  handleSubmit={this.onItemUnshare}
+                  title={gettext('Leave Share Wiki')}
+                  content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                  footer={gettext('Leave')}
+                /> : (isWikiOwner ? <DeleteWikiDialog
+                  toggleCancel={this.onDeleteCancel}
+                  handleSubmit={this.deleteWiki}
+                  title={gettext('Delete Wiki')}
+                  content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                  footer={gettext('Delete')}
+                /> : <DeleteWikiDialog
+                  toggleCancel={this.onDeleteCancel}
+                  handleSubmit={this.deleteWiki}
+                  title={gettext('Leave Share Wiki')}
+                  content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                  footer={gettext('Leave')}
+                />
+                )
+              )
             }
           </ModalPortal>
         }
@@ -162,6 +222,19 @@ class WikiCardItem extends Component {
               toggleCancel={this.onRenameToggle}
               onRename={this.renameWiki}
               wiki={wiki}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowShareDialog &&
+          <ModalPortal>
+            <ShareWikiDialog
+              itemType={'library'}
+              itemName={wiki.name}
+              itemPath={'/'}
+              repoID={wiki.repo_id}
+              repoEncrypted={ false }
+              enableDirPrivateShare={true}
+              toggleDialog={this.onShareToggle}
             />
           </ModalPortal>
         }

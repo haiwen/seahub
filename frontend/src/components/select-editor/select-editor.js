@@ -9,6 +9,7 @@ const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
   isEditing: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
+  isWiki: PropTypes.bool,
   autoFocus: PropTypes.bool,
   options: PropTypes.array.isRequired,
   currentOption: PropTypes.string.isRequired,
@@ -56,7 +57,7 @@ class SelectEditor extends React.Component {
     }
 
     const { enableAddCustomPermission } = this.props;
-    if (enableAddCustomPermission) {
+    if (enableAddCustomPermission && !this.props.isWiki) {
       const option = {
         value: gettext('Add custom permission'),
         isDisabled: true,

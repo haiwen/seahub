@@ -9,6 +9,8 @@ import EmptyTip from '../../components/empty-tip';
 import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
+import { seafileAPI } from '../../utils/seafile-api';
+
 
 const propTypes = {
   sidePanelRate: PropTypes.number,
@@ -23,6 +25,7 @@ class Wikis extends Component {
       errorMsg: '',
       currentDeptID: '',
       wikis: [],
+      groupWikis: [],
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
       isDropdownMenuShown: false,
@@ -35,6 +38,7 @@ class Wikis extends Component {
 
   getWikis = () => {
     let wikis = [];
+    let groupWikis = [];
     wikiAPI.listWikis().then(res => {
       wikis = wikis.concat(res.data.data);
       wikis.map(wiki => {
@@ -42,12 +46,20 @@ class Wikis extends Component {
       });
       wikiAPI.listWikis2().then(res => {
         let wikis2 = res.data.wikis;
+        groupWikis = res.data.group_wikis;
+        groupWikis.forEach(group => {
+          group.wiki_info.forEach(wiki => {
+            wiki.version = 'v2';
+            wiki.admins = group.group_admins;
+          });
+        });
         wikis2.map(wiki => {
           return wiki['version'] = 'v2';
         });
         this.setState({
           loading: false,
-          wikis: wikis.concat(wikis2)
+          wikis: wikis.concat(wikis2),
+          groupWikis: groupWikis
         });
       }).catch((error) => {
         this.setState({
@@ -89,11 +101,22 @@ class Wikis extends Component {
   addWiki = (wikiName, currentDeptID) => {
     wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
+      let groupWikis = this.state.groupWikis;
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';
-      wikis.push(new_wiki);
+      if (currentDeptID){
+        groupWikis.filter(group => {
+          if (group.group_id === currentDeptID){
+            group.wiki_info.push(new_wiki);
+          }
+          return group;
+        });
+      } else {
+        wikis.push(new_wiki);
+      }
       this.setState({
         wikis,
+        groupWikis,
         currentDeptID: '',
       });
     }).catch((error) => {
@@ -110,7 +133,14 @@ class Wikis extends Component {
         let wikis = this.state.wikis.filter(item => {
           return item.name !== wiki.name;
         });
-        this.setState({ wikis: wikis });
+        let groupWikis = this.state.groupWikis.filter(group => {
+          group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
+          return group;
+        });
+        this.setState({
+          wikis: wikis,
+          groupWikis: groupWikis,
+        });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -122,7 +152,14 @@ class Wikis extends Component {
         let wikis = this.state.wikis.filter(item => {
           return item.name !== wiki.name;
         });
-        this.setState({ wikis: wikis });
+        let groupWikis = this.state.groupWikis.filter(group => {
+          group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
+          return group;
+        });
+        this.setState({
+          wikis: wikis,
+          groupWikis: groupWikis,
+        });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -130,6 +167,57 @@ class Wikis extends Component {
         }
       });
     }
+  };
+
+  leaveSharedWiki = (wiki) => {
+    if (!wiki.owner.includes('@seafile_group')) {
+      let options = {
+        'share_type': 'personal',
+        'from': wiki.owner
+      };
+      seafileAPI.leaveShareRepo(wiki.repo_id, options).then(res => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({
+          wikis: wikis,
+        });
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error, true);
+        toaster.danger(errorMsg);
+      });
+    } else {
+      seafileAPI.leaveShareGroupOwnedRepo(wiki.repo_id).then(res => {
+        let wikis = this.state.wikis.filter(item => {
+          return item.name !== wiki.name;
+        });
+        this.setState({
+          wikis: wikis,
+        });
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error, true);
+        toaster.danger(errorMsg);
+      });
+    }
+
+  };
+
+  unshareGroupWiki = (wiki, groupId) => {
+    seafileAPI.unshareRepoToGroup(wiki.repo_id, groupId).then(() => {
+      let groupWikis = this.state.groupWikis.map(group => {
+        if (group.group_id === groupId) {
+          return {
+            ...group,
+            wiki_info: group.wiki_info.filter(item => item.name !== wiki.name)
+          };
+        }
+        return group;
+      });
+      this.setState({ groupWikis: groupWikis });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   };
 
   renameWiki = (wiki, newName) => {
@@ -213,6 +301,8 @@ class Wikis extends Component {
                 <WikiCardView
                   data={this.state}
                   deleteWiki={this.deleteWiki}
+                  leaveSharedWiki={this.leaveSharedWiki}
+                  unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
                   toggelAddWikiDialog={this.toggelAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}
