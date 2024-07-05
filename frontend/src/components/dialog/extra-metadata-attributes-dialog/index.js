@@ -4,7 +4,6 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import { zIndexes, DIALOG_MAX_HEIGHT } from '../../../constants';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import { getValidColumns } from '../../../utils/extra-attributes';
 import Column from './column';

@@ -368,6 +368,7 @@ class MetadataColumns(APIView):
 
     def post(self, request, repo_id):
         column_name = request.data.get('column_name')
+        column_type = request.data.get('column_type', 'text')
         if not column_name:
             error_msg = 'column_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -403,7 +404,7 @@ class MetadataColumns(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         column_key = gen_unique_id(column_keys)
-        column = MetadataColumn(column_key, column_name, 'text')
+        column = MetadataColumn(column_key, column_name, column_type)
 
         try:
             metadata_server_api.add_column(METADATA_TABLE.id, column.to_dict())

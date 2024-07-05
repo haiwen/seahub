@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import Icon from '../icon';
-import { gettext, canSetExProps } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
-import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 import FileTagList from '../file-tag-list';
-import ConfirmApplyFolderPropertiesDialog from '../dialog/confirm-apply-folder-properties-dialog';
 import ExtraMetadataAttributesDialog from '../dialog/extra-metadata-attributes-dialog';
 
 const propTypes = {
@@ -29,8 +27,6 @@ class DetailListView extends React.Component {
     super(props);
     this.state = {
       isEditFileTagShow: false,
-      isShowExtraProperties: false,
-      isShowApplyProperties: false,
       isShowMetadataExtraProperties: false,
     };
     this.tagListTitleID = `detail-list-view-tags-${uuidv4()}`;
@@ -67,16 +63,8 @@ class DetailListView extends React.Component {
     return Utils.joinPath(path, dirent.name);
   };
 
-  toggleExtraPropertiesDialog = () => {
-    this.setState({ isShowExtraProperties: !this.state.isShowExtraProperties });
-  };
-
   toggleExtraMetadataPropertiesDialog = () => {
     this.setState({ isShowMetadataExtraProperties: !this.state.isShowMetadataExtraProperties });
-  };
-
-  toggleApplyPropertiesDialog = () => {
-    this.setState({ isShowApplyProperties: !this.state.isShowApplyProperties });
   };
 
   renderTags = () => {
@@ -91,28 +79,6 @@ class DetailListView extends React.Component {
           <tbody>
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-            {direntDetail.permission === 'rw' && canSetExProps && (
-              <Fragment>
-                <tr className="file-extra-attributes">
-                  <th colSpan={2}>
-                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
-                      {gettext('Edit extra properties')}
-                    </div>
-                  </th>
-                </tr>
-                <tr className="file-extra-attributes">
-                  <th colSpan={2}>
-                    <div
-                      className="edit-file-extra-attributes-btn text-truncate"
-                      onClick={this.toggleApplyPropertiesDialog}
-                      title={gettext('Apply properties to files inside the folder')}
-                    >
-                      {gettext('Apply properties to files inside the folder')}
-                    </div>
-                  </th>
-                </tr>
-              </Fragment>
-            )}
             {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
               <Fragment>
                 <tr className="file-extra-attributes">
@@ -144,15 +110,6 @@ class DetailListView extends React.Component {
               <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
             </td>
           </tr>
-          {direntDetail.permission === 'rw' && canSetExProps && (
-            <tr className="file-extra-attributes">
-              <th colSpan={2}>
-                <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
-                  {gettext('Edit extra properties')}
-                </div>
-              </th>
-            </tr>
-          )}
           {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
             <tr className="file-extra-attributes">
               <th colSpan={2}>
@@ -186,22 +143,6 @@ class DetailListView extends React.Component {
             isEditFileTagShow={this.state.isEditFileTagShow}
           />
         }
-        {this.state.isShowExtraProperties && (
-          <ExtraAttributesDialog
-            repoID={this.props.repoID}
-            filePath={direntPath}
-            direntType={direntType}
-            direntDetail={direntDetail}
-            onToggle={this.toggleExtraPropertiesDialog}
-          />
-        )}
-        {this.state.isShowApplyProperties && (
-          <ConfirmApplyFolderPropertiesDialog
-            toggle={this.toggleApplyPropertiesDialog}
-            repoID={this.props.repoID}
-            path={direntPath}
-          />
-        )}
         {this.state.isShowMetadataExtraProperties && (
           <ExtraMetadataAttributesDialog
             repoID={this.props.repoID}
