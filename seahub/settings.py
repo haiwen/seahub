@@ -1037,6 +1037,23 @@ if ENABLE_LDAP:
     AUTHENTICATION_BACKENDS += ('seahub.base.accounts.CustomLDAPBackend',)
 
 #####################
+# Semantic search   #
+#####################
+INDEX_STORAGE_PATH = ''
+MODEL_CACHE_DIR = ''
+
+RETRIEVAL_NUM = 50
+MODEL_VOCAB_PATH = ''
+
+## sea-embedding
+SEA_EMBEDDING_SERVER = ''
+SEA_EMBEDDING_KEY = ''
+
+## seasech
+SEASEARCH_SERVER = ''
+SEASEARCH_TOKEN = ''
+
+#####################
 # Custom Nav Items  #
 #####################
 # an example:
