@@ -6,7 +6,7 @@ import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
-import Header from './components/header';
+//import Header from './components/header';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';
@@ -219,12 +219,13 @@ class App extends Component {
     return (
       <React.Fragment>
         <SystemNotification />
-        <Header
+        {/*<Header
           isSidePanelClosed={isSidePanelClosed}
           onCloseSidePanel={this.onCloseSidePanel}
           onShowSidePanel={this.onShowSidePanel}
           onSearchedClick={this.onSearchedClick}
         />
+        */}
         <div id="main">
           <SidePanel
             isSidePanelClosed={isSidePanelClosed}
@@ -232,7 +233,7 @@ class App extends Component {
             onCloseSidePanel={this.onCloseSidePanel}
             currentTab={currentTab}
             tabItemClick={this.tabItemClick}
-            showLogoOnlyInMobile={true}
+            showLogoOnlyInMobile={false}
             toggleFoldSideNav={this.toggleFoldSideNav}
           />
           <MainPanel>
