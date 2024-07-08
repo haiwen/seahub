@@ -117,6 +117,7 @@ img[src=""] {
 .wiki-editor-container .sdoc-content-wrapper {
   height: auto;
 }
+
 .wiki-editor-container .sdoc-editor-container {
   flex: 1;
   display: flex;
@@ -251,9 +252,10 @@ img[src=""] {
 }
 
 .cur-view-content .wiki-editor-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-height: 0;
 }
 
 .cur-view-content .sdoc-scroll-container {
