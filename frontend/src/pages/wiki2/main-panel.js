@@ -55,8 +55,6 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
-
-
   render() {
     const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage } = this.props;
     const { currentPageConfig = {}, } = this.state;

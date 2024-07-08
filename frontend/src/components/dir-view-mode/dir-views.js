@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import TreeSection from '../../tree-section';
-import { MetadataStatusManagementDialog, MetadataTreeView } from '../../../metadata';
-import metadataAPI from '../../../metadata/api';
-import toaster from '../../toast';
-
-import './index.css';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import TreeSection from '../tree-section';
+import { MetadataStatusManagementDialog, MetadataTreeView } from '../../metadata';
+import metadataAPI from '../../metadata/api';
+import toaster from '../toast';
 
 const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -63,11 +61,21 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
 
   return (
     <>
-      <TreeSection title={gettext('Views')} moreKey={{ name: 'views' }} moreOperations={moreOperations} moreOperationClick={moreOperationClick}>
+      <TreeSection
+        title={gettext('Views')}
+        moreKey={{ name: 'views' }}
+        moreOperations={moreOperations}
+        moreOperationClick={moreOperationClick}
+      >
         {!loading && metadataStatus && (<MetadataTreeView repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
-        <MetadataStatusManagementDialog value={metadataStatus} repoID={repoID} toggle={closeMetadataManagementDialog} submit={toggleMetadataStatus} />
+        <MetadataStatusManagementDialog
+          value={metadataStatus}
+          repoID={repoID}
+          toggle={closeMetadataManagementDialog}
+          submit={toggleMetadataStatus}
+        />
       )}
     </>
   );
