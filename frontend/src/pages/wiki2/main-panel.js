@@ -49,6 +49,7 @@ class MainPanel extends Component {
       accessToken: seadoc_access_token,
       serviceUrl: appConfig.serviceURL,
       assets_url: appConfig.assetsUrl,
+      isWiki: true,
     };
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
