@@ -96,7 +96,7 @@ class ExtraMetadataAttributesDialog extends Component {
   updateData = (update, column) => {
     const newRow = { ...this.state.row, ...update };
     this.setState({ row: newRow }, () => {
-      const { repoID, filePath } = this.props;
+      const { repoID } = this.props;
 
       let newValue = update[column.key];
       let recordID = this.state.row._id;

@@ -1187,18 +1187,15 @@ a.sf-popover-item {
     margin:5px -10px;
 }
 /********** Container ***********/
-#wrapper {
-}
 #header {
-    background:#f4f4f7;
-    width:100%;
-    height:53px;
+    background: #F8FAFD;
+    width: 100%;
+    height: 53px;
     font-size: 14px;
     border-bottom: 1px solid #e8e8e8;
-    padding:8px 16px 4px;
-    /*display:flex;*/
-    justify-content:space-between;
-    flex-shrink:0;
+    padding: 8px 16px 4px;
+    justify-content: space-between;
+    flex-shrink: 0;
 }
 #wide-panel-noframe {
     padding-top:16px;
