@@ -52,9 +52,8 @@
   padding: .5rem 1rem;
   display: flex;
   flex-shrink: 0;
-  background: #fff;
+  background-color: #F8FAFD;
   border-bottom: 1px solid #eee;
-  box-shadow: 0 2px 4px rgba(0,0,0, 10%);
   z-index: 100;
 }
 
