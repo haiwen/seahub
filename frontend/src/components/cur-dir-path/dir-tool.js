@@ -50,10 +50,6 @@ class DirTool extends React.Component {
     this.setState({isRepoTagDialogOpen: false});
   };
 
-  isMarkdownFile(filePath) {
-    return Utils.getFileName(filePath).includes('.md');
-  }
-
   getMenu = () => {
     const list = [];
     const { repoID, userPerm, currentPath } = this.props;
@@ -61,7 +57,7 @@ class DirTool extends React.Component {
     if (userPerm !== 'rw') {
       return list;
     }
-    if (this.isMarkdownFile(currentPath)) {
+    if (Utils.isMarkdownFile(currentPath)) {
       return list;
     }
 
