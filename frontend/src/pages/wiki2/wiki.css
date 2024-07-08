@@ -2,18 +2,6 @@ body {
   overflow: hidden;
 }
 
-.heading-icon {
-  position: absolute;
-  right: 1rem;
-  top: 25%;
-  color: #888;
-  font-size: 0.8125rem;
-}
-
-img[src=""] {
-  opacity: 0;
-}
-
 .wiki2-main-panel {
   width: calc(100% - 300px);
   display: flex;
@@ -31,34 +19,8 @@ img[src=""] {
   justify-content: space-between;
 }
 
-.cur-view-content .wiki-page-container {
-  margin: 0 -1rem -1.25rem;
-  padding: 30px 1rem 1.25rem;
-  display: flex;
-  flex: 1;
-  padding-left: 30px;
-  overflow-y: auto;
-}
-
 .main-panel-center .cur-view-content {
   padding: 0;
-}
-
-.cur-view-content .wiki-page-content {
-  width: calc(100% - 200px);
-  padding-right: 30px;
-}
-
-@media (max-width: 991.98px) {
-  .cur-view-content .wiki-page-container {
-    padding: 0 14px;
-    padding-top: 30px;
-  }
-
-  .cur-view-content .wiki-page-content {
-    width: 100%;
-    padding-right: 0;
-  }
 }
 
 .main-panel-center .cur-view-content .sf-wiki-title {
@@ -77,34 +39,6 @@ img[src=""] {
 /* reset article h1 */
 .wiki2-main-panel .article h1 {
   margin-top: 0;
-}
-
-.wiki-page-container .outline-h2,
-.wiki-page-container .outline-h3 {
-  height: 24px;
-  font-size: 12px;
-  color: #4d5156;
-}
-
-.wiki-page-container .outline-h2.active,
-.wiki-page-container .outline-h3.active {
-  color: #eb8205;
-}
-
-.wiki-page-container .sf-slate-viewer-scroll-container {
-  background-color: #fff !important;
-  padding: 0px !important;
-  overflow: inherit;
-}
-
-.wiki-page-container .sf-slate-viewer-article-container {
-  margin: 0 !important;
-  width: 100%;
-}
-
-.wiki-page-container .sf-slate-viewer-outline {
-  top: 79px;
-  width: 200px;
 }
 
 @media (max-width: 767px) {
@@ -133,16 +67,6 @@ img[src=""] {
   padding-top: 0;
   padding-bottom: 0;
   width: 100%;
-}
-
-.sdoc-wiki-outline-container {
-  height: 80%;
-  overflow-y: auto;
-  padding-right: 1rem;
-  position: fixed;
-  right: 0;
-  top: 97px;
-  width: 300px;
 }
 
 .wiki-editor-container .sdoc-editor-container {
@@ -178,10 +102,6 @@ img[src=""] {
 .sdoc-editor-container .wiki-viewer-container .side-file-bar .file-list .file-item.active {
   background-color: #e5e5e5;
   font-weight: bold;
-}
-
-.sdoc-editor-container .sdoc-wiki-outline-container {
-  width: 280px;
 }
 
 /* wiki editor style */
