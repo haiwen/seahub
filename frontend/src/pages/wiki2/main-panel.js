@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SdocWikiViewer } from '@seafile/sdoc-editor';
+import { SdocWikiEditor } from '@seafile/sdoc-editor';
 import { gettext, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
@@ -84,7 +84,7 @@ class MainPanel extends Component {
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
                   <PageHeader onUpdatePage={onUpdatePage} currentPageConfig={currentPageConfig} />
-                  <SdocWikiViewer
+                  <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}
