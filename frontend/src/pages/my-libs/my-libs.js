@@ -1,17 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
+import { navigate } from '@gatsbyjs/reach-router';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import TopToolbar from '../../components/toolbar/top-toolbar';
-import MyLibsToolbar from '../../components/toolbar/my-libs-toolbar';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ModalPortal from '../../components/modal-portal';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -25,6 +29,8 @@ class MyLibraries extends Component {
       errorMsg: '',
       isLoading: true,
       repoList: [],
+      isCreateRepoDialogOpen: false,
+      isDropdownMenuOpen: false,
       isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
@@ -62,6 +68,7 @@ class MyLibraries extends Component {
   };
 
   onCreateRepo = (repo) => {
+    this.toggleCreateRepoDialog();
     seafileAPI.createMineRepo(repo).then((res) => {
       const newRepo = new Repo({
         repo_id: res.data.repo_id,
@@ -125,20 +132,61 @@ class MyLibraries extends Component {
     this.setState({repoList: repoList});
   };
 
+  toggleCreateRepoDialog = () => {
+    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+  };
+
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
+
+  visitDeleted = () => {
+    navigate(`${siteRoot}my-libs/deleted/`);
+  };
+
+  visitDeletedviaKey = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.visiteDeleted();
+    }
+  };
+
   render() {
+    const { isDropdownMenuOpen } = this.state;
     return (
       <Fragment>
         <TopToolbar
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
         >
-          <MyLibsToolbar onCreateRepo={this.onCreateRepo} moreShown={true} />
         </TopToolbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
-              {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              <h3 className="sf-heading m-0">
+                {gettext('My Libraries')}
+                <SingleDropdownToolbar
+                  opList={[{'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog}]}
+                />
+              </h3>
+              <div>
+                {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+                  <DropdownToggle
+                    tag="i"
+                    className={'cur-view-path-btn sf3-font-more sf3-font ml-2'}
+                    data-toggle="dropdown"
+                    title={gettext('More operations')}
+                    aria-label={gettext('More operations')}
+                    aria-expanded={isDropdownMenuOpen}
+                  >
+                  </DropdownToggle>
+                  <DropdownMenu right={true}>
+                    <DropdownItem onClick={this.visitDeleted} onKeyDown={this.visitDeletedviaKey}>{gettext('Deleted Libraries')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -166,6 +214,15 @@ class MyLibraries extends Component {
               sortItems={this.sortRepoList}
             />
           }
+          {this.state.isCreateRepoDialogOpen && (
+            <ModalPortal>
+              <CreateRepoDialog
+                libraryType='mine'
+                onCreateRepo={this.onCreateRepo}
+                onCreateToggle={this.toggleCreateRepoDialog}
+              />
+            </ModalPortal>
+          )}
         </div>
       </Fragment>
     );

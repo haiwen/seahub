@@ -662,6 +662,29 @@ a, a:hover { color: #ec8000; }
   padding-left: 0.25rem;
 }
 
+/* for folded 'side nav' */
+.side-panel-folded .nav {
+  margin: 0!important;
+}
+
+.side-panel-folded .heading,
+.side-panel-folded .nav-item#share-admin-nav,
+.side-panel-folded .nav-item .nav-text,
+.side-panel-folded .nav-item .toggle-icon,
+.side-panel-folded .nav-item .sub-nav {
+  display: none!important;
+}
+
+.side-nav-bottom-toolbar {
+  height: 38px;
+  cursor: pointer;
+}
+
+.side-nav-bottom-toolbar:hover {
+  background: #f0f0f0;
+}
+/* folded 'side nav' ends */
+
 .side-nav-footer {
   display:flex;
   flex-shrink:0;
@@ -703,6 +726,11 @@ a, a:hover { color: #ec8000; }
   height: 38px;
   padding: 0 .5rem;
   margin: 0;
+}
+
+
+.side-panel-folded .nav .nav-item .nav-link {
+  height: 36px;
 }
 
 .side-nav-con .active .sharp,
@@ -1481,12 +1509,6 @@ a.table-sort-op:hover {
 
 .side-panel .side-nav-con .nav .nav-item .nav-link {
   border: none;
-}
-
-@media (max-width: 768px) {
-  .side-panel .side-nav .side-nav-con .nav-item {
-    background-color: #f8f8f8;
-  }
 }
 
 .rotate-90 {

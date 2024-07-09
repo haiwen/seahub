@@ -8,10 +8,13 @@ import Repo from '../../models/repo';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import TopToolbar from './top-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ModalPortal from '../../components/modal-portal';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func,
@@ -29,6 +32,8 @@ class PublicSharedView extends React.Component {
       isLoading: true,
       errMessage: '',
       repoList: [],
+      isCreateRepoDialogOpen: false,
+      isSelectRepoDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false,
@@ -152,10 +157,49 @@ class PublicSharedView extends React.Component {
   renderSortIconInMobile = () => {
     return (
       <>
-
         {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
       </>
     );
+  };
+
+  onCreateRepoToggle = () => {
+    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+  };
+
+  onSelectRepoToggle = () => {
+    this.setState({isSelectRepoDialogOpen: !this.state.isSelectRepoDialogOpen});
+  };
+
+  onCreateRepo = (repo) => {
+    this.onCreateRepoToggle();
+    seafileAPI.createPublicRepo(repo).then(res => {
+      let object = {
+        repo_id: res.data.id,
+        repo_name: res.data.name,
+        permission: res.data.permission,
+        size: res.data.size,
+        owner_name: res.data.owner_name,
+        owner_email: res.data.owner,
+        mtime: res.data.mtime,
+        encrypted: res.data.encrypted,
+      };
+      let repo = new Repo(object);
+      this.addRepoItem(repo);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onRepoSelectedHandler = (selectedRepoList) => {
+    selectedRepoList.forEach(repo => {
+      seafileAPI.selectOwnedRepoToPublic(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
+        this.addRepoItem(repo);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    });
   };
 
   render() {
@@ -178,14 +222,25 @@ class PublicSharedView extends React.Component {
 
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          {canAddPublicRepo && <TopToolbar onShowSidePanel={this.props.onShowSidePanel} addRepoItem={this.addRepoItem} />}
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('Shared with all')}</h3>
+              <h3 className="sf-heading m-0">
+                {gettext('Shared with all')}
+                {canAddPublicRepo &&
+                <SingleDropdownToolbar
+                  opList={[
+                    {'text': gettext('Share existing libraries'), 'onClick': this.onSelectRepoToggle},
+                    {'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle}
+                  ]}
+                />
+                }
+              </h3>
               {this.renderSortIconInMobile()}
             </div>
             <div className="cur-view-content">
@@ -201,6 +256,23 @@ class PublicSharedView extends React.Component {
           sortItems={this.sortItems}
         />
         }
+        {this.state.isCreateRepoDialogOpen && (
+          <ModalPortal>
+            <CreateRepoDialog
+              libraryType={this.state.libraryType}
+              onCreateToggle={this.onCreateRepoToggle}
+              onCreateRepo={this.onCreateRepo}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isSelectRepoDialogOpen && (
+          <ModalPortal>
+            <ShareRepoDialog
+              onRepoSelectedHandler={this.onRepoSelectedHandler}
+              onShareRepoDialogClose={this.onSelectRepoToggle}
+            />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }

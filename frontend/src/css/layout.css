@@ -7,7 +7,10 @@
 
 /* for top bottom layout*/
 #header {
-  display: flex;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 4px rgba(0,0,0, 10%);
+  z-index: 100;
 }
 
 /* for left right layout */
@@ -23,6 +26,22 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: #fff;
+}
+
+.side-panel-folded {
+  flex-basis: 69px;
+}
+
+.user-panel .side-panel-north {
+  height: 49px;
+}
+
+.positioned-top-logo {
+  position: fixed;
+  top: .5rem;
+  left: 1rem;
+  z-index: 101;
 }
 
 .main-panel {
@@ -34,12 +53,12 @@
 @media (max-width: 767px) {
   .side-panel {
     position:fixed;
+    top: 0;
     left:-300px;
     z-index: 1031;
     width: 300px;
     max-width: calc(100% - 40px);
     height:100%;
-    background:#f8f8f8;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
@@ -55,16 +74,6 @@
   background-color: #F8FAFD;
   border-bottom: 1px solid #eee;
   z-index: 100;
-}
-
-@media (max-width: 767px) {
-  .side-panel-north {
-    border-right: 1px solid #eee;
-  }
-
-  .main-panel-north {
-    padding-bottom: 0.25rem;
-  }
 }
 
 .side-panel-center,

@@ -5,6 +5,7 @@ import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '
 const propTypes = {
   onCloseSidePanel: PropTypes.func,
   showCloseSidePanelIcon: PropTypes.bool,
+  positioned: PropTypes.bool
 };
 
 class Logo extends React.Component {
@@ -14,8 +15,9 @@ class Logo extends React.Component {
   };
 
   render() {
+    const { positioned } = this.props;
     return (
-      <div className="top-logo">
+      <div className={`top-logo ${positioned ? 'd-none d-md-block positioned-top-logo' : ''}`}>
         <a href={siteRoot} id="logo">
           <img src={logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>

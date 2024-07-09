@@ -5,7 +5,7 @@ import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
-  canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems
+  canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -16,6 +16,8 @@ import CreateGroupDialog from '../components/dialog/create-group-dialog';
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
+  isSidePanelFolded: PropTypes.bool,
+  toggleFoldSideNav: PropTypes.func
 };
 
 const SUB_NAV_ITEM_HEIGHT = 28;
@@ -23,12 +25,13 @@ const SUB_NAV_ITEM_HEIGHT = 28;
 class MainSideNav extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       filesNavUnfolded: false,
       sharedExtended: false,
       closeSideBar:false,
       groupItems: [],
-      isCreateGroupDialogOpen: false
+      isCreateGroupDialogOpen: false,
     };
     this.adminHeight = 0;
     this.filesNavHeight = 0;
@@ -214,12 +217,22 @@ class MainSideNav extends React.Component {
     });
   };
 
+  toggleMinimize = () => {
+    this.setState({
+      isMinimized: !this.state.isMinimized
+    }, () => {
+      localStorage.setItem('sf_user_side_nav_minimized', this.state.isMinimized);
+    });
+  };
+
+
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { filesNavUnfolded } = this.state;
+    const { isSidePanelFolded } = this.props;
     return (
       <div className="side-nav">
-        <div className="side-nav-con">
+        <div className={'side-nav-con d-flex flex-column'}>
           <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
           <ul className="nav nav-pills flex-column nav-container">
             <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
@@ -334,6 +347,16 @@ class MainSideNav extends React.Component {
             </ul>
           )
           }
+
+          <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
+            {isSidePanelFolded ? <img src={`${mediaUrl}img/open-sidebar.svg`} width="20" alt="" title={gettext('Unfold the sidebar')} /> : (
+              <>
+                <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
+                <span>{gettext('Fold the sidebar')}</span>
+              </>
+            )}
+          </div>
+
         </div>
       </div>
     );
