@@ -7,13 +7,12 @@ import TreeSection from '../tree-section';
 const DirOthers = ({ userPerm, repoID, currentPath }) => {
 
   let trashUrl = null;
-  let historyUrl = null;
+  const historyUrl = siteRoot + 'repo/history/' + repoID + '/';
   if (userPerm === 'rw' && !Utils.isMarkdownFile(currentPath)) {
     if (Utils.getFileName(currentPath)) {
       trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
     } else {
       trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
-      historyUrl = siteRoot + 'repo/history/' + repoID + '/';
     }
   }
 
@@ -29,16 +28,14 @@ const DirOthers = ({ userPerm, repoID, currentPath }) => {
           </div>
         </div>
       }
-      {historyUrl &&
-        <div className='tree-node-inner text-nowrap' title={gettext('History')} onClick={() => location.href = historyUrl}>
-          <div className="tree-node-text">{gettext('History')}</div>
-          <div className="left-icon">
-            <div className="tree-node-icon">
-              <span className="sf3-font-history sf3-font"></span>
-            </div>
+      <div className='tree-node-inner text-nowrap' title={gettext('History')} onClick={() => location.href = historyUrl}>
+        <div className="tree-node-text">{gettext('History')}</div>
+        <div className="left-icon">
+          <div className="tree-node-icon">
+            <span className="sf3-font-history sf3-font"></span>
           </div>
         </div>
-      }
+      </div>
     </TreeSection>
   );
 };
