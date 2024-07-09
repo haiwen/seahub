@@ -237,6 +237,7 @@
 
 .dir-content-resize:hover {
   opacity: 1;
+  cursor: col-resize;
 }
 
 .dir-content-resize .line {
@@ -265,7 +266,6 @@
 
 .dir-content-resize:hover .drag-handler {
   display: block;
-  cursor: col-resize;
 }
 
 .readonly-tip-message {
