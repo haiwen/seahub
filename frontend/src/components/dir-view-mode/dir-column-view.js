@@ -73,6 +73,8 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired
 };
 
+const DRAG_HANDLER_HEIGHT = 26;
+
 class DirColumnView extends React.Component {
 
   constructor(props) {
@@ -82,6 +84,8 @@ class DirColumnView extends React.Component {
       navRate: 0.25,
     };
     this.containerWidth = null;
+    this.resizeRef = null;
+    this.dragHandler = null;
   }
 
   onResizeMouseUp = () => {
@@ -124,6 +128,17 @@ class DirColumnView extends React.Component {
     }
   };
 
+  onMouseOver = (event) => {
+    if (!this.dragHandler) return;
+    const { top } = this.resizeRef.getBoundingClientRect();
+    const dragHandlerTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerTop);
+  };
+
+  setDragHandlerTop = (top) => {
+    this.dragHandler.style.top = top + 'px';
+  };
+
   setCookie = (name, value) => {
     let cookie = name + '=' + value + ';';
     document.cookie = cookie;
@@ -152,11 +167,12 @@ class DirColumnView extends React.Component {
 
   render() {
     const { currentMode, isTreePanelShown } = this.props;
-    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
-    const select = this.state.inResizing ? 'none' : '';
-    const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
+    const { navRate, inResizing } = this.state;
+    const onResizeMove = inResizing ? this.onResizeMouseMove : null;
+    const select = inResizing ? 'none' : '';
+    const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
-      <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
+      <div className="dir-column-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         {isTreePanelShown && (
           <>
             <DirColumnNav
@@ -173,15 +189,24 @@ class DirColumnView extends React.Component {
               onRenameNode={this.props.onRenameNode}
               onDeleteNode={this.props.onDeleteNode}
               repoID={this.props.repoID}
-              navRate={this.state.navRate}
-              inResizing={this.state.inResizing}
+              navRate={navRate}
+              inResizing={inResizing}
               currentRepoInfo={this.props.currentRepoInfo}
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
             />
-            <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
+            <div
+              className="dir-content-resize"
+              ref={ref => this.resizeRef = ref}
+              style={{ left: `calc(${navRate ? navRate * 100 + '%' : '25%'} - 1px)` }}
+              onMouseDown={this.onResizeMouseDown}
+              onMouseOver={this.onMouseOver}
+            >
+              <div className="line"></div>
+              <div className="drag-handler" ref={ref => this.dragHandler = ref} style={{ height: DRAG_HANDLER_HEIGHT }}></div>
+            </div>
           </>
         )}
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>

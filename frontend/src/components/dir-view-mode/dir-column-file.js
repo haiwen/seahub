@@ -59,7 +59,7 @@ class DirColumnFile extends React.Component {
       };
 
       return (
-        <div className="w-100 h-100 o-hidden d-flex" style={{ paddingRight: 10, flexDirection: 'column', alignItems: 'center' }}>
+        <div className="w-100 h-100 o-hidden d-flex" style={{ paddingRight: 10, paddingLeft: 10, flexDirection: 'column', alignItems: 'center' }}>
           <div className="" style={{ width: '100%', height: 10, zIndex: 7, transform: 'translateZ(1000px)', position: 'relative', background: '#fff' }}></div>
           <SeafileMetadata repoID={this.props.repoID} currentRepoInfo={this.props.currentRepoInfo} />
         </div>
