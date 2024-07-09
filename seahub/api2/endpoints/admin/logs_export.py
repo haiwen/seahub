@@ -18,8 +18,6 @@ from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
 
-logger = logging.getLogger(__name__)
-
 
 class SysLogsExport(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

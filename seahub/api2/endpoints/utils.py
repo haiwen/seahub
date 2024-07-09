@@ -297,12 +297,12 @@ def format_date(start, end):
 
 
 def export_logs_to_excel(start, end, log_type):
-    start_timestamp, end_timestamp = format_date(start, end)
+    start_time, end_time = format_date(start, end)
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
-    params = {'start_time': start_timestamp, 'end_time': end_timestamp, 'log_type': log_type}
+    params = {'start_time': start_time, 'end_time': end_time, 'log_type': log_type}
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
