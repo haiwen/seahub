@@ -33,8 +33,12 @@
   height: 49px;
 }
 
+.user-panel {
+  position: relative;
+}
+
 .positioned-top-logo {
-  position: fixed;
+  position: absolute;
   top: .5rem;
   left: 1rem;
   z-index: 101;
