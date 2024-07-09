@@ -286,19 +286,23 @@ def sdoc_export_to_docx(path, username, doc_uuid, download_token,
     return resp
 
 
-def export_logs_to_excel(start, end, log_type):
+def format_date(start, end):
     start_struct_time = datetime.datetime.strptime(start, "%Y-%m-%d")
     start_timestamp = time.mktime(start_struct_time.timetuple())
 
     end_struct_time = datetime.datetime.strptime(end, "%Y-%m-%d")
     end_timestamp = time.mktime(end_struct_time.timetuple())
     end_timestamp += 24 * 60 * 60
+    return start_timestamp, end_timestamp
 
+
+def export_logs_to_excel(start, end, log_type):
+    start_timestamp, end_timestamp = format_date(start, end)
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
-    params = {'tstart': start_timestamp, 'tend': end_timestamp, 'log_type': log_type}
+    params = {'start_time': start_timestamp, 'end_time': end_timestamp, 'log_type': log_type}
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
@@ -311,7 +315,7 @@ def event_export_status(task_id):
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
     if resp.status_code == 500:
-        logger.error('seafile io query status error: %s, %s' % (task_id, resp.content))
+        logger.error('query export status error: %s, %s' % (task_id, resp.content))
         return api_error(500, 'Internal Server Error')
     if not resp.status_code == 200:
         return api_error(resp.status_code, resp.content)

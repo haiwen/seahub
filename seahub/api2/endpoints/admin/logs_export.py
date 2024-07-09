@@ -12,7 +12,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from urllib.parse import quote, urljoin
+from rest_framework import status
+from urllib.parse import quote
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import check_time_period_valid, export_logs_to_excel, event_export_status
@@ -21,8 +22,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
-from seahub.utils import is_pro_version
-from seahub.settings import SITE_ROOT, SEAFEVENTS_SERVER_URL, SECRET_KEY
+from seahub.settings import SITE_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -37,17 +37,13 @@ class SysLogsExport(APIView):
         if not next_page:
             next_page = SITE_ROOT
 
-        if not is_pro_version():
-            messages.error(request, _('Failed to export excel, this feature is only in professional version.'))
-            return HttpResponseRedirect(next_page)
-
         start = request.GET.get('start', None)
         end = request.GET.get('end', None)
         log_type = request.GET.get('logType', None)
 
         if not check_time_period_valid(start, end):
-            messages.error(request, _('Failed to export excel, invalid start or end date'))
-            return HttpResponseRedirect(next_page)
+            error_msg = 'Failed to export excel, invalid start or end date.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         task_id = export_logs_to_excel(start, end, log_type)
         res_data = {'task_id': task_id}
@@ -66,7 +62,7 @@ class FileLogsExportStatus(APIView):
         task_id = request.GET.get('task_id', '')
         if not task_id:
             error_msg = 'task_id invalid.'
-            return api_error(400, error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         is_finished = event_export_status(task_id)
 
@@ -81,7 +77,7 @@ def sys_log_export_excel(request):
     
     if not task_id:
         error_msg = 'task_id invalid.'
-        return api_error(400, error_msg)
+        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
     if log_type == 'loginadmin':
         excel_name = 'login-logs.xlsx'
@@ -93,12 +89,12 @@ def sys_log_export_excel(request):
         excel_name = 'perm-audit-logs.xlsx'
     else:
         error_msg = 'log_type invalid'
-        return api_error(400, error_msg)
+        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
     target_dir = os.path.join('/tmp/seafile_events/', task_id)
     tmp_excel_path = os.path.join(target_dir, excel_name)
     if not os.path.isfile(tmp_excel_path):
-        return api_error(400, excel_name + ' not found.')
+        return api_error(status.HTTP_400_BAD_REQUEST, excel_name + ' not found.')
 
     response = FileResponse(open(tmp_excel_path, 'rb'), content_type='application/ms-excel', as_attachment=True)
     try:
