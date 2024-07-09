@@ -33,20 +33,21 @@
   flex-basis: 69px;
 }
 
-.side-panel-folded .side-panel-north {
+.user-panel .side-panel-north {
   height: 49px;
 }
 
-.side-panel-folded .top-logo {
+.positioned-top-logo {
   position: fixed;
-  width: 128px;
+  top: .5rem;
+  left: 1rem;
+  z-index: 101;
 }
 
 .main-panel {
   flex: 1 0 78%;
   display: flex;
   flex-direction: column;
-  z-index: 0; /* for .side-panel-folded */
 }
 
 @media (max-width: 767px) {

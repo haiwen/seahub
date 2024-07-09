@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../utils/utils';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
 
@@ -20,8 +21,8 @@ class SidePanel extends React.Component {
     const { children, isSidePanelFolded, showLogoOnlyInMobile = false } = this.props;
     return (
       <div className={`side-panel ${isSidePanelFolded ? 'side-panel-folded' : ''} ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
-        <div className={`side-panel-north ${showLogoOnlyInMobile ? 'd-md-none' : ''}`}>
-          <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
+        <div className={'side-panel-north'}>
+          {showLogoOnlyInMobile && !Utils.isDesktop() && <Logo onCloseSidePanel={this.props.onCloseSidePanel} />}
         </div>
         <div className="side-panel-center">
           {children ? children :

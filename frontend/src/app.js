@@ -7,6 +7,7 @@ import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
 //import Header from './components/header';
+import Logo from './components/logo';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';
@@ -226,14 +227,15 @@ class App extends Component {
           onSearchedClick={this.onSearchedClick}
         />
         */}
-        <div id="main">
+        <div id="main" className="user-panel">
+          <Logo onCloseSidePanel={this.onCloseSidePanel} positioned={true} />
           <SidePanel
             isSidePanelClosed={isSidePanelClosed}
             isSidePanelFolded={isSidePanelFolded}
             onCloseSidePanel={this.onCloseSidePanel}
             currentTab={currentTab}
             tabItemClick={this.tabItemClick}
-            showLogoOnlyInMobile={false}
+            showLogoOnlyInMobile={true}
             toggleFoldSideNav={this.toggleFoldSideNav}
           />
           <MainPanel>
