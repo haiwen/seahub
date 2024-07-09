@@ -5,6 +5,8 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
+import './dir-column-file.css';
+
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -59,8 +61,8 @@ class DirColumnFile extends React.Component {
       };
 
       return (
-        <div className="w-100 h-100 o-hidden d-flex" style={{ paddingRight: 10, paddingLeft: 10, flexDirection: 'column', alignItems: 'center' }}>
-          <div className="" style={{ width: '100%', height: 10, zIndex: 7, transform: 'translateZ(1000px)', position: 'relative', background: '#fff' }}></div>
+        <div className="dir-column-file w-100 h-100 o-hidden d-flex">
+          <div className="dir-column-file-top"></div>
           <SeafileMetadata repoID={this.props.repoID} currentRepoInfo={this.props.currentRepoInfo} />
         </div>
       );
