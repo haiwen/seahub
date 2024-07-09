@@ -25,14 +25,14 @@ class SidePanel extends React.Component {
           {showLogoOnlyInMobile && !Utils.isDesktop() && <Logo onCloseSidePanel={this.props.onCloseSidePanel} />}
         </div>
         <div className="side-panel-center">
-          {children ? children :
+          {children ? children : (
             <MainSideNav
               tabItemClick={this.props.tabItemClick}
               currentTab={this.props.currentTab}
               isSidePanelFolded={isSidePanelFolded}
               toggleFoldSideNav={this.props.toggleFoldSideNav}
             />
-          }
+          )}
         </div>
       </div>
     );
