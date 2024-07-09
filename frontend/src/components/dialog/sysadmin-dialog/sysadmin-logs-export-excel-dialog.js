@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, I
 import { gettext, siteRoot } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
 import moment from 'moment';
 
 class LogsExportExcelDialog extends React.Component {
@@ -67,6 +68,19 @@ class LogsExportExcelDialog extends React.Component {
             }
           });
         }, 1000);
+      }
+    }).catch(error => {
+      this.props.toggle();
+      if (error.response && error.response.status === 500) {
+        const error_msg = error.response.data ? error.response.data['error_msg'] : null;
+        if (error_msg && error_msg !== 'Internal Server Error') {
+          toaster.danger(error_msg);
+        } else {
+          toaster.danger(gettext('Internal Server Error.'));
+        }
+      } else {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       }
     });
   };

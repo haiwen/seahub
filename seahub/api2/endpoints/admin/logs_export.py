@@ -1,13 +1,8 @@
-import json
 import os
 import logging
-import requests
-import jwt
 import time
 from shutil import rmtree
-from django.contrib import messages
-from django.http import HttpResponseRedirect, FileResponse
-from django.utils.translation import gettext as _
+from django.http import FileResponse
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -22,7 +17,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import sys_staff_required
-from seahub.settings import SITE_ROOT
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +27,6 @@ class SysLogsExport(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        next_page = request.headers.get('referer', None)
-        if not next_page:
-            next_page = SITE_ROOT
-
         start = request.GET.get('start', None)
         end = request.GET.get('end', None)
         log_type = request.GET.get('logType', None)
