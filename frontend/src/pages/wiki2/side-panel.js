@@ -7,6 +7,7 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
 import PageUtils from './wiki-nav/page-utils';
+import Page from './models/page';
 import { isObjectNotEmpty } from './utils';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
@@ -38,7 +39,7 @@ class SidePanel extends Component {
     const { pages } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
     config.pages.splice(index, 1);
-    // TODO: To delete a page, do you need to delete all subpages at once (requires a new API)
+    // TODO: To delete a page, do you need to delete all subpages at once（update PageUtils delete a page)
     wikiAPI.deleteWiki2Page(wikiId, pageId).then(res=>{
       this.props.updateWikiConfig(config);
     }).catch((error) => {
@@ -52,14 +53,14 @@ class SidePanel extends Component {
     }
   };
 
-  addPageInside = async ({ newConfig }) => {
-    this.props.updateWikiConfig(newConfig);
+  addPageInside = async ({ parentPageId, page_id, name, icon, path, docUuid, successCallback, errorCallback}) => {
+    const newPage = new Page({ id: page_id, name, icon, path, docUuid });
+    this.addPage(newPage, parentPageId, successCallback, errorCallback);
   };
 
-  onAddNewPage = async ({ page_id, newConfig, successCallback, jumpToNewPage = true }) => {
-    this.props.updateWikiConfig(newConfig);
-    jumpToNewPage && this.props.setCurrentPage(page_id, successCallback);
-    successCallback();
+  onAddNewPage = async ({ name, icon, path, page_id, docUuid, successCallback, errorCallback, jumpToNewPage = true }) => {
+    const newPage = new Page({ id: page_id, name, icon, path, docUuid });
+    this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
   };
 
   duplicatePage = async (fromPageConfig, successCallback, errorCallback) => {
@@ -82,11 +83,10 @@ class SidePanel extends Component {
     config.pages.push(page);
     PageUtils.addPage(navigation, pageId, parentId);
     config.navigation = navigation;
-    const onSuccess = () => {
-      jumpToNewPage && this.props.setCurrentPage(pageId, successCallback);
-      successCallback();
-    };
-    this.props.saveWikiConfig(config, onSuccess, errorCallback);
+    JSON.stringify(config);
+    this.props.updateWikiConfig(config);
+    jumpToNewPage && this.props.setCurrentPage(pageId, successCallback);
+    successCallback && successCallback();
   };
 
   movePage = ({ moved_page_id, target_page_id, move_position }) => {
@@ -94,7 +94,8 @@ class SidePanel extends Component {
     let { navigation } = config;
     PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
     config.navigation = navigation;
-    this.props.saveWikiConfig(config);
+    JSON.stringify(config);
+    this.props.updateWikiConfig(config);
   };
 
   renderWikiNav = () => {
@@ -126,18 +127,21 @@ class SidePanel extends Component {
   handleAddNewPage = (jumpToNewPage = true, pageName = 'Untitled') => {
     const voidFn = () => void 0;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
-      const { page_id } = res.data.file_info;
-      const newConfig = JSON.parse(res.data.wiki.wiki_config);
+      const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
       this.onAddNewPage({
         page_id: page_id,
-        name: pageName,
-        newConfig: newConfig,
+        name: page_name,
+        icon: '',
+        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
+        docUuid: doc_uuid,
         successCallback: voidFn,
+        errorCallback: voidFn,
+        jumpToNewPage,
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.onError();
+
     });
   };
 

@@ -226,24 +226,15 @@ def save_wiki_config(wiki, username, wiki_config):
         raise Exception(resp.text)
 
 
-def delete_nav_by_id(navigation, page_id):
-    def delete_nav(items, page_id):
-        for item in items[:]:
-            if item['id'] == page_id:
-                items.remove(item)
-            elif 'children' in item:
-                delete_nav(item['children'], page_id)
-
-    delete_nav(navigation, page_id)
-
-
 def delete_page(pages, id_set):
     new_pages = []
+    old_pages = []
     for page in pages:
         if page['id'] in id_set:
             new_pages.append(page)
-
-    return new_pages
+        else:
+            old_pages.append(page)
+    return new_pages, old_pages
 
 
 def pop_nav(navigation, page_id):
@@ -262,20 +253,10 @@ def move_nav(navigation, target_id, moved_nav):
     for nav in navigation:
         if nav['id'] == target_id:
             if 'children' in nav:
-                nav['children'].append(moved_nav)
+                nav['children'].insert(0, moved_nav)
             else:
                 nav['children'] = [moved_nav]
             return
         if 'children' in nav:
             move_nav(nav['children'], target_id, moved_nav)
 
-
-def same_level_move_nav(navigation, index, target_id, moved_nav):
-    for nav in navigation:
-        if nav['id'] == target_id:
-            navigation.insert(index, moved_nav)
-            return
-        if 'children' in nav:
-            if target_id in nav['children']:
-                nav['children'].insert(index, moved_nav)
-            same_level_move_nav(nav['children'], index, target_id, moved_nav)

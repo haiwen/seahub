@@ -32,13 +32,17 @@ const dropTarget = {
   drop(props, monitor) {
     const dragSource = monitor.getItem();
     if (dragSource.mode === 'wiki-page') {
-      const { page: targetPage } = props;
+      const { pageIndex: targetIndex, page: targetPage } = props;
       const draggedPageId = dragSource.data.id;
       const targetPageId = targetPage.id;
       if (draggedPageId !== targetPageId) {
-        wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId).then(res => {
-          const newConfig = JSON.parse(res.data.wiki_config);
-          props.updateWikiConfig(newConfig);
+        const sourceIndex = dragSource.idx;
+        const move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
+        wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId, move_position).then(res => {
+          props.onMovePage({
+            moved_page_id: draggedPageId,
+            target_page_id: targetPageId,
+            move_position,});
         }).catch((error) => {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
