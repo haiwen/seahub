@@ -8,7 +8,7 @@ const DirOthers = ({ userPerm, repoID, currentPath }) => {
 
   let trashUrl = null;
   const historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-  if (userPerm === 'rw' && !Utils.isMarkdownFile(currentPath)) {
+  if (userPerm === 'rw') {
     if (Utils.getFileName(currentPath)) {
       trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
     } else {
