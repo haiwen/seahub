@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Utils } from '../utils/utils';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool,
@@ -19,8 +21,9 @@ class SidePanel extends React.Component {
 
   render() {
     const { children, isSidePanelFolded, showLogoOnlyInMobile = false } = this.props;
+    const style = isSidePanelFolded ? { flexBasis: SIDE_PANEL_FOLDED_WIDTH } : {};
     return (
-      <div className={`side-panel ${isSidePanelFolded ? 'side-panel-folded' : ''} ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
+      <div className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })} style={style}>
         <div className={'side-panel-north'}>
           {showLogoOnlyInMobile && !Utils.isDesktop() && <Logo onCloseSidePanel={this.props.onCloseSidePanel} />}
         </div>

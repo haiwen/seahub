@@ -29,10 +29,6 @@
   background: #fff;
 }
 
-.side-panel-folded {
-  flex-basis: 69px;
-}
-
 .user-panel .side-panel-north {
   height: 49px;
 }
