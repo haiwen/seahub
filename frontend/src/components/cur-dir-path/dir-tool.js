@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
@@ -52,40 +52,20 @@ class DirTool extends React.Component {
 
   getMenu = () => {
     const list = [];
-    const { repoID, userPerm, currentPath } = this.props;
-    const { TAGS, TRASH, HISTORY } = TextTranslation;
-    if (userPerm !== 'rw') {
+    const { userPerm, currentPath } = this.props;
+    if (userPerm !== 'rw' || Utils.isMarkdownFile(currentPath)) {
       return list;
     }
-    if (Utils.isMarkdownFile(currentPath)) {
-      return list;
-    }
-
+    const { TAGS } = TextTranslation;
     list.push(TAGS);
-
-    if (Utils.getFileName(currentPath)) {
-      let trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
-      list.push({...TRASH, href: trashUrl});
-    } else {
-      let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
-      list.push({...TRASH, href: trashUrl});
-      let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-      list.push({...HISTORY, href: historyUrl});
-    }
     return list;
   };
 
   onMenuItemClick = (item) => {
-    const { key, href } = item;
+    const { key } = item;
     switch (key) {
       case 'Tags':
         this.setState({isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen});
-        break;
-      case 'Trash':
-        location.href = href;
-        break;
-      case 'History':
-        location.href = href;
         break;
     }
   };

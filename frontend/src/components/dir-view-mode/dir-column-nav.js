@@ -14,6 +14,9 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TreeSection from '../../components/tree-section';
 import DirViews from './dir-views';
+import DirOthers from './dir-others';
+
+import './dir-column-nav.css';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -268,7 +271,17 @@ class DirColumnNav extends React.Component {
             repoID={this.props.repoID}
           />
         </TreeSection>
-        <DirViews repoID={this.props.repoID} currentPath={this.props.currentPath} userPerm={this.props.userPerm} onNodeClick={this.onNodeClick}/>
+        <DirViews
+          repoID={this.props.repoID}
+          currentPath={this.props.currentPath}
+          userPerm={this.props.userPerm}
+          onNodeClick={this.onNodeClick}
+        />
+        <DirOthers
+          repoID={this.props.repoID}
+          currentPath={this.props.currentPath}
+          userPerm={this.props.userPerm}
+        />
       </>
     );
   };

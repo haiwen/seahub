@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 
 import './index.css';
 
-const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick }) => {
+const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick, className }) => {
   const [showChildren, setShowChildren] = useState(true);
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
@@ -43,8 +44,13 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
   }, []);
 
   return (
-    <div className="tree-section">
-      <div className={`tree-section-header${highlight ? ' tree-section-header-hover' : ''}`} onMouseEnter={onMouseEnter} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave}>
+    <div className={classnames('tree-section', {[className]: className})}>
+      <div
+        className={classnames('tree-section-header', {'tree-section-header-hover': highlight})}
+        onMouseEnter={onMouseEnter}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
+      >
         <div className="tree-section-header-title">{title}</div>
         <div className="tree-section-header-operations">
           {validMoreOperations.length > 0 && (
@@ -81,6 +87,7 @@ TreeSection.propTypes = {
   children: PropTypes.any,
   moreKey: PropTypes.object,
   moreOperationClick: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default TreeSection;
