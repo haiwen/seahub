@@ -667,6 +667,10 @@ a, a:hover { color: #ec8000; }
   margin: 0!important;
 }
 
+.side-panel-folded .nav .nav-item {
+  margin-bottom: 4px;
+}
+
 .side-panel-folded .heading,
 .side-panel-folded .nav-item#share-admin-nav,
 .side-panel-folded .nav-item .nav-text,
@@ -726,11 +730,6 @@ a, a:hover { color: #ec8000; }
   height: 38px;
   padding: 0 .5rem;
   margin: 0;
-}
-
-
-.side-panel-folded .nav .nav-item .nav-link {
-  height: 36px;
 }
 
 .side-nav-con .active .sharp,
