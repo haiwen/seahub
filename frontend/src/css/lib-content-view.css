@@ -229,7 +229,7 @@
   width: 6px;
   position: absolute;
   top: 0;
-  z-index: 1;
+  z-index: 8;
   opacity: 0;
   transition-duration: .2s;
   transition-property: opacity;
