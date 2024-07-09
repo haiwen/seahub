@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import TreeSection from '../tree-section';
 
-const DirOthers = ({ userPerm, repoID, currentPath }) => {
+const DirOthers = ({ userPerm, repoID }) => {
 
   let trashUrl = null;
   const historyUrl = siteRoot + 'repo/history/' + repoID + '/';
   if (userPerm === 'rw') {
-    if (Utils.getFileName(currentPath)) {
-      trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
-    } else {
-      trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
-    }
+    trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
   }
 
   return (
@@ -43,7 +38,6 @@ const DirOthers = ({ userPerm, repoID, currentPath }) => {
 DirOthers.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
-  currentPath: PropTypes.string,
 };
 
 export default DirOthers;
