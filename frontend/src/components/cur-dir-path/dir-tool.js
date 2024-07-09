@@ -7,6 +7,7 @@ import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -79,13 +80,14 @@ class DirTool extends React.Component {
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode } = this.props;
+    const { repoID, currentMode, currentPath } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
+    const isFileExtended = currentPath === '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
     return (
       <React.Fragment>
         <div className="d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
-          {!this.props.isCustomPermission &&
+          {(!this.props.isCustomPermission && !isFileExtended) &&
             <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </span>
