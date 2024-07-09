@@ -10,6 +10,7 @@ import ToolbarForSelectedDirents from '../../components/toolbar/selected-dirents
 import '../../css/lib-content-view.css';
 
 const propTypes = {
+  isSidePanelFolded: PropTypes.bool,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,
 
@@ -249,6 +250,7 @@ class LibContentContainer extends React.Component {
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <DirColumnView
+                isSidePanelFolded={this.props.isSidePanelFolded}
                 isTreePanelShown={this.props.isTreePanelShown}
                 currentMode={this.props.currentMode}
                 path={this.props.path}

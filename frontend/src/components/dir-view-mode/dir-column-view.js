@@ -4,8 +4,10 @@ import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 
 const propTypes = {
+  isSidePanelFolded: PropTypes.bool,
   isTreePanelShown: PropTypes.bool.isRequired,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
@@ -99,7 +101,9 @@ class DirColumnView extends React.Component {
   };
 
   onResizeMouseMove = (e) => {
-    let sizeNavWidth = this.containerWidth / 0.78 * 0.22 + 3;
+    const { isSidePanelFolded } = this.props;
+    let sizeNavWidth = isSidePanelFolded ? SIDE_PANEL_FOLDED_WIDTH + 3 : this.containerWidth / 0.78 * 0.22 + 3;
+
     let rate = (e.nativeEvent.clientX - sizeNavWidth) / this.containerWidth;
     if (rate < 0.1) {
       this.setState({

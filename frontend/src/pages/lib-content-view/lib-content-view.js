@@ -23,6 +23,7 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 
 const propTypes = {
+  isSidePanelFolded: PropTypes.bool,
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
@@ -2068,6 +2069,7 @@ class LibContentView extends React.Component {
         </div>
         <div className="main-panel-center flex-row">
           <LibContentContainer
+            isSidePanelFolded={this.props.isSidePanelFolded}
             repoEncrypted={this.state.repoEncrypted}
             isRepoOwner={isRepoOwner}
             onFilesTagChanged={this.onFileTagChanged}
