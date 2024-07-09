@@ -86,6 +86,7 @@ class DirColumnView extends React.Component {
     this.containerWidth = null;
     this.resizeRef = null;
     this.dragHandler = null;
+    this.viewModeContainer = React.createRef();
   }
 
   onResizeMouseUp = () => {
@@ -98,7 +99,7 @@ class DirColumnView extends React.Component {
   };
 
   onResizeMouseDown = () => {
-    this.containerWidth = this.refs.viewModeContainer.clientWidth;
+    this.containerWidth = this.viewModeContainer.current.clientWidth;
     this.setState({
       inResizing: true
     });
@@ -172,7 +173,7 @@ class DirColumnView extends React.Component {
     const select = inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
-      <div className="dir-column-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
+      <div className="dir-column-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref={this.viewModeContainer}>
         {isTreePanelShown && (
           <>
             <DirColumnNav
