@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Z_INDEX } from '../../_basic';
 
 const propTypes = {
-  table: PropTypes.object.isRequired,
   onScrollbarScroll: PropTypes.func.isRequired,
   onScrollbarMouseUp: PropTypes.func.isRequired,
 };
@@ -53,10 +52,10 @@ class RightScrollbar extends React.Component {
       style.zIndex = Z_INDEX.SCROLL_BAR;
     }
 
-    /* sf-metadata-footer have 30px height */
-    style.bottom = 30;
+    /* sf-metadata-header have 33px height */
+    style.top = 33;
     /* sf-metadata-wrapper have 0px margin */
-    style.right = '0px';
+    style.right = 0;
     return style;
   };
 

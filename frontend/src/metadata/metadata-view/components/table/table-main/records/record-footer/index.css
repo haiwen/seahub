@@ -1,3 +1,20 @@
+.sf-metadata-result-footer {
+  position: relative;
+  height: 32px;
+  width: 100%;
+  overflow: hidden;
+  line-height: 32px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.sf-metadata-result-footer.at-border {
+  border-bottom: none;
+}
+
 .sf-metadata-result-footer .rows-record {
   width: 80px;
   padding-left: 8px;

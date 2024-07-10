@@ -4,7 +4,6 @@ import { EVENT_BUS_TYPE } from '../../constants';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
-// import TableTool from './view-settings';
 import TableMain from  './table-main';
 import RecordDetailsDialog from '../record-details-dialog';
 import { PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
@@ -173,7 +172,6 @@ const Container = () => {
   return (
     <>
       <div className="sf-metadata-wrapper">
-        {/* <TableTool view={metadata.view} modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} /> */}
         <div className="sf-metadata-main">
           {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
           {!errorMsg && (
@@ -196,7 +194,6 @@ const Container = () => {
         </div>
       </div>
       <RecordDetailsDialog />
-
     </>
   );
 };
