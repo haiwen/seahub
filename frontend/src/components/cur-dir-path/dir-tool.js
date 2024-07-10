@@ -8,7 +8,7 @@ import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import TableTool from '../../metadata/metadata-view/components/view-settings';
+import MetadataViewToolBar from '../../metadata/metadata-view/components/view-toolbar';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -88,7 +88,7 @@ class DirTool extends React.Component {
     if (isFileExtended) {
       return (
         <div className="d-flex">
-          <TableTool />
+          <MetadataViewToolBar />
         </div>
       );
     }

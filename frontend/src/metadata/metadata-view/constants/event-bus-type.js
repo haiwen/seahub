@@ -34,5 +34,4 @@ export const EVENT_BUS_TYPE = {
 
   // change
   VIEW_CHANGED: 'view_changed',
-  COLLABORATORS_CHANGED: 'collaborators_changed',
 };

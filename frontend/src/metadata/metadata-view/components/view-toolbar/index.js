@@ -6,7 +6,7 @@ import { EVENT_BUS_TYPE } from '../../constants';
 
 import './index.css';
 
-const TableTool = () => {
+const ViewToolBar = () => {
   const [isLoading, setLoading] = useState(true);
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
@@ -57,7 +57,6 @@ const TableTool = () => {
 
   useEffect(() => {
     if (isLoading) return;
-
     const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.VIEW_CHANGED, viewChange);
     return () => {
       unsubscribeViewChange();
@@ -110,7 +109,7 @@ const TableTool = () => {
   );
 };
 
-TableTool.propTypes = {
+ViewToolBar.propTypes = {
   view: PropTypes.object,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
@@ -118,4 +117,4 @@ TableTool.propTypes = {
   modifyHiddenColumns: PropTypes.func,
 };
 
-export default TableTool;
+export default ViewToolBar;

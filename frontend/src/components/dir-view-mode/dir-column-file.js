@@ -5,8 +5,6 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
-import './dir-column-file.css';
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
