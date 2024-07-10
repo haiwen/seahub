@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
 import Loading from './loading';
 
+import '../css/terms-preview.css';
+
 const propTypes = {
   content: PropTypes.string,
   onContentClick: PropTypes.func,

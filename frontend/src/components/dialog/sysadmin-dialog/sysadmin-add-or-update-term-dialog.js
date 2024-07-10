@@ -42,7 +42,7 @@ class AddOrUpdateTermDialog extends React.Component {
   }
 
   handleNameChange = (e) => {
-    this.setState({name: e.target.value.trim()});
+    this.setState({name: e.target.value});
   };
 
   handleVersionNumberChange = (e) => {
