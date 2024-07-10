@@ -23,22 +23,11 @@ body {
   padding: 0;
 }
 
-.main-panel-center .cur-view-content .sf-wiki-title {
-  border: none;
-  font-size: 26pt;
-  font-weight: bold;
-  padding: 0 50px 0 0;
-  color: #212529;
-}
-
-.main-panel-center .cur-view-content .sf-wiki-title:focus {
-  box-shadow: none;
-}
-
 /* scroll container */
 /* wiki editor */
 .cur-view-content .sdoc-scroll-container {
   display: flex;
+  min-height: 0;
   overflow: auto;
 }
 
@@ -47,15 +36,17 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  align-items: center;
+  width: 100%;
 }
 
 .wiki-editor-container .sdoc-editor-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: auto;
+  min-height: 0;
+  min-width: 0;
   width: 100%;
-  min-width: 1100px;
 }
 
 .wiki-editor-container .sdoc-editor-container .sdoc-content-wrapper {
@@ -63,8 +54,11 @@ body {
 }
 
 .wiki-editor-container .sdoc-editor-container .sdoc-editor-content {
+  display: flex;
   flex-direction: column;
   position: static;
+  min-width: 0;
+  width: 100%;
 }
 
 .sdoc-editor-container .sdoc-article-container {
@@ -80,7 +74,7 @@ body {
   justify-content: center;
   min-height: 800px;
   width: 100%;
-  padding: 15px 142px 0px 142px;
+  padding: 0 142px;
   box-shadow: none;
   border: none;
 }
@@ -108,160 +102,4 @@ body {
 
 .sdoc-editor-container .sdoc-article-container .article #sdoc-editor {
   width: 100%;
-}
-
-/* editor layout */
-.main-panel-center .cur-view-content .wiki-page-gap-container {
-  padding: 0 50px;
-  padding-left: 142px;
-}
-
-/* wiki page header */
-.wiki-page-controller {
-  display: flex;
-  visibility: hidden;
-  margin-top: 10px;
-}
-
-.wiki-page-controller.show {
-  visibility: visible;
-}
-
-.wiki-page-controller-item {
-  display: flex;
-  align-items: center;
-  margin-left: 6px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #949491;
-}
-
-.wiki-page-controller-item:first-of-type {
-  margin-left: 0;
-}
-
-.wiki-page-controller-item:hover {
-  background-color: #efefef;
-  border-radius: 4px;
-}
-
-.wiki-page-controller-item .text {
-  margin-left: 4px;
-  font-size: 14px;
-}
-
-.wiki-icon-container {
-  margin-bottom: 8px;
-  line-height: 78px;
-}
-
-.wiki-icon-container.gap {
-  margin-top: 60px;
-}
-
-.wiki-icon-wrapper {
-  display: none;
-  margin-top: -48px;
-  position: relative;
-  width: 78px;
-  height: 78px;
-  font-size: 78px;
-  z-index: 1;
-}
-
-.wiki-icon-wrapper:hover {
-  cursor: pointer;
-  background-color: #d3c5c370;
-}
-
-.wiki-icon-wrapper.show {
-  display: block;
-}
-
-/* Icon */
-.wiki-icon-popover {
-  max-width: max-content;
-}
-
-.wiki-icon-panel-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 14px;
-  background-color: #fff;
-}
-
-.wiki-icon-panel-header>span {
-  padding: 2px 8px;
-  border-radius: 4px;
-  user-select: none;
-}
-
-.wiki-icon-panel-header>span:hover {
-  background-color: #efefef;
-  cursor: pointer;
-}
-
-.wiki-icon-panel-body {
-  padding: 0;
-  background-color: #fff;
-}
-
-.wiki-icon-panel-body em-emoji-picker {
-  height: 337px;
-}
-
-/* Cover */
-.cur-view-content .wiki-cover {
-  position: relative;
-  height: 30vh;
-  width: 100%;
-}
-
-.cur-view-content .wiki-cover .wiki-cover-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.wiki-cover .wiki-cover-controller {
-  position: absolute;
-  top: 15px;
-  right: 20%;
-}
-
-.wiki-cover .wiki-cover-controller .wiki-cover-controller-btn {
-  padding: 4px 6px;
-  background-color: #fff;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #6a6767b3;
-  cursor: pointer;
-}
-
-.wiki-cover .wiki-cover-controller .wiki-cover-controller-btn:hover {
-  color: #4d5156;
-}
-
-.wiki-cover-popover {
-  max-width: max-content !important;
-}
-
-.wiki-cover-panel-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 10px;
-  background-color: #fff;
-  overflow-y: auto;
-}
-
-.wiki-cover-panel .wiki-cover-gallery-img {
-  width: 120px;
-  height: 64px;
-  cursor: pointer;
-
-}
-
-.wiki-cover-panel .wiki-cover-gallery-img:hover {
-  filter: brightness(1.1);
 }
