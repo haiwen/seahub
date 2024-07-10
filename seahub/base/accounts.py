@@ -88,7 +88,7 @@ ANONYMOUS_EMAIL = 'Anonymous'
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
 
-def default_ldap_role_mapping(role):
+def default_ldap_role_mapping(role, role_list=None):
     return role
 
 
@@ -860,8 +860,9 @@ def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_i
         contact_email = contact_email_list[0].decode()
 
     if user_role_list:
+        role_list = [role.decode() for role in user_role_list]
         user_role = user_role_list[0].decode()
-        user_role = ldap_role_mapping(user_role)
+        user_role = ldap_role_mapping(user_role, role_list)
 
     if authc_id_list:
         authc_id = authc_id_list[0].decode()
