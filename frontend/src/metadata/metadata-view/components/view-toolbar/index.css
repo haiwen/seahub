@@ -1,18 +1,10 @@
 .sf-metadata-tool {
   background-color: #fff;
-  border-bottom: 1px solid #e4e4e4;
-  border-top: 1px solid #ddd;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
   display: flex;
   flex-shrink: 0;
   flex-wrap: nowrap;
   height: 48px;
   justify-content: space-between;
-  padding: 0 20px;
-  position: relative;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
 }
 
 .sf-metadata-tool .sf-metadata-tool-left-operations,

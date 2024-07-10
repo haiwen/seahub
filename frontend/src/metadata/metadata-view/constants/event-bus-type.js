@@ -25,4 +25,13 @@ export const EVENT_BUS_TYPE = {
   DRAG_ENTER: 'drag_enter',
   COLLAPSE_ALL_GROUPS: 'collapse_all_groups',
   EXPAND_ALL_GROUPS: 'expand_all_groups',
+
+  // modify view
+  MODIFY_FILTERS: 'modify_filters',
+  MODIFY_SORTS:'modify_sorts',
+  MODIFY_GROUPBYS:'modify_groupbys',
+  MODIFY_HIDDEN_COLUMNS:'modify_hidden_columns',
+
+  // change
+  VIEW_CHANGED: 'view_changed',
 };

@@ -100,7 +100,8 @@ class RecordsBody extends Component {
     const { startRenderIndex, endRenderIndex } = this.state;
     const contentScrollTop = this.resultContentRef.scrollTop;
     const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
-    const end = Math.min(Math.ceil((contentScrollTop + this.resultContentRef.offsetHeight) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordIds.length);
+    const { height } = this.props.getTableContentRect();
+    const end = Math.min(Math.ceil((contentScrollTop + height) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordIds.length);
     if (start !== startRenderIndex) {
       this.setState({ startRenderIndex: start });
     }

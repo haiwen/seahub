@@ -4,7 +4,6 @@ import { EVENT_BUS_TYPE } from '../../constants';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
-import TableTool from './table-tool';
 import TableMain from  './table-main';
 import RecordDetailsDialog from '../record-details-dialog';
 import { PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
@@ -108,12 +107,10 @@ const Container = () => {
 
   const modifyFilters = useCallback((filters, filterConjunction) => {
     store.modifyFilters(filterConjunction, filters);
-    store.saveView();
   }, [store]);
 
   const modifySorts = useCallback((sorts) => {
     store.modifySorts(sorts);
-    store.saveView();
   }, [store]);
 
   const modifyGroupbys = useCallback(() => {
@@ -154,9 +151,17 @@ const Container = () => {
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
     const unsubscribeSelectCell = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, onSelectCell);
+    const unsubscribeModifyFilters = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_FILTERS, modifyFilters);
+    const unsubscribeModifySorts = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SORTS, modifySorts);
+    const unsubscribeModifyGroupbys = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
+    const unsubscribeModifyHiddenColumns = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       unsubscribeSelectCell();
+      unsubscribeModifyFilters();
+      unsubscribeModifySorts();
+      unsubscribeModifyGroupbys();
+      unsubscribeModifyHiddenColumns();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -164,7 +169,6 @@ const Container = () => {
   return (
     <>
       <div className="sf-metadata-wrapper">
-        <TableTool view={metadata.view} modifyFilters={modifyFilters} modifySorts={modifySorts} modifyGroupbys={modifyGroupbys} modifyHiddenColumns={modifyHiddenColumns} />
         <div className="sf-metadata-main">
           {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
           {!errorMsg && (
@@ -188,9 +192,7 @@ const Container = () => {
       </div>
       <RecordDetailsDialog />
     </>
-
   );
-
 };
 
 export default Container;

@@ -8,6 +8,7 @@ import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import MetadataViewToolBar from '../../metadata/metadata-view/components/view-toolbar';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -83,11 +84,20 @@ class DirTool extends React.Component {
     const { repoID, currentMode, currentPath } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath === '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
+
+    if (isFileExtended) {
+      return (
+        <div className="d-flex">
+          <MetadataViewToolBar />
+        </div>
+      );
+    }
+
     return (
       <React.Fragment>
         <div className="d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
-          {(!this.props.isCustomPermission && !isFileExtended) &&
+          {(!this.props.isCustomPermission) &&
             <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
             </span>

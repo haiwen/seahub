@@ -8,10 +8,41 @@ import RecordMetrics from '../../../../../utils/record-metrics';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL } from '../../../../../constants';
 import { getRecordsFromSelectedRange } from '../../../../../utils/selected-cell-utils';
 import { gettext } from '../../../../../../../utils/constants';
+import { addClassName, removeClassName } from '../../../../../utils';
 
 import './index.css';
 
 class RecordsFooter extends React.Component {
+
+  ref = null;
+
+  componentDidMount() {
+    window.addEventListener('resize', this.calculateAtBorder);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.calculateAtBorder);
+  }
+
+  componentDidUpdate() {
+    this.calculateAtBorder();
+  }
+
+  calculateAtBorder = () => {
+    const { bottom } = this.ref.getBoundingClientRect();
+
+    // update classnames after records count change
+    const originClassName = this.ref ? this.ref.className : '';
+    let newClassName;
+    if (bottom >= window.innerHeight) {
+      newClassName = addClassName(originClassName, 'at-border');
+    } else {
+      newClassName = removeClassName(originClassName, 'at-border');
+    }
+    if (newClassName !== originClassName && this.ref) {
+      this.ref.className = newClassName;
+    }
+  };
 
   onClick = () => {
     if (this.props.isLoadingMore) {
@@ -105,7 +136,7 @@ class RecordsFooter extends React.Component {
     const recordWidth = (isLoadingMore || hasMore ? SEQUENCE_COLUMN_WIDTH + columns[0].width : SEQUENCE_COLUMN_WIDTH) + groupOffsetLeft;
 
     return (
-      <div className="sf-metadata-result-footer" style={{ zIndex: Z_INDEX.GRID_FOOTER, transform: 'translateZ(1000px)' }}>
+      <div className="sf-metadata-result-footer" style={{ zIndex: Z_INDEX.GRID_FOOTER, transform: 'translateZ(1000px)' }} ref={ref => this.ref = ref}>
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
           {!isLoadingMore && hasMore &&
