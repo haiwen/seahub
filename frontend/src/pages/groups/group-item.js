@@ -9,8 +9,6 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import Repo from '../../models/repo';
 
-import '../../css/groups.css';
-
 const propTypes = {
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,

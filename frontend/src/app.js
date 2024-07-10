@@ -27,7 +27,6 @@ import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all';
 import LibContentView from './pages/lib-content-view/lib-content-view';
 import Group from './pages/groups/group-view';
-import Groups from './pages/groups/groups-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
@@ -52,6 +51,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    if (window.location.pathname === '/groups/') {
+      window.location.href = window.location.origin + '/libraries/';
+    }
     this.state = {
       isSidePanelClosed: false,
       isSidePanelFolded: localStorage.getItem('sf_user_side_nav_folded') == 'true' || false,
@@ -257,7 +259,6 @@ class App extends Component {
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
               <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} isSidePanelFolded={isSidePanelFolded} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
               <OCMRepoDir path={siteRoot + 'remote-library/:providerID/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
-              <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <Group
                 path={siteRoot + 'group/:groupID'}
                 onShowSidePanel={this.onShowSidePanel}
