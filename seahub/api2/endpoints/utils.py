@@ -314,10 +314,5 @@ def event_export_status(task_id):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
-    if resp.status_code == 500:
-        logger.error('query export status error: %s, %s' % (task_id, resp.content))
-        return api_error(500, 'Internal Server Error')
-    if not resp.status_code == 200:
-        return api_error(resp.status_code, resp.content)
-    is_finished = json.loads(resp.content)['is_finished']
-    return is_finished
+
+    return resp
