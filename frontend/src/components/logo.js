@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../utils/constants';
+import { Utils } from '../utils/utils';
 
 const propTypes = {
   onCloseSidePanel: PropTypes.func,
   showCloseSidePanelIcon: PropTypes.bool,
-  positioned: PropTypes.bool
+  positioned: PropTypes.bool,
+  showLogoOnlyInMobile: PropTypes.bool
 };
 
 class Logo extends React.Component {
@@ -15,7 +17,12 @@ class Logo extends React.Component {
   };
 
   render() {
-    const { positioned } = this.props;
+    const { positioned, showLogoOnlyInMobile } = this.props;
+
+    if (showLogoOnlyInMobile && Utils.isDesktop()) {
+      return null;
+    }
+
     return (
       <div className={`top-logo ${positioned ? 'd-none d-md-block positioned-top-logo' : ''}`}>
         <a href={siteRoot} id="logo">
