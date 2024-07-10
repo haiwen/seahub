@@ -328,7 +328,7 @@ class OrgAllRepos extends Component {
           'current_page': page,
           'has_next_page': has_next_page
         };
-      }else{
+      } else {
         page_info = res.data.page_info;
       }
       this.setState({
