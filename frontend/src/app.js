@@ -27,7 +27,6 @@ import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all';
 import LibContentView from './pages/lib-content-view/lib-content-view';
 import Group from './pages/groups/group-view';
-import Groups from './pages/groups/groups-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
@@ -242,6 +241,7 @@ class App extends Component {
             <Router className="reach-router">
               <Libraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <Libraries path={ siteRoot + 'libraries' } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <Libraries path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyFileActivitiesWrapper path={siteRoot + 'my-activities'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
@@ -257,7 +257,6 @@ class App extends Component {
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
               <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} isSidePanelFolded={isSidePanelFolded} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
               <OCMRepoDir path={siteRoot + 'remote-library/:providerID/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
-              <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <Group
                 path={siteRoot + 'group/:groupID'}
                 onShowSidePanel={this.onShowSidePanel}
