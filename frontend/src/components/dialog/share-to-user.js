@@ -55,11 +55,14 @@ class UserItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
           <div className="position-relative">
-            <img src={item.user_info.avatar_url}
-              width="24" alt={item.user_info.nickname}
+            <img
+              src={item.user_info.avatar_url}
+              width="24"
+              alt={item.user_info.nickname}
               className="rounded-circle mr-2 cursor-pointer"
               onMouseEnter={this.userAvatarOnMouseEnter}
-              onMouseLeave={this.userAvatarOnMouseLeave} />
+              onMouseLeave={this.userAvatarOnMouseLeave}
+            />
             <span>{item.user_info.nickname}</span>
             {isUserDetailsPopoverOpen && (
               <div className="user-details-popover p-4 position-absolute w-100 mt-1">

@@ -44,6 +44,47 @@ const UserSelectStyle = {
   clearIndicator: () => ({
     display: 'none',
   }),
+  // multi select style
+  multiValue: (provided) => {
+    return {
+      ...provided,
+      display: 'inline-flex',
+      alignItems: 'center',
+      background: '#eaeaea',
+      borderRadius: '10px',
+      margin: '0 10px 0 0',
+      padding: '0 0 0 2px',
+    };
+  },
+  multiValueLabel: (provided) => {
+    return {
+      ...provided,
+      padding: '0px',
+    };
+  },
+  multiValueRemove: (provided) => {
+    return {
+      ...provided,
+      color: '#666',
+      ':hover': {
+        backgroundColor: 'transparent',
+        color: '#555555',
+      }
+    };
+  },
+  // single select style
+  singleValue: (provided) => {
+    return {
+      ...provided,
+      display: 'inline-flex',
+      alignItems: 'center',
+      background: '#eaeaea',
+      borderRadius: '10px',
+      margin: '0',
+      padding: '0 2px',
+      width: 'fit-content',
+    };
+  },
 };
 
 export { MenuSelectStyle, UserSelectStyle };

@@ -26,9 +26,14 @@ class UserSelect extends React.Component {
     this.state = {
       searchValue: ''
     };
+    this.userSelect = React.createRef();
   }
 
   onInputChange = (searchValue) => {
+    if (!this.props.isMulti && searchValue.trim()) {
+      this.handleSelectChange(null);
+      this.clearSelect();
+    }
     this.setState({ searchValue });
   };
 
@@ -49,20 +54,24 @@ class UserSelect extends React.Component {
             let obj = {};
             obj.value = item.name;
             obj.email = item.email;
-            obj.label = enableShowContactEmailWhenSearchUser ? (
-              <div className="d-flex">
-                <img src={item.avatar_url} className="avatar" width="24" alt="" />
-                <div className="ml-2">
-                  <span className="user-option-name">{item.name}</span><br />
-                  <span className="user-option-email">{item.contact_email}</span>
+            if (enableShowContactEmailWhenSearchUser) {
+              obj.label = (
+                <div className="d-flex">
+                  <img src={item.avatar_url} className="avatar" width="24" alt="" />
+                  <div className="ml-2">
+                    <span className="user-option-name">{item.name}</span><br />
+                    <span className="user-option-email">{item.contact_email}</span>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <React.Fragment>
-                <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-                <span className='select-module select-module-name'>{item.name}</span>
-              </React.Fragment>
-            );
+              );
+            } else {
+              obj.label = (
+                <>
+                  <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
+                  <span className='select-module select-module-name'>{item.name}</span>
+                </>
+              );
+            }
             this.options.push(obj);
           }
           callback(this.options);
@@ -75,7 +84,7 @@ class UserSelect extends React.Component {
   };
 
   clearSelect = () => {
-    this.refs.userSelect.onChange([], { action: 'clear' });
+    this.userSelect.current.onChange([], { action: 'clear' });
   };
 
   render() {
@@ -92,14 +101,14 @@ class UserSelect extends React.Component {
             );
           }
         }}
-        isMulti={this.props.isMulti}
+        isMulti={true}
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}
         onInputChange={this.onInputChange}
         placeholder={this.props.placeholder}
         className={`user-select ${this.props.className}`}
         value={this.props.value}
-        ref="userSelect"
+        ref={this.userSelect}
         styles={UserSelectStyle}
       />
     );
