@@ -51,6 +51,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    if (window.location.pathname === '/groups/') {
+      window.location.href = window.location.origin + '/libraries/';
+    }
     this.state = {
       isSidePanelClosed: false,
       isSidePanelFolded: localStorage.getItem('sf_user_side_nav_folded') == 'true' || false,
@@ -241,7 +244,6 @@ class App extends Component {
             <Router className="reach-router">
               <Libraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <Libraries path={ siteRoot + 'libraries' } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <Libraries path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <MyFileActivitiesWrapper path={siteRoot + 'my-activities'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
