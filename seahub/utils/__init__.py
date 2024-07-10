@@ -1165,7 +1165,6 @@ if HAS_OFFICE_CONVERTER:
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
         except Exception as e:
-            print(e)
             logging.exception('failed to add_office_convert_task: %s' % e)
             return _('Internal Server Error')
         return None

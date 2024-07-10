@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext, siteRoot } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
 import moment from 'moment';
 
 class LogsExportExcelDialog extends React.Component {
@@ -13,6 +16,7 @@ class LogsExportExcelDialog extends React.Component {
       startDateStr: '',
       endDateStr: '',
       errMsg: '',
+      taskId: '',
     };
   }
 
@@ -20,25 +24,65 @@ class LogsExportExcelDialog extends React.Component {
     if (!this.isValidDateStr()) {
       return;
     }
-    let { startDateStr, endDateStr } = this.state;
-    let url = siteRoot;
-
     switch (this.props.logType) {
       case 'login':
-        url += 'sys/loginadmin/export-excel/';
+        this.sysExportLogs('loginadmin');
         break;
       case 'fileAccess':
-        url += 'sys/log/fileaudit/export-excel/';
+        this.sysExportLogs('fileaudit');
         break;
       case 'fileUpdate':
-        url += 'sys/log/fileupdate/export-excel/';
+        this.sysExportLogs('fileupdate');
         break;
       case 'sharePermission':
-        url += 'sys/log/permaudit/export-excel/';
+        this.sysExportLogs('permaudit');
         break;
     }
-    location.href = url + '?start=' + startDateStr + '&end=' + endDateStr;
-    this.props.toggle();
+  };
+
+  sysExportLogs = (logType) =>{
+    let { startDateStr, endDateStr } = this.state;
+    let task_id = '';
+    systemAdminAPI.sysAdminExportLogsExcel(startDateStr, endDateStr, logType).then(res => {
+      task_id = res.data.task_id;
+      this.setState({
+        taskId: task_id
+      });
+      this.props.toggle();
+      return systemAdminAPI.queryAsyncOperationExportExcel(task_id);
+    }).then(res => {
+      if (res.data.is_finished === true){
+        location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
+      } else {
+        this.timer = setInterval(() => {
+          systemAdminAPI.queryAsyncOperationExportExcel(task_id).then(res => {
+            if (res.data.is_finished === true){
+              this.setState({isFinished: true});
+              clearInterval(this.timer);
+              location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
+            }
+          }).catch(err => {
+            if (this.state.isFinished === false){
+              clearInterval(this.timer);
+              toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
+            }
+          });
+        }, 1000);
+      }
+    }).catch(error => {
+      this.props.toggle();
+      if (error.response && error.response.status === 500) {
+        const error_msg = error.response.data ? error.response.data['error_msg'] : null;
+        if (error_msg && error_msg !== 'Internal Server Error') {
+          toaster.danger(error_msg);
+        } else {
+          toaster.danger(gettext('Internal Server Error.'));
+        }
+      } else {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+    });
   };
 
   isValidDateStr = () => {

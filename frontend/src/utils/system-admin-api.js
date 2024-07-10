@@ -66,6 +66,21 @@ class SystemAdminAPI {
     return this.req.get(url, {params: params});
   }
 
+  sysAdminExportLogsExcel(start, end, logType) {
+    const url = this.server + '/api/v2.1/admin/logs/export-excel/';
+    const params = {
+      start: start,
+      end: end,
+      logType: logType
+    };
+    return this.req.get(url, { params: params });
+  }
+
+  queryAsyncOperationExportExcel(task_id) {
+    const url = this.server + '/api/v2.1/query-export-status/?task_id=' + task_id;
+    return this.req.get(url);
+  }
+
 }
 
 let systemAdminAPI = new SystemAdminAPI();
