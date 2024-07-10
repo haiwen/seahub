@@ -17,10 +17,6 @@
   align-items: center;
 }
 
-.header .common-list-btn, .header .add-reviewer-btn {
-  margin-right: .25em;
-}
-
 .header .common-list-btn .common-list-btn-number {
   margin-left: .5em;
 }
@@ -124,7 +120,6 @@
   border: 0;
 }
 
-.review-side-panel-item .reviewer-info,
 .review-side-panel-item .author-info {
   display: flex;
   align-items: center;
@@ -156,7 +151,6 @@
   width: 1.5rem;
 }
 
-.review-side-panel-item .reviewer-name,
 .review-side-panel-item .author-name {
   height: 2rem;
   line-height: 2rem;

@@ -236,7 +236,6 @@ class SysAdminShareToUser extends React.Component {
                 <UserSelect
                   ref="userSelect"
                   isMulti={true}
-                  className="reviewer-select"
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
                 />

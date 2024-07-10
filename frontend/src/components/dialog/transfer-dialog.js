@@ -51,7 +51,6 @@ class TransferDialog extends React.Component {
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-
   };
 
   componentDidMount() {
@@ -83,7 +82,7 @@ class TransferDialog extends React.Component {
         toaster.danger(errMessage);
       });
     }
-    else{
+    else {
       seafileAPI.listDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
@@ -102,7 +101,6 @@ class TransferDialog extends React.Component {
   onClick = () => {
     this.setState({
       transferToUser: !this.state.transferToUser,
-
     });
   };
 
@@ -142,7 +140,6 @@ class TransferDialog extends React.Component {
                 <UserSelect
                   ref="userSelect"
                   isMulti={false}
-                  className="reviewer-select"
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}
                 />
