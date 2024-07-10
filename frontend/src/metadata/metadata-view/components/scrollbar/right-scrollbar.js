@@ -55,8 +55,8 @@ class RightScrollbar extends React.Component {
 
     /* sf-metadata-footer have 30px height */
     style.bottom = 30;
-    /* sf-metadata-wrapper have 10px margin */
-    style.right = '10px';
+    /* sf-metadata-wrapper have 0px margin */
+    style.right = '0px';
     return style;
   };
 

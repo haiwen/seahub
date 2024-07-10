@@ -16,15 +16,6 @@
   align-items: center;
 }
 
-.sf-metadata-wrapper .seatable-app-header.searcher-active .table-right-operations {
-  width: 100%;
-  margin-right: 10px;
-}
-
-.sf-metadata-wrapper .seatable-app-header .table-left-operations .setting-item {
-  margin-right: 0 !important;
-}
-
 .sf-metadata-wrapper .table-left-operations .custom-filter-label {
   padding: 0 0.5rem;
 }
@@ -973,12 +964,6 @@
 .table-filters .filters-list .single-select-option,
 .table-filters .filters-list .multiple-select-option {
   max-width: 250px;
-}
-
-.sf-metadata-wrapper .sf-metadata-main,
-.sf-metadata-wrapper .seatable-app-header {
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
 }
 
 .sf-metadata-wrapper .sf-metadata-main {

@@ -43,7 +43,7 @@ const MetadataTreeView = ({ repoID, currentPath, onNodeClick }) => {
   return (
     <div className="tree-view tree metadata-tree-view">
       <div className="tree-node">
-        <div className="children" style={{ paddingLeft: 20 }}>
+        <div className="children">
           <div
             className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': currentPath === node.path })}
             title={gettext('File extended properties')}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
@@ -37,9 +38,9 @@ class HideColumnSetter extends Component {
 
     return (
       <>
-        <div className={`setting-item ${labelClass ? '' : 'mb-1'}`}>
+        <div className={classnames('setting-item', { 'mb-1': !labelClass })}>
           <div
-            className={`mr-2 setting-item-btn filters-setting-btn ${labelClass}`}
+            className={classnames('setting-item-btn filters-setting-btn', labelClass) }
             onClick={this.onHideColumnToggle}
             role="button"
             onKeyDown={this.onKeyDown}

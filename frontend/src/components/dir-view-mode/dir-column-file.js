@@ -60,12 +60,7 @@ class DirColumnFile extends React.Component {
         mediaUrl,
       };
 
-      return (
-        <div className="dir-column-file w-100 h-100 o-hidden d-flex">
-          <div className="dir-column-file-top"></div>
-          <SeafileMetadata repoID={this.props.repoID} currentRepoInfo={this.props.currentRepoInfo} />
-        </div>
-      );
+      return (<SeafileMetadata repoID={this.props.repoID} currentRepoInfo={this.props.currentRepoInfo} />);
     }
 
     return (

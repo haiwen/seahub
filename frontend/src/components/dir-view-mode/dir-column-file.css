@@ -4,12 +4,3 @@
   flex-direction: column;
   align-items: center;
 }
-
-.dir-column-file .dir-column-file-top {
-  width: 100%;
-  height: 10px;
-  z-index: 7;
-  transform: translateZ(1000px);
-  position: relative;
-  background: #ffffff;
-}
