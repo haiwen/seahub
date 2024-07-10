@@ -31,10 +31,6 @@
   max-width: max-content;
 }
 
-.wiki-page-icon-panel__header {
-  /* height: 337px; */
-}
-
 .wiki-page-icon-panel__body {
   padding: 0;
   background-color: #fff;
