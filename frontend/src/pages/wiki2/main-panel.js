@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
-import PageHeader from './editor-component/page-header';
+import RightHeader from './wiki-right-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -82,7 +82,7 @@ class MainPanel extends Component {
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
-                  <PageHeader onUpdatePage={onUpdatePage} currentPageConfig={currentPageConfig} />
+                  <RightHeader onUpdatePage={onUpdatePage} currentPageConfig={currentPageConfig} />
                   <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
