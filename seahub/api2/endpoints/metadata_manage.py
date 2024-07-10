@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.repo_metadata.models import RepoMetadata
+from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
@@ -443,3 +443,212 @@ class MetadataColumns(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'column': column})
+    
+    
+class MetadataViews(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        try:
+            metadata_views = RepoMetadataViews.objects.list_views(repo_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(metadata_views)
+    
+    def post(self, request, repo_id):
+        #  Add a metadata view
+        view_name = request.data.get('name')
+        if not view_name:
+            error_msg = 'view name is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            new_view = RepoMetadataViews.objects.add_view(repo_id, view_name)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'view': new_view})
+    
+    
+    def put(self, request, repo_id):
+        # Update a metadata view, including rename, change filters and so on
+        # by a json data
+        view_id = request.data.get('view_id', None)
+        view_data = request.data.get('view_data', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not view_data:
+            error_msg = 'view_data is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        views = RepoMetadataViews.objects.filter(
+            repo_id = repo_id,
+        ).first()
+        if not views:
+            error_msg = 'The metadata views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if view_id not in views.view_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        try:
+            result = RepoMetadataViews.objects.update_view(repo_id, view_id, view_data)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+    def delete(self, request, repo_id):
+        # Update a metadata view, including rename, change filters and so on
+        # by a json data
+        view_id = request.data.get('view_id', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+    
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        views = RepoMetadataViews.objects.filter(
+            repo_id=repo_id
+        ).first()
+        if not views:
+            error_msg = 'The metadata views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        if view_id not in views.view_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+    
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    
+        try:
+            result = RepoMetadataViews.objects.delete_view(repo_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+    
+        return Response({'success': True})
+
+
+class MetadataViewsMoveView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+    
+    def post(self, request, repo_id):
+        # put view_id in front of target_view_id
+        view_id = request.data.get('view_id')
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        target_view_id = request.data.get('target_view_id')
+        if not target_view_id:
+            error_msg = 'target_view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        views = RepoMetadataViews.objects.filter(
+            repo_id=repo_id,
+        ).first()
+        if not views:
+            error_msg = 'The metadata views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if view_id not in views.view_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if target_view_id not in views.view_ids:
+            error_msg = 'target_view_id %s does not exists.' % target_view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        try:
+            results = RepoMetadataViews.objects.move_view(repo_id, view_id, target_view_id)
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'navigation': results['navigation']})
