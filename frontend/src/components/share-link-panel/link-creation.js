@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -101,11 +101,11 @@ class LinkCreation extends React.Component {
       this.setState({errorInfo: ''});
       let { type, itemPath, repoID } = this.props;
       let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
+
+      const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
-      if (isPro) {
-        const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
-        permissions = JSON.stringify(permissionDetails);
-      }
+      permissions = JSON.stringify(permissionDetails);
+
       let expirationTime = '';
       if (isExpireChecked) {
         if (expType == 'by-days') {
@@ -327,7 +327,7 @@ class LinkCreation extends React.Component {
               </div>
             }
           </FormGroup>
-          {(isPro && !isCustomPermission) && (
+          {!isCustomPermission && (
             <FormGroup check>
               <Label check>
                 <span>{gettext('Set permission')}</span>
