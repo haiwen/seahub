@@ -15,7 +15,7 @@ class GroupMembers extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{`${gettext('Group members')} (${members.length})`}</ModalHeader>
-        <ModalBody className="px-0">
+        <ModalBody className="px-0 group-members-container">
           <ul className="list-unstyled">
             {members.map((item, index) => {
               return <li key={index} className="group-member px-4 py-2 d-flex align-items-center">

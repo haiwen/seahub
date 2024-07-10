@@ -1,3 +1,8 @@
+.group-members-container {
+  max-height: 500px;
+  overflow: auto;
+}
+
 .group-member:hover {
   background: #f5f5f5;
 }
