@@ -51,7 +51,7 @@ function validate_running_user () {
     fi
 }
 
-export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$(central_config_dir):$PYTHONPATH
 if [[ -d ${INSTALLPATH}/pro ]]; then
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
     export SEAFES_DIR=$seafesdir
