@@ -34,6 +34,7 @@ class Store {
   saveView = () => {
     const { filters, sorts, gropbys, filter_conjunction } = this.data.view;
     const view = { filters, sorts, gropbys, filter_conjunction };
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     this.context.localStorage.setItem('view', view);
   };
 
@@ -330,6 +331,7 @@ class Store {
       type, filter_conjunction: filterConjunction, filters,
     });
     this.applyOperation(operation);
+    this.saveView();
   }
 
   modifySorts(sorts) {
@@ -338,6 +340,7 @@ class Store {
       type, sorts,
     });
     this.applyOperation(operation);
+    this.saveView();
   }
 
   modifyGroupbys(groupbys) {
@@ -346,6 +349,7 @@ class Store {
       type, groupbys,
     });
     this.applyOperation(operation);
+    this.saveView();
   }
 
   modifyHiddenColumns(shown_column_keys) {
@@ -354,6 +358,7 @@ class Store {
       type, shown_column_keys
     });
     this.applyOperation(operation);
+    this.saveView();
   }
 }
 

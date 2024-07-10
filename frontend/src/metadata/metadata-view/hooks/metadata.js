@@ -41,7 +41,6 @@ export const MetadataProvider = ({
     storeRef.current.initStartIndex();
     storeRef.current.loadData(PER_LOAD_NUMBER).then(() => {
       setMetadata(storeRef.current.data);
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, storeRef.current.data.view);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

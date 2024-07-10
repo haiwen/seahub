@@ -389,7 +389,6 @@
   flex: 1 1;
   position: relative;
   overflow-y: scroll;
-  /* padding-bottom: 150px; */
 }
 
 .sf-metadata-result-table-content .sf-metadata-result-loading {

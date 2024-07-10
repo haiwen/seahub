@@ -107,13 +107,10 @@ const Container = () => {
 
   const modifyFilters = useCallback((filters, filterConjunction) => {
     store.modifyFilters(filterConjunction, filters);
-    store.saveView();
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, store.data.view);
   }, [store]);
 
   const modifySorts = useCallback((sorts) => {
     store.modifySorts(sorts);
-    store.saveView();
   }, [store]);
 
   const modifyGroupbys = useCallback(() => {
