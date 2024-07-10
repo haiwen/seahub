@@ -61,7 +61,7 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
 
 
   return (
-    <div className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div id="wiki-page-title" className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentPageConfig.icon && (
         <HeaderIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}

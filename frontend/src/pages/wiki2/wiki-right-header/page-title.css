@@ -1,6 +1,7 @@
 .wiki-page-title-wrapper {
   position: relative;
-  padding: 0 50px 0 142px;
+  width: 100%;
+  padding: 0 142px;
 }
 
 .wiki-page-icon-wrapper {

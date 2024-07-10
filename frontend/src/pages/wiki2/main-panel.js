@@ -35,6 +35,16 @@ class MainPanel extends Component {
     this.scrollRef = React.createRef();
   }
 
+  getHeaderHeight = () => {
+    const pageCover = document.getElementById('wiki-page-cover');
+    const pageCoverHeight = pageCover?.offsetHeight || 0;
+    const pageTitle = document.getElementById('wiki-page-title');
+    const pageTitleHeight = pageTitle?.offsetHeight || 0;
+
+    const topNavHeight = 44;
+    return pageCoverHeight + pageTitleHeight + topNavHeight;
+  };
+
   static getDerivedStateFromProps(props, state) {
     const { seadoc_access_token, currentPageId, config } = props;
     const appConfig = window.app.config;
@@ -57,7 +67,7 @@ class MainPanel extends Component {
 
   render() {
     const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage } = this.props;
-    const { currentPageConfig = {}, } = this.state;
+    const { currentPageConfig = {} } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
 
@@ -69,9 +79,7 @@ class MainPanel extends Component {
             currentPageId={this.props.currentPageId}
             currentPageConfig={currentPageConfig}
           />
-          {username &&
-            <Account />
-          }
+          {username && <Account />}
         </div>
         <div className="main-panel-center">
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
@@ -88,6 +96,7 @@ class MainPanel extends Component {
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}
                     scrollRef={this.scrollRef}
+                    getHeaderHeight={this.getHeaderHeight}
                   />
                 </div>
               </div>
