@@ -58,6 +58,7 @@ class Search extends Component {
     this.searchResultListRef = React.createRef();
     this.isChineseInput = false;
     this.searchResultListContainerRef = React.createRef();
+    this.calculateStoreKey(props);
   }
 
   componentDidMount() {
@@ -67,7 +68,8 @@ class Search extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.calculateProperty(nextProps);
+    this.calculateStoreKey(nextProps);
+    this.isChineseInput = false;
   }
 
   componentWillUnmount() {
@@ -77,14 +79,13 @@ class Search extends Component {
     this.isChineseInput = false;
   }
 
-  calculateProperty = (props) => {
+  calculateStoreKey = (props) => {
     const { repoID } = props;
     let storeKey = 'sfVisitedSearchItems';
     if (repoID) {
       storeKey += repoID;
     }
     this.storeKey = storeKey;
-    this.isChineseInput = false;
   };
 
   onCompositionStart = () => {

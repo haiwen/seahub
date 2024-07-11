@@ -66,7 +66,7 @@ export default class AISearch extends Component {
     this.searchResultListContainerRef = React.createRef();
     this.indexStateTimer = null;
     this.isChineseInput = false;
-    this.calculateProperty(props);
+    this.calculateStoreKey(props);
   }
 
   componentDidMount() {
@@ -80,7 +80,7 @@ export default class AISearch extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.calculateProperty(nextProps);
+    this.calculateStoreKey(nextProps);
     if (nextProps.isLibView) {
       if (this.props.repoID !== nextProps.repoID) {
         this.queryLibraryIndexState(nextProps.repoID);
@@ -97,7 +97,7 @@ export default class AISearch extends Component {
     }
   }
 
-  calculateProperty = (props) => {
+  calculateStoreKey = (props) => {
     if (props.isLibView && props.currentRepoInfo) {
       this.isRepoOwner = props.currentRepoInfo.owner_email === username;
       this.isAdmin = props.currentRepoInfo.is_admin;
