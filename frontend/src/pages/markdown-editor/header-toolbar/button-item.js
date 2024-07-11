@@ -72,7 +72,7 @@ class ButtonItem extends React.Component {
 
   onMouseDown = (event) => {
     if (!this.props.disabled) {
-      this.props.onMouseDown(event);
+      this.props.onMouseDown && this.props.onMouseDown(event);
     }
   };
 
