@@ -50,7 +50,6 @@ class HideColumnSetter extends Component {
             id={target}
           >
             <Icon iconName="hide" />
-            <span>{message}</span>
           </div>
         </div>
       </>

@@ -4,13 +4,13 @@ import {
   HEADER_HEIGHT_TYPE,
   isEmptyObject,
   Z_INDEX,
-} from '../../../../_basic';
-import HeaderCell from './header-cell';
-import HeaderActionsCell from './header-actions-cell';
-import { isMobile } from '../../../../utils';
-import { getFrozenColumns } from '../../../../utils/table-utils';
-import { isFrozen } from '../../../../utils/column-utils';
-import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../constants';
+} from '../../../../../_basic';
+import Cell from './cell';
+import ActionsCell from './actions-cell';
+import { isMobile } from '../../../../../utils';
+import { getFrozenColumns } from '../../../../../utils/table-utils';
+import { isFrozen } from '../../../../../utils/column-utils';
+import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../../constants';
 
 class RecordsHeader extends Component {
 
@@ -40,7 +40,7 @@ class RecordsHeader extends Component {
       const style = { backgroundColor: '#f9f9f9' };
       const isLastFrozenCell = key === lastFrozenColumnKey;
       return (
-        <HeaderCell
+        <Cell
           frozen
           key={key}
           height={height}
@@ -60,7 +60,7 @@ class RecordsHeader extends Component {
     const rendererColumns = columns.slice(colOverScanStartIdx, colOverScanEndIdx);
     return rendererColumns.map(column => {
       return (
-        <HeaderCell
+        <Cell
           isHideTriangle={isHideTriangle}
           key={column.key}
           groupOffsetLeft={groupOffsetLeft}
@@ -111,7 +111,7 @@ class RecordsHeader extends Component {
           <div className="frozen-columns d-flex" style={this.getFrozenWrapperStyle(height)} ref={ref => {
             !isMobile && this.props.onRef(ref);
           }}>
-            <HeaderActionsCell
+            <ActionsCell
               isMobile={isMobile}
               height={height}
               hasSelectedRecord={hasSelectedRecord}

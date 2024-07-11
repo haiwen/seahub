@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import toaster from '../../../../../../components/toast';
-import { PRIVATE_COLUMN_KEY, isFunction } from '../../../../_basic';
-import { isNameColumn } from '../../../../utils/column-utils';
-import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../constants';
-import { isCellValueChanged } from '../../../../utils/cell-comparer';
-import CellFormatter from '../../../cell-formatter';
+import toaster from '../../../../../../../../components/toast';
+import { PRIVATE_COLUMN_KEY, isFunction } from '../../../../../../_basic';
+import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { isCellValueChanged } from '../../../../../../utils/cell-comparer';
+import CellFormatter from '../../../../../cell-formatter';
+import CellOperationBtn from './operation-btn';
 
-class RecordCell extends React.Component {
+import './index.css';
+
+class Cell extends React.Component {
 
   static defaultProps = {
     needBindEvents: true
@@ -139,12 +141,10 @@ class RecordCell extends React.Component {
   };
 
   render = () => {
-    const { frozen, record, column, needBindEvents, height, bgColor } = this.props;
+    const { frozen, record, column, needBindEvents, height, bgColor, isCellSelected } = this.props;
     const { key, left, width } = column;
     const readonly = true;
-    const commentCount = isNameColumn(column) && this.getCommentCount();
-    const hasComment = !!commentCount;
-    const className = this.getCellClass(hasComment);
+    const className = this.getCellClass(false);
     const cellStyle = {
       width,
       height,
@@ -170,12 +170,13 @@ class RecordCell extends React.Component {
     return (
       <div key={`${record._id}-${key}`} {...props}>
         {cellContent}
+        {isCellSelected && (<CellOperationBtn value={cellValue} column={column} />)}
       </div>
     );
   };
 }
 
-RecordCell.propTypes = {
+Cell.propTypes = {
   frozen: PropTypes.bool,
   isCellSelected: PropTypes.bool,
   isLastCell: PropTypes.bool,
@@ -195,4 +196,4 @@ RecordCell.propTypes = {
   bgColor: PropTypes.string,
 };
 
-export default RecordCell;
+export default Cell;

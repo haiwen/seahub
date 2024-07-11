@@ -221,11 +221,12 @@ export const getColumns = (columns) => {
   const validColumns = columns.map((column) => {
     const { type, key, name, ...params } = column;
     return {
+      ...params,
       key,
       type: getColumnType(key, type),
       name: getColumnName(key, name),
-      ...params,
       width: columnsWidth[key] || 200,
+      editable: false,
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
@@ -245,3 +246,12 @@ export const getColumns = (columns) => {
   });
   return displayColumns;
 };
+
+export function canEdit(col, rowData, enableCellSelect) {
+  if (!col) return false;
+  if (window.sfMetadataContext.canModifyCell(col) === false) return false;
+  if (col.editable != null && typeof (col.editable) === 'function') {
+    return enableCellSelect === true && col.editable(rowData);
+  }
+  return enableCellSelect === true && !!col.editable;
+}

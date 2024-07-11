@@ -49,7 +49,6 @@ class RecordsGroupBody extends Component {
     };
     this.groupsNode = {};
     this.recordFrozenRefs = [];
-    this.frozenBtnAddRecordRefs = [];
     this.rowVisibleStart = startRenderIndex;
     this.rowVisibleEnd = endRenderIndex;
     this.columnVisibleStart = 0;
@@ -791,7 +790,6 @@ class RecordsGroupBody extends Component {
       recordMetrics, summaryConfigs, lastFrozenColumnKey, showCellColoring, columnColors,
     } = this.props;
     this.recordFrozenRefs = [];
-    this.frozenBtnAddRecordRefs = [];
     const totalColumnsWidth = columnsWidth + SEQUENCE_COLUMN_WIDTH;
     const { startRenderIndex, endRenderIndex, groupMetrics, selectedPosition } = this.state;
     const { groupRows, maxLevel } = groupMetrics;

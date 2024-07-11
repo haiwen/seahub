@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import RecordCell from '../record-cell';
-import ActionsCell from '../actions-cell';
+import Cell from './cell';
+import ActionsCell from './actions-cell';
 import { getFrozenColumns } from '../../../../../utils/table-utils';
 import { Z_INDEX } from '../../../../../_basic';
 
@@ -94,7 +94,7 @@ class Record extends React.Component {
       const isLastFrozenCell = key === lastFrozenColumnKey;
       const bgColor = columnColor && columnColor[key];
       return (
-        <RecordCell
+        <Cell
           frozen
           key={column.key}
           record={record}
@@ -157,7 +157,7 @@ class Record extends React.Component {
       const isLastCell = this.isLastCell(columns, key);
       const bgColor = columnColor && columnColor[key];
       return (
-        <RecordCell
+        <Cell
           key={column.key}
           record={record}
           groupRecordIndex={groupRecordIndex}

@@ -46,9 +46,9 @@ class GroupbySetter extends Component {
 
     return (
       <>
-        <div className={classnames('setting-item mr-2', { 'mb-1': !labelClass })}>
+        <div className={classnames('setting-item', { 'mb-1': !labelClass })}>
           <div
-            className={classnames('mr-2 setting-item-btn groupbys-setting-btn', labelClass)}
+            className={classnames('setting-item-btn groupbys-setting-btn', labelClass)}
             onClick={this.onGroupbySetterToggle}
             role="button"
             onKeyDown={this.onKeyDown}
@@ -58,7 +58,6 @@ class GroupbySetter extends Component {
             id={this.props.target}
           >
             <Icon iconName="group" />
-            <span>{groupbyMessage}</span>
           </div>
         </div>
       </>

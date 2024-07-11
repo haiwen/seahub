@@ -33,11 +33,11 @@ export const TABLE_NOT_SUPPORT_EDIT_TYPE_MAP = {
   [CellType.LAST_MODIFIER]: true,
   [CellType.CTIME]: true,
   [CellType.MTIME]: true,
+  [CellType.FILE_NAME]: true,
 };
 
 export const TABLE_SUPPORT_EDIT_TYPE_MAP = {
   [CellType.TEXT]: true,
-  [CellType.FILE_NAME]: true,
 };
 
 export const TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP = {
@@ -101,6 +101,11 @@ export const PER_LOAD_NUMBER = 1000;
 
 // dtable-db limit loads up to 10,000 rows at a time
 export const MAX_LOAD_NUMBER = 10000;
+
+export const EDITOR_TYPE = {
+  PREVIEWER: 'previewer',
+  ADDITION: 'addition',
+};
 
 export {
   EVENT_BUS_TYPE,

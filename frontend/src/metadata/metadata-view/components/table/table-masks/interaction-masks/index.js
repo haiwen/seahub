@@ -8,7 +8,7 @@ import {
   KeyCodes,
   isFunction,
 } from '../../../../_basic';
-import { EVENT_BUS_TYPE, TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP, GROUP_ROW_TYPE, TRANSFER_TYPES } from '../../../../constants';
+import { EVENT_BUS_TYPE, TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE } from '../../../../constants';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
@@ -30,7 +30,7 @@ import { EditorPortal, EditorContainer } from '../../../cell-editor';
 import './index.css';
 
 const READONLY_PREVIEW_COLUMNS = [
-
+  CellType.FILE_NAME,
 ];
 
 class InteractionMasks extends React.Component {
@@ -125,10 +125,9 @@ class InteractionMasks extends React.Component {
   };
 
   onOpenEditorEvent = (mode) => {
-    this.setState({
-      openEditorMode: mode
+    this.setState({ openEditorMode: mode }, () => {
+      this.openEditor();
     });
-    this.openEditor();
   };
 
   onCloseEditorEvent = () => {
@@ -211,7 +210,7 @@ class InteractionMasks extends React.Component {
       event && event.preventDefault();
     }
     const { key } = event || {};
-    const { selectedPosition } = this.state;
+    const { selectedPosition, openEditorMode } = this.state;
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = selectedColumn;
@@ -219,7 +218,7 @@ class InteractionMasks extends React.Component {
     // how to open editors?
     // 1. editor is closed
     // 2. record-cell is editable or open editor with preview mode
-    if (((this.isSelectedCellEditable() || READONLY_PREVIEW_COLUMNS.includes(columnType)) && !this.state.isEditorEnabled)) {
+    if (((this.isSelectedCellEditable() || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !this.state.isEditorEnabled)) {
       this.setState({
         isEditorEnabled: true,
         firstEditorKeyDown: key,

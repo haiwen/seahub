@@ -50,7 +50,7 @@ const FilterSetter = ({ columns,
   const className = classnames(wrapperClass, { 'active': filters.length > 0 });
   return (
     <>
-      <div className={classnames('setting-item', { 'mr-2': className, 'mb-1': !className })}>
+      <div className={classnames('setting-item', { 'mb-1': !className })}>
         <div
           className={classnames('setting-item-btn filters-setting-btn', className)}
           onClick={onSetterToggle}
@@ -62,7 +62,6 @@ const FilterSetter = ({ columns,
           id={target}
         >
           <Icon iconName='filter' />
-          <span>{filterMessage}</span>
         </div>
       </div>
       {isShowSetter &&

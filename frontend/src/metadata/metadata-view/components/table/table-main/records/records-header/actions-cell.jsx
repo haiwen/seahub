@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SelectAll from './select-all';
-import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants';
+import { SEQUENCE_COLUMN_WIDTH } from '../../../../../constants';
 
-class HeaderActionsCell extends Component {
+class ActionsCell extends Component {
 
   render() {
     const {
@@ -34,7 +34,7 @@ class HeaderActionsCell extends Component {
   }
 }
 
-HeaderActionsCell.propTypes = {
+ActionsCell.propTypes = {
   isMobile: PropTypes.bool,
   hasSelectedRecord: PropTypes.bool,
   isSelectedAll: PropTypes.bool,
@@ -45,4 +45,4 @@ HeaderActionsCell.propTypes = {
   selectAllRecords: PropTypes.func,
 };
 
-export default HeaderActionsCell;
+export default ActionsCell;

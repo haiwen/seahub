@@ -40,7 +40,7 @@ const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperC
     <>
       <div className={classnames('setting-item', { 'mb-1': !className })}>
         <div
-          className={classnames('mr-2 setting-item-btn filters-setting-btn', className)}
+          className={classnames('setting-item-btn filters-setting-btn', className)}
           onClick={onSetterToggle}
           role="button"
           onKeyDown={onKeyDown}
@@ -50,7 +50,6 @@ const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperC
           id={target}
         >
           <Icon iconName="sort" />
-          <span>{sortMessage}</span>
         </div>
       </div>
       {isShowSetter && (

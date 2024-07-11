@@ -111,7 +111,7 @@ class RecordsFooter extends React.Component {
     const { hasMore, hasSelectedRecord, recordMetrics, selectedRange, recordsCount } = this.props;
     if (hasSelectedRecord) {
       const selectedRecordsCount = RecordMetrics.getSelectedIds(recordMetrics).length;
-      return selectedRecordsCount > 1 ? gettext('xxx_records_selected').replace('xxx', selectedRecordsCount) : gettext('1 record selected');
+      return selectedRecordsCount > 1 ? gettext('xxx records selected').replace('xxx', selectedRecordsCount) : gettext('1 record selected');
     }
     const selectedCellsCount = this.getSelectedCellsCount(selectedRange);
     if (selectedCellsCount > 1) {

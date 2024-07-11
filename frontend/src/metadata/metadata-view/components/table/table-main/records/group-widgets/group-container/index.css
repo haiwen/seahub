@@ -338,37 +338,8 @@
   border-bottom: 1px solid #cacaca;
 }
 
-.canvas-groups-rows .table-btn-add-record-row .table-btn-add-record,
-.canvas-groups-rows .table-btn-add-record-row .table-btn-add-record-row-filler {
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #cacaca;
-}
-
-.canvas-groups-rows .table-btn-add-record-row {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  background-color: #fff;
-}
-
-.canvas-groups-rows .table-btn-add-record-row .table-btn-add-record {
-  border-left: 1px solid #cacaca;
-  border-bottom-left-radius: 5px;
-  background-color: #fff;
-}
-
-.canvas-groups-rows.frozen .frozen-btn-add-record-wrapper,
-.canvas-groups-rows.frozen .table-btn-add-record.frozen-columns,
 .canvas-groups-rows.frozen .table-result-table-cell.actions-cell {
   z-index: 2 !important;
-}
-
-.canvas-groups-rows .table-btn-add-record-row-filler {
-  border-right: 1px solid #cacaca;
-  border-bottom-right-radius: 5px;
-}
-
-.frozen-columns.table-btn-add-record {
-  border-radius: 0;
 }
 
 .canvas-groups-rows .actions-cell {
@@ -422,8 +393,7 @@
 }
 
 .canvas-groups-rows.animation .group-item,
-.canvas-groups-rows.animation .sf-metadata-result-table-row,
-.canvas-groups-rows.animation .sf-metadata-result-table-row .table-btn-add-record .canvas-groups-rows.animation .sf-metadata-result-table-row .table-btn-add-record-row-filler {
+.canvas-groups-rows.animation .sf-metadata-result-table-row {
   transition-property: height, top;
   -webkit-transition-property: height, top;
   -moz-transition-property: height, top;

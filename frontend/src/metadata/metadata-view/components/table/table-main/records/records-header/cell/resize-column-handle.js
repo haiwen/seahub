@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from '../../../../_basic';
+import { debounce } from '../../../../../../_basic';
 
 class ResizeColumnHandle extends Component {
 
