@@ -37,7 +37,6 @@ class RecordsBody extends Component {
     this.resultContentRef = null;
     this.resultRef = null;
     this.recordFrozenRefs = [];
-    this.frozenBtnAddRecordRefs = [];
     this.rowVisibleStart = 0;
     this.rowVisibleEnd = this.setRecordVisibleEnd();
     this.columnVisibleStart = 0;
@@ -472,7 +471,6 @@ class RecordsBody extends Component {
 
   renderRecords = () => {
     this.recordFrozenRefs = [];
-    this.frozenBtnAddRecordRefs = [];
     const {
       recordsCount, columns, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
       recordMetrics, showCellColoring, columnColors

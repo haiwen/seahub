@@ -256,13 +256,6 @@ class Records extends Component {
       dom.frozenColumns.style.marginTop = '-' + top + 'px';
     });
 
-    this.bodyRef.frozenBtnAddRecordRefs.forEach(dom => {
-      if (!dom) return;
-      dom.frozenColumns.style.position = 'fixed';
-      dom.frozenColumns.style.marginLeft = '0px';
-      dom.frozenColumns.style.marginTop = '-' + top + 'px';
-    });
-
     if (this.bodyRef.fixFrozenDoms) {
       this.bodyRef.fixFrozenDoms(left, top);
     }
@@ -276,13 +269,6 @@ class Records extends Component {
     }
 
     this.bodyRef.recordFrozenRefs.forEach(dom => {
-      if (!dom) return;
-      dom.frozenColumns.style.position = 'absolute';
-      dom.frozenColumns.style.marginLeft = left + 'px';
-      dom.frozenColumns.style.marginTop = '0px';
-    });
-
-    this.bodyRef.frozenBtnAddRecordRefs.forEach(dom => {
       if (!dom) return;
       dom.frozenColumns.style.position = 'absolute';
       dom.frozenColumns.style.marginLeft = left + 'px';

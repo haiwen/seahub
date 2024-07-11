@@ -2,9 +2,8 @@ import React, { Fragment, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
-import { isMobile } from '../../../../utils';
-import { isFrozen } from '../../../../utils/column-utils';
-import { gettext } from '../../../../../../utils/constants';
+import { isMobile, gettext } from '../../../../../../utils';
+import { isFrozen } from '../../../../../../utils/column-utils';
 
 class HeaderDropdownMenu extends React.Component {
 

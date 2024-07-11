@@ -1,8 +1,10 @@
 import View from './view';
+import Column from './column';
 
 class Metadata {
   constructor(object) {
-    this.columns = object.columns || [];
+    const columns = object.columns || [];
+    this.columns = columns.map(column => new Column(column));
     this.rows = object.rows || [];
     this.id_row_map = {};
     this.row_ids = [];

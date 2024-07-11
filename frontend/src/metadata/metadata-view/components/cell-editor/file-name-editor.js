@@ -26,8 +26,9 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
     const suffix = fileName.slice(index).toLowerCase();
     if (suffix.indexOf(' ') > -1) return '';
     if (Utils.imageCheck(fileName)) return 'image';
-    if (suffix === '.sdoc') return 'sdoc';
-    return 'file';
+    if (Utils.isMarkdownFile(fileName)) return 'file';
+    if (Utils.isSdocFile(fileName)) return 'sdoc';
+    return '';
   }, [_isDir, fileName]);
 
   const parentDir = useMemo(() => {

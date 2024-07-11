@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import deepCopy from 'deep-copy';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { getValidFilters, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../../../utils/constants';
 import { FilterPopover } from '../popover';
@@ -24,7 +24,7 @@ const FilterSetter = ({ columns,
     return deepCopy(getValidFilters(propsFilters || [], columns));
   }, [propsFilters, columns]);
 
-  const filterMessage = useMemo(() => {
+  const message = useMemo(() => {
     const filtersLength = filters.length;
     if (filtersLength === 1) return isNeedSubmit ? gettext('1 preset filter') : gettext('1 filter');
     if (filtersLength > 1) return filtersLength + ' ' + (isNeedSubmit ? gettext('Preset filters') : gettext('Filters'));
@@ -50,21 +50,18 @@ const FilterSetter = ({ columns,
   const className = classnames(wrapperClass, { 'active': filters.length > 0 });
   return (
     <>
-      <div className={classnames('setting-item', { 'mr-2': className, 'mb-1': !className })}>
-        <div
-          className={classnames('setting-item-btn filters-setting-btn', className)}
-          onClick={onSetterToggle}
-          role="button"
-          onKeyDown={onKeyDown}
-          title={filterMessage}
-          aria-label={filterMessage}
-          tabIndex={0}
-          id={target}
-        >
-          <Icon iconName='filter' />
-          <span>{filterMessage}</span>
-        </div>
-      </div>
+      <IconBtn
+        iconName="filter"
+        size={24}
+        className={className}
+        onClick={onSetterToggle}
+        role="button"
+        onKeyDown={onKeyDown}
+        title={message}
+        aria-label={message}
+        tabIndex={0}
+        id={target}
+      />
       {isShowSetter &&
         <FilterPopover
           filtersClassName={filtersClassName}

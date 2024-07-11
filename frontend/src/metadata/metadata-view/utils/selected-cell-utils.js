@@ -3,6 +3,7 @@ import { getColumnByIndex } from './column-utils';
 import { SUPPORT_PREVIEW_COLUMN_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import RowUtils from './row-utils';
+import { canEdit } from './column-utils';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',
@@ -48,7 +49,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
     return false;
   }
   const isCellEditable = isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
-  return isCellEditable;
+  return isCellEditable && canEdit(column, row, enableCellSelect);
 };
 
 export function selectedRangeIsSingleCell(selectedRange) {

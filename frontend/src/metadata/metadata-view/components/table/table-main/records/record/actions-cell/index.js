@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Tooltip } from 'reactstrap';
-import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants';
-import { isMobile, gettext } from '../../../../utils';
 import { Icon } from '@seafile/sf-metadata-ui-component';
+import { SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
+import { isMobile, gettext } from '../../../../../../utils';
+
+import './index.css';
 
 class ActionsCell extends Component {
 
@@ -78,7 +80,7 @@ class ActionsCell extends Component {
           </div>
         </div>
         <span className='rdg-row-expand-icon' onClick={this.props.onRowExpand}>
-          <Icon iconName="open" />
+          <Icon iconName="open-record" />
         </span>
         {/* {this.getLockedRowTooltip()} */}
       </div>

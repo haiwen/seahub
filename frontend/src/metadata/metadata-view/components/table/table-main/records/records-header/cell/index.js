@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip, Tooltip } from 'reactstrap';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../../_basic';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../../../../_basic';
 import ResizeColumnHandle from './resize-column-handle';
-import { SUPPORT_BATCH_DOWNLOAD_TYPES, TABLE_SUPPORT_EDIT_TYPE_MAP, EVENT_BUS_TYPE } from '../../../../constants';
+import { SUPPORT_BATCH_DOWNLOAD_TYPES, TABLE_SUPPORT_EDIT_TYPE_MAP, EVENT_BUS_TYPE } from '../../../../../../constants';
 import HeaderDropdownMenu from './header-dropdown-menu';
-import { gettext } from '../../../../utils';
+import { gettext } from '../../../../../../utils';
 
-class HeaderCell extends Component {
+class Cell extends Component {
 
   static defaultProps = {
     style: null,
@@ -161,4 +161,4 @@ class HeaderCell extends Component {
   }
 }
 
-export default HeaderCell;
+export default Cell;
