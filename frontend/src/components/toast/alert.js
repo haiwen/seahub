@@ -21,6 +21,8 @@ class Alert extends React.PureComponent {
         return 'sf3-font sf3-font-exclamation-circle';
       case 'danger':
         return 'sf3-font sf3-font-exclamation-circle';
+      case 'notify-in-progress':
+        return 'loading-icon';
       default:
         return 'sf3-font sf3-font-check-circle';
     }

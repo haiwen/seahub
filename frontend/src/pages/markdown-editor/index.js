@@ -106,7 +106,7 @@ class MarkdownEditor extends React.Component {
 
   receiveUpdateData (data) {
     let currentTime = new Date();
-    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
+    if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
       return;
     }
     editorApi.fileMetaData().then((res) => {
