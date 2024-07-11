@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -55,34 +55,32 @@ class ShareLinkPanel extends React.Component {
       toaster.danger(errMessage);
     });
 
-    if (isPro) {
-      const { itemType, userPerm } = this.props;
-      if (itemType == 'library') {
-        let permissionOptions = Utils.getShareLinkPermissionList(itemType, userPerm, path);
+    const { itemType, userPerm } = this.props;
+    if (itemType == 'library') {
+      let permissionOptions = Utils.getShareLinkPermissionList(itemType, userPerm, path);
+      this.setState({
+        permissionOptions: permissionOptions,
+        currentPermission: permissionOptions[0],
+      });
+    } else {
+      let getDirentInfoAPI;
+      if (this.props.itemType === 'file') {
+        getDirentInfoAPI = seafileAPI.getFileInfo(repoID, path);
+      } else if (this.props.itemType === 'dir') {
+        getDirentInfoAPI = seafileAPI.getDirInfo(repoID, path);
+      }
+      getDirentInfoAPI.then((res) => {
+        let canEdit = res.data.can_edit;
+        let permission = res.data.permission;
+        let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path, canEdit);
         this.setState({
           permissionOptions: permissionOptions,
           currentPermission: permissionOptions[0],
         });
-      } else {
-        let getDirentInfoAPI;
-        if (this.props.itemType === 'file') {
-          getDirentInfoAPI = seafileAPI.getFileInfo(repoID, path);
-        } else if (this.props.itemType === 'dir') {
-          getDirentInfoAPI = seafileAPI.getDirInfo(repoID, path);
-        }
-        getDirentInfoAPI.then((res) => {
-          let canEdit = res.data.can_edit;
-          let permission = res.data.permission;
-          let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path, canEdit);
-          this.setState({
-            permissionOptions: permissionOptions,
-            currentPermission: permissionOptions[0],
-          });
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-      }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
   }
 

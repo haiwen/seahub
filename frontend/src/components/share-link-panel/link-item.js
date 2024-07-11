@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import toaster from '../toast';
-import { isPro, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
@@ -103,7 +103,7 @@ class LinkItem extends React.Component {
             {this.cutLink(link)}
           </td>
           <td>
-            {(isPro && permissions) && Utils.getShareLinkPermissionObject(currentPermission).text}
+            {permissions && Utils.getShareLinkPermissionObject(currentPermission).text}
           </td>
           <td>
             {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}

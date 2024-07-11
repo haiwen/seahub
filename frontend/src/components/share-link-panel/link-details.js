@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button } from 'reactstrap';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import Selector from '../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -234,7 +234,7 @@ class LinkDetails extends React.Component {
               }
             </>
           )}
-          {(isPro && sharedLinkInfo.permissions) && (
+          {sharedLinkInfo.permissions && (
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
               <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
