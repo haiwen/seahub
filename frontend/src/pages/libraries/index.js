@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import cookie from 'react-cookies';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
@@ -10,7 +9,6 @@ import Group from '../../models/group';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/repos-sort-menu';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
@@ -21,11 +19,6 @@ import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
 
 import '../../css/files.css';
-
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired
-};
 
 class Libraries extends Component {
   constructor(props) {
@@ -238,11 +231,7 @@ class Libraries extends Component {
       };
     });
     return (
-      <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        />
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -365,11 +354,9 @@ class Libraries extends Component {
             />
           )}
         </div>
-      </Fragment>
+      </>
     );
   }
 }
-
-Libraries.propTypes = propTypes;
 
 export default Libraries;

@@ -5,14 +5,6 @@
   flex-direction: column;
 }
 
-/* for top bottom layout*/
-#header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 2px 4px rgba(0,0,0, 10%);
-  z-index: 100;
-}
-
 /* for left right layout */
 #main {
   flex: 1;
@@ -35,13 +27,6 @@
 
 .user-panel {
   position: relative;
-}
-
-.positioned-top-logo {
-  position: absolute;
-  top: .5rem;
-  left: 1rem;
-  z-index: 101;
 }
 
 .main-panel {

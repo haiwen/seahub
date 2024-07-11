@@ -12,13 +12,10 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ModalPortal from '../../components/modal-portal';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 
 const propTypes = {
-  onShowSidePanel: PropTypes.func,
-  onSearchedClick: PropTypes.func,
   currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool,
   repoList: PropTypes.array,
@@ -222,11 +219,6 @@ class PublicSharedView extends React.Component {
 
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        >
-        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">

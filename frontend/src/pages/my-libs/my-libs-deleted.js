@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 moment.locale(lang);
 
@@ -44,9 +43,6 @@ class MyLibsDeleted extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north">
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -185,10 +181,6 @@ class DeletedRepoItem extends Component {
 DeletedRepoItem.propTypes = {
   repo: PropTypes.object.isRequired,
   refreshDeletedRepoList: PropTypes.func.isRequired,
-};
-
-MyLibsDeleted.propTypes = {
-  onSearchedClick: PropTypes.func.isRequired,
 };
 
 export default MyLibsDeleted;

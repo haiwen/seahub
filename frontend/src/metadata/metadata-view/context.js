@@ -1,6 +1,6 @@
 import metadataAPI from '../api';
 import { UserService, LocalStorage } from './_basic';
-import EventBus from './utils/event-bus';
+import EventBus from '../../components/common/event-bus';
 import { username } from '../../utils/constants';
 
 class Context {

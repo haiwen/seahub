@@ -10,7 +10,6 @@ import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import GroupMembersDialog from '../../components/dialog/group-members-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
@@ -26,8 +25,6 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import '../../css/group-view.css';
 
 const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
   groupID: PropTypes.string,
 };
@@ -430,12 +427,6 @@ class GroupView extends React.Component {
     const opList = this.getOpList();
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-          </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
