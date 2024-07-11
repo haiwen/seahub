@@ -32,6 +32,7 @@ class CommonToolbar extends React.Component {
       isLibView: props.isLibView,
       path: props.path,
       isViewFile: props.isViewFile,
+      currentRepoInfo: props.currentRepoInfo,
     };
   }
 
@@ -45,12 +46,12 @@ class CommonToolbar extends React.Component {
     this.unsubscribeLibChange && this.unsubscribeLibChange();
   }
 
-  onRepoChange = ({ repoID, repoName, isLibView, path, isViewFile }) => {
-    this.setState({ repoID, repoName, isLibView, path, isViewFile });
+  onRepoChange = ({ repoID, repoName, isLibView, path, isViewFile, currentRepoInfo }) => {
+    this.setState({ repoID, repoName, isLibView, path, isViewFile, currentRepoInfo });
   };
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, path, isViewFile } = this.state;
+    const { repoID, repoName, isLibView, path, isViewFile, currentRepoInfo } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
@@ -62,9 +63,8 @@ class CommonToolbar extends React.Component {
             path={path}
             isViewFile={isViewFile}
             placeholder={placeholder}
+            currentRepoInfo={currentRepoInfo}
             onSearchedClick={this.props.onSearchedClick}
-            repoName={repoName}
-            currentRepoInfo={this.props.currentRepoInfo}
             isLibView={isLibView}
           />
         );

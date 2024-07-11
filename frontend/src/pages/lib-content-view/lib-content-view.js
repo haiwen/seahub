@@ -207,6 +207,7 @@ class LibContentView extends React.Component {
       path: '',
       isViewFile: false,
       isLibView: false,
+      currentRepoInfo: null,
     });
   }
 
@@ -215,6 +216,7 @@ class LibContentView extends React.Component {
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: this.props.repoID,
       repoName: this.state.repoName,
+      currentRepoInfo: this.state.currentRepoInfo,
       path: this.state.path,
       isViewFile: this.state.isViewFile,
       isLibView: true,
