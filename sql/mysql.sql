@@ -1480,10 +1480,10 @@ CREATE TABLE `base_clientssotoken` (
   KEY `base_clientssotoken_accessed_at_cdc66bf3` (`accessed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `TrashRecord` (
+CREATE TABLE IF NOT EXISTS `FileTrash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(255) NOT NULL,
-  `obj_type` varchar(128) NOT NULL,
+  `obj_type` varchar(10) NOT NULL,
   `obj_id` varchar(40) NOT NULL,
   `obj_name` varchar(255) NOT NULL,
   `delete_time` datetime NOT NULL,
@@ -1492,7 +1492,5 @@ CREATE TABLE IF NOT EXISTS `TrashRecord` (
   `path` text NOT NULL,
   `size` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `ix_TrashRecord_delete_time` (`delete_time`),
-  KEY `ix_TrashRecord_repo_id` (`repo_id`),
-  KEY `ix_TrashRecord_path` (`path`)
+  KEY `ix_FileTrash_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
