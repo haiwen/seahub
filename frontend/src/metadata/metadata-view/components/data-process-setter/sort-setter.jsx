@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { getValidSorts, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { SortPopover } from '../popover';
@@ -38,20 +38,18 @@ const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperC
   const className = classnames(wrapperClass, { 'active': sorts.length > 0 });
   return (
     <>
-      <div className={classnames('setting-item', { 'mb-1': !className })}>
-        <div
-          className={classnames('setting-item-btn filters-setting-btn', className)}
-          onClick={onSetterToggle}
-          role="button"
-          onKeyDown={onKeyDown}
-          title={sortMessage}
-          aria-label={sortMessage}
-          tabIndex={0}
-          id={target}
-        >
-          <Icon iconName="sort" />
-        </div>
-      </div>
+      <IconBtn
+        iconName="sort"
+        size={24}
+        className={className}
+        onClick={onSetterToggle}
+        role="button"
+        onKeyDown={onKeyDown}
+        title={sortMessage}
+        aria-label={sortMessage}
+        tabIndex={0}
+        id={target}
+      />
       {isShowSetter && (
         <SortPopover
           isNeedSubmit={isNeedSubmit}

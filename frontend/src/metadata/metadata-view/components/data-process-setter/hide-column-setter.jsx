@@ -1,61 +1,52 @@
-import React, { Component } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 
-class HideColumnSetter extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isHideColumnSetterShow: false,
-    };
-  }
+const HideColumnSetter = ({ columns, wrapperClass, target, localShownColumnKeys }) => {
+  const [isShowSetter, setShowSetter] = useState(false);
 
-  onKeyDown = (e) => {
-    if (CommonlyUsedHotkey.isEnter(e) || CommonlyUsedHotkey.isSpace(e)) this.onHideColumnToggle();
-  };
+  const hiddenColumns = useMemo(() => {
+    return columns.filter((column) => !localShownColumnKeys.includes(column.key));
+  }, [columns, localShownColumnKeys]);
 
-  onHideColumnToggle = () => {
-    this.setState({ isHideColumnSetterShow: !this.state.isHideColumnSetterShow });
-  };
-
-  render() {
-    const { columns, wrapperClass, target, localShownColumnKeys } = this.props;
-    if (!columns) return null;
-    let message = gettext('Hide columns');
-    const hiddenColumns = columns.filter((column) => !localShownColumnKeys.includes(column.key));
+  const message = useMemo(() => {
     const hiddenColumnsLength = hiddenColumns.length;
-    if (hiddenColumnsLength === 1) {
-      message = gettext('1 hidden column');
-    } else if (hiddenColumnsLength > 1) {
-      message = gettext('xxx hidden columns').replace('xxx', hiddenColumnsLength);
-    }
-    let labelClass = wrapperClass || '';
-    labelClass = (labelClass && hiddenColumnsLength > 0) ? labelClass + ' active' : labelClass;
+    if (hiddenColumnsLength === 1) return gettext('1 hidden column');
+    if (hiddenColumnsLength > 1) return gettext('xxx hidden columns').replace('xxx', hiddenColumnsLength);
+    return gettext('Hide columns');
+  }, [hiddenColumns]);
 
-    return (
-      <>
-        <div className={classnames('setting-item', { 'mb-1': !labelClass })}>
-          <div
-            className={classnames('setting-item-btn filters-setting-btn', labelClass) }
-            onClick={this.onHideColumnToggle}
-            role="button"
-            onKeyDown={this.onKeyDown}
-            title={message}
-            aria-label={message}
-            tabIndex={0}
-            id={target}
-          >
-            <Icon iconName="hide" />
-          </div>
-        </div>
-      </>
-    );
-  }
-}
+  const onSetterToggle = useCallback(() => {
+    setShowSetter(!isShowSetter);
+  }, [isShowSetter]);
+
+  const onKeyDown = useCallback((event) => {
+    event.stopPropagation();
+    if (CommonlyUsedHotkey.isEnter(event) || CommonlyUsedHotkey.isSpace(event)) onSetterToggle();
+  }, [onSetterToggle]);
+
+  const className = classnames(wrapperClass, { 'active': hiddenColumns.length > 0 });
+  return (
+    <>
+      <IconBtn
+        iconName="hide"
+        size={24}
+        className={className}
+        onClick={onSetterToggle}
+        role="button"
+        onKeyDown={onKeyDown}
+        title={message}
+        aria-label={message}
+        tabIndex={0}
+        id={target}
+      />
+    </>
+  );
+};
 
 HideColumnSetter.propTypes = {
   wrapperClass: PropTypes.string,

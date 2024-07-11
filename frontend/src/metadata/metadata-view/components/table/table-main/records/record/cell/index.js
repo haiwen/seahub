@@ -163,14 +163,15 @@ class Cell extends React.Component {
       style: cellStyle,
       ...cellEvents,
     };
+    const isDir = this.isDir();
     const cellContent = (
-      <CellFormatter readonly={readonly} value={cellValue} field={column} isDir={this.isDir()} />
+      <CellFormatter readonly={readonly} value={cellValue} field={column} isDir={isDir} />
     );
 
     return (
       <div key={`${record._id}-${key}`} {...props}>
         {cellContent}
-        {isCellSelected && (<CellOperationBtn value={cellValue} column={column} />)}
+        {isCellSelected && (<CellOperationBtn value={cellValue} column={column} isDir={isDir} />)}
       </div>
     );
   };

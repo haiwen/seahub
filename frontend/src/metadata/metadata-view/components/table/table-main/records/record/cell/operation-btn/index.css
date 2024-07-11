@@ -1,11 +1,11 @@
 .sf-metadata-cell-operation-btn {
-  transition: all 0.020s ease-in;
   background: #fff;
   border-radius: 3px;
   box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
   position: absolute;
   right: 8px;
   top: 6px;
+  transition: background 0.020s ease-in;
 }
 
 .sf-metadata-cell-operation-btn:hover {

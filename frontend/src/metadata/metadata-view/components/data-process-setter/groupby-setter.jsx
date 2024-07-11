@@ -1,69 +1,59 @@
-import React, { Component } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Icon } from '@seafile/sf-metadata-ui-component';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 
-class GroupbySetter extends Component {
+const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target }) => {
+  const [isShowSetter, setShowSetter] = useState(false);
 
-  static defaultProps = {
-    target: 'sf-metadata-groupby-popover',
-    isNeedSubmit: false,
-  };
+  const groupbys = useMemo(() => {
+    return propsGroupbys || [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns, propsGroupbys]);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShowGroupbySetter: false,
-    };
-  }
-
-  onKeyDown = (e) => {
-    if (CommonlyUsedHotkey.isEnter(e) || CommonlyUsedHotkey.isSpace(e)) this.onGroupbySetterToggle();
-  };
-
-  onGroupbySetterToggle = () => {
-    this.setState({ isShowGroupbySetter: !this.state.isShowGroupbySetter });
-  };
-
-  render() {
-    const { columns, groupbys, wrapperClass } = this.props;
-    if (!columns) return null;
-
+  const message = useMemo(() => {
     const groupbysLength = groupbys ? groupbys.length : 0;
-    const activated = groupbysLength > 0;
-
+    if (groupbysLength === 1) return gettext('Grouped by 1 column');
+    if (groupbysLength > 1) return gettext('Grouped by xxx columns').replace('xxx', groupbysLength);
     // need to translate to Group
-    let groupbyMessage = gettext('Group_by');
-    if (groupbysLength === 1) {
-      groupbyMessage = gettext('Grouped by 1 column');
-    } else if (groupbysLength > 1) {
-      groupbyMessage = gettext('Grouped by xxx columns').replace('xxx', groupbysLength);
-    }
-    let labelClass = wrapperClass || '';
-    labelClass = (labelClass && activated) ? labelClass + ' active' : labelClass;
+    return gettext('Group_by');
+  }, [groupbys]);
 
-    return (
-      <>
-        <div className={classnames('setting-item', { 'mb-1': !labelClass })}>
-          <div
-            className={classnames('setting-item-btn groupbys-setting-btn', labelClass)}
-            onClick={this.onGroupbySetterToggle}
-            role="button"
-            onKeyDown={this.onKeyDown}
-            title={groupbyMessage}
-            aria-label={groupbyMessage}
-            tabIndex={0}
-            id={this.props.target}
-          >
-            <Icon iconName="group" />
-          </div>
-        </div>
-      </>
-    );
-  }
-}
+  const onSetterToggle = useCallback(() => {
+    setShowSetter(!isShowSetter);
+  }, [isShowSetter]);
+
+  const onKeyDown = useCallback((event) => {
+    event.stopPropagation();
+    if (CommonlyUsedHotkey.isEnter(event) || CommonlyUsedHotkey.isSpace(event)) onSetterToggle();
+  }, [onSetterToggle]);
+
+  const className = classnames(wrapperClass, { 'active': groupbys.length > 0 });
+  return (
+    <>
+      <IconBtn
+        iconName="group"
+        size={24}
+        className={className}
+        onClick={onSetterToggle}
+        role="button"
+        onKeyDown={onKeyDown}
+        title={message}
+        aria-label={message}
+        tabIndex={0}
+        id={target}
+      />
+    </>
+  );
+
+};
+
+GroupbySetter.defaultProps = {
+  target: 'sf-metadata-groupby-popover',
+  isNeedSubmit: false,
+};
 
 GroupbySetter.propTypes = {
   wrapperClass: PropTypes.string,
