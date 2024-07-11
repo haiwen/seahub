@@ -30,7 +30,6 @@ export default class AISearch extends Component {
     path: PropTypes.string,
     placeholder: PropTypes.string,
     onSearchedClick: PropTypes.func.isRequired,
-    repoName: PropTypes.string,
     currentRepoInfo: PropTypes.object,
     isViewFile: PropTypes.bool,
     isLibView: PropTypes.bool,
@@ -64,22 +63,10 @@ export default class AISearch extends Component {
     this.inputRef = React.createRef();
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
+    this.searchResultListContainerRef = React.createRef();
     this.indexStateTimer = null;
     this.isChineseInput = false;
-    if (props.isLibView && props.currentRepoInfo) {
-      this.isRepoOwner = props.currentRepoInfo.owner_email === username;
-      this.isAdmin = props.currentRepoInfo.is_admin;
-    } else {
-      this.isRepoOwner = false;
-      this.isAdmin = false;
-    }
-    this.searchResultListContainerRef = React.createRef();
-    const { repoID } = props;
-    let storeKey = 'sfVisitedAISearchItems';
-    if (repoID) {
-      storeKey += repoID;
-    }
-    this.storeKey = storeKey;
+    this.calculateProperty(props);
   }
 
   componentDidMount() {
@@ -88,12 +75,45 @@ export default class AISearch extends Component {
     document.addEventListener('compositionend', this.onCompositionEnd);
     document.addEventListener('click', this.handleOutsideClick);
     if (this.props.isLibView) {
-      this.queryLibraryIndexState();
+      this.queryLibraryIndexState(this.props.repoID);
     }
   }
 
-  queryLibraryIndexState() {
-    seafileAPI.queryLibraryIndexState(this.props.repoID).then(res => {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.calculateProperty(nextProps);
+    if (nextProps.isLibView) {
+      if (this.props.repoID !== nextProps.repoID) {
+        this.queryLibraryIndexState(nextProps.repoID);
+      }
+    } else {
+      if (this.indexStateTimer) {
+        clearInterval(this.indexStateTimer);
+        this.indexStateTimer = null;
+      }
+      this.isChineseInput = false;
+      this.setState({
+        indexState: '',
+      });
+    }
+  }
+
+  calculateProperty = (props) => {
+    if (props.isLibView && props.currentRepoInfo) {
+      this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+      this.isAdmin = props.currentRepoInfo.is_admin;
+    } else {
+      this.isRepoOwner = false;
+      this.isAdmin = false;
+    }
+    let storeKey = 'sfVisitedAISearchItems';
+    if (props.repoID) {
+      storeKey += props.repoID;
+    }
+    this.storeKey = storeKey;
+  };
+
+  queryLibraryIndexState(repoID) {
+    seafileAPI.queryLibraryIndexState(repoID).then(res => {
       const { state: indexState, task_id: taskId } = res.data;
       this.setState({ indexState }, () => {
         if (indexState === INDEX_STATE.RUNNING) {
