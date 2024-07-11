@@ -1,15 +1,18 @@
 body {
   overflow: hidden;
 }
+
 #wrapper {
   height: 100%;
 }
+
 .top-header {
-  background: #f4f4f7;
-  border-bottom: 1px solid #e8e8e8;
+  background-color: #f8fafd;
+  border-bottom: 1px solid #eee;
   padding: .5rem 1rem;
   flex-shrink: 0;
 }
+
 .content {
   max-width: 950px;
 }

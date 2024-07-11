@@ -21,7 +21,7 @@ class Header extends React.Component {
   render() {
     const { onShowSidePanel, onSearchedClick, showSearch, children } = this.props;
     return (
-      <div id="header" className="d-flex justify-content-between py-2 px-4">
+      <div id="header" className="top-header d-flex justify-content-between flex-shrink-0">
         <div className={'flex-shrink-0 d-none d-md-flex'}>
           <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
         </div>
