@@ -383,7 +383,7 @@ class RepoTrash2(APIView):
             show_time = show_days
 
         try:
-            deleted_entries = get_trash_records(repo_id, show_time, path)
+            deleted_entries = get_trash_records(repo_id, show_time)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
