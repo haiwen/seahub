@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CommonToolbar from './common-toolbar';
+import CommonToolbar from '../toolbar/common-toolbar';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func,
@@ -10,7 +10,7 @@ const propTypes = {
   showSearch: PropTypes.bool
 };
 
-class TopToolbar extends React.Component {
+class SettingTopToolbar extends React.Component {
 
   render() {
     const { onShowSidePanel, onSearchedClick, children, showSearch } = this.props;
@@ -31,6 +31,6 @@ class TopToolbar extends React.Component {
   }
 }
 
-TopToolbar.propTypes = propTypes;
+SettingTopToolbar.propTypes = propTypes;
 
-export default TopToolbar;
+export default SettingTopToolbar;

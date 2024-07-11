@@ -6,10 +6,9 @@ import { Utils } from './utils/utils';
 import { isPro, isDBSqlite3, gettext, siteRoot } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import toaster from './components/toast';
-import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
-import TopToolbar from './components/toolbar/top-toolbar';
-import SideNav from './components/user-settings/side-nav';
+import SettingSidePanel from './components/user-settings/setting-side-panel';
+import SettingTopToolbar from './components/user-settings/setting-top-toolbar';
 import UserAvatarForm from './components/user-settings/user-avatar-form';
 import UserBasicInfoForm from './components/user-settings/user-basic-info-form';
 import WebAPIAuthToken from './components/user-settings/web-api-auth-token';
@@ -124,60 +123,52 @@ class Settings extends React.Component {
   render() {
     const { isSidePanelClosed } = this.state;
     return (
-      <React.Fragment>
-        <div id="main" className="h-100">
-          <SidePanel
-            isSidePanelClosed={isSidePanelClosed}
-            onCloseSidePanel={this.onCloseSidePanel}
-          >
-            <SideNav data={this.sideNavItems} curItemID={this.state.curItemID} />
-          </SidePanel>
-          <MainPanel>
-            <>
-              <TopToolbar
-                onShowSidePanel={this.onShowSidePanel}
-                showSearch={false}
-              >
-              </TopToolbar>
-              <div className="main-panel-center flex-row">
-                <div className="cur-view-container">
-                  <div className="cur-view-path">
-                    <h3 className="sf-heading m-0">{gettext('Settings')}</h3>
-                  </div>
-                  <div className="cur-view-content content position-relative" onScroll={this.handleContentScroll}>
-                    <div id="user-basic-info" className="setting-item">
-                      <h3 className="setting-item-heading">{gettext('Profile Setting')}</h3>
-                      <UserAvatarForm />
-                      {this.state.userInfo && <UserBasicInfoForm userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
-                    </div>
-                    {canUpdatePassword &&
-                    <div id="update-user-passwd" className="setting-item">
-                      <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                      <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
-                    </div>
-                    }
-                    {enableGetAuthToken && <WebAPIAuthToken />}
-                    {enableWebdavSecret && <WebdavPassword />}
-                    {enableAddressBook && this.state.userInfo &&
-                    <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
-                    <LanguageSetting />
-                    {(isPro || !isDBSqlite3) && <EmailNotice />}
-                    {twoFactorAuthEnabled && <TwoFactorAuthentication />}
-                    {enableWechatWork && <SocialLogin />}
-                    {enableDingtalk && <SocialLoginDingtalk />}
-                    {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
-                    <LinkedDevices />
-                    {enableDeleteAccount && <DeleteAccount />}
-                  </div>
-                </div>
+      <div id="main" className="h-100">
+        <SettingSidePanel
+          isSidePanelClosed={isSidePanelClosed}
+          onCloseSidePanel={this.onCloseSidePanel}
+          data={this.sideNavItems}
+          curItemID={this.state.curItemID}
+        />
+        <MainPanel>
+          <SettingTopToolbar onShowSidePanel={this.onShowSidePanel} showSearch={false} />
+          <div className="main-panel-center flex-row">
+            <div className="cur-view-container">
+              <div className="cur-view-path">
+                <h3 className="sf-heading m-0">{gettext('Settings')}</h3>
               </div>
-            </>
-          </MainPanel>
-          <MediaQuery query="(max-width: 767.8px)">
-            <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
-          </MediaQuery>
-        </div>
-      </React.Fragment>
+              <div className="cur-view-content content position-relative" onScroll={this.handleContentScroll}>
+                <div id="user-basic-info" className="setting-item">
+                  <h3 className="setting-item-heading">{gettext('Profile Setting')}</h3>
+                  <UserAvatarForm />
+                  {this.state.userInfo && <UserBasicInfoForm userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
+                </div>
+                {canUpdatePassword &&
+                <div id="update-user-passwd" className="setting-item">
+                  <h3 className="setting-item-heading">{gettext('Password')}</h3>
+                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
+                </div>
+                }
+                {enableGetAuthToken && <WebAPIAuthToken />}
+                {enableWebdavSecret && <WebdavPassword />}
+                {enableAddressBook && this.state.userInfo &&
+                <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
+                <LanguageSetting />
+                {(isPro || !isDBSqlite3) && <EmailNotice />}
+                {twoFactorAuthEnabled && <TwoFactorAuthentication />}
+                {enableWechatWork && <SocialLogin />}
+                {enableDingtalk && <SocialLoginDingtalk />}
+                {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
+                <LinkedDevices />
+                {enableDeleteAccount && <DeleteAccount />}
+              </div>
+            </div>
+          </div>
+        </MainPanel>
+        <MediaQuery query="(max-width: 767.8px)">
+          <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+        </MediaQuery>
+      </div>
     );
   }
 }
