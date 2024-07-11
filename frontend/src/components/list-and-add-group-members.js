@@ -177,8 +177,8 @@ class ManageMembersDialog extends React.Component {
             className="add-members-select"
           />
           {this.state.selectedOption ?
-            <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
-            <Button color="secondary" disabled>{gettext('Submit')}</Button>
+            <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
+            <Button color="primary" disabled>{gettext('Submit')}</Button>
           }
         </div>
         {

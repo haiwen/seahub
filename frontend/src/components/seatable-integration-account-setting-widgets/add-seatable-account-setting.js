@@ -130,7 +130,7 @@ class AddSeatableAccountSetting extends Component {
           <button
             onClick={stage === 'toCheck'? this.testSeatableAPIToken : this.addSeatableAccountSetting}
             type="button"
-            className="btn btn-secondary add-account-btn"
+            className="btn btn-primary add-account-btn"
           >{stage === 'toCheck' ? gettext('Check') : gettext('Submit')}</button>
         </div>
         <div className="base-account">

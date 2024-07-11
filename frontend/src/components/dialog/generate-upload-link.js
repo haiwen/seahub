@@ -430,7 +430,7 @@ class GenerateUploadLink extends React.Component {
           }
         </FormGroup>
         {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
-        <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
+        <Button color="primary" className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
       </Form>
     );
   }

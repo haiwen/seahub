@@ -348,7 +348,7 @@ class ShareToGroup extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.shareToGroup}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&
