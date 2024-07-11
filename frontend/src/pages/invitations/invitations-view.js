@@ -300,11 +300,4 @@ Content.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-const InvitationsViewPropTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-};
-
-InvitationsView.propTypes = InvitationsViewPropTypes;
-
 export default InvitationsView;

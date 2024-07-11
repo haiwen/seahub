@@ -1,20 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
-
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-};
 
 class Wikis extends Component {
   constructor(props) {
@@ -177,12 +170,6 @@ class Wikis extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-          </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         {this.state.isShowAddDialog &&
           <ModalPortal>
             <AddWikiDialog
@@ -241,7 +228,5 @@ class Wikis extends Component {
     );
   }
 }
-
-Wikis.propTypes = propTypes;
 
 export default Wikis;

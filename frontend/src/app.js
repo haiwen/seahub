@@ -6,8 +6,8 @@ import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
 import { Utils } from './utils/utils';
 import SystemNotification from './components/system-notification';
-//import Header from './components/header';
-import Logo from './components/logo';
+import EventBus from './components/common/event-bus';
+import Header from './components/header';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import FilesActivities from './pages/dashboard/files-activities';
@@ -30,22 +30,11 @@ import Group from './pages/groups/group-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
-import MainContentWrapper from './components/main-content-wrapper';
 
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';
 
-const FilesActivitiesWrapper = MainContentWrapper(FilesActivities);
-const MyFileActivitiesWrapper = MainContentWrapper(MyFileActivities);
-const StarredWrapper = MainContentWrapper(Starred);
-const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
-const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
-const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
-const OCMViaWebdavWrapper = MainContentWrapper(OCMViaWebdav);
-const InvitationsViewWrapper = MainContentWrapper(InvitationsView);
-const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
-const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 
 class App extends Component {
 
@@ -62,6 +51,8 @@ class App extends Component {
     };
     this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
+    const eventBus = new EventBus();
+    this.eventBus = eventBus;
   }
 
   onpopstate = (event) => {
@@ -222,52 +213,55 @@ class App extends Component {
     return (
       <React.Fragment>
         <SystemNotification />
-        {/*<Header
+        <Header
           isSidePanelClosed={isSidePanelClosed}
           onCloseSidePanel={this.onCloseSidePanel}
           onShowSidePanel={this.onShowSidePanel}
           onSearchedClick={this.onSearchedClick}
+          eventBus={this.eventBus}
         />
-        */}
         <div id="main" className="user-panel">
-          <Logo onCloseSidePanel={this.onCloseSidePanel} positioned={true} />
           <SidePanel
             isSidePanelClosed={isSidePanelClosed}
             isSidePanelFolded={isSidePanelFolded}
             onCloseSidePanel={this.onCloseSidePanel}
             currentTab={currentTab}
             tabItemClick={this.tabItemClick}
-            showLogoOnlyInMobile={true}
             toggleFoldSideNav={this.toggleFoldSideNav}
           />
           <MainPanel>
             <Router className="reach-router">
-              <Libraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <Libraries path={ siteRoot + 'libraries' } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <MyFileActivitiesWrapper path={siteRoot + 'my-activities'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <OCMViaWebdavWrapper path={siteRoot + 'ocm-via-webdav'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
-              <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} isSidePanelFolded={isSidePanelFolded} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
-              <OCMRepoDir path={siteRoot + 'remote-library/:providerID/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
-              <Group
-                path={siteRoot + 'group/:groupID'}
-                onShowSidePanel={this.onShowSidePanel}
-                onSearchedClick={this.onSearchedClick}
-                onGroupChanged={this.onGroupChanged}
+              <Libraries path={siteRoot} />
+              <Libraries path={siteRoot + 'libraries'} />
+              <MyLibraries path={siteRoot + 'my-libs'} />
+              <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
+              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
+              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
+              <PublicSharedView path={siteRoot + 'org/'} />
+              <Wikis path={siteRoot + 'published'} />
+              <Starred path={siteRoot + 'starred'} />
+              <InvitationsView path={siteRoot + 'invitations/'} />
+              <FilesActivities path={siteRoot + 'dashboard'} />
+              <MyFileActivities path={siteRoot + 'my-activities'} />
+              <Group path={siteRoot + 'group/:groupID'} onGroupChanged={this.onGroupChanged} />
+              <LinkedDevices path={siteRoot + 'linked-devices'} />
+              <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
+              <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
+              <SharedLibraries path={siteRoot + 'shared-libs'} />
+              <ShareWithOCM path={siteRoot + 'shared-with-ocm'} />
+              <OCMViaWebdav path={siteRoot + 'ocm-via-webdav'} />
+              <OCMRepoDir
+                path={siteRoot + 'remote-library/:providerID/:repoID/*'}
+                pathPrefix={this.state.pathPrefix}
+                onTabNavClick={this.tabItemClick}
               />
-              <Wikis path={siteRoot + 'published'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-              <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
-              <InvitationsViewWrapper path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <LibContentView
+                path={siteRoot + 'library/:repoID/*'}
+                pathPrefix={this.state.pathPrefix}
+                isSidePanelFolded={isSidePanelFolded}
+                onTabNavClick={this.tabItemClick}
+                eventBus={this.eventBus}
+              />
             </Router>
           </MainPanel>
           <MediaQuery query="(max-width: 767.8px)">

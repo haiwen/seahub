@@ -29,7 +29,6 @@ class LibContentToolbar extends React.Component {
           repoName={this.props.repoName}
           currentRepoInfo={this.props.currentRepoInfo}
           onSearchedClick={this.props.onSearchedClick}
-          searchPlaceholder={gettext('Search files')}
         />
       </Fragment>
     );

@@ -14,7 +14,6 @@ import ShareLinkPermissionSelect from '../../components/dialog/share-link-permis
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
@@ -363,11 +362,6 @@ class Item extends Component {
 
 Item.propTypes = itemPropTypes;
 
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired
-};
-
 const PER_PAGE = 25;
 
 class ShareAdminShareLinks extends Component {
@@ -540,11 +534,6 @@ class ShareAdminShareLinks extends Component {
   render() {
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        >
-        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -599,7 +588,5 @@ class ShareAdminShareLinks extends Component {
     );
   }
 }
-
-ShareAdminShareLinks.propTypes = propTypes;
 
 export default ShareAdminShareLinks;

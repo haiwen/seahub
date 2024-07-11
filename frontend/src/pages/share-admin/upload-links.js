@@ -12,7 +12,6 @@ import EmptyTip from '../../components/empty-tip';
 import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 const contentPropTypes = {
@@ -203,11 +202,6 @@ class Item extends Component {
 
 Item.propTypes = itemPropTypes;
 
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired
-};
-
 class ShareAdminUploadLinks extends Component {
 
   constructor(props) {
@@ -273,10 +267,6 @@ class ShareAdminUploadLinks extends Component {
   render() {
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -317,7 +307,5 @@ class ShareAdminUploadLinks extends Component {
     );
   }
 }
-
-ShareAdminUploadLinks.propTypes = propTypes;
 
 export default ShareAdminUploadLinks;

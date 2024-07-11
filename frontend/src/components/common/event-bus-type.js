@@ -1,4 +1,5 @@
 export const EVENT_BUS_TYPE = {
+  // metadata
   QUERY_COLLABORATORS: 'query-collaborators',
   QUERY_COLLABORATOR: 'query-collaborator',
   UPDATE_TABLE_ROWS: 'update-table-rows',
@@ -34,4 +35,7 @@ export const EVENT_BUS_TYPE = {
 
   // change
   VIEW_CHANGED: 'view_changed',
+
+  // library
+  CURRENT_LIBRARY_CHANGED: 'current_library_changed',
 };

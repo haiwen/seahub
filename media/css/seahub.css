@@ -1196,7 +1196,6 @@ a.sf-popover-item {
     height: 49px;
     font-size: 14px;
     padding: .5rem 1rem;
-    /*display:flex;*/
     justify-content: space-between;
     flex-shrink: 0;
 }

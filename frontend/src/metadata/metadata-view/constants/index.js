@@ -1,5 +1,5 @@
 import { CellType } from '../_basic';
-import { EVENT_BUS_TYPE } from './event-bus-type';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 import TRANSFER_TYPES from './TransferTypes';
 
 export const CELL_NAVIGATION_MODE = {

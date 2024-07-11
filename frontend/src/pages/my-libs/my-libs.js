@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { navigate } from '@gatsbyjs/reach-router';
 import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -10,17 +9,11 @@ import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ModalPortal from '../../components/modal-portal';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-};
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -156,11 +149,6 @@ class MyLibraries extends Component {
     const { isDropdownMenuOpen } = this.state;
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        >
-        </TopToolbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -228,7 +216,5 @@ class MyLibraries extends Component {
     );
   }
 }
-
-MyLibraries.propTypes = propTypes;
 
 export default MyLibraries;

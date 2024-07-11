@@ -16,17 +16,17 @@ import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
-import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const propTypes = {
+  eventBus: PropTypes.object,
   isSidePanelFolded: PropTypes.bool,
   pathPrefix: PropTypes.array.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
-  onMenuClick: PropTypes.func.isRequired,
   repoID: PropTypes.string,
 };
 
@@ -201,10 +201,24 @@ class LibContentView extends React.Component {
   componentWillUnmount() {
     window.onpopstate = this.oldonpopstate;
     collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
+      repoID: '',
+      repoName: '',
+      path: '',
+      isViewFile: false,
+      isLibView: false,
+    });
   }
 
   componentDidUpdate() {
     this.lastModifyTime = new Date();
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
+      repoID: this.props.repoID,
+      repoName: this.state.repoName,
+      path: this.state.path,
+      isViewFile: this.state.isViewFile,
+      isLibView: true,
+    });
   }
 
   onpopstate = (event) => {
@@ -2027,45 +2041,6 @@ class LibContentView extends React.Component {
 
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <LibContentToolbar
-            isViewFile={this.state.isViewFile}
-            filePermission={this.state.filePermission}
-            fileTags={this.state.fileTags}
-            onFileTagChanged={this.onToolbarFileTagChanged}
-            onSideNavMenuClick={this.props.onMenuClick}
-            repoID={this.props.repoID}
-            path={this.state.path}
-            isDirentSelected={this.state.isDirentSelected}
-            selectedDirentList={this.state.selectedDirentList}
-            onItemsMove={this.onMoveItems}
-            onItemsCopy={this.onCopyItems}
-            onItemsDelete={this.onDeleteItems}
-            onItemRename={this.onMainPanelItemRename}
-            direntList={this.state.direntList}
-            repoName={this.state.repoName}
-            repoEncrypted={this.state.repoEncrypted}
-            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-            userPerm={this.state.userPerm}
-            showShareBtn={showShareBtn}
-            enableDirPrivateShare={enableDirPrivateShare}
-            onAddFile={this.onAddFile}
-            onAddFolder={this.onAddFolder}
-            onUploadFile={this.onUploadFile}
-            onUploadFolder={this.onUploadFolder}
-            currentMode={this.state.currentMode}
-            switchViewMode={this.switchViewMode}
-            onSearchedClick={this.onSearchedClick}
-            isRepoOwner={isRepoOwner}
-            currentRepoInfo={this.state.currentRepoInfo}
-            updateDirent={this.updateDirent}
-            onDirentSelected={this.onDirentSelected}
-            showDirentDetail={this.showDirentDetail}
-            unSelectDirent={this.unSelectDirent}
-            onFilesTagChanged={this.onFileTagChanged}
-            repoTags={this.state.repoTags}
-          />
-        </div>
         <div className="main-panel-center flex-row">
           <LibContentContainer
             isSidePanelFolded={this.props.isSidePanelFolded}

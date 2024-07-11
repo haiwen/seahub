@@ -15,7 +15,7 @@ import GroupbyService from '../../services/groupby-service';
 import { isEsc } from '../../utils/hotkey';
 import { getEventClassName } from '../../utils/utils';
 import { generateDefaultGroupby, getDefaultCountType, getGroupbyColumns } from '../../../utils/groupby-utils';
-import eventBus from '../../../utils/event-bus';
+import eventBus from '../../../../../components/common/event-bus';
 import { GROUPBY_ACTION_TYPE, GROUPBY_DATE_GRANULARITY_LIST, GROUPBY_GEOLOCATION_GRANULARITY_LIST } from '../../constants/groupby';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import { gettext } from '../../../utils';

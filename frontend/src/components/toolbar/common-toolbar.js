@@ -7,6 +7,7 @@ import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
 import Account from '../common/account';
 import Logout from '../common/logout';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -16,14 +17,41 @@ const propTypes = {
   onSearchedClick: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   currentRepoInfo: PropTypes.object,
+  eventBus: PropTypes.object,
   isViewFile: PropTypes.bool,
   showSearch: PropTypes.bool
 };
 
 class CommonToolbar extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      repoID: props.repoID,
+      repoName: props.repoName,
+      isLibView: props.isLibView,
+      path: props.path,
+      isViewFile: props.isViewFile,
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.eventBus) {
+      this.unsubscribeLibChange = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, this.onRepoChange);
+    }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeLibChange && this.unsubscribeLibChange();
+  }
+
+  onRepoChange = ({ repoID, repoName, isLibView, path, isViewFile }) => {
+    this.setState({ repoID, repoName, isLibView, path, isViewFile });
+  };
+
   renderSearch = () => {
-    const { repoID, repoName, isLibView, searchPlaceholder, path, isViewFile } = this.props;
+    const { repoID, repoName, isLibView, path, isViewFile } = this.state;
+    const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
