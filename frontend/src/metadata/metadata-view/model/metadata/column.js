@@ -1,5 +1,3 @@
-
-
 class Column {
   constructor(object) {
     this.key = object.key || '';
