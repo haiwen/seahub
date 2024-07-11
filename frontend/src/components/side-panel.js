@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import MediaQuery from 'react-responsive';
+import Logo from './logo';
 import MainSideNav from './main-side-nav';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
 
@@ -21,6 +23,11 @@ class SidePanel extends React.Component {
     const style = isSidePanelFolded ? { flexBasis: SIDE_PANEL_FOLDED_WIDTH } : {};
     return (
       <div className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })} style={style}>
+        <MediaQuery query="(max-width: 767.8px)">
+          <div className='side-panel-north'>
+            <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
+          </div>
+        </MediaQuery>
         <div className="side-panel-center">
           {children ? children : (
             <MainSideNav
