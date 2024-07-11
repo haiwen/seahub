@@ -263,7 +263,7 @@ class GroupbyPopover extends Component {
         hideArrow
         fade={false}
         target={target}
-        placement='auto-start'
+        placement='bottom-end'
         className='groupby-popover no-user-select'
         boundariesElement={document.body}
       >
