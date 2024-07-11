@@ -237,7 +237,7 @@ class LibContentView extends React.Component {
 
   onRepoUpdateEvent = () => {
     let currentTime = new Date();
-    if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
+    if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
       return;
     }
     let repoID = this.props.repoID;
@@ -1303,7 +1303,6 @@ class LibContentView extends React.Component {
       return dirent;
     });
     if (dirent) {
-      // dirent.isSelected = true;
       this.setState({
         direntList: direntList,
         isDirentSelected: true,
@@ -1793,7 +1792,7 @@ class LibContentView extends React.Component {
   createDirent(name, type, size) {
     // use current dirent parent's permission as it's permission
     const { userPerm: permission } = this.state;
-    const mtime = new Date().getTime()/1000;
+    const mtime = new Date().getTime() / 1000;
     const obj = { name, type, mtime, size, permission };
     const dirent = new Dirent(obj);
     return dirent;

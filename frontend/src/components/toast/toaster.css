@@ -78,6 +78,15 @@
   color: rgb(236, 76, 71);
 }
 
+.seahub-toast-alert-container.notify-in-progress {
+  border-left: 3px solid rgb(16, 112, 202);
+  color: rgb(16, 112, 202);
+}
+
+.seahub-toast-alert-container.notify-in-progress .loading-icon {
+  margin: 0;
+}
+
 .seahub-toast-alert-container .toast-alert-icon {
   margin-right: 10px;
   width: 14px;

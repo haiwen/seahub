@@ -313,7 +313,7 @@ class FileUploader extends React.Component {
 
   onFileUploadSuccess = (resumableFile, message) => {
     let formData = resumableFile.formData;
-    let currentTime = new Date().getTime()/1000;
+    let currentTime = new Date().getTime() / 1000;
     message = formData.replace ? message : JSON.parse(message)[0];
     if (formData.relative_path) { // upload folder
       // 'upload folder' is not supported

@@ -52,6 +52,10 @@ export default class Toaster {
     return this.notifyHandler(title, { ...settings, intent: 'none' });
   };
 
+  notifyInProgress = (title, settings = {}) => {
+    return this.notifyHandler(title, { ...settings, intent: 'notify-in-progress' });
+  };
+
   success = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'success' });
   };
