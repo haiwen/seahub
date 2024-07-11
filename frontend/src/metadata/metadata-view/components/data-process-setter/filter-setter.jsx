@@ -64,6 +64,7 @@ const FilterSetter = ({ columns,
       />
       {isShowSetter &&
         <FilterPopover
+          placement="bottom-end"
           filtersClassName={filtersClassName}
           target={target}
           isNeedSubmit={isNeedSubmit}

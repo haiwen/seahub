@@ -240,7 +240,7 @@ class SortPopover extends Component {
     const isEmpty = isSortsEmpty(sorts);
     return (
       <UncontrolledPopover
-        placement="auto-start"
+        placement="bottom-end"
         isOpen={true}
         target={target}
         fade={false}

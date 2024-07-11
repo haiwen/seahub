@@ -144,7 +144,7 @@ class HideColumnPopover extends React.Component {
     const isEmpty = fieldSettings.length === 0 ? true : false;
     return (
       <UncontrolledPopover
-        placement='auto-start'
+        placement='bottom-end'
         isOpen={true}
         target={target}
         fade={false}
