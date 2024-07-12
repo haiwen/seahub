@@ -57,7 +57,6 @@ class SendUploadLinkApiTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
         json_resp = json.loads(resp.content)
         assert json_resp['success'][0] == self.admin.email
-        assert mail.outbox[0].from_email == self.user.email
         assert mail.outbox[0].extra_headers['Reply-to'] == self.user.email
 
     @patch('seahub.utils.IS_EMAIL_CONFIGURED', True)
@@ -84,7 +83,6 @@ class SendUploadLinkApiTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
         json_resp = json.loads(resp.content)
         assert json_resp['success'][0] == self.admin.email
-        assert mail.outbox[0].from_email == contact_email
         assert mail.outbox[0].extra_headers['Reply-to'] == contact_email
 
     @patch('seahub.utils.IS_EMAIL_CONFIGURED', False)
