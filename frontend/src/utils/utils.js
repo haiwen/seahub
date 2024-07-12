@@ -1647,24 +1647,7 @@ export const Utils = {
   isRelativePath(url) {
     let RgExp = new RegExp('^(?:[a-z]+:)?//', 'i');
     return !RgExp.test(url);
-  },
-
-  setCookie(name, value) {
-    let cookie = name + '=' + value + ';';
-    document.cookie = cookie;
-  },
-
-  getCookie(cookiename) {
-    let name = cookiename + '=';
-    let cookie = document.cookie.split(';');
-    for (let i = 0, len = cookie.length; i < len; i++) {
-      let c = cookie[i].trim();
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length) * 1;
-      }
-    }
-    return '';
-  },
+  }
 
 };
 

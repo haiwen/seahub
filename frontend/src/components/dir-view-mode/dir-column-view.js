@@ -6,7 +6,6 @@ import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import ResizeBar from '../resize-bar';
-import { Utils } from '../../utils/utils';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 
 const propTypes = {
@@ -82,7 +81,7 @@ class DirColumnView extends React.Component {
     super(props);
     this.state = {
       inResizing: false,
-      navRate: Utils.getCookie('navRate') || 0.25,
+      navRate: parseFloat(localStorage.getItem('sf_dir_content_nav_rate') || 0.25),
     };
     this.containerWidth = null;
     this.resizeBarRef = React.createRef();
@@ -96,7 +95,7 @@ class DirColumnView extends React.Component {
         inResizing: false
       });
     }
-    Utils.setCookie('navRate', this.state.navRate);
+    localStorage.setItem('sf_dir_content_nav_rate', this.state.navRate);
   };
 
   onResizeMouseDown = () => {

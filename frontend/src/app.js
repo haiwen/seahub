@@ -55,7 +55,7 @@ class App extends Component {
       currentTab: '',
       pathPrefix: [],
       inResizing: false,
-      sidePanelRate: Utils.getCookie('sidePanelRate') || INIT_SIDE_PANEL_RATE,
+      sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
     };
     this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
@@ -223,7 +223,7 @@ class App extends Component {
         inResizing: false
       });
     }
-    Utils.setCookie('sidePanelRate', this.state.sidePanelRate);
+    localStorage.setItem('sf_side_panel_rate', this.state.sidePanelRate);
   };
 
   onResizeMouseDown = () => {
