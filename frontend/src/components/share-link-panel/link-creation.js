@@ -373,13 +373,12 @@ class LinkCreation extends React.Component {
                   </FormGroup>
                 );
               })}
-
             </FormGroup>
           )}
           {type !== 'batch' && (
             <FormGroup check>
               <Label check>
-                <span>{'Set scope'}</span>
+                <span>{gettext('Set scope')}</span>
               </Label>
               <FormGroup check className="ml-4">
                 <Label check>
@@ -392,6 +391,15 @@ class LinkCreation extends React.Component {
                   <Input type="radio" name='scope' value = {'specific_users'} checked={this.state.currentScope === 'specific_users'} onChange={this.setScope} className="mr-1" />
                   {gettext('Specific users in the team')}
                 </Label>
+                {this.state.currentScope === 'specific_users' &&
+                <UserSelect
+                  ref="userSelect"
+                  isMulti={true}
+                  className="reviewer-select"
+                  placeholder={gettext('Search users')}
+                  onSelectChange={this.handleSelectChange}
+                />
+                }
               </FormGroup>
               {isEmailConfigured && (
                 <FormGroup check className="ml-4">
@@ -399,24 +407,11 @@ class LinkCreation extends React.Component {
                     <Input type="radio" name='scope' value = {'specific_emails'} checked={this.state.currentScope === 'specific_emails'} onChange={this.setScope} className="mr-1" />
                     {gettext('Specific people with email address')}
                   </Label>
+                  {this.state.currentScope === 'specific_emails' &&
+                  <input type="text" className="form-control" value={this.state.inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')}/>
+                  }
                 </FormGroup>
               )}
-              {this.state.currentScope === 'specific_users' &&
-                <div className="ml-4" style={{marginBottom:'50px'}}>
-                  <UserSelect
-                    ref="userSelect"
-                    isMulti={true}
-                    className="reviewer-select"
-                    placeholder={gettext('Search users')}
-                    onSelectChange={this.handleSelectChange}
-                  />
-                </div>
-              }
-              {this.state.currentScope === 'specific_emails' &&
-                <div className="ml-4" style={{marginBottom:'50px'}}>
-                  <input type="text" className="form-control" value={this.state.inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')}/>
-                </div>
-              }
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
