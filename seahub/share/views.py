@@ -5,34 +5,27 @@ import json
 import logging
 
 from django.core.cache import cache
-from django.http import HttpResponse, HttpResponseRedirect, Http404, \
-    HttpResponseBadRequest
-from django.utils.translation import gettext as _, activate
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.utils.translation import gettext as _
 from django.contrib import messages
-from django.utils.html import escape
 
 import seaserv
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
-from seahub.share.forms import FileLinkShareForm, \
-    UploadLinkShareForm
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import require_POST
 from seahub.contacts.signals import mail_sended
 from seahub.views import is_registered_user, check_folder_permission
-from seahub.utils import string2list, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    is_valid_username, is_valid_email, send_html_email, is_org_context, \
-    gen_token, normalize_cache_key, get_site_name, gen_shared_link
+from seahub.utils import string2list, check_filename_with_rename, \
+    is_valid_username, is_valid_email, is_org_context, \
+    gen_token, normalize_cache_key, gen_shared_link
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
-        ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
-        SHARE_LINK_AUDIT_CODE_TIMEOUT
-from seahub.profile.models import Profile
+from seahub.settings import SITE_ROOT, SHARE_LINK_AUDIT_CODE_TIMEOUT
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -121,95 +114,6 @@ def share_to_user(request, repo, to_user, permission):
                                            to_user=to_user, repo=repo,
                                            path='/', org_id=org_id)
         return True
-
-
-# share link
-@login_required_ajax
-def send_shared_link(request):
-    """
-    Handle ajax post request to send file shared link.
-    """
-    if not request.method == 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
-        return HttpResponse(data, status=500, content_type=content_type)
-
-    form = FileLinkShareForm(request.POST)
-    if form.is_valid():
-        email = form.cleaned_data['email']
-        file_shared_link = form.cleaned_data['file_shared_link']
-        file_shared_name = form.cleaned_data['file_shared_name']
-        file_shared_type = form.cleaned_data['file_shared_type']
-        extra_msg = escape(form.cleaned_data['extra_msg'])
-
-        to_email_list = string2list(email)
-        send_success, send_failed = [], []
-        # use contact_email, if present
-        username = Profile.objects.get_contact_email_by_user(request.user.username)
-        for to_email in to_email_list:
-            if not is_valid_email(to_email):
-                send_failed.append(to_email)
-                continue
-
-            if SHARE_LINK_EMAIL_LANGUAGE:
-                activate(SHARE_LINK_EMAIL_LANGUAGE)
-
-            # Add email to contacts.
-            mail_sended.send(sender=None, user=request.user.username,
-                             email=to_email)
-
-            c = {
-                'email': request.user.username,
-                'to_email': to_email,
-                'file_shared_link': file_shared_link,
-                'file_shared_name': file_shared_name,
-            }
-
-            if extra_msg:
-                c['extra_msg'] = extra_msg
-
-            if REPLACE_FROM_EMAIL:
-                from_email = username
-            else:
-                from_email = None  # use default from email
-
-            if ADD_REPLY_TO_HEADER:
-                reply_to = username
-            else:
-                reply_to = None
-
-            try:
-                if file_shared_type == 'f':
-                    c['file_shared_type'] = _("file")
-                    send_html_email(_('A file is shared to you on %s') % get_site_name(),
-                                    'shared_link_email.html',
-                                    c, from_email, [to_email],
-                                    reply_to=reply_to
-                                    )
-                else:
-                    c['file_shared_type'] = _("directory")
-                    send_html_email(_('A directory is shared to you on %s') % get_site_name(),
-                                    'shared_link_email.html',
-                                    c, from_email, [to_email],
-                                    reply_to=reply_to)
-
-                send_success.append(to_email)
-            except Exception:
-                send_failed.append(to_email)
-
-        if len(send_success) > 0:
-            data = json.dumps({"send_success": send_success, "send_failed": send_failed})
-            return HttpResponse(data, status=200, content_type=content_type)
-        else:
-            data = json.dumps({"error": _("Internal server error, or please check the email(s) you entered")})
-            return HttpResponse(data, status=400, content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
-                                      content_type=content_type)
 
 
 @login_required
@@ -333,78 +237,6 @@ def export_shared_link(request):
     wb.save(response)
 
     return response
-
-
-@login_required_ajax
-def send_shared_upload_link(request):
-    """
-    Handle ajax post request to send shared upload link.
-    """
-    if not request.method == 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
-        return HttpResponse(data, status=500, content_type=content_type)
-
-    form = UploadLinkShareForm(request.POST)
-    if form.is_valid():
-        email = form.cleaned_data['email']
-        shared_upload_link = form.cleaned_data['shared_upload_link']
-        extra_msg = escape(form.cleaned_data['extra_msg'])
-
-        to_email_list = string2list(email)
-        send_success, send_failed = [], []
-        # use contact_email, if present
-        username = Profile.objects.get_contact_email_by_user(request.user.username)
-        for to_email in to_email_list:
-            if not is_valid_email(to_email):
-                send_failed.append(to_email)
-                continue
-            # Add email to contacts.
-            mail_sended.send(sender=None, user=request.user.username,
-                             email=to_email)
-
-            c = {
-                'email': request.user.username,
-                'to_email': to_email,
-                'shared_upload_link': shared_upload_link,
-                }
-
-            if extra_msg:
-                c['extra_msg'] = extra_msg
-
-            if REPLACE_FROM_EMAIL:
-                from_email = username
-            else:
-                from_email = None  # use default from email
-
-            if ADD_REPLY_TO_HEADER:
-                reply_to = username
-            else:
-                reply_to = None
-
-            try:
-                send_html_email(_('An upload link is shared to you on %s') % get_site_name(),
-                                'shared_upload_link_email.html',
-                                c, from_email, [to_email],
-                                reply_to=reply_to)
-
-                send_success.append(to_email)
-            except Exception:
-                send_failed.append(to_email)
-
-        if len(send_success) > 0:
-            data = json.dumps({"send_success": send_success, "send_failed": send_failed})
-            return HttpResponse(data, status=200, content_type=content_type)
-        else:
-            data = json.dumps({"error": _("Internal server error, or please check the email(s) you entered")})
-            return HttpResponse(data, status=400, content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
-                                      content_type=content_type)
 
 
 @login_required_ajax
