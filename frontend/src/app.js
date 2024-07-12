@@ -252,14 +252,18 @@ class App extends Component {
 
   render() {
     const { currentTab, isSidePanelClosed, isSidePanelFolded, sidePanelRate, inResizing } = this.state;
-    const mainPanelStyle = {
-      userSelect: inResizing ? 'none' : '',
-      flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
-    };
-    const sidePanelStyle = {
-      userSelect: inResizing ? 'none' : '',
-      flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
-    };
+    let mainPanelStyle = {};
+    let sidePanelStyle = {};
+    if (!isSidePanelFolded) {
+      mainPanelStyle = {
+        userSelect: inResizing ? 'none' : '',
+        flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
+      };
+      sidePanelStyle = {
+        userSelect: inResizing ? 'none' : '',
+        flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
+      };
+    }
     return (
       <React.Fragment>
         <SystemNotification />
@@ -285,14 +289,16 @@ class App extends Component {
             toggleFoldSideNav={this.toggleFoldSideNav}
             style={sidePanelStyle}
           />
-          <ResizeBar
-            resizeBarRef={this.resizeBarRef}
-            dragHandlerRef={this.dragHandlerRef}
-            resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
-            dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
-            onResizeMouseDown={this.onResizeMouseDown}
-            onResizeMouseOver={this.onResizeMouseOver}
-          />
+          {!isSidePanelFolded &&
+            <ResizeBar
+              resizeBarRef={this.resizeBarRef}
+              dragHandlerRef={this.dragHandlerRef}
+              resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
+              dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+              onResizeMouseDown={this.onResizeMouseDown}
+              onResizeMouseOver={this.onResizeMouseOver}
+            />
+          }
           <div className="main-panel" style={mainPanelStyle}>
             <Router className="reach-router">
               <Libraries path={siteRoot} />

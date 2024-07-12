@@ -24,7 +24,7 @@ class SidePanel extends React.Component {
     return (
       <div
         className={classnames('side-panel', {'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed})}
-        style={isSidePanelFolded ? {flexBasis: SIDE_PANEL_FOLDED_WIDTH, ...style} : style}
+        style={isSidePanelFolded ? { flexBasis: SIDE_PANEL_FOLDED_WIDTH } : style}
       >
         <MediaQuery query="(max-width: 767.8px)">
           <div className='side-panel-north'>
