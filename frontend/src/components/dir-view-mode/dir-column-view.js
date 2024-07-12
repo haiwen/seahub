@@ -108,7 +108,7 @@ class DirColumnView extends React.Component {
 
   onResizeMouseMove = (e) => {
     const { isSidePanelFolded } = this.props;
-    let sizeNavWidth = isSidePanelFolded ? SIDE_PANEL_FOLDED_WIDTH + 3 : this.containerWidth / 0.78 * 0.22 + 3;
+    let sizeNavWidth = isSidePanelFolded ? SIDE_PANEL_FOLDED_WIDTH + 3 : window.innerWidth - this.containerWidth;
     let rate = (e.nativeEvent.clientX - sizeNavWidth) / this.containerWidth;
     this.setState({
       navRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
