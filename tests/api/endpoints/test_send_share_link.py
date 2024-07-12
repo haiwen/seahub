@@ -1,11 +1,10 @@
-#coding: UTF-8
+# coding: UTF-8
 import json
 from mock import patch
 from django.core import mail
 from django.urls import reverse
 from django.test import override_settings
 
-from seahub.utils import IS_EMAIL_CONFIGURED
 from seahub.share.models import FileShare
 from seahub.profile.models import Profile
 from seahub.profile.utils import refresh_cache
@@ -16,7 +15,7 @@ class SendShareLinkApiTest(BaseTestCase):
 
     def setUp(self):
         fs = FileShare.objects.create_file_link(self.user.username,
-                self.repo.id, self.file, None)
+                                                self.repo.id, self.file, None)
 
         self.token = fs.token
         mail.outbox = []
@@ -47,7 +46,6 @@ class SendShareLinkApiTest(BaseTestCase):
 
     @patch('seahub.utils.IS_EMAIL_CONFIGURED', True)
     @patch('seahub.api2.endpoints.send_share_link_email.IS_EMAIL_CONFIGURED', True)
-    @patch('seahub.api2.endpoints.send_share_link_email.REPLACE_FROM_EMAIL', True)
     @patch('seahub.api2.endpoints.send_share_link_email.ADD_REPLY_TO_HEADER', True)
     def test_can_send_email_rewrite(self):
         self.login_as(self.user)
@@ -68,12 +66,11 @@ class SendShareLinkApiTest(BaseTestCase):
 
     @patch('seahub.utils.IS_EMAIL_CONFIGURED', True)
     @patch('seahub.api2.endpoints.send_share_link_email.IS_EMAIL_CONFIGURED', True)
-    @patch('seahub.api2.endpoints.send_share_link_email.REPLACE_FROM_EMAIL', True)
     @patch('seahub.api2.endpoints.send_share_link_email.ADD_REPLY_TO_HEADER', True)
     def test_can_send_email_rewrite_contact_email(self):
         self.login_as(self.user)
         nickname = 'Testuser'
-        contact_email= 'contact_email@test.com'
+        contact_email = 'contact_email@test.com'
         p = Profile.objects.add_or_update(self.user.email, nickname=nickname)
         p.contact_email = contact_email
         p.save()
