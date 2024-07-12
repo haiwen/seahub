@@ -9,7 +9,13 @@ import SystemNotification from './components/system-notification';
 import EventBus from './components/common/event-bus';
 import Header from './components/header';
 import SidePanel from './components/side-panel';
-import MainPanel from './components/main-panel';
+import ResizeBar from './components/resize-bar';
+import {
+  DRAG_HANDLER_HEIGHT,
+  INIT_SIDE_PANEL_RATE,
+  MAX_SIDE_PANEL_RATE,
+  MIN_SIDE_PANEL_RATE
+} from './components/resize-bar/constants';
 import FilesActivities from './pages/dashboard/files-activities';
 import MyFileActivities from './pages/dashboard/my-file-activities';
 import Starred from './pages/starred/starred';
@@ -48,11 +54,15 @@ class App extends Component {
       isSidePanelFolded: localStorage.getItem('sf_user_side_nav_folded') == 'true' || false,
       currentTab: '',
       pathPrefix: [],
+      inResizing: false,
+      sidePanelRate: Utils.getCookie('sidePanelRate') || INIT_SIDE_PANEL_RATE,
     };
     this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
     const eventBus = new EventBus();
     this.eventBus = eventBus;
+    this.resizeBarRef = React.createRef();
+    this.dragHandlerRef = React.createRef();
   }
 
   onpopstate = (event) => {
@@ -207,9 +217,49 @@ class App extends Component {
     });
   };
 
-  render() {
-    const { currentTab, isSidePanelClosed, isSidePanelFolded } = this.state;
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+    Utils.setCookie('sidePanelRate', this.state.sidePanelRate);
+  };
 
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    });
+  };
+
+  onResizeMouseMove = (e) => {
+    let rate = e.nativeEvent.clientX / window.innerWidth;
+    this.setState({
+      sidePanelRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+    });
+  };
+
+  onResizeMouseOver = (event) => {
+    if (!this.dragHandlerRef.current) return;
+    const { top } = this.resizeBarRef.current.getBoundingClientRect();
+    const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerRefTop);
+  };
+
+  setDragHandlerTop = (top) => {
+    this.dragHandlerRef.current.style.top = top + 'px';
+  };
+
+  render() {
+    const { currentTab, isSidePanelClosed, isSidePanelFolded, sidePanelRate, inResizing } = this.state;
+    const mainPanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
+    };
+    const sidePanelStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
+    };
     return (
       <React.Fragment>
         <SystemNotification />
@@ -220,7 +270,12 @@ class App extends Component {
           onSearchedClick={this.onSearchedClick}
           eventBus={this.eventBus}
         />
-        <div id="main" className="user-panel">
+        <div
+          id="main"
+          className="user-panel"
+          onMouseMove={inResizing ? this.onResizeMouseMove : null}
+          onMouseUp={this.onResizeMouseUp}
+        >
           <SidePanel
             isSidePanelClosed={isSidePanelClosed}
             isSidePanelFolded={isSidePanelFolded}
@@ -228,8 +283,17 @@ class App extends Component {
             currentTab={currentTab}
             tabItemClick={this.tabItemClick}
             toggleFoldSideNav={this.toggleFoldSideNav}
+            style={sidePanelStyle}
           />
-          <MainPanel>
+          <ResizeBar
+            resizeBarRef={this.resizeBarRef}
+            dragHandlerRef={this.dragHandlerRef}
+            resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
+            dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+            onResizeMouseDown={this.onResizeMouseDown}
+            onResizeMouseOver={this.onResizeMouseOver}
+          />
+          <div className="main-panel" style={mainPanelStyle}>
             <Router className="reach-router">
               <Libraries path={siteRoot} />
               <Libraries path={siteRoot + 'libraries'} />
@@ -263,7 +327,7 @@ class App extends Component {
                 eventBus={this.eventBus}
               />
             </Router>
-          </MainPanel>
+          </div>
           <MediaQuery query="(max-width: 767.8px)">
             <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
           </MediaQuery>
