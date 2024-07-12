@@ -823,9 +823,6 @@ SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 # Settings for Seahub Priv #
 ############################
 
-# Replace from email to current user instead of email sender.
-REPLACE_FROM_EMAIL = False
-
 # Add ``Reply-to`` header, see RFC #822.
 ADD_REPLY_TO_HEADER = False
 
