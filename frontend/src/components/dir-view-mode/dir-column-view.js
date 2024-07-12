@@ -5,6 +5,9 @@ import DirColumnFile from './dir-column-file';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
+import ResizeBar from '../resize-bar';
+import { Utils } from '../../utils/utils';
+import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -73,19 +76,17 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired
 };
 
-const DRAG_HANDLER_HEIGHT = 26;
-
 class DirColumnView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       inResizing: false,
-      navRate: 0.25,
+      navRate: Utils.getCookie('navRate') || 0.25,
     };
     this.containerWidth = null;
-    this.resizeRef = null;
-    this.dragHandler = null;
+    this.resizeBarRef = React.createRef();
+    this.dragHandlerRef = React.createRef();
     this.viewModeContainer = React.createRef();
   }
 
@@ -95,7 +96,7 @@ class DirColumnView extends React.Component {
         inResizing: false
       });
     }
-    this.setCookie('navRate', this.state.navRate);
+    Utils.setCookie('navRate', this.state.navRate);
   };
 
   onResizeMouseDown = () => {
@@ -108,63 +109,22 @@ class DirColumnView extends React.Component {
   onResizeMouseMove = (e) => {
     const { isSidePanelFolded } = this.props;
     let sizeNavWidth = isSidePanelFolded ? SIDE_PANEL_FOLDED_WIDTH + 3 : this.containerWidth / 0.78 * 0.22 + 3;
-
     let rate = (e.nativeEvent.clientX - sizeNavWidth) / this.containerWidth;
-    if (rate < 0.1) {
-      this.setState({
-        inResizing: false,
-        navRate: 0.12,
-      });
-    }
-    else if (rate > 0.4) {
-      this.setState({
-        inResizing: false,
-        navRate: 0.38,
-      });
-    }
-    else {
-      this.setState({
-        navRate: rate
-      });
-    }
+    this.setState({
+      navRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+    });
   };
 
-  onMouseOver = (event) => {
-    if (!this.dragHandler) return;
-    const { top } = this.resizeRef.getBoundingClientRect();
-    const dragHandlerTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
-    this.setDragHandlerTop(dragHandlerTop);
+  onResizeMouseOver = (event) => {
+    if (!this.dragHandlerRef.current) return;
+    const { top } = this.resizeBarRef.current.getBoundingClientRect();
+    const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerRefTop);
   };
 
   setDragHandlerTop = (top) => {
-    this.dragHandler.style.top = top + 'px';
+    this.dragHandlerRef.current.style.top = top + 'px';
   };
-
-  setCookie = (name, value) => {
-    let cookie = name + '=' + value + ';';
-    document.cookie = cookie;
-  };
-
-  getCookie = (cookiename) => {
-    let name = cookiename + '=';
-    let cookie = document.cookie.split(';');
-    for (let i = 0, len = cookie.length; i < len; i++) {
-      let c = cookie[i].trim();
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length) * 1;
-      }
-    }
-    return '';
-  };
-
-  UNSAFE_componentWillMount() {
-    let rate = this.getCookie('navRate');
-    if (rate) {
-      this.setState({
-        navRate: rate,
-      });
-    }
-  }
 
   render() {
     const { currentMode, isTreePanelShown } = this.props;
@@ -198,16 +158,14 @@ class DirColumnView extends React.Component {
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
             />
-            <div
-              className="dir-content-resize"
-              ref={ref => this.resizeRef = ref}
-              style={{ left: `calc(${navRate ? navRate * 100 + '%' : '25%'} - 1px)` }}
-              onMouseDown={this.onResizeMouseDown}
-              onMouseOver={this.onMouseOver}
-            >
-              <div className="line"></div>
-              <div className="drag-handler" ref={ref => this.dragHandler = ref} style={{ height: DRAG_HANDLER_HEIGHT }}></div>
-            </div>
+            <ResizeBar
+              resizeBarRef={this.resizeBarRef}
+              dragHandlerRef={this.dragHandlerRef}
+              resizeBarStyle={{ left: `calc(${navRate ? navRate * 100 + '%' : '25%'} - 1px)` }}
+              dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+              onResizeMouseDown={this.onResizeMouseDown}
+              onResizeMouseOver={this.onResizeMouseOver}
+            />
           </>
         )}
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
