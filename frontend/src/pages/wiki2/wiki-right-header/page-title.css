@@ -26,6 +26,7 @@
 
 .wiki-page-icon-container>span {
   font-size: 66px;
+  font-family: EmojiMart, "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji";
 }
 
 .wiki-page-icon-container:hover {
