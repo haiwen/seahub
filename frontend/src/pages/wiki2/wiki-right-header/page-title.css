@@ -18,8 +18,14 @@
   position: relative;
   width: 78px;
   height: 78px;
-  font-size: 78px;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wiki-page-icon-container>span {
+  font-size: 66px;
 }
 
 .wiki-page-icon-container:hover {
