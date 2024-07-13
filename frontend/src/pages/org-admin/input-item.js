@@ -88,7 +88,7 @@ class OrgSamlConfigInput extends Component {
           <Col md="4">
             {isBtnsShown &&
               <Fragment>
-                <Button className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
+                <Button color="primary" className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
                 <Button className="ml-1 sf2-icon-x2 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}></Button>
               </Fragment>
             }

@@ -321,7 +321,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.addGroupFolderPerm}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.addGroupFolderPerm}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&

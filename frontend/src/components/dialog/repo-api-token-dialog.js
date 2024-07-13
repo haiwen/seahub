@@ -256,7 +256,7 @@ class RepoAPITokenDialog extends React.Component {
                 </td>
                 <td><span className="text-secondary">--</span></td>
                 <td>
-                  <Button onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+                  <Button color="primary" onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
                 </td>
               </tr>
             </tbody>

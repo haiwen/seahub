@@ -253,6 +253,7 @@ class ShareToOtherServer extends React.Component {
                 <Button
                   onClick={this.OCMShare}
                   disabled={btnDisabled}
+                  color="primary"
                   className={isSubmitting ? 'btn-loading' : ''}>
                   {gettext('Submit')}
                 </Button>
