@@ -54,18 +54,16 @@
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
-  word-break: keep-all;
   line-height: 17px;
   font-size: 14px;
+  height: 34px;
 }
 
 .grid-file-name-link {
   color: #212529;
   font-size: 0.875rem;
-  display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  white-space: pre-wrap; 
+  word-wrap: break-word;
 }
 
 .grid-file-locked-icon {
