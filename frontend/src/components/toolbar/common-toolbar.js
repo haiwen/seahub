@@ -50,6 +50,15 @@ class CommonToolbar extends React.Component {
     this.setState({ repoID, repoName, isLibView, path, isViewFile, currentRepoInfo });
   };
 
+  onSearchedClick = (searchedItem) => {
+    // If search result is current library, use libContentView.onSearchedClick; else use app.onSearchedClick
+    if (this.state.isLibView && this.state.repoID === searchedItem.repo_id) {
+      this.props.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, searchedItem);
+    } else {
+      this.props.onSearchedClick(searchedItem);
+    }
+  };
+
   renderSearch = () => {
     const { repoID, repoName, isLibView, path, isViewFile, currentRepoInfo } = this.state;
     const { searchPlaceholder } = this.props;
@@ -64,7 +73,7 @@ class CommonToolbar extends React.Component {
             isViewFile={isViewFile}
             placeholder={placeholder}
             currentRepoInfo={currentRepoInfo}
-            onSearchedClick={this.props.onSearchedClick}
+            onSearchedClick={this.onSearchedClick}
             isLibView={isLibView}
           />
         );
@@ -73,7 +82,7 @@ class CommonToolbar extends React.Component {
           <Search
             repoID={repoID}
             placeholder={placeholder}
-            onSearchedClick={this.props.onSearchedClick}
+            onSearchedClick={this.onSearchedClick}
             isViewFile={isViewFile}
             isPublic={false}
             path={path}
