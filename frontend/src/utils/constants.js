@@ -70,6 +70,7 @@ export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting;
+export const enableClean = window.app.pageOptions.enableClean;
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;

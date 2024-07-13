@@ -1095,6 +1095,7 @@ def react_fake_view(request, **kwargs):
         'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
+        'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
