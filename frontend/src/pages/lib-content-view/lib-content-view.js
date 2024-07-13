@@ -129,9 +129,20 @@ class LibContentView extends React.Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.calculatePara(this.props);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.repoID !== this.props.repoID) {
+      this.calculatePara(nextProps);
+    }
+  }
+
+  calculatePara = async(props) => {
+    const { repoID, eventBus } = props;
+    this.unsubscribeEvent = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
-    let repoID = this.props.repoID;
     let location = window.location.href.split('?')[0]; // '?': to remove the effect of '?notifications=all', which is added to the URL when the 'view all notifications' dialog is open.
     location = decodeURIComponent(location);
     let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
@@ -196,11 +207,12 @@ class LibContentView extends React.Component {
         });
       }
     }
-  }
+  };
 
   componentWillUnmount() {
     window.onpopstate = this.oldonpopstate;
     collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
+    this.unsubscribeEvent();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
