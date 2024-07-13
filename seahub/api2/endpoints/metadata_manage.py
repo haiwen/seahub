@@ -87,6 +87,9 @@ class MetadataManage(APIView):
 
         try:
             task_id = add_init_metadata_task(params=params)
+            metadata_view = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
+            if not metadata_view:
+                RepoMetadataViews.objects.add_view(repo_id, 'All files')
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -131,6 +134,7 @@ class MetadataManage(APIView):
         try:
             record.enabled = False
             record.save()
+            RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
