@@ -73,8 +73,8 @@ class Content extends Component {
     this.toggleDialog('contact_email', gettext('Set Contact Email'));
   };
 
-  toggleSetUserReferenceIDDialog = () => {
-    this.toggleDialog('reference_id', gettext('Set Reference ID'));
+  toggleSetUserRoleDialog = () => {
+    this.toggleDialog('role', gettext('Set Role'));
   };
 
   updateValue = (value) => {
@@ -144,10 +144,10 @@ class Content extends Component {
               {this.showEditIcon(this.toggleSetUserComtactEmailDialog)}
             </dd>
 
-            <dt className="info-item-heading">{gettext('Reference ID')}</dt>
+            <dt className="info-item-heading">{gettext('Role')}</dt>
             <dd className="info-item-content">
-              {user.reference_id || '--'}
-              {this.showEditIcon(this.toggleSetUserReferenceIDDialog)}
+              {user.role|| '--'}
+              {this.showEditIcon(this.toggleSetUserRoleDialog)}
             </dd>
 
             <dt className="info-item-heading">{gettext('Space Used / Quota')}</dt>
