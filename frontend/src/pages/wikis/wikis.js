@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -8,6 +9,11 @@ import EmptyTip from '../../components/empty-tip';
 import AddWikiDialog from '../../components/dialog/add-wiki-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
+
+const propTypes = {
+  sidePanelRate: PropTypes.number,
+  isSidePanelFolded: PropTypes.bool,
+};
 
 class Wikis extends Component {
   constructor(props) {
@@ -209,6 +215,8 @@ class Wikis extends Component {
                   deleteWiki={this.deleteWiki}
                   renameWiki={this.renameWiki}
                   toggelAddWikiDialog={this.toggelAddWikiDialog}
+                  sidePanelRate={this.props.sidePanelRate}
+                  isSidePanelFolded={this.props.isSidePanelFolded}
                 />
               </div>
             }
@@ -228,5 +236,7 @@ class Wikis extends Component {
     );
   }
 }
+
+Wikis.propTypes = propTypes;
 
 export default Wikis;
