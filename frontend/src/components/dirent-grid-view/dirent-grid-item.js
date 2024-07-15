@@ -190,7 +190,7 @@ class DirentGridItem extends React.Component {
   };
 
   getRenderedText = (dirent) => {
-    const containerWidth = 120 * 2;
+    const containerWidth = 230;
 
     let tagRenderWidth = 0;
     if (dirent.file_tags && dirent.file_tags.length > 0) {
