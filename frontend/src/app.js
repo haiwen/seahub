@@ -308,7 +308,7 @@ class App extends Component {
               <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
               <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
               <PublicSharedView path={siteRoot + 'org/'} />
-              <Wikis path={siteRoot + 'published'} />
+              <Wikis path={siteRoot + 'published'} sidePanelRate={sidePanelRate} />
               <Starred path={siteRoot + 'starred'} />
               <InvitationsView path={siteRoot + 'invitations/'} />
               <FilesActivities path={siteRoot + 'dashboard'} />

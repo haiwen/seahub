@@ -12,6 +12,7 @@ const propTypes = {
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
   toggelAddWikiDialog: PropTypes.func,
+  sidePanelRate: PropTypes.number,
 };
 
 class WikiCardGroup extends Component {
@@ -31,17 +32,19 @@ class WikiCardGroup extends Component {
 
   onResize = () => {
     if (isMobile) return;
-    const numberOfWiki = Math.floor((window.innerWidth * 0.78 / 180));
-    const gridTemplateColumns = (Math.floor((window.innerWidth * 0.78 - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
+    const containerWidth = window.innerWidth * (1 - this.props.sidePanelRate);
+    const numberOfWiki = Math.floor((containerWidth / 180));
+    const gridTemplateColumns = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     if (this.groupItemsRef.current) {
       this.groupItemsRef.current.style.gridTemplateColumns = gridTemplateColumns;
     }
   };
 
   render() {
-    const { wikis, title, isDepartment, toggelAddWikiDialog } = this.props;
-    const numberOfWiki = Math.floor((window.innerWidth * 0.78 / 180));
-    const grids = (Math.floor((window.innerWidth * 0.78 - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
+    const { wikis, title, isDepartment, toggelAddWikiDialog, sidePanelRate } = this.props;
+    const containerWidth = window.innerWidth * (1 - sidePanelRate);
+    const numberOfWiki = Math.floor((containerWidth / 180));
+    const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
