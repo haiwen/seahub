@@ -2,9 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
-import { Button } from 'reactstrap';
+import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
-import Selector from '../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -14,6 +13,7 @@ import SendLink from '../send-link';
 import SharedLink from '../shared-link';
 import SetLinkExpiration from '../set-link-expiration';
 import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
+import SelectEditor from '../select-editor/select-editor';
 import { shareLinkAPI } from '../../utils/share-link-api';
 
 const propTypes = {
@@ -37,15 +37,12 @@ class LinkDetails extends React.Component {
     this.state = {
       storedPasswordVisible: false,
       isEditingExpiration: false,
-      isExpirationEditIconShow: false,
       expType: 'by-days',
       expireDays: this.props.defaultExpireDays,
       expDate: null,
-      isOpIconShown: false,
       isLinkDeleteDialogOpen: false,
       isSendLinkShown: false,
 
-      isScopeOpIconShown: false,
       currentScope: this.props.sharedLinkInfo.user_scope,  // all_users, specific_users, spcific_emails
       selectedOption: null,
       isSpecificUserChecked: false,
@@ -68,14 +65,6 @@ class LinkDetails extends React.Component {
     this.setState({
       storedPasswordVisible: !this.state.storedPasswordVisible
     });
-  };
-
-  handleMouseOverExpirationEditIcon = () => {
-    this.setState({ isExpirationEditIconShow: true });
-  };
-
-  handleMouseOutExpirationEditIcon = () => {
-    this.setState({ isExpirationEditIconShow: false });
   };
 
   editingExpirationToggle = () => {
@@ -119,25 +108,9 @@ class LinkDetails extends React.Component {
     });
   };
 
-  handleMouseOver = () => {
-    this.setState({ isOpIconShown: true });
-  };
-
-  handleMouseOut = () => {
-    this.setState({ isOpIconShown: false });
-  };
-
-  handleMouseOverScope = () => {
-    this.setState({isScopeOpIconShown: true});
-  };
-
-  handleMouseOutScope = () => {
-    this.setState({isScopeOpIconShown: false});
-  };
-
   changePerm = (permOption) => {
     const { sharedLinkInfo } = this.props;
-    const { permissionDetails } = Utils.getShareLinkPermissionObject(permOption.value);
+    const { permissionDetails } = Utils.getShareLinkPermissionObject(permOption);
     seafileAPI.updateShareLink(sharedLinkInfo.token, JSON.stringify(permissionDetails)).then((res) => {
       this.props.updateLink(new ShareLink(res.data));
     }).catch((error) => {
@@ -184,25 +157,20 @@ class LinkDetails extends React.Component {
     this.props.setMode('linkEmailAuth', this.state.sharedLinkInfo);
   };
 
+  getPermissionText = (perm) => {
+    return Utils.getShareLinkPermissionObject(perm).text;
+  };
 
   render() {
     const { sharedLinkInfo, permissionOptions } = this.props;
-    const { isOpIconShown, isScopeOpIconShown, currentScope } = this.state;
+    const { currentScope } = this.state;
     const currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
-    this.permOptions = permissionOptions.map(item => {
-      return {
-        value: item,
-        text: Utils.getShareLinkPermissionObject(item).text,
-        isSelected: item === currentPermission
-      };
-    });
-    const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0];
 
     return (
       <div>
         <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
         <dl>
-          <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
+          <dt className="text-secondary font-weight-normal">{gettext('Link')}</dt>
           <dd>
             <SharedLink
               link={sharedLinkInfo.link}
@@ -212,7 +180,7 @@ class LinkDetails extends React.Component {
           </dd>
           {!sharedLinkInfo.is_dir && sharedLinkInfo.permissions.can_download && ( // just for file
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
+              <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link')}</dt>
               <dd>
                 <SharedLink
                   link={`${sharedLinkInfo.link}?dl=1`}
@@ -224,75 +192,98 @@ class LinkDetails extends React.Component {
           )}
           {sharedLinkInfo.password && (
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
-              <dd className="d-flex align-items-center">
-                <span className="mr-1">{this.state.storedPasswordVisible ? sharedLinkInfo.password : '***************'}</span>
-                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}></span>
+              <dt className="text-secondary font-weight-normal">{gettext('Password')}</dt>
+              <dd>
+                <InputGroup className="w-50">
+                  {this.state.storedPasswordVisible ?
+                    <Input type="text" readOnly={true} value={sharedLinkInfo.password} /> :
+                    <Input type="text" readOnly={true} value={'***************'} />
+                  }
+                  <InputGroupAddon addonType="append">
+                    <Button
+                      aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
+                      onClick={this.toggleStoredPasswordVisible}
+                      className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}
+                    >
+                    </Button>
+                  </InputGroupAddon>
+                </InputGroup>
               </dd>
             </>
           )}
           {sharedLinkInfo.expire_date && (
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-              {!this.state.isEditingExpiration &&
-              <dd style={{ width: '250px' }} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
-                {moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
-                {this.state.isExpirationEditIconShow && (
-                  <a href="#"
-                    role="button"
-                    aria-label={gettext('Edit')}
-                    title={gettext('Edit')}
-                    className="sf3-font sf3-font-rename attr-action-icon"
-                    onClick={this.editingExpirationToggle}>
-                  </a>
+              <dt className="text-secondary font-weight-normal">{gettext('Expiration Date')}</dt>
+              <dd>
+                {this.state.isEditingExpiration ? (
+                  <div className="ml-4">
+                    <SetLinkExpiration
+                      minDays={shareLinkExpireDaysMin}
+                      maxDays={shareLinkExpireDaysMax}
+                      defaultDays={shareLinkExpireDaysDefault}
+                      expType={this.state.expType}
+                      setExpType={this.setExpType}
+                      expireDays={this.state.expireDays}
+                      onExpireDaysChanged={this.onExpireDaysChanged}
+                      expDate={this.state.expDate}
+                      onExpDateChanged={this.onExpDateChanged}
+                    />
+                    <div className={this.state.expType === 'by-days' ? 'mt-2' : 'mt-3'}>
+                      <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
+                      <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
+                    </div>
+                  </div>
+                ) : (
+                  <InputGroup className="w-50">
+                    <Input type="text" readOnly={true} value={moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
+                    <InputGroupAddon addonType="append">
+                      <Button
+                        aria-label={gettext('Edit')}
+                        title={gettext('Edit')}
+                        className="sf3-font sf3-font-rename"
+                        onClick={this.editingExpirationToggle}
+                      >
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
                 )}
               </dd>
-              }
-              {this.state.isEditingExpiration &&
-              <dd>
-                <div className="ml-4">
-                  <SetLinkExpiration
-                    minDays={shareLinkExpireDaysMin}
-                    maxDays={shareLinkExpireDaysMax}
-                    defaultDays={shareLinkExpireDaysDefault}
-                    expType={this.state.expType}
-                    setExpType={this.setExpType}
-                    expireDays={this.state.expireDays}
-                    onExpireDaysChanged={this.onExpireDaysChanged}
-                    expDate={this.state.expDate}
-                    onExpDateChanged={this.onExpDateChanged}
-                  />
-                  <div className={this.state.expType === 'by-days' ? 'mt-2' : 'mt-3'}>
-                    <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
-                    <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
-                  </div>
-                </div>
-              </dd>
-              }
             </>
           )}
           {sharedLinkInfo.permissions && (
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
-              <dd style={{ width: '250px' }} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-                <Selector
-                  isDropdownToggleShown={isOpIconShown && !sharedLinkInfo.is_expired}
-                  currentSelectedOption={currentSelectedPermOption}
-                  options={this.permOptions}
-                  selectOption={this.changePerm}
-                />
+              <dd>
+                <div className="w-50">
+                  <SelectEditor
+                    isTextMode={false}
+                    isEditIconShow={false}
+                    options={permissionOptions}
+                    currentOption={currentPermission}
+                    onOptionChanged={this.changePerm}
+                    translateOption={this.getPermissionText}
+                  />
+                </div>
               </dd>
             </>
           )}
           <>
             <dt className="text-secondary font-weight-normal">{gettext('Scope')}</dt>
-            <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverScope} onMouseLeave={this.handleMouseOutScope}>
-              <ShareLinkScopeEditor
-                isTextMode={true}
-                isEditIconShow={isScopeOpIconShown}
-                currentScope={currentScope}
-                onScopeChanged={this.changeScope}
-              />
+            <dd className="d-flex align-items-center">
+              <div className="w-50 mr-1">
+                <ShareLinkScopeEditor
+                  isTextMode={false}
+                  isEditIconShow={false}
+                  currentScope={currentScope}
+                  onScopeChanged={this.changeScope}
+                />
+              </div>
+              {currentScope === 'specific_users' &&
+              <Button color="primary" outline={true} className="border-0" onClick={this.onUserAuth}>{gettext('Authenticated users')}</Button>
+              }
+              {currentScope === 'specific_emails' &&
+              <Button color="primary" outline={true} className="border-0" onClick={this.onEmailAuth}>{gettext('Authenticated emails')}</Button>
+              }
             </dd>
           </>
         </dl>
@@ -318,12 +309,6 @@ class LinkDetails extends React.Component {
           confirmBtnText={gettext('Delete')}
           toggleDialog={this.toggleLinkDeleteDialog}
         />
-        }
-        {currentScope === 'specific_users' && !this.state.isSendLinkShown &&
-          <Button onClick={this.onUserAuth} style={{'marginLeft': '5px'}}>{gettext('Authed users')}</Button>
-        }
-        {currentScope === 'specific_emails' && !this.state.isSendLinkShown &&
-          <Button onClick={this.onEmailAuth} style={{'marginLeft': '5px'}}>{gettext('Authed emails')}</Button>
         }
       </div>
     );
