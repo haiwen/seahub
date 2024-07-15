@@ -187,6 +187,8 @@ export const getColumnName = (key, name) => {
       return gettext('Parent folder');
     case PRIVATE_COLUMN_KEY.FILE_NAME:
       return gettext('File name');
+    case PRIVATE_COLUMN_KEY.FILE_TYPE:
+      return gettext('File type');
     default:
       return name;
   }

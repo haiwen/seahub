@@ -893,6 +893,14 @@ ENABLE_METADATA_MANAGEMENT = False
 METADATA_SERVER_URL = ''
 METADATA_SERVER_SECRET_KEY = ''
 
+METADATA_FILE_TYPES = {
+    '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif'),
+    '_document': ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'markdown',
+                  'md', 'pdf', 'ai', 'svg', 'xls', 'xlsx', 'ods', 'fods', 'xmind', 'sdoc'),
+    '_video': ('mp4', 'ogv', 'webm', 'mov'),
+    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
+}
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
