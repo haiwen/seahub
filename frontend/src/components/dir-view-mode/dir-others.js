@@ -12,7 +12,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
     trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
   }
   const toggleTrashDialog = () => {
-    setShowTrashDialog(!showTrashDialog); // 切换对话框显示状态
+    setShowTrashDialog(!showTrashDialog);
   };
   return (
     <TreeSection title={gettext('Others')} className="dir-others">

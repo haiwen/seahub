@@ -144,7 +144,6 @@ from seaserv import seafserv_threaded_rpc, \
 
 from constance import config
 
-
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 

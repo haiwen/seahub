@@ -23,7 +23,6 @@ from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 from seaserv import seafile_api
-
 from pysearpc import SearpcError
 from constance import config
 
@@ -243,7 +242,6 @@ class RepoTrash(APIView):
             clean_up_repo_trash.send(sender=None, org_id=org_id,
                                      operator=username, repo_id=repo_id, repo_name=repo.name,
                                      repo_owner=repo_owner, days=keep_days)
-            
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -343,9 +341,7 @@ class RepoTrash2(APIView):
         1. all authenticated user can perform this action.
         """
 
-        # argument check
-        path = request.data.get('path', '/')
-
+        path = '/'
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:

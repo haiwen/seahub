@@ -1493,4 +1493,4 @@ CREATE TABLE IF NOT EXISTS `FileTrash` (
   `size` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_FileTrash_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci;

@@ -4,7 +4,6 @@ import stat
 import json
 import logging
 import posixpath
-from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -562,9 +561,7 @@ class DirView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
         dir_name = os.path.basename(path)
-
         try:
-
             seafile_api.del_file(repo_id, parent_dir,
                                  json.dumps([dir_name]), username)
         except SearpcError as e:

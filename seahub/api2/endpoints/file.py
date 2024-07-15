@@ -5,7 +5,6 @@ import json
 import logging
 import posixpath
 import requests
-import datetime
 from pathlib import Path
 
 from rest_framework.authentication import SessionAuthentication

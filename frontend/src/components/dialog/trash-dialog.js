@@ -4,7 +4,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { Modal, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
-import {gettext, siteRoot, enableClean, username} from '../../utils/constants';
+import {gettext, siteRoot, enableUserCleanTrash, username} from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
 import Loading from '../../components/loading';
@@ -181,7 +181,7 @@ class RepoFolderTrashDialog extends React.Component {
         <div style={{display: 'flex', margin: '15px 10px'}} >
           <h4 dangerouslySetInnerHTML={{__html: title}}></h4>
           <a href={oldTrashUrl} style={{marginLeft:'auto', fontStyle:'30px'}}>Visit old version page</a>
-          {(enableClean && !showFolder && isRepoAdmin) &&
+          {(enableUserCleanTrash && !showFolder && isRepoAdmin) &&
             <button className="btn btn-secondary clean flex-shrink-0 ml-4" style={{marginLeft:'auto'}}
               onClick={this.cleanTrash}>{gettext('Clean')}</button>
           }

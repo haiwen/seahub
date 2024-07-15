@@ -23,7 +23,7 @@ const {
   repoID,
   repoFolderName,
   path,
-  enableClean,
+  enableUserCleanTrash,
   isRepoAdmin
 } = window.app.pageOptions;
 
@@ -257,7 +257,7 @@ class RepoFolderTrash extends React.Component {
                   <div className="d-flex">
                     <button className="btn btn-secondary clean flex-shrink-0 ml-4"
                       onClick={this.getOldTrash}>{gettext('Select trash')}</button>
-                    {(path == '/' && enableClean && !showFolder && isRepoAdmin) &&
+                    {(path == '/' && enableUserCleanTrash && !showFolder && isRepoAdmin) &&
                       <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                     }
                   </div>
