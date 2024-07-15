@@ -33,7 +33,7 @@ class WikiCardGroup extends Component {
   onResize = () => {
     if (isMobile) return;
     const containerWidth = window.innerWidth * (1 - this.props.sidePanelRate);
-    const numberOfWiki = Math.floor((containerWidth / 180));
+    const numberOfWiki = Math.floor(containerWidth / 180);
     const gridTemplateColumns = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     if (this.groupItemsRef.current) {
       this.groupItemsRef.current.style.gridTemplateColumns = gridTemplateColumns;
@@ -43,7 +43,7 @@ class WikiCardGroup extends Component {
   render() {
     const { wikis, title, isDepartment, toggelAddWikiDialog, sidePanelRate } = this.props;
     const containerWidth = window.innerWidth * (1 - sidePanelRate);
-    const numberOfWiki = Math.floor((containerWidth / 180));
+    const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     return (
       <div className='wiki-card-group mb-4'>
