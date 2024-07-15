@@ -27,7 +27,7 @@ from pysearpc import SearpcError
 from constance import config
 
 logger = logging.getLogger(__name__)
-
+SHOW_REPO_TRASH_DAYS = 90
 
 class RepoTrash(APIView):
 
@@ -365,21 +365,7 @@ class RepoTrash2(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            show_days = int(request.GET.get('show_days', '0'))
-        except ValueError:
-            show_days = 0
-        if show_days < 0:
-            error_msg = 'show_days invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo_history_limit = seafile_api.get_repo_history_limit(repo_id)
-        if repo_history_limit == -1 or repo_history_limit > show_days:
-            show_time = repo_history_limit
-        else:
-            show_time = show_days
-
-        try:
-            deleted_entries = get_trash_records(repo_id, show_time)
+            deleted_entries = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
