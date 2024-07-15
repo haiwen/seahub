@@ -12,6 +12,7 @@ import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
 
 const propTypes = {
   sidePanelRate: PropTypes.number,
+  isSidePanelFolded: PropTypes.bool,
 };
 
 class Wikis extends Component {
@@ -215,6 +216,7 @@ class Wikis extends Component {
                   renameWiki={this.renameWiki}
                   toggelAddWikiDialog={this.toggelAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}
+                  isSidePanelFolded={this.props.isSidePanelFolded}
                 />
               </div>
             }
