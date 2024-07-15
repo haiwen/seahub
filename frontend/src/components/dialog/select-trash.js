@@ -35,10 +35,10 @@ class SelectTrash extends React.Component {
 
   formSubmit = ()=>{
     const inputValue = this.state.inputValue;
-    if (inputValue.value === 1){
+    if (inputValue.value === 1) {
       this.listOldTrash();
     }
-    if (inputValue.value === 0){
+    if (inputValue.value === 0) {
       this.listNewTrash();
     }
     this.props.changeTrash(this.state.inputValue.value);
