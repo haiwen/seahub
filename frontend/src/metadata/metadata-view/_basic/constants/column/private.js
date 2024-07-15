@@ -14,4 +14,5 @@ export const PRIVATE_COLUMN_KEY = {
   FILE_CREATOR: '_file_creator',
   FILE_MODIFIER: '_file_modifier',
   FILE_NAME: '_name',
+  FILE_TYPE: '_file_type',
 };
