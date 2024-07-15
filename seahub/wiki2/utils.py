@@ -16,7 +16,6 @@ from seahub.group.utils import is_group_admin, is_group_member
 
 logger = logging.getLogger(__name__)
 
-
 WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
 WIKI_CONFIG_FILE_NAME = 'index.json'
@@ -173,6 +172,24 @@ def get_and_gen_page_nav_by_id(id_set, navigation, page_id, old_to_new):
             get_and_gen_page_nav_by_id(id_set, new_navigation, page_id, old_to_new)
 
 
+def gen_new_page_nav_by_id(navigation, page_id, current_id):
+    new_nav = {
+        'id': page_id,
+        'type': 'page',
+    }
+    if current_id:
+        for nav in navigation:
+            if nav.get('type') == 'page' and nav.get('id') == current_id:
+                sub_nav = nav.get('children', [])
+                sub_nav.append(new_nav)
+                nav['children'] = sub_nav
+                return
+            else:
+                gen_new_page_nav_by_id(nav.get('children', []), page_id, current_id)
+    else:
+        navigation.append(new_nav)
+
+
 def get_current_level_page_ids(navigation, page_id, ids=[]):
     for item in navigation:
         if item.get('id') == page_id:
@@ -207,3 +224,39 @@ def save_wiki_config(wiki, username, wiki_config):
     resp = requests.post(upload_link, files=files, data=data)
     if not resp.ok:
         raise Exception(resp.text)
+
+
+def delete_page(pages, id_set):
+    new_pages = []
+    old_pages = []
+    for page in pages:
+        if page['id'] in id_set:
+            new_pages.append(page)
+        else:
+            old_pages.append(page)
+    return new_pages, old_pages
+
+
+def pop_nav(navigation, page_id):
+    for nav in navigation:
+        if nav['id'] == page_id:
+            navigation.remove(nav)
+            return nav
+        if 'children' in nav and nav['children']:
+            result = pop_nav(nav['children'], page_id)
+            if result:
+                return result
+    return None
+
+
+def move_nav(navigation, target_id, moved_nav):
+    for nav in navigation:
+        if nav['id'] == target_id:
+            if 'children' in nav:
+                nav['children'].insert(0, moved_nav)
+            else:
+                nav['children'] = [moved_nav]
+            return
+        if 'children' in nav:
+            move_nav(nav['children'], target_id, moved_nav)
+

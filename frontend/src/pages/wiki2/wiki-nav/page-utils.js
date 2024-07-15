@@ -103,11 +103,16 @@ export default class PageUtils {
     }
     function _insertPageRecursion(item, page_id, target_page_id, target_id, move_position) {
       if (item.id === target_id) {
-        let insertIndex = target_page_id ? item.children.findIndex(item => item.id === target_page_id) : -1;
-        if (move_position === 'move_below') {
-          insertIndex++;
+        if (item.children) {
+          let insertIndex = target_page_id ? item.children.findIndex(item => item.id === target_page_id) : -1;
+          if (move_position === 'move_below') {
+            insertIndex++;
+          }
+          item.children.splice(insertIndex, 0, movedPage);
+        } else {
+          item.children = [];
+          item.children.push(movedPage);
         }
-        item.children.splice(insertIndex, 0, movedPage);
         return;
       }
       item.children && item.children.forEach(item => {

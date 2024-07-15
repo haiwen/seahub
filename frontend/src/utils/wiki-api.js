@@ -191,6 +191,16 @@ class WikiAPI {
     return this.req.delete(url);
   }
 
+  moveWiki2Page(wikiId, moved_id, target_id, move_position) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/pages/';
+    let params = {
+      'moved_id': moved_id,
+      'target_id': target_id,
+      'move_position': move_position
+    };
+    return this.req.put(url, params);
+  }
+
   deleteWiki2Folder(wikiId, folderId) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/folder/' + folderId + '/';
     return this.req.delete(url);
