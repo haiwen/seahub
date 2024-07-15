@@ -14,7 +14,6 @@ const propTypes = {
   toggle: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func,
   currentPageId: PropTypes.string,
-
 };
 
 

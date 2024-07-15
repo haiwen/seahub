@@ -1,8 +1,8 @@
 import { DragSource, DropTarget } from 'react-dnd';
-import wikiAPI from '../../../../utils/wiki-api';
-import { wikiId } from '../../../../utils/constants';
 import PageItem from './page-item';
-import {Utils} from '../../../../utils/utils';
+import wikiAPI from '../../../../utils/wiki-api';
+import { wikiId, gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 import toaster from '../../../../components/toast';
 
 const dragSource = {
@@ -42,10 +42,15 @@ const dropTarget = {
           props.onMovePage({
             moved_page_id: draggedPageId,
             target_page_id: targetPageId,
-            move_position,});
+            move_position,
+          });
         }).catch((error) => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+          if (error.response && error.response.status === 400 && error.response.data.error_msg === 'Internal Server Error') {
+            toaster.danger(gettext('Cannot move parent page to child page'));
+          } else {
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          }
         });
       }
       return;

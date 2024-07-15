@@ -40,7 +40,7 @@ class SidePanel extends Component {
     const index = PageUtils.getPageIndexById(pageId, pages);
     config.pages.splice(index, 1);
     // TODO: To delete a page, do you need to delete all subpages at once（update PageUtils delete a page)
-    wikiAPI.deleteWiki2Page(wikiId, pageId).then(res=>{
+    wikiAPI.deleteWiki2Page(wikiId, pageId).then((res) => {
       this.props.updateWikiConfig(config);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -141,7 +141,6 @@ class SidePanel extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-
     });
   };
 
