@@ -41,16 +41,6 @@ class RepotrashAPI {
     };
     return this.req.post(url, params);
   }
-
-  deleteRepoTrash2(repoID, days) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/';
-    const params = {
-      keep_days: days
-    };
-    return this.req.delete(url, {data: params});
-  }
-
-
 }
 
 let repotrashAPI = new RepotrashAPI();

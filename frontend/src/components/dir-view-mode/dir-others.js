@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
 import TreeSection from '../tree-section';
-import RepoFolderTrashDialog from '../dialog/trash-dialog';
+import TrashDialog from '../dialog/trash-dialog';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
   const [showTrashDialog, setShowTrashDialog] = useState(false);
@@ -35,7 +35,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
         </div>
       </div>
       {showTrashDialog && (
-        <RepoFolderTrashDialog
+        <TrashDialog
           repoID={repoID}
           currentRepoInfo={currentRepoInfo}
           showTrashDialog={showTrashDialog}
@@ -43,7 +43,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
         />
       )}
     </TreeSection>
-
   );
 };
 
@@ -51,7 +50,6 @@ DirOthers.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
-
 };
 
 export default DirOthers;

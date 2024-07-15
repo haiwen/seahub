@@ -44,7 +44,6 @@ class RepoFolderTrash extends React.Component {
   }
 
   componentDidMount() {
-    // this.getItems();
     this.getItems2();
   }
 
@@ -192,13 +191,12 @@ class RepoFolderTrash extends React.Component {
 
   clickRoot = (e) => {
     e.preventDefault();
-    if (this.state.trashType === 0){
+    if (this.state.trashType === 0) {
       this.refreshTrash2();
     }
-    if (this.state.trashType === 1){
+    if (this.state.trashType === 1) {
       this.refreshTrash();
     }
-
   };
 
   clickFolderPath = (folderPath, e) => {
@@ -253,7 +251,10 @@ class RepoFolderTrash extends React.Component {
                   <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
-                  <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>
+                  <p className="m-0 text-truncate d-flex">
+                    <span className="mr-1">{gettext('Current path: ')}</span>
+                    {showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}
+                  </p>
                   <div className="d-flex">
                     <button className="btn btn-secondary clean flex-shrink-0 ml-4"
                       onClick={this.getOldTrash}>{gettext('Select trash')}</button>
