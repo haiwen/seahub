@@ -162,7 +162,6 @@ class CcnetDB:
                 users.append(users_obj)
 
         return users, total_count
-    
 
     def get_group_ids_admins_map(self, group_ids):
         group_admins = {}
@@ -183,3 +182,20 @@ class CcnetDB:
             else:
                 group_admins[group_id] = [user]
         return group_admins
+
+    def change_groups_into_departments(self, group_id, org_id):
+        sql = f"""
+        UPDATE `{self.db_name}`.`Group` g
+        SET
+            g.creator_name = 'system admin',
+            g.parent_group_id = -1
+        WHERE
+            g.group_id = {group_id}
+        """
+        structure_sql = f"""
+        INSERT INTO `{self.db_name}`.`GroupStructure` (group_id, path)
+        VALUES ('{group_id}', '{group_id}')
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            cursor.execute(structure_sql)
