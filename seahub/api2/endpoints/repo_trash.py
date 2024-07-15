@@ -387,10 +387,6 @@ class RepoTrash2(APIView):
         
         items = []
         if len(deleted_entries) >= 1:
-            # sort entry by delete time
-            deleted_entries.sort(
-                key=lambda x: x.delete_time, reverse=True)
-
             for item in deleted_entries:
                 item_info = self.get_item_info(item)
                 items.append(item_info)
