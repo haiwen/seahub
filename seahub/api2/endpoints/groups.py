@@ -22,6 +22,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username, is_pro_version
 from seahub.utils.repo import get_repo_owner
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
@@ -103,7 +104,6 @@ class Groups(APIView):
             user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
-
         try:
             avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
         except ValueError:
@@ -132,7 +132,6 @@ class Groups(APIView):
 
         for g in user_groups:
             group_info = get_group_info(request, g.id, avatar_size)
-
             if with_repos:
                 if org_id:
                     group_repos = seafile_api.get_org_group_repos(org_id, g.id)
@@ -280,6 +279,32 @@ class Group(APIView):
 
         group_info = get_group_info(request, group_id, avatar_size)
 
+        return Response(group_info)
+
+    @api_check_group
+    def post(self, request, group_id):
+        """
+        change group to department
+        """
+        username = request.user.username
+        if not is_group_admin_or_owner(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # group to department
+        try:
+            ccnet_db = CcnetDB()
+            ccnet_db.change_groups_into_departments(group_id, org_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        group_info = get_group_info(request, group_id)
         return Response(group_info)
 
     @api_check_group

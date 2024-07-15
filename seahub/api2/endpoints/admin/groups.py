@@ -355,7 +355,7 @@ class AdminSearchGroup(APIView):
 
         return Response({"group_list": result})
     
-    
+
 class AdminDepartments(APIView):
     """
     List all departments
