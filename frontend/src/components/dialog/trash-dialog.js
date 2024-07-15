@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
-import {gettext, siteRoot, enableClean, username} from '../../utils/constants';
+import { gettext, siteRoot, enableClean, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
 import Loading from '../../components/loading';
@@ -14,17 +14,16 @@ import CleanTrash from '../../components/dialog/clean-trash';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
-
-import '../../css/repo-folder-trash.css';
+import '../../css/trash-dialog.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   showTrashDialog: PropTypes.bool.isRequired,
-  toggleTrashDialog: PropTypes.bool.isRequired
+  toggleTrashDialog: PropTypes.func.isRequired
 };
 
-class RepoFolderTrashDialog extends React.Component {
+class TrashDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -43,7 +42,6 @@ class RepoFolderTrashDialog extends React.Component {
   componentDidMount() {
     this.getItems2();
   }
-
 
   getItems = (scanStat) => {
     seafileAPI.getRepoFolderTrash(this.props.repoID, '/', scanStat).then((res) => {
@@ -177,30 +175,27 @@ class RepoFolderTrashDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
 
     return (
-      <Modal isOpen={showTrashDialog} toggle={toggleTrashDialog} size="lg" style={{ maxWidth: '1100px' }}>
-        <div style={{display: 'flex', margin: '15px 10px'}} >
-          <h4 dangerouslySetInnerHTML={{__html: title}}></h4>
-          <a href={oldTrashUrl} style={{marginLeft:'auto', fontStyle:'30px'}}>Visit old version page</a>
-          {(enableClean && !showFolder && isRepoAdmin) &&
-            <button className="btn btn-secondary clean flex-shrink-0 ml-4" style={{marginLeft:'auto'}}
-              onClick={this.cleanTrash}>{gettext('Clean')}</button>
+      <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
+        <ModalHeader
+          close={
+            <>
+              <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
+              {(enableClean && !showFolder && isRepoAdmin) &&
+                <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+              }
+              <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
+            </>
           }
-        </div>
+        >
+          <div dangerouslySetInnerHTML={{__html: title}}></div>
+        </ModalHeader>
         <ModalBody>
-          <div className="h-100 d-flex flex-column">
-            <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
-              <div className="row">
-                <div className="col-md-10 offset-md-1">
-                  <Content
-                    data={this.state}
-                    repoID={this.props.repoID}
-                    getMore={this.getMore}
-                    renderFolder={this.renderFolder}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <Content
+            data={this.state}
+            repoID={this.props.repoID}
+            getMore={this.getMore}
+            renderFolder={this.renderFolder}
+          />
           {isCleanTrashDialogOpen &&
           <ModalPortal>
             <CleanTrash
@@ -392,7 +387,6 @@ class FolderItem extends React.Component {
 
   renderFolder = (e) => {
     e.preventDefault();
-
     const item = this.props.item;
     const { commitID, baseDir, folderPath } = this.props;
     this.props.renderFolder(commitID, baseDir, Utils.joinPath(folderPath, item.name));
@@ -409,11 +403,16 @@ class FolderItem extends React.Component {
         <td>{item.parent_dir}</td>
         <td></td>
         <td></td>
+        <td></td>
       </tr>
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${this.props.repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
+        <td className="text-center">
+          <img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" />
+        </td>
+        <td>
+          <a href={`${siteRoot}repo/${this.props.repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a>
+        </td>
         <td>{item.parent_dir}</td>
         <td></td>
         <td>{Utils.bytesToSize(item.size)}</td>
@@ -432,6 +431,6 @@ FolderItem.propTypes = {
   renderFolder: PropTypes.func.isRequired,
 };
 
-RepoFolderTrashDialog.propTypes = propTypes;
+TrashDialog.propTypes = propTypes;
 
-export default RepoFolderTrashDialog;
+export default TrashDialog;

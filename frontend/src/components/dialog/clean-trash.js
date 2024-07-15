@@ -59,7 +59,6 @@ class CleanTrash extends React.Component {
         submitBtnDisabled: false
       });
     });
-
   };
 
   render() {

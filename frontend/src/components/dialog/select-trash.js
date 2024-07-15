@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
+import { MenuSelectStyle } from '../common/select/seahub-select-style';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -58,15 +59,14 @@ class SelectTrash extends React.Component {
       <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{gettext('Select trash')}</ModalHeader>
         <ModalBody>
-          <React.Fragment>
-            <CreatableSelect
-              defaultValue={this.options[this.props.trashType]}
-              options={this.options}
-              autoFocus={false}
-              onChange={this.handleInputChange}
-              placeholder=''
-            />
-          </React.Fragment>
+          <CreatableSelect
+            defaultValue={this.options[this.props.trashType]}
+            options={this.options}
+            autoFocus={false}
+            onChange={this.handleInputChange}
+            placeholder=''
+            styles={MenuSelectStyle}
+          />
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary"
