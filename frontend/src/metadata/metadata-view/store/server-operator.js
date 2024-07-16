@@ -50,7 +50,6 @@ class ServerOperator {
         callback({ operation });
         break;
       }
-
       case OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON: {
         const { repo_id, row_id, button_column_key } = operation;
         window.sfMetadataContext.lockRowViaButton(repo_id, row_id, button_column_key).then(res => {
@@ -60,10 +59,18 @@ class ServerOperator {
         });
         break;
       }
-
       case OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON: {
         const { repo_id, row_id, button_column_key, updates } = operation;
         window.sfMetadataContext.updateRowViaButton(repo_id, row_id, button_column_key, updates).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_row_via_button' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.INSERT_COLUMN: {
+        const { repo_id, name, column_type, key, data } = operation;
+        window.sfMetadataContext.updateRowViaButton(repo_id, name, column_type, key, data).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: 'Failed_to_modify_row_via_button' });

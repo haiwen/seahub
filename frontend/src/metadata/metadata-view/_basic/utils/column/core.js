@@ -26,8 +26,14 @@ const getColumnByKey = (columns, columnKey) => {
   return columns.find((column) => column.key === columnKey);
 };
 
+const getColumnByName = (columns, columnName) => {
+  if (!Array.isArray(columns) || !columnName) return null;
+  return columns.find((column) => column.key === columnName);
+};
+
 export {
   getColumnType,
   getColumnsByType,
   getColumnByKey,
+  getColumnByName,
 };

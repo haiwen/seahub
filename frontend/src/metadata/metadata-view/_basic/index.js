@@ -48,14 +48,20 @@ export {
   PRIVATE_COLUMN_KEY,
   NOT_DISPLAY_COLUMN_KEYS,
   VIEW_NOT_DISPLAY_COLUMN_KEYS,
+  PREDEFINED_COLUMN_KEYS,
 } from './constants';
 
 export {
   getColumnType,
   getColumnsByType,
   getColumnByKey,
+  getColumnByName,
   isDateColumn,
   isSupportDateColumnFormat,
+  getDateColumnFormat,
+  getDateDisplayString,
+  isPredefinedColumn,
+  getSelectColumnOptions,
   getValidFilters,
   getValidFiltersWithoutError,
   deleteInvalidFilter,
@@ -115,4 +121,5 @@ export {
   isEmptyObject,
   debounce,
   throttle,
+  isRegExpression,
 } from './utils';

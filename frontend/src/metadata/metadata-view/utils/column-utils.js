@@ -189,6 +189,18 @@ export const getColumnName = (key, name) => {
       return gettext('File name');
     case PRIVATE_COLUMN_KEY.FILE_TYPE:
       return gettext('File type');
+    case PRIVATE_COLUMN_KEY.FILE_COLLABORATORS:
+      return gettext('Collaborators');
+    case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
+      return gettext('File Expire time');
+    case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
+      return gettext('Document keywords');
+    case PRIVATE_COLUMN_KEY.FILE_SUMMARY:
+      return gettext('Document summary');
+    case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
+      return gettext('Is expired');
+    case PRIVATE_COLUMN_KEY.FILE_STATUS:
+      return gettext('File status');
     default:
       return name;
   }
@@ -212,6 +224,18 @@ const getColumnType = (key, type) => {
       return CellType.FILE_NAME;
     case PRIVATE_COLUMN_KEY.IS_DIR:
       return CellType.CHECKBOX;
+    case PRIVATE_COLUMN_KEY.FILE_COLLABORATORS:
+      return CellType.COLLABORATOR;
+    case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
+      return CellType.DATE;
+    case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
+      return CellType.TEXT;
+    case PRIVATE_COLUMN_KEY.FILE_SUMMARY:
+      return CellType.LONG_TEXT;
+    case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
+      return CellType.CHECKBOX;
+    case PRIVATE_COLUMN_KEY.FILE_STATUS:
+      return CellType.SINGLE_SELECT;
     default:
       return type;
   }
@@ -228,7 +252,7 @@ export const getColumns = (columns) => {
       type: getColumnType(key, type),
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
-      editable: false,
+      editable: !key.startsWith('_'),
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];

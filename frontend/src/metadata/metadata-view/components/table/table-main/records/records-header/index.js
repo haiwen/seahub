@@ -11,6 +11,7 @@ import { isMobile } from '../../../../../utils';
 import { getFrozenColumns } from '../../../../../utils/table-utils';
 import { isFrozen } from '../../../../../utils/column-utils';
 import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../../constants';
+import InsertColumn from './insert-column';
 
 class RecordsHeader extends Component {
 
@@ -89,7 +90,7 @@ class RecordsHeader extends Component {
 
   render() {
     const {
-      containerWidth, hasSelectedRecord, isSelectedAll, lastFrozenColumnKey, groupOffsetLeft, table
+      containerWidth, hasSelectedRecord, isSelectedAll, lastFrozenColumnKey, groupOffsetLeft, table, columns,
     } = this.props;
     const headerSettings = table.header_settings || {};
     const heightMode = isEmptyObject(headerSettings) ? HEADER_HEIGHT_TYPE.DEFAULT : headerSettings.header_height;
@@ -125,6 +126,7 @@ class RecordsHeader extends Component {
           </div>
           {/* scroll */}
           {headerCells}
+          <InsertColumn lastColumn={columns[columns.length - 1]} groupOffsetLeft={groupOffsetLeft} height={height} />
         </div>
       </div>
     );

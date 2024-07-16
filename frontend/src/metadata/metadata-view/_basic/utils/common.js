@@ -94,3 +94,11 @@ export const throttle = (func, delay) => {
     }
   };
 };
+
+export const isRegExpression = (value) => {
+  try {
+    return !!new RegExp(value);
+  } catch (e) {
+    return false;
+  }
+};

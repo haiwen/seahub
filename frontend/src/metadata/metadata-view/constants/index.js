@@ -44,7 +44,7 @@ export const TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP = {
   [CellType.TEXT]: true,
 };
 
-export const CANVAS_RIGHT_INTERVAL = 240;
+export const CANVAS_RIGHT_INTERVAL = 44;
 
 export const LEFT_NAV = 280;
 export const ROW_DETAIL_PADDING = 40 * 2;
@@ -86,16 +86,6 @@ export const DELETED_OPTION_BACKGROUND_COLOR = '#eaeaea';
 export const DELETED_OPTION_TIPS = 'deleted_option';
 
 export const SUPPORT_BATCH_DOWNLOAD_TYPES = [];
-
-export const DEFAULT_COLUMNS = [
-  { name: 'Name', type: CellType.TEXT, width: 200, editable: false, key: 'name' },
-  { name: 'Parent_dir', type: CellType.TEXT, width: 200, editable: false, key: 'parent_dir' },
-  { name: 'CTime', type: CellType.CTIME, width: 200, editable: false, key: 'created_time' },
-  { name: 'MTime', type: CellType.MTIME, width: 200, editable: false, key: 'modified_time' },
-  { name: 'Creator', type: CellType.CREATOR, width: 200, editable: false, key: 'creator' },
-  { name: 'Last_modified', type: CellType.LAST_MODIFIER, width: 200, editable: false, key: 'modifier' },
-  { name: 'Is_dir', type: CellType.TEXT, width: 200, editable: false, key: 'is_dir' },
-];
 
 export const PER_LOAD_NUMBER = 1000;
 

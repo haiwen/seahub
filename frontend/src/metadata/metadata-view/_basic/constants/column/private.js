@@ -15,4 +15,10 @@ export const PRIVATE_COLUMN_KEY = {
   FILE_MODIFIER: '_file_modifier',
   FILE_NAME: '_name',
   FILE_TYPE: '_file_type',
+  FILE_COLLABORATORS: '_collaborators',
+  FILE_EXPIRE_TIME: '_expire_time',
+  FILE_KEYWORDS: '_keywords',
+  FILE_SUMMARY: '_summary',
+  FILE_EXPIRED: '_expired',
+  FILE_STATUS: '_status',
 };

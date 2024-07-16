@@ -42,7 +42,7 @@ const ViewToolBar = () => {
 
   useEffect(() => {
     let timer = setInterval(() => {
-      if (window.sfMetadataContext) {
+      if (window.sfMetadataContext && window.sfMetadataStore.data) {
         timer && clearInterval(timer);
         timer = null;
         setLoading(false);

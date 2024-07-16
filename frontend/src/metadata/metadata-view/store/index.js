@@ -359,6 +359,14 @@ class Store {
     this.applyOperation(operation);
     this.saveView();
   }
+
+  insertColumn = (name, type, key, data) => {
+    const _type = OPERATION_TYPE.INSERT_COLUMN;
+    const operation = this.createOperation({
+      type: _type, repo_id: this.repoId, name, column_type: type, key, data
+    });
+    this.applyOperation(operation);
+  };
 }
 
 export default Store;

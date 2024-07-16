@@ -72,7 +72,9 @@ class Context {
   };
 
   canModifyCell = (column) => {
-    return false;
+    const { editable } = column;
+    if (!editable) return false;
+    return true;
   };
 
   canModifyRow = (row) => {
@@ -101,6 +103,10 @@ class Context {
 
   updateRowViaButton = () => {
     // todo
+  };
+
+  insertColumn = (repoId, name, type, key, data) => {
+    return this.metadataAPI.insertColumn(repoId, name, type, key, data);
   };
 
   getRowsByIds = () => {

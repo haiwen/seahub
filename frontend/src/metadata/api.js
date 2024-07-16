@@ -68,19 +68,20 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
+  insertColumn = (repoID, name, type, key, data) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    const params = {
+      'column_name': name,
+      'column_type': type,
+    };
+    return this.req.post(url, params);
+  };
+
   addMetadataRecords(repoID, parentDir, name) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     const data = {
       'parent_dir': parentDir,
       'name': name,
-    };
-    return this.req.post(url, data);
-  }
-
-  addMetadataColumn(repoID, column_name) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
-    let data = {
-      'column_name': column_name
     };
     return this.req.post(url, data);
   }

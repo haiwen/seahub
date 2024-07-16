@@ -667,9 +667,7 @@ class Records extends Component {
         >
           <div className="sf-metadata-result-content" style={{ width: containerWidth }}>
             <RecordsHeader
-              onRef={(ref) => {
-                this.headerFrozenRef = ref;
-              }}
+              onRef={(ref) => this.headerFrozenRef = ref}
               containerWidth={containerWidth}
               table={table}
               columns={columns}
