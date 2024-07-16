@@ -28,6 +28,12 @@ class PageItem extends Component {
     this.pageItemRef = React.createRef();
   }
 
+  componentWillUnmount() {
+    this.setState = () => {
+      return;
+    };
+  }
+
   onMouseEnter = () => {
     this.setState({ isMouseEnter: true });
     if (this.state.isSelected) return;
