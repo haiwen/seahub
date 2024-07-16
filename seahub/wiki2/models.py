@@ -11,47 +11,36 @@ class WikiDoesNotExist(Exception):
     pass
 
 
-class WikiManager(models.Manager):
-    def add(self, wiki_name, owner, repo_id):
-        now = timezone.now()
-        wiki = self.model(owner=owner, name=wiki_name, repo_id=repo_id, created_at=now)
-        wiki.save(using=self._db)
-        return wiki
+class WikiManager():
+    def get(self, wiki_id):
+        repo = seafile_api.get_repo(wiki_id)
+        if not repo:
+            return None
+        return Wiki2(repo)
 
 
-class Wiki2(models.Model):
+class Wiki2(object):
     """New wiki model to enable a user has multiple wikis and replace
     personal wiki.
     """
-
-    owner = LowerCaseCharField(max_length=255)
-    name = models.CharField(max_length=255)
-    repo_id = models.CharField(max_length=36, db_index=True)
-    created_at = models.DateTimeField(default=timezone.now, db_index=True)
     objects = WikiManager()
-
-    class Meta:
-        db_table = 'wiki_wiki2'
-        unique_together = (('owner', 'repo_id'),)
-        ordering = ["name"]
-
-    @property
-    def updated_at(self):
-        assert len(self.repo_id) == 36
-
-        repo = seafile_api.get_repo(self.repo_id)
-        if not repo:
-            return ''
-
-        return repo.last_modify
-
+    
+    def __init__(self, wiki, owner=None):
+        # wiki a wiki type repo object
+        self.pk = wiki.id
+        self.id = wiki.id
+        self.owner = owner
+        self.name = wiki.repo_name
+        self.updated_at = timestamp_to_isoformat_timestr(wiki.last_modify)
+        self.repo_id = wiki.repo_id
+        
+    
     def to_dict(self):
         return {
             'id': self.pk,
             'owner': self.owner,
             'name': self.name,
-            'created_at': datetime_to_isoformat_timestr(self.created_at),
-            'updated_at': timestamp_to_isoformat_timestr(self.updated_at),
+            'updated_at': self.updated_at,
             'repo_id': self.repo_id,
         }
 

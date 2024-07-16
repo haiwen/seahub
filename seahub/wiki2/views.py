@@ -8,7 +8,7 @@ from datetime import datetime
 from seaserv import seafile_api
 
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 from seahub.share.models import FileShare
@@ -21,7 +21,7 @@ from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import can_edit_wiki, check_wiki_permission, get_wiki_config
 
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, get_repo_owner
 from seahub.settings import SEADOC_SERVER_URL
 
 # Get an instance of a logger
@@ -33,8 +33,14 @@ def wiki_view(request, wiki_id):
     """ edit wiki page. for wiki2
     """
     # get wiki object or 404
-    wiki = get_object_or_404(Wiki, id=wiki_id)
-
+    wiki = Wiki.objects.get(wiki_id=wiki_id)
+    if not wiki:
+        raise Http404
+    
+    
+    repo_owner = get_repo_owner(request, wiki_id)
+    wiki.owner = repo_owner
+    
     page_id = request.GET.get('page_id')
     file_path = ''
 
