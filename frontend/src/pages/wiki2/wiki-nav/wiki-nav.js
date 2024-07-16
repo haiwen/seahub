@@ -13,7 +13,6 @@ class WikiNav extends Component {
     isEditMode: PropTypes.bool,
     navigation: PropTypes.array,
     pages: PropTypes.array,
-    onTogglePinViewList: PropTypes.func,
     setCurrentPage: PropTypes.func,
     onUpdatePage: PropTypes.func,
     onDeletePage: PropTypes.func,
