@@ -181,6 +181,50 @@ class DirentGridItem extends React.Component {
     this.props.onGridItemContextMenu(event, dirent);
   };
 
+  getTextRenderWidth = (text, font) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font || '14px Arial';
+    const metrics = context.measureText(text);
+    return metrics.width;
+  };
+
+  getRenderedText = (dirent) => {
+    const containerWidth = 230;
+
+    let tagRenderWidth = 0;
+    if (dirent.file_tags && dirent.file_tags.length > 0) {
+      if (dirent.file_tags.length === 1) {
+        tagRenderWidth = 16;
+      } else {
+        tagRenderWidth = 16 + (dirent.file_tags.length - 1) * 8;
+      }
+    }
+    let remainWidth = containerWidth - tagRenderWidth;
+    let nameRenderWidth = this.getTextRenderWidth(dirent.name);
+    let showName = '';
+    if (nameRenderWidth > remainWidth) {
+      let dotIndex = dirent.name.lastIndexOf('.');
+      let frontName = dirent.name.slice(0, dotIndex - 2);
+      let backName = dirent.name.slice(dotIndex - 2);
+      let sum = 0;
+      for (let i = 0; i < frontName.length; i++) {
+        // Use charCodeAt(i) > 127 to check Chinese and English.
+        // English and symbols occupy 1 position, Chinese and others occupy 2 positions.
+        frontName.charCodeAt(i) > 127 ? (sum = sum + 2 ) : (sum = sum + 1);
+        // When sum position exceeds 20, back string will not be displayed.
+        if (sum > 20) {
+          frontName = frontName.slice(0, i) + '...';
+          break;
+        }
+      }
+      showName = frontName + backName;
+    } else {
+      showName = dirent.name;
+    }
+    return showName;
+  };
+
   render() {
     let { dirent, path } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -212,6 +256,7 @@ class DirentGridItem extends React.Component {
 
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
+    const showName = this.getRenderedText(dirent);
     return (
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
@@ -248,8 +293,17 @@ class DirentGridItem extends React.Component {
               </Fragment>
             )}
             {(!dirent.isDir() && !this.canPreview) ?
-              <a className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} onClick={this.onItemLinkClick}>{dirent.name}</a> :
-              <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+              <a
+                className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`}
+                onClick={this.onItemLinkClick}
+                title={dirent.name}
+              >{showName}</a> :
+              <a
+                className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`}
+                href={dirent.type === 'dir' ? dirHref : fileHref}
+                onClick={this.onItemLinkClick}
+                title={dirent.name}
+              >{showName}</a>
             }
           </div>
         </li>
@@ -259,4 +313,5 @@ class DirentGridItem extends React.Component {
 }
 
 DirentGridItem.propTypes = propTypes;
+
 export default DirentGridItem;

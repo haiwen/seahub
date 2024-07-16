@@ -198,12 +198,16 @@ class Wiki extends Component {
       callback && callback();
     });
     this.cacheHistoryFiles(docUuid, name, id);
+    this.updateDocumentTitle(name);
   };
 
   onUpdatePage = (pageId, newPage) => {
     if (newPage.name === '') {
       toaster.danger(gettext('Page name cannot be empty'));
       return;
+    }
+    if (this.state.currentPageId === pageId) {
+      this.updateDocumentTitle(newPage.name);
     }
     const { config } = this.state;
     let pages = config.pages;
@@ -215,6 +219,10 @@ class Wiki extends Component {
     });
     const newConfig = { ...config, pages: newPages };
     this.saveWikiConfig(newConfig);
+  };
+
+  updateDocumentTitle = (newTitle) => {
+    document.title = newTitle;
   };
 
   render() {

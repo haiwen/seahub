@@ -13,6 +13,8 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
   toggelAddWikiDialog: PropTypes.func,
+  sidePanelRate: PropTypes.number,
+  isSidePanelFolded: PropTypes.bool,
 };
 
 class WikiCardView extends Component {
@@ -57,7 +59,7 @@ class WikiCardView extends Component {
 
   render() {
     let { loading, errorMsg, wikis } = this.props.data;
-    const { toggelAddWikiDialog } = this.props;
+    const { toggelAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -72,6 +74,8 @@ class WikiCardView extends Component {
         key='my-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        sidePanelRate={sidePanelRate}
+        isSidePanelFolded={isSidePanelFolded}
         wikis={myWikis}
         title={gettext('My Wikis')}
         isDepartment={false}
@@ -85,6 +89,8 @@ class WikiCardView extends Component {
           key={'department-Wikis-' + deptID}
           deleteWiki={this.props.deleteWiki}
           renameWiki={this.props.renameWiki}
+          sidePanelRate={sidePanelRate}
+          isSidePanelFolded={isSidePanelFolded}
           wikis={department2WikisMap[deptID]}
           title={department2WikisMap[deptID][0].owner_nickname}
           isDepartment={true}
@@ -98,6 +104,8 @@ class WikiCardView extends Component {
         key='old-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        isSidePanelFolded={isSidePanelFolded}
+        sidePanelRate={sidePanelRate}
         wikis={v1Wikis}
         title={gettext('Old Wikis')}
         isDepartment={false}
