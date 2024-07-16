@@ -93,6 +93,9 @@ class CurDirPath extends React.Component {
           currentMode={this.props.currentMode}
           switchViewMode={this.props.switchViewMode}
           isCustomPermission={this.props.isCustomPermission}
+          sortBy={this.props.sortBy}
+          sortOrder={this.props.sortOrder}
+          sortItems={this.props.sortItems}
         />}
         {!isDesktop && this.props.direntList.length > 0 &&
         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
