@@ -39,7 +39,7 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
   const onKeyUp = useCallback(() => {
     timer.current = setTimeout(() => {
       isTyping.current = false;
-    }, 500);
+    }, 2000);
   }, []);
 
   const onCompositionStart = useCallback(() => {
