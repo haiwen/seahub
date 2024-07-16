@@ -7,7 +7,7 @@ import shutil
 import logging
 import requests
 import posixpath
-from urllib.parse import unquote
+from urllib.parse import quote, unquote
 import time
 from datetime import datetime, timedelta
 from pypinyin import lazy_pinyin
