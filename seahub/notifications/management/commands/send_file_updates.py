@@ -1,9 +1,9 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
-from datetime import datetime
-import logging
 import os
 import re
+import logging
+from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
 from django.urls import reverse
@@ -14,7 +14,6 @@ from django.utils.translation import gettext as _
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.constants import HASH_URLS
 from seahub.options.models import (
     UserOptions, KEY_FILE_UPDATES_EMAIL_INTERVAL,
     KEY_FILE_UPDATES_LAST_EMAILED_TIME
@@ -27,33 +26,37 @@ from seahub.utils.timeutils import utc_to_local
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-########## Utility Functions ##########
+
+# Utility Functions
 def td(con):
     return con
     # return '<td>%s</td>' % con
 
+
 def a_tag(con, href='#', style=''):
     return '<a href="%s" style="%s">%s</a>' % (href, style, e(con))
+
 
 def repo_url(repo_id, repo_name):
     p = reverse('lib_view', args=[repo_id, repo_name, ''])
 
     return get_site_scheme_and_netloc() + p
 
+
 def file_url(repo_id, file_path):
     p = reverse('view_lib_file', args=[repo_id, file_path])
     return get_site_scheme_and_netloc() + p
+
 
 def dir_url(repo_id, repo_name, dir_path):
     p = reverse('lib_view', args=[repo_id, repo_name, dir_path.strip('/')])
 
     return get_site_scheme_and_netloc() + p
 
+
 def user_info_url(username):
     p = reverse('user_profile', args=[username])
     return get_site_scheme_and_netloc() + p
-
-#######################################
 
 
 class Command(BaseCommand):
@@ -225,17 +228,20 @@ class Command(BaseCommand):
             else:
                 if (now - last_emailed_time).total_seconds() < interval_val:
                     continue
+                if (now - last_emailed_time).total_seconds() > 86400:
+                    last_emailed_time = now - timedelta(days=7)
 
             # get file updates(from: last_emailed_time, to: now) for repos
             # user can access
-            res = get_user_activities_by_timestamp(
-                username, last_emailed_time, now)
+            res = get_user_activities_by_timestamp(username, last_emailed_time, now)
             if not res:
+                UserOptions.objects.set_file_updates_last_emailed_time(username, now)
                 continue
 
             # remove my activities
             res = [x for x in res if x.op_user != username]
             if not res:
+                UserOptions.objects.set_file_updates_last_emailed_time(username, now)
                 continue
 
             # format mail content & send file updates email to user
@@ -269,8 +275,7 @@ class Command(BaseCommand):
                                 'notifications/file_updates_email.html', c,
                                 None, [contact_email])
                 # set new last_emailed_time
-                UserOptions.objects.set_file_updates_last_emailed_time(
-                    username, now)
+                UserOptions.objects.set_file_updates_last_emailed_time(username, now)
                 self.stdout.write('[%s] Successful to send email to %s' %
                                   (str(datetime.now()), contact_email))
             except Exception as e:
