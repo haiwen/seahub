@@ -21,7 +21,6 @@ class PageItem extends Component {
       isShowDeleteDialog: false,
       isShowInsertPage: false,
       pageName: props.page.name || '',
-      pageIcon: props.page.icon,
       isSelected: props.currentPageId === props.page.id,
       isMouseEnter: false,
     };
@@ -71,27 +70,15 @@ class PageItem extends Component {
   };
 
   savePageProperties = () => {
-    const { name, icon, id } = this.props.page;
-    const { pageIcon } = this.state;
-    let pageName = this.state.pageName.trim();
-    if (pageIcon !== icon || pageName !== name) {
-      let newView = {};
-      if (pageName !== name) {
-        newView.name = pageName;
-      }
-      if (pageIcon !== icon) {
-        newView.icon = pageIcon;
-      }
-      this.props.onUpdatePage(id, newView);
+    const { name, id } = this.props.page;
+    const pageName = this.state.pageName.trim();
+    if (pageName !== name) {
+      this.props.onUpdatePage(id, { name: pageName });
     }
   };
 
   onChangeName = (newName) => {
     this.setState({ pageName: newName });
-  };
-
-  onChangeIcon = (newIcon) => {
-    this.setState({ pageIcon: newIcon });
   };
 
   openDeleteDialog = () => {
