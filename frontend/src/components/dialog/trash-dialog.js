@@ -43,27 +43,6 @@ class TrashDialog extends React.Component {
     this.getItems2();
   }
 
-  getItems = (scanStat) => {
-    seafileAPI.getRepoFolderTrash(this.props.repoID, '/', scanStat).then((res) => {
-      const { data, more, scan_stat } = res.data;
-      if (!data.length && more) {
-        this.getItems(scan_stat);
-      } else {
-        this.setState({
-          isLoading: false,
-          items: this.state.items.concat(data),
-          more: more,
-          scanStat: scan_stat
-        });
-      }
-    }).catch((error) => {
-      this.setState({
-        isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });
-    });
-  };
-
   getItems2 = () => {
     repotrashAPI.getRepoFolderTrash2(this.props.repoID, '/').then((res) => {
       const { data } = res.data;
@@ -73,13 +52,6 @@ class TrashDialog extends React.Component {
         more: false
       });
     });
-  };
-
-  getMore = () => {
-    this.setState({
-      isLoading: true
-    });
-    this.getItems(this.state.scanStat);
   };
 
   onSearchedClick = (selectedItem) => {
@@ -102,18 +74,6 @@ class TrashDialog extends React.Component {
     this.setState({
       isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen
     });
-  };
-
-  refreshTrash = () => {
-    this.setState({
-      isLoading: true,
-      errorMsg: '',
-      items: [],
-      scanStat: null,
-      more: false,
-      showFolder: false
-    });
-    this.getItems();
   };
 
   refreshTrash2 = () => {
@@ -200,9 +160,7 @@ class TrashDialog extends React.Component {
           <ModalPortal>
             <CleanTrash
               repoID={this.props.repoID}
-              trashType={this.state.trashType}
-              refreshTrash={this.refreshTrash}
-              refreshTrash2={this.refreshTrash2}
+              refreshTrash={this.refreshTrash2}
               toggleDialog={this.toggleCleanTrashDialog}
             />
           </ModalPortal>
@@ -274,7 +232,7 @@ class Content extends React.Component {
 
 Content.propTypes = {
   data: PropTypes.object.isRequired,
-  getMore: PropTypes.func.isRequired,
+  getMore: PropTypes.func,
   renderFolder: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired
 };

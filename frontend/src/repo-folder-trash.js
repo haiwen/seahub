@@ -6,13 +6,11 @@ import moment from 'moment';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
-import { repotrashAPI } from './utils/repo-trash-api';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CleanTrash from './components/dialog/clean-trash';
-import SelectTrash from './components/dialog/select-trash';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -38,20 +36,13 @@ class RepoFolderTrash extends React.Component {
       scanStat: null,
       more: false,
       isCleanTrashDialogOpen: false,
-      trashType: 0,
-      isOldTrashDialogOpen: false,
     };
   }
 
   componentDidMount() {
-    this.getItems2();
+    this.getItems();
   }
 
-  changeTrashType = (type) =>{
-    this.setState({
-      trashType: type
-    });
-  };
 
   getItems = (scanStat) => {
     seafileAPI.getRepoFolderTrash(repoID, path, scanStat).then((res) => {
@@ -74,16 +65,7 @@ class RepoFolderTrash extends React.Component {
     });
   };
 
-  getItems2 = () => {
-    repotrashAPI.getRepoFolderTrash2(repoID, path).then((res) => {
-      const { data } = res.data;
-      this.setState({
-        isLoading: false,
-        items: this.state.items.concat(data),
-        more: false
-      });
-    });
-  };
+
 
   getMore = () => {
     this.setState({
@@ -108,16 +90,6 @@ class RepoFolderTrash extends React.Component {
     window.history.back();
   };
 
-  getOldTrash = ()=> {
-    this.toggleOldTrashDialog();
-  };
-
-  toggleOldTrashDialog = () => {
-    this.setState({
-      isOldTrashDialogOpen: !this.state.isOldTrashDialogOpen
-    });
-  };
-
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
   };
@@ -140,17 +112,6 @@ class RepoFolderTrash extends React.Component {
     this.getItems();
   };
 
-  refreshTrash2 = () => {
-    this.setState({
-      isLoading: true,
-      errorMsg: '',
-      items: [],
-      scanStat: null,
-      more: false,
-      showFolder: false
-    });
-    this.getItems2();
-  };
 
   renderFolder = (commitID, baseDir, folderPath) => {
     this.setState({
@@ -191,12 +152,7 @@ class RepoFolderTrash extends React.Component {
 
   clickRoot = (e) => {
     e.preventDefault();
-    if (this.state.trashType === 0) {
-      this.refreshTrash2();
-    }
-    if (this.state.trashType === 1) {
-      this.refreshTrash();
-    }
+    this.refreshTrash();
   };
 
   clickFolderPath = (folderPath, e) => {
@@ -229,7 +185,7 @@ class RepoFolderTrash extends React.Component {
   };
 
   render() {
-    const { isCleanTrashDialogOpen, isOldTrashDialogOpen, showFolder } = this.state;
+    const { isCleanTrashDialogOpen, showFolder } = this.state;
 
     let title = gettext('{placeholder} Trash');
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
@@ -251,17 +207,10 @@ class RepoFolderTrash extends React.Component {
                   <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
-                  <p className="m-0 text-truncate d-flex">
-                    <span className="mr-1">{gettext('Current path: ')}</span>
-                    {showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}
-                  </p>
-                  <div className="d-flex">
-                    <button className="btn btn-secondary clean flex-shrink-0 ml-4"
-                      onClick={this.getOldTrash}>{gettext('Select trash')}</button>
-                    {(path == '/' && enableUserCleanTrash && !showFolder && isRepoAdmin) &&
-                      <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
-                    }
-                  </div>
+                  <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>
+                  {(path == '/' && enableUserCleanTrash && !showFolder && isRepoAdmin) &&
+                  <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                  }
                 </div>
                 <Content
                   data={this.state}
@@ -272,25 +221,11 @@ class RepoFolderTrash extends React.Component {
             </div>
           </div>
         </div>
-        {isOldTrashDialogOpen &&
-        <ModalPortal>
-          <SelectTrash
-            repoID={repoID}
-            trashType={this.state.trashType}
-            refreshTrash={this.refreshTrash}
-            refreshTrash2={this.refreshTrash2}
-            changeTrash={this.changeTrashType}
-            toggleDialog={this.toggleOldTrashDialog}
-          />
-        </ModalPortal>
-        }
         {isCleanTrashDialogOpen &&
         <ModalPortal>
           <CleanTrash
             repoID={repoID}
-            trashType={this.state.trashType}
             refreshTrash={this.refreshTrash}
-            refreshTrash2={this.refreshTrash2}
             toggleDialog={this.toggleCleanTrashDialog}
           />
         </ModalPortal>
