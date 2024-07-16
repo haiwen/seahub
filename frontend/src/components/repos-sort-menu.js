@@ -34,8 +34,8 @@ class ReposSortMenu extends React.Component {
         <DropdownToggle
           tag="div"
           data-toggle="dropdown"
-          title={gettext('Switch view mode')}
-          aria-label={gettext('Switch view mode')}
+          title={gettext('Switch sort mode')}
+          aria-label={gettext('Switch sort mode')}
           aria-expanded={isDropdownMenuOpen}
         >
           <span className="cur-view-path-btn px-1" role="button">

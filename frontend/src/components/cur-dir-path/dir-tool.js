@@ -7,6 +7,7 @@ import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/repos-sort-menu';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import MetadataViewToolBar from '../../metadata/metadata-view/components/view-toolbar';
 
@@ -19,6 +20,9 @@ const propTypes = {
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.func,
 };
 
 class DirTool extends React.Component {
@@ -27,8 +31,15 @@ class DirTool extends React.Component {
     super(props);
     this.state = {
       isRepoTagDialogOpen: false,
-      isDropdownMenuOpen: false
+      isDropdownMenuOpen: false,
     };
+
+    this.sortOptions = [
+      {value: 'name-asc', text: gettext('By name ascending')},
+      {value: 'name-desc', text: gettext('By name descending')},
+      {value: 'time-asc', text: gettext('By time ascending')},
+      {value: 'time-desc', text: gettext('By time descending')}
+    ];
   }
 
   toggleDropdownMenu = () => {
@@ -78,6 +89,11 @@ class DirTool extends React.Component {
     }
   };
 
+  onSelectSortOption = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
+    this.props.sortItems(sortBy, sortOrder);
+  };
+
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
@@ -97,6 +113,7 @@ class DirTool extends React.Component {
       <React.Fragment>
         <div className="d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+          <ReposSortMenu sortOptions={this.sortOptions} onSelectSortOption={this.onSelectSortOption}/>
           {(!this.props.isCustomPermission) &&
             <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
