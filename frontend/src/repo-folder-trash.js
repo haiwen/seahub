@@ -43,7 +43,6 @@ class RepoFolderTrash extends React.Component {
     this.getItems();
   }
 
-
   getItems = (scanStat) => {
     seafileAPI.getRepoFolderTrash(repoID, path, scanStat).then((res) => {
       const { data, more, scan_stat } = res.data;
@@ -64,8 +63,6 @@ class RepoFolderTrash extends React.Component {
       });
     });
   };
-
-
 
   getMore = () => {
     this.setState({
@@ -111,7 +108,6 @@ class RepoFolderTrash extends React.Component {
     });
     this.getItems();
   };
-
 
   renderFolder = (commitID, baseDir, folderPath) => {
     this.setState({

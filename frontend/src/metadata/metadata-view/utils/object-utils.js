@@ -1,6 +1,6 @@
 class ObjectUtils {
 
-  static getDataType(data) {
+  static getDataType(data){
     let type = typeof data;
     if (type !== 'object') {
       return type;
@@ -8,7 +8,7 @@ class ObjectUtils {
     return Object.prototype.toString.call(data).replace(/^\[object (\S+)\]$/, '$1');
   }
 
-  static iterable(data) {
+  static iterable(data){
     return ['Object', 'Array'].includes(this.getDataType(data));
   }
 

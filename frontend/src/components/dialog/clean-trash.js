@@ -41,10 +41,11 @@ class CleanTrash extends React.Component {
     this.setState({
       submitBtnDisabled: true
     });
+
     seafileAPI.deleteRepoTrash(repoID, inputValue.value).then((res) => {
+      toaster.success(gettext('Clean succeeded.'));
       this.props.refreshTrash();
       this.props.toggleDialog();
-      toaster.success(gettext('Clean succeeded.'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
