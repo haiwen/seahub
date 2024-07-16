@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { WIKI_COVER_LIST } from '../constant';
-import HeaderIcon from './page-icon';
+import PageIcon from './page-icon';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
 
 import './page-title.css';
@@ -63,7 +63,7 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
   return (
     <div id="wiki-page-title" className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentPageConfig.icon && (
-        <HeaderIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+        <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}
       <div className={classnames('wiki-page-controller', {'show': isShowController})}>
         {!currentPageConfig.icon && (
