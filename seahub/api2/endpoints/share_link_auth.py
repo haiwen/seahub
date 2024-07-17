@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+
+from django.utils.translation import gettext as _
 from seahub.api2.utils import api_error, send_share_link_emails
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -281,11 +283,23 @@ class ShareLinkEmailAuthView(APIView):
             email_auth_infos = authed_details.get('authed_emails', [])
             exist_emails = email_auth_infos
             new_auth_infos = []
+
+            result = {
+                'failed': [],
+                'success': []
+            }
             for email in email_list:
                 if email in exist_emails:
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg':  _('Email %s already exsits.') % email
+                    })
                     continue
                 email_auth_infos.append(email)
                 new_auth_infos.append(email)
+                result['success'].append({
+                    'email': email
+                })
             
             authed_details['authed_emails'] = email_auth_infos
             file_share.authed_details = json.dumps(authed_details)
@@ -295,13 +309,12 @@ class ShareLinkEmailAuthView(APIView):
                 shared_from = email2nickname(request.user.username)
                 send_share_link_emails(new_auth_infos, file_share, shared_from)
 
-
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'auth_list': new_auth_infos})
+        return Response(result)
 
 
     def delete(self, request, token):
