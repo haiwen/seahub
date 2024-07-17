@@ -97,9 +97,16 @@ class DirTool extends React.Component {
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath === '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
+
+    const sortOptions = this.sortOptions.map(item => {
+      return {
+        ...item,
+        isSelected: item.value == `${sortBy}-${sortOrder}`
+      };
+    });
 
     if (isFileExtended) {
       return (
@@ -113,7 +120,7 @@ class DirTool extends React.Component {
       <React.Fragment>
         <div className="d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
-          <ReposSortMenu sortOptions={this.sortOptions} onSelectSortOption={this.onSelectSortOption}/>
+          <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
           {(!this.props.isCustomPermission) &&
             <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
