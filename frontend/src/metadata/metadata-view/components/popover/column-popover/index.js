@@ -63,10 +63,12 @@ const ColumnPopover = ({ target, onChange }) => {
       flag = 0;
     }
 
-    const data = dataRef.current.getValue();
     if (flag == 0) return;
-    onChange(columnName, column.type, { key: column.key, data });
-  }, [nameRef, column, metadata, onChange]);
+    let data = dataRef.current.getValue();
+    if (Object.keys(data).length === 0) data = null;
+    onChange(columnName, column.type, { key: column.unique ? column.key : '', data });
+    toggle();
+  }, [nameRef, column, metadata, onChange, toggle]);
 
   return (
     <UncontrolledPopover

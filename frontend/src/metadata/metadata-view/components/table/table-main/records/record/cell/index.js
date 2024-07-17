@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import toaster from '../../../../../../../../components/toast';
 import { PRIVATE_COLUMN_KEY, isFunction } from '../../../../../../_basic';
 import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { getCellValueByColumn } from '../../../../../../utils';
 import { isCellValueChanged } from '../../../../../../utils/cell-comparer';
 import CellFormatter from '../../../../../cell-formatter';
 import CellOperationBtn from './operation-btn';
@@ -155,8 +156,7 @@ class Cell extends React.Component {
     if (bgColor) {
       cellStyle['backgroundColor'] = bgColor;
     }
-
-    let cellValue = record[key];
+    const cellValue = getCellValueByColumn(record, column);
     const cellEvents = needBindEvents && this.getEvents();
     const props = {
       className,

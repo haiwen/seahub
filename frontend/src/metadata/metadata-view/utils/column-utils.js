@@ -120,8 +120,7 @@ export const setColumnOffsets = (columns) => {
 
 export function isColumnSupportEdit(cell, columns) {
   const column = columns[cell.idx];
-  if (column.type === CellType.FILE_NAME) return true;
-  return false;
+  return column.editable;
 }
 
 export function isColumnSupportDirectEdit(cell, columns) {
@@ -241,11 +240,26 @@ const getColumnType = (key, type) => {
   }
 };
 
+const getFileTypeColumnData = (data) => {
+  const _OPTIONS = {
+    '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428', id: '_picture' },
+    '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428', id: '_document' },
+    '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_video' },
+    '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142', id: '_audio' },
+  };
+
+  let newData = { ...data };
+  newData.options = Array.isArray(newData.options) ? newData.options.map(o => {
+    return { ..._OPTIONS[o.name] };
+  }) : [];
+  return newData;
+};
+
 export const getColumns = (columns) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
   const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
-    const { type, key, name, ...params } = column;
+    const { type, key, name, data, ...params } = column;
     return {
       ...params,
       key,
@@ -253,6 +267,7 @@ export const getColumns = (columns) => {
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
       editable: !key.startsWith('_'),
+      data: key === PRIVATE_COLUMN_KEY.FILE_TYPE ? getFileTypeColumnData(data) : data,
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
@@ -273,11 +288,11 @@ export const getColumns = (columns) => {
   return displayColumns;
 };
 
-export function canEdit(col, rowData, enableCellSelect) {
+export function canEdit(col, record, enableCellSelect) {
   if (!col) return false;
   if (window.sfMetadataContext.canModifyCell(col) === false) return false;
   if (col.editable != null && typeof (col.editable) === 'function') {
-    return enableCellSelect === true && col.editable(rowData);
+    return enableCellSelect === true && col.editable(record);
   }
   return enableCellSelect === true && !!col.editable;
 }

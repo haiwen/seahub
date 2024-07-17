@@ -68,23 +68,21 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  insertColumn = (repoID, name, type, key, data) => {
+  insertColumn = (repoID, name, type, { key, data }) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
-    const params = {
+    let params = {
       'column_name': name,
       'column_type': type,
     };
+    if (key) {
+      params['column_key'] = key;
+    }
+
+    if (data) {
+      params['column_data'] = data;
+    }
     return this.req.post(url, params);
   };
-
-  addMetadataRecords(repoID, parentDir, name) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
-    const data = {
-      'parent_dir': parentDir,
-      'name': name,
-    };
-    return this.req.post(url, data);
-  }
 
   getMetadataRecordInfo(repoID, parentDir, name) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
@@ -98,12 +96,18 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  updateMetadataRecord = (repoID, recordID, columnName, newValue) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/' + recordID + '/';
-    const data = {
-      'column_name': columnName,
-      'value': newValue,
-    };
+  modifyRecord = (repoID, recordID, update) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
+    const data = { records_data: [{ record_id: recordID, record: update }] };
+    return this.req.put(url, data);
+  };
+
+  modifyRecords = (repoID, recordsData, is_copy_paste = false) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
+    let data = { records_data: recordsData };
+    if (is_copy_paste) {
+      data.is_copy_paste = 'true';
+    }
     return this.req.put(url, data);
   };
 

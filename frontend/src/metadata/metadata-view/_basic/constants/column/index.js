@@ -25,7 +25,8 @@ export {
 } from './predefined-columns';
 
 export {
-  PRIVATE_COLUMN_KEY
+  PRIVATE_COLUMN_KEY,
+  PRIVATE_COLUMN_KEYS
 } from './private';
 
 export {

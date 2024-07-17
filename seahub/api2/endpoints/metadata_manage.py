@@ -11,6 +11,11 @@ from seahub.repo_metadata.models import RepoMetadata
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
+from seahub.utils.timeutils import utc_to_local, \
+        datetime_to_isoformat_timestr, datetime_to_timestamp, \
+        timestamp_to_isoformat_timestr
+from datetime import datetime
+import time
 
 from seaserv import seafile_api
 
@@ -211,6 +216,85 @@ class MetadataRecords(APIView):
         
         return Response(results)
 
+    def put(self, request, repo_id):
+        records_data = request.data.get('records_data')
+        if not records_data:
+            error_msg = 'records_data invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        
+        from seafevents.repo_metadata.utils import METADATA_TABLE
+        columns = []
+        try:
+            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+            columns = columns_data.get('columns', [])
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        sys_column_names = [
+            METADATA_TABLE.columns.id.name,
+            METADATA_TABLE.columns.file_creator.name,
+            METADATA_TABLE.columns.file_ctime.name,
+            METADATA_TABLE.columns.file_modifier.name,
+            METADATA_TABLE.columns.file_mtime.name,
+            METADATA_TABLE.columns.parent_dir.name,
+            METADATA_TABLE.columns.file_name.name,
+            METADATA_TABLE.columns.is_dir.name,
+            METADATA_TABLE.columns.file_type.name,
+        ]
+
+        rows = []
+        for record_data in records_data:
+            record_id = record_data.get('record_id', '')
+            record = record_data.get('record', {})
+            if record_id:
+                flag = False
+                update = {
+                    METADATA_TABLE.columns.id.name: record_id,
+                }
+                for column_name, value in record.items():
+                    if column_name not in sys_column_names:
+                        try:
+                            column = next(column for column in columns if column['name'] == column_name)
+                            flag = True
+                            if value and column['type'] == 'date':
+                                column_data = column.get('data', {})
+                                format = column_data.get('format', 'YYYY-MM-DD')
+                                datetime_obj = datetime.strptime(value, '%Y-%m-%d %H:%M' if 'HH:mm' in format else '%Y-%m-%d')
+                                update[column_name] = datetime_to_isoformat_timestr(datetime_obj)
+                            else:
+                                update[column_name] = value
+                        except Exception as e:
+                            pass
+                if flag:
+                    rows.append(update)
+        if rows:
+            try:
+                metadata_server_api.update_rows(METADATA_TABLE.id, rows)
+            except Exception as e:
+                logger.exception(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 class MetadataRecordInfo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -245,7 +329,7 @@ class MetadataRecordInfo(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.metadata_server_api import METADATA_TABLE
+        from seafevents.repo_metadata.utils import METADATA_TABLE
 
         sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
             `{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?;'
@@ -295,72 +379,6 @@ class MetadataRecordInfo(APIView):
         return Response(query_result)
 
 
-class MetadataRecord(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def put(self, request, repo_id, record_id):
-        column_name = request.data.get('column_name')
-        new_value = request.data.get('value')
-
-        if not column_name:
-            error_msg = 'column_name invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not new_value:
-            error_msg = 'value invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        permission = check_folder_permission(request, repo_id, '/')
-        if permission != 'rw':
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
-        from seafevents.repo_metadata.metadata_server_api import METADATA_TABLE
-
-        sys_column_names = [
-            METADATA_TABLE.columns.id.name,
-            METADATA_TABLE.columns.file_creator.name,
-            METADATA_TABLE.columns.file_ctime.name,
-            METADATA_TABLE.columns.file_modifier.name,
-            METADATA_TABLE.columns.file_mtime.name,
-            METADATA_TABLE.columns.parent_dir.name,
-            METADATA_TABLE.columns.file_name.name,
-            METADATA_TABLE.columns.is_dir.name,
-        ]
-
-        if column_name in sys_column_names:
-            error_msg = 'column_name invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        row = {
-            METADATA_TABLE.columns.id.name: record_id,
-            column_name: new_value
-        }
-
-        try:
-            metadata_server_api.update_rows(METADATA_TABLE.id, [row])
-        except Exception as e:
-            logger.exception(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'success': True})
-
-
 class MetadataColumns(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -369,6 +387,9 @@ class MetadataColumns(APIView):
     def post(self, request, repo_id):
         column_name = request.data.get('column_name')
         column_type = request.data.get('column_type', 'text')
+        column_key = request.data.get('column_key', '')
+        column_data = request.data.get('column_data', '')
+
         if not column_name:
             error_msg = 'column_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -390,7 +411,7 @@ class MetadataColumns(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.metadata_server_api import METADATA_TABLE, MetadataColumn
+        from seafevents.repo_metadata.utils import METADATA_TABLE, MetadataColumn
         columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
         column_keys = set()
         column_names = set()
@@ -403,14 +424,22 @@ class MetadataColumns(APIView):
             error_msg = 'column_name duplicated.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        column_key = gen_unique_id(column_keys)
-        column = MetadataColumn(column_key, column_name, column_type)
+
+        if column_key and column_key.startswith('_') and column_key in column_keys:
+            error_msg = 'predefined column duplicated'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not column_key:
+            column_key = gen_unique_id(column_keys)
+
+        column = MetadataColumn(column_key, column_name, column_type, column_data)
+        column = column.to_dict()
 
         try:
-            metadata_server_api.add_column(METADATA_TABLE.id, column.to_dict())
+            metadata_server_api.add_column(METADATA_TABLE.id, column)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        return Response({'column': column})

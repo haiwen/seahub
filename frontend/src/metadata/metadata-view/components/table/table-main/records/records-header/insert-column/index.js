@@ -28,7 +28,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft }) => {
   }, [ref]);
 
   const insertColumn = useCallback((name, type, { key, data }) => {
-    store.insertColumn(name, type, key, data);
+    store.insertColumn(name, type, { key, data });
   }, [store]);
 
   const onHotKey = useCallback((event) => {

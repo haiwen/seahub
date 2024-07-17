@@ -60,9 +60,7 @@ class Records extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { columns, getTableContentRect } = nextProps;
     const { width: tableContentWidth } = getTableContentRect();
-    if (
-      this.props.columns !== columns
-    ) {
+    if (this.props.columns !== columns) {
       const columnMetrics = this.createColumnMetrics(nextProps);
       this.updateHorizontalScrollState({
         columnMetrics,

@@ -72,8 +72,8 @@ const Container = () => {
   }, [metadata, store]);
 
   const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false) => {
-    // todo: store op
-  }, []);
+    store.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste);
+  }, [store]);
 
   const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData) => {
     const rowIds = [rowId];

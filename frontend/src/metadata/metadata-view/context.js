@@ -105,8 +105,16 @@ class Context {
     // todo
   };
 
-  insertColumn = (repoId, name, type, key, data) => {
-    return this.metadataAPI.insertColumn(repoId, name, type, key, data);
+  insertColumn = (repoId, name, type, { key, data }) => {
+    return this.metadataAPI.insertColumn(repoId, name, type, { key, data });
+  };
+
+  modifyRecord = (repoId, recordId, columnName, value) => {
+    return this.metadataAPI.modifyRecord(repoId, recordId, columnName, value);
+  };
+
+  modifyRecords = (repoId, recordsData, isCopyPaste) => {
+    return this.metadataAPI.modifyRecords(repoId, recordsData, isCopyPaste);
   };
 
   getRowsByIds = () => {

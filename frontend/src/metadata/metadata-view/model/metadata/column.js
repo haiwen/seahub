@@ -4,8 +4,8 @@ class Column {
     this.data = object.data || null;
     this.name = object.name || [];
     this.type = object.type || [];
-    this.width = object.width || [];
-    this.editable = object.editable || [];
+    this.width = object.width || 200;
+    this.editable = object.editable || !this.key.startsWith('_') || false;
   }
 
 }
