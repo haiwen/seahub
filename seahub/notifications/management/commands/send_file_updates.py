@@ -231,7 +231,7 @@ class Command(BaseCommand):
 
                 # to avoid slow queries caused by retrieving too much data,
                 # only get file changes within the past week.
-                if (now - last_emailed_time).total_seconds() > 604800:
+                if (now - last_emailed_time).total_seconds() > 7 * 86400:
                     last_emailed_time = now - timedelta(days=7)
 
             # get file updates(from: last_emailed_time, to: now) for repos
