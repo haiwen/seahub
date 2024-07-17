@@ -1087,7 +1087,9 @@ class Repos(APIView):
         if org_id and org_id > 0:
             repo_id = seafile_api.create_org_repo(repo_name,
                     repo_desc, username, org_id, passwd,
-                    enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                    enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                    pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                    pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
@@ -1103,16 +1105,22 @@ class Repos(APIView):
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
                             enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
-                            storage_id=storage_id )
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
+                            storage_id=storage_id)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd,
-                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
 
         if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
             add_encrypted_repo_secret_key_to_database(repo_id, passwd)
@@ -1126,6 +1134,9 @@ class Repos(APIView):
             return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
         magic = request.data.get('magic', '')
         random_key = request.data.get('random_key', '')
+        pwd_hash = request.data.get('pwd_hash', '')
+        pwd_hash_algo = request.data.get('pwd_hash_algo', '')
+        pwd_hash_params = request.data.get('pwd_hash_params', '')
 
         try:
             enc_version = int(request.data.get('enc_version', 0))
@@ -1149,9 +1160,14 @@ class Repos(APIView):
                              'You must provide magic, random_key and enc_version.')
 
         if org_id and org_id > 0:
-            repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name, repo_desc,
-                                                      username, magic, random_key,
-                                                      salt, enc_version, org_id)
+            repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name,
+                                                      repo_desc, username,
+                                                      magic, random_key, salt,
+                                                      enc_version,
+                                                      org_id,
+                                                      pwd_hash=pwd_hash,
+                                                      pwd_hash_algo=pwd_hash_algo,
+                                                      pwd_hash_params=pwd_hash_params)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES and \
                     STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
@@ -1160,18 +1176,30 @@ class Repos(APIView):
 
                 if not storages:
                     logger.error('no library storage found.')
-                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
-                            repo_desc, username, magic, random_key, \
-                            salt, enc_version)
+                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+                                                          repo_desc, username,
+                                                          magic, random_key, salt,
+                                                          enc_version,
+                                                          pwd_hash=pwd_hash,
+                                                          pwd_hash_algo=pwd_hash_algo,
+                                                          pwd_hash_params=pwd_hash_params)
                 else:
-                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
-                            repo_desc, username, magic, random_key, \
-                            salt, enc_version, \
-                            storage_id=storages[0].get('storage_id', None))
+                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+                                                          repo_desc, username,
+                                                          magic, random_key, salt,
+                                                          enc_version,
+                                                          pwd_hash=pwd_hash,
+                                                          pwd_hash_algo=pwd_hash_algo,
+                                                          pwd_hash_params=pwd_hash_params,
+                                                          storage_id=storages[0].get('storage_id', None))
             else:
-                repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
-                        repo_desc, username, magic, random_key, \
-                        salt, enc_version)
+                repo_id = seafile_api.create_enc_repo(repo_id, repo_name,
+                                                      repo_desc, username,
+                                                      magic, random_key, salt,
+                                                      enc_version,
+                                                      pwd_hash=pwd_hash,
+                                                      pwd_hash_algo=pwd_hash_algo,
+                                                      pwd_hash_params=pwd_hash_params)
 
         return repo_id, None
 
@@ -1239,7 +1267,9 @@ class PubRepos(APIView):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                   username, org_id, passwd,
-                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                                                  pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                                  pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_org_inner_pub_repo(org_id, repo.id, permission)
         else:
@@ -1257,16 +1287,22 @@ class PubRepos(APIView):
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
                             enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
                             storage_id=storage_id)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd,
-                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
 
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
@@ -4814,7 +4850,10 @@ class GroupRepos(APIView):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                   username, org_id, passwd,
-                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                                                  pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                                  pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_org_group_repo(repo_id, org_id, group.id,
                                            username, permission)
@@ -4832,16 +4871,22 @@ class GroupRepos(APIView):
 
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd, storage_id,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
                             repo_desc, username, passwd,
-                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                            enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                            pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                            pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd,
-                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
 
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)
