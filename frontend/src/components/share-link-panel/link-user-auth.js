@@ -14,34 +14,44 @@ class UserItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false,
+      isHighlighted: false,
+      isOperationShow: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   deleteItem = () => {
     const { item } = this.props;
     this.props.deleteItem(item.username);
-
   };
 
   render() {
-    let item = this.props.item;
+    const { item } = this.props;
+    const { isHighlighted } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
-        <td className="name">
-          <div className="position-relative" title={item.contact_email}>
-            <img src={item.avatar_url}
-              width="24" alt={item.name}
-              className="rounded-circle mr-2 cursor-pointer"
-            />
+      <tr
+        className={isHighlighted ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+        tabIndex="0"
+      >
+        <td>
+          <div className="d-flex align-items-center" title={item.contact_email}>
+            <img src={item.avatar_url} width="24" alt={item.name} className="rounded-circle mr-2 cursor-pointer" />
             <span>{item.name}</span>
           </div>
         </td>
@@ -68,40 +78,11 @@ UserItem.propTypes = {
   deleteItem: PropTypes.func.isRequired,
 };
 
-class UserList extends React.Component {
-
-  render() {
-    let items = this.props.items;
-    return (
-      <tbody>
-        {items.map((item, index) => {
-          return (
-            <UserItem
-              key={index}
-              item={item}
-              repoID={this.props.repoID}
-              deleteItem={this.props.deleteItem}
-            />
-          );
-        })}
-      </tbody>
-    );
-  }
-}
-
-UserList.propTypes = {
-  repoID: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  linkToken: PropTypes.string,
-  deleteItem: PropTypes.func,
-};
-
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   linkToken: PropTypes.string,
   setMode: PropTypes.func,
   path: PropTypes.string,
-  hideHead: PropTypes.bool
 };
 
 class LinkUserAuth extends React.Component {
@@ -169,35 +150,38 @@ class LinkUserAuth extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width="82%">
-            <button
-              className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0 mr-2"
-              onClick={this.goBack}
-              title={gettext('Back')}
-              aria-label={gettext('Back')}>
-            </button>
-            {gettext('Links')}
-          </th>
+          <th width="82%"></th>
           <th width="18%"></th>
         </tr>
       </thead>
     );
     return (
       <Fragment>
-        <table className="w-xs-200">
-          {this.props.hideHead ? null : thead}
+        <div className="d-flex align-items-center pb-2 border-bottom">
+          <h6 className="font-weight-normal m-0">
+            <button
+              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2"
+              onClick={this.goBack}
+              title={gettext('Back')}
+              aria-label={gettext('Back')}
+            >
+            </button>
+            {gettext('Authenticated users')}
+          </h6>
+        </div>
+        <table className="table-thead-hidden w-xs-200">
+          {thead}
           <tbody>
             <tr>
-              <td width="82%">
+              <td>
                 <UserSelect
                   ref="userSelect"
                   isMulti={true}
-                  className="reviewer-select"
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
                 />
               </td>
-              <td width="18%">
+              <td>
                 <Button onClick={this.addLinkAuthUsers}>{gettext('Submit')}</Button>
               </td>
             </tr>
@@ -206,12 +190,18 @@ class LinkUserAuth extends React.Component {
         <div className="auth-share-list-container">
           <table className="table-thead-hidden w-xs-200">
             {thead}
-            <UserList
-              repoID={this.props.repoID}
-              items={authUsers}
-              linkToken={this.props.linkToken}
-              deleteItem={this.deleteItem}
-            />
+            <tbody>
+              {authUsers.map((item, index) => {
+                return (
+                  <UserItem
+                    key={index}
+                    item={item}
+                    repoID={this.props.repoID}
+                    deleteItem={this.deleteItem}
+                  />
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </Fragment>

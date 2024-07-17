@@ -13,16 +13,23 @@ class EmailItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false,
     };
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   deleteItem = () => {
@@ -34,11 +41,15 @@ class EmailItem extends React.Component {
   render() {
     let item = this.props.item;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
-        <td className="name">
-          <div className="position-relative" title={item}>
-            <span>{item}</span>
-          </div>
+      <tr
+        className={this.state.isHighlighted ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+        tabIndex="0"
+      >
+        <td>
+          {item}
         </td>
         <td>
           <span
@@ -59,36 +70,8 @@ class EmailItem extends React.Component {
 
 EmailItem.propTypes = {
   repoID: PropTypes.string.isRequired,
-  item: PropTypes.object.isRequired,
+  item: PropTypes.string.isRequired,
   deleteItem: PropTypes.func.isRequired,
-};
-
-class EmailList extends React.Component {
-
-  render() {
-    let items = this.props.items;
-    return (
-      <tbody>
-        {items.map((item, index) => {
-          return (
-            <EmailItem
-              key={index}
-              item={item}
-              repoID={this.props.repoID}
-              deleteItem={this.props.deleteItem}
-            />
-          );
-        })}
-      </tbody>
-    );
-  }
-}
-
-EmailList.propTypes = {
-  repoID: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  linkToken: PropTypes.string,
-  deleteItem: PropTypes.func,
 };
 
 const propTypes = {
@@ -104,11 +87,10 @@ class LinkEmailAuth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputEmails: null,
+      inputEmails: '',
       authEmails: []
     };
   }
-
 
   componentDidMount() {
     this.listLinkAuthUsers();
@@ -129,7 +111,7 @@ class LinkEmailAuth extends React.Component {
       let newAuthUsers = [...authEmails, ...res.data.auth_list];
       this.setState({
         authEmails: newAuthUsers,
-        inputEmails: null
+        inputEmails: ''
       });
       this.refs.userSelect.clearSelect();
     });
@@ -159,33 +141,37 @@ class LinkEmailAuth extends React.Component {
   };
 
   render() {
-    let { authEmails, inputEmails } = this.state;
+    const { authEmails, inputEmails } = this.state;
     const thead = (
       <thead>
         <tr>
-          <th width="82%">
-            <button
-              className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0 mr-2"
-              onClick={this.goBack}
-              title={gettext('Back')}
-              aria-label={gettext('Back')}>
-            </button>
-            {gettext('Links')}
-          </th>
+          <th width="82%"></th>
           <th width="18%"></th>
         </tr>
       </thead>
     );
     return (
       <Fragment>
-        <table className="w-xs-200">
-          {this.props.hideHead ? null : thead}
+        <div className="d-flex align-items-center pb-2 border-bottom">
+          <h6 className="font-weight-normal m-0">
+            <button
+              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2"
+              onClick={this.goBack}
+              title={gettext('Back')}
+              aria-label={gettext('Back')}
+            >
+            </button>
+            {gettext('Authenticated emails')}
+          </h6>
+        </div>
+        <table className="table-thead-hidden w-xs-200">
+          {thead}
           <tbody>
             <tr>
-              <td width="82%">
-                <input type="text" className="form-control" value={inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')}/>
+              <td>
+                <input type="text" className="form-control" value={inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')} />
               </td>
-              <td width="18%">
+              <td>
                 <Button onClick={this.addLinkAuthUsers}>{gettext('Submit')}</Button>
               </td>
             </tr>
@@ -194,12 +180,18 @@ class LinkEmailAuth extends React.Component {
         <div className="auth-share-list-container">
           <table className="table-thead-hidden w-xs-200">
             {thead}
-            <EmailList
-              repoID={this.props.repoID}
-              items={authEmails}
-              linkToken={this.props.linkToken}
-              deleteItem={this.deleteItem}
-            />
+            <tbody>
+              {authEmails.map((item, index) => {
+                return (
+                  <EmailItem
+                    key={index}
+                    item={item}
+                    repoID={this.props.repoID}
+                    deleteItem={this.deleteItem}
+                  />
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </Fragment>
