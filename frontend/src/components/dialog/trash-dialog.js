@@ -55,9 +55,8 @@ class TrashDialog extends React.Component {
       }
       this.setState({
         currentPage: page,
-        hasNextPage: total_count - page*this.state.perPage > 0,
+        hasNextPage: total_count - page * this.state.perPage > 0,
         isLoading: false,
-        // items: this.state.items.concat(items),
         items: items,
         more: false
       });
@@ -260,11 +259,6 @@ class Content extends React.Component {
           curPerPage={curPerPage}
           resetPerPage={this.props.resetPerPage}
         />
-        {isLoading && <Loading />}
-        {errorMsg && <p className="error mt-6 text-center">{errorMsg}</p>}
-        {(more && !isLoading && !showFolder) && (
-          <button className="btn btn-block more mt-6" onClick={this.props.getMore}>{gettext('More')}</button>
-        )}
       </React.Fragment>
     );
   }

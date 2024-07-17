@@ -21,7 +21,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         repo_id = options.get('rid')
-        days = options['ndb']
+        if not repo_id:
+            self.stdout.write(
+                '\nPlease use < -rid [repo_id] | -ndb [n_days_before][optional]'
+            )
+            return
+            
+        days = options.get('ndb', 0)
         logger.info('Start clean repo trash...')
         self.print_msg('Start clean repo trash...')
         self.do_action(repo_id, days)
