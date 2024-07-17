@@ -37,7 +37,7 @@ class RepotrashAPI {
   getRepoFolderTrash2(repoID, page, per_page) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/';
     let params = {
-      page: page,
+      page: page || 1,
       per_page: per_page
     };
     return this.req.get(url, {params: params});

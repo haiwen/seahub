@@ -11,6 +11,7 @@ import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
 import CleanTrash from '../../components/dialog/clean-trash';
+import Paginator from '../paginator';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
@@ -36,6 +37,9 @@ class TrashDialog extends React.Component {
       isCleanTrashDialogOpen: false,
       trashType: 0,
       isOldTrashDialogOpen: false,
+      currentPage: 1,
+      perPage: 100,
+      hasNextPage: false
     };
   }
 
@@ -43,12 +47,18 @@ class TrashDialog extends React.Component {
     this.getItems2();
   }
 
-  getItems2 = () => {
-    repotrashAPI.getRepoFolderTrash2(this.props.repoID).then((res) => {
-      const { items } = res.data;
+  getItems2 = (page) => {
+    repotrashAPI.getRepoFolderTrash2(this.props.repoID, page, this.state.perPage).then((res) => {
+      const { items, total_count } = res.data;
+      if (!page){
+        page = 1;
+      }
       this.setState({
+        currentPage: page,
+        hasNextPage: total_count - page*this.state.perPage > 0,
         isLoading: false,
-        items: this.state.items.concat(items),
+        // items: this.state.items.concat(items),
+        items: items,
         more: false
       });
     });
@@ -65,7 +75,13 @@ class TrashDialog extends React.Component {
     }
   };
 
-
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getItems2(1);
+    });
+  };
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
   };
@@ -154,7 +170,12 @@ class TrashDialog extends React.Component {
             data={this.state}
             repoID={this.props.repoID}
             getMore={this.getMore}
+            currentPage={this.state.currentPage}
+            curPerPage={this.state.perPage}
+            hasNextPage={this.state.hasNextPage}
             renderFolder={this.renderFolder}
+            getListByPage={this.getItems2}
+            resetPerPage={this.resetPerPage}
           />
           {isCleanTrashDialogOpen &&
           <ModalPortal>
@@ -185,8 +206,19 @@ class Content extends React.Component {
     ];
   }
 
+  getPreviousPage = () => {
+    this.props.getListByPage(this.props.currentPage - 1);
+  };
+
+  getNextPage = () => {
+    this.props.getListByPage(this.props.currentPage + 1);
+  };
+
   render() {
     const { isLoading, errorMsg, items, more, showFolder, commitID, baseDir, folderPath, folderItems } = this.props.data;
+    const {
+      curPerPage, currentPage, hasNextPage
+    } = this.props;
     return (
       <React.Fragment>
         <table className="table-hover">
@@ -220,6 +252,14 @@ class Content extends React.Component {
               })}
           </tbody>
         </table>
+        <Paginator
+          gotoPreviousPage={this.getPreviousPage}
+          gotoNextPage={this.getNextPage}
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+          curPerPage={curPerPage}
+          resetPerPage={this.props.resetPerPage}
+        />
         {isLoading && <Loading />}
         {errorMsg && <p className="error mt-6 text-center">{errorMsg}</p>}
         {(more && !isLoading && !showFolder) && (
@@ -234,7 +274,12 @@ Content.propTypes = {
   data: PropTypes.object.isRequired,
   getMore: PropTypes.func,
   renderFolder: PropTypes.func.isRequired,
-  repoID: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
 };
 
 
