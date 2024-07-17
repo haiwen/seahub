@@ -15,12 +15,9 @@
   line-height: 0;
 }
 
-.grid-item:hover .grid-file-img-link {
-  background: #f8f8f8;
-}
-
-.grid-item:hover a {
-  color: #eb8205;
+.grid-item:hover {
+  background: #f5f5f5;
+  border-radius: 5px;
 }
 
 .grid-file-img-link {
@@ -67,6 +64,11 @@
   word-break: break-all;
 }
 
+.grid-file-name-link:hover {
+  color: #212529;
+  text-decoration: none;
+}
+
 .grid-file-locked-icon {
   position: absolute;
   bottom: 0;
@@ -75,11 +77,7 @@
 }
 
 .grid-selected-active {
-  background-color: #f8f8f8;
-}
-
-.grid-link-selected-active {
-  color: #eb8205;
+  background-color: #f2f4f6;
 }
 
 .grid-drop-show {
