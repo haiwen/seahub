@@ -54,6 +54,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   posX: PropTypes.string,
   posY: PropTypes.string,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -689,16 +690,19 @@ class DirentListView extends React.Component {
           <ContextMenu
             id={'dirent-container-menu'}
             onMenuItemClick={this.onContainerMenuItemClick}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           <ContextMenu
             id={'dirent-item-menu'}
             onMenuItemClick={this.onMenuItemClick}
             onShowMenu={this.onShowMenu}
             onHideMenu={this.onHideMenu}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           <ContextMenu
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           {this.state.isShowDirentsDraggablePreview &&
             <ModalPortal>

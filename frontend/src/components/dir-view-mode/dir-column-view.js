@@ -87,6 +87,7 @@ class DirColumnView extends React.Component {
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
     this.viewModeContainer = React.createRef();
+    this.dirContentMain = React.createRef();
   }
 
   onResizeMouseUp = () => {
@@ -125,6 +126,10 @@ class DirColumnView extends React.Component {
     this.dragHandlerRef.current.style.top = top + 'px';
   };
 
+  getMenuContainerSize = () => {
+    return window.getComputedStyle(this.viewModeContainer.current);
+  };
+
   render() {
     const { currentMode, isTreePanelShown } = this.props;
     const { navRate, inResizing } = this.state;
@@ -132,7 +137,12 @@ class DirColumnView extends React.Component {
     const select = inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
-      <div className="dir-column-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref={this.viewModeContainer}>
+      <div
+        className="dir-column-view"
+        onMouseMove={onResizeMove}
+        onMouseUp={this.onResizeMouseUp}
+        ref={this.viewModeContainer}
+      >
         {isTreePanelShown && (
           <>
             <DirColumnNav
@@ -167,7 +177,11 @@ class DirColumnView extends React.Component {
             />
           </>
         )}
-        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
+        <div
+          className="dir-content-main" style={{userSelect: select, flex: mainFlex}}
+          onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
+          ref={this.dirContentMain}
+        >
           {this.props.isViewFile ? (
             <DirColumnFile
               path={this.props.path}
@@ -219,6 +233,7 @@ class DirColumnView extends React.Component {
               repoTags={this.props.repoTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
+              getMenuContainerSize={this.getMenuContainerSize}
             /> :
             <DirGridView
               path={this.props.path}
@@ -248,6 +263,7 @@ class DirColumnView extends React.Component {
               isDirentDetailShow={this.props.isDirentDetailShow}
               onItemRename={this.props.onItemRename}
               onFileTagChanged={this.props.onFileTagChanged}
+              getMenuContainerSize={this.getMenuContainerSize}
             />
           )}
         </div>
