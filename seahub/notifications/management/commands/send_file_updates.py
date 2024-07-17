@@ -229,7 +229,8 @@ class Command(BaseCommand):
                 if (now - last_emailed_time).total_seconds() < interval_val:
                     continue
 
-                # reset last_emailed_time to 7 days ago
+                # to avoid slow queries caused by retrieving too much data,
+                # only get file changes within the past week.
                 if (now - last_emailed_time).total_seconds() > 604800:
                     last_emailed_time = now - timedelta(days=7)
 
