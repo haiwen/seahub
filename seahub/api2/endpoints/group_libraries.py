@@ -214,10 +214,14 @@ class GroupLibraries(APIView):
             is_org = True
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, '', username, org_id, password,
-                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                                                  pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                                  pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
         else:
             repo_id = seafile_api.create_repo(repo_name, '', username, password,
-                                              enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+                                              enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
+                                              pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                              pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
 
         repo = seafile_api.get_repo(repo_id)
         share_dir_to_group(repo, '/', username, username, group_id,

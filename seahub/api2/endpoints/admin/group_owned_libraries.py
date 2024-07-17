@@ -22,12 +22,15 @@ from seahub.utils.repo import get_library_storages, get_repo_owner, get_availabl
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.utils import normalize_custom_permission_name
 from seahub.share.signals import share_repo_to_group_successful
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_READ_WRITE
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-        ENCRYPTED_LIBRARY_VERSION
+        ENCRYPTED_LIBRARY_VERSION, ENCRYPTED_LIBRARY_PWD_HASH_ALGO, \
+        ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
+
 
 logger = logging.getLogger(__name__)
+
 
 def get_group_owned_repo_info(request, repo_id):
 
@@ -45,6 +48,7 @@ def get_group_owned_repo_info(request, repo_id):
     repo_info['owner_email'] = repo_owner
 
     return repo_info
+
 
 class AdminGroupOwnedLibraries(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -92,8 +96,7 @@ class AdminGroupOwnedLibraries(APIView):
         group_id = int(group_id)
         if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-            if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
-                    'ROLE_BASED'):
+            if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
 
                 storages = get_library_storages(request)
                 storage_id = request.data.get("storage_id", None)
@@ -103,26 +106,36 @@ class AdminGroupOwnedLibraries(APIView):
 
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
                         permission, password, enc_version=ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
                         storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                 if org_id and org_id > 0:
                     repo_id = seafile_api.org_add_group_owned_repo(
                         org_id, group_id, repo_name, permission, password,
-                        ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
                 else:
                     repo_id = seafile_api.add_group_owned_repo(
                         group_id, repo_name, permission, password,
-                        ENCRYPTED_LIBRARY_VERSION)
+                        enc_version=ENCRYPTED_LIBRARY_VERSION,
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
         else:
             if org_id and org_id > 0:
                 repo_id = seafile_api.org_add_group_owned_repo(
                     org_id, group_id, repo_name, permission, password,
-                    ENCRYPTED_LIBRARY_VERSION)
+                    enc_version=ENCRYPTED_LIBRARY_VERSION,
+                    pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                    pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
             else:
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
                                                            permission, password,
-                                                           ENCRYPTED_LIBRARY_VERSION)
+                                                           enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
 
         # for activities
         username = request.user.username
@@ -140,6 +153,7 @@ class AdminGroupOwnedLibraries(APIView):
         # TODO
         info['permission'] = permission
         return Response(info)
+
 
 class AdminGroupOwnedLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

@@ -44,7 +44,8 @@ from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
 from seahub.views import check_folder_permission
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-        ENCRYPTED_LIBRARY_VERSION
+        ENCRYPTED_LIBRARY_VERSION, ENCRYPTED_LIBRARY_PWD_HASH_ALGO, \
+        ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +140,8 @@ class GroupOwnedLibraries(APIView):
                                                            permission,
                                                            password,
                                                            enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
+                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
                                                            storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
