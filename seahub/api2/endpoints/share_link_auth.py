@@ -275,7 +275,7 @@ class ShareLinkEmailAuthView(APIView):
 
             email_str = request.data.get('emails', '')
             email_list = string2list(email_str)
-            email_list = [e for e in email_list if is_valid_email(e)]
+            # email_list = [e for e in email_list if is_valid_email(e)]
             try:
                 authed_details = json.loads(file_share.authed_details)
             except:
@@ -293,6 +293,12 @@ class ShareLinkEmailAuthView(APIView):
                     result['failed'].append({
                         'email': email,
                         'error_msg':  _('Email %s already exsits.') % email
+                    })
+                    continue
+                if not is_valid_email(email):
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg': _('Email %s is invalid.') % email
                     })
                     continue
                 email_auth_infos.append(email)
