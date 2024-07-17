@@ -9,8 +9,8 @@ import Loading from '../loading';
 import LinkDetails from './link-details';
 import LinkCreation from './link-creation';
 import LinkList from './link-list';
-import LinkUserAuth from './link-user-auth';
-import LinkEmailAuth from './link-email-auth';
+import LinkAuthenticatedUsers from './link-authenticated-users';
+import LinkAuthenticatedEmails from './link-authenticated-emails';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -274,18 +274,18 @@ class ShareLinkPanel extends React.Component {
             updateAfterCreation={this.updateAfterCreation}
           />
         );
-      case 'linkUserAuth':
+      case 'linkAuthenticatedUsers':
         return (
-          <LinkUserAuth
+          <LinkAuthenticatedUsers
             repoID={repoID}
             linkToken={sharedLinkInfo.token}
             setMode={this.setMode}
             path={itemPath}
           />
         );
-      case 'linkEmailAuth':
+      case 'linkAuthenticatedEmails':
         return (
-          <LinkEmailAuth
+          <LinkAuthenticatedEmails
             repoID={repoID}
             linkToken={sharedLinkInfo.token}
             setMode={this.setMode}

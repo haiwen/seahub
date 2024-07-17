@@ -3,18 +3,17 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import '../../css/invitations.css';
-
-import '../../css/share-to-user.css';
+import UserSelect from '../user-select';
+import toaster from '../toast';
 import { shareLinkAPI } from '../../utils/share-link-api';
 
-class EmailItem extends React.Component {
+class UserItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isHighlighted: false,
-      isOperationShow: false,
+      isOperationShow: false
     };
   }
 
@@ -34,22 +33,25 @@ class EmailItem extends React.Component {
 
   deleteItem = () => {
     const { item } = this.props;
-    this.props.deleteItem(item);
-
+    this.props.deleteItem(item.username);
   };
 
   render() {
-    let item = this.props.item;
+    const { item } = this.props;
+    const { isHighlighted } = this.state;
     return (
       <tr
-        className={this.state.isHighlighted ? 'tr-highlight' : ''}
+        className={isHighlighted ? 'tr-highlight' : ''}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
         tabIndex="0"
       >
         <td>
-          {item}
+          <div className="d-flex align-items-center" title={item.contact_email}>
+            <img src={item.avatar_url} width="24" alt={item.name} className="rounded-circle mr-2 cursor-pointer" />
+            <span>{item.name}</span>
+          </div>
         </td>
         <td>
           <span
@@ -68,9 +70,9 @@ class EmailItem extends React.Component {
   }
 }
 
-EmailItem.propTypes = {
+UserItem.propTypes = {
   repoID: PropTypes.string.isRequired,
-  item: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
   deleteItem: PropTypes.func.isRequired,
 };
 
@@ -79,16 +81,15 @@ const propTypes = {
   linkToken: PropTypes.string,
   setMode: PropTypes.func,
   path: PropTypes.string,
-  hideHead: PropTypes.bool
 };
 
-class LinkEmailAuth extends React.Component {
+class LinkAuthenticatedUsers extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      inputEmails: '',
-      authEmails: []
+      selectedOption: null,
+      authUsers: []
     };
   }
 
@@ -98,35 +99,48 @@ class LinkEmailAuth extends React.Component {
 
   listLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
-    shareLinkAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
-      this.setState({authEmails: res.data.auth_list});
+    shareLinkAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
+      this.setState({authUsers: res.data.auth_list});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
   addLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
-    const { inputEmails } = this.state;
-    shareLinkAPI.addShareLinkAuthEmails(linkToken, inputEmails, path).then(res => {
-      let authEmails = this.state.authEmails;
-      let newAuthUsers = [...authEmails, ...res.data.auth_list];
+    const { selectedOption } = this.state;
+    if (!selectedOption || !selectedOption.length ) {
+      return false;
+    }
+    const users = selectedOption.map((item, index) => item.email);
+    shareLinkAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
+      let authUsers = this.state.authUsers;
+      let newAuthUsers = [...authUsers, ...res.data.auth_list];
       this.setState({
-        authEmails: newAuthUsers,
-        inputEmails: ''
+        authUsers: newAuthUsers,
+        selectedOption: null
       });
       this.refs.userSelect.clearSelect();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
-  deleteItem = (email) => {
+  deleteItem = (username) => {
     const { linkToken, path } = this.props;
-    let emails = [email, ];
-    shareLinkAPI.deleteShareLinkAuthEmails(linkToken, emails, path).then(res => {
-      let authEmails = this.state.authEmails.filter(e => {
-        return e !== email;
+    let users = [username, ];
+    shareLinkAPI.deleteShareLinkAuthUsers(linkToken, users, path).then(res => {
+      let authUsers = this.state.authUsers.filter(user => {
+        return user.username !== username;
       });
       this.setState({
-        authEmails: authEmails
+        authUsers: authUsers
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -134,14 +148,12 @@ class LinkEmailAuth extends React.Component {
     this.props.setMode('displayLinkDetails');
   };
 
-  handleInputChange = (e) => {
-    this.setState({
-      inputEmails: e.target.value
-    });
+  handleSelectChange = (option) => {
+    this.setState({selectedOption: option});
   };
 
   render() {
-    const { authEmails, inputEmails } = this.state;
+    let { authUsers } = this.state;
     const thead = (
       <thead>
         <tr>
@@ -161,7 +173,7 @@ class LinkEmailAuth extends React.Component {
               aria-label={gettext('Back')}
             >
             </button>
-            {gettext('Authenticated emails')}
+            {gettext('Authenticated users')}
           </h6>
         </div>
         <table className="table-thead-hidden w-xs-200">
@@ -169,7 +181,12 @@ class LinkEmailAuth extends React.Component {
           <tbody>
             <tr>
               <td>
-                <input type="text" className="form-control" value={inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')} />
+                <UserSelect
+                  ref="userSelect"
+                  isMulti={true}
+                  placeholder={gettext('Search users')}
+                  onSelectChange={this.handleSelectChange}
+                />
               </td>
               <td>
                 <Button onClick={this.addLinkAuthUsers}>{gettext('Submit')}</Button>
@@ -177,13 +194,13 @@ class LinkEmailAuth extends React.Component {
             </tr>
           </tbody>
         </table>
-        <div className="auth-share-list-container">
+        <div className="share-list-container">
           <table className="table-thead-hidden w-xs-200">
             {thead}
             <tbody>
-              {authEmails.map((item, index) => {
+              {authUsers.map((item, index) => {
                 return (
-                  <EmailItem
+                  <UserItem
                     key={index}
                     item={item}
                     repoID={this.props.repoID}
@@ -199,6 +216,6 @@ class LinkEmailAuth extends React.Component {
   }
 }
 
-LinkEmailAuth.propTypes = propTypes;
+LinkAuthenticatedUsers.propTypes = propTypes;
 
-export default LinkEmailAuth;
+export default LinkAuthenticatedUsers;

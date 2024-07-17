@@ -150,11 +150,11 @@ class LinkDetails extends React.Component {
   };
 
   onUserAuth  = () => {
-    this.props.setMode('linkUserAuth', this.state.sharedLinkInfo);
+    this.props.setMode('linkAuthenticatedUsers', this.state.sharedLinkInfo);
   };
 
   onEmailAuth  = () => {
-    this.props.setMode('linkEmailAuth', this.state.sharedLinkInfo);
+    this.props.setMode('linkAuthenticatedEmails', this.state.sharedLinkInfo);
   };
 
   getPermissionText = (perm) => {
@@ -168,7 +168,12 @@ class LinkDetails extends React.Component {
 
     return (
       <div>
-        <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
+        <div className="d-flex align-items-center pb-2 border-bottom">
+          <h6 className="font-weight-normal m-0">
+            <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
+            {gettext('Link')}
+          </h6>
+        </div>
         <dl>
           <dt className="text-secondary font-weight-normal">{gettext('Link')}</dt>
           <dd>
@@ -203,7 +208,7 @@ class LinkDetails extends React.Component {
                     <Button
                       aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
                       onClick={this.toggleStoredPasswordVisible}
-                      className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}
+                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}
                     >
                     </Button>
                   </InputGroupAddon>
@@ -240,7 +245,7 @@ class LinkDetails extends React.Component {
                       <Button
                         aria-label={gettext('Edit')}
                         title={gettext('Edit')}
-                        className="sf3-font sf3-font-rename"
+                        className="link-operation-icon sf3-font sf3-font-rename"
                         onClick={this.editingExpirationToggle}
                       >
                       </Button>
@@ -270,7 +275,7 @@ class LinkDetails extends React.Component {
           <>
             <dt className="text-secondary font-weight-normal">{gettext('Scope')}</dt>
             <dd className="d-flex align-items-center">
-              <div className="w-50 mr-1">
+              <div className="w-50 mr-2">
                 <ShareLinkScopeEditor
                   isTextMode={false}
                   isEditIconShow={false}
@@ -279,10 +284,10 @@ class LinkDetails extends React.Component {
                 />
               </div>
               {currentScope === 'specific_users' &&
-              <Button color="primary" outline={true} className="border-0" onClick={this.onUserAuth}>{gettext('Authenticated users')}</Button>
+              <Button color="primary" outline={true} className="border-0 p-0 link-authenticated-op" onClick={this.onUserAuth}>{gettext('Authenticated users')}</Button>
               }
               {currentScope === 'specific_emails' &&
-              <Button color="primary" outline={true} className="border-0" onClick={this.onEmailAuth}>{gettext('Authenticated emails')}</Button>
+              <Button color="primary" outline={true} className="border-0 p-0 link-authenticated-op" onClick={this.onEmailAuth}>{gettext('Authenticated emails')}</Button>
               }
             </dd>
           </>
