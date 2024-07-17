@@ -16,7 +16,6 @@ import CreateGroupDialog from '../components/dialog/create-group-dialog';
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
-  isSidePanelFolded: PropTypes.bool,
   toggleFoldSideNav: PropTypes.func
 };
 
@@ -29,7 +28,6 @@ class MainSideNav extends React.Component {
     this.state = {
       filesNavUnfolded: false,
       sharedExtended: false,
-      closeSideBar: false,
       groupItems: [],
       isCreateGroupDialogOpen: false,
     };
@@ -217,19 +215,9 @@ class MainSideNav extends React.Component {
     });
   };
 
-  toggleMinimize = () => {
-    this.setState({
-      isMinimized: !this.state.isMinimized
-    }, () => {
-      localStorage.setItem('sf_user_side_nav_minimized', this.state.isMinimized);
-    });
-  };
-
-
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
     const { filesNavUnfolded } = this.state;
-    const { isSidePanelFolded } = this.props;
     return (
       <div className="side-nav">
         <div className={'side-nav-con d-flex flex-column'}>
@@ -349,12 +337,8 @@ class MainSideNav extends React.Component {
           }
 
           <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
-            {isSidePanelFolded ? <img src={`${mediaUrl}img/open-sidebar.svg`} width="20" alt="" title={gettext('Unfold the sidebar')} /> : (
-              <>
-                <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
-                <span>{gettext('Fold the sidebar')}</span>
-              </>
-            )}
+            <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
+            <span>{gettext('Fold the sidebar')}</span>
           </div>
 
         </div>
