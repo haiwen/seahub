@@ -398,7 +398,6 @@ def get_user_repos(username, org_id=None):
             r.name = r.repo_name
             r.last_modify = r.last_modified
             
-
     return (owned_repos, shared_repos, groups_repos, public_repos)
 
 def get_conf_text_ext():
