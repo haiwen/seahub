@@ -104,7 +104,7 @@ class DirTool extends React.Component {
     const sortOptions = this.sortOptions.map(item => {
       return {
         ...item,
-        isSelected: item.value == `${sortBy}-${sortOrder}`
+        isSelected: item.value === `${sortBy}-${sortOrder}`
       };
     });
 
