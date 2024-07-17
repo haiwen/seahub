@@ -125,16 +125,32 @@ class ShareLinkUserAuthView(APIView):
             user_auth_infos = authed_details.get('authed_users', [])
             exist_emails = user_auth_infos
             auth_infos = []
+            result = {
+                'failed': [],
+                'success': []
+            }
+            
             for username in email_list:
                 if username in exist_emails:
+                    result['failed'].append({
+                        'email': username,
+                        'error_msg': _('User %s already exsits.') % username
+                    })
                     continue
                 try:
                     User.objects.get(email=username)
                 except User.DoesNotExist:
+                    result['failed'].append({
+                        'email': username,
+                        'error_msg': _('User %s does not exist.') % username
+                    })
                     continue
 
                 user_auth_infos.append(username)
                 auth_infos.append(get_user_auth_info(username, token))
+                result['success'].append({
+                    'email': username
+                })
             authed_details['authed_users'] = user_auth_infos
             file_share.authed_details = json.dumps(authed_details)
             file_share.save()
@@ -144,7 +160,7 @@ class ShareLinkUserAuthView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'auth_list': auth_infos})
+        return Response(result)
 
 
     def delete(self, request, token):
