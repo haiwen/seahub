@@ -34,12 +34,13 @@ class RepotrashAPI {
     return this;
   }
 
-  getRepoFolderTrash2(repoID, path) {
+  getRepoFolderTrash2(repoID, page, per_page) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/';
     let params = {
-      path: path
+      page: page,
+      per_page: per_page
     };
-    return this.req.post(url, params);
+    return this.req.get(url, {params: params});
   }
 }
 

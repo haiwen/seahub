@@ -44,11 +44,11 @@ class TrashDialog extends React.Component {
   }
 
   getItems2 = () => {
-    repotrashAPI.getRepoFolderTrash2(this.props.repoID, '/').then((res) => {
-      const { data } = res.data;
+    repotrashAPI.getRepoFolderTrash2(this.props.repoID).then((res) => {
+      const { items } = res.data;
       this.setState({
         isLoading: false,
-        items: this.state.items.concat(data),
+        items: this.state.items.concat(items),
         more: false
       });
     });

@@ -334,7 +334,7 @@ class RepoTrash2(APIView):
 
         return item_info
 
-    def post(self, request, repo_id, format=None):
+    def get(self, request, repo_id):
         """ Return deleted files/dirs of a repo/folder
 
         Permission checking:
@@ -348,6 +348,16 @@ class RepoTrash2(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+            if per_page > 100:
+                per_page = 100
+        except ValueError:
+            current_page = 1
+            per_page = 100
+        start = (current_page - 1) * per_page
+        limit = per_page
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
@@ -365,7 +375,7 @@ class RepoTrash2(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            deleted_entries = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS)
+            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -378,7 +388,8 @@ class RepoTrash2(APIView):
                 items.append(item_info)
 
         result = {
-            'data': items
+            'items': items,
+            'total_count': total_count
         }
 
         return Response(result)
