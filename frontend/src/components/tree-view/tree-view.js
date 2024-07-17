@@ -22,6 +22,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   posX: PropTypes.number,
   posY: PropTypes.number,
+  getMenuContainerSize: PropTypes.func,
 };
 
 const LEFT_INDENT = 20;
@@ -347,6 +348,7 @@ class TreeView extends React.Component {
           onMenuItemClick={this.onMenuItemClick}
           onHideMenu={this.onHideMenu}
           onShowMenu={this.onShowMenu}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
       </div>
     );
