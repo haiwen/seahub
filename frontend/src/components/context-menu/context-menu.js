@@ -7,11 +7,10 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
-  rtl: PropTypes.bool,
   onMenuItemClick: PropTypes.func.isRequired,
   onShowMenu: PropTypes.func,
   onHideMenu: PropTypes.func,
-  hideOnLeave: PropTypes.bool,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class ContextMenu extends React.Component {
@@ -38,7 +37,7 @@ class ContextMenu extends React.Component {
 
       wrapper(() => {
         const { x, y } = this.state;
-        const { top, left } = this.props.rtl ? this.getRTLMenuPosition(x, y) : this.getMenuPosition(x, y);
+        const { top, left } = this.getMenuPosition(x, y);
 
         wrapper(() => {
           if (!this.menu) return;
@@ -85,9 +84,20 @@ class ContextMenu extends React.Component {
     if (e.detail.id !== this.props.id) return;
 
     const { x, y } = e.detail.position;
-    const { currentObject, menuList} = e.detail;
+    if (this.props.getMenuContainerSize) {
+      const containerSize = this.props.getMenuContainerSize();
+      const relativeX = x - (window.innerWidth - parseFloat(containerSize.width));
+      const relativeY = y - (window.innerHeight - parseFloat(containerSize.height));
+      this.setState({
+        x: relativeX,
+        y: relativeY,
+      });
+    } else {
+      this.setState({ x, y });
+    }
 
-    this.setState({ isVisible: true, x, y, currentObject, menuList });
+    const { currentObject, menuList } = e.detail;
+    this.setState({ isVisible: true, currentObject, menuList });
     this.registerHandlers();
     callIfExists(this.props.onShowMenu, e);
   };
@@ -106,8 +116,6 @@ class ContextMenu extends React.Component {
 
   handleMouseLeave = (event) => {
     event.preventDefault();
-
-    if (this.props.hideOnLeave) hideMenu();
   };
 
   handleContextMenu = (e) => {
@@ -136,48 +144,21 @@ class ContextMenu extends React.Component {
 
     if (!this.menu) return menuStyles;
 
-    const { innerWidth, innerHeight } = window;
+    let { innerWidth, innerHeight } = window;
     const rect = this.menu.getBoundingClientRect();
+
+    if (this.props.getMenuContainerSize) {
+      let containerSize = this.props.getMenuContainerSize();
+      innerWidth = parseFloat(containerSize.width);
+      innerHeight = parseFloat(containerSize.height);
+    }
 
     if (y + rect.height > innerHeight) {
       menuStyles.top -= rect.height;
-    }
-
-    if (x + rect.width > innerWidth) {
-      menuStyles.left -= rect.width;
-    }
-
-    if (menuStyles.top < 0) {
-      menuStyles.top = rect.height < innerHeight ? (innerHeight - rect.height) / 2 : 0;
     }
 
     if (menuStyles.left < 0) {
       menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
-    }
-
-    return menuStyles;
-  };
-
-  getRTLMenuPosition = (x = 0, y = 0) => {
-    let menuStyles = {
-      top: y,
-      left: x
-    };
-
-    if (!this.menu) return menuStyles;
-
-    const { innerWidth, innerHeight } = window;
-    const rect = this.menu.getBoundingClientRect();
-
-    // Try to position the menu on the left side of the cursor
-    menuStyles.left = x - rect.width;
-
-    if (y + rect.height > innerHeight) {
-      menuStyles.top -= rect.height;
-    }
-
-    if (menuStyles.left < 0) {
-      menuStyles.left += rect.width;
     }
 
     if (menuStyles.top < 0) {
@@ -185,7 +166,7 @@ class ContextMenu extends React.Component {
     }
 
     if (menuStyles.left + rect.width > innerWidth) {
-      menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
+      menuStyles.left = innerWidth - rect.width;
     }
 
     return menuStyles;

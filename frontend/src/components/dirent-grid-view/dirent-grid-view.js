@@ -52,6 +52,7 @@ const propTypes = {
   posX: PropTypes.number,
   posY: PropTypes.number,
   dirent: PropTypes.object,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirentGridView extends React.Component {
@@ -539,10 +540,12 @@ class DirentGridView extends React.Component {
         <ContextMenu
           id={'grid-item-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
         <ContextMenu
           id={'dirent-grid-container-menu'}
           onMenuItemClick={this.onMenuItemClick}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
         {this.state.isCreateFolderDialogShow && (
           <ModalPortal>

@@ -39,6 +39,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {
@@ -269,6 +270,7 @@ class DirColumnNav extends React.Component {
             selectedDirentList={this.props.selectedDirentList}
             onItemsMove={this.props.onItemsMove}
             repoID={this.props.repoID}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
         </TreeSection>
         <DirViews
