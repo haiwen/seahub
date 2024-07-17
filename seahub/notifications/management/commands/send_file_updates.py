@@ -219,7 +219,7 @@ class Command(BaseCommand):
             self.stdout.write('[%s] Set language code to %s for user: %s' % (
                 str(datetime.now()), user_language, username))
 
-            # get last_emailed_time if any, defaults to today 00:00:00.0
+            # get last_emailed_time if any, defaults to today 00:00:00
             last_emailed_time = user_last_emailed_time_dict.get(username, None)
             now = datetime.utcnow().replace(microsecond=0)
             if not last_emailed_time:
@@ -228,7 +228,9 @@ class Command(BaseCommand):
             else:
                 if (now - last_emailed_time).total_seconds() < interval_val:
                     continue
-                if (now - last_emailed_time).total_seconds() > 86400:
+
+                # reset last_emailed_time to 7 days ago
+                if (now - last_emailed_time).total_seconds() > 604800:
                     last_emailed_time = now - timedelta(days=7)
 
             # get file updates(from: last_emailed_time, to: now) for repos
