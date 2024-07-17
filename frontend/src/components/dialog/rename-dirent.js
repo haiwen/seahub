@@ -65,6 +65,7 @@ class Rename extends React.Component {
 
   handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       this.handleSubmit();
     }
   };
