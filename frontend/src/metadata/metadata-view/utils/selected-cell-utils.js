@@ -2,7 +2,7 @@ import { Z_INDEX, getGroupByPath, isFunction } from '../_basic';
 import { getColumnByIndex, canEdit } from './column-utils';
 import { SUPPORT_PREVIEW_COLUMN_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
-import RowUtils from './row-utils';
+import { getCellValueByColumn } from './cell-value-utils';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',
@@ -23,9 +23,8 @@ export const getSelectedColumn = ({ selectedPosition, columns }) => {
 
 export const getSelectedCellValue = ({ selectedPosition, columns, isGroupView, recordGetterByIndex }) => {
   const column = getSelectedColumn({ selectedPosition, columns });
-  const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
-
-  return row && column ? RowUtils.get(row, column.key) : null;
+  const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
+  return getCellValueByColumn(record, column);
 };
 
 export const isSelectedCellSupportOpenEditor = (cell, columns, isGroupView, recordGetterByIndex) => {

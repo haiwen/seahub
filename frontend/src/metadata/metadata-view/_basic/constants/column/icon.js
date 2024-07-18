@@ -9,6 +9,11 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.TEXT]: 'text',
   [CellType.FILE_NAME]: 'text',
   [CellType.CHECKBOX]: 'checkbox',
+  [CellType.COLLABORATOR]: 'collaborator',
+  [CellType.DATE]: 'date',
+  [CellType.LONG_TEXT]: 'long-text',
+  [CellType.SINGLE_SELECT]: 'single-select',
+  [CellType.NUMBER]: 'number',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -20,6 +25,11 @@ const COLUMNS_ICON_NAME = {
   [CellType.TEXT]: 'Text',
   [CellType.FILE_NAME]: 'File name',
   [CellType.CHECKBOX]: 'Checkbox',
+  [CellType.COLLABORATOR]: 'Collaborator',
+  [CellType.DATE]: 'Date',
+  [CellType.LONG_TEXT]: 'Long text',
+  [CellType.SINGLE_SELECT]: 'Single select',
+  [CellType.NUMBER]: 'Number',
 };
 
 export {

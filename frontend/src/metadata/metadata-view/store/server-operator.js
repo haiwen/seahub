@@ -13,8 +13,8 @@ class ServerOperator {
     switch (op_type) {
       case OPERATION_TYPE.MODIFY_RECORD: {
         const { repo_id, row_id, updates } = operation;
-        const rowsData = [{ row_id, row: updates }];
-        window.sfMetadataContext.updateRows(repo_id, rowsData).then(res => {
+        const rowsData = [{ record_id: row_id, record: updates }];
+        window.sfMetadataContext.modifyRecords(repo_id, rowsData).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: 'Failed_to_modify_record' });
@@ -24,9 +24,9 @@ class ServerOperator {
       case OPERATION_TYPE.MODIFY_RECORDS: {
         const { repo_id, row_ids, id_row_updates, is_copy_paste } = operation;
         const rowsData = row_ids.map(rowId => {
-          return { row_id: rowId, row: id_row_updates[rowId] };
+          return { record_id: rowId, record: id_row_updates[rowId] };
         });
-        window.sfMetadataContext.updateRows(repo_id, rowsData, is_copy_paste).then(res => {
+        window.sfMetadataContext.modifyRecords(repo_id, rowsData, is_copy_paste).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: 'Failed_to_modify_record' });
@@ -50,7 +50,6 @@ class ServerOperator {
         callback({ operation });
         break;
       }
-
       case OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON: {
         const { repo_id, row_id, button_column_key } = operation;
         window.sfMetadataContext.lockRowViaButton(repo_id, row_id, button_column_key).then(res => {
@@ -60,13 +59,22 @@ class ServerOperator {
         });
         break;
       }
-
       case OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON: {
         const { repo_id, row_id, button_column_key, updates } = operation;
         window.sfMetadataContext.updateRowViaButton(repo_id, row_id, button_column_key, updates).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: 'Failed_to_modify_row_via_button' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.INSERT_COLUMN: {
+        const { repo_id, name, column_type, key, data } = operation;
+        window.sfMetadataContext.insertColumn(repo_id, name, column_type, { key, data }).then(res => {
+          operation.column = res.data.column;
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_insert_column' });
         });
         break;
       }
@@ -89,9 +97,9 @@ class ServerOperator {
     }
   };
 
-  handleReloadRecords(operation, callback) {
+  handleReloadRecords(table, operation, callback) {
     const { repo_id: repoId } = operation;
-    const { relatedColumnKeyMap } = this.getOperationRelatedColumns(operation);
+    const { relatedColumnKeyMap } = this.getOperationRelatedColumns(table, operation);
     const isReloadRecordsOp = this.checkReloadRecordsOperation(operation);
     if (!isReloadRecordsOp) return;
 

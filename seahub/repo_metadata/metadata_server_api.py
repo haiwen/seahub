@@ -5,16 +5,7 @@ from seahub.settings import METADATA_SERVER_URL, METADATA_SERVER_SECRET_KEY
 def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, start=0, limit=1000, order_by=None):
     from seafevents.repo_metadata.utils import METADATA_TABLE
 
-    sql = f'SELECT \
-        `{METADATA_TABLE.columns.id.name}`, \
-        `{METADATA_TABLE.columns.file_creator.name}`, \
-        `{METADATA_TABLE.columns.file_ctime.name}`, \
-        `{METADATA_TABLE.columns.file_modifier.name}`, \
-        `{METADATA_TABLE.columns.file_mtime.name}`, \
-        `{METADATA_TABLE.columns.parent_dir.name}`, \
-        `{METADATA_TABLE.columns.file_name.name}`, \
-        `{METADATA_TABLE.columns.is_dir.name}`,  \
-        `{METADATA_TABLE.columns.file_type.name}` FROM `{METADATA_TABLE.name}`'
+    sql = f'SELECT * FROM `{METADATA_TABLE.name}`'
 
     parameters = []
 

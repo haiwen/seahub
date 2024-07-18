@@ -3,13 +3,15 @@ import CellType from './type';
 const DATE_COLUMN_OPTIONS = [
   CellType.CTIME,
   CellType.MTIME,
+  CellType.DATE,
 ];
 const NUMERIC_COLUMNS_TYPES = [
-
+  CellType.NUMBER,
 ];
 const COLLABORATOR_COLUMN_TYPES = [
   CellType.CREATOR,
   CellType.LAST_MODIFIER,
+  CellType.COLLABORATOR,
 ];
 
 // date
@@ -50,7 +52,7 @@ const NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP = {
 };
 
 const MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP = {
-
+  [CellType.COLLABORATOR]: true,
 };
 const SINGLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.TEXT]: true,
@@ -58,6 +60,12 @@ const SINGLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.MTIME]: true,
   [CellType.CREATOR]: true,
   [CellType.LAST_MODIFIER]: true,
+  [CellType.FILE_NAME]: true,
+  [CellType.CHECKBOX]: true,
+  [CellType.DATE]: true,
+  [CellType.LONG_TEXT]: true,
+  [CellType.SINGLE_SELECT]: true,
+  [CellType.NUMBER]: true,
 };
 
 const DATE_DEFAULT_TYPES = {

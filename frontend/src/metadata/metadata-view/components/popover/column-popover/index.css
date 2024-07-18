@@ -1,0 +1,85 @@
+.sf-metadata-column-popover .popover {
+  margin-top: 0;
+  max-width: none;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-popover-inner {
+  max-height: calc(100vh - 170px);
+  min-width: 350px;
+  /* overflow: auto; */
+}
+
+.sf-metadata-column-popover .sf-metadata-column-popover-inner>div:first-child {
+  padding: 1rem 1rem 0;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  padding: 0 .5rem;
+  position: relative;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type.sf-metadata-column-type-focus {
+  background-color: #fff;
+  border-color: #1991eb;
+  box-shadow: 0 0 0 2px #467fcf40;
+  color: #495057;
+  outline: 0;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-column-type-info {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type-info .sf-metadata-icon {
+  flex-shrink: 0;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type-info span {
+  display: inline-block;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-icon-drop-down {
+  transform: rotate(-90deg);
+}
+
+.sf-metadata-column-popover .sf-metadata-column-type .sf-metadata-icon {
+  fill: #aaa;
+  cursor: default;
+  font-size: 14px;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-popover-footer {
+  background: #fff;
+  padding: 1rem;
+  position: relative;
+  text-align: right;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-settings-item.is-invalid .invalid-feedback {
+  display: block;
+  font-size: 13px;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-settings-item.is-invalid .form-control,
+.sf-metadata-column-popover .sf-metadata-column-settings-item.is-invalid .sf-metadata-column-type {
+  border-color: #cd201f !important;
+  box-shadow: 0 0 0 2px #cd201f40 !important;
+}

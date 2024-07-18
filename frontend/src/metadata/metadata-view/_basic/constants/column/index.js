@@ -21,7 +21,12 @@ export {
 } from './format';
 
 export {
-  PRIVATE_COLUMN_KEY
+  PREDEFINED_COLUMN_KEYS,
+} from './predefined-columns';
+
+export {
+  PRIVATE_COLUMN_KEY,
+  PRIVATE_COLUMN_KEYS
 } from './private';
 
 export {

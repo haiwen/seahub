@@ -12,7 +12,7 @@ import { EVENT_BUS_TYPE, TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP, GROUP_ROW_TYPE
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
-  isSelectedCellEditable, getRecordsFromSelectedRange,
+  isSelectedCellEditable, getRecordsFromSelectedRange, getSelectedCellValue,
 } from '../../../../utils/selected-cell-utils';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import SelectionRangeMask from '../selection-range-mask';
@@ -508,23 +508,11 @@ class InteractionMasks extends React.Component {
       let linkItem = {};
       let oldLinkItem = {};
       editableColumns.forEach(column => {
-        const { key, type } = column;
-        const cellVal = record[key];
-        if (type === CellType.LINK) {
-          if (!Array.isArray(cellVal) || cellVal.length === 0) {
-            return;
-          }
-          linkItem[key] = null;
-          oldLinkItem[key] = cellVal;
-          return;
-        }
+        const { key, name } = column;
+        const cellVal = record[key] || record[name];
         if (cellVal || cellVal === 0 || (Array.isArray(cellVal) && cellVal.length > 0)) {
           originalOldRecordData[key] = cellVal;
-          if (type === CellType.FILE) {
-            originalUpdate[key] = [];
-          } else {
-            originalUpdate[key] = null;
-          }
+          originalUpdate[key] = null;
         }
       });
 
@@ -1144,6 +1132,7 @@ class InteractionMasks extends React.Component {
               scrollLeft={getScrollLeft()}
               record={getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex })}
               column={getSelectedColumn({ selectedPosition, columns })}
+              value={getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex })}
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               editorPosition={editorPosition}

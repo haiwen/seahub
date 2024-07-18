@@ -1,5 +1,8 @@
 import getEventTransfer from './get-event-transfer';
-import CellValueUtils from './cell-value-utils';
+import {
+  isValidCellValue,
+  getCellValueByColumn,
+} from './cell-value-utils';
 import { gettext } from '../../../utils/constants';
 
 export const getEventClassName = (e) => {
@@ -56,8 +59,13 @@ export const isWebkitBrowser = () => {
   return agent.includes('webkit');
 };
 
+export const getTrimmedString = (value) => {
+  return (typeof value === 'string') ? value.trim() : '';
+};
+
 export {
   gettext,
   getEventTransfer,
-  CellValueUtils,
+  isValidCellValue,
+  getCellValueByColumn,
 };

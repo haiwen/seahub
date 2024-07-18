@@ -7,6 +7,11 @@ const CellType = {
   MTIME: 'mtime',
   FILE_NAME: 'file-name',
   CHECKBOX: 'checkbox',
+  COLLABORATOR: 'collaborator',
+  DATE: 'date',
+  LONG_TEXT: 'long-text',
+  SINGLE_SELECT: 'single-select',
+  NUMBER: 'number',
 };
 
 export default CellType;

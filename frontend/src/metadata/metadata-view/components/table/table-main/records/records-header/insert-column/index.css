@@ -1,0 +1,9 @@
+.record-header-cell .sf-metadata-result-table-cell.insert-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-header-cell .sf-metadata-result-table-cell.insert-column:hover {
+  cursor: pointer;
+}

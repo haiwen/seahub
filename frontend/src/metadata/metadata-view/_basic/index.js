@@ -46,16 +46,23 @@ export {
   GROUPBY_DATE_GRANULARITY_LIST,
   HEADER_HEIGHT_TYPE,
   PRIVATE_COLUMN_KEY,
+  PRIVATE_COLUMN_KEYS,
   NOT_DISPLAY_COLUMN_KEYS,
   VIEW_NOT_DISPLAY_COLUMN_KEYS,
+  PREDEFINED_COLUMN_KEYS,
 } from './constants';
 
 export {
   getColumnType,
   getColumnsByType,
   getColumnByKey,
+  getColumnByName,
   isDateColumn,
   isSupportDateColumnFormat,
+  getDateColumnFormat,
+  getDateDisplayString,
+  isPredefinedColumn,
+  getSelectColumnOptions,
   getValidFilters,
   getValidFiltersWithoutError,
   deleteInvalidFilter,
@@ -115,4 +122,5 @@ export {
   isEmptyObject,
   debounce,
   throttle,
+  isRegExpression,
 } from './utils';

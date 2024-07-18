@@ -8,7 +8,11 @@ export const OPERATION_TYPE = {
   MODIFY_GROUPBYS: 'modify_groupbys',
   MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
   LOCK_RECORD_VIA_BUTTON: 'lock_record_via_button',
-  MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button'
+  MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
+
+  // column
+  INSERT_COLUMN: 'insert_column',
+
 };
 
 export const OPERATION_ATTRIBUTES = {
@@ -22,12 +26,14 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS]: ['shown_column_keys'],
   [OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'button_column_key'],
   [OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'updates', 'old_row_data', 'original_updates', 'original_old_row_data', 'button_column_key'],
+  [OPERATION_TYPE.INSERT_COLUMN]: ['repo_id', 'name', 'column_type', 'key', 'data'],
 };
 
 export const UNDO_OPERATION_TYPE = [
-  OPERATION_TYPE.MODIFY_RECORD,
-  OPERATION_TYPE.MODIFY_RECORDS,
-  OPERATION_TYPE.RESTORE_RECORDS,
+  // OPERATION_TYPE.MODIFY_RECORD,
+  // OPERATION_TYPE.MODIFY_RECORDS,
+  // OPERATION_TYPE.RESTORE_RECORDS,
+  // OPERATION_TYPE.INSERT_COLUMN,
 ];
 
 // only apply operation on the local
@@ -40,6 +46,7 @@ export const LOCAL_APPLY_OPERATION_TYPE = [
 
 // apply operation after exec operation on the server
 export const NEED_APPLY_AFTER_SERVER_OPERATION = [
-  OPERATION_TYPE.INSERT_RECORD,
-  OPERATION_TYPE.INSERT_RECORDS,
+  OPERATION_TYPE.INSERT_COLUMN,
+  OPERATION_TYPE.MODIFY_RECORD,
+  OPERATION_TYPE.MODIFY_RECORDS,
 ];

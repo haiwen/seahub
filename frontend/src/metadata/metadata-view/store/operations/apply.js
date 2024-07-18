@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { UTC_FORMAT_DEFAULT } from '../../_basic';
 import { OPERATION_TYPE } from './constants';
+import Column from '../../model/metadata/column';
 
 dayjs.extend(utc);
 
@@ -29,18 +30,19 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.MODIFY_RECORDS: {
-      const { id_original_row_updates } = operation;
+      const { id_original_row_updates, id_row_updates } = operation;
       const { rows } = data;
       const modifyTime = dayjs().utc().format(UTC_FORMAT_DEFAULT);
       const modifier = window.sfMetadataContext.getUsername();
       let updatedRows = [...rows];
       rows.forEach((row, index) => {
         const rowId = row._id;
-        const rowUpdates = id_original_row_updates[rowId];
-        if (!rowUpdates) {
+        const originalRowUpdates = id_original_row_updates[rowId];
+        const rowUpdates = id_row_updates[rowId];
+        if (!rowUpdates && !originalRowUpdates) {
           return;
         }
-        const updatedRow = Object.assign({}, row, rowUpdates, {
+        const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
           '_mtime': modifyTime,
           '_last_modifier': modifier,
         });
@@ -116,6 +118,13 @@ export default function apply(data, operation) {
     case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS: {
       const { shown_column_keys } = operation;
       data.view.shown_column_keys = shown_column_keys;
+      return data;
+    }
+    case OPERATION_TYPE.INSERT_COLUMN: {
+      const { column } = operation;
+      const newColumn = new Column(column);
+      data.columns.push(newColumn);
+      data.view.columns.push(newColumn);
       return data;
     }
     default: {

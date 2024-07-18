@@ -236,6 +236,9 @@ class DataProcessor {
         table.view.groups = this.getGroupedRows(table, rows, groupbys);
         break;
       }
+      case OPERATION_TYPE.INSERT_COLUMN: {
+        break;
+      }
       default: {
         break;
       }

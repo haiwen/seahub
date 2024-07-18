@@ -117,14 +117,14 @@ class Store {
       return;
     }
     this.isSendingOperation = true;
-    this.context.eventBus.dispatch(EVENT_BUS_TYPE.SAVING_APP_DATA);
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.SAVING);
     this.sendNextOperation(undoRedoHandler);
   }
 
   sendNextOperation(undoRedoHandler) {
     if (this.pendingOperations.length === 0) {
       this.isSendingOperation = false;
-      this.context.eventBus.dispatch(EVENT_BUS_TYPE.SAVED_APP_DATA);
+      this.context.eventBus.dispatch(EVENT_BUS_TYPE.SAVED);
       return;
     }
     const operation = this.pendingOperations.shift();
@@ -140,7 +140,7 @@ class Store {
     }
     if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(operation.op_type)) {
       this.handleUndoRedos(undoRedoHandler, operation);
-      this.data = operation.apply(this.data);
+      this.data = deepCopy(operation.apply(this.data));
       this.syncOperationOnData(operation);
     }
 
@@ -148,7 +148,7 @@ class Store {
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
 
     // need reload records if has related formula columns
-    this.serverOperator.handleReloadRecords(operation, ({ reloadedRecords, idRecordNotExistMap, relatedColumnKeyMap }) => {
+    this.serverOperator.handleReloadRecords(this.data, operation, ({ reloadedRecords, idRecordNotExistMap, relatedColumnKeyMap }) => {
       if (reloadedRecords.length > 0) {
         DataProcessor.handleReloadedRecords(this.data, reloadedRecords, relatedColumnKeyMap);
       }
@@ -223,9 +223,7 @@ class Store {
    */
   modifyRecord(row_id, updates, old_row_data, original_updates, original_old_row_data) {
     const row = getRowById(this.data, row_id);
-    if (!row || !this.context.eventBus.canModifyRow(row)) {
-      return;
-    }
+    if (!row || !this.context.canModifyRow(row)) return;
     const type = OPERATION_TYPE.MODIFY_RECORD;
     const operation = this.createOperation({
       type,
@@ -359,6 +357,15 @@ class Store {
     this.applyOperation(operation);
     this.saveView();
   }
+
+  insertColumn = (name, type, { key, data }) => {
+    const _type = OPERATION_TYPE.INSERT_COLUMN;
+    const operation = this.createOperation({
+      type: _type, repo_id: this.repoId, name, column_type: type, key, data
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;

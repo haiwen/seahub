@@ -60,9 +60,7 @@ class Records extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { columns, getTableContentRect } = nextProps;
     const { width: tableContentWidth } = getTableContentRect();
-    if (
-      this.props.columns !== columns
-    ) {
+    if (this.props.columns !== columns) {
       const columnMetrics = this.createColumnMetrics(nextProps);
       this.updateHorizontalScrollState({
         columnMetrics,
@@ -667,9 +665,7 @@ class Records extends Component {
         >
           <div className="sf-metadata-result-content" style={{ width: containerWidth }}>
             <RecordsHeader
-              onRef={(ref) => {
-                this.headerFrozenRef = ref;
-              }}
+              onRef={(ref) => this.headerFrozenRef = ref}
               containerWidth={containerWidth}
               table={table}
               columns={columns}
