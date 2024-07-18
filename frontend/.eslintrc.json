@@ -48,6 +48,17 @@
     "no-useless-concat": "off",
     "jsx-a11y/anchor-has-content": "off",
     "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": "off"
+    "jsx-a11y/anchor-is-valid": "off",
+    "space-before-blocks": ["warn", "always"],
+    "space-in-parens": ["warn", "never"],
+    "keyword-spacing": ["warn", {
+      "before": true,
+      "after": true,
+      "overrides": {
+        "if" : {
+          "after": true
+        }
+      }
+    }]
   }
 }

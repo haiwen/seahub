@@ -40,14 +40,20 @@ class DirentGridItem extends React.Component {
       this.canDrag = modify;
     }
 
+    this.clickTimeout = null;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({isGridSelected: false}, () => {
-      if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
-        this.setState({isGridSelected: true});
-      }
-    });
+  componentWillUnmount() {
+    if (this.clickTimeout) {
+      clearTimeout(this.clickTimeout);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeDirent !== this.props.activeDirent) {
+      const isSelected = this.props.activeDirent && this.props.activeDirent.name === this.props.dirent.name;
+      this.setState({ isGridSelected: isSelected });
+    }
   }
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
@@ -57,28 +63,40 @@ class DirentGridItem extends React.Component {
   onItemClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    this.setState({isGridSelected: false});
 
     const { dirent, activeDirent } = this.props;
-    if (dirent.isDir()) {
-      this.props.onItemClick(dirent);
+
+    if (this.clickTimeout) {
+      clearTimeout(this.clickTimeout);
+      this.clickTimeout = null;
+      this.handleSingleClick(dirent, activeDirent);
       return;
     }
 
-    // is have preview permission
+    this.clickTimeout = setTimeout(() => {
+      this.clickTimeout = null;
+      this.handleSingleClick(dirent, activeDirent);
+    }, 250); //A click within 250 milliseconds is considered a single click.
+  };
+
+  handleSingleClick = (dirent, activeDirent) => {
     if (!this.canPreview) {
       return;
     }
 
     if (dirent === activeDirent) {
-      this.setState({isGridSelected: false});
-      if (Utils.imageCheck(dirent.name)) {
-        this.props.showImagePopup(dirent);
-      } else {
-        this.props.onItemClick(dirent);
-      }
+      this.handleDoubleClick(dirent);
     } else {
-      this.setState({isGridSelected: false});
       this.props.onGridItemClick(this.props.dirent);
+    }
+  };
+
+  handleDoubleClick = (dirent) => {
+    if (Utils.imageCheck(dirent.name)) {
+      this.props.showImagePopup(dirent);
+    } else {
+      this.props.onItemClick(dirent);
     }
   };
 
@@ -96,11 +114,7 @@ class DirentGridItem extends React.Component {
       return;
     }
 
-    if (Utils.imageCheck(dirent.name)) {
-      this.props.showImagePopup(dirent);
-    } else {
-      this.props.onItemClick(dirent);
-    }
+    this.handleDoubleClick(dirent);
   };
 
   onGridItemDragStart = (e) => {
@@ -211,7 +225,7 @@ class DirentGridItem extends React.Component {
       for (let i = 0; i < frontName.length; i++) {
         // Use charCodeAt(i) > 127 to check Chinese and English.
         // English and symbols occupy 1 position, Chinese and others occupy 2 positions.
-        frontName.charCodeAt(i) > 127 ? (sum = sum + 2 ) : (sum = sum + 1);
+        frontName.charCodeAt(i) > 127 ? (sum = sum + 2) : (sum = sum + 1);
         // When sum position exceeds 20, back string will not be displayed.
         if (sum > 20) {
           frontName = frontName.slice(0, i) + '...';
@@ -248,7 +262,6 @@ class DirentGridItem extends React.Component {
     }
 
     let gridClass = 'grid-file-img-link cursor-pointer';
-    gridClass += this.state.isGridSelected ? ' grid-selected-active' : ' ';
     gridClass += this.state.isGridDropTipShow ? ' grid-drop-show' : ' ';
 
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
@@ -259,7 +272,10 @@ class DirentGridItem extends React.Component {
     const showName = this.getRenderedText(dirent);
     return (
       <Fragment>
-        <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
+        <li
+          className={`grid-item ${this.state.isGridSelected ? 'grid-selected-active' : ''}`}
+          onContextMenu={this.onGridItemContextMenu}
+          onMouseDown={this.onGridItemMouseDown}>
           <div
             className={gridClass}
             draggable={this.canDrag}
@@ -294,14 +310,14 @@ class DirentGridItem extends React.Component {
             )}
             {(!dirent.isDir() && !this.canPreview) ?
               <a
-                className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`}
-                onClick={this.onItemLinkClick}
+                className="sf-link grid-file-name-link"
+                onClick={this.onItemClick}
                 title={dirent.name}
               >{showName}</a> :
               <a
-                className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`}
+                className="grid-file-name-link"
                 href={dirent.type === 'dir' ? dirHref : fileHref}
-                onClick={this.onItemLinkClick}
+                onClick={this.onItemClick}
                 title={dirent.name}
               >{showName}</a>
             }
