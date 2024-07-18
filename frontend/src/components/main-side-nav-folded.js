@@ -96,7 +96,7 @@ class MainSideNavFolded extends React.Component {
           </ul>
 
           {sideNavFooterCustomHtml ?
-            <div className='side-nav-footer' dangerouslySetInnerHTML={{__html: sideNavFooterCustomHtml}}></div>
+            <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
             :
             <ul className="nav nav-pills flex-column nav-container">
               <li className='nav-item' id="main-side-nav-folded-help">

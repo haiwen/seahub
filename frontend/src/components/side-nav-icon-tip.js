@@ -25,7 +25,7 @@ function SideNavIconTip(props) {
       innerClassName={showAnimation ? 'side-nav-icon-tip side-nav-icon-tip-animation' : 'side-nav-icon-tip'}
       toggle={toggleTooltip}
       hideArrow={true}
-      delay={{show: 0, hide: 0}}
+      delay={{ show: 0, hide: 0 }}
       target={props.target}
       placement="right"
       isOpen={showTooltip}
