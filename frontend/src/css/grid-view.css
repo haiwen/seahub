@@ -10,6 +10,7 @@
 .grid-item {
   width: 134px;
   padding: 10px 4px;
+  margin: 4px;
   text-align: center;
   position: relative;
   line-height: 0;
