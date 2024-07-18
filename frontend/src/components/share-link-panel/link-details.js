@@ -14,7 +14,6 @@ import SharedLink from '../shared-link';
 import SetLinkExpiration from '../set-link-expiration';
 import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
 import SelectEditor from '../select-editor/select-editor';
-import { shareLinkAPI } from '../../utils/share-link-api';
 
 const propTypes = {
   sharedLinkInfo: PropTypes.object.isRequired,
@@ -44,8 +43,6 @@ class LinkDetails extends React.Component {
       isSendLinkShown: false,
 
       currentScope: this.props.sharedLinkInfo.user_scope,  // all_users, specific_users, spcific_emails
-      selectedOption: null,
-      isSpecificUserChecked: false,
     };
   }
 
@@ -138,23 +135,22 @@ class LinkDetails extends React.Component {
   };
 
   changeScope = (scope) => {
-    shareLinkAPI.updateShareLinkScope(this.props.sharedLinkInfo.token, scope).then((res) => {
-      let sharedLinkInfo = new ShareLink(res.data);
-      this.setState({sharedLinkInfo: sharedLinkInfo, currentScope: sharedLinkInfo.user_scope});
-      let message = gettext('Success');
-      toaster.success(message);
+    const { sharedLinkInfo } = this.props;
+    const { token } = sharedLinkInfo;
+    seafileAPI.updateShareLink(token, '', '', scope).then((res) => {
+      this.props.updateLink(new ShareLink(res.data));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   };
 
-  onUserAuth  = () => {
-    this.props.setMode('linkAuthenticatedUsers', this.state.sharedLinkInfo);
+  onUserAuth = () => {
+    this.props.setMode('linkAuthenticatedUsers');
   };
 
-  onEmailAuth  = () => {
-    this.props.setMode('linkAuthenticatedEmails', this.state.sharedLinkInfo);
+  onEmailAuth = () => {
+    this.props.setMode('linkAuthenticatedEmails');
   };
 
   getPermissionText = (perm) => {
@@ -163,9 +159,8 @@ class LinkDetails extends React.Component {
 
   render() {
     const { sharedLinkInfo, permissionOptions } = this.props;
-    const { currentScope } = this.state;
+    const { user_scope: currentScope } = sharedLinkInfo;
     const currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
-
     return (
       <div>
         <div className="d-flex align-items-center pb-2 border-bottom">

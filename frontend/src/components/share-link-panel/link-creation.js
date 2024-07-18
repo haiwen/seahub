@@ -9,7 +9,6 @@ import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import SetLinkExpiration from '../set-link-expiration';
 import UserSelect from '../user-select';
-import { shareLinkAPI } from '../../utils/share-link-api';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -134,7 +133,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
+        request = seafileAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
       }
 
       request.then((res) => {

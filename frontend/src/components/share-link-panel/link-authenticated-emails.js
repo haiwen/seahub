@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
-import { shareLinkAPI } from '../../utils/share-link-api';
+import { seafileAPI } from '../../utils/seafile-api';
 
 class EmailItem extends React.Component {
 
@@ -94,7 +94,7 @@ class LinkAuthenticatedEmails extends React.Component {
 
   getItems = () => {
     const { linkToken, path } = this.props;
-    shareLinkAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
+    seafileAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
       this.setState({authEmails: res.data.auth_list});
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -108,7 +108,7 @@ class LinkAuthenticatedEmails extends React.Component {
     this.setState({
       isSubmitting: true
     });
-    shareLinkAPI.addShareLinkAuthEmails(linkToken, inputEmails, path).then(res => {
+    seafileAPI.addShareLinkAuthEmails(linkToken, inputEmails, path).then(res => {
       const { success, failed } = res.data;
       let newEmails = [];
       if (success.length) {
@@ -139,7 +139,7 @@ class LinkAuthenticatedEmails extends React.Component {
   deleteItem = (email) => {
     const { linkToken, path } = this.props;
     let emails = [email, ];
-    shareLinkAPI.deleteShareLinkAuthEmails(linkToken, emails, path).then(res => {
+    seafileAPI.deleteShareLinkAuthEmails(linkToken, emails, path).then(res => {
       let authEmails = this.state.authEmails.filter(e => {
         return e !== email;
       });

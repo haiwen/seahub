@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
 import toaster from '../toast';
-import { shareLinkAPI } from '../../utils/share-link-api';
 
 class UserItem extends React.Component {
 
@@ -99,7 +99,7 @@ class LinkAuthenticatedUsers extends React.Component {
 
   listLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
-    shareLinkAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
+    seafileAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
       this.setState({authUsers: res.data.auth_list});
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -114,7 +114,7 @@ class LinkAuthenticatedUsers extends React.Component {
       return false;
     }
     const users = selectedOption.map((item, index) => item.email);
-    shareLinkAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
+    seafileAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
       const { success, failed } = res.data;
       let newEmails = [];
       if (success.length) {
@@ -142,7 +142,7 @@ class LinkAuthenticatedUsers extends React.Component {
   deleteItem = (username) => {
     const { linkToken, path } = this.props;
     let users = [username, ];
-    shareLinkAPI.deleteShareLinkAuthUsers(linkToken, users, path).then(res => {
+    seafileAPI.deleteShareLinkAuthUsers(linkToken, users, path).then(res => {
       let authUsers = this.state.authUsers.filter(user => {
         return user.username !== username;
       });
