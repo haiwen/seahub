@@ -134,7 +134,7 @@ class ShareLinkUserAuthView(APIView):
                 if username in exist_emails:
                     result['failed'].append({
                         'email': username,
-                        'error_msg': _('User %s already exsits.') % username
+                        'error_msg': _('User %s already exists.') % username
                     })
                     continue
                 try:
@@ -308,7 +308,7 @@ class ShareLinkEmailAuthView(APIView):
                 if email in exist_emails:
                     result['failed'].append({
                         'email': email,
-                        'error_msg':  _('Email %s already exsits.') % email
+                        'error_msg':  _('Email %s already exists.') % email
                     })
                     continue
                 if not is_valid_email(email):
