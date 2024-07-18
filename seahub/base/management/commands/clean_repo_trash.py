@@ -16,8 +16,8 @@ class Command(BaseCommand):
         self.stdout.write('[%s] %s\n' % (datetime.now(), msg))
 
     def add_arguments(self, parser):
-        parser.add_argument('--repo_id', help='repo id', type=str)
-        parser.add_argument('--keep_days', help='keep days', type=int)
+        parser.add_argument('--repo-id', help='repo id', type=str)
+        parser.add_argument('--keep-days', help='keep days', type=int)
 
     def handle(self, *args, **options):
         repo_id = options.get('repo_id')
@@ -52,5 +52,5 @@ class Command(BaseCommand):
             self.print_msg('Clean repo trash %s[%s], error: %s' % (repo.name, repo_id, e))
             return
 
-        logger.info('Successfully cleared repo trash %s from %s days ago' % (repo.name, days))
-        self.print_msg('Successfully cleared repo trash %s from %s days ago' % (repo.name, days))
+        logger.info('Successfully cleared repo trash %s older than %s days' % (repo.name, days))
+        self.print_msg('Successfully cleared repo trash %s older than %s days' % (repo.name, days))
