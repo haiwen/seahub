@@ -51,7 +51,9 @@ const FILTER_PREDICATE_SHOW = {
   [FILTER_PREDICATE_TYPE.HAS_NONE_OF]: gettext('has none of...'),
   [FILTER_PREDICATE_TYPE.IS_EXACTLY]: gettext('is exactly...'),
   [FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID]: gettext('is current user\'s ID'),
-  [FILTER_PREDICATE_TYPE.INCLUDE_ME]: gettext('include the current user')
+  [FILTER_PREDICATE_TYPE.INCLUDE_ME]: gettext('include the current user'),
+  [FILTER_PREDICATE_TYPE.IS_ANY_OF]: gettext('is any of...'),
+  [FILTER_PREDICATE_TYPE.IS_NONE_OF]: gettext('is none of...'),
 };
 
 export {

@@ -1,8 +1,4 @@
 import getEventTransfer from './get-event-transfer';
-import {
-  isValidCellValue,
-  getCellValueByColumn,
-} from './cell-value-utils';
 import { gettext } from '../../../utils/constants';
 
 export const getEventClassName = (e) => {
@@ -66,6 +62,4 @@ export const getTrimmedString = (value) => {
 export {
   gettext,
   getEventTransfer,
-  isValidCellValue,
-  getCellValueByColumn,
 };

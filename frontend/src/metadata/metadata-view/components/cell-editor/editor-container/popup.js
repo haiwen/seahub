@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn } from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
 import { canEdit } from '../../../utils/column-utils';
-import { getCellValueByColumn } from '../../../utils';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER,

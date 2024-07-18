@@ -44,7 +44,7 @@ const STRING_PREDICATE = {
   [FILTER_PREDICATE_TYPE.IS_NOT]: true
 };
 
-export const DATE_EMPTY_LABEL_MAP = {
+export const DATA_EMPTY_LABEL_MAP = {
   [FILTER_PREDICATE_TYPE.EMPTY]: true,
   [FILTER_PREDICATE_TYPE.NOT_EMPTY]: true,
 };
@@ -64,6 +64,9 @@ const MULTIPLE_SELECTOR_COLUMNS = [CellType.CREATOR, CellType.LAST_MODIFIER];
 export const isFilterTermArray = (column, filterPredicate) => {
   const { type } = column;
   if (MULTIPLE_SELECTOR_COLUMNS.includes(type)) {
+    return true;
+  }
+  if (type === CellType.SINGLE_SELECT && [FILTER_PREDICATE_TYPE.IS_ANY_OF, FILTER_PREDICATE_TYPE.IS_NONE_OF].includes(filterPredicate)) {
     return true;
   }
   return false;
@@ -193,7 +196,7 @@ export const getUpdatedFilterByPredicate = (filter, column, filterPredicate) => 
     }
   }
   if (isFilterTermArray(column, filterPredicate)) {
-    if (DATE_EMPTY_LABEL_MAP[filterPredicate] || filterPredicate === FILTER_PREDICATE_TYPE.INCLUDE_ME) {
+    if (DATA_EMPTY_LABEL_MAP[filterPredicate] || filterPredicate === FILTER_PREDICATE_TYPE.INCLUDE_ME) {
       updatedFilter.filter_term = [];
     }
     return updatedFilter;

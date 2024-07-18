@@ -2,6 +2,23 @@ import * as CommonlyUsedHotkey from './hotkey';
 import LocalStorage from './local-storage';
 
 export {
+  isValidCellValue,
+  getCellValueByColumn,
+  getDateDisplayString,
+  getPrecisionNumber,
+  getNumberDisplayString,
+  replaceNumberNotAllowInput,
+  getOption,
+  getColumnOptionNameById,
+  getOptionName,
+  getMultipleOptionName,
+  getCollaborator,
+  getCollaboratorsNames,
+  getCollaboratorsName,
+  getCollaboratorEmailsByNames,
+  getLongtextDisplayString,
+} from './cell';
+export {
   getColumnType,
   getColumnsByType,
   getColumnByKey,
@@ -9,9 +26,15 @@ export {
   isDateColumn,
   isSupportDateColumnFormat,
   getDateColumnFormat,
-  getDateDisplayString,
   isPredefinedColumn,
   getSelectColumnOptions,
+  isNumericColumn,
+  isNumberColumn,
+  getColumnOptions,
+  generateOptionID,
+  createOption,
+  generatorCellOption,
+  generatorCellOptions,
 } from './column';
 export {
   getValidFilters,

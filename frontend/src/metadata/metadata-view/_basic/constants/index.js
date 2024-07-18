@@ -61,6 +61,9 @@ export {
   TEXT_SORTER_COLUMN_TYPES,
   NUMBER_SORTER_COLUMN_TYPES,
 } from './sort';
+export {
+  DISPLAY_INTERNAL_ERRORS,
+} from './error';
 
 export {
   KeyCodes,

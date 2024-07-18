@@ -7,20 +7,25 @@ import {
   dateFilter,
   textFilter,
   checkboxFilter,
+  singleSelectFilter,
+  collaboratorFilter,
+  numberFilter,
 } from './filter-column';
 import {
   FILTER_CONJUNCTION_TYPE,
 } from '../../constants/filter';
 import { DateUtils } from '../date';
 import { CellType, DATE_FORMAT_MAP } from '../../constants/column';
+import { getCellValueByColumn } from '../cell';
 
 const getFilterResult = (row, filter, { username, userId }) => {
-  const { column_key, column } = filter;
-  let cellValue = row[column_key];
+  const { column } = filter;
+  let cellValue = getCellValueByColumn(row, column);
   switch (column.type) {
     case CellType.CTIME:
-    case CellType.MTIME: {
-      cellValue = DateUtils.format(cellValue, DATE_FORMAT_MAP.YYYY_MM_DD_HH_MM_SS);
+    case CellType.MTIME:
+    case CellType.DATE: {
+      cellValue = DateUtils.format(cellValue, DATE_FORMAT_MAP.YYYY_MM_DD);
       return dateFilter(cellValue, filter);
     }
     case CellType.FILE_NAME:
@@ -33,6 +38,15 @@ const getFilterResult = (row, filter, { username, userId }) => {
     }
     case CellType.CHECKBOX: {
       return checkboxFilter(cellValue, filter);
+    }
+    case CellType.SINGLE_SELECT: {
+      return singleSelectFilter(cellValue, filter);
+    }
+    case CellType.NUMBER: {
+      return numberFilter(cellValue, filter);
+    }
+    case CellType.COLLABORATOR: {
+      return collaboratorFilter(cellValue, filter, username);
     }
     default: {
       return false;

@@ -1,4 +1,6 @@
 import { SORT_COLUMN_OPTIONS } from '../../constants/sort';
+import { CellType } from '../../constants/column';
+import { getColumnOptions } from '../column';
 
 /**
  * Check is valid sort
@@ -57,6 +59,21 @@ const deleteInvalidSort = (sorts, columns) => {
     const { column_key } = sort;
     const sortColumn = columns.find((column) => column.key === column_key);
     let newSort = { ...sort, column: sortColumn };
+    const { type: columnType } = sortColumn;
+    switch (columnType) {
+      case CellType.SINGLE_SELECT: {
+        const options = getColumnOptions(sortColumn);
+        let option_id_index_map = {};
+        options.forEach((option, index) => {
+          option_id_index_map[option.id] = index;
+        });
+        newSort.option_id_index_map = option_id_index_map;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
     cleanSorts.push(newSort);
   });
   return cleanSorts;

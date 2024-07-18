@@ -8,7 +8,6 @@ export {
   isDateColumn,
   isSupportDateColumnFormat,
   getDateColumnFormat,
-  getDateDisplayString,
 } from './date';
 export {
   isPredefinedColumn,
@@ -16,3 +15,15 @@ export {
 export {
   getSelectColumnOptions,
 } from './select';
+export {
+  isNumericColumn,
+  isNumberColumn,
+} from './number';
+export {
+  getColumnOptions,
+  generateOptionID,
+  createOption,
+  generatorCellOption,
+  generatorCellOptions,
+} from './option';
+
