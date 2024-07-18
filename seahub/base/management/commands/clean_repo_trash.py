@@ -2,7 +2,6 @@ import logging
 from datetime import datetime
 from seahub.utils import SeafEventsSession
 from seafevents import seafevents_api
-from seaserv import seafile_api
 from django.core.management.base import BaseCommand
 
 
