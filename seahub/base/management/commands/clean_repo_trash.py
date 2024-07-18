@@ -16,41 +16,27 @@ class Command(BaseCommand):
         self.stdout.write('[%s] %s\n' % (datetime.now(), msg))
 
     def add_arguments(self, parser):
-        parser.add_argument('--repo-id', help='repo id', type=str)
         parser.add_argument('--keep-days', help='keep days', type=int)
 
     def handle(self, *args, **options):
-        repo_id = options.get('repo_id')
-        if not repo_id:
-            self.stdout.write(
-                '\nPlease use < --repo_id | --keep_days'
-            )
+        days = options.get('keep_days')
+        if days < 0:
+            self.print_msg('keep-days cannot be set to nagative number')
             return
-            
-        days = options.get('keep_days', 0)
         logger.info('Start clean repo trash...')
         self.print_msg('Start clean repo trash...')
-        self.do_action(repo_id, days)
+        self.do_action(days)
         self.print_msg('Finish clean repo trash.\n')
         logger.info('Finish clean repo trash.\n')
 
-    def do_action(self, repo_id, days):
-        try:
-            repo = seafile_api.get_repo(repo_id)
-        except Exception as e:
-            self.print_msg('Clean repo trash %s, error: %s' % (repo_id, e))
-            return
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            self.print_msg(error_msg)
-            return
+    def do_action(self, days):
         try:
             session = SeafEventsSession()
-            seafevents_api.clean_up_repo_trash(session, repo_id, days)
+            seafevents_api.clean_up_all_repo_trash(session, days)
         except Exception as e:
-            logger.debug('Clean repo trash %s[%s], error: %s' % (repo.name, repo_id, e))
-            self.print_msg('Clean repo trash %s[%s], error: %s' % (repo.name, repo_id, e))
+            logger.debug('Clean up repo trash error: %s' % e)
+            self.print_msg('Clean up repo trash error: %s' % e)
             return
 
-        logger.info('Successfully cleared repo trash %s older than %s days' % (repo.name, days))
-        self.print_msg('Successfully cleared repo trash %s older than %s days' % (repo.name, days))
+        logger.info('Successfully cleared repo trash older than %s days' % days)
+        self.print_msg('Successfully cleared repo trash older than %s days' % days)
