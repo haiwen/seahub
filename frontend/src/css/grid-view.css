@@ -78,6 +78,7 @@
 
 .grid-selected-active {
   background-color: #f2f4f6;
+  border-radius: 5px;
 }
 
 .grid-drop-show {

@@ -43,7 +43,7 @@ class DirentGridItem extends React.Component {
     this.clickTimeout = null;
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
     }
@@ -67,7 +67,7 @@ class DirentGridItem extends React.Component {
 
     const { dirent, activeDirent } = this.props;
 
-    if( this.clickTimeout) {
+    if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
       this.clickTimeout = null;
       this.handleSingleClick(dirent, activeDirent);
@@ -81,21 +81,21 @@ class DirentGridItem extends React.Component {
   };
 
   handleSingleClick = (dirent, activeDirent) => {
-    if(!this.canPreview) {
+    if (!this.canPreview) {
       return;
     }
 
-    if(dirent === activeDirent){
+    if (dirent === activeDirent) {
       this.handleDoubleClick(dirent);
-    }else{
+    } else {
       this.props.onGridItemClick(this.props.dirent);
     }
   };
 
   handleDoubleClick = (dirent) => {
-    if(Utils.imageCheck(dirent.name)){
+    if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
-    }else{
+    } else {
       this.props.onItemClick(dirent);
     }
   };
@@ -225,7 +225,7 @@ class DirentGridItem extends React.Component {
       for (let i = 0; i < frontName.length; i++) {
         // Use charCodeAt(i) > 127 to check Chinese and English.
         // English and symbols occupy 1 position, Chinese and others occupy 2 positions.
-        frontName.charCodeAt(i) > 127 ? (sum = sum + 2 ) : (sum = sum + 1);
+        frontName.charCodeAt(i) > 127 ? (sum = sum + 2) : (sum = sum + 1);
         // When sum position exceeds 20, back string will not be displayed.
         if (sum > 20) {
           frontName = frontName.slice(0, i) + '...';
@@ -273,7 +273,7 @@ class DirentGridItem extends React.Component {
     return (
       <Fragment>
         <li
-          className={`grid-item ${this.state.isGridSelected && 'grid-selected-active'}`}
+          className={`grid-item ${this.state.isGridSelected ? 'grid-selected-active' : ''}`}
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}>
           <div
