@@ -3,6 +3,7 @@ import {
   DEFAULT_DATE_FORMAT,
   PRIVATE_COLUMN_KEY,
   NOT_DISPLAY_COLUMN_KEYS,
+  PRIVATE_COLUMN_KEYS,
 } from '../_basic';
 import {
   SEQUENCE_COLUMN_WIDTH
@@ -240,7 +241,17 @@ const getColumnType = (key, type) => {
   }
 };
 
-const getFileTypeColumnData = (data) => {
+const normalizeColumnData = (column) => {
+  const { key, data } = column;
+  if (PRIVATE_COLUMN_KEYS.includes(key)) {
+    if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
+    if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
+  }
+  return data;
+};
+
+const getFileTypeColumnData = (column) => {
+  const { data } = column;
   const _OPTIONS = {
     '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428', id: '_picture' },
     '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428', id: '_document' },
@@ -251,15 +262,30 @@ const getFileTypeColumnData = (data) => {
   let newData = { ...data };
   newData.options = Array.isArray(newData.options) ? newData.options.map(o => {
     return { ..._OPTIONS[o.name] };
-  }) : [];
+  }) : Object.keys(_OPTIONS);
   return newData;
 };
 
-export const getColumns = (columns) => {
+const getFileStatusColumnData = (column) => {
+  const { data } = column;
+  const _OPTIONS = {
+    '_picture': { name: gettext('Draft'), color: '#FFFCB5', textColor: '#202428', id: '_draft' },
+    '_document': { name: gettext('In review'), color: '#B7CEF9', textColor: '#202428', id: '_in_review' },
+    '_video': { name: gettext('Done'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
+  };
+
+  let newData = { ...data };
+  newData.options = Array.isArray(newData.options) ? newData.options.map(o => {
+    return { ..._OPTIONS[o.name] };
+  }) : Object.keys(_OPTIONS);
+  return newData;
+};
+
+export const normalizeColumns = (columns) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
   const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
-    const { type, key, name, data, ...params } = column;
+    const { type, key, name, ...params } = column;
     return {
       ...params,
       key,
@@ -267,7 +293,7 @@ export const getColumns = (columns) => {
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
       editable: !key.startsWith('_'),
-      data: key === PRIVATE_COLUMN_KEY.FILE_TYPE ? getFileTypeColumnData(data) : data,
+      data: normalizeColumnData(column)
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
