@@ -16,7 +16,7 @@ class Command(BaseCommand):
         self.stdout.write('[%s] %s\n' % (datetime.now(), msg))
 
     def add_arguments(self, parser):
-        parser.add_argument('--keep-days', help='keep days', type=int)
+        parser.add_argument('--keep-days', help='keep days', type=int, default=90)
 
     def handle(self, *args, **options):
         days = options.get('keep_days')
