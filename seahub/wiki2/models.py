@@ -52,5 +52,4 @@ from seahub.signals import repo_deleted
 @receiver(repo_deleted)
 def remove_wiki(sender, **kwargs):
     repo_id = kwargs['repo_id']
-
-    Wiki2.objects.filter(repo_id=repo_id).delete()
+    return
