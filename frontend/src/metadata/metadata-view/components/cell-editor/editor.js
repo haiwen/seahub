@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Calendar } from '@seafile/sf-metadata-ui-component';
-// import Calendar from './date-editor';
 import { CellType } from '../../_basic';
 import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
