@@ -7,7 +7,6 @@ import { Utils } from '../../utils/utils';
 import {gettext, siteRoot, enableUserCleanTrash, username} from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
-import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
 import CleanTrash from '../../components/dialog/clean-trash';
@@ -214,7 +213,7 @@ class Content extends React.Component {
   };
 
   render() {
-    const { isLoading, errorMsg, items, more, showFolder, commitID, baseDir, folderPath, folderItems } = this.props.data;
+    const { items, showFolder, commitID, baseDir, folderPath, folderItems } = this.props.data;
     const {
       curPerPage, currentPage, hasNextPage
     } = this.props;
