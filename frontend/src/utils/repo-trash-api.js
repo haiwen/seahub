@@ -8,7 +8,7 @@ class RepotrashAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token;
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
