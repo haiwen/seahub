@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    help = 'Clear the designated repo trash within the specified time'
+    help = 'Clear repo trash within the specified time'
     label = 'clean_repo_trash'
 
     def print_msg(self, msg):
