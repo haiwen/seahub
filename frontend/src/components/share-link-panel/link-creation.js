@@ -48,10 +48,7 @@ class LinkCreation extends React.Component {
 
       currentScope: 'all_users',
       selectedOption: null,
-      isSpecificUserChecked: false,
-      isScopeOpIconShown: false,
-
-      inputEmails: null,
+      inputEmails: ''
     };
   }
 
@@ -266,7 +263,7 @@ class LinkCreation extends React.Component {
   };
 
   setScope = (e) => {
-    this.setState({currentScope: e.target.value, selectedOption: null, inputEmails: null});
+    this.setState({currentScope: e.target.value, selectedOption: null, inputEmails: ''});
   };
 
   handleSelectChange = (option) => {
@@ -389,7 +386,7 @@ class LinkCreation extends React.Component {
               </FormGroup>
               <FormGroup check className="ml-4">
                 <Label check>
-                  <Input type="radio" name='scope' value = {'specific_users'} checked={this.state.currentScope === 'specific_users'} onChange={this.setScope} className="mr-1" />
+                  <Input type="radio" name='scope' value={'specific_users'} checked={this.state.currentScope === 'specific_users'} onChange={this.setScope} className="mr-1" />
                   {gettext('Specific users in the team')}
                 </Label>
                 {this.state.currentScope === 'specific_users' &&
@@ -404,7 +401,7 @@ class LinkCreation extends React.Component {
               {isEmailConfigured && (
                 <FormGroup check className="ml-4">
                   <Label check>
-                    <Input type="radio" name='scope' value = {'specific_emails'} checked={this.state.currentScope === 'specific_emails'} onChange={this.setScope} className="mr-1" />
+                    <Input type="radio" name='scope' value={'specific_emails'} checked={this.state.currentScope === 'specific_emails'} onChange={this.setScope} className="mr-1" />
                     {gettext('Specific people with email address')}
                   </Label>
                   {this.state.currentScope === 'specific_emails' &&

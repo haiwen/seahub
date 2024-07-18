@@ -34,11 +34,10 @@ class EmailItem extends React.Component {
   deleteItem = () => {
     const { item } = this.props;
     this.props.deleteItem(item);
-
   };
 
   render() {
-    let item = this.props.item;
+    const { item } = this.props;
     return (
       <tr
         className={this.state.isHighlighted ? 'tr-highlight' : ''}
@@ -47,9 +46,7 @@ class EmailItem extends React.Component {
         onFocus={this.onMouseEnter}
         tabIndex="0"
       >
-        <td>
-          {item}
-        </td>
+        <td>{item}</td>
         <td>
           <span
             tabIndex="0"
@@ -112,10 +109,21 @@ class LinkAuthenticatedEmails extends React.Component {
       isSubmitting: true
     });
     shareLinkAPI.addShareLinkAuthEmails(linkToken, inputEmails, path).then(res => {
-      let authEmails = this.state.authEmails;
-      let newAuthUsers = [...authEmails, ...res.data.auth_list];
+      const { success, failed } = res.data;
+      let newEmails = [];
+      if (success.length) {
+        newEmails = success.map(item => item.email);
+        let msg = gettext('Successfully added %s.').replace('%s', newEmails.join(', '));
+        toaster.success(msg);
+      }
+      if (failed.length) {
+        failed.forEach(item => {
+          let msg = `${item.email}: ${item.error_msg}`;
+          toaster.danger(msg);
+        });
+      }
       this.setState({
-        authEmails: newAuthUsers,
+        authEmails: newEmails.concat(authEmails),
         inputEmails: '',
         isSubmitting: false
       });

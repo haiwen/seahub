@@ -109,16 +109,27 @@ class LinkAuthenticatedUsers extends React.Component {
 
   addLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
-    const { selectedOption } = this.state;
+    const { selectedOption, authUsers } = this.state;
     if (!selectedOption || !selectedOption.length ) {
       return false;
     }
     const users = selectedOption.map((item, index) => item.email);
     shareLinkAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
-      let authUsers = this.state.authUsers;
-      let newAuthUsers = [...authUsers, ...res.data.auth_list];
+      const { success, failed } = res.data;
+      let newEmails = [];
+      if (success.length) {
+        newEmails = success.map(item => item.email);
+        let msg = gettext('Successfully added %s.').replace('%s', newEmails.join(', '));
+        toaster.success(msg);
+      }
+      if (failed.length) {
+        failed.forEach(item => {
+          let msg = `${item.email}: ${item.error_msg}`;
+          toaster.danger(msg);
+        });
+      }
       this.setState({
-        authUsers: newAuthUsers,
+        authUsers: newEmails.concat(authUsers),
         selectedOption: null
       });
       this.refs.userSelect.clearSelect();
