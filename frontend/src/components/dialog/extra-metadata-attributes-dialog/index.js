@@ -101,7 +101,7 @@ class ExtraMetadataAttributesDialog extends Component {
       let newValue = update[column.key];
       let recordID = this.state.row._id;
       if (this.isExist) {
-        metadataAPI.modifyRecord(repoID, recordID, { [column.name]: newValue}).then(res => {
+        metadataAPI.modifyRecord(repoID, recordID, { [column.name]: newValue }).then(res => {
           this.setState({ update: {}, row: res.data.row });
         }).catch(error => {
           const errorMsg = Utils.getErrorMsg(error);

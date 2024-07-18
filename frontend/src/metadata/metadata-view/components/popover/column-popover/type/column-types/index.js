@@ -128,7 +128,7 @@ const ColumnTypes = ({
                       <div
                         className={classnames('select-column-item text-truncate', { 'active': item.key === column.key })}
                         key={item.key}
-                        onClick={(event) => onSelectColumn(event,item)}
+                        onClick={(event) => onSelectColumn(event, item)}
                       >
                         <Icon iconName={item.icon} />
                         <span>{item.name}</span>
