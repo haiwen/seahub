@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import stat
 import logging
+import os
+from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -13,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.signals import clean_up_repo_trash
+from seahub.utils import get_trash_records
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission
@@ -24,7 +27,7 @@ from pysearpc import SearpcError
 from constance import config
 
 logger = logging.getLogger(__name__)
-
+SHOW_REPO_TRASH_DAYS = 90
 
 class RepoTrash(APIView):
 
@@ -301,5 +304,90 @@ class RepoTrashRevertDirents(APIView):
                     'path': path,
                     'error_msg': str(e)
                 })
+
+        return Response(result)
+
+
+class RepoTrash2(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get_item_info(self, trash_item):
+
+        item_info = {
+            'parent_dir': '/' if trash_item.path == '/' else trash_item.path,
+            'obj_name': trash_item.obj_name,
+            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
+            'commit_id': trash_item.commit_id,
+        }
+
+        if trash_item.obj_type == 'dir':
+            is_dir = True
+        else:
+            is_dir = False
+
+        item_info['is_dir'] = is_dir
+        item_info['size'] = trash_item.size if not is_dir else ''
+        item_info['obj_id'] = trash_item.obj_id if not is_dir else ''
+
+        return item_info
+
+    def get(self, request, repo_id):
+        """ Return deleted files/dirs of a repo/folder
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        path = '/'
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+        start = (current_page - 1) * per_page
+        limit = per_page
+        try:
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        items = []
+        if len(deleted_entries) >= 1:
+            for item in deleted_entries:
+                item_info = self.get_item_info(item)
+                items.append(item_info)
+
+        result = {
+            'items': items,
+            'total_count': total_count
+        }
 
         return Response(result)

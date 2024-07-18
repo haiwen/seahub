@@ -397,7 +397,7 @@ def get_user_repos(username, org_id=None):
             r.id = r.repo_id
             r.name = r.repo_name
             r.last_modify = r.last_modified
-
+            
     return (owned_repos, shared_repos, groups_repos, public_repos)
 
 def get_conf_text_ext():
@@ -812,6 +812,11 @@ if EVENTS_CONFIG_FILE:
 
     def get_file_history_suffix():
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
+    
+    def get_trash_records(repo_id, show_time, start, limit):
+        with _get_seafevents_session() as session:
+            res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
+        return res, total_count
 
 else:
     parsed_events_conf = None
@@ -874,6 +879,8 @@ else:
         pass
     def get_user_activities_by_timestamp():
         pass
+    def get_trash_records():
+        pass
 
 
 def calc_file_path_hash(path, bits=12):
@@ -881,7 +888,6 @@ def calc_file_path_hash(path, bits=12):
         path = path.encode('UTF-8')
 
     path_hash = hashlib.md5(urllib.parse.quote(path)).hexdigest()[:bits]
-
     return path_hash
 
 def get_service_url():
