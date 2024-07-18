@@ -340,7 +340,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     ) : (
@@ -351,7 +351,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     );
