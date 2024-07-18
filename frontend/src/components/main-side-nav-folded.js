@@ -39,12 +39,12 @@ class MainSideNavFolded extends React.Component {
         <div className={'side-nav-con d-flex flex-column'}>
           <ul className="nav nav-pills flex-column nav-container">
 
-            <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+            <li id="main-side-nav-folded-files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
               <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                 <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
               </Link>
             </li>
-            <Tip target="files" text={gettext('Files')} />
+            <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
 
             <li className={`nav-item ${this.getActiveClass('starred')}`} id="main-side-nav-folded-starred">
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
