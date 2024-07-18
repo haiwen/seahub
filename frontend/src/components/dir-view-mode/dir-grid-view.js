@@ -32,6 +32,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   onItemRename: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirGridView extends React.Component {
@@ -83,6 +84,7 @@ class DirGridView extends React.Component {
           onAddFolder={this.props.onAddFolder}
           repoTags={this.props.repoTags}
           onFileTagChanged={this.props.onFileTagChanged}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
       </Fragment>
     );
