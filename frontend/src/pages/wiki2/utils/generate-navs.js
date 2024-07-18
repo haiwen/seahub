@@ -87,5 +87,3 @@ export const generateNavItems = (slateNodes) => {
   return treeRoot;
 };
 
-
-

@@ -55,7 +55,7 @@ class Search extends Component {
 
   onChangeHandler = (event) => {
     let _this = this;
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
     let newValue = event.target.value;
     if (this.inputValue === newValue.trim()) {
       return false;
@@ -124,7 +124,7 @@ class Search extends Component {
 
   sendRequest(queryData) {
     // 'page=1' for this first request
-    this.setState({page: 1}, () => {
+    this.setState({ page: 1 }, () => {
       const { search_repo, q } = queryData;
       const { page, perPage } = this.state;
       this.searchWiki(search_repo, q, page, perPage);
@@ -220,7 +220,7 @@ class Search extends Component {
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
-    let style = {'width': width};
+    let style = { 'width': width };
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
