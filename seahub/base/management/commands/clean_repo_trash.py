@@ -16,18 +16,18 @@ class Command(BaseCommand):
         self.stdout.write('[%s] %s\n' % (datetime.now(), msg))
 
     def add_arguments(self, parser):
-        parser.add_argument('-rid', help='repo id', type=str)
-        parser.add_argument('-ndb', help='n days before', type=int)
+        parser.add_argument('--repo_id', help='repo id', type=str)
+        parser.add_argument('--keep_days', help='keep days', type=int)
 
     def handle(self, *args, **options):
-        repo_id = options.get('rid')
+        repo_id = options.get('repo_id')
         if not repo_id:
             self.stdout.write(
-                '\nPlease use < -rid [repo_id] | -ndb [n_days_before][optional]'
+                '\nPlease use < --repo_id [repo_id] | --keep_days [keep days]'
             )
             return
             
-        days = options.get('ndb', 0)
+        days = options.get('keep_days', 0)
         logger.info('Start clean repo trash...')
         self.print_msg('Start clean repo trash...')
         self.do_action(repo_id, days)
