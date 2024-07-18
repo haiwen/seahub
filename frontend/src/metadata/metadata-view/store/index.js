@@ -7,7 +7,7 @@ import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATIO
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
-import { getColumns } from '../utils/column-utils';
+import { normalizeColumns } from '../utils/column-utils';
 import { Metadata, User } from '../model';
 
 class Store {
@@ -41,7 +41,7 @@ class Store {
     const res = await this.context.getMetadata({ start: this.startIndex, limit });
     const view = this.context.localStorage.getItem('view');
     const rows = res?.data?.results || [];
-    const columns = getColumns(res?.data?.metadata);
+    const columns = normalizeColumns(res?.data?.metadata);
     let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
     const loadedCount = rows.length;

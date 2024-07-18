@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Calendar } from '@seafile/sf-metadata-ui-component';
+import { SfCalendar } from '@seafile/sf-metadata-ui-component';
 import { CellType } from '../../_basic';
 import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
@@ -15,8 +15,12 @@ const Editor = React.forwardRef((props, ref) => {
     case CellType.TEXT: {
       return (<TextEditor ref={ref} {...props} />);
     }
+    case CellType.DATE: {
+      const lang = window.sfMetadataContext.getSetting('lang');
+      return (<SfCalendar ref={ref} {...props} lang={lang} />);
+    }
     default: {
-      return (<Calendar ref={ref} {...props} />);
+      return null;
     }
   }
 });
