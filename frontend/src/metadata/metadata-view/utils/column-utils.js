@@ -241,15 +241,6 @@ const getColumnType = (key, type) => {
   }
 };
 
-const normalizeColumnData = (column) => {
-  const { key, data } = column;
-  if (PRIVATE_COLUMN_KEYS.includes(key)) {
-    if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
-    if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
-  }
-  return data;
-};
-
 const getFileTypeColumnData = (column) => {
   const { data } = column;
   const _OPTIONS = {
@@ -269,9 +260,9 @@ const getFileTypeColumnData = (column) => {
 const getFileStatusColumnData = (column) => {
   const { data } = column;
   const _OPTIONS = {
-    '_picture': { name: gettext('Draft'), color: '#FFFCB5', textColor: '#202428', id: '_draft' },
-    '_document': { name: gettext('In review'), color: '#B7CEF9', textColor: '#202428', id: '_in_review' },
-    '_video': { name: gettext('Done'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
+    '_draft': { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428', id: '_draft' },
+    '_in_review': { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428', id: '_in_review' },
+    '_done': { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
   };
 
   let newData = { ...data };
@@ -279,6 +270,21 @@ const getFileStatusColumnData = (column) => {
     return { ..._OPTIONS[o.name] };
   }) : Object.keys(_OPTIONS);
   return newData;
+};
+
+const normalizeColumnData = (column) => {
+  const { key, data } = column;
+  if (PRIVATE_COLUMN_KEYS.includes(key)) {
+    if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
+    if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
+  }
+  if (column.type === CellType.SINGLE_SELECT) {
+    return { ...data, options: data?.options || [] };
+  }
+  if (column.type === CellType.DATE) {
+    return { ...data, format: data?.format || DEFAULT_DATE_FORMAT };
+  }
+  return data;
 };
 
 export const normalizeColumns = (columns) => {
