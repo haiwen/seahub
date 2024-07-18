@@ -104,16 +104,16 @@ class Rename extends React.Component {
   };
 
   onAfterModelOpened = () => {
-    if (!this.newInput.current) return;
-    this.newInput.current.focus();
-
-    let { dirent } = this.props;
-    let type = dirent.type;
-    if (type === 'file') {
-      var endIndex = dirent.name.lastIndexOf('.md');
-      this.newInput.current.setSelectionRange(0, endIndex, 'forward');
-    } else {
-      this.newInput.current.setSelectionRange(0, -1);
+    const inputElement = this.newInput.current;
+    if (inputElement) {
+      inputElement.focus();
+      const filename = this.state.newName;
+      const lastDotIndex = filename.lastIndexOf('.');
+      if (lastDotIndex > 0) {
+        inputElement.setSelectionRange(0, lastDotIndex);
+      } else {
+        inputElement.select();
+      }
     }
   };
 
