@@ -110,7 +110,7 @@ class Wikis extends Component {
         let wikis = this.state.wikis.filter(item => {
           return item.name !== wiki.name;
         });
-        this.setState({wikis: wikis});
+        this.setState({ wikis: wikis });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -122,7 +122,7 @@ class Wikis extends Component {
         let wikis = this.state.wikis.filter(item => {
           return item.name !== wiki.name;
         });
-        this.setState({wikis: wikis});
+        this.setState({ wikis: wikis });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -141,7 +141,7 @@ class Wikis extends Component {
           }
           return item;
         });
-        this.setState({wikis: wikis});
+        this.setState({ wikis: wikis });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -156,7 +156,7 @@ class Wikis extends Component {
           }
           return item;
         });
-        this.setState({wikis: wikis});
+        this.setState({ wikis: wikis });
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;

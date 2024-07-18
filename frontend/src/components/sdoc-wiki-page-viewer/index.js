@@ -32,11 +32,11 @@ class SdocWikiPageViewer extends React.Component {
 
   changeInlineNode = (item) => {
     const { repoID } = this.props;
-    let url, imagePath;
+    let url; let imagePath;
     // isPublicWiki: in the old version, only public wiki need replace image url
     if (item.type == 'image') { // change image url
       url = item.data.src;
-      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
       // different repo
       if (re.test(url)) {
         // get image path

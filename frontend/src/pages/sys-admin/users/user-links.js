@@ -21,11 +21,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   render() {
@@ -119,7 +119,7 @@ class Item extends Component {
   };
 
   toggleLinkDialog = () => {
-    this.setState({isLinkDialogOpen: !this.state.isLinkDialogOpen});
+    this.setState({ isLinkDialogOpen: !this.state.isLinkDialogOpen });
   };
 
   deleteItem = () => {
@@ -141,7 +141,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'View':
         this.toggleLinkDialog();
         break;
@@ -154,7 +154,7 @@ class Item extends Component {
   getRoleText = () => {
     let roleText;
     const { item } = this.props;
-    switch(item.role) {
+    switch (item.role) {
       case 'Owner':
         roleText = gettext('Owner');
         break;
@@ -248,7 +248,7 @@ class Links extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const email = decodeURIComponent(this.props.email);
     seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
@@ -291,7 +291,7 @@ class Links extends Component {
     const token = item.token;
     if (type == 'download') {
       seafileAPI.sysAdminDeleteShareLink(token).then(res => {
-        let items = this.state.shareLinkItems.filter(item=> {
+        let items = this.state.shareLinkItems.filter(item => {
           return item.token != token;
         });
         this.setState({
@@ -304,7 +304,7 @@ class Links extends Component {
       });
     } else {
       seafileAPI.sysAdminDeleteUploadLink(token).then(res => {
-        let items = this.state.uploadLinkItems.filter(item=> {
+        let items = this.state.uploadLinkItems.filter(item => {
           return item.token != token;
         });
         this.setState({

@@ -101,18 +101,18 @@ class Item extends Component {
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   deleteInstitution = () => {
@@ -170,7 +170,7 @@ class Institutions extends Component {
     this.initPage = 1;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
     this.setState({
@@ -205,14 +205,14 @@ class Institutions extends Component {
   };
 
   toggleAddInstitutionDialog = () => {
-    this.setState({isAddInstitutionDialogOpen: !this.state.isAddInstitutionDialogOpen});
+    this.setState({ isAddInstitutionDialogOpen: !this.state.isAddInstitutionDialogOpen });
   };
 
   addInstitution = (name) => {
     seafileAPI.sysAdminAddInstitution(name).then(res => {
       let institutionList = this.state.institutionList;
       institutionList.push(res.data);
-      this.setState({institutionList: institutionList});
+      this.setState({ institutionList: institutionList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -224,7 +224,7 @@ class Institutions extends Component {
       let institutionList = this.state.institutionList.filter(inst => {
         return inst.id != institutionID;
       });
-      this.setState({institutionList: institutionList});
+      this.setState({ institutionList: institutionList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

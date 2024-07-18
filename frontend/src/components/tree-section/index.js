@@ -44,9 +44,9 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
   }, []);
 
   return (
-    <div className={classnames('tree-section', {[className]: className})}>
+    <div className={classnames('tree-section', { [className]: className })}>
       <div
-        className={classnames('tree-section-header', {'tree-section-header-hover': highlight})}
+        className={classnames('tree-section-header', { 'tree-section-header-hover': highlight })}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}

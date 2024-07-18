@@ -56,7 +56,7 @@ class DirPath extends React.Component {
         <Link to={siteRoot + 'shared-with-ocm/'} className="normal" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')}>{gettext('All')}</Link>
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?
-          <span className="path-repo-name">{repoName}</span>:
+          <span className="path-repo-name">{repoName}</span> :
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}

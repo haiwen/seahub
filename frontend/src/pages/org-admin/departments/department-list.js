@@ -35,11 +35,11 @@ class OrgDepartmentsList extends React.Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onDepartmentNameChanged = (dept) => {
@@ -54,7 +54,7 @@ class OrgDepartmentsList extends React.Component {
   };
 
   toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
   };
 
   onAddNewDepartment = (newDepartment) => {
@@ -123,7 +123,7 @@ class OrgDepartmentsList extends React.Component {
                   </thead>
                   <tbody>
                     {groups.map((group, index) => {
-                      return(
+                      return (
                         <GroupItem
                           key={group.id}
                           group={group}

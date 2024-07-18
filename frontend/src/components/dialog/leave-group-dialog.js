@@ -13,7 +13,7 @@ class LeaveGroupDialog extends React.Component {
   }
 
   leaveGroup = () => {
-    seafileAPI.quitGroup(this.props.groupID, username).then((res)=> {
+    seafileAPI.quitGroup(this.props.groupID, username).then((res) => {
       this.props.onGroupChanged();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -22,7 +22,7 @@ class LeaveGroupDialog extends React.Component {
   };
 
   render() {
-    return(
+    return (
       <Modal isOpen={true} toggle={this.props.toggleLeaveGroupDialog}>
         <ModalHeader toggle={this.props.toggleLeaveGroupDialog}>{gettext('Leave Group')}</ModalHeader>
         <ModalBody>

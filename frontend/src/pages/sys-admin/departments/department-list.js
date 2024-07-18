@@ -27,11 +27,11 @@ class DepartmentList extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   listDepartments = () => {
@@ -124,7 +124,7 @@ class DepartmentList extends React.Component {
                   </thead>
                   <tbody>
                     {groups.map((group, index) => {
-                      return(
+                      return (
                         <Fragment key={group.id}>
                           <GroupItem
                             group={group}

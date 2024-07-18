@@ -48,7 +48,7 @@ class RepoSnapshot extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');
@@ -102,7 +102,7 @@ class RepoSnapshot extends React.Component {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))} className="text-truncate" title={pathList[index]}>{pathList[index]}</a>
+                <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))} className="text-truncate" title={pathList[index]}>{pathList[index]}</a>
                 <span className="mx-1">/</span>
               </React.Fragment>
             );
@@ -144,7 +144,7 @@ class RepoSnapshot extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2>
-                  <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+                  <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
                   <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
@@ -160,7 +160,7 @@ class RepoSnapshot extends React.Component {
                           <a href={`${siteRoot}profile/${encodeURIComponent(authorName)}/`}>{authorNickName}</a>
                         </React.Fragment>
                       ) : <span>{gettext('Unknown')}</span>}
-                      <p className="m-0 ml-2" dangerouslySetInnerHTML={{__html: commitRelativeTime}}></p>
+                      <p className="m-0 ml-2" dangerouslySetInnerHTML={{ __html: commitRelativeTime }}></p>
                     </div>
                   </div>
                 )}
@@ -196,10 +196,10 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      {width: '5%', text: ''},
-      {width: '55%', text: gettext('Name')},
-      {width: '20%', text: gettext('Size')},
-      {width: '20%', text: ''}
+      { width: '5%', text: '' },
+      { width: '55%', text: gettext('Name') },
+      { width: '20%', text: gettext('Size') },
+      { width: '20%', text: '' }
     ];
   }
 
@@ -254,11 +254,11 @@ class FolderItem extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   restoreItem = (e) => {
@@ -267,7 +267,7 @@ class FolderItem extends React.Component {
     const item = this.props.item;
     const path = Utils.joinPath(this.props.folderPath, item.name);
     const request = item.type == 'dir' ?
-      seafileAPI.revertFolder(repoID, path, commitID):
+      seafileAPI.revertFolder(repoID, path, commitID) :
       seafileAPI.revertFile(repoID, path, commitID);
     request.then((res) => {
       toaster.success(gettext('Successfully restored 1 item.'));
@@ -296,7 +296,7 @@ class FolderItem extends React.Component {
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td></td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
+          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
         </td>
       </tr>
     ) : (
@@ -305,8 +305,8 @@ class FolderItem extends React.Component {
         <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
-          <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`action-icon sf2-icon-download ${isIconShown ? '': 'invisible'}`} title={gettext('Download')}></a>
+          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
+          <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`action-icon sf2-icon-download ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')}></a>
         </td>
       </tr>
     );

@@ -16,7 +16,7 @@ const propTypes = {
   onUploadRetry: PropTypes.func.isRequired,
   onFileUpload: PropTypes.func.isRequired,
   onFolderUpload: PropTypes.func.isRequired,
-  isUploading : PropTypes.bool.isRequired
+  isUploading: PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
@@ -95,7 +95,7 @@ class UploadProgressDialog extends React.Component {
             </div>
             {isUploading && (
               <div className="progress">
-                <div className="progress-bar" role="progressbar" style={{width: `${totalProgress}%`}} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
+                <div className="progress-bar" role="progressbar" style={{ width: `${totalProgress}%` }} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             )}
           </div>

@@ -8,7 +8,7 @@ class SystemAdminAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -37,7 +37,7 @@ class SystemAdminAPI {
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
-        headers:form.getHeaders()
+        headers: form.getHeaders()
       });
     } else {
       return this.req.post(url, form);
@@ -63,7 +63,7 @@ class SystemAdminAPI {
       params.order_by = sortBy;
       params.direction = sortOrder;
     }
-    return this.req.get(url, {params: params});
+    return this.req.get(url, { params: params });
   }
 
   sysAdminExportLogsExcel(start, end, logType) {

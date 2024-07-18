@@ -96,7 +96,7 @@ class AddWikiDialog extends React.Component {
                 maxMenuHeight={200}
                 value={this.state.selectedOption}
                 components={{ NoOptionsMessage: (
-                  <div style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('No department')}</div>
+                  <div style={{ margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' }}>{gettext('No department')}</div>
                 ) }}
                 noOptionsMessage={() => {return gettext('No options available');}}
               />

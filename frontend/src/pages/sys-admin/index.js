@@ -160,7 +160,7 @@ class SysAdmin extends React.Component {
     const tmpTab = this.getCurrentTabForPageList(pageList);
     currentTab = tmpTab ? tmpTab : currentTab;
 
-    this.setState({currentTab: currentTab});
+    this.setState({ currentTab: currentTab });
   }
 
   UNSAFE_componentWillMount() {
@@ -172,7 +172,7 @@ class SysAdmin extends React.Component {
   }
 
   getCurrentTabForPageList = (pageList) => {
-    let urlPartList, tab;
+    let urlPartList; let tab;
     const urlBase = `${siteRoot}sys/`;
     for (let i = 0, len = pageList.length; i < len; i++) {
       urlPartList = pageList[i].urlPartList;
@@ -186,11 +186,11 @@ class SysAdmin extends React.Component {
   };
 
   onCloseSidePanel = () => {
-    this.setState({isSidePanelClosed: !this.state.isSidePanelClosed});
+    this.setState({ isSidePanelClosed: !this.state.isSidePanelClosed });
   };
 
   tabItemClick = (param) => {
-    this.setState({currentTab: param});
+    this.setState({ currentTab: param });
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }

@@ -35,11 +35,11 @@ class OrgLinks extends React.Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onChangePageNum = (event, num) => {
@@ -76,7 +76,7 @@ class OrgLinks extends React.Component {
   };
 
   toggleLinkDialog = () => {
-    this.setState({isShowLinkDialog: !this.state.isShowLinkDialog});
+    this.setState({ isShowLinkDialog: !this.state.isShowLinkDialog });
   };
 
   componentDidMount() {
@@ -106,7 +106,7 @@ class OrgLinks extends React.Component {
                 </thead>
                 <tbody>
                   {linkList && linkList.map((item, index) => {
-                    return(
+                    return (
                       <React.Fragment key={index}>
                         <RepoItem
                           link={item}
@@ -177,7 +177,7 @@ class RepoItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {

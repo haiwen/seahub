@@ -16,7 +16,7 @@ class SingleDropdownToolbar extends React.Component {
   }
 
   toggleDropdownMenu = () => {
-    this.setState({isDropdownMenuOpen: !this.state.isDropdownMenuOpen});
+    this.setState({ isDropdownMenuOpen: !this.state.isDropdownMenuOpen });
   };
 
   onDropdownToggleKeyDown = (e) => {
@@ -47,7 +47,7 @@ class SingleDropdownToolbar extends React.Component {
           >
           </DropdownToggle>
           <DropdownMenu>
-            {opList.map((item, index)=> {
+            {opList.map((item, index) => {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
               } else {

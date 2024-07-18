@@ -24,12 +24,12 @@ class SysAdminCreateGroupDialog extends React.Component {
 
   handleRepoNameChange = (e) => {
     if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
-    this.setState({groupName: e.target.value});
+    this.setState({ groupName: e.target.value });
   };
 
   handleSubmit = () => {

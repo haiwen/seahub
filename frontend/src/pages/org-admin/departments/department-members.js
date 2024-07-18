@@ -92,11 +92,11 @@ class OrgDepartmentItem extends React.Component {
   };
 
   onFreezedDepart = () => {
-    this.setState({isDepartFreezed: true});
+    this.setState({ isDepartFreezed: true });
   };
 
   onUnfreezedDepart = () => {
-    this.setState({isDepartFreezed: false});
+    this.setState({ isDepartFreezed: false });
   };
 
   onDepartmentNameChanged = (dept) => {
@@ -140,7 +140,7 @@ class OrgDepartmentItem extends React.Component {
   };
 
   toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
   };
 
   showSetGroupQuotaDialog = (subGroupID) => {

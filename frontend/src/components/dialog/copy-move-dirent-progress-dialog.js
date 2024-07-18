@@ -14,7 +14,7 @@ const propTypes = {
 class CopyMoveDirentProgressDialog extends React.Component {
 
   render() {
-    let { type , asyncOperationProgress, asyncOperatedFilesLength } = this.props;
+    let { type, asyncOperationProgress, asyncOperatedFilesLength } = this.props;
     let title = type === 'move' ? gettext('Move {num} items') : gettext('Copy {num} items');
     title = title.replace('{num}', asyncOperatedFilesLength);
     let progressStyle = {

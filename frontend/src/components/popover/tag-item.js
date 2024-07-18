@@ -36,7 +36,7 @@ class TagItem extends React.Component {
     } else {
       let fileTag = null;
       let fileTagList = this.props.fileTagList;
-      for(let i = 0; i < fileTagList.length; i++) {
+      for (let i = 0; i < fileTagList.length; i++) {
         if (fileTagList[i].repo_tag_id === repoTag.id) {
           fileTag = fileTagList[i];
           break;
@@ -63,7 +63,7 @@ class TagItem extends React.Component {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        <div className="tag-item d-flex align-items-center" style={{backgroundColor: repoTag.color}}>
+        <div className="tag-item d-flex align-items-center" style={{ backgroundColor: repoTag.color }}>
           <span className="tag-name">{repoTag.name}</span>
         </div>
         {isTagSelected && <i className="sf2-icon-tick tag-selected-icon"></i>}

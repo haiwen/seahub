@@ -9,7 +9,7 @@ const csCZ = require('@seafile/seafile-calendar/lib/locale/cs_CZ');
 const ruRU = require('@seafile/seafile-calendar/lib/locale/ru_RU');
 
 function translateCalendar() {
-  const locale = window.app.config ?  window.app.config.lang : 'en';
+  const locale = window.app.config ? window.app.config.lang : 'en';
   let language;
   switch (locale) {
     case 'zh-cn':

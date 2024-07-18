@@ -68,7 +68,7 @@ class App extends Component {
   onpopstate = (event) => {
     if (event.state && event.state.currentTab && event.state.pathPrefix) {
       let { currentTab, pathPrefix } = event.state;
-      this.setState({currentTab, pathPrefix});
+      this.setState({ currentTab, pathPrefix });
     }
   };
 
@@ -80,12 +80,12 @@ class App extends Component {
     }
   }
 
-  navigateClientUrlToLib = () =>{
+  navigateClientUrlToLib = () => {
     if (window.location.hash && window.location.hash.indexOf('common/lib') != -1) {
       let splitUrlArray = window.location.hash.split('/');
       let repoID = splitUrlArray[splitUrlArray.length - 2];
       let url = siteRoot + 'library/' + repoID + '/';
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     }
   };
 
@@ -102,7 +102,7 @@ class App extends Component {
       let href = window.location.href.split('/');
       currentTab = href[href.length - 2];
     }
-    this.setState({currentTab: currentTab});
+    this.setState({ currentTab: currentTab });
   }
 
   onCloseSidePanel = () => {
@@ -119,9 +119,9 @@ class App extends Component {
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
-      this.setState({currentTab: '', pathPrefix: []});
+      this.setState({ currentTab: '', pathPrefix: [] });
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let isWeChat = Utils.isWeChat();
@@ -135,7 +135,7 @@ class App extends Component {
   };
 
   onGroupChanged = (groupID) => {
-    setTimeout(function() {
+    setTimeout(function () {
       let url;
       if (groupID) {
         url = siteRoot + 'group/' + groupID + '/';
@@ -157,7 +157,7 @@ class App extends Component {
       pathPrefix: pathPrefix
     }, () => {
       let { currentTab, pathPrefix } = this.state;
-      window.history.replaceState({currentTab: currentTab, pathPrefix: pathPrefix}, null);
+      window.history.replaceState({ currentTab: currentTab, pathPrefix: pathPrefix }, null);
     });
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });

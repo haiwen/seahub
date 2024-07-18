@@ -27,7 +27,7 @@ class NavItem extends React.Component {
     const { node } = this.props;
     const { expanded } = this.state;
     if (node.children && node.children.length > 0 && !expanded) {
-      this.setState({expanded: !expanded});
+      this.setState({ expanded: !expanded });
       return;
     }
     this.props.onLinkClick(node);
@@ -37,7 +37,7 @@ class NavItem extends React.Component {
     const { node } = this.props;
     const { expanded } = this.state;
     if (node.children && node.children.length > 0) {
-      this.setState({expanded: !expanded});
+      this.setState({ expanded: !expanded });
       return;
     }
   };
@@ -70,7 +70,7 @@ class NavItem extends React.Component {
       return (
         <div className="pl-4 position-relative">
           <span className="switch-btn" onClick={this.toggleExpanded}>
-            <i className={`sf3-font sf3-font-down ${expanded ? '': 'rotate-270 d-inline-block'}`}></i>
+            <i className={`sf3-font sf3-font-down ${expanded ? '' : 'rotate-270 d-inline-block'}`}></i>
           </span>
           {this.renderLink(node)}
           {expanded && node.children.map((child, index) => {

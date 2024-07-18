@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
-import {gettext, isPro, orgID} from '../../utils/constants';
+import { gettext, isPro, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
@@ -169,7 +169,7 @@ class TransferDialog extends React.Component {
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
-      <Modal isOpen={true} style={{maxWidth: '720px'}} toggle={this.props.toggleDialog} className="transfer-dialog">
+      <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>

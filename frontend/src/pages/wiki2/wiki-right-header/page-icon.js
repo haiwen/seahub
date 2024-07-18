@@ -22,7 +22,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
 
   return (
     <>
-      <div className={classNames('wiki-page-icon-wrapper', {'no-page-cover': currentPageConfig.cover_img_url})}>
+      <div className={classNames('wiki-page-icon-wrapper', { 'no-page-cover': currentPageConfig.cover_img_url })}>
         <div className='wiki-page-icon-container' id='wiki-page-icon-container'>
           <span>{currentPageConfig.icon}</span>
         </div>

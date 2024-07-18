@@ -55,7 +55,7 @@ class DeleteFolderDialog extends Component {
       <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Delete Folder')}</ModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{__html: message}}></p>
+          <p dangerouslySetInnerHTML={{ __html: message }}></p>
           {alert_message && <p className="error">{alert_message}</p>}
         </ModalBody>
         <ModalFooter>

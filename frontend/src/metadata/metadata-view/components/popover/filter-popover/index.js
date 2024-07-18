@@ -7,11 +7,10 @@ import {
   FILTER_COLUMN_OPTIONS,
   getValidFilters,
 } from '../../../_basic';
-import { getEventClassName } from '../../../utils';
+import { getEventClassName, gettext } from '../../../utils';
 import { getFilterByColumn } from '../../../utils/filters-utils';
 import FiltersList from './widgets';
 import { EVENT_BUS_TYPE } from '../../../constants';
-import { gettext } from '../../../utils';
 
 import './index.css';
 

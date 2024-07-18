@@ -43,7 +43,7 @@ class FileHistory extends React.Component {
     editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       let historyData = res.data;
       if (!historyData) {
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
         throw Error('There is an error in server.');
       }
       this.initNewRecords(res.data);
@@ -54,7 +54,7 @@ class FileHistory extends React.Component {
     seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
       let historyData = res.data;
       if (!historyData) {
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
         throw Error('There is an error in server.');
       }
       this.initOldRecords(res.data);
@@ -70,7 +70,7 @@ class FileHistory extends React.Component {
         path = oldPath ? oldPath : path;
         seafileAPI.listOldFileHistoryRecords(historyRepoID, path, commitID).then((res) => {
           if (!res.data) {
-            this.setState({isLoading: false});
+            this.setState({ isLoading: false });
             throw Error('There is an error in server.');
           }
           this.setState({
@@ -81,7 +81,7 @@ class FileHistory extends React.Component {
       } else {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
           if (!res.data) {
-            this.setState({isLoading: false});
+            this.setState({ isLoading: false });
             throw Error('There is an error in server.');
           }
           this.setState({
@@ -110,13 +110,13 @@ class FileHistory extends React.Component {
         isLoading: false,
       });
     } else {
-      this.setState({nextCommit: result.next_start_commit,});
+      this.setState({ nextCommit: result.next_start_commit, });
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
           this.initOldRecords(res.data);
         });
       } else {
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
       }
     }
   }
@@ -147,7 +147,7 @@ class FileHistory extends React.Component {
         let commitID = this.state.nextCommit;
         let filePath = this.state.filePath;
         let oldFilePath = this.state.oldFilePath;
-        this.setState({isReloadingData: true});
+        this.setState({ isReloadingData: true });
         if (oldFilePath) {
           seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
             this.updateOldRecords(res.data, oldFilePath);
@@ -180,7 +180,7 @@ class FileHistory extends React.Component {
         isReloadingData: false,
       });
     } else {
-      this.setState({nextCommit: result.next_start_commit,});
+      this.setState({ nextCommit: result.next_start_commit, });
       if (this.state.nextCommit) {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
           this.updateOldRecords(res.data, filePath);
@@ -194,7 +194,7 @@ class FileHistory extends React.Component {
     let filePath = item.path;
     editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
         this.refershFileList();
       }
     });

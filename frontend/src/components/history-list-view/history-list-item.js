@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
@@ -31,23 +31,23 @@ class HistoryListItem extends React.Component {
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({isShowOperationIcon: true});
+      this.setState({ isShowOperationIcon: true });
     }
   };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
-      this.setState({isShowOperationIcon: false});
+      this.setState({ isShowOperationIcon: false });
     }
   };
 
   onToggleClick = (e) => {
-    this.setState({isMenuShow: !this.state.isMenuShow});
+    this.setState({ isMenuShow: !this.state.isMenuShow });
     this.props.onFreezedItemToggle();
   };
 
   onItemClick = () => {
-    this.setState({isShowOperationIcon: false});  //restore to default state
+    this.setState({ isShowOperationIcon: false }); // restore to default state
     if (this.props.item.commit_id === this.props.currentItem.commit_id) {
       return;
     }
@@ -74,7 +74,7 @@ class HistoryListItem extends React.Component {
       isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
     }
     let objID = this.props.currentItem.rev_file_id;
-    let url = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
+    let url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: objID });
     return (
       <li
         className={`history-list-item ${isHigtlightItem ? 'item-active' : ''}`}

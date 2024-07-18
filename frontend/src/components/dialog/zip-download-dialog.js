@@ -81,7 +81,7 @@ class ZipDownloadDialog extends React.Component {
         });
       } else {
         this.setState({
-          zipProgress: data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%'
+          zipProgress: data.total == 0 ? '100%' : (data.zipped / data.total * 100).toFixed(2) + '%'
         });
         if (data['total'] == data['zipped']) {
           clearInterval(interval);
@@ -132,7 +132,7 @@ class ZipDownloadDialog extends React.Component {
 class Content extends React.Component {
 
   render() {
-    const {isLoading, errorMsg, zipProgress} = this.props.data;
+    const { isLoading, errorMsg, zipProgress } = this.props.data;
 
     if (isLoading) {
       return <Loading />;

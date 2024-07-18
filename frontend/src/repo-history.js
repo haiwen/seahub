@@ -79,7 +79,7 @@ class RepoHistory extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');
@@ -108,7 +108,7 @@ class RepoHistory extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex text-nowrap"></h2>
+                <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
                   <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
@@ -137,18 +137,18 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = showLabel ? [
-      {width: '43%', text: gettext('Description')},
-      {width: '12%', text: gettext('Time')},
-      {width: '9%', text: gettext('Modifier')},
-      {width: '12%', text: `${gettext('Device')} / ${gettext('Version')}`},
-      {width: '12%', text: gettext('Labels')},
-      {width: '12%', text: ''}
+      { width: '43%', text: gettext('Description') },
+      { width: '12%', text: gettext('Time') },
+      { width: '9%', text: gettext('Modifier') },
+      { width: '12%', text: `${gettext('Device')} / ${gettext('Version')}` },
+      { width: '12%', text: gettext('Labels') },
+      { width: '12%', text: '' }
     ] : [
-      {width: '43%', text: gettext('Description')},
-      {width: '15%', text: gettext('Time')},
-      {width: '15%', text: gettext('Modifier')},
-      {width: '15%', text: `${gettext('Device')} / ${gettext('Version')}`},
-      {width: '12%', text: ''}
+      { width: '43%', text: gettext('Description') },
+      { width: '15%', text: gettext('Time') },
+      { width: '15%', text: gettext('Modifier') },
+      { width: '15%', text: `${gettext('Device')} / ${gettext('Version')}` },
+      { width: '12%', text: '' }
     ];
   }
 
@@ -229,11 +229,11 @@ class Item extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   showCommitDetails = (e) => {
@@ -303,15 +303,15 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <a href="#" role="button" className={`attr-action-icon sf3-font sf3-font-rename ${isIconShown ? '': 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
+            <a href="#" role="button" className={`attr-action-icon sf3-font sf3-font-rename ${isIconShown ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
             }
           </td>
           }
           <td>
             {userPerm == 'rw' && (
               item.isFirstCommit ?
-                <span className={isIconShown ? '': 'invisible'}>{gettext('Current Version')}</span> :
-                <a href={`${siteRoot}repo/${repoID}/snapshot/?commit_id=${item.commit_id}`} className={isIconShown ? '': 'invisible'}>{gettext('View Snapshot')}</a>
+                <span className={isIconShown ? '' : 'invisible'}>{gettext('Current Version')}</span> :
+                <a href={`${siteRoot}repo/${repoID}/snapshot/?commit_id=${item.commit_id}`} className={isIconShown ? '' : 'invisible'}>{gettext('View Snapshot')}</a>
             )}
           </td>
         </tr>

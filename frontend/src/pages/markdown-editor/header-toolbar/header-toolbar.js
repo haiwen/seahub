@@ -153,9 +153,10 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className='sf3-font sf3-font-spinner'/></button>
+                    <i className='sf3-font sf3-font-spinner'/>
+                  </button>
                   :
-                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon='sf3-font sf3-font-save'  disabled={!contentChanged}
+                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon='sf3-font sf3-font-save' disabled={!contentChanged}
                     onMouseDown={this.props.onSaveEditorContent} isActive={contentChanged}/>
                 }
               </ButtonGroup>
@@ -215,7 +216,8 @@ class HeaderToolbar extends React.Component {
               <ButtonGroup>
                 {saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className='sf3-font sf3-font-spinner'/></button>
+                    <i className='sf3-font sf3-font-spinner'/>
+                  </button>
                   :
                   <ButtonItem
                     id={'saveButton'}

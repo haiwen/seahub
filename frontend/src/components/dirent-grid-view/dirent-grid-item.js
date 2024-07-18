@@ -63,7 +63,7 @@ class DirentGridItem extends React.Component {
   onItemClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({isGridSelected: false});
+    this.setState({ isGridSelected: false });
 
     const { dirent, activeDirent } = this.props;
 
@@ -77,7 +77,7 @@ class DirentGridItem extends React.Component {
     this.clickTimeout = setTimeout(() => {
       this.clickTimeout = null;
       this.handleSingleClick(dirent, activeDirent);
-    }, 250); //A click within 250 milliseconds is considered a single click.
+    }, 250); // A click within 250 milliseconds is considered a single click.
   };
 
   handleSingleClick = (dirent, activeDirent) => {
@@ -121,7 +121,7 @@ class DirentGridItem extends React.Component {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
-    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path};
+    let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = 'move';
@@ -133,7 +133,7 @@ class DirentGridItem extends React.Component {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
-      this.setState({isGridDropTipShow: true});
+      this.setState({ isGridDropTipShow: true });
     }
   };
 
@@ -149,20 +149,20 @@ class DirentGridItem extends React.Component {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
-    this.setState({isGridDropTipShow: false});
+    this.setState({ isGridDropTipShow: false });
   };
 
   onGridItemDragDrop = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
-    this.setState({isGridDropTipShow: false});
+    this.setState({ isGridDropTipShow: false });
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
-    let {nodeDirent, nodeParentPath} = dragStartItemData;
+    let { nodeDirent, nodeParentPath } = dragStartItemData;
     let dropItemData = this.props.dirent;
 
     if (nodeDirent.name === dropItemData.name) {
@@ -177,7 +177,7 @@ class DirentGridItem extends React.Component {
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   };
 
-  onGridItemMouseDown = (event) =>{
+  onGridItemMouseDown = (event) => {
     this.props.onGridItemMouseDown(event);
   };
 
@@ -299,7 +299,7 @@ class DirentGridItem extends React.Component {
                   {dirent.file_tags.map((fileTag, index) => {
                     let length = dirent.file_tags.length;
                     return (
-                      <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
+                      <span className="file-tag" key={fileTag.id} style={{ zIndex: length - index, backgroundColor: fileTag.color }}></span>
                     );
                   })}
                 </div>
@@ -313,13 +313,15 @@ class DirentGridItem extends React.Component {
                 className="sf-link grid-file-name-link"
                 onClick={this.onItemClick}
                 title={dirent.name}
-              >{showName}</a> :
+              >{showName}
+              </a> :
               <a
                 className="grid-file-name-link"
                 href={dirent.type === 'dir' ? dirHref : fileHref}
                 onClick={this.onItemClick}
                 title={dirent.name}
-              >{showName}</a>
+              >{showName}
+              </a>
             }
           </div>
         </li>

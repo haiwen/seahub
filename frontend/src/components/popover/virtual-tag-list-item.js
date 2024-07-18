@@ -51,7 +51,8 @@ export default class VirtualTagListItem extends React.Component {
           onClick={this.deleteVirtualTag}
           aria-label={gettext('Delete')}
           title={gettext('Delete')}
-        ></button>
+        >
+        </button>
       </li>
     );
   }

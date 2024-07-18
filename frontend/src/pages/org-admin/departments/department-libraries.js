@@ -43,13 +43,13 @@ class OrgDepartmentItem extends React.Component {
 
   onAddNewRepo = (newRepo) => {
     const { repos } = this.state;
-    repos.unshift({...newRepo, name: newRepo.repo_name}); // 'name': to be compatible with the data returned by the 'GET' request
+    repos.unshift({ ...newRepo, name: newRepo.repo_name }); // 'name': to be compatible with the data returned by the 'GET' request
     this.setState({ repos });
   };
 
   onDeleteRepo = (repoID) => {
     const { repos } = this.state;
-    this.setState({repos: repos.filter(item => item.repo_id != repoID)});
+    this.setState({ repos: repos.filter(item => item.repo_id != repoID) });
   };
 
   render() {

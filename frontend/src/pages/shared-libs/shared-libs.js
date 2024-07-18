@@ -105,7 +105,7 @@ class Content extends Component {
         </>
       );
       const content = currentViewMode == 'list' ? (
-        <table className={(isDesktop && !theadHidden)? '' : 'table-thead-hidden'}>
+        <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
           {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
             {itemsContent}
@@ -177,7 +177,7 @@ class Item extends Component {
 
   share = (e) => {
     e.preventDefault();
-    this.setState({isShowSharedDialog: true});
+    this.setState({ isShowSharedDialog: true });
   };
 
   leaveShare = (e) => {
@@ -197,7 +197,7 @@ class Item extends Component {
     }
 
     request.then((res) => {
-      this.setState({unshared: true});
+      this.setState({ unshared: true });
       let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
       toaster.success(message);
     }).catch(error => {
@@ -210,7 +210,7 @@ class Item extends Component {
   };
 
   toggleShareDialog = () => {
-    this.setState({isShowSharedDialog: false});
+    this.setState({ isShowSharedDialog: false });
   };
 
   onToggleStarRepo = (e) => {
@@ -218,7 +218,7 @@ class Item extends Component {
     const repoName = this.props.data.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -228,7 +228,7 @@ class Item extends Component {
       });
     } else {
       seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -293,7 +293,8 @@ class Item extends Component {
                 aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                 onClick={this.onToggleStarRepo}
                 className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-              ></i>
+              >
+              </i>
             </td>
             <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
             <td>
@@ -329,7 +330,7 @@ class Item extends Component {
             <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
             <td title={data.owner_contact_email}>{data.owner_name}</td>
           </tr>
-        ): (
+        ) : (
           <div
             className="library-grid-item px-3 d-flex justify-content-between align-items-center"
             onMouseOver={this.handleMouseOver}
@@ -346,7 +347,8 @@ class Item extends Component {
                   aria-label={gettext('Unstar')}
                   onClick={this.onToggleStarRepo}
                   className='op-icon library-grid-item-icon sf3-font-star sf3-font'
-                ></i>
+                >
+                </i>
               }
               {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
             </div>
@@ -473,7 +475,7 @@ class SharedLibraries extends Component {
 
   componentDidMount() {
     if (!this.props.repoList) {
-      seafileAPI.listRepos({type:'shared'}).then((res) => {
+      seafileAPI.listRepos({ type: 'shared' }).then((res) => {
         let repoList = res.data.repos.map((item) => {
           return new Repo(item);
         });
@@ -518,7 +520,7 @@ class SharedLibraries extends Component {
       }
       return item;
     });
-    this.setState({items: items});
+    this.setState({ items: items });
   };
 
   renderContent = () => {

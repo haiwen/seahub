@@ -24,10 +24,10 @@ class Libraries extends Component {
   constructor(props) {
     super(props);
     this.sortOptions = [
-      {value: 'name-asc', text: gettext('By name ascending')},
-      {value: 'name-desc', text: gettext('By name descending')},
-      {value: 'time-asc', text: gettext('By time ascending')},
-      {value: 'time-desc', text: gettext('By time descending')}
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'time-asc', text: gettext('By time ascending') },
+      { value: 'time-desc', text: gettext('By time descending') }
     ];
 
     this.state = {
@@ -38,7 +38,7 @@ class Libraries extends Component {
       isSortOptionsDialogOpen: false,
       isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       groupList: [],
-      sharedRepoList:[],
+      sharedRepoList: [],
       publicRepoList: [],
       isCreateRepoDialogOpen: false,
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list',
@@ -107,7 +107,7 @@ class Libraries extends Component {
         storage_name: res.data.storage_name
       });
       this.state.repoList.unshift(newRepo);
-      this.setState({repoList: this.state.repoList});
+      this.setState({ repoList: this.state.repoList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -116,7 +116,7 @@ class Libraries extends Component {
 
   onSelectSortOption = (sortOption) => {
     const [sortBy, sortOrder] = sortOption.value.split('-');
-    this.setState({sortBy, sortOrder}, () => {
+    this.setState({ sortBy, sortOrder }, () => {
       localStorage.setItem('sf_repos_sort_by', sortBy);
       localStorage.setItem('sf_repos_sort_order', sortOrder);
       const { allRepoList: repoList, groupList: groups } = this.state;
@@ -145,7 +145,7 @@ class Libraries extends Component {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repoID;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onRenameRepo = (repo, newName) => {
@@ -155,7 +155,7 @@ class Libraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onMonitorRepo = (repo, monitored) => {
@@ -165,14 +165,14 @@ class Libraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   toggleGuideForNewDialog = () => {
@@ -272,7 +272,7 @@ class Libraries extends Component {
                         <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                         {gettext('My Libraries')}
                         <SingleDropdownToolbar
-                          opList={[{'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog}]}
+                          opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
                         />
                       </h4>
                       {(!Utils.isDesktop() && this.state.repoList.length > 0) &&

@@ -12,16 +12,16 @@ class TrafficTableBody extends React.Component {
 
   trafficName = () => {
     let { userTrafficItem, type } = this.props;
-    switch(type) {
+    switch (type) {
       case 'user':
         if (userTrafficItem.name) {
           return (
             <a href={siteRoot + 'sys/users/' + userTrafficItem.email + '/'}>{userTrafficItem.name}</a>
           );
         }
-        return(<span>{'--'}</span>);
+        return (<span>{'--'}</span>);
       case 'org':
-        return(<span>{userTrafficItem.org_name}</span>);
+        return (<span>{userTrafficItem.org_name}</span>);
     }
   };
 
@@ -35,7 +35,7 @@ class TrafficTableBody extends React.Component {
     let linkUploadSize = Utils.bytesToSize(userTrafficItem.link_file_upload);
     let linkDownloadSize = Utils.bytesToSize(userTrafficItem.link_file_download);
 
-    return(
+    return (
       <tr>
         <td>{this.trafficName()}</td>
         <td>{syncUploadSize}</td>

@@ -28,7 +28,7 @@ class DirView extends Component {
     this.fileInput = React.createRef();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.loadDirentList('/');
   }
 
@@ -37,7 +37,7 @@ class DirView extends Component {
   };
 
   toggleNewFolderDialog = () => {
-    this.setState({isNewFolderDialogOpen: !this.state.isNewFolderDialogOpen});
+    this.setState({ isNewFolderDialogOpen: !this.state.isNewFolderDialogOpen });
   };
 
   createNewFolder = (path) => {
@@ -80,7 +80,7 @@ class DirView extends Component {
         path: path,
       }, () => {
         let url = siteRoot + 'sys/libraries/' + repoID + '/' + encodeURIComponent(this.state.repoName) + Utils.encodePath(path);
-        window.history.replaceState({url: url, path: path}, path, url);
+        window.history.replaceState({ url: url, path: path }, path, url);
       });
     }).catch((error) => {
       this.setState({

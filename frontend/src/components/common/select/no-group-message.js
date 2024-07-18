@@ -4,7 +4,7 @@ import { gettext } from '../../../utils/constants';
 
 const NoGroupMessage = (props) => {
   return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
+    <div {...props.innerProps} style={{ margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' }}>{gettext('Group not found')}</div>
   );
 };
 

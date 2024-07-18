@@ -1,6 +1,6 @@
 class Group {
   constructor(object) {
-    this.id= object.id;
+    this.id = object.id;
     this.name = object.name;
     this.owner = object.owner;
     this.admins = object.admins || [];

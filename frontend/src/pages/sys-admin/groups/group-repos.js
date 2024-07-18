@@ -40,7 +40,7 @@ class Content extends Component {
                 <th width="30%">{gettext('Name')}</th>
                 <th width="30%">{gettext('Size')}</th>
                 <th width="25%">{gettext('Shared By')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -82,18 +82,18 @@ class Item extends Component {
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   toggleUnshareRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen});
+    this.setState({ isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen });
   };
 
   unshareRepo = () => {
@@ -171,7 +171,7 @@ class GroupRepos extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminListGroupRepos(this.props.groupID).then((res) => {
       this.setState({
         loading: false,

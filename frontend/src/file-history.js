@@ -20,7 +20,7 @@ class FileHistory extends React.Component {
     };
   }
 
-  setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
+  setDiffContent = (newMarkdownContent, oldMarkdownContent) => {
     this.setState({
       renderingContent: false,
       newMarkdownContent: newMarkdownContent,
@@ -29,8 +29,8 @@ class FileHistory extends React.Component {
   };
 
 
-  onHistoryItemClick = (item, preItem)=> {
-    this.setState({renderingContent: true});
+  onHistoryItemClick = (item, preItem) => {
+    this.setState({ renderingContent: true });
     seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path).then((res) => {
       axios.all([
         seafileAPI.getFileContent(res.data),

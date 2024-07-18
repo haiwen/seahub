@@ -18,11 +18,11 @@ class GroupItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteShareItem = () => {
@@ -127,7 +127,7 @@ class SysAdminShareToGroup extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   componentDidMount() {
@@ -166,7 +166,7 @@ class SysAdminShareToGroup extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   shareToGroup = () => {
@@ -228,7 +228,7 @@ class SysAdminShareToGroup extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({sharedItems: sharedItems});
+    this.setState({ sharedItems: sharedItems });
   };
 
   render() {

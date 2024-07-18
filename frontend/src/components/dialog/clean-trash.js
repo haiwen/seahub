@@ -17,10 +17,10 @@ class CleanTrash extends React.Component {
   constructor(props) {
     super(props);
     this.options = [
-      {label: gettext('3 days ago'), value: 3},
-      {label: gettext('1 week ago'), value: 7},
-      {label: gettext('1 month ago'), value: 30},
-      {label: gettext('all'), value: 0}
+      { label: gettext('3 days ago'), value: 3 },
+      { label: gettext('1 week ago'), value: 7 },
+      { label: gettext('1 month ago'), value: 30 },
+      { label: gettext('all'), value: 0 }
     ];
     this.state = {
       inputValue: this.options[0],

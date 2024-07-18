@@ -298,7 +298,8 @@ class ShareToInvitePeople extends React.Component {
               </td>
               <td>
                 <Button color="primary" onClick={this.shareAndInvite} className="submit-btn" disabled={isSubmitting}
-                >{isSubmitting ? <Loading /> : gettext('Submit')}</Button>
+                >{isSubmitting ? <Loading /> : gettext('Submit')}
+                </Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&

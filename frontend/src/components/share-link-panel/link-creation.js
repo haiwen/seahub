@@ -83,22 +83,22 @@ class LinkCreation extends React.Component {
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({password: passwd});
+    this.setState({ password: passwd });
   };
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({passwdnew: passwd});
+    this.setState({ passwdnew: passwd });
   };
 
   setPermission = (e) => {
-    this.setState({currentPermission: e.target.value});
+    this.setState({ currentPermission: e.target.value });
   };
 
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
-      this.setState({errorInfo: ''});
+      this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
       let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
 
@@ -135,7 +135,7 @@ class LinkCreation extends React.Component {
         let resp_data = error.response.data;
         let errMessage = resp_data && resp_data['error_msg'];
         if (errMessage === 'Folder permission denied.') {
-          this.setState({errorInfo: gettext('Share links cannot be generated because "Invisible", "Online Read-Write" or "Online Read-Only" is set for you on some folder(s) in the library.')});
+          this.setState({ errorInfo: gettext('Share links cannot be generated because "Invisible", "Online Read-Write" or "Online Read-Only" is set for you on some folder(s) in the library.') });
         } else {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
@@ -145,12 +145,12 @@ class LinkCreation extends React.Component {
   };
 
   onExpireChecked = (e) => {
-    this.setState({isExpireChecked: e.target.checked});
+    this.setState({ isExpireChecked: e.target.checked });
   };
 
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
-    this.setState({expireDays: day});
+    this.setState({ expireDays: day });
   };
 
   validateParamsInput = () => {
@@ -159,30 +159,30 @@ class LinkCreation extends React.Component {
 
     if (type == 'batch') {
       if (!Number.isInteger(parseInt(linkAmount)) || parseInt(linkAmount) <= 1) {
-        this.setState({errorInfo: gettext('Please enter an integer bigger than 1 as number of links.')});
+        this.setState({ errorInfo: gettext('Please enter an integer bigger than 1 as number of links.') });
         return false;
       }
       if (parseInt(linkAmount) > SHARE_LINK_MAX_NUMBER) {
-        this.setState({errorInfo: gettext('Please enter an integer not bigger than {max_number} as number of links.').replace('{max_number}', SHARE_LINK_MAX_NUMBER)});
+        this.setState({ errorInfo: gettext('Please enter an integer not bigger than {max_number} as number of links.').replace('{max_number}', SHARE_LINK_MAX_NUMBER) });
         return false;
       }
     }
 
     if (type == 'single' && isShowPasswordInput) {
       if (password.length === 0) {
-        this.setState({errorInfo: gettext('Please enter a password.')});
+        this.setState({ errorInfo: gettext('Please enter a password.') });
         return false;
       }
       if (password.length < shareLinkPasswordMinLength) {
-        this.setState({errorInfo: gettext('The password is too short.')});
+        this.setState({ errorInfo: gettext('The password is too short.') });
         return false;
       }
       if (password !== passwdnew) {
-        this.setState({errorInfo: gettext('Passwords don\'t match')});
+        this.setState({ errorInfo: gettext('Passwords don\'t match') });
         return false;
       }
       if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
-        this.setState({errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)});
+        this.setState({ errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel) });
         return false;
       }
     }
@@ -190,7 +190,7 @@ class LinkCreation extends React.Component {
     if (isExpireChecked) {
       if (expType == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: gettext('Please select an expiration time')});
+          this.setState({ errorInfo: gettext('Please select an expiration time') });
           return false;
         }
         return true;
@@ -199,11 +199,11 @@ class LinkCreation extends React.Component {
       // by days
       let reg = /^\d+$/;
       if (!expireDays) {
-        this.setState({errorInfo: gettext('Please enter days')});
+        this.setState({ errorInfo: gettext('Please enter days') });
         return false;
       }
       if (!reg.test(expireDays)) {
-        this.setState({errorInfo: gettext('Please enter a non-negative integer')});
+        this.setState({ errorInfo: gettext('Please enter a non-negative integer') });
         return false;
       }
 
@@ -213,26 +213,26 @@ class LinkCreation extends React.Component {
 
       if (minDays !== 0 && maxDays == 0) {
         if (expireDays < minDays) {
-          this.setState({errorInfo: 'Please enter valid days'});
+          this.setState({ errorInfo: 'Please enter valid days' });
           return false;
         }
       }
 
       if (minDays === 0 && maxDays !== 0 ) {
         if (expireDays > maxDays) {
-          this.setState({errorInfo: 'Please enter valid days'});
+          this.setState({ errorInfo: 'Please enter valid days' });
           return false;
         }
       }
 
       if (minDays !== 0 && maxDays !== 0) {
         if (expireDays < minDays || expireDays > maxDays) {
-          this.setState({errorInfo: 'Please enter valid days'});
+          this.setState({ errorInfo: 'Please enter valid days' });
           return false;
         }
       }
 
-      this.setState({expireDays: expireDays});
+      this.setState({ expireDays: expireDays });
     }
 
     return true;
@@ -249,7 +249,7 @@ class LinkCreation extends React.Component {
   };
 
   render() {
-    const { userPerm, type, permissionOptions  } = this.props;
+    const { userPerm, type, permissionOptions } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     return (
@@ -257,13 +257,14 @@ class LinkCreation extends React.Component {
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
             <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
-            {type == 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}</h6>
+            {type == 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}
+          </h6>
         </div>
         <Form className="pt-4">
           {type == 'batch' && (
             <FormGroup>
               <Label for="link-number" className="p-0">{gettext('Number of links')}</Label>
-              <Input type="number" id="link-number" value={this.state.linkAmount} onChange={this.onLinkAmountChange} style={{width: inputWidth}} />
+              <Input type="number" id="link-number" value={this.state.linkAmount} onChange={this.onLinkAmountChange} style={{ width: inputWidth }} />
             </FormGroup>
           )}
           <FormGroup check>
@@ -283,11 +284,11 @@ class LinkCreation extends React.Component {
                 <FormGroup>
                   <Label for="passwd">{gettext('Password')}</Label>
                   <span className="tip">{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', shareLinkPasswordMinLength).replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)}</span>
-                  <InputGroup style={{width: inputWidth}}>
+                  <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
                     <InputGroupAddon addonType="append">
                       <Button onClick={this.togglePasswordVisible}>
-                        <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '': '-slash'}`}></i>
+                        <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
                       </Button>
                       <Button onClick={this.generatePassword}>
                         <i className="link-operation-icon sf3-font sf3-font-magic"></i>
@@ -297,7 +298,7 @@ class LinkCreation extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <Label for="passwd-again">{gettext('Password again')}</Label>
-                  <Input id="passwd-again" style={{width: inputWidth}} type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+                  <Input id="passwd-again" style={{ width: inputWidth }} type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
                 </FormGroup>
               </div>
             }

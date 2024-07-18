@@ -50,7 +50,7 @@ class SidePanel extends Component {
     }
   };
 
-  addPageInside = async ({ parentPageId, page_id, name, icon, path, docUuid, successCallback, errorCallback}) => {
+  addPageInside = async ({ parentPageId, page_id, name, icon, path, docUuid, successCallback, errorCallback }) => {
     const newPage = new Page({ id: page_id, name, icon, path, docUuid });
     this.addPage(newPage, parentPageId, successCallback, errorCallback);
   };

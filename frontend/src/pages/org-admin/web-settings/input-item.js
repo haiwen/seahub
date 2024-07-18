@@ -8,7 +8,7 @@ const propTypes = {
   inputType: PropTypes.string,
   saveSetting: PropTypes.func.isRequired,
   keyText: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   helpTip: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
@@ -25,7 +25,7 @@ class WebSettingInput extends Component {
   }
 
   toggleBtns = () => {
-    this.setState({isBtnsShown: !this.state.isBtnsShown});
+    this.setState({ isBtnsShown: !this.state.isBtnsShown });
   };
 
   hideBtns = (e) => {
@@ -33,7 +33,7 @@ class WebSettingInput extends Component {
       return;
     }
     if (this.props.value != this.state.value) {
-      this.setState({value: this.props.value});
+      this.setState({ value: this.props.value });
     }
     this.toggleBtns();
   };

@@ -60,7 +60,7 @@ export default class VirtualTagColor extends React.Component {
         <span
           id={`tag-${id}-color`}
           className="tag-color cursor-pointer rounded-circle d-flex align-items-center justify-content-center"
-          style={{backgroundColor: tagColor}}
+          style={{ backgroundColor: tagColor }}
           onClick={this.togglePopover}
         >
           <i className="sf3-font sf3-font-down text-white"></i>
@@ -74,12 +74,12 @@ export default class VirtualTagColor extends React.Component {
         >
           <PopoverBody className="p-2">
             <div className="d-flex justify-content-between">
-              {colorList.map((item, index)=>{
+              {colorList.map((item, index) => {
                 return (
                   <div key={index} className="tag-color-option mx-1">
                     <label className="colorinput">
                       <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked={item == tagColor} onClick={this.selectTagColor} />
-                      <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{backgroundColor: item}}>
+                      <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: item }}>
                         <i className="sf2-icon-tick color-selected"></i>
                       </span>
                     </label>

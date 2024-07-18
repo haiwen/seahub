@@ -72,7 +72,7 @@ class Content extends Component {
       <table className="table-hover">
         <thead>
           <tr>
-            <th width="4%">{/*icon*/}</th>
+            <th width="4%">{/* icon*/}</th>
             <th width="30%">{gettext('Name')}</th>
             <th width="26%">{gettext('Owner')}</th>
             <th width="15%">{gettext('Size')}</th>

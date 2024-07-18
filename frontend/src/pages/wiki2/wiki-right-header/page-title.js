@@ -102,7 +102,7 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
       {currentPageConfig.icon && (
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}
-      <div className={classnames('wiki-page-controller', {'show': isShowController})}>
+      <div className={classnames('wiki-page-controller', { 'show': isShowController })}>
         {!currentPageConfig.icon && (
           <div className='wiki-page-controller-item' onClick={handleAddIcon}>
             <i className='sf3-font sf3-font-icon'></i>

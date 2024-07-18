@@ -17,7 +17,7 @@ class TreeViewItem extends React.Component {
 
   constructor(props) {
     super(props);
-    let filePath = this.props.filePath ?  this.props.filePath +  '/' + this.props.node.object.name : this.props.node.path;
+    let filePath = this.props.filePath ? this.props.filePath + '/' + this.props.node.object.name : this.props.node.path;
 
     this.state = {
       filePath: filePath,
@@ -35,7 +35,7 @@ class TreeViewItem extends React.Component {
   };
 
   onItemClick = (e) => {
-    e.stopPropagation();  // need prevent event popup
+    e.stopPropagation(); // need prevent event popup
     let isCurrentRepo = false;
     if (this.props.selectedRepo) {
       isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
@@ -59,7 +59,7 @@ class TreeViewItem extends React.Component {
     if (!node.hasChildren()) {
       return '';
     }
-    return(
+    return (
       <div className="list-view-content">
         {node.children.map(item => {
           return (
@@ -99,7 +99,7 @@ class TreeViewItem extends React.Component {
 
     return (
       <div className="file-chooser-item">
-        <div className={`${node.path === '/'? 'hide': ''}`}>
+        <div className={`${node.path === '/' ? 'hide' : ''}`}>
           <div className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`} onClick={this.onItemClick}>
             <div className="item-text">
               <span className="name user-select-none ellipsis" title={node.object && node.object.name}>{node.object && node.object.name}</span>

@@ -28,11 +28,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPageList = () => {
@@ -73,7 +73,7 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="5%">{/*icon*/}</th>
+                <th width="5%">{/* icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">
                   {sortBy != undefined ?
@@ -86,7 +86,7 @@ class Content extends Component {
                 </th>
                 <th width="32%">ID</th>
                 <th width="18%">{gettext('Owner')}</th>
-                <th width="5%">{/*Operations*/}</th>
+                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -165,7 +165,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
 
-      this.setState({isRepoDeleted: false});
+      this.setState({ isRepoDeleted: false });
     });
   };
 
@@ -208,7 +208,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Share':
         this.toggleShareDialog();
         break;
@@ -227,19 +227,19 @@ class Item extends Component {
   };
 
   toggleShareDialog = () => {
-    this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
+    this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
   };
 
   toggleDeleteDialog = () => {
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   toggleTransferDialog = () => {
-    this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
+    this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
   toggleHistorySettingDialog = () => {
-    this.setState({isHistorySettingDialogOpen: !this.state.isHistorySettingDialogOpen});
+    this.setState({ isHistorySettingDialogOpen: !this.state.isHistorySettingDialogOpen });
   };
 
   renderRepoName = () => {
@@ -257,7 +257,7 @@ class Item extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Share':
         translateResult = gettext('Share');
         break;
@@ -293,7 +293,7 @@ class Item extends Component {
     return operations;
   };
 
-  render () {
+  render() {
     const { repo } = this.props;
     const {
       isOpIconShown,

@@ -29,9 +29,9 @@ export const EVENT_BUS_TYPE = {
 
   // modify view
   MODIFY_FILTERS: 'modify_filters',
-  MODIFY_SORTS:'modify_sorts',
-  MODIFY_GROUPBYS:'modify_groupbys',
-  MODIFY_HIDDEN_COLUMNS:'modify_hidden_columns',
+  MODIFY_SORTS: 'modify_sorts',
+  MODIFY_GROUPBYS: 'modify_groupbys',
+  MODIFY_HIDDEN_COLUMNS: 'modify_hidden_columns',
 
   // change
   VIEW_CHANGED: 'view_changed',

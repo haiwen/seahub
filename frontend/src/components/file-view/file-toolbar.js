@@ -50,19 +50,19 @@ class FileToolbar extends React.Component {
         this.customPermission = permissionRes.data.permission;
         // share dialog need a global custom_permission
         window.custom_permission = this.customPermission;
-        this.setState({isLoading: false});
-      } catch(error) {
+        this.setState({ isLoading: false });
+      } catch (error) {
         let errorMsg = Utils.getErrorMsg(error);
         toaster.danger(errorMsg);
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
       }
     } else {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }
   }
 
   toggleShareDialog = () => {
-    this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
+    this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
   };
 
   toggleMoreOpMenu = () => {
@@ -85,7 +85,7 @@ class FileToolbar extends React.Component {
     const { isLocked, lockedByMe } = this.props;
     const { moreDropdownOpen } = this.state;
     let showLockUnlockBtn = false;
-    let lockUnlockText, lockUnlockIcon;
+    let lockUnlockText; let lockUnlockIcon;
     if (canLockUnlockFile) {
       if (!isLocked) {
         showLockUnlockBtn = true;

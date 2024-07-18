@@ -21,7 +21,7 @@ class SearchGroups extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let params = (new URL(document.location)).searchParams;
     this.setState({
       name: params.get('name') || ''
@@ -121,7 +121,7 @@ class SearchGroups extends Component {
                     </Col>
                   </FormGroup>
                   <FormGroup row>
-                    <Col sm={{size: 5, offset: 1}}>
+                    <Col sm={{ size: 5, offset: 1 }}>
                       <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getGroups}>{gettext('Submit')}</button>
                     </Col>
                   </FormGroup>

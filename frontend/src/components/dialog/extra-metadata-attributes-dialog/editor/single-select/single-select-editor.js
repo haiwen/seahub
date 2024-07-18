@@ -111,7 +111,7 @@ class SingleSelectEditor extends Component {
               const style = {
                 backgroundColor: option.color,
                 color: option.textColor || null,
-                maxWidth: Math.max(200 - 62,  column.width ? column.width  -62 : 0)
+                maxWidth: Math.max(200 - 62, column.width ? column.width - 62 : 0)
               };
               return (
                 <div className="single-select-option-container" key={option.id} onClick={this.onSelectOption.bind(this, isSelected ? null : option.id)}>

@@ -36,7 +36,7 @@ class Picker extends React.Component {
         onChange={props.onChange}
       >
         {
-          ({value}) => {
+          ({ value }) => {
             return (
               <span>
                 <input

@@ -14,9 +14,9 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'info', urlPart: 'info', text: gettext('Info')},
-      {name: 'members', urlPart: 'members', text: gettext('Members')},
-      {name: 'admins', urlPart: 'admins', text: gettext('Admins')},
+      { name: 'info', urlPart: 'info', text: gettext('Info') },
+      { name: 'members', urlPart: 'members', text: gettext('Members') },
+      { name: 'admins', urlPart: 'admins', text: gettext('Admins') },
     ];
   }
 

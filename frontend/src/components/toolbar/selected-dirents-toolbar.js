@@ -60,11 +60,11 @@ class MultipleDirOperationToolbar extends React.Component {
   }
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onItemsDelete = () => {
@@ -76,8 +76,8 @@ class MultipleDirOperationToolbar extends React.Component {
     if (selectedDirentList.length) {
       if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
         let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
-        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
-        location.href= url;
+        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+        location.href = url;
         return;
       }
       if (!useGoFileserver) {

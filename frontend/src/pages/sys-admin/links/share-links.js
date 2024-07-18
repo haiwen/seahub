@@ -71,7 +71,7 @@ class Content extends Component {
                   <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByCount}>{gettext('Count')} {sortBy == 'view_cnt' ? sortIcon : initialSortIcon}</a>
                 </th>
                 <th width="11%">{gettext('Expiration')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             </thead>
             {items &&
@@ -196,7 +196,7 @@ class ShareLinks extends Component {
     this.initPage = 1;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage, sortBy, sortOrder } = this.state;
     this.setState({
@@ -249,7 +249,7 @@ class ShareLinks extends Component {
       let newShareLinkList = this.state.shareLinkList.filter(item =>
         item.token != linkToken
       );
-      this.setState({shareLinkList: newShareLinkList});
+      this.setState({ shareLinkList: newShareLinkList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

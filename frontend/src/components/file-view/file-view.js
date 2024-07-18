@@ -44,7 +44,7 @@ class FileView extends React.Component {
   }
 
   toggleDetailsPanel = () => {
-    this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
+    this.setState({ isDetailsPanelOpen: !this.state.isDetailsPanelOpen });
   };
 
   toggleStar = () => {
@@ -120,7 +120,7 @@ class FileView extends React.Component {
             repoID={repoID}
             repoName={repoName}
             path={parentDir}
-            dirent={{'name': fileName, type: 'file'}}
+            dirent={{ 'name': fileName, type: 'file' }}
             togglePanel={this.toggleDetailsPanel}
           />
           }

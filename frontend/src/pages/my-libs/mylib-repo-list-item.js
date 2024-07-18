@@ -87,7 +87,7 @@ class MylibRepoListItem extends React.Component {
   };
 
   onMenuItemClick = (item) => {
-    switch(item) {
+    switch (item) {
       case 'Star':
       case 'Unstar':
         this.onToggleStarRepo();
@@ -153,7 +153,7 @@ class MylibRepoListItem extends React.Component {
     const repoName = this.props.repo.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -163,7 +163,7 @@ class MylibRepoListItem extends React.Component {
       });
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -200,57 +200,57 @@ class MylibRepoListItem extends React.Component {
     if (e != undefined) {
       e.preventDefault();
     }
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onDeleteToggle = (e) => {
     e.preventDefault();
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+    this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
   };
 
   onRenameToggle = () => {
     this.props.onFreezedItem();
-    this.setState({isRenaming: !this.state.isRenaming});
+    this.setState({ isRenaming: !this.state.isRenaming });
   };
 
   onTransferToggle = () => {
-    this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
+    this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
   onHistorySettingToggle = () => {
-    this.setState({isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow});
+    this.setState({ isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow });
   };
 
   onChangePasswordToggle = () => {
-    this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
+    this.setState({ isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow });
   };
 
   onResetPasswordToggle = () => {
-    this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
+    this.setState({ isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow });
   };
 
   onLabelToggle = () => {
-    this.setState({isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen});
+    this.setState({ isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen });
   };
 
   onFolderPermissionToggle = () => {
-    this.setState({isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow});
+    this.setState({ isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow });
   };
 
   onAPITokenToggle = () => {
-    this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
+    this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
   };
 
   onSeaTableIntegrationToggle = () => {
-    this.setState({isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow});
+    this.setState({ isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow });
   };
 
   toggleRepoShareAdminDialog = () => {
-    this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
+    this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
 
   toggleOldFilesAutoDelDialog = () => {
-    this.setState({isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen});
+    this.setState({ isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen });
   };
 
   onUnfreezedItem = () => {
@@ -275,7 +275,7 @@ class MylibRepoListItem extends React.Component {
 
   onRenameCancel = () => {
     this.props.onUnfreezedItem();
-    this.setState({isRenaming: !this.state.isRenaming});
+    this.setState({ isRenaming: !this.state.isRenaming });
   };
 
   onTransferRepo = (user) => {
@@ -286,9 +286,9 @@ class MylibRepoListItem extends React.Component {
       toaster.success(message);
     }).catch(error => {
       if (error.response) {
-        toaster.danger(error.response.data.error_msg || gettext('Error'), {duration: 3});
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
       } else {
-        toaster.danger(gettext('Failed. Please check the network.'), {duration: 3});
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
       }
     });
     this.onTransferToggle();
@@ -314,7 +314,7 @@ class MylibRepoListItem extends React.Component {
       }
       toaster.danger(errMessage);
 
-      this.setState({isRepoDeleted: false});
+      this.setState({ isRepoDeleted: false });
     });
   };
 
@@ -334,7 +334,8 @@ class MylibRepoListItem extends React.Component {
             aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.onToggleStarRepo}
             className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-          ></i>
+          >
+          </i>
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
@@ -434,7 +435,7 @@ class MylibRepoListItem extends React.Component {
     let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td onClick={this.visitRepo}>
           {this.state.isRenaming && (

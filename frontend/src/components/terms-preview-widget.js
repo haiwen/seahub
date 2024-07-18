@@ -54,7 +54,7 @@ class TermsPreviewWidget extends React.Component {
 
     return (
       <div className="conditions-preview-container" onClick={this.props.onContentClick}>
-        <div dangerouslySetInnerHTML={{__html: this.state.innerHtml}}></div>
+        <div dangerouslySetInnerHTML={{ __html: this.state.innerHtml }}></div>
       </div>
     );
   }

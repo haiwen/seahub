@@ -15,14 +15,14 @@ class WikiDirListView extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     return (
-      <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+      <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
         <thead>
           {isDesktop ? (
             <tr>
-              <th style={{width: '4%'}}></th>
-              <th style={{width: '66%'}}>{gettext('Name')}</th>
-              <th style={{width: '15%'}}>{gettext('Size')}</th>
-              <th style={{width: '15%'}}>{gettext('Last Update')}</th>
+              <th style={{ width: '4%' }}></th>
+              <th style={{ width: '66%' }}>{gettext('Name')}</th>
+              <th style={{ width: '15%' }}>{gettext('Size')}</th>
+              <th style={{ width: '15%' }}>{gettext('Last Update')}</th>
             </tr>
           ) : (
             <tr>

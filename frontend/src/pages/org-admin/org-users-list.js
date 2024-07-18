@@ -25,11 +25,11 @@ class OrgUsersList extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   toggleItemFreezed = (isFreezed) => {
@@ -75,7 +75,7 @@ class OrgUsersList extends React.Component {
                 <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
               </th>
               <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
-              <th width="10%">{/*Operations*/}</th>
+              <th width="10%">{/* Operations*/}</th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +96,7 @@ class OrgUsersList extends React.Component {
           </tbody>
         </table>
         <div className="paginator">
-          {page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+          {page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
           {(page != 1 && pageNext) && <span> | </span>}
           {pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
         </div>

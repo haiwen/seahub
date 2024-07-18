@@ -127,7 +127,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
                 <DropdownItem
                   onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}
-                >{'导入部门'}</DropdownItem>
+                >{'导入部门'}
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
             }

@@ -4,10 +4,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
-import { resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
+import { gettext, resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext } from '../../utils/constants';
 import UploadProgressDialog from './upload-progress-dialog';
 import toaster from '../../components/toast';
 
@@ -145,7 +144,7 @@ class FileUploader extends React.Component {
   maxFileSizeErrorCallback = (file) => {
     let { forbidUploadFileList } = this.state;
     forbidUploadFileList.push(file);
-    this.setState({forbidUploadFileList: forbidUploadFileList});
+    this.setState({ forbidUploadFileList: forbidUploadFileList });
   };
 
   onChunkingComplete = (resumableFile) => {
@@ -156,12 +155,12 @@ class FileUploader extends React.Component {
 
     resumableFile.formData = {};
     if (isFile) { // upload file
-      resumableFile.formData  = {
+      resumableFile.formData = {
         parent_dir: path,
       };
     } else { // upload folder
       let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
-      resumableFile.formData  = {
+      resumableFile.formData = {
         parent_dir: path,
         relative_path: relative_path
       };
@@ -303,7 +302,7 @@ class FileUploader extends React.Component {
 
   onProgress = () => {
     let progress = Math.round(this.resumable.progress() * 100);
-    this.setState({totalProgress: progress});
+    this.setState({ totalProgress: progress });
     Utils.registerGlobalVariable('uploader', 'totalProgress', progress);
   };
 
@@ -336,7 +335,7 @@ class FileUploader extends React.Component {
         }
         return item;
       });
-      this.setState({uploadFileList: uploadFileList});
+      this.setState({ uploadFileList: uploadFileList });
 
       return;
     }
@@ -358,7 +357,7 @@ class FileUploader extends React.Component {
         }
         return item;
       });
-      this.setState({uploadFileList: uploadFileList});
+      this.setState({ uploadFileList: uploadFileList });
 
       return;
     }
@@ -380,7 +379,7 @@ class FileUploader extends React.Component {
       }
       return item;
     });
-    this.setState({uploadFileList: uploadFileList});
+    this.setState({ uploadFileList: uploadFileList });
   };
 
   onFileError = (resumableFile, message) => {
@@ -390,7 +389,7 @@ class FileUploader extends React.Component {
     } else {
       // eg: '{"error": "Internal error" \n }'
       let errorMessage = message.replace(/\n/g, '');
-      errorMessage  = JSON.parse(errorMessage);
+      errorMessage = JSON.parse(errorMessage);
       error = errorMessage.error;
       if (error === 'File locked by others.') {
         error = gettext('File is locked by others.');
@@ -408,7 +407,7 @@ class FileUploader extends React.Component {
       return item;
     });
 
-    this.loaded = 0;  // reset loaded data;
+    this.loaded = 0; // reset loaded data;
     this.setState({
       retryFileList: this.state.retryFileList,
       uploadFileList: uploadFileList
@@ -435,7 +434,7 @@ class FileUploader extends React.Component {
       msg = gettext('Failed to upload {file_name}.')
         .replace('{file_name}', file.fileName);
     }
-    toaster.danger(msg, {'id': 'file-error-msg'});
+    toaster.danger(msg, { 'id': 'file-error-msg' });
     this.error = true;
 
     // reset upload link loaded
@@ -470,7 +469,7 @@ class FileUploader extends React.Component {
   };
 
   generateUniqueIdentifier = (file) => {
-    let relativePath = file.webkitRelativePath||file.relativePath||file.fileName||file.name;
+    let relativePath = file.webkitRelativePath || file.relativePath || file.fileName || file.name;
     return MD5(relativePath + new Date()) + relativePath;
   };
 
@@ -498,7 +497,7 @@ class FileUploader extends React.Component {
     this.resumable.files = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    this.setState({isUploadProgressDialogShow: false, uploadFileList: [], forbidUploadFileList: []});
+    this.setState({ isUploadProgressDialogShow: false, uploadFileList: [], forbidUploadFileList: [] });
     Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
   };
 
@@ -519,7 +518,7 @@ class FileUploader extends React.Component {
       this.loaded = 0;
     }
 
-    this.setState({uploadFileList: uploadFileList});
+    this.setState({ uploadFileList: uploadFileList });
   };
 
   onCancelAllUploading = () => {
@@ -614,7 +613,7 @@ class FileUploader extends React.Component {
   };
 
   cancelFileUpload = () => {
-    this.resumable.files.pop(); //delete latest file；
+    this.resumable.files.pop(); // delete latest file；
   };
 
   render() {

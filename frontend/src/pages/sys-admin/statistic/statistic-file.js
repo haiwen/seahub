@@ -26,11 +26,11 @@ class StatisticFile extends React.Component {
   getActiviesFiles = (startTime, endTime, groupBy) => {
     let { filesData } = this.state;
     seafileAPI.sysAdminStatisticFiles(startTime, endTime, groupBy).then((res) => {
-      let labels = [],
-        added = [],
-        deleted = [],
-        visited = [],
-        modified = [];
+      let labels = [];
+      let added = [];
+      let deleted = [];
+      let visited = [];
+      let modified = [];
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
@@ -44,22 +44,22 @@ class StatisticFile extends React.Component {
           label: gettext('Added'),
           data: added,
           borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b'};
+          backgroundColor: '#57cd6b' };
         let visitedData = {
           label: gettext('Visited'),
           data: visited,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         let modifiedData = {
           label: gettext('Modified'),
           data: modified,
           borderColor: '#72c3fc',
-          backgroundColor: '#72c3fc'};
+          backgroundColor: '#72c3fc' };
         let deletedData = {
           label: gettext('Deleted'),
           data: deleted,
           borderColor: '#f75356',
-          backgroundColor: '#f75356'};
+          backgroundColor: '#f75356' };
         filesData = [visitedData, addedData, modifiedData, deletedData];
       }
       this.setState({
@@ -76,7 +76,7 @@ class StatisticFile extends React.Component {
   render() {
     let { labels, filesData, isLoading } = this.state;
 
-    return(
+    return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">

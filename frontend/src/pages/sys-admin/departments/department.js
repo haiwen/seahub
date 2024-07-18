@@ -40,9 +40,9 @@ class Department extends React.Component {
     };
 
     this.navItems = [
-      {name: 'subDepartments', urlPart: '/', text: gettext('Sub-departments')},
-      {name: 'members', urlPart: '/members/', text: gettext('Members')},
-      {name: 'repos', urlPart: '/libraries/', text: gettext('Libraries')}
+      { name: 'subDepartments', urlPart: '/', text: gettext('Sub-departments') },
+      { name: 'members', urlPart: '/members/', text: gettext('Members') },
+      { name: 'repos', urlPart: '/libraries/', text: gettext('Libraries') }
     ];
   }
 
@@ -88,7 +88,7 @@ class Department extends React.Component {
   };
 
   toggleAddDepartmentDialog = () => {
-    this.setState({ isShowAddDepartmentDialog: !this.state.isShowAddDepartmentDialog});
+    this.setState({ isShowAddDepartmentDialog: !this.state.isShowAddDepartmentDialog });
   };
 
   render() {

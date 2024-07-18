@@ -80,18 +80,18 @@ class Item extends Component {
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   deleteGroup = () => {
@@ -155,7 +155,7 @@ class OrgGroups extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
@@ -179,7 +179,7 @@ class OrgGroups extends Component {
       let newGroupList = this.state.groupList.filter(item => {
         return item.group_id != groupID;
       });
-      this.setState({groupList: newGroupList});
+      this.setState({ groupList: newGroupList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -216,7 +216,6 @@ class OrgGroups extends Component {
 OrgGroups.propTypes = {
   orgID: PropTypes.string,
 };
-
 
 
 export default OrgGroups;

@@ -40,7 +40,7 @@ class PublicSharedView extends React.Component {
 
   componentDidMount() {
     if (!this.props.repoList) {
-      seafileAPI.listRepos({type:'public'}).then((res) => {
+      seafileAPI.listRepos({ type: 'public' }).then((res) => {
         let repoList = res.data.repos.map((item) => {
           return new Repo(item);
         });
@@ -63,11 +63,11 @@ class PublicSharedView extends React.Component {
   }
 
   onItemUnshare = (repo) => {
-    seafileAPI.unshareRepo(repo.repo_id, {share_type: 'public'}).then(() => {
+    seafileAPI.unshareRepo(repo.repo_id, { share_type: 'public' }).then(() => {
       let repoList = this.state.repoList.filter(item => {
         return item.repo_id !== repo.repo_id;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
       let message = gettext('Successfully unshared {name}').replace('{name}', repo.repo_name);
       toaster.success(message);
     }).catch(error => {
@@ -100,7 +100,7 @@ class PublicSharedView extends React.Component {
 
     let newRepoList = this.state.repoList.map(item => {return item;});
     newRepoList.unshift(repo);
-    this.setState({repoList: newRepoList});
+    this.setState({ repoList: newRepoList });
   };
 
   sortItems = (sortBy, sortOrder) => {
@@ -160,11 +160,11 @@ class PublicSharedView extends React.Component {
   };
 
   onCreateRepoToggle = () => {
-    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
   };
 
   onSelectRepoToggle = () => {
-    this.setState({isSelectRepoDialogOpen: !this.state.isSelectRepoDialogOpen});
+    this.setState({ isSelectRepoDialogOpen: !this.state.isSelectRepoDialogOpen });
   };
 
   onCreateRepo = (repo) => {
@@ -190,7 +190,7 @@ class PublicSharedView extends React.Component {
 
   onRepoSelectedHandler = (selectedRepoList) => {
     selectedRepoList.forEach(repo => {
-      seafileAPI.selectOwnedRepoToPublic(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
+      seafileAPI.selectOwnedRepoToPublic(repo.repo_id, { share_type: 'public', permission: repo.sharePermission }).then(() => {
         this.addRepoItem(repo);
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
@@ -227,8 +227,8 @@ class PublicSharedView extends React.Component {
                 {canAddPublicRepo &&
                 <SingleDropdownToolbar
                   opList={[
-                    {'text': gettext('Share existing libraries'), 'onClick': this.onSelectRepoToggle},
-                    {'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle}
+                    { 'text': gettext('Share existing libraries'), 'onClick': this.onSelectRepoToggle },
+                    { 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle }
                   ]}
                 />
                 }

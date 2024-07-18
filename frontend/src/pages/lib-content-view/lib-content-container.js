@@ -113,7 +113,7 @@ class LibContentContainer extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
-      this.setState({currentDirent: null});
+      this.setState({ currentDirent: null });
     }
   }
 
@@ -128,12 +128,12 @@ class LibContentContainer extends React.Component {
   };
 
   onDirentClick = (dirent) => {
-    this.setState({currentDirent: dirent});
+    this.setState({ currentDirent: dirent });
     this.props.onDirentClick(dirent);
   };
 
   onItemSelected = (dirent) => {
-    this.setState({currentDirent: dirent});
+    this.setState({ currentDirent: dirent });
     this.props.onItemSelected(dirent);
   };
 
@@ -150,7 +150,7 @@ class LibContentContainer extends React.Component {
   checkCurrentDirent = (deletedDirent) => {
     let { currentDirent } = this.state;
     if (currentDirent && deletedDirent.name === currentDirent.name) {
-      this.setState({currentDirent: null});
+      this.setState({ currentDirent: null });
     }
   };
 

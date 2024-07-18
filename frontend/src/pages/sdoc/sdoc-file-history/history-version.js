@@ -112,7 +112,7 @@ class HistoryVersion extends React.Component {
         <div className="history-info">
           {this.state.isRenameShow ?
             <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
-            :<div className="name">{name}</div>
+            : <div className="name">{name}</div>
           }
           <div className="time">{moment(ctime).format('YYYY-MM-DD HH:mm')}</div>
           <div className="owner">
@@ -155,22 +155,23 @@ class HistoryVersion extends React.Component {
                 </Modal>
               </>
             )
-            : (<Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-              <DropdownToggle
-                tag='a'
-                className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isMenuShow}
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-              />
-              <DropdownMenu>
-                {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
-                <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-                {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
-                <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            : (
+              <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
+                <DropdownToggle
+                  tag='a'
+                  className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isMenuShow}
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                />
+                <DropdownMenu>
+                  {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
+                  <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
+                  {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
+                  <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             )}
         </div>
       </li>

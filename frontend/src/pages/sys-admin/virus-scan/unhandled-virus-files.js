@@ -64,7 +64,7 @@ class VirusFileItem extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'delete':
         translateResult = gettext('Delete');
         break;
@@ -84,8 +84,8 @@ class VirusFileItem extends Component {
 
   render() {
     const virusFile = this.props.virusFile;
-    let fileStatus = '',
-      fileOpList = [];
+    let fileStatus = '';
+    let fileOpList = [];
     if (virusFile.has_deleted) {
       fileStatus = <span className="text-green">{gettext('Deleted')}</span>;
     } else if (virusFile.has_ignored) {
@@ -149,11 +149,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPage = () => {
@@ -289,7 +289,7 @@ class UnhandledVirusFiles extends Component {
 
   handleFile = (virusID, op) => {
     let request;
-    switch(op) {
+    switch (op) {
       case 'delete':
         request = seafileAPI.deleteVirusFile(virusID);
         break;

@@ -31,7 +31,7 @@ class SaveSharedFileDialog extends React.Component {
       this.props.handleSaveSharedFile();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
     });
   };
 

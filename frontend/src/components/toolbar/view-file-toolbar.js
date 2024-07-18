@@ -36,7 +36,7 @@ class ViewFileToolbar extends React.Component {
   }
 
   toggleDropdownMenu = () => {
-    this.setState({isDropdownMenuOpen: !this.state.isDropdownMenuOpen});
+    this.setState({ isDropdownMenuOpen: !this.state.isDropdownMenuOpen });
   };
 
   onDropdownToggleKeyDown = (e) => {
@@ -56,7 +56,7 @@ class ViewFileToolbar extends React.Component {
   toggleSubMenu = (e) => {
     e.stopPropagation();
     this.setState({
-      isSubMenuShown: !this.state.isSubMenuShown}, () => {
+      isSubMenuShown: !this.state.isSubMenuShown }, () => {
       this.toggleDropdownMenu();
     });
   };
@@ -82,15 +82,15 @@ class ViewFileToolbar extends React.Component {
   };
 
   toggleMore = () => {
-    this.setState({isMoreMenuShow: !this.state.isMoreMenuShow});
+    this.setState({ isMoreMenuShow: !this.state.isMoreMenuShow });
   };
 
   onShareToggle = () => {
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onEditFileTagToggle = () => {
-    this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
+    this.setState({ isEditTagDialogShow: !this.state.isEditTagDialogShow });
   };
 
   onHistoryClick = () => {
@@ -138,8 +138,8 @@ class ViewFileToolbar extends React.Component {
       }
 
       opList.push(
-        {'icon': 'tag', 'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle},
-        {'icon': 'history', 'text': gettext('History'), 'onClick': this.onHistoryClick}
+        { 'icon': 'tag', 'text': gettext('Tags'), 'onClick': this.onEditFileTagToggle },
+        { 'icon': 'history', 'text': gettext('History'), 'onClick': this.onHistoryClick }
       );
     }
 
@@ -159,7 +159,7 @@ class ViewFileToolbar extends React.Component {
             <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
-            {opList.map((item, index)=> {
+            {opList.map((item, index) => {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
               } else if (item.subOpList) {
@@ -181,7 +181,7 @@ class ViewFileToolbar extends React.Component {
                       <i className="sf3-font-down sf3-font rotate-270"></i>
                     </DropdownToggle>
                     <DropdownMenu>
-                      {item.subOpList.map((item, index)=> {
+                      {item.subOpList.map((item, index) => {
                         if (item == 'Divider') {
                           return <DropdownItem key={index} divider />;
                         } else {

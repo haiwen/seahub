@@ -132,7 +132,7 @@ class UsersTraffic extends React.Component {
         {!isLoading &&
           <TrafficTable type={'user'} sortItems={this.sortItems} sortBy={sortBy} sortOrder={sortOrder}>
             {userTrafficList.length > 0 && userTrafficList.map((item, index) => {
-              return(
+              return (
                 <TrafficTableBody
                   key={index}
                   userTrafficItem={item}

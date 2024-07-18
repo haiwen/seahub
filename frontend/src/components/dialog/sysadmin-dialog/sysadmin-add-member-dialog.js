@@ -9,7 +9,7 @@ import UserSelect from '../../user-select';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  groupID:  PropTypes.string.isRequired,
+  groupID: PropTypes.string.isRequired,
   onAddNewMembers: PropTypes.func.isRequired
 };
 

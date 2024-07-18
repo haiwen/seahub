@@ -10,7 +10,7 @@ import './list-tag-popover.css';
 const tagListItemPropTypes = {
   item: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
-  onDeleteTag : PropTypes.func.isRequired
+  onDeleteTag: PropTypes.func.isRequired
 };
 
 class TagListItem extends React.Component {
@@ -54,7 +54,8 @@ class TagListItem extends React.Component {
           onClick={this.deleteTag}
           aria-label={gettext('Delete')}
           title={gettext('Delete')}
-        ></button>
+        >
+        </button>
       </li>
     );
   }

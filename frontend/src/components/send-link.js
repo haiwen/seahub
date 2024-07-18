@@ -104,7 +104,8 @@ class SendLink extends React.Component {
             id="msg"
             value={msg}
             onChange={this.handleMsgInputChange}
-          ></textarea>
+          >
+          </textarea>
         </FormGroup>
         {errorMsg && <p className="error">{errorMsg}</p>}
         <Button color="primary" onClick={this.sendLink} disabled={btnDisabled} className="mr-2">{gettext('Send')}</Button>

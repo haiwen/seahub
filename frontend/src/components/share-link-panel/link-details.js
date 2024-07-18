@@ -63,15 +63,15 @@ class LinkDetails extends React.Component {
   };
 
   handleMouseOverExpirationEditIcon = () => {
-    this.setState({isExpirationEditIconShow: true});
+    this.setState({ isExpirationEditIconShow: true });
   };
 
   handleMouseOutExpirationEditIcon = () => {
-    this.setState({isExpirationEditIconShow: false});
+    this.setState({ isExpirationEditIconShow: false });
   };
 
   editingExpirationToggle = () => {
-    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
+    this.setState({ isEditingExpiration: !this.state.isEditingExpiration });
   };
 
   setExpType = (e) => {
@@ -88,7 +88,7 @@ class LinkDetails extends React.Component {
 
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
-    this.setState({expireDays: day});
+    this.setState({ expireDays: day });
   };
 
   updateExpiration = () => {
@@ -112,11 +112,11 @@ class LinkDetails extends React.Component {
   };
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   changePerm = (permOption) => {
@@ -131,7 +131,7 @@ class LinkDetails extends React.Component {
   };
 
   toggleLinkDeleteDialog = () => {
-    this.setState({isLinkDeleteDialogOpen: !this.state.isLinkDeleteDialogOpen});
+    this.setState({ isLinkDeleteDialogOpen: !this.state.isLinkDeleteDialogOpen });
   };
 
   toggleSendLink = () => {
@@ -190,7 +190,7 @@ class LinkDetails extends React.Component {
               <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
               <dd className="d-flex align-items-center">
                 <span className="mr-1">{this.state.storedPasswordVisible ? sharedLinkInfo.password : '***************'}</span>
-                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}></span>
+                <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}></span>
               </dd>
             </>
           )}
@@ -198,7 +198,7 @@ class LinkDetails extends React.Component {
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
               {!this.state.isEditingExpiration &&
-              <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
+              <dd style={{ width: '250px' }} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
                 {moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
                 {this.state.isExpirationEditIconShow && (
                   <a href="#"
@@ -237,7 +237,7 @@ class LinkDetails extends React.Component {
           {sharedLinkInfo.permissions && (
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
-              <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+              <dd style={{ width: '250px' }} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
                 <Selector
                   isDropdownToggleShown={isOpIconShown && !sharedLinkInfo.is_expired}
                   currentSelectedOption={currentSelectedPermOption}

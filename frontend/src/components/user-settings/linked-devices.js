@@ -44,7 +44,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
@@ -52,7 +52,7 @@ class Content extends Component {
             })}
           </tbody>
         </table>
-      ): emptyTip;
+      ) : emptyTip;
     }
   }
 }

@@ -52,7 +52,7 @@ class TreeView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
+    let dragStartNodeData = { nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path };
     dragStartNodeData = JSON.stringify(dragStartNodeData);
 
     e.dataTransfer.effectAllowed = 'move';
@@ -109,17 +109,17 @@ class TreeView extends React.Component {
     let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartNodeData = JSON.parse(dragStartNodeData);
 
-    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
+    let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartNodeData;
     let dropNodeData = node;
 
-    if (Array.isArray(dragStartNodeData)) { //move items
-      if (!dropNodeData) { //move items to root
+    if (Array.isArray(dragStartNodeData)) { // move items
+      if (!dropNodeData) { // move items to root
         if (dragStartNodeData[0].nodeParentPath === '/') {
-          this.setState({isTreeViewDropTipShow: false});
+          this.setState({ isTreeViewDropTipShow: false });
           return;
         }
         this.props.onItemsMove(this.props.currentRepoInfo, '/');
-        this.setState({isTreeViewDropTipShow: false});
+        this.setState({ isTreeViewDropTipShow: false });
         return;
       }
       this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, dropNodeData.path);
@@ -128,11 +128,11 @@ class TreeView extends React.Component {
 
     if (!dropNodeData) {
       if (nodeParentPath === '/') {
-        this.setState({isTreeViewDropTipShow: false});
+        this.setState({ isTreeViewDropTipShow: false });
         return;
       }
       this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
-      this.setState({isTreeViewDropTipShow: false});
+      this.setState({ isTreeViewDropTipShow: false });
       return;
     }
 
@@ -198,11 +198,11 @@ class TreeView extends React.Component {
   };
 
   freezeItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   unfreezeItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onMenuItemClick = (operation, node) => {

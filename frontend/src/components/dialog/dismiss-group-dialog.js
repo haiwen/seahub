@@ -14,7 +14,7 @@ class DismissGroupDialog extends React.Component {
 
   dismissGroup = () => {
     let that = this;
-    seafileAPI.deleteGroup(this.props.groupID).then((res)=> {
+    seafileAPI.deleteGroup(this.props.groupID).then((res) => {
       that.props.onGroupChanged();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -23,7 +23,7 @@ class DismissGroupDialog extends React.Component {
   };
 
   render() {
-    return(
+    return (
       <Modal isOpen={this.props.showDismissGroupDialog} toggle={this.props.toggleDismissGroupDialog}>
         <ModalHeader>{gettext('Delete Group')}</ModalHeader>
         <ModalBody>

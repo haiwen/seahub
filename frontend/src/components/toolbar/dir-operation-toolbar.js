@@ -42,11 +42,11 @@ class DirOperationToolbar extends React.Component {
   }
 
   toggleDesktopOpMenu = () => {
-    this.setState({isDesktopMenuOpen: !this.state.isDesktopMenuOpen});
+    this.setState({ isDesktopMenuOpen: !this.state.isDesktopMenuOpen });
   };
 
   toggleMobileOpMenu = () => {
-    this.setState({isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen});
+    this.setState({ isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen });
   };
 
   onUploadFile = (e) => {
@@ -64,7 +64,7 @@ class DirOperationToolbar extends React.Component {
   };
 
   onCreateFolderToggle = () => {
-    this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
+    this.setState({ isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow });
   };
 
   onCreateFileToggle = () => {
@@ -110,7 +110,7 @@ class DirOperationToolbar extends React.Component {
   };
 
   onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
+    this.setState({ isCreateFolderDialogShow: false });
     this.props.onAddFolder(dirPath);
   };
 
@@ -181,8 +181,8 @@ class DirOperationToolbar extends React.Component {
             'icon': 'upload-files',
             'text': gettext('Upload'),
             subOpList: [
-              {'text': gettext('Upload Files'), 'onClick': this.onUploadFile},
-              {'text': gettext('Upload Folder'), 'onClick': this.onUploadFolder}
+              { 'text': gettext('Upload Files'), 'onClick': this.onUploadFile },
+              { 'text': gettext('Upload Folder'), 'onClick': this.onUploadFolder }
             ]
           });
         } else {
@@ -196,16 +196,16 @@ class DirOperationToolbar extends React.Component {
 
       if (canCreate) {
         let newSubOpList = [
-          {'text': gettext('New Folder'), 'onClick': this.onCreateFolderToggle},
-          {'text': gettext('New File'), 'onClick': this.onCreateFileToggle},
+          { 'text': gettext('New Folder'), 'onClick': this.onCreateFolderToggle },
+          { 'text': gettext('New File'), 'onClick': this.onCreateFileToggle },
           'Divider',
-          {'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle},
-          {'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle},
-          {'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle},
-          {'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle}
+          { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
+          { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
+          { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
+          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle }
         ];
         if (enableSeadoc && !repoEncrypted) {
-          newSubOpList.push({'text': gettext('New SeaDoc File'), 'onClick': this.onCreateSeaDocToggle});
+          newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': this.onCreateSeaDocToggle });
         }
         opList.push({
           'icon': 'new',
@@ -237,7 +237,7 @@ class DirOperationToolbar extends React.Component {
               <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
-              {opList.map((item, index)=> {
+              {opList.map((item, index) => {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
                 } else if (item.subOpList) {
@@ -260,7 +260,7 @@ class DirOperationToolbar extends React.Component {
                         <i className="sf3-font-down sf3-font rotate-270"></i>
                       </DropdownToggle>
                       <DropdownMenu>
-                        {item.subOpList.map((item, index)=> {
+                        {item.subOpList.map((item, index) => {
                           if (item == 'Divider') {
                             return <DropdownItem key={index} divider />;
                           } else {

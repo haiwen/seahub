@@ -16,7 +16,7 @@ class ImportWorkWeixinDepartmentDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading : false,
+      isLoading: false,
     };
   }
 
@@ -26,7 +26,7 @@ class ImportWorkWeixinDepartmentDialog extends React.Component {
 
   handleSubmit = () => {
     this.props.onImportDepartmentSubmit();
-    this.setState({ isLoading : true });
+    this.setState({ isLoading: true });
   };
 
   render() {

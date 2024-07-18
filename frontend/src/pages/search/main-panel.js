@@ -77,9 +77,9 @@ class SearchViewPanel extends React.Component {
     }).catch((error) => {
       this.setState({ isLoading: false });
       if (error.response) {
-        toaster.danger(error.response.data.detail || error.response.data.error_msg || gettext('Error'), {duration: 3});
+        toaster.danger(error.response.data.detail || error.response.data.error_msg || gettext('Error'), { duration: 3 });
       } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
+        toaster.danger(gettext('Please check the network.'), { duration: 3 });
       }
     });
   };

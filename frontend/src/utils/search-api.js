@@ -37,7 +37,7 @@ class SearchAPI {
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
-        headers:form.getHeaders()
+        headers: form.getHeaders()
       });
     } else {
       return this.req.post(url, form);
@@ -46,7 +46,7 @@ class SearchAPI {
 
   searchItems(query_str, query_type, cancelToken) {
     let url = this.server + '/api2/items-search/?query_str=' + query_str + '&query_type=' + query_type;
-    return this.req.get(url, {cancelToken: cancelToken});
+    return this.req.get(url, { cancelToken: cancelToken });
   }
 
 }

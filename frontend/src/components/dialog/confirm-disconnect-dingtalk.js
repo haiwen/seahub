@@ -21,7 +21,7 @@ class ConfirmDisconnectDingtalk extends Component {
   };
 
   render() {
-    const {formActionURL, csrfToken, toggle} = this.props;
+    const { formActionURL, csrfToken, toggle } = this.props;
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
         <ModalHeader toggle={toggle}>{gettext('Disconnect')}</ModalHeader>

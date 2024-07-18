@@ -90,39 +90,39 @@ class DirentGridView extends React.Component {
 
   onGridItemClick = (dirent) => {
     hideMenu();
-    this.setState({activeDirent: dirent});
+    this.setState({ activeDirent: dirent });
     this.props.onGridItemClick(dirent);
   };
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
+    this.setState({ isCreateFolderDialogShow: false });
     this.props.onAddFolder(dirPath);
   };
 
   onItemShare = (e) => {
-    e.nativeEvent.stopImmediatePropagation(); //for document event
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    e.nativeEvent.stopImmediatePropagation(); // for document event
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   closeSharedDialog = () => {
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onItemDelete = (currentObject, e) => {
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+    e.nativeEvent.stopImmediatePropagation(); // for document event
     this.props.onItemDelete(currentObject);
   };
 
   onItemConvert = (currentObject, e, dstType) => {
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+    e.nativeEvent.stopImmediatePropagation(); // for document event
     this.props.onItemConvert(currentObject, dstType);
   };
 
@@ -136,7 +136,7 @@ class DirentGridView extends React.Component {
 
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
-    switch(operation) {
+    switch (operation) {
       case 'Download':
         this.onItemDownload(currentObject, event);
         break;
@@ -256,7 +256,7 @@ class DirentGridView extends React.Component {
         isZipDialogOpen: true
       });
     } else {
-      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
       location.href = url;
     }
   };
@@ -274,15 +274,15 @@ class DirentGridView extends React.Component {
   };
 
   onItemMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onItemCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onPermissionItem = () => {
-    this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
+    this.setState({ isPermissionDialogOpen: !this.state.isPermissionDialogOpen });
   };
 
   onLockItem = (currentObject) => {
@@ -330,7 +330,7 @@ class DirentGridView extends React.Component {
   onHistory = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
+    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: repoID, filePath: filePath });
     location.href = url;
   };
 
@@ -343,7 +343,7 @@ class DirentGridView extends React.Component {
   onOpenViaClient = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
+    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
     location.href = url;
   };
 
@@ -382,7 +382,7 @@ class DirentGridView extends React.Component {
   };
 
   closeImagePopup = () => {
-    this.setState({isImagePopupOpen: false});
+    this.setState({ isImagePopupOpen: false });
   };
 
   moveToPrevImage = () => {
@@ -481,7 +481,7 @@ class DirentGridView extends React.Component {
 
     hideMenu();
 
-    this.setState({activeDirent: currentObject});
+    this.setState({ activeDirent: currentObject });
 
     let showMenuConfig = {
       id: id,
@@ -505,7 +505,7 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    let {direntList, path} = this.props;
+    let { direntList, path } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 

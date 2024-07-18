@@ -36,7 +36,7 @@ class ShareRepoListItem extends React.Component {
         <td className="name">{repo.repo_name}</td>
         <td>{moment(repo.last_modified).fromNow()}</td>
         <td>
-          <Input style={{height: '1.5rem', padding: 0}} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>
+          <Input style={{ height: '1.5rem', padding: 0 }} type="select" name="select" onChange={this.onPermissionChange} value={repo.sharePermission}>
             <option value='rw'>{gettext('Read-Write')}</option>
             <option value='r'>{gettext('Read-Only')}</option>
           </Input>
@@ -67,13 +67,13 @@ class ShareRepoDialog extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type: 'mine'}).then(res => {
+    seafileAPI.listRepos({ type: 'mine' }).then(res => {
       let repoList = res.data.repos.map(item => {
         let repo = new Repo(item);
         repo.sharePermission = 'rw';
         return repo;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
     });
   }
 
@@ -87,7 +87,7 @@ class ShareRepoDialog extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
     }
-    this.setState({selectedRepoList: selectedRepoList});
+    this.setState({ selectedRepoList: selectedRepoList });
   };
 
   onPermissionChange = (repo, permission) => {
@@ -97,13 +97,13 @@ class ShareRepoDialog extends React.Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   handleSubmit = () => {
     if (this.state.selectedRepoList.length === 0) {
       let errMessage = gettext('Please select a library to share.');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return;
     }
 

@@ -27,8 +27,8 @@ class ViewModes extends React.Component {
     const { isDropdownMenuOpen } = this.state;
     const { currentViewMode } = this.props;
     const options = [
-      {'icon': 'list-view', 'text': gettext('List view'), 'value': 'list'},
-      {'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid'}
+      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list' },
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid' }
     ];
     return (
       <Dropdown

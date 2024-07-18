@@ -35,7 +35,7 @@ class SimpleText extends React.Component {
   onChange = (e) => {
     let value = e.target.value;
     if (value === this.state.value) return;
-    this.setState({value});
+    this.setState({ value });
   };
 
   onCut = (e) => {

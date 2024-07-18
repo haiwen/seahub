@@ -45,7 +45,7 @@ class GroupItem extends React.Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Rename':
         translateResult = gettext('Rename');
         break;
@@ -60,7 +60,7 @@ class GroupItem extends React.Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Rename':
         this.toggleRenameDialog();
         break;
@@ -102,7 +102,7 @@ class GroupItem extends React.Component {
   render() {
     const group = this.props.group;
     const { highlight, isOpIconShown, isRenameDialogOpen, isSetGroupQuotaDialogOpen, isDeleteDialogOpen } = this.state;
-    const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
+    const newHref = siteRoot + 'org/departmentadmin/groups/' + group.id + '/';
     return (
       <Fragment>
         <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

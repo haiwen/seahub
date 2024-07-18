@@ -51,7 +51,8 @@ class SingleSelect extends Component {
                   className="single-select-option"
                   style={optionStyle}
                   title={optionName}
-                >{optionName}</div>
+                >{optionName}
+                </div>
               )}
             </div>
             {column.editable && (

@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import toaster from '../../../../components/toast';
-import { EVENT_BUS_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
-import TableMain from  './table-main';
+import TableMain from './table-main';
 import RecordDetailsDialog from '../record-details-dialog';
-import { PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
 import { Utils } from '../../../../utils/utils';
 
 import './index.css';

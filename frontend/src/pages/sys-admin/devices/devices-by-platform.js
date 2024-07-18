@@ -46,7 +46,7 @@ class Content extends Component {
                 <th width="19%">{gettext('Device Name')}</th>
                 <th width="19%">{gettext('IP')}</th>
                 <th width="19%">{gettext('Last Access')}</th>
-                <th width="5%">{/*Operations*/}</th>
+                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -97,11 +97,11 @@ class Item extends Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   handleUnlink = (e) => {
@@ -114,13 +114,13 @@ class Item extends Component {
   };
 
   toggleUnlinkDeviceDialog = () => {
-    this.setState({isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen});
+    this.setState({ isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen });
   };
 
   unlinkDevice = (deleteFiles) => {
     const { platform, device_id, user } = this.props.item;
     seafileAPI.sysAdminUnlinkDevice(platform, device_id, user, deleteFiles).then((res) => {
-      this.setState({unlinked: true});
+      this.setState({ unlinked: true });
       let message = gettext('Successfully unlinked the device.');
       toaster.success(message);
     }).catch((error) => {
@@ -179,7 +179,7 @@ class DevicesByPlatform extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage } = this.state;
     this.setState({

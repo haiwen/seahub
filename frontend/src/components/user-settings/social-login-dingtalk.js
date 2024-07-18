@@ -36,7 +36,7 @@ class SocialLoginDintalk extends React.Component {
       <React.Fragment>
         <div className="setting-item" id="social-auth">
           <h3 className="setting-item-heading">{gettext('Social Login')}</h3>
-          <p className="mb-2">{langCode == 'zh-cn' ? '钉钉': 'Dingtalk'}</p>
+          <p className="mb-2">{langCode == 'zh-cn' ? '钉钉' : 'Dingtalk'}</p>
           {socialConnectedDingtalk ?
             <button className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</button> :
             <a href={`${siteRoot}dingtalk/connect/?next=${encodeURIComponent(socialNextPage)}`} className="btn btn-outline-primary">{gettext('Connect')}</a>

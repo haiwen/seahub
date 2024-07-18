@@ -26,11 +26,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPageList = () => {
@@ -71,7 +71,7 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="5%">{/*icon*/}</th>
+                <th width="5%">{/* icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">
                   {sortBy != undefined ?
@@ -84,7 +84,7 @@ class Content extends Component {
                 </th>
                 <th width="32%">ID</th>
                 <th width="18%">{gettext('Owner')}</th>
-                <th width="5%">{/*Operations*/}</th>
+                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -182,7 +182,7 @@ class RepoItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {
@@ -224,7 +224,7 @@ class RepoItem extends React.Component {
   };
 
   toggleTransfer = () => {
-    this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
+    this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
   onTransferRepo = (user) => {
@@ -302,7 +302,7 @@ class OrgAllRepos extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage, sortBy } = this.state;
     this.setState({
@@ -385,7 +385,7 @@ class OrgAllRepos extends Component {
 
   transferRepoItem = (repoID, user) => {
     this.setState({
-      repos: this.state.repos.map(item =>{
+      repos: this.state.repos.map(item => {
         if (item.repoID == repoID) {
           item.ownerEmail = user.email;
           item.ownerName = user.value;

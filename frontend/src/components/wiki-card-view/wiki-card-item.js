@@ -64,7 +64,7 @@ class WikiCardItem extends Component {
   };
 
   toggleDropDownMenu = () => {
-    this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+    this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
   };
 
   onClickDropdown = (e) => {
@@ -117,7 +117,7 @@ class WikiCardItem extends Component {
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 aria-haspopup={true}
-                style={{'minWidth': '0'}}
+                style={{ 'minWidth': '0' }}
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
                 <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>

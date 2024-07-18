@@ -26,11 +26,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   render() {
@@ -125,7 +125,7 @@ class Item extends Component {
   };
 
   toggleDeleteDialog = () => {
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   deleteRepo = () => {
@@ -133,7 +133,7 @@ class Item extends Component {
   };
 
   toggleTransferDialog = () => {
-    this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
+    this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
   transferRepo = (owner) => {
@@ -171,7 +171,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Delete':
         this.toggleDeleteDialog();
         break;
@@ -253,7 +253,7 @@ class Repos extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const email = decodeURIComponent(this.props.email);
     seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
@@ -278,7 +278,7 @@ class Repos extends Component {
       let newRepoList = this.state.repoList.filter(item => {
         return item.id != repoID;
       });
-      this.setState({repoList: newRepoList});
+      this.setState({ repoList: newRepoList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -291,7 +291,7 @@ class Repos extends Component {
       let newRepoList = this.state.repoList.filter(item => {
         return item.id != repoID;
       });
-      this.setState({repoList: newRepoList});
+      this.setState({ repoList: newRepoList });
       let message = gettext('Successfully transferred the library.');
       toaster.success(message);
     }).catch(error => {

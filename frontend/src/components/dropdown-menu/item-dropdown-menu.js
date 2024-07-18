@@ -39,14 +39,14 @@ class ItemDropdownMenu extends React.Component {
     }
     let { item } = this.props;
     let menuList = this.props.getMenuList(item);
-    this.setState({menuList: menuList});
+    this.setState({ menuList: menuList });
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {  // for toolbar item operation
+  UNSAFE_componentWillReceiveProps(nextProps) { // for toolbar item operation
     let { item } = nextProps;
     if (item.name !== this.props.item.name) {
       let menuList = this.props.getMenuList(item);
-      this.setState({menuList: menuList});
+      this.setState({ menuList: menuList });
     }
   }
 
@@ -62,7 +62,7 @@ class ItemDropdownMenu extends React.Component {
 
   onHideMenu = () => {
     if (this.state.isItemMenuShow) {
-      this.setState({isItemMenuShow: false});
+      this.setState({ isItemMenuShow: false });
       if (typeof(this.props.unfreezeItem) === 'function') {
         this.props.unfreezeItem();
       }
@@ -84,7 +84,7 @@ class ItemDropdownMenu extends React.Component {
 
   toggleOperationMenu = () => {
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow},
+      { isItemMenuShow: !this.state.isItemMenuShow },
       () => {
         if (this.state.isItemMenuShow && typeof(this.props.freezeItem) === 'function') {
           this.props.freezeItem();

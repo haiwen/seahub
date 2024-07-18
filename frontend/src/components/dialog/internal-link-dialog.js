@@ -26,7 +26,7 @@ class InternalLinkDialog extends React.Component {
 
   componentDidMount() {
     if (this.props.internalLink) {
-      this.setState({smartLink: this.props.internalLink});
+      this.setState({ smartLink: this.props.internalLink });
       return;
     }
     this.getInternalLink();
@@ -44,19 +44,19 @@ class InternalLinkDialog extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     });
   };
 
   copyToClipBoard = () => {
     copy(this.state.smartLink);
     const message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message, {duration: 2});
+    toaster.success(message, { duration: 2 });
     this.toggle();
   };
 
   toggle = () => {
-    this.props.onInternalLinkDialogToggle({internalLink: ''});
+    this.props.onInternalLinkDialogToggle({ internalLink: '' });
   };
 
   render() {

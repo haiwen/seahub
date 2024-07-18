@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 class Content extends Component {
 
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items } = this.props.data;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -48,7 +48,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
@@ -56,7 +56,7 @@ class Content extends Component {
             })}
           </tbody>
         </table>
-      ): emptyTip;
+      ) : emptyTip;
     }
   }
 }

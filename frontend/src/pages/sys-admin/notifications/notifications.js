@@ -22,11 +22,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   render() {
@@ -46,7 +46,7 @@ class Content extends Component {
           <thead>
             <tr>
               <th width="95%">{gettext('Notification Detail')}</th>
-              <th width="5%">{/*Operations*/}</th>
+              <th width="5%">{/* Operations*/}</th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +127,7 @@ class Item extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   deleteNotification = () => {
@@ -140,7 +140,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Set to current':
         this.setToCurrent();
         break;
@@ -236,7 +236,7 @@ class Notifications extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminListAllSysNotifications().then((res) => {
       this.setState({
         loading: false,
@@ -251,14 +251,14 @@ class Notifications extends Component {
   }
 
   toggleAddNotificationDialog = () => {
-    this.setState({isAddNotificationDialogOpen: !this.state.isAddNotificationDialogOpen});
+    this.setState({ isAddNotificationDialogOpen: !this.state.isAddNotificationDialogOpen });
   };
 
   addNotification = (msg) => {
     seafileAPI.sysAdminAddSysNotification(msg).then(res => {
       let notificationList = this.state.notificationList;
       notificationList.unshift(res.data.notification);
-      this.setState({notificationList: notificationList});
+      this.setState({ notificationList: notificationList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -270,7 +270,7 @@ class Notifications extends Component {
       let notificationList = this.state.notificationList.filter(item => {
         return item.id != id;
       });
-      this.setState({notificationList: notificationList});
+      this.setState({ notificationList: notificationList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -288,7 +288,7 @@ class Notifications extends Component {
         }
         return item;
       });
-      this.setState({notificationList: notificationList});
+      this.setState({ notificationList: notificationList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

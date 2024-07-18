@@ -23,7 +23,7 @@ class AddSeatableAccountSetting extends Component {
       seatable_url: currentDtableInfo?.seatable_url || '',
       seatable_api_token: currentDtableInfo?.base_api_token || '',
       successMessage: null,
-      stage: 'toCheck',  // toCheck: need to check -> toSubmit: need to submit
+      stage: 'toCheck', // toCheck: need to check -> toSubmit: need to submit
       passwordType: 'password'
     };
   }
@@ -81,7 +81,7 @@ class AddSeatableAccountSetting extends Component {
       errMessage = gettext('SeaTable API token is required');
     }
 
-    this.setState({errMessage});
+    this.setState({ errMessage });
     if (errMessage) return;
     let detail = {
       base_name,
@@ -110,9 +110,9 @@ class AddSeatableAccountSetting extends Component {
 
   togglePasswordShow = () => {
     if (this.state.passwordType === 'password') {
-      this.setState({passwordType: 'text'});
+      this.setState({ passwordType: 'text' });
     } else {
-      this.setState({passwordType: 'password'});
+      this.setState({ passwordType: 'password' });
     }
   };
 
@@ -123,15 +123,16 @@ class AddSeatableAccountSetting extends Component {
         <div className="add-account-header d-flex align-items-center justify-content-between">
           <span>
             <span className="back-btn d-inline-flex align-items-center justify-content-center" onClick={this.props.changeStatus}>
-              <i className="link-icon icon-left sf3-font sf3-font-arrow" style={{transform: 'rotate(180deg)', color: '#999'}}></i>
+              <i className="link-icon icon-left sf3-font sf3-font-arrow" style={{ transform: 'rotate(180deg)', color: '#999' }}></i>
             </span>
             <span className="add-account-header-text">{gettext('Add SeaTable Integration')}</span>
           </span>
           <button
-            onClick={stage === 'toCheck'? this.testSeatableAPIToken : this.addSeatableAccountSetting}
+            onClick={stage === 'toCheck' ? this.testSeatableAPIToken : this.addSeatableAccountSetting}
             type="button"
             className="btn btn-primary add-account-btn"
-          >{stage === 'toCheck' ? gettext('Check') : gettext('Submit')}</button>
+          >{stage === 'toCheck' ? gettext('Check') : gettext('Submit')}
+          </button>
         </div>
         <div className="base-account">
           <div className="account-name-desc">

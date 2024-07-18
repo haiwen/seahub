@@ -38,7 +38,7 @@ class DeleteDepartmentDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{__html: tipMessage}}></p>
+          <p dangerouslySetInnerHTML={{ __html: tipMessage }}></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>

@@ -20,11 +20,11 @@ class ShareItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteShareItem = () => {
@@ -133,7 +133,7 @@ class ShareToOtherServer extends React.Component {
 
   componentDidMount() {
     seafileAPI.listOCMSharesPrepare(this.props.repoID).then((res) => {
-      this.setState({ocmShares: res.data.ocm_share_list});
+      this.setState({ ocmShares: res.data.ocm_share_list });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({
@@ -195,7 +195,7 @@ class ShareToOtherServer extends React.Component {
       let ocmShares = this.state.ocmShares.filter(item => {
         return item.id != id;
       });
-      this.setState({ocmShares: ocmShares});
+      this.setState({ ocmShares: ocmShares });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -204,7 +204,7 @@ class ShareToOtherServer extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   render() {

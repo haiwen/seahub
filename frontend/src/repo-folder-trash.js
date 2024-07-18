@@ -74,7 +74,7 @@ class RepoFolderTrash extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');
@@ -167,7 +167,7 @@ class RepoFolderTrash extends React.Component {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a className="text-truncate" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
+                <a className="text-truncate" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
                 <span className="mx-1">/</span>
               </React.Fragment>
             );
@@ -198,7 +198,7 @@ class RepoFolderTrash extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2 dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></h2>
+                <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role={gettext('Back')}>
                   <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
@@ -236,12 +236,12 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      {width: '5%', text: ''},
-      {width: '20%', text: gettext('Name')},
-      {width: '40%', text: gettext('Original path')},
-      {width: '12%', text: gettext('Delete Time')},
-      {width: '13%', text: gettext('Size')},
-      {width: '10%', text: ''}
+      { width: '5%', text: '' },
+      { width: '20%', text: gettext('Name') },
+      { width: '40%', text: gettext('Original path') },
+      { width: '12%', text: gettext('Delete Time') },
+      { width: '13%', text: gettext('Size') },
+      { width: '10%', text: '' }
     ];
   }
 
@@ -307,11 +307,11 @@ class Item extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   restoreItem = (e) => {
@@ -361,7 +361,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     ) : (
@@ -372,7 +372,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     );
@@ -394,11 +394,11 @@ class FolderItem extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   renderFolder = (e) => {
