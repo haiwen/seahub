@@ -30,7 +30,7 @@ class SidePanel extends Component {
   renderIndexView = () => {
     return (
       <div className="wiki-pages-container">
-        <div style={{marginTop: '2px'}}></div>
+        <div style={{ marginTop: '2px' }}></div>
         <IndexMdViewer
           indexContent={this.props.indexContent}
           onLinkClick={this.props.onLinkClick}
@@ -58,7 +58,7 @@ class SidePanel extends Component {
 
   render() {
     return (
-      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
+      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '' : 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           <Logo onCloseSidePanel={this.props.onCloseSide} />
         </div>

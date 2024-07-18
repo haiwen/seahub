@@ -29,7 +29,7 @@ class LinkList extends React.Component {
   }
 
   toggleDeleteShareLinksDialog = () => {
-    this.setState({isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen});
+    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
   };
 
   toggleSelectAllLinks = (e) => {

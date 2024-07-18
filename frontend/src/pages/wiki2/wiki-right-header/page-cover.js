@@ -51,7 +51,7 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
     <>
       <div id="wiki-page-cover" className='wiki-page-cover' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         <img className='wiki-page-cover__img' alt={gettext('Cover')} src={getCoverImgUrl(currentPageConfig.cover_img_url)} />
-        <div className={classNames('wiki-page-cover__controller', {show: isShowCoverController})}>
+        <div className={classNames('wiki-page-cover__controller', { show: isShowCoverController })}>
           <div className='wiki-cover-controller-btn' id='wiki-change-cover-btn'>{gettext('Change cover')}</div>
         </div>
       </div>

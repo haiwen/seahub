@@ -13,7 +13,7 @@ class Section extends Component {
   }
 
   render() {
-    const { headingText, children} = this.props;
+    const { headingText, children } = this.props;
     return (
       <div className="mb-4">
         <h4 className="border-bottom font-weight-normal mb-2 pb-1">{headingText}</h4>

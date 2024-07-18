@@ -33,7 +33,7 @@ class SearchResultItem extends React.Component {
 
     return (
       <li
-        className={classnames('search-result-item', {'search-result-item-highlight': this.props.isHighlight })}
+        className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
         ref={ref => this.props.setRef(ref)}
       >
@@ -41,7 +41,7 @@ class SearchResultItem extends React.Component {
         <div className="item-content">
           <div className="item-name ellipsis">{item.name}</div>
           <div className="item-link ellipsis">{showName}</div>
-          <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></div>
+          <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
       </li>
     );

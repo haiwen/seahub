@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Form, FormGroup, Input, Col } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
@@ -45,7 +44,7 @@ class GroupItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {
@@ -81,7 +80,7 @@ class GroupItem extends React.Component {
         <td> -- </td>
       );
     } else {
-      return(
+      return (
         <td>
           <a href={userInfoHref} className="font-weight-normal">{group.creatorName}</a>
         </td>
@@ -140,11 +139,11 @@ class OrgGroupsSearchGroupsResult extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   render() {
@@ -198,7 +197,7 @@ class OrgGroupsSearchGroups extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let params = (new URL(document.location)).searchParams;
     this.setState({
       query: params.get('query') || '',
@@ -278,7 +277,7 @@ class OrgGroupsSearchGroups extends Component {
                     </Col>
                   </FormGroup>
                   <FormGroup row>
-                    <Col sm={{size: 5}}>
+                    <Col sm={{ size: 5 }}>
                       <button className="btn btn-outline-primary" disabled={!isSubmitBtnActive} onClick={this.getItems}>{gettext('Submit')}</button>
                     </Col>
                   </FormGroup>

@@ -49,7 +49,7 @@ class CopyDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || selectedPath === '') {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -62,7 +62,7 @@ class CopyDirent extends React.Component {
 
     // copy dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -80,7 +80,7 @@ class CopyDirent extends React.Component {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', copyDirentPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -94,13 +94,13 @@ class CopyDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
     // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -109,7 +109,7 @@ class CopyDirent extends React.Component {
       message = gettext('Can not copy directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -149,7 +149,7 @@ class CopyDirent extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
-          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></div>}
+          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
         <ModalBody>
           <FileChooser

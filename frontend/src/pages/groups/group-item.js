@@ -119,7 +119,7 @@ class GroupItem extends React.Component {
             <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
             {isDeptAdmin && (
               <SingleDropdownToolbar
-                opList={[{'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog}]}
+                opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
               />
             )}
           </h4>

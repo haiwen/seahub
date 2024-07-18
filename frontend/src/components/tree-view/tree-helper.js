@@ -5,7 +5,7 @@ import Dirent from '../../models/dirent';
 
 class TreeHelper {
 
-  expandNode(tree, node) {  // This tree has been cloned
+  expandNode(tree, node) { // This tree has been cloned
     tree.expandNode(node);
   }
 
@@ -79,7 +79,7 @@ class TreeHelper {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
     let destNode = treeCopy.getNodeByPath(destPath);
-    if (destNode && node) {        // node has loaded
+    if (destNode && node) { // node has loaded
       node.object.name = nodeName; // need not update path
       treeCopy.moveNode(node, destNode);
     }
@@ -98,7 +98,7 @@ class TreeHelper {
         treeCopy.moveNode(node, destNode);
       });
     } else {
-      nodePaths.forEach(nodePath=> {
+      nodePaths.forEach(nodePath => {
         let node = treeCopy.getNodeByPath(nodePath);
         treeCopy.delete(node);
       });
@@ -111,8 +111,8 @@ class TreeHelper {
     let destNode = treeCopy.getNodeByPath(destPath);
     let treeNode = treeCopy.getNodeByPath(nodePath);
     if (destNode) {
-      let node = treeNode.clone();  // need a dup
-      node.object.name = nodeName;  // need not update path
+      let node = treeNode.clone(); // need a dup
+      node.object.name = nodeName; // need not update path
       treeCopy.copyNode(node, destNode);
     }
     return treeCopy;
@@ -132,8 +132,8 @@ class TreeHelper {
 
   buildTree() {
     let tree = new Tree();
-    let object = new Dirent({name: '/'});
-    let root = new TreeNode({object, isLoaded: false, isExpanded: true});
+    let object = new Dirent({ name: '/' });
+    let root = new TreeNode({ object, isLoaded: false, isExpanded: true });
     tree.setRoot(root);
     return tree;
   }

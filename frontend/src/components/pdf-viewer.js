@@ -59,7 +59,7 @@ class PDFViewer extends React.Component {
             </div>
             <div id="sidebarResizer"></div>
           </div>
-          {/*<!-- sidebarContainer -->*/}
+          {/* <!-- sidebarContainer -->*/}
 
           <div id="mainContainer">
             <div className="findbar hidden doorHanger" id="findbar">
@@ -94,7 +94,7 @@ class PDFViewer extends React.Component {
                 <span id="findMsg" className="toolbarLabel"></span>
               </div>
             </div>
-            {/*<!-- findbar -->*/}
+            {/* <!-- findbar -->*/}
 
             <div className="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar">
               <div className="editorParamsToolbarContainer">
@@ -218,7 +218,7 @@ class PDFViewer extends React.Component {
                 </button>
               </div>
             </div>
-            {/*<!-- secondaryToolbar -->*/}
+            {/* <!-- secondaryToolbar -->*/}
 
             <div className="toolbar">
               <div id="toolbarContainer">
@@ -313,7 +313,7 @@ class PDFViewer extends React.Component {
                 </div>
                 <div id="loadingBar">
                   <span className="loading-icon loading-tip"></span>
-                  {/*<div className="progress">
+                  {/* <div className="progress">
                     <div className="glimmer">
                     </div>
                   </div>*/}
@@ -325,7 +325,7 @@ class PDFViewer extends React.Component {
               <div id="viewer" className="pdfViewer"></div>
             </div>
           </div>
-          {/*<!-- mainContainer -->*/}
+          {/* <!-- mainContainer -->*/}
 
           <div id="dialogContainer">
             <dialog id="passwordDialog">
@@ -404,7 +404,7 @@ class PDFViewer extends React.Component {
                 <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
               </div>
             </dialog>
-            <dialog id="printServiceDialog" style={{minWidth: '200px'}}>
+            <dialog id="printServiceDialog" style={{ minWidth: '200px' }}>
               <div className="row">
                 <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
               </div>
@@ -417,11 +417,11 @@ class PDFViewer extends React.Component {
               </div>
             </dialog>
           </div>
-          {/*<!-- dialogContainer -->*/}
+          {/* <!-- dialogContainer -->*/}
 
         </div>
-        {/*<!-- outerContainer -->*/}
-        {/*<div id="printContainer"></div>*/}
+        {/* <!-- outerContainer -->*/}
+        {/* <div id="printContainer"></div>*/}
         <input type="file" id="fileInput" className="hidden" />
       </React.Fragment>
     );

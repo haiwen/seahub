@@ -75,7 +75,7 @@ class SearchFileDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
-        <ModalBody style={{height: '250px'}} className="o-auto">
+        <ModalBody style={{ height: '250px' }} className="o-auto">
           <div className="d-flex">
             <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} autoFocus={true} />
             <button type="submit" className={`btn btn-primary flex-shrink-0 ${isSubmitting ? 'btn-loading' : ''}`} onClick={this.searchFile} disabled={isSubmitDisabled}>{gettext('Search')}</button>
@@ -136,7 +136,7 @@ class FileItem extends React.PureComponent {
       `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}` :
       `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + item.path)}`;
 
-    return(
+    return (
       <tr>
         <td className="text-center"><img src={item.type == 'file' ? Utils.getFileIconUrl(item.path) : Utils.getFolderIconUrl()} alt="" width="24" /></td>
         <td>

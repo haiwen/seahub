@@ -12,7 +12,7 @@ import InviteUserViaWeiXinDialog from '../../components/dialog/org-admin-invite-
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
-import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser} from '../../utils/constants';
+import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 class Search extends React.Component {
@@ -52,7 +52,7 @@ class Search extends React.Component {
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
-          style={{width: '15rem'}}
+          style={{ width: '15rem' }}
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.handleInputChange}
@@ -121,19 +121,19 @@ class OrgUsers extends Component {
   };
 
   toggleImportOrgUsersDialog = () => {
-    this.setState({isImportOrgUsersDialogOpen: !this.state.isImportOrgUsersDialogOpen});
+    this.setState({ isImportOrgUsersDialogOpen: !this.state.isImportOrgUsersDialogOpen });
   };
 
   toggleAddOrgUser = () => {
-    this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
+    this.setState({ isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog });
   };
 
   toggleInviteUserDialog = () => {
-    this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
+    this.setState({ isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen });
   };
 
   toggleInviteUserViaWeiXinDialog = () => {
-    this.setState({isInviteUserViaWeiXinDialogOpen: !this.state.isInviteUserViaWeiXinDialogOpen});
+    this.setState({ isInviteUserViaWeiXinDialogOpen: !this.state.isInviteUserViaWeiXinDialogOpen });
   };
 
   initOrgUsersData = (page) => {
@@ -198,7 +198,7 @@ class OrgUsers extends Component {
   toggleOrgUsersDelete = (email, username) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
-      this.setState({orgUsers: users});
+      this.setState({ orgUsers: users });
       let msg = gettext('Deleted user %s');
       msg = msg.replace('%s', username);
       toaster.success(msg);
@@ -235,15 +235,15 @@ class OrgUsers extends Component {
     });
   };
 
-  changeStatus= (email, isActive) => {
+  changeStatus = (email, isActive) => {
     seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgUsers.map(item => {
         if (item.email == email) {
-          item['is_active']= res.data['is_active'];
+          item['is_active'] = res.data['is_active'];
         }
         return item;
       });
-      this.setState({orgUsers: users});
+      this.setState({ orgUsers: users });
       toaster.success(gettext('Edit succeeded.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -269,14 +269,17 @@ class OrgUsers extends Component {
       <Fragment>
         <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import users')}</button>
         <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add user')}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add user')}
+        </button>
         {orgEnableAdminInviteUser &&
         <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Invite users')}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Invite users')}
+        </button>
         }
         {invitationLink &&
         <button className={topBtn} title={'通过微信邀请用户'} onClick={this.toggleInviteUserViaWeiXinDialog}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{'通过微信邀请用户'}</button>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{'通过微信邀请用户'}
+        </button>
         }
         {this.state.isImportOrgUsersDialogOpen &&
         <ModalPortal>

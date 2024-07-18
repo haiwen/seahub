@@ -179,7 +179,7 @@ class DirColumnView extends React.Component {
           </>
         )}
         <div
-          className="dir-content-main" style={{userSelect: select, flex: mainFlex}}
+          className="dir-content-main" style={{ userSelect: select, flex: mainFlex }}
           onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
           ref={this.dirContentMain}
         >

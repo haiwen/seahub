@@ -142,10 +142,10 @@ class LoginLogs extends Component {
   }
 
   toggleExportExcelDialog = () => {
-    this.setState({isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen});
+    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
   };
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
     this.setState({

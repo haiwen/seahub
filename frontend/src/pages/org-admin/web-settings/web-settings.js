@@ -24,7 +24,7 @@ class OrgWebSettings extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.orgAdminGetOrgInfo().then((res) => {
       this.setState({
         loading: false,
@@ -39,7 +39,7 @@ class OrgWebSettings extends Component {
     });
   }
 
-  updateName= (key, newOrgName) => {
+  updateName = (key, newOrgName) => {
     seafileAPI.orgAdminUpdateName(orgID, newOrgName).then((res) => {
       this.setState({
         config_dict: res.data

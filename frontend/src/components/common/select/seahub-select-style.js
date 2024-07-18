@@ -16,7 +16,7 @@ const MenuSelectStyle = {
     cursor: 'pointer',
     lineHeight: '1.5',
   }),
-  menuPortal:  base => ({ ...base, zIndex: 9999 }),
+  menuPortal: base => ({ ...base, zIndex: 9999 }),
   indicatorSeparator: () => {},
 };
 

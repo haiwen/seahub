@@ -94,7 +94,7 @@ class Account extends Component {
       });
       this.isFirstMounted = false;
     } else {
-      this.setState({showInfo: !this.state.showInfo});
+      this.setState({ showInfo: !this.state.showInfo });
     }
   };
 
@@ -153,7 +153,7 @@ class Account extends Component {
           {this.renderAvatar()}
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}></span>
-        <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
+        <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo ? '' : 'hide'}`}>
           <div className="outer-caret up-outer-caret">
             <div className="inner-caret"></div>
           </div>
@@ -165,7 +165,7 @@ class Account extends Component {
             <div id="space-traffic">
               <div className="item">
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
-                <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span></div>
+                <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}></span></div>
               </div>
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>

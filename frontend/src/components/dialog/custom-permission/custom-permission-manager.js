@@ -46,7 +46,7 @@ class CustomPermissionManager extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     });
   };
 
@@ -93,7 +93,7 @@ class CustomPermissionManager extends React.Component {
     seafileAPI.deleteCustomPermission(repoID, permissionID).then(res => {
       const { permissions } = this.state;
       const newPermissions = permissions.filter(permission => permission.id !== permissionID);
-      this.setState({permissions: newPermissions});
+      this.setState({ permissions: newPermissions });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -101,11 +101,11 @@ class CustomPermissionManager extends React.Component {
   };
 
   onChangeMode = () => {
-    this.setState({currentMode: MANAGER_STATE.LIST});
+    this.setState({ currentMode: MANAGER_STATE.LIST });
   };
 
   onAddCustomPermission = () => {
-    this.setState({currentMode: MANAGER_STATE.ADD});
+    this.setState({ currentMode: MANAGER_STATE.ADD });
   };
 
   onEditCustomPermission = (permission) => {

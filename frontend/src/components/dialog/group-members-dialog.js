@@ -18,10 +18,12 @@ class GroupMembers extends React.Component {
         <ModalBody className="px-0 group-members-container">
           <ul className="list-unstyled">
             {members.map((item, index) => {
-              return <li key={index} className="group-member px-4 py-2 d-flex align-items-center">
-                <img src={item.avatar_url} alt={item.name} className="avatar" />
-                <span className="ml-2 text-truncate" title={item.name}>{item.name}</span>
-              </li>;
+              return (
+                <li key={index} className="group-member px-4 py-2 d-flex align-items-center">
+                  <img src={item.avatar_url} alt={item.name} className="avatar" />
+                  <span className="ml-2 text-truncate" title={item.name}>{item.name}</span>
+                </li>
+              );
             })}
           </ul>
         </ModalBody>

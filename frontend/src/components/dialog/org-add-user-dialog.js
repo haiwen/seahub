@@ -29,13 +29,13 @@ class AddOrgUserDialog extends React.Component {
     let isValid = this.validateInputParams();
     if (isValid) {
       let { email, name, password } = this.state;
-      this.setState({isAddingUser: true});
+      this.setState({ isAddingUser: true });
       this.props.handleSubmit(email, name.trim(), password);
     }
   };
 
   togglePasswordVisible = () => {
-    this.setState({isPasswordVisible: !this.state.isPasswordVisible}, () => {
+    this.setState({ isPasswordVisible: !this.state.isPasswordVisible }, () => {
       if (this.state.isPasswordVisible) {
         this.passwdInput.type = 'password';
         this.passwdNewInput.type = 'password';
@@ -60,17 +60,17 @@ class AddOrgUserDialog extends React.Component {
 
   inputEmail = (e) => {
     let email = e.target.value.trim();
-    this.setState({email: email});
+    this.setState({ email: email });
   };
 
   inputName = (e) => {
     let name = e.target.value;
-    this.setState({name: name});
+    this.setState({ name: name });
   };
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({password: passwd}, () => {
+    this.setState({ password: passwd }, () => {
       if (this.state.isPasswordVisible) {
         this.passwdInput.type = 'password';
         this.passwdNewInput.type = 'password';
@@ -80,7 +80,7 @@ class AddOrgUserDialog extends React.Component {
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
-    this.setState({passwdnew: passwd}, () => {
+    this.setState({ passwdnew: passwd }, () => {
       if (this.state.isPasswordVisible) {
         this.passwdInput.type = 'password';
         this.passwdNewInput.type = 'password';
@@ -97,13 +97,13 @@ class AddOrgUserDialog extends React.Component {
     let email = this.state.email;
     if (!email.length) {
       errMessage = gettext('email is required');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     let name = this.state.name.trim();
     if (!name.length) {
       errMessage = gettext('Name is required');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
 
@@ -111,17 +111,17 @@ class AddOrgUserDialog extends React.Component {
     let password2 = this.state.passwdnew;
     if (!password1.length) {
       errMessage = gettext('Please enter password');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     if (!password2.length) {
       errMessage = gettext('Please enter the password again');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     if (password1 !== password2) {
       errMessage = gettext('Passwords don\'t match');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     return true;
@@ -135,7 +135,7 @@ class AddOrgUserDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="userEmail">{gettext('Email')}</Label>
-              <Input id="userEmail"  value={this.state.email || ''} onChange={this.inputEmail} />
+              <Input id="userEmail" value={this.state.email || ''} onChange={this.inputEmail} />
             </FormGroup>
             <FormGroup>
               <Label for="userName">{gettext('Name')}</Label>
@@ -157,7 +157,7 @@ class AddOrgUserDialog extends React.Component {
             </FormGroup>
             <FormGroup>
               <Label for="userPwdNew">{gettext('Confirm Password')}</Label>
-              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}}  className="passwd"   value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
+              <Input id="userPwdNew" innerRef={input => {this.passwdNewInput = input;}} className="passwd" value={this.state.passwdnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           </Form>
           {this.state.errMessage && <Label className="err-message">{this.state.errMessage}</Label>}

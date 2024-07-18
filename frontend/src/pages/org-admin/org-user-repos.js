@@ -75,7 +75,7 @@ class Content extends Component {
         <table className="table-hover">
           <thead>
             <tr>
-              <th width="4%">{/*icon*/}</th>
+              <th width="4%">{/* icon*/}</th>
               <th width="35%">{gettext('Name')}</th>
               <th width="16%">{gettext('Size')}</th>
               <th width="25%">{gettext('Last Update')}</th>
@@ -145,7 +145,7 @@ class Item extends Component {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
 
-      this.setState({isRepoDeleted: false});
+      this.setState({ isRepoDeleted: false });
     });
   };
 

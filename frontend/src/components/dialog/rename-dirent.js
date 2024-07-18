@@ -24,7 +24,7 @@ class Rename extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    this.setState({newName: this.props.dirent.name});
+    this.setState({ newName: this.props.dirent.name });
   }
 
   componentDidMount() {
@@ -38,24 +38,24 @@ class Rename extends React.Component {
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
-    this.setState({newName: e.target.value});
+    this.setState({ newName: e.target.value });
   };
 
   handleSubmit = () => {
     let { isValid, errMessage } = this.validateInput();
     if (!isValid) {
-      this.setState({errMessage : errMessage});
+      this.setState({ errMessage: errMessage });
     } else {
       let isDuplicated = this.checkDuplicatedName();
       if (isDuplicated) {
         let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
         errMessage = errMessage.replace('{name}', Utils.HTMLescape(this.state.newName));
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
       } else {
         this.props.onRename(this.state.newName);
         this.props.toggleCancel();
@@ -76,7 +76,7 @@ class Rename extends React.Component {
 
   changeState = (dirent) => {
     let name = dirent.name;
-    this.setState({newName: name});
+    this.setState({ newName: name });
   };
 
   validateInput = () => {
@@ -123,7 +123,7 @@ class Rename extends React.Component {
       <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>
         <ModalBody>
-          <p>{type === 'file' ? gettext('New file name'): gettext('New folder name')}</p>
+          <p>{type === 'file' ? gettext('New file name') : gettext('New folder name')}</p>
           <Input onKeyDown={this.handleKeyDown} innerRef={this.newInput} value={this.state.newName} onChange={this.handleChange} />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>

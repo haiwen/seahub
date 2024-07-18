@@ -20,9 +20,9 @@ class CreateGroupDialog extends React.Component {
     let name = event.target.value;
 
     if (!name.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
     this.setState({
       groupName: name
@@ -38,12 +38,12 @@ class CreateGroupDialog extends React.Component {
     let name = this.state.groupName.trim();
     if (name) {
       let that = this;
-      seafileAPI.createGroup(name).then((res)=> {
+      seafileAPI.createGroup(name).then((res) => {
         that.props.onCreateGroup(res.data);
         this.props.toggleDialog();
       }).catch((error) => {
         let errorMsg = Utils.getErrorMsg(error);
-        this.setState({errorMsg: errorMsg});
+        this.setState({ errorMsg: errorMsg });
       });
     } else {
       this.setState({
@@ -63,7 +63,7 @@ class CreateGroupDialog extends React.Component {
   };
 
   render() {
-    return(
+    return (
       <Modal isOpen={true} toggle={this.props.toggleDialog} autoFocus={false}>
         <ModalHeader toggle={this.props.toggleDialog}>{gettext('New Group')}</ModalHeader>
         <ModalBody>

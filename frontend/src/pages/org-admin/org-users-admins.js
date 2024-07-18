@@ -21,7 +21,7 @@ class OrgUsers extends Component {
   }
 
   toggleAddOrgAdmin = () => {
-    this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
+    this.setState({ isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog });
   };
 
   initOrgAdmin = () => {
@@ -29,7 +29,7 @@ class OrgUsers extends Component {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
-      this.setState({orgAdminUsers: userList});
+      this.setState({ orgAdminUsers: userList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -79,11 +79,11 @@ class OrgUsers extends Component {
     seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
       let users = this.state.orgAdminUsers.map(item => {
         if (item.email == email) {
-          item['is_active']= res.data['is_active'];
+          item['is_active'] = res.data['is_active'];
         }
         return item;
       });
-      this.setState({orgAdminUsers: users});
+      this.setState({ orgAdminUsers: users });
       toaster.success(gettext('Edit succeeded.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

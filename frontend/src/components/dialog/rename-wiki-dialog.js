@@ -31,7 +31,7 @@ class RenameWikiDialog extends React.Component {
   handleSubmit = () => {
     let { isValid, errMessage } = this.validateInput();
     if (!isValid) {
-      this.setState({ errMessage : errMessage });
+      this.setState({ errMessage: errMessage });
     } else {
       this.props.onRename(this.state.newName.trim());
     }

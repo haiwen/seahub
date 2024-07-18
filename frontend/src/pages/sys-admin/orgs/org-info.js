@@ -24,15 +24,15 @@ class Content extends Component {
   }
 
   toggleSetQuotaDialog = () => {
-    this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
+    this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
   };
 
   toggleSetNameDialog = () => {
-    this.setState({isSetNameDialogOpen: !this.state.isSetNameDialogOpen});
+    this.setState({ isSetNameDialogOpen: !this.state.isSetNameDialogOpen });
   };
 
   toggleSetMaxUserNumberDialog = () => {
-    this.setState({isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen});
+    this.setState({ isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen });
   };
 
   showEditIcon = (action) => {
@@ -165,7 +165,7 @@ class OrgInfo extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
@@ -180,12 +180,12 @@ class OrgInfo extends Component {
   }
 
   updateQuota = (quota) => {
-    const data = {quota: quota};
+    const data = { quota: quota };
     seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         quota: res.data.quota
       });
-      this.setState({orgInfo: newOrgInfo});
+      this.setState({ orgInfo: newOrgInfo });
       toaster.success(gettext('Successfully set quota.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -194,12 +194,12 @@ class OrgInfo extends Component {
   };
 
   updateName = (orgName) => {
-    const data = {orgName: orgName};
+    const data = { orgName: orgName };
     seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         org_name: res.data.org_name
       });
-      this.setState({orgInfo: newOrgInfo});
+      this.setState({ orgInfo: newOrgInfo });
       toaster.success(gettext('Successfully set name.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -208,12 +208,12 @@ class OrgInfo extends Component {
   };
 
   updateMaxUserNumber = (newValue) => {
-    const data = {maxUserNumber: newValue};
+    const data = { maxUserNumber: newValue };
     seafileAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
         max_user_number: res.data.max_user_number
       });
-      this.setState({orgInfo: newOrgInfo});
+      this.setState({ orgInfo: newOrgInfo });
       toaster.success(gettext('Successfully set max number of members.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

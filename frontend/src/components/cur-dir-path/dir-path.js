@@ -195,7 +195,7 @@ class DirPath extends React.Component {
         {(this.props.isViewFile && fileTags.length !== 0) &&
           <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1 d-flex align-items-center">
             {fileTags.map((fileTag, index) => {
-              return (<span className="file-tag" key={fileTag.id} style={{zIndex: index, backgroundColor: fileTag.color}}></span>);
+              return (<span className="file-tag" key={fileTag.id} style={{ zIndex: index, backgroundColor: fileTag.color }}></span>);
             })}
             <UncontrolledTooltip target="column-mode-file-tags" placement="bottom">
               {tagTitle}

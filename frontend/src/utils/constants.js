@@ -1,6 +1,6 @@
 export const defaultContentForSDoc = {
   version: 0,
-  children: [{id: 'aaaa', type: 'paragraph', children: [{ text: '' }]}]
+  children: [{ id: 'aaaa', type: 'paragraph', children: [{ text: '' }] }]
 };
 
 export const dirPath = '/';
@@ -11,7 +11,7 @@ export const internalFilePath = '/_Internal/seatable-integration.json';
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
 export const avatarInfo = window.app.config.avatarInfo;
-export const logoPath =  window.app.config.logoPath;
+export const logoPath = window.app.config.logoPath;
 export const mediaUrl = window.app.config.mediaUrl;
 export const siteTitle = window.app.config.siteTitle;
 export const siteName = window.app.config.siteName;
@@ -30,7 +30,7 @@ export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
 export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
 
-//pageOptions
+// pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
@@ -116,7 +116,7 @@ export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
-export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True': '';
+export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True' : '';
 export const sharedToken = window.wiki ? window.wiki.config.sharedToken : '';
 export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 export const hasIndex = window.wiki ? window.wiki.config.hasIndex : '';

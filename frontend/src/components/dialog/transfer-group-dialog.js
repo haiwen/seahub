@@ -40,7 +40,7 @@ class TransferGroupDialog extends React.Component {
         this.props.toggleTransferGroupDialog();
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
       });
     }
   };

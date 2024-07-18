@@ -6,7 +6,7 @@ import '../../../css/switch.css';
 
 function Switch(props) {
   const { onChange, checked, placeholder, disabled, className, size, textPosition, setRef } = props;
-  return(
+  return (
     <div className={classnames('seahub-switch position-relative', className, size)} ref={setRef}>
       <label className="custom-switch">
         <input
@@ -20,7 +20,7 @@ function Switch(props) {
         {textPosition === 'left' &&
           <span className="custom-switch-description text-truncate">{placeholder}</span>
         }
-        <span className={classnames('custom-switch-indicator', {'disabled': disabled})}></span>
+        <span className={classnames('custom-switch-indicator', { 'disabled': disabled })}></span>
         {textPosition === 'right' &&
           <span className="custom-switch-description text-truncate">{placeholder}</span>
         }

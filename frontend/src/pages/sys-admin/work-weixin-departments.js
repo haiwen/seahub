@@ -87,7 +87,7 @@ class WorkWeixinDepartments extends Component {
     this.setState({
       isMembersListLoading: true,
     });
-    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id, {fetch_child: true}).then((res) => {
+    seafileAPI.adminListWorkWeixinDepartmentMembers(department_id, { fetch_child: true }).then((res) => {
       let membersTempObj = this.state.membersTempObj;
       membersTempObj[department_id] = res.data.userlist;
       let canCheckUserIds = this.getCanCheckUserIds(res.data.userlist);
@@ -98,7 +98,7 @@ class WorkWeixinDepartments extends Component {
         canCheckUserIds: canCheckUserIds,
       });
     }).catch((error) => {
-      this.setState({isMembersListLoading: false});
+      this.setState({ isMembersListLoading: false });
       this.handleError(error);
     });
   };
@@ -173,7 +173,7 @@ class WorkWeixinDepartments extends Component {
       userList.push(newUsersTempObj[i]);
     }
     if (userList.length === 0) {
-      toaster.danger('未选择成员', {duration: 3});
+      toaster.danger('未选择成员', { duration: 3 });
       return;
     }
     seafileAPI.adminAddWorkWeixinUsersBatch(userList).then((res) => {
@@ -185,9 +185,9 @@ class WorkWeixinDepartments extends Component {
         this.handleSubmitSuccess(res.data.success);
       }
       if (res.data.failed) {
-        const fails= res.data.failed;
+        const fails = res.data.failed;
         for (let i = 0; i < fails.length; i++) {
-          toaster.danger(fails[i].name + ' ' + fails[i].error_msg, {duration: 3});
+          toaster.danger(fails[i].name + ' ' + fails[i].error_msg, { duration: 3 });
         }
       }
     }).catch((error) => {
@@ -200,7 +200,7 @@ class WorkWeixinDepartments extends Component {
     let { membersTempObj, membersList, canCheckUserIds } = this.state;
     for (let i = 0; i < success.length; i++) {
       let { userid, name, email } = success[i];
-      toaster.success(name + ' 成功导入', {duration: 1});
+      toaster.success(name + ' 成功导入', { duration: 1 });
       // refresh all temp
       if (canCheckUserIds.indexOf(userid) !== -1) {
         canCheckUserIds.splice(canCheckUserIds.indexOf(userid), 1);
@@ -276,7 +276,7 @@ class WorkWeixinDepartments extends Component {
     for (let i = 0, len = fails.length; i < len; i++) {
       let fail = fails[i];
       let failName = fail.type === 'department' ? fail.department_name : fail.api_user_name;
-      toaster.danger(failName + ' ' + fail.msg, { duration: 3} );
+      toaster.danger(failName + ' ' + fail.msg, { duration: 3 } );
     }
   };
 

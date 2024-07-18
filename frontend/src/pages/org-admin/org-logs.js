@@ -24,19 +24,19 @@ class OrgLogs extends Component {
               <ul className="nav">
                 <li className="nav-item" onClick={() => this.tabItemClick('logadmin')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'logadmin' ? 'active': ''}`}
+                    className={`nav-link ${this.props.currentTab === 'logadmin' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/'} title={gettext('File Access')}>{gettext('File Access')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('file-update')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'file-update' ? 'active': ''}`}
+                    className={`nav-link ${this.props.currentTab === 'file-update' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/file-update/'} title={gettext('File Update')}>{gettext('File Update')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('perm-audit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'perm-audit' ? 'active': ''}`}
+                    className={`nav-link ${this.props.currentTab === 'perm-audit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/perm-audit/'} title={gettext('Permission')}>{gettext('Permission')}
                   </Link>
                 </li>

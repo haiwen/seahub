@@ -40,18 +40,18 @@ class ButtonItem extends React.Component {
 
     const { isFreezed, tooltipOpen } = this.state;
     if (isFreezed && !tooltipOpen) return;
-    this.setState({tooltipOpen: !tooltipOpen, isFreezed: true});
+    this.setState({ tooltipOpen: !tooltipOpen, isFreezed: true });
 
     setTimeout(() => {
       this.setState({ isFreezed: false });
     }, 100);
   };
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { disabled, isActive } = nextProps;
     const { disabled: oldDisabled, isActive: oldIsActive } = this.props;
     if (disabled !== oldDisabled) {
-      this.setState({tooltipOpen: false});
+      this.setState({ tooltipOpen: false });
       return true;
     }
     // only render iconButton when the button is active or show show tooltip
@@ -89,7 +89,7 @@ class ButtonItem extends React.Component {
     const { tooltipOpen } = this.state;
     const { id, isActive, disabled, icon, text } = this.props;
     const className = this.getClassName();
-    const delay = {show: 0, hide: 0};
+    const delay = { show: 0, hide: 0 };
     return (
       <button
         type="button"

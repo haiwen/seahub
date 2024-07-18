@@ -48,17 +48,17 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.sideNavItems = [
-      {show: true, href: '#user-basic-info', text: gettext('Profile')},
-      {show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password')},
-      {show: enableGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token')},
-      {show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password')},
-      {show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book')},
-      {show: true, href: '#lang-setting', text: gettext('Language')},
-      {show: isPro, href: '#email-notice', text: gettext('Email Notification')},
-      {show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication')},
-      {show: (enableWechatWork || enableDingtalk || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login')},
-      {show: true, href: '#linked-devices', text: gettext('Linked Devices')},
-      {show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account')},
+      { show: true, href: '#user-basic-info', text: gettext('Profile') },
+      { show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password') },
+      { show: enableGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token') },
+      { show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password') },
+      { show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book') },
+      { show: true, href: '#lang-setting', text: gettext('Language') },
+      { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
+      { show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication') },
+      { show: (enableWechatWork || enableDingtalk || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Social Login') },
+      { show: true, href: '#linked-devices', text: gettext('Linked Devices') },
+      { show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account') },
     ];
 
     this.state = {
@@ -97,7 +97,7 @@ class Settings extends React.Component {
     });
     if (scrolled.length) {
       this.setState({
-        curItemID: scrolled[scrolled.length -1].href.substr(1)
+        curItemID: scrolled[scrolled.length - 1].href.substr(1)
       });
     }
   };

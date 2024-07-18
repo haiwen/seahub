@@ -18,11 +18,11 @@ class UserItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteUserFolderPermission = () => {
@@ -113,23 +113,23 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   }
 
   handleUserSelectChange = (option) => {
-    this.setState({selectedUsers: option});
+    this.setState({ selectedUsers: option });
   };
 
   componentDidMount() {
-    const {repoID, folderPath, isDepartmentRepo} = this.props;
+    const { repoID, folderPath, isDepartmentRepo } = this.props;
     const request = isDepartmentRepo ?
       seafileAPI.listDepartmentRepoUserFolderPerm(repoID, folderPath) :
       seafileAPI.listUserFolderPerm(repoID, folderPath);
     request.then((res) => {
       if (res.data.length !== 0) {
-        this.setState({userFolderPermItems: res.data});
+        this.setState({ userFolderPermItems: res.data });
       }
     });
   }
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   addUserFolderPerm = () => {
@@ -200,7 +200,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         }
         return item;
       });
-      this.setState({userFolderPermItems: userFolderPermItems});
+      this.setState({ userFolderPermItems: userFolderPermItems });
     });
   };
 
@@ -260,11 +260,11 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
+          <th width={showPath ? '32%' : '55%'}>{gettext('User')}</th>
           {showPath &&
           <th width="32%">{gettext('Folder')}</th>
           }
-          <th width={showPath ? '24%': '30%'}>{gettext('Permission')}</th>
+          <th width={showPath ? '24%' : '30%'}>{gettext('Permission')}</th>
           <th width={showPath ? '12%' : '15%'}></th>
         </tr>
       </thead>

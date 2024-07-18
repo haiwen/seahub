@@ -51,7 +51,7 @@ class Picker extends React.Component {
         onChange={this.props.onChange}
       >
         {
-          ({value}) => {
+          ({ value }) => {
             return (
               <div>
                 <input

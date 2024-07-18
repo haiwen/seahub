@@ -22,11 +22,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPage = () => {
@@ -143,7 +143,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Delete':
         this.toggleDeleteDialog();
         break;
@@ -159,14 +159,14 @@ class Item extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   toggleTransferDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
+    this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
   deleteGroup = () => {
@@ -179,7 +179,7 @@ class Item extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
         break;

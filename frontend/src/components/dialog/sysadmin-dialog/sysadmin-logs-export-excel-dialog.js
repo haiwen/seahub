@@ -40,7 +40,7 @@ class LogsExportExcelDialog extends React.Component {
     }
   };
 
-  sysExportLogs = (logType) =>{
+  sysExportLogs = (logType) => {
     let { startDateStr, endDateStr } = this.state;
     let task_id = '';
     systemAdminAPI.sysAdminExportLogsExcel(startDateStr, endDateStr, logType).then(res => {
@@ -57,7 +57,7 @@ class LogsExportExcelDialog extends React.Component {
         this.timer = setInterval(() => {
           systemAdminAPI.queryAsyncOperationExportExcel(task_id).then(res => {
             if (res.data.is_finished === true){
-              this.setState({isFinished: true});
+              this.setState({ isFinished: true });
               clearInterval(this.timer);
               location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
             }

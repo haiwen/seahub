@@ -10,17 +10,17 @@ class ResultsItem extends React.Component {
     super(props);
   }
 
-  handlerFileURL= (item) => {
+  handlerFileURL = (item) => {
     return item.is_dir ? siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + item.fullpath :
       siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.fullpath);
   };
 
-  handlerParentDirPath= (item) => {
+  handlerParentDirPath = (item) => {
     let index = item.is_dir ? item.fullpath.length - item.name.length - 1 : item.fullpath.length - item.name.length;
     return item.fullpath.substring(0, index);
   };
 
-  handlerParentDirURL= (item) => {
+  handlerParentDirURL = (item) => {
     return siteRoot + 'library/' + item.repo_id + '/' + item.repo_name + this.handlerParentDirPath(item);
   };
 
@@ -47,7 +47,7 @@ class ResultsItem extends React.Component {
           <div className="item-link ellipsis">
             {Utils.bytesToSize(item.size) + ' ' + moment(item.last_modified * 1000).format('YYYY-MM-DD')}
           </div>
-          <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content_highlight}}></div>
+          <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content_highlight }}></div>
         </div>
       </li>
     );

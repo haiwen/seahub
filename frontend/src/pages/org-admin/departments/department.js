@@ -39,9 +39,9 @@ class OrgDepartmentItem extends React.Component {
     };
 
     this.navItems = [
-      {name: 'subDepartments', urlPart: '/', text: gettext('Sub-departments')},
-      {name: 'members', urlPart: '/members/', text: gettext('Members')},
-      {name: 'repos', urlPart: '/libraries/', text: gettext('Libraries')}
+      { name: 'subDepartments', urlPart: '/', text: gettext('Sub-departments') },
+      { name: 'members', urlPart: '/members/', text: gettext('Members') },
+      { name: 'repos', urlPart: '/libraries/', text: gettext('Libraries') }
     ];
   }
 
@@ -79,7 +79,7 @@ class OrgDepartmentItem extends React.Component {
   };
 
   toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
   };
 
   render() {

@@ -23,11 +23,11 @@ class OrgSamlConfigInput extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({value: nextProps.value,});
+    this.setState({ value: nextProps.value, });
   }
 
   toggleBtns = () => {
-    this.setState({isBtnsShown: !this.state.isBtnsShown});
+    this.setState({ isBtnsShown: !this.state.isBtnsShown });
   };
 
   hideBtns = () => {
@@ -35,7 +35,7 @@ class OrgSamlConfigInput extends Component {
       return;
     }
     if (this.props.value != this.state.value) {
-      this.setState({value: this.props.value});
+      this.setState({ value: this.props.value });
     }
     this.toggleBtns();
   };

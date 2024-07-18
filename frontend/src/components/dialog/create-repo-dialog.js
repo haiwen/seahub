@@ -28,29 +28,29 @@ class CreateRepoDialog extends React.Component {
     this.templateOptions = [];
     this.storageOptions = [];
     if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
-      this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
+      this.templateOptions = libraryTemplates.map((item) => { return { value: item, label: item }; });
     }
     if (Array.isArray(storages) && storages.length) {
-      this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+      this.storageOptions = storages.map((item) => { return { value: item.id, label: item.name }; });
     }
   }
 
   handleRepoNameChange = (e) => {
     if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
-    this.setState({repoName: e.target.value});
+    this.setState({ repoName: e.target.value });
   };
 
   handlePassword1Change = (e) => {
-    this.setState({password1: e.target.value});
+    this.setState({ password1: e.target.value });
   };
 
   handlePassword2Change = (e) => {
-    this.setState({password2: e.target.value});
+    this.setState({ password2: e.target.value });
   };
 
   handleSubmit = () => {
@@ -81,12 +81,12 @@ class CreateRepoDialog extends React.Component {
     let repoName = this.state.repoName.trim();
     if (!repoName.length) {
       errMessage = gettext('Name is required');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     if (repoName.indexOf('/') > -1) {
       errMessage = gettext('Name should not include \'/\'.');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     if (this.state.encrypt) {
@@ -94,22 +94,22 @@ class CreateRepoDialog extends React.Component {
       let password2 = this.state.password2.trim();
       if (!password1.length) {
         errMessage = gettext('Please enter password');
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
         return false;
       }
       if (!password2.length) {
         errMessage = gettext('Please enter the password again');
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
         return false;
       }
       if (password1.length < repoPasswordMinLength) {
         errMessage = gettext('Password is too short');
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
         return false;
       }
       if (password1 !== password2) {
         errMessage = gettext('Passwords don\'t match');
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
         return false;
       }
     }
@@ -118,15 +118,15 @@ class CreateRepoDialog extends React.Component {
 
   onPermissionChange = (e) => {
     let permission = e.target.value;
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   handleStorageInputChange = (selectedItem) => {
-    this.setState({storage_id: selectedItem.value});
+    this.setState({ storage_id: selectedItem.value });
   };
 
   handlelibraryTemplatesInputChange = (selectedItem) => {
-    this.setState({library_template: selectedItem.value});
+    this.setState({ library_template: selectedItem.value });
   };
 
   onEncrypted = (e) => {

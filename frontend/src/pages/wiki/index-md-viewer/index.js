@@ -6,7 +6,7 @@ import { Utils } from '../../../utils/utils';
 import { generateNavItems } from '../utils/generate-navs';
 import NavItem from './nav-item';
 
-import'./style.css';
+import './style.css';
 
 const viewerPropTypes = {
   indexContent: PropTypes.string.isRequired,
@@ -51,7 +51,7 @@ class IndexMdViewer extends React.Component {
       // change image url
       if (item.type == 'image' && isPublicWiki) {
         url = item.data.src;
-        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+        const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
         // different repo
         if (!re.test(url)) {
           return;

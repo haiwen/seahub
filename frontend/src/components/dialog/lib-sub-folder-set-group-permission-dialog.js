@@ -18,11 +18,11 @@ class GroupItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteGroupPermissionItem = () => {
@@ -111,7 +111,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   componentDidMount() {
@@ -146,7 +146,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   addGroupFolderPerm = () => {
@@ -220,7 +220,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({groupPermissionItems: groupPermissionItems});
+    this.setState({ groupPermissionItems: groupPermissionItems });
   };
 
   onSetSubFolder = (e) => {

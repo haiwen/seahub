@@ -1,9 +1,8 @@
 import { Z_INDEX, getGroupByPath, isFunction } from '../_basic';
-import { getColumnByIndex } from './column-utils';
+import { getColumnByIndex, canEdit } from './column-utils';
 import { SUPPORT_PREVIEW_COLUMN_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import RowUtils from './row-utils';
-import { canEdit } from './column-utils';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',

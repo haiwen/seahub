@@ -35,10 +35,10 @@ class DirTool extends React.Component {
     };
 
     this.sortOptions = [
-      {value: 'name-asc', text: gettext('By name ascending')},
-      {value: 'name-desc', text: gettext('By name descending')},
-      {value: 'time-asc', text: gettext('By time ascending')},
-      {value: 'time-desc', text: gettext('By time descending')}
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'time-asc', text: gettext('By time ascending') },
+      { value: 'time-desc', text: gettext('By time descending') }
     ];
   }
 
@@ -56,11 +56,11 @@ class DirTool extends React.Component {
         dom = dom.parentNode;
       }
     }
-    this.setState({isRepoTagDialogOpen: false});
+    this.setState({ isRepoTagDialogOpen: false });
   };
 
   toggleCancel = () => {
-    this.setState({isRepoTagDialogOpen: false});
+    this.setState({ isRepoTagDialogOpen: false });
   };
 
   getMenu = () => {
@@ -78,7 +78,7 @@ class DirTool extends React.Component {
     const { key } = item;
     switch (key) {
       case 'Tags':
-        this.setState({isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen});
+        this.setState({ isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen });
         break;
     }
   };

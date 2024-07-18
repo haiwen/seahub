@@ -51,7 +51,7 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showInsertFileDialog: false,
       collabUsers: userInfo ?
-        [{user: userInfo, is_editing: false}] : [],
+        [{ user: userInfo, is_editing: false }] : [],
       value: null,
       isShowHistory: false,
       readOnly: true,
@@ -92,19 +92,19 @@ class MarkdownEditor extends React.Component {
     }
   };
 
-  emitSwitchEditor = (is_editing=false) => {
+  emitSwitchEditor = (is_editing = false) => {
     if (userInfo && this.state.collabServer) {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
         request: 'editing',
-        doc_id: CryptoJS.MD5(repoID+path).toString(),
+        doc_id: CryptoJS.MD5(repoID + path).toString(),
         user: userInfo,
         is_editing,
       });
     }
   };
 
-  receiveUpdateData (data) {
+  receiveUpdateData(data) {
     let currentTime = new Date();
     if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
       return;
@@ -116,7 +116,7 @@ class MarkdownEditor extends React.Component {
             {gettext('This file has been updated.')}
             <a href='' >{' '}{gettext('Refresh')}</a>
           </span>,
-          {id: 'repo_updated', duration: 3600});
+          { id: 'repo_updated', duration: 3600 });
       }
     });
   }
@@ -125,7 +125,7 @@ class MarkdownEditor extends React.Component {
   receivePresenceData(data) {
     let collabUsers = [];
     let editingUsers = [];
-    switch(data.response) {
+    switch (data.response) {
       case 'user_join':
         toaster.notify(`user ${data.user.name} joined`, {
           duration: 3
@@ -150,7 +150,7 @@ class MarkdownEditor extends React.Component {
         editingUsers = collabUsers.filter(ele => ele.is_editing === true && ele.myself === undefined);
         if (editingUsers.length > 0) {
           const message = gettext('Another user is editing this file!');
-          toaster.danger(message, {duration: 3});
+          toaster.danger(message, { duration: 3 });
         }
         this.setState({ collabUsers });
         return;
@@ -238,7 +238,7 @@ class MarkdownEditor extends React.Component {
     const { fileInfo } = this.state;
     this.setState({
       loading: false,
-      fileInfo: {...fileInfo, mtime, size, starred, permission, lastModifier, id},
+      fileInfo: { ...fileInfo, mtime, size, starred, permission, lastModifier, id },
       markdownContent,
       value: '',
       readOnly: !hasPermission,
@@ -248,7 +248,7 @@ class MarkdownEditor extends React.Component {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
         request: 'join_room',
-        doc_id: CryptoJS.MD5(repoID+path).toString(),
+        doc_id: CryptoJS.MD5(repoID + path).toString(),
         user: userInfo
       });
 
@@ -329,22 +329,22 @@ class MarkdownEditor extends React.Component {
   setFileInfoMtime = (fileInfo) => {
     const { fileInfo: oldFileInfo } = this.state;
     const newFileInfo = Object.assign({}, oldFileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name });
-    this.setState({fileInfo: newFileInfo});
+    this.setState({ fileInfo: newFileInfo });
   };
 
   toggleStar = () => {
     const { fileInfo } = this.state;
     const { starred } = fileInfo;
-    const newFileInfo = Object.assign({}, fileInfo, {starred: !starred});
+    const newFileInfo = Object.assign({}, fileInfo, { starred: !starred });
     if (starred) {
       editorApi.unstarItem().then((response) => {
-        this.setState({fileInfo: newFileInfo});
+        this.setState({ fileInfo: newFileInfo });
       });
       return;
     }
 
     editorApi.starItem().then((response) => {
-      this.setState({fileInfo: newFileInfo});
+      this.setState({ fileInfo: newFileInfo });
     });
   };
 
@@ -372,7 +372,7 @@ class MarkdownEditor extends React.Component {
       return;
     }
     let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
-    eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection});
+    eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection });
   };
 
   addParticipants = () => {
@@ -408,7 +408,7 @@ class MarkdownEditor extends React.Component {
 
       this.lastModifyTime = new Date();
       const message = gettext('Successfully saved');
-      toaster.success(message, {duration: 2,});
+      toaster.success(message, { duration: 2, });
 
       editorApi.getFileInfo().then((res) => {
         this.setFileInfoMtime(res.data);
@@ -418,7 +418,7 @@ class MarkdownEditor extends React.Component {
     }, () => {
       this.setState({ saving: false });
       const message = gettext('Failed to save');
-      toaster.danger(message, {duration: 2});
+      toaster.danger(message, { duration: 2 });
     });
   };
 
@@ -505,4 +505,4 @@ class MarkdownEditor extends React.Component {
   }
 }
 
-export default  MarkdownEditor;
+export default MarkdownEditor;

@@ -48,7 +48,7 @@ class CustomPermissionEditor extends React.Component {
         isLoading: false
       });
     } else {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }
 
   }
@@ -57,22 +57,22 @@ class CustomPermissionEditor extends React.Component {
     const { permission_name } = this.state;
     const newName = evt.target.value;
     if (newName === permission_name) return;
-    this.setState({permission_name: newName});
+    this.setState({ permission_name: newName });
   };
 
   onChangePermissionDescription = (evt) => {
     const { permission_desc } = this.state;
     const newDescription = evt.target.value;
     if (newDescription === permission_desc) return;
-    this.setState({permission_desc: newDescription});
+    this.setState({ permission_desc: newDescription });
   };
 
   onChangePermission = (type) => {
     return () => {
       const { permission } = this.state;
       const value = !permission[type];
-      const newPermission = Object.assign({}, permission, {[type]: value});
-      this.setState({permission: newPermission});
+      const newPermission = Object.assign({}, permission, { [type]: value });
+      this.setState({ permission: newPermission });
     };
   };
 
@@ -97,14 +97,14 @@ class CustomPermissionEditor extends React.Component {
     const { permission_name, permission_desc, permission } = this.state;
     const { isValid, errMessage } = this.validParams();
     if (!isValid) {
-      this.setState({errMessage});
+      this.setState({ errMessage });
       return;
     }
     this.props.onUpdateCustomPermission(permission_name, permission_desc, permission);
   };
 
   toggle = () => {
-    this.setState({tooltipOpen: !this.state.tooltipOpen});
+    this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
 
   render() {
@@ -167,10 +167,10 @@ class CustomPermissionEditor extends React.Component {
                   <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
-                    <span id="modify-tip" className="sf3-font sf3-font-tips ml-2" style={{color: '#999'}}></span>
+                    <span id="modify-tip" className="sf3-font sf3-font-tips ml-2" style={{ color: '#999' }}></span>
                     <Tooltip
                       toggle={this.toggle}
-                      delay={{show: 0, hide: 0}}
+                      delay={{ show: 0, hide: 0 }}
                       target={'modify-tip'}
                       placement='bottom'
                       isOpen={this.state.tooltipOpen}>

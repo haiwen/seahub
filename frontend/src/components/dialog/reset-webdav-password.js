@@ -26,16 +26,16 @@ class ResetWebdavPassword extends Component {
   submit = () => {
 
     if (this.state.password.length === 0) {
-      this.setState({errMsg: gettext('Please enter a password.')});
+      this.setState({ errMsg: gettext('Please enter a password.') });
       return false;
     }
     if (this.state.password.length < webdavSecretMinLength) {
-      this.setState({errMsg: gettext('The password is too short.')});
+      this.setState({ errMsg: gettext('The password is too short.') });
       return false;
     }
 
     if (Utils.getStrengthLevel(this.state.password) < webdavSecretStrengthLevel) {
-      this.setState({errMsg: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', webdavSecretStrengthLevel)});
+      this.setState({ errMsg: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', webdavSecretStrengthLevel) });
       return false;
     }
 
@@ -47,7 +47,7 @@ class ResetWebdavPassword extends Component {
   };
 
   handleInputChange = (e) => {
-    this.setState({password: e.target.value});
+    this.setState({ password: e.target.value });
   };
 
   togglePasswordVisible = () => {
@@ -75,7 +75,7 @@ class ResetWebdavPassword extends Component {
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <InputGroupAddon addonType="append">
               <Button onClick={this.togglePasswordVisible}>
-                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '': '-slash'}`}></i>
+                <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
               </Button>
               <Button onClick={this.generatePassword}>
                 <i className="sf3-font sf3-font-magic"></i>

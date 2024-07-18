@@ -9,7 +9,7 @@ export const CollaboratorsProvider = ({
 }) => {
   const collaboratorsCacheRef = useRef({});
   const [collaboratorsCache, setCollaboratorsCache] = useState({});
-  const [collaborators, setCollaborators ] = useState([]);
+  const [collaborators, setCollaborators] = useState([]);
 
   const { store } = useMetadata();
 

@@ -22,10 +22,10 @@ class TermsAndConditions extends Component {
   }
 
   toggleAddTermDialog = () => {
-    this.setState({isAddTermDialogOpen: !this.state.isAddTermDialogOpen});
+    this.setState({ isAddTermDialogOpen: !this.state.isAddTermDialogOpen });
   };
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminListTermsAndConditions().then((res) => {
       this.setState({
         termList: res.data.term_and_condition_list,
@@ -58,7 +58,7 @@ class TermsAndConditions extends Component {
           return item;
         }
       });
-      this.setState({termList: termList});
+      this.setState({ termList: termList });
       toaster.success(gettext('Update succeeded.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -69,7 +69,7 @@ class TermsAndConditions extends Component {
   deleteTerm = (termID) => {
     seafileAPI.sysAdminDeleteTermAndCondition(termID).then(res => {
       let termList = this.state.termList.filter(item => item.id != termID);
-      this.setState({termList: termList});
+      this.setState({ termList: termList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

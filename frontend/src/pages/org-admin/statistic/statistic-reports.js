@@ -42,7 +42,7 @@ class OrgStatisticReports extends React.Component {
         return;
       }
     }
-    switch(type) {
+    switch (type) {
       case 'month':
         url += 'user-traffic/excel/?month=' + month;
         break;
@@ -59,7 +59,7 @@ class OrgStatisticReports extends React.Component {
   render() {
 
     let { errorMessage } = this.state;
-    return(
+    return (
       <Fragment>
         <MainPanelTopbar />
         <div className="cur-view-container">

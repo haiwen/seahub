@@ -29,7 +29,7 @@ class MainSideNav extends React.Component {
     this.state = {
       filesNavUnfolded: false,
       sharedExtended: false,
-      closeSideBar:false,
+      closeSideBar: false,
       groupItems: [],
       isCreateGroupDialogOpen: false,
     };
@@ -45,7 +45,7 @@ class MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    seafileAPI.listGroups().then(res =>{
+    seafileAPI.listGroups().then(res => {
       let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;
@@ -241,7 +241,7 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Files')}</span>
                 <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
               </Link>
-              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0}}>
+              <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{ height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0 }}>
                 {canAddRepo && (
                   <li className={`nav-item ${this.getActiveClass('my-libs') || this.getActiveClass('deleted')}`}>
                     <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
@@ -309,7 +309,7 @@ class MainSideNav extends React.Component {
 
           <h2 className="mb-2 pt-1 px-2 font-weight-normal heading">{gettext('Help and resources')}</h2>
           {sideNavFooterCustomHtml ? (
-            <div className='side-nav-footer' dangerouslySetInnerHTML={{__html: sideNavFooterCustomHtml}}></div>
+            <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
           ) : (
             <ul className="nav nav-pills flex-column nav-container">
               <li className='nav-item'>

@@ -32,11 +32,11 @@ class Content extends Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPage = () => {
@@ -91,28 +91,28 @@ class Content extends Component {
       const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')} / ${gettext('Last Access')}`;
       if (isPro) {
         columns.push(
-          {width: '20%', text: colNameText},
-          {width: '15%', text: gettext('Status')},
-          {width: '15%', text: gettext('Role')}
+          { width: '20%', text: colNameText },
+          { width: '15%', text: gettext('Status') },
+          { width: '15%', text: gettext('Role') }
         );
       } else {
         columns.push(
-          {width: '30%', text: colNameText},
-          {width: '20%', text: gettext('Status')}
+          { width: '30%', text: colNameText },
+          { width: '20%', text: gettext('Status') }
         );
       }
       if (multiInstitution && !isAdmin) {
         columns.push(
-          {width: '14%', text: colSpaceText},
-          {width: '14%', text: gettext('Institution')},
-          {width: '14%', text: colCreatedText},
-          {width: '5%', text: ''}
+          { width: '14%', text: colSpaceText },
+          { width: '14%', text: gettext('Institution') },
+          { width: '14%', text: colCreatedText },
+          { width: '5%', text: '' }
         );
       } else {
         columns.push(
-          {width: '20%', text: colSpaceText},
-          {width: '22%', text: colCreatedText},
-          {width: '5%', text: ''}
+          { width: '20%', text: colSpaceText },
+          { width: '22%', text: colCreatedText },
+          { width: '5%', text: '' }
         );
       }
 
@@ -256,30 +256,30 @@ class Item extends Component {
   };
 
   toggleSetQuotaDialog = () => {
-    this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
+    this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
   };
 
   toggleDeleteUserDialog = () => {
-    this.setState({isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen});
+    this.setState({ isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen });
   };
 
   toggleResetUserPasswordDialog = () => {
-    this.setState({isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen});
+    this.setState({ isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen });
   };
 
   toggleRevokeAdminDialog = () => {
-    this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
+    this.setState({ isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen });
   };
 
-  toggleConfirmInactiveDialog= () => {
-    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  toggleConfirmInactiveDialog = () => {
+    this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
   onUserSelected = () => {
     this.props.onUserSelected(this.props.item);
   };
 
-  updateStatus= (roleOption) => {
+  updateStatus = (roleOption) => {
     const isActive = roleOption.value == 'active';
     if (isActive) {
       toaster.notify(gettext('It may take some time, please wait.'));
@@ -396,7 +396,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Delete':
         this.toggleDeleteUserDialog();
         break;

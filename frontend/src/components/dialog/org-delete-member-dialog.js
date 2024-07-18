@@ -39,7 +39,7 @@ class DeleteMemberDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Member')}</ModalHeader>
         <ModalBody>
-          <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
+          <div dangerouslySetInnerHTML={{ __html: subtitle }}></div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>

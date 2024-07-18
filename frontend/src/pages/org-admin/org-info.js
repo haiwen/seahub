@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { mediaUrl, gettext, orgMemberQuotaEnabled} from '../../utils/constants';
+import { mediaUrl, gettext, orgMemberQuotaEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 
@@ -92,10 +92,10 @@ class OrgInfo extends Component {
                   <h4 className="info-content-item-heading">{gettext('Space used')}</h4>
                   {storage_quota > 0 ? (
                     <>
-                      <p className="info-content-space-text">{`${(storage_usage/storage_quota * 100).toFixed(2)}%`}</p>
+                      <p className="info-content-space-text">{`${(storage_usage / storage_quota * 100).toFixed(2)}%`}</p>
                       <div className="progress-container">
                         <div className="progress">
-                          <div className="progress-bar" role="progressbar" style={{width: `${storage_usage/storage_quota * 100}%`}} aria-valuenow={storage_usage/storage_quota * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                          <div className="progress-bar" role="progressbar" style={{ width: `${storage_usage / storage_quota * 100}%` }} aria-valuenow={storage_usage / storage_quota * 100} aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <p className="progress-text m-0">{`${Utils.bytesToSize(storage_usage)} / ${Utils.bytesToSize(storage_quota)}`}</p>
                       </div>

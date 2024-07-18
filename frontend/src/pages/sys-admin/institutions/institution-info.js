@@ -19,7 +19,7 @@ class Content extends Component {
   }
 
   toggleSetQuotaDialog = () => {
-    this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
+    this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
   };
 
   showEditIcon = (action) => {
@@ -96,7 +96,7 @@ class InstitutionInfo extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
       this.setState({
         loading: false,
@@ -115,7 +115,7 @@ class InstitutionInfo extends Component {
       const newInstitutionInfo = Object.assign(this.state.institutionInfo, {
         quota_total: res.data.quota_total,
       });
-      this.setState({institutionInfo: newInstitutionInfo});
+      this.setState({ institutionInfo: newInstitutionInfo });
       toaster.success(gettext('Successfully set quota.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

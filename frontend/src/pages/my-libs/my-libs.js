@@ -38,7 +38,7 @@ class MyLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type: 'mine'}).then((res) => {
+    seafileAPI.listRepos({ type: 'mine' }).then((res) => {
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
@@ -74,7 +74,7 @@ class MyLibraries extends Component {
         storage_name: res.data.storage_name
       });
       this.state.repoList.unshift(newRepo);
-      this.setState({repoList: this.state.repoList});
+      this.setState({ repoList: this.state.repoList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -95,7 +95,7 @@ class MyLibraries extends Component {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repoID;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onRenameRepo = (repo, newName) => {
@@ -105,7 +105,7 @@ class MyLibraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onMonitorRepo = (repo, monitored) => {
@@ -115,18 +115,18 @@ class MyLibraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   toggleCreateRepoDialog = () => {
-    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
   };
 
   toggleDropdownMenu = () => {
@@ -155,7 +155,7 @@ class MyLibraries extends Component {
               <h3 className="sf-heading m-0">
                 {gettext('My Libraries')}
                 <SingleDropdownToolbar
-                  opList={[{'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog}]}
+                  opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
                 />
               </h3>
               <div>

@@ -18,11 +18,11 @@ class GroupItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteShareItem = () => {
@@ -144,7 +144,7 @@ class ShareToGroup extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   componentDidMount() {
@@ -168,7 +168,7 @@ class ShareToGroup extends React.Component {
         obj.label = res.data[i].name;
         options.push(obj);
       }
-      this.setState({options: options});
+      this.setState({ options: options });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -191,7 +191,7 @@ class ShareToGroup extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   shareToGroup = () => {
@@ -212,7 +212,7 @@ class ShareToGroup extends React.Component {
         // todo modify api
         let items = res.data.success.map(item => {
           let sharedItem = {
-            'group_info': { 'id': item.group_id, 'name': item.group_name},
+            'group_info': { 'id': item.group_id, 'name': item.group_name },
             'permission': item.permission,
             'share_type': 'group',
           };
@@ -306,7 +306,7 @@ class ShareToGroup extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({sharedItems: sharedItems});
+    this.setState({ sharedItems: sharedItems });
   };
 
   render() {

@@ -9,7 +9,7 @@ class WikiAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -38,7 +38,7 @@ class WikiAPI {
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
-        headers:form.getHeaders()
+        headers: form.getHeaders()
       });
     } else {
       return this.req.post(url, form);
@@ -81,7 +81,7 @@ class WikiAPI {
     return this.req.get(url, {
       params: options,
       paramsSerializer: {
-        serialize: function(params) {
+        serialize: function (params) {
           let list = [];
           for (let key in params) {
             if (Array.isArray(params[key])) {
@@ -131,7 +131,7 @@ class WikiAPI {
     return this.req.get(url, {
       params: options,
       paramsSerializer: {
-        serialize: function(params) {
+        serialize: function (params) {
           let list = [];
           for (let key in params) {
             if (Array.isArray(params[key])) {

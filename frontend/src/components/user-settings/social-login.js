@@ -36,7 +36,7 @@ class SocialLogin extends React.Component {
       <React.Fragment>
         <div className="setting-item" id="social-auth">
           <h3 className="setting-item-heading">{gettext('Social Login')}</h3>
-          <p className="mb-2">{langCode == 'zh-cn' ? '企业微信': 'WeChat Work'}</p>
+          <p className="mb-2">{langCode == 'zh-cn' ? '企业微信' : 'WeChat Work'}</p>
           {socialConnected ?
             <button className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</button> :
             <a href={`${siteRoot}work-weixin/oauth-connect/?next=${encodeURIComponent(socialNextPage)}`} className="btn btn-outline-primary">{gettext('Connect')}</a>

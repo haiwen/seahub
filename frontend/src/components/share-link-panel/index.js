@@ -44,7 +44,7 @@ class ShareLinkPanel extends React.Component {
   componentDidMount() {
     const { page } = this.state;
     const { repoID, itemPath: path } = this.props;
-    seafileAPI.listShareLinks({repoID, path, page}).then((res) => {
+    seafileAPI.listShareLinks({ repoID, path, page }).then((res) => {
       this.setState({
         isLoading: false,
         hasMore: res.data.length == PER_PAGE,
@@ -192,10 +192,10 @@ class ShareLinkPanel extends React.Component {
     if (!this.state.isLoadingMore && this.state.hasMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.getMore();
         });
       }
@@ -205,7 +205,7 @@ class ShareLinkPanel extends React.Component {
   getMore = () => {
     const { page, shareLinks } = this.state;
     const { repoID, itemPath: path } = this.props;
-    seafileAPI.listShareLinks({repoID, path, page: page + 1}).then((res) => {
+    seafileAPI.listShareLinks({ repoID, path, page: page + 1 }).then((res) => {
       this.setState({
         isLoadingMore: false,
         hasMore: res.data.length == PER_PAGE,

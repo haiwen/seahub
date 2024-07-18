@@ -18,11 +18,11 @@ class UserItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteShareItem = () => {
@@ -126,7 +126,7 @@ class SysAdminShareToUser extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
     this.options = [];
   };
 
@@ -134,7 +134,7 @@ class SysAdminShareToUser extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
       if (res.data.length !== 0) {
-        this.setState({sharedItems: res.data});
+        this.setState({ sharedItems: res.data });
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -143,7 +143,7 @@ class SysAdminShareToUser extends React.Component {
   }
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   shareToUser = () => {
@@ -154,7 +154,7 @@ class SysAdminShareToUser extends React.Component {
         users[i] = this.state.selectedOption[i].email;
       }
     }
-    seafileAPI.sysAdminAddRepoSharedItem(repoID, 'user' , users, this.state.permission).then(res => {
+    seafileAPI.sysAdminAddRepoSharedItem(repoID, 'user', users, this.state.permission).then(res => {
       let errorMsg = [];
       if (res.data.failed.length > 0) {
         for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -215,7 +215,7 @@ class SysAdminShareToUser extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({sharedItems: sharedItems});
+    this.setState({ sharedItems: sharedItems });
   };
 
   render() {

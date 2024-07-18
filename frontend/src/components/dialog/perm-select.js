@@ -33,7 +33,7 @@ class PermSelect extends React.Component {
     if (this.props.repoID) {
       this.listCustomPermissions();
     } else {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }
   }
 
@@ -49,7 +49,7 @@ class PermSelect extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     });
   };
 
@@ -112,7 +112,7 @@ class PermSelect extends React.Component {
 
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalBody style={{maxHeight: '400px', overflow: 'auto'}}>
+        <ModalBody style={{ maxHeight: '400px', overflow: 'auto' }}>
           {isLoading && <Loading />}
           {!isLoading && permissions.map((item, index) => {
             return (

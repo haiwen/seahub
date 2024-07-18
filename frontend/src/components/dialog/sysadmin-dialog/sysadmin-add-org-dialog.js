@@ -24,7 +24,7 @@ class SysAdminAddOrgDialog extends React.Component {
   checkSubmitBtnActive = () => {
     const { name, email, password, passwordAgain } = this.state;
     let btnActive = true;
-    if (name.trim() !='' &&
+    if (name.trim() != '' &&
       email.trim() != '' &&
       password.trim() != '' &&
       passwordAgain.trim() != '') {
@@ -72,7 +72,7 @@ class SysAdminAddOrgDialog extends React.Component {
   handleSubmit = () => {
     let { name, email, password, passwordAgain } = this.state;
     if (password != passwordAgain) {
-      this.setState({errorMsg: gettext('Passwords do not match.')});
+      this.setState({ errorMsg: gettext('Passwords do not match.') });
       return;
     }
     const data = {

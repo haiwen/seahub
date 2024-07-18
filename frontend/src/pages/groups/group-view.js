@@ -1,4 +1,4 @@
-import React,{ Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, username, canAddRepo } from '../../utils/constants';
@@ -80,7 +80,7 @@ class GroupView extends React.Component {
     seafileAPI.getGroup(groupID).then((res) => {
       let currentGroup = new Group(res.data);
       let emptyTip = this.getEmptyTip(currentGroup);
-      let isStaff  = currentGroup.admins.indexOf(username) > -1;  //for item operations
+      let isStaff = currentGroup.admins.indexOf(username) > -1; // for item operations
       let isOwner = currentGroup.owner === username ? true : false;
       let isDepartmentGroup = currentGroup.parent_group_id !== 0;
       this.setState({
@@ -90,7 +90,7 @@ class GroupView extends React.Component {
         isDepartmentGroup: isDepartmentGroup,
         isOwner: isOwner,
         currentPage: 1,
-        repoList: []  // empty it for the current group
+        repoList: [] // empty it for the current group
       }, () => {
         this.loadRepos(this.state.currentPage);
         this.listGroupMembers();
@@ -145,7 +145,7 @@ class GroupView extends React.Component {
           </EmptyTip>
         );
       } else {
-        if (currentGroup.admins.indexOf(username) == -1) {  // is a member of this group
+        if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
           emptyTip = (
             <EmptyTip>
               <h2>{gettext('No libraries')}</h2>
@@ -165,13 +165,13 @@ class GroupView extends React.Component {
   };
 
   onCreateRepoToggle = () => {
-    this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+    this.setState({ isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow });
   };
 
   onCreateRepo = (repo, groupOwnerType) => {
     let groupId = this.props.groupID;
     if (groupOwnerType && groupOwnerType === 'department') {
-      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { //need modify endpoint api
+      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { // need modify endpoint api
         let object = {
           repo_id: res.data.id,
           repo_name: res.data.name,
@@ -184,7 +184,7 @@ class GroupView extends React.Component {
         };
         let repo = new Repo(object);
         let repoList = this.addRepoItem(repo);
-        this.setState({repoList: repoList});
+        this.setState({ repoList: repoList });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -194,7 +194,7 @@ class GroupView extends React.Component {
       seafileAPI.createGroupRepo(groupId, repo).then(res => {
         let repo = new Repo(res.data);
         let repoList = this.addRepoItem(repo);
-        this.setState({repoList: repoList});
+        this.setState({ repoList: repoList });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -208,7 +208,7 @@ class GroupView extends React.Component {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
     this.loadGroup(groupID);
   };
 
@@ -224,7 +224,7 @@ class GroupView extends React.Component {
       let repoList = this.state.repoList.filter(item => {
         return item.repo_id !== repo.repo_id;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
       this.loadGroup(group.id);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -240,7 +240,7 @@ class GroupView extends React.Component {
         }
         return item;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -254,7 +254,7 @@ class GroupView extends React.Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   toggleDismissGroupDialog = () => {
@@ -278,13 +278,13 @@ class GroupView extends React.Component {
     });
   };
 
-  toggleImportMembersDialog= () => {
+  toggleImportMembersDialog = () => {
     this.setState({
       showImportMembersDialog: !this.state.showImportMembersDialog
     });
   };
 
-  importMembersInBatch= (file) => {
+  importMembersInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
       res.data.failed.forEach(item => {
@@ -369,10 +369,10 @@ class GroupView extends React.Component {
     if (hasNextPage && !isLoadingMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.loadRepos(currentPage + 1);
         });
       }
@@ -390,24 +390,24 @@ class GroupView extends React.Component {
     const opList = [];
     if ((!isDepartmentGroup && canAddRepo) ||
       (isDepartmentGroup && isStaff)) {
-      opList.push({'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle});
+      opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle });
     }
-    opList.push({'text': gettext('Members'), 'onClick': this.toggleMembersDialog});
+    opList.push({ 'text': gettext('Members'), 'onClick': this.toggleMembersDialog });
     if (currentGroup) {
       if (isStaff || isOwner) {
-        opList.push({'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog});
+        opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
         if (isOwner) {
-          opList.push({'text': gettext('Transfer'), 'onClick': this.toggleTransferGroupDialog});
+          opList.push({ 'text': gettext('Transfer'), 'onClick': this.toggleTransferGroupDialog });
         }
-        opList.push({'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog});
-        opList.push({'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog});
+        opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
+        opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
         if (isOwner) {
-          opList.push({'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog});
+          opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog });
         }
       }
 
       if (!isOwner && !isDepartmentGroup) {
-        opList.push({'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog});
+        opList.push({ 'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog });
       }
     }
 
@@ -445,7 +445,7 @@ class GroupView extends React.Component {
                         {currentGroup.group_quota > 0 &&
                           <div className="department-usage-container">
                             <div className="department-usage">
-                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{width: useRate}}></span></span>
+                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{ width: useRate }}></span></span>
                               <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
                             </div>
                           </div>

@@ -30,14 +30,14 @@ class TCAccept extends React.Component {
         </div>
         <div className="o-auto">
           <div className="py-4 px-4 my-6 mx-auto content">
-            <h2 dangerouslySetInnerHTML={{__html: termsName}}></h2>
+            <h2 dangerouslySetInnerHTML={{ __html: termsName }}></h2>
             <div className="article">
               <TermsPreviewWidget content={termsText} />
             </div>
             <form action={formAction} method="post">
               <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-              <div dangerouslySetInnerHTML={{__html: formTerms}}></div>
-              <div dangerouslySetInnerHTML={{__html: formReturnTo}}></div>
+              <div dangerouslySetInnerHTML={{ __html: formTerms }}></div>
+              <div dangerouslySetInnerHTML={{ __html: formReturnTo }}></div>
               <Button type="submit">{gettext('Accept')}</Button>
               <a href={logoutURL} className="btn btn-secondary ml-2">{gettext('Cancel')}</a>
             </form>

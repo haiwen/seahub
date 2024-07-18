@@ -9,7 +9,7 @@ import CommonOperationConfirmationDialog from '../../components/dialog/common-op
 
 const propTypes = {
   item: PropTypes.object.isRequired,
-  showLinkDetails : PropTypes.func.isRequired,
+  showLinkDetails: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
   deleteLink: PropTypes.func.isRequired
 };
@@ -48,7 +48,7 @@ class LinkItem extends React.Component {
   };
 
   toggleDeleteShareLinkDialog = () => {
-    this.setState({isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen});
+    this.setState({ isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen });
   };
 
   onCopyIconClicked = (e) => {

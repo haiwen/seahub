@@ -228,7 +228,8 @@ class FileAuditItem extends React.Component {
             <DropdownToggle tag="i" className="sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
             <DropdownMenu>
               <DropdownItem size='sm' onClick={this.props.filterRepo.bind(this, fileEvent.repo_name)}>
-                {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.repo_name}</span></DropdownItem>
+                {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.repo_name}</span>
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         }

@@ -32,7 +32,7 @@ export const getDateDisplayString = (value, format) => {
   const date = moment(validValue);
 
   if (!date.isValid()) return value;
-  switch(format) {
+  switch (format) {
     case 'D/M/YYYY':
     case 'DD/MM/YYYY': {
       const formatValue = date.format('YYYY-MM-DD');
@@ -192,7 +192,7 @@ const _toThousands = (num, isCurrency, formatData) => {
   }
   decimalValue = decimalValue.replace(/./, decimalString);
   // format integer value
-  let result = [], counter = 0;
+  let result = []; let counter = 0;
   integer = Math.abs(integer).toString();
   for (var i = integer.length - 1; i >= 0; i--) {
     counter++;
@@ -249,7 +249,7 @@ export const getNumberDisplayString = (value, formatData) => {
   }
   if (isNaN(value) || value === Infinity || value === -Infinity) return value + '';
   const { format = DEFAULT_NUMBER_FORMAT } = formatData || {};
-  switch(format) {
+  switch (format) {
     case 'number': {
       return _toThousands(value, false, formatData);
     }
@@ -285,9 +285,9 @@ export const replaceNumberNotAllowInput = (value, format = DEFAULT_NUMBER_FORMAT
     return '';
   }
   value = value.replace(/。/g, '.');
-  switch(format) {
+  switch (format) {
     case 'number': {
-      return value.replace(/[^.-\d,]/g,'');
+      return value.replace(/[^.-\d,]/g, '');
     }
     case 'percent': {
       return value.replace(/[^.-\d,%]/g, '');
@@ -311,7 +311,7 @@ export const replaceNumberNotAllowInput = (value, format = DEFAULT_NUMBER_FORMAT
   }
 };
 
-export const getFloatNumber = (data, format) =>  {
+export const getFloatNumber = (data, format) => {
   if (!data && data !== 0) {
     return null;
   }

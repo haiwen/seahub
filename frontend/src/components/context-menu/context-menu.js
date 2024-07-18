@@ -31,7 +31,7 @@ class ContextMenu extends React.Component {
     this.listenId = listener.register(this.handleShow, this.handleHide);
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.state.isVisible) {
       const wrapper = window.requestAnimationFrame || setTimeout;
 
@@ -105,7 +105,7 @@ class ContextMenu extends React.Component {
   handleHide = (e) => {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
       this.unregisterHandlers();
-      this.setState({ isVisible: false});
+      this.setState({ isVisible: false });
       callIfExists(this.props.onHideMenu, e);
     }
   };

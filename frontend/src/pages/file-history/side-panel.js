@@ -29,7 +29,7 @@ class SidePanel extends React.Component {
     editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       let historyList = res.data;
       if (historyList.length === 0) {
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
         throw Error('there has an error in server');
       }
       this.initResultState(res.data);
@@ -77,7 +77,7 @@ class SidePanel extends React.Component {
       });
       editUtilities.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
-        this.setState({isReloadingData: false});
+        this.setState({ isReloadingData: false });
       });
     }
   };
@@ -86,7 +86,7 @@ class SidePanel extends React.Component {
     let commitId = currentItem.commit_id;
     editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
         this.refershFileList();
       }
       let message = gettext('Successfully restored.');
@@ -94,7 +94,7 @@ class SidePanel extends React.Component {
     });
   };
 
-  onItemClick =(item, preItem) => {
+  onItemClick = (item, preItem) => {
     this.props.onItemClick(item, preItem);
   };
 

@@ -24,7 +24,7 @@ class DirColumnFile extends React.Component {
   componentDidMount() {
     if (this.props.hash) {
       let hash = this.props.hash;
-      setTimeout(function() {
+      setTimeout(function () {
         window.location.hash = hash;
       }, 500);
     }

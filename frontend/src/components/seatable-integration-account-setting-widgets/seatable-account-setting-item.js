@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 
 class SeatableAccountItem extends Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       isShowDialog: false,
@@ -21,11 +21,11 @@ class SeatableAccountItem extends Component {
   };
 
   openDialog = () => {
-    this.setState({isShowDialog: true});
+    this.setState({ isShowDialog: true });
   };
 
   closeDialog = () => {
-    this.setState({isShowDialog: false});
+    this.setState({ isShowDialog: false });
   };
 
   onDeleteSeatables = () => {
@@ -51,7 +51,7 @@ class SeatableAccountItem extends Component {
             title={gettext('Edit')}
             aria-label={gettext('Edit')}
           >
-            <i className="sf2-icon-edit" style={{color: '#999'}}></i>
+            <i className="sf2-icon-edit" style={{ color: '#999' }}></i>
           </span>
           <span
             className="account-operation-btn"
@@ -59,7 +59,7 @@ class SeatableAccountItem extends Component {
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-            <i className="sf3-font-delete1 sf3-font" style={{color: '#999'}}></i>
+            <i className="sf3-font-delete1 sf3-font" style={{ color: '#999' }}></i>
           </span>
         </td>
         {isShowDialog &&

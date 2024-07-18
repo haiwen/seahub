@@ -42,9 +42,9 @@ class AbuseReports extends Component {
 
   handleError = (e) => {
     if (e.response) {
-      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
+      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), { duration: 3 });
     } else {
-      toaster.danger(gettext('Please check the network.'), {duration: 3});
+      toaster.danger(gettext('Please check the network.'), { duration: 3 });
     }
   };
 
@@ -65,9 +65,13 @@ class AbuseReports extends Component {
           <td>{item.abuse_type}</td>
           <td>{item.description}</td>
           <td>{moment(item.time).format('YYYY-MM-DD')}</td>
-          <td><p onClick={this.updateAbuseReport.bind(this, handled, abuseReportId)}
-            className="op-target ellipsis ellipsis-op-target cursor-pointer"
-          >{gettext(item.handled.toString())}</p></td>
+          <td>
+            <p
+              onClick={this.updateAbuseReport.bind(this, handled, abuseReportId)}
+              className="op-target ellipsis ellipsis-op-target cursor-pointer"
+            >{gettext(item.handled.toString())}
+            </p>
+          </td>
         </tr>
       );
     });

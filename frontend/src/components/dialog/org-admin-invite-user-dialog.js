@@ -23,7 +23,7 @@ class OrgAdminInviteUserDialog extends React.Component {
     let isValid = this.validateInputParams();
     if (isValid) {
       let { email } = this.state;
-      this.setState({isAddingUser: true});
+      this.setState({ isAddingUser: true });
       this.props.handleSubmit(email.trim());
     }
   };
@@ -37,7 +37,7 @@ class OrgAdminInviteUserDialog extends React.Component {
 
   inputEmail = (e) => {
     let email = e.target.value.trim();
-    this.setState({email: email});
+    this.setState({ email: email });
   };
 
   toggle = () => {
@@ -49,7 +49,7 @@ class OrgAdminInviteUserDialog extends React.Component {
     let email = this.state.email.trim();
     if (!email.length) {
       errMessage = gettext('email is required');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     return true;

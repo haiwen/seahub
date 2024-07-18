@@ -41,11 +41,11 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       const table = (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           <thead>
             {isDesktop ? (
               <tr>
-                <th width="4%">{/*icon*/}</th>
+                <th width="4%">{/* icon*/}</th>
                 <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width="30%">{gettext('Share To')}</th>
                 <th width="24%">{gettext('Permission')}</th>
@@ -125,11 +125,11 @@ class Item extends Component {
   };
 
   onMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   changePerm = (permission) => {
@@ -185,7 +185,7 @@ class Item extends Component {
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
-    this.setState({isShowPermEditor: true});
+    this.setState({ isShowPermEditor: true });
   };
 
   render() {
@@ -259,7 +259,7 @@ class Item extends Component {
             />
           )}
         </td>
-        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
 

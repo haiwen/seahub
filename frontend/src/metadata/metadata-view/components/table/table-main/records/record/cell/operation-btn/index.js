@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { CellType } from '../../../../../../../_basic';
 import { EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../constants';

@@ -5,7 +5,7 @@ import RecordsBody from './records-body';
 import RecordsGroupBody from './records-group-body';
 import RecordsFooter from './record-footer';
 import { HorizontalScrollbar } from '../../../scrollbar';
-import { recalculate } from '../../../../utils/column-utils';
+import { recalculate, setColumnOffsets } from '../../../../utils/column-utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 import {
   isWindowsBrowser, isWebkitBrowser, isMobile, getEventClassName,
@@ -15,7 +15,6 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
-import { setColumnOffsets } from '../../../../utils/column-utils';
 
 class Records extends Component {
 

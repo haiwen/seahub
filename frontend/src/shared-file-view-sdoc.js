@@ -16,7 +16,7 @@ const {
 } = window.shared.pageOptions;
 
 // share permission of this sdoc
-const sharePermission = {'can_edit': canEdit, 'can_download': canDownload, 'can_upload': false};
+const sharePermission = { 'can_edit': canEdit, 'can_download': canDownload, 'can_upload': false };
 const sharePermissionStr = Utils.getShareLinkPermissionStr(sharePermission);
 const sharePermissionText = Utils.getShareLinkPermissionObject(sharePermissionStr).text;
 
@@ -39,7 +39,7 @@ window.seafile = {
   assetsUrl,
 };
 
-(function() {
+(function () {
   const fileIcon = Utils.getFileIconUrl(docName, 192);
   document.getElementById('favicon').href = fileIcon;
 })();

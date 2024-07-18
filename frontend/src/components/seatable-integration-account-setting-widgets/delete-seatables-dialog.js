@@ -12,7 +12,7 @@ class DeleteSeatablesDialog extends Component {
     closeDialog: PropTypes.func,
   };
 
-  render () {
+  render() {
     const { accountName, closeDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={closeDialog}>

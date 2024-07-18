@@ -95,7 +95,7 @@ class Item extends Component {
     item.icon_url = Utils.getLibIconUrl(item);
     item.icon_title = Utils.getLibIconTitle(item);
 
-    let shareRepoUrl =`${siteRoot}remote-library/${this.props.item.provider_id}/${this.props.item.repo_id}/${Utils.encodePath(this.props.item.repo_name)}/`;
+    let shareRepoUrl = `${siteRoot}remote-library/${this.props.item.provider_id}/${this.props.item.repo_id}/${Utils.encodePath(this.props.item.repo_name)}/`;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
@@ -146,7 +146,7 @@ class SharedWithOCM extends Component {
       let items = this.state.items.filter(item => {
         return item.id != id;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       toaster.success(gettext('Successfully unshared {name}').replace('{name}', repo_name));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

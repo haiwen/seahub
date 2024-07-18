@@ -8,11 +8,10 @@ import { RightScrollbar } from '../../../scrollbar';
 import Record from './record';
 import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../../utils/group-metrics';
 import RecordMetrics from '../../../../utils/record-metrics';
-import { isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column-utils';
+import { isFrozen, isNameColumn, isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column-utils';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { isSelectedCellSupportOpenEditor } from '../../../../utils/selected-cell-utils';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../../utils/records-body-utils';
-import { isFrozen, isNameColumn } from '../../../../utils/column-utils';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../constants';
 import { addClassName, removeClassName } from '../../../../utils';
 

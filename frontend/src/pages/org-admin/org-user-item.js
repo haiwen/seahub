@@ -92,7 +92,7 @@ class UserItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {
@@ -113,7 +113,7 @@ class UserItem extends React.Component {
       case -2:
         return '--';
       default: // data > 0
-        return Utils.formatSize({bytes: data});
+        return Utils.formatSize({ bytes: data });
     }
   };
 
@@ -126,15 +126,15 @@ class UserItem extends React.Component {
     }
   };
 
-  toggleConfirmInactiveDialog= () => {
-    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  toggleConfirmInactiveDialog = () => {
+    this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
   render() {
     const { highlight, isConfirmInactiveDialogOpen } = this.state;
     let { user, currentTab } = this.props;
     let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
-    let isOperationMenuShow = (user.email !== username)  && this.state.showMenu;
+    let isOperationMenuShow = (user.email !== username) && this.state.showMenu;
 
     // for 'user status'
     const curStatus = user.is_active ? 'active' : 'inactive';
@@ -166,7 +166,7 @@ class UserItem extends React.Component {
               operationBeforeSelect={user.is_active ? this.toggleConfirmInactiveDialog : undefined}
             />
           </td>
-          <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
+          <td>{`${Utils.formatSize({ bytes: user.quota_usage })} / ${this.getQuotaTotal(user.quota_total)}`}</td>
           <td>
             {user.ctime} /
             <br />

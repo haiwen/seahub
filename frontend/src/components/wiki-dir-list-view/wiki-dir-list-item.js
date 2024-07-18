@@ -19,11 +19,11 @@ class WikiDirListItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({highlight: true});
+    this.setState({ highlight: true });
   };
 
   onMouseLeave = () => {
-    this.setState({highlight: false});
+    this.setState({ highlight: false });
   };
 
   onContextMenu = (event) => {

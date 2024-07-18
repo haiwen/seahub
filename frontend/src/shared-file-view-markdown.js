@@ -43,7 +43,7 @@ class FileContent extends React.Component {
     if (innerNode.type == 'image') {
       let imageUrl = innerNode.data.src;
 
-      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
 
       // different repo
       if (!re.test(imageUrl)) {

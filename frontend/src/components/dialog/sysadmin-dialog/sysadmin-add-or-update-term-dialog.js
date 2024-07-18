@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Alert, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
@@ -42,41 +42,41 @@ class AddOrUpdateTermDialog extends React.Component {
   }
 
   handleNameChange = (e) => {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   };
 
   handleVersionNumberChange = (e) => {
-    this.setState({versionNumber: e.target.value.trim()});
+    this.setState({ versionNumber: e.target.value.trim() });
   };
 
   handleTextChange = (e) => {
-    this.setState({text: e.target.value.trim()});
+    this.setState({ text: e.target.value.trim() });
   };
 
   setActive = () => {
-    this.setState({isActive: true});
+    this.setState({ isActive: true });
   };
 
   setInActive = () => {
-    this.setState({isActive: false});
+    this.setState({ isActive: false });
   };
 
   addTerm = () => {
     let { name, versionNumber, text, isActive } = this.state;
     if (name === '') {
-      this.setState({errMsg: gettext('Name is required.')});
+      this.setState({ errMsg: gettext('Name is required.') });
       return;
     }
     if (versionNumber === '') {
-      this.setState({errMsg: gettext('Version Number is required.')});
+      this.setState({ errMsg: gettext('Version Number is required.') });
       return;
     }
     if (isNaN(versionNumber)) {
-      this.setState({errMsg: gettext('Version Number must be a number.')});
+      this.setState({ errMsg: gettext('Version Number must be a number.') });
       return;
     }
     if (text === '') {
-      this.setState({errMsg: gettext('Text is required.')});
+      this.setState({ errMsg: gettext('Text is required.') });
       return;
     }
     if (this.props.isUpdate) {
@@ -87,11 +87,11 @@ class AddOrUpdateTermDialog extends React.Component {
   };
 
   onContentClick = () => {
-    this.setState({isConditionsEditorDialogShow: !this.state.isConditionsEditorDialogShow});
+    this.setState({ isConditionsEditorDialogShow: !this.state.isConditionsEditorDialogShow });
   };
 
   onCloseEditorDialog = () => {
-    this.setState({isConditionsEditorDialogShow: false});
+    this.setState({ isConditionsEditorDialogShow: false });
   };
 
   onUpdateContent = (content) => {

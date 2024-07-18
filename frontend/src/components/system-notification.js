@@ -13,14 +13,14 @@ class SystemNotification extends React.Component {
   }
 
   close = () => {
-    this.setState({isClosed: true});
+    this.setState({ isClosed: true });
 
     if (navigator.cookieEnabled) {
-      let date = new Date(),
-        cookies = document.cookie.split('; '),
-        infoIDExist = false,
-        newInfoID = curNoteID + '_';
-      date.setTime(date.getTime() + 14*24*60*60*1000);
+      let date = new Date();
+      let cookies = document.cookie.split('; ');
+      let infoIDExist = false;
+      let newInfoID = curNoteID + '_';
+      date.setTime(date.getTime() + 14 * 24 * 60 * 60 * 1000);
       newInfoID += '; expires=' + date.toGMTString() + '; path=' + siteRoot;
       for (var i = 0, len = cookies.length; i < len; i++) {
         if (cookies[i].split('=')[0] == 'info_id') {
@@ -42,7 +42,7 @@ class SystemNotification extends React.Component {
 
     return (
       <div id="info-bar" className="d-flex justify-content-between">
-        <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{__html: curNoteMsg}}></p>
+        <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: curNoteMsg }}></p>
         <button className="close sf2-icon-x1" title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close}></button>
       </div>
     );

@@ -16,7 +16,7 @@ const propTypes = {
   onUploadCancel: PropTypes.func.isRequired,
   onUploadRetry: PropTypes.func.isRequired,
   onUploadRetryAll: PropTypes.func.isRequired,
-  isUploading : PropTypes.bool.isRequired
+  isUploading: PropTypes.bool.isRequired
 };
 
 class UploadProgressDialog extends React.Component {
@@ -34,7 +34,7 @@ class UploadProgressDialog extends React.Component {
 
   onMinimizeUpload = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    this.setState({isMinimized: !this.state.isMinimized});
+    this.setState({ isMinimized: !this.state.isMinimized });
   };
 
   onCloseUpload = (e) => {
@@ -59,7 +59,7 @@ class UploadProgressDialog extends React.Component {
     }
 
     return (
-      <div className="uploader-list-view mw-100" style={{height: this.state.isMinimized ? document.querySelector('.uploader-list-header').offsetHeight : '20rem'}}>
+      <div className="uploader-list-view mw-100" style={{ height: this.state.isMinimized ? document.querySelector('.uploader-list-header').offsetHeight : '20rem' }}>
         <div className="uploader-list-header flex-shrink-0">
           <div>
             {isUploading ? (
@@ -67,7 +67,7 @@ class UploadProgressDialog extends React.Component {
                 <span>{gettext('File Uploading...')}</span>
                 <span className="ml-2">{`${totalProgress}% (${Utils.formatBitRate(uploadBitrate)})`}</span>
                 <div className="progress">
-                  <div className="progress-bar" role="progressbar" style={{width: `${totalProgress}%`}} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
+                  <div className="progress-bar" role="progressbar" style={{ width: `${totalProgress}%` }} aria-valuenow={totalProgress} aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </>
             ) : (

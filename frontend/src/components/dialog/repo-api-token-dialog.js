@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext} from '../../utils/constants';
-import {Modal, ModalHeader, ModalBody, Button, Input} from 'reactstrap';
+import { gettext } from '../../utils/constants';
+import { Modal, ModalHeader, ModalBody, Button, Input } from 'reactstrap';
 import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
-import {seafileAPI} from '../../utils/seafile-api';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import copy from 'copy-to-clipboard';
@@ -26,11 +26,11 @@ class APITokenItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   onDeleteAPIToken = () => {
@@ -136,7 +136,7 @@ class RepoAPITokenDialog extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   addAPIToken = () => {
@@ -147,7 +147,7 @@ class RepoAPITokenDialog extends React.Component {
     this.setState({
       isSubmitBtnActive: false,
     });
-    const {appName, permission, apiTokenList} = this.state;
+    const { appName, permission, apiTokenList } = this.state;
 
     seafileAPI.addRepoAPIToken(this.repo.repo_id, appName, permission).then((res) => {
       apiTokenList.push(res.data);
@@ -194,9 +194,9 @@ class RepoAPITokenDialog extends React.Component {
 
   handleError = (e) => {
     if (e.response) {
-      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
+      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), { duration: 3 });
     } else {
-      toaster.danger(gettext('Please check the network.'), {duration: 3});
+      toaster.danger(gettext('Please check the network.'), { duration: 3 });
     }
   };
 
@@ -261,7 +261,7 @@ class RepoAPITokenDialog extends React.Component {
               </tr>
             </tbody>
           </table>
-          <div style={{minHeight: '10rem', maxHeight: '18rem'}}>
+          <div style={{ minHeight: '10rem', maxHeight: '18rem' }}>
             {this.state.apiTokenList.length !== 0 &&
             <table className="table-thead-hidden w-xs-250">
               {thead}
@@ -285,11 +285,11 @@ class RepoAPITokenDialog extends React.Component {
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal
-        isOpen={true} style={{maxWidth: '800px'}}
+        isOpen={true} style={{ maxWidth: '800px' }}
         toggle={this.props.onRepoAPITokenToggle}
       >
         <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
-          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+          <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <div className="o-auto">

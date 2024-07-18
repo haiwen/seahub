@@ -25,8 +25,8 @@ class Dirent {
       this.is_locked = json.is_locked || false;
       this.is_freezed = json.is_freezed || false;
       this.lock_time = json.lock_time || '';
-      this.lock_owner= json.lock_owner || null;
-      this.lock_owner_name= json.lock_owner_name || null;
+      this.lock_owner = json.lock_owner || null;
+      this.lock_owner_name = json.lock_owner_name || null;
       this.locked_by_me = json.locked_by_me || false;
       this.modifier_name = json.modifier_name || '';
       this.modifier_email = json.modifier_email || '';

@@ -77,7 +77,7 @@ class ExtraMetadataAttributesDialog extends Component {
 
     let dirName = Utils.getDirName(filePath);
     let fileName = Utils.getFileName(filePath);
-    let parentDir = direntType === 'file' ?  dirName : dirName.slice(0, dirName.length - fileName.length - 1);
+    let parentDir = direntType === 'file' ? dirName : dirName.slice(0, dirName.length - fileName.length - 1);
 
     if (!parentDir.startsWith('/')) {
       parentDir = '/' + parentDir;

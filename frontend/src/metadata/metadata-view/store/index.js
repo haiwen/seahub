@@ -4,12 +4,11 @@ import {
   getRowsByIds,
 } from '../_basic';
 import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE } from './operations';
-import { EVENT_BUS_TYPE } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import { getColumns } from '../utils/column-utils';
 import { Metadata, User } from '../model';
-import { PER_LOAD_NUMBER } from '../constants';
 
 class Store {
 

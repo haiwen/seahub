@@ -47,7 +47,7 @@ class AddWikiPageDialog extends React.Component {
 
     input.focus();
     const focusPosition = this.props.wikiPageName.length;
-    input.setSelectionRange(focusPosition,focusPosition);
+    input.setSelectionRange(focusPosition, focusPosition);
   };
 
   render() {

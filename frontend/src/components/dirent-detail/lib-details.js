@@ -34,7 +34,7 @@ class LibDetail extends React.Component {
 
   getFileCounts = (repo) => {
     seafileAPI.getRepoInfo(repo.repo_id).then(res => {
-      this.setState({fileCount: res.data.file_count});
+      this.setState({ fileCount: res.data.file_count });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -57,7 +57,7 @@ class LibDetail extends React.Component {
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={bigIconUrl} height="96"  alt="" />
+            <img src={bigIconUrl} height="96" alt="" />
           </div>
           <div className="dirent-table-container">
             <table className="table-thead-hidden">

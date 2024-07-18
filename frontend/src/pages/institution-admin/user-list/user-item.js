@@ -6,7 +6,7 @@ import { gettext, username } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import moment from 'moment';
 
-const OPERATIONS =[
+const OPERATIONS = [
   {
     value: 'active',
     text: gettext('active'),

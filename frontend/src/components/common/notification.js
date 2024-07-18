@@ -20,7 +20,7 @@ class Notification extends React.Component {
 
   componentDidMount() {
     seafileAPI.getUnseenNotificationCount().then(res => {
-      this.setState({unseenCount: res.data.unseen_count});
+      this.setState({ unseenCount: res.data.unseen_count });
     });
   }
 
@@ -34,7 +34,7 @@ class Notification extends React.Component {
       });
     } else {
       this.loadNotices();
-      this.setState({showNotice: true});
+      this.setState({ showNotice: true });
     }
   };
 
@@ -43,7 +43,7 @@ class Notification extends React.Component {
     let perPage = 5;
     seafileAPI.listNotifications(page, perPage).then(res => {
       let noticeList = res.data.notification_list;
-      this.setState({noticeList: noticeList});
+      this.setState({ noticeList: noticeList });
     });
   };
 
@@ -71,11 +71,11 @@ class Notification extends React.Component {
   onNotificationDialogToggle = () => {
     let newSearch = this.state.isShowNotificationDialog ? null : 'all';
     Utils.updateSearchParameter('notifications', newSearch);
-    this.setState({isShowNotificationDialog: !this.state.isShowNotificationDialog});
+    this.setState({ isShowNotificationDialog: !this.state.isShowNotificationDialog });
   };
 
   onNotificationListToggle = () => {
-    this.setState({showNotice: false});
+    this.setState({ showNotice: false });
   };
 
   onMarkAllNotifications = () => {

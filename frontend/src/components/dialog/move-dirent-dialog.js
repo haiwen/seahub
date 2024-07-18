@@ -50,7 +50,7 @@ class MoveDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || selectedPath === '') {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -63,13 +63,13 @@ class MoveDirent extends React.Component {
 
     // move dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
     // move dirents to current path
     if (selectedPath && selectedPath === this.props.path && (repo.repo_id === repoID)) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -87,7 +87,7 @@ class MoveDirent extends React.Component {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', moveDirentPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -102,19 +102,19 @@ class MoveDirent extends React.Component {
     let message = gettext('Invalid destination path');
 
     if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
     // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
     // copy the dirent to current path
     if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -123,7 +123,7 @@ class MoveDirent extends React.Component {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
       message = message.replace('%(des)s', selectedPath);
-      this.setState({errMessage: message});
+      this.setState({ errMessage: message });
       return;
     }
 
@@ -169,7 +169,7 @@ class MoveDirent extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
-          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></div>}
+          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
         <ModalBody>
           <FileChooser

@@ -24,7 +24,7 @@ export default class TagListFooter extends Component {
   }
 
   toggleTooltip = () => {
-    this.setState({showTooltip: !this.state.showTooltip});
+    this.setState({ showTooltip: !this.state.showTooltip });
   };
 
   onClickImport = () => {
@@ -109,10 +109,10 @@ export default class TagListFooter extends Component {
   render() {
     return (
       <div className="tag-list-footer">
-        <span className="sf3-font sf3-font-tips mr-2" style={{color: '#999'}} id="import-export-tags-tip"></span>
+        <span className="sf3-font sf3-font-tips mr-2" style={{ color: '#999' }} id="import-export-tags-tip"></span>
         <Tooltip
           toggle={this.toggleTooltip}
-          delay={{show: 0, hide: 0}}
+          delay={{ show: 0, hide: 0 }}
           target='import-export-tags-tip'
           placement='bottom'
           isOpen={this.state.showTooltip}

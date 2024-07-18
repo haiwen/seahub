@@ -60,7 +60,7 @@ class DirentDetail extends React.Component {
             break;
           }
         }
-        this.setState({folderDirent: folderDirent});
+        this.setState({ folderDirent: folderDirent });
         this.updateDetailView(folderDirent, path);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);

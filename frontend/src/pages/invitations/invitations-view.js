@@ -51,7 +51,7 @@ class Item extends React.Component {
     });
     const token = this.props.invitation.token;
     seafileAPI.deleteInvitation(token).then((res) => {
-      this.setState({deleted: true});
+      this.setState({ deleted: true });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -63,7 +63,7 @@ class Item extends React.Component {
   };
 
   revokeItem = () => {
-    this.setState({deleted: true});
+    this.setState({ deleted: true });
   };
 
   toggleRevokeDialog = (e) => {
@@ -195,7 +195,7 @@ class Content extends Component {
 
     const isDesktop = Utils.isDesktop();
     return (
-      <table className={`table-hover${isDesktop ? '': ' table-thead-hidden'}`}>
+      <table className={`table-hover${isDesktop ? '' : ' table-thead-hidden'}`}>
         <thead>
           {isDesktop ?
             <tr>
@@ -276,7 +276,7 @@ class InvitationsView extends React.Component {
               <h3 className="sf-heading">
                 {gettext('Invite Guest')}
                 <SingleDropdownToolbar
-                  opList={[{'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog}]}
+                  opList={[{ 'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog }]}
                 />
               </h3>
             </div>

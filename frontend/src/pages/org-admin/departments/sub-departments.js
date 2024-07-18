@@ -64,11 +64,11 @@ class OrgDepartmentItem extends React.Component {
   };
 
   onFreezedDepart = () => {
-    this.setState({isDepartFreezed: true});
+    this.setState({ isDepartFreezed: true });
   };
 
   onUnfreezedDepart = () => {
-    this.setState({isDepartFreezed: false});
+    this.setState({ isDepartFreezed: false });
   };
 
   onDepartmentNameChanged = (dept) => {
@@ -133,7 +133,7 @@ class OrgDepartmentItem extends React.Component {
                 </thead>
                 <tbody>
                   {groups.map((group, index) => {
-                    return(
+                    return (
                       <React.Fragment key={group.id}>
                         <GroupItem
                           group={group}

@@ -20,7 +20,7 @@ class UpdateRepoCommitLabels extends React.Component {
     super(props);
     this.state = {
       inputValue: this.props.commitLabels.map((item, index) => {
-        return {label: item, value: item};
+        return { label: item, value: item };
       }),
       submitBtnDisabled: false
     };
@@ -35,7 +35,7 @@ class UpdateRepoCommitLabels extends React.Component {
   formSubmit = () => {
     const inputValue = this.state.inputValue;
     const labels = inputValue.map((item, index) => item.value).join(',');
-    const {repoID, commitID} = this.props;
+    const { repoID, commitID } = this.props;
 
     this.setState({
       submitBtnDisabled: true
@@ -62,7 +62,7 @@ class UpdateRepoCommitLabels extends React.Component {
         <ModalBody>
           <React.Fragment>
             <CreatableSelect
-              defaultValue={this.props.commitLabels.map((item, index) => { return {label: item, value: item}; })}
+              defaultValue={this.props.commitLabels.map((item, index) => { return { label: item, value: item }; })}
               isMulti={true}
               onChange={this.handleInputChange}
               placeholder=''

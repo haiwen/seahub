@@ -84,8 +84,9 @@ class WebAPIAuthToken extends React.Component {
                   aria-label={isAuthTokenVisible ? gettext('Hide') : gettext('Show')}
                   onKeyDown={this.onIconKeyDown}
                   onClick={this.toggleAuthTokenVisible}
-                  className={`eye-icon sf3-font sf3-font-eye${this.state.isAuthTokenVisible ? '': '-slash'}`}
-                ></span>
+                  className={`eye-icon sf3-font sf3-font-eye${this.state.isAuthTokenVisible ? '' : '-slash'}`}
+                >
+                </span>
               </div>
               <button className="btn btn-outline-primary mt-2" onClick={this.deleteAuthToken}>{gettext('Delete')}</button>
             </React.Fragment>

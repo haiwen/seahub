@@ -4,7 +4,7 @@ import { seafileAPI } from './seafile-api';
 class EditorUtilities {
 
   listRepoDir() {
-    return seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
+    return seafileAPI.listDir(repoID, '/', { recursive: true }).then(items => {
       const files = items.data.dirent_list.map(item => {
         return {
           name: item.name,
@@ -49,8 +49,8 @@ class EditorUtilities {
     return seafileAPI.getSource();
   }
 
-  searchFiles(queryData,cancelToken) {
-    return seafileAPI.searchFiles(queryData,cancelToken);
+  searchFiles(queryData, cancelToken) {
+    return seafileAPI.searchFiles(queryData, cancelToken);
   }
 
   getAccountInfo() {

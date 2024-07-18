@@ -37,7 +37,7 @@ class DirView extends Component {
     this.fileInput = React.createRef();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.loadDirentList('/');
   }
 
@@ -68,8 +68,8 @@ class DirView extends Component {
         path: path,
         userPerm: user_perm,
       }, () => {
-        let url =`${siteRoot}remote-library/${providerID}/${repoID}/${repoName}${Utils.encodePath(path)}`;
-        window.history.replaceState({url: url, path: path}, path, url);
+        let url = `${siteRoot}remote-library/${providerID}/${repoID}/${repoName}${Utils.encodePath(path)}`;
+        window.history.replaceState({ url: url, path: path }, path, url);
       });
     }).catch((error) => {
       this.setState({

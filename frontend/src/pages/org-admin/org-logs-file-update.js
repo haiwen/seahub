@@ -257,7 +257,8 @@ class FileUpdateItem extends React.Component {
     return (
       <td>{fileEvent.description}
         <a className="font-weight-normal text-muted ml-1" href='#'
-          onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a>
+          onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}
+        </a>
       </td>
     );
   };

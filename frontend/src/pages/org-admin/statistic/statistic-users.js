@@ -24,8 +24,8 @@ class OrgStatisticUsers extends React.Component {
   getActiviesFiles = (startTime, endTime, groupBy) => {
     let { filesData } = this.state;
     seafileAPI.orgAdminStatisticActiveUsers(orgID, startTime, endTime, groupBy).then((res) => {
-      let labels = [],
-        count = [];
+      let labels = [];
+      let count = [];
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
@@ -36,7 +36,7 @@ class OrgStatisticUsers extends React.Component {
           label: gettext('Active Users'),
           data: count,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         filesData = [userCount];
       }
       this.setState({

@@ -23,7 +23,7 @@ class NumberEditor extends React.Component {
     }
     const initValue = event.target.value.trim();
 
-    //Prevent the repetition of periods bug in the Chinese input method of the Windows system
+    // Prevent the repetition of periods bug in the Chinese input method of the Windows system
     if (!isMac() && initValue.indexOf('.。') > -1) return;
     let value = replaceNumberNotAllowInput(initValue, format, currency_symbol);
     if (value === this.state.value) return;

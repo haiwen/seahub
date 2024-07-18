@@ -78,7 +78,7 @@ class SystemRepo extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetSystemRepoInfo().then((res) => {
       let items = [];
       items.push(res.data);

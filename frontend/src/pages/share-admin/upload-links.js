@@ -42,16 +42,16 @@ class Content extends Component {
 
     const isDesktop = Utils.isDesktop();
     const table = (
-      <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+      <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
         <thead>
           {isDesktop ? (
             <tr>
-              <th width="4%">{/*icon*/}</th>
+              <th width="4%">{/* icon*/}</th>
               <th width="30%">{gettext('Name')}</th>
               <th width="24%">{gettext('Library')}</th>
               <th width="16%">{gettext('Visits')}</th>
               <th width="16%">{gettext('Expiration')}</th>
-              <th width="10%">{/*Operations*/}</th>
+              <th width="10%">{/* Operations*/}</th>
             </tr>
           ) : (
             <tr>
@@ -105,11 +105,11 @@ class Item extends Component {
   };
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   viewLink = (e) => {
@@ -140,7 +140,7 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
-    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
+    const deletedTip = item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
@@ -240,7 +240,7 @@ class ShareAdminUploadLinks extends Component {
       let items = this.state.items.filter(uploadItem => {
         return uploadItem.token !== item.token;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       const message = gettext('Successfully deleted 1 item.');
       toaster.success(message);
     }).catch((error) => {
@@ -250,13 +250,13 @@ class ShareAdminUploadLinks extends Component {
   };
 
   toggleCleanInvalidUploadLinksDialog = () => {
-    this.setState({isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen});
+    this.setState({ isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen });
   };
 
   cleanInvalidUploadLinks = () => {
     seafileAPI.cleanInvalidUploadLinks().then(res => {
       const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
-      this.setState({items: newItems});
+      this.setState({ items: newItems });
       toaster.success(gettext('Successfully cleaned invalid upload links.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -278,7 +278,7 @@ class ShareAdminUploadLinks extends Component {
                   <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
                     {gettext('Upload Links')}
                     <SingleDropdownToolbar
-                      opList={[{'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog}]}
+                      opList={[{ 'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog }]}
                     />
                   </Link>
                 </li>

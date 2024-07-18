@@ -14,7 +14,7 @@ function getImageFileNameWithTimestamp() {
 
 class EditorApi {
 
-  constructor () {
+  constructor() {
     this.repoID = repoID;
     this.filePath = filePath;
     this.serviceUrl = serviceUrl;
@@ -33,7 +33,7 @@ class EditorApi {
     );
   }
 
-  unstarItem () {
+  unstarItem() {
     return (
       seafileAPI.unstarItem(this.repoID, this.filePath)
     );
@@ -62,7 +62,7 @@ class EditorApi {
       seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
         const uploadLink = res.data + '?ret-json=1';
         const name = getImageFileNameWithTimestamp();
-        const newFile = new File([imageFile], name, {type: imageFile.type});
+        const newFile = new File([imageFile], name, { type: imageFile.type });
         const formData = new FormData();
         formData.append('parent_dir', '/');
         formData.append('relative_path', 'images/auto-upload');
@@ -101,7 +101,7 @@ class EditorApi {
 
   getFiles() {
     const rootPath = '/';
-    return seafileAPI.listDir(repoID, rootPath, { recursive: true} ).then((response) => {
+    return seafileAPI.listDir(repoID, rootPath, { recursive: true } ).then((response) => {
       var files = response.data.dirent_list.map((item) => {
         return {
           name: item.name,
@@ -129,7 +129,7 @@ class EditorApi {
     return seafileAPI.getInternalLink(repoID, filePath);
   }
 
-  createShareLink (repoID, filePath, userPassword, userValidDays, permissions) {
+  createShareLink(repoID, filePath, userPassword, userValidDays, permissions) {
     return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays, permissions);
   }
 

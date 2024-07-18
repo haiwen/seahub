@@ -12,15 +12,18 @@ class OpIcon extends React.Component {
 
   render() {
     const { className, op, title } = this.props;
-    return (<span
-      tabIndex="0"
-      role="button"
-      className={className}
-      title={title}
-      aria-label={title}
-      onClick={op}
-      onKeyDown={Utils.onKeyDown}
-    ></span>);
+    return (
+      <span
+        tabIndex="0"
+        role="button"
+        className={className}
+        title={title}
+        aria-label={title}
+        onClick={op}
+        onKeyDown={Utils.onKeyDown}
+      >
+      </span>
+    );
   }
 }
 
