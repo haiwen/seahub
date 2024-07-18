@@ -4,7 +4,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
-import {gettext, siteRoot, enableUserCleanTrash, username} from '../../utils/constants';
+import { gettext, siteRoot, enableUserCleanTrash, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
 import ModalPortal from '../../components/modal-portal';
@@ -65,7 +65,7 @@ class TrashDialog extends React.Component {
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
       let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
+      navigate(url, { repalce: true });
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
       let newWindow = window.open('about:blank');
@@ -161,7 +161,7 @@ class TrashDialog extends React.Component {
             </>
           }
         >
-          <div dangerouslySetInnerHTML={{__html: title}}></div>
+          <div dangerouslySetInnerHTML={{ __html: title }}></div>
         </ModalHeader>
         <ModalBody>
           <Content
@@ -195,12 +195,12 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      {width: '5%', text: ''},
-      {width: '20%', text: gettext('Name')},
-      {width: '40%', text: gettext('Original path')},
-      {width: '12%', text: gettext('Delete Time')},
-      {width: '13%', text: gettext('Size')},
-      {width: '10%', text: ''}
+      { width: '5%', text: '' },
+      { width: '20%', text: gettext('Name') },
+      { width: '40%', text: gettext('Original path') },
+      { width: '12%', text: gettext('Delete Time') },
+      { width: '13%', text: gettext('Size') },
+      { width: '10%', text: '' }
     ];
   }
 
@@ -287,11 +287,11 @@ class Item extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   restoreItem = (e) => {
@@ -374,11 +374,11 @@ class FolderItem extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   renderFolder = (e) => {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Logo from './logo';
 import CommonToolbar from './toolbar/common-toolbar';
 
-import './header.css';
+import '../css/header.css';
 
 const propTypes = {
   children: PropTypes.object,

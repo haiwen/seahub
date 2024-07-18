@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
+import MainSideNavFolded from './main-side-nav-folded';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
 
 const propTypes = {
@@ -32,14 +33,22 @@ class SidePanel extends React.Component {
           </div>
         </MediaQuery>
         <div className="side-panel-center">
-          {children ? children : (
+          {children ? children : null}
+          {(!children && !isSidePanelFolded) &&
             <MainSideNav
               tabItemClick={this.props.tabItemClick}
               currentTab={this.props.currentTab}
               isSidePanelFolded={isSidePanelFolded}
               toggleFoldSideNav={this.props.toggleFoldSideNav}
             />
-          )}
+          }
+          {(!children && isSidePanelFolded) &&
+            <MainSideNavFolded
+              tabItemClick={this.props.tabItemClick}
+              currentTab={this.props.currentTab}
+              toggleFoldSideNav={this.props.toggleFoldSideNav}
+            />
+          }
         </div>
       </div>
     );

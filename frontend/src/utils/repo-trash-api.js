@@ -40,7 +40,7 @@ class RepotrashAPI {
       page: page || 1,
       per_page: per_page
     };
-    return this.req.get(url, {params: params});
+    return this.req.get(url, { params: params });
   }
 }
 
