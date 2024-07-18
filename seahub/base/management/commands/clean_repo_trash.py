@@ -23,7 +23,7 @@ class Command(BaseCommand):
         repo_id = options.get('repo_id')
         if not repo_id:
             self.stdout.write(
-                '\nPlease use < --repo_id [repo_id] | --keep_days [keep days]'
+                '\nPlease use < --repo_id | --keep_days'
             )
             return
             
