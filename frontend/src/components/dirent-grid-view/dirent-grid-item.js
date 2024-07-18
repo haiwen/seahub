@@ -77,7 +77,7 @@ class DirentGridItem extends React.Component {
     this.clickTimeout = setTimeout(() => {
       this.clickTimeout = null;
       this.handleSingleClick(dirent, activeDirent);
-    }, 250); // A click within 250 milliseconds is considered a single click.
+    }, 100); // Clicks within 100 milliseconds is considered a single click.
   };
 
   handleSingleClick = (dirent, activeDirent) => {
