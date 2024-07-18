@@ -105,13 +105,13 @@ class Rename extends React.Component {
 
   onAfterModelOpened = () => {
     const inputElement = this.newInput.current;
-    if(inputElement){
+    if (inputElement) {
       inputElement.focus();
       const filename = this.state.newName;
       const lastDotIndex = filename.lastIndexOf('.');
-      if(lastDotIndex > 0){
+      if (lastDotIndex > 0) {
         inputElement.setSelectionRange(0, lastDotIndex);
-      }else{
+      } else {
         inputElement.select();
       }
     }
