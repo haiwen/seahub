@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NormalEditorContainer from './normal';
 import PopupEditorContainer from './popup';
+import PreviewEditorContainer from './preview';
 import { CellType } from '../../../_basic';
-import Editor from '../editor';
 
 const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.DATE,
@@ -24,7 +24,7 @@ const EditorContainer = (props) => {
   }
 
   if (PREVIEW_EDITOR_COLUMN_TYPES.includes(column.type)) {
-    return (<Editor { ...props } />);
+    return (<PreviewEditorContainer { ...props } />);
   }
   return (<NormalEditorContainer { ...props } />);
 };
