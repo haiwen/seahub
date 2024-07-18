@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils';
 // eslint-disable-next-line react/display-name
 const Name = forwardRef(({ readOnly, value }, ref) => {
   const [error, setError] = useState('');
-  const [name, setName] = useState(value ||'');
+  const [name, setName] = useState(value || '');
 
   const onNameChange = useCallback((event) => {
     const value = event.target.value;
