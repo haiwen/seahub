@@ -124,7 +124,6 @@ class ShareLinkUserAuthView(APIView):
                 authed_details = {}
             user_auth_infos = authed_details.get('authed_users', [])
             exist_emails = user_auth_infos
-            auth_infos = []
             result = {
                 'failed': [],
                 'success': []
@@ -147,10 +146,7 @@ class ShareLinkUserAuthView(APIView):
                     continue
 
                 user_auth_infos.append(username)
-                auth_infos.append(get_user_auth_info(username, token))
-                result['success'].append({
-                    'email': username
-                })
+                result['success'].append(get_user_auth_info(username, token))
             authed_details['authed_users'] = user_auth_infos
             file_share.authed_details = json.dumps(authed_details)
             file_share.save()
