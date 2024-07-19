@@ -88,21 +88,31 @@ ANONYMOUS_EMAIL = 'Anonymous'
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
 
-def default_ldap_role_mapping(role, role_list=None):
+def default_ldap_role_mapping(role):
     return role
 
+def default_ldap_role_list_mapping(role_list):
+    return role_list[0] if role_list else ''
 
 ldap_role_mapping = default_ldap_role_mapping
+ldap_role_list_mapping = default_ldap_role_list_mapping
+USE_LDAP_ROLE_LIST_MAPPING = False
+
 if ENABLE_LDAP:
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    conf_dir = os.path.join(current_path, '../../../../conf')
+    sys.path.append(conf_dir)
     try:
-        current_path = os.path.dirname(os.path.abspath(__file__))
-        conf_dir = os.path.join(current_path, '../../../../conf')
-        sys.path.append(conf_dir)
         from seahub_custom_functions import ldap_role_mapping
         ldap_role_mapping = ldap_role_mapping
     except:
         pass
-
+    try:
+        from seahub_custom_functions import ldap_role_list_mapping
+        ldap_role_list_mapping = ldap_role_list_mapping
+        USE_LDAP_ROLE_LIST_MAPPING = True
+    except:
+        pass
 
 class UserManager(object):
 
@@ -860,9 +870,12 @@ def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_i
         contact_email = contact_email_list[0].decode()
 
     if user_role_list:
-        role_list = [role.decode() for role in user_role_list]
-        user_role = user_role_list[0].decode()
-        user_role = ldap_role_mapping(user_role, role_list)
+        if not USE_LDAP_ROLE_LIST_MAPPING:
+            role = user_role_list[0].decode()
+            user_role = ldap_role_mapping(role)
+        else:
+            role_list = [role.decode() for role in user_role_list]
+            user_role = ldap_role_list_mapping(role_list)
 
     if authc_id_list:
         authc_id = authc_id_list[0].decode()
