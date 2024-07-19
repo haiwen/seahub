@@ -1,23 +1,23 @@
 import cookie from 'react-cookies';
-import {siteRoot} from './constants';
+import { siteRoot } from './constants';
 import axios from 'axios';
 
 class ShareLinkAPI {
-  init({server, username, password, token}) {
+  init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
-        headers: {'Authorization': 'Token ' + this.token},
+        headers: { 'Authorization': 'Token ' + this.token },
       });
     }
     return this;
   }
 
-  initForSeahubUsage({siteRoot, xcsrfHeaders}) {
+  initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
     if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
       let server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
@@ -61,7 +61,7 @@ class ShareLinkAPI {
     const params = {
       emails: emails,
     };
-    return this.req.delete(url, {data: params});
+    return this.req.delete(url, { data: params });
   }
 
   listShareLinkAuthEmails(link_token, path) {
@@ -83,10 +83,10 @@ class ShareLinkAPI {
     const params = {
       emails: emails,
     };
-    return this.req.delete(url, {data: params});
+    return this.req.delete(url, { data: params });
   }
 
-  updateShareLink(token, permissions, expirationTime='', userScope='') {
+  updateShareLink(token, permissions, expirationTime = '', userScope = '') {
     var url = this.server + '/api/v2.1/share-links/' + token + '/';
     let form = new FormData();
     if (permissions) {
@@ -126,5 +126,5 @@ class ShareLinkAPI {
 
 let shareLinkAPI = new ShareLinkAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
-shareLinkAPI.initForSeahubUsage({siteRoot, xcsrfHeaders});
-export {shareLinkAPI};
+shareLinkAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+export { shareLinkAPI };

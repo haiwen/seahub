@@ -263,11 +263,11 @@ class LinkCreation extends React.Component {
   };
 
   setScope = (e) => {
-    this.setState({currentScope: e.target.value, selectedOption: null, inputEmails: ''});
+    this.setState({ currentScope: e.target.value, selectedOption: null, inputEmails: '' });
   };
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   handleInputChange = (e) => {

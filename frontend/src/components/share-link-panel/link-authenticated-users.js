@@ -100,7 +100,7 @@ class LinkAuthenticatedUsers extends React.Component {
   listLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
-      this.setState({authUsers: res.data.auth_list});
+      this.setState({ authUsers: res.data.auth_list });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -140,7 +140,7 @@ class LinkAuthenticatedUsers extends React.Component {
 
   deleteItem = (username) => {
     const { linkToken, path } = this.props;
-    let users = [username, ];
+    let users = [username,];
     shareLinkAPI.deleteShareLinkAuthUsers(linkToken, users, path).then(res => {
       let authUsers = this.state.authUsers.filter(user => {
         return user.username !== username;
@@ -159,7 +159,7 @@ class LinkAuthenticatedUsers extends React.Component {
   };
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   render() {

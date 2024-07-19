@@ -95,7 +95,7 @@ class LinkAuthenticatedEmails extends React.Component {
   getItems = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
-      this.setState({authEmails: res.data.auth_list});
+      this.setState({ authEmails: res.data.auth_list });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -138,7 +138,7 @@ class LinkAuthenticatedEmails extends React.Component {
 
   deleteItem = (email) => {
     const { linkToken, path } = this.props;
-    let emails = [email, ];
+    let emails = [email,];
     shareLinkAPI.deleteShareLinkAuthEmails(linkToken, emails, path).then(res => {
       let authEmails = this.state.authEmails.filter(e => {
         return e !== email;

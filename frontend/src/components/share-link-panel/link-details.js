@@ -202,7 +202,7 @@ class LinkDetails extends React.Component {
                     <Button
                       aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
                       onClick={this.toggleStoredPasswordVisible}
-                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '': '-slash'}`}
+                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
                     >
                     </Button>
                   </InputGroupAddon>
