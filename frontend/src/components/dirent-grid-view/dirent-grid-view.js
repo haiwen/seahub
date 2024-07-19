@@ -88,10 +88,12 @@ class DirentGridView extends React.Component {
     });
   };
 
-  onGridItemClick = (dirent) => {
+  onGridItemClick = (dirent, event) => {
     hideMenu();
-    this.setState({ activeDirent: dirent });
-    this.props.onGridItemClick(dirent);
+    if (this.state.activeDirent !== dirent) {
+      this.setState({ activeDirent: dirent });
+    }
+    this.props.onGridItemClick(dirent, event);
   };
 
   onMoveToggle = () => {
@@ -462,6 +464,9 @@ class DirentGridView extends React.Component {
     let id = 'grid-item-contextmenu';
     let menuList = this.getDirentItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
+
+    if(this.props.direntList.filter(item => item.isSelected).length > 1) return;
+
     this.props.onGridItemClick && this.props.onGridItemClick(dirent);
   };
 
@@ -501,13 +506,18 @@ class DirentGridView extends React.Component {
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+
+    const selectedDirents = this.props.direntList.filter(item => item.isSelected);
+    const selectedTypes = new Set(selectedDirents.map(item => item.type));
+    const hasMultipleTypes = selectedTypes.size > 1;
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, hasMultipleTypes);
   };
 
   render() {
     let { direntList, path } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
+    const selectedDirentList = this.props.direntList.filter(item => item.isSelected);
 
     if (this.props.isDirentListLoading) {
       return (<Loading />);
@@ -628,7 +638,7 @@ class DirentGridView extends React.Component {
         {this.state.isRenameDialogShow && (
           <ModalPortal>
             <Rename
-              dirent={this.state.activeDirent}
+              dirent={selectedDirentList.length > 1 ? selectedDirentList[selectedDirentList.length - 1] : this.state.activeDirent}
               onRename={this.onItemRename}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onItemRenameToggle}

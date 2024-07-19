@@ -128,9 +128,9 @@ class LibContentContainer extends React.Component {
     this.props.closeDirentDetail();
   };
 
-  onDirentClick = (dirent) => {
+  onDirentClick = (dirent, event) => {
     this.setState({ currentDirent: dirent });
-    this.props.onDirentClick(dirent);
+    this.props.onDirentClick(dirent, event);
   };
 
   onItemSelected = (dirent) => {
