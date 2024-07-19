@@ -32,7 +32,7 @@ class SidePanel extends React.Component {
             <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
           </div>
         </MediaQuery>
-        <div className="side-panel-center">
+        <div className="side-panel-center"  >
           {children ? children : null}
           {(!children && !isSidePanelFolded) &&
             <MainSideNav

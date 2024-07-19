@@ -11,7 +11,7 @@ const propTypes = {
 class OpIcon extends React.Component {
 
   render() {
-    const { className, op, title } = this.props;
+    const { className, op, title   } = this.props;
     return (
       <span
         tabIndex="0"
