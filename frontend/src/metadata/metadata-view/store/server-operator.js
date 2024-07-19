@@ -78,7 +78,42 @@ class ServerOperator {
         });
         break;
       }
-
+      case OPERATION_TYPE.MODIFY_FILTERS: {
+        const { repo_id, view_id, filter_conjunction, filters } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_filter' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_SORTS: {
+        const { repo_id, view_id, sorts } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { sorts }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_sort' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_GROUPBYS: {
+        const { repo_id, view_id, groupbys } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { groupbys }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_group' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS: {
+        const { repo_id, view_id, shown_column_keys } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { shown_column_keys }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_hidden_columns' });
+        });
+        break;
+      }
       default: {
         break;
       }

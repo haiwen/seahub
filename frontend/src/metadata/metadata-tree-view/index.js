@@ -1,17 +1,43 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { gettext } from '../../utils/constants';
-import Icon from '../../components/icon';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import metadataAPI from '../api';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
+import ViewItem from './view-item';
+import NameDialog from './name-dialog';
 
 import './index.css';
+import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 
-const MetadataTreeView = ({ repoID, currentPath, onNodeClick }) => {
-  const node = useMemo(() => {
-    return {
+const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
+  const canAdd = useMemo(() => {
+    if (userPerm !== 'rw' && userPerm !== 'admin') return false;
+    return true;
+  }, [userPerm]);
+  const [views, setViews] = useState([]);
+  const [showAddViewDialog, setSowAddViewDialog] = useState(false);
+  const [, setState] = useState(0);
+  const viewsMap = useRef({});
+
+  useEffect(() => {
+    metadataAPI.listViews(repoID).then(res => {
+      const { navigation, views } = res.data;
+      Array.isArray(views) && views.forEach(view => {
+        viewsMap.current[view._id] = view;
+      });
+      setViews(navigation.filter(item => item.type === 'view'));
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, []);
+
+  const onClick = useCallback((view) => {
+    const node = {
       children: [],
-      path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+      path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name,
       isExpanded: false,
       isLoaded: true,
       isPreload: true,
@@ -24,48 +50,93 @@ const MetadataTreeView = ({ repoID, currentPath, onNodeClick }) => {
       },
       parentNode: {},
       key: repoID,
+      view_id: view._id,
     };
-  }, [repoID]);
-  const [highlight, setHighlight] = useState(false);
+    onNodeClick(node);
+  }, [onNodeClick]);
 
-  const onMouseEnter = useCallback(() => {
-    setHighlight(true);
+  const openAddView = useCallback(() => {
+    setSowAddViewDialog(true);
   }, []);
 
-  const onMouseOver = useCallback(() => {
-    setHighlight(true);
+  const closeAddView = useCallback(() => {
+    setSowAddViewDialog(false);
   }, []);
 
-  const onMouseLeave = useCallback(() => {
-    setHighlight(false);
-  }, []);
+  const addView = useCallback((name, failCallback) => {
+    metadataAPI.addView(repoID, name).then(res => {
+      const view = res.data.view;
+      let newViews = views.slice(0);
+      newViews.push({ _id: view._id, type: 'view' });
+      viewsMap.current[view._id] = view;
+      setSowAddViewDialog(false);
+      setViews(newViews);
+      onClick(view);
+    }).catch(error => {
+      failCallback && failCallback(error);
+    });
+  }, [views, repoID, viewsMap, onClick]);
+
+  const onDeleteView = useCallback((viewId, isSelected) => {
+    metadataAPI.deleteView(repoID, viewId).then(res => {
+      const currentViewIndex = views.findIndex(item => item.id === viewId);
+      const newViews = views.filter(item => item.id === viewId);
+      delete viewsMap.current[viewId];
+      setViews(newViews);
+      if (isSelected) {
+        const lastViewId = views[currentViewIndex - 1].id;
+        const lastView = viewsMap.current[lastViewId];
+        onNodeClick(lastView);
+      }
+    }).catch((error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    }));
+  }, [views, onClick, viewsMap]);
+
+  const updateView = useCallback((viewId, update, successCallback, failCallback) => {
+    metadataAPI.modifyView(repoID, viewId, update).then(res => {
+      successCallback && successCallback();
+      const currentView = viewsMap.current[viewId];
+      viewsMap.current[viewId] = { ...currentView, ...update };
+      setState(n => n + 1);
+    }).catch(error => {
+      failCallback && failCallback(error);
+    });
+  }, [repoID, viewsMap]);
 
   return (
-    <div className="tree-view tree metadata-tree-view">
-      <div className="tree-node">
-        <div className="children">
-          <div
-            className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': currentPath === node.path })}
-            title={gettext('File extended properties')}
-            onMouseEnter={onMouseEnter}
-            onMouseOver={onMouseOver}
-            onMouseLeave={onMouseLeave}
-            onClick={() => onNodeClick(node)}
-          >
-            <div className="tree-node-text">{gettext('File extended properties')}</div>
-            <div className="left-icon">
-              <div className="tree-node-icon">
-                <Icon symbol="table" className="metadata-views-icon" />
-              </div>
-            </div>
+    <>
+      <div className="tree-view tree metadata-tree-view">
+        <div className="tree-node">
+          <div className="children">
+            {views.map((item, index) => {
+              const view = viewsMap.current[item._id];
+              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name;
+              const isSelected = currentPath === viewPath;
+              return (
+                <ViewItem
+                  key={view._id}
+                  canDelete={index !== 0}
+                  isSelected={isSelected}
+                  userPerm={userPerm}
+                  view={view}
+                  onClick={onClick}
+                  onDelete={() => onDeleteView(view._id, isSelected)}
+                  onUpdate={(update, successCallback, failCallback) => updateView(view._id, update, successCallback, failCallback)}
+                />);
+            })}
+            {canAdd && (<CustomizeAddTool className="sf-metadata-add-view" callBack={openAddView} footerName={gettext('Add view')} addIconClassName="sf-metadata-add-view-icon" />)}
           </div>
         </div>
       </div>
-    </div>
+      {showAddViewDialog && (<NameDialog title={gettext('Add view')} onSubmit={addView} onToggle={closeAddView} />)}
+    </>
   );
 };
 
 MetadataTreeView.propTypes = {
+  userPerm: PropTypes.string,
   repoID: PropTypes.string.isRequired,
   currentPath: PropTypes.string,
   onNodeClick: PropTypes.func,

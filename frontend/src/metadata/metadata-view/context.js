@@ -71,6 +71,11 @@ class Context {
     return this.metadataAPI.getMetadata(repoID, params);
   };
 
+  getViews = () => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.listViews(repoID);
+  };
+
   canModifyCell = (column) => {
     const { editable } = column;
     if (!editable) return false;
@@ -115,6 +120,10 @@ class Context {
 
   modifyRecords = (repoId, recordsData, isCopyPaste) => {
     return this.metadataAPI.modifyRecords(repoId, recordsData, isCopyPaste);
+  };
+
+  modifyView = (repoId, viewId, viewData) => {
+    return this.metadataAPI.modifyView(repoId, viewId, viewData);
   };
 
   getRowsByIds = () => {

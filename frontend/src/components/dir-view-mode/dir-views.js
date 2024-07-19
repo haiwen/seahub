@@ -67,7 +67,7 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
         moreOperations={moreOperations}
         moreOperationClick={moreOperationClick}
       >
-        {!loading && metadataStatus && (<MetadataTreeView repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
+        {!loading && metadataStatus && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog

@@ -1,0 +1,116 @@
+import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
+import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
+import NameDialog from '../name-dialog';
+
+import './index.css';
+
+const ViewItem = ({ canDelete, userPerm, isSelected, view, onClick, onDelete, onUpdate }) => {
+  const [highlight, setHighlight] = useState(false);
+  const [freeze, setFreeze] = useState(false);
+  const [isShowRenameDialog, setRenameDialogShow] = useState(false);
+  const operations = useMemo(() => {
+    if (userPerm !== 'rw' && userPerm !== 'admin') return [];
+    let value = [
+      { key: 'rename', value: gettext('Rename') },
+    ];
+    if (canDelete) {
+      value.push({ key: 'delete', value: gettext('Delete') });
+    }
+    return value;
+  }, [userPerm]);
+
+  const onMouseEnter = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseOver = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseLeave = useCallback(() => {
+    if (freeze) return;
+    setHighlight(false);
+  }, [freeze]);
+
+  const freezeItem = useCallback(() => {
+    setFreeze(true);
+  }, []);
+
+  const unfreezeItem = useCallback(() => {
+    setFreeze(false);
+    setHighlight(false);
+  }, []);
+
+  const operationClick = useCallback((operationKey) => {
+    if (operationKey === 'rename') {
+      setRenameDialogShow(true);
+      return;
+    }
+
+    if (operationKey === 'delete') {
+      onDelete();
+      return;
+    }
+  }, [onDelete, view]);
+
+  const closeRenameDialog = useCallback(() => {
+    setRenameDialogShow(false);
+  }, []);
+
+  const renameView = useCallback((name, failCallback) => {
+    onUpdate({ name }, () => {
+      setRenameDialogShow(false);
+    }, failCallback);
+  }, [onUpdate]);
+
+  return (
+    <>
+      <div
+        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
+        title={gettext('File extended properties')}
+        onMouseEnter={onMouseEnter}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
+        onClick={() => onClick(view)}
+      >
+        <div className="tree-node-text">{view.name}</div>
+        <div className="left-icon">
+          <div className="tree-node-icon">
+            <Icon symbol="table" className="metadata-views-icon" />
+          </div>
+        </div>
+        <div className="right-icon">
+          {highlight && (
+            <ItemDropdownMenu
+              item={{ name: 'metadata-view' }}
+              toggleClass="sf3-font sf3-font-more"
+              freezeItem={freezeItem}
+              unfreezeItem={unfreezeItem}
+              getMenuList={() => operations}
+              onMenuItemClick={operationClick}
+            />
+          )}
+        </div>
+      </div>
+      {isShowRenameDialog && (
+        <NameDialog title={gettext('Rename view')} value={view.name} onSubmit={renameView} onToggle={closeRenameDialog} />
+      )}
+    </>
+
+  );
+};
+
+ViewItem.propTypes = {
+  canDelete: PropTypes.bool,
+  isSelected: PropTypes.bool,
+  view: PropTypes.object,
+  onClick: PropTypes.func,
+};
+
+export default ViewItem;

@@ -117,6 +117,43 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
+  // view
+  listViews = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
+    return this.req.get(url);
+  };
+
+  addView = (repoID, name) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
+    const params = { name };
+    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
+
+  modifyView = (repoID, viewId, viewData) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
+    const params = {
+      view_id: viewId,
+      view_data: viewData,
+    };
+    return this.req.put(url, params);
+  };
+
+  deleteView = (repoID, viewId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
+    const params = {
+      view_id: viewId,
+    };
+    return this.req.delete(url, params);
+  };
+
+  moveView = (repoID, viewId, targetViewId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/move-views/';
+    const params = {
+      view_id: viewId,
+      target_view_id: targetViewId,
+    };
+    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
 }
 
 const metadataAPI = new MetadataManagerAPI();

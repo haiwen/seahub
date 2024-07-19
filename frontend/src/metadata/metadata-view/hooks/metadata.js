@@ -36,7 +36,8 @@ export const MetadataProvider = ({
     window.sfMetadataContext = context;
     window.sfMetadataContext.init({ otherSettings: params });
     const repoId = window.sfMetadataContext.getSetting('repoID');
-    storeRef.current = new Store({ context: window.sfMetadataContext, repoId });
+    const viewId = window.sfMetadataContext.getSetting('viewID');
+    storeRef.current = new Store({ context: window.sfMetadataContext, repoId, viewId });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
     storeRef.current.loadData(PER_LOAD_NUMBER).then(() => {

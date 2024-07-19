@@ -68,7 +68,7 @@ class MetadataManage(APIView):
             error_msg = f'The metadata module is enabled for repo {repo_id}.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id

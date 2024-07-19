@@ -3,7 +3,9 @@ import {
   getRowById,
   getRowsByIds,
 } from '../_basic';
-import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE } from './operations';
+import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
+  VIEW_OPERATION
+} from './operations';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
@@ -14,6 +16,7 @@ class Store {
 
   constructor(props) {
     this.repoId = props.repoId;
+    this.viewId = props.viewId;
     this.data = null;
     this.context = props.context;
     this.startIndex = 0;
@@ -30,17 +33,11 @@ class Store {
     this.startIndex = 0;
   };
 
-  saveView = () => {
-    const { filters, sorts, gropbys, filter_conjunction } = this.data.view;
-    const view = { filters, sorts, gropbys, filter_conjunction };
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
-    this.context.localStorage.setItem('view', view);
-  };
-
   async loadData(limit = PER_LOAD_NUMBER) {
     const res = await this.context.getMetadata({ start: this.startIndex, limit });
-    const view = this.context.localStorage.getItem('view');
     const rows = res?.data?.results || [];
+    const viewRes = await this.context.getViews();
+    const view = viewRes?.data?.views.find(v => v._id === this.viewId) || {};
     const columns = normalizeColumns(res?.data?.metadata);
     let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
@@ -142,6 +139,10 @@ class Store {
       this.handleUndoRedos(undoRedoHandler, operation);
       this.data = deepCopy(operation.apply(this.data));
       this.syncOperationOnData(operation);
+    }
+
+    if (VIEW_OPERATION.includes(operation.op_type)) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     }
 
     operation.success_callback && operation.success_callback();
@@ -325,37 +326,33 @@ class Store {
   modifyFilters(filterConjunction, filters) {
     const type = OPERATION_TYPE.MODIFY_FILTERS;
     const operation = this.createOperation({
-      type, filter_conjunction: filterConjunction, filters,
+      type, filter_conjunction: filterConjunction, filters, repo_id: this.repoId, view_id: this.viewId
     });
     this.applyOperation(operation);
-    this.saveView();
   }
 
   modifySorts(sorts) {
     const type = OPERATION_TYPE.MODIFY_SORTS;
     const operation = this.createOperation({
-      type, sorts,
+      type, sorts, repo_id: this.repoId, view_id: this.viewId
     });
     this.applyOperation(operation);
-    this.saveView();
   }
 
   modifyGroupbys(groupbys) {
     const type = OPERATION_TYPE.MODIFY_GROUPBYS;
     const operation = this.createOperation({
-      type, groupbys,
+      type, groupbys, repo_id: this.repoId, view_id: this.viewId
     });
     this.applyOperation(operation);
-    this.saveView();
   }
 
   modifyHiddenColumns(shown_column_keys) {
     const type = OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS;
     const operation = this.createOperation({
-      type, shown_column_keys
+      type, shown_column_keys, repo_id: this.repoId, view_id: this.viewId
     });
     this.applyOperation(operation);
-    this.saveView();
   }
 
   insertColumn = (name, type, { key, data }) => {

@@ -99,7 +99,7 @@ class DirTool extends React.Component {
     const { isDropdownMenuOpen } = this.state;
     const { repoID, currentMode, currentPath, sortBy, sortOrder } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
-    const isFileExtended = currentPath === '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
+    const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
 
     const sortOptions = this.sortOptions.map(item => {
       return {
