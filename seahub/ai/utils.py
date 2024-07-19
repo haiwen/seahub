@@ -4,7 +4,8 @@ import jwt
 import time
 from urllib.parse import urljoin
 
-from seahub.settings import SEAFILE_AI_SERVER_URL, SEAFILE_AI_SECRET_KEY
+from seahub.settings import SEAFILE_AI_SERVER_URL, SEAFILE_AI_SECRET_KEY, \
+    SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.utils import get_user_repos
 
 from seaserv import seafile_api
@@ -32,16 +33,20 @@ def create_library_sdoc_index(params):
 
 
 def search(params):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search/')
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/search')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
 
 def question_answering_search_in_library(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/question-answering-search-in-library/')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
 
 def update_library_sdoc_index(params):
     headers = gen_headers()
