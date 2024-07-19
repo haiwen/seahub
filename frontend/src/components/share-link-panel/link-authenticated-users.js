@@ -116,20 +116,19 @@ class LinkAuthenticatedUsers extends React.Component {
     const users = selectedOption.map((item, index) => item.email);
     seafileAPI.addShareLinkAuthUsers(linkToken, users, path).then(res => {
       const { success, failed } = res.data;
-      let newEmails = [];
       if (success.length) {
-        newEmails = success.map(item => item.email);
-        let msg = gettext('Successfully added %s.').replace('%s', newEmails.join(', '));
+        let newNames = success.map(item => item.name);
+        let msg = gettext('Successfully added %s.').replace('%s', newNames.join(', '));
         toaster.success(msg);
       }
       if (failed.length) {
         failed.forEach(item => {
-          let msg = `${item.email}: ${item.error_msg}`;
+          let msg = `${item.name}: ${item.error_msg}`;
           toaster.danger(msg);
         });
       }
       this.setState({
-        authUsers: newEmails.concat(authUsers),
+        authUsers: success.concat(authUsers),
         selectedOption: null
       });
       this.refs.userSelect.clearSelect();
