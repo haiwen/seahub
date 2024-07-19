@@ -21,7 +21,7 @@ from django.utils.translation import gettext as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error, to_python_boolean, is_wiki_repo
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
@@ -36,12 +36,12 @@ from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, get_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
@@ -84,32 +84,41 @@ class Wikis2View(APIView):
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
-
-        filter_repo_ids = []
+        
+        wikis = []
+        username = request.user.username
         if filter_by['mine']:
-            filter_repo_ids += ([r.id for r in owned])
-
+            owned_wikis = [r for r in owned if is_wiki_repo(r)]
+            for r in owned_wikis:
+                r.owner = username
+                r.permission = 'rw'
+                wikis.append(r)
+            
         if filter_by['shared']:
-            filter_repo_ids += ([r.id for r in shared])
+            shared_wikis = [r for r in shared if is_wiki_repo(r)]
+            for r in shared_wikis:
+                r.owner = r.user
+                wikis.append(r)
 
         if filter_by['group']:
-            filter_repo_ids += ([r.id for r in groups])
-
-        if filter_by['org']:
-            filter_repo_ids += ([r.id for r in public])
-
-        filter_repo_ids = list(set(filter_repo_ids))
-
-        wikis = Wiki.objects.filter(repo_id__in=filter_repo_ids)
-
+            group_wikis = [r for r in groups if is_wiki_repo(r)]
+            for r in group_wikis:
+                r.owner = r.user
+                wikis.append(r)
+                
+        wikis = list(set(wikis))
         wiki_list = []
-        for wiki in wikis:
+        for w in wikis:
+            wiki = Wiki(w)
             wiki_info = wiki.to_dict()
             if is_group_wiki(wiki):
-                wiki_info['owner_nickname'] = group_id_to_name(wiki.owner)
+                group_id = int(wiki.owner.split('@')[0])
+                wiki_info['owner_nickname'] = group_id_to_name(group_id)
             else:
                 wiki_info['owner_nickname'] = email2nickname(wiki.owner)
             wiki_list.append(wiki_info)
+            
+        wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
 
         return Response({'wikis': wiki_list})
 
@@ -138,6 +147,7 @@ class Wikis2View(APIView):
         else:
             try:
                 group_id = int(wiki_owner)
+                wiki_owner = "%s@seafile_group" % group_id
             except:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'wiki_owner invalid')
             is_group_owner = True
@@ -187,20 +197,22 @@ class Wikis2View(APIView):
                 repo_id = seafile_api.create_repo(wiki_name, '', username)
 
         try:
-            wiki = Wiki.objects.add(wiki_name=wiki_name, owner=wiki_owner, repo_id=repo_id)
             seafile_db_api = SeafileDB()
             seafile_db_api.set_repo_type(repo_id, 'wiki')
         except Exception as e:
             logger.error(e)
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
-
+        
+        repo = seafile_api.get_repo(repo_id)
+        wiki = Wiki(repo, wiki_owner)
         wiki_info = wiki.to_dict()
         if not is_group_owner:
             wiki_info['owner_nickname'] = email2nickname(wiki.owner)
         else:
-            wiki_info['owner_nickname'] = group_id_to_name(wiki.owner)
-
+            group_id = int(wiki.owner.split('@')[0])
+            wiki_info['owner_nickname'] = group_id_to_name(group_id)
+        
         return Response(wiki_info)
 
 
@@ -218,35 +230,30 @@ class Wiki2View(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
 
         username = request.user.username
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = 'Wiki not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not check_wiki_admin_permission(wiki, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if wiki_name == wiki.name:
             return Response({"success": True})
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
+        
         if not repo:
             error_msg = "Wiki library not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not is_group_wiki(wiki):
-            if is_org_context(request):
-                repo_owner = seafile_api.get_org_repo_owner(repo.id)
-            else:
-                repo_owner = seafile_api.get_repo_owner(repo.id)
-
             is_owner = True if username == repo_owner else False
             if not is_owner:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -258,15 +265,11 @@ class Wiki2View(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            # desc is ''
             seafile_api.edit_repo(repo_id, wiki_name, '', username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        wiki.name = wiki_name
-        wiki.save()
 
         return Response({"success": True})
 
@@ -274,24 +277,25 @@ class Wiki2View(APIView):
         """Delete a wiki.
         """
         username = request.user.username
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = 'Wiki not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        wiki.delete()
-
+        
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
         if is_group_wiki(wiki):
-            group_id = int(wiki.owner)
+            group_id = int(wiki.owner.split('@')[0])
             try:
                 SeafileAPI.delete_group_owned_repo(group_id, wiki.repo_id, org_id)
             except Exception as e:
@@ -318,11 +322,13 @@ class Wiki2ConfigView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         username = request.user.username
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         if not check_wiki_permission(wiki, request.user.username):
             error_msg = 'Permission denied.'
@@ -342,11 +348,14 @@ class Wiki2ConfigView(APIView):
 
     def get(self, request, wiki_id):
 
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         if not check_wiki_permission(wiki, request.user.username):
             error_msg = 'Permission denied.'
@@ -397,11 +406,14 @@ class Wiki2PagesView(APIView):
             error_msg = 'page_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         if not check_wiki_permission(wiki, request.user.username):
             error_msg = 'Permission denied.'
@@ -487,11 +499,14 @@ class Wiki2PagesView(APIView):
         return Response({'file_info': file_info})
 
     def put(self, request, wiki_id):
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         username = request.user.username
         if not check_wiki_permission(wiki, username):
@@ -543,11 +558,14 @@ class Wiki2PageView(APIView):
 
     def get(self, request, wiki_id, page_id):
 
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         username = request.user.username
         if not check_wiki_permission(wiki, username):
@@ -610,11 +628,14 @@ class Wiki2PageView(APIView):
         })
 
     def delete(self, request, wiki_id, page_id):
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         username = request.user.username
         if not check_wiki_permission(wiki, username):
@@ -720,11 +741,14 @@ class Wiki2DuplicatePageView(APIView):
             error_msg = 'page_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            wiki = Wiki.objects.get(id=wiki_id)
-        except Wiki.DoesNotExist:
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
 
         username = request.user.username
         if not check_wiki_permission(wiki, username):

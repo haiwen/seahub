@@ -526,11 +526,11 @@ urlpatterns = [
 
     ## user::wiki2
     re_path(r'^api/v2.1/wikis2/$', Wikis2View.as_view(), name='api-v2.1-wikis2'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/config/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
-    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>\d+)/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/config/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
 
     ## user::drafts
     re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),

@@ -67,12 +67,12 @@ def get_wiki_config(repo_id, username):
 
 
 def is_group_wiki(wiki):
-    return not ('@' in wiki.owner)
+    return '@seafile_group' in wiki.owner
 
 
 def check_wiki_admin_permission(wiki, username):
     if is_group_wiki(wiki):
-        group_id = wiki.owner
+        group_id = int(wiki.owner.split('@')[0])
         return is_group_admin(group_id, username)
     else:
         if username == wiki.owner:
@@ -82,7 +82,7 @@ def check_wiki_admin_permission(wiki, username):
 
 def check_wiki_permission(wiki, username):
     if is_group_wiki(wiki):
-        group_id = wiki.owner
+        group_id = int(wiki.owner.split('@')[0])
         return is_group_member(group_id, username)
     else:
         if username == wiki.owner:
