@@ -531,8 +531,12 @@ class DirentGridView extends React.Component {
   onGridItemContextMenu = (event, dirent) => {
     if (this.props.selectedDirentList.length > 1) return;
     // Display menu items according to the current dirent permission
-    const menuList = this.getDirentItemMenuList(dirent, true);
-    this.handleContextClick(event, GRID_ITEM_CONTEXTMENU_ID, menuList, dirent);
+    let id = 'grid-item-contextmenu';
+    let menuList = this.getDirentItemMenuList(dirent, true);
+    this.handleContextClick(event, id, menuList, dirent);
+
+    if (this.props.direntList.filter(item => item.isSelected).length > 1) return;
+
     this.props.onGridItemClick && this.props.onGridItemClick(dirent);
   };
 
@@ -572,7 +576,11 @@ class DirentGridView extends React.Component {
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+
+    const selectedDirents = this.props.direntList.filter(item => item.isSelected);
+    const selectedTypes = new Set(selectedDirents.map(item => item.type));
+    const hasMultipleTypes = selectedTypes.size > 1;
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, hasMultipleTypes);
   };
 
   render() {
