@@ -11,8 +11,9 @@ import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
+import Selector from '../../../components/single-selector';
 
-const { twoFactorAuthEnabled } = window.sysadmin.pageOptions;
+const { twoFactorAuthEnabled, availableRoles, availableAdminRoles } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
@@ -24,7 +25,9 @@ class Content extends Component {
       isSetQuotaDialogOpen: false,
       isSetUserUploadRateLimitDialogOpen: false,
       isSetUserDownloadRateLimitDialogOpen: false,
-      isUpdateUserDialogOpen: false
+      isUpdateUserDialogOpen: false,
+      isUpdateUserRoleDialogOpen: false,
+      highlight: false
     };
   }
 
@@ -73,16 +76,18 @@ class Content extends Component {
     this.toggleDialog('contact_email', gettext('Set Contact Email'));
   };
 
-  toggleSetUserRoleDialog = () => {
-    this.toggleDialog('role', gettext('Set Role'));
-  };
-
   updateValue = (value) => {
     this.props.updateUser(this.state.currentKey, value);
   };
 
   toggleUpdateUserDialog = () => {
     this.toggleDialog('', '');
+  };
+
+  toggleUpdateRoleDialog = () => {
+    this.setState({
+      isUpdateUserRoleDialogOpen: !this.state.isUpdateUserRoleDialogOpen
+    });
   };
 
   showEditIcon = (action) => {
@@ -97,6 +102,7 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg } = this.props;
+    const { highlight } = this.state;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -106,7 +112,8 @@ class Content extends Component {
       const {
         currentKey, dialogTitle,
         isSetQuotaDialogOpen, isUpdateUserDialogOpen,
-        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen
+        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen,
+        isUpdateUserRoleDialogOpen
       } = this.state;
       return (
         <Fragment>
@@ -146,8 +153,23 @@ class Content extends Component {
 
             <dt className="info-item-heading">{gettext('Role')}</dt>
             <dd className="info-item-content">
-              {user.role|| '--'}
-              {this.showEditIcon(this.toggleSetUserRoleDialog)}
+              {this.props.isAdmin ?
+                <Selector
+                  isDropdownToggleShown={highlight}
+                  currentSelectedOption={this.props.currentSelectedAdminRoleOption}
+                  options={this.props.adminRoleOptions}
+                  selectOption={this.props.updateAdminRole}
+                  toggleItemFreezed={this.props.toggleItemFreezed}
+                />
+                :
+                <Selector
+                  isDropdownToggleShown={highlight}
+                  currentSelectedOption={this.props.currentSelectedRoleOption}
+                  options={this.props.roleOptions}
+                  selectOption={this.props.updateRole}
+                  toggleItemFreezed={this.props.toggleItemFreezed}
+                />
+              }
             </dd>
 
             <dt className="info-item-heading">{gettext('Space Used / Quota')}</dt>
@@ -220,6 +242,14 @@ class Content extends Component {
             toggleDialog={this.toggleUpdateUserDialog}
           />
           }
+          {isUpdateUserRoleDialogOpen &&
+          <SysAdminUpdateUserDialog
+            dialogTitle={dialogTitle}
+            value={user[currentKey]}
+            updateValue={this.updateValue}
+            toggleDialog={this.toggleUpdateRoleDialog}
+          />
+          }
         </Fragment>
       );
     }
@@ -280,6 +310,24 @@ class User extends Component {
     });
   };
 
+  updateAdminRole = (roleOption) => {
+    seafileAPI.sysAdminUpdateAdminRole(this.props.userInfo.email, roleOption.value).then(res => {
+      let newUser = this.state.userInfo;
+      if (newUser.email == this.props.email) {
+        newUser.admin_role = res.data.role;
+      }
+      this.setState({ userInfo: newUser });
+      toaster.success(gettext('Edit succeeded'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  updateRole = (roleOption) => {
+    this.updateUser('role', roleOption.value);
+  };
+
   disable2FA = () => {
     const email = this.state.userInfo.email;
     seafileAPI.sysAdminDeleteTwoFactorAuth(email).then(res => {
@@ -309,8 +357,62 @@ class User extends Component {
     });
   };
 
+  translateAdminRole = (role) => {
+    switch (role) {
+      case 'default_admin':
+        return gettext('Default Admin');
+      case 'system_admin':
+        return gettext('System Admin');
+      case 'daily_admin':
+        return gettext('Daily Admin');
+      case 'audit_admin':
+        return gettext('Audit Admin');
+      default:
+        return role;
+    }
+  };
+
+  translateRole = (role) => {
+    switch (role) {
+      case 'default':
+        return gettext('Default');
+      case 'guest':
+        return gettext('Guest');
+      default:
+        return role;
+    }
+  };
+
   render() {
     const { userInfo } = this.state;
+    const { isAdmin } = this.props;
+    let currentSelectedAdminRoleOption;
+    let currentSelectedRoleOption;
+    if (isAdmin) {
+      const { admin_role: curAdminRole } = userInfo;
+      this.adminRoleOptions = availableAdminRoles.map(item => {
+        return {
+          value: item,
+          text: this.translateAdminRole(item),
+          isSelected: item == curAdminRole
+        };
+      });
+      currentSelectedAdminRoleOption = this.adminRoleOptions.filter(item => item.isSelected)[0];
+    } else {
+      const { role: curRole } = userInfo;
+      this.roleOptions = availableRoles.map(item => {
+        return {
+          value: item,
+          text: this.translateRole(item),
+          isSelected: item == curRole
+        };
+      });
+      currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || { // `|| {...}`: to be compatible with old data(roles not in the present `availableRoles`
+        value: curRole,
+        text: this.translateRole(curRole),
+        isSelected: true
+      };
+    }
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -322,6 +424,13 @@ class User extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 userInfo={this.state.userInfo}
+                isAdmin={isAdmin}
+                adminRoleOptions={this.adminRoleOptions}
+                roleOptions={this.roleOptions}
+                currentSelectedRoleOption={currentSelectedRoleOption}
+                currentSelectedAdminRoleOption={currentSelectedAdminRoleOption}
+                updateAdminRole={this.updateAdminRole}
+                updateRole={this.updateRole}
                 updateUser={this.updateUser}
                 disable2FA={this.disable2FA}
                 toggleForce2fa={this.toggleForce2fa}
