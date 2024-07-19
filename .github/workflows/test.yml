@@ -3,9 +3,17 @@ name: Seahub Test CI
 on:
   pull_request:
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -40,3 +48,13 @@ jobs:
           cd $GITHUB_WORKSPACE
           export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: run npm lint
+        run: |
+          cd $GITHUB_WORKSPACE/tests/
+          chmod +x github_actions_npm_lint.sh
+          ./github_actions_npm_lint.sh
