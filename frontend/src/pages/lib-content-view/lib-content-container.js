@@ -221,6 +221,7 @@ class LibContentContainer extends React.Component {
               filePermission={this.props.filePermission}
               onFileTagChanged={this.props.onToolbarFileTagChanged}
               repoTags={this.props.repoTags}
+              metadataViewId={this.props.metadataViewId}
             />
             <ToolbarForSelectedDirents
               repoID={this.props.repoID}

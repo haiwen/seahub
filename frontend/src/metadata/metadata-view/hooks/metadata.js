@@ -10,6 +10,9 @@ const MetadataContext = React.createContext(null);
 
 export const MetadataProvider = ({
   children,
+  repoID,
+  viewID,
+  currentRepoInfo,
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -31,13 +34,15 @@ export const MetadataProvider = ({
 
   // init
   useEffect(() => {
+    setLoading(true);
     // init context
     const context = new Context();
     window.sfMetadataContext = context;
     window.sfMetadataContext.init({ otherSettings: params });
-    const repoId = window.sfMetadataContext.getSetting('repoID');
-    const viewId = window.sfMetadataContext.getSetting('viewID');
-    storeRef.current = new Store({ context: window.sfMetadataContext, repoId, viewId });
+    window.sfMetadataContext.setSetting('viewID', viewID);
+    window.sfMetadataContext.setSetting('repoID', repoID);
+    window.sfMetadataContext.setSetting('currentRepoInfo', currentRepoInfo);
+    storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
     storeRef.current.loadData(PER_LOAD_NUMBER).then(() => {
@@ -55,13 +60,14 @@ export const MetadataProvider = ({
 
     return () => {
       window.sfMetadataContext.destroy();
+      window.sfMetadataStore.destroy();
       unsubscribeServerTableChanged();
       unsubscribeTableChanged();
       unsubscribeHandleTableError();
       unsubscribeUpdateRows();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [repoID, viewID, currentRepoInfo]);
 
   return (
     <MetadataContext.Provider value={{ isLoading, metadata, store: storeRef.current }}>

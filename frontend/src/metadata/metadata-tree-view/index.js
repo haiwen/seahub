@@ -27,7 +27,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       Array.isArray(views) && views.forEach(view => {
         viewsMap.current[view._id] = view;
       });
-      setViews(navigation.filter(item => item.type === 'view'));
+      setViews(navigation);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -94,7 +94,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
     }));
   }, [views, onClick, viewsMap]);
 
-  const updateView = useCallback((viewId, update, successCallback, failCallback) => {
+  const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
       successCallback && successCallback();
       const currentView = viewsMap.current[viewId];
@@ -105,12 +105,23 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
     });
   }, [repoID, viewsMap]);
 
+  const onMoveView = useCallback((sourceViewId, targetViewId) => {
+    metadataAPI.moveView(repoID, sourceViewId, targetViewId).then(res => {
+      const { navigation } = res.data;
+      setViews(navigation);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID]);
+
   return (
     <>
       <div className="tree-view tree metadata-tree-view">
         <div className="tree-node">
           <div className="children">
             {views.map((item, index) => {
+              if (item.type !== 'view') return null;
               const view = viewsMap.current[item._id];
               const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name;
               const isSelected = currentPath === viewPath;
@@ -123,7 +134,8 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
                   view={view}
                   onClick={onClick}
                   onDelete={() => onDeleteView(view._id, isSelected)}
-                  onUpdate={(update, successCallback, failCallback) => updateView(view._id, update, successCallback, failCallback)}
+                  onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
+                  onMove={onMoveView}
                 />);
             })}
             {canAdd && (<CustomizeAddTool className="sf-metadata-add-view" callBack={openAddView} footerName={gettext('Add view')} addIconClassName="sf-metadata-add-view-icon" />)}

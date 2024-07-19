@@ -24,10 +24,20 @@ class Store {
     this.undos = [];
     this.pendingOperations = [];
     this.isSendingOperation = false;
-    this.isTableReadonly = false;
+    this.isReadonly = false;
     this.serverOperator = new ServerOperator();
     this.collaborators = [];
   }
+
+  destroy = () => {
+    this.viewId = '';
+    this.data = null;
+    this.startIndex = 0;
+    this.redos = [];
+    this.undos = [];
+    this.pendingOperations = [];
+    this.isSendingOperation = false;
+  };
 
   initStartIndex = () => {
     this.startIndex = 0;
@@ -179,7 +189,7 @@ class Store {
   }
 
   undoOperation() {
-    if (this.isTableReadonly || this.undos.length === 0) return;
+    if (this.isReadonly || this.undos.length === 0) return;
     const lastOperation = this.undos.pop();
     const lastInvertOperation = lastOperation.invert();
     if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastInvertOperation.op_type)) {
@@ -196,7 +206,7 @@ class Store {
   }
 
   redoOperation() {
-    if (this.isTableReadonly || this.redos.length === 0) return;
+    if (this.isReadonly || this.redos.length === 0) return;
     let lastOperation = this.redos.pop();
     if (NEED_APPLY_AFTER_SERVER_OPERATION.includes(lastOperation.op_type)) {
       this.applyOperation(lastOperation, { handleUndo: false, asyncUndoRedo: (operation) => {

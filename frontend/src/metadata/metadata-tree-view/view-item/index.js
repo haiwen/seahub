@@ -7,13 +7,32 @@ import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-me
 import NameDialog from '../name-dialog';
 
 import './index.css';
+import { Utils } from '../../../utils/utils';
 
-const ViewItem = ({ canDelete, userPerm, isSelected, view, onClick, onDelete, onUpdate }) => {
+const ViewItem = ({
+  canDelete,
+  userPerm,
+  isSelected,
+  view,
+  onClick,
+  onDelete,
+  onUpdate,
+  onMove,
+}) => {
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [isShowRenameDialog, setRenameDialogShow] = useState(false);
+  const [isDropShow, setDropShow] = useState(false);
+  const canUpdate = useMemo(() => {
+    if (userPerm !== 'rw' && userPerm !== 'admin') return false;
+    return true;
+  }, [userPerm]);
+  const canDrop = useMemo(() => {
+    if (Utils.isIEBrower() || !canUpdate) return false;
+    return true;
+  }, [canUpdate]);
   const operations = useMemo(() => {
-    if (userPerm !== 'rw' && userPerm !== 'admin') return [];
+    if (!canUpdate) return [];
     let value = [
       { key: 'rename', value: gettext('Rename') },
     ];
@@ -21,7 +40,7 @@ const ViewItem = ({ canDelete, userPerm, isSelected, view, onClick, onDelete, on
       value.push({ key: 'delete', value: gettext('Delete') });
     }
     return value;
-  }, [userPerm]);
+  }, [canUpdate]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
@@ -69,17 +88,61 @@ const ViewItem = ({ canDelete, userPerm, isSelected, view, onClick, onDelete, on
     }, failCallback);
   }, [onUpdate]);
 
+  const onDragStart = useCallback((event) => {
+    if (!canDrop) return false;
+    const dragData = JSON.stringify({ type: 'sf-metadata-view', view_id: view._id });
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('applicaiton/drag-sf-metadata-view-info', dragData);
+  }, [canDrop, view]);
+
+  const onDragEnter = useCallback((event) => {
+    if (!canDrop) return false;
+    setDropShow(true);
+  }, [canDrop, view]);
+
+  const onDragLeave = useCallback(() => {
+    if (!canDrop) return false;
+    setDropShow(false);
+  }, [canDrop, view]);
+
+  const onDragMove = useCallback(() => {
+    if (!canDrop) return false;
+  }, [canDrop]);
+
+  const onDrop = useCallback((event) => {
+    if (!canDrop) return false;
+    event.stopPropagation();
+    setDropShow(false);
+
+    let dragData = event.dataTransfer.getData('applicaiton/drag-sf-metadata-view-info');
+    if (!dragData) return;
+    dragData = JSON.parse(dragData);
+    if (dragData.type !== 'sf-metadata-view') return false;
+    if (!dragData.view_id) return;
+    onMove && onMove(dragData.view_id, view._id);
+  }, [canDrop, view, onMove]);
+
   return (
     <>
       <div
-        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
+        className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected, 'tree-node-drop': isDropShow })}
         title={gettext('File extended properties')}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
         onClick={() => onClick(view)}
       >
-        <div className="tree-node-text">{view.name}</div>
+        <div
+          className="tree-node-text"
+          draggable={canUpdate}
+          onDragStart={onDragStart}
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
+          onDragOver={onDragMove}
+          onDrop={onDrop}
+        >
+          {view.name}
+        </div>
         <div className="left-icon">
           <div className="tree-node-icon">
             <Icon symbol="table" className="metadata-views-icon" />
