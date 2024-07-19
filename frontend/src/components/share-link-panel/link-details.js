@@ -6,6 +6,7 @@ import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
+import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
 import toaster from '../toast';
@@ -40,9 +41,7 @@ class LinkDetails extends React.Component {
       expireDays: this.props.defaultExpireDays,
       expDate: null,
       isLinkDeleteDialogOpen: false,
-      isSendLinkShown: false,
-
-      currentScope: this.props.sharedLinkInfo.user_scope,  // all_users, specific_users, spcific_emails
+      isSendLinkShown: false
     };
   }
 
@@ -137,7 +136,7 @@ class LinkDetails extends React.Component {
   changeScope = (scope) => {
     const { sharedLinkInfo } = this.props;
     const { token } = sharedLinkInfo;
-    seafileAPI.updateShareLink(token, '', '', scope).then((res) => {
+    shareLinkAPI.updateShareLink(token, '', '', scope).then((res) => {
       this.props.updateLink(new ShareLink(res.data));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

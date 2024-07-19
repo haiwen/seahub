@@ -1,5 +1,6 @@
 import cookie from 'react-cookies';
-import { SeafileAPI } from 'seafile-js';
+//import { SeafileAPI } from 'seafile-js';
+import { SeafileAPI } from './a';
 import { siteRoot } from './constants';
 
 let seafileAPI = new SeafileAPI();
