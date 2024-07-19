@@ -1,3 +1,7 @@
+.side-nav-icon-tip-popover {
+  cursor: pointer;
+}
+
 .side-nav-icon-tip {
   opacity: 0;
   transform: translateX(-20px);
