@@ -31,14 +31,7 @@ const SingleSelectEditor = forwardRef(({
   const canEditData = false;
 
   const options = useMemo(() => {
-    let options = getSelectColumnOptions(column);
-    if (options.length === 0) {
-      options = [
-        { id: '1', name: '带开始', color: '#EED5FF', fontColor: '#202428' },
-        { id: '2', name: '进行中', color: '#FFFDCF', fontColor: '#202428' },
-        { id: '3', name: '已完成', color: '#59CB74', fontColor: '#fff' },
-      ];
-    }
+    const options = getSelectColumnOptions(column);
     const { data } = column;
     const { cascade_column_key, cascade_settings } = data || {};
     if (cascade_column_key) {
