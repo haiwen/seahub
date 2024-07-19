@@ -29,7 +29,7 @@ class Wiki2(object):
         # wiki a wiki type repo object
         self.pk = wiki.id
         self.id = wiki.id
-        self.owner = owner
+        self.owner = owner or wiki.owner
         self.name = wiki.repo_name
         self.updated_at = timestamp_to_isoformat_timestr(wiki.last_modify)
         self.repo_id = wiki.repo_id

@@ -84,29 +84,32 @@ class Wikis2View(APIView):
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
-
+        
         wikis = []
+        username = request.user.username
         if filter_by['mine']:
-            wikis += ([r for r in owned if is_wiki_repo(r)])
-
+            owned_wikis = [r for r in owned if is_wiki_repo(r)]
+            for r in owned_wikis:
+                r.owner = username
+                r.permission = 'rw'
+                wikis.append(r)
+            
         if filter_by['shared']:
-            wikis += ([r for r in shared if is_wiki_repo(r)])
+            shared_wikis = [r for r in shared if is_wiki_repo(r)]
+            for r in shared_wikis:
+                r.owner = r.user
+                wikis.append(r)
 
         if filter_by['group']:
-            wikis += ([r for r in groups if is_wiki_repo(r)])
-
-        if filter_by['org']:
-            wikis += ([r for r in public if is_wiki_repo(r)])
-
+            group_wikis = [r for r in groups if is_wiki_repo(r)]
+            for r in group_wikis:
+                r.owner = r.user
+                wikis.append(r)
+                
         wikis = list(set(wikis))
-        repo_id_owner_dict = {}
-        for w in wikis:
-            repo_owner = get_repo_owner(request, w.repo_id)
-            repo_id_owner_dict[w.repo_id] = repo_owner
         wiki_list = []
         for w in wikis:
-            owner = repo_id_owner_dict[w.repo_id]
-            wiki = Wiki(w, owner)
+            wiki = Wiki(w)
             wiki_info = wiki.to_dict()
             if is_group_wiki(wiki):
                 group_id = int(wiki.owner.split('@')[0])
@@ -238,6 +241,7 @@ class Wiki2View(APIView):
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
+        print(repo.__dict__, 'fwefeweeddddd')
         
         if not repo:
             error_msg = "Wiki library not found."

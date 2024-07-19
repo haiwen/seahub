@@ -30,7 +30,7 @@ class WikiCardView extends Component {
     if (!canPublishRepo || !isPro) return;
     let departmentMap = {};
     wikiAPI.listWikiDepartments().then(res => {
-      res.data.forEach(item => departmentMap[item.id] = true);
+      res.data.forEach(item => departmentMap[item.email] = true);
       this.setState({ departmentMap });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
