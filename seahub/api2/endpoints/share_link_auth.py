@@ -130,11 +130,12 @@ class ShareLinkUserAuthView(APIView):
             }
             
             for username in email_list:
+                nickname = email2nickname(username)
                 if username in exist_emails:
                     result['failed'].append({
                         'email': username,
-                        'name': email2nickname(username),
-                        'error_msg': _('User %s already exists.') % username
+                        'name': nickname,
+                        'error_msg': _('User %s already exists.') % nickname
                     })
                     continue
                 try:
@@ -142,8 +143,8 @@ class ShareLinkUserAuthView(APIView):
                 except User.DoesNotExist:
                     result['failed'].append({
                         'email': username,
-                        'name': email2nickname(username),
-                        'error_msg': _('User %s does not exist.') % username
+                        'name': nickname,
+                        'error_msg': _('User %s does not exist.') % nickname
                     })
                     continue
 
