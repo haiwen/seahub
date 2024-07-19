@@ -45,15 +45,15 @@ class SidePanel extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({opNode: nextProps.currentNode});
+    this.setState({ opNode: nextProps.currentNode });
   }
 
   onMouseEnter = () => {
-    this.setState({isMenuIconShow: true});
+    this.setState({ isMenuIconShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isMenuIconShow: false});
+    this.setState({ isMenuIconShow: false });
   };
 
   onDropdownToggleClick = (e) => {
@@ -62,16 +62,16 @@ class SidePanel extends Component {
   };
 
   toggleOperationMenu = () => {
-    this.setState({isHeaderMenuShow: !this.state.isHeaderMenuShow});
+    this.setState({ isHeaderMenuShow: !this.state.isHeaderMenuShow });
   };
 
   onNodeClick = (node) => {
-    this.setState({opNode: node});
+    this.setState({ opNode: node });
     this.props.onNodeClick(node);
   };
 
   onMenuItemClick = (operation, node) => {
-    this.setState({opNode: node});
+    this.setState({ opNode: node });
     switch (operation) {
       case 'New Folder':
         this.onAddFolderToggle();
@@ -96,7 +96,7 @@ class SidePanel extends Component {
         opNode: root,
       });
     } else {
-      this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
+      this.setState({ isAddFileDialogShow: !this.state.isAddFileDialogShow });
     }
   };
 
@@ -108,31 +108,31 @@ class SidePanel extends Component {
         opNode: root,
       });
     } else {
-      this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
+      this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
     }
   };
 
   onRenameToggle = () => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
   };
 
   onDeleteToggle = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+    this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
   };
 
   onAddFolderNode = (dirPath) => {
-    this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
+    this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
     this.props.onAddFolderNode(dirPath);
   };
 
   onRenameNode = (newName) => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
   };
 
   onDeleteNode = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+    this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
     let node = this.state.opNode;
     this.props.onDeleteNode(node);
   };
@@ -152,7 +152,7 @@ class SidePanel extends Component {
 
   render() {
     return (
-      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
+      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '' : 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           <Logo onCloseSidePanel={this.props.onCloseSide} />
         </div>

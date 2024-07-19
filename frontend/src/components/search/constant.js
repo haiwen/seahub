@@ -3,7 +3,7 @@ const getValueLength = (str) => {
   let len = 0;
   for (let i = 0; i < str.length; i++) {
     code = str.charCodeAt(i);
-    if (code == 10) { //solve enter problem
+    if (code == 10) { // solve enter problem
       len += 2;
     } else if (code < 0x007f) {
       len += 1;

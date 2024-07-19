@@ -20,7 +20,7 @@ class SysAdminRepoTransferDialog extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   submit = () => {
@@ -30,13 +30,13 @@ class SysAdminRepoTransferDialog extends React.Component {
 
   render() {
     const repoName = this.props.repoName;
-    const innerSpan = '<span class="op-target" title=' + repoName + '>' + repoName +'</span>';
+    const innerSpan = '<span class="op-target" title=' + repoName + '>' + repoName + '</span>';
     let msg = gettext('Transfer Library {library_name}');
     let message = msg.replace('{library_name}', innerSpan);
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>
-          <div dangerouslySetInnerHTML={{__html:message}} />
+          <div dangerouslySetInnerHTML={{ __html: message }} />
         </ModalHeader>
         <ModalBody>
           <UserSelect
