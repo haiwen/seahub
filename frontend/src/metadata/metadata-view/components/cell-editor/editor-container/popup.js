@@ -64,7 +64,7 @@ class PopupEditorContainer extends React.Component {
     let editorProps = {
       ref: this.setEditorRef,
       value: value,
-      rowMetaData: this.getRowMetaData(),
+      recordMetaData: this.getRecordMetaData(),
       onBlur: this.commit,
       onCommit: this.commit,
       onCommitData: this.commitData,
@@ -94,12 +94,12 @@ class PopupEditorContainer extends React.Component {
     return null;
   };
 
-  getRowMetaData = () => {
+  getRecordMetaData = () => {
     // clone row data so editor cannot actually change this
     // convention based method to get corresponding Id or Name of any Name or Id property
-    if (typeof this.props.column.getRowMetaData === 'function') {
+    if (typeof this.props.column.getRecordMetaData === 'function') {
       const { record, column } = this.props;
-      return this.props.column.getRowMetaData(record, column);
+      return this.props.column.getRecordMetaData(record, column);
     }
   };
 
@@ -148,9 +148,6 @@ class PopupEditorContainer extends React.Component {
     const newValue = this.getEditor().getValue();
     const updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     let originalUpdates = { ...updated };
-    if (columnType === CellType.SINGLE_SELECT) {
-      originalUpdates = this.getEditor().getValueOfOptionId();
-    }
     if (
       !isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) ||
       !this.isNewValueValid(updated)
@@ -190,15 +187,12 @@ class PopupEditorContainer extends React.Component {
     const rowId = record._id;
     const originalOldCellValue = getCellValueByColumn(record, column);
     let originalUpdates = { ...updated };
-    if (columnType === CellType.SINGLE_SELECT) {
-      originalUpdates = this.getEditor().getValueOfOptionId();
-    }
     const key = Object.keys(updated)[0];
     const value = updated[key];
     const updates = { [columnName]: value };
 
     // special treatment of long-text column types to keep the stored data consistent
-    if (column.type === CellType.LONG_TEXT) {
+    if (columnType === CellType.LONG_TEXT) {
       originalUpdates[key] = value.text;
     }
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);

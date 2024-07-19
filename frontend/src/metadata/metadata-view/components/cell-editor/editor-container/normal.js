@@ -91,7 +91,7 @@ class NormalEditorContainer extends React.Component {
       onCommit: this.commit,
       onCommitData: this.commitData,
       onCommitCancel: this.commitCancel,
-      rowMetaData: this.getRowMetaData(),
+      recordMetaData: this.getRecordMetaData(),
       record: this.props.record,
       height: this.props.height,
       onBlur: this.commit,
@@ -167,11 +167,11 @@ class NormalEditorContainer extends React.Component {
     return false;
   };
 
-  getRowMetaData = () => {
+  getRecordMetaData = () => {
     // clone row data so editor cannot actually change this
     // convention based method to get corresponding Id or Name of any Name or Id property
-    if (typeof this.props.column.getRowMetaData === 'function') {
-      return this.props.column.getRowMetaData(this.props.record, this.props.column);
+    if (typeof this.props.column.getRecordMetaData === 'function') {
+      return this.props.column.getRecordMetaData(this.props.record, this.props.column);
     }
   };
 

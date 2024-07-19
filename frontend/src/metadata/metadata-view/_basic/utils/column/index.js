@@ -14,6 +14,7 @@ export {
 } from './predefined';
 export {
   getSelectColumnOptions,
+  getNotDuplicateOption,
 } from './select';
 export {
   isNumericColumn,

@@ -4,6 +4,8 @@ import { SfCalendar } from '@seafile/sf-metadata-ui-component';
 import { CellType } from '../../_basic';
 import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
+import NumberEditor from './number-editor';
+import SingleSelectEditor from './single-select-editor';
 
 // eslint-disable-next-line react/display-name
 const Editor = React.forwardRef((props, ref) => {
@@ -18,6 +20,12 @@ const Editor = React.forwardRef((props, ref) => {
     case CellType.DATE: {
       const lang = window.sfMetadataContext.getSetting('lang');
       return (<SfCalendar ref={ref} {...props} lang={lang} />);
+    }
+    case CellType.NUMBER: {
+      return (<NumberEditor ref={ref} {...props} />);
+    }
+    case CellType.SINGLE_SELECT: {
+      return (<SingleSelectEditor ref={ref} {...props} />);
     }
     default: {
       return null;

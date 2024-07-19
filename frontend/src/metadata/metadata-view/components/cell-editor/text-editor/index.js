@@ -32,9 +32,7 @@ class SimpleTextEditor extends Component {
   };
 
   updateValue = (value, callback) => {
-    if (value === this.state.value) {
-      return;
-    }
+    if (value === this.state.value) return;
     this.setState({ value }, () => {
       callback && callback();
     });
