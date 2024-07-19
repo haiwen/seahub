@@ -91,6 +91,10 @@ class Context {
     return true;
   };
 
+  canModifyColumn = (column) => {
+    return true;
+  };
+
   getPermission = () => {
     return 'rw';
   };

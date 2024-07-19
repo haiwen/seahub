@@ -1,7 +1,7 @@
 import React, { Fragment, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { ModalPortal } from '@seafile/sf-metadata-ui-component';
+import { ModalPortal, Icon } from '@seafile/sf-metadata-ui-component';
 import { isMobile, gettext } from '../../../../../../utils';
 import { isFrozen } from '../../../../../../utils/column-utils';
 
@@ -85,7 +85,7 @@ class HeaderDropdownMenu extends React.Component {
           aria-label={gettext('More operations')}
           tabIndex={0}
         >
-          <i className="toggle-icon small sf-metadata-font sf-metadata-icon-drop-down"></i>
+          <Icon iconName="drop-down" />
         </DropdownToggle>
         {isMenuShow && !isMobile &&
           <ModalPortal>

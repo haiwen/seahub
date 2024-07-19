@@ -1,5 +1,4 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
@@ -203,11 +202,6 @@ const SingleSelectEditor = forwardRef(({
   }, [displayOptions]);
 
   useImperativeHandle(ref, () => ({
-    getInputNode: () => {
-      const domNode = ReactDOM.findDOMNode(inputRef);
-      if (domNode.tagName === 'INPUT') return domNode;
-      return domNode.querySelector('input:not([type=hidden])');
-    },
     getValue: () => {
       const { key } = column;
       return { [key]: value };
