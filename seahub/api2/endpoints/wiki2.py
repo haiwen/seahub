@@ -241,7 +241,6 @@ class Wiki2View(APIView):
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
-        print(repo.__dict__, 'fwefeweeddddd')
         
         if not repo:
             error_msg = "Wiki library not found."
