@@ -22,6 +22,7 @@ function SideNavIconTip(props) {
 
   return (
     <Tooltip
+      popperClassName={'side-nav-icon-tip-popover'}
       innerClassName={showAnimation ? 'side-nav-icon-tip side-nav-icon-tip-animation' : 'side-nav-icon-tip'}
       toggle={toggleTooltip}
       hideArrow={true}

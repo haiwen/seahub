@@ -7,7 +7,6 @@
   background-color: #fff;
   position: absolute;
   top: 48px;
-  z-index: 2;
   width: 100%;
   height: calc(100% - 48px);
   border-top: 1px solid #e8e8e8;
