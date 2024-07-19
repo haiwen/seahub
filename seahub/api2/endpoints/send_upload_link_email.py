@@ -15,7 +15,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, \
     is_valid_email, string2list, gen_shared_upload_link, send_html_email, \
     get_site_name
 from seahub.share.models import UploadLinkShare
-from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
+from seahub.settings import ADD_REPLY_TO_HEADER
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -83,11 +83,6 @@ class SendUploadLinkView(APIView):
                 'password': link.get_password(),
             }
 
-            if REPLACE_FROM_EMAIL:
-                from_email = useremail
-            else:
-                from_email = None  # use default from email
-
             if ADD_REPLY_TO_HEADER:
                 reply_to = useremail
             else:
@@ -99,7 +94,7 @@ class SendUploadLinkView(APIView):
 
             # send email
             try:
-                send_html_email(title, template, c, from_email, [to_email], reply_to=reply_to)
+                send_html_email(title, template, c, None, [to_email], reply_to=reply_to)
                 result['success'].append(to_email)
             except Exception as e:
                 logger.error(e)

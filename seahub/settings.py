@@ -83,13 +83,15 @@ STATIC_ROOT = '%s/assets/' % MEDIA_ROOT
 STATIC_URL = '/media/assets/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '%s/static' % PROJECT_ROOT,
-    '%s/frontend/build' % PROJECT_ROOT,
-)
+]
+# %s/frontend/build perhaps not exists
+if os.path.isdir('%s/frontend/build' % PROJECT_ROOT):
+    STATICFILES_DIRS.append('%s/frontend/build' % PROJECT_ROOT)
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -828,9 +830,6 @@ SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 ############################
 # Settings for Seahub Priv #
 ############################
-
-# Replace from email to current user instead of email sender.
-REPLACE_FROM_EMAIL = False
 
 # Add ``Reply-to`` header, see RFC #822.
 ADD_REPLY_TO_HEADER = False

@@ -7,6 +7,7 @@ const propTypes = {
   customSelectorToggle: PropTypes.object,
   menuCustomClass: PropTypes.string,
   isDropdownToggleShown: PropTypes.bool,
+  isDropdownToggleShown: PropTypes.bool,
   currentSelectedOption: PropTypes.object,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,

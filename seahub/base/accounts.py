@@ -924,7 +924,7 @@ class CustomLDAPBackend(object):
                 continue
             try:
                 result_data = admin_bind.search_s(base, ldap.SCOPE_SUBTREE, filterstr)
-                if result_data is not None:
+                if result_data:
                     break
             except Exception as e:
                 raise Exception('ldap user search failed: %s' % e)
