@@ -11,6 +11,7 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
 import { gettext, siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../../components/tree-section';
 import DirViews from './dir-views';
 import DirOthers from './dir-others';
@@ -56,9 +57,26 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation: false,
+      operationList: [],
     };
     this.isNodeMenuShow = true;
   }
+
+  componentDidMount() {
+    this.initMenuList();
+  }
+
+  initMenuList = () => {
+    const menuList = this.getMenuList();
+    this.setState({ operationList: menuList });
+  };
+
+  getMenuList = () => {
+    let menuList = [];
+    menuList.push(TextTranslation.NEW_FOLDER);
+    menuList.push(TextTranslation.NEW_FILE);
+    return menuList;
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({ opNode: nextProps.currentNode });
@@ -71,6 +89,10 @@ class DirColumnNav extends React.Component {
       return;
     }
     this.props.onNodeClick(node);
+  };
+
+  onMoreOperationClick = (operation) => {
+    this.onMenuItemClick(operation);
   };
 
   onMenuItemClick = (operation, node) => {
@@ -249,40 +271,59 @@ class DirColumnNav extends React.Component {
   };
 
   renderContent = () => {
-    if (this.props.isTreeDataLoading) return (<Loading/>);
+    const {
+      isTreeDataLoading,
+      userPerm,
+      treeData,
+      currentPath,
+      onNodeExpanded,
+      onNodeCollapse,
+      onItemMove,
+      onItemsMove,
+      currentRepoInfo,
+      selectedDirentList,
+      repoID,
+      getMenuContainerSize,
+    } = this.props;
+
     return (
       <>
-        <TreeSection title={gettext('Files')}>
-          <TreeView
-            userPerm={this.props.userPerm}
-            isNodeMenuShow={this.isNodeMenuShow}
-            treeData={this.props.treeData}
-            currentPath={this.props.currentPath}
-            onNodeClick={this.onNodeClick}
-            onNodeExpanded={this.props.onNodeExpanded}
-            onNodeCollapse={this.props.onNodeCollapse}
-            onMenuItemClick={this.onMenuItemClick}
-            onFreezedItem={this.onFreezedItem}
-            onUnFreezedItem={this.onUnFreezedItem}
-            onItemMove={this.props.onItemMove}
-            currentRepoInfo={this.props.currentRepoInfo}
-            selectedDirentList={this.props.selectedDirentList}
-            onItemsMove={this.props.onItemsMove}
-            repoID={this.props.repoID}
-            getMenuContainerSize={this.props.getMenuContainerSize}
-          />
-        </TreeSection>
-        <DirViews
-          repoID={this.props.repoID}
-          currentPath={this.props.currentPath}
-          userPerm={this.props.userPerm}
-          onNodeClick={this.onNodeClick}
-        />
-        <DirOthers
-          repoID={this.props.repoID}
-          userPerm={this.props.userPerm}
-          currentRepoInfo={this.props.currentRepoInfo}
-        />
+        {isTreeDataLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <TreeSection title={gettext('Files')} moreKey={{ name: 'files' }} moreOperations={this.state.operationList} moreOperationClick={this.onMoreOperationClick}>
+              <TreeView
+                userPerm={userPerm}
+                isNodeMenuShow={this.isNodeMenuShow}
+                treeData={treeData}
+                currentPath={currentPath}
+                onNodeClick={this.onNodeClick}
+                onNodeExpanded={onNodeExpanded}
+                onNodeCollapse={onNodeCollapse}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.onFreezedItem}
+                onUnFreezedItem={this.onUnFreezedItem}
+                onItemMove={onItemMove}
+                currentRepoInfo={currentRepoInfo}
+                selectedDirentList={selectedDirentList}
+                onItemsMove={onItemsMove}
+                repoID={repoID}
+                getMenuContainerSize={getMenuContainerSize}
+              />
+            </TreeSection>
+            <DirViews
+              repoID={repoID}
+              currentPath={currentPath}
+              userPerm={userPerm}
+              onNodeClick={this.onNodeClick}
+            />
+            <DirOthers
+              repoID={repoID}
+              userPerm={userPerm}
+            />
+          </>
+        )}
       </>
     );
   };

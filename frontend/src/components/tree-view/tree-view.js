@@ -182,7 +182,7 @@ class TreeView extends React.Component {
     }
 
     // move dirents to current path
-    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
+    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path) {
       return;
     }
 
