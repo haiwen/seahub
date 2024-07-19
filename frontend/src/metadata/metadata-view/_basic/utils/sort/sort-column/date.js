@@ -1,4 +1,4 @@
-import { SORT_TYPE } from '../../../constants/sort';
+import { SORT_TYPE } from '../../../constants';
 
 /**
  * Sort date

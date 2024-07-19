@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledPopover } from 'reactstrap';
 import classnames from 'classnames';
-import { CellType } from '../../../_basic';
+import { CellType, DEFAULT_DATE_FORMAT } from '../../../_basic';
 import { gettext } from '../../../utils';
 import ObjectUtils from '../../../utils/object-utils';
 import { ValidateColumnFormFields } from './utils';
@@ -65,7 +65,16 @@ const ColumnPopover = ({ target, onChange }) => {
 
     if (flag == 0) return;
     let data = dataRef.current.getValue();
-    if (Object.keys(data).length === 0) data = null;
+    if (Object.keys(data).length === 0) {
+      data = null;
+      if (!column.unique) {
+        if (column.type === CellType.SINGLE_SELECT) {
+          data = { options: [] };
+        } else if (column.type === CellType.DATE) {
+          data = { format: DEFAULT_DATE_FORMAT };
+        }
+      }
+    }
     onChange(columnName, column.type, { key: column.unique ? column.key : '', data });
     toggle();
   }, [nameRef, column, metadata, onChange, toggle]);

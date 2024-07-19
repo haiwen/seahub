@@ -50,7 +50,7 @@ class Store {
     this.startIndex += loadedCount;
     const collaboratorsRes = await this.context.getCollaborators();
     this.collaborators = Array.isArray(collaboratorsRes?.data?.user_list) ? collaboratorsRes.data.user_list.map(user => new User(user)) : [];
-    DataProcessor.run(this.data);
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
   }
 
   async loadMore(limit) {
@@ -71,7 +71,7 @@ class Store {
     this.data.hasMore = loadedCount === limit;
     this.data.recordsCount = this.data.row_ids.length;
     this.startIndex = this.startIndex + loadedCount;
-    DataProcessor.run(this.data);
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
   }
 
@@ -84,7 +84,7 @@ class Store {
     const rowIndex = this.data.rows.findIndex(row => row._id === newRowId);
     this.data.id_row_map[newRowId] = newRow;
     this.data.rows[rowIndex] = newRow;
-    DataProcessor.run(this.data);
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
   }
 
   createOperation(op) {
@@ -211,7 +211,7 @@ class Store {
   }
 
   syncOperationOnData(operation) {
-    DataProcessor.syncOperationOnData(this.data, operation);
+    DataProcessor.syncOperationOnData(this.data, operation, { collaborators: this.collaborators });
   }
 
   /**

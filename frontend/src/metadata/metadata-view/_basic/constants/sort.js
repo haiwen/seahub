@@ -10,10 +10,15 @@ const SORT_COLUMN_OPTIONS = [
   CellType.CTIME,
   CellType.MTIME,
   CellType.TEXT,
+  CellType.DATE,
+  CellType.SINGLE_SELECT,
+  CellType.COLLABORATOR,
+  CellType.CHECKBOX,
+  CellType.NUMBER,
 ];
 
 const TEXT_SORTER_COLUMN_TYPES = [CellType.TEXT];
-const NUMBER_SORTER_COLUMN_TYPES = [];
+const NUMBER_SORTER_COLUMN_TYPES = [CellType.NUMBER];
 
 export {
   SORT_TYPE,

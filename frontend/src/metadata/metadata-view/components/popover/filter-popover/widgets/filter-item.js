@@ -216,6 +216,10 @@ class FilterItem extends React.Component {
     this.onFilterTermChanged(Object.values(value)[0]);
   };
 
+  onFilterExactDateChanged = (value) => {
+    this.onFilterTermChanged(value);
+  };
+
   onFilterTermChanged = (newFilterTerm) => {
     const { index, filter } = this.props;
     const { filterTerm } = this.state;
@@ -369,7 +373,7 @@ class FilterItem extends React.Component {
         if (filter_term_modifier === 'exact_date') {
           return (
             <FilterCalendar
-              onChange={this.onFilterTermTextChanged}
+              onChange={this.onFilterExactDateChanged}
               value={this.state.filterTerm}
               filterColumn={filterColumn}
             />

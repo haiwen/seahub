@@ -213,7 +213,8 @@ const getFormattedFilter = (filter, column) => {
   let formattedFilter = filter;
   switch (columnType) {
     case CellType.CTIME:
-    case CellType.MTIME: {
+    case CellType.MTIME:
+    case CellType.DATE: {
       formattedFilter.other_date = getFormattedFilterOtherDate(filter_term_modifier, filter_term);
       break;
     }

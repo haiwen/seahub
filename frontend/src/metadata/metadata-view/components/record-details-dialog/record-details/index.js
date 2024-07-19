@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, Col } from 'reactstrap';
 import { IconBtn, CenteredLoading } from '@seafile/sf-metadata-ui-component';
-import { getCellValueByColumn, gettext } from '../../../utils';
+import { gettext } from '../../../utils';
 import FieldLabel from './field-label';
 import CellFormatter from '../../cell-formatter';
+import { getCellValueByColumn } from '../../../_basic';
 
 import './index.css';
 

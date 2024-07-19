@@ -27,9 +27,9 @@ class DataProcessor {
     return row_ids;
   }
 
-  static getSortedRows(table, rows, sorts) {
+  static getSortedRows(table, rows, sorts, { collaborators }) {
     const tableRows = isTableRows(rows) ? rows : getRowsByIds(table, rows);
-    return sortTableRows(table, tableRows, sorts);
+    return sortTableRows(table, tableRows, sorts, { collaborators });
   }
 
   static getGroupedRows(table, rows, groupbys) {
@@ -76,7 +76,7 @@ class DataProcessor {
     });
   };
 
-  static run(table) {
+  static run(table, { collaborators }) {
     const rows = table.rows;
     const { filters, filter_conjunction, sorts, groupbys } = table.view;
     const availableColumns = table.view.available_columns || table.columns;
@@ -92,7 +92,7 @@ class DataProcessor {
       renderedRows = this.getFilteredRows(table, renderedRows, filter_conjunction, filters);
     }
     if (_isSortView) {
-      renderedRows = this.getSortedRows(table, renderedRows, sorts);
+      renderedRows = this.getSortedRows(table, renderedRows, sorts, { collaborators });
     }
     const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys) : [];
     const row_ids = isTableRows(renderedRows) ? renderedRows.map(row => row._id) : renderedRows;
@@ -145,7 +145,7 @@ class DataProcessor {
     // todo
   }
 
-  static syncOperationOnData(table, operation) {
+  static syncOperationOnData(table, operation, { collaborators }) {
 
     switch (operation.op_type) {
       case OPERATION_TYPE.MODIFY_RECORD:
@@ -212,7 +212,7 @@ class DataProcessor {
       }
       case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS:
       case OPERATION_TYPE.MODIFY_FILTERS: {
-        this.run(table);
+        this.run(table, { collaborators });
         break;
       }
 
@@ -220,10 +220,10 @@ class DataProcessor {
         const { sorts, rows } = table.view;
         const availableColumns = table.view.available_columns || table.columns;
         if (!isSortView({ sorts }, availableColumns)) {
-          this.run(table);
+          this.run(table, { collaborators });
           break;
         }
-        table.view.rows = this.getSortedRows(table, rows, sorts);
+        table.view.rows = this.getSortedRows(table, rows, sorts, { collaborators });
         this.updatePageDataWithCommonOperations();
         break;
       }

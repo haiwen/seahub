@@ -12,6 +12,17 @@ const textPredicates = [
   FILTER_PREDICATE_TYPE.IS_CURRENT_USER_ID,
 ];
 
+const numberPredicates = [
+  FILTER_PREDICATE_TYPE.EQUAL,
+  FILTER_PREDICATE_TYPE.NOT_EQUAL,
+  FILTER_PREDICATE_TYPE.LESS,
+  FILTER_PREDICATE_TYPE.GREATER,
+  FILTER_PREDICATE_TYPE.LESS_OR_EQUAL,
+  FILTER_PREDICATE_TYPE.GREATER_OR_EQUAL,
+  FILTER_PREDICATE_TYPE.EMPTY,
+  FILTER_PREDICATE_TYPE.NOT_EMPTY,
+];
+
 const datePredicates = [
   FILTER_PREDICATE_TYPE.IS,
   FILTER_PREDICATE_TYPE.IS_WITHIN,
@@ -41,8 +52,25 @@ const FILTER_COLUMN_OPTIONS = {
   [CellType.TEXT]: {
     filterPredicateList: textPredicates,
   },
+  [CellType.NUMBER]: {
+    filterPredicateList: numberPredicates,
+  },
   [CellType.FILE_NAME]: {
     filterPredicateList: textPredicates,
+  },
+  [CellType.DATE]: {
+    filterPredicateList: datePredicates,
+    filterTermModifierList: dateTermModifiers,
+  },
+  [CellType.SINGLE_SELECT]: {
+    filterPredicateList: [
+      FILTER_PREDICATE_TYPE.IS,
+      FILTER_PREDICATE_TYPE.IS_NOT,
+      FILTER_PREDICATE_TYPE.IS_ANY_OF,
+      FILTER_PREDICATE_TYPE.IS_NONE_OF,
+      FILTER_PREDICATE_TYPE.EMPTY,
+      FILTER_PREDICATE_TYPE.NOT_EMPTY,
+    ],
   },
   [CellType.CTIME]: {
     filterPredicateList: datePredicates,
@@ -81,6 +109,23 @@ const FILTER_COLUMN_OPTIONS = {
       FILTER_PREDICATE_TYPE.NOT_CONTAIN,
       FILTER_PREDICATE_TYPE.IS,
       FILTER_PREDICATE_TYPE.IS_NOT,
+      FILTER_PREDICATE_TYPE.EMPTY,
+      FILTER_PREDICATE_TYPE.NOT_EMPTY,
+    ],
+  },
+  [CellType.COLLABORATOR]: {
+    filterPredicateList: [
+      FILTER_PREDICATE_TYPE.HAS_ANY_OF,
+      FILTER_PREDICATE_TYPE.HAS_ALL_OF,
+      FILTER_PREDICATE_TYPE.HAS_NONE_OF,
+      FILTER_PREDICATE_TYPE.IS_EXACTLY,
+      FILTER_PREDICATE_TYPE.EMPTY,
+      FILTER_PREDICATE_TYPE.NOT_EMPTY,
+      FILTER_PREDICATE_TYPE.INCLUDE_ME,
+    ],
+  },
+  [CellType.LONG_TEXT]: {
+    filterPredicateList: [
       FILTER_PREDICATE_TYPE.EMPTY,
       FILTER_PREDICATE_TYPE.NOT_EMPTY,
     ],

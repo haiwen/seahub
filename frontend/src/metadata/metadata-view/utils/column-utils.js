@@ -272,7 +272,7 @@ const getFileStatusColumnData = (column) => {
   return newData;
 };
 
-const normalizeColumnData = (column) => {
+export const normalizeColumnData = (column) => {
   const { key, data } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) {
     if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
@@ -298,8 +298,7 @@ export const normalizeColumns = (columns) => {
       type: getColumnType(key, type),
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
-      editable: !key.startsWith('_'),
-      data: normalizeColumnData(column)
+      editable: !key.startsWith('_')
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
