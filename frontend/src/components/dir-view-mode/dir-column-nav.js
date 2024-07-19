@@ -321,6 +321,7 @@ class DirColumnNav extends React.Component {
             <DirOthers
               repoID={repoID}
               userPerm={userPerm}
+              currentRepoInfo={currentRepoInfo}
             />
           </>
         )}

@@ -195,8 +195,8 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      { width: '5%', text: '' },
-      { width: '20%', text: gettext('Name') },
+      { width: '5%', text: gettext('Name') },
+      { width: '20%', text: '' },
       { width: '40%', text: gettext('Original path') },
       { width: '12%', text: gettext('Delete Time') },
       { width: '13%', text: gettext('Size') },
@@ -214,16 +214,14 @@ class Content extends React.Component {
 
   render() {
     const { items, showFolder, commitID, baseDir, folderPath, folderItems } = this.props.data;
-    const {
-      curPerPage, currentPage, hasNextPage
-    } = this.props;
+    const { curPerPage, currentPage, hasNextPage } = this.props;
     return (
       <React.Fragment>
         <table className="table-hover">
           <thead>
             <tr>
               {this.theadData.map((item, index) => {
-                return <th key={index} width={item.width}>{item.text}</th>;
+                return <th key={index} className={index === 0 ? 'pl-4' : ''} width={item.width}>{item.text}</th>;
               })}
             </tr>
           </thead>
