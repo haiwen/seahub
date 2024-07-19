@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
 import { EVENT_BUS_TYPE } from '../../constants';
 
@@ -60,7 +59,7 @@ const ViewToolBar = ({ metadataViewId }) => {
 
   return (
     <div
-      className={classnames('sf-metadata-tool')}
+      className='sf-metadata-tool'
       // style={{ zIndex: Z_INDEX.TABLE_HEADER, transform: 'translateZ(1000px)' }}
       onClick={onHeaderClick}
     >

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import { CustomizeSelect, IconBtn, SearchInput, Icon } from '@seafile/sf-metadata-ui-component';
 import {
@@ -250,7 +249,7 @@ class FilterItem extends React.Component {
           value={filterTerm}
           onChange={this.onFilterTermTextChanged}
           autoFocus={false}
-          className={classnames('text-truncate')}
+          className='text-truncate'
         />
       );
     } else if (type === 'checkbox') {
