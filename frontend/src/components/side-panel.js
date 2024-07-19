@@ -21,7 +21,7 @@ const propTypes = {
 class SidePanel extends React.Component {
 
   render() {
-    const { children, isSidePanelFolded, style } = this.props;
+    const { children, isSidePanelFolded, style } = this.props;   
     return (
       <div
         className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })}
