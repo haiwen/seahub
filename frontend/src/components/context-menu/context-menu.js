@@ -82,7 +82,6 @@ class ContextMenu extends React.Component {
 
   handleShow = (e) => {
     if (e.detail.id !== this.props.id) return;
-
     const { x, y } = e.detail.position;
     if (this.props.getMenuContainerSize) {
       const containerSize = this.props.getMenuContainerSize();
