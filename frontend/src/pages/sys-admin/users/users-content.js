@@ -58,6 +58,7 @@ class Content extends Component {
       curPerPage, hasNextPage, currentPage,
       sortBy, sortOrder
     } = this.props;
+
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
