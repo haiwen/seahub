@@ -7,6 +7,7 @@ import time
 import json
 import re
 import logging
+import jwt
 
 from collections import defaultdict
 from functools import wraps
@@ -31,6 +32,7 @@ from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import get_user_repos
 from seahub.utils.mail import send_html_email_with_dj_template
+from seahub.settings import SECRET_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -317,3 +319,23 @@ def send_share_link_emails(emails, fs, shared_from):
         if not send_success:
             logger.error('Failed to send code via email to %s' % email)
             continue
+
+def is_valid_internal_jwt(auth):
+    
+    if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
+        return False
+
+    token = auth[1]
+    if not token:
+        return False
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except:
+        return False
+    else:
+        is_internal = payload.get('is_internal')
+        if is_internal:
+            return True
+        
+    return False

@@ -3,6 +3,7 @@ from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
+from seahub.api2.endpoints.internal_api import InternalUserListView
 from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
 from seahub.views.mobile import mobile_login
@@ -772,6 +773,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/dingtalk/users/batch/$', AdminDingtalkUsersBatch.as_view(), name='api-v2.1-admin-dingtalk-users-batch'),
     re_path(r'^api/v2.1/admin/dingtalk/departments/import/$', AdminDingtalkDepartmentsImport.as_view(), name='api-v2.1-admin-dingtalk-department-import'),
 
+    ## internal
+    re_path(r'^api/v2.1/internal/user-list/$', InternalUserListView.as_view(), name="api-v2.1-internal-user-list"),
+    
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     path('sys/useradmin/export-excel/', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
