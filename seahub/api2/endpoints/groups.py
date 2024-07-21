@@ -299,6 +299,7 @@ class Group(APIView):
         try:
             ccnet_db = CcnetDB()
             ccnet_db.change_groups_into_departments(group_id, org_id)
+            seafile_api.set_group_quota(group_id, -2)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
