@@ -319,6 +319,7 @@ def send_share_link_emails(emails, fs, shared_from):
         if not send_success:
             logger.error('Failed to send code via email to %s' % email)
             continue
+
 def is_valid_internal_jwt(auth):
     
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
