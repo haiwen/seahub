@@ -94,6 +94,15 @@ class RepoMetadataViewsManager(models.Manager):
             return {'views': [], 'navigation': []}
         return json.loads(metadata_views.details)
     
+    def get_view(self, repo_id, view_id):
+        metadata_views = self.filter(repo_id=repo_id).first()
+        if not metadata_views:
+            return None
+        view_details = json.loads(metadata_views.details)
+        for v in view_details['views']:
+            if v.get('_id') == view_id:
+                return v
+        
     def update_view(self, repo_id, view_id, view_dict):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_dict.pop('_id', '')
