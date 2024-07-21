@@ -26,7 +26,7 @@ class LanguageSetting extends React.Component {
         <h3 className="setting-item-heading">{gettext('Language Setting')}</h3>
         <SeahubSelect
           className='language-selector'
-          value={{value: currentLang.langCode, label: currentLang.langName}}
+          value={{ value: currentLang.langCode, label: currentLang.langName }}
           options={options}
           onChange={this.onSelectChange}
         />

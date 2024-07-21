@@ -12,13 +12,13 @@ class DeleteSeatablesDialog extends Component {
     closeDialog: PropTypes.func,
   };
 
-  render () {
+  render() {
     const { accountName, closeDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={closeDialog}>
         <ModalHeader toggle={closeDialog}>{gettext('Delete SeaTable base')}</ModalHeader>
         <ModalBody>
-          <p className="pb-6">{gettext('Are you sure to delete SeaTable {accountName}?').replace('{accountName}', accountName)}</p>
+          <p className="pb-6">{gettext('Are you sure you want to delete SeaTable {accountName}?').replace('{accountName}', accountName)}</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={closeDialog}>{gettext('Cancel')}</Button>

@@ -3,11 +3,11 @@
 }
 
 .wiki-side-nav {
-  flex:auto;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden; /* for ff */
-  border-right:1px solid #eee;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* for ff */
+  border-right: 1px solid #eee;
 }
 
 .wiki-pages-heading {
@@ -41,9 +41,9 @@
 }
 
 .wiki-pages-container .tree-view {
-  margin-left: -10px;
+  margin-left: 10px;
   margin-top: 14px;
-  padding-left:0;
+  padding-left: 0px;
 }
 
 img[src=""] {
@@ -52,9 +52,9 @@ img[src=""] {
 
 .wiki-side-panel {
   flex: 0 0 20%;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 @media (max-width: 767px) {
@@ -65,8 +65,8 @@ img[src=""] {
 
 .wiki-main-panel {
   flex: 1 0 80%;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
   overflow: hidden;
 }
@@ -137,5 +137,8 @@ img[src=""] {
 @media (max-width: 767px) {
   .wiki-page-container .article {
     padding: 0 !important;
+  }
+  .wiki-main-panel .mobile-toolbar-icon {
+    font-size: 1.1rem;
   }
 }

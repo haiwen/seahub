@@ -25,11 +25,11 @@ class OrgUsersList extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   toggleItemFreezed = (isFreezed) => {
@@ -59,9 +59,9 @@ class OrgUsersList extends React.Component {
     let sortIcon;
     if (sortBy == '') {
       // initial sort icon
-      sortIcon = <span className="fas fa-sort"></span>;
+      sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
     } else {
-      sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
     }
     let { orgUsers, page, pageNext } = this.props;
     return (
@@ -75,7 +75,7 @@ class OrgUsersList extends React.Component {
                 <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
               </th>
               <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
-              <th width="10%">{/*Operations*/}</th>
+              <th width="10%">{/* Operations*/}</th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +96,7 @@ class OrgUsersList extends React.Component {
           </tbody>
         </table>
         <div className="paginator">
-          {page !=1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
+          {page != 1 && <a href="#" onClick={(e) => this.onChangePageNum(e, -1)}>{gettext('Previous')}</a>}
           {(page != 1 && pageNext) && <span> | </span>}
           {pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
         </div>

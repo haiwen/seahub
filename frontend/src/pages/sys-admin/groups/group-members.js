@@ -56,7 +56,7 @@ class Content extends Component {
                 <th width="5%">{/* icon */}</th>
                 <th width="55%">{gettext('Name')}</th>
                 <th width="30%">{gettext('Role')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -117,19 +117,19 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     if (this.props.isItemFreezed) return;
-    this.setState({highlighted: true});
+    this.setState({ highlighted: true });
   };
 
   handleMouseLeave = () => {
     if (this.props.isItemFreezed) return;
-    this.setState({highlighted: false});
+    this.setState({ highlighted: false });
   };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   removeMember = () => {
@@ -217,7 +217,7 @@ class GroupMembers extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
 
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
@@ -255,7 +255,7 @@ class GroupMembers extends Component {
   };
 
   toggleAddMemgerDialog = () => {
-    this.setState({isAddMemberDialogOpen: !this.state.isAddMemberDialogOpen});
+    this.setState({ isAddMemberDialogOpen: !this.state.isAddMemberDialogOpen });
   };
 
   addMembers = (emails) => {
@@ -275,7 +275,7 @@ class GroupMembers extends Component {
         const msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
           .replace('{email_placeholder}', item.email)
           .replace('{error_msg_placeholder}', item.error_msg);
-        toaster.danger(msg, {duration: 3});
+        toaster.danger(msg, { duration: 3 });
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

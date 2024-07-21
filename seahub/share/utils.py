@@ -1,5 +1,5 @@
 import logging
-
+import json
 from seahub.group.utils import is_group_admin
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
@@ -9,6 +9,17 @@ import seaserv
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
+
+
+SCOPE_ALL_USERS = 'all_users'
+SCOPE_SPECIFIC_USERS = 'specific_users'
+SCOPE_SPECIFIC_EMAILS = 'specific_emails'
+
+VALID_SHARE_LINK_SCOPE = [
+    SCOPE_ALL_USERS,
+    SCOPE_SPECIFIC_USERS,
+    SCOPE_SPECIFIC_EMAILS
+]
 
 
 def normalize_custom_permission_name(permission):
@@ -255,3 +266,26 @@ def has_shared_to_group(repo_id, path, gid, org_id=None):
                                                                    path, repo_owner)
 
     return gid in [item.group_id for item in share_items]
+
+
+def check_share_link_user_access(share, username):
+    if share.user_scope == 'all_users':
+        return True
+    if username == share.username:
+        return True
+    try:
+        authed_details = json.loads(share.authed_details)
+    except:
+        authed_details = {}
+    
+    if share.user_scope == SCOPE_SPECIFIC_USERS:
+        authed_users = authed_details.get('authed_users', [])
+        if username in authed_users:
+            return True
+    
+    if share.user_scope == SCOPE_SPECIFIC_EMAILS:
+        auhhed_emails = authed_details.get('authed_emails', [])
+        if username in auhhed_emails:
+            return True
+    
+    return False

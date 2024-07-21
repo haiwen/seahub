@@ -4,9 +4,9 @@ import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot } from '../../../utils/constants';
 
 const NAV_ITEMS = [
-  {name: 'info', urlPart: '', text: gettext('Info')},
-  {name: 'owned-repos', urlPart: 'owned-libraries', text: gettext('Owned Libraries')},
-  {name: 'groups', urlPart: 'groups', text: gettext('Groups')}
+  { name: 'info', urlPart: '', text: gettext('Info') },
+  { name: 'owned-repos', urlPart: 'owned-libraries', text: gettext('Owned Libraries') },
+  { name: 'groups', urlPart: 'groups', text: gettext('Groups') }
 ];
 
 const UserContent = ({ children, ...rest }) => {

@@ -6,7 +6,6 @@
 {% block header_css_class %}hide{% endblock %}
 
 {% block extra_base_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 {% endblock %}
 
@@ -38,7 +37,7 @@ html, body, #wrapper { height:100%; }
         <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" />
         <div class="position-relative">
           <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
-          <i id="toggle-show-password" class="fas fa-eye-slash"></i>
+          <i id="toggle-show-password" class="sf3-font sf3-font-eye-slash"></i>
         </div>
 
         {% if form.captcha %}
@@ -158,8 +157,8 @@ $('#lang-context').on('click', function() {
 $('[name="login"]').trigger('focus');
 
 $('#toggle-show-password').click(function() {
-  $(this).toggleClass('fa-eye-slash fa-eye');
-  if ($(this).hasClass('fa-eye-slash')) {
+  $(this).toggleClass('sf3-font-eye-slash sf3-font-eye');
+  if ($(this).hasClass('sf3-font-eye-slash')) {
     $('#password-input').attr('type', 'password');
   } else {
     $('#password-input').attr('type', 'text');

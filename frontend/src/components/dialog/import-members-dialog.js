@@ -32,7 +32,7 @@ class ImportMembersDialog extends React.Component {
     }
     // check file extension
     let fileName = this.fileInputRef.current.files[0].name;
-    if(fileName.substr(fileName.lastIndexOf('.') + 1) != 'xlsx') {
+    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'xlsx') {
       this.setState({
         errorMsg: gettext('Please choose a .xlsx file.')
       });

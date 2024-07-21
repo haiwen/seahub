@@ -94,11 +94,11 @@ class Item extends Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   render() {
@@ -136,7 +136,7 @@ class OrgDevicesErrors extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage } = this.state;
     this.setState({

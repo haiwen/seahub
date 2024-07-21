@@ -27,20 +27,20 @@ class OrgStatisticTraffic extends React.Component {
   }
 
   changeTabActive = activeName => {
-    this.setState({tabActive: activeName});
+    this.setState({ tabActive: activeName });
   };
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
     seafileAPI.orgAdminStatisticSystemTraffic(orgID, startTime, endTime, groupBy).then((res) => {
       let labels = [];
-      let total_upload = [],
-        total_download = [],
-        link_upload = [],
-        link_download = [],
-        sync_upload = [],
-        sync_download = [],
-        web_upload = [],
-        web_download = [];
+      let total_upload = [];
+      let total_download = [];
+      let link_upload = [];
+      let link_download = [];
+      let sync_upload = [];
+      let sync_download = [];
+      let web_upload = [];
+      let web_download = [];
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
@@ -58,42 +58,42 @@ class OrgStatisticTraffic extends React.Component {
           label: gettext('Upload'),
           data: link_upload,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         let linkDownload = {
           label: gettext('Download'),
           data: link_download,
           borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b'};
+          backgroundColor: '#57cd6b' };
         let syncUpload = {
           label: gettext('Upload'),
           data: sync_upload,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         let syncDownload = {
           label: gettext('Download'),
           data: sync_download,
           borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b'};
+          backgroundColor: '#57cd6b' };
         let webUpload = {
           label: gettext('Upload'),
           data: web_upload,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         let webDownload = {
           label: gettext('Download'),
           data: web_download,
           borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b'};
+          backgroundColor: '#57cd6b' };
         let totalUpload = {
           label: gettext('Upload'),
           data: total_upload,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         let totalDownload = {
           label: gettext('Download'),
           data: total_download,
           borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b'};
+          backgroundColor: '#57cd6b' };
         let linkData = [linkUpload, linkDownload];
         let syncData = [syncUpload, syncDownload];
         let webData = [webUpload, webDownload];
@@ -152,7 +152,7 @@ class OrgStatisticTraffic extends React.Component {
                       labels={labels}
                       filesData={filesData}
                       chartTitle={gettext('Total Traffic')}
-                      suggestedMaxNumbers={10*1000*1000}
+                      suggestedMaxNumbers={10 * 1000 * 1000}
                       isTitleCallback={true}
                       isTicksCallback={true}
                       isLegendStatus={true}
@@ -165,7 +165,7 @@ class OrgStatisticTraffic extends React.Component {
                       labels={labels}
                       filesData={webData}
                       chartTitle={gettext('Web Traffic')}
-                      suggestedMaxNumbers={10*1000*1000}
+                      suggestedMaxNumbers={10 * 1000 * 1000}
                       isTitleCallback={true}
                       isTicksCallback={true}
                       isLegendStatus={true}
@@ -178,7 +178,7 @@ class OrgStatisticTraffic extends React.Component {
                       labels={labels}
                       filesData={linkData}
                       chartTitle={gettext('Share Link Traffic')}
-                      suggestedMaxNumbers={10*1000*1000}
+                      suggestedMaxNumbers={10 * 1000 * 1000}
                       isTitleCallback={true}
                       isTicksCallback={true}
                       isLegendStatus={true}
@@ -191,7 +191,7 @@ class OrgStatisticTraffic extends React.Component {
                       labels={labels}
                       filesData={syncData}
                       chartTitle={gettext('Sync Traffic')}
-                      suggestedMaxNumbers={10*1000*1000}
+                      suggestedMaxNumbers={10 * 1000 * 1000}
                       isTitleCallback={true}
                       isTicksCallback={true}
                       isLegendStatus={true}

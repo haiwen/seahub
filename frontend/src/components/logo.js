@@ -15,7 +15,7 @@ class Logo extends React.Component {
 
   render() {
     return (
-      <div className="top-logo">
+      <div className='top-logo'>
         <a href={siteRoot} id="logo">
           <img src={logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>

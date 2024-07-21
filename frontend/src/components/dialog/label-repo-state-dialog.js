@@ -61,7 +61,7 @@ class LabelRepoStateDialog extends React.Component {
       submitBtnDisabled: true
     });
 
-    const {repoID, repoName} = this.props;
+    const { repoID, repoName } = this.props;
     const labels = inputValue.map((item, index) => item.value).join(',');
     seafileAPI.addNewRepoLabels(repoID, labels).then((res) => {
       const msg = gettext('Successfully added label(s) for library {placeholder}').replace('{placeholder}', repoName);
@@ -113,7 +113,7 @@ class Content extends React.Component {
           isMulti={true}
           onChange={this.props.handleChange}
           placeholder=''
-          options={existingLabels.map((item, index) => { return {label: item, value: item}; })}
+          options={existingLabels.map((item, index) => { return { label: item, value: item }; })}
         />
         {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}
       </React.Fragment>

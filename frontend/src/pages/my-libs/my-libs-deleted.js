@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 moment.locale(lang);
 
@@ -38,15 +37,12 @@ class MyLibsDeleted extends Component {
     let deletedRepoList = this.state.deletedRepoList.filter(item => {
       return item.repo_id !== repoID;
     });
-    this.setState({deletedRepoList: deletedRepoList});
+    this.setState({ deletedRepoList: deletedRepoList });
   };
 
   render() {
     return (
       <Fragment>
-        <div className="main-panel-north">
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -89,10 +85,10 @@ class DeletedRepoTable extends Component {
       <table>
         <thead>
           <tr>
-            <th style={{width: '4%'}}>{/*img*/}</th>
-            <th style={{width: '52%'}}>{gettext('Name')}</th>
-            <th style={{width: '30%'}}>{gettext('Deleted Time')}</th>
-            <th style={{width: '14%'}}></th>
+            <th style={{ width: '4%' }}>{/* img*/}</th>
+            <th style={{ width: '52%' }}>{gettext('Name')}</th>
+            <th style={{ width: '30%' }}>{gettext('Deleted Time')}</th>
+            <th style={{ width: '14%' }}></th>
           </tr>
         </thead>
         <tbody>
@@ -175,7 +171,8 @@ class DeletedRepoItem extends Component {
         <td>
           <a href="#" onClick={this.restoreDeletedRepo} title={gettext('Restore')}
             role="button" aria-label={gettext('Restore')}
-            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}></a>
+            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}>
+          </a>
         </td>
       </tr>
     );
@@ -185,10 +182,6 @@ class DeletedRepoItem extends Component {
 DeletedRepoItem.propTypes = {
   repo: PropTypes.object.isRequired,
   refreshDeletedRepoList: PropTypes.func.isRequired,
-};
-
-MyLibsDeleted.propTypes = {
-  onSearchedClick: PropTypes.func.isRequired,
 };
 
 export default MyLibsDeleted;

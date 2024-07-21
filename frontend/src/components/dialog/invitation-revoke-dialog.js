@@ -50,7 +50,7 @@ class InvitationRevokeDialog extends React.Component {
       <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Revoke Access')}</ModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{__html: content}}></p>
+          <p dangerouslySetInnerHTML={{ __html: content }}></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>

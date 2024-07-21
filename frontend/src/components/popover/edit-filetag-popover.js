@@ -81,7 +81,7 @@ class EditFileTagPopover extends React.Component {
     } else {
       let fileTag = null;
       let fileTagList = this.props.fileTagList;
-      for(let i = 0; i < fileTagList.length; i++) {
+      for (let i = 0; i < fileTagList.length; i++) {
         if (fileTagList[i].repo_tag_id === repoTag.id) {
           fileTag = fileTagList[i];
           break;

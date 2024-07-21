@@ -27,7 +27,7 @@
   background-color: #f0f0f0;
   padding: 0.625rem;
   font-size: 1rem;
-  color: #322;
+  color: #212529;
   display: flex;
   justify-content: space-between;
   min-height: 2.25rem;
@@ -57,6 +57,10 @@
   padding: 0 1rem 1.25rem;
   background-color: #fff;
   overflow: auto;
+}
+
+.uploader-content-bar .btn {
+  font-size: .875rem;
 }
 
 .file-upload-item {

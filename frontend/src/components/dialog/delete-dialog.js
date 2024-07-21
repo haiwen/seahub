@@ -26,7 +26,7 @@ class Delete extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody>
-          <p>{gettext('Are you sure to delete')}{' '}<b>{name}</b> ?</p>
+          <p>{gettext('Are you sure you want to delete')}{' '}<b>{name}</b> ?</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

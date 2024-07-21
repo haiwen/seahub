@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('iconfont.eot?t=1715743130302'); /* IE9 */
-  src: url('iconfont.eot?t=1715743130302#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1715743130302') format('woff2'),
-       url('iconfont.woff?t=1715743130302') format('woff'),
-       url('iconfont.ttf?t=1715743130302') format('truetype'),
-       url('iconfont.svg?t=1715743130302#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1720052264663'); /* IE9 */
+  src: url('iconfont.eot?t=1720052264663#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1720052264663') format('woff2'),
+       url('iconfont.woff?t=1720052264663') format('woff'),
+       url('iconfont.ttf?t=1720052264663') format('truetype'),
+       url('iconfont.svg?t=1720052264663#sf3-font') format('svg');
 }
 
 .sf3-font {
@@ -14,6 +14,166 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sf3-font-icon:before {
+  content: "\e622";
+}
+
+.sf3-font-enter:before {
+  content: "\e845";
+}
+
+.sf3-font-open-sidebar:before {
+  content: "\e843";
+}
+
+.sf3-font-close-sidebar:before {
+  content: "\e844";
+}
+
+.sf3-font-exclamation-triangle:before {
+  content: "\e840";
+}
+
+.sf3-font-check-circle:before {
+  content: "\e841";
+}
+
+.sf3-font-exclamation-circle:before {
+  content: "\e842";
+}
+
+.sf3-font-print:before {
+  content: "\e832";
+}
+
+.sf3-font-spinner:before {
+  content: "\e833";
+}
+
+.sf3-font-info1:before {
+  content: "\e834";
+}
+
+.sf3-font-lock:before {
+  content: "\e835";
+}
+
+.sf3-font-save:before {
+  content: "\e836";
+}
+
+.sf3-font-eye:before {
+  content: "\e837";
+}
+
+.sf3-font-folder-open:before {
+  content: "\e838";
+}
+
+.sf3-font-expand-arrows-alt:before {
+  content: "\e839";
+}
+
+.sf3-font-eye-slash:before {
+  content: "\e83a";
+}
+
+.sf3-font-calendar-alt:before {
+  content: "\e83b";
+}
+
+.sf3-font-ellipsis-v:before {
+  content: "\e83c";
+}
+
+.sf3-font-download:before {
+  content: "\e83d";
+}
+
+.sf3-font-angles-down:before {
+  content: "\e83e";
+}
+
+.sf3-font-angles-up:before {
+  content: "\e83f";
+}
+
+.sf3-font-unlock:before {
+  content: "\e82e";
+}
+
+.sf3-font-magic:before {
+  content: "\e82f";
+}
+
+.sf3-font-share-alt:before {
+  content: "\e830";
+}
+
+.sf3-font-sort3:before {
+  content: "\e831";
+}
+
+.sf3-font-image:before {
+  content: "\e82d";
+}
+
+.sf3-font-folder:before {
+  content: "\e82c";
+}
+
+.sf3-font-duplicate-page:before {
+  content: "\e82a";
+}
+
+.sf3-font-move-to:before {
+  content: "\e82b";
+}
+
+.sf3-font-open-in-new-tab:before {
+  content: "\e620";
+}
+
+.sf3-font-link:before {
+  content: "\e61f";
+}
+
+.sf3-font-files2:before {
+  content: "\e828";
+}
+
+.sf3-font-file:before {
+  content: "\e829";
+}
+
+.sf3-font-monitor:before {
+  content: "\e827";
+}
+
+.sf3-font-star-empty:before {
+  content: "\e825";
+}
+
+.sf3-font-star:before {
+  content: "\e826";
+}
+
+.sf3-font-down:before {
+  content: "\e824";
+}
+
+.sf3-font-new-page:before {
+  content: "\e823";
+}
+
+.sf3-font-upload-files:before {
+  content: "\e821";
+}
+
+.sf3-font-share:before {
+  content: "\e820";
 }
 
 .sf3-font-rename:before {
@@ -168,10 +328,6 @@
   content: "\e7f1";
 }
 
-.sf3-font-x-011:before {
-  content: "\e7f8";
-}
-
 .sf3-font-list:before {
   content: "\e7f9";
 }
@@ -180,16 +336,8 @@
   content: "\e7fa";
 }
 
-.sf3-font-download:before {
-  content: "\e7fb";
-}
-
 .sf3-font-entry:before {
   content: "\e7fc";
-}
-
-.sf3-font-delete:before {
-  content: "\e7fd";
 }
 
 .sf3-font-files1:before {
@@ -202,14 +350,6 @@
 
 .sf3-font-new-group:before {
   content: "\e7f3";
-}
-
-.sf3-font-copy:before {
-  content: "\e7f4";
-}
-
-.sf3-font-more-level1:before {
-  content: "\e7f5";
 }
 
 .sf3-font-sort1:before {
@@ -246,10 +386,6 @@
 
 .sf3-font-x-01:before {
   content: "\e7d8";
-}
-
-.sf3-font-more-level:before {
-  content: "\e7d7";
 }
 
 .sf3-font-desktop:before {

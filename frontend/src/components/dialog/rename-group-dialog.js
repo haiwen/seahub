@@ -18,9 +18,9 @@ class RenameGroupDialog extends React.Component {
 
   handleGroupNameChange = (event) => {
     if (!event.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
     let name = event.target.value;
@@ -33,7 +33,7 @@ class RenameGroupDialog extends React.Component {
     let name = this.state.newGroupName.trim();
     if (name) {
       let that = this;
-      seafileAPI.renameGroup(this.props.groupID, name).then((res)=> {
+      seafileAPI.renameGroup(this.props.groupID, name).then((res) => {
         that.props.loadGroup(this.props.groupID);
         that.props.onGroupChanged(res.data.id);
       }).catch(error => {
@@ -54,7 +54,7 @@ class RenameGroupDialog extends React.Component {
   };
 
   render() {
-    return(
+    return (
       <Modal isOpen={this.props.showRenameGroupDialog} toggle={this.props.toggleRenameGroupDialog}>
         <ModalHeader>{gettext('Rename Group')}</ModalHeader>
         <ModalBody>

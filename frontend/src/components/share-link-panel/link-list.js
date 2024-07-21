@@ -29,7 +29,7 @@ class LinkList extends React.Component {
   }
 
   toggleDeleteShareLinksDialog = () => {
-    this.setState({isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen});
+    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
   };
 
   toggleSelectAllLinks = (e) => {
@@ -77,7 +77,7 @@ class LinkList extends React.Component {
             <p className="text-secondary">{gettext('No share links')}</p>
           </EmptyTip>
         ) : (
-          <div className='share-list-container share-link'>
+          <div className='share-list-container share-link-list'>
             <table className="table-place-header">
               <thead>
                 <tr>

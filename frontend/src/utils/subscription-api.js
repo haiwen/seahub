@@ -8,7 +8,7 @@ class SubscriptionAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,

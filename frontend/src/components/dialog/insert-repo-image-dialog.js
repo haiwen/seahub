@@ -37,12 +37,12 @@ class InsertRepoImageDialog extends React.Component {
       });
     }
     else {
-      this.setState({repo: null, selectedPath: ''});
+      this.setState({ repo: null, selectedPath: '' });
     }
   };
 
   onRepoItemClick = () => {
-    this.setState({repo: null, selectedPath: ''});
+    this.setState({ repo: null, selectedPath: '' });
   };
 
   render() {

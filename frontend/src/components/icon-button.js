@@ -32,7 +32,7 @@ class IconButton extends React.Component {
         <i className={this.props.icon}></i>
         <Tooltip
           toggle={this.toggle}
-          delay={{show: 0, hide: 0}}
+          delay={{ show: 0, hide: 0 }}
           target={this.props.id}
           placement='bottom'
           isOpen={this.state.tooltipOpen}>

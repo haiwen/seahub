@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import toaster from '../toast';
-import { isPro, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
-  showLinkDetails : PropTypes.func.isRequired,
+  showLinkDetails: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
   deleteLink: PropTypes.func.isRequired
 };
@@ -38,7 +38,7 @@ class LinkItem extends React.Component {
 
   cutLink = (link) => {
     let length = link.length;
-    return link.slice(0, 9) + '...' + link.slice(length-5);
+    return link.slice(0, 9) + '...' + link.slice(length - 5);
   };
 
   onDeleteIconClicked = (e) => {
@@ -48,7 +48,7 @@ class LinkItem extends React.Component {
   };
 
   toggleDeleteShareLinkDialog = () => {
-    this.setState({isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen});
+    this.setState({ isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen });
   };
 
   onCopyIconClicked = (e) => {
@@ -103,14 +103,14 @@ class LinkItem extends React.Component {
             {this.cutLink(link)}
           </td>
           <td>
-            {(isPro && permissions) && Utils.getShareLinkPermissionObject(currentPermission).text}
+            {permissions && Utils.getShareLinkPermissionObject(currentPermission).text}
           </td>
           <td>
             {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf2-icon-delete action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
           </td>
         </tr>
         {this.state.isDeleteShareLinkDialogOpen && (

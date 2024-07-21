@@ -1,24 +1,19 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
+import { navigate } from '@gatsbyjs/reach-router';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
-import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
-
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-};
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ModalPortal from '../../components/modal-portal';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -27,9 +22,9 @@ class MyLibraries extends Component {
       errorMsg: '',
       isLoading: true,
       repoList: [],
-      isShowDetails: false,
+      isCreateRepoDialogOpen: false,
+      isDropdownMenuOpen: false,
       isSortOptionsDialogOpen: false,
-      isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -43,7 +38,7 @@ class MyLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listRepos({type: 'mine'}).then((res) => {
+    seafileAPI.listRepos({ type: 'mine' }).then((res) => {
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
@@ -66,6 +61,7 @@ class MyLibraries extends Component {
   };
 
   onCreateRepo = (repo) => {
+    this.toggleCreateRepoDialog();
     seafileAPI.createMineRepo(repo).then((res) => {
       const newRepo = new Repo({
         repo_id: res.data.repo_id,
@@ -78,7 +74,7 @@ class MyLibraries extends Component {
         storage_name: res.data.storage_name
       });
       this.state.repoList.unshift(newRepo);
-      this.setState({repoList: this.state.repoList});
+      this.setState({ repoList: this.state.repoList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -99,7 +95,7 @@ class MyLibraries extends Component {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repoID;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onRenameRepo = (repo, newName) => {
@@ -109,7 +105,7 @@ class MyLibraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onMonitorRepo = (repo, monitored) => {
@@ -119,52 +115,66 @@ class MyLibraries extends Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
   };
 
-  onRepoClick = (repo) => {
-    if (this.state.isShowDetails) {
-      this.onRepoDetails(repo);
+  toggleCreateRepoDialog = () => {
+    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
+  };
+
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
+
+  visitDeleted = () => {
+    navigate(`${siteRoot}my-libs/deleted/`);
+  };
+
+  visitDeletedviaKey = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.visiteDeleted();
     }
   };
 
-  onRepoDetails = (repo) => {
-    this.setState({
-      currentRepo: repo,
-      isShowDetails: true,
-    });
-  };
-
-  closeDetails = () => {
-    this.setState({isShowDetails: !this.state.isShowDetails});
-  };
-
-  toggleGuideForNewDialog = () => {
-    window.app.pageOptions.guideEnabled = false;
-    this.setState({
-      isGuideForNewDialogOpen: false
-    });
-  };
-
   render() {
+    const { isDropdownMenuOpen } = this.state;
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'mine'}/>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('My Libraries')}</h3>
-              {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+              <h3 className="sf-heading m-0">
+                {gettext('My Libraries')}
+                <SingleDropdownToolbar
+                  opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
+                />
+              </h3>
+              <div>
+                {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+                  <DropdownToggle
+                    tag="i"
+                    className={'cur-view-path-btn sf3-font-more sf3-font ml-2'}
+                    data-toggle="dropdown"
+                    title={gettext('More operations')}
+                    aria-label={gettext('More operations')}
+                    aria-expanded={isDropdownMenuOpen}
+                  >
+                  </DropdownToggle>
+                  <DropdownMenu right={true}>
+                    <DropdownItem onClick={this.visitDeleted} onKeyDown={this.visitDeletedviaKey}>{gettext('Deleted Libraries')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -179,17 +189,11 @@ class MyLibraries extends Component {
                   onDeleteRepo={this.onDeleteRepo}
                   onTransferRepo={this.onTransferRepo}
                   onMonitorRepo={this.onMonitorRepo}
-                  onRepoClick={this.onRepoClick}
                   sortRepoList={this.sortRepoList}
                 />
               }
             </div>
           </div>
-          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
-            <GuideForNewDialog
-              toggleDialog={this.toggleGuideForNewDialog}
-            />
-          }
           {this.state.isSortOptionsDialogOpen &&
             <SortOptionsDialog
               toggleDialog={this.toggleSortOptionsDialog}
@@ -198,20 +202,19 @@ class MyLibraries extends Component {
               sortItems={this.sortRepoList}
             />
           }
-          {this.state.isShowDetails && (
-            <div className="cur-view-detail">
-              <LibDetail
-                currentRepo={this.state.currentRepo}
-                closeDetails={this.closeDetails}
+          {this.state.isCreateRepoDialogOpen && (
+            <ModalPortal>
+              <CreateRepoDialog
+                libraryType='mine'
+                onCreateRepo={this.onCreateRepo}
+                onCreateToggle={this.toggleCreateRepoDialog}
               />
-            </div>
+            </ModalPortal>
           )}
         </div>
       </Fragment>
     );
   }
 }
-
-MyLibraries.propTypes = propTypes;
 
 export default MyLibraries;

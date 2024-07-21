@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -17,10 +17,26 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   fileTags: PropTypes.array.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  toggleTreePanel: PropTypes.func.isRequired,
   direntList: PropTypes.array,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
+  repoEncrypted: PropTypes.bool.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  showShareBtn: PropTypes.bool.isRequired,
+  onAddFile: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
+  onUploadFile: PropTypes.func.isRequired,
+  onUploadFolder: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array.isRequired,
+  filePermission: PropTypes.string,
+  repoTags: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -41,16 +57,30 @@ class CurDirPath extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     return (
-      <Fragment>
+      <div className="cur-dir-path d-flex justify-content-between align-items-center">
         <DirPath
+          repoID={this.props.repoID}
           repoName={this.props.repoName}
+          repoEncrypted={this.props.repoEncrypted}
+          isGroupOwnedRepo={this.props.isGroupOwnedRepo}
           pathPrefix={this.props.pathPrefix}
           currentPath={this.props.currentPath}
+          userPerm={this.props.userPerm}
           onPathClick={this.props.onPathClick}
           onTabNavClick={this.props.onTabNavClick}
-          repoID={this.props.repoID}
           isViewFile={this.props.isViewFile}
           fileTags={this.props.fileTags}
+          toggleTreePanel={this.props.toggleTreePanel}
+          enableDirPrivateShare={this.props.enableDirPrivateShare}
+          showShareBtn={this.props.showShareBtn}
+          onAddFolder={this.props.onAddFolder}
+          onAddFile={this.props.onAddFile}
+          onUploadFile={this.props.onUploadFile}
+          onUploadFolder={this.props.onUploadFolder}
+          direntList={this.props.fullDirentList}
+          filePermission={this.props.filePermission}
+          onFileTagChanged={this.props.onFileTagChanged}
+          repoTags={this.props.repoTags}
         />
         {isDesktop &&
         <DirTool
@@ -60,6 +90,12 @@ class CurDirPath extends React.Component {
           currentPath={this.props.currentPath}
           updateUsedRepoTags={this.props.updateUsedRepoTags}
           onDeleteRepoTag={this.props.onDeleteRepoTag}
+          currentMode={this.props.currentMode}
+          switchViewMode={this.props.switchViewMode}
+          isCustomPermission={this.props.isCustomPermission}
+          sortBy={this.props.sortBy}
+          sortOrder={this.props.sortOrder}
+          sortItems={this.props.sortItems}
         />}
         {!isDesktop && this.props.direntList.length > 0 &&
         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
@@ -71,7 +107,7 @@ class CurDirPath extends React.Component {
           sortItems={this.props.sortItems}
         />
         }
-      </Fragment>
+      </div>
     );
   }
 }

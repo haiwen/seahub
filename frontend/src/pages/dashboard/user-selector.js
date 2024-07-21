@@ -79,7 +79,7 @@ class UserSelector extends Component {
               <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Modified by')}
-          <i className="fas fa-caret-down ml-2 toggle-icon"></i>
+          <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isPopoverOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded shadow" ref={ref => this.userSelector = ref}>

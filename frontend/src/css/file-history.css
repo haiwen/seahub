@@ -28,6 +28,10 @@
   text-decoration: none;
 }
 
+.history-header .title .go-back .sf3-font-down {
+  font-size: 1.25rem !important;
+}
+
 .content-viewer {
   flex: 1;
   display: flex;

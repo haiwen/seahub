@@ -26,9 +26,9 @@ class GroupMembers extends React.Component {
       <Table size="sm" className="manage-members-table">
         <thead>
           <tr>
-            <th width="15%"></th>
+            <th width="10%"></th>
             <th width="45%">{gettext('Name')}</th>
-            <th width="30%">{gettext('Role')}</th>
+            <th width="35%">{gettext('Role')}</th>
             <th width="10%"></th>
           </tr>
         </thead>
@@ -138,9 +138,9 @@ class Member extends React.PureComponent {
     });
     const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
 
-    return(
+    return (
       <tr onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} className={this.state.highlight ? 'tr-highlight' : ''} tabIndex="0" onFocus={this.handleMouseOver}>
-        <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
+        <th scope="row"><img className="avatar" src={item.avatar_url} alt="" /></th>
         <td>{item.name}</td>
         <td>
           {((isOwner === false) || (isOwner === true && item.role === 'Owner')) &&

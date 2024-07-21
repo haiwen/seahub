@@ -5,7 +5,7 @@ import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import InvitationsToolbar from '../../components/toolbar/invitations-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
 import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import Loading from '../../components/loading';
@@ -51,7 +51,7 @@ class Item extends React.Component {
     });
     const token = this.props.invitation.token;
     seafileAPI.deleteInvitation(token).then((res) => {
-      this.setState({deleted: true});
+      this.setState({ deleted: true });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -63,7 +63,7 @@ class Item extends React.Component {
   };
 
   revokeItem = () => {
-    this.setState({deleted: true});
+    this.setState({ deleted: true });
   };
 
   toggleRevokeDialog = (e) => {
@@ -122,7 +122,7 @@ class Item extends React.Component {
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
-              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -159,7 +159,6 @@ class Item extends React.Component {
 }
 
 const ItemPropTypes = {
-  data: PropTypes.object.isRequired,
   invitation: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
 };
@@ -196,7 +195,7 @@ class Content extends Component {
 
     const isDesktop = Utils.isDesktop();
     return (
-      <table className={`table-hover${isDesktop ? '': ' table-thead-hidden'}`}>
+      <table className={`table-hover${isDesktop ? '' : ' table-thead-hidden'}`}>
         <thead>
           {isDesktop ?
             <tr>
@@ -271,15 +270,15 @@ class InvitationsView extends React.Component {
   render() {
     return (
       <Fragment>
-        <InvitationsToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-          toggleInvitePeopleDialog={this.toggleInvitePeopleDialog}
-        />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
+              <h3 className="sf-heading">
+                {gettext('Invite Guest')}
+                <SingleDropdownToolbar
+                  opList={[{ 'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog }]}
+                />
+              </h3>
             </div>
             <div className="cur-view-content">
               <Content data={this.state} />
@@ -300,12 +299,5 @@ class InvitationsView extends React.Component {
 Content.propTypes = {
   data: PropTypes.object.isRequired,
 };
-
-const InvitationsViewPropTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
-};
-
-InvitationsView.propTypes = InvitationsViewPropTypes;
 
 export default InvitationsView;

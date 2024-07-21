@@ -29,7 +29,7 @@ class ListTaggedFilesDialog extends React.Component {
 
   onFileTagChanged = (TaggedFile) => {
     const path = TaggedFile.parent_path;
-    const dirent = {name: TaggedFile.filename};
+    const dirent = { name: TaggedFile.filename };
     let direntPath = path === '/' ? path + TaggedFile.filename : path + '/' + TaggedFile.filename;
     this.props.onFileTagChanged(dirent, direntPath);
   };
@@ -75,7 +75,7 @@ class ListTaggedFilesDialog extends React.Component {
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Modal isOpen={true} style={{maxWidth: '678px'}}>
+      <Modal isOpen={true} style={{ maxWidth: '678px' }}>
         <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
@@ -162,7 +162,7 @@ class TaggedFile extends React.Component {
         {taggedFile.file_deleted ?
           <Fragment>
             <td colSpan='3' className="name">{taggedFile.filename}{' '}
-              <span style={{color:'red'}}>{gettext('deleted')}</span>
+              <span style={{ color: 'red' }}>{gettext('deleted')}</span>
             </td>
           </Fragment>
           :

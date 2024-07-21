@@ -136,13 +136,13 @@ class Content extends Component {
           <dt>{gettext('Name')}</dt>
           <dd>
             {name || '--'}
-            <span title={gettext('Edit')} className="attr-action-icon fa fa-pencil-alt" onClick={this.toggleSetNameDialog}></span>
+            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetNameDialog}></span>
           </dd>
 
           <dt>{gettext('Contact Email')}</dt>
           <dd>
             {contact_email || '--'}
-            <span title={gettext('Edit')} className="attr-action-icon fa fa-pencil-alt" onClick={this.toggleSetContactEmailDialog}></span>
+            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetContactEmailDialog}></span>
           </dd>
 
           <dt>{gettext('Organization')}</dt>
@@ -151,7 +151,7 @@ class Content extends Component {
           <dt>{gettext('Space Used / Quota')}</dt>
           <dd>
             {`${Utils.bytesToSize(quota_usage)}${quota_total > 0 ? ' / ' + Utils.bytesToSize(quota_total) : ''}`}
-            <span title={gettext('Edit')} className="attr-action-icon fa fa-pencil-alt" onClick={this.toggleSetQuotaDialog}></span>
+            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetQuotaDialog}></span>
           </dd>
         </dl>
         {isSetNameDialogOpen &&

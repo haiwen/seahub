@@ -25,21 +25,21 @@ class CreateForder extends React.Component {
 
   componentDidMount() {
     let parentPath = this.props.parentPath;
-    if (parentPath[parentPath.length - 1] === '/') {  // mainPanel
-      this.setState({parentPath: parentPath});
+    if (parentPath[parentPath.length - 1] === '/') { // mainPanel
+      this.setState({ parentPath: parentPath });
     } else {
-      this.setState({parentPath: parentPath + '/'}); // sidePanel
+      this.setState({ parentPath: parentPath + '/' }); // sidePanel
     }
   }
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
-    this.setState({childName: e.target.value});
+    this.setState({ childName: e.target.value });
   };
 
   handleSubmit = () => {
@@ -53,7 +53,7 @@ class CreateForder extends React.Component {
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
     } else {
       let path = this.state.parentPath + newName;
       this.props.onAddFolder(path);

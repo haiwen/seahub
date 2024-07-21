@@ -14,6 +14,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
+import UsersFilterBar from './users-filter-bar';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 
@@ -31,19 +32,19 @@ class Content extends Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1);
+    this.props.getListByPage(this.props.currentPage - 1, this.props.is_active, this.props.role);
   };
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1);
+    this.props.getListByPage(this.props.currentPage + 1, this.props.is_active, this.props.role);
   };
 
   sortByQuotaUsage = (e) => {
@@ -57,6 +58,7 @@ class Content extends Component {
       curPerPage, hasNextPage, currentPage,
       sortBy, sortOrder
     } = this.props;
+
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -74,9 +76,9 @@ class Content extends Component {
       let sortIcon;
       if (sortBy == '') {
         // initial sort icon
-        sortIcon = <span className="fas fa-sort"></span>;
+        sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       } else {
-        sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+        sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       }
       const spaceText = gettext('Space Used');
       const spaceEl =
@@ -89,28 +91,28 @@ class Content extends Component {
       const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')} / ${gettext('Last Access')}`;
       if (isPro) {
         columns.push(
-          {width: '20%', text: colNameText},
-          {width: '15%', text: gettext('Status')},
-          {width: '15%', text: gettext('Role')}
+          { width: '20%', text: colNameText },
+          { width: '15%', text: gettext('Status') },
+          { width: '15%', text: gettext('Role') }
         );
       } else {
         columns.push(
-          {width: '30%', text: colNameText},
-          {width: '20%', text: gettext('Status')}
+          { width: '30%', text: colNameText },
+          { width: '20%', text: gettext('Status') }
         );
       }
       if (multiInstitution && !isAdmin) {
         columns.push(
-          {width: '14%', text: colSpaceText},
-          {width: '14%', text: gettext('Institution')},
-          {width: '14%', text: colCreatedText},
-          {width: '5%', text: ''}
+          { width: '14%', text: colSpaceText },
+          { width: '14%', text: gettext('Institution') },
+          { width: '14%', text: colCreatedText },
+          { width: '5%', text: '' }
         );
       } else {
         columns.push(
-          {width: '20%', text: colSpaceText},
-          {width: '22%', text: colCreatedText},
-          {width: '5%', text: ''}
+          { width: '20%', text: colSpaceText },
+          { width: '22%', text: colCreatedText },
+          { width: '5%', text: '' }
         );
       }
 
@@ -129,21 +131,26 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  toggleItemFreezed={this.toggleItemFreezed}
-                  updateUser={this.props.updateUser}
-                  deleteUser={this.props.deleteUser}
-                  updateAdminRole={this.props.updateAdminRole}
-                  revokeAdmin={this.props.revokeAdmin}
-                  onUserSelected={this.props.onUserSelected}
-                  isAdmin={this.props.isAdmin}
-                  isLDAPImported={this.props.isLDAPImported}
-                />);
+                if (index < this.props.curPerPage) {
+                  return (
+                    <Item
+                      key={index}
+                      item={item}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                      toggleItemFreezed={this.toggleItemFreezed}
+                      updateUser={this.props.updateUser}
+                      deleteUser={this.props.deleteUser}
+                      updateAdminRole={this.props.updateAdminRole}
+                      revokeAdmin={this.props.revokeAdmin}
+                      onUserSelected={this.props.onUserSelected}
+                      isAdmin={this.props.isAdmin}
+                      isLDAPImported={this.props.isLDAPImported}
+                    />
+                  );
+                }
+                return null;
               })}
             </tbody>
           </table>
@@ -160,7 +167,19 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip;
+      return (
+        <div>
+          {this.props.currentItem === 'database' &&
+            <UsersFilterBar
+              isActive={this.props.is_active}
+              role={this.props.role}
+              onStatusChange={this.props.onStatusChange}
+              onRoleChange={this.props.onRoleChange}
+            />
+          }
+          {items.length ? table : emptyTip}
+        </div>
+      );
     }
   }
 }
@@ -188,6 +207,11 @@ Content.propTypes = {
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
   sortOrder: PropTypes.string,
+  is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  role: PropTypes.string,
+  currentItem: PropTypes.string,
+  onStatusChange: PropTypes.func,
+  onRoleChange: PropTypes.func
 };
 
 class Item extends Component {
@@ -232,30 +256,30 @@ class Item extends Component {
   };
 
   toggleSetQuotaDialog = () => {
-    this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
+    this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
   };
 
   toggleDeleteUserDialog = () => {
-    this.setState({isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen});
+    this.setState({ isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen });
   };
 
   toggleResetUserPasswordDialog = () => {
-    this.setState({isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen});
+    this.setState({ isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen });
   };
 
   toggleRevokeAdminDialog = () => {
-    this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
+    this.setState({ isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen });
   };
 
-  toggleConfirmInactiveDialog= () => {
-    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  toggleConfirmInactiveDialog = () => {
+    this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
   onUserSelected = () => {
     this.props.onUserSelected(this.props.item);
   };
 
-  updateStatus= (roleOption) => {
+  updateStatus = (roleOption) => {
     const isActive = roleOption.value == 'active';
     if (isActive) {
       toaster.notify(gettext('It may take some time, please wait.'));
@@ -372,7 +396,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Delete':
         this.toggleDeleteUserDialog();
         break;
@@ -512,7 +536,7 @@ class Item extends Component {
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
             <span
               title={gettext('Edit')}
-              className={`fa fa-pencil-alt attr-action-icon ${isOpIconShown ? '' : 'invisible'}`}
+              className={`sf3-font sf3-font-rename attr-action-icon ${isOpIconShown ? '' : 'invisible'}`}
               onClick={this.toggleSetQuotaDialog}>
             </span>
           </td>

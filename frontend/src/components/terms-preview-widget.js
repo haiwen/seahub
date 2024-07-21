@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
 import Loading from './loading';
 
+import '../css/terms-preview.css';
+
 const propTypes = {
   content: PropTypes.string,
   onContentClick: PropTypes.func,
@@ -52,7 +54,7 @@ class TermsPreviewWidget extends React.Component {
 
     return (
       <div className="conditions-preview-container" onClick={this.props.onContentClick}>
-        <div dangerouslySetInnerHTML={{__html: this.state.innerHtml}}></div>
+        <div dangerouslySetInnerHTML={{ __html: this.state.innerHtml }}></div>
       </div>
     );
   }

@@ -33,3 +33,5 @@ HASH_URLS = {
         }
 
 REPO_SHARE_LINK_COUNT_LIMIT = 500000
+
+REPO_TYPE_WIKI = 'wiki'

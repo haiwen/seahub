@@ -48,7 +48,7 @@ class SelectEditor extends React.Component {
       let option = {};
       option.value = options[i];
       if (!options[i].length) { // it's ''. for example, intitution option in 'system admin - users' page can be ''.
-        option.label = <div style={{minHeight: '1em'}}></div>;
+        option.label = <div style={{ minHeight: '1em' }}></div>;
       } else {
         option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
       }
@@ -62,7 +62,7 @@ class SelectEditor extends React.Component {
         isDisabled: true,
         label: (
           <div className="permission-editor-btn-add-custom-permission" onClick={this.props.onAddCustomPermissionToggle}>
-            <i className="fa fa-plus"></i>
+            <i className="sf3-font sf3-font-enlarge"></i>
             <span>{gettext('Add custom permission')}</span>
           </div>
         )
@@ -82,7 +82,7 @@ class SelectEditor extends React.Component {
   onEditPermission = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
-    this.setState({isEditing: true});
+    this.setState({ isEditing: true });
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
   };
 
@@ -91,7 +91,7 @@ class SelectEditor extends React.Component {
     if (permission !== this.props.currentOption) {
       this.props.onOptionChanged(permission);
     }
-    this.setState({isEditing: false});
+    this.setState({ isEditing: false });
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   };
 
@@ -100,7 +100,7 @@ class SelectEditor extends React.Component {
   };
 
   onMenuClose = () => {
-    this.setState({isEditing: false});
+    this.setState({ isEditing: false });
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   };
 
@@ -136,7 +136,7 @@ class SelectEditor extends React.Component {
                 role="button"
                 aria-label={gettext('Edit')}
                 title={gettext('Edit')}
-                className="fa fa-pencil-alt attr-action-icon"
+                className="sf3-font sf3-font-rename attr-action-icon"
                 onClick={this.onEditPermission}>
               </a>
             )}

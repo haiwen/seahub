@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -9,6 +9,8 @@ import Loading from '../loading';
 import LinkDetails from './link-details';
 import LinkCreation from './link-creation';
 import LinkList from './link-list';
+import LinkAuthenticatedUsers from './link-authenticated-users';
+import LinkAuthenticatedEmails from './link-authenticated-emails';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -44,7 +46,7 @@ class ShareLinkPanel extends React.Component {
   componentDidMount() {
     const { page } = this.state;
     const { repoID, itemPath: path } = this.props;
-    seafileAPI.listShareLinks({repoID, path, page}).then((res) => {
+    seafileAPI.listShareLinks({ repoID, path, page }).then((res) => {
       this.setState({
         isLoading: false,
         hasMore: res.data.length == PER_PAGE,
@@ -55,34 +57,32 @@ class ShareLinkPanel extends React.Component {
       toaster.danger(errMessage);
     });
 
-    if (isPro) {
-      const { itemType, userPerm } = this.props;
-      if (itemType == 'library') {
-        let permissionOptions = Utils.getShareLinkPermissionList(itemType, userPerm, path);
+    const { itemType, userPerm } = this.props;
+    if (itemType == 'library') {
+      let permissionOptions = Utils.getShareLinkPermissionList(itemType, userPerm, path);
+      this.setState({
+        permissionOptions: permissionOptions,
+        currentPermission: permissionOptions[0],
+      });
+    } else {
+      let getDirentInfoAPI;
+      if (this.props.itemType === 'file') {
+        getDirentInfoAPI = seafileAPI.getFileInfo(repoID, path);
+      } else if (this.props.itemType === 'dir') {
+        getDirentInfoAPI = seafileAPI.getDirInfo(repoID, path);
+      }
+      getDirentInfoAPI.then((res) => {
+        let canEdit = res.data.can_edit;
+        let permission = res.data.permission;
+        let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path, canEdit);
         this.setState({
           permissionOptions: permissionOptions,
           currentPermission: permissionOptions[0],
         });
-      } else {
-        let getDirentInfoAPI;
-        if (this.props.itemType === 'file') {
-          getDirentInfoAPI = seafileAPI.getFileInfo(repoID, path);
-        } else if (this.props.itemType === 'dir') {
-          getDirentInfoAPI = seafileAPI.getDirInfo(repoID, path);
-        }
-        getDirentInfoAPI.then((res) => {
-          let canEdit = res.data.can_edit;
-          let permission = res.data.permission;
-          let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, permission, path, canEdit);
-          this.setState({
-            permissionOptions: permissionOptions,
-            currentPermission: permissionOptions[0],
-          });
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-      }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
   }
 
@@ -194,10 +194,10 @@ class ShareLinkPanel extends React.Component {
     if (!this.state.isLoadingMore && this.state.hasMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.getMore();
         });
       }
@@ -207,7 +207,7 @@ class ShareLinkPanel extends React.Component {
   getMore = () => {
     const { page, shareLinks } = this.state;
     const { repoID, itemPath: path } = this.props;
-    seafileAPI.listShareLinks({repoID, path, page: page + 1}).then((res) => {
+    seafileAPI.listShareLinks({ repoID, path, page: page + 1 }).then((res) => {
       this.setState({
         isLoadingMore: false,
         hasMore: res.data.length == PER_PAGE,
@@ -242,6 +242,7 @@ class ShareLinkPanel extends React.Component {
             updateLink={this.updateLink}
             deleteLink={this.deleteLink}
             closeShareDialog={this.props.closeShareDialog}
+            setMode={this.setMode}
           />
         );
       case 'singleLinkCreation':
@@ -268,6 +269,24 @@ class ShareLinkPanel extends React.Component {
             currentPermission={currentPermission}
             setMode={this.setMode}
             updateAfterCreation={this.updateAfterCreation}
+          />
+        );
+      case 'linkAuthenticatedUsers':
+        return (
+          <LinkAuthenticatedUsers
+            repoID={repoID}
+            linkToken={sharedLinkInfo.token}
+            setMode={this.setMode}
+            path={itemPath}
+          />
+        );
+      case 'linkAuthenticatedEmails':
+        return (
+          <LinkAuthenticatedEmails
+            repoID={repoID}
+            linkToken={sharedLinkInfo.token}
+            setMode={this.setMode}
+            path={itemPath}
           />
         );
       default:

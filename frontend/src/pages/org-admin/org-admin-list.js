@@ -28,11 +28,11 @@ class OrgAdminList extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   toggleItemFreezed = (isFreezed) => {
@@ -51,7 +51,7 @@ class OrgAdminList extends React.Component {
               <th width="15%">{gettext('Status')}</th>
               <th width="20%">{gettext('Space Used')} / {gettext('Quota')}</th>
               <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
-              <th width="10%">{/*Operations*/}</th>
+              <th width="10%">{/* Operations*/}</th>
             </tr>
           </thead>
           <tbody>

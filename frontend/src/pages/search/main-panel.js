@@ -77,9 +77,9 @@ class SearchViewPanel extends React.Component {
     }).catch((error) => {
       this.setState({ isLoading: false });
       if (error.response) {
-        toaster.danger(error.response.data.detail || error.response.data.error_msg || gettext('Error'), {duration: 3});
+        toaster.danger(error.response.data.detail || error.response.data.error_msg || gettext('Error'), { duration: 3 });
       } else {
-        toaster.danger(gettext('Please check the network.'), {duration: 3});
+        toaster.danger(gettext('Please check the network.'), { duration: 3 });
       }
     });
   };
@@ -273,7 +273,7 @@ class SearchViewPanel extends React.Component {
   getFileTypesList = () => {
     const fileTypeItems = ['Text', 'Document', 'Image', 'Video', 'Audio', 'PDF', 'Markdown'];
     let ftype = [];
-    for (let i = 0, len = this.state.fileTypeItemsStatus.length; i < len; i++){
+    for (let i = 0, len = this.state.fileTypeItemsStatus.length; i < len; i++) {
       if (this.state.fileTypeItemsStatus[i]) {
         ftype.push(fileTypeItems[i]);
       }
@@ -331,8 +331,8 @@ class SearchViewPanel extends React.Component {
               onChange={this.handleSearchInput}
               onKeyDown={this.handleKeyDown}
             />
-            <i className="search-icon-right input-icon-addon fas fa-search" onClick={this.handleSubmit}></i>
-            <i className={`fas action-icon fa-angle-double-${isCollapseOpen ? 'up' : 'down'}`} onClick={this.toggleCollapse}></i>
+            <i className="search-icon-right input-icon-addon sf3-font sf3-font-search" onClick={this.handleSubmit}></i>
+            <i className={`action-icon sf3-font sf3-font-angles-${isCollapseOpen ? 'up' : 'down'}`} onClick={this.toggleCollapse}></i>
           </div>
           {this.state.errorMsg && <div className="error">{this.state.errorMsg}</div>}
           <AdvancedSearch

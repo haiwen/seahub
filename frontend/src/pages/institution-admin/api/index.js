@@ -8,7 +8,7 @@ class InstAdminAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -19,8 +19,8 @@ class InstAdminAPI {
   }
 
   initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
-    if (siteRoot && siteRoot.charAt(siteRoot.length-1) === '/') {
-      var server = siteRoot.substring(0, siteRoot.length-1);
+    if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
+      var server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
     } else {
       this.server = siteRoot;
@@ -37,7 +37,7 @@ class InstAdminAPI {
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
-        headers:form.getHeaders()
+        headers: form.getHeaders()
       });
     } else {
       return this.req.post(url, form);
@@ -73,7 +73,7 @@ class InstAdminAPI {
     const params = {
       q: q
     };
-    return this.req.get(url, {params: params});
+    return this.req.get(url, { params: params });
   }
 
   deleteInstitutionUser(email) {

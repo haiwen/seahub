@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -14,8 +14,8 @@ import ShareLinkPermissionSelect from '../../components/dialog/share-link-permis
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import TopToolbar from '../../components/toolbar/top-toolbar';
 import Selector from '../../components/single-selector';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -73,23 +73,23 @@ class Content extends Component {
       // sort
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
-      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
       const isDesktop = Utils.isDesktop();
       // only for some columns
       const columnWidths = isPro ? ['14%', '7%', '14%'] : ['21%', '14%', '20%'];
       const table = (
-        <table className={`${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`${isDesktop ? '' : 'table-thead-hidden'}`}>
           <thead>
             {isDesktop ? (
               <tr>
-                <th width="4%">{/*icon*/}</th>
+                <th width="4%">{/* icon*/}</th>
                 <th width="31%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width={columnWidths[0]}>{gettext('Library')}</th>
                 {isPro && <th width="20%">{gettext('Permission')}</th>}
                 <th width={columnWidths[1]}>{gettext('Visits')}</th>
                 <th width={columnWidths[2]}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a></th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             ) : (
               <tr>
@@ -247,7 +247,7 @@ class Item extends Component {
 
   render() {
     const item = this.props.item;
-    const { currentPermission, permissionOptions , isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    const { currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
     this.permOptions = permissionOptions.map(item => {
       return {
         value: item,
@@ -257,7 +257,7 @@ class Item extends Component {
     });
     const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0] || {};
 
-    let iconUrl, objUrl;
+    let iconUrl; let objUrl;
     if (item.is_dir) {
       let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
       iconUrl = Utils.getFolderIconUrl(false);
@@ -267,7 +267,7 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
-    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
+    const deletedTip = item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onFocus={this.handleMouseEnter}>
         <td><img src={iconUrl} width="24" alt="" /></td>
@@ -293,8 +293,8 @@ class Item extends Component {
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
     );
@@ -318,7 +318,7 @@ class Item extends Component {
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
               <DropdownToggle
                 tag="i"
-                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -362,11 +362,6 @@ class Item extends Component {
 
 Item.propTypes = itemPropTypes;
 
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired
-};
-
 const PER_PAGE = 25;
 
 class ShareAdminShareLinks extends Component {
@@ -387,10 +382,10 @@ class ShareAdminShareLinks extends Component {
 
     // for mobile
     this.sortOptions = [
-      {value: 'name-asc', text: gettext('By name ascending')},
-      {value: 'name-desc', text: gettext('By name descending')},
-      {value: 'time-asc', text: gettext('By expiration ascending')},
-      {value: 'time-desc', text: gettext('By expiration descending')}
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'time-asc', text: gettext('By expiration ascending') },
+      { value: 'time-desc', text: gettext('By expiration descending') }
     ];
   }
 
@@ -399,24 +394,24 @@ class ShareAdminShareLinks extends Component {
 
     switch (`${sortBy}-${sortOrder}`) {
       case 'name-asc':
-        comparator = function(a, b) {
+        comparator = function (a, b) {
           var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
           return result;
         };
         break;
       case 'name-desc':
-        comparator = function(a, b) {
+        comparator = function (a, b) {
           var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
           return -result;
         };
         break;
       case 'time-asc':
-        comparator = function(a, b) {
+        comparator = function (a, b) {
           return a.expire_date < b.expire_date ? -1 : 1;
         };
         break;
       case 'time-desc':
-        comparator = function(a, b) {
+        comparator = function (a, b) {
           return a.expire_date < b.expire_date ? 1 : -1;
         };
         break;
@@ -471,10 +466,10 @@ class ShareAdminShareLinks extends Component {
     if (!this.state.isLoadingMore && this.state.hasMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.getMore();
         });
       }
@@ -506,7 +501,7 @@ class ShareAdminShareLinks extends Component {
       let items = this.state.items.filter(uploadItem => {
         return uploadItem.token !== item.token;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       let message = gettext('Successfully deleted 1 item.');
       toaster.success(message);
     }).catch((error) => {
@@ -522,13 +517,13 @@ class ShareAdminShareLinks extends Component {
   };
 
   toggleCleanInvalidShareLinksDialog = () => {
-    this.setState({isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen});
+    this.setState({ isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen });
   };
 
   cleanInvalidShareLinks = () => {
     seafileAPI.cleanInvalidShareLinks().then(res => {
       const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
-      this.setState({items: newItems});
+      this.setState({ items: newItems });
       toaster.success(gettext('Successfully cleaned invalid share links.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -539,19 +534,17 @@ class ShareAdminShareLinks extends Component {
   render() {
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        >
-
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidShareLinksDialog}>{gettext('Clean invalid share links')}</Button>
-        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
               <ul className="nav">
                 <li className="nav-item">
-                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
+                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
+                    {gettext('Share Links')}
+                    <SingleDropdownToolbar
+                      opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
+                    />
+                  </Link>
                 </li>
                 {canGenerateUploadLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
@@ -595,7 +588,5 @@ class ShareAdminShareLinks extends Component {
     );
   }
 }
-
-ShareAdminShareLinks.propTypes = propTypes;
 
 export default ShareAdminShareLinks;

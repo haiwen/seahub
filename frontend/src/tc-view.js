@@ -22,7 +22,7 @@ class TCView extends React.Component {
         </div>
         <div className="o-auto">
           <div className="py-4 px-4 my-6 mx-auto content">
-            <h2 dangerouslySetInnerHTML={{__html: termsName}}></h2>
+            <h2 dangerouslySetInnerHTML={{ __html: termsName }}></h2>
             <div className="article">
               <TermsPreviewWidget content={termsText} />
             </div>

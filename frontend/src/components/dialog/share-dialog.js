@@ -203,7 +203,7 @@ class ShareDialog extends React.Component {
             }
             {enableDirPrivateShare &&
               <Fragment>
-                {activeTab === 'shareToUser' &&
+                {(activeTab === 'shareToUser' && canShareRepo) &&
                   <TabPane tabId="shareToUser" role="tabpanel" id="share-to-user-panel">
                     <ShareToUser
                       itemType={this.props.itemType}
@@ -215,7 +215,7 @@ class ShareDialog extends React.Component {
                     />
                   </TabPane>
                 }
-                {activeTab === 'shareToGroup' &&
+                {(activeTab === 'shareToGroup' && canShareRepo) &&
                   <TabPane tabId="shareToGroup" role="tabpanel" id="share-to-group-panel">
                     <ShareToGroup
                       itemType={this.props.itemType}
@@ -227,7 +227,7 @@ class ShareDialog extends React.Component {
                     />
                   </TabPane>
                 }
-                {isPro && activeTab === 'customSharePermission' && (
+                {(isPro && activeTab === 'customSharePermission' && canShareRepo) && (
                   <TabPane tabId="customSharePermission" role="tabpanel" id="custom-share-perm-panel">
                     <CustomPermissionManager repoID={this.props.repoID} />
                   </TabPane>
@@ -311,7 +311,7 @@ class ShareDialog extends React.Component {
       return (
         <div className="external-share-message mt-2">
           <h6>{additionalShareDialogNote.title}</h6>
-          <p style={{fontSize: '14px', color: '#666'}} className="text-wrap m-0">{additionalShareDialogNote.content}</p>
+          <p style={{ fontSize: '14px', color: '#666' }} className="text-wrap m-0">{additionalShareDialogNote.content}</p>
         </div>
       );
     }
@@ -322,7 +322,7 @@ class ShareDialog extends React.Component {
     const { itemType, itemName } = this.props;
     return (
       <div>
-        <Modal isOpen={true} style={{maxWidth: '760px'}} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog} tag="div">
             <h5 className="text-truncate">{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></h5>
             {this.renderExternalShareMessage()}

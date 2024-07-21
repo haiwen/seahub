@@ -117,19 +117,19 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     if (this.props.isItemFreezed) return;
-    this.setState({highlighted: true});
+    this.setState({ highlighted: true });
   };
 
   handleMouseLeave = () => {
     if (this.props.isItemFreezed) return;
-    this.setState({highlighted: false});
+    this.setState({ highlighted: false });
   };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen}, () => {
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen }, () => {
       if (this.state.isDeleteDialogOpen) {
         seafileAPI.sysAdminGetOrg(this.props.item.org_id).then((res) => {
           let orgName = '<span class="op-target">' + Utils.HTMLescape(res.data.org_name) + '</span>';
@@ -140,7 +140,7 @@ class Item extends Component {
             gettext('{userCount} user(s) and {repoCount} libraries of this organization will also be deleted.')
               .replace('{userCount}', userCount)
               .replace('{repoCount}', repoCount);
-          this.setState({deleteDialogMsg: deleteDialogMsg});
+          this.setState({ deleteDialogMsg: deleteDialogMsg });
         }).catch(error => {
           let errorMsg = Utils.getErrorMsg(error);
           toaster.danger(errorMsg);
@@ -202,7 +202,7 @@ class Item extends Component {
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
           <td>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
         </tr>
         {isDeleteDialogOpen &&

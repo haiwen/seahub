@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TreeListView from './tree-list-view';
-
 import TreeNode from '../../components/tree-view/tree-node';
 import Dirent from '../../models/dirent';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -21,6 +20,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
+  hideLibraryName: PropTypes.bool,
 };
 
 class RepoListItem extends React.Component {
@@ -34,7 +34,7 @@ class RepoListItem extends React.Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
 
     // render search result
@@ -42,7 +42,7 @@ class RepoListItem extends React.Component {
     if (repoID && repoID === repo.repo_id) {
       this.loadRepoDirentList(repo);
       setTimeout(() => {
-        this.setState({isShowChildren: true});
+        this.setState({ isShowChildren: true });
         this.loadNodeAndParentsByPath(repoID, filePath);
       }, 0);
       return;
@@ -93,7 +93,7 @@ class RepoListItem extends React.Component {
     direntList = Utils.sortDirents(direntList, 'name', 'asc');
 
     let nodeList = direntList.map(object => {
-      return new TreeNode({object});
+      return new TreeNode({ object });
     });
     node.addChildren(nodeList);
   };
@@ -111,34 +111,34 @@ class RepoListItem extends React.Component {
           direntList = res.data.dirent_list.filter(item => item.type === 'dir');
         }
         this.addResponseListToNode(direntList, node);
-        this.setState({treeData: tree});
+        this.setState({ treeData: tree });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
     } else {
       tree.expandNode(node);
-      this.setState({treeData: tree});
+      this.setState({ treeData: tree });
     }
   };
 
   onNodeCollapse = (node) => {
     let tree = treeHelper.collapseNode(this.state.treeData, node);
-    this.setState({treeData: tree});
+    this.setState({ treeData: tree });
   };
 
   loadNodeAndParentsByPath = (repoID, path, expandNode) => {
 
     let tree = this.state.treeData.clone();
 
-    seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
+    seafileAPI.listDir(repoID, path, { with_parents: true }).then(res => {
       let direntList = res.data.dirent_list;
       direntList = direntList.filter(item => item.type === 'dir');
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
         let parentDir = object.parent_dir;
-        let key = parentDir === '/' ?  '/' : parentDir.slice(0, parentDir.length - 1);
+        let key = parentDir === '/' ? '/' : parentDir.slice(0, parentDir.length - 1);
         if (!results[key]) {
           results[key] = [];
         }
@@ -168,7 +168,7 @@ class RepoListItem extends React.Component {
     e.stopPropagation();
     let repo = this.props.repo;
     this.loadRepoDirentList(repo);
-    this.setState({isShowChildren: !this.state.isShowChildren});
+    this.setState({ isShowChildren: !this.state.isShowChildren });
   };
 
   onDirentItemClick = (filePath, dirent) => {
@@ -199,17 +199,19 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
-          <div className="item-text">
-            <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+        {!this.props.hideLibraryName &&
+          <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+            <div className="item-text">
+              <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+            </div>
+            <div className="item-left-icon">
+              <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
+              <i className="tree-node-icon">
+                <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
+              </i>
+            </div>
           </div>
-          <div className="item-left-icon">
-            <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-            <i className="tree-node-icon">
-              <span className="icon far fa-folder tree-node-icon"></span>
-            </i>
-          </div>
-        </div>
+        }
         {this.state.isShowChildren && (
           <TreeListView
             repo={this.props.repo}

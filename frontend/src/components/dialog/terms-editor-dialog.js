@@ -39,7 +39,7 @@ class TermsEditorDialog extends React.Component {
   };
 
   onContentChanged = () => {
-    return this.setState({isValueChanged: true});
+    return this.setState({ isValueChanged: true });
   };
 
   getCurrentContent = () => {
@@ -61,7 +61,7 @@ class TermsEditorDialog extends React.Component {
         className={'conditions-editor-dialog'}
         contentClassName={'conditions-editor-dialog-content'}
         size={'lg'}
-        style={{width: 770}}
+        style={{ width: 770 }}
       >
         <ModalHeader className="conditions-editor-dialog-title" toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody className={'conditions-editor-dialog-main'}>

@@ -88,11 +88,11 @@ class UserNotificationsDialog extends React.Component {
   };
 
   toggleDropDownMenu = () => {
-    this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+    this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
   };
 
   onHandleScroll = () => {
-    if (!this.state.hasNextPage || this.state.isLoading ||!this.tableRef) {
+    if (!this.state.hasNextPage || this.state.isLoading || !this.tableRef) {
       return;
     }
     if (this.notificationTableRef.offsetHeight + this.notificationTableRef.scrollTop + 1 >= this.tableRef.offsetHeight) {
@@ -126,13 +126,13 @@ class UserNotificationsDialog extends React.Component {
     else {
       const isDesktop = Utils.isDesktop();
       const theadData = isDesktop ? [
-        {width: '7%', text: ''},
-        {width: '73%', text: gettext('Message')},
-        {width: '20%', text: gettext('Time')}
+        { width: '7%', text: '' },
+        { width: '73%', text: gettext('Message') },
+        { width: '20%', text: gettext('Time') }
       ] : [
-        {width: '15%', text: ''},
-        {width: '52%', text: gettext('Message')},
-        {width: '33%', text: gettext('Time')}
+        { width: '15%', text: '' },
+        { width: '52%', text: gettext('Message') },
+        { width: '33%', text: gettext('Time') }
       ];
       content = (
         <table className="table-hover" ref={ref => this.tableRef = ref}>

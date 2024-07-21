@@ -33,47 +33,10 @@
   border-radius: 2px;
 }
 
-.group-operations {
-  margin-right: 0.25rem;
-}
-
-.group-operations .group-op-item {
-  padding: 0 0.5rem;
-  height: 30px;
-  min-width: 46px;
-  background-color: #fff;
-  line-height: 29px;
-  font-weight: normal;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  font-size: 1.125rem;
-}
 /* end file-operation toolbar */
-
-/* begin view-mode toolbar */
-.detail-btn button,
-.sf-view-mode-btn {
-  padding: 0;
-  height: 30px;
-  min-width: 2rem;
-  color: #aaa;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  line-height: 29px;
-  font-size: 18px;
-  border-radius: 2px;
+#cur-folder-more-op-toggle {
+  margin-right: -4px;
 }
-
-.detail-btn button {
-  font-size: 15px;
-  padding-top: 1px;
-}
-
-.sf-view-mode-btn.current-mode {
-  background-color: #ccc !important;
-  color: #fff !important;
-}
-/* end view-mode toolbar */
 
 /* begin common-toolbar */
 .common-toolbar {

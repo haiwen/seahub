@@ -12,7 +12,7 @@ class ToggleFilter extends React.Component {
         onClick={this.props.toggleFilter}
       >
         <span className="text-primary">{filterBy}</span>
-        <span className="ml-2 close" style={{fontSize: '1.2rem'}}>x</span>
+        <span className="ml-2 close" style={{ fontSize: '1.2rem' }}>x</span>
       </Button>
     );
   }

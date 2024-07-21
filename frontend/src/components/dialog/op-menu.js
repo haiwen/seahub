@@ -32,7 +32,7 @@ class OpMenu extends React.Component {
 
   toggleOperationMenu = (e) => {
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow},
+      { isItemMenuShow: !this.state.isItemMenuShow },
       () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
@@ -49,14 +49,14 @@ class OpMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
           tag="i"
-          className="d-flex w-5 h-5 align-items-center justify-content-center sf-dropdown-toggle fa fa-ellipsis-v"
+          className="d-flex w-5 h-5 align-items-center justify-content-center sf-dropdown-toggle sf3-font sf3-font-more-vertical"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
         />
         <DropdownMenu className="my-1 mr-2">
-          {operations.map((item, index )=> {
+          {operations.map((item, index ) => {
             return (<DropdownItem key={index} data-op={item} onClick={this.onMenuItemClick}>{translateOperations(item)}</DropdownItem>);
           })}
         </DropdownMenu>

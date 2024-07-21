@@ -5,11 +5,13 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils } from '../../utils/utils';
 
+const LEFT_INDENT = 20;
+
 const propTypes = {
   userPerm: PropTypes.string,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
-  paddingLeft: PropTypes.number.isRequired,
+  leftIndent: PropTypes.number.isRequired,
   isNodeMenuShow: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onNodeClick: PropTypes.func.isRequired,
@@ -23,7 +25,7 @@ const propTypes = {
   onNodeDrop: PropTypes.func,
   handleContextClick: PropTypes.func.isRequired,
   onNodeDragEnter: PropTypes.func.isRequired,
-  onNodeDragLeave:PropTypes.func.isRequired,
+  onNodeDragLeave: PropTypes.func.isRequired,
 };
 
 class TreeNodeView extends React.Component {
@@ -117,7 +119,7 @@ class TreeNodeView extends React.Component {
       return false;
     }
     if (this.props.node.object.type === 'dir') {
-      this.setState({isNodeDropShow: true});
+      this.setState({ isNodeDropShow: true });
     }
     this.props.onNodeDragEnter(e, this.props.node);
   };
@@ -133,7 +135,7 @@ class TreeNodeView extends React.Component {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
-    this.setState({isNodeDropShow: false});
+    this.setState({ isNodeDropShow: false });
     this.props.onNodeDragLeave(e, this.props.node);
   };
 
@@ -142,12 +144,12 @@ class TreeNodeView extends React.Component {
       return false;
     }
     e.stopPropagation();
-    this.setState({isNodeDropShow: false});
+    this.setState({ isNodeDropShow: false });
     this.props.onNodeDrop(e, this.props.node);
   };
 
   unfreezeItem = () => {
-    this.setState({isShowOperationMenu: false});
+    this.setState({ isShowOperationMenu: false });
     this.props.unfreezeItem();
   };
 
@@ -168,7 +170,7 @@ class TreeNodeView extends React.Component {
 
   handleContextClick = (event) => {
     this.props.handleContextClick(event, this.props.node);
-    this.setState({isShowOperationMenu: false});
+    this.setState({ isShowOperationMenu: false });
   };
 
   getNodeTypeAndIcon = () => {
@@ -176,34 +178,34 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.type === 'dir') {
-      icon = <i className="far fa-folder"></i>;
+      icon = <i className="sf3-font sf3-font-folder"></i>;
       type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="far fa-file"></i>;
+        icon = <i className="sf3-font sf3-font-file"></i>;
         type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
-          icon = <i className="far fa-image"></i>;
+          icon = <i className="sf3-font sf3-font-image"></i>;
           type = 'image';
         }
         else if (suffix === '.md' || suffix === '.markdown') {
-          icon = <i className="far fa-file-alt"></i>;
+          icon = <i className="sf3-font sf3-font-files2"></i>;
           type = 'file';
         }
         else {
-          icon = <i className="far fa-file"></i>;
+          icon = <i className="sf3-font sf3-font-file"></i>;
           type = 'file';
         }
       }
     }
-    return {icon, type};
+    return { icon, type };
   };
 
   calculateMenuList = (node) => {
-    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT} =  TextTranslation;
+    let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT } = TextTranslation;
 
     let menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
     if (node.object.type === 'dir') {
@@ -234,18 +236,18 @@ class TreeNodeView extends React.Component {
   };
 
   renderChildren = () => {
-    let { node, paddingLeft } = this.props;
+    let { node } = this.props;
     if (!node.hasChildren()) {
       return '';
     }
     return (
-      <div className="children" style={{paddingLeft: paddingLeft}}>
+      <div className="children">
         {node.children.map(item => {
           return (
             <TreeNodeView
               key={item.path}
               node={item}
-              paddingLeft={paddingLeft}
+              leftIndent={this.props.leftIndent + LEFT_INDENT}
               userPerm={this.props.userPerm}
               currentPath={this.props.currentPath}
               isNodeMenuShow={this.props.isNodeMenuShow}
@@ -270,7 +272,7 @@ class TreeNodeView extends React.Component {
   };
 
   render() {
-    let { currentPath, node, isNodeMenuShow, userPerm } = this.props;
+    let { currentPath, node, isNodeMenuShow, userPerm, leftIndent } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
@@ -282,7 +284,7 @@ class TreeNodeView extends React.Component {
       <div className="tree-node">
         <div
           type={type}
-          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/'? 'hide': ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
+          className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/' ? 'hide' : ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
           title={node.object.name}
           onMouseEnter={this.onMouseEnter}
           onMouseOver={this.onMouseOver}
@@ -291,14 +293,25 @@ class TreeNodeView extends React.Component {
           onContextMenu={this.onItemContextMenu}
           onClick={this.onNodeClick}
         >
-          <div className="tree-node-text" draggable={this.canDrag} onDragStart={this.onNodeDragStart} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
-          <div className="left-icon">
-            {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
+          <div
+            className="tree-node-text"
+            draggable={this.canDrag}
+            onDragStart={this.onNodeDragStart}
+            onDragEnter={this.onNodeDragEnter}
+            onDragLeave={this.onNodeDragLeave}
+            onDragOver={this.onNodeDragMove}
+            onDrop={this.onNodeDrop}
+            style={{ paddingLeft: leftIndent + 5 }}
+          >{node.object.name}
+          </div>
+          <div className="left-icon" style={{ left: leftIndent - 40 }}>
+            {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
               <i
-                className={`folder-toggle-icon fa ${node.isExpanded ? 'fa-caret-down' : 'fa-caret-right'}`}
+                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
-              ></i>
+              >
+              </i>
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>
@@ -307,7 +320,7 @@ class TreeNodeView extends React.Component {
               {((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
                 <ItemDropdownMenu
                   item={this.props.node}
-                  toggleClass={'fas fa-ellipsis-v'}
+                  toggleClass={'sf3-font sf3-font-more-vertical'}
                   getMenuList={this.calculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}

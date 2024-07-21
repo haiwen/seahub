@@ -129,7 +129,12 @@ try:
 
         from .utils import SeafEventsSession
         session = SeafEventsSession()
-        seafevents_api.save_user_activity(session, record)
+        try:
+            seafevents_api.save_user_activity(session, record)
+            seafevents_api.clean_up_repo_trash(session, repo_id, days)
+        except Exception as e:
+            logger.error(e)
+        
         session.close()
 
     def repo_restored_cb(sender, **kwargs):

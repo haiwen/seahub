@@ -35,7 +35,8 @@ class DingtalkDepartmentMembersList extends Component {
           <td>
             {!member.email &&
               <input type="checkbox" className="vam" onChange={() => this.props.onUserChecked(member)}
-                checked={(member.userid in newUsersTempObj) ? 'checked' : ''}></input>}
+                checked={(member.userid in newUsersTempObj) ? 'checked' : ''}>
+              </input>}
           </td>
           <td><img className="avatar" src={avatar} alt=""></img></td>
           <td>{member.name}</td>
@@ -56,7 +57,8 @@ class DingtalkDepartmentMembersList extends Component {
                 <th width="5%">
                   {canCheckUserIds.length > 0 &&
                     <input type="checkbox" className="vam" checked={this.props.isCheckedAll}
-                      onChange={() => this.props.onAllUsersChecked()}></input>}
+                      onChange={() => this.props.onAllUsersChecked()}>
+                    </input>}
                 </th>
                 <th width="10%"></th>
                 <th width="20%">{'名称'}</th>

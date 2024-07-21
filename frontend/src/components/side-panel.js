@@ -1,29 +1,54 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import MediaQuery from 'react-responsive';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
-import SideNavFooter from './side-nav-footer';
+import MainSideNavFolded from './main-side-nav-folded';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
 
 const propTypes = {
-  isSidePanelClosed: PropTypes.bool.isRequired,
-  currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  onCloseSidePanel: PropTypes.func.isRequired,
-  tabItemClick: PropTypes.func.isRequired,
+  isSidePanelClosed: PropTypes.bool,
+  currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onCloseSidePanel: PropTypes.func,
+  tabItemClick: PropTypes.func,
+  children: PropTypes.object,
+  style: PropTypes.object,
+  isSidePanelFolded: PropTypes.bool,
+  toggleFoldSideNav: PropTypes.func
 };
 
 class SidePanel extends React.Component {
 
   render() {
+    const { children, isSidePanelFolded, style } = this.props;
     return (
-      <div className={`side-panel ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
-        <div className="side-panel-north">
-          <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
-        </div>
+      <div
+        className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })}
+        style={isSidePanelFolded ? { flexBasis: SIDE_PANEL_FOLDED_WIDTH } : style}
+      >
+        <MediaQuery query="(max-width: 767.8px)">
+          <div className='side-panel-north'>
+            <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
+          </div>
+        </MediaQuery>
         <div className="side-panel-center">
-          <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} />
-        </div>
-        <div className="side-panel-footer">
-          <SideNavFooter />
+          {children ? children : null}
+          {(!children && !isSidePanelFolded) &&
+            <MainSideNav
+              tabItemClick={this.props.tabItemClick}
+              currentTab={this.props.currentTab}
+              isSidePanelFolded={isSidePanelFolded}
+              toggleFoldSideNav={this.props.toggleFoldSideNav}
+            />
+          }
+          {(!children && isSidePanelFolded) &&
+            <MainSideNavFolded
+              tabItemClick={this.props.tabItemClick}
+              currentTab={this.props.currentTab}
+              toggleFoldSideNav={this.props.toggleFoldSideNav}
+            />
+          }
         </div>
       </div>
     );

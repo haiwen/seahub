@@ -30,10 +30,11 @@ class SearchByName extends Component {
     return (
       <Fragment>
         <i
-          className="fas fa-search top-search-file-icon"
+          className="sf3-font sf3-font-search top-search-file-icon"
           onClick={this.toggleDialog}
           title={gettext('Search files in this library')}
-        ></i>
+        >
+        </i>
         {this.state.isDialogOpen &&
         <SearchFileDialog
           repoID={repoID}

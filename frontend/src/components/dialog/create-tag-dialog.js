@@ -29,7 +29,7 @@ class CreateTagDialog extends React.Component {
       tagName: e.target.value,
     });
     if (this.state.errorMsg) {
-      this.setState({errorMsg: ''});
+      this.setState({ errorMsg: '' });
     }
   };
 
@@ -55,7 +55,7 @@ class CreateTagDialog extends React.Component {
         errMessage = gettext('Tag "{name}" already exists.');
         errMessage = errMessage.replace('{name}', Utils.HTMLescape(name));
       }
-      this.setState({errorMsg: errMessage});
+      this.setState({ errorMsg: errMessage });
     });
   };
 
@@ -70,7 +70,7 @@ class CreateTagDialog extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.onClose}>
-          <span className="tag-dialog-back fas fa-sm fa-arrow-left" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
+          <span className="tag-dialog-back sf3-font sf3-font-arrow rotate-180 d-inline-block" onClick={this.props.toggleCancel} aria-label={gettext('Back')}></span>
           {gettext('New Tag')}
         </ModalHeader>
         <ModalBody>
@@ -83,15 +83,15 @@ class CreateTagDialog extends React.Component {
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
               <div className="d-flex justify-content-between">
-                {TAG_COLORS.map((item, index)=>{
+                {TAG_COLORS.map((item, index) => {
                   return (
                     <div key={index} className="tag-color-option" onChange={this.selectTagcolor}>
                       <label className="colorinput">
-                        {index===0 ?
+                        {index === 0 ?
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
-                        <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{backgroundColor:item}}>
-                          <i className="fas fa-check color-selected"></i>
+                        <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: item }}>
+                          <i className="sf2-icon-tick color-selected"></i>
                         </span>
                       </label>
                     </div>

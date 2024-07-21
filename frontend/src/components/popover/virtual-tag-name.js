@@ -80,8 +80,9 @@ export default class VirtualTagName extends React.Component {
           <span
             onClick={this.toggleMode}
             className="cursor-pointer flex-fill"
-            style={{width: 100, height: 20}}
-          >{tagName}</span>
+            style={{ width: 100, height: 20 }}
+          >{tagName}
+          </span>
         }
       </div>
     );

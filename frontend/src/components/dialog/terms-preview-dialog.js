@@ -27,7 +27,7 @@ class TermsPreviewDialog extends React.Component {
       <Modal
         isOpen={true}
         size={'lg'}
-        style={{width: 600}}
+        style={{ width: 600 }}
         wrapClassName={'conditions-perview-wrapper'}
         toggle={this.toggle}
       >

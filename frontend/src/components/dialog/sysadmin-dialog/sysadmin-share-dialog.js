@@ -32,7 +32,7 @@ class SysAdminShareDialog extends React.Component {
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
-      this.setState({activeTab: tab});
+      this.setState({ activeTab: tab });
     }
   };
 
@@ -80,7 +80,7 @@ class SysAdminShareDialog extends React.Component {
   render() {
     return (
       <div>
-        <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={{ maxWidth: '720px' }} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="op-target" title={this.props.itemName}>{this.props.itemName}</span></ModalHeader>
           <ModalBody className="share-dialog-content">
             {this.renderDirContent()}

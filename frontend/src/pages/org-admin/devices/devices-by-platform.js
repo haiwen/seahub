@@ -46,7 +46,7 @@ class Content extends Component {
                 <th width="19%">{gettext('Device Name')}</th>
                 <th width="19%">{gettext('IP')}</th>
                 <th width="19%">{gettext('Last Access')}</th>
-                <th width="5%">{/*Operations*/}</th>
+                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -94,11 +94,11 @@ class Item extends Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   handleUnlink = (e) => {
@@ -111,13 +111,13 @@ class Item extends Component {
   };
 
   toggleUnlinkDeviceDialog = () => {
-    this.setState({isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen});
+    this.setState({ isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen });
   };
 
   unlinkDevice = (deleteFiles) => {
     const { platform, device_id, user } = this.props.item;
     seafileAPI.orgAdminUnlinkDevice(orgID, platform, device_id, user, deleteFiles).then((res) => {
-      this.setState({unlinked: true});
+      this.setState({ unlinked: true });
       let message = gettext('Successfully unlinked the device.');
       toaster.success(message);
     }).catch((error) => {
@@ -145,7 +145,7 @@ class Item extends Component {
             <span title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
           </td>
           <td>
-            <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
+            <a href="#" className={`sf3-font-delete1 sf3-font action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
           </td>
         </tr>
         {isUnlinkDeviceDialogOpen &&
@@ -176,7 +176,7 @@ class DevicesByPlatform extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage } = this.state;
     this.setState({

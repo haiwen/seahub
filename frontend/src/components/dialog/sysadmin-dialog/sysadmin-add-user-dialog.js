@@ -49,7 +49,7 @@ class SysAdminAddUserDialog extends React.Component {
   };
 
   togglePasswordVisible = () => {
-    this.setState({isPasswordVisible: !this.state.isPasswordVisible});
+    this.setState({ isPasswordVisible: !this.state.isPasswordVisible });
   };
 
   inputPassword = (e) => {
@@ -99,7 +99,7 @@ class SysAdminAddUserDialog extends React.Component {
   handleSubmit = () => {
     const { email, password, passwordAgain, name, role } = this.state;
     if (password != passwordAgain) {
-      this.setState({errorMsg: gettext('Passwords do not match.')});
+      this.setState({ errorMsg: gettext('Passwords do not match.') });
       return;
     }
     let data = {
@@ -138,7 +138,7 @@ class SysAdminAddUserDialog extends React.Component {
             <FormGroup>
               <Label>
                 {gettext('Role')}
-                <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
+                <span className="small text-secondary ml-1 sf3-font sf3-font-tips" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
               </Label>
               <SysAdminUserRoleEditor
                 isTextMode={false}
@@ -154,8 +154,12 @@ class SysAdminAddUserDialog extends React.Component {
               <InputGroup>
                 <Input autoComplete="new-password" type={isPasswordVisible ? 'text' : 'password'} value={password || ''} onChange={this.inputPassword} />
                 <InputGroupAddon addonType="append">
-                  <Button className="mt-0" onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button className="mt-0" onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                  <Button className="mt-0" onClick={this.togglePasswordVisible}>
+                    <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+                  </Button>
+                  <Button className="mt-0" onClick={this.generatePassword}>
+                    <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  </Button>
                 </InputGroupAddon>
               </InputGroup>
             </FormGroup>

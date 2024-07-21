@@ -47,7 +47,7 @@ class FileDetails extends React.Component {
         let file_tag = new FileTag(item);
         fileTagList.push(file_tag);
       });
-      this.setState({fileTagList: fileTagList});
+      this.setState({ fileTagList: fileTagList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

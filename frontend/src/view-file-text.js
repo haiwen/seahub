@@ -49,7 +49,7 @@ class ViewFileText extends React.Component {
       isSaving: false,
       participants: [],
     };
-    this.onSave=this.onSave.bind(this);
+    this.onSave = this.onSave.bind(this);
     this.isParticipant = false;
   }
 
@@ -61,7 +61,7 @@ class ViewFileText extends React.Component {
     });
   };
 
-  onSave () {
+  onSave() {
     if (!this.isParticipant) {
       this.addParticipant();
     }

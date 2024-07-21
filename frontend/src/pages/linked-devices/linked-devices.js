@@ -12,7 +12,7 @@ import { Utils } from '../../utils/utils';
 class Content extends Component {
 
   render() {
-    const {loading, errorMsg, items} = this.props.data;
+    const { loading, errorMsg, items } = this.props.data;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -48,7 +48,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
@@ -56,7 +56,7 @@ class Content extends Component {
             })}
           </tbody>
         </table>
-      ): emptyTip;
+      ) : emptyTip;
     }
   }
 }
@@ -135,7 +135,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    let opClasses = 'sf2-icon-delete unlink-device action-icon';
+    let opClasses = 'sf3-font-delete1 sf3-font unlink-device action-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
 
     const desktopItem = (
@@ -162,7 +162,7 @@ class Item extends Component {
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
-              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"

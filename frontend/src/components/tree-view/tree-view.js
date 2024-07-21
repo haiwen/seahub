@@ -19,11 +19,13 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array,
   onItemsMove: PropTypes.func,
+  repoID: PropTypes.string.isRequired,
   posX: PropTypes.number,
   posY: PropTypes.number,
+  getMenuContainerSize: PropTypes.func,
 };
 
-const PADDING_LEFT = 20;
+const LEFT_INDENT = 20;
 
 class TreeView extends React.Component {
 
@@ -50,7 +52,7 @@ class TreeView extends React.Component {
     if (Utils.isIEBrower()) {
       return false;
     }
-    let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
+    let dragStartNodeData = { nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path };
     dragStartNodeData = JSON.stringify(dragStartNodeData);
 
     e.dataTransfer.effectAllowed = 'move';
@@ -107,17 +109,17 @@ class TreeView extends React.Component {
     let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartNodeData = JSON.parse(dragStartNodeData);
 
-    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartNodeData;
+    let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartNodeData;
     let dropNodeData = node;
 
-    if (Array.isArray(dragStartNodeData)) { //move items
-      if (!dropNodeData) { //move items to root
+    if (Array.isArray(dragStartNodeData)) { // move items
+      if (!dropNodeData) { // move items to root
         if (dragStartNodeData[0].nodeParentPath === '/') {
-          this.setState({isTreeViewDropTipShow: false});
+          this.setState({ isTreeViewDropTipShow: false });
           return;
         }
         this.props.onItemsMove(this.props.currentRepoInfo, '/');
-        this.setState({isTreeViewDropTipShow: false});
+        this.setState({ isTreeViewDropTipShow: false });
         return;
       }
       this.onMoveItems(dragStartNodeData, dropNodeData, this.props.currentRepoInfo, dropNodeData.path);
@@ -126,11 +128,11 @@ class TreeView extends React.Component {
 
     if (!dropNodeData) {
       if (nodeParentPath === '/') {
-        this.setState({isTreeViewDropTipShow: false});
+        this.setState({ isTreeViewDropTipShow: false });
         return;
       }
       this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
-      this.setState({isTreeViewDropTipShow: false});
+      this.setState({ isTreeViewDropTipShow: false });
       return;
     }
 
@@ -180,7 +182,7 @@ class TreeView extends React.Component {
     }
 
     // move dirents to current path
-    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path ) {
+    if (dragStartNodeData[0].nodeParentPath && dragStartNodeData[0].nodeParentPath === dropNodeData.path) {
       return;
     }
 
@@ -196,11 +198,11 @@ class TreeView extends React.Component {
   };
 
   freezeItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   unfreezeItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onMenuItemClick = (operation, node) => {
@@ -325,7 +327,7 @@ class TreeView extends React.Component {
           userPerm={this.props.userPerm}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
-          paddingLeft={PADDING_LEFT}
+          leftIndent={LEFT_INDENT}
           isNodeMenuShow={this.props.isNodeMenuShow}
           isItemFreezed={this.state.isItemFreezed}
           onNodeClick={this.onNodeClick}
@@ -346,6 +348,7 @@ class TreeView extends React.Component {
           onMenuItemClick={this.onMenuItemClick}
           onHideMenu={this.onHideMenu}
           onShowMenu={this.onShowMenu}
+          getMenuContainerSize={this.props.getMenuContainerSize}
         />
       </div>
     );

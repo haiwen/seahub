@@ -22,6 +22,7 @@ import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 const propTypes = {
+  currentViewMode: PropTypes.string,
   currentGroup: PropTypes.object,
   libraryType: PropTypes.string,
   repo: PropTypes.object.isRequired,
@@ -29,7 +30,6 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
-  onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
   onItemDelete: PropTypes.func,
   onMonitorRepo: PropTypes.func
@@ -101,12 +101,12 @@ class SharedRepoListItem extends React.Component {
   toggleOperationMenu = (e) => {
     let dataset = e.target ? e.target.dataset : null;
     if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
-      this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+      this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
       return;
     }
 
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow},
+      { isItemMenuShow: !this.state.isItemMenuShow },
       () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
@@ -141,9 +141,10 @@ class SharedRepoListItem extends React.Component {
   };
 
   getRepoComputeParams = () => {
-    let repo = this.props.repo;
+    const { repo, currentViewMode } = this.props;
 
-    let iconUrl = Utils.getLibIconUrl(repo);
+    const useBigLibaryIcon = currentViewMode == 'grid';
+    const iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
@@ -158,15 +159,12 @@ class SharedRepoListItem extends React.Component {
 
   onMenuItemClick = (e) => {
     let operation = e.target.dataset.toggle;
-    switch(operation) {
+    switch (operation) {
       case 'Rename':
         this.onItemRenameToggle();
         break;
       case 'Folder Permission':
         this.onItemFolderPermissionToggle();
-        break;
-      case 'Details':
-        this.onItemDetails();
         break;
       case 'Share':
         this.onItemShare();
@@ -240,24 +238,20 @@ class SharedRepoListItem extends React.Component {
 
   onRenameCancel = () => {
     this.props.onUnfreezedItem();
-    this.setState({isRenaming: !this.state.isRenaming});
+    this.setState({ isRenaming: !this.state.isRenaming });
   };
 
   onItemFolderPermissionToggle = () => {
-    this.setState({isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen});
+    this.setState({ isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen });
   };
 
   onHistorySettingToggle = () => {
-    this.setState({isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow});
-  };
-
-  onItemDetails = () => {
-    this.props.onItemDetails(this.props.repo);
+    this.setState({ isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow });
   };
 
   onItemShare = (e) => {
     e.preventDefault();
-    this.setState({isShowSharedDialog: true});
+    this.setState({ isShowSharedDialog: true });
   };
 
   onItemUnshare = (e) => {
@@ -267,12 +261,12 @@ class SharedRepoListItem extends React.Component {
 
   onItemDeleteToggle = (e) => {
     e.preventDefault();
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
+    this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
   };
 
   onItemDelete = () => {
     const { currentGroup, repo } = this.props;
-    if (!currentGroup) {  // repo can not be deleted in share all module
+    if (!currentGroup) { // repo can not be deleted in share all module
       return;
     }
 
@@ -297,49 +291,46 @@ class SharedRepoListItem extends React.Component {
       }
       toaster.danger(errMessage);
 
-      this.setState({isRepoDeleted: false});
+      this.setState({ isRepoDeleted: false });
     });
   };
 
   toggleShareDialog = () => {
-    this.setState({isShowSharedDialog: false});
+    this.setState({ isShowSharedDialog: false });
   };
 
   toggleRepoShareAdminDialog = () => {
-    this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
+    this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
 
   toggleOldFilesAutoDelDialog = () => {
-    this.setState({isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen});
+    this.setState({ isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen });
   };
 
   onSeaTableIntegrationToggle = () => {
-    this.setState({isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow});
+    this.setState({ isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow });
   };
 
   onAPITokenToggle = () => {
-    this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
+    this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
   };
 
   onChangePasswordToggle = () => {
-    this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
+    this.setState({ isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow });
   };
 
   onResetPasswordToggle = () => {
-    this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
+    this.setState({ isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow });
   };
 
   translateMenuItem = (menuItem) => {
     let translateResult = '';
-    switch(menuItem) {
+    switch (menuItem) {
       case 'Rename':
         translateResult = gettext('Rename');
         break;
       case 'Folder Permission':
         translateResult = gettext('Folder Permission');
-        break;
-      case 'Details':
-        translateResult = gettext('Details');
         break;
       case 'Unshare':
         translateResult = gettext('Unshare');
@@ -397,8 +388,8 @@ class SharedRepoListItem extends React.Component {
 
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
-    //todo this have a bug; use current api is not return admins param;
-    let isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1; //for group repolist;
+    // todo this have a bug; use current api is not return admins param;
+    let isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1; // for group repolist;
     let isRepoOwner = repo.owner_email === username;
     let isAdmin = repo.is_admin;
     let operations = [];
@@ -423,7 +414,7 @@ class SharedRepoListItem extends React.Component {
               const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
               operations.push(monitorOp);
             }
-            operations.push('Divider', 'History Setting', 'Details');
+            operations.push('Divider', 'History Setting');
             if (Utils.isDesktop()) {
               operations.push('Advanced');
             }
@@ -477,14 +468,14 @@ class SharedRepoListItem extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
           tag="i"
-          className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+          className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           onClick={this.clickOperationMenuToggle}
         />
-        <div className={`${this.state.isItemMenuShow?'':'d-none'}`} onClick={this.toggleOperationMenu}>
+        <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
           <div className="mobile-operation-menu-bg-layer"></div>
           <div className="mobile-operation-menu">
             {operations.map((item, index) => {
@@ -508,9 +499,9 @@ class SharedRepoListItem extends React.Component {
     } else {
       operations = this.generatorOperations();
     }
-    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
+    const shareOperation = <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
+    const deleteOperation = <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
 
     if (this.isDeparementOnwerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
@@ -520,18 +511,21 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
-              className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+              tag="i"
+              role="button"
+              tabIndex="0"
+              className="sf-dropdown-toggle sf3-font-more sf3-font"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
               aria-haspopup={true}
-              style={{'minWidth': '0'}}
+              style={{ 'minWidth': '0' }}
               onClick={this.clickOperationMenuToggle}
               onKeyDown={this.onDropdownToggleKeyDown}
             />
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
-              {operations.map((item, index)=> {
+              {operations.map((item, index) => {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
                 } else if (item == 'Advanced') {
@@ -545,14 +539,14 @@ class SharedRepoListItem extends React.Component {
                       onMouseMove={(e) => {e.stopPropagation();}}
                     >
                       <DropdownToggle
-                        caret
                         className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center pr-2"
                         onMouseEnter={this.toggleAdvancedMenuShown}
                       >
                         {this.translateMenuItem(item)}
+                        <i className="sf3-font-down sf3-font rotate-270"></i>
                       </DropdownToggle>
                       <DropdownMenu>
-                        {advancedOperations.map((item, index)=> {
+                        {advancedOperations.map((item, index) => {
                           return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>);
                         })}
                       </DropdownMenu>
@@ -580,13 +574,16 @@ class SharedRepoListItem extends React.Component {
                 return (
                   <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
                     <DropdownToggle
-                      className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+                      tag="i"
+                      role="button"
+                      tabIndex="0"
+                      className="sf-dropdown-toggle sf3-font-more sf3-font"
                       title={gettext('More operations')}
                       aria-label={gettext('More operations')}
                       data-toggle="dropdown"
                       aria-expanded={this.state.isItemMenuShow}
                       aria-haspopup={true}
-                      style={{'minWidth': '0'}}
+                      style={{ 'minWidth': '0' }}
                       onClick={this.clickOperationMenuToggle}
                       onKeyDown={this.onDropdownToggleKeyDown}
                     />
@@ -612,7 +609,7 @@ class SharedRepoListItem extends React.Component {
     const { repo_name: repoName } = this.props.repo;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -622,7 +619,7 @@ class SharedRepoListItem extends React.Component {
       });
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({isStarred: !this.state.isStarred});
+        this.setState({ isStarred: !this.state.isStarred });
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -634,32 +631,73 @@ class SharedRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
+    const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo } = this.props;
-    return (
-      <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-          <td className="text-center">
-            <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
-              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
-            </a>
-          </td>
-          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>
-            {this.state.isRenaming ?
-              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <Fragment>
-                <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
-              </Fragment>
-            }
-          </td>
-          <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
-          <td>{repo.size}</td>
-          <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
-          <td title={repo.owner_contact_email}>{repo.owner_name}</td>
-        </tr>
-      </Fragment>
+    const { repo, currentViewMode } = this.props;
+    return currentViewMode == 'list' ? (
+      <tr
+        className={this.state.highlight ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
+        <td className="text-center">
+          <i
+            role="button"
+            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            onClick={this.onToggleStarRepo}
+            className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+          >
+          </i>
+        </td>
+        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td>
+          {this.state.isRenaming ?
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <Fragment>
+              <Link to={libPath}>{repo.repo_name}</Link>
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
+            </Fragment>
+          }
+        </td>
+        <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
+        <td>{repo.size}</td>
+        <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
+        <td title={repo.owner_contact_email}>{repo.owner_name}</td>
+      </tr>
+    ) : (
+      <div
+        className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
+        <div className="d-flex align-items-center text-truncate">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
+          {this.state.isRenaming ?
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+            <Fragment>
+              <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              {isStarred &&
+                <i
+                  role="button"
+                  title={gettext('Unstar')}
+                  aria-label={gettext('Unstar')}
+                  onClick={this.onToggleStarRepo}
+                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                >
+                </i>
+              }
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
+            </Fragment>
+          }
+        </div>
+        <div className="flex-shrink-0">
+          {this.state.isOperationShow && this.generatorPCMenu()}
+        </div>
+      </div>
     );
   };
 
@@ -675,14 +713,14 @@ class SharedRepoListItem extends React.Component {
     this.repoURL = libPath;
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
           <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
           <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
               <Fragment>
                 <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
+                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
               </Fragment>
             }
             <br />

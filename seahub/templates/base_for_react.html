@@ -9,13 +9,16 @@
 <meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
 {% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
+{% if request.is_mobile or request.is_tablet %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% else %}
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{% endif %}
 {% endblock %}
 {% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
@@ -27,7 +30,7 @@
 <body>
     <div id="wrapper" class="{{ LANGUAGE_CODE }}"></div>
     <div id="modal-wrapper" class="{{ LANGUAGE_CODE }}"></div>
-    {%block extra_content %}{% endblock %}
+    {% block wiki-v1-extra_content %}{% endblock %}
 
 <script type="text/javascript">
     window.app = {
@@ -106,6 +109,7 @@
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
             enableRepoHistorySetting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
+            enableUserCleanTrash: {% if enable_user_clean_trash %} true {% else %} false {% endif %},
             isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
@@ -138,6 +142,7 @@
             enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
             enableSSOToThirdpartWebsite: {% if enable_sso_to_thirdpart_website %} true {% else %} false {% endif %},
             enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% endif %},
+            enablePDFThumbnail: {% if enable_pdf_thumbnail %} true {% else %} false {% endif %},
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},
@@ -146,9 +151,9 @@
             onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %},
             enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
             enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
-            canSetExProps: {% if can_set_ex_props %} true {% else %} false {% endif %},
             enableSeaTableIntegration: {% if enable_seatable_integration %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+            enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
         }
      };
 </script>

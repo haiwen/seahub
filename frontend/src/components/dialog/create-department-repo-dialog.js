@@ -20,9 +20,9 @@ class CreateDepartmentRepoDialog extends React.Component {
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
-      this.setState({isSubmitBtnActive: false});
+      this.setState({ isSubmitBtnActive: false });
     } else {
-      this.setState({isSubmitBtnActive: true});
+      this.setState({ isSubmitBtnActive: true });
     }
 
     this.setState({
@@ -54,12 +54,12 @@ class CreateDepartmentRepoDialog extends React.Component {
     let repoName = this.state.repoName.trim();
     if (!repoName.length) {
       errMessage = gettext('Name is required');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
     if (repoName.indexOf('/') > -1) {
       errMessage = gettext('Name should not include \'/\'.');
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
       return false;
     }
 

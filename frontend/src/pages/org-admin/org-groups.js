@@ -42,11 +42,11 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon fas fa-search"></i>
+        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
-          style={{width: '15rem'}}
+          style={{ width: '15rem' }}
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.handleInputChange}
@@ -111,11 +111,11 @@ class OrgGroups extends Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   deleteGroupItem = (group) => {
@@ -236,7 +236,7 @@ class GroupItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {
@@ -272,7 +272,7 @@ class GroupItem extends React.Component {
         <td> -- </td>
       );
     } else {
-      return(
+      return (
         <td>
           <a href={userInfoHref} className="font-weight-normal">{group.creatorName}</a>
         </td>
@@ -295,7 +295,7 @@ class GroupItem extends React.Component {
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
                 tag="a"
-                className="attr-action-icon fas fa-ellipsis-v"
+                className="attr-action-icon sf3-font sf3-font-more-vertical"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"

@@ -28,7 +28,7 @@ class CommonOperationConfirmationDialog extends Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{__html: message}}></p>
+          <p dangerouslySetInnerHTML={{ __html: message }}></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

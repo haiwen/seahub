@@ -24,7 +24,7 @@ class MoreMenu extends React.PureComponent {
     super(props);
     this.state = {
       tooltipOpen: false,
-      dropdownOpen:false
+      dropdownOpen: false
     };
   }
 
@@ -51,8 +51,8 @@ class MoreMenu extends React.PureComponent {
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
         <DropdownToggle id="moreButton" aria-label={gettext('More operations')}>
-          <i className="fa fa-ellipsis-v"/>
-          <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
+          <i className="sf3-font sf3-font-more-vertical"/>
+          <Tooltip toggle={this.tooltipToggle} delay={{ show: 0, hide: 0 }} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
           </Tooltip>
         </DropdownToggle>
         <DropdownMenu className="drop-list" right={true}>

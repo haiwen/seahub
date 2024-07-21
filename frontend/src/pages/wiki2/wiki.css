@@ -1,0 +1,105 @@
+body {
+  overflow: hidden;
+}
+
+.wiki2-main-panel {
+  width: calc(100% - 300px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wiki2-main-panel .wiki2-main-panel-north {
+  height: 44px;
+  position: relative;
+  padding: 0.5rem 1rem;
+  display: flex;
+  z-index: 100;
+  justify-content: space-between;
+}
+
+.main-panel-center .cur-view-content {
+  padding: 0;
+}
+
+/* scroll container */
+/* wiki editor */
+.cur-view-content .sdoc-scroll-container {
+  display: flex;
+  min-height: 0;
+  overflow: auto;
+}
+
+.cur-view-content .wiki-editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  align-items: center;
+  width: 100%;
+}
+
+.wiki-editor-container .sdoc-editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wiki-editor-container .sdoc-editor-container .sdoc-content-wrapper {
+  height: auto;
+}
+
+.wiki-editor-container .sdoc-editor-container .sdoc-editor-content {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  min-width: 0;
+  width: 100%;
+}
+
+.sdoc-editor-container .sdoc-article-container {
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+/* wiki editor article */
+.sdoc-editor-container .sdoc-article-container .article {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-height: 800px;
+  width: 100%;
+  padding: 0 142px;
+  box-shadow: none;
+  border: none;
+}
+
+.sdoc-editor-container .sdoc-article-container .article h1,
+.sdoc-editor-container .sdoc-article-container .article :first-child {
+  margin-top: 0;
+}
+
+.sdoc-editor-container .sdoc-article-container .article>div {
+  caret-color: blue;
+}
+
+.sdoc-editor-container .sdoc-article-container .article .sdoc-drag-cover::before {
+  content: ' ';
+  width: 59px;
+  display: inline-block;
+  position: absolute;
+  left: -60px;
+}
+
+.sdoc-editor-container .sdoc-article-container .article .sdoc-draging {
+  border-bottom: 2px solid rgba(35, 131, 226);
+}
+
+.sdoc-editor-container .sdoc-article-container .article #sdoc-editor {
+  width: 100%;
+}

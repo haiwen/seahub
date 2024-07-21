@@ -106,7 +106,13 @@ export const DURATION_DECIMAL_DIGITS = {
   [DURATION_FORMATS_MAP.H_MM_SS_SSS]: 3,
 };
 
+export const PRIVATE_FILE_TYPE = {
+  FILE_EXTENDED_PROPERTIES: '__file_extended_properties'
+};
+
 const TAG_COLORS = ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84',
   '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'];
+
+export const SIDE_PANEL_FOLDED_WIDTH = 71;
 
 export { KeyCodes, zIndexes, TAG_COLORS };

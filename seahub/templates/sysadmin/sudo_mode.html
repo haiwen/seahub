@@ -4,7 +4,6 @@
 {% block sub_title %}{% trans "Confirm Password" %} - {% endblock %}
 {% block header_css_class %}hide{% endblock %}
 {% block extra_base_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 {% endblock %}
 
@@ -27,7 +26,7 @@ html, body, #wrapper { height:100%; }
     <form action="" method="post" class="con">{% csrf_token %}
       <div class="position-relative">
         <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
-        <i id="toggle-show-password" class="fas fa-eye-slash"></i>
+        <i id="toggle-show-password" class="sf3-font sf3-font-eye-slash"></i>
       </div>
       {% if password_error %}
       <p class="error mt-1">{% trans "Incorrect password" %}</p>
@@ -58,8 +57,8 @@ $el.removeClass('vh');
 $('input[name="password"]').trigger('focus');
 
 $('#toggle-show-password').click(function() {
-  $(this).toggleClass('fa-eye-slash fa-eye');
-  if ($(this).hasClass('fa-eye-slash')) {
+  $(this).toggleClass('sf3-font-eye-slash sf3-font-eye');
+  if ($(this).hasClass('sf3-font-eye-slash')) {
     $('#password-input').attr('type', 'password');
   } else {
     $('#password-input').attr('type', 'text');

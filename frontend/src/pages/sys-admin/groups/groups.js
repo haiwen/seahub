@@ -24,7 +24,7 @@ class Groups extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage } = this.state;
     this.setState({
@@ -36,7 +36,7 @@ class Groups extends Component {
   }
 
   toggleCreateGroupDialog = () => {
-    this.setState({isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen});
+    this.setState({ isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen });
   };
 
   getGroupListByPage = (page) => {

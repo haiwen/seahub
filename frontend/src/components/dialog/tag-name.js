@@ -86,7 +86,8 @@ class TagName extends React.Component {
           <span
             onClick={this.toggleMode}
             className="cursor-pointer flex-fill"
-          >{tagName}</span>
+          >{tagName}
+          </span>
         }
       </div>
     );

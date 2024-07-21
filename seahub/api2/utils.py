@@ -7,9 +7,12 @@ import time
 import json
 import re
 import logging
+import jwt
 
 from collections import defaultdict
 from functools import wraps
+from django.core.cache import cache
+
 
 from django.http import HttpResponse
 from rest_framework.authentication import SessionAuthentication
@@ -21,11 +24,15 @@ from pysearpc import SearpcError
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter, email2contact_email
+from seahub.constants import REPO_TYPE_WIKI
 from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.utils import get_user_repos
+from seahub.utils.mail import send_html_email_with_dj_template
+from seahub.settings import SECRET_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -278,3 +285,57 @@ def is_web_request(request):
         return True
     else:
         return False
+    
+def is_wiki_repo(repo):
+    return repo.repo_type == REPO_TYPE_WIKI
+
+def get_search_repos(username, org_id):
+    repos = []
+    owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
+    repo_list = owned_repos + public_repos + shared_repos + group_repos
+
+    repo_id_set = set()
+    for repo in repo_list:
+        repo_id = repo.id
+        if repo.origin_repo_id:
+            repo_id = repo.origin_repo_id
+
+        if repo_id in repo_id_set:
+            continue
+        repo_id_set.add(repo_id)
+        repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
+
+    return repos
+    
+def send_share_link_emails(emails, fs, shared_from):
+    subject = "Share links"
+    for email in emails:
+        c = {'url': "%s?email=%s" % (fs.get_full_url(), email), 'shared_from': shared_from}
+        send_success = send_html_email_with_dj_template(
+            email,
+            subject=subject,
+            dj_template='share/share_link_email.html',
+            context=c)
+        if not send_success:
+            logger.error('Failed to send code via email to %s' % email)
+            continue
+
+def is_valid_internal_jwt(auth):
+    
+    if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
+        return False
+
+    token = auth[1]
+    if not token:
+        return False
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    except:
+        return False
+    else:
+        is_internal = payload.get('is_internal')
+        if is_internal:
+            return True
+        
+    return False

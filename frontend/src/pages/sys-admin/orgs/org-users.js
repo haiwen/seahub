@@ -30,11 +30,11 @@ class Content extends Component {
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   render() {
@@ -132,7 +132,7 @@ class Item extends Component {
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Delete':
         this.toggleDeleteDialog();
         break;
@@ -148,21 +148,21 @@ class Item extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   toggleResetPasswordDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen});
+    this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen });
   };
 
-  toggleConfirmInactiveDialog= () => {
-    this.setState({isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen});
+  toggleConfirmInactiveDialog = () => {
+    this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
-  updateStatus= (statusOption) => {
+  updateStatus = (statusOption) => {
     this.props.updateStatus(this.props.item.email, statusOption.value);
   };
 
@@ -170,7 +170,7 @@ class Item extends Component {
     this.props.updateStatus(this.props.item.email, 'inactive');
   };
 
-  updateMembership= (membershipOption) => {
+  updateMembership = (membershipOption) => {
     this.props.updateMembership(this.props.item.email, membershipOption.value);
   };
 
@@ -190,7 +190,7 @@ class Item extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
         break;
@@ -241,7 +241,7 @@ class Item extends Component {
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
 
     // for 'user membership'
-    const curMembership = item.is_org_staff? 'Admin' : 'Member';
+    const curMembership = item.is_org_staff ? 'Admin' : 'Member';
     this.membershipOptions = ['Admin', 'Member'].map(item => {
       return {
         value: item,
@@ -346,7 +346,7 @@ class OrgUsers extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
@@ -366,7 +366,7 @@ class OrgUsers extends Component {
   }
 
   toggleAddUserDialog = () => {
-    this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
+    this.setState({ isAddUserDialogOpen: !this.state.isAddUserDialogOpen });
   };
 
   addUser = (newUserInfo) => {
@@ -374,7 +374,7 @@ class OrgUsers extends Component {
     seafileAPI.sysAdminAddOrgUser(this.props.orgID, email, name, password).then(res => {
       let userList = this.state.userList;
       userList.unshift(res.data);
-      this.setState({userList: userList});
+      this.setState({ userList: userList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -386,7 +386,7 @@ class OrgUsers extends Component {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -403,7 +403,7 @@ class OrgUsers extends Component {
         }
         return item;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -419,7 +419,7 @@ class OrgUsers extends Component {
         }
         return item;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

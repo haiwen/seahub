@@ -30,7 +30,7 @@ class FileView extends React.Component {
         <div className="file-view-header d-flex justify-content-between align-items-center">
           <div className="text-truncate mr-4">
             <h2 className="file-title text-truncate" title={fileName}>{fileName}</h2>
-            <p className="meta-info m-0">{fromTrash ? `${gettext('Current Path: ')}${gettext('Trash')}`: commitTime}</p>
+            <p className="meta-info m-0">{fromTrash ? `${gettext('Current Path: ')}${gettext('Trash')}` : commitTime}</p>
           </div>
           {canDownloadFile && <Download />}
         </div>

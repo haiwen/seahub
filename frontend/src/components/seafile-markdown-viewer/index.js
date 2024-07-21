@@ -36,11 +36,11 @@ class SeafileMarkdownViewer extends React.Component {
 
   changeInlineNode = (item) => {
     const { repoID } = this.props;
-    let url, imagePath;
+    let url; let imagePath;
     // isPublicWiki: in the old version, only public wiki need replace image url
     if (item.type == 'image') { // change image url
       url = item.data.src;
-      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      const re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*raw=1');
       // different repo
       if (re.test(url)) {
         // get image path
@@ -90,7 +90,7 @@ class SeafileMarkdownViewer extends React.Component {
       value: markdownContent,
       scrollRef: this.scrollRef,
       onLinkClick: this.onLinkClick,
-      ...(isWiki && {beforeRenderCallback: this.modifyValueBeforeRender})
+      ...(isWiki && { beforeRenderCallback: this.modifyValueBeforeRender })
     };
 
     return (
@@ -110,13 +110,15 @@ class SeafileMarkdownViewer extends React.Component {
     const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
-    const contentClassName = `wiki-page-content ${!isWiki ?  + 'w-100' : ''}`;
+    const contentClassName = `wiki-page-content ${isWiki ? '' : 'w-100'}`;
     return (
       <div ref={this.scrollRef} className={containerClass}>
         <div className={contentClassName}>
           {this.props.children}
           {this.renderMarkdown()}
-          <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          <p id="wiki-page-last-modified">
+            {gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span>
+          </p>
         </div>
       </div>
     );

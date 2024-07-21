@@ -54,6 +54,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   posX: PropTypes.string,
   posY: PropTypes.string,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -99,11 +100,11 @@ class DirentListView extends React.Component {
   }
 
   freezeItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   unfreezeItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onItemRename = (dirent, newName) => {
@@ -124,7 +125,7 @@ class DirentListView extends React.Component {
   };
 
   onItemSelected = (dirent) => {
-    this.setState({activeDirent: null});
+    this.setState({ activeDirent: null });
     this.props.onItemSelected(dirent);
   };
 
@@ -133,7 +134,7 @@ class DirentListView extends React.Component {
     if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent ) {
       return;
     }
-    this.setState({activeDirent: dirent});
+    this.setState({ activeDirent: dirent });
     this.props.onDirentClick(dirent);
   };
 
@@ -203,7 +204,7 @@ class DirentListView extends React.Component {
   };
 
   closeImagePopup = () => {
-    this.setState({isImagePopupOpen: false});
+    this.setState({ isImagePopupOpen: false });
   };
 
   onCreateFileToggle = (fileType) => {
@@ -214,11 +215,11 @@ class DirentListView extends React.Component {
   };
 
   onCreateFolderToggle = () => {
-    this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
+    this.setState({ isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow });
   };
 
   onAddFolder = (dirPath) => {
-    this.setState({isCreateFolderDialogShow: false});
+    this.setState({ isCreateFolderDialogShow: false });
     this.props.onAddFolder(dirPath);
   };
 
@@ -231,11 +232,11 @@ class DirentListView extends React.Component {
   };
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onItemsDownload = () => {
@@ -243,8 +244,8 @@ class DirentListView extends React.Component {
     if (selectedDirentList.length) {
       if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
         let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
-        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
-        location.href= url;
+        let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+        location.href = url;
         return;
       }
 
@@ -260,7 +261,7 @@ class DirentListView extends React.Component {
   };
 
   onCloseZipDownloadDialog = () => {
-    this.setState({isProgressDialogShow: false});
+    this.setState({ isProgressDialogShow: false });
   };
 
   // common contextmenu handle
@@ -400,7 +401,7 @@ class DirentListView extends React.Component {
   };
 
   onContainerMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'New Folder':
         this.onCreateFolderToggle();
         break;
@@ -430,7 +431,7 @@ class DirentListView extends React.Component {
   };
 
   onDirentsMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Move':
         this.onMoveToggle();
         break;
@@ -522,7 +523,7 @@ class DirentListView extends React.Component {
       if (this.state.isListDropTipShow) {
         return ;
       }
-      this.setState({isListDropTipShow: true});
+      this.setState({ isListDropTipShow: true });
     }
   };
 
@@ -543,7 +544,7 @@ class DirentListView extends React.Component {
     }
     this.enteredCounter--;
     if (this.enteredCounter === 0) {
-      this.setState({isListDropTipShow: false});
+      this.setState({ isListDropTipShow: false });
     }
   };
 
@@ -553,16 +554,16 @@ class DirentListView extends React.Component {
     }
     e.persist();
     this.enteredCounter = 0;
-    this.setState({isListDropTipShow: false});
+    this.setState({ isListDropTipShow: false });
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
 
-    let {nodeDirent, nodeParentPath, nodeRootPath} = dragStartItemData;
+    let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
 
-    if (Array.isArray(dragStartItemData)) { //selected items
+    if (Array.isArray(dragStartItemData)) { // selected items
       return;
     }
 
@@ -600,7 +601,7 @@ class DirentListView extends React.Component {
     const sortByName = sortBy == 'name';
     const sortByTime = sortBy == 'time';
     const sortBySize = sortBy == 'size';
-    const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
     const isDesktop = Utils.isDesktop();
 
@@ -615,18 +616,18 @@ class DirentListView extends React.Component {
         onDragLeave={this.onTableDragLeave}
         onDrop={this.tableDrop}
       >
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? (
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
               <tr>
                 <th width="3%" className="pl10">
                   <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected} aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')} />
                 </th>
-                <th width="3%" className="pl10">{/*icon */}</th>
-                <th width="5%" className="pl10">{/*star */}</th>
+                <th width="3%" className="pl10">{/* icon */}</th>
+                <th width="5%" className="pl10">{/* star */}</th>
                 <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-                <th width="6%">{/*tag */}</th>
-                <th width="18%">{/*operation */}</th>
+                <th width="6%">{/* tag */}</th>
+                <th width="18%">{/* operation */}</th>
                 <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
                 <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
               </tr>
@@ -689,16 +690,19 @@ class DirentListView extends React.Component {
           <ContextMenu
             id={'dirent-container-menu'}
             onMenuItemClick={this.onContainerMenuItemClick}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           <ContextMenu
             id={'dirent-item-menu'}
             onMenuItemClick={this.onMenuItemClick}
             onShowMenu={this.onShowMenu}
             onHideMenu={this.onHideMenu}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           <ContextMenu
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
+            getMenuContainerSize={this.props.getMenuContainerSize}
           />
           {this.state.isShowDirentsDraggablePreview &&
             <ModalPortal>

@@ -18,11 +18,11 @@ class GroupItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   deleteShareItem = () => {
@@ -127,7 +127,7 @@ class SysAdminShareToGroup extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
   };
 
   componentDidMount() {
@@ -154,7 +154,7 @@ class SysAdminShareToGroup extends React.Component {
   listSharedGroups = () => {
     let repoID = this.props.repoID;
     seafileAPI.sysAdminListRepoSharedItems(repoID, 'group').then((res) => {
-      if(res.data.length !== 0) {
+      if (res.data.length !== 0) {
         this.setState({
           sharedItems: res.data
         });
@@ -166,7 +166,7 @@ class SysAdminShareToGroup extends React.Component {
   };
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   shareToGroup = () => {
@@ -228,7 +228,7 @@ class SysAdminShareToGroup extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({sharedItems: sharedItems});
+    this.setState({ sharedItems: sharedItems });
   };
 
   render() {
@@ -265,7 +265,7 @@ class SysAdminShareToGroup extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.shareToGroup}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&

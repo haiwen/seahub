@@ -103,10 +103,10 @@ class ManageMembersDialog extends React.Component {
     if (hasNextPage && !isLoadingMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.listGroupMembers(page + 1);
         });
       }
@@ -177,8 +177,8 @@ class ManageMembersDialog extends React.Component {
             className="add-members-select"
           />
           {this.state.selectedOption ?
-            <Button color="secondary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
-            <Button color="secondary" disabled>{gettext('Submit')}</Button>
+            <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
+            <Button color="primary" disabled>{gettext('Submit')}</Button>
           }
         </div>
         {
@@ -192,7 +192,7 @@ class ManageMembersDialog extends React.Component {
         {groupMembers.length > 10 &&
           <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
             <InputGroupText>
-              <i className="fas fa-search" aria-hidden={true}></i>
+              <i className="sf3-font sf3-font-search" aria-hidden={true}></i>
             </InputGroupText>
             <Input
               type="text"

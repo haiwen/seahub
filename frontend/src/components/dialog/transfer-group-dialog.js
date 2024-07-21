@@ -40,7 +40,7 @@ class TransferGroupDialog extends React.Component {
         this.props.toggleTransferGroupDialog();
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
-        this.setState({errMessage: errMessage});
+        this.setState({ errMessage: errMessage });
       });
     }
   };
@@ -58,7 +58,6 @@ class TransferGroupDialog extends React.Component {
           <UserSelect
             ref="userSelect"
             isMulti={false}
-            className="reviewer-select"
             placeholder={gettext('Please enter 1 or more character')}
             onSelectChange={this.handleSelectChange}
           />
