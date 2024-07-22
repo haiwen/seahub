@@ -26,7 +26,6 @@ class Content extends Component {
       isSetUserUploadRateLimitDialogOpen: false,
       isSetUserDownloadRateLimitDialogOpen: false,
       isUpdateUserDialogOpen: false,
-      isUpdateUserRoleDialogOpen: false,
       highlight: false
     };
   }
