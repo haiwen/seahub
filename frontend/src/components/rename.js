@@ -46,7 +46,7 @@ class Rename extends React.Component {
   };
 
   onChange = (e) => {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   };
 
   onKeyDown = (e) => {

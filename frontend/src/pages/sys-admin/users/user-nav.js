@@ -14,11 +14,11 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'info', urlPart: '', text: gettext('Info')},
-      {name: 'owned-repos', urlPart: 'owned-libraries', text: gettext('Owned Libraries')},
-      {name: 'shared-repos', urlPart: 'shared-libraries', text: gettext('Shared Libraries')},
-      {name: 'links', urlPart: 'shared-links', text: gettext('Shared Links')},
-      {name: 'groups', urlPart: 'groups', text: gettext('Groups')}
+      { name: 'info', urlPart: '', text: gettext('Info') },
+      { name: 'owned-repos', urlPart: 'owned-libraries', text: gettext('Owned Libraries') },
+      { name: 'shared-repos', urlPart: 'shared-libraries', text: gettext('Shared Libraries') },
+      { name: 'links', urlPart: 'shared-links', text: gettext('Shared Links') },
+      { name: 'groups', urlPart: 'groups', text: gettext('Groups') }
     ];
   }
 

@@ -54,8 +54,8 @@ class Content extends Component {
         </EmptyTip>
       );
 
-      const initialSortIcon = <span className="fas fa-sort"></span>;
-      const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
+      const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       const table = (
         <Fragment>
           <table className="table-hover">
@@ -71,7 +71,7 @@ class Content extends Component {
                   <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByCount}>{gettext('Count')} {sortBy == 'view_cnt' ? sortIcon : initialSortIcon}</a>
                 </th>
                 <th width="11%">{gettext('Expiration')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             </thead>
             {items &&
@@ -156,7 +156,7 @@ class Item extends Component {
   render() {
     let { isOpIconShown } = this.state;
     let { item } = this.props;
-    let deleteIcon = `action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`;
+    let deleteIcon = `action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td>{item.obj_name}</td>
@@ -196,7 +196,7 @@ class ShareLinks extends Component {
     this.initPage = 1;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage, sortBy, sortOrder } = this.state;
     this.setState({
@@ -249,7 +249,7 @@ class ShareLinks extends Component {
       let newShareLinkList = this.state.shareLinkList.filter(item =>
         item.token != linkToken
       );
-      this.setState({shareLinkList: newShareLinkList});
+      this.setState({ shareLinkList: newShareLinkList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

@@ -21,7 +21,7 @@ class Info extends Component {
     this.fileInput = React.createRef();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetSysInfo().then((res) => {
       this.setState({
         loading: false,
@@ -44,7 +44,7 @@ class Info extends Component {
     const file = this.fileInput.current.files[0];
     seafileAPI.sysAdminUploadLicense(file).then((res) => {
       let info = this.state.sysInfo;
-      Object.assign(info, res.data, {with_license: true});
+      Object.assign(info, res.data, { with_license: true });
       this.setState({
         sysInfo: info
       });

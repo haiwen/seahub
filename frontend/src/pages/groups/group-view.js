@@ -1,8 +1,7 @@
-import React,{ Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
-import { Link } from '@gatsbyjs/reach-router';
+import { gettext, username, canAddRepo } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -11,9 +10,8 @@ import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
-import OpIcon from '../../components/op-icon';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import GroupMembersDialog from '../../components/dialog/group-members-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
@@ -21,16 +19,13 @@ import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import LibDetail from '../../components/dirent-detail/lib-details';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 import '../../css/group-view.css';
 
 const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired,
-  onTabNavClick: PropTypes.func.isRequired,
   groupID: PropTypes.string,
 };
 
@@ -65,8 +60,8 @@ class GroupView extends React.Component {
       showImportMembersDialog: false,
       showManageMembersDialog: false,
       groupMembers: [],
-      isShowDetails: false,
       isLeaveGroupDialogOpen: false,
+      isMembersDialogOpen: false
     };
   }
 
@@ -85,7 +80,7 @@ class GroupView extends React.Component {
     seafileAPI.getGroup(groupID).then((res) => {
       let currentGroup = new Group(res.data);
       let emptyTip = this.getEmptyTip(currentGroup);
-      let isStaff  = currentGroup.admins.indexOf(username) > -1;  //for item operations
+      let isStaff = currentGroup.admins.indexOf(username) > -1; // for item operations
       let isOwner = currentGroup.owner === username ? true : false;
       let isDepartmentGroup = currentGroup.parent_group_id !== 0;
       this.setState({
@@ -95,9 +90,10 @@ class GroupView extends React.Component {
         isDepartmentGroup: isDepartmentGroup,
         isOwner: isOwner,
         currentPage: 1,
-        repoList: []  // empty it for the current group
+        repoList: [] // empty it for the current group
       }, () => {
         this.loadRepos(this.state.currentPage);
+        this.listGroupMembers();
       });
     }).catch((error) => {
       this.setState({
@@ -149,7 +145,7 @@ class GroupView extends React.Component {
           </EmptyTip>
         );
       } else {
-        if (currentGroup.admins.indexOf(username) == -1) {  // is a member of this group
+        if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
           emptyTip = (
             <EmptyTip>
               <h2>{gettext('No libraries')}</h2>
@@ -169,13 +165,13 @@ class GroupView extends React.Component {
   };
 
   onCreateRepoToggle = () => {
-    this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+    this.setState({ isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow });
   };
 
   onCreateRepo = (repo, groupOwnerType) => {
     let groupId = this.props.groupID;
     if (groupOwnerType && groupOwnerType === 'department') {
-      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { //need modify endpoint api
+      seafileAPI.createGroupOwnedLibrary(groupId, repo).then(res => { // need modify endpoint api
         let object = {
           repo_id: res.data.id,
           repo_name: res.data.name,
@@ -188,7 +184,7 @@ class GroupView extends React.Component {
         };
         let repo = new Repo(object);
         let repoList = this.addRepoItem(repo);
-        this.setState({repoList: repoList});
+        this.setState({ repoList: repoList });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -198,7 +194,7 @@ class GroupView extends React.Component {
       seafileAPI.createGroupRepo(groupId, repo).then(res => {
         let repo = new Repo(res.data);
         let repoList = this.addRepoItem(repo);
-        this.setState({repoList: repoList});
+        this.setState({ repoList: repoList });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -212,7 +208,7 @@ class GroupView extends React.Component {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
-    this.setState({repoList: repoList});
+    this.setState({ repoList: repoList });
     this.loadGroup(groupID);
   };
 
@@ -228,7 +224,7 @@ class GroupView extends React.Component {
       let repoList = this.state.repoList.filter(item => {
         return item.repo_id !== repo.repo_id;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
       this.loadGroup(group.id);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -244,7 +240,7 @@ class GroupView extends React.Component {
         }
         return item;
       });
-      this.setState({repoList: repoList});
+      this.setState({ repoList: repoList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -258,17 +254,7 @@ class GroupView extends React.Component {
       }
       return item;
     });
-    this.setState({repoList: repoList});
-  };
-
-  onTabNavClick = (tabName) => {
-    this.props.onTabNavClick(tabName);
-  };
-
-  toggleGroupDropdown = () => {
-    this.setState({
-      showGroupDropdown: !this.state.showGroupDropdown
-    });
+    this.setState({ repoList: repoList });
   };
 
   toggleDismissGroupDialog = () => {
@@ -292,13 +278,13 @@ class GroupView extends React.Component {
     });
   };
 
-  toggleImportMembersDialog= () => {
+  toggleImportMembersDialog = () => {
     this.setState({
       showImportMembersDialog: !this.state.showImportMembersDialog
     });
   };
 
-  importMembersInBatch= (file) => {
+  importMembersInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
       res.data.failed.forEach(item => {
@@ -349,17 +335,6 @@ class GroupView extends React.Component {
     }
   };
 
-  onItemDetails = (repo) => {
-    this.setState({
-      isShowDetails: true,
-      currentRepo: repo,
-    });
-  };
-
-  closeDetails = () => {
-    this.setState({isShowDetails: false});
-  };
-
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
@@ -394,153 +369,89 @@ class GroupView extends React.Component {
     if (hasNextPage && !isLoadingMore) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
-      const scrollTop    = event.target.scrollTop;
+      const scrollTop = event.target.scrollTop;
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
-        this.setState({isLoadingMore: true}, () => {
+        this.setState({ isLoadingMore: true }, () => {
           this.loadRepos(currentPage + 1);
         });
       }
     }
   };
 
-  render() {
-    let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
-    let isShowSettingIcon = false;
-    if (currentGroup) { // group message is loaded
-      if (currentGroup.parent_group_id === 0) {
-        isShowSettingIcon = true;
-      } else {
-        if (currentGroup.admins.indexOf(username) > -1) {
-          isShowSettingIcon = true;
+  toggleMembersDialog = () => {
+    this.setState({
+      isMembersDialogOpen: !this.state.isMembersDialogOpen
+    });
+  };
+
+  getOpList = () => {
+    const { currentGroup, isDepartmentGroup, isStaff, isOwner } = this.state;
+    const opList = [];
+    if ((!isDepartmentGroup && canAddRepo) ||
+      (isDepartmentGroup && isStaff)) {
+      opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle });
+    }
+    opList.push({ 'text': gettext('Members'), 'onClick': this.toggleMembersDialog });
+    if (currentGroup) {
+      if (isStaff || isOwner) {
+        opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
+        if (isOwner) {
+          opList.push({ 'text': gettext('Transfer'), 'onClick': this.toggleTransferGroupDialog });
+        }
+        opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
+        opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
+        if (isOwner) {
+          opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog });
         }
       }
+
+      if (!isOwner && !isDepartmentGroup) {
+        opList.push({ 'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog });
+      }
     }
+
+    return opList;
+  };
+
+  render() {
+    const { errMessage, emptyTip, currentGroup, isDepartmentGroup,
+      groupMembers, isMembersDialogOpen
+    } = this.state;
+
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
       useRate = currentGroup.group_quota_usage / currentGroup.group_quota * 100 + '%';
     }
+
+    const opList = this.getOpList();
     return (
       <Fragment>
-        <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            <div className="operation">
-              {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
-                Utils.isDesktop() ? (
-                  <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-                  </button>
-                ) : (
-                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateRepoToggle}></span>
-                )
-              )}
-            </div>
-          </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               {currentGroup && (
                 <Fragment>
-                  <div className="path-container">
-                    <Link to={`${siteRoot}groups/`} onClick={() => this.onTabNavClick('groups')}>{gettext('Groups')}</Link>
-                    <span className="path-split">/</span>
+                  <div className="sf-heading d-flex align-items-center">
+                    {isDepartmentGroup &&
+                    <span className="sf3-font-department sf3-font nav-icon" title={gettext('This is a special group representing a department.')}></span>
+                    }
                     <span>{currentGroup.name}</span>
-                    {isDepartmentGroup && (
-                      <Fragment>
-                        <span className="department-group-icon fas fa-building" title={gettext('This is a special group representing a department.')}></span>
-                        {currentGroup.group_quota > 0 &&
-                          <span className="department-usage-container">
-                            <div className="department-usage">
-                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{width: useRate}}></span></span>
-                              <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
-                            </div>
-                          </span>
-                        }
-                      </Fragment>
-                    )}
+                    <SingleDropdownToolbar opList={opList} />
                   </div>
                   <div className="path-tool">
-                    { isShowSettingIcon &&
-                    <React.Fragment>
-                      <OpIcon
-                        className="sf2-icon-cog1 action-icon group-top-action-icon"
-                        title={gettext('Settings')}
-                        op={this.toggleGroupDropdown}
-                      />
-                      {this.state.showGroupDropdown &&
-                        <div className="sf-popover" id="group-setting-popover">
-                          <div className="sf-popover-hd sf-popover-title">
-                            <span>{gettext('Settings')}</span>
-                            <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
-                              role="button"
-                              aria-label={gettext('Close')}
-                              onClick={this.toggleGroupDropdown}></a>
+                    {isDepartmentGroup && (
+                      <>
+                        {currentGroup.group_quota > 0 &&
+                          <div className="department-usage-container">
+                            <div className="department-usage">
+                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{ width: useRate }}></span></span>
+                              <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
+                            </div>
                           </div>
-                          <div className="sf-popover-con">
-                            {(this.state.isStaff || this.state.isOwner) &&
-                            <ul className="sf-popover-list">
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog}>{gettext('Rename')}</a></li>
-                              {
-                                this.state.isOwner &&
-                                <li><a href="#" className="sf-popover-item" onClick={this.toggleTransferGroupDialog} >{gettext('Transfer')}</a></li>
-                              }
-                            </ul>
-                            }
-                            {(this.state.isStaff || this.state.isOwner) &&
-                            <ul className="sf-popover-list">
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
-                            </ul>
-                            }
-                            {
-                              this.state.isOwner &&
-                              <ul className="sf-popover-list">
-                                <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Delete Group')}</a></li>
-                              </ul>
-                            }
-                            {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
-                            {(!this.state.isOwner && !isDepartmentGroup) &&
-                            <ul className="sf-popover-list">
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
-                            </ul>
-                            }
-                          </div>
-                        </div>}
-                    </React.Fragment>
-                    }
-                    <a href="#"
-                      className="sf2-icon-user2 action-icon group-top-action-icon"
-                      title={gettext('Members')} id="groupMembers"
-                      onClick={() => this.toggleGroupMembersPopover('open')}>
-                    </a>
-                    {this.state.showGroupMembersPopover &&
-                    <div className="sf-popover" id="group-members-popover">
-                      <div className="sf-popover-hd sf-popover-title group-member-list-header">
-                        <span>{gettext('Members')}</span>
-                        <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
-                          onClick={this.toggleGroupMembersPopover}></a>
-                      </div>
-                      <div className="sf-popover-con">
-                        <ul className="sf-popover-list group-member-list">
-                          {this.state.groupMembers.map((item, index) => {
-                            return (
-                              <li key={index}>
-                                <a href="#" className="sf-popover-item user-item d-flex">
-                                  <img src={item.avatar_url} alt="" className="group-member-avatar avatar"/>
-                                  <span className="txt-item ellipsis d-flex">
-                                    <span className="group-member-name ellipsis">{item.name}</span>
-                                    <span className="group-member-admin">{this.translateRole(item.role)}</span>
-                                  </span>
-                                </a>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </div>}
+                        }
+                      </>
+                    )}
                     {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
@@ -568,18 +479,12 @@ class GroupView extends React.Component {
                   sortItems={this.sortItems}
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
-                  onItemDetails={this.onItemDetails}
                   onItemRename={this.onItemRename}
                   onMonitorRepo={this.onMonitorRepo}
                 />
               }
             </div>
           </div>
-          {this.state.isShowDetails && (
-            <div className="cur-view-detail">
-              <LibDetail currentRepo={this.state.currentRepo} closeDetails={this.closeDetails}/>
-            </div>
-          )}
         </div>
         {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
           <ModalPortal>
@@ -592,11 +497,16 @@ class GroupView extends React.Component {
         )}
         {this.state.isCreateRepoDialogShow && this.state.isDepartmentGroup &&
           <CreateRepoDialog
-            isAdmin={this.state.isAdmin}
             onCreateToggle={this.onCreateRepoToggle}
             onCreateRepo={this.onCreateRepo}
             libraryType='department'
           />
+        }
+        {isMembersDialogOpen &&
+        <GroupMembersDialog
+          members={groupMembers}
+          toggleDialog={this.toggleMembersDialog}
+        />
         }
         {this.state.showRenameGroupDialog &&
           <RenameGroupDialog

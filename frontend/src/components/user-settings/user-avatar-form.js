@@ -37,22 +37,22 @@ class UserAvatarForm extends React.Component {
     }
 
     const fileExt = fileName.substr((fileName.lastIndexOf('.') + 1)).toLowerCase();
-    const allowedExt = ['jpg','jpeg', 'png', 'gif'];
+    const allowedExt = ['jpg', 'jpeg', 'png', 'gif'];
     if (allowedExt.indexOf(fileExt) == -1) {
       const errorMsg = gettext('File extensions can only be {placeholder}.')
         .replace('{placeholder}', allowedExt.join(', '));
-      toaster.danger(errorMsg, {duration: 5});
+      toaster.danger(errorMsg, { duration: 5 });
       return false;
     }
 
     // file size should be less than 1MB
-    if (file.size > 1024*1024) {
+    if (file.size > 1024 * 1024) {
       const errorMsg = gettext('The file is too large. Allowed maximum size is 1MB.');
-      toaster.danger(errorMsg, {duration: 5});
+      toaster.danger(errorMsg, { duration: 5 });
       return false;
     }
 
-    //this.form.current.submit();
+    // this.form.current.submit();
     seafileAPI.updateUserAvatar(file, 160).then((res) => {
       this.setState({
         avatarSrc: res.data.avatar_url
@@ -94,7 +94,7 @@ class UserAvatarForm extends React.Component {
         <div className="col-auto position-relative" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver} tabIndex="0">
           <img src={this.state.avatarSrc} width="80" height="80" alt="" className="user-avatar" />
           <input type="file" name="avatar" className="d-none" onChange={this.fileInputChange} ref={this.fileInput} />
-          <span className={`avatar-edit fas fa-edit ${!this.state.isEditShown && 'd-none'}`} onClick={this.openFileInput} role="button" aria-label={gettext('Edit')} tabIndex="0" onKeyDown={this.onEditIconKeyDown}></span>
+          <span className={`avatar-edit sf3-font sf3-font-rename ${!this.state.isEditShown && 'd-none'}`} onClick={this.openFileInput} role="button" aria-label={gettext('Edit')} tabIndex="0" onKeyDown={this.onEditIconKeyDown}></span>
         </div>
       </form>
     );

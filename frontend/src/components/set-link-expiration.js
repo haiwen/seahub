@@ -83,7 +83,7 @@ class SetLinkExpiration extends React.Component {
           </Label>
           {expType == 'by-days' && (
             <Fragment>
-              <InputGroup style={{width: inputWidth}}>
+              <InputGroup style={{ width: inputWidth }}>
                 <Input type="text" value={expireDays} onChange={onExpireDaysChanged} />
                 <InputGroupAddon addonType="append">
                   <InputGroupText>{gettext('days')}</InputGroupText>

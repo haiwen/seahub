@@ -23,11 +23,11 @@ class Item extends Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   onDeleteLink = (e) => {
@@ -102,7 +102,7 @@ class RepoShareAdminUploadLinks extends Component {
       let items = this.state.items.filter(linkItem => {
         return linkItem.token !== item.token;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       let message = gettext('Successfully deleted 1 item');
       toaster.success(message);
     }).catch((error) => {

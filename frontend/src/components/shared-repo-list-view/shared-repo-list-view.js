@@ -8,6 +8,7 @@ import LibsMobileThead from '../libs-mobile-thead';
 import Loading from '../loading';
 
 const propTypes = {
+  currentViewMode: PropTypes.string,
   libraryType: PropTypes.string,
   currentGroup: PropTypes.object,
   isShowTableThread: PropTypes.bool,
@@ -17,10 +18,10 @@ const propTypes = {
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func,
-  onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
   hasNextPage: PropTypes.bool,
   onMonitorRepo: PropTypes.func,
+  theadHidden: PropTypes.bool,
 };
 
 class SharedRepoListView extends React.Component {
@@ -58,16 +59,16 @@ class SharedRepoListView extends React.Component {
       sortByName: this.props.sortBy == 'name',
       sortByTime: this.props.sortBy == 'time',
       sortBySize: this.props.sortBy == 'size',
-      sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
+      sortIcon: this.props.sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>
     };
   };
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   onItemRename = (repo, newName) => {
@@ -84,6 +85,7 @@ class SharedRepoListView extends React.Component {
   };
 
   renderRepoListView = () => {
+    const { currentViewMode = 'list' } = this.props;
     return (
       <Fragment>
         {this.props.repoList.map(repo => {
@@ -98,9 +100,9 @@ class SharedRepoListView extends React.Component {
               onUnfreezedItem={this.onUnfreezedItem}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
-              onItemDetails={this.props.onItemDetails}
               onItemRename={this.props.onItemRename}
               onMonitorRepo={this.props.onMonitorRepo}
+              currentViewMode={currentViewMode}
             />
           );
         })}
@@ -109,27 +111,30 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
-
+    const { theadHidden = false, currentViewMode = 'list' } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
-    return (
-      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
+    return currentViewMode == 'list' ? (
+      <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-            <th width="12%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            <th width="16%">{gettext('Owner')}</th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            <th width="17%">{gettext('Owner')}</th>
           </tr>
         </thead>
         <tbody>
           {this.renderRepoListView()}
         </tbody>
       </table>
+    ) : (
+      <div className="d-flex justify-content-between flex-wrap">
+        {this.renderRepoListView()}
+      </div>
     );
   };
 

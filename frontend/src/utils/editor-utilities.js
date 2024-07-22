@@ -1,27 +1,10 @@
-import { slug, repoID, historyRepoID } from './constants';
+import { repoID, historyRepoID } from './constants';
 import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {
 
-  getFiles() {
-    return seafileAPI.listWikiDir(slug, '/').then(items => {
-      const files = items.data.dir_file_list.map(item => {
-        return {
-          name: item.name,
-          type: item.type === 'dir' ? 'dir' : 'file',
-          isExpanded: item.type === 'dir' ? true : false,
-          parent_path: item.parent_dir,
-          last_update_time: item.last_update_time,
-          permission: item.permission,
-          size: item.size
-        };
-      });
-      return files;
-    });
-  }
-
   listRepoDir() {
-    return seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
+    return seafileAPI.listDir(repoID, '/', { recursive: true }).then(items => {
       const files = items.data.dirent_list.map(item => {
         return {
           name: item.name,
@@ -66,8 +49,8 @@ class EditorUtilities {
     return seafileAPI.getSource();
   }
 
-  searchFiles(queryData,cancelToken) {
-    return seafileAPI.searchFiles(queryData,cancelToken);
+  searchFiles(queryData, cancelToken) {
+    return seafileAPI.searchFiles(queryData, cancelToken);
   }
 
   getAccountInfo() {

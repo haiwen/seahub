@@ -12,8 +12,8 @@ class LogsNav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'adminOperationLogs', urlPart:'admin-logs/operation', text: gettext('Admin Operation Logs')},
-      {name: 'adminLoginLogs', urlPart:'admin-logs/login', text: gettext('Admin Login Logs')},
+      { name: 'adminOperationLogs', urlPart: 'admin-logs/operation', text: gettext('Admin Operation Logs') },
+      { name: 'adminLoginLogs', urlPart: 'admin-logs/login', text: gettext('Admin Login Logs') },
     ];
   }
 

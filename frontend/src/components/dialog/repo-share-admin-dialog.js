@@ -53,9 +53,9 @@ class RepoShareAdminDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <div>
-        <Modal isOpen={true} style={{maxWidth: '760px'}} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
-            <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+            <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
           </ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
             <Fragment>

@@ -78,7 +78,7 @@ class SharePermissionEditor extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     });
   };
 

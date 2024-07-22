@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
-import { gettext, siteRoot } from '../../utils/constants';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
+import ViewModes from '../../components/view-modes';
+import ReposSortMenu from '../../components/repos-sort-menu';
+import { PRIVATE_FILE_TYPE } from '../../constants';
+import MetadataViewToolBar from '../../metadata/metadata-view/components/view-toolbar';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -12,6 +17,13 @@ const propTypes = {
   currentPath: PropTypes.string.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.func,
+  metadataViewId: PropTypes.string,
 };
 
 class DirTool extends React.Component {
@@ -19,18 +31,22 @@ class DirTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isListRepoTagShow: false,
+      isRepoTagDialogOpen: false,
+      isDropdownMenuOpen: false,
     };
-    this.tagsIconID = `tags-icon-${uuidv4()}`;
+
+    this.sortOptions = [
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'time-asc', text: gettext('By time ascending') },
+      { value: 'time-desc', text: gettext('By time descending') }
+    ];
   }
 
-  onMouseDown = (e) => {
-    e.stopPropagation();
-  };
-
-  toggleRepoTag = (e) => {
-    e.stopPropagation();
-    this.setState({ isListRepoTagShow: !this.state.isListRepoTagShow });
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
   };
 
   hidePopover = (e) => {
@@ -41,95 +57,127 @@ class DirTool extends React.Component {
         dom = dom.parentNode;
       }
     }
-    this.setState({ isListRepoTagShow: false });
+    this.setState({ isRepoTagDialogOpen: false });
   };
 
   toggleCancel = () => {
-    this.setState({ isListRepoTagShow: false });
+    this.setState({ isRepoTagDialogOpen: false });
   };
 
-  isMarkdownFile(filePath) {
-    return Utils.getFileName(filePath).includes('.md');
-  }
+  getMenu = () => {
+    const list = [];
+    const { userPerm, currentPath } = this.props;
+    if (userPerm !== 'rw' || Utils.isMarkdownFile(currentPath)) {
+      return list;
+    }
+    const { TAGS } = TextTranslation;
+    list.push(TAGS);
+    return list;
+  };
+
+  onMenuItemClick = (item) => {
+    const { key } = item;
+    switch (key) {
+      case 'Tags':
+        this.setState({ isRepoTagDialogOpen: !this.state.isRepoTagDialogOpen });
+        break;
+    }
+  };
+
+  onMenuItemKeyDown = (e, item) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(item);
+    }
+  };
+
+  onSelectSortOption = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
+    this.props.sortItems(sortBy, sortOrder);
+  };
 
   render() {
-    let { repoID, userPerm, currentPath } = this.props;
-    if (userPerm !== 'rw') {
-      return '';
-    }
-    if (this.isMarkdownFile(currentPath)) {
-      return '';
-    }
-    let toolbarDom = null;
-    if (Utils.getFileName(currentPath)) { // name not '' is not root path
-      let trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
-      toolbarDom = (
-        <ul className="path-toolbar">
-          <li className="toolbar-item">
-            <a
-              className="op-link sf2-icon-tag"
-              href="#"
-              id={this.tagsIconID}
-              role="button"
-              onClick={this.toggleRepoTag}
-              onMouseDown={this.onMouseDown}
-              title={gettext('Tags')}
-              aria-label={gettext('Tags')}
-            ></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
-          </li>
-        </ul>
-      );
-    } else { // currentPath === '/' is root path
-      let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
-      let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-      toolbarDom = (
-        <ul className="path-toolbar">
-          <li className="toolbar-item">
-            <a
-              className="op-link sf2-icon-tag"
-              href="#"
-              id={this.tagsIconID}
-              role="button"
-              onClick={this.toggleRepoTag}
-              onMouseDown={this.onMouseDown}
-              title={gettext('Tags')}
-              aria-label={gettext('Tags')}
-            ></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a>
-          </li>
-          <li className="toolbar-item">
-            <a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a>
-          </li>
-        </ul>
+    const menuItems = this.getMenu();
+    const { isDropdownMenuOpen } = this.state;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, metadataViewId } = this.props;
+    const propertiesText = TextTranslation.PROPERTIES.value;
+    const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
+
+    const sortOptions = this.sortOptions.map(item => {
+      return {
+        ...item,
+        isSelected: item.value === `${sortBy}-${sortOrder}`
+      };
+    });
+
+    if (isFileExtended) {
+      return (
+        <div className="d-flex">
+          <MetadataViewToolBar metadataViewId={metadataViewId} />
+        </div>
       );
     }
+
     return (
-      <>
-        {toolbarDom}
-        {this.state.isListRepoTagShow &&
-          <SeahubPopover
-            popoverClassName="list-tag-popover"
-            target={this.tagsIconID}
-            hideSeahubPopover={this.hidePopover}
-            hideSeahubPopoverWithEsc={this.hidePopover}
-            canHideSeahubPopover={true}
-            boundariesElement={document.body}
-            placement={'bottom-end'}
-          >
-            <ListTagPopover
-              repoID={repoID}
-              onListTagCancel={this.toggleCancel}
-            />
-          </SeahubPopover>
+      <React.Fragment>
+        <div className="d-flex">
+          <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+          <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
+          {(!this.props.isCustomPermission) &&
+            <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
+              <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
+            </span>
+          }
+          {menuItems.length > 0 &&
+          <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+            <DropdownToggle
+              tag="i"
+              id="cur-folder-more-op-toggle"
+              className='cur-view-path-btn sf3-font-more sf3-font ml-2'
+              data-toggle="dropdown"
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              aria-expanded={isDropdownMenuOpen}
+            >
+            </DropdownToggle>
+            <DropdownMenu right={true}>
+              {menuItems.map((menuItem, index) => {
+                if (menuItem === 'Divider') {
+                  return <DropdownItem key={index} divider />;
+                } else {
+                  return (
+                    <DropdownItem
+                      key={index}
+                      onClick={this.onMenuItemClick.bind(this, menuItem)}
+                      onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
+                    >{menuItem.value}
+                    </DropdownItem>
+                  );
+                }
+              })}
+            </DropdownMenu>
+          </Dropdown>
+          }
+        </div>
+        {this.state.isRepoTagDialogOpen &&
+        <SeahubPopover
+          popoverClassName="list-tag-popover"
+          target="cur-folder-more-op-toggle"
+          hideSeahubPopover={this.hidePopover}
+          hideSeahubPopoverWithEsc={this.hidePopover}
+          canHideSeahubPopover={true}
+          boundariesElement={document.body}
+          placement={'bottom-end'}
+        >
+          <ListTagPopover
+            repoID={repoID}
+            onListTagCancel={this.toggleCancel}
+          />
+        </SeahubPopover>
         }
-      </>
+      </React.Fragment>
     );
   }
+
 }
 
 DirTool.propTypes = propTypes;

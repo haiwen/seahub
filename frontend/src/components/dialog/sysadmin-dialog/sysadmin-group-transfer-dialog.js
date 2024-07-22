@@ -36,18 +36,17 @@ class SysAdminTransferGroupDialog extends React.Component {
 
   render() {
     const { submitBtnDisabled } = this.state;
-    const groupName = '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) +'</span>';
+    const groupName = '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) + '</span>';
     const msg = gettext('Transfer Group {placeholder} to').replace('{placeholder}', groupName);
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span dangerouslySetInnerHTML={{__html: msg}}></span>
+          <span dangerouslySetInnerHTML={{ __html: msg }}></span>
         </ModalHeader>
         <ModalBody>
           <UserSelect
             ref="userSelect"
             isMulti={false}
-            className="reviewer-select"
             placeholder={gettext('Select a user')}
             onSelectChange={this.handleSelectChange}
           />

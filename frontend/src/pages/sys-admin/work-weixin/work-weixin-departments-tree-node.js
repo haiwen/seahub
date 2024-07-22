@@ -86,8 +86,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
     let toggleClass = classNames({
-      'folder-toggle-icon fa fa-caret-down': department.children && this.state.isChildrenShow,
-      'folder-toggle-icon fa fa-caret-right': department.children && !this.state.isChildrenShow,
+      'folder-toggle-icon sf3-font sf3-font-down rotate-270': department.children && this.state.isChildrenShow,
+      'folder-toggle-icon sf3-font sf3-font-down': department.children && !this.state.isChildrenShow,
     });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,
@@ -116,7 +116,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             >
               <DropdownToggle
                 tag='i'
-                className='fa fa-ellipsis-v cursor-pointer attr-action-icon'
+                className='sf3-font sf3-font-more-vertical cursor-pointer attr-action-icon'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -127,7 +127,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
                 <DropdownItem
                   onClick={this.importDepartmentDialogToggle.bind(this, department)}
                   id={department.id}
-                >{'导入部门'}</DropdownItem>
+                >{'导入部门'}
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
             }

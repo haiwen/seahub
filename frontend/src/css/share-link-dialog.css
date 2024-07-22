@@ -58,7 +58,7 @@
     overflow: auto;
 }
 
-#share-link-panel .share-list-container {
+.share-list-container.share-link-list {
     max-height: 23rem;
     overflow: hidden;
 }
@@ -66,6 +66,12 @@
 #share-link-panel .table-real-container {
     height: 20rem;
     overflow: auto;
+}
+
+#share-link-panel .link-authenticated-op:hover {
+  background: transparent;
+  text-decoration: underline;
+  color: #ff9800;
 }
 
 .share-dialog-content label {

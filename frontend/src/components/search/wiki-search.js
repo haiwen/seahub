@@ -55,7 +55,7 @@ class Search extends Component {
 
   onChangeHandler = (event) => {
     let _this = this;
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
     let newValue = event.target.value;
     if (this.inputValue === newValue.trim()) {
       return false;
@@ -85,7 +85,7 @@ class Search extends Component {
 
   getSearchResult(queryData) {
 
-    if(this.source){
+    if (this.source) {
       this.cancelRequest();
     }
     this.setState({
@@ -124,7 +124,7 @@ class Search extends Component {
 
   sendRequest(queryData) {
     // 'page=1' for this first request
-    this.setState({page: 1}, () => {
+    this.setState({ page: 1 }, () => {
       const { search_repo, q } = queryData;
       const { page, perPage } = this.state;
       this.searchWiki(search_repo, q, page, perPage);
@@ -220,7 +220,7 @@ class Search extends Component {
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
-    let style = {'width': width};
+    let style = { 'width': width };
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -228,7 +228,7 @@ class Search extends Component {
             <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
             <div className="search-container">
               <div className="input-icon">
-                <i className="search-icon-left input-icon-addon fas fa-search"></i>
+                <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
                 <input
                   type="text"
                   className="form-control search-input"
@@ -240,7 +240,7 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
-                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon sf3-font sf3-font-x-01' onClick={this.onCloseHandler}></i>}
               </div>
               <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
@@ -250,14 +250,14 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
-            <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
+            <i className="search-icon sf3-font sf3-font-search" onClick={this.onSearchToggle}></i>
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
               <div className="search-container">
                 <div className="input-icon">
-                  <i className="search-icon-left input-icon-addon fas fa-search"></i>
+                  <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
                   <input
                     type="text"
                     className="form-control search-input"
@@ -269,7 +269,7 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon sf3-font sf3-font-x-01' onClick={this.onCloseHandler}></i>}
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}

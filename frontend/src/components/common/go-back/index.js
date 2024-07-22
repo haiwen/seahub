@@ -12,7 +12,7 @@ class GoBack extends Component {
   render() {
     return (
       <div className="go-back" onClick={this.onBackClick}>
-        <span className="fas fa-chevron-left"></span>
+        <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
       </div>
     );
   }

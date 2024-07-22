@@ -18,7 +18,7 @@ class SearchedListView extends React.Component {
   }
 
   onItemClick = (item) => {
-    this.setState({currentItem: item});
+    this.setState({ currentItem: item });
     this.props.onItemClick(item);
   };
 

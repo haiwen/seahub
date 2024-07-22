@@ -39,10 +39,10 @@ class FileContent extends React.Component {
       <div className="shared-file-view-body d-flex text-center">
         <div className="image-file-view flex-1">
           {prevImgPath && (
-            <a href={prevImgURL} id="img-prev" title={gettext('you can also press ← ')}><span className="fas fa-chevron-left"></span></a>
+            <a href={prevImgURL} id="img-prev" title={gettext('you can also press ← ')}><span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span></a>
           )}
           {nextImgPath && (
-            <a href={nextImgURL} id="img-next" title={gettext('you can also press →')}><span className="fas fa-chevron-right"></span></a>
+            <a href={nextImgURL} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
           )}
           <img src={rawPath} alt={fileName} id="image-view" />
         </div>

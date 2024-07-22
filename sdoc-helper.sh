@@ -23,6 +23,7 @@ if [ $Y = 'y' ]
 then
     git add .
     git commit -m "update sdoc version and sdoc translate"
-    git push origin master
+    d=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`
+    git push origin $d
 fi
 

@@ -1,0 +1,4 @@
+.filter-popover .popover {
+  max-width: none;
+  min-width: 300px;
+}

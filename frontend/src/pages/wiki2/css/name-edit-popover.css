@@ -1,0 +1,31 @@
+.name-edit-popover .popover {
+  max-width: 460px;
+  width: 460px;
+  left: 140px !important;
+}
+
+.name-edit-popover .name-edit-content {
+  padding: 8px 12px;
+}
+
+.name-edit-popover .item-name-editor {
+  margin-bottom: 7px;
+}
+
+.name-edit-popover .item-name-editor-input {
+  height: 36px;
+}
+
+.name-edit-popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+  height: 40px;
+  font-size: 14px;
+}
+
+.name-edit-popover-header .header-text {
+  color: #212529;
+}

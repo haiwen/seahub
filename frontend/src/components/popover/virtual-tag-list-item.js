@@ -47,11 +47,12 @@ export default class VirtualTagListItem extends React.Component {
         <VirtualTagColor repoID={repoID} tag={item} updateVirtualTag={this.props.updateVirtualTag} />
         <VirtualTagName repoID={repoID} tag={item} updateVirtualTag={this.props.updateVirtualTag} />
         <button
-          className={`tag-delete-icon sf2-icon-delete border-0 px-0 bg-transparent cursor-pointer ${isTagHighlighted ? '' : 'invisible'}`}
+          className={`tag-delete-icon sf3-font-delete1 sf3-font border-0 px-0 bg-transparent cursor-pointer ${isTagHighlighted ? '' : 'invisible'}`}
           onClick={this.deleteVirtualTag}
           aria-label={gettext('Delete')}
           title={gettext('Delete')}
-        ></button>
+        >
+        </button>
       </li>
     );
   }

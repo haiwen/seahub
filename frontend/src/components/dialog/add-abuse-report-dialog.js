@@ -34,7 +34,7 @@ class AddAbuseReportDialog extends React.Component {
     }
     seafileAPI.addAbuseReport(this.props.sharedToken, this.state.abuseType, this.state.description, this.state.reporter, this.props.filePath).then((res) => {
       this.props.toggleAddAbuseReportDialog();
-      toaster.success(gettext('Success'), {duration: 2});
+      toaster.success(gettext('Success'), { duration: 2 });
     }).catch((error) => {
       if (error.response) {
         this.setState({
@@ -49,17 +49,17 @@ class AddAbuseReportDialog extends React.Component {
     if (type === this.state.abuseType) {
       return;
     }
-    this.setState({abuseType: type});
+    this.setState({ abuseType: type });
   };
 
   setReporter = (event) => {
     let reporter = event.target.value.trim();
-    this.setState({reporter: reporter});
+    this.setState({ reporter: reporter });
   };
 
   setDescription = (event) => {
     let desc = event.target.value.trim();
-    this.setState({description: desc});
+    this.setState({ description: desc });
   };
 
   render() {

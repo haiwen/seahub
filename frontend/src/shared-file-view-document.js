@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
-import { gettext, mediaUrl} from './utils/constants';
+import { gettext, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';

@@ -4,6 +4,13 @@
 
 .cur-view-content.lib-content-container {
   padding: 0;
+  background-color: #fff;
+  position: absolute;
+  top: 48px;
+  width: 100%;
+  height: calc(100% - 48px);
+  border-top: 1px solid #e8e8e8;
+  transform: translateZ(10px);
 }
 
 .view-mode-container {
@@ -14,9 +21,10 @@
   min-height: 0;
 }
 
-.dir-colunm-view {
+.dir-column-view {
   display: flex;
   width: 100%;
+  position: relative;
 }
 
 .dir-content-nav {
@@ -41,19 +49,19 @@
 
 /*tree view */
 .tree-view {
-  margin-left: -9px;
+  margin-left: -12px;
   padding: 12px 12px 12px 0;
   line-height: 1.5;
   flex: 1;
-  border: 1px solid rgba(69,170,242,0);
+  border: 1px solid rgba(69, 170, 242, 0);
 }
 
 .tree-view-drop {
-  border: 1px solid rgba(69,170,242);
+  border: 1px solid rgba(69, 170, 242);
 }
 
 .tree-view-drop::before {
-  border-left: 1px solid rgba(69,170,242);
+  border-left: 1px solid rgba(69, 170, 242);
   content: '';
   margin-left: 8px;
   height: calc(100% + 24px);
@@ -64,13 +72,14 @@
 
 .tree-node-inner {
   position: relative;
-  height: 24px;
+  height: 28px;
+  padding: 2px;
   cursor: pointer;
   line-height: 1.625;
 }
 
 .tree-node-inner-hover {
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   border-radius: 0.25rem;
 }
 
@@ -88,7 +97,7 @@
   position: absolute;
   display:flex;
   align-items:center;
-  top: 0;
+  top: 2px;
   left: 0;
   padding-left: 1.5rem;
 }
@@ -96,7 +105,7 @@
 .folder-toggle-icon {
   position: absolute;
   left: 0;
-  color: #c0c0c0;
+  color: #666666;
   line-height: 1.625;
   width: 1.5rem;
   display: flex;
@@ -105,23 +114,23 @@
 }
 
 .tree-node-drop {
-  background-color:rgb(255,239,178);
+  background-color: rgb(255, 239, 178);
 }
 
 .tree-node-icon {
   display: inline-block;
   width: 1rem;
   text-align: center;
-  color: #b0b0b0;
+  color: #666666;
 }
 
 .tree-node-inner .right-icon {
   position: absolute;
-  top: 0;
+  top: 2px;
   right: 0.5rem;
   bottom: 0;
   width: 1rem;
-  color: #888;
+  color: #666666;
   z-index: 2;
   font-size: 0.8125rem;
   text-align: center;
@@ -133,20 +142,25 @@
   vertical-align: middle;
   font-size: 0.8125rem;
   line-height: 1.625rem !important;
+  color: #666666;
 }
 
 .tree-node-hight-light {
-  color: #fff;
   border-radius: 4px;
-  background-color: #ff9800 !important;
+  background-color: #f5f5f5 !important;
 }
 
-.tree-node-hight-light i {
-  color:#fff;
-}
-
-.dropdown-menu {
-  min-width: 8rem;
+.tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 24px;
+  left: -8px;
+  top: 2px;
+  background-color: #FF8000;
+  border-radius: 2px;
+  z-index: 0;
 }
 
 .parent-path {
@@ -178,9 +192,11 @@
 .dir-content-main .wiki-open-file {
   width: 40px;
   height: 40px;
+  line-height: 40px;
+  text-align: center;
   font-size: 16px;
   border-radius: 50%;
-  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
   user-select: none;
   border: none;
   right: 10px;
@@ -189,12 +205,6 @@
   z-index: 1050;
   background-color: #fff;
   cursor: pointer;
-}
-
-.dir-content-main .wiki-open-file i {
-  position: absolute;
-  top: 12px;
-  left: 12px;
 }
 
 .dir-content-main .wiki-open-file:hover {
@@ -213,15 +223,49 @@
   width: 100%;
 }
 
-.dir-content-resize {
-  flex: 0 0 .5%;
-  cursor: ew-resize;
-}
-
 .readonly-tip-message {
   display: flex;
   padding: 0.25rem 0;
   background-color: #FEFBDC;
   justify-content: center;
   align-items: center;
+}
+
+.op-btn {
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  height: 32px;
+  padding: 0 .5rem;
+}
+
+.op-btn:hover {
+  background: #f5f5f5;
+}
+
+.dir-view-path .cur-view-path-btn {
+  margin-left: -4px;
+}
+
+.dir-view-path .path-item {
+  min-width: 0; /* overwrite some styles */
+  padding: 0 6px;
+  font-size: 1rem;
+  color: inherit;
+  border-radius: 3px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.dir-view-path .path-item:hover {
+  background: #efefef;
+}
+
+.dir-view-path .path-item-dropdown-toggle {
+  color: #666;
+}
+
+.dir-view-path .path-split {
+  padding: 0 2px;
 }

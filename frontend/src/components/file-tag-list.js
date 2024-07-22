@@ -9,7 +9,7 @@ function FileTagList(props) {
         const color = fileTag.tag_color || fileTag.color;
         const name = fileTag.tag_name || fileTag.name || '';
         return (
-          <li key={fileTag.id} style={{backgroundColor: color}} className="file-tag-item">
+          <li key={fileTag.id} style={{ backgroundColor: color }} className="file-tag-item">
             <span className="tag-name" title={name}>{name}</span>
           </li>
         );

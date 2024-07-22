@@ -1,0 +1,58 @@
+.metadata-tree-view .tree-node-inner {
+  height: 28px;
+  padding: 2px 0;
+}
+
+.metadata-tree-view .tree-node-inner .left-icon {
+  top: 6px;
+  padding-left: 8px;
+}
+
+.metadata-tree-view .tree-node-inner .tree-node-text {
+  padding-left: 28.8px;
+}
+
+.metadata-tree-view .tree-node-icon {
+  height: 100%;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(1px);
+}
+
+.metadata-tree-view .metadata-views-icon {
+  height: 14px;
+  width: 14px;
+  line-height: 1.5;
+}
+
+.metadata-tree-view .sf-metadata-add-view {
+  border-top: none;
+  height: 28px;
+  padding: 2px 0 2px 28.8px;
+  position: relative;
+}
+
+.metadata-tree-view .sf-metadata-add-view:hover {
+  background-color: #f0f0f0;
+  border-radius: 0.25rem;
+}
+
+.metadata-tree-view .sf-metadata-add-view .sf-metadata-add-view-icon {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-weight: 400;
+  fill: #666;
+}
+
+.metadata-tree-view .sf-metadata-add-view .text-truncate {
+  display: inline-block;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+  font-weight: 400;
+}

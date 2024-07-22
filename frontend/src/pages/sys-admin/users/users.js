@@ -4,6 +4,7 @@ import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -43,11 +44,13 @@ class Users extends Component {
       isAddUserDialogOpen: false,
       isBatchSetQuotaDialogOpen: false,
       isBatchDeleteUserDialogOpen: false,
-      isBatchAddAdminDialogOpen: false
+      isBatchAddAdminDialogOpen: false,
+      is_active: null,
+      role: null,
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.isAdmin) { // 'Admin' page
       this.getUserList(); // no pagination
     } else {
@@ -55,33 +58,35 @@ class Users extends Component {
       const {
         currentPage, perPage,
         sortBy = '',
-        sortOrder = 'asc'
+        sortOrder = 'asc',
+        is_active,
+        role,
       } = this.state;
       this.setState({
         perPage: parseInt(urlParams.get('per_page') || perPage),
         currentPage: parseInt(urlParams.get('page') || currentPage),
         sortBy: urlParams.get('order_by') || sortBy,
-        sortOrder: urlParams.get('direction') || sortOrder
+        sortOrder: urlParams.get('direction') || sortOrder,
       }, () => {
-        this.getUsersListByPage(this.state.currentPage);
+        this.getUsersListByPage(this.state.currentPage, is_active, role);
       });
     }
   }
 
   toggleImportUserDialog = () => {
-    this.setState({isImportUserDialogOpen: !this.state.isImportUserDialogOpen});
+    this.setState({ isImportUserDialogOpen: !this.state.isImportUserDialogOpen });
   };
 
   toggleAddUserDialog = () => {
-    this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
+    this.setState({ isAddUserDialogOpen: !this.state.isAddUserDialogOpen });
   };
 
   toggleBatchSetQuotaDialog = () => {
-    this.setState({isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen});
+    this.setState({ isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen });
   };
 
   toggleBatchDeleteUserDialog = () => {
-    this.setState({isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen});
+    this.setState({ isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen });
   };
 
   onUserSelected = (item) => {
@@ -160,10 +165,10 @@ class Users extends Component {
     });
   };
 
-  getUsersListByPage = (page) => {
+  getUsersListByPage = (page, is_active, role) => {
     const { perPage, sortBy, sortOrder } = this.state;
     const { isLDAPImported } = this.props;
-    seafileAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder).then(res => {
+    systemAdminAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
       this.setState({
         userList: users,
@@ -179,6 +184,39 @@ class Users extends Component {
     });
   };
 
+  updateURL = (page, perPage) => {
+    let url = new URL(location.href);
+    let searchParams = new URLSearchParams(url.search);
+    searchParams.set('page', page);
+    searchParams.set('per_page', perPage);
+    url.search = searchParams.toString();
+    navigate(url.toString());
+  };
+
+  // is_active: '1', '0', '' (active, inactive, all)
+  onStatusChange = (is_active) => {
+    this.setState({
+      is_active: is_active,
+      currentPage: 1
+    }, () => {
+      const { currentPage, perPage, is_active, role } = this.state;
+      this.updateURL(currentPage, perPage);
+      this.getUsersListByPage(currentPage, is_active, role);
+    });
+  };
+
+  // role: 'default', 'guest', ''
+  onRoleChange = (role) => {
+    this.setState({
+      role: role,
+      currentPage: 1
+    }, () => {
+      const { currentPage, perPage, is_active, role } = this.state;
+      this.updateURL(currentPage, perPage);
+      this.getUsersListByPage(currentPage, is_active, role);
+    });
+  };
+
   sortByQuotaUsage = () => {
     this.setState({
       sortBy: 'quota_usage',
@@ -187,13 +225,13 @@ class Users extends Component {
     }, () => {
       let url = new URL(location.href);
       let searchParams = new URLSearchParams(url.search);
-      const { currentPage, sortBy, sortOrder } = this.state;
+      const { currentPage, sortBy, sortOrder, is_active, role } = this.state;
       searchParams.set('page', currentPage);
       searchParams.set('order_by', sortBy);
       searchParams.set('direction', sortOrder);
       url.search = searchParams.toString();
       navigate(url.toString());
-      this.getUsersListByPage(currentPage);
+      this.getUsersListByPage(currentPage, is_active, role);
     });
   };
 
@@ -202,7 +240,7 @@ class Users extends Component {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
       let msg = gettext('Deleted user %s');
       msg = msg.replace('%s', username);
       toaster.success(msg);
@@ -225,7 +263,7 @@ class Users extends Component {
         });
         return item;
       });
-      this.setState({userList: userList});
+      this.setState({ userList: userList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -240,7 +278,7 @@ class Users extends Component {
       if (res.data.success.length) {
         let oldUserList = this.state.userList;
         let newUserList = oldUserList.filter(oldUser => {
-          return !res.data.success.some(deletedUser =>{
+          return !res.data.success.some(deletedUser => {
             return deletedUser.email == oldUser.email;
           });
         });
@@ -309,7 +347,7 @@ class Users extends Component {
     this.setState({
       perPage: perPage
     }, () => {
-      this.getUsersListByPage(1);
+      this.getUsersListByPage(1, this.state.is_active, this.state.role);
     });
   };
 
@@ -317,11 +355,11 @@ class Users extends Component {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
-          item[key]= res.data[key];
+          item[key] = res.data[key];
         }
         return item;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
       const msg = (key == 'is_active' && value) ?
         res.data.update_status_tip : gettext('Edit succeeded');
       toaster.success(msg);
@@ -339,7 +377,7 @@ class Users extends Component {
         }
         return item;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
       toaster.success(gettext('Edit succeeded'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -395,7 +433,7 @@ class Users extends Component {
   };
 
   toggleBatchAddAdminDialog = () => {
-    this.setState({isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen});
+    this.setState({ isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen });
   };
 
   addAdminInBatch = (emails) => {
@@ -468,6 +506,8 @@ class Users extends Component {
                 currentPage={this.state.currentPage}
                 hasNextPage={this.state.hasNextPage}
                 curPerPage={this.state.perPage}
+                is_active={this.state.is_active}
+                role={this.state.role}
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getUsersListByPage}
                 updateUser={this.updateUser}
@@ -477,6 +517,9 @@ class Users extends Component {
                 onUserSelected={this.onUserSelected}
                 isAllUsersSelected={this.isAllUsersSelected}
                 toggleSelectAllUsers={this.toggleSelectAllUsers}
+                onRoleChange={this.onRoleChange}
+                onStatusChange={this.onStatusChange}
+                currentItem={this.getCurrentNavItem()}
               />
             </div>
           </div>

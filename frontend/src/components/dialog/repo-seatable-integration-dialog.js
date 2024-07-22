@@ -56,12 +56,12 @@ class RepoSeaTableIntegrationDialog extends React.Component {
 
   changeTab = (tab) => {
     if (this.state.activeTab !== tab) {
-      this.setState({activeTab: tab});
+      this.setState({ activeTab: tab });
     }
   };
 
   changeStatus = (status) => {
-    this.setState({status});
+    this.setState({ status });
   };
 
   getFile = (detail, fileList) => {
@@ -155,7 +155,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={onSeaTableIntegrationToggle} className="account-dialog">
         <ModalHeader toggle={onSeaTableIntegrationToggle}>
-          <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
+          <p dangerouslySetInnerHTML={{ __html: title }} className="m-0"></p>
         </ModalHeader>
         <ModalBody className="account-dialog-content">
           <div className="account-dialog-main">

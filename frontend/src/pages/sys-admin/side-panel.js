@@ -33,7 +33,7 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading">{gettext('System Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 {canViewSystemInfo &&
-                <li className="nav-item">
+                <li className={`nav-item ${this.getActiveClass('info')}`}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('info')}`}
                     to={siteRoot + 'sys/info/'}
@@ -45,7 +45,7 @@ class SidePanel extends React.Component {
                 </li>
                 }
                 {(isPro || !isDBSqlite3) && canViewStatistic &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('statistic')}`}>
                     <Link className={`nav-link ellipsis ${this.getActiveClass('statistic')}`}
                       to={siteRoot + 'sys/statistics/file/'}
                       onClick={() => this.props.tabItemClick('statistic')}
@@ -56,7 +56,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('devices')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('devices')}`}
                       to={siteRoot + 'sys/desktop-devices/'}
@@ -68,7 +68,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {constanceEnabled && canConfigSystem &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('web-settings')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('web-settings')}`}
                       to={siteRoot + 'sys/web-settings/'}
@@ -80,7 +80,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {canManageLibrary &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('libraries')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
                       to={siteRoot + 'sys/all-libraries/'}
@@ -92,7 +92,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {canManageUser &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('users')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('users')}`}
                       to={siteRoot + 'sys/users/'}
@@ -104,7 +104,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {canManageGroup &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('groups')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('groups')}`}
                       to={siteRoot + 'sys/groups/'}
@@ -116,7 +116,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && canManageGroup &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('departments')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('departments')}`}
                       to={siteRoot + 'sys/departments/'}
@@ -128,7 +128,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {multiTenancy && otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('organizations')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('organizations')}`}
                       to={siteRoot + 'sys/organizations/'}
@@ -140,7 +140,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && multiInstitution && otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('institutions')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('institutions')}`}
                       to={siteRoot + 'sys/institutions/'}
@@ -152,7 +152,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('notifications')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('notifications')}`}
                       to={siteRoot + 'sys/notifications/'}
@@ -164,7 +164,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('links')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('links')}`}
                       to={siteRoot + 'sys/share-links/'}
@@ -176,7 +176,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {sysadminExtraEnabled && canViewUserLog &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('logs')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('logs')}`}
                       to={siteRoot + 'sys/logs/login'}
@@ -188,7 +188,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && otherPermission && enableFileScan &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('file-scan-records')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('file-scan-records')}`}
                       to={siteRoot + 'sys/file-scan-records/'}
@@ -200,7 +200,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('virus-files')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('virus-files')}`}
                       to={siteRoot + 'sys/virus-files/all/'}
@@ -212,7 +212,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && enableGuestInvitation && otherPermission &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('invitations')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
                       to={siteRoot + 'sys/invitations/'}
@@ -224,7 +224,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {otherPermission && enableTermsAndConditions &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('termsandconditions')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('termsandconditions')}`}
                       to={siteRoot + 'sys/terms-and-conditions/'}
@@ -236,7 +236,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {isPro && canViewAdminLog &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('adminLogs')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('adminLogs')}`}
                       to={siteRoot + 'sys/admin-logs/operation'}
@@ -248,7 +248,7 @@ class SidePanel extends React.Component {
                   </li>
                 }
                 {otherPermission && enableWorkWeixin &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('work-weixin')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('work-weixin')}`}
                       to={siteRoot + 'sys/work-weixin/'}
@@ -261,7 +261,7 @@ class SidePanel extends React.Component {
                 }
 
                 {otherPermission && enableDingtalk &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('dingtalk')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('dingtalk')}`}
                       to={siteRoot + 'sys/dingtalk/'}
@@ -274,7 +274,7 @@ class SidePanel extends React.Component {
                 }
 
                 {otherPermission && enableShareLinkReportAbuse &&
-                  <li className="nav-item">
+                  <li className={`nav-item ${this.getActiveClass('abuse-reports')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('abuse-reports')}`}
                       to={siteRoot + 'sys/abuse-reports/'}

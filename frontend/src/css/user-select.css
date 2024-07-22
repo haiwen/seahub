@@ -2,6 +2,39 @@
   font-size: 14px;
   font-weight: 500;
 }
+
 .user-option-email {
   font-size: 12px;
+}
+
+/* dropdown menu avatar is 24*24px, selection box avatar is 16*16px */
+.user-select .true__value-container .select-module.select-module-icon.avatar {
+  height: 16px;
+  width: 16px;
+}
+
+.user-select .true__value-container .true__multi-value__label {
+  padding: 0px;
+}
+
+.user-select .true__value-container .true__multi-value__label .select-module.select-module-icon.avatar {
+  transform: translateY(-2px);
+}
+
+.user-select .true__value-container .select-module.select-module-name {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1;
+  line-height: 20px;
+  margin-left: 5px;
+}
+
+.user-select .true__control.true__control--is-focused,
+.user-select .true__control.true__control--is-focused:hover {
+  background-color: #ffffff;
+  border-color: #1991eb;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
 }

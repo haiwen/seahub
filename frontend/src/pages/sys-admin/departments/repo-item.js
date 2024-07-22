@@ -42,7 +42,7 @@ class RepoItem extends React.Component {
         }
         <td>{Utils.bytesToSize(repo.size)}</td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+          <span className={`sf3-font-delete1 sf3-font action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
         </td>
       </tr>
     );

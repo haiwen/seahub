@@ -33,14 +33,14 @@ class Plans extends Component {
   }
 
   togglePlan = (plan) => {
-    this.setState({currentPlan: plan}, () => {
+    this.setState({ currentPlan: plan }, () => {
     });
   };
 
   onPay = () => {
     let { paymentType } = this.props;
     let { currentPlan, assetQuotaUnitCount, count } = this.state;
-    let totalAmount, assetQuota, newUserCount;
+    let totalAmount; let assetQuota; let newUserCount;
 
     // parse
     if (paymentType === 'paid') {
@@ -75,7 +75,7 @@ class Plans extends Component {
     } else if (count > 9999) {
       count = 9999;
     }
-    this.setState({count: count});
+    this.setState({ count: count });
   };
 
   onAssetQuotaUnitCountInputChange = (e) => {
@@ -89,7 +89,7 @@ class Plans extends Component {
     } else if (count > 9999) {
       count = 9999;
     }
-    this.setState({assetQuotaUnitCount: count});
+    this.setState({ assetQuotaUnitCount: count });
   };
 
   renderPaidOrExtendTime = () => {
@@ -158,7 +158,7 @@ class Plans extends Component {
               <span className='order-into'>{'实际支付金额'}</span>
               <span className='order-price'>
                 {originalTotalAmount !== totalAmount &&
-                  <span style={{fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a'}}>{'￥' + originalTotalAmount}</span>
+                  <span style={{ fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a' }}>{'￥' + originalTotalAmount}</span>
                 }
                 <span>{'￥' + totalAmount + ' '}</span>
               </span>
@@ -182,7 +182,7 @@ class Plans extends Component {
         <span className='py-2 mb-0 text-orange font-500 text-center'>
           {'¥ '}<span className="price-version-plan-price">{currentPlan.price}</span>{' ' + currentPlan.description}
         </span>
-        <InputGroup style={{marginBottom: '5px'}} className='user-numbers'>
+        <InputGroup style={{ marginBottom: '5px' }} className='user-numbers'>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>{operationIntro}</InputGroupText>
           </InputGroupAddon>
@@ -201,7 +201,7 @@ class Plans extends Component {
         <span className='py-2 text-orange mb-0 font-500 price-version-plan-whole-price text-center'>
           {'总价 ¥ ' + totalAmount}
           {originalTotalAmount !== totalAmount &&
-            <span style={{fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a'}}>{' ￥' + originalTotalAmount}</span>
+            <span style={{ fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a' }}>{' ￥' + originalTotalAmount}</span>
           }
         </span>
         <span className='py-2 mb-0 text-lg-size font-500 price-version-plan-valid-day text-center'>{'有效期至 ' + currentPlan.new_term_end}</span>
@@ -223,7 +223,7 @@ class Plans extends Component {
         <span className='py-2 mb-0 text-orange font-500 text-center'>
           {'¥ '}<span className="price-version-plan-price">{currentPlan.asset_quota_price}</span>{' ' + currentPlan.asset_quota_description}
         </span>
-        <InputGroup style={{marginBottom: '5px'}} className='space-quota'>
+        <InputGroup style={{ marginBottom: '5px' }} className='space-quota'>
           <InputGroupAddon addonType="prepend">
             <InputGroupText><span className="font-500">{operationIntro}</span></InputGroupText>
           </InputGroupAddon>
@@ -245,7 +245,7 @@ class Plans extends Component {
         <span className='py-4 text-orange mb-0 font-500 price-version-plan-whole-price text-center'>
           {'总价 ¥ ' + totalAmount}
           {originalTotalAmount !== totalAmount &&
-            <span style={{fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a'}}>{' ￥' + originalTotalAmount}</span>
+            <span style={{ fontSize: 'small', textDecoration: 'line-through', color: '#9a9a9a' }}>{' ￥' + originalTotalAmount}</span>
           }
         </span>
         <span className='py-2 mb-0 text-lg-size font-500 price-version-plan-valid-day text-center'>{'有效期至 ' + currentPlan.new_term_end}</span>
@@ -263,7 +263,7 @@ class Plans extends Component {
       return this.renderAddUser();
     } else if (paymentType === 'buy_quota') {
       return this.renderBuyQuota();
-    }  else {
+    } else {
       toaster.danger(gettext('Internal Server Error.'));
       return;
     }
@@ -333,7 +333,7 @@ class PlansDialog extends Component {
     const { isLoading, isWaiting, planList } = this.state;
     const { toggleDialog, paymentTypeTrans, paymentType } = this.props;
     const modalStyle = (paymentType === 'paid' || paymentType === 'extend_time') ?
-      {width: '560px', maxWidth: '560px'} : {width: '560px'};
+      { width: '560px', maxWidth: '560px' } : { width: '560px' };
 
     if (isLoading) {
       return (
@@ -494,7 +494,8 @@ class Subscription extends Component {
                 key={index}
                 className="btn btn-outline-primary mr-4"
                 onClick={this.togglePaymentType.bind(this, item)}
-              >{name}</button>
+              >{name}
+              </button>
             );
           })}
           {!this.state.subscription &&

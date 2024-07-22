@@ -34,11 +34,11 @@ class Item extends Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   onDeleteLink = (e) => {
@@ -60,7 +60,7 @@ class Item extends Component {
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
-    this.setState({isShowPermEditor: true});
+    this.setState({ isShowPermEditor: true });
   };
 
   render() {
@@ -86,7 +86,7 @@ class Item extends Component {
                   role="button"
                   aria-label={gettext('Edit')}
                   title={gettext('Edit')}
-                  className="fa fa-pencil-alt attr-action-icon"
+                  className="sf3-font sf3-font-rename attr-action-icon"
                   onClick={this.onEditPermission}>
                 </a>
               )}
@@ -157,7 +157,7 @@ class RepoShareAdminGroupShares extends Component {
       let items = this.state.items.filter(shareItem => {
         return shareItem.path + shareItem.share_to !== item.path + item.share_to;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       let message = gettext('Successfully deleted 1 item');
       toaster.success(message);
     }).catch((error) => {

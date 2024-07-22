@@ -28,7 +28,7 @@ class AboutDialog extends React.Component {
         <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
             <button type="button" className="close" onClick={toggleDialog}><span aria-hidden="true">×</span></button>
-            <div className="about-content" dangerouslySetInnerHTML={{__html: aboutDialogCustomHtml}}></div>
+            <div className="about-content" dangerouslySetInnerHTML={{ __html: aboutDialogCustomHtml }}></div>
           </ModalBody>
         </Modal>
       );

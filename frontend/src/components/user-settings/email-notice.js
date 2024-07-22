@@ -16,16 +16,16 @@ class EmailNotice extends React.Component {
 
     // interval: in seconds
     this.fileUpdatesOptions = [
-      {interval: 0, text: gettext('Don\'t send emails')},
-      {interval: 3600, text: gettext('Per hour')},
-      {interval: 14400, text: gettext('Per 4 hours')},
-      {interval: 86400, text: gettext('Per day')},
-      {interval: 604800, text: gettext('Per week')}
+      { interval: 0, text: gettext('Don\'t send emails') },
+      { interval: 3600, text: gettext('Per hour') },
+      { interval: 14400, text: gettext('Per 4 hours') },
+      { interval: 86400, text: gettext('Per day') },
+      { interval: 604800, text: gettext('Per week') }
     ];
 
     this.collaborateOptions = [
-      {interval: 0, text: gettext('Don\'t send emails')},
-      {interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not been read within one hour, they will be sent to your mailbox.') + ')'}
+      { interval: 0, text: gettext('Don\'t send emails') },
+      { interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not been read within one hour, they will be sent to your mailbox.') + ')' }
     ];
 
     this.state = {

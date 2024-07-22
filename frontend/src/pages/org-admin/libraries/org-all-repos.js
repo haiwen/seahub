@@ -26,11 +26,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPageList = () => {
@@ -64,14 +64,14 @@ class Content extends Component {
           <h2>{gettext('No libraries')}</h2>
         </EmptyTip>
       );
-      const initialSortIcon = <span className="fas fa-sort"></span>;
-      const sortIcon = <span className="fas fa-caret-down"></span>;
+      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
+      const sortIcon = <span className="sf3-font sf3-font-down"></span>;
       const table = (
         <Fragment>
           <table>
             <thead>
               <tr>
-                <th width="5%">{/*icon*/}</th>
+                <th width="5%">{/* icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">
                   {sortBy != undefined ?
@@ -84,7 +84,7 @@ class Content extends Component {
                 </th>
                 <th width="32%">ID</th>
                 <th width="18%">{gettext('Owner')}</th>
-                <th width="5%">{/*Operations*/}</th>
+                <th width="5%">{/* Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -182,7 +182,7 @@ class RepoItem extends React.Component {
   toggleOperationMenu = (e) => {
     e.stopPropagation();
     this.setState(
-      {isItemMenuShow: !this.state.isItemMenuShow }, () => {
+      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
         if (this.state.isItemMenuShow) {
           this.props.onFreezedItem();
         } else {
@@ -224,7 +224,7 @@ class RepoItem extends React.Component {
   };
 
   toggleTransfer = () => {
-    this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
+    this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
   };
 
   onTransferRepo = (user) => {
@@ -256,7 +256,7 @@ class RepoItem extends React.Component {
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
                 tag="a"
-                className="attr-action-icon fas fa-ellipsis-v"
+                className="attr-action-icon sf3-font sf3-font-more-vertical"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -302,7 +302,7 @@ class OrgAllRepos extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage, sortBy } = this.state;
     this.setState({
@@ -321,14 +321,14 @@ class OrgAllRepos extends Component {
         return new OrgAdminRepo(item);
       });
       let page_info = {};
-      if(res.data.page_info === undefined){
+      if (res.data.page_info === undefined) {
         let page = res.data.page;
         let has_next_page = res.data.page_next;
         page_info = {
           'current_page': page,
           'has_next_page': has_next_page
         };
-      }else{
+      } else {
         page_info = res.data.page_info;
       }
       this.setState({
@@ -385,7 +385,7 @@ class OrgAllRepos extends Component {
 
   transferRepoItem = (repoID, user) => {
     this.setState({
-      repos: this.state.repos.map(item =>{
+      repos: this.state.repos.map(item => {
         if (item.repoID == repoID) {
           item.ownerEmail = user.email;
           item.ownerName = user.value;

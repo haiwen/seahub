@@ -19,15 +19,15 @@ class CustomPermissionItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isShowOperations: true});
+    this.setState({ isShowOperations: true });
   };
 
   onMouseOver = () => {
-    this.setState({isShowOperations: true});
+    this.setState({ isShowOperations: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isShowOperations: false});
+    this.setState({ isShowOperations: false });
   };
 
   onEditCustomPermission = () => {
@@ -51,12 +51,12 @@ class CustomPermissionItem extends React.Component {
           {this.state.isShowOperations && (
             <Fragment>
               <OpIcon
-                className="fa fa-pencil-alt attr-action-icon"
+                className="sf3-font sf3-font-rename attr-action-icon"
                 title={gettext('Edit')}
                 op={this.onEditCustomPermission}
               />
               <OpIcon
-                className="fa fa-trash attr-action-icon"
+                className="sf3-font sf3-font-delete1 attr-action-icon"
                 title={gettext('Delete')}
                 op={this.onDeleteCustomPermission}
               />

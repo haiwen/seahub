@@ -28,7 +28,7 @@ class Item extends Component {
     let mdFile = this.props.item.text;
     processor.process(mdFile).then((result) => {
       let innerHtml = String(result);
-      this.setState({itemContent: innerHtml});
+      this.setState({ itemContent: innerHtml });
     });
   }
 
@@ -37,7 +37,7 @@ class Item extends Component {
       let mdFile = nextProps.item.text;
       processor.process(mdFile).then((result) => {
         let innerHtml = String(result);
-        this.setState({itemContent: innerHtml});
+        this.setState({ itemContent: innerHtml });
       });
     }
   }
@@ -61,19 +61,19 @@ class Item extends Component {
   };
 
   toggleUpdateDialog = (e) => {
-    this.setState({isUpdateDialogOpen: !this.state.isUpdateDialogOpen});
+    this.setState({ isUpdateDialogOpen: !this.state.isUpdateDialogOpen });
   };
 
   toggleDeleteDialog = (e) => {
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
   toggleTermsContentDialog = (e) => {
-    this.setState({isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen});
+    this.setState({ isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen });
   };
 
   onMenuItemClick = (operation) => {
-    switch(operation) {
+    switch (operation) {
       case 'Update':
         this.toggleUpdateDialog();
         break;
@@ -103,7 +103,7 @@ class Item extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Update':
         translateResult = gettext('Update');
         break;

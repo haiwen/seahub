@@ -17,7 +17,7 @@ class ButtonQR extends React.Component {
       isPopoverOpen: false
     };
 
-    this.btnID = 'btn-' + Math.random().toString().substr(2,5);
+    this.btnID = 'btn-' + Math.random().toString().substr(2, 5);
   }
 
   togglePopover = () => {
@@ -35,7 +35,7 @@ class ButtonQR extends React.Component {
         <Popover placement="bottom" isOpen={isPopoverOpen} target={this.btnID} toggle={this.togglePopover}>
           <PopoverBody>
             <QRCode value={link} size={128} />
-            <p className="m-0 mt-1 text-center" style={{'maxWidth': '128px'}}>{gettext('Scan the QR code to view the shared content directly')}</p>
+            <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
           </PopoverBody>
         </Popover>
       </div>

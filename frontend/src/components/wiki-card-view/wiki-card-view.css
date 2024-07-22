@@ -1,0 +1,132 @@
+.wiki-card-group .sf-heading {
+  margin: 16px 0 10px;
+}
+
+.wiki-card-group-items {
+  display: grid;
+  gap: 16px 16px;
+}
+
+.wiki-card-item {
+  height: 176px;
+  width: 100%;
+  box-shadow: 0 0 3px #0000001f;
+  padding: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.wiki-card-item:hover {
+  box-shadow: 0 0 6px #0000002e;
+}
+
+/* wiki-card-item-top */
+.wiki-card-item .wiki-card-item-top {
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+}
+
+.wiki-card-item .wiki-card-item-top .dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.wiki-card-item .wiki-card-item-top .sf3-font-wiki.sf3-font {
+  color: #FF9800;
+  font-size: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.wiki-card-item .wiki-card-item-top .wiki-item-name {
+  font-size: 16px;
+}
+
+.wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle {
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0;
+  color: #999;
+  margin-left: 20px;
+}
+
+.wiki-card-item.wiki-card-item-menu-open .wiki-card-item-top .dropdown .sf-dropdown-toggle,
+.wiki-card-item:hover .wiki-card-item-top .dropdown .sf-dropdown-toggle {
+  opacity: 1;
+}
+
+.wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle:hover {
+  color: #333;
+}
+
+/* wiki-item-name */
+.wiki-card-item .wiki-item-name {
+  padding-top: 8px;
+  margin-bottom: 38px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  height: 50px;
+}
+
+/* wiki-item-owner */
+.wiki-card-item .wiki-item-owner {
+  height: 16px;
+}
+
+.wiki-card-item .wiki-card-item-avatar-container {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 10px;
+  height: 16px;
+  max-width: 100%;
+}
+
+.wiki-card-item .wiki-card-item-avatar-container .wiki-card-item-avatar {
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+}
+
+.wiki-card-item .wiki-card-item-avatar-container .wiki-card-item-owner {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 20px;
+  margin-left: 5px;
+}
+
+.wiki-card-item .wiki-card-item-avatar-container .sf3-font-department {
+  font-size: 14px;
+  color: #999;
+}
+
+/* wiki-item-updated-time */
+.wiki-card-item .wiki-item-updated-time {
+  height: 20px;
+  font-size: 12px;
+  color: #666;
+  padding-top: 6px;
+}
+
+.wiki-card-item-add span:first-child {
+  color: #999;
+  line-height: 24px;
+  height: 24px;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.wiki-card-item-add span:last-child {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .wiki-card-item .wiki-card-item-top .dropdown .sf-dropdown-toggle {
+    border: none;
+    opacity: 1;
+  }
+}

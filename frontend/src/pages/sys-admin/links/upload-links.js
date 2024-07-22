@@ -50,7 +50,7 @@ class Content extends Component {
                 <th width="15%">{gettext('Created At')}</th>
                 <th width="10%">{gettext('Count')}</th>
                 <th width="11%">{gettext('Expiration')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="10%">{/* Operations*/}</th>
               </tr>
             </thead>
             {items &&
@@ -133,7 +133,7 @@ class Item extends Component {
   render() {
     let { isOpIconShown } = this.state;
     let { item } = this.props;
-    let deleteIcon = `action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`;
+    let deleteIcon = `action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`;
     return (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
@@ -207,7 +207,7 @@ class UploadLinks extends Component {
       let newUploadLinkList = this.state.uploadLinkList.filter(item =>
         item.token != linkToken
       );
-      this.setState({uploadLinkList: newUploadLinkList});
+      this.setState({ uploadLinkList: newUploadLinkList });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

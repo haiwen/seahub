@@ -103,7 +103,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       }, () => {
         if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
-          this.setState({isOperationShow: true});
+          this.setState({ isOperationShow: true });
         }
       });
     }
@@ -115,7 +115,7 @@ class DirentListItem extends React.Component {
     });
   };
 
-  //UI Interactive
+  // UI Interactive
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -124,7 +124,7 @@ class DirentListItem extends React.Component {
       });
     }
     if (this.state.canDrag) {
-      this.setState({isDragTipShow: true});
+      this.setState({ isDragTipShow: true });
     }
   };
 
@@ -136,7 +136,7 @@ class DirentListItem extends React.Component {
       });
     }
     if (this.state.canDrag) {
-      this.setState({isDragTipShow: true});
+      this.setState({ isDragTipShow: true });
     }
   };
 
@@ -147,7 +147,7 @@ class DirentListItem extends React.Component {
         isOperationShow: false,
       });
     }
-    this.setState({isDragTipShow: false});
+    this.setState({ isDragTipShow: false });
   };
 
   unfreezeItem = () => {
@@ -158,7 +158,7 @@ class DirentListItem extends React.Component {
     this.props.unfreezeItem();
   };
 
-  //buiness handler
+  // buiness handler
   onItemSelected = () => {
     this.props.onItemSelected(this.props.dirent);
   };
@@ -221,14 +221,14 @@ class DirentListItem extends React.Component {
 
   onItemDelete = (e) => {
     e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+    e.nativeEvent.stopImmediatePropagation(); // for document event
     this.props.onItemDelete(this.props.dirent);
   };
 
   onItemShare = (e) => {
     e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation(); //for document event
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    e.nativeEvent.stopImmediatePropagation(); // for document event
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   exportDocx = () => {
@@ -240,7 +240,7 @@ class DirentListItem extends React.Component {
   };
 
   closeSharedDialog = () => {
-    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onMobileMenuItemClick = (e) => {
@@ -249,7 +249,7 @@ class DirentListItem extends React.Component {
   };
 
   onMenuItemClick = (operation, event) => {
-    switch(operation) {
+    switch (operation) {
       case 'Download':
         this.onItemDownload(event);
         break;
@@ -319,9 +319,9 @@ class DirentListItem extends React.Component {
     }
   };
 
-  onItemConvert = (e, dstType)=> {
+  onItemConvert = (e, dstType) => {
     e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+    e.nativeEvent.stopImmediatePropagation(); // for document event
     this.props.onItemConvert(this.props.dirent, dstType);
   };
 
@@ -359,15 +359,15 @@ class DirentListItem extends React.Component {
   };
 
   onItemMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onItemCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onPermissionItem = () => {
-    this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
+    this.setState({ isPermissionDialogOpen: !this.state.isPermissionDialogOpen });
   };
 
   onLockItem = () => {
@@ -415,7 +415,7 @@ class DirentListItem extends React.Component {
   onHistory = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
-    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
+    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: repoID, filePath: filePath });
     location.href = url;
   };
 
@@ -428,11 +428,11 @@ class DirentListItem extends React.Component {
   onOpenViaClient = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
-    let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
+    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
     location.href = url;
   };
 
-  onConvertWithONLYOFFICE = ()=> {
+  onConvertWithONLYOFFICE = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
@@ -467,7 +467,7 @@ class DirentListItem extends React.Component {
         });
       }
     } else {
-      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+      let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
       location.href = url;
     }
   };
@@ -485,7 +485,7 @@ class DirentListItem extends React.Component {
 
   onTagTooltipToggle = (e) => {
     e.stopPropagation();
-    this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
+    this.setState({ isShowTagTooltip: !this.state.isShowTagTooltip });
   };
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
@@ -501,9 +501,9 @@ class DirentListItem extends React.Component {
     if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
       this.props.onShowDirentsDraggablePreview();
       e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0); // Show an empty content
-      let selectedList =  selectedDirentList.map(item => {
+      let selectedList = selectedDirentList.map(item => {
         let nodeRootPath = this.getDirentPath(item);
-        let dragStartItemData = {nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+        let dragStartItemData = { nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
         return dragStartItemData;
       });
       selectedList = JSON.stringify(selectedList);
@@ -516,7 +516,7 @@ class DirentListItem extends React.Component {
     }
 
     let nodeRootPath = this.getDirentPath(this.props.dirent);
-    let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath};
+    let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
@@ -528,7 +528,7 @@ class DirentListItem extends React.Component {
     }
     if (this.props.dirent.type === 'dir') {
       e.stopPropagation();
-      this.setState({isDropTipshow: true});
+      this.setState({ isDropTipshow: true });
     }
   };
 
@@ -551,14 +551,14 @@ class DirentListItem extends React.Component {
     if (this.props.dirent.type === 'dir') {
       e.stopPropagation();
     }
-    this.setState({isDropTipshow: false});
+    this.setState({ isDropTipshow: false });
   };
 
   onItemDragDrop = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
-    this.setState({isDropTipshow: false});
+    this.setState({ isDropTipshow: false });
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
@@ -569,14 +569,14 @@ class DirentListItem extends React.Component {
     }
     let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
-    if (Array.isArray(dragStartItemData)) { //move items
-      let direntPaths =  dragStartItemData.map(draggedItem => {
+    if (Array.isArray(dragStartItemData)) { // move items
+      let direntPaths = dragStartItemData.map(draggedItem => {
         return draggedItem.nodeRootPath;
       });
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
 
-      if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) { //eg; A/B, A/C --> A/B
+      if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) { // eg; A/B, A/C --> A/B
         return;
       }
 
@@ -634,17 +634,16 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
                 )}
                 {showShareBtn && (
-                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                  <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -658,17 +657,16 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
                 )}
                 {showShareBtn && (
-                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                  <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
                   item={this.props.dirent}
-                  toggleClass={'sf2-icon-caret-down'}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -697,12 +695,13 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
+    let isActive = (activeDirent && activeDirent.name === dirent.name) || dirent.isSelected;
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
-    trClass += (activeDirent && activeDirent.name === dirent.name)  ? 'tr-active' : '';
-    trClass += dirent.isSelected? 'tr-active' : '';
+    trClass += isActive ? 'tr-active' : '';
+    trClass += isActive ? 'tr-active' : '';
 
-    let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}'): gettext('locked by {name}');
+    let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
     const isDesktop = Utils.isDesktop();
@@ -727,12 +726,18 @@ class DirentListItem extends React.Component {
         onContextMenu={this.onItemContextMenu}
       >
         <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected} aria-label={dirent.isSelected ?gettext('Unselect this item') : gettext('Select this item')} />
+          <input
+            type="checkbox"
+            className="vam"
+            onChange={this.onItemSelected}
+            checked={isActive}
+            aria-label={isActive ? gettext('Unselect this item') : gettext('Select this item')}
+          />
         </td>
         <td className="pl10">
           {dirent.starred !== undefined &&
           <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
-            <i className={`fa-star ${dirent.starred ? 'fas' : 'far star-empty'}`}></i>
+            <i className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}></i>
           </a>
           }
         </td>
@@ -743,7 +748,7 @@ class DirentListItem extends React.Component {
               <img ref='drag_icon' src={iconUrl} width="24" alt='' />
             }
             {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-            <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
+            <div ref="empty_content" style={{ position: 'absolute', width: '1px', height: '1px' }}></div>
           </div>
         </td>
         <td className="name">
@@ -805,7 +810,7 @@ class DirentListItem extends React.Component {
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
-              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"

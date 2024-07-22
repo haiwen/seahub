@@ -26,7 +26,7 @@ class WebSettings extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetSysSettingInfo().then((res) => {
       this.setState({
         loading: false,
@@ -351,7 +351,8 @@ class WebSettings extends Component {
                   />
                 </Section>
 
-                {isPro && <Section headingText={gettext('Terms')}>
+                {isPro &&
+                <Section headingText={gettext('Terms')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
                     displayName='ENABLE_TERMS_AND_CONDITIONS'
@@ -359,7 +360,8 @@ class WebSettings extends Component {
                     value={config_dict['ENABLE_TERMS_AND_CONDITIONS']}
                     helpTip={gettext('Enable system admin to add Terms and Conditions, and all users will have to accept the terms.')}
                   />
-                </Section>}
+                </Section>
+                }
               </Fragment>
               }
             </div>

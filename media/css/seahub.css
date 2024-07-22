@@ -58,71 +58,6 @@
  *    sf-popover:  20
  *
  */
-
-/****** icon-xx ********/
-/* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
-@font-face {
-    font-family: 'FontAwesome';
-    src: url('font/fontawesome-webfont.eot?v=3.0.1');
-    src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
-    url('font/fontawesome-webfont.woff?v=3.0.1') format('woff'),
-    url('font/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-[class^="icon-"],
-[class*=" icon-"] {
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
-    -webkit-font-smoothing: antialiased;
-    vertical-align: baseline;
-    speak: none;
-}
-.icon-cloud-download:before       { content: "\f0ed"; }
-.icon-download:before             { content: "\f01a"; }
-.icon-trash:before                { content: "\f014"; }
-.icon-refresh:before              { content: "\f021"; }
-.icon-plus:before                 { content: "\f067"; }
-.icon-minus:before                { content: "\f068"; }
-.icon-pencil:before               { content: "\f040"; }
-.icon-remove:before               { content: "\f00d"; }
-.icon-star:before                 { content: "\f005"; }
-.icon-star-empty:before           { content: "\f006"; }
-.icon-upload:before               { content: "\f01b"; }
-.icon-upload-alt:before           { content: "\f093"; }
-.icon-ban-circle:before           { content: "\f05e"; }
-.icon-plus-sign-alt:before        { content: "\f0fe"; }
-.icon-double-angle-left:before    { content: "\f100"; }
-.icon-double-angle-right:before   { content: "\f101"; }
-.icon-double-angle-up:before      { content: "\f102"; }
-.icon-double-angle-down:before    { content: "\f103"; }
-.icon-zoom-in:before              { content: "\f00e"; }
-.icon-zoom-out:before             { content: "\f010"; }
-.icon-caret-down:before           { content: "\f0d7"; }
-.icon-caret-up:before             { content: "\f0d8"; }
-.icon-caret-left:before           { content: "\f0d9"; }
-.icon-caret-right:before          { content: "\f0da"; }
-.icon-search:before               { content: "\f002"; }
-.icon-move:before                 { content: "\f047"; }
-.icon-copy:before                 { content: "\f0c5"; }
-.icon-lightbulb:before            { content: "\f0eb"; }
-.icon-chevron-left:before         { content: "\f053"; }
-.icon-chevron-right:before        { content: "\f054"; }
-.icon-question-sign:before        { content: "\f059"; }
-.icon-building:before             { content: "\f0f7"; }
-.icon-phone:before                { content: "\f095"; }
-.icon-magic:before                { content: "\f0d0"; }
-.icon-eye:before                  { content: "\f06e"; }
-.icon-eye-slash:before            { content: "\f070"; }
-.icon-plus-square:before          { content: "\f0fe"; }
-.icon-envelope:before             { content: "\f0e0"; }
-.icon-ellipsis-vertical:before    { content: "\f142"; }
-.icon-building:before             { content: "\f0f7"; }
-.fa-1x {
-    font-size: 1.3em;
-}
 /****** sf2-icon-xx ********/
 @font-face {
     font-family: 'seafile-font2';
@@ -217,7 +152,7 @@ form,input,textarea,select,button,img {
 body, input, textarea, button, select {
     font-size: 13px;
     line-height: 1.5;
-    color: #333;
+    color: #212529;
     word-wrap:break-word;
 }
 input, button, select { line-height:19px;/*for ff*/ }
@@ -226,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 { font-size:1.9em; }
 h2 { font-size:1.5em; color:#222; font-weight:bold; }
-h3 { font-size:16px; color:#322; font-weight:normal;  }
+h3 { font-size:16px; color:#212529; font-weight:normal;  }
 h4 { font-size:1.1em; color:#222; font-weight:normal; }
 h5, h6 { font-size:1em; }
 ul { list-style:none; }
@@ -279,7 +214,7 @@ select {
 }
 .sf-btn-link {
     display:inline-block;
-    color:#333;
+    color:#212529;
     line-height:19px;
     text-decoration:none;
     font-weight:normal;
@@ -291,7 +226,7 @@ select {
     border-radius:3px;
 }
 .sf-btn-link:hover {
-    color:#333;
+    color:#212529;
     text-decoration:none;
 }
 input[type=radio] {
@@ -368,7 +303,7 @@ th, td {
     border-bottom:1px solid #eee;
 }
 td {
-    color: #333;
+    color: #212529;
     font-size:14px;
     word-break:break-all; /* mainly for lib/folder/file name */
 }
@@ -429,7 +364,7 @@ table img { vertical-align:middle; }
 .hl { background-color: #f8f8f8; } /* highlight */
 .tip { color:#808080; font-size:12px; }
 .tick-green { color:green; }
-.label { color:#333; font-size:12px; font-style:normal; }
+.label { color:#212529; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
 .cspt { cursor:pointer; }
@@ -831,7 +766,7 @@ textarea:-moz-placeholder {/* for FF */
     display:block;
     font-size:15px;
     padding:4px 4px 4px 0;
-    color:#333;
+    color:#212529;
     font-weight:normal;
 }
 .side-tabnav-tabs .tab a:focus {
@@ -1135,7 +1070,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:40px 200px 40px 60px;
     font-size:14px;
     line-height:1.6;
-    color:#333;
+    color:#212529;
 }
 .article h2,
 .article h3,
@@ -1143,7 +1078,7 @@ textarea:-moz-placeholder {/* for FF */
 .article h5,
 .article h6 {
     margin: 1.2em 0 0.4em;
-    color:#333;
+    color:#212529;
     font-weight:bold;
 }
 .article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p,
@@ -1252,18 +1187,16 @@ a.sf-popover-item {
     margin:5px -10px;
 }
 /********** Container ***********/
-#wrapper {
-}
 #header {
-    background:#f4f4f7;
-    width:100%;
-    height:53px;
+    background-color: #f8fafd;
+    border-bottom: 1px solid #eee;
+    z-index: 100;
+    width: 100%;
+    height: 49px;
     font-size: 14px;
-    border-bottom: 1px solid #e8e8e8;
-    padding:8px 16px 4px;
-    /*display:flex;*/
-    justify-content:space-between;
-    flex-shrink:0;
+    padding: .5rem 1rem;
+    justify-content: space-between;
+    flex-shrink: 0;
 }
 #wide-panel-noframe {
     padding-top:16px;
@@ -1312,7 +1245,7 @@ a.sf-popover-item {
 .wiki-nav .link {
     display:inline-block;
     font-size:15px;
-    color:#333;
+    color:#212529;
     line-height:1.5;
     font-weight:normal;
     padding: 4px 10px 9px;
@@ -1419,7 +1352,7 @@ a.sf-popover-item {
     border-bottom:1px solid #ddd;
 }
 .account-popup a.item {
-    color:#333;
+    color:#212529;
     font-weight:normal;
 }
 .account-popup a.item:hover {
@@ -1464,9 +1397,9 @@ a.sf-popover-item {
 /*** separate pages ***/
 /* login */
 #lang {
-    font-weight:normal;
-    font-size:13px;
-    margin-top:12px;
+    font-weight: normal;
+    font-size: 13px;
+    margin-top: 12px;
 }
 #lang-context:hover {
     text-decoration:none;
@@ -1528,8 +1461,9 @@ a.sf-popover-item {
     font-size: 13px;
 }
 #toggle-show-password {
+    height: 40px;
+    line-height: 40px;
     position: absolute;
-    top: 13px;
     right: 10px;
     cursor: pointer;
     color: #999;
@@ -1606,7 +1540,7 @@ a.sf-popover-item {
     color:#888;
 }
 #traffic-stat {
-    color: #333;
+    color: #212529;
     font-weight: normal;
 }
 #notices-loading,
@@ -1653,7 +1587,7 @@ a.sf-popover-item {
     margin-left:5px;
 }
 .commit-time {
-    color:#333;
+    color:#212529;
     font-size:13px;
     font-weight:normal;
     margin-top: 0em;
@@ -1673,7 +1607,7 @@ a.sf-popover-item {
 }
 .fileinput-button .icon-plus {
     font-size:13px;
-    color:#333;
+    color:#212529;
 }
 .fileinput-button input {
     position: absolute;

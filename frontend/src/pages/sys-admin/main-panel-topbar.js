@@ -19,7 +19,8 @@ class MainPanelTopbar extends Component {
             className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none"
             title={gettext('Side Nav Menu')}
             onClick={this.props.toggleSidePanel}
-          ></span>
+          >
+          </span>
           <div className="operation">
             {this.props.children}
           </div>

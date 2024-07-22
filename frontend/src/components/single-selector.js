@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import '../css/single-selector.css';
 
 const propTypes = {
-  isDropdownToggleShown: PropTypes.bool.isRequired,
+  customSelectorToggle: PropTypes.object,
+  menuCustomClass: PropTypes.string,
+  isDropdownToggleShown: PropTypes.bool,
   currentSelectedOption: PropTypes.object,
   options: PropTypes.array.isRequired,
   selectOption: PropTypes.func.isRequired,
@@ -63,21 +65,27 @@ class Selector extends Component {
 
   render() {
     const { isPopoverOpen } = this.state;
-    const { currentSelectedOption, options, isDropdownToggleShown } = this.props;
+    const { currentSelectedOption, options, isDropdownToggleShown, menuCustomClass = '',
+      customSelectorToggle = null
+    } = this.props;
     return (
       <div className="sf-single-selector position-relative">
-        <span className="cur-option" onClick={this.onToggleClick}>
-          {currentSelectedOption ? currentSelectedOption.text : ''}
-          {isDropdownToggleShown && <i className="fas fa-caret-down ml-2 toggle-icon"></i>}
-        </span>
+        <div onClick={this.onToggleClick}>
+          {customSelectorToggle ? customSelectorToggle : (
+            <span className="cur-option">
+              {currentSelectedOption.text}
+              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>}
+            </span>
+          )}
+        </div>
         {isPopoverOpen && (
-          <div className="options-container position-absolute rounded shadow mt-1" ref={ref => this.selector = ref}>
+          <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
             <ul className="option-list list-unstyled py-3 o-auto">
               {options.map((item, index) => {
                 return (
                   <li key={index} className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center" onClick={(e) => {this.selectItem(e, item);}}>
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
-                    <i className={`sf2-icon-tick text-gray font-weight-bold ${item.isSelected ? '' : 'invisible'}`}></i>
+                    <i className={`sf2-icon-tick ${item.isSelected ? '' : 'invisible'}`}></i>
                   </li>
                 );
               })}

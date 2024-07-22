@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import json
 import logging
+import requests
+import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -19,11 +21,12 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
 from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
-from seahub.utils import is_org_context, get_user_repos
+from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.views import check_folder_permission
 from seahub.share.utils import is_repo_admin
 from seahub.share.models import FileShare
+
 
 logger = logging.getLogger(__name__)
 
@@ -150,30 +153,31 @@ class WikiView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def delete(self, request, slug):
+    def delete(self, request, wiki_id):
         """Delete a wiki.
         """
         username = request.user.username
         try:
-            owner = Wiki.objects.get(slug=slug).username
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = 'Wiki not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        owner = wiki.username
         if owner != username:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        Wiki.objects.filter(slug=slug).delete()
+        wiki.delete()
 
         return Response()
 
-    def put(self, request, slug):
+    def put(self, request, wiki_id):
         """Edit a wiki permission
         """
         username = request.user.username
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -191,13 +195,13 @@ class WikiView(APIView):
         wiki.save()
         return Response(wiki.to_dict())
 
-    def post(self, request, slug):
+    def post(self, request, wiki_id):
         """Rename a Wiki
         """
         username = request.user.username
 
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = _("Wiki not found.")
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)

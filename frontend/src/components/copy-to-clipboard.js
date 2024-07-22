@@ -1,7 +1,7 @@
 import deselectCurrent from 'toggle-selection';
 
 function copy(text) {
-  let reselectPrevious, range, selection, mark, success = false;
+  let reselectPrevious; let range; let selection; let mark; let success = false;
   try {
     reselectPrevious = deselectCurrent();
 
@@ -19,7 +19,7 @@ function copy(text) {
 
     const successful = document.execCommand('copy');
     if (!successful) {
-      //console.log('copy command was unsuccessful');
+      // console.log('copy command was unsuccessful');
     }
     success = true;
   } catch (err) {

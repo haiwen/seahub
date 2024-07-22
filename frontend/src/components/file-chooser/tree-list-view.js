@@ -16,8 +16,8 @@ const propTypes = {
 class TreeListView extends React.Component {
 
   render() {
-    return(
-      <div className="list-view-content" style={{'marginLeft': '-1.5rem'}}>
+    return (
+      <div className="list-view-content" style={{ 'marginLeft': '-1.5rem' }}>
         <TreeListItem
           node={this.props.treeData.root}
           onNodeCollapse={this.props.onNodeCollapse}

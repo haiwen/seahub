@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirColumnFile from './dir-column-file';
 import DirListView from './dir-list-view';
+import DirGridView from './dir-grid-view';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
+import ResizeBar from '../resize-bar';
+import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 
 const propTypes = {
+  isSidePanelFolded: PropTypes.bool,
+  isTreePanelShown: PropTypes.bool.isRequired,
+  currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   // repoinfo
@@ -30,6 +37,7 @@ const propTypes = {
   hash: PropTypes.string,
   filePermission: PropTypes.string,
   content: PropTypes.string,
+  metadataViewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -64,7 +72,8 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
-  onItemsScroll: PropTypes.func.isRequired
+  onItemsScroll: PropTypes.func.isRequired,
+  isDirentDetailShow: PropTypes.bool.isRequired
 };
 
 class DirColumnView extends React.Component {
@@ -73,9 +82,13 @@ class DirColumnView extends React.Component {
     super(props);
     this.state = {
       inResizing: false,
-      navRate: 0.25,
+      navRate: parseFloat(localStorage.getItem('sf_dir_content_nav_rate') || 0.25),
     };
     this.containerWidth = null;
+    this.resizeBarRef = React.createRef();
+    this.dragHandlerRef = React.createRef();
+    this.viewModeContainer = React.createRef();
+    this.dirContentMain = React.createRef();
   }
 
   onResizeMouseUp = () => {
@@ -84,94 +97,93 @@ class DirColumnView extends React.Component {
         inResizing: false
       });
     }
-    this.setCookie('navRate', this.state.navRate);
+    localStorage.setItem('sf_dir_content_nav_rate', this.state.navRate);
   };
 
   onResizeMouseDown = () => {
-    this.containerWidth = this.refs.viewModeContainer.clientWidth;
+    this.containerWidth = this.viewModeContainer.current.clientWidth;
     this.setState({
       inResizing: true
     });
   };
 
   onResizeMouseMove = (e) => {
-    let sizeNavWidth = this.containerWidth / 0.78 * 0.22 + 3;
+    const { isSidePanelFolded } = this.props;
+    let sizeNavWidth = isSidePanelFolded ? SIDE_PANEL_FOLDED_WIDTH + 3 : window.innerWidth - this.containerWidth;
     let rate = (e.nativeEvent.clientX - sizeNavWidth) / this.containerWidth;
-    if (rate < 0.1) {
-      this.setState({
-        inResizing: false,
-        navRate: 0.12,
-      });
-    }
-    else if (rate > 0.4) {
-      this.setState({
-        inResizing: false,
-        navRate: 0.38,
-      });
-    }
-    else {
-      this.setState({
-        navRate: rate
-      });
-    }
+    this.setState({
+      navRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+    });
   };
 
-  setCookie = (name, value) => {
-    let cookie = name + '=' + value + ';';
-    document.cookie = cookie;
+  onResizeMouseOver = (event) => {
+    if (!this.dragHandlerRef.current) return;
+    const { top } = this.resizeBarRef.current.getBoundingClientRect();
+    const dragHandlerRefTop = event.pageY - top - DRAG_HANDLER_HEIGHT / 2;
+    this.setDragHandlerTop(dragHandlerRefTop);
   };
 
-  getCookie = (cookiename) => {
-    let name = cookiename + '=';
-    let cookie = document.cookie.split(';');
-    for (let i = 0, len = cookie.length; i < len; i++) {
-      let c = cookie[i].trim();
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length) * 1;
-      }
-    }
-    return '';
+  setDragHandlerTop = (top) => {
+    this.dragHandlerRef.current.style.top = top + 'px';
   };
 
-  UNSAFE_componentWillMount() {
-    let rate = this.getCookie('navRate');
-    if (rate) {
-      this.setState({
-        navRate: rate,
-      });
-    }
-  }
+  getMenuContainerSize = () => {
+    return window.getComputedStyle(this.viewModeContainer.current);
+  };
 
   render() {
-    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
-    const select = this.state.inResizing ? 'none' : '';
-    const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
+    const { currentMode, isTreePanelShown } = this.props;
+    const { navRate, inResizing } = this.state;
+    const onResizeMove = inResizing ? this.onResizeMouseMove : null;
+    const select = inResizing ? 'none' : '';
+    const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
-      <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
-        <DirColumnNav
-          currentPath={this.props.path}
-          userPerm={this.props.userPerm}
-          isTreeDataLoading={this.props.isTreeDataLoading}
-          treeData={this.props.treeData}
-          currentNode={this.props.currentNode}
-          onNodeClick={this.props.onNodeClick}
-          onNodeCollapse={this.props.onNodeCollapse}
-          onNodeExpanded={this.props.onNodeExpanded}
-          onAddFolderNode={this.props.onAddFolderNode}
-          onAddFileNode={this.props.onAddFileNode}
-          onRenameNode={this.props.onRenameNode}
-          onDeleteNode={this.props.onDeleteNode}
-          repoID={this.props.repoID}
-          navRate={this.state.navRate}
-          inResizing={this.state.inResizing}
-          currentRepoInfo={this.props.currentRepoInfo}
-          onItemMove={this.props.onItemMove}
-          onItemCopy={this.props.onItemCopy}
-          selectedDirentList={this.props.selectedDirentList}
-          onItemsMove={this.props.onItemsMove}
-        />
-        <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
-        <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}} onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}>
+      <div
+        className="dir-column-view"
+        onMouseMove={onResizeMove}
+        onMouseUp={this.onResizeMouseUp}
+        ref={this.viewModeContainer}
+      >
+        {isTreePanelShown && (
+          <>
+            <DirColumnNav
+              currentPath={this.props.path}
+              userPerm={this.props.userPerm}
+              isTreeDataLoading={this.props.isTreeDataLoading}
+              treeData={this.props.treeData}
+              currentNode={this.props.currentNode}
+              onNodeClick={this.props.onNodeClick}
+              onNodeCollapse={this.props.onNodeCollapse}
+              onNodeExpanded={this.props.onNodeExpanded}
+              onAddFolderNode={this.props.onAddFolderNode}
+              onAddFileNode={this.props.onAddFileNode}
+              onRenameNode={this.props.onRenameNode}
+              onDeleteNode={this.props.onDeleteNode}
+              repoID={this.props.repoID}
+              navRate={navRate}
+              inResizing={inResizing}
+              currentRepoInfo={this.props.currentRepoInfo}
+              onItemMove={this.props.onItemMove}
+              onItemCopy={this.props.onItemCopy}
+              selectedDirentList={this.props.selectedDirentList}
+              onItemsMove={this.props.onItemsMove}
+              getMenuContainerSize={this.getMenuContainerSize}
+            />
+            <ResizeBar
+              resizeBarRef={this.resizeBarRef}
+              dragHandlerRef={this.dragHandlerRef}
+              resizeBarStyle={{ left: `calc(${navRate ? navRate * 100 + '%' : '25%'} - 1px)` }}
+              dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+              onResizeMouseDown={this.onResizeMouseDown}
+              onResizeMouseOver={this.onResizeMouseOver}
+            />
+          </>
+        )}
+        <div
+          className="dir-content-main" style={{ userSelect: select, flex: mainFlex }}
+          onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
+          ref={this.dirContentMain}
+        >
           {this.props.isViewFile ? (
             <DirColumnFile
               path={this.props.path}
@@ -181,11 +193,13 @@ class DirColumnView extends React.Component {
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
               content={this.props.content}
+              metadataViewId={this.props.metadataViewId}
+              currentRepoInfo={this.props.currentRepoInfo}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}
             />
-          ) : (
+          ) : (currentMode == 'list' ?
             <DirListView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -222,6 +236,37 @@ class DirColumnView extends React.Component {
               repoTags={this.props.repoTags}
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
+              getMenuContainerSize={this.getMenuContainerSize}
+            /> :
+            <DirGridView
+              path={this.props.path}
+              repoID={this.props.repoID}
+              currentRepoInfo={this.props.currentRepoInfo}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+              userPerm={this.props.userPerm}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              onRenameNode={this.props.onRenameNode}
+              isRepoInfoBarShow={this.props.isRepoInfoBarShow}
+              repoTags={this.props.repoTags}
+              usedRepoTags={this.props.usedRepoTags}
+              updateUsedRepoTags={this.props.updateUsedRepoTags}
+              isDirentListLoading={this.props.isDirentListLoading}
+              direntList={this.props.direntList}
+              fullDirentList={this.props.fullDirentList}
+              onAddFile={this.props.onAddFile}
+              onItemClick={this.props.onItemClick}
+              onItemDelete={this.props.onItemDelete}
+              onItemMove={this.props.onItemMove}
+              onItemCopy={this.props.onItemCopy}
+              onItemConvert={this.props.onItemConvert}
+              updateDirent={this.props.updateDirent}
+              onAddFolder={this.props.onAddFolder}
+              showDirentDetail={this.props.showDirentDetail}
+              onGridItemClick={this.props.onDirentClick}
+              isDirentDetailShow={this.props.isDirentDetailShow}
+              onItemRename={this.props.onItemRename}
+              onFileTagChanged={this.props.onFileTagChanged}
+              getMenuContainerSize={this.getMenuContainerSize}
             />
           )}
         </div>

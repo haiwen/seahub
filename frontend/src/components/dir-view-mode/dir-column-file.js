@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
 const propTypes = {
@@ -12,9 +13,11 @@ const propTypes = {
   isFileLoadedErr: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
+  metadataViewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
+  currentRepoInfo: PropTypes.object,
 };
 
 class DirColumnFile extends React.Component {
@@ -22,7 +25,7 @@ class DirColumnFile extends React.Component {
   componentDidMount() {
     if (this.props.hash) {
       let hash = this.props.hash;
-      setTimeout(function() {
+      setTimeout(function () {
         window.location.hash = hash;
       }, 500);
     }
@@ -48,6 +51,18 @@ class DirColumnFile extends React.Component {
         <div className="message err-tip">{gettext('File does not exist.')}</div>
       );
     }
+
+    if (this.props.content === '__sf-metadata') {
+      const { repoID, currentRepoInfo, metadataViewId } = this.props;
+      window.sfMetadata = {
+        siteRoot,
+        lang,
+        mediaUrl,
+      };
+
+      return (<SeafileMetadata repoID={repoID} currentRepoInfo={currentRepoInfo} viewID={metadataViewId} />);
+    }
+
     return (
       <SeafileMarkdownViewer
         isTOCShow={false}
@@ -59,11 +74,9 @@ class DirColumnFile extends React.Component {
         repoID={this.props.repoID}
         path={this.props.path}
       >
-        <Fragment>
-          <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
-            <i className="fas fa-expand-arrows-alt"></i>
-          </span>
-        </Fragment>
+        <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
+          <i className="sf3-font sf3-font-expand-arrows-alt"></i>
+        </span>
       </SeafileMarkdownViewer>
     );
   }

@@ -36,11 +36,11 @@ class WikiPagesDirView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, slug):
+    def get(self, request, wiki_id):
         """List all dir files in a wiki.
         """
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -105,12 +105,12 @@ class WikiPageContentView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, slug):
+    def get(self, request, wiki_id):
         """Get content of a wiki
         """
         path = request.GET.get('p', '/')
         try:
-            wiki = Wiki.objects.get(slug=slug)
+            wiki = Wiki.objects.get(id=wiki_id)
         except Wiki.DoesNotExist:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)

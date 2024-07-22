@@ -61,7 +61,7 @@ class RepoAPITokenPermissionEditor extends React.Component {
           <Fragment>
             <span>{optionTranslation}</span>
             {this.props.isEditIconShow &&
-              <OpIcon title={gettext('Edit')} className="fa fa-pencil-alt attr-action-icon" op={this.onEditPermission} />
+              <OpIcon title={gettext('Edit')} className="sf3-font sf3-font-rename attr-action-icon" op={this.onEditPermission} />
             }
           </Fragment>
           :

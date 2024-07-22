@@ -17,8 +17,7 @@ class SearchResultItem extends React.Component {
   };
 
   onClickHandler = () => {
-    var item = this.props.item;
-    this.props.onItemClickHandler(item);
+    this.props.onItemClickHandler(this.props.item);
   };
 
   render() {
@@ -28,14 +27,13 @@ class SearchResultItem extends React.Component {
     let showName = item.repo_name + '/' + item.link_content;
     showName = showName.endsWith('/') ? showName.slice(0, showName.length - 1) : showName;
 
-
     if (item.thumbnail_url) {
       fileIconUrl = item.thumbnail_url;
     }
 
     return (
       <li
-        className={classnames('search-result-item', {'search-result-item-highlight': this.props.isHighlight })}
+        className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
         ref={ref => this.props.setRef(ref)}
       >
@@ -43,7 +41,7 @@ class SearchResultItem extends React.Component {
         <div className="item-content">
           <div className="item-name ellipsis">{item.name}</div>
           <div className="item-link ellipsis">{showName}</div>
-          <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></div>
+          <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
       </li>
     );

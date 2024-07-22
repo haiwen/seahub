@@ -40,7 +40,7 @@ class SearchInput extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.value !== this.props.value) {
-      this.setState({searchValue: nextProps.value});
+      this.setState({ searchValue: nextProps.value });
     }
   }
 
@@ -58,7 +58,7 @@ class SearchInput extends Component {
     this.timer && clearTimeout(this.timer);
     const { onChange, wait } = this.props;
     let text = e.target.value;
-    this.setState({searchValue: text || ''}, () => {
+    this.setState({ searchValue: text || '' }, () => {
       if (this.isInputtingChinese) return;
       this.timer = setTimeout(() => {
         onChange && onChange(this.state.searchValue.trim());
@@ -73,7 +73,7 @@ class SearchInput extends Component {
 
   clearSearch = () => {
     const { clearValue } = this.props;
-    this.setState({searchValue: ''}, () => {
+    this.setState({ searchValue: '' }, () => {
       clearValue && clearValue();
     });
   };
@@ -98,7 +98,7 @@ class SearchInput extends Component {
     if (!isClearable || !searchValue) return null;
     const { ClearIndicator } = components;
     if (React.isValidElement(ClearIndicator)) {
-      return React.cloneElement(ClearIndicator, {clearValue: this.clearSearch});
+      return React.cloneElement(ClearIndicator, { clearValue: this.clearSearch });
     } else if (this.isFunction(ClearIndicator)) {
       return <ClearIndicator clearValue={this.clearSearch} />;
     }

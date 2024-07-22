@@ -1,0 +1,11 @@
+.metadata-status-management-dialog .change-metadata-status-management {
+  margin-bottom: 10px;
+}
+
+.metadata-status-management-dialog .change-metadata-status-management .custom-switch {
+  padding-left: 0;
+}
+
+.metadata-status-management-dialog .tip {
+  font-size: 12px;
+}

@@ -60,7 +60,7 @@ class DepartmentMembers extends React.Component {
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      this.setState({membersErrorMsg: errMessage});
+      this.setState({ membersErrorMsg: errMessage });
     });
   };
 

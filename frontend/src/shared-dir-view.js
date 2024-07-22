@@ -30,7 +30,7 @@ let {
   repoID, relativePath,
   mode, thumbnailSize, zipped,
   trafficOverLimit, canDownload,
-  noQuota, canUpload, enableVideoThumbnail
+  noQuota, canUpload, enableVideoThumbnail, enablePDFThumbnail
 } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
@@ -111,7 +111,8 @@ class SharedDirView extends React.Component {
     let items = this.state.items.filter((item) => {
       return !item.is_dir &&
         (Utils.imageCheck(item.file_name) ||
-        (enableVideoThumbnail && Utils.videoCheck(item.file_name))) &&
+        (enableVideoThumbnail && Utils.videoCheck(item.file_name)) ||
+        (enablePDFThumbnail && Utils.pdfCheck(item.file_name))) &&
         !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
@@ -120,7 +121,7 @@ class SharedDirView extends React.Component {
 
     const len = items.length;
     const _this = this;
-    let getThumbnail = function(i) {
+    let getThumbnail = function (i) {
       const curItem = items[i];
       seafileAPI.getShareLinkThumbnail(token, curItem.file_path, thumbnailSize).then((res) => {
         curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
@@ -230,10 +231,10 @@ class SharedDirView extends React.Component {
         return;
       }
       // init state: total is 0
-      let asyncOperationProgress = !data.total ? 0 : parseInt((data.done/data.total * 100).toFixed(2));
+      let asyncOperationProgress = !data.total ? 0 : parseInt((data.done / data.total * 100).toFixed(2));
 
       this.getAsyncCopyMoveProgress();
-      this.setState({asyncOperationProgress: asyncOperationProgress});
+      this.setState({ asyncOperationProgress: asyncOperationProgress });
     } catch (error) {
       this.setState({
         asyncOperationProgress: 0,
@@ -281,7 +282,7 @@ class SharedDirView extends React.Component {
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
-      this.setState({errMessage: errMessage});
+      this.setState({ errMessage: errMessage });
     });
   };
 
@@ -406,7 +407,7 @@ class SharedDirView extends React.Component {
     // put the new file as the first file
     let items = Array.from(this.state.items);
     items.splice(folderItems.length, 0, newItem);
-    this.setState({items: items});
+    this.setState({ items: items });
     seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
   };
 
@@ -419,9 +420,9 @@ class SharedDirView extends React.Component {
           usedRepoTags.push(usedRepoTag);
         }
       });
-      this.setState({usedRepoTags: usedRepoTags});
+      this.setState({ usedRepoTags: usedRepoTags });
       if (usedRepoTags.length != 0 && relativePath == '/') {
-        this.setState({isRepoInfoBarShow: true});
+        this.setState({ isRepoInfoBarShow: true });
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -455,20 +456,23 @@ class SharedDirView extends React.Component {
                       className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`}
                       title={gettext('List')}
                       aria-label={gettext('List')}
-                    ></a>
+                    >
+                    </a>
                     <a
                       href={`?p=${encodeURIComponent(relativePath)}&mode=grid`}
                       className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`}
                       title={gettext('Grid')}
                       aria-label={gettext('Grid')}
-                    ></a>
+                    >
+                    </a>
                   </div>
                   }
                   {canUpload && (
                     <Button disabled={noQuota}
                       title={noQuota ? gettext('The owner of this library has run out of space.') : ''}
                       onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn"
-                    >{gettext('Upload')}</Button>
+                    >{gettext('Upload')}
+                    </Button>
                   )}
                   {showDownloadIcon &&
                   <Fragment>
@@ -647,7 +651,7 @@ class Content extends React.Component {
       );
     }
 
-    const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+    const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
     return mode == 'list' ? (
       <table className="table-hover">
         <thead>
@@ -708,15 +712,15 @@ class Item extends React.Component {
   }
 
   toggleOpMenu = () => {
-    this.setState({isOpMenuOpen: !this.state.isOpMenuOpen});
+    this.setState({ isOpMenuOpen: !this.state.isOpMenuOpen });
   };
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   zipDownloadFolder = (e) => {
@@ -784,7 +788,7 @@ class Item extends React.Component {
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
               <DropdownToggle
                 tag="i"
-                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -827,7 +831,7 @@ class Item extends React.Component {
                   {item.file_tags.map((fileTag, index) => {
                     let length = item.file_tags.length;
                     return (
-                      <span className="file-tag" key={fileTag.file_tag_id} style={{zIndex:length - index, backgroundColor:fileTag.tag_color}}></span>
+                      <span className="file-tag" key={fileTag.file_tag_id} style={{ zIndex: length - index, backgroundColor: fileTag.tag_color }}></span>
                     );
                   })}
                 </div>
@@ -864,7 +868,7 @@ class Item extends React.Component {
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
               <DropdownToggle
                 tag="i"
-                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -907,11 +911,11 @@ class GridItem extends React.Component {
   }
 
   handleMouseOver = () => {
-    this.setState({isIconShown: true});
+    this.setState({ isIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isIconShown: false});
+    this.setState({ isIconShown: false });
   };
 
   zipDownloadFolder = (e) => {

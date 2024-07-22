@@ -22,19 +22,19 @@ class UserItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({isOperationShow: true});
+    this.setState({ isOperationShow: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOperationShow: false});
+    this.setState({ isOperationShow: false });
   };
 
   userAvatarOnMouseEnter = () => {
-    this.setState({isUserDetailsPopoverOpen: true});
+    this.setState({ isUserDetailsPopoverOpen: true });
   };
 
   userAvatarOnMouseLeave = () => {
-    this.setState({isUserDetailsPopoverOpen: false});
+    this.setState({ isUserDetailsPopoverOpen: false });
   };
 
   deleteShareItem = () => {
@@ -55,11 +55,14 @@ class UserItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
           <div className="position-relative">
-            <img src={item.user_info.avatar_url}
-              width="24" alt={item.user_info.nickname}
+            <img
+              src={item.user_info.avatar_url}
+              width="24"
+              alt={item.user_info.nickname}
               className="rounded-circle mr-2 cursor-pointer"
               onMouseEnter={this.userAvatarOnMouseEnter}
-              onMouseLeave={this.userAvatarOnMouseLeave} />
+              onMouseLeave={this.userAvatarOnMouseLeave}
+            />
             <span>{item.user_info.nickname}</span>
             {isUserDetailsPopoverOpen && (
               <div className="user-details-popover p-4 position-absolute w-100 mt-1">
@@ -180,7 +183,7 @@ class ShareToUser extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
+    this.setState({ selectedOption: option });
     this.options = [];
   };
 
@@ -188,8 +191,8 @@ class ShareToUser extends React.Component {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
-      if(res.data.length !== 0) {
-        this.setState({sharedItems: res.data});
+      if (res.data.length !== 0) {
+        this.setState({ sharedItems: res.data });
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -198,7 +201,7 @@ class ShareToUser extends React.Component {
   }
 
   setPermission = (permission) => {
-    this.setState({permission: permission});
+    this.setState({ permission: permission });
   };
 
   shareToUser = () => {
@@ -221,7 +224,7 @@ class ShareToUser extends React.Component {
         // todo modify api
         let items = res.data.success.map(item => {
           let sharedItem = {
-            'user_info': { 'nickname': item.user_name, 'name': item.user_email},
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email },
             'permission': item.permission,
             'share_type': 'user',
           };
@@ -329,7 +332,7 @@ class ShareToUser extends React.Component {
       }
       return sharedItem;
     });
-    this.setState({sharedItems: sharedItems});
+    this.setState({ sharedItems: sharedItems });
   };
 
   render() {
@@ -353,7 +356,6 @@ class ShareToUser extends React.Component {
                 <UserSelect
                   ref="userSelect"
                   isMulti={true}
-                  className="reviewer-select"
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
                 />
@@ -371,7 +373,7 @@ class ShareToUser extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.shareToUser}>{gettext('Submit')}</Button>
+                <Button color="primary" onClick={this.shareToUser}>{gettext('Submit')}</Button>
               </td>
             </tr>
             {this.state.errorMsg.length > 0 &&

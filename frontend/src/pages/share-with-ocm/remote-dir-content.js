@@ -36,7 +36,7 @@ class DirentItem extends React.Component {
     this.props.downloadDirent(this.props.dirent);
   };
 
-  render () {
+  render() {
     let { isOpIconShown } = this.state;
     let { dirent } = this.props;
     let iconUrl = Utils.getDirentIcon(dirent);
@@ -53,7 +53,7 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && dirent.is_file &&
-            <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.downloadDirent}></a>
+            <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></a>
             }
           </td>
           <td>{Utils.bytesToSize(dirent.size)}</td>
@@ -93,9 +93,9 @@ class DirContent extends React.Component {
         <table className="table-hover">
           <thead>
             <tr>
-              <th width="5%">{/*icon*/}</th>
+              <th width="5%">{/* icon*/}</th>
               <th width="55%">{gettext('Name')}</th>
-              <th width="10%">{/*operation*/}</th>
+              <th width="10%">{/* operation*/}</th>
               <th width="15%">{gettext('Size')}</th>
               <th width="15%">{gettext('Last Update')}</th>
             </tr>
@@ -117,7 +117,7 @@ class DirContent extends React.Component {
   }
 }
 
-DirContent.propTypes =  {
+DirContent.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,

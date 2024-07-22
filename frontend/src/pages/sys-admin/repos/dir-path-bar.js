@@ -58,7 +58,7 @@ class DirPath extends React.Component {
         }
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?
-          <span className="path-repo-name">{repoName}</span>:
+          <span className="path-repo-name">{repoName}</span> :
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}

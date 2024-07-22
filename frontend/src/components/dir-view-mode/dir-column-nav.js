@@ -9,8 +9,14 @@ import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
-import { siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
+import { gettext, siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import TextTranslation from '../../utils/text-translation';
+import TreeSection from '../../components/tree-section';
+import DirViews from './dir-views';
+import DirOthers from './dir-others';
+
+import './dir-column-nav.css';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -33,6 +39,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
+  getMenuContainerSize: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {
@@ -50,25 +57,46 @@ class DirColumnNav extends React.Component {
       isCopyDialogShow: false,
       isMoveDialogShow: false,
       isMutipleOperation: false,
+      operationList: [],
     };
     this.isNodeMenuShow = true;
   }
 
+  componentDidMount() {
+    this.initMenuList();
+  }
+
+  initMenuList = () => {
+    const menuList = this.getMenuList();
+    this.setState({ operationList: menuList });
+  };
+
+  getMenuList = () => {
+    let menuList = [];
+    menuList.push(TextTranslation.NEW_FOLDER);
+    menuList.push(TextTranslation.NEW_FILE);
+    return menuList;
+  };
+
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({opNode: nextProps.currentNode});
+    this.setState({ opNode: nextProps.currentNode });
   }
 
   onNodeClick = (node) => {
-    this.setState({opNode: node});
-    if (Utils.imageCheck(node.object.name)) {
+    this.setState({ opNode: node });
+    if (Utils.imageCheck(node?.object?.name || '')) {
       this.showNodeImagePopup(node);
       return;
     }
     this.props.onNodeClick(node);
   };
 
+  onMoreOperationClick = (operation) => {
+    this.onMenuItemClick(operation);
+  };
+
   onMenuItemClick = (operation, node) => {
-    this.setState({opNode: node});
+    this.setState({ opNode: node });
     switch (operation) {
       case 'New Folder':
         if (!node) {
@@ -110,7 +138,7 @@ class DirColumnNav extends React.Component {
         opNode: root,
       });
     } else {
-      this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
+      this.setState({ isAddFileDialogShow: !this.state.isAddFileDialogShow });
     }
   };
 
@@ -122,29 +150,29 @@ class DirColumnNav extends React.Component {
         opNode: root,
       });
     } else {
-      this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
+      this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
     }
   };
 
   onRenameToggle = () => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
   };
 
   onCopyToggle = () => {
-    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
+    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
   };
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
+    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
   };
 
   onAddFolderNode = (dirPath) => {
-    this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
+    this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
     this.props.onAddFolderNode(dirPath);
   };
 
   onRenameNode = (newName) => {
-    this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
+    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
   };
@@ -242,31 +270,72 @@ class DirColumnNav extends React.Component {
     e.stopPropagation();
   };
 
+  renderContent = () => {
+    const {
+      isTreeDataLoading,
+      userPerm,
+      treeData,
+      currentPath,
+      onNodeExpanded,
+      onNodeCollapse,
+      onItemMove,
+      onItemsMove,
+      currentRepoInfo,
+      selectedDirentList,
+      repoID,
+      getMenuContainerSize,
+    } = this.props;
+
+    return (
+      <>
+        {isTreeDataLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <TreeSection title={gettext('Files')} moreKey={{ name: 'files' }} moreOperations={this.state.operationList} moreOperationClick={this.onMoreOperationClick}>
+              <TreeView
+                userPerm={userPerm}
+                isNodeMenuShow={this.isNodeMenuShow}
+                treeData={treeData}
+                currentPath={currentPath}
+                onNodeClick={this.onNodeClick}
+                onNodeExpanded={onNodeExpanded}
+                onNodeCollapse={onNodeCollapse}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.onFreezedItem}
+                onUnFreezedItem={this.onUnFreezedItem}
+                onItemMove={onItemMove}
+                currentRepoInfo={currentRepoInfo}
+                selectedDirentList={selectedDirentList}
+                onItemsMove={onItemsMove}
+                repoID={repoID}
+                getMenuContainerSize={getMenuContainerSize}
+              />
+            </TreeSection>
+            <DirViews
+              repoID={repoID}
+              currentPath={currentPath}
+              userPerm={userPerm}
+              onNodeClick={this.onNodeClick}
+            />
+            <DirOthers
+              repoID={repoID}
+              userPerm={userPerm}
+              currentRepoInfo={currentRepoInfo}
+            />
+          </>
+        )}
+      </>
+    );
+  };
+
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
     return (
       <Fragment>
-        <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}} onScroll={this.stopTreeScrollPropagation}>
-          {this.props.isTreeDataLoading ?
-            (<Loading/>) :
-            (<TreeView
-              userPerm={this.props.userPerm}
-              isNodeMenuShow={this.isNodeMenuShow}
-              treeData={this.props.treeData}
-              currentPath={this.props.currentPath}
-              onNodeClick={this.onNodeClick}
-              onNodeExpanded={this.props.onNodeExpanded}
-              onNodeCollapse={this.props.onNodeCollapse}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.onFreezedItem}
-              onUnFreezedItem={this.onUnFreezedItem}
-              onItemMove={this.props.onItemMove}
-              currentRepoInfo={this.props.currentRepoInfo}
-              selectedDirentList={this.props.selectedDirentList}
-              onItemsMove={this.props.onItemsMove}
-            />)
-          }
+        <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
+          {this.renderContent()}
         </div>
         {this.state.isAddFolderDialogShow && (
           <ModalPortal>
@@ -340,7 +409,7 @@ class DirColumnNav extends React.Component {
   }
 }
 
-DirColumnNav.defaultProps={
+DirColumnNav.defaultProps = {
   navRate: 0.25
 };
 

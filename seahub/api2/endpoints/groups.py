@@ -13,7 +13,7 @@ from rest_framework import status
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
@@ -181,6 +181,9 @@ class Groups(APIView):
 
                 repos = []
                 for r in group_repos:
+                    if is_wiki_repo(r):
+                        continue
+
                     repo_owner = repo_id_owner_dict.get(r.id, r.user)
                     repo = {
                         "id": r.id,

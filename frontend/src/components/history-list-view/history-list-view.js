@@ -25,7 +25,7 @@ class HistoryListView extends React.Component {
   componentDidMount = () => {
     let historyList = this.props.historyList;
     if (historyList.length > 0) {
-      this.setState({currentItem: historyList[0]});
+      this.setState({ currentItem: historyList[0] });
       if (historyList === 1) {
         this.props.onItemClick(historyList[0]);
       } else {
@@ -35,13 +35,13 @@ class HistoryListView extends React.Component {
   };
 
   onFreezedItemToggle = () => {
-    this.setState({isItemFreezed: !this.state.isItemFreezed});
+    this.setState({ isItemFreezed: !this.state.isItemFreezed });
   };
 
   onScrollHandler = (event) => {
     const clientHeight = event.target.clientHeight;
     const scrollHeight = event.target.scrollHeight;
-    const scrollTop    = event.target.scrollTop;
+    const scrollTop = event.target.scrollTop;
     const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
     let hasMore = this.props.hasMore;
     if (isBottom && hasMore) {
@@ -50,7 +50,7 @@ class HistoryListView extends React.Component {
   };
 
   onItemClick = (item, currentIndex) => {
-    this.setState({currentItem: item});
+    this.setState({ currentItem: item });
     if (currentIndex !== this.props.historyList.length) {
       let preItem = this.props.historyList[currentIndex + 1];
       this.props.onItemClick(item, preItem);

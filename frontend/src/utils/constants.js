@@ -1,6 +1,6 @@
 export const defaultContentForSDoc = {
   version: 0,
-  children: [{id: 'aaaa', type: 'paragraph', children: [{ text: '' }]}]
+  children: [{ id: 'aaaa', type: 'paragraph', children: [{ text: '' }] }]
 };
 
 export const dirPath = '/';
@@ -11,7 +11,7 @@ export const internalFilePath = '/_Internal/seatable-integration.json';
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
 export const avatarInfo = window.app.config.avatarInfo;
-export const logoPath =  window.app.config.logoPath;
+export const logoPath = window.app.config.logoPath;
 export const mediaUrl = window.app.config.mediaUrl;
 export const siteTitle = window.app.config.siteTitle;
 export const siteName = window.app.config.siteName;
@@ -30,7 +30,7 @@ export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
 export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
 
-//pageOptions
+// pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
 export const seafileCollabServer = window.app.pageOptions.seafileCollabServer;
 export const name = window.app.pageOptions.name;
@@ -70,6 +70,7 @@ export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting;
+export const enableUserCleanTrash = window.app.pageOptions.enableUserCleanTrash;
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
@@ -92,11 +93,10 @@ export const curNoteID = window.app.pageOptions.curNoteID;
 export const enableTC = window.app.pageOptions.enableTC;
 
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
+export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
 
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
-
-export const canSetExProps = window.app.pageOptions.canSetExProps || false;
 
 // seafile_ai
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI || false;
@@ -111,16 +111,20 @@ export const enableSeaTableIntegration = window.app.pageOptions.enableSeaTableIn
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
+export const wikiId = window.wiki ? window.wiki.config.wikiId : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
-export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True': '';
+export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True' : '';
 export const sharedToken = window.wiki ? window.wiki.config.sharedToken : '';
 export const sharedType = window.wiki ? window.wiki.config.sharedType : '';
 export const hasIndex = window.wiki ? window.wiki.config.hasIndex : '';
 export const assetsUrl = window.wiki ? window.wiki.config.assetsUrl : '';
+export const isWiki2 = window.wiki ? window.wiki.config.isWiki2 : false;
+export const seadocServerUrl = window.wiki ? window.wiki.config.seadocServerUrl : '';
+export const seadocAccessToken = window.wiki ? window.wiki.config.seadocAccessToken : '';
 
 // file history
 export const PER_PAGE = 25;

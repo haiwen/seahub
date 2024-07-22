@@ -51,7 +51,7 @@ class StatisticChart extends React.Component {
       },
       tooltips: {
         callbacks: {
-          label: function(tooltipItem, data) {
+          label: function (tooltipItem, data) {
             if (isTitleCallback) {
               return _this.titleCallback(tooltipItem, data);
             }
@@ -69,7 +69,7 @@ class StatisticChart extends React.Component {
           ticks: {
             beginAtZero: true,
             suggestedMax: suggestedMaxNumbers,
-            callback: function(value, index, values) {
+            callback: function (value, index, values) {
               if (isTicksCallback) {
                 return _this.ticksCallback(value, index, values);
               }
@@ -95,7 +95,7 @@ class StatisticChart extends React.Component {
       labels: nextProps.labels,
       datasets: nextProps.filesData
     };
-    this.setState({data: data});
+    this.setState({ data: data });
   }
 
   titleCallback = (tooltipItem, data) => {

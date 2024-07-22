@@ -40,7 +40,7 @@ class UpdateUser extends React.Component {
   };
 
   render() {
-    const  { toggleDialog } = this.props;
+    const { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</ModalHeader>

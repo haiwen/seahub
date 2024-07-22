@@ -33,7 +33,7 @@ class FileInfo extends React.PureComponent {
       <div className="text-truncate">
         <h2 className="file-title d-flex align-items-center">
           <span className="file-name text-truncate" title={fileName}>{fileName}</span>
-          <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
+          <a className={`file-star sf3-font ${isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
             href="#"
             title={starredText}
             role="button"

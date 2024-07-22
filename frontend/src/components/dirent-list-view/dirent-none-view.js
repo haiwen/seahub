@@ -54,17 +54,23 @@ class DirentNodeView extends React.Component {
           <p className="text-secondary text-center">{gettext('This folder has no content at this time.')}</p>
           <p className="text-secondary text-center">{gettext('You can create files quickly')}{' +'}</p>
           <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-            {'+ Markdown'}</button>
+            {'+ Markdown'}
+          </button>
           <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>
-            {'+ PPT'}</button>
+            {'+ PPT'}
+          </button>
           <br />
           <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>
-            {'+ Word'}</button>
+            {'+ Word'}
+          </button>
           <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>
-            {'+ Excel'}</button>
+            {'+ Excel'}
+          </button>
           <br />
-          {enableSeadoc && !currentRepoInfo.encrypted && <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>
-            {'+ SeaDoc'}</button>}
+          {enableSeadoc && !currentRepoInfo.encrypted &&
+          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>
+            {'+ SeaDoc'}
+          </button>}
         </div>
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>

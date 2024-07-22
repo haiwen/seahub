@@ -55,7 +55,7 @@ class LibHistorySetting extends React.Component {
       let message = gettext('Successfully set library history.');
       seafileAPI.setRepoHistoryLimit(repoID, days).then(res => {
         toaster.success(message);
-        this.setState({keepDays: res.data.keep_days});
+        this.setState({ keepDays: res.data.keep_days });
         this.props.toggleDialog();
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -114,7 +114,7 @@ class LibHistorySetting extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <span dangerouslySetInnerHTML={{__html: title}} className="d-flex mw-100"></span>
+          <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -128,11 +128,11 @@ class LibHistorySetting extends React.Component {
               <Label>{gettext('Keep full history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('noHistory');}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('noHistory');}}/>{' '}
               <Label>{gettext('Don\'t keep history')}</Label>
             </FormGroup>
             <FormGroup check>
-              <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('autoHistory');}}/>{' '}
+              <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('autoHistory');}}/>{' '}
               <Label>{gettext('Only keep a period of history:')}</Label>
               <Input
                 type="text"

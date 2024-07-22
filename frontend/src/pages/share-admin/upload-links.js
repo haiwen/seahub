@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -12,7 +12,7 @@ import EmptyTip from '../../components/empty-tip';
 import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import TopToolbar from '../../components/toolbar/top-toolbar';
+import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
@@ -42,16 +42,16 @@ class Content extends Component {
 
     const isDesktop = Utils.isDesktop();
     const table = (
-      <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+      <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
         <thead>
           {isDesktop ? (
             <tr>
-              <th width="4%">{/*icon*/}</th>
+              <th width="4%">{/* icon*/}</th>
               <th width="30%">{gettext('Name')}</th>
               <th width="24%">{gettext('Library')}</th>
               <th width="16%">{gettext('Visits')}</th>
               <th width="16%">{gettext('Expiration')}</th>
-              <th width="10%">{/*Operations*/}</th>
+              <th width="10%">{/* Operations*/}</th>
             </tr>
           ) : (
             <tr>
@@ -105,11 +105,11 @@ class Item extends Component {
   };
 
   handleMouseOver = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   handleMouseOut = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   viewLink = (e) => {
@@ -140,7 +140,7 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
-    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
+    const deletedTip = item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
@@ -149,8 +149,8 @@ class Item extends Component {
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
     );
@@ -169,7 +169,7 @@ class Item extends Component {
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
             <DropdownToggle
               tag="i"
-              className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -201,11 +201,6 @@ class Item extends Component {
 }
 
 Item.propTypes = itemPropTypes;
-
-const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired
-};
 
 class ShareAdminUploadLinks extends Component {
 
@@ -245,7 +240,7 @@ class ShareAdminUploadLinks extends Component {
       let items = this.state.items.filter(uploadItem => {
         return uploadItem.token !== item.token;
       });
-      this.setState({items: items});
+      this.setState({ items: items });
       const message = gettext('Successfully deleted 1 item.');
       toaster.success(message);
     }).catch((error) => {
@@ -255,13 +250,13 @@ class ShareAdminUploadLinks extends Component {
   };
 
   toggleCleanInvalidUploadLinksDialog = () => {
-    this.setState({isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen});
+    this.setState({ isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen });
   };
 
   cleanInvalidUploadLinks = () => {
     seafileAPI.cleanInvalidUploadLinks().then(res => {
       const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
-      this.setState({items: newItems});
+      this.setState({ items: newItems });
       toaster.success(gettext('Successfully cleaned invalid upload links.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -272,12 +267,6 @@ class ShareAdminUploadLinks extends Component {
   render() {
     return (
       <Fragment>
-        <TopToolbar
-          onShowSidePanel={this.props.onShowSidePanel}
-          onSearchedClick={this.props.onSearchedClick}
-        >
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidUploadLinksDialog}>{gettext('Clean invalid upload links')}</Button>
-        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -285,7 +274,14 @@ class ShareAdminUploadLinks extends Component {
                 {canGenerateShareLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
                 )}
-                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
+                <li className="nav-item">
+                  <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
+                    {gettext('Upload Links')}
+                    <SingleDropdownToolbar
+                      opList={[{ 'text': gettext('Clean invalid upload links'), 'onClick': this.toggleCleanInvalidUploadLinksDialog }]}
+                    />
+                  </Link>
+                </li>
               </ul>
             </div>
             <div className="cur-view-content">
@@ -311,7 +307,5 @@ class ShareAdminUploadLinks extends Component {
     );
   }
 }
-
-ShareAdminUploadLinks.propTypes = propTypes;
 
 export default ShareAdminUploadLinks;

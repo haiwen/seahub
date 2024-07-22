@@ -26,7 +26,7 @@ class CommitDetails extends React.Component {
   }
 
   componentDidMount() {
-    const {repoID, commitID} = this.props;
+    const { repoID, commitID } = this.props;
     seafileAPI.getCommitDetails(repoID, commitID).then((res) => {
       this.setState({
         isLoading: false,
@@ -43,7 +43,7 @@ class CommitDetails extends React.Component {
   }
 
   render() {
-    const { toggleDialog, commitTime} = this.props;
+    const { toggleDialog, commitTime } = this.props;
     return (
       <Modal isOpen={true} centered={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</ModalHeader>
@@ -60,12 +60,12 @@ class Content extends React.Component {
 
   renderDetails = (data) => {
     const detailsData = [
-      {type: 'new', title: gettext('New files')},
-      {type: 'removed', title: gettext('Deleted files')},
-      {type: 'renamed', title: gettext('Renamed or Moved files')},
-      {type: 'modified', title: gettext('Modified files')},
-      {type: 'newdir', title: gettext('New directories')},
-      {type: 'deldir', title: gettext('Deleted directories')}
+      { type: 'new', title: gettext('New files') },
+      { type: 'removed', title: gettext('Deleted files') },
+      { type: 'renamed', title: gettext('Renamed or Moved files') },
+      { type: 'modified', title: gettext('Modified files') },
+      { type: 'newdir', title: gettext('New directories') },
+      { type: 'deldir', title: gettext('Deleted directories') }
     ];
 
     let showDesc = true;
@@ -91,7 +91,7 @@ class Content extends React.Component {
               <ul>
                 {
                   data[item.type].map((item, index) => {
-                    return <li key={index} dangerouslySetInnerHTML={{__html: item}} className="commit-detail-item text-truncate"></li>;
+                    return <li key={index} dangerouslySetInnerHTML={{ __html: item }} className="commit-detail-item text-truncate"></li>;
                   })
                 }
               </ul>
@@ -103,7 +103,7 @@ class Content extends React.Component {
   };
 
   render() {
-    const {isLoading, errorMsg, commitDetails} = this.props.data;
+    const { isLoading, errorMsg, commitDetails } = this.props.data;
 
     if (isLoading) {
       return <Loading />;

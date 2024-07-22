@@ -1,12 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import axios from 'axios';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
-import MainPanelTopbar from './remote-dir-topbar';
 import DirPathBar from './remote-dir-path';
 import DirContent from './remote-dir-content';
 
@@ -39,7 +37,7 @@ class DirView extends Component {
     this.fileInput = React.createRef();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.loadDirentList('/');
   }
 
@@ -70,8 +68,8 @@ class DirView extends Component {
         path: path,
         userPerm: user_perm,
       }, () => {
-        let url =`${siteRoot}remote-library/${providerID}/${repoID}/${repoName}${Utils.encodePath(path)}`;
-        window.history.replaceState({url: url, path: path}, path, url);
+        let url = `${siteRoot}remote-library/${providerID}/${repoID}/${repoName}${Utils.encodePath(path)}`;
+        window.history.replaceState({ url: url, path: path }, path, url);
       });
     }).catch((error) => {
       this.setState({
@@ -129,20 +127,15 @@ class DirView extends Component {
   };
 
   render() {
-    const { loading, errorMsg,
-      repoName, direntList, path, userPerm } = this.state;
+    const { loading, errorMsg, repoName, direntList, path } = this.state;
     const { repoID } = this.props;
 
     return (
       <Fragment>
-        <MainPanelTopbar>
-          <Fragment>
-            <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
-            {userPerm === 'rw' &&
-              <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
-            }
-          </Fragment>
-        </MainPanelTopbar>
+        {/*
+          <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
+          {userPerm === 'rw' && <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>}
+        */}
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">

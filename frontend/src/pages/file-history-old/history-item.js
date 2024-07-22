@@ -45,7 +45,7 @@ class HistoryItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let downloadUrl = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id});
+    let downloadUrl = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id });
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`;
     let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
     let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
@@ -115,7 +115,7 @@ class MoreMenu extends React.PureComponent {
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle
           tag='i'
-          className='fa fa-ellipsis-v'
+          className='sf3-font sf3-font-more-vertical'
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
@@ -126,7 +126,7 @@ class MoreMenu extends React.PureComponent {
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {/*canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>*/}
+          {/* canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>*/}
           {index != 0 && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>

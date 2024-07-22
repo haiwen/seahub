@@ -1,0 +1,31 @@
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label {
+  padding-top: 9px;
+  height: fit-content;
+}
+
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label .header-icon {
+  display: inline-block;
+  margin-left: -.3125rem;
+  padding: 0 .3125rem;
+}
+
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label .field-description-section .header-icon .sf-metadata-icon {
+  color: #212529a6;
+  cursor: default;
+  font-size: 14px;
+}
+
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label .field-description-section .field-description-section-field-name {
+  color: #212529b3;
+}
+
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label .field-description-section .field-uneditable-tip {
+  color: #bdbdbd;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+}
+
+.sf-metadata-record-details-item .sf-metadata-record-details-item-label .field-description-section .field-uneditable-tip:hover {
+  color: #666;
+}

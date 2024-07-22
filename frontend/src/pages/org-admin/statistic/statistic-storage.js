@@ -24,8 +24,8 @@ class OrgStatisticStorage extends React.Component {
   getActiviesFiles = (startTime, endTime, groupBy) => {
     let { filesData } = this.state;
     seafileAPI.orgAdminStatisticStorages(orgID, startTime, endTime, groupBy).then((res) => {
-      let labels = [],
-        totalStorage = [];
+      let labels = [];
+      let totalStorage = [];
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
@@ -36,7 +36,7 @@ class OrgStatisticStorage extends React.Component {
           label: gettext('Total Storage'),
           data: totalStorage,
           borderColor: '#fd913a',
-          backgroundColor: '#fd913a'};
+          backgroundColor: '#fd913a' };
         filesData = [total_storage];
       }
       this.setState({
@@ -52,7 +52,7 @@ class OrgStatisticStorage extends React.Component {
 
   render() {
     let { labels, filesData, isLoading } = this.state;
-    return(
+    return (
       <Fragment>
         <MainPanelTopbar />
         <div className="cur-view-container">
@@ -64,7 +64,7 @@ class OrgStatisticStorage extends React.Component {
               <StatisticChart
                 labels={labels}
                 filesData={filesData}
-                suggestedMaxNumbers={10*1000*1000}
+                suggestedMaxNumbers={10 * 1000 * 1000}
                 isTitleCallback={true}
                 isTicksCallback={true}
                 isLegendStatus={false}

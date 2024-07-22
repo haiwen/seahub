@@ -66,11 +66,11 @@ class SharedFileView extends React.Component {
       });
     }
     if (!canDownload) {
-      document.addEventListener('contextmenu', function(e) {
+      document.addEventListener('contextmenu', function (e) {
         e.preventDefault();
         return false;
       });
-      document.addEventListener('keydown', function(e) {
+      document.addEventListener('keydown', function (e) {
         // prevent ctrl + s/p/a/c, i.e, 'save', 'print', 'select all', 'copy'
         // metaKey: for mac
         if ((e.ctrlKey || e.metaKey) && (e.which == 83 || e.which == 80 || e.which == 65 || e.which == 67)) {

@@ -8,7 +8,7 @@
 .sys-stat-tool {
   display: flex;
   font-size: 13px;
-  color: #333;
+  color: #212529;
 }
 
 .system-statistic-item {
@@ -43,7 +43,7 @@
 .statistic-traffic-tab {
   display: flex;
   font-size: 13px;
-  color: #333;
+  color: #212529;
   margin-top: 10px;
 }
 

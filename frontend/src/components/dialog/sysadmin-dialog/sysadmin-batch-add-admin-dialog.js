@@ -41,7 +41,6 @@ class SysAdminBatchAddAdminDialog extends React.Component {
         <ModalBody>
           <UserSelect
             isMulti={true}
-            className="reviewer-select"
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
           />

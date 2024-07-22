@@ -141,6 +141,7 @@ MIDDLEWARE = [
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
     'seahub.organizations.middleware.RedirectMiddleware',
+    'seahub.base.middleware.UserAgentMiddleWare',
 ]
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -246,6 +247,7 @@ INSTALLED_APPS = [
     'seahub.institutions',
     'seahub.invitations',
     'seahub.wiki',
+    'seahub.wiki2',
     'seahub.group',
     'seahub.notifications',
     'seahub.options',
@@ -269,6 +271,7 @@ INSTALLED_APPS = [
     'seahub.dingtalk',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
+    'seahub.repo_metadata',
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',
@@ -752,6 +755,9 @@ THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 ENABLE_VIDEO_THUMBNAIL = False
 THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
+# pdf thumbnails
+ENABLE_PDF_THUMBNAIL = True
+
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
@@ -879,12 +885,20 @@ if os.environ.get('SEAFILE_DOCS', None):
     LOGO_WIDTH = ''
     ENABLE_WIKI = True
 
-#######################
-# extended properties #
-#######################
-SEATABLE_EX_PROPS_BASE_API_TOKEN = ''
-EX_PROPS_TABLE = ''
-EX_EDITABLE_COLUMNS = []
+##############################
+# metadata server properties #
+##############################
+ENABLE_METADATA_MANAGEMENT = False
+METADATA_SERVER_URL = ''
+METADATA_SERVER_SECRET_KEY = ''
+
+METADATA_FILE_TYPES = {
+    '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif'),
+    '_document': ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'markdown',
+                  'md', 'pdf', 'ai', 'svg', 'xls', 'xlsx', 'ods', 'fods', 'xmind', 'sdoc'),
+    '_video': ('mp4', 'ogv', 'webm', 'mov'),
+    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
+}
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
@@ -954,6 +968,8 @@ sys.path.pop(0)
 
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
+SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {

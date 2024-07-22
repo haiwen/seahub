@@ -63,7 +63,7 @@ class AdvancedSearch extends React.Component {
       const typesLength = fileTypes.length;
       return (
         <div className="search-filters">
-          {search_repo && <span className="mr-4">{gettext('Libraries')}{': '}{search_repo == 'all'? gettext('All') : repo_name}</span>}
+          {search_repo && <span className="mr-4">{gettext('Libraries')}{': '}{search_repo == 'all' ? gettext('All') : repo_name}</span>}
           {typesLength > 0 &&
             <span className="mr-4">{gettext('File Types')}{': '}
               {fileTypes.map((type, index) => {
@@ -204,7 +204,7 @@ class AdvancedSearch extends React.Component {
                     onChange={this.props.handleTimeFromInput}
                     showHourAndMinute={false}
                   />
-                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
+                  <span className="select-data-icon"><i className="sf3-font sf3-font-calendar-alt"></i></span>
                 </Col>
                 <div className="mt-2">-</div>
                 <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
@@ -215,7 +215,7 @@ class AdvancedSearch extends React.Component {
                     onChange={this.props.handleTimeToInput}
                     showHourAndMinute={false}
                   />
-                  <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
+                  <span className="select-data-icon"><i className="sf3-font sf3-font-calendar-alt"></i></span>
                 </Col>
               </Row>
               {errorDateMsg && <Row><Col md="2" lg="2"></Col><Col md="8" className="error mt-2">{errorDateMsg}</Col></Row>}

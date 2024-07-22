@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
-import {gettext, isPro, orgID} from '../../utils/constants';
+import { gettext, isPro, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
@@ -51,7 +51,6 @@ class TransferDialog extends React.Component {
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-
   };
 
   componentDidMount() {
@@ -83,7 +82,7 @@ class TransferDialog extends React.Component {
         toaster.danger(errMessage);
       });
     }
-    else{
+    else {
       seafileAPI.listDepartments().then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           let obj = {};
@@ -102,7 +101,6 @@ class TransferDialog extends React.Component {
   onClick = () => {
     this.setState({
       transferToUser: !this.state.transferToUser,
-
     });
   };
 
@@ -142,7 +140,6 @@ class TransferDialog extends React.Component {
                 <UserSelect
                   ref="userSelect"
                   isMulti={false}
-                  className="reviewer-select"
                   placeholder={gettext('Select a user')}
                   onSelectChange={this.handleSelectChange}
                 />
@@ -166,16 +163,13 @@ class TransferDialog extends React.Component {
       </Fragment>
     );
   };
+
   render() {
-
-
     const { itemName: repoName } = this.props;
     let title = gettext('Transfer Library {library_name}');
     title = title.replace('{library_name}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
-
-
     return (
-      <Modal isOpen={true} style={{maxWidth: '720px'}} toggle={this.props.toggleDialog} className="transfer-dialog">
+      <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={this.props.toggleDialog} className="transfer-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </ModalHeader>

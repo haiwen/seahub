@@ -40,6 +40,11 @@ class FileUUIDMapManager(models.Manager):
             uuid.save(using=self._db)
         return uuid
 
+    def create_fileuuidmap_by_uuid(self, file_uuid, repo_id, parent_path, filename, is_dir):
+        repo_id, parent_path = self.model.get_origin_repo_id_and_parent_path(repo_id, parent_path)
+        file_map = self.model(uuid=file_uuid, repo_id=repo_id, parent_path=parent_path, filename=filename, is_dir=is_dir)
+        file_map.save(using=self._db)
+
     def get_fileuuidmap_by_path(self, repo_id, parent_path, filename, is_dir):
         """ get filemap uuid by repoid、 parent_path 、 filename 、is_dir
             args:

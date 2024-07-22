@@ -8,15 +8,15 @@ const propTypes = {
   groupID: PropTypes.string,
   parentGroupID: PropTypes.string,
   toggle: PropTypes.func.isRequired,
-  onDepartChanged: PropTypes.func.isRequired,
+  onAddNewDepartment: PropTypes.func.isRequired,
 };
 
-class AddDepartDialog extends React.Component {
+class AddDepartmentDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      departName: '',
+      departmentName: '',
       errMessage: '',
     };
   }
@@ -28,9 +28,9 @@ class AddDepartDialog extends React.Component {
       if (this.props.parentGroupID) {
         parentGroup = this.props.parentGroupID;
       }
-      seafileAPI.orgAdminAddDepartGroup(orgID, parentGroup, this.state.departName.trim()).then((res) => {
+      seafileAPI.orgAdminAddDepartGroup(orgID, parentGroup, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onDepartChanged();
+        this.props.onAddNewDepartment(res.data);
       }).catch(error => {
         let errorMsg = gettext(error.response.data.error_msg);
         this.setState({ errMessage: errorMsg });
@@ -40,7 +40,7 @@ class AddDepartDialog extends React.Component {
 
   validateName = () => {
     let errMessage = '';
-    const name = this.state.departName.trim();
+    const name = this.state.departmentName.trim();
     if (!name.length) {
       errMessage = gettext('Name is required');
       this.setState({ errMessage: errMessage });
@@ -51,7 +51,7 @@ class AddDepartDialog extends React.Component {
 
   handleChange = (e) => {
     this.setState({
-      departName: e.target.value,
+      departmentName: e.target.value,
     });
   };
 
@@ -70,11 +70,11 @@ class AddDepartDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="departName">{gettext('Name')}</Label>
+              <Label for="departmentName">{gettext('Name')}</Label>
               <Input
-                id="departName"
+                id="departmentName"
                 onKeyDown={this.handleKeyDown}
-                value={this.state.departName}
+                value={this.state.departmentName}
                 onChange={this.handleChange}
                 autoFocus={true}
               />
@@ -83,6 +83,7 @@ class AddDepartDialog extends React.Component {
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
@@ -90,6 +91,6 @@ class AddDepartDialog extends React.Component {
   }
 }
 
-AddDepartDialog.propTypes = propTypes;
+AddDepartmentDialog.propTypes = propTypes;
 
-export default AddDepartDialog;
+export default AddDepartmentDialog;

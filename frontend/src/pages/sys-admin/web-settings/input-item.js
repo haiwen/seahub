@@ -8,7 +8,7 @@ const propTypes = {
   inputType: PropTypes.string,
   saveSetting: PropTypes.func.isRequired,
   keyText: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   helpTip: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired
 };
@@ -24,11 +24,11 @@ class WebSettingInput extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({value: nextProps.value});
+    this.setState({ value: nextProps.value });
   }
 
   toggleBtns = () => {
-    this.setState({isBtnsShown: !this.state.isBtnsShown});
+    this.setState({ isBtnsShown: !this.state.isBtnsShown });
   };
 
   hideBtns = (e) => {
@@ -36,7 +36,7 @@ class WebSettingInput extends Component {
       return;
     }
     if (this.props.value != this.state.value) {
-      this.setState({value: this.props.value});
+      this.setState({ value: this.props.value });
     }
     this.toggleBtns();
   };
@@ -66,7 +66,7 @@ class WebSettingInput extends Component {
         extraContent={
           isBtnsShown ?
             <Fragment>
-              <Button className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
+              <Button color="primary" className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
               <Button className="ml-1 sf2-icon-x2 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}></Button>
             </Fragment> : null
         }

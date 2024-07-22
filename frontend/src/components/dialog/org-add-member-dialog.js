@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -9,8 +9,8 @@ import UserSelect from '../user-select';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  groupID:  PropTypes.string.isRequired,
-  onMemberChanged: PropTypes.func.isRequired
+  groupID: PropTypes.string.isRequired,
+  onAddNewMembers: PropTypes.func.isRequired
 };
 
 class AddMemberDialog extends React.Component {
@@ -40,7 +40,7 @@ class AddMemberDialog extends React.Component {
         this.setState({ errMessage: res.data.failed[0].error_msg });
       }
       if (res.data.success.length > 0) {
-        this.props.onMemberChanged();
+        this.props.onAddNewMembers(res.data.success);
         this.props.toggle();
       }
     }).catch(error => {
@@ -50,6 +50,7 @@ class AddMemberDialog extends React.Component {
   };
 
   render() {
+    const { errMessage } = this.state;
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Add Member')}</ModalHeader>
@@ -61,11 +62,11 @@ class AddMemberDialog extends React.Component {
             isMulti={false}
             className='org-add-member-select'
           />
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

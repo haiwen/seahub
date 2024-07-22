@@ -1,0 +1,21 @@
+.wiki2-top-nav .wiki2-top-nav-item {
+  align-items: center;
+  padding: 2px 6px;
+}
+
+.wiki2-top-nav>div:not(.wiki2-top-nav-item) {
+  margin: 2px 2px 0 2px;
+}
+
+.wiki2-top-nav .wiki2-top-nav-item:hover {
+  background-color: #EFEFEF;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.wiki2-top-nav .wiki2-top-nav-item .nav-item-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 0;
+  margin-right: 4px;
+}

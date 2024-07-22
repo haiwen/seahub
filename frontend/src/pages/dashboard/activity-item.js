@@ -34,8 +34,8 @@ class ActivityItem extends Component {
 
   render() {
     const isDesktop = this.props.isDesktop;
-    let {item, index, items} = this.props;
-    let op, details, moreDetails = false;
+    let { item, index, items } = this.props;
+    let op; let details; let moreDetails = false;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
     let libURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + '/';
@@ -43,7 +43,7 @@ class ActivityItem extends Component {
     let smallLibLink = <a className="small text-secondary" href={libURL}>{item.repo_name}</a>;
 
     if (item.obj_type == 'repo') {
-      switch(item.op_type) {
+      switch (item.op_type) {
         case 'create':
           op = gettext('Created library');
           details = libLink;
@@ -80,7 +80,7 @@ class ActivityItem extends Component {
       op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
       details = (
         <Fragment>
-          <p className="m-0 d-inline" dangerouslySetInnerHTML={{__html: firstLine}}></p>
+          <p className="m-0 d-inline" dangerouslySetInnerHTML={{ __html: firstLine }}></p>
           {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details text-secondary ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
         </Fragment>
       );

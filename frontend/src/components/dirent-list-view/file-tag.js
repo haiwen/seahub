@@ -20,8 +20,9 @@ export default class FileTag extends React.PureComponent {
           className="file-tag"
           id={fileTagID}
           key={fileTag.id}
-          style={{zIndex:length - index, backgroundColor:fileTag.color}}
-        ></span>
+          style={{ zIndex: length - index, backgroundColor: fileTag.color }}
+        >
+        </span>
         <UncontrolledTooltip target={fileTagID} placement="bottom">
           {fileTag.name}
         </UncontrolledTooltip>

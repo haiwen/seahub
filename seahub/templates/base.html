@@ -8,7 +8,11 @@
 <meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
 {% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
+{% if request.is_mobile or request.is_tablet %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% else %}
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{% endif %}
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon">

@@ -13,8 +13,9 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onRepoClick: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired,
+  inAllLibs: PropTypes.bool, // for 'My Libraries' in 'Files' page
+  currentViewMode: PropTypes.string,
 };
 
 class MylibRepoListView extends React.Component {
@@ -27,11 +28,11 @@ class MylibRepoListView extends React.Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   sortByName = (e) => {
@@ -70,7 +71,7 @@ class MylibRepoListView extends React.Component {
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
               onMonitorRepo={this.props.onMonitorRepo}
-              onRepoClick={this.props.onRepoClick}
+              currentViewMode={this.props.currentViewMode}
             />
           );
         })}
@@ -79,25 +80,31 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const showStorageBackend = storages.length > 0;
-    const sortIcon = this.props.sortOrder === 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
-    return (
-      <table>
+    const { inAllLibs, currentViewMode = 'list' } = this.props;
+    const showStorageBackend = !inAllLibs && storages.length > 0;
+    const sortIcon = this.props.sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+
+    return currentViewMode == 'list' ? (
+      <table className={inAllLibs ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width={showStorageBackend ? '33%' : '38%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
-            <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={showStorageBackend ? '15%' : '20%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
-            {showStorageBackend ? <th width="15%">{gettext('Storage Backend')}</th> : null}
-            <th width={showStorageBackend ? '15%' : '20%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
+            <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
+            <th width={showStorageBackend ? '36%' : '35%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
+            <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
+            <th width={showStorageBackend ? '15%' : '14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
+            {showStorageBackend ? <th width="17%">{gettext('Storage Backend')}</th> : null}
+            <th width={showStorageBackend ? '15%' : '34%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
           </tr>
         </thead>
         <tbody>
           {this.renderRepoListView()}
         </tbody>
       </table>
+    ) : (
+      <div className="d-flex justify-content-between flex-wrap">
+        {this.renderRepoListView()}
+      </div>
     );
   };
 

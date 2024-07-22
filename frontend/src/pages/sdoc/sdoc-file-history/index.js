@@ -243,7 +243,15 @@ class SdocFileHistory extends React.Component {
   renderChangesTip = ({ onChangeSidePanelDisplay }) => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
     if (isLoading) return null;
-    if (!isShowChanges) return null;
+    if (!isShowChanges) {
+      return (
+        <div className="sdoc-file-history-header-right d-flex align-items-center justify-content-end">
+          <div className='sdoc-file-changes-switch'>
+            <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
+          </div>
+        </div>
+      );
+    }
     const changesCount = changes ? changes.length : 0;
     if (changesCount === 0) {
       return (
@@ -270,7 +278,7 @@ class SdocFileHistory extends React.Component {
             id="sdoc-file-changes-last"
             onClick={this.lastChange}
           >
-            <span className="fas fa-chevron-up"></span>
+            <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
           </div>
           <div className="sdoc-file-changes-divider"></div>
           <div
@@ -278,7 +286,7 @@ class SdocFileHistory extends React.Component {
             id="sdoc-file-changes-next"
             onClick={this.nextChange}
           >
-            <span className="fas fa-chevron-down"></span>
+            <span className="sf3-font sf3-font-down"></span>
           </div>
           <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last" delay={0} fade={false}>
             {gettext('Last modification')}
@@ -339,12 +347,15 @@ class SdocFileHistory extends React.Component {
         const path = [0, 0, 0];
         const { isShowChanges } = this.state;
         this.onSelectHistoryVersion(...getCurrentAndLastVersion(path, historyGroups, isShowChanges));
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch((error) => {
       const errorMessage = 'there has an error in server';
-      const isLoading = false;
-      this.setState({ isLoading });
-      this.setState({ sidePanelInitData: { isLoading, errorMessage } });
+      this.setState({
+        isLoading: false,
+        sidePanelInitData: { isLoading: false, errorMessage }
+      });
       throw Error(errorMessage);
     });
   }

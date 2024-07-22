@@ -26,7 +26,7 @@ class AllRepos extends Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage = 1, perPage, sortBy } = this.state;
     this.setState({
@@ -39,7 +39,7 @@ class AllRepos extends Component {
   }
 
   toggleCreateRepoDialog = () => {
-    this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
+    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
   };
 
   getReposByPage = (page) => {
@@ -128,10 +128,10 @@ class AllRepos extends Component {
   };
 
   getValueLength(str) {
-    let code, len = 0;
+    let code; let len = 0;
     for (let i = 0, length = str.length; i < length; i++) {
       code = str.charCodeAt(i);
-      if (code === 10) { //solve enter problem
+      if (code === 10) { // solve enter problem
         len += 2;
       } else if (code < 0x007f) {
         len += 1;
@@ -150,7 +150,7 @@ class AllRepos extends Component {
       <Fragment>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
-            <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+            <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
           </Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

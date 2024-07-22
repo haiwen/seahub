@@ -37,15 +37,15 @@ class Content extends Component {
 
       // sort
       const sortByName = sortBy == 'name';
-      const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
+      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
       const isDesktop = Utils.isDesktop();
       const table = (
-        <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
+        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           <thead>
             {isDesktop ? (
               <tr>
-                <th width="4%">{/*icon*/}</th>
+                <th width="4%">{/* icon*/}</th>
                 <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width="30%">{gettext('Share To')}</th>
                 <th width="24%">{gettext('Permission')}</th>
@@ -125,11 +125,11 @@ class Item extends Component {
   };
 
   onMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    this.setState({ isOpIconShown: true });
   };
 
   onMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    this.setState({ isOpIconShown: false });
   };
 
   changePerm = (permission) => {
@@ -185,7 +185,7 @@ class Item extends Component {
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
-    this.setState({isShowPermEditor: true});
+    this.setState({ isShowPermEditor: true });
   };
 
   render() {
@@ -240,7 +240,7 @@ class Item extends Component {
                   role="button"
                   aria-label={gettext('Edit')}
                   title={gettext('Edit')}
-                  className="fa fa-pencil-alt attr-action-icon"
+                  className="sf3-font sf3-font-rename attr-action-icon"
                   onClick={this.onEditPermission}>
                 </a>
               )}
@@ -259,7 +259,7 @@ class Item extends Component {
             />
           )}
         </td>
-        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
 
@@ -277,7 +277,7 @@ class Item extends Component {
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
               <DropdownToggle
                 tag="i"
-                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"

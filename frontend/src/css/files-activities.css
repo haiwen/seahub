@@ -3,7 +3,7 @@
   cursor: pointer;
 }
 .activity-details:hover {
-  color: #333;
+  color: #212529;
 }
 .mobile-activity-time {
   display: inline-block;

@@ -46,7 +46,7 @@ class InternalLink extends React.Component {
 
   render() {
     if (this.state.isInternalLoding) {
-      return(<Loading />);
+      return (<Loading />);
     }
     return (
       <div>

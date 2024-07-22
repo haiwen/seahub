@@ -26,11 +26,11 @@ class Content extends Component {
   }
 
   onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
+    this.setState({ isItemFreezed: true });
   };
 
   onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
+    this.setState({ isItemFreezed: false });
   };
 
   getPreviousPage = () => {
@@ -150,7 +150,7 @@ class Item extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isSetAdminDialogOpen: !this.state.isSetAdminDialogOpen});
+    this.setState({ isSetAdminDialogOpen: !this.state.isSetAdminDialogOpen });
   };
 
   setAdmin = () => {
@@ -179,7 +179,7 @@ class Item extends Component {
 
   translateOperations = (item) => {
     let translateResult = '';
-    switch(item) {
+    switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
         break;
@@ -263,7 +263,7 @@ class InstitutionUsers extends Component {
     this.initPage = 1;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     seafileAPI.sysAdminGetInstitution(this.props.institutionID).then((res) => {
       this.setState({
         institutionName: res.data.name
@@ -305,7 +305,7 @@ class InstitutionUsers extends Component {
         }
         return user;
       });
-      this.setState({userList: userList});
+      this.setState({ userList: userList });
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -314,7 +314,7 @@ class InstitutionUsers extends Component {
   };
 
   toggleAddUserDialog = () => {
-    this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
+    this.setState({ isAddUserDialogOpen: !this.state.isAddUserDialogOpen });
   };
 
   resetPerPage = (newPerPage) => {
@@ -330,7 +330,7 @@ class InstitutionUsers extends Component {
       let failedArray = res.data.failed;
       if (successArray.length) {
         let newUserList = this.state.userList.concat(successArray);
-        this.setState({userList: newUserList});
+        this.setState({ userList: newUserList });
       }
       failedArray.forEach((item) => {
         toaster.danger(item.error_msg);
@@ -346,7 +346,7 @@ class InstitutionUsers extends Component {
       let newUserList = this.state.userList.filter(user => {
         return user.email != email;
       });
-      this.setState({userList: newUserList});
+      this.setState({ userList: newUserList });
       toaster.success('success');
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
