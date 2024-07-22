@@ -95,6 +95,7 @@ class DirentGridItem extends React.Component {
   handleDoubleClick = (dirent) => {
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
+      this.props.onGridItemClick(null);
     } else {
       this.props.onItemClick(dirent);
     }
