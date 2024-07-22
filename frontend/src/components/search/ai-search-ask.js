@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
-import { MarkdownViewer } from '@seafile/seafile-editor';
+import { processor } from '@seafile/seafile-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
@@ -37,8 +37,8 @@ export default class AISearchAsk extends Component {
     this.state = {
       value: props.value,
       isLoading: false,
-      answeringResult: '',
       hitFiles: [],
+      htmlResult: '',
     };
     this.timer = null;
     this.isChineseInput = false;
@@ -117,6 +117,14 @@ export default class AISearchAsk extends Component {
     return items;
   }
 
+  onClickCitation = (e) => {
+    const index = parseInt(e.target.innerText) - 1;
+    const hitFile = this.state.hitFiles[index];
+    if (hitFile) {
+      this.props.onItemClickHandler(hitFile);
+    }
+  };
+
   onSearch = () => {
     const { indexState, repoID, token } = this.props;
     if (indexState === INDEX_STATE.UNCREATED) {
@@ -137,11 +145,33 @@ export default class AISearchAsk extends Component {
     };
     seafileAPI.questionAnsweringFiles(searchParams, token).then(res => {
       let { answering_result, hit_files } = res.data || {};
-      this.setState({
-        isLoading: false,
-        answeringResult: answering_result === 'false' ? '' : answering_result.trim(),
-        hitFiles: this.formatQuestionAnsweringItems(hit_files),
-      });
+      const modifiedAnsweringResult = answering_result
+        .replace(/\[\[([cC])itation/g, '[citation')
+        .replace(/[cC]itation:(\d+)]]/g, 'citation:$1]')
+        .replace(/\[\[([cC]itation:\d+)]](?!])/g, '[$1]')
+        .replace(/(\s*)\n\[citation:/, '[citation:')
+        .replace(/\[[cC]itation:(\d+)]/g, (match, p1) => `<span className="ai-search-ask-body-citation-container"><span className="ai-search-ask-body-citation">${p1}</span></span>`);
+
+      if (modifiedAnsweringResult === 'false') {
+        this.setState({
+          htmlResult: '',
+          isLoading: false,
+          hitFiles: this.formatQuestionAnsweringItems(hit_files)
+        });
+      } else {
+        processor.process(modifiedAnsweringResult.trim(), (error, processResult) => {
+          this.setState({
+            htmlResult: String(processResult),
+            isLoading: false,
+            hitFiles: this.formatQuestionAnsweringItems(hit_files),
+          }, () => {
+            const doms = document.querySelectorAll('.ai-search-ask-body-citation');
+            doms.forEach(dom => {
+              dom.addEventListener('click', this.onClickCitation);
+            });
+          });
+        });
+      }
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
@@ -152,7 +182,7 @@ export default class AISearchAsk extends Component {
   };
 
   render() {
-    const { isLoading, answeringResult, hitFiles } = this.state;
+    const { isLoading, hitFiles } = this.state;
     return (
       <div className="search">
         <div className="search-mask show" onClick={this.props.closeAsk}></div>
@@ -175,9 +205,9 @@ export default class AISearchAsk extends Component {
               <AISearchRobot/>
             </div>
             <div className="ai-search-ask-body-right">
-              {answeringResult.length > 0 ?
+              {this.state.htmlResult.length > 0 ?
                 <div className="ai-search-ask-body-markdown">
-                  <MarkdownViewer value={answeringResult} isShowOutline={false}/>
+                  <div className="article" dangerouslySetInnerHTML={{ __html: this.state.htmlResult }}></div>
                 </div>
                 :
                 <p>{gettext('No result')}</p>
