@@ -79,14 +79,14 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
 
   const onDeleteView = useCallback((viewId, isSelected) => {
     metadataAPI.deleteView(repoID, viewId).then(res => {
-      const currentViewIndex = views.findIndex(item => item.id === viewId);
-      const newViews = views.filter(item => item.id === viewId);
+      const newViews = views.filter(item => item._id !== viewId);
       delete viewsMap.current[viewId];
       setViews(newViews);
       if (isSelected) {
-        const lastViewId = views[currentViewIndex - 1].id;
+        const currentViewIndex = views.findIndex(item => item._id === viewId);
+        const lastViewId = views[currentViewIndex - 1]._id;
         const lastView = viewsMap.current[lastViewId];
-        onNodeClick(lastView);
+        onClick(lastView);
       }
     }).catch((error => {
       const errorMsg = Utils.getErrorMsg(error);
