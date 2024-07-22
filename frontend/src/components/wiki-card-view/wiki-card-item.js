@@ -122,29 +122,25 @@ class WikiCardItem extends Component {
     }
     let isWikiOwner = username === wiki.owner;
     let isOldVersion = wiki.version !== 'v2';
-    let enableShare = username === wiki.owner || isAdmin;
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
     let wikiName = isOldVersion ? `${wiki.name} (old version)` : wiki.name;
-
-
     let showRename = false;
     let showShare = false;
     let showDelete = false;
     let showLeaveShare = false;
-
     if (isDepartment) {
       if (isAdmin) {
-        showRename = true;
         if (isGroupOwner) {
           showDelete = true;
           showShare = true;
+          showRename = true;
         } else {
           showLeaveShare = true;
         }
       }
     } else {
-      if(isAdmin || isWikiOwner) {
+      if (isAdmin || isWikiOwner) {
         showShare = true;
         showDelete = true;
         showRename = true;
@@ -175,23 +171,19 @@ class WikiCardItem extends Component {
                 style={{ 'minWidth': '0' }}
               />
               <DropdownMenu right={true} className="dtable-dropdown-menu">
-                {(isWikiOwner || isAdmin) &&
-                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
-                }
-                {enableShare &&
+                {showRename &&
+                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
+                {showShare &&
                   <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 }
-                {isOldVersion ?
+                {isOldVersion &&
                   <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
-                  : ((isDepartment && isGroupOwner) ?
-                    <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem> :
-                    (isDepartment ?
-                      <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem> :
-                      (isWikiOwner ?
-                        <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem> :
-                        <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
-                      ))
-                  )
+                }
+                {showDelete &&
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                }
+                {showLeaveShare &&
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
                 }
               </DropdownMenu>
             </Dropdown>
@@ -204,41 +196,40 @@ class WikiCardItem extends Component {
         </div>
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
-            {isOldVersion ?
+            {isOldVersion &&
               <DeleteWikiDialog
                 toggleCancel={this.onDeleteCancel}
                 handleSubmit={this.deleteWiki}
                 title={gettext('Unpublish Wiki')}
                 content={<p>{gettext('Are you sure you want to unpublish Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
                 footer={gettext('Unpublish')}
+              />}
+            {(isDepartment && isGroupOwner) ?
+              <DeleteWikiDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.deleteWiki}
+                title={gettext('Delete Wiki')}
+                content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                footer={gettext('Delete')}
+              /> : isDepartment ? <DeleteWikiDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.onItemUnshare}
+                title={gettext('Leave Share Wiki')}
+                content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                footer={gettext('Leave')}
+              /> : (isWikiOwner ? <DeleteWikiDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.deleteWiki}
+                title={gettext('Delete Wiki')}
+                content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                footer={gettext('Delete')}
+              /> : <DeleteWikiDialog
+                toggleCancel={this.onDeleteCancel}
+                handleSubmit={this.deleteWiki}
+                title={gettext('Leave Share Wiki')}
+                content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
+                footer={gettext('Leave')}
               />
-              : ((isDepartment && isGroupOwner) ?
-                <DeleteWikiDialog
-                  toggleCancel={this.onDeleteCancel}
-                  handleSubmit={this.deleteWiki}
-                  title={gettext('Delete Wiki')}
-                  content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
-                  footer={gettext('Delete')}
-                /> : isDepartment ? <DeleteWikiDialog
-                  toggleCancel={this.onDeleteCancel}
-                  handleSubmit={this.onItemUnshare}
-                  title={gettext('Leave Share Wiki')}
-                  content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
-                  footer={gettext('Leave')}
-                /> : (isWikiOwner ? <DeleteWikiDialog
-                  toggleCancel={this.onDeleteCancel}
-                  handleSubmit={this.deleteWiki}
-                  title={gettext('Delete Wiki')}
-                  content={<p>{gettext('Are you sure you want to delete Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
-                  footer={gettext('Delete')}
-                /> : <DeleteWikiDialog
-                  toggleCancel={this.onDeleteCancel}
-                  handleSubmit={this.deleteWiki}
-                  title={gettext('Leave Share Wiki')}
-                  content={<p>{gettext('Are you sure you want to leave share Wiki')}{' '}<b>{wiki.name}</b> ?</p>}
-                  footer={gettext('Leave')}
-                />
-                )
               )
             }
           </ModalPortal>

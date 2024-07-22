@@ -79,12 +79,6 @@ class Wikis2View(APIView):
     def get(self, request, format=None):
         """List all wikis.
         """
-        # org_id = request.user.org.org_id if is_org_context(request) else None
-        # if org_id:
-        #     user_groups = ccnet_api.get_org_groups_by_user(org_id, request.user.username, return_ancestors=True)
-        # else:
-        #     user_groups = ccnet_api.get_groups(request.user.username, return_ancestors=True)
-
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
@@ -98,7 +92,6 @@ class Wikis2View(APIView):
             r.permission = 'rw'
             wikis.append(r)
 
-        
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
         filter_repo_type_ids_map['shared'] = ([r.id for r in shared_wikis])
 
@@ -106,34 +99,12 @@ class Wikis2View(APIView):
             r.owner = r.user
             wikis.append(r)
 
-
         group_wikis = [r for r in groups if is_wiki_repo(r)]
         filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
 
         for r in group_wikis:
-            print(r.__dict__, '111111')
             r.owner = r.user
             wikis.append(r)
-
-        # groups_info = []
-        # gids = [g.id for g in user_groups]
-        # admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
-
-        # for g in user_groups:
-        #     group_info = get_group_info(request, g.id)
-        #     if org_id:
-        #         group_repos = seafile_api.get_org_group_repos(org_id, g.id)
-        #     else:
-        #         group_repos = seafile_api.get_repos_by_group(g.id)
-        #     repos = []
-        #     for r in group_repos:
-        #         repo = {
-        #             "repo_id": r.id,
-        #             "repo_name": r.name,
-        #         }
-        #         repos.append(repo)
-        #     group_info['repos'] = repos
-        #     groups_info.append(group_info)
 
         wikis = list(set(wikis))
         wiki_list = []
@@ -153,12 +124,9 @@ class Wikis2View(APIView):
             }
             repo_info = {
                 "type": "group",
-                # "size": group_w.size,
                 "mtime": group_w.last_modified,
                 "last_modified": timestamp_to_isoformat_timestr(group_w.last_modified),
-                # "encrypted": group_w.encrypted,
                 "permission": group_w.permission,
-                # "is_admin": (group_w.id, group_w.group_id) in admin_info,
             }
             wiki_info.update(repo_info)
             if len(group_wiki_list) == 0:
@@ -185,24 +153,15 @@ class Wikis2View(APIView):
             if w.id in filter_repo_type_ids_map['mine']:
                 repo_info = {
                     "type": "mine",
-                    # "owner_contact_email": email2contact_email(username),
                     "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
-                    # "size": w.size,
-                    # "encrypted": w.encrypted,
                     "permission": 'rw',
-                    # "status": normalize_repo_status_code(w.status),
-                    # "salt": w.salt if w.enc_version >= 3 else '',
                 }
                 wiki_info.update(repo_info)
             if w.id in filter_repo_type_ids_map['shared']:
                 repo_info = {
                     'type': 'shared',
                     "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
-                    # "size": w.size,
-                    # "encrypted": w.encrypted,
                     "permission": w.permission,
-                    # "status": normalize_repo_status_code(w.status),
-                    # "salt": w.salt if w.enc_version >= 3 else '',
                 }
                 wiki_info.update(repo_info)
 
