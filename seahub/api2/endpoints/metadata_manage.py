@@ -455,11 +455,7 @@ class MetadataViews(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+        
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
