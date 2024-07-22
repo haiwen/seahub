@@ -14,6 +14,7 @@ import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
 
 import './side-panel.css';
+import WikiTrashDialog from './wiki-trash-dialog';
 
 const { repoName } = window.wiki.config;
 
@@ -29,7 +30,12 @@ const propTypes = {
 };
 
 class SidePanel extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowTrashDialog: false,
+    };
+  }
   confirmDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
     const { pages } = config;
@@ -94,6 +100,10 @@ class SidePanel extends Component {
     this.props.updateWikiConfig(config);
   };
 
+  toggelTrashDialog = () => {
+    this.setState({ 'isShowTrashDialog': !this.state.isShowTrashDialog });
+  };
+
   renderWikiNav = () => {
     const { config, onUpdatePage } = this.props;
     const { pages, navigation } = config;
@@ -146,6 +156,7 @@ class SidePanel extends Component {
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
+          <a onClick={this.toggelTrashDialog}> Trash </a>
           <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
             <i className='sf3-font sf3-font-new-page'></i>
           </div>
@@ -157,6 +168,12 @@ class SidePanel extends Component {
           {isLoading ? <Loading /> : this.renderWikiNav()}
         </div>
         <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+        {this.state.isShowTrashDialog && (
+          <WikiTrashDialog
+            showTrashDialog={this.state.isShowTrashDialog}
+            toggleTrashDialog={this.toggelTrashDialog}
+          />
+        )}
       </div>
     );
   }
