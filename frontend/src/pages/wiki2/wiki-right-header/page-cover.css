@@ -48,15 +48,15 @@
 
 .wiki-page-cover-panel__body {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   background-color: #fff;
   overflow-y: auto;
 }
 
 .wiki-page-cover-panel .wiki-cover-gallery-img {
-  width: 120px;
-  height: 64px;
+  width: 240px;
+  height: 72px;
   cursor: pointer;
 }
 
