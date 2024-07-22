@@ -18,7 +18,7 @@ from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
 from seahub.ai.utils import create_library_sdoc_index, search, update_library_sdoc_index, \
     delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library,\
     get_file_download_token, get_search_repos, RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
-    format_repos
+    format_repos, USER_REPOS_CACHE_PREFIX, USER_REPOS_CACHE_TIMEOUT
 from seahub.utils import is_org_context, normalize_cache_key
 from seahub.views import check_folder_permission
 
@@ -337,3 +337,51 @@ class FileDownloadToken(APIView):
         }
 
         return Response(library_files_info, status.HTTP_200_OK)
+
+
+class ItemsSearch(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """search items"""
+        QUERY_TYPES = [
+            'library',
+        ]
+
+        query_str = request.GET.get('query_str', '')
+        query_type = request.GET.get('query_type', '')
+
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if query_type not in QUERY_TYPES:
+            error_msg = 'query type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else None
+
+        if query_type == 'library':
+            cache_key = normalize_cache_key(username, USER_REPOS_CACHE_PREFIX)
+            all_repos = cache.get(cache_key)
+            if not all_repos:
+                all_repos = get_search_repos(username, org_id)
+                cache.set(cache_key, all_repos, USER_REPOS_CACHE_TIMEOUT)
+
+            query_result = []
+            # Iterator avoids loading all memory at once
+            query_result = [
+                {
+                    "fullpath": "/",
+                    "is_dir": True,
+                    "repo_name": repo_info[3],
+                    "repo_id": repo_info[0],
+                    "name": repo_info[3]
+                }
+                for repo_info in all_repos
+                if query_str in repo_info[3]
+            ]
+        return Response({'results': query_result})
