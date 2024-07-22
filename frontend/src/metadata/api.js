@@ -148,7 +148,7 @@ class MetadataManagerAPI {
     const params = {
       view_id: viewId,
     };
-    return this.req.delete(url, params);
+    return this.req.delete(url, { data: params });
   };
 
   moveView = (repoID, viewId, targetViewId) => {
