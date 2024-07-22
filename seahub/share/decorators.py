@@ -21,7 +21,6 @@ def _share_link_auth_email_entry(request, fileshare, func, *args, **kwargs):
     
     session_key = "link_authed_email_%s" % fileshare.token
     if request.session.get(session_key) is not None:
-        request.user.username = request.session.get(session_key)
         return func(request, fileshare, *args, **kwargs)
     
     if request.method == 'GET':
@@ -37,7 +36,6 @@ def _share_link_auth_email_entry(request, fileshare, func, *args, **kwargs):
         authed_details = json.loads(fileshare.authed_details)
         if code == code_post and email_post in authed_details.get('authed_emails'):
             request.session[session_key] = email_post
-            request.user.username = request.session.get(session_key)
             cache.delete(cache_key)
             return func(request, fileshare, *args, **kwargs)
         else:

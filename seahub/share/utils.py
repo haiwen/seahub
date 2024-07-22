@@ -269,7 +269,7 @@ def has_shared_to_group(repo_id, path, gid, org_id=None):
 
 
 def check_share_link_user_access(share, username):
-    if share.user_scope == 'all_users':
+    if share.user_scope in [SCOPE_ALL_USERS, SCOPE_SPECIFIC_EMAILS]:
         return True
     if username == share.username:
         return True
@@ -281,11 +281,6 @@ def check_share_link_user_access(share, username):
     if share.user_scope == SCOPE_SPECIFIC_USERS:
         authed_users = authed_details.get('authed_users', [])
         if username in authed_users:
-            return True
-    
-    if share.user_scope == SCOPE_SPECIFIC_EMAILS:
-        auhhed_emails = authed_details.get('authed_emails', [])
-        if username in auhhed_emails:
             return True
     
     return False
