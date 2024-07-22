@@ -116,8 +116,8 @@ class Wikis2View(APIView):
             wikis.append(r)
 
         # groups_info = []
-        gids = [g.id for g in user_groups]
-        admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+        # gids = [g.id for g in user_groups]
+        # admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
 
         # for g in user_groups:
         #     group_info = get_group_info(request, g.id)

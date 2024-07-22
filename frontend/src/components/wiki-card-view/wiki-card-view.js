@@ -100,6 +100,8 @@ class WikiCardView extends Component {
         title={gettext('Shared with me')}
         isDepartment={false}
         isShowAvatar={false}
+        sidePanelRate={sidePanelRate}
+        isSidePanelFolded={isSidePanelFolded}
         toggelAddWikiDialog={null}
       />
     );
