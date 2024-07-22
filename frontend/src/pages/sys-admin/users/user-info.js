@@ -106,8 +106,7 @@ class Content extends Component {
       const {
         currentKey, dialogTitle,
         isSetQuotaDialogOpen, isUpdateUserDialogOpen,
-        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen,
-        isUpdateUserRoleDialogOpen
+        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen
       } = this.state;
       return (
         <Fragment>
