@@ -10,6 +10,7 @@ const WIKI_COVER_LIST = [
   'wiki-cover-6.jpg',
   'wiki-cover-7.jpg',
   'wiki-cover-8.jpg',
+  'wiki-cover-9.jpg',
 ];
 
 export { FOLDER, PAGE, WIKI_COVER_LIST };
