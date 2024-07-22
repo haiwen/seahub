@@ -123,6 +123,11 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  getView = (repoID, viewId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/' + viewId + '/';
+    return this.req.get(url);
+  };
+
   addView = (repoID, name) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     const params = { name };

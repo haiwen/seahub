@@ -76,6 +76,11 @@ class Context {
     return this.metadataAPI.listViews(repoID);
   };
 
+  getView = (viewId) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.getView(repoID, viewId);
+  };
+
   canModifyCell = (column) => {
     const { editable } = column;
     if (!editable) return false;

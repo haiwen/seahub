@@ -46,8 +46,8 @@ class Store {
   async loadData(limit = PER_LOAD_NUMBER) {
     const res = await this.context.getMetadata({ start: this.startIndex, limit });
     const rows = res?.data?.results || [];
-    const viewRes = await this.context.getViews();
-    const view = viewRes?.data?.views.find(v => v._id === this.viewId) || {};
+    const viewRes = await this.context.getView(this.viewId);
+    const view = viewRes?.data?.view || {};
     const columns = normalizeColumns(res?.data?.metadata);
     let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
