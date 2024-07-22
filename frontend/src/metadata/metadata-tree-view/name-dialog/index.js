@@ -6,7 +6,7 @@ import { gettext } from '../../metadata-view/utils';
 import { Utils } from '../../../utils/utils';
 
 const NameDialog = ({ value: oldName, title, onSubmit, onToggle }) => {
-  const [name, setName] = useState(oldName);
+  const [name, setName] = useState(oldName || '');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
 

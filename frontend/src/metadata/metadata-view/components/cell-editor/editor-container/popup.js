@@ -144,7 +144,7 @@ class PopupEditorContainer extends React.Component {
     const { onCommit, column, record } = this.props;
     if (!record._id) return;
     const { key: columnKey, type: columnType, name: columnName } = column;
-    const originalOldCellValue = record[columnKey];
+    const originalOldCellValue = getCellValueByColumn(record, column);
     const newValue = this.getEditor().getValue();
     const updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     let originalUpdates = { ...updated };

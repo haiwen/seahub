@@ -219,7 +219,7 @@ class NormalEditorContainer extends React.Component {
   commit = (args) => {
     const { onCommit, record, column } = this.props;
     const { key: columnKey, type: columnType, name: columnName } = column;
-    const originalOldCellValue = record[columnKey];
+    const originalOldCellValue = getCellValueByColumn(record, column);
     const updated = this.getEditor().getValue();
     if (!isCellValueChanged(originalOldCellValue, updated[columnKey], columnType)) {
       this.props.onCommitCancel();
