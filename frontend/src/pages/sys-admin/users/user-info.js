@@ -11,8 +11,9 @@ import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
+import Selector from '../../../components/single-selector';
 
-const { twoFactorAuthEnabled } = window.sysadmin.pageOptions;
+const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
@@ -24,7 +25,8 @@ class Content extends Component {
       isSetQuotaDialogOpen: false,
       isSetUserUploadRateLimitDialogOpen: false,
       isSetUserDownloadRateLimitDialogOpen: false,
-      isUpdateUserDialogOpen: false
+      isUpdateUserDialogOpen: false,
+      highlight: false
     };
   }
 
@@ -73,10 +75,6 @@ class Content extends Component {
     this.toggleDialog('contact_email', gettext('Set Contact Email'));
   };
 
-  toggleSetUserReferenceIDDialog = () => {
-    this.toggleDialog('reference_id', gettext('Set Reference ID'));
-  };
-
   updateValue = (value) => {
     this.props.updateUser(this.state.currentKey, value);
   };
@@ -97,6 +95,7 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg } = this.props;
+    const { highlight } = this.state;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -144,10 +143,15 @@ class Content extends Component {
               {this.showEditIcon(this.toggleSetUserComtactEmailDialog)}
             </dd>
 
-            <dt className="info-item-heading">{gettext('Reference ID')}</dt>
+            <dt className="info-item-heading">{gettext('Role')}</dt>
             <dd className="info-item-content">
-              {user.reference_id || '--'}
-              {this.showEditIcon(this.toggleSetUserReferenceIDDialog)}
+              <Selector
+                isDropdownToggleShown={highlight}
+                currentSelectedOption={this.props.currentSelectedRoleOption}
+                options={this.props.roleOptions}
+                selectOption={this.props.updateRole}
+                toggleItemFreezed={this.props.toggleItemFreezed}
+              />
             </dd>
 
             <dt className="info-item-heading">{gettext('Space Used / Quota')}</dt>
@@ -280,6 +284,11 @@ class User extends Component {
     });
   };
 
+
+  updateRole = (roleOption) => {
+    this.updateUser('role', roleOption.value);
+  };
+
   disable2FA = () => {
     const email = this.state.userInfo.email;
     seafileAPI.sysAdminDeleteTwoFactorAuth(email).then(res => {
@@ -309,8 +318,34 @@ class User extends Component {
     });
   };
 
+  translateRole = (role) => {
+    switch (role) {
+      case 'default':
+        return gettext('Default');
+      case 'guest':
+        return gettext('Guest');
+      default:
+        return role;
+    }
+  };
+
   render() {
     const { userInfo } = this.state;
+    let currentSelectedRoleOption;
+    const { role: curRole } = userInfo;
+    this.roleOptions = availableRoles.map(item => {
+      return {
+        value: item,
+        text: this.translateRole(item),
+        isSelected: item == curRole
+      };
+    });
+    currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || {
+      value: curRole,
+      text: this.translateRole(curRole),
+      isSelected: true
+    };
+
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -322,6 +357,9 @@ class User extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 userInfo={this.state.userInfo}
+                roleOptions={this.roleOptions}
+                currentSelectedRoleOption={currentSelectedRoleOption}
+                updateRole={this.updateRole}
                 updateUser={this.updateUser}
                 disable2FA={this.disable2FA}
                 toggleForce2fa={this.toggleForce2fa}
