@@ -575,14 +575,15 @@ class LibContentView extends React.Component {
     this.setState({ itemsShowLength: 100 });
   };
 
+  shouldDisplayThumbnail = (item) => {
+    return ((Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name)) || (enablePDFThumbnail && Utils.pdfCheck(item.name))) && !item.encoded_thumbnail_src);
+  };
+
   getThumbnails = (repoID, path, direntList) => {
-    let items = direntList.filter((item) => {
-      return (Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name)) || (enablePDFThumbnail && Utils.pdfCheck(item.name))) && !item.encoded_thumbnail_src;
-    });
+    let items = direntList.filter((item) => this.shouldDisplayThumbnail(item));
     if (items.length == 0) {
       return ;
     }
-
     const _this = this;
     const len = items.length;
     const thumbnailSize = 48;
@@ -1458,30 +1459,34 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
-    let isExist = this.state.direntList.some(item => {
-      return item.name === direntObject.name && item.type === direntObject.type;
-    });
+    const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type );
+
     if (isExist) {
-      let direntList = this.state.direntList;
-      for (let i = 0; i < direntList.length; i++) {
-        let dirent = direntList[i];
+      const updatedDirentList = this.state.direntList.map(dirent => {
         if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
-          let mtime = moment.unix(direntObject.mtime).fromNow();
-          this.updateDirent(dirent, 'mtime', mtime); // todo file size is need update too, api is not return;
-          break;
+          const mtime = moment.unix(direntObject.mtime).fromNow();
+
+          return this.updateDirent(dirent, 'mtime', mtime); // Note: Consider updating file size here as well
         }
-      }
+        return dirent;
+      });
+
+      this.setState({ direntList: updatedDirentList });
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
-      let dirent = new Dirent(direntObject);
+      const dirent = new Dirent(direntObject);
+
+      this.setState(prevState => ({
+        direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
+      }));
+
       if (this.state.isTreePanelShown) {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
       }
-      if (direntObject.type === 'dir') {
-        this.setState({ direntList: [dirent, ...this.state.direntList] });
-      } else {
-        this.setState({ direntList: [...this.state.direntList, dirent] });
+
+      if (direntObject.type !== 'dir') {
+        this.loadDirentList(this.state.path);
       }
     }
   };
