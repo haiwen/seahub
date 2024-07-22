@@ -107,6 +107,7 @@ class TreeView extends React.Component {
       return;
     }
     let dragStartNodeData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    if (!dragStartNodeData) return;
     dragStartNodeData = JSON.parse(dragStartNodeData);
 
     let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartNodeData;

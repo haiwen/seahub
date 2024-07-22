@@ -62,16 +62,25 @@ class DirPath extends React.Component {
       if (item === '') {
         return null;
       }
-      if (index === (pathList.length - 1)) {
-        if (item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
-          return (
-            <Fragment key={index}>
-              <span className="path-split">/</span>
-              <span className="path-item">{gettext('File extended properties')}</span>
-            </Fragment>
-          );
-        }
+      if (index === pathList.length - 2 && item === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+        return (
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-item">{gettext('File extended properties')}</span>
+          </Fragment>
+        );
+      }
 
+      if (index === pathList.length - 1 && pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) {
+        return (
+          <Fragment key={index}>
+            <span className="path-split">/</span>
+            <span className="path-item">{item}</span>
+          </Fragment>
+        );
+      }
+
+      if (index === (pathList.length - 1)) {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
@@ -129,7 +138,7 @@ class DirPath extends React.Component {
     const { currentPath } = this.props;
     const path = currentPath[currentPath.length - 1] === '/' ? currentPath.slice(0, currentPath.length - 1) : currentPath;
     const pathList = path.split('/');
-    return pathList[pathList.length - 1] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
+    return pathList[pathList.length - 2] === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
   };
 
   render() {

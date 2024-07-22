@@ -8,6 +8,7 @@ export {
   UNDO_OPERATION_TYPE,
   LOCAL_APPLY_OPERATION_TYPE,
   NEED_APPLY_AFTER_SERVER_OPERATION,
+  VIEW_OPERATION,
 } from './constants';
 
 export {

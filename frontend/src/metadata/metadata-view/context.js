@@ -25,8 +25,8 @@ class Context {
     this.metadataAPI = metadataAPI;
 
     // init localStorage
-    const { repoID } = this.settings;
-    this.localStorage = new LocalStorage(`sf-metadata-${repoID}`);
+    const { repoID, viewID } = this.settings;
+    this.localStorage = new LocalStorage(`sf-metadata-${repoID}-${viewID}`);
 
     // init userService
     this.userService = new UserService({ mediaUrl, api: this.metadataAPI.listUserInfo });
@@ -69,6 +69,11 @@ class Context {
   getMetadata = (params) => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.getMetadata(repoID, params);
+  };
+
+  getViews = () => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.listViews(repoID);
   };
 
   canModifyCell = (column) => {
@@ -115,6 +120,10 @@ class Context {
 
   modifyRecords = (repoId, recordsData, isCopyPaste) => {
     return this.metadataAPI.modifyRecords(repoId, recordsData, isCopyPaste);
+  };
+
+  modifyView = (repoId, viewId, viewData) => {
+    return this.metadataAPI.modifyView(repoId, viewId, viewData);
   };
 
   getRowsByIds = () => {

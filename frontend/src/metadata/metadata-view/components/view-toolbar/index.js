@@ -6,8 +6,7 @@ import { EVENT_BUS_TYPE } from '../../constants';
 
 import './index.css';
 
-const ViewToolBar = () => {
-  const [isLoading, setLoading] = useState(true);
+const ViewToolBar = ({ metadataViewId }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -41,28 +40,21 @@ const ViewToolBar = () => {
   }, []);
 
   useEffect(() => {
+    let unsubscribeViewChange;
     let timer = setInterval(() => {
       if (window.sfMetadataContext && window.sfMetadataStore.data) {
         timer && clearInterval(timer);
         timer = null;
-        setLoading(false);
         setView(window.sfMetadataStore.data.view);
         setCollaborators(window.sfMetadataStore?.collaborators || []);
+        unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.VIEW_CHANGED, viewChange);
       }
     }, 300);
     return () => {
       timer && clearInterval(timer);
+      unsubscribeViewChange && unsubscribeViewChange();
     };
-  }, []);
-
-  useEffect(() => {
-    if (isLoading) return;
-    const unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.VIEW_CHANGED, viewChange);
-    return () => {
-      unsubscribeViewChange();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [metadataViewId]);
 
   if (!view) return null;
 
@@ -110,11 +102,7 @@ const ViewToolBar = () => {
 };
 
 ViewToolBar.propTypes = {
-  view: PropTypes.object,
-  modifyFilters: PropTypes.func,
-  modifySorts: PropTypes.func,
-  modifyGroupbys: PropTypes.func,
-  modifyHiddenColumns: PropTypes.func,
+  metadataViewId: PropTypes.string,
 };
 
 export default ViewToolBar;

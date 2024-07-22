@@ -13,6 +13,7 @@ const propTypes = {
   isFileLoadedErr: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
+  metadataViewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -52,13 +53,14 @@ class DirColumnFile extends React.Component {
     }
 
     if (this.props.content === '__sf-metadata') {
+      const { repoID, currentRepoInfo, metadataViewId } = this.props;
       window.sfMetadata = {
         siteRoot,
         lang,
         mediaUrl,
       };
 
-      return (<SeafileMetadata repoID={this.props.repoID} currentRepoInfo={this.props.currentRepoInfo} />);
+      return (<SeafileMetadata repoID={repoID} currentRepoInfo={currentRepoInfo} viewID={metadataViewId} />);
     }
 
     return (
