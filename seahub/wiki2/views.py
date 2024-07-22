@@ -4,6 +4,7 @@ import logging
 import posixpath
 from datetime import datetime
 
+from constance import config
 from seaserv import seafile_api
 
 from django.http import Http404
@@ -15,7 +16,7 @@ from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
-from seahub.utils.repo import get_repo_owner
+from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.settings import SEADOC_SERVER_URL
 
 # Get an instance of a logger
@@ -67,13 +68,14 @@ def wiki_view(request, wiki_id):
             logger.warning(e)
 
     last_modified = datetime.fromtimestamp(last_modified)
-
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
+        "is_admin": is_repo_admin(req_user, wiki.repo_id),
         "file_path": file_path,
         "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
-        "permission": permission
+        "permission": permission,
+        "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH
     })

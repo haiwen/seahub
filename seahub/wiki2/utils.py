@@ -264,3 +264,15 @@ def move_nav(navigation, target_id, moved_nav, move_position):
         if 'children' in nav:
             move_nav(nav['children'], target_id, moved_nav, move_position)
 
+
+def revert_pages(navigation, trash_pages, pages, doc_uuid):
+    for trash_page in trash_pages:
+        if trash_page['docUuid'] == doc_uuid:
+            pages.append(trash_page)
+            new_nav = {
+                "id": trash_page['id'],
+                "type": "page"
+            }
+            navigation.append(new_nav)
+            trash_pages.remove(trash_page)
+            break

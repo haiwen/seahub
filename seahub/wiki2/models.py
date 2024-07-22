@@ -45,6 +45,29 @@ class Wiki2(object):
         }
 
 
+class WikiPageTrash(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    page_id = models.CharField(max_length=4)
+    name = models.CharField(max_length=255)
+    delete_time = models.DateTimeField(auto_now_add=True, blank=False, null=False)
+    size = models.BigIntegerField(blank=False, null=False)
+
+    class Meta:
+        db_table = 'WikiPageTrash'
+        managed = False
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'repo_id': self.repo_id,
+            'path': self.path,
+            'page_id': self.page_id,
+            'name': self.name,
+            'delete_time': self.delete_time,
+            'size': self.size
+        }
+
 ###### signal handlers
 from django.dispatch import receiver
 from seahub.signals import repo_deleted

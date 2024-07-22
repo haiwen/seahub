@@ -24,11 +24,14 @@
         config: {
             wikiId: "{{ wiki.id }}",
             repoName: "{{ wiki.name }}",
+            wikiOwner: "{{ wiki.owner }}",
+            isAdmin: "{{ is_admin }}",
             initial_path: "{{ file_path|escapejs }}",
             isWiki2: true,
             seadocServerUrl: "{{ seadoc_server_url }}",
             seadocAccessToken: "{{ seadoc_access_token }}",
             permission: "{{ permission }}",
+            enableUserCleanTrash: {% if enable_user_clean_trash %} true {% else %} false {% endif %}
         }
     };
 </script>
