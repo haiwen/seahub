@@ -135,8 +135,8 @@ class WikiCardItem extends Component {
 
     if (isDepartment) {
       if (isAdmin) {
+        showRename = true;
         if (isGroupOwner) {
-          showRename = true;
           showDelete = true;
           showShare = true;
         } else {
