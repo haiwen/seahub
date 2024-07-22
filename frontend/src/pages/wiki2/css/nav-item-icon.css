@@ -9,6 +9,17 @@
   margin-right: 8px;
 }
 
+.nav-item-icon .sf3-font {
+  color: #666666;
+  line-height: 16px;
+}
+
+.nav-item-icon .seafile-multicolor-icon {
+  color: #666666;
+  height: 16px;
+  width: 16px;
+}
+
 .nav-item-icon:hover:not(.nav-item-icon-disable) {
   background-color: #DFDFDD;
 }
