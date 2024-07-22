@@ -126,6 +126,33 @@ class WikiCardItem extends Component {
     let publishedUrl = `${siteRoot}published/${encodeURIComponent(wiki.slug)}/`;
     let editUrl = `${siteRoot}wikis/${wiki.id}/`;
     let wikiName = isOldVersion ? `${wiki.name} (old version)` : wiki.name;
+
+
+    let showRename = false;
+    let showShare = false;
+    let showDelete = false;
+    let showLeaveShare = false;
+
+    if (isDepartment) {
+      if (isAdmin) {
+        if (isGroupOwner) {
+          showRename = true;
+          showDelete = true;
+          showShare = true;
+        } else {
+          showLeaveShare = true;
+        }
+      }
+    } else {
+      if(isAdmin || isWikiOwner) {
+        showShare = true;
+        showDelete = true;
+        showRename = true;
+      } else {
+        showLeaveShare = true;
+      }
+    }
+
     return (
       <>
         <div
