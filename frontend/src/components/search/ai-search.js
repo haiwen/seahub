@@ -8,11 +8,8 @@ import Icon from '../icon';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
-import toaster from '../toast';
 import Loading from '../loading';
-import Switch from '../common/switch';
 
 const INDEX_STATE = {
   RUNNING: 'running',
@@ -51,7 +48,6 @@ export default class AISearch extends Component {
       showRecent: true,
       isResultGetted: false,
       isCloseShow: false,
-      isSettingsShown: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
@@ -74,27 +70,6 @@ export default class AISearch extends Component {
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
     document.addEventListener('click', this.handleOutsideClick);
-    if (this.props.isLibView) {
-      this.queryLibraryIndexState(this.props.repoID);
-    }
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.calculateStoreKey(nextProps);
-    if (nextProps.isLibView) {
-      if (this.props.repoID !== nextProps.repoID) {
-        this.queryLibraryIndexState(nextProps.repoID);
-      }
-    } else {
-      if (this.indexStateTimer) {
-        clearInterval(this.indexStateTimer);
-        this.indexStateTimer = null;
-      }
-      this.isChineseInput = false;
-      this.setState({
-        indexState: '',
-      });
-    }
   }
 
   calculateStoreKey = (props) => {
@@ -111,19 +86,6 @@ export default class AISearch extends Component {
     }
     this.storeKey = storeKey;
   };
-
-  queryLibraryIndexState(repoID) {
-    seafileAPI.queryLibraryIndexState(repoID).then(res => {
-      const { state: indexState, task_id: taskId } = res.data;
-      this.setState({ indexState }, () => {
-        if (indexState === INDEX_STATE.RUNNING) {
-          this.queryIndexTaskStatus(taskId);
-        }
-      });
-    }).catch(error => {
-      this.setState({ indexState: INDEX_STATE.UNCREATED });
-    });
-  }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onDocumentKeydown);
@@ -479,7 +441,6 @@ export default class AISearch extends Component {
       inputValue: '',
       isMaskShow: false,
       isCloseShow: false,
-      isSettingsShown: false,
       isResultGetted: false,
       resultItems: [],
       highlightIndex: 0,
@@ -699,93 +660,8 @@ export default class AISearch extends Component {
     });
   };
 
-  queryIndexTaskStatus = (taskId) => {
-    if (!taskId) return;
-    this.indexStateTimer = setInterval(() => {
-      seafileAPI.queryIndexTaskStatus(taskId).then(res => {
-        const isFinished = res.data.is_finished;
-        if (isFinished) {
-          this.setState({ indexState: INDEX_STATE.FINISHED });
-          this.indexStateTimer && clearInterval(this.indexStateTimer);
-          this.indexStateTimer = null;
-        }
-      }).catch(error => {
-        this.indexStateTimer && clearInterval(this.indexStateTimer);
-        this.indexStateTimer = null;
-        const errorMsg = Utils.getErrorMsg(error);
-        toaster.danger(errorMsg);
-        this.setState({ indexState: INDEX_STATE.UNCREATED });
-      });
-    }, 3000);
-  };
-
-  onCreateIndex = () => {
-    this.setState({ indexState: INDEX_STATE.RUNNING });
-    seafileAPI.createLibraryIndex(this.props.repoID).then(res => {
-      const taskId = res.data.task_id;
-      toaster.notify(gettext('Indexing the library. Semantic search will be available within a few minutes.'));
-      this.queryIndexTaskStatus(taskId);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-      this.setState({ indexState: INDEX_STATE.UNCREATED });
-    });
-  };
-
-  onDeleteIndex = () => {
-    seafileAPI.deleteLibraryIndex(this.props.repoID).then(res => {
-      toaster.notify(gettext('Successfully turned it off'));
-      this.setState({ indexState: INDEX_STATE.UNCREATED });
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-    });
-  };
-
   setSettingsContainerRef = (ref) => {
     this.settingsContainer = ref;
-  };
-
-  renderSwitch = () => {
-    const { indexState } = this.state;
-    if (indexState === INDEX_STATE.RUNNING) {
-      return (
-        <Switch
-          checked={true}
-          placeholder={gettext('Turn on semantic search for this library')}
-          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
-          size="small"
-          textPosition='right'
-          disabled={true}
-          setRef={this.setSettingsContainerRef}
-        />
-      );
-    } else if (indexState === INDEX_STATE.FINISHED) {
-      return (
-        <Switch
-          checked={true}
-          placeholder={gettext('Turn off semantic search for this library')}
-          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
-          size="small"
-          onChange={this.onDeleteIndex}
-          textPosition='right'
-          setRef={this.setSettingsContainerRef}
-        />
-      );
-    } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {
-      return (
-        <Switch
-          checked={false}
-          placeholder={gettext('Turn on semantic search for this library')}
-          className="position-absolute p-4 bg-white border rounded shadow-sm search-settings"
-          size="small"
-          onChange={this.onCreateIndex}
-          textPosition='right'
-          setRef={this.setSettingsContainerRef}
-        />
-      );
-    }
-    return null;
   };
 
   renderSearchIcon = () => {
@@ -794,21 +670,6 @@ export default class AISearch extends Component {
       return <Icon symbol='AI-search' className='input-icon-addon' />;
     } else {
       return <Icon symbol='search' className='input-icon-addon' />;
-    }
-  };
-
-  toggleSettingsShown = () => {
-    this.setState({
-      isSettingsShown: !this.state.isSettingsShown
-    });
-  };
-
-  handleOutsideClick = (e) => {
-    const { isSettingsShown } = this.state;
-    if (isSettingsShown &&
-      !this.settingsContainer.contains(e.target) &&
-      !this.settingIcon.contains(e.target)) {
-      this.toggleSettingsShown();
     }
   };
 
@@ -858,7 +719,6 @@ export default class AISearch extends Component {
                   </>
                 }
               </div>
-              {this.state.isSettingsShown && this.renderSwitch()}
               <div
                 className="search-result-container dropdown-search-result-container"
                 onScroll={this.onResultListScroll}
