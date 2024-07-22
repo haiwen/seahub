@@ -84,12 +84,6 @@ class Content extends Component {
     this.toggleDialog('', '');
   };
 
-  toggleUpdateRoleDialog = () => {
-    this.setState({
-      isUpdateUserRoleDialogOpen: !this.state.isUpdateUserRoleDialogOpen
-    });
-  };
-
   showEditIcon = (action) => {
     return (
       <span
@@ -232,14 +226,6 @@ class Content extends Component {
             toggleDialog={this.toggleUpdateUserDialog}
           />
           }
-          {isUpdateUserRoleDialogOpen &&
-          <SysAdminUpdateUserDialog
-            dialogTitle={dialogTitle}
-            value={user[currentKey]}
-            updateValue={this.updateValue}
-            toggleDialog={this.toggleUpdateRoleDialog}
-          />
-          }
         </Fragment>
       );
     }
@@ -356,7 +342,7 @@ class User extends Component {
         isSelected: item == curRole
       };
     });
-    currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || { // `|| {...}`: to be compatible with old data(roles not in the present `availableRoles`
+    currentSelectedRoleOption = this.roleOptions.filter(item => item.isSelected)[0] || {
       value: curRole,
       text: this.translateRole(curRole),
       isSelected: true
