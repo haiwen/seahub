@@ -253,12 +253,16 @@ class DirColumnView extends React.Component {
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}
               fullDirentList={this.props.fullDirentList}
+              selectedDirentList={this.props.selectedDirentList}
               onAddFile={this.props.onAddFile}
               onItemClick={this.props.onItemClick}
               onItemDelete={this.props.onItemDelete}
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
               onItemConvert={this.props.onItemConvert}
+              onItemsMove={this.props.onItemsMove}
+              onItemsCopy={this.props.onItemsCopy}
+              onItemsDelete={this.props.onItemsDelete}
               updateDirent={this.props.updateDirent}
               onAddFolder={this.props.onAddFolder}
               showDirentDetail={this.props.showDirentDetail}

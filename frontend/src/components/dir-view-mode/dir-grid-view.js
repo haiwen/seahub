@@ -11,6 +11,7 @@ const propTypes = {
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFile: PropTypes.func.isRequired,
@@ -18,6 +19,9 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
@@ -68,12 +72,16 @@ class DirGridView extends React.Component {
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
           fullDirentList={this.props.fullDirentList}
+          selectedDirentList={this.props.selectedDirentList}
           onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
           onItemDelete={this.props.onItemDelete}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
           onItemConvert={this.props.onItemConvert}
+          onItemsMove={this.props.onItemsMove}
+          onItemsCopy={this.props.onItemsCopy}
+          onItemsDelete={this.props.onItemsDelete}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
           onRenameNode={this.props.onRenameNode}

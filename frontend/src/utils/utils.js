@@ -681,14 +681,7 @@ export const Utils = {
     return withoutDot ? parts.pop() : '.' + parts.pop();
   },
 
-  getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu, hasMultipleTypes = false) {
-    if (hasMultipleTypes) {
-      const folderOps = Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
-      const fileOps = Utils.getFileOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
-
-      return folderOps.filter(operation => fileOps.includes(operation));
-    }
-
+  getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     const operationListGetter = dirent.type === 'dir' ? Utils.getFolderOperationList : Utils.getFileOperationList;
     return operationListGetter(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   },
