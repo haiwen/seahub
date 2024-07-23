@@ -372,7 +372,7 @@ def ajax_get_link_email_audit_code(request):
     cache.set(cache_key, code, 60 * 60)
 
     # send code to user via email
-    subject = _("The verification code")
+    subject = _("Verification code")
     c = {'code': code}
 
     send_success = send_html_email_with_dj_template(email,
