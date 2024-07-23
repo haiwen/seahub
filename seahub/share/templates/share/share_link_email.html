@@ -2,18 +2,21 @@
 {% load i18n %}
 
 {% block email_con %}
-
 {% autoescape off %}
-
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans %}
-    {{ shared_from }} has shared a library with you.
-    Please click <a href={{ url }}>here</a> to verify your email.
+    {{ shared_from }} shared a file link with you.
 {% endblocktrans%}
 </p>
-
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}
+You can click <a href={{ url }}>here</a> to verify your email address and visit it.
+{% endblocktrans%}
+</p>
 {% endautoescape %}
+{% endblock %}
 
+{% block thanks %}
 {% endblock %}

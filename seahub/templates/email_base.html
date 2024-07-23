@@ -5,11 +5,13 @@
     <div style="padding:30px 55px 40px;min-height:300px;border-top:1px solid #efefef;background:transparent url('{{ url_base }}{{media_url}}img/email_bg.jpg') scroll repeat-x center top;">
         {% block email_con %}{% endblock %}
 
-        <p style="font-size:14px;color:#434144;margin:30px 0;">
+        {% block thanks %}
+        <p style="font-size:14px;color:#434144;margin-top:30px;">
         {% trans "Thanks for using our site!" %}
         </p>
+        {% endblock %}
 
-        <p style="font-size:14px;color:#434144;">
+        <p style="font-size:14px;color:#434144;margin-top:30px;">
         {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
         </p>
     </div>
