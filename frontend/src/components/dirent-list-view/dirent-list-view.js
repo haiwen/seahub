@@ -306,7 +306,7 @@ class DirentListView extends React.Component {
   // table-container contextmenu handle
   onContainerClick = () => {
     hideMenu();
-    if (this.state.activeDirent) {
+    if (this.props.selectedDirentList.length > 0) {
       this.onDirentClick(null);
     }
   };
