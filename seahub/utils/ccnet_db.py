@@ -162,3 +162,12 @@ class CcnetDB:
                 users.append(users_obj)
 
         return users, total_count
+    
+    
+    def get_group_ids_admins_map(self, group_ids):
+        
+        
+        return {
+            '12': ['xxx','xxxx'],
+            '13': ['xxx', 'xxxx']
+        }

@@ -53,8 +53,7 @@ from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_own
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
-from seahub.api2.endpoints.groups import get_group_info
-
+from seahub.api2.endpoints.groups import get_group_info, get_group_admins
 
 HTTP_520_OPERATION_FAILED = 520
 
@@ -82,6 +81,13 @@ class Wikis2View(APIView):
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
+        
+        # list user groups
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
+        else:
+            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
         wikis = []
         filter_repo_type_ids_map = {}
@@ -101,6 +107,15 @@ class Wikis2View(APIView):
 
         group_wikis = [r for r in groups if is_wiki_repo(r)]
         filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
+        
+        
+        group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
+        
+        ccnet_db = CcnetDB()
+        group_ids_admins_map = ccnet_db.et_group_ids_admins_map(group_id_in_wikis)
+        
+        user_wiki_groups = [ug for ug in user_groups if ug.group_id in group_id_in_wikis]
+        wiki_group_id_group_map = {g.group_id : g for g in user_wiki_groups}
 
         for r in group_wikis:
             r.owner = r.user
@@ -112,14 +127,13 @@ class Wikis2View(APIView):
         for group_w in group_wikis:
             wiki = Wiki(group_w)
             wiki_info = wiki.to_dict()
-            group_info = get_group_info(request, group_w.group_id)
+            # group_info = get_group_info(request, group_w.group_id)
+            group_obj = wiki_group_id_group_map.get(group_w.group_id)
             group_wiki = {
-                'group_name': group_info['name'],
-                'group_id': group_info['id'],
-                'group_admins': group_info['admins'],
-                "parent_group_id": group_info['parent_group_id'],
-                "owner": group_info['owner'],
-                "created_at": group_info['created_at'],
+                'group_name': group_obj.group_name,
+                'group_id': group_obj.group_id,
+                'group_admins': group_ids_admins_map.get(group_obj.group_id),
+                "owner": group_obj.creator_name,
                 'wiki_info': []
             }
             repo_info = {
