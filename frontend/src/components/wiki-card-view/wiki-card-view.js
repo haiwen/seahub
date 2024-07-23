@@ -83,19 +83,19 @@ class WikiCardView extends Component {
         toggelAddWikiDialog={canPublishRepo ? toggelAddWikiDialog.bind(this, null) : null}
       />
     );
-    for (let deptID in department2WikisMap) {
+    for (let deptEmail in department2WikisMap) {
       wikiCardGroups.push(
         <WikiCardGroup
-          key={'department-Wikis-' + deptID}
+          key={'department-Wikis-' + deptEmail}
           deleteWiki={this.props.deleteWiki}
           renameWiki={this.props.renameWiki}
           sidePanelRate={sidePanelRate}
           isSidePanelFolded={isSidePanelFolded}
-          wikis={department2WikisMap[deptID]}
-          title={department2WikisMap[deptID][0].owner_nickname}
+          wikis={department2WikisMap[deptEmail]}
+          title={department2WikisMap[deptEmail][0].owner_nickname}
           isDepartment={true}
           isShowAvatar={false}
-          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[deptID]) ? toggelAddWikiDialog.bind(this, deptID) : null}
+          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[deptEmail]) ? toggelAddWikiDialog.bind(this, deptEmail) : null}
         />
       );
     }
