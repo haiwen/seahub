@@ -1,5 +1,7 @@
 .side-nav-icon-tip-popover {
   cursor: pointer;
+  padding-left: 0 !important;
+  left: 20px !important;
 }
 
 .side-nav-icon-tip {

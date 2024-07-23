@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import classnames from 'classnames';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/sdoc-editor';
 import { gettext } from '../../utils/constants';
@@ -8,10 +7,10 @@ import Loading from '../../components/loading';
 import GoBack from '../../components/common/go-back';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../../components/toast';
 
 import '../../css/layout.css';
 import '../../css/sdoc-revision.css';
-import toaster from '../../components/toast';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
@@ -112,7 +111,7 @@ class SdocRevision extends React.Component {
       <div className="sdoc-revision d-flex h-100 w-100 o-hidden">
         <div className="sdoc-revision-container d-flex flex-column">
           <div className="sdoc-revision-header pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
-            <div className={classnames('sdoc-revision-header-left h-100 d-flex align-items-center o-hidden')}>
+            <div className='sdoc-revision-header-left h-100 d-flex align-items-center o-hidden'>
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>

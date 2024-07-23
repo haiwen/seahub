@@ -54,10 +54,9 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: 40px;
+  height: 32px;
   padding: 0 8px 0 0;
   font-size: 14px;
-  font-weight: 500;
   align-items: center;
   justify-content: center;
   border-radius: 3px;
@@ -66,6 +65,7 @@
 
 .wiki-nav .wiki-page-item.selected-page {
   background-color: #EDEDEA;
+  font-weight: 500;
 }
 
 .wiki-nav .wiki-page-item:hover {
@@ -94,10 +94,6 @@
   overflow: hidden;
 }
 
-.wiki-nav .wiki-page-content {
-  padding-left: calc(12 * 0.8px + 0.5rem);
-}
-
 .wiki-nav .wiki-page-content:hover {
   cursor: pointer;
 }
@@ -108,17 +104,25 @@
 }
 
 .wiki-nav .wiki-page-content .wiki-page-title {
-  height: 40px;
-  line-height: 40px;
+  height: 32px;
+  line-height: 32px;
   flex: 1;
 }
 
 .wiki-nav .more-wiki-page-operation {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  padding: 0 2px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.wiki-nav .wiki-add-page-btn {
+  height: 20px;
+  line-height: 20px;
+  padding: 0 3px;
+  margin-left: 4px;
 }
 
 .wiki-nav .wiki-add-page-btn:hover,
@@ -129,6 +133,7 @@
 
 .wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
+  font-size: 14px;
   cursor: pointer;
   opacity: 0;
 }

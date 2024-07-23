@@ -39,47 +39,45 @@ class MainSideNavFolded extends React.Component {
         <div className={'side-nav-con d-flex flex-column'}>
           <ul className="nav nav-pills flex-column nav-container">
 
-            <li id="main-side-nav-folded-files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+            <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
               <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
-                <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
+                <span className="sf3-font-files sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-files"></span>
+                <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
               </Link>
             </li>
-            <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
 
-            <li className={`nav-item ${this.getActiveClass('starred')}`} id="main-side-nav-folded-starred">
+            <li className={`nav-item ${this.getActiveClass('starred')}`}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                <span className="sf3-font-starred sf3-font" aria-hidden="true"></span>
+                <span className="sf3-font-starred sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-starred"></span>
+                <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
               </Link>
             </li>
-            <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
 
             {showActivity &&
               <>
-                <li className={`nav-item ${this.getActiveClass('dashboard')}`} id="main-side-nav-folded-dashboard">
+                <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
-                    <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
+                    <span className="sf3-font-activities sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-dashboard"></span>
+                    <Tip target="main-side-nav-folded-dashboard" text={gettext('Activities')} />
                   </Link>
                 </li>
-                <Tip target="main-side-nav-folded-dashboard" text={gettext('Activities')} />
               </>
             }
 
-            <li className={`nav-item ${this.getActiveClass('published')}`} id="main-side-nav-folded-wikis">
+            <li className={`nav-item ${this.getActiveClass('published')}`}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} onClick={(e) => this.tabItemClick(e, 'published')}>
-                <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
+                <span className="sf3-font-wiki sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wikis"></span>
+                <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
               </Link>
             </li>
-            <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
 
             {canInvitePeople &&
-              <>
-                <li className={`nav-item ${this.getActiveClass('invitations')}`} id="main-side-nav-folded-invitations">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                    <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
-                  </Link>
-                </li>
-                <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
-              </>
+              <li className={`nav-item ${this.getActiveClass('invitations')}`}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                  <span className="sf3-font-invite-visitors sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-invitations"></span>
+                  <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
+                </Link>
+              </li>
             }
 
             {customNavItems &&
@@ -99,20 +97,20 @@ class MainSideNavFolded extends React.Component {
             <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
             :
             <ul className="nav nav-pills flex-column nav-container">
-              <li className='nav-item' id="main-side-nav-folded-help">
+              <li className='nav-item'>
                 <a className={'nav-link'} href={siteRoot + 'help/'} title={gettext('Help')}>
-                  <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
+                  <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-help"></span>
+                  <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
                 </a>
               </li>
-              <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
               {enableTC &&
                 <>
-                  <li className='nav-item' id="main-side-nav-folded-terms">
+                  <li className='nav-item'>
                     <a href={`${siteRoot}terms/`} className="nav-link">
-                      <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                      <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-terms"></span>
+                      <Tip target="main-side-nav-folded-terms" text={gettext('Terms')} />
                     </a>
                   </li>
-                  <Tip target="main-side-nav-folded-terms" text={gettext('Terms')} />
                 </>
               }
               {additionalAppBottomLinks && (
@@ -120,18 +118,18 @@ class MainSideNavFolded extends React.Component {
                   {Object.keys(additionalAppBottomLinks).map((key, index) => {
                     return (
                       <a className="nav-link" href={additionalAppBottomLinks[key]}>
-                        <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                        <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true"></span>
                       </a>
                     );
                   })}
                 </>
               )}
-              <li className='nav-item' id="main-side-nav-folded-clients">
+              <li className='nav-item'>
                 <a href={siteRoot + 'download_client_program/'} className="nav-link">
-                  <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
+                  <span className="sf3-font-devices sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-clients"></span>
+                  <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                 </a>
               </li>
-              <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
             </ul>
           }
           <div
