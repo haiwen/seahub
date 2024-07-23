@@ -57,7 +57,7 @@ class Libraries extends Component {
         let group = new Group(item);
         group.repos = item.repos.map(item => new Repo(item));
         return group;
-      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 );
+      }).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
       const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
       this.setState({
         isLoading: false,

@@ -172,7 +172,7 @@ class Store {
     this.sendNextOperation(undoRedoHandler);
   };
 
-  handleUndoRedos(undoRedoHandler, operation){
+  handleUndoRedos(undoRedoHandler, operation) {
     const { handleUndo, asyncUndoRedo } = undoRedoHandler;
     if (handleUndo) {
       if (this.redos.length > 0) {

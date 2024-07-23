@@ -47,7 +47,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submi
           textPosition="right"
           className="change-metadata-status-management w-100"
           onChange={onValueChange}
-          placeholder={gettext('Enable extended properties' )}
+          placeholder={gettext('Enable extended properties')}
         />
         <div className="tip">
           {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}

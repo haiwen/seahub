@@ -131,7 +131,7 @@ class DirentListView extends React.Component {
 
   onDirentClick = (dirent) => {
     hideMenu();
-    if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent ) {
+    if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent) {
       return;
     }
     this.setState({ activeDirent: dirent });

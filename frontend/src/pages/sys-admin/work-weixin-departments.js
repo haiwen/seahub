@@ -276,7 +276,7 @@ class WorkWeixinDepartments extends Component {
     for (let i = 0, len = fails.length; i < len; i++) {
       let fail = fails[i];
       let failName = fail.type === 'department' ? fail.department_name : fail.api_user_name;
-      toaster.danger(failName + ' ' + fail.msg, { duration: 3 } );
+      toaster.danger(failName + ' ' + fail.msg, { duration: 3 });
     }
   };
 

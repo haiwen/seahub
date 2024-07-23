@@ -1331,7 +1331,7 @@ class LibContentView extends React.Component {
 
   onDirentClick = (clickedDirent, event) => {
     const { direntList, selectedDirentList, lastSelectedIndex } = this.state;
-    if (clickedDirent){
+    if (clickedDirent) {
       const clickedIndex = direntList.findIndex(dirent => dirent.name === clickedDirent.name);
 
       let newSelectedDirentList = [...selectedDirentList];
@@ -1341,7 +1341,7 @@ class LibContentView extends React.Component {
       if (isCtrlOrMetaKeyPressed) {
         // Ctrl (Cmd on Mac) key is pressed: Toggle selection of the clicked item
         const isSelected = newSelectedDirentList.some(dirent => dirent.name === clickedDirent.name);
-        if (isSelected){
+        if (isSelected) {
           newSelectedDirentList = newSelectedDirentList.filter(dirent => dirent.name !== clickedDirent.name);
         } else {
           newSelectedDirentList.push(clickedDirent);
@@ -1488,7 +1488,7 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
-    const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type );
+    const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
 
     if (isExist) {
       const updatedDirentList = this.state.direntList.map(dirent => {

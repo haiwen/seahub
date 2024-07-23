@@ -102,7 +102,7 @@ class WikiCardItem extends Component {
       <>
         <div
           className={`wiki-card-item ${this.state.isItemMenuShow ? 'wiki-card-item-menu-open' : ''}`}
-          onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl )}
+          onClick={this.clickWikiCard.bind(this, isOldVersion ? publishedUrl : editUrl)}
         >
           <div className="wiki-card-item-top">
             <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>

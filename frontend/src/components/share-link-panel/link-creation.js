@@ -128,7 +128,7 @@ class LinkCreation extends React.Component {
         request = seafileAPI.batchCreateMultiShareLink(repoID, itemPath, linkAmount, autoGeneratePassword, expirationTime, permissions);
       } else {
         const { currentScope, selectedOption, inputEmails } = this.state;
-        if ( currentScope === 'specific_users' && selectedOption ) {
+        if (currentScope === 'specific_users' && selectedOption) {
           users = selectedOption.map((item, index) => item.email);
         }
         if (currentScope === 'specific_emails' && inputEmails) {
@@ -232,7 +232,7 @@ class LinkCreation extends React.Component {
         }
       }
 
-      if (minDays === 0 && maxDays !== 0 ) {
+      if (minDays === 0 && maxDays !== 0) {
         if (expireDays > maxDays) {
           this.setState({ errorInfo: 'Please enter valid days' });
           return false;

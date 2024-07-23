@@ -472,7 +472,7 @@ class DirentGridView extends React.Component {
 
     const hasCustomPermission = (action) => {
       const { isCustomPermission, customPermission } = Utils.getUserPermission(this.props.userPerm);
-      if (isCustomPermission){
+      if (isCustomPermission) {
         return customPermission.permission[action];
       }
       return true;
@@ -502,7 +502,7 @@ class DirentGridView extends React.Component {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
     }
 
-    if (selectedDirentList.length === 0){
+    if (selectedDirentList.length === 0) {
       if (!hasCustomPermission('create')) return;
       this.handleContextClick(event, DIRENT_GRID_CONTAINER_MENU_ID, direntsContainerMenuList);
     } else if (selectedDirentList.length === 1) {
@@ -521,7 +521,7 @@ class DirentGridView extends React.Component {
       let menuList = [];
       if (!hasCustomPermission('modify') && !hasCustomPermission('copy') && !hasCustomPermission('download') && !hasCustomPermission('delete')) return;
       ['move', 'copy', 'download', 'delete'].forEach(action => {
-        if (hasCustomPermission(action)){
+        if (hasCustomPermission(action)) {
           menuList.push(TextTranslation[action.toUpperCase()]);
         }
       });
