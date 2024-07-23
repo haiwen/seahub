@@ -55,13 +55,15 @@ class WikiCardGroup extends Component {
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     let isGroup = false;
+    let depIcon = false;
     if (group){
       isGroup = true;
+      depIcon = group.owner === "system admin"
     }
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
-          <span className={`sf3-font nav-icon sf3-font-${isDepartment ? 'department' : 'mine'}`} aria-hidden="true"></span>
+          <span className={`sf3-font nav-icon sf3-font-${(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'}`} aria-hidden="true"></span>
           {title}
         </h4>
         <div className='wiki-card-group-items' style={{ gridTemplateColumns: isMobile ? '48% 48%' : grids }} ref={this.groupItemsRef}>
