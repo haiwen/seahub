@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../../_i18n/i18n-sdoc-editor';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
@@ -405,4 +407,8 @@ class SdocFileHistory extends React.Component {
   }
 }
 
-ReactDom.render(<SdocFileHistory />, document.getElementById('wrapper'));
+ReactDom.render(
+  <I18nextProvider i18n={ i18n } >
+    <SdocFileHistory />
+  </I18nextProvider>,
+  document.getElementById('wrapper'));
