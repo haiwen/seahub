@@ -724,7 +724,6 @@ urlpatterns = [
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/$', wiki_view, name='wiki'),
 
     path('avatar/', include('seahub.avatar.urls')),
-    path('notice/', include('seahub.notifications.urls')),
     path('group/', include('seahub.group.urls')),
     path('options/', include('seahub.options.urls')),
     path('profile/', include('seahub.profile.urls')),

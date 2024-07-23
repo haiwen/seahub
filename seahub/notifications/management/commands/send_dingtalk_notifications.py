@@ -13,7 +13,7 @@ from django.utils.translation import ngettext
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
-from seahub.utils import get_site_scheme_and_netloc, get_site_name
+from seahub.utils import get_site_name, get_service_url
 from seahub.auth.models import SocialAuthUser
 
 from seahub.dingtalk.settings import DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL, \
@@ -109,7 +109,7 @@ class Command(BaseCommand, CommandLogMixin):
             self.log_error('can not get access_token')
 
         self.dingtalk_message_send_to_conversation_url = DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL + '?access_token=' + access_token
-        self.detail_url = get_site_scheme_and_netloc().rstrip('/') + reverse('user_notification_list')
+        self.detail_url = get_service_url().rstrip('/') + '/?notifications=all'
         site_name = get_site_name()
 
         # start
