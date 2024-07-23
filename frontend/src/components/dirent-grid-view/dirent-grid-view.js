@@ -30,11 +30,15 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   direntList: PropTypes.array.isRequired,
   fullDirentList: PropTypes.array,
+  selectedDirentList: PropTypes.array.isRequired,
   onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
   onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -55,6 +59,10 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
 };
 
+const DIRENT_GRID_CONTAINER_MENU_ID = 'dirent-grid-container-menu';
+const GRID_ITEM_CONTEXTMENU_ID = 'grid-item-contextmenu';
+const DIRENTS_MENU_ID = 'dirents-menu';
+
 class DirentGridView extends React.Component {
   constructor(props) {
     super(props);
@@ -74,9 +82,10 @@ class DirentGridView extends React.Component {
       fileType: '',
       isPermissionDialogOpen: false,
 
-      isMutipleOperation: false,
+      isMutipleOperation: true,
       isGridItemFreezed: false,
       activeDirent: null,
+      downloadItems: [],
     };
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
@@ -88,10 +97,12 @@ class DirentGridView extends React.Component {
     });
   };
 
-  onGridItemClick = (dirent) => {
+  onGridItemClick = (dirent, event) => {
     hideMenu();
-    this.setState({ activeDirent: dirent });
-    this.props.onGridItemClick(dirent);
+    if (this.state.activeDirent !== dirent) {
+      this.setState({ activeDirent: dirent });
+    }
+    this.props.onGridItemClick(dirent, event);
   };
 
   onMoveToggle = () => {
@@ -118,7 +129,12 @@ class DirentGridView extends React.Component {
 
   onItemDelete = (currentObject, e) => {
     e.nativeEvent.stopImmediatePropagation(); // for document event
-    this.props.onItemDelete(currentObject);
+    if (this.props.selectedDirentList.length === 1) {
+      this.props.onItemDelete(currentObject);
+      return;
+    } else {
+      this.props.onItemsDelete();
+    }
   };
 
   onItemConvert = (currentObject, e, dstType) => {
@@ -138,7 +154,7 @@ class DirentGridView extends React.Component {
     hideMenu();
     switch (operation) {
       case 'Download':
-        this.onItemDownload(currentObject, event);
+        this.onItemsDownload();
         break;
       case 'Share':
         this.onItemShare(event);
@@ -223,6 +239,27 @@ class DirentGridView extends React.Component {
     }
   };
 
+  onDirentsMenuItemClick = (operation) => {
+    switch (operation) {
+      case 'Move':
+        this.onMoveToggle();
+        break;
+      case 'Copy':
+        this.onCopyToggle();
+        break;
+      case 'Download':
+        this.onItemsDownload();
+        break;
+      case 'Delete':
+        this.props.onItemsDelete();
+        break;
+      default:
+        break;
+    }
+
+    hideMenu();
+  };
+
   onEditFileTagToggle = () => {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
@@ -246,19 +283,23 @@ class DirentGridView extends React.Component {
     });
   };
 
-  onItemDownload = (currentObject, e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let dirent = currentObject;
-    let repoID = this.props.repoID;
-    let direntPath = this.getDirentPath(dirent);
-    if (dirent.type === 'dir') {
-      this.setState({
-        isZipDialogOpen: true
-      });
-    } else {
+  onItemsDownload = () => {
+    let { path, repoID, selectedDirentList } = this.props;
+    if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
+      let direntPath = Utils.joinPath(path, selectedDirentList[0].name);
       let url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
       location.href = url;
+      return;
     }
+
+    let selectedDirentNames = selectedDirentList.map(dirent => {
+      return dirent.name;
+    });
+
+    this.setState({
+      isZipDialogOpen: true,
+      downloadItems: selectedDirentNames
+    });
   };
 
   onCreateFolderToggle = () => {
@@ -428,12 +469,16 @@ class DirentGridView extends React.Component {
 
   onGridContainerContextMenu = (event) => {
     event.preventDefault();
-    // Display menu items based on the permissions of the current path
-    let permission = this.props.userPerm;
-    if (permission !== 'admin' && permission !== 'rw') {
-      return;
-    }
-    let id = 'dirent-grid-container-menu';
+    const hasCustomPermission = (action) => {
+      const { isCustomPermission, customPermission } = Utils.getUserPermission(this.props.userPerm);
+      if (isCustomPermission) {
+        return customPermission.permission[action];
+      }
+      return true;
+    };
+
+    if (!['admin', 'rw'].includes(this.props.userPerm)) return;
+
     const {
       NEW_FOLDER, NEW_FILE,
       NEW_MARKDOWN_FILE,
@@ -443,25 +488,51 @@ class DirentGridView extends React.Component {
       NEW_SEADOC_FILE
     } = TextTranslation;
 
-    const menuList = [
+    let direntsContainerMenuList = [
       NEW_FOLDER, NEW_FILE, 'Divider',
       NEW_MARKDOWN_FILE,
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     ];
-    const { currentRepoInfo } = this.props;
+    const { currentRepoInfo, selectedDirentList } = this.props;
+
     if (enableSeadoc && !currentRepoInfo.encrypted) {
-      menuList.push(NEW_SEADOC_FILE);
+      direntsContainerMenuList.push(NEW_SEADOC_FILE);
     }
-    this.handleContextClick(event, id, menuList);
+
+    if (selectedDirentList.length === 0) {
+      if (!hasCustomPermission('create')) return;
+      this.handleContextClick(event, DIRENT_GRID_CONTAINER_MENU_ID, direntsContainerMenuList);
+    } else if (selectedDirentList.length === 1) {
+      if (!this.state.activeDirent) {
+        let menuList = Utils.getDirentOperationList(this.isRepoOwner, currentRepoInfo, selectedDirentList[0], true);
+        this.handleContextClick(event, GRID_ITEM_CONTEXTMENU_ID, menuList, selectedDirentList[0]);
+      } else {
+        this.onDirentClick(null);
+        event.persist();
+        if (!hasCustomPermission('modify')) return;
+        setTimeout(() => {
+          this.handleContextClick(event, DIRENT_GRID_CONTAINER_MENU_ID, direntsContainerMenuList);
+        }, 0);
+      }
+    } else {
+      let menuList = [];
+      if (!hasCustomPermission('modify') && !hasCustomPermission('copy') && !hasCustomPermission('download') && !hasCustomPermission('delete')) return;
+      ['move', 'copy', 'download', 'delete'].forEach(action => {
+        if (hasCustomPermission(action)) {
+          menuList.push(TextTranslation[action.toUpperCase()]);
+        }
+      });
+      this.handleContextClick(event, DIRENTS_MENU_ID, menuList);
+    }
   };
 
   onGridItemContextMenu = (event, dirent) => {
+    if (this.props.selectedDirentList.length > 1) return;
     // Display menu items according to the current dirent permission
-    let id = 'grid-item-contextmenu';
-    let menuList = this.getDirentItemMenuList(dirent, true);
-    this.handleContextClick(event, id, menuList, dirent);
+    const menuList = this.getDirentItemMenuList(dirent, true);
+    this.handleContextClick(event, GRID_ITEM_CONTEXTMENU_ID, menuList, dirent);
     this.props.onGridItemClick && this.props.onGridItemClick(dirent);
   };
 
@@ -505,7 +576,7 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    let { direntList, path } = this.props;
+    let { direntList, selectedDirentList, path } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 
@@ -538,13 +609,18 @@ class DirentGridView extends React.Component {
           }
         </ul>
         <ContextMenu
-          id={'grid-item-contextmenu'}
+          id={GRID_ITEM_CONTEXTMENU_ID}
           onMenuItemClick={this.onMenuItemClick}
           getMenuContainerSize={this.props.getMenuContainerSize}
         />
         <ContextMenu
-          id={'dirent-grid-container-menu'}
+          id={DIRENT_GRID_CONTAINER_MENU_ID}
           onMenuItemClick={this.onMenuItemClick}
+          getMenuContainerSize={this.props.getMenuContainerSize}
+        />
+        <ContextMenu
+          id={DIRENTS_MENU_ID}
+          onMenuItemClick={this.onDirentsMenuItemClick}
           getMenuContainerSize={this.props.getMenuContainerSize}
         />
         {this.state.isCreateFolderDialogShow && (
@@ -574,7 +650,8 @@ class DirentGridView extends React.Component {
             repoID={this.props.repoID}
             repoEncrypted={this.props.currentRepoInfo.encrypted}
             isMutipleOperation={this.state.isMutipleOperation}
-            onItemMove={this.props.onItemMove}
+            selectedDirentList={selectedDirentList}
+            onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
             dirent={this.state.activeDirent}
           />
@@ -584,7 +661,7 @@ class DirentGridView extends React.Component {
             <ZipDownloadDialog
               repoID={this.props.repoID}
               path={this.props.path}
-              target={dirent.name}
+              target={this.state.downloadItems}
               toggleDialog={this.closeZipDialog}
             />
           </ModalPortal>
@@ -595,9 +672,9 @@ class DirentGridView extends React.Component {
             repoID={this.props.repoID}
             repoEncrypted={this.props.currentRepoInfo.encrypted}
             isMutipleOperation={this.state.isMutipleOperation}
-            onItemCopy={this.props.onItemCopy}
+            selectedDirentList={selectedDirentList}
+            onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
-            dirent={this.state.activeDirent}
           />
         }
         {this.state.isEditFileTagShow &&
@@ -628,7 +705,7 @@ class DirentGridView extends React.Component {
         {this.state.isRenameDialogShow && (
           <ModalPortal>
             <Rename
-              dirent={this.state.activeDirent}
+              dirent={selectedDirentList.length > 1 ? selectedDirentList[selectedDirentList.length - 1] : this.state.activeDirent}
               onRename={this.onItemRename}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onItemRenameToggle}

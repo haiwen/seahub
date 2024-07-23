@@ -100,7 +100,7 @@ class DataProcessor {
     table.view.groups = groups;
   }
 
-  static updateDataWithModifyRecords(table, relatedColumnKeyMap, ) {
+  static updateDataWithModifyRecords(table, relatedColumnKeyMap) {
     // todo
   }
 

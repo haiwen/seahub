@@ -43,7 +43,17 @@
     "array-bracket-spacing": ["warn", "never"],
     "object-curly-spacing": ["warn", "always"],
     "spaced-comment": "warn",
-    "keyword-spacing": ["warn", {"before": true}],
+    "space-before-blocks": ["warn", "always"],
+    "space-in-parens": ["warn", "never"],
+    "keyword-spacing": ["warn", {
+      "before": true,
+      "after": true,
+      "overrides": {
+        "if" : {
+          "after": true
+        }
+      }
+    }],
     "space-infix-ops": "error",
     "key-spacing": ["error", { "beforeColon": false }],
     "arrow-spacing": ["error", { "before": true, "after": true }],

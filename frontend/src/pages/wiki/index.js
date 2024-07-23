@@ -402,7 +402,7 @@ class Wiki extends Component {
       }
     }
 
-    if (node.path === this.state.path ) {
+    if (node.path === this.state.path) {
       return;
     }
 

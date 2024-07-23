@@ -51,18 +51,18 @@ class LogsExportExcelDialog extends React.Component {
       this.props.toggle();
       return systemAdminAPI.queryAsyncOperationExportExcel(task_id);
     }).then(res => {
-      if (res.data.is_finished === true){
+      if (res.data.is_finished === true) {
         location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
       } else {
         this.timer = setInterval(() => {
           systemAdminAPI.queryAsyncOperationExportExcel(task_id).then(res => {
-            if (res.data.is_finished === true){
+            if (res.data.is_finished === true) {
               this.setState({ isFinished: true });
               clearInterval(this.timer);
               location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
             }
           }).catch(err => {
-            if (this.state.isFinished === false){
+            if (this.state.isFinished === false) {
               clearInterval(this.timer);
               toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
             }

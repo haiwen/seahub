@@ -222,7 +222,7 @@ class PermAuditItem extends React.Component {
 
   render() {
     let { permEvent } = this.props;
-    if (this.props.userSelected && permEvent.from_user_email !== this.props.userSelected ) {
+    if (this.props.userSelected && permEvent.from_user_email !== this.props.userSelected) {
       return null;
     } else {
       return (

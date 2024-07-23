@@ -209,7 +209,7 @@ class ShareToUser extends React.Component {
     let users = [];
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
+    if (this.state.selectedOption && this.state.selectedOption.length > 0) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         users[i] = this.state.selectedOption[i].email;
       }
@@ -284,7 +284,7 @@ class ShareToUser extends React.Component {
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username, path).then(res => {
         this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; })
+          sharedItems: this.state.sharedItems.filter(item => { return item.user_info.name !== username; })
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -293,7 +293,7 @@ class ShareToUser extends React.Component {
     } else {
       seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
         this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; })
+          sharedItems: this.state.sharedItems.filter(item => { return item.user_info.name !== username; })
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);

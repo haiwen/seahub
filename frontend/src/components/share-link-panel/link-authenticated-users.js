@@ -110,7 +110,7 @@ class LinkAuthenticatedUsers extends React.Component {
   addLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
     const { selectedOption, authUsers } = this.state;
-    if (!selectedOption || !selectedOption.length ) {
+    if (!selectedOption || !selectedOption.length) {
       return false;
     }
     const users = selectedOption.map((item, index) => item.email);

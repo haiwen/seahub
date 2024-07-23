@@ -71,7 +71,7 @@ class AdvancedSearch extends React.Component {
               })}
             </span>
           }
-          {(time_from && time_to ) &&
+          {(time_from && time_to) &&
             <span className="mr-4">{gettext('Last Update')}{': '}{time_from.format('YYYY-MM-DD')}{' '}{gettext('to')}{' '}{time_to.format('YYYY-MM-DD')}</span>
           }
           {(size_from && size_to) &&

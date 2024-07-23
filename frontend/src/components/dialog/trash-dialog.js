@@ -49,7 +49,7 @@ class TrashDialog extends React.Component {
   getItems2 = (page) => {
     repotrashAPI.getRepoFolderTrash2(this.props.repoID, page, this.state.perPage).then((res) => {
       const { items, total_count } = res.data;
-      if (!page){
+      if (!page) {
         page = 1;
       }
       this.setState({

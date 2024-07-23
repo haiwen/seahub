@@ -24,7 +24,6 @@ class DirentGridItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isGridSelected: false,
       isGridDropTipShow: false,
     };
 
@@ -49,13 +48,6 @@ class DirentGridItem extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.activeDirent !== this.props.activeDirent) {
-      const isSelected = this.props.activeDirent && this.props.activeDirent.name === this.props.dirent.name;
-      this.setState({ isGridSelected: isSelected });
-    }
-  }
-
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
   };
@@ -63,32 +55,31 @@ class DirentGridItem extends React.Component {
   onItemClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ isGridSelected: false });
 
     const { dirent, activeDirent } = this.props;
 
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
       this.clickTimeout = null;
-      this.handleSingleClick(dirent, activeDirent);
+      this.handleSingleClick(dirent, activeDirent, e);
       return;
     }
 
     this.clickTimeout = setTimeout(() => {
       this.clickTimeout = null;
-      this.handleSingleClick(dirent, activeDirent);
+      this.handleSingleClick(dirent, activeDirent, e);
     }, 100); // Clicks within 100 milliseconds is considered a single click.
   };
 
-  handleSingleClick = (dirent, activeDirent) => {
+  handleSingleClick = (dirent, activeDirent, event) => {
     if (!this.canPreview) {
       return;
     }
 
-    if (dirent === activeDirent) {
+    if (dirent === activeDirent && !event.metaKey && !event.ctrlKey) {
       this.handleDoubleClick(dirent);
     } else {
-      this.props.onGridItemClick(this.props.dirent);
+      this.props.onGridItemClick(dirent, event);
     }
   };
 
@@ -274,7 +265,7 @@ class DirentGridItem extends React.Component {
     return (
       <Fragment>
         <li
-          className={`grid-item ${this.state.isGridSelected ? 'grid-selected-active' : ''}`}
+          className={`grid-item ${this.props.dirent.isSelected ? 'grid-selected-active' : ''}`}
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}>
           <div

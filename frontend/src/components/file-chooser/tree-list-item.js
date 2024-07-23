@@ -89,7 +89,7 @@ class TreeViewItem extends React.Component {
 
     const fileName = node.object.name;
     if (this.props.fileSuffixes && fileName && node.object.type === 'file') {
-      if ( fileName.indexOf('.') !== -1) {
+      if (fileName.indexOf('.') !== -1) {
         const suffix = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
         if (!this.props.fileSuffixes.includes(suffix)) return null;
       } else {

@@ -66,7 +66,7 @@ const DateData = ({ value, onChange }) => {
           textPosition="right"
           className="sf-metadata-date-column-data-minute w-100"
           onChange={onMinuteChange}
-          placeholder={gettext('Accurate to minute' )} />
+          placeholder={gettext('Accurate to minute')} />
       </div>
     </div>
   );

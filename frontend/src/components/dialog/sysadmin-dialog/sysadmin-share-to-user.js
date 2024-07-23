@@ -149,7 +149,7 @@ class SysAdminShareToUser extends React.Component {
   shareToUser = () => {
     let users = [];
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
+    if (this.state.selectedOption && this.state.selectedOption.length > 0) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         users[i] = this.state.selectedOption[i].email;
       }
@@ -186,7 +186,7 @@ class SysAdminShareToUser extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', useremail).then(res => {
       this.setState({
-        sharedItems: this.state.sharedItems.filter( item => { return item.user_email !== useremail; })
+        sharedItems: this.state.sharedItems.filter(item => { return item.user_email !== useremail; })
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

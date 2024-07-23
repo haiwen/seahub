@@ -239,7 +239,7 @@ class FileAuditItem extends React.Component {
 
   render() {
     let { fileEvent } = this.props;
-    if (this.props.userSelected && fileEvent.user_email !== this.props.userSelected ) {
+    if (this.props.userSelected && fileEvent.user_email !== this.props.userSelected) {
       return null;
     } else if (this.props.repoSelected && fileEvent.repo_name !== this.props.repoSelected) {
       return null;

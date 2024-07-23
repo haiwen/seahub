@@ -682,9 +682,8 @@ export const Utils = {
   },
 
   getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
-    return dirent.type == 'dir' ?
-      Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu) :
-      Utils.getFileOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    const operationListGetter = dirent.type === 'dir' ? Utils.getFolderOperationList : Utils.getFileOperationList;
+    return operationListGetter(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   },
 
   sharePerms: function (permission) {

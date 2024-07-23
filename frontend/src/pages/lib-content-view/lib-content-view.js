@@ -54,6 +54,7 @@ class LibContentView extends React.Component {
       isGroupOwnedRepo: false,
       userPerm: '',
       selectedDirentList: [],
+      lastSelectedIndex: null,
       fileTags: [],
       repoTags: [],
       usedRepoTags: [],
@@ -1328,22 +1329,50 @@ class LibContentView extends React.Component {
 
   };
 
-  onDirentClick = (dirent) => {
-    let direntList = this.state.direntList.map(dirent => {
-      dirent.isSelected = false;
-      return dirent;
-    });
-    if (dirent) {
+  onDirentClick = (clickedDirent, event) => {
+    const { direntList, selectedDirentList, lastSelectedIndex } = this.state;
+    if (clickedDirent) {
+      const clickedIndex = direntList.findIndex(dirent => dirent.name === clickedDirent.name);
+
+      let newSelectedDirentList = [...selectedDirentList];
+      const isCtrlOrMetaKeyPressed = event && (event.ctrlKey || event.metaKey);
+      const isShiftKeyPressed = event && event.shiftKey;
+
+      if (isCtrlOrMetaKeyPressed) {
+        // Ctrl (Cmd on Mac) key is pressed: Toggle selection of the clicked item
+        const isSelected = newSelectedDirentList.some(dirent => dirent.name === clickedDirent.name);
+        if (isSelected) {
+          newSelectedDirentList = newSelectedDirentList.filter(dirent => dirent.name !== clickedDirent.name);
+        } else {
+          newSelectedDirentList.push(clickedDirent);
+        }
+      } else if (isShiftKeyPressed && lastSelectedIndex !== null) {
+        // Shift key is pressed: Select all items between the last selected and the clicked item
+        const rangeStart = Math.min(this.state.lastSelectedIndex, clickedIndex);
+        const rangeEnd = Math.max(this.state.lastSelectedIndex, clickedIndex);
+        newSelectedDirentList = direntList.slice(rangeStart, rangeEnd + 1);
+      } else {
+        newSelectedDirentList = [clickedDirent];
+      }
+
       this.setState({
-        direntList: direntList,
-        isDirentSelected: true,
-        selectedDirentList: [dirent],
+        direntList: direntList.map(dirent => {
+          dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
+          return dirent;
+        }),
+        isDirentSelected: newSelectedDirentList.length > 0,
+        selectedDirentList: newSelectedDirentList,
+        lastSelectedIndex: clickedIndex,
       });
     } else {
       this.setState({
-        direntList: direntList,
+        direntList: direntList.map(dirent => {
+          dirent.isSelected = false;
+          return dirent;
+        }),
         isDirentSelected: false,
         selectedDirentList: [],
+        lastSelectedIndex: null,
       });
     }
   };
@@ -1459,7 +1488,7 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
-    const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type );
+    const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
 
     if (isExist) {
       const updatedDirentList = this.state.direntList.map(dirent => {
