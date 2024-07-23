@@ -98,7 +98,7 @@ export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
 // seafile_ai
-export const enableSeafileAI = window.app.pageOptions.enableSeafileAI || false;
+export const enableSeasearch = window.app.pageOptions.enableSeasearch || false;
 
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;

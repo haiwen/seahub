@@ -854,7 +854,6 @@ ENABLE_REPO_WIKI_MODE = True
 
 SEAFILE_AI_SECRET_KEY = ''
 SEAFILE_AI_SERVER_URL = ''
-ENABLE_SEAFILE_AI = False
 
 ############################
 # HU berlin additional #
@@ -912,6 +911,32 @@ EVENTS_CONFIG_FILE = os.environ.get(
 del d
 if not os.path.exists(EVENTS_CONFIG_FILE):
     del EVENTS_CONFIG_FILE
+
+##############################
+# seasearch                  #
+##############################
+import configparser
+parsed_events_conf = configparser.ConfigParser()
+parsed_events_conf.read(EVENTS_CONFIG_FILE)
+ENABLE_SEASEARCH = False
+
+def parse_bool(v):
+    if isinstance(v, bool):
+        return v
+    v = str(v).lower()
+    if v == '1' or v == 'true':
+        return True
+    else:
+        return False
+try:
+    ENABLE_SEASEARCH = parsed_events_conf.get('SEASEARCH', 'enabled')
+    ENABLE_SEASEARCH = parse_bool(ENABLE_SEASEARCH)
+    ENABLE_ES_SEARCH = parsed_events_conf.get('INDEX FILES', 'enabled')
+    ENABLE_ES_SEARCH = parse_bool(ENABLE_ES_SEARCH)
+    if ENABLE_ES_SEARCH:
+        ENABLE_SEASEARCH = False 
+except configparser.Error:
+    pass
 
 #####################
 # External settings #

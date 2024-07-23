@@ -1,6 +1,6 @@
 import React from 'react';
 import deepCopy from 'deep-copy';
-import { gettext, enableSeafileAI } from '../../utils/constants';
+import { gettext, enableSeasearch } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
 import AdvancedSearch from './advanced-search';
@@ -50,7 +50,7 @@ class SearchViewPanel extends React.Component {
       isResultGot: false,
     });
 
-    if (enableSeafileAI) {
+    if (enableSeasearch) {
       this.onAiSearch(params);
     } else {
       this.onNormalSearch(params);

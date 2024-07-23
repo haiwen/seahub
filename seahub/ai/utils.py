@@ -34,13 +34,6 @@ def search(params):
     return resp
 
 
-def question_answering_search_in_library(params):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/question-answering-search-in-library/')
-    resp = requests.post(url, json=params, headers=headers)
-    return resp
-
-
 def get_file_download_token(repo_id, file_id, username):
     return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
 

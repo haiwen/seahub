@@ -15,8 +15,8 @@ from seahub.api2.authentication import TokenAuthentication, SeafileAiAuthenticat
 from seahub.api2.utils import api_error
 
 from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
-from seahub.ai.utils import search, question_answering_search_in_library, \
-    get_file_download_token, get_search_repos, RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
+from seahub.ai.utils import search, get_file_download_token, get_search_repos, \
+    RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
     format_repos
 from seahub.utils import is_org_context, normalize_cache_key
 from seahub.views import check_folder_permission
@@ -115,59 +115,6 @@ class Search(APIView):
                 else:
                     f['repo_id'] = real_repo_id
                     f['fullpath'] = f['fullpath'].split(origin_path)[-1]
-
-        return Response(resp_json, resp.status_code)
-
-
-class QuestionAnsweringSearchInLibrary(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def post(self, request):
-        query = request.data.get('query')
-        repo_id = request.data.get('repo_id')
-
-        try:
-            count = int(request.data.get('count'))
-        except:
-            count = 10
-
-        if not query:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
-
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
-
-        try:
-            repo = seafile_api.get_repo(repo_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # permission check
-        if not check_folder_permission(request, repo_id, '/'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        repo = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
-
-        params = {
-            'query': query,
-            'repo': repo,
-            'count': count,
-        }
-
-        try:
-            resp = question_answering_search_in_library(params)
-            if resp.status_code == 500:
-                logger.error('ask in library error status: %s body: %s', resp.status_code, resp.text)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-            resp_json = resp.json()
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response(resp_json, resp.status_code)
 
