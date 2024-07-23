@@ -24,7 +24,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, ENABLE_SEASEARCH, \
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, \
     ENABLE_SEATABLE_INTEGRATION
 
 from seahub.organizations.models import OrgAdminSettings
@@ -36,7 +36,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
-    IS_DB_SQLITE3
+    IS_DB_SQLITE3, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -172,7 +172,7 @@ def base(request):
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_seadoc': ENABLE_SEADOC,
-        'enable_seasearch': ENABLE_SEASEARCH,
+        'enable_seasearch': bool(HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH),
         'enable_seatable_integration': ENABLE_SEATABLE_INTEGRATION
     }
 

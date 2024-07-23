@@ -997,7 +997,8 @@ if getattr(settings, 'ENABLE_SEADOC', False):
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
     ]
 
-if settings.ENABLE_SEASEARCH:
+from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+if HAS_FILE_SEASEARCH and not HAS_FILE_SEARCH:
     urlpatterns += [
         re_path(r'^api/v2.1/ai/search/$', Search.as_view(), name='api-v2.1-ai-search'),
         re_path(r'^api/v2.1/ai/repo/file-download-token/$', FileDownloadToken.as_view(), name='api-v2.1-ai-repo-file-download-token'),
