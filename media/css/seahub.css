@@ -2065,3 +2065,11 @@ a.sf-popover-item {
     background: #6e7687;
     height: 12px;
 }
+
+#email-audit-form .email-input {
+  width: 172px;
+}
+
+#email-audit-form .get-code-btn {
+  width: 102px;
+}

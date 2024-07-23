@@ -32,6 +32,7 @@ from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import get_user_repos
 from seahub.utils.mail import send_html_email_with_dj_template
+from django.utils.translation import gettext as _
 from seahub.settings import SECRET_KEY
 
 logger = logging.getLogger(__name__)
@@ -285,7 +286,7 @@ def is_web_request(request):
         return True
     else:
         return False
-    
+
 def is_wiki_repo(repo):
     return repo.repo_type == REPO_TYPE_WIKI
 
@@ -306,9 +307,9 @@ def get_search_repos(username, org_id):
         repos.append((repo.id, repo.origin_repo_id, repo.origin_path, repo.name))
 
     return repos
-    
+
 def send_share_link_emails(emails, fs, shared_from):
-    subject = "Share links"
+    subject = _("A share link for you")
     for email in emails:
         c = {'url': "%s?email=%s" % (fs.get_full_url(), email), 'shared_from': shared_from}
         send_success = send_html_email_with_dj_template(
@@ -321,7 +322,7 @@ def send_share_link_emails(emails, fs, shared_from):
             continue
 
 def is_valid_internal_jwt(auth):
-    
+
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
@@ -337,5 +338,5 @@ def is_valid_internal_jwt(auth):
         is_internal = payload.get('is_internal')
         if is_internal:
             return True
-        
+
     return False

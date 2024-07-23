@@ -344,56 +344,6 @@ def ajax_private_share_dir(request):
         data = json.dumps({"error": _("Please check the email(s) you entered")})
         return HttpResponse(data, status=400, content_type=content_type)
 
-
-def ajax_get_link_audit_code(request):
-    """
-    Generate a token, and record that token with email in cache, expires in
-    one hour, send token to that email address.
-
-    User provide token and email at share link page, if the token and email
-    are valid, record that email in session.
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    token = request.POST.get('token')
-    email = request.POST.get('email')
-    if not is_valid_email(email):
-        return HttpResponse(json.dumps({
-            'error': _('Email address is not valid')
-        }), status=400, content_type=content_type)
-
-    dfs = FileShare.objects.get_valid_file_link_by_token(token)
-    ufs = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
-
-    fs = dfs if dfs else ufs
-    if fs is None:
-        return HttpResponse(json.dumps({
-            'error': _('Share link is not found')
-        }), status=400, content_type=content_type)
-
-    cache_key = normalize_cache_key(email, 'share_link_audit_')
-    code = gen_token(max_length=6)
-    cache.set(cache_key, code, SHARE_LINK_AUDIT_CODE_TIMEOUT)
-
-    # send code to user via email
-    subject = _("Verification code for visiting share links")
-    c = {'code': code}
-
-    send_success = send_html_email_with_dj_template(email,
-                                                    subject=subject,
-                                                    dj_template='share/audit_code_email.html',
-                                                    context=c)
-
-    if not send_success:
-        logger.error('Failed to send audit code via email to %s')
-        return HttpResponse(json.dumps({
-            "error": _("Failed to send a verification code, please try again later.")
-        }), status=500, content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True}), status=200,
-                        content_type=content_type)
-
-
 def ajax_get_link_email_audit_code(request):
     content_type = 'application/json; charset=utf-8'
 
@@ -422,7 +372,7 @@ def ajax_get_link_email_audit_code(request):
     cache.set(cache_key, code, 60 * 60)
 
     # send code to user via email
-    subject = _("Verification code for visiting share links")
+    subject = _("The verification code")
     c = {'code': code}
 
     send_success = send_html_email_with_dj_template(email,

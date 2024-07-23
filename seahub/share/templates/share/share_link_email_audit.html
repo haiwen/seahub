@@ -1,82 +1,112 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block sub_title %}{% trans "Email address verification" %} - {% endblock %}
+{% block header_css_class %}hide{% endblock %}
+{% block extra_base_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+{% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+html, body, #wrapper { height:100%; }
+#wrapper {
+  background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
+  background-size: cover;
+  padding-top:1px;
+}
+</style>
+{% endblock %}
+
 {% block main_panel %}
-<div class="new-narrow-panel" role="main">
-    <h2 class="hd">{% trans "Email Verification" %}</h2>
-    <form action="" method="post" id="link-audit-form" class="con">{% csrf_token %}
-        <p class="tip">{% trans "Please provide your email address to continue." %}</p>
-        <label for="email">{% trans "Email" %}</label>
-        <input id="email" type="text" class="input email-input" name="email" value="{{email}}" />
-        <button type="button" id="get-code" class="get-code-btn">{% trans "Get code" %}</button><br />
-        <label for="code">{% trans "Verification code" %}</label><br />
-        <input id="code" type="text" class="input" name="code" value="{{code}}" />
+<div class="login-panel-outer-container vh">
+  <div class="login-panel" id="log-in-panel">
+    <h1 class="login-panel-hd">{% trans "Email address verification" %}</h1>
+    <p class="text-center">{% trans "Please provide your email address to continue." %}</p>
+    <form action="" method="post" id="email-audit-form" class="con">{% csrf_token %}
+      <div class="d-flex mt-2 mb-3">
+        <input type="text" class="input email-input mr-2" name="email" value="{{email}}" placeholder="{% trans "Enter your email address" %}" />
+        <button type="button" id="get-code" class="btn btn-primary btn-sm text-truncate get-code-btn flex-shrink-0" title="{% trans "Get code" %}">{% trans "Get code" %}</button>
+      </div>
+      <input id="code" type="text" class="input d-block" name="code" placeholder="{% trans "Paste the verification code here" %}" />
 
-        {% if err_msg %}
-        <p class="error">{{ err_msg }}</p>
-        {% else %}
-        <p class="error hide"></p>
-        {% endif %}
+      {% if err_msg %}
+      <p class="error">{{ err_msg }}</p>
+      {% else %}
+      <p class="error hide"></p>
+      {% endif %}
 
-        <input type="submit" value="{% trans "Submit" %}" />
+      <button type="submit" class="submit btn btn-primary btn-block h-auto">{% trans "Submit" %}</button>
     </form>
+  </div>
 </div>
 {% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
+$('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
+var $el = $('.login-panel-outer-container');
+var elHeight = $el.outerHeight();
+var wdHeight = $(window).height();
+if (wdHeight > elHeight) {
+  $el.css({'margin-top': (wdHeight - elHeight)/2});
+}
+$el.removeClass('vh');
+
 $('#get-code').on('click', function() {
-    var email = $('input[name="email"]').val().trim();
-    if (!email) {
-        return false;
-    }
+  var email = $('input[name="email"]').val().trim();
+  if (!email) {
+    return false;
+  }
 
-    var $this = $(this);
-    var originalText = $this.text(); // Remember the original text content
-    var seconds = 60;
+  var $this = $(this);
+  //var originalText = $this.text(); // Remember the original text content
+  var originalText = "{% trans "Resend" %}";
+  var seconds = 60;
 
-    $this.prop('disabled', true).addClass('btn-disabled');
+  $this.prop('disabled', true);
+  $this.text(originalText + '(' + seconds + 's)');
+  // do a set interval, using an interval of 1000 milliseconds
+  //     and clear it after the number of seconds counts down to 0
+  var interval = setInterval(function() {
+    // decrement the seconds and update the text
+    seconds = seconds - 1;
     $this.text(originalText + '(' + seconds + 's)');
-    // do a set interval, using an interval of 1000 milliseconds
-    //     and clear it after the number of seconds counts down to 0
-    var interval = setInterval(function() {
-        // decrement the seconds and update the text
-        seconds = seconds - 1;
-        $this.text(originalText + ' (' + seconds + 's)');
-        if (seconds === 0) { // once seconds is 0...
-            $this.prop('disabled', false).removeClass('btn-disabled')
-                 .text(originalText); // reset to original text
-            clearInterval(interval); // clear interval
-        }
-    }, 1000);
+    if (seconds === 0) { // once seconds is 0...
+      $this.prop('disabled', false)
+        .text(originalText); // reset to original text
+      clearInterval(interval); // clear interval
+    }
+  }, 1000);
 
-    $.ajax({
-        url: "{% url "ajax_get_link_email_audit_code" %}",
-        type: 'POST',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        data: {
-            token: "{{token}}",
-            email: email
-        },
-        success: function() {
-            feedback("{% trans "A verification code has been sent to the email." %}", 'success');
-        },
-        error: function(xhr) {
-            var error_msg = prepareAjaxErrorMsg(xhr);
-            $('.error', $this.closest('form')).html(error_msg).removeClass('hide');
-            $this.prop('disabled', false).removeClass('btn-disabled')
-                 .text(originalText); // reset to original text
-            clearInterval(interval);
-        }
-    });
+  $.ajax({
+    url: "{% url "ajax_get_link_email_audit_code" %}",
+    type: 'POST',
+    cache: false,
+    beforeSend: prepareCSRFToken,
+    data: {
+      token: "{{token}}",
+      email: email
+    },
+    success: function() {
+      feedback("{% trans "A verification code has been sent to the email address." %}", 'success');
+    },
+    error: function(xhr) {
+      var error_msg = prepareAjaxErrorMsg(xhr);
+      $('.error', $this.closest('form')).html(error_msg).removeClass('hide');
+      $this.prop('disabled', false)
+        .text(originalText); // reset to original text
+      clearInterval(interval);
+    }
+  });
 });
 
-$('#link-audit-form').on('submit', function() {
-    var email = $('[name="email"]').val().trim();
-    var code = $('[name="code"]').val().trim();
-    if (!email || !code) {
-        return false;
-    }
+$('#email-audit-form').on('submit', function() {
+  var email = $('[name="email"]').val().trim();
+  var code = $('[name="code"]').val().trim();
+  if (!email || !code) {
+    return false;
+  }
 });
 </script>
 {% endblock %}

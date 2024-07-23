@@ -12,27 +12,33 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.share.utils import SCOPE_SPECIFIC_EMAILS, SCOPE_ALL_USERS, SCOPE_SPECIFIC_USERS
 from seahub.utils import render_error
 from seahub.utils import normalize_cache_key, is_pro_version, redirect_to_login
+from seahub.utils.auth import get_login_bg_image_path
 from seahub.constants import REPO_SHARE_LINK_COUNT_LIMIT
 
 
 def _share_link_auth_email_entry(request, fileshare, func, *args, **kwargs):
     if request.user.username == fileshare.username:
         return func(request, fileshare, *args, **kwargs)
-    
+
     session_key = "link_authed_email_%s" % fileshare.token
     if request.session.get(session_key) is not None:
         return func(request, fileshare, *args, **kwargs)
-    
+
+    login_bg_image_path = get_login_bg_image_path()
     if request.method == 'GET':
         email = request.GET.get('email', '')
-        return render(request, 'share/share_link_email_audit.html', {'email': email, 'token': fileshare.token})
-    
+        return render(request, 'share/share_link_email_audit.html', {
+            'email': email,
+            'token': fileshare.token,
+            'login_bg_image_path': login_bg_image_path,
+            })
+
     elif request.method == 'POST':
         code_post = request.POST.get('code', '')
         email_post = request.POST.get('email', '')
         cache_key = normalize_cache_key(email_post, 'share_link_email_auth_', token=fileshare.token)
         code = cache.get(cache_key)
-        
+
         authed_details = json.loads(fileshare.authed_details)
         if code == code_post and email_post in authed_details.get('authed_emails'):
             request.session[session_key] = email_post
@@ -40,12 +46,13 @@ def _share_link_auth_email_entry(request, fileshare, func, *args, **kwargs):
             return func(request, fileshare, *args, **kwargs)
         else:
             return render(request, 'share/share_link_email_audit.html', {
-                'err_msg': 'Invalid token, please try again.',
+                'login_bg_image_path': login_bg_image_path,
+                'err_msg': _('Invalid verification code, please try again.'),
                 'email': email_post,
                 'code': code,
                 'token': fileshare.token,
                 'code_verify': False
-                
+
             })
     else:
         assert False, 'TODO'
@@ -56,7 +63,7 @@ def share_link_audit(func):
     def _decorated(request, token, *args, **kwargs):
 
         assert token is not None    # Checked by URLconf
-        
+
         is_for_upload = False
         try:
             fileshare = FileShare.objects.get(token=token)
@@ -69,22 +76,22 @@ def share_link_audit(func):
                 is_for_upload = True
             except UploadLinkShare.DoesNotExist:
                 fileshare = None
-                
+
         if not fileshare:
             return render_error(request, _('Link does not exist.'))
-            
+
         if fileshare.is_expired():
             return render_error(request, _('Link is expired.'))
-        
+
         if is_for_upload:
             return func(request, fileshare, *args, **kwargs)
-        
+
         if fileshare.user_scope in [SCOPE_ALL_USERS, SCOPE_SPECIFIC_USERS]:
             return func(request, fileshare, *args, **kwargs)
 
         if fileshare.user_scope == SCOPE_SPECIFIC_EMAILS:
             return _share_link_auth_email_entry(request, fileshare, func, *args, **kwargs)
-        
+
     return _decorated
 
 def share_link_login_required(func):
