@@ -655,7 +655,7 @@ export const Utils = {
     }
 
     if (permission == 'rw' && enableOnlyoffice &&
-      onlyofficeConverterExtensions.includes(this.getFileExtension(dirent.name, false))) {
+      onlyofficeConverterExtensions.includes(Utils.getFileExtension(dirent.name, false))) {
       list.push(ONLYOFFICE_CONVERT);
     }
 
