@@ -108,7 +108,7 @@ class Wikis extends Component {
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
-          return item.name !== wiki.name;
+          return item.id !== wiki.id;
         });
         this.setState({ wikis: wikis });
       }).catch((error) => {
@@ -120,7 +120,7 @@ class Wikis extends Component {
     } else {
       wikiAPI.deleteWiki2(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
-          return item.name !== wiki.name;
+          return item.id !== wiki.id;
         });
         this.setState({ wikis: wikis });
       }).catch((error) => {
