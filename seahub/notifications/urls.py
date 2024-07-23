@@ -5,4 +5,5 @@ from .views import *
 urlpatterns = [
     ########## user notifications
     path('list/', user_notification_list, name='user_notification_list'),
+
 ]

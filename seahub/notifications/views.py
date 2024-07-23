@@ -20,10 +20,6 @@ from seahub.avatar.util import get_default_avatar_url
 logger = logging.getLogger(__name__)
 
 ########## user notifications
-@login_required
-def user_notification_list(request):
-    return render(request, "notifications/user_notification_list_react.html", {
-        })
 
 def add_notice_from_info(notices):
     '''Add 'msg_from' or 'default_avatar_url' to notice.

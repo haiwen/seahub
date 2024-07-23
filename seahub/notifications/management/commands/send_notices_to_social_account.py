@@ -7,13 +7,12 @@ import json
 import requests
 
 from django.core.management.base import BaseCommand
-from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import gettext as _
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
-from seahub.utils import get_site_scheme_and_netloc, get_site_name
+from seahub.utils import get_site_name, get_service_url
 from seahub.auth.models import SocialAuthUser
 from seahub.seadoc.models import SeadocNotification
 from seahub.tags.models import FileUUIDMap
@@ -154,7 +153,7 @@ class Command(BaseCommand, CommandLogMixin):
             else:
                 self.dingtalk_message_send_to_conversation_url = DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL + \
                         '?access_token=' + dingtalk_access_token
-                self.detail_url = get_site_scheme_and_netloc().rstrip('/') + reverse('user_notification_list')
+                self.detail_url = get_service_url().rstrip('/') + '/?notifications=all'
 
         if ENABLE_WORK_WEIXIN:
 
@@ -164,7 +163,7 @@ class Command(BaseCommand, CommandLogMixin):
             else:
                 self.work_weixin_notifications_url = WORK_WEIXIN_NOTIFICATIONS_URL + \
                         '?access_token=' + work_weixin_access_token
-                self.detail_url = get_site_scheme_and_netloc().rstrip('/') + reverse('user_notification_list')
+                self.detail_url = get_service_url().rstrip('/') + '/?notifications=all'
 
         if not dingtalk_access_token and not work_weixin_access_token:
             return
