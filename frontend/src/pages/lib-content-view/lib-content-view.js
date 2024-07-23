@@ -1361,6 +1361,7 @@ class LibContentView extends React.Component {
           return dirent;
         }),
         isDirentSelected: newSelectedDirentList.length > 0,
+        isAllDirentSelected: newSelectedDirentList.length === direntList.length,
         selectedDirentList: newSelectedDirentList,
         lastSelectedIndex: clickedIndex,
       });
@@ -1371,6 +1372,7 @@ class LibContentView extends React.Component {
           return dirent;
         }),
         isDirentSelected: false,
+        isAllDirentSelected: false,
         selectedDirentList: [],
         lastSelectedIndex: null,
       });
@@ -1415,7 +1417,6 @@ class LibContentView extends React.Component {
     let selectedDirentList = direntList.filter(item => {
       return item.isSelected;
     });
-
     if (selectedDirentList.length) {
       this.setState({ isDirentSelected: true });
       if (selectedDirentList.length === direntList.length) {
