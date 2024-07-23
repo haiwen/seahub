@@ -21,7 +21,7 @@ class Wikis extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      currentDeptID: '',
+      currentDeptEmail: '',
       wikis: [],
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
@@ -72,16 +72,16 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggelAddWikiDialog = (currentDeptID) => {
+  toggelAddWikiDialog = (currentDeptEmail) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
-        currentDeptID: '',
+        currentDeptEmail: '',
       });
     } else {
       this.setState({
         isShowAddDialog: true,
-        currentDeptID
+        currentDeptEmail
       });
     }
   };
@@ -94,7 +94,7 @@ class Wikis extends Component {
       wikis.push(new_wiki);
       this.setState({
         wikis,
-        currentDeptID: '',
+        currentDeptEmail: '',
       });
     }).catch((error) => {
       if (error.response) {
@@ -108,7 +108,7 @@ class Wikis extends Component {
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
-          return item.name !== wiki.name;
+          return item.id !== wiki.id;
         });
         this.setState({ wikis: wikis });
       }).catch((error) => {
@@ -120,7 +120,7 @@ class Wikis extends Component {
     } else {
       wikiAPI.deleteWiki2(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
-          return item.name !== wiki.name;
+          return item.id !== wiki.id;
         });
         this.setState({ wikis: wikis });
       }).catch((error) => {
@@ -181,7 +181,7 @@ class Wikis extends Component {
             <AddWikiDialog
               toggleCancel={this.toggelAddWikiDialog}
               addWiki={this.addWiki}
-              currentDeptID={this.state.currentDeptID}
+              currentDeptEmail={this.state.currentDeptEmail}
             />
           </ModalPortal>
         }
