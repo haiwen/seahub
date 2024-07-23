@@ -166,19 +166,20 @@ class CcnetDB:
 
     def get_group_ids_admins_map(self, group_ids):
         group_admins = {}
-        for group_id in group_ids:
-            sql = f"""
-            SELECT user_name
-            FROM 
-                `{self.db_name}`.`GroupUser`
-            WHERE 
-                group_id = {group_id} AND is_staff = 1
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(sql)
-                for result in cursor.fetchall():
-                    if group_id in group_admins:
-                        group_admins[group_id].append(result[0])
-                    else:
-                        group_admins[group_id] = [result[0]]
+        group_ids_str = ','.join(str(id) for id in group_ids)
+        sql = f"""
+        SELECT user_name, group_id
+        FROM 
+            `{self.db_name}`.`GroupUser`
+        WHERE 
+            group_id IN ({group_ids_str}) AND is_staff = 1
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+        for user, group_id in result:
+            if group_id in group_admins:
+                group_admins[group_id].append(user)
+            else:
+                group_admins[group_id] = [user]
         return group_admins
