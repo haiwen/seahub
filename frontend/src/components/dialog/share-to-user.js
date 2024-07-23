@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
+import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import '../../css/invitations.css';
 
+import '../../css/invitations.css';
 import '../../css/share-to-user.css';
 
 class UserItem extends React.Component {
@@ -38,13 +38,11 @@ class UserItem extends React.Component {
   };
 
   deleteShareItem = () => {
-    let item = this.props.item;
-    this.props.deleteShareItem(item.user_info.name);
+    this.props.deleteShareItem(this.props.item.user_info.name);
   };
 
   onChangeUserPermission = (permission) => {
-    let item = this.props.item;
-    this.props.onChangeUserPermission(item, permission);
+    this.props.onChangeUserPermission(this.props.item, permission);
   };
 
   render() {
@@ -54,7 +52,7 @@ class UserItem extends React.Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
-          <div className="position-relative">
+          <div className="position-relative d-flex align-items-center">
             <img
               src={item.user_info.avatar_url}
               width="24"
@@ -67,9 +65,12 @@ class UserItem extends React.Component {
             {isUserDetailsPopoverOpen && (
               <div className="user-details-popover p-4 position-absolute w-100 mt-1">
                 <div className="user-details-main pb-3">
-                  <img src={item.user_info.avatar_url} width="40"
+                  <img
+                    src={item.user_info.avatar_url}
+                    width="40"
                     alt={item.user_info.nickname}
-                    className="rounded-circle mr-2" />
+                    className="rounded-circle mr-2"
+                  />
                   <span className="user-details-name">{item.user_info.nickname}</span>
                 </div>
                 <dl className="m-0 mt-3 d-flex">
