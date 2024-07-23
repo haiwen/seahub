@@ -324,7 +324,7 @@ export default class AISearch extends Component {
           // resultItems: [],
           isResultGetted: false,
         }, () => {
-          if (trimmedValue !== '') {
+          if (!this.props.repoID && trimmedValue !== '') {
             this.getRepoSearchResult(newValue);
           }
         });
