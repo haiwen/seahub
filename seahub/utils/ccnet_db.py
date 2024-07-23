@@ -163,11 +163,22 @@ class CcnetDB:
 
         return users, total_count
     
-    
+
     def get_group_ids_admins_map(self, group_ids):
-        
-        
-        return {
-            '12': ['xxx','xxxx'],
-            '13': ['xxx', 'xxxx']
-        }
+        group_admins = {}
+        for group_id in group_ids:
+            sql = f"""
+            SELECT user_name
+            FROM 
+                `{self.db_name}`.`GroupUser`
+            WHERE 
+                group_id = {group_id} AND is_staff = 1
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                for result in cursor.fetchall():
+                    if group_id in group_admins:
+                        group_admins[group_id].append(result[0])
+                    else:
+                        group_admins[group_id] = [result[0]]
+        return group_admins

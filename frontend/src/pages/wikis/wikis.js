@@ -296,7 +296,7 @@ class Wikis extends Component {
                 }
               </div>
             </div>
-            {(this.state.loading || this.state.wikis.length !== 0) &&
+            {(this.state.loading || this.state.wikis.length !== 0 || this.state.groupWikis.length !== 0) &&
               <div className="cur-view-content pb-4">
                 <WikiCardView
                   data={this.state}
@@ -310,7 +310,7 @@ class Wikis extends Component {
                 />
               </div>
             }
-            {(!this.state.loading && this.state.wikis.length === 0) &&
+            {(!this.state.loading && this.state.wikis.length === 0 && this.state.groupWikis.length === 0) &&
               <div className="cur-view-content">
                 <EmptyTip>
                   <h2>{gettext('No Wikis')}</h2>

@@ -43,6 +43,7 @@ from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_C
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
@@ -88,7 +89,6 @@ class Wikis2View(APIView):
             user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
-
         wikis = []
         filter_repo_type_ids_map = {}
         owned_wikis = [r for r in owned if is_wiki_repo(r)]
@@ -107,16 +107,17 @@ class Wikis2View(APIView):
 
         group_wikis = [r for r in groups if is_wiki_repo(r)]
         filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
-        
-        
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
-        
-        ccnet_db = CcnetDB()
-        group_ids_admins_map = ccnet_db.et_group_ids_admins_map(group_id_in_wikis)
-        
-        user_wiki_groups = [ug for ug in user_groups if ug.group_id in group_id_in_wikis]
-        wiki_group_id_group_map = {g.group_id : g for g in user_wiki_groups}
+        try:
+            ccnet_db = CcnetDB()
+            group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        user_wiki_groups = [ug for ug in user_groups if ug.id in group_id_in_wikis]
+        wiki_group_id_group_map = {g.id: g for g in user_wiki_groups}
         for r in group_wikis:
             r.owner = r.user
             wikis.append(r)
@@ -127,12 +128,11 @@ class Wikis2View(APIView):
         for group_w in group_wikis:
             wiki = Wiki(group_w)
             wiki_info = wiki.to_dict()
-            # group_info = get_group_info(request, group_w.group_id)
             group_obj = wiki_group_id_group_map.get(group_w.group_id)
             group_wiki = {
                 'group_name': group_obj.group_name,
-                'group_id': group_obj.group_id,
-                'group_admins': group_ids_admins_map.get(group_obj.group_id),
+                'group_id': group_obj.id,
+                'group_admins': group_ids_admins_map.get(group_obj.id),
                 "owner": group_obj.creator_name,
                 'wiki_info': []
             }
