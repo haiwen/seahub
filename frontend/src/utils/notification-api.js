@@ -8,7 +8,7 @@ class NotificationAPI {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;  //none
+    this.token = token;
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -37,7 +37,7 @@ class NotificationAPI {
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
-        headers:form.getHeaders()
+        headers: form.getHeaders()
       });
     } else {
       return this.req.post(url, form);
@@ -50,8 +50,8 @@ class NotificationAPI {
 
   }
 
-  setSysUserNotificationToSeen(notificationID){
-    const url = this.server + 'api/v2.1/sys-user-notifications/'+notificationID+'/seen/';
+  setSysUserNotificationToSeen(notificationID) {
+    const url = this.server + 'api/v2.1/sys-user-notifications/' + notificationID + '/seen/';
     return this.req.put(url);
   }
 
