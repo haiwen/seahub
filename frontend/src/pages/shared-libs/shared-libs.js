@@ -282,172 +282,172 @@ class Item extends Component {
     // at present, only repo shared with 'r', 'rw' can be monitored.(Fri Feb 10 16:24:49 CST 2023)
     const enableMonitorRepo = isPro && (data.permission == 'r' || data.permission == 'rw');
 
-    const desktopItem = (
-      <Fragment>
-        {currentViewMode == 'list' ? (
-          <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-            <td className="text-center">
-              <i
-                role="button"
-                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                onClick={this.onToggleStarRepo}
-                className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-              >
-              </i>
-            </td>
-            <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-            <td>
-              <Fragment>
-                <Link to={shareRepoUrl}>{data.repo_name}</Link>
-                {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
-              </Fragment>
-            </td>
-            <td>
-              {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
-              }
-              <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-              {enableMonitorRepo &&
-              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownToggle
-                  tag="i"
-                  role="button"
-                  tabIndex="0"
-                  className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isOpMenuOpen}
-                />
-                <DropdownMenu>
-                  <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-              }
-            </td>
-            <td>{data.size}</td>
-            <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
-            <td title={data.owner_contact_email}>{data.owner_name}</td>
-          </tr>
-        ) : (
-          <div
-            className="library-grid-item px-3 d-flex justify-content-between align-items-center"
-            onMouseOver={this.handleMouseOver}
-            onMouseOut={this.handleMouseOut}
-            onFocus={this.handleMouseOver}
-          >
-            <div className="d-flex align-items-center text-truncate">
-              <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
-              <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
-              {isStarred &&
+    if (this.props.isDesktop) {
+      return (
+        <Fragment>
+          {currentViewMode == 'list' ? (
+            <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+              <td className="text-center">
                 <i
                   role="button"
-                  title={gettext('Unstar')}
-                  aria-label={gettext('Unstar')}
+                  title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                  aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   onClick={this.onToggleStarRepo}
-                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                  className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
                 >
                 </i>
-              }
-              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
-            </div>
+              </td>
+              <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+              <td>
+                <Fragment>
+                  <Link to={shareRepoUrl}>{data.repo_name}</Link>
+                  {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
+                </Fragment>
+              </td>
+              <td>
+                {(isPro && data.is_admin) &&
+                <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+                }
+                <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+                {enableMonitorRepo &&
+                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                  <DropdownToggle
+                    tag="i"
+                    role="button"
+                    tabIndex="0"
+                    className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                    title={gettext('More operations')}
+                    aria-label={gettext('More operations')}
+                    data-toggle="dropdown"
+                    aria-expanded={this.state.isOpMenuOpen}
+                  />
+                  <DropdownMenu>
+                    <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+                }
+              </td>
+              <td>{data.size}</td>
+              <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
+              <td title={data.owner_contact_email}>{data.owner_name}</td>
+            </tr>
+          ) : (
+            <div
+              className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+              onFocus={this.handleMouseOver}
+            >
+              <div className="d-flex align-items-center text-truncate">
+                <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
+                <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                {isStarred &&
+                  <i
+                    role="button"
+                    title={gettext('Unstar')}
+                    aria-label={gettext('Unstar')}
+                    onClick={this.onToggleStarRepo}
+                    className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                  >
+                  </i>
+                }
+                {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
+              </div>
 
-            <div className="flex-shrink-0">
-              {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
-              }
-              <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-              {enableMonitorRepo &&
+              <div className="flex-shrink-0">
+                {(isPro && data.is_admin) &&
+                <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+                }
+                <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+                {enableMonitorRepo &&
+                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                  <DropdownToggle
+                    tag="i"
+                    role="button"
+                    tabIndex="0"
+                    className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                    title={gettext('More operations')}
+                    aria-label={gettext('More operations')}
+                    data-toggle="dropdown"
+                    aria-expanded={this.state.isOpMenuOpen}
+                  />
+                  <DropdownMenu>
+                    <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+                }
+              </div>
+            </div>
+          )}
+          {this.state.isShowSharedDialog && (
+            <ModalPotal>
+              <ShareDialog
+                itemType={'library'}
+                itemName={data.repo_name}
+                itemPath={'/'}
+                repoID={data.repo_id}
+                repoEncrypted={data.encrypted}
+                enableDirPrivateShare={true}
+                userPerm={data.permission}
+                isAdmin={true}
+                toggleDialog={this.toggleShareDialog}
+              />
+            </ModalPotal>
+          )}
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+            <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+            <td onClick={this.visitRepo}>
+              <Link to={shareRepoUrl}>{data.repo_name}</Link>
+              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
+              <br />
+              <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
+              <span className="item-meta-info">{data.size}</span>
+              <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
+            </td>
+            <td>
               <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
                 <DropdownToggle
                   tag="i"
-                  role="button"
-                  tabIndex="0"
-                  className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
                   title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
                   data-toggle="dropdown"
                   aria-expanded={this.state.isOpMenuOpen}
                 />
-                <DropdownMenu>
-                  <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-              }
-            </div>
-          </div>
-        )}
-        {this.state.isShowSharedDialog && (
-          <ModalPotal>
-            <ShareDialog
-              itemType={'library'}
-              itemName={data.repo_name}
-              itemPath={'/'}
-              repoID={data.repo_id}
-              repoEncrypted={data.encrypted}
-              enableDirPrivateShare={true}
-              userPerm={data.permission}
-              isAdmin={true}
-              toggleDialog={this.toggleShareDialog}
-            />
-          </ModalPotal>
-        )}
-      </Fragment>
-    );
-
-    const mobileItem = (
-      <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td onClick={this.visitRepo}>
-            <Link to={shareRepoUrl}>{data.repo_name}</Link>
-            {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
-            <br />
-            <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
-            <span className="item-meta-info">{data.size}</span>
-            <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
-          </td>
-          <td>
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
-                  {(isPro && data.is_admin) && <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>}
-                  <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-                  {enableMonitorRepo && <DropdownItem className="mobile-menu-item" onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>}
+                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                  <div className="mobile-operation-menu-bg-layer"></div>
+                  <div className="mobile-operation-menu">
+                    <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
+                    {(isPro && data.is_admin) && <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>}
+                    <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+                    {enableMonitorRepo && <DropdownItem className="mobile-menu-item" onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>}
+                  </div>
                 </div>
-              </div>
-            </Dropdown>
-          </td>
-        </tr>
-        {this.state.isShowSharedDialog && (
-          <ModalPotal>
-            <ShareDialog
-              itemType={'library'}
-              itemName={data.repo_name}
-              itemPath={'/'}
-              repoID={data.repo_id}
-              repoEncrypted={data.encrypted}
-              enableDirPrivateShare={true}
-              userPerm={data.permission}
-              isAdmin={true}
-              toggleDialog={this.toggleShareDialog}
-            />
-          </ModalPotal>
-        )}
-      </Fragment>
-    );
-
-    return this.props.isDesktop ? desktopItem : mobileItem;
+              </Dropdown>
+            </td>
+          </tr>
+          {this.state.isShowSharedDialog && (
+            <ModalPotal>
+              <ShareDialog
+                itemType={'library'}
+                itemName={data.repo_name}
+                itemPath={'/'}
+                repoID={data.repo_id}
+                repoEncrypted={data.encrypted}
+                enableDirPrivateShare={true}
+                userPerm={data.permission}
+                isAdmin={true}
+                toggleDialog={this.toggleShareDialog}
+              />
+            </ModalPotal>
+          )}
+        </Fragment>
+      );
+    }
   }
 }
 
