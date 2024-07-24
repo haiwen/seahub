@@ -27,12 +27,33 @@ def generate_view_id(length, view_ids=None):
     
     return new_id
 
+
+class RepoMetadataManager(models.Manager):
+
+    def enable_metadata(self, repo_id):
+        metadata = self.filter(repo_id=repo_id).first()
+        enabled = True
+        from_commit = '0000000000000000000000000000000000000000'
+        if not metadata:
+            metadata = self.model(repo_id=repo_id, enabled=enabled, from_commit=from_commit)
+        else:
+            metadata.enabled = enabled
+            metadata.from_commit = from_commit
+            metadata.to_commit = None
+        metadata.save()
+        return metadata
+
+
 class RepoMetadata(models.Model):
 
     repo_id = models.CharField(max_length=36, unique=True)
     created_time = models.DateTimeField(auto_now_add=True)
     modified_time = models.DateTimeField(auto_now=True)
     enabled = models.BooleanField(db_index=True)
+    from_commit = models.CharField(max_length=40)
+    to_commit = models.CharField(max_length=40)
+
+    objects = RepoMetadataManager()
 
     class Meta:
         db_table = 'repo_metadata'
