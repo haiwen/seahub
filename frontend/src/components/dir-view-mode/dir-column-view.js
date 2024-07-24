@@ -65,6 +65,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
@@ -83,13 +84,89 @@ class DirColumnView extends React.Component {
     this.state = {
       inResizing: false,
       navRate: parseFloat(localStorage.getItem('sf_dir_content_nav_rate') || 0.25),
+      startPoint: { x: 0, y: 0 },
+      endPoint: { x: 0, y: 0 },
+      selectedItemsList: [],
+      isSelecting: false,
     };
+    this.isMoving = false;
     this.containerWidth = null;
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
     this.viewModeContainer = React.createRef();
     this.dirContentMain = React.createRef();
   }
+
+  onSelectMouseDown = (e) => {
+    if (e.target.closest('img') || e.target.closest('div.grid-file-name') || e.button === 2) return;
+
+    const containerBounds = this.dirContentMain.current.getBoundingClientRect();
+    this.setState({
+      startPoint: { x: e.clientX - containerBounds.left, y: e.clientY - containerBounds.top },
+      endPoint: { x: e.clientX - containerBounds.left, y: e.clientY - containerBounds.top },
+      selectedItemsList: [],
+      isSelecting: true,
+    });
+  };
+
+  onSelectMouseMove = (e) => {
+    if (!this.state.isSelecting) return;
+
+    this.isMoving = true;
+    const containerBounds = this.dirContentMain.current.getBoundingClientRect();
+    const endPoint = { x: e.clientX - containerBounds.left, y: e.clientY - containerBounds.top };
+    this.setState({
+      endPoint: endPoint,
+    }, () => {
+      this.determineSelectedItems();
+
+      const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.innerText));
+      const filteredDirentList = this.props.direntList
+        .filter(dirent => selectedItemNames.has(dirent.name))
+        .map(dirent => ({ ...dirent, isSelected: true }));
+
+      this.props.onSelectedDirentListUpdate(filteredDirentList);
+    });
+  };
+
+  onSelectMouseUp = () => {
+    if (!this.state.isSelecting || !this.isMoving) return;
+    this.setState({
+      isSelecting: false,
+    });
+  };
+
+  determineSelectedItems = () => {
+    // Logic to determine which items are within the selection box
+    const { startPoint, endPoint } = this.state;
+    const items = this.dirContentMain.current.querySelectorAll('.grid-item');
+
+    const selectionRect = {
+      left: Math.min(startPoint.x, endPoint.x),
+      top: Math.min(startPoint.y, endPoint.y),
+      right: Math.max(startPoint.x, endPoint.x),
+      bottom: Math.max(startPoint.y, endPoint.y),
+    };
+
+    const newSelectedItemsList = [];
+
+    items.forEach(item => {
+      const bounds = item.getBoundingClientRect();
+      const relativeBounds = {
+        left: bounds.left - this.dirContentMain.current.getBoundingClientRect().left,
+        top: bounds.top - this.dirContentMain.current.getBoundingClientRect().top,
+        right: bounds.right - this.dirContentMain.current.getBoundingClientRect().left,
+        bottom: bounds.bottom - this.dirContentMain.current.getBoundingClientRect().top,
+      };
+
+      // Check if the element is within the selection box's bounds
+      if (relativeBounds.left < selectionRect.right && relativeBounds.right > selectionRect.left &&
+        relativeBounds.top < selectionRect.bottom && relativeBounds.bottom > selectionRect.top) {
+        newSelectedItemsList.push(item);
+      }
+    });
+    this.setState({ selectedItemsList: newSelectedItemsList });
+  };
 
   onResizeMouseUp = () => {
     if (this.state.inResizing) {
@@ -129,6 +206,21 @@ class DirColumnView extends React.Component {
 
   getMenuContainerSize = () => {
     return window.getComputedStyle(this.viewModeContainer.current);
+  };
+
+  renderSelectionBox = () => {
+    const { startPoint, endPoint } = this.state;
+    if (!this.state.isSelecting) return null;
+    const left = Math.min(startPoint.x, endPoint.x);
+    const top = Math.min(startPoint.y, endPoint.y);
+    const width = Math.abs(startPoint.x - endPoint.x);
+    const height = Math.abs(startPoint.y - endPoint.y);
+    return (
+      <div
+        className="selection-box"
+        style={{ left, top, width, height }}
+      />
+    );
   };
 
   render() {
@@ -182,6 +274,9 @@ class DirColumnView extends React.Component {
         <div
           className="dir-content-main" style={{ userSelect: select, flex: mainFlex }}
           onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
+          onMouseDown={this.onSelectMouseDown}
+          onMouseUp={this.onSelectMouseUp}
+          onMouseMove={this.onSelectMouseMove}
           ref={this.dirContentMain}
         >
           {this.props.isViewFile ? (
@@ -273,6 +368,7 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
             />
           )}
+          {this.renderSelectionBox()}
         </div>
       </div>
     );

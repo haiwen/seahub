@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail, isDir } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -1377,6 +1377,18 @@ class LibContentView extends React.Component {
     }
   };
 
+  onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
+    this.setState({
+      direntList: this.state.direntList.map(dirent => {
+        dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
+        return dirent;
+      }),
+      isDirentSelected: newSelectedDirentList.length > 0,
+      selectedDirentList: newSelectedDirentList,
+      lastSelectedIndex: lastSelectedIndex,
+    });
+  };
+
   onItemClick = (dirent) => {
     this.resetSelected();
     let repoID = this.props.repoID;
@@ -2161,6 +2173,7 @@ class LibContentView extends React.Component {
             isDirentDetailShow={this.state.isDirentDetailShow}
             selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
             selectedDirentList={this.state.selectedDirentList}
+            onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
             onItemsMove={this.onMoveItems}
             onItemsCopy={this.onCopyItems}
             onItemsDelete={this.onDeleteItems}

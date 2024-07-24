@@ -77,16 +77,16 @@ class DirentGridItem extends React.Component {
     }
 
     if (dirent === activeDirent && !event.metaKey && !event.ctrlKey) {
-      this.handleDoubleClick(dirent);
+      this.handleDoubleClick(dirent, event);
     } else {
       this.props.onGridItemClick(dirent, event);
     }
   };
 
-  handleDoubleClick = (dirent) => {
+  handleDoubleClick = (dirent, event) => {
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
-      this.props.onGridItemClick(null);
+      this.props.onGridItemClick(null, event);
     } else {
       this.props.onItemClick(dirent);
     }
@@ -106,7 +106,7 @@ class DirentGridItem extends React.Component {
       return;
     }
 
-    this.handleDoubleClick(dirent);
+    this.handleDoubleClick(dirent, e);
   };
 
   onGridItemDragStart = (e) => {

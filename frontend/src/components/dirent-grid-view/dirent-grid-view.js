@@ -446,25 +446,28 @@ class DirentGridView extends React.Component {
 
   // common contextmenu handle
   onMouseDown = (event) => {
-    event.stopPropagation();
     if (event.button === 2) {
+      event.stopPropagation();
       return;
     }
   };
 
   onGridContainerMouseDown = (event) => {
     this.onMouseDown(event);
+
+    if (event.button === 0) {
+      hideMenu();
+      this.props.onGridItemClick(null);
+    }
   };
 
   onGridItemMouseDown = (event) => {
     this.onMouseDown(event);
   };
 
-  gridContainerClick = () => {
+  gridContainerClick = (event) => {
+    event.stopPropagation();
     hideMenu();
-    if (!this.props.isDirentDetailShow) {
-      this.onGridItemClick(null);
-    }
   };
 
   onGridContainerContextMenu = (event) => {
@@ -509,7 +512,7 @@ class DirentGridView extends React.Component {
         let menuList = Utils.getDirentOperationList(this.isRepoOwner, currentRepoInfo, selectedDirentList[0], true);
         this.handleContextClick(event, GRID_ITEM_CONTEXTMENU_ID, menuList, selectedDirentList[0]);
       } else {
-        this.onDirentClick(null);
+        this.props.onGridItemClick(null);
         event.persist();
         if (!hasCustomPermission('modify')) return;
         setTimeout(() => {
@@ -586,7 +589,7 @@ class DirentGridView extends React.Component {
 
     return (
       <Fragment>
-        <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
+        <ul className="grid-view" onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
           {
             direntList.length !== 0 && direntList.map((dirent, index) => {
               return (
