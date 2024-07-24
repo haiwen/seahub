@@ -140,55 +140,54 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
-    const deletedTip = item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null;
-    const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-        <td><img src={iconUrl} alt="" width="24" /></td>
-        <td><Link to={objUrl}>{item.obj_name}</Link>{deletedTip}</td>
-        <td><Link to={repoUrl}>{item.repo_name}</Link></td>
-        <td>{item.view_cnt}</td>
-        <td>{this.renderExpiration()}</td>
-        <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-          <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
-        </td>
-      </tr>
-    );
-
-    const mobileItem = (
-      <tr>
-        <td><img src={iconUrl} alt="" width="24" /></td>
-        <td>
-          <Link to={objUrl}>{item.obj_name}</Link>
-          <br />
-          <span>{item.repo_name}</span><br />
-          <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
-          <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
-        </td>
-        <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
-                <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
-              </div>
-            </div>
-          </Dropdown>
-        </td>
-      </tr>
-    );
     return (
       <Fragment>
-        {this.props.isDesktop ? desktopItem : mobileItem}
+        {this.props.isDesktop ?
+          <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+            <td><img src={iconUrl} alt="" width="24" /></td>
+            <td>
+              <Link to={objUrl}>{item.obj_name}</Link>
+              {item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null}
+            </td>
+            <td><Link to={repoUrl}>{item.repo_name}</Link></td>
+            <td>{item.view_cnt}</td>
+            <td>{this.renderExpiration()}</td>
+            <td>
+              {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+              <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
+            </td>
+          </tr>
+          :
+          <tr>
+            <td><img src={iconUrl} alt="" width="24" /></td>
+            <td>
+              <Link to={objUrl}>{item.obj_name}</Link>
+              <br />
+              <span>{item.repo_name}</span><br />
+              <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+              <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
+            </td>
+            <td>
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                  <div className="mobile-operation-menu-bg-layer"></div>
+                  <div className="mobile-operation-menu">
+                    {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
+                    <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
+                  </div>
+                </div>
+              </Dropdown>
+            </td>
+          </tr>
+        }
         {isLinkDialogOpen &&
         <ShareAdminLink
           link={item.link}
