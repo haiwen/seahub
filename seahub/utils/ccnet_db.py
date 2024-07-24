@@ -162,3 +162,15 @@ class CcnetDB:
                 users.append(users_obj)
 
         return users, total_count
+
+    def get_org_staffs(self, org_id):
+        sql = f"""
+        SELECT email 
+        FROM `{self.db_name}`.`OrgUser`
+        WHERE org_id={org_id} AND is_staff=1
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            staffs = cursor.fetchall()
+
+        return [s[0] for s in staffs]
