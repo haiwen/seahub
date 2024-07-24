@@ -82,69 +82,65 @@ class Item extends React.Component {
 
     const item = this.props.invitation;
 
-    const desktopItem = (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter} tabIndex="0">
-        <td>{item.accepter}</td>
-        <td>{moment(item.invite_time).format('YYYY-MM-DD')}</td>
-        <td>{moment(item.expire_time).format('YYYY-MM-DD')}</td>
-        <td>{item.accept_time && <i className="sf2-icon-tick invite-accept-icon"></i>}</td>
-        <td>
-          {isOpIconShown && (
-            item.accept_time ?
-              <a href="#"
-                role="button"
-                className="action-icon sf3-font sf3-font-cancel-invitation"
-                title={gettext('Revoke Access')}
-                aria-label={gettext('Revoke Access')}
-                onClick={this.toggleRevokeDialog}>
-              </a> :
-              <a href="#"
-                role="button"
-                className="action-icon sf2-icon-x3"
-                title={gettext('Delete')}
-                aria-label={gettext('Delete')}
-                onClick={this.deleteItem}>
-              </a>
-          )}
-        </td>
-      </tr>
-    );
-
-    const mobileItem = (
-      <tr>
-        <td>
-          {item.accepter}<br />
-          <span className="item-meta-info">{moment(item.invite_time).format('YYYY-MM-DD')}<span className="small">({gettext('Invite Time')})</span></span>
-          <span className="item-meta-info">{moment(item.expire_time).format('YYYY-MM-DD')}<span className="small">({gettext('Expiration')})</span></span>
-          <span className="item-meta-info">{item.accept_time && gettext('Accepted')}</span>
-        </td>
-        <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                {item.accept_time ?
-                  <DropdownItem className="mobile-menu-item" onClick={this.toggleRevokeDialog}>{gettext('Revoke Access')}</DropdownItem> :
-                  <DropdownItem className="mobile-menu-item" onClick={this.deleteItem}>{gettext('Delete')}</DropdownItem>
-                }
-              </div>
-            </div>
-          </Dropdown>
-        </td>
-      </tr>
-    );
-
     return (
       <Fragment>
-        {this.props.isDesktop ? desktopItem : mobileItem}
+        {this.props.isDesktop ?
+          <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter} tabIndex="0">
+            <td>{item.accepter}</td>
+            <td>{moment(item.invite_time).format('YYYY-MM-DD')}</td>
+            <td>{moment(item.expire_time).format('YYYY-MM-DD')}</td>
+            <td>{item.accept_time && <i className="sf2-icon-tick invite-accept-icon"></i>}</td>
+            <td>
+              {isOpIconShown && (
+                item.accept_time ?
+                  <a href="#"
+                    role="button"
+                    className="action-icon sf3-font sf3-font-cancel-invitation"
+                    title={gettext('Revoke Access')}
+                    aria-label={gettext('Revoke Access')}
+                    onClick={this.toggleRevokeDialog}>
+                  </a> :
+                  <a href="#"
+                    role="button"
+                    className="action-icon sf2-icon-x3"
+                    title={gettext('Delete')}
+                    aria-label={gettext('Delete')}
+                    onClick={this.deleteItem}>
+                  </a>
+              )}
+            </td>
+          </tr>
+          :
+          <tr>
+            <td>
+              {item.accepter}<br />
+              <span className="item-meta-info">{moment(item.invite_time).format('YYYY-MM-DD')}<span className="small">({gettext('Invite Time')})</span></span>
+              <span className="item-meta-info">{moment(item.expire_time).format('YYYY-MM-DD')}<span className="small">({gettext('Expiration')})</span></span>
+              <span className="item-meta-info">{item.accept_time && gettext('Accepted')}</span>
+            </td>
+            <td>
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                  <div className="mobile-operation-menu-bg-layer"></div>
+                  <div className="mobile-operation-menu">
+                    {item.accept_time ?
+                      <DropdownItem className="mobile-menu-item" onClick={this.toggleRevokeDialog}>{gettext('Revoke Access')}</DropdownItem> :
+                      <DropdownItem className="mobile-menu-item" onClick={this.deleteItem}>{gettext('Delete')}</DropdownItem>
+                    }
+                  </div>
+                </div>
+              </Dropdown>
+            </td>
+          </tr>
+        }
         {isRevokeDialogOpen &&
         <InvitationRevokeDialog
           accepter={item.accepter}
