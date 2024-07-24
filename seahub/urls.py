@@ -200,7 +200,7 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import Search, FileDownloadToken
+from seahub.ai.apis import Search
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, Wiki2DuplicatePageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
@@ -997,12 +997,10 @@ if getattr(settings, 'ENABLE_SEADOC', False):
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
     ]
 
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
-if HAS_FILE_SEASEARCH and not HAS_FILE_SEARCH:
-    urlpatterns += [
-        re_path(r'^api/v2.1/ai/search/$', Search.as_view(), name='api-v2.1-ai-search'),
-        re_path(r'^api/v2.1/ai/repo/file-download-token/$', FileDownloadToken.as_view(), name='api-v2.1-ai-repo-file-download-token'),
-    ]
+# Seasearch
+urlpatterns += [
+    re_path(r'^api/v2.1/ai/search/$', Search.as_view(), name='api-v2.1-ai-search'),
+]
 
 if getattr(settings, 'CLIENT_SSO_VIA_LOCAL_BROWSER', False):
     urlpatterns += [

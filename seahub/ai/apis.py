@@ -117,28 +117,3 @@ class Search(APIView):
                     f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
         return Response(resp_json, resp.status_code)
-
-
-class FileDownloadToken(APIView):
-    authentication_classes = (SeafileAiAuthentication, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request):
-        repo_id = request.GET.get('repo_id')
-        path = request.GET.get('path')
-
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
-
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
-
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        username = request.user.username
-        download_token = get_file_download_token(repo_id, file_id, username)
-
-        library_files_info = {
-            'download_token': download_token
-        }
-
-        return Response(library_files_info, status.HTTP_200_OK)
