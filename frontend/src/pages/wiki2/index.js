@@ -53,6 +53,11 @@ class Wiki extends Component {
   }
 
   handlePath = () => {
+    const custom_url = window.location.pathname.substring(1);
+    if (custom_url.includes('publish/custom')) {
+      return custom_url;
+    }
+
     return isWiki2 ? 'wikis/' : 'published/';
   };
 
@@ -151,7 +156,10 @@ class Wiki extends Component {
 
     const params = new URLSearchParams(window.location.search);
     params.set('page_id', pageId);
-    const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    if (this.handlePath().includes('publish/custom')) {
+      fileUrl = `${siteRoot}${this.handlePath()}?${params.toString()}`;
+    }
     window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
 

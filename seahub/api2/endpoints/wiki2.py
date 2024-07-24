@@ -5,8 +5,9 @@ import json
 import logging
 import requests
 import posixpath
-import time
+import datetime
 import uuid
+import re
 import urllib.request, urllib.error, urllib.parse
 from copy import deepcopy
 
@@ -23,7 +24,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean, is_wiki_repo
 from seahub.utils.db_api import SeafileDB
-from seahub.wiki2.models import Wiki2 as Wiki
+from seahub.wiki2.models import Wiki2 as Wiki, WikiPublish
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
@@ -402,10 +403,10 @@ class Wiki2ConfigView(APIView):
 
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
-
-        if not check_wiki_permission(wiki, request.user.username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not WikiPublish.objects.filter(wiki_id=wiki_id).exists():
+            if not check_wiki_permission(wiki, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             repo = seafile_api.get_repo(wiki.repo_id)
@@ -621,9 +622,10 @@ class Wiki2PageView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not WikiPublish.objects.filter(wiki_id=wiki_id).exists():
+            if not check_wiki_permission(wiki, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
@@ -642,9 +644,9 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         permission = check_folder_permission(request, wiki.repo_id, '/')
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # if not permission:
+        #     error_msg = 'Permission denied.'
+        #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
@@ -905,3 +907,103 @@ class Wiki2DuplicatePageView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'wiki_config': wiki_config})
+
+
+class Wiki2PublishView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def _check_custom_url(self, custom_url):
+
+        return True if re.search(r'^[-0-9a-zA-Z]+$', custom_url) else False
+
+    def get(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            publish_config = WikiPublish.objects.get(wiki_id=wiki_id)
+            custom_url = publish_config.custom_url
+        except WikiPublish.DoesNotExist:
+            custom_url = ''
+
+        return Response({'custom_url': custom_url})
+
+    def post(self, request, wiki_id):
+        custom_url = request.data.get('custom_url', None)
+        if not custom_url:
+            error_msg = 'wiki custom url invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        custom_url = custom_url.strip()
+        if not self._check_custom_url(custom_url):
+            error_msg = _('URL is invalid')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if len(custom_url) < 5 or len(custom_url) > 30:
+            error_msg = _('The custom part of URL should have 5-30 characters.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if WikiPublish.objects.filter(custom_url=custom_url).exists():
+            error_msg = _('This custom domain is already in use and cannot be used for your wiki')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            created_at = datetime.datetime.utcnow()
+            username = request.user.username
+            defaults = {
+                'wiki_id': wiki_id,
+                'created_at': created_at,
+                'visit_times': 0,
+                'creator': username,
+                'custom_url': custom_url,
+                'inactive': False,
+                'version': 1
+            }
+            WikiPublish.objects.update_or_create(wiki_id=wiki_id, defaults=defaults)
+        except Exception as e:
+            logger.error(e)
+            error_msg = _('Internal Server Error')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({
+            "custom_url": custom_url,
+        })
+
+    def delete(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        publish_config = WikiPublish.objects.filter(wiki_id=wiki_id).first()
+        if publish_config:
+            publish_config.delete()
+        return Response({'success': True})

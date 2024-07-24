@@ -226,6 +226,24 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
+  publishWiki(wikiId, custom_url) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    let form = new FormData();
+    form.append('custom_url', custom_url);
+    return this._sendPostRequest(url, form);
+  }
+
+  getPublishWikiLink(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    return this.req.get(url);
+  }
+
+  deletePublishWikiLink(wikiId, customUrl) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    return this.req.delete(url);
+  }
+
+
 }
 
 let wikiAPI = new WikiAPI();

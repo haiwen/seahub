@@ -7,6 +7,7 @@ const entryFiles = {
   TCView: '/tc-view.js',
   wiki: '/wiki.js',
   wiki2: '/wiki2.js',
+  wikiPublish: '/wiki-publish.js',
   fileHistory: '/file-history.js',
   fileHistoryOld: '/file-history-old.js',
   sdocFileHistory: '/pages/sdoc/sdoc-file-history/index.js',

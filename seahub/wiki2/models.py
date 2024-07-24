@@ -45,6 +45,30 @@ class Wiki2(object):
         }
 
 
+class WikiPublish(models.Model):
+    wiki_id = models.CharField(max_length=36, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    visit_times = models.IntegerField(default=0)
+    creator = models.CharField(max_length=255)
+    custom_url = models.CharField(max_length=100, null=True, unique=True)
+    inactive = models.BooleanField(default=False)
+    version = models.IntegerField(default=1)
+
+    class Meta:
+        db_table = 'WikiPublish'
+
+    def to_dict(self):
+        return {
+            'wiki_id': self.wiki_id,
+            'created_at': self.created_at,
+            'visit_times': self.visit_times,
+            'creator': self.creator,
+            'custom_url': self.custom_url,
+            'inactive': self.inactive,
+            'version': self.version
+        }
+
+
 ###### signal handlers
 from django.dispatch import receiver
 from seahub.signals import repo_deleted

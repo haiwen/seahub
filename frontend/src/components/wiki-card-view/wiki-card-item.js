@@ -7,6 +7,9 @@ import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
 import ShareWikiDialog from '../dialog/share-wiki-dialog';
+import PublishWikiDialog from '../dialog/publish-wiki-dialog';
+import wikiAPI from '../../utils/wiki-api';
+import toaster from '../toast';
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,
@@ -26,6 +29,8 @@ class WikiCardItem extends Component {
       isShowRenameDialog: false,
       isItemMenuShow: false,
       isShowShareDialog: false,
+      isShowPublishDialog: false,
+      customUrl: '',
     };
   }
 
@@ -46,6 +51,10 @@ class WikiCardItem extends Component {
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
+  };
+
+  onPublishToggle = (e) => {
+    this.getPublishWikiLink();
   };
 
   onDeleteCancel = () => {
@@ -75,6 +84,39 @@ class WikiCardItem extends Component {
       this.props.renameWiki(this.props.wiki, newName);
     }
     this.setState({ isShowRenameDialog: false });
+  };
+
+  publishWiki = (url) => {
+    const urlIndex = url.indexOf('/custom/');
+    const custom_url = url.substring(urlIndex + '/custom/'.length);
+    wikiAPI.publishWiki(this.props.wiki.id, custom_url).then((res) => {
+      const { custom_url } = res.data;
+      this.setState({ customUrl: custom_url });
+      toaster.success(gettext('Successfully.'));
+    }).catch((error) => {
+      if (error.response) {
+        let errorMsg = error.response.data.error_msg;
+        toaster.danger(errorMsg);
+      }
+    });
+  };
+
+  getPublishWikiLink = () => {
+    wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
+      const { custom_url } = res.data;
+      this.setState({
+        customUrl: custom_url,
+        isShowPublishDialog: !this.state.isShowPublishDialog,
+      });
+    }).catch((error) => {
+      this.setState({
+        isShowPublishDialog: !this.state.isShowPublishDialog,
+      });
+      if (error.response) {
+        let errorMsg = error.response.data.error_msg;
+        toaster.danger(errorMsg);
+      }
+    });
   };
 
   clickWikiCard = (link) => {
@@ -130,6 +172,7 @@ class WikiCardItem extends Component {
     let showDelete = false;
     let showLeaveShare = false;
     let showDropdownMenu = false;
+    let showPublish = false;
 
     if (isDepartment) {
       if (isAdmin) {
@@ -137,6 +180,7 @@ class WikiCardItem extends Component {
           showDelete = true;
           showShare = true;
           showRename = true;
+          showPublish = true;
         } else {
           showLeaveShare = true;
         }
@@ -146,6 +190,7 @@ class WikiCardItem extends Component {
         showShare = true;
         showDelete = true;
         showRename = true;
+        showPublish = true;
       } else {
         showLeaveShare = true;
       }
@@ -180,6 +225,8 @@ class WikiCardItem extends Component {
                 <DropdownMenu right={true} className="dtable-dropdown-menu">
                   {showRename &&
                     <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
+                  {showPublish &&
+                    <DropdownItem onClick={this.onPublishToggle}>{gettext('Publish')}</DropdownItem>}
                   {showShare &&
                     <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                   }
@@ -261,6 +308,16 @@ class WikiCardItem extends Component {
               repoEncrypted={ false }
               enableDirPrivateShare={true}
               toggleDialog={this.onShareToggle}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowPublishDialog &&
+          <ModalPortal>
+            <PublishWikiDialog
+              toggleCancel={this.onPublishToggle}
+              onPublish={this.publishWiki}
+              wiki={wiki}
+              customUrl={this.state.customUrl}
             />
           </ModalPortal>
         }
