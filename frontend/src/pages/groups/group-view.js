@@ -420,8 +420,7 @@ class GroupView extends React.Component {
         opList.push({ 'text': gettext('Leave group'), 'onClick': this.toggleLeaveGroupDialog });
       }
       if (this.state.currentGroup.owner !== 'system admin' && !isMultiTenancy) {
-          opList.push({ 'text': gettext('Invite Members'), 'onClick': this.toggleInviteMembersDialog });
-
+        opList.push({ 'text': gettext('Invite Members'), 'onClick': this.toggleInviteMembersDialog });
       }
     }
 
