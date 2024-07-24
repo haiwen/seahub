@@ -172,7 +172,8 @@ def base(request):
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_seadoc': ENABLE_SEADOC,
-        'enable_seasearch': bool(HAS_FILE_SEASEARCH and not HAS_FILE_SEARCH),
+        'enable_elasticsearch': HAS_FILE_SEARCH,
+        'enable_seasearch': HAS_FILE_SEASEARCH,
         'enable_seatable_integration': ENABLE_SEATABLE_INTEGRATION
     }
 

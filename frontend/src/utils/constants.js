@@ -97,7 +97,8 @@ export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
-// seafile_ai
+// search
+export const enableElasticsearch = window.app.pageOptions.enableElasticsearch || false;
 export const enableSeasearch = window.app.pageOptions.enableSeasearch || false;
 
 // dtable

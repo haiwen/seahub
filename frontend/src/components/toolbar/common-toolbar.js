@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon, enableSeasearch } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, enableSeasearch, enableElasticsearch } from '../../utils/constants';
 import Search from '../search/search';
 import AISearch from '../search/ai-search';
 import SearchByName from '../search/search-by-name';
@@ -65,7 +65,7 @@ class CommonToolbar extends React.Component {
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
-      if (enableSeasearch) {
+      if (enableSeasearch && !enableElasticsearch) {
         return (
           <AISearch
             repoID={repoID}
