@@ -27,7 +27,7 @@ class OrgAdminInviteUserViaWeiXinDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{'通过微信邀请用户'}</ModalHeader>
         <ModalBody>
           <p>{'请将邀请链接发送给其他人，这样他们就可以通过扫描链接里的二维码来加入组织。'}</p>
