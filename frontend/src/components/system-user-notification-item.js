@@ -13,7 +13,7 @@ class SystemUserNotificationItem extends React.Component {
   }
 
   close = () => {
-    this.setState({isClosed: true});
+    this.setState({ isClosed: true });
     notificationAPI.setSysUserNotificationToSeen(this.props.notificationID);
   };
 
@@ -24,9 +24,8 @@ class SystemUserNotificationItem extends React.Component {
     return (
       <div id="info-bar" className="d-flex justify-content-between">
         <span className="mr-3" aria-hidden="true"></span>
-        <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{__html: this.props.msg}}></p>
-        <button className="close sf2-icon-x1" title={gettext('Close')} aria-label={gettext('Close')}
-          onClick={this.close}></button>
+        <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: this.props.msg }}></p>
+        <button className="close sf2-icon-x1" title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close}></button>
       </div>
     );
   }
