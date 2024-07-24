@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser/file-chooser';
 import { SeahubSelect, NoGroupMessage } from '../common/select';
+import toaster from '../../components/toast';
 
 class GroupItem extends React.Component {
 
@@ -78,7 +79,7 @@ GroupItem.propTypes = {
   item: PropTypes.object.isRequired,
   permissions: PropTypes.array.isRequired,
   showPath: PropTypes.bool.isRequired,
-  repoName: PropTypes.string.isRequired,
+  repoName: PropTypes.string,
   deleteGroupPermissionItem: PropTypes.func.isRequired,
   onChangeGroupPermission: PropTypes.func.isRequired,
 };
@@ -128,6 +129,9 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
           value: item.name
         };
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -142,6 +146,9 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
           groupPermissionItems: res.data
         });
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -166,7 +173,6 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
           errorMsg[i] = res.data.failed[i];
         }
       }
-
       this.setState({
         errorMsg: errorMsg,
         groupPermissionItems: this.state.groupPermissionItems.concat(res.data.success),
@@ -174,20 +180,9 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
         permission: 'rw',
         folderPath: ''
       });
-    }).catch((error) => {
-      let errorMsg = '';
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }
-      this.setState({
-        errorMsg: [errorMsg]
-      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -199,6 +194,9 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       this.setState({
         groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; })
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -208,6 +206,9 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       seafileAPI.updateGroupFolderPerm(item.repo_id, permission, item.folder_path, item.group_id);
     request.then(() => {
       this.updateGroupPermission(item, permission);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
