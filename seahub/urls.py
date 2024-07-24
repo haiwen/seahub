@@ -40,7 +40,7 @@ from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
 from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
-        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
+        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample, GroupInviteLinks, GroupInviteLink, group_invite
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
@@ -303,7 +303,7 @@ urlpatterns = [
     path('my-libs/deleted/', react_fake_view, name="my_libs_deleted"),
     path('org/', react_fake_view, name="org"),
     path('invitations/', react_fake_view, name="invitations"),
-
+    re_path(r'^group-invite/(?P<token>[-0-9a-f]{8})/$', group_invite, name='group_invite'),
     re_path(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     re_path(r'^ajax/u/d/(?P<token>[-0-9a-f]+)/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     path('ajax/upload-file-done/', upload_file_done, name='upload_file_done'),
@@ -354,6 +354,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/group-members-import-example/$', GroupMembersImportExample.as_view(), name='api-v2.1-group-members-import-example'),
     re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
     re_path(r'^api/v2.1/search-group/$', SearchGroup.as_view(), name='api-v2.1-search-group'),
+
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/invite-links/$', GroupInviteLinks.as_view(),name='api-v2.1-group-invite-links'),
+    re_path(r'^api/v2.1/groups/(?P<group_id>\d+)/invite-links/(?P<token>[-0-9a-f]{8})/$', GroupInviteLink.as_view(), name='api-v2.1-group-invite-link'),
 
     ## address book
     re_path(r'^api/v2.1/address-book/groups/(?P<group_id>\d+)/sub-groups/$', AddressBookGroupsSubGroups.as_view(), name='api-v2.1-address-book-groups-sub-groups'),
