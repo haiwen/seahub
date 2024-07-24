@@ -346,3 +346,7 @@ img[src=""],img:not([src]) { /* for first loading img*/
   cursor: pointer;
   font-size: 12px;
 }
+
+.dir-tool>div {
+  margin-left: 8px;
+}

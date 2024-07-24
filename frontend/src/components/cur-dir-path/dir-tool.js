@@ -119,20 +119,20 @@ class DirTool extends React.Component {
 
     return (
       <React.Fragment>
-        <div className="d-flex">
+        <div className="dir-tool d-flex">
           <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
           <ReposSortMenu sortOptions={sortOptions} onSelectSortOption={this.onSelectSortOption}/>
           {(!this.props.isCustomPermission) &&
-            <span className="cur-view-path-btn ml-2" onClick={() => this.props.switchViewMode('detail')}>
+            <div className="cur-view-path-btn" onClick={() => this.props.switchViewMode('detail')}>
               <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
-            </span>
+            </div>
           }
           {menuItems.length > 0 &&
           <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
             <DropdownToggle
               tag="i"
               id="cur-folder-more-op-toggle"
-              className='cur-view-path-btn sf3-font-more sf3-font ml-2'
+              className='cur-view-path-btn sf3-font-more sf3-font'
               data-toggle="dropdown"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
