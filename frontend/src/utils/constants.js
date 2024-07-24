@@ -115,6 +115,7 @@ export const wikiId = window.wiki ? window.wiki.config.wikiId : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
+export const wikiPermission = window.wiki ? window.wiki.config.permission : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
 export const isPublicWiki = window.wiki ? window.wiki.config.isPublicWiki === 'True' : '';

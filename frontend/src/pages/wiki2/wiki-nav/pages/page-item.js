@@ -5,7 +5,7 @@ import NameEditPopover from '../../common/name-edit-popover';
 import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
 import DeleteDialog from '../../common/delete-dialog';
-import { gettext } from '../../../../utils/constants';
+import { gettext, wikiPermission } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
 import DraggedPageItem from './dragged-page-item';
@@ -225,7 +225,7 @@ class PageItem extends Component {
                   </div>
                 </div>
                 <div className="d-flex">
-                  {isEditMode &&
+                  {isEditMode && wikiPermission !== 'public' &&
                     <>
                       <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
                         <Icon symbol={'more-level'} />

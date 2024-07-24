@@ -33,7 +33,6 @@ class Wiki2(object):
         self.name = wiki.repo_name
         self.updated_at = timestamp_to_isoformat_timestr(wiki.last_modify)
         self.repo_id = wiki.repo_id
-        
     
     def to_dict(self):
         return {
@@ -69,6 +68,25 @@ class WikiPageTrash(models.Model):
             'name': self.name,
             'delete_time': self.delete_time,
             'size': self.size
+        }
+
+class Wiki2Publish(models.Model):
+    repo_id = models.CharField(max_length=36, unique=True, db_index=True)
+    publish_url = models.CharField(max_length=40, null=True, unique=True)
+    username = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    visit_count = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'wiki_wiki2_publish'
+
+    def to_dict(self):
+        return {
+            'repo_id': self.repo_id,
+            'publish_url': self.publish_url,
+            'username': self.username,
+            'created_at': self.created_at,
+            'visit_count': self.visit_count
         }
 
 ###### signal handlers

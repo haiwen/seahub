@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SdocWikiEditor } from '@seafile/sdoc-editor';
-import { gettext, username } from '../../utils/constants';
+import { gettext, username, wikiPermission } from '../../utils/constants';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
@@ -69,7 +69,7 @@ class MainPanel extends Component {
             currentPageId={this.props.currentPageId}
             currentPageConfig={currentPageConfig}
           />
-          {username && <Account />}
+          {username && wikiPermission !== 'public' && <Account />}
         </div>
         <div className="main-panel-center">
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
