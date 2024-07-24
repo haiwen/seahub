@@ -9,7 +9,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id
+from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
 from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
@@ -63,8 +63,8 @@ class MetadataManage(APIView):
         """
 
         # check dose the repo have opened metadata manage
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if record and record.enabled:
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if metadata and metadata.enabled:
             error_msg = f'The metadata module is enabled for repo {repo_id}.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
@@ -84,6 +84,15 @@ class MetadataManage(APIView):
             'repo_id': repo_id,
             'username': request.user.username
         }
+
+        try:
+            RepoMetadata.objects.enable_metadata(repo_id)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        init_metadata(metadata_server_api)
 
         try:
             task_id = add_init_metadata_task(params=params)

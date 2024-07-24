@@ -248,6 +248,7 @@ const getFileTypeColumnData = (column) => {
     '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428', id: '_document' },
     '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_video' },
     '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142', id: '_audio' },
+    '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5', id: '_code' },
   };
 
   let newData = { ...data };
