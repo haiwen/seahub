@@ -239,13 +239,7 @@ class Wikis extends Component {
       });
     } else {
       wikiAPI.renameWiki2(wiki.id, newName).then(() => {
-        let wikis = this.state.wikis.map(item => {
-          if (item.id === wiki.id && item.version === 'v2') {
-            item.name = newName;
-          }
-          return item;
-        });
-        this.setState({ wikis: wikis });
+        this.getWikis();
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
