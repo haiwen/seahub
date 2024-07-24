@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser/file-chooser';
+import toaster from '../../components/toast';
 
 class UserItem extends React.Component {
 
@@ -81,7 +82,7 @@ UserItem.propTypes = {
   deleteUserFolderPermission: PropTypes.func.isRequired,
   onChangeUserFolderPerm: PropTypes.func.isRequired,
   showPath: PropTypes.bool.isRequired,
-  repoName: PropTypes.string.isRequired,
+  repoName: PropTypes.string,
 };
 
 
@@ -125,6 +126,9 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       if (res.data.length !== 0) {
         this.setState({userFolderPermItems: res.data});
       }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -159,20 +163,9 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         folderPath: '',
       });
       this.refs.userSelect.clearSelect();
-    }).catch((error) => {
-      let errorMsg = '';
-      if (error.response) {
-        if (error.response.data && error.response.data['error_msg']) {
-          errorMsg = error.response.data['error_msg'];
-        } else {
-          errorMsg = gettext('Error');
-        }
-      } else {
-        errorMsg = gettext('Please check the network.');
-      }
-      this.setState({
-        errorMsg: [errorMsg]
-      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -186,6 +179,9 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           return deletedItem != item;
         })
       });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
@@ -201,6 +197,9 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         return item;
       });
       this.setState({userFolderPermItems: userFolderPermItems});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
