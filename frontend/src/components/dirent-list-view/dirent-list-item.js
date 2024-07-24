@@ -708,138 +708,146 @@ class DirentListItem extends React.Component {
     const { canDrag } = this.state;
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
-    const desktopItem = (
-      <tr
-        className={trClass}
-        draggable={canDrag}
-        onFocus={this.onMouseEnter}
-        onMouseEnter={this.onMouseEnter}
-        onMouseOver={this.onMouseOver}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.onDirentClick}
-        onDragStart={this.onItemDragStart}
-        onDragEnter={this.onItemDragEnter}
-        onDragOver={this.onItemDragOver}
-        onDragLeave={this.onItemDragLeave}
-        onDrop={this.onItemDragDrop}
-        onMouseDown={this.onItemMouseDown}
-        onContextMenu={this.onItemContextMenu}
-      >
-        <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
-          <input
-            type="checkbox"
-            className="vam"
-            onChange={this.onItemSelected}
-            checked={isActive}
-            aria-label={isActive ? gettext('Unselect this item') : gettext('Select this item')}
-          />
-        </td>
-        <td className="pl10">
-          {dirent.starred !== undefined &&
-          <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
-            <i className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}></i>
-          </a>
-          }
-        </td>
-        <td className="pl10">
-          <div className="dir-icon">
-            {(this.canPreview && dirent.encoded_thumbnail_src) ?
-              <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
-              <img ref='drag_icon' src={iconUrl} width="24" alt='' />
-            }
-            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-            <div ref="empty_content" style={{ position: 'absolute', width: '1px', height: '1px' }}></div>
-          </div>
-        </td>
-        <td className="name">
-          {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />}
-          {!this.state.isRenameing && (
-            <Fragment>
-              {(!dirent.isDir() && !this.canPreview) ?
-                <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
-              }
-            </Fragment>
-          )}
-        </td>
-        <td className="tag-list-title">
-          {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
-            <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
-              {dirent.file_tags.map((fileTag, index) => {
-                return (
-                  <FileTag fileTag={fileTag} length={dirent.file_tags.length} key={index} index={index}/>
-                );
-              })}
-            </div>
-          )}
-          {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) && (
-            <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
-          )}
-        </td>
-        <td className="operation">{this.renderItemOperation()}</td>
-        <td className="file-size">{dirent.size && dirent.size}</td>
-        <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
-      </tr>
-    );
-    const mobileItem = (
-      <tr>
-        <td onClick={this.onItemClick}>
-          <div className="dir-icon">
-            {(this.canPreview && dirent.encoded_thumbnail_src) ?
-              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
-              <img src={iconUrl} width="24" alt="" />
-            }
-            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-          </div>
-        </td>
-        <td onClick={this.onItemClick}>
-          {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> }
-          {!this.state.isRenameing && (
-            <Fragment>
-              {(!dirent.isDir() && !this.canPreview) ?
-                <a className="sf-link">{dirent.name}</a> :
-                <a href={dirent.type === 'dir' ? dirHref : fileHref}>{dirent.name}</a>
-              }
-            </Fragment>
-          )}
-          <br />
-          {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
-          <span className="item-meta-info">{dirent.mtime_relative}</span>
-        </td>
-        <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                {dirent.starred !== undefined &&
-                <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>{dirent.starred ? gettext('Unstar') : gettext('Star')}</DropdownItem>}
-                {this.props.getDirentItemMenuList(dirent, true).map((item, index) => {
-                  if (item != 'Divider' && item.key != 'Open via Client') {
-                    return (
-                      <DropdownItem className="mobile-menu-item" key={index} data-op={item.key} onClick={this.onMobileMenuItemClick}>{item.value}</DropdownItem>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </div>
-            </div>
-          </Dropdown>
-        </td>
-      </tr>
-    );
 
     return (
       <Fragment>
-        {isDesktop ? desktopItem : mobileItem}
+        {isDesktop ?
+          <tr
+            className={trClass}
+            draggable={canDrag}
+            onFocus={this.onMouseEnter}
+            onMouseEnter={this.onMouseEnter}
+            onMouseOver={this.onMouseOver}
+            onMouseLeave={this.onMouseLeave}
+            onClick={this.onDirentClick}
+            onDragStart={this.onItemDragStart}
+            onDragEnter={this.onItemDragEnter}
+            onDragOver={this.onItemDragOver}
+            onDragLeave={this.onItemDragLeave}
+            onDrop={this.onItemDragDrop}
+            onMouseDown={this.onItemMouseDown}
+            onContextMenu={this.onItemContextMenu}
+          >
+            <td className={`pl10 ${this.state.isDragTipShow ? 'tr-drag-effect' : ''}`}>
+              <input
+                type="checkbox"
+                className="vam"
+                onChange={this.onItemSelected}
+                checked={isActive}
+                aria-label={isActive ? gettext('Unselect this item') : gettext('Select this item')}
+              />
+            </td>
+            <td className="pl10">
+              {dirent.starred !== undefined &&
+              <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
+                <i className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}></i>
+              </a>
+              }
+            </td>
+            <td className="pl10">
+              <div className="dir-icon">
+                {(this.canPreview && dirent.encoded_thumbnail_src) ?
+                  <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                  <img ref='drag_icon' src={iconUrl} width="24" alt='' />
+                }
+                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
+                <div ref="empty_content" style={{ position: 'absolute', width: '1px', height: '1px' }}></div>
+              </div>
+            </td>
+            <td className="name">
+              {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />}
+              {!this.state.isRenameing && (
+                <Fragment>
+                  {(!dirent.isDir() && !this.canPreview) ?
+                    <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                    <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+                  }
+                </Fragment>
+              )}
+            </td>
+            <td className="tag-list-title">
+              {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
+                <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
+                  {dirent.file_tags.map((fileTag, index) => {
+                    return (
+                      <FileTag fileTag={fileTag} length={dirent.file_tags.length} key={index} index={index}/>
+                    );
+                  })}
+                </div>
+              )}
+              {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) && (
+                <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
+              )}
+            </td>
+            <td className="operation">{this.renderItemOperation()}</td>
+            <td className="file-size">{dirent.size && dirent.size}</td>
+            <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
+          </tr>
+          :
+          <tr>
+            <td onClick={this.onItemClick}>
+              <div className="dir-icon">
+                {(this.canPreview && dirent.encoded_thumbnail_src) ?
+                  <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
+                  <img src={iconUrl} width="24" alt="" />
+                }
+                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
+              </div>
+            </td>
+            <td onClick={this.onItemClick}>
+              {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> }
+              {!this.state.isRenameing && (
+                <Fragment>
+                  {(!dirent.isDir() && !this.canPreview) ?
+                    <a className="sf-link">{dirent.name}</a> :
+                    <a href={dirent.type === 'dir' ? dirHref : fileHref}>{dirent.name}</a>
+                  }
+                </Fragment>
+              )}
+              <br />
+              {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
+              <span className="item-meta-info">{dirent.mtime_relative}</span>
+            </td>
+            <td>
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                  <div className="mobile-operation-menu-bg-layer"></div>
+                  <div className="mobile-operation-menu">
+                    {dirent.starred !== undefined &&
+                      <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
+                        {dirent.starred ? gettext('Unstar') : gettext('Star')}
+                      </DropdownItem>
+                    }
+                    {this.props.getDirentItemMenuList(dirent, true).map((item, index) => {
+                      if (item != 'Divider' && item.key != 'Open via Client') {
+                        return (
+                          <DropdownItem
+                            className="mobile-menu-item"
+                            key={index}
+                            data-op={item.key}
+                            onClick={this.onMobileMenuItemClick}
+                          >
+                            {item.value}
+                          </DropdownItem>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                </div>
+              </Dropdown>
+            </td>
+          </tr>
+        }
         {this.state.isMoveDialogShow &&
           <ModalPortal>
             <MoveDirentDialog
