@@ -894,11 +894,17 @@ METADATA_SERVER_URL = ''
 METADATA_SERVER_SECRET_KEY = ''
 
 METADATA_FILE_TYPES = {
-    '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif'),
-    '_document': ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'markdown',
-                  'md', 'pdf', 'ai', 'svg', 'xls', 'xlsx', 'ods', 'fods', 'xmind', 'sdoc'),
-    '_video': ('mp4', 'ogv', 'webm', 'mov'),
-    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
+    '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'mpo', 'jpe', 'xbm',
+                 'svg', 'ppm', 'pcx', 'xcf', 'xpm', 'mgn', 'ufo'),
+    '_document': ('oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'pdf', 'ai', 'svg', 'xls', 'xlsx', 'ods',
+                  'fods', 'xmind', 'ac', 'am', 'bat', 'diff', 'json', 'org', 'properties', 'vi', 'vim', 'xml', 'log',
+                  'csv', 'rst', 'patch', ),
+    '_text': ('txt', 'text', 'tex', 'markdown', 'md', 'sdoc', 'doc', 'docx', ),
+    '_code': ('cc', 'c', 'cmake', 'cpp', 'cs', 'css', 'el', 'h', 'html', 'htm', 'java', 'js', 'less', 'make', 'php', 'pl',
+              'py', 'rb', 'scala', 'script', 'sh', 'sql', 'groovy', 'go', 'yml', 'xhtml', ),
+    '_video': ('mp4', 'ogv', 'webm', 'mov', 'avi', 'wmv', 'asf', 'asx', 'rm', 'rmvb', 'mpg', 'mpeg', 'mpe', '3gp',
+               'm4v', 'mkv', 'flv', 'vob'),
+    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'rm', 'mp1', 'mp2')
 }
 
 d = os.path.dirname
