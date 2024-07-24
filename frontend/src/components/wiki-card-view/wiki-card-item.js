@@ -113,11 +113,11 @@ class WikiCardItem extends Component {
   render() {
     const { wiki, isDepartment, isShowAvatar } = this.props;
     let isAdmin = false;
-    if (wiki.admins){
+    if (wiki.admins) {
       isAdmin = wiki.admins.includes(username);
     }
     let isGroupOwner = false;
-    if (this.props.group){
+    if (this.props.group) {
       isGroupOwner = wiki.owner.split('@')[0] === this.props.group.group_id.toString();
     }
     let isWikiOwner = username === wiki.owner;

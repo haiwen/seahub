@@ -104,9 +104,9 @@ class Wikis extends Component {
       let groupWikis = this.state.groupWikis;
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';
-      if (currentDeptID){
+      if (currentDeptID) {
         groupWikis.filter(group => {
-          if (group.group_id === currentDeptID){
+          if (group.group_id === currentDeptID) {
             group.wiki_info.push(new_wiki);
           }
           return group;

@@ -56,9 +56,9 @@ class WikiCardGroup extends Component {
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
     let isGroup = false;
     let depIcon = false;
-    if (group){
+    if (group) {
       isGroup = true;
-      depIcon = group.owner === "system admin"
+      depIcon = group.owner === 'system admin';
     }
     return (
       <div className='wiki-card-group mb-4'>
