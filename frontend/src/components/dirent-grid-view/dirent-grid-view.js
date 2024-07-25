@@ -447,6 +447,7 @@ class DirentGridView extends React.Component {
   // common contextmenu handle
   onMouseDown = (event) => {
     if (event.button === 2) {
+      event.preventDefault();
       event.stopPropagation();
       return;
     }
@@ -462,6 +463,7 @@ class DirentGridView extends React.Component {
   };
 
   onGridItemMouseDown = (event) => {
+    event.stopPropagation();
     this.onMouseDown(event);
   };
 
