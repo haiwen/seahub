@@ -3,6 +3,7 @@ import utc from 'dayjs/plugin/utc';
 import { UTC_FORMAT_DEFAULT } from '../../_basic';
 import { OPERATION_TYPE } from './constants';
 import Column from '../../model/metadata/column';
+import View from '../../model/metadata/view';
 
 dayjs.extend(utc);
 
@@ -124,7 +125,39 @@ export default function apply(data, operation) {
       const { column } = operation;
       const newColumn = new Column(column);
       data.columns.push(newColumn);
-      data.view.columns.push(newColumn);
+      data.view = new View(data.view, data.columns);
+      return data;
+    }
+    case OPERATION_TYPE.DELETE_COLUMN: {
+      const { column_key } = operation;
+      const newColumns = data.columns.slice(0);
+      const columnIndex = newColumns.findIndex(column => column.key === column_key);
+      if (columnIndex !== -1) {
+        newColumns.splice(columnIndex, 1);
+        data.columns = newColumns;
+        data.view = new View(data.view, data.columns);
+      }
+      return data;
+    }
+    case OPERATION_TYPE.RENAME_COLUMN: {
+      const { column_key, new_name } = operation;
+      const columnIndex = data.columns.findIndex(column => column.key === column_key);
+      if (columnIndex !== -1) {
+        const newColumn = new Column({ ...data.columns[columnIndex], name: new_name });
+        data.columns[columnIndex] = newColumn;
+      }
+      data.view = new View(data.view, data.columns);
+      return data;
+    }
+    case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+      const { column_key, new_data } = operation;
+      const columnIndex = data.columns.findIndex(column => column.key === column_key);
+      if (columnIndex !== -1) {
+        const oldColumn = data.columns[columnIndex];
+        const newColumn = new Column({ ...oldColumn, data: { ...oldColumn.data, ...new_data } });
+        data.columns[columnIndex] = newColumn;
+      }
+      data.view = new View(data.view, data.columns);
       return data;
     }
     default: {

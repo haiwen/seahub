@@ -1,0 +1,11 @@
+.sf-metadata-confirm-delete-option-popover .popover {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px 1px #0003;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  padding: 16px;
+  width: 300px;
+}

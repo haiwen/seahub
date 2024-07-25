@@ -493,7 +493,6 @@ class LibContentView extends React.Component {
   };
 
   showFileMetadata = (filePath, viewId) => {
-    if (this.state.metadataViewId === viewId) return;
     const repoID = this.props.repoID;
     this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata', metadataViewId: viewId });
     const repoInfo = this.state.currentRepoInfo;

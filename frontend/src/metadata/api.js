@@ -68,22 +68,6 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  insertColumn = (repoID, name, type, { key, data }) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
-    let params = {
-      'column_name': name,
-      'column_type': type,
-    };
-    if (key) {
-      params['column_key'] = key;
-    }
-
-    if (data) {
-      params['column_data'] = data;
-    }
-    return this.req.post(url, params);
-  };
-
   getMetadataRecordInfo(repoID, parentDir, name) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let params = {};
@@ -158,6 +142,49 @@ class MetadataManagerAPI {
       target_view_id: targetViewId,
     };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
+
+  // column
+  insertColumn = (repoID, name, type, { key, data }) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    let params = {
+      'column_name': name,
+      'column_type': type,
+    };
+    if (key) {
+      params['column_key'] = key;
+    }
+
+    if (data) {
+      params['column_data'] = data;
+    }
+    return this.req.post(url, params);
+  };
+
+  deleteColumn = (repoID, columnKey) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    const params = {
+      column_key: columnKey,
+    };
+    return this.req.delete(url, { data: params });
+  };
+
+  renameColumn = (repoID, columnKey, name) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    const params = {
+      column_key: columnKey,
+      name: name,
+    };
+    return this.req.put(url, params);
+  };
+
+  modifyColumnData = (repoID, columnKey, data) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    const params = {
+      column_key: columnKey,
+      data: data,
+    };
+    return this.req.put(url, params);
   };
 }
 

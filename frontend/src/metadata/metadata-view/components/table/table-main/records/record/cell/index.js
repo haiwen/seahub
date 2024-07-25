@@ -8,6 +8,7 @@ import CellOperationBtn from './operation-btn';
 import Formatter from './formatter';
 
 import './index.css';
+import ObjectUtils from '../../../../../../utils/object-utils';
 
 const Cell = React.memo(({
   needBindEvents,
@@ -170,7 +171,8 @@ const Cell = React.memo(({
     height !== newHeight ||
     column.left !== newColumn.left ||
     column.width !== newColumn.width ||
-    bgColor !== newBgColor
+    bgColor !== newBgColor ||
+    !ObjectUtils.isSameObject(column.data, newColumn.data)
   );
   return !isChanged;
 });

@@ -4,6 +4,7 @@ import {
   PRIVATE_COLUMN_KEY,
   NOT_DISPLAY_COLUMN_KEYS,
   PRIVATE_COLUMN_KEYS,
+  SELECT_OPTION_COLORS,
 } from '../_basic';
 import {
   SEQUENCE_COLUMN_WIDTH
@@ -293,13 +294,14 @@ export const normalizeColumns = (columns) => {
   const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
     const { type, key, name, ...params } = column;
+    const columnType = getColumnType(key, type);
     return {
       ...params,
       key,
-      type: getColumnType(key, type),
+      type: columnType,
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
-      editable: !key.startsWith('_')
+      editable: !key.startsWith('_') && columnType !== CellType.LONG_TEXT
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
@@ -326,5 +328,24 @@ export function canEdit(col, record, enableCellSelect) {
   if (col.editable != null && typeof (col.editable) === 'function') {
     return enableCellSelect === true && col.editable(record);
   }
+  console.log(col);
   return enableCellSelect === true && !!col.editable;
 }
+
+export const getNotDuplicateOption = (options) => {
+  const defaultOptions = SELECT_OPTION_COLORS.slice(12, 24);
+  let defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
+  const adjacentOptions = options.slice(-11);
+
+  function isDuplicate(option) {
+    return option.color === defaultOption.COLOR;
+  }
+
+  let duplicateOption = adjacentOptions.find(isDuplicate);
+  while (duplicateOption) {
+    defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
+    duplicateOption = adjacentOptions.find(isDuplicate);
+  }
+
+  return defaultOption;
+};

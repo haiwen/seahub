@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useMemo } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -6,7 +6,7 @@ import { Icon } from '@seafile/sf-metadata-ui-component';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEYS } from '../../../../../../_basic';
 import ResizeColumnHandle from './resize-column-handle';
 import { EVENT_BUS_TYPE } from '../../../../../../constants';
-import HeaderDropdownMenu from './header-dropdown-menu';
+import DropdownMenu from './dropdown-menu';
 import { gettext } from '../../../../../../utils';
 
 import './index.css';
@@ -20,10 +20,11 @@ const Cell = ({
   column,
   style: propsStyle,
   resizeColumnWidth,
-  downloadColumnAllFiles,
+  renameColumn,
+  deleteColumn,
+  modifyColumnData,
 }) => {
   const headerCellRef = useRef(null);
-  const [isMenuShow, setMenuShow] = useState(false);
 
   const canEditColumnInfo = useMemo(() => {
     if (isHideTriangle) return false;
@@ -60,10 +61,6 @@ const Cell = ({
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_COLUMN, column);
   }, []);
 
-  const toggleHeaderDropDownMenu = useCallback(() => {
-    setMenuShow(!isMenuShow);
-  }, [isMenuShow]);
-
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];
   return (
@@ -72,6 +69,7 @@ const Cell = ({
         className={classnames('sf-metadata-result-table-cell column', { 'table-last--frozen': isLastFrozenCell })}
         ref={headerCellRef}
         style={style}
+        id={`sf-metadata-column-${key}`}
         onClick={() => handleHeaderCellClick(column, frozen)}
       >
         <div className="sf-metadata-result-column-content sf-metadata-record-header-cell-left d-flex align-items-center text-truncate">
@@ -85,17 +83,8 @@ const Cell = ({
             <span title={name} className={`header-name-text ${height === 56 && 'double'}`}>{name}</span>
           </div>
         </div>
-        {canEditColumnInfo &&
-          <HeaderDropdownMenu
-            isMenuShow={isMenuShow}
-            column={column}
-            toggleHeaderDropDownMenu={toggleHeaderDropDownMenu}
-            downloadColumnAllFiles={downloadColumnAllFiles}
-          />
-        }
-        <ResizeColumnHandle
-          onDrag={onDrag}
-        />
+        {canEditColumnInfo && (<DropdownMenu column={column} renameColumn={renameColumn} deleteColumn={deleteColumn} modifyColumnData={modifyColumnData} />)}
+        <ResizeColumnHandle onDrag={onDrag} />
       </div>
     </div>
   );
@@ -115,7 +104,9 @@ Cell.propTypes = {
   isLastFrozenCell: PropTypes.bool,
   isHideTriangle: PropTypes.bool,
   resizeColumnWidth: PropTypes.func,
-  downloadColumnAllFiles: PropTypes.func,
+  renameColumn: PropTypes.func,
+  deleteColumn: PropTypes.func,
+  modifyColumnData: PropTypes.func,
 };
 
 export default Cell;

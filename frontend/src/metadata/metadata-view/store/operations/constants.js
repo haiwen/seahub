@@ -12,7 +12,9 @@ export const OPERATION_TYPE = {
 
   // column
   INSERT_COLUMN: 'insert_column',
-
+  DELETE_COLUMN: 'delete_column',
+  RENAME_COLUMN: 'rename_column',
+  MODIFY_COLUMN_DATA: 'modify_column_data',
 };
 
 export const OPERATION_ATTRIBUTES = {
@@ -27,6 +29,9 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'button_column_key'],
   [OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON]: ['repo_id', 'row_id', 'updates', 'old_row_data', 'original_updates', 'original_old_row_data', 'button_column_key'],
   [OPERATION_TYPE.INSERT_COLUMN]: ['repo_id', 'name', 'column_type', 'key', 'data'],
+  [OPERATION_TYPE.RENAME_COLUMN]: ['repo_id', 'column_key', 'new_name', 'old_name'],
+  [OPERATION_TYPE.MODIFY_COLUMN_DATA]: ['repo_id', 'column_key', 'new_data', 'old_data'],
+  [OPERATION_TYPE.DELETE_COLUMN]: ['repo_id', 'column_key', 'column'],
 };
 
 export const UNDO_OPERATION_TYPE = [
@@ -43,13 +48,16 @@ export const LOCAL_APPLY_OPERATION_TYPE = [
 
 // apply operation after exec operation on the server
 export const NEED_APPLY_AFTER_SERVER_OPERATION = [
-  OPERATION_TYPE.INSERT_COLUMN,
   OPERATION_TYPE.MODIFY_RECORD,
   OPERATION_TYPE.MODIFY_RECORDS,
   OPERATION_TYPE.MODIFY_FILTERS,
   OPERATION_TYPE.MODIFY_SORTS,
   OPERATION_TYPE.MODIFY_GROUPBYS,
   OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS,
+  OPERATION_TYPE.INSERT_COLUMN,
+  OPERATION_TYPE.DELETE_COLUMN,
+  OPERATION_TYPE.RENAME_COLUMN,
+  OPERATION_TYPE.MODIFY_COLUMN_DATA,
 ];
 
 export const VIEW_OPERATION = [
@@ -57,4 +65,11 @@ export const VIEW_OPERATION = [
   OPERATION_TYPE.MODIFY_SORTS,
   OPERATION_TYPE.MODIFY_GROUPBYS,
   OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS,
+];
+
+export const COLUMN_OPERATION = [
+  OPERATION_TYPE.INSERT_COLUMN,
+  OPERATION_TYPE.DELETE_COLUMN,
+  OPERATION_TYPE.RENAME_COLUMN,
+  OPERATION_TYPE.MODIFY_COLUMN_DATA,
 ];

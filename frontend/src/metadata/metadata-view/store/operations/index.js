@@ -9,6 +9,7 @@ export {
   LOCAL_APPLY_OPERATION_TYPE,
   NEED_APPLY_AFTER_SERVER_OPERATION,
   VIEW_OPERATION,
+  COLUMN_OPERATION,
 } from './constants';
 
 export {

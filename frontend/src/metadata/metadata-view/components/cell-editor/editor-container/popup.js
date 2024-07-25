@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX, getCellValueByColumn } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById } from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
@@ -146,7 +146,7 @@ class PopupEditorContainer extends React.Component {
     const { key: columnKey, type: columnType, name: columnName } = column;
     const originalOldCellValue = getCellValueByColumn(record, column);
     const newValue = this.getEditor().getValue();
-    const updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
+    let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     let originalUpdates = { ...updated };
     if (
       !isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) ||
@@ -156,6 +156,9 @@ class PopupEditorContainer extends React.Component {
         this.editor.onClose();
       }
       return;
+    }
+    if (columnType === CellType.SINGLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
     }
     this.changeCommitted = true;
     const rowId = record._id;
@@ -220,7 +223,7 @@ class PopupEditorContainer extends React.Component {
   closeEditor = (isEscapeKeydown) => {
     const { column } = this.props;
     if (column.type === CellType.DATE && !isEscapeKeydown) return null;
-    return this.onClickOutside;
+    return () => this.onClickOutside(isEscapeKeydown);
   };
 
   onClickOutside = (isEscapeKeydown) => {
@@ -261,7 +264,7 @@ PopupEditorContainer.propTypes = {
 
   record: PropTypes.object,
   column: PropTypes.object,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.bool]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.bool, PropTypes.array]),
 
   onGridKeyDown: PropTypes.func,
   onCommit: PropTypes.func,

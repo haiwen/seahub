@@ -34,7 +34,8 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
     });
   }, []);
 
-  const onClick = useCallback((view) => {
+  const onClick = useCallback((view, isSelected) => {
+    if (isSelected) return;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name,
@@ -132,7 +133,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
                   isSelected={isSelected}
                   userPerm={userPerm}
                   view={view}
-                  onClick={onClick}
+                  onClick={(view) => onClick(view, isSelected)}
                   onDelete={() => onDeleteView(view._id, isSelected)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
                   onMove={onMoveView}

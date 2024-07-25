@@ -1,4 +1,5 @@
 import { normalizeColumnData } from '../../utils/column-utils';
+import { CellType } from '../../_basic';
 
 class Column {
   constructor(object) {
@@ -7,7 +8,7 @@ class Column {
     this.type = object.type || '';
     this.data = object.data || null;
     this.width = object.width || 200;
-    this.editable = object.editable || !this.key.startsWith('_') || false;
+    this.editable = object.editable || !this.key.startsWith('_') && this.type !== CellType.LONG_TEXT || false;
     this.data = normalizeColumnData(this);
   }
 

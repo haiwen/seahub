@@ -1,0 +1,21 @@
+.sf-metadata-edit-column-options-container {
+  min-width: 400px;
+  height: auto;
+  background-color: #fff;
+}
+
+.sf-metadata-edit-column-options-container .sf-metadata-edit-column-options-search-container {
+  padding: 10px 10px 0;
+}
+
+.sf-metadata-edit-column-options-container .sf-metadata-option-search-control {
+  color: #212529;
+}
+
+.sf-metadata-edit-column-options-container .sf-metadata-select-options-list {
+  margin-bottom: 0;
+  margin-top: 1rem;
+  max-height: 300px;
+  overflow: auto;
+  padding: 0;
+}

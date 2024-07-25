@@ -615,3 +615,8 @@
   height: 100%;
   width: 100%;
 }
+
+.sf-metadata-tip-default {
+  font-size: 13px;
+  color: #666;
+}

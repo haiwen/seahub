@@ -95,9 +95,9 @@
   text-align: center;
 }
 
-.sf-metadata-single-select-editor .single-select-check-icon .dtable-font {
+.sf-metadata-single-select-editor .single-select-check-icon .sf-metadata-icon-check-icon {
   font-size: 12px;
-  color: #798d99;
+  fill: #798d99;
 }
 
 .sf-metadata-single-select-editor .none-search-result {
