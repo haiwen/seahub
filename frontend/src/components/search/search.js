@@ -303,6 +303,7 @@ class Search extends Component {
     this.setState({ value: newValue });
     setTimeout(() => {
       const trimmedValue = newValue.trim();
+      const isInRepo = this.props.repoID;
       if (this.isChineseInput === false && this.state.inputValue !== newValue) {
         this.setState({
           inputValue: newValue,
@@ -311,7 +312,7 @@ class Search extends Component {
           // resultItems: [],
           isResultGetted: false,
         }, () => {
-          if (trimmedValue !== '') {
+          if (!isInRepo && trimmedValue !== '') {
             this.getRepoSearchResult(newValue);
           }
         });

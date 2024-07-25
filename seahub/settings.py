@@ -851,10 +851,6 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
-SEAFILE_AI_SECRET_KEY = ''
-SEAFILE_AI_SERVER_URL = ''
-ENABLE_SEAFILE_AI = False
-
 ############################
 # HU berlin additional #
 ############################
@@ -916,6 +912,7 @@ EVENTS_CONFIG_FILE = os.environ.get(
 del d
 if not os.path.exists(EVENTS_CONFIG_FILE):
     del EVENTS_CONFIG_FILE
+
 
 #####################
 # External settings #

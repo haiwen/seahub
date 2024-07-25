@@ -40,7 +40,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
         gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
         get_service_url, is_valid_username, is_pro_version, \
-        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH
+        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -57,10 +57,9 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
-from seahub.settings import ENABLE_SEAFILE_AI
 if HAS_FILE_SEARCH:
     from seahub.search.utils import search_files
-if ENABLE_SEAFILE_AI:
+if HAS_FILE_SEASEARCH:
     from seahub.ai.utils import search, format_repos
 
 
@@ -2922,7 +2921,7 @@ class SeadocSearchFilenameView(APIView):
     def get(self, request, file_uuid):
         """Search sdoc by filename.
         """
-        if not (HAS_FILE_SEARCH or ENABLE_SEAFILE_AI):
+        if not (HAS_FILE_SEARCH or HAS_FILE_SEASEARCH):
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2995,7 +2994,7 @@ class SeadocSearchFilenameView(APIView):
             has_more = True if total > current_page * per_page else False
             return Response({"total":total, "results":results, "has_more":has_more})
 
-        if ENABLE_SEAFILE_AI:
+        if HAS_FILE_SEASEARCH:
             repos = [repo,]
             searched_repos, repos_map = format_repos(repos)
             count = per_page

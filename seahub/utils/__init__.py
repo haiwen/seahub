@@ -1177,6 +1177,7 @@ if HAS_OFFICE_CONVERTER:
 
 # search realted
 HAS_FILE_SEARCH = False
+HAS_FILE_SEASEARCH = False
 if EVENTS_CONFIG_FILE:
     def check_search_enabled():
         enabled = False
@@ -1188,8 +1189,15 @@ if EVENTS_CONFIG_FILE:
             else:
                 logging.debug('search: not enabled')
         return enabled
+    
+    def check_seasearch_enabled():
+        enabled = False
+        if hasattr(seafevents_api, 'is_seasearch_enabled'):
+            enabled = seafevents_api.is_seasearch_enabled(parsed_events_conf)
+        return enabled
 
     HAS_FILE_SEARCH = check_search_enabled()
+    HAS_FILE_SEASEARCH = check_seasearch_enabled()
 
 # repo auto delete related
 ENABLE_REPO_AUTO_DEL = False
