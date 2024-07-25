@@ -29,7 +29,7 @@ const Cell = React.memo(({
     const { type } = column;
     const canEditable = window.sfMetadataContext.canModifyCell(column);
     return classnames('sf-metadata-result-table-cell', `sf-metadata-result-table-${type}-cell`, {
-      'table-cell-uneditable': !canEditable && TABLE_SUPPORT_EDIT_TYPE_MAP[type],
+      'table-cell-uneditable': !canEditable || !TABLE_SUPPORT_EDIT_TYPE_MAP[type],
       [highlightClassName]: highlightClassName,
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,

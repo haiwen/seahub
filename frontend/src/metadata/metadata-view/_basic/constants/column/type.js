@@ -12,6 +12,7 @@ const CellType = {
   LONG_TEXT: 'long-text',
   SINGLE_SELECT: 'single-select',
   NUMBER: 'number',
+  GEOLOCATION: 'geolocation',
 };
 
 export default CellType;

@@ -19,3 +19,7 @@ export {
   getCollaboratorEmailsByNames,
 } from './collaborator';
 export { getLongtextDisplayString } from './long-text';
+export {
+  getGeolocationDisplayString,
+  getGeolocationByGranularity,
+} from './geolocation';

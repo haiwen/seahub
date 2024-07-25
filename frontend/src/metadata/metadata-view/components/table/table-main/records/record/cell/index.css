@@ -10,6 +10,10 @@
   justify-content: flex-start;
 }
 
+.sf-metadata-result-table-cell:not(.table-cell-uneditable):hover {
+  cursor: pointer;
+}
+
 .sf-metadata-result-table-cell.index {
   width: 90px;
   height: 100%;

@@ -38,6 +38,11 @@ export const TABLE_NOT_SUPPORT_EDIT_TYPE_MAP = {
 
 export const TABLE_SUPPORT_EDIT_TYPE_MAP = {
   [CellType.TEXT]: true,
+  [CellType.DATE]: true,
+  [CellType.NUMBER]: true,
+  [CellType.SINGLE_SELECT]: true,
+  [CellType.COLLABORATOR]: true,
+  [CellType.CHECKBOX]: true,
 };
 
 export const TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP = {

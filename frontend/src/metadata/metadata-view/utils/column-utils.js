@@ -202,6 +202,8 @@ export const getColumnName = (key, name) => {
       return gettext('Is expired');
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
       return gettext('File status');
+    case PRIVATE_COLUMN_KEY.LOCATION:
+      return gettext('Image location');
     default:
       return name;
   }
@@ -237,6 +239,8 @@ const getColumnType = (key, type) => {
       return CellType.CHECKBOX;
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
       return CellType.SINGLE_SELECT;
+    case PRIVATE_COLUMN_KEY.LOCATION:
+      return CellType.GEOLOCATION;
     default:
       return type;
   }
