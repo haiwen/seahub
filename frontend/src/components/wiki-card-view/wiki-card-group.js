@@ -7,7 +7,9 @@ import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 
 const propTypes = {
   wikis: PropTypes.array.isRequired,
+  group: PropTypes.object,
   deleteWiki: PropTypes.func.isRequired,
+  unshareGroupWiki: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
@@ -48,23 +50,39 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment, toggelAddWikiDialog } = this.props;
+    const { wikis, title, isDepartment, toggelAddWikiDialog, group } = this.props;
     const containerWidth = this.getContainerWidth();
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
+    let isGroup = false;
+    let depIcon = false;
+    if (group) {
+      isGroup = true;
+      depIcon = group.owner === 'system admin';
+    }
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
-          <span className={`sf3-font nav-icon sf3-font-${isDepartment ? 'department' : 'mine'}`} aria-hidden="true"></span>
+          <span className={`sf3-font nav-icon sf3-font-${(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'}`} aria-hidden="true"></span>
           {title}
         </h4>
         <div className='wiki-card-group-items' style={{ gridTemplateColumns: isMobile ? '48% 48%' : grids }} ref={this.groupItemsRef}>
           {wikis.map((wiki, index) => {
-            return (
+            return (isGroup ?
               <WikiCardItem
+                key={index + wiki.id + wiki.name}
+                group={group}
+                wiki={wiki}
+                deleteWiki={this.props.deleteWiki}
+                unshareGroupWiki={this.props.unshareGroupWiki}
+                isDepartment={isDepartment}
+                isShowAvatar={this.props.isShowAvatar}
+                renameWiki={this.props.renameWiki}
+              /> : <WikiCardItem
                 key={index + wiki.id + wiki.name}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
+                unshareGroupWiki={this.props.unshareGroupWiki}
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}

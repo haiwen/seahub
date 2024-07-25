@@ -369,11 +369,11 @@ class RepoView(APIView):
         except Exception as e:
             has_been_shared_out = False
             logger.error(e)
-
+            
         result = {
             "repo_id": repo.id,
             "repo_name": repo.name,
-
+            "repo_type": repo.repo_type,
             "owner_email": repo_owner,
             "owner_name": email2nickname(repo_owner),
             "owner_contact_email": email2contact_email(repo_owner),

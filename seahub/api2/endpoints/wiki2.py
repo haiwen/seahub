@@ -42,6 +42,7 @@ from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_C
     ENCRYPTED_LIBRARY_VERSION
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
@@ -49,11 +50,37 @@ from seahub.api2.views import HTTP_447_TOO_MANY_FILES_IN_LIBRARY
 from seahub.group.utils import group_id_to_name, is_group_admin
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
+from seaserv import ccnet_api
 
 HTTP_520_OPERATION_FAILED = 520
 
 
 logger = logging.getLogger(__name__)
+
+def _merge_wiki_in_groups(group_wikis):
+    
+    group_ids = [gw.group_id for gw in group_wikis]
+    group_id_wikis_map = {key: [] for key in group_ids}
+    for gw in group_wikis:
+        wiki = Wiki(gw)
+        wiki_info = wiki.to_dict()
+        owner = gw.owner
+        if ('@seafile_group') in owner:
+            group_id = int(owner.split('@')[0])
+            owner_nickname = group_id_to_name(group_id)
+        else:
+            owner_nickname = email2nickname(owner)
+        repo_info = {
+                "type": "group",
+                "permission": gw.permission,
+                "owner_nickname": owner_nickname
+        }
+        wiki_info.update(repo_info)
+        group_id = gw.group_id
+        group_id_wikis_map[group_id].append(wiki_info)
+    return group_id_wikis_map
+        
+
 
 
 class Wikis2View(APIView):
@@ -64,63 +91,82 @@ class Wikis2View(APIView):
     def get(self, request, format=None):
         """List all wikis.
         """
-        # parse request params
-        filter_by = {
-            'mine': False,
-            'shared': False,
-            'group': False,
-            'org': False,
-        }
-
-        rtype = request.GET.get('type', "")
-        if not rtype:
-            # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
-
-        for f in rtype.split(','):
-            f = f.strip()
-            filter_by[f] = True
-
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         (owned, shared, groups, public) = get_user_repos(username, org_id)
         
-        wikis = []
-        username = request.user.username
-        if filter_by['mine']:
-            owned_wikis = [r for r in owned if is_wiki_repo(r)]
-            for r in owned_wikis:
-                r.owner = username
-                r.permission = 'rw'
-                wikis.append(r)
-            
-        if filter_by['shared']:
-            shared_wikis = [r for r in shared if is_wiki_repo(r)]
-            for r in shared_wikis:
-                r.owner = r.user
-                wikis.append(r)
+        # list user groups
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
+        else:
+            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
-        if filter_by['group']:
-            group_wikis = [r for r in groups if is_wiki_repo(r)]
-            for r in group_wikis:
-                r.owner = r.user
-                wikis.append(r)
-                
-        wikis = list(set(wikis))
+        owned_wikis = [r for r in owned if is_wiki_repo(r)]
         wiki_list = []
-        for w in wikis:
-            wiki = Wiki(w)
+        for r in owned_wikis:
+            r.owner = username
+            r.permission = 'rw'
+            wiki = Wiki(r)
             wiki_info = wiki.to_dict()
-            if is_group_wiki(wiki):
-                group_id = int(wiki.owner.split('@')[0])
-                wiki_info['owner_nickname'] = group_id_to_name(group_id)
-            else:
-                wiki_info['owner_nickname'] = email2nickname(wiki.owner)
+            repo_info = {
+                    "type": "mine",
+                    "permission": 'rw',
+                    "owner_nickname": email2nickname(username)
+                }
+            wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
             
+        shared_wikis = [r for r in shared if is_wiki_repo(r)]
+        for r in shared_wikis:
+            owner = r.user
+            r.owner = owner
+            wiki = Wiki(r)
+            if ('@seafile_group') in r.owner:
+                group_id = int(owner.split('@')[0])
+                owner_nickname = group_id_to_name(group_id)
+            else:
+                owner_nickname = email2nickname(owner)
+            wiki_info = wiki.to_dict()
+            repo_info = {
+                    "type": "shared",
+                    "permission": r.permission,
+                    "owner_nickname": owner_nickname
+                }
+            wiki_info.update(repo_info)
+            wiki_list.append(wiki_info)
+
+        group_wikis = [r for r in groups if is_wiki_repo(r)]
+        group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
+        try:
+            group_ids_admins_map = {}
+            if group_id_in_wikis:
+                ccnet_db = CcnetDB()
+                group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        user_wiki_groups = [ug for ug in user_groups if ug.id in group_id_in_wikis]
+        for r in group_wikis:
+            r.owner = r.user
+
+        group_wiki_list = []
+        group_id_wikis_map = _merge_wiki_in_groups(group_wikis)
+        for group_obj in user_wiki_groups:
+            group_wiki = {
+                'group_name': group_obj.group_name,
+                'group_id': group_obj.id,
+                'group_admins': group_ids_admins_map.get(group_obj.id) or [],
+                "owner": group_obj.creator_name,
+                'wiki_info': group_id_wikis_map[group_obj.id]
+            }
+            group_wiki_list.append(group_wiki)
+        
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
 
-        return Response({'wikis': wiki_list})
+        return Response({'wikis': wiki_list, 'group_wikis': group_wiki_list})
 
     def post(self, request, format=None):
         """Add a new wiki.
