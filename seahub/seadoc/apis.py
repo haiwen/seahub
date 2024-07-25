@@ -165,12 +165,9 @@ class SeadocUploadFile(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # update file
-        files = {
-            'file': file,
-            'file_name': uuid_map.filename,
-            'target_file': file_path,
-        }
-        resp = requests.post(upload_link, files=files)
+        files = {'file': file}
+        data = {'filename': uuid_map.filename, 'target_file': file_path}
+        resp = requests.post(upload_link, files=files, data=data)
         if not resp.ok:
             logger.error('save sdoc failed %s, %s' % (file_uuid, resp.text))
             return api_error(resp.status_code, resp.content)
@@ -382,12 +379,8 @@ class SeadocUploadImage(APIView):
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
-            files = {
-                'file': file,
-                'file_name': file.name,
-                'target_file': file_path,
-            }
-            data = {'parent_dir': parent_path}
+            files = {'file': file}
+            data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
             if not resp.ok:
                 logger.error(resp.text)
@@ -574,12 +567,8 @@ class SeadocCopyHistoryFile(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         upload_link = gen_inner_file_upload_url('upload-api', token)
-        files = {
-            'file': file,
-            'file_name': new_file_name,
-            'target_file': new_file_path,
-        }
-        data = {'parent_dir': parent_dir}
+        files = {'file': file}
+        data = {'parent_dir': parent_dir, 'filename': new_file_name, 'target_file': new_file_path}
         resp = requests.post(upload_link, files=files, data=data)
         if not resp.ok:
             logger.error(resp.text)
@@ -2090,12 +2079,9 @@ class SeadocRevisionView(APIView):
 
             # rewrite file
             file = request.FILES.get('file', None)
-            files = {
-                'file': file,
-                'file_name': uuid_map.filename,
-                'target_file': file_path,
-            }
-            resp = requests.post(upload_link, files=files)
+            files = {'file': file}
+            data = {'filename': uuid_map.filename, 'target_file': file_path}
+            resp = requests.post(upload_link, files=files, data=data)
             if not resp.ok:
                 logger.error(resp.text)
                 error_msg = 'Internal Server Error'
