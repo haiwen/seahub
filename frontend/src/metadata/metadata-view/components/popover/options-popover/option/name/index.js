@@ -23,7 +23,7 @@ const Name = ({
     if (newName === option.name || newName === '') return;
     const newOption = Object.assign({}, option, { name: newName });
     onChange(newOption, 'name');
-  }, [name, onToggleFreeze, option, onChange]);
+  }, [name, onToggleFreeze, option, onChange, onClose]);
 
   const onClick = useCallback((event) => {
     if ((ref.current && !ref.current.contains(event.target)) && isEditing) {
@@ -44,7 +44,7 @@ const Name = ({
       onSave();
       onClose();
     }
-  }, []);
+  }, [onSave, onClose]);
 
   const onToggle = useCallback((event) => {
     event.stopPropagation();
@@ -57,6 +57,7 @@ const Name = ({
     return () => {
       document.addEventListener('mousedown', onClick);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

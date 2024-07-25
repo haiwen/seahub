@@ -23,11 +23,9 @@ const CollaboratorEditor = forwardRef(({
   const [maxItemNum, setMaxItemNum] = useState(0);
   const [itemHeight, setItemHeight] = useState(0);
   const timerRef = useRef(null);
-  const inputRef = useRef(null);
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const collaboratorItemRef = useRef(null);
-  const canEditData = false;
 
   const { collaborators } = useCollaborators();
   const displayCollaborators = useMemo(() => {
@@ -89,7 +87,7 @@ const CollaboratorEditor = forwardRef(({
 
   const onMenuMouseLeave = useCallback((index) => {
     setHighlightIndex(-1);
-  }, [highlightIndex]);
+  }, []);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -108,7 +106,7 @@ const CollaboratorEditor = forwardRef(({
     }
     if (!collaborator) return;
     onSelectCollaborator(collaborator.email);
-  }, [canEditData, displayCollaborators, highlightIndex, value, searchValue, onSelectCollaborator]);
+  }, [displayCollaborators, highlightIndex, onSelectCollaborator]);
 
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
@@ -122,7 +120,7 @@ const CollaboratorEditor = forwardRef(({
     if (highlightIndex > displayCollaborators.length - maxItemNum) {
       editorContainerRef.current.scrollTop -= itemHeight;
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, itemHeight]);
+  }, [editorContainerRef, highlightIndex, maxItemNum, displayCollaborators, itemHeight]);
 
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
@@ -136,7 +134,7 @@ const CollaboratorEditor = forwardRef(({
     if (highlightIndex >= maxItemNum) {
       editorContainerRef.current.scrollTop += itemHeight;
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, itemHeight]);
+  }, [editorContainerRef, highlightIndex, maxItemNum, displayCollaborators, itemHeight]);
 
   const onEsc = useCallback((event) => {
     event.preventDefault();
@@ -187,6 +185,7 @@ const CollaboratorEditor = forwardRef(({
       timerRef.current && clearTimeout(timerRef.current);
       timerRef.current = null;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
 
   useEffect(() => {
@@ -201,7 +200,7 @@ const CollaboratorEditor = forwardRef(({
     },
     onBlur: () => blur(),
     onClose: () => onClose(),
-  }), [column, value, inputRef, onClose]);
+  }), [column, value, blur, onClose]);
 
   const renderCollaborators = useCallback(() => {
     if (displayCollaborators.length === 0) {
@@ -233,7 +232,7 @@ const CollaboratorEditor = forwardRef(({
       );
     });
 
-  }, [displayCollaborators, searchValue, column, value, highlightIndex]);
+  }, [displayCollaborators, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectCollaborator]);
 
   return (
     <div className="sf-metadata-collaborator-editor" style={{ top: -38 }} ref={editorRef}>

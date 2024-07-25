@@ -72,7 +72,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     newOptions.push(newOption);
     onChange(newOptions);
     setEditingOptionId(newOption.id);
-  }, [searchValue, options, displayOptions, onChange]);
+  }, [searchValue, options, onChange]);
 
   const onDelete = useCallback((optionId) => {
     const newOptions = options.filter(option => option.id !== optionId);
@@ -127,7 +127,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     if (displayOptions.length > 0) return null;
     if (searchValue) return (<div className="none-search-result mt-2">{gettext('No options available')}</div>);
     return (<div className="none-search-result mt-2">{gettext('No options')}</div>);
-  }, [displayOptions]);
+  }, [searchValue, displayOptions]);
 
   const renderOptions = useCallback(() => {
     return Array.isArray(displayOptions) ? displayOptions.map((option, index) => {

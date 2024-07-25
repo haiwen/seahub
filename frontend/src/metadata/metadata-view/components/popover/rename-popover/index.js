@@ -29,7 +29,7 @@ const RenamePopover = ({ value: oldValue, target, onToggle, onSubmit }) => {
       return;
     }
     onSubmit(value);
-  }, [value, onSubmit]);
+  }, [value, metadata, onSubmit]);
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {

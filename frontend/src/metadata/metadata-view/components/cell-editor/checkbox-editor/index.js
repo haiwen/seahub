@@ -28,7 +28,7 @@ const CheckboxEditor = ({
       return;
     }
     onChangeValue();
-  }, [value, field, canChange, onChangeValue]);
+  }, [canChange, onChangeValue]);
 
   return (
     <div className="sf-metadata-checkbox-editor" onClick={onClickContainer}>

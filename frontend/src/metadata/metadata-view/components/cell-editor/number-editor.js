@@ -27,6 +27,7 @@ const NumberEditor = forwardRef(({
     const data = column?.data || {};
     const value = getNumberDisplayString(validValue, data) || '';
     setValue(value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChange = useCallback((event) => {

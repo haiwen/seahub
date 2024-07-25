@@ -23,7 +23,6 @@ const SingleSelectEditor = forwardRef(({
   const [maxItemNum, setMaxItemNum] = useState(0);
   const [itemHeight, setItemHeight] = useState(0);
   const timerRef = useRef(null);
-  const inputRef = useRef(null);
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
@@ -81,7 +80,7 @@ const SingleSelectEditor = forwardRef(({
 
   const onMenuMouseLeave = useCallback((index) => {
     setHighlightIndex(-1);
-  }, [highlightIndex]);
+  }, []);
 
   const createOption = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
@@ -136,7 +135,7 @@ const SingleSelectEditor = forwardRef(({
     if (highlightIndex > displayOptions.length - maxItemNum) {
       editorContainerRef.current.scrollTop -= itemHeight;
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, itemHeight]);
+  }, [editorContainerRef, highlightIndex, maxItemNum, displayOptions, itemHeight]);
 
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
@@ -150,7 +149,7 @@ const SingleSelectEditor = forwardRef(({
     if (highlightIndex >= maxItemNum) {
       editorContainerRef.current.scrollTop += itemHeight;
     }
-  }, [editorContainerRef, highlightIndex, maxItemNum, itemHeight]);
+  }, [editorContainerRef, highlightIndex, maxItemNum, displayOptions, itemHeight]);
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {
@@ -194,6 +193,7 @@ const SingleSelectEditor = forwardRef(({
       timerRef.current && clearTimeout(timerRef.current);
       timerRef.current = null;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
 
   useEffect(() => {
@@ -208,7 +208,7 @@ const SingleSelectEditor = forwardRef(({
     },
     onBlur: () => blur(),
 
-  }), [column, value, inputRef]);
+  }), [column, value, blur]);
 
   const renderOptions = useCallback(() => {
     if (displayOptions.length === 0) {
@@ -248,7 +248,7 @@ const SingleSelectEditor = forwardRef(({
       );
     });
 
-  }, [displayOptions, searchValue, column, value, highlightIndex]);
+  }, [displayOptions, searchValue, column, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
 
   return (
     <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
