@@ -61,14 +61,25 @@ HTTP_520_OPERATION_FAILED = 520
 
 logger = logging.getLogger(__name__)
 
+def _merge_wiki_in_groups(group_wikis):
+    
+    group_ids = [gw.group_id for gw in group_wikis]
+    group_id_wikis_map = {key: [] for key in group_ids}
+    for gw in group_wikis:
+        wiki = Wiki(gw)
+        wiki_info = wiki.to_dict()
+        repo_info = {
+                "type": "group",
+                "mtime": gw.last_modified,
+                "last_modified": timestamp_to_isoformat_timestr(gw.last_modified),
+                "permission": gw.permission,
+        }
+        wiki_info.update(repo_info)
+        group_id = gw.group_id
+        group_id_wikis_map[group_id].append(wiki_info)
+    return group_id_wikis_map
+        
 
-def _merge_wikis_in_group(wikis):
-    group_wikis = {}
-    for gw in wikis:
-        group_id = gw['group_id']
-        if group_id not in group_wikis:
-            group_wikis[group_id] = []
-        group_wikis[group_id].append({"repo_name": gw["repo_name"]})
 
 
 class Wikis2View(APIView):
@@ -117,53 +128,32 @@ class Wikis2View(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         user_wiki_groups = [ug for ug in user_groups if ug.id in group_id_in_wikis]
-        wiki_group_id_group_map = {g.id: g for g in user_wiki_groups}
         for r in group_wikis:
             r.owner = r.user
-            wikis.append(r)
 
-        wikis = list(set(wikis))
         wiki_list = []
         group_wiki_list = []
-        for group_w in group_wikis:
-            wiki = Wiki(group_w)
-            wiki_info = wiki.to_dict()
-            group_obj = wiki_group_id_group_map.get(group_w.group_id)
+        group_id_wikis_map = _merge_wiki_in_groups(group_wikis)
+        for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
                 'group_id': group_obj.id,
                 'group_admins': group_ids_admins_map.get(group_obj.id),
                 "owner": group_obj.creator_name,
-                'wiki_info': []
+                'wiki_info': group_id_wikis_map[group_obj.id]
             }
-            repo_info = {
-                "type": "group",
-                "mtime": group_w.last_modified,
-                "last_modified": timestamp_to_isoformat_timestr(group_w.last_modified),
-                "permission": group_w.permission,
-            }
-            wiki_info.update(repo_info)
-            if len(group_wiki_list) == 0:
-                group_wiki['wiki_info'] = [wiki_info]
-                group_wiki_list.append(group_wiki)
-            else:
-                for w in group_wiki_list:
-                    if w['group_id'] == group_wiki['group_id']:
-                        w['wiki_info'].append(wiki_info)
-                        break
-                else:
-                    group_wiki['wiki_info'].append(wiki_info)
-                    group_wiki_list.append(group_wiki)
+            group_wiki_list.append(group_wiki)
+        
 
-        wiki_ids_map = []
+        wiki_ids_list = []
         for w in wikis:
             wiki = Wiki(w)
             wiki_info = wiki.to_dict()
-            if w.id not in wiki_ids_map:
-                wiki_ids_map.append(w.id)
+            if w.id not in wiki_ids_list:
+                wiki_ids_list.append(w.id)
             else:
                 continue
-            wiki_ids_map.append(w.id)
+            wiki_ids_list.append(w.id)
             if w.id in filter_repo_type_ids_map['mine']:
                 repo_info = {
                     "type": "mine",
@@ -178,12 +168,6 @@ class Wikis2View(APIView):
                     "permission": w.permission,
                 }
                 wiki_info.update(repo_info)
-
-            if is_group_wiki(wiki):
-                group_id = int(wiki.owner.split('@')[0])
-                wiki_info['owner_nickname'] = group_id_to_name(group_id)
-            else:
-                wiki_info['owner_nickname'] = email2nickname(wiki.owner)
             wiki_list.append(wiki_info)
 
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
