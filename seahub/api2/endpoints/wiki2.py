@@ -34,13 +34,12 @@ from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url,
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
-from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm, get_repo_owner, normalize_repo_status_code
+from seahub.utils.repo import parse_repo_perm, get_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
-from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
@@ -49,12 +48,9 @@ from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentRe
 from seahub.base.models import FileComment
 from seahub.api2.views import HTTP_447_TOO_MANY_FILES_IN_LIBRARY
 from seahub.group.utils import group_id_to_name, is_group_admin
-from seahub.share.models import ExtraGroupsSharePermission
-from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
-from seahub.api2.endpoints.groups import get_group_info, get_group_admins
 
 HTTP_520_OPERATION_FAILED = 520
 
