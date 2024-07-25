@@ -204,7 +204,7 @@ class Item extends Component {
         translateResult = gettext('Transfer');
         break;
       case 'Change':
-        translateResult = gettext('Change');
+        translateResult = gettext('Change to department');
         break;
     }
 

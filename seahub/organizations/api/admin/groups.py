@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.throttling import UserRateThrottle
@@ -17,7 +17,10 @@ from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils.ccnet_db import CcnetDB
+from seahub.utils.db_api import SeafileDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import GROUP_TRANSFER
 
 from pysearpc import SearpcError
 
@@ -112,29 +115,6 @@ class OrgAdminGroup(APIView):
         }
 
         return Response(group_info)
-
-    def post(self, request, org_id, group_id):
-        """ Admin change a group
-
-        1. group to department
-
-        Permission checking:
-        1. Admin user;
-        """
-
-        # resource check
-        org_id = int(org_id)
-        if not ccnet_api.get_org_by_id(org_id):
-            error_msg = 'Organization %s not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        group_id = int(group_id)
-        if get_org_id_by_group(group_id) != org_id:
-            error_msg = 'Group %s not found.' % group_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        return SysAdminGroup().post(request, group_id, org_id)
 
     def put(self, request, org_id, group_id):
         """ Admin update a group
@@ -270,3 +250,59 @@ class OrgAdminDepartments(APIView):
             result.append(department_info)
         
         return Response(result)
+
+
+class OrgAdminGroupToDeptView(APIView):
+    """org group to department"""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, org_id, group_id):
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        group = ccnet_api.get_group(group_id)
+        old_owner = group.creator_name
+
+        try:
+            # group to department
+            ccnet_db = CcnetDB()
+            seafile_db = SeafileDB()
+            ccnet_db.change_groups_into_departments(group_id)
+            seafile_db.change_groups_into_departments(group_id, org_id)
+            seafile_api.set_group_quota(group_id, -2)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": group_id,
+            "name": group.group_name,
+            "from": old_owner,
+            "to": 'system admin',
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                             operation=GROUP_TRANSFER, detail=admin_op_detail)
+
+        group = ccnet_api.get_group(group_id)
+
+        group_info = {
+            "id": group.id,
+            "group_name": group.group_name,
+            "ctime": timestamp_to_isoformat_timestr(group.timestamp),
+            "creator_email": group.creator_name,
+            "creator_name": email2nickname(group.creator_name),
+            'creator_contact_email': email2contact_email(group.creator_name),
+        }
+        return Response(group_info)

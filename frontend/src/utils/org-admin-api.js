@@ -2,7 +2,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { siteRoot } from './constants';
 
-class GroupAPI {
+class OrgAdminAPI {
 
   init({ server, username, password, token }) {
     this.server = server;
@@ -34,19 +34,25 @@ class GroupAPI {
     return this;
   }
 
-  adminGroup2Department(groupID) {
-    var url = this.server + '/api/v2.1/admin/groups/' + groupID + '/';
-    return this.req.post(url);
+  _sendPostRequest(url, form) {
+    if (form.getHeaders) {
+      return this.req.post(url, form, {
+        headers: form.getHeaders()
+      });
+    } else {
+      return this.req.post(url, form);
+    }
   }
+
   orgAdminGroup2Department(orgID, groupID) {
-    var url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/';
+    var url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/group-to-department/';
     return this.req.post(url);
   }
 
 }
 
-let groupAPI = new GroupAPI();
+let orgAdminAPI = new OrgAdminAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
-groupAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+orgAdminAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export { groupAPI };
+export { orgAdminAPI };

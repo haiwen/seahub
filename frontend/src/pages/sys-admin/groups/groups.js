@@ -9,7 +9,7 @@ import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialo
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './groups-content';
-import { groupAPI } from '../../../utils/group-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 class Groups extends Component {
 
@@ -111,7 +111,7 @@ class Groups extends Component {
   };
 
   changeGroup2Department = (groupID) => {
-    groupAPI.adminGroup2Department(groupID).then((res) => {
+    systemAdminAPI.adminGroup2Department(groupID).then((res) => {
       toaster.success(gettext('Successfully Change the group.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

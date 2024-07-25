@@ -9,7 +9,7 @@ import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
 import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
-import { groupAPI } from '../../utils/group-api';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 
 class Search extends React.Component {
 
@@ -135,7 +135,7 @@ class OrgGroups extends Component {
   };
 
   changeGroupItem = (group) => {
-    groupAPI.orgAdminGroup2Department(orgID, group.id).then(res => {
+    orgAdminAPI.orgAdminGroup2Department(orgID, group.id).then(res => {
       let msg = gettext('Successfully change {name}');
       msg = msg.replace('{name}', group.groupName);
       toaster.success(msg);
@@ -330,7 +330,7 @@ class GroupItem extends React.Component {
               />
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change')}</DropdownItem>
+                <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           }
