@@ -525,6 +525,9 @@ class Wiki2PagesView(APIView):
         id_set = get_all_wiki_ids(navigation)
         target_page_id = request.data.get('target_id', '')
         moved_page_id = request.data.get('moved_id', '')
+        move_position = request.data.get('move_position', '')
+        # TODO 'move_position' is one of 'move_below' 'move_above' 'move_into'
+        
         if (target_page_id not in id_set) or (moved_page_id not in id_set):
             error_msg = 'Page not found'
             logger.error(error_msg)

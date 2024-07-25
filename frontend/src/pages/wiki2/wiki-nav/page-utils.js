@@ -78,6 +78,13 @@ export default class PageUtils {
     }
   }
 
+  /**
+   * move page to another page
+   * @param {object} navigation
+   * @param {string} moved_page_id
+   * @param {string} target_page_id
+   * @param {string} move_position, one of'move_into', 'move_below', 'move_into'
+   */
   static movePage(navigation, moved_page_id, target_page_id, move_position) {
     let movedPage = null;
     function _cutPageRecursion(item, page_id) {
@@ -101,42 +108,46 @@ export default class PageUtils {
         });
       }
     }
-    function _insertPageRecursion(item, page_id, target_page_id, target_id, move_position) {
-      if (item.id === target_id) {
-        if (item.children) {
-          let insertIndex = target_page_id ? item.children.findIndex(item => item.id === target_page_id) : -1;
-          if (move_position === 'move_below') {
-            insertIndex++;
-          }
-          item.children.splice(insertIndex, 0, movedPage);
-        } else {
-          item.children = [];
-          item.children.push(movedPage);
-        }
-        return;
-      }
-      item.children && item.children.forEach(item => {
-        _insertPageRecursion(item, page_id, target_page_id, target_id, move_position);
-      });
-    }
-    function _insertPage(navigation, page_id, target_page_id, target_id, move_position) {
-      if (!target_id) {
-        let insertIndex = target_page_id ? navigation.findIndex(item => item.id === target_page_id) : -1;
-        if (insertIndex < 0) {
-          navigation.splice(0, 0, movedPage);
-          return;
-        }
-        if (move_position === 'move_below') {
-          insertIndex++;
-        }
-        navigation.splice(insertIndex, 0, movedPage);
-        return;
-      }
-      navigation.forEach(item => {
-        _insertPageRecursion(item, page_id, target_page_id, target_id, move_position);
-      });
-    }
     _cutPage(navigation, moved_page_id);
-    _insertPage(navigation, moved_page_id, target_page_id, target_page_id, move_position);
+    if (!movedPage) return;
+
+    function _insertPage(tree, target_page_id, move_position) {
+      if (!tree) return;
+      if (!Array.isArray(tree.children)) {
+        tree.children = [];
+      }
+      const target_page = tree.children.find(item => item.id === target_page_id);
+      const target_index = tree.children.findIndex(item => item.id === target_page_id);
+      if (target_page) {
+        switch (move_position) {
+          case 'move_into': {
+            if (!Array.isArray(target_page.children)) {
+              target_page.children = [];
+            }
+            target_page.children.push(movedPage);
+            break;
+          }
+          case 'move_above': {
+            tree.children.splice(target_index, 0, movedPage);
+            break;
+          }
+          case 'move_below': {
+            tree.children.splice(target_index + 1, 0, movedPage);
+            break;
+          }
+          default:
+            break;
+        }
+      } else {
+        tree.children.forEach(child => {
+          _insertPage(child, target_page_id, move_position);
+        });
+      }
+    }
+
+    let tree = {};
+    tree.children = navigation;
+    _insertPage(tree, target_page_id, move_position);
+    return tree.children;
   }
 }

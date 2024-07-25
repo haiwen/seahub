@@ -89,10 +89,10 @@ class SidePanel extends Component {
   movePage = ({ moved_page_id, target_page_id, move_position }) => {
     let config = deepCopy(this.props.config);
     let { navigation } = config;
-    PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
-    config.navigation = navigation;
+    config.navigation = PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
     JSON.stringify(config);
-    this.props.updateWikiConfig(config);
+    // this.props.updateWikiConfig(config);
+    this.props.saveWikiConfig(config);
   };
 
   renderWikiNav = () => {

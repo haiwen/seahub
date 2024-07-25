@@ -31,30 +31,55 @@ const dragSource = {
 const dropTarget = {
   drop(props, monitor) {
     const dragSource = monitor.getItem();
-    if (dragSource.mode === 'wiki-page') {
-      const { pageIndex: targetIndex, page: targetPage } = props;
-      const draggedPageId = dragSource.data.id;
-      const targetPageId = targetPage.id;
-      if (draggedPageId !== targetPageId) {
-        const sourceIndex = dragSource.idx;
-        const move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
-        wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId, move_position).then(res => {
-          props.onMovePage({
-            moved_page_id: draggedPageId,
-            target_page_id: targetPageId,
-            move_position,
-          });
-        }).catch((error) => {
-          if (error.response && error.response.status === 400 && error.response.data.error_msg === 'Internal Server Error') {
-            toaster.danger(gettext('Cannot move parent page to child page'));
-          } else {
-            let errMessage = Utils.getErrorMsg(error);
-            toaster.danger(errMessage);
-          }
-        });
-      }
-      return;
+    const className = props.getClassName();
+    let move_position;
+    if (className.includes('page-can-drop-bottom')) {
+      move_position = 'move_below';
+    } else if (className.includes('page-can-drop-top')) {
+      move_position = 'move_above';
+    } else if (className.includes('dragged-page-over')) {
+      move_position = 'move_into';
     }
+    if (dragSource.mode === 'wiki-page') {
+      const targetPage = props.page;
+      const draggedPage = dragSource.data;
+      const moved_page_id = draggedPage.id;
+      const target_page_id = targetPage.id;
+      // Cannot move a page to itself
+      if (moved_page_id === target_page_id) {
+        return;
+      }
+      if (targetPage._path && targetPage._path.includes(moved_page_id)) {
+        toaster.danger(gettext('Cannot move parent page to child page'));
+        return;
+      }
+      props.onMovePage({ moved_page_id, target_page_id, move_position });
+    }
+    return;
+    // if (dragSource.mode === 'wiki-page') {
+    //   const { pageIndex: targetIndex, page: targetPage } = props;
+    //   const draggedPageId = dragSource.data.id;
+    //   const targetPageId = targetPage.id;
+    //   if (draggedPageId !== targetPageId) {
+    //     // const sourceIndex = dragSource.idx;
+    //     // const move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
+    //     wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId, move_position).then(res => {
+    //       props.onMovePage({
+    //         moved_page_id: draggedPageId,
+    //         target_page_id: targetPageId,
+    //         move_position,
+    //       });
+    //     }).catch((error) => {
+    //       if (error.response && error.response.status === 400 && error.response.data.error_msg === 'Internal Server Error') {
+    //         toaster.danger(gettext('Cannot move parent page to child page'));
+    //       } else {
+    //         let errMessage = Utils.getErrorMsg(error);
+    //         toaster.danger(errMessage);
+    //       }
+    //     });
+    //   }
+    //   return;
+    // }
   }
 };
 
