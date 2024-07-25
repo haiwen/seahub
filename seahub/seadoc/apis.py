@@ -59,7 +59,7 @@ from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
 if HAS_FILE_SEARCH:
     from seahub.search.utils import search_files
-if HAS_FILE_SEASEARCH and not HAS_FILE_SEARCH:
+if HAS_FILE_SEASEARCH:
     from seahub.ai.utils import search, format_repos
 
 
@@ -2994,7 +2994,7 @@ class SeadocSearchFilenameView(APIView):
             has_more = True if total > current_page * per_page else False
             return Response({"total":total, "results":results, "has_more":has_more})
 
-        if HAS_FILE_SEASEARCH and not HAS_FILE_SEARCH:
+        if HAS_FILE_SEASEARCH:
             repos = [repo,]
             searched_repos, repos_map = format_repos(repos)
             count = per_page

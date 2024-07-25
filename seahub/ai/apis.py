@@ -18,7 +18,7 @@ from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
 from seahub.ai.utils import search, get_file_download_token, get_search_repos, \
     RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
     format_repos
-from seahub.utils import is_org_context, normalize_cache_key
+from seahub.utils import is_org_context, normalize_cache_key, HAS_FILE_SEASEARCH
 from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
@@ -32,6 +32,10 @@ class Search(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
+        if not HAS_FILE_SEASEARCH:
+            error_msg = 'Seasearch not supported.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         query = request.data.get('query')
         search_repo = request.data.get('search_repo', 'all')
         suffixes = request.data.get('suffixes', '')
