@@ -54,32 +54,18 @@ const dropTarget = {
         return;
       }
       props.onMovePage({ moved_page_id, target_page_id, move_position });
+      // wikiAPI.moveWiki2Page(wikiId, moved_page_id, target_page_id, move_position).then(res => {
+      //   props.onMovePage({
+      //     moved_page_id,
+      //     target_page_id,
+      //     move_position,
+      //   });
+      // }).catch((error) => {
+      //   let errMessage = Utils.getErrorMsg(error);
+      //   toaster.danger(errMessage);
+      // });
     }
     return;
-    // if (dragSource.mode === 'wiki-page') {
-    //   const { pageIndex: targetIndex, page: targetPage } = props;
-    //   const draggedPageId = dragSource.data.id;
-    //   const targetPageId = targetPage.id;
-    //   if (draggedPageId !== targetPageId) {
-    //     // const sourceIndex = dragSource.idx;
-    //     // const move_position = sourceIndex > targetIndex ? 'move_above' : 'move_below';
-    //     wikiAPI.moveWiki2Page(wikiId, draggedPageId, targetPageId, move_position).then(res => {
-    //       props.onMovePage({
-    //         moved_page_id: draggedPageId,
-    //         target_page_id: targetPageId,
-    //         move_position,
-    //       });
-    //     }).catch((error) => {
-    //       if (error.response && error.response.status === 400 && error.response.data.error_msg === 'Internal Server Error') {
-    //         toaster.danger(gettext('Cannot move parent page to child page'));
-    //       } else {
-    //         let errMessage = Utils.getErrorMsg(error);
-    //         toaster.danger(errMessage);
-    //       }
-    //     });
-    //   }
-    //   return;
-    // }
   }
 };
 

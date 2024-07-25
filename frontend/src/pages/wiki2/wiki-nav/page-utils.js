@@ -63,20 +63,21 @@ export default class PageUtils {
     return pages.findIndex(page => page.id === pageId);
   };
 
-  static insertPage(navigation, page_id, target_page_id, target_id, move_position) {
-    if (!target_id) {
-      let insertIndex = target_page_id ? navigation.findIndex(item => item.id === target_page_id) : -1;
-      if (insertIndex < 0) {
-        this.addPage(navigation, page_id, target_id);
-        return true;
+  static generatePaths = (tree) => {
+    tree._path = '';
+    function runNode(node) {
+      const newPath = node._path ? (node._path + '-' + node.id) : (node.id || '');
+      if (node.children) {
+        node.children.forEach(child => {
+          if (child) {
+            child._path = newPath;
+            runNode(child);
+          }
+        });
       }
-      if (move_position === 'move_below') {
-        insertIndex++;
-      }
-      navigation.splice(insertIndex, 0, new NewPage(page_id));
-      return;
     }
-  }
+    runNode(tree);
+  };
 
   /**
    * move page to another page
@@ -148,6 +149,7 @@ export default class PageUtils {
     let tree = {};
     tree.children = navigation;
     _insertPage(tree, target_page_id, move_position);
+    this.generatePaths(tree);
     return tree.children;
   }
 }
