@@ -53,17 +53,17 @@ const dropTarget = {
         toaster.danger(gettext('Cannot move parent page to child page'));
         return;
       }
-      props.onMovePage({ moved_page_id, target_page_id, move_position });
-      // wikiAPI.moveWiki2Page(wikiId, moved_page_id, target_page_id, move_position).then(res => {
-      //   props.onMovePage({
-      //     moved_page_id,
-      //     target_page_id,
-      //     move_position,
-      //   });
-      // }).catch((error) => {
-      //   let errMessage = Utils.getErrorMsg(error);
-      //   toaster.danger(errMessage);
-      // });
+      // props.onMovePage({ moved_page_id, target_page_id, move_position });
+      wikiAPI.moveWiki2Page(wikiId, moved_page_id, target_page_id, move_position).then(res => {
+        props.onMovePage({
+          moved_page_id,
+          target_page_id,
+          move_position,
+        });
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
     return;
   }

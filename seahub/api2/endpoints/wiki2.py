@@ -540,7 +540,7 @@ class Wiki2PagesView(APIView):
             logger.error(error_msg)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        move_nav(navigation, target_page_id, moved_nav)
+        move_nav(navigation, target_page_id, moved_nav, move_position)
         wiki_config['navigation'] = navigation
         wiki_config = json.dumps(wiki_config)
 

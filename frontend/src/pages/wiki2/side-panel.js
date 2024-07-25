@@ -91,8 +91,8 @@ class SidePanel extends Component {
     let { navigation } = config;
     config.navigation = PageUtils.movePage(navigation, moved_page_id, target_page_id, move_position);
     JSON.stringify(config);
-    // this.props.updateWikiConfig(config);
-    this.props.saveWikiConfig(config);
+    this.props.updateWikiConfig(config);
+    // this.props.saveWikiConfig(config);
   };
 
   renderWikiNav = () => {
