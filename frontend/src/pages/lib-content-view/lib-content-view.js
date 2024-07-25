@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail, isDir } from '../../utils/constants';
+import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';

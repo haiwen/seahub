@@ -270,9 +270,3 @@
 .dir-view-path .path-split {
   padding: 0 2px;
 }
-
-.dir-content-main .selection-box {
-  position: absolute;
-  background-color: rgba(0, 120, 215, 0.3);
-  border: 1px solid rgba(0, 120, 215, 0.8);
-}

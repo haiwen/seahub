@@ -31,6 +31,7 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   fullDirentList: PropTypes.array,
   selectedDirentList: PropTypes.array.isRequired,
+  onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
   onItemCopy: PropTypes.func.isRequired,
@@ -86,9 +87,161 @@ class DirentGridView extends React.Component {
       isGridItemFreezed: false,
       activeDirent: null,
       downloadItems: [],
+
+      startPoint: { x: 0, y: 0 },
+      endPoint: { x: 0, y: 0 },
+      selectedItemsList: [],
+      isSelecting: false,
+      isMouseDown: false,
+      autoScrollInterval: null,
     };
+    this.containerRef = React.createRef();
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
+
+  componentDidMount() {
+    window.addEventListener('mouseup', this.onGlobalMouseUp);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this.onGlobalMouseUp);
+  }
+
+  onGridContainerMouseDown = (event) => {
+    if (event.button === 2) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    } else if (event.button === 0) {
+      hideMenu();
+      this.props.onGridItemClick(null);
+      if (event.target.closest('img') || event.target.closest('div.grid-file-name')) return;
+
+      const containerBounds = this.containerRef.current.getBoundingClientRect();
+      this.setState({
+        startPoint: { x: event.clientX - containerBounds.left, y: event.clientY - containerBounds.top },
+        endPoint: { x: event.clientX - containerBounds.left, y: event.clientY - containerBounds.top },
+        selectedItemsList: [],
+        isSelecting: false,
+        isMouseDown: true,
+      });
+    }
+  };
+
+  onSelectMouseMove = (e) => {
+    if (!this.state.isMouseDown) return;
+
+    const containerBounds = this.containerRef.current.getBoundingClientRect();
+    const endPoint = { x: e.clientX - containerBounds.left, y: e.clientY - containerBounds.top };
+
+    // Constrain endPoint within the container bounds
+    endPoint.x = Math.max(0, Math.min(endPoint.x, containerBounds.width));
+    endPoint.y = Math.max(0, Math.min(endPoint.y, containerBounds.height));
+
+    // Check if the mouse has moved a certain distance to start selection, prevents accidental selections
+    const distance = Math.sqrt(
+      Math.pow(endPoint.x - this.state.startPoint.x, 2) +
+      Math.pow(endPoint.y - this.state.startPoint.y, 2)
+    );
+    if (distance > 5) {
+      this.setState({
+        isSelecting: true,
+        endPoint: endPoint,
+      }, () => {
+        this.determineSelectedItems();
+        this.autoScroll(e.clientY);
+
+        const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.innerText));
+        const filteredDirentList = this.props.direntList
+          .filter(dirent => selectedItemNames.has(dirent.name))
+          .map(dirent => ({ ...dirent, isSelected: true }));
+
+        this.props.onSelectedDirentListUpdate(filteredDirentList);
+      });
+    }
+  };
+
+  onGlobalMouseUp = () => {
+    if (!this.state.isMouseDown) return;
+    clearInterval(this.state.autoScrollInterval);
+    this.setState({
+      isSelecting: false,
+      isMouseDown: false,
+      autoScrollInterval: null,
+    });
+  };
+
+  determineSelectedItems = () => {
+    const { startPoint, endPoint } = this.state;
+    const container = this.containerRef.current;
+    const items = container.querySelectorAll('.grid-item');
+
+    const selectionRect = {
+      left: Math.min(startPoint.x, endPoint.x),
+      top: Math.min(startPoint.y, endPoint.y),
+      right: Math.max(startPoint.x, endPoint.x),
+      bottom: Math.max(startPoint.y, endPoint.y),
+    };
+
+    const newSelectedItemsList = [];
+
+    items.forEach(item => {
+      const bounds = item.getBoundingClientRect();
+      const relativeBounds = {
+        left: bounds.left - container.getBoundingClientRect().left,
+        top: bounds.top - container.getBoundingClientRect().top,
+        right: bounds.right - container.getBoundingClientRect().left,
+        bottom: bounds.bottom - container.getBoundingClientRect().top,
+      };
+
+      // Check if the element is within the selection box's bounds
+      if (relativeBounds.left < selectionRect.right && relativeBounds.right > selectionRect.left &&
+        relativeBounds.top < selectionRect.bottom && relativeBounds.bottom > selectionRect.top) {
+        newSelectedItemsList.push(item);
+      }
+    });
+    this.setState({ selectedItemsList: newSelectedItemsList });
+  };
+
+  autoScroll = (mouseY) => {
+    const container = this.containerRef.current;
+    const containerBounds = container.getBoundingClientRect();
+    const scrollSpeed = 10;
+    const scrollThreshold = 20;
+
+    const updateEndPoint = () => {
+      const endPoint = {
+        x: this.state.endPoint.x,
+        y: mouseY - containerBounds.top + container.scrollTop,
+      };
+      this.setState({ endPoint }, () => {
+        this.determineSelectedItems();
+      });
+    };
+
+    if (mouseY < containerBounds.top + scrollThreshold) {
+      // Scroll Up
+      if (!this.state.autoScrollInterval) {
+        const interval = setInterval(() => {
+          container.scrollTop -= scrollSpeed;
+          updateEndPoint();
+        }, 50);
+        this.setState({ autoScrollInterval: interval });
+      }
+    } else if (mouseY > containerBounds.bottom - scrollThreshold) {
+      // Scroll Down
+      if (!this.state.autoScrollInterval) {
+        const interval = setInterval(() => {
+          container.scrollTop += scrollSpeed;
+          updateEndPoint();
+        }, 50);
+        this.setState({ autoScrollInterval: interval });
+      }
+    } else {
+      clearInterval(this.state.autoScrollInterval);
+      this.setState({ autoScrollInterval: null });
+    }
+  };
 
   onCreateFileToggle = (fileType) => {
     this.setState({
@@ -444,27 +597,12 @@ class DirentGridView extends React.Component {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
   };
 
-  // common contextmenu handle
-  onMouseDown = (event) => {
-    if (event.button === 2) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-  };
-
-  onGridContainerMouseDown = (event) => {
-    this.onMouseDown(event);
-
-    if (event.button === 0) {
-      hideMenu();
-      this.props.onGridItemClick(null);
-    }
-  };
-
   onGridItemMouseDown = (event) => {
     event.stopPropagation();
-    this.onMouseDown(event);
+    event.preventDefault();
+    if (event.button === 2) {
+      return;
+    }
   };
 
   gridContainerClick = (event) => {
@@ -580,6 +718,21 @@ class DirentGridView extends React.Component {
     return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   };
 
+  renderSelectionBox = () => {
+    const { startPoint, endPoint } = this.state;
+    if (!this.state.isSelecting) return null;
+    const left = Math.min(startPoint.x, endPoint.x);
+    const top = Math.min(startPoint.y, endPoint.y);
+    const width = Math.abs(startPoint.x - endPoint.x);
+    const height = Math.abs(startPoint.y - endPoint.y);
+    return (
+      <div
+        className="selection-box"
+        style={{ left, top, width, height }}
+      />
+    );
+  };
+
   render() {
     let { direntList, selectedDirentList, path } = this.props;
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
@@ -591,7 +744,13 @@ class DirentGridView extends React.Component {
 
     return (
       <Fragment>
-        <ul className="grid-view" onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
+        <ul
+          className="grid-view"
+          onContextMenu={this.onGridContainerContextMenu}
+          onMouseDown={this.onGridContainerMouseDown}
+          onMouseMove={this.onSelectMouseMove}
+          ref={this.containerRef}
+        >
           {
             direntList.length !== 0 && direntList.map((dirent, index) => {
               return (
@@ -612,6 +771,7 @@ class DirentGridView extends React.Component {
               );
             })
           }
+          {this.renderSelectionBox()}
         </ul>
         <ContextMenu
           id={GRID_ITEM_CONTEXTMENU_ID}
@@ -739,6 +899,7 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         )}
+
       </Fragment>
     );
   }

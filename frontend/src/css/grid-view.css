@@ -85,3 +85,9 @@
 .grid-drop-show {
   background: #f8f8f8;
 }
+
+.selection-box {
+  position: absolute;
+  background-color: rgba(0, 120, 215, 0.3);
+  border: 1px solid rgba(0, 120, 215, 0.8);
+}

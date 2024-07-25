@@ -12,6 +12,7 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
   onAddFile: PropTypes.func.isRequired,
@@ -73,6 +74,7 @@ class DirGridView extends React.Component {
           direntList={this.props.direntList}
           fullDirentList={this.props.fullDirentList}
           selectedDirentList={this.props.selectedDirentList}
+          onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
           onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
           onItemDelete={this.props.onItemDelete}
