@@ -96,15 +96,13 @@ class DirentListItem extends React.Component {
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
+  componentDidUpdate(prevProps) {
+    const { isItemFreezed, activeDirent, dirent } = this.props;
+
+    if (prevProps.isItemFreezed !== isItemFreezed && !isItemFreezed) {
       this.setState({
         highlight: false,
-        isOperationShow: false,
-      }, () => {
-        if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
-          this.setState({ isOperationShow: true });
-        }
+        isOperationShow: activeDirent && activeDirent.name === dirent.name,
       });
     }
   }

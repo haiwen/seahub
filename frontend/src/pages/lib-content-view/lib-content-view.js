@@ -1330,7 +1330,6 @@ class LibContentView extends React.Component {
   };
 
   onDirentClick = (clickedDirent, event) => {
-    console.log('onDirentClick:', clickedDirent);
     const { direntList, selectedDirentList, lastSelectedIndex } = this.state;
     if (clickedDirent) {
       const clickedIndex = direntList.findIndex(dirent => dirent.name === clickedDirent.name);

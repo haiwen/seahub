@@ -131,10 +131,6 @@ class DirentListView extends React.Component {
 
   onDirentClick = (dirent, event) => {
     hideMenu();
-    if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent) {
-      return;
-    }
-    this.setState({ activeDirent: dirent });
     this.props.onDirentClick(dirent, event);
   };
 
@@ -305,10 +301,8 @@ class DirentListView extends React.Component {
 
   // table-container contextmenu handle
   onContainerClick = () => {
-    console.log('onContainerClick before');
     hideMenu();
     if (this.props.selectedDirentList.length > 0) {
-      console.log('onContainerClick after');
       this.onDirentClick(null);
     }
   };
