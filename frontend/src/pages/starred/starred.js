@@ -19,42 +19,39 @@ class Content extends Component {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
-    } else {
-      const emptyTip = (
+    } else if (items.length === 0) {
+      return (
         <EmptyTip>
           <h2>{gettext('No favorites')}</h2>
           <p>{gettext('You have not added any libraries, folders or files to your favorites yet. A favorite gives you quick access to your most frequently used objects. You can add a library, folder or file to your favorites by clicking the star to the left of its name.')}</p>
         </EmptyTip>
       );
-
-      const desktopThead = (
-        <thead>
-          <tr>
-            <th width="4%"></th>
-            <th width="40%">{gettext('Name')}</th>
-            <th width="32%">{gettext('Library')}</th>
-            <th width="18%">{gettext('Last Update')}</th>
-            <th width="6%"></th>
-          </tr>
-        </thead>
-      );
-      const mobileThead = (
-        <thead>
-          <tr>
-            <th width="12%"></th>
-            <th width="80%"></th>
-            <th width="8%"></th>
-          </tr>
-        </thead>
-      );
-
+    } else {
       const isDesktop = Utils.isDesktop();
-      return items.length ? (
+      return (
         <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
-          {isDesktop ? desktopThead : mobileThead}
-          <TableBody items={items} />
+          {isDesktop ?
+            <thead>
+              <tr>
+                <th width="4%"></th>
+                <th width="40%">{gettext('Name')}</th>
+                <th width="32%">{gettext('Library')}</th>
+                <th width="18%">{gettext('Last Update')}</th>
+                <th width="6%"></th>
+              </tr>
+            </thead>
+            :
+            <thead>
+              <tr>
+                <th width="12%"></th>
+                <th width="80%"></th>
+                <th width="8%"></th>
+              </tr>
+            </thead>
+          }
+          <TableBody items={items} isDesktop={isDesktop} />
         </table>
-      ) : emptyTip;
+      );
     }
   }
 }
@@ -133,7 +130,7 @@ class TableBody extends Component {
       item.mtime_relative = moment(item.mtime).fromNow();
 
 
-      return <Item key={index} data={item} />;
+      return <Item key={index} data={item} isDesktop={this.props.isDesktop} />;
     }, this);
 
     return (
@@ -145,6 +142,7 @@ class TableBody extends Component {
 TableBody.propTypes = {
   data: PropTypes.object,
   items: PropTypes.array,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 class Item extends Component {
@@ -197,18 +195,54 @@ class Item extends Component {
     }
   };
 
-  render() {
-
-    if (this.state.unstarred) {
-      return null;
-    }
-
+  renderMobile = () => {
     const data = this.props.data;
+    const linkUrl = data.dirent_view_url;
+    const mobileItem = (
+      <tr>
+        <td className="text-center" onClick={this.visitItem}>
+          {
+            data.thumbnail_url ?
+              <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
+              <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
+          }
+        </td>
+        <td onClick={this.visitItem}>
+          {data.is_dir ?
+            <Link to={linkUrl}>{data.obj_name}</Link> :
+            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
+          }
+          <br />
+          <span className="item-meta-info">{data.repo_name}</span>
+          <span className="item-meta-info" dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></span>
+        </td>
+        <td>
+          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+            <DropdownToggle
+              tag="i"
+              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+              title={gettext('More operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isOpMenuOpen}
+            />
+            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+              <div className="mobile-operation-menu-bg-layer"></div>
+              <div className="mobile-operation-menu">
+                <DropdownItem className="mobile-menu-item" onClick={this.unstar}>{gettext('Unstar')}</DropdownItem>
+              </div>
+            </div>
+          </Dropdown>
+        </td>
+      </tr>
+    );
+    return mobileItem;
+  };
 
+  renderDesktop = () => {
+    const data = this.props.data;
     let opClasses = 'sf2-icon-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
     const linkUrl = data.dirent_view_url;
-
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center">
@@ -238,52 +272,21 @@ class Item extends Component {
         </td>
       </tr>
     );
+    return desktopItem;
+  };
 
-    const mobileItem = (
-      <tr>
-        <td className="text-center" onClick={this.visitItem}>
-          {
-            data.thumbnail_url ?
-              <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-              <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
-          }
-        </td>
-        <td onClick={this.visitItem}>
-          { data.is_dir ?
-            <Link to={linkUrl}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
-          }
-          <br />
-          <span className="item-meta-info">{data.repo_name}</span>
-          <span className="item-meta-info" dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></span>
-        </td>
-        <td>
-          <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-            <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-              title={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isOpMenuOpen}
-            />
-            <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-              <div className="mobile-operation-menu-bg-layer"></div>
-              <div className="mobile-operation-menu">
-                <DropdownItem className="mobile-menu-item" onClick={this.unstar}>{gettext('Unstar')}</DropdownItem>
-              </div>
-            </div>
-          </Dropdown>
-        </td>
-      </tr>
-    );
-
-    return Utils.isDesktop() ? desktopItem : mobileItem;
+  render() {
+    if (this.state.unstarred) {
+      return null;
+    }
+    return this.props.isDesktop ? this.renderDesktop() : this.renderMobile();
   }
 }
 
 Item.propTypes = {
   data: PropTypes.object,
   items: PropTypes.array,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 class Starred extends Component {

@@ -126,17 +126,11 @@ class Item extends Component {
     });
   };
 
-  render() {
-    if (this.state.unlinked) {
-      return null;
-    }
-
+  renderDesktop = () => {
     const data = this.props.data;
-
     let opClasses = 'sf3-font-delete1 sf3-font unlink-device action-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
-
-    const desktopItem = (
+    return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td>{data.platform}</td>
         <td>{data.device_name}</td>
@@ -147,8 +141,11 @@ class Item extends Component {
         </td>
       </tr>
     );
+  };
 
-    const mobileItem = (
+  renderMobile = () => {
+    const data = this.props.data;
+    return (
       <tr>
         <td>
           {data.device_name}<br />
@@ -176,10 +173,15 @@ class Item extends Component {
         </td>
       </tr>
     );
+  };
 
+  render() {
+    if (this.state.unlinked) {
+      return null;
+    }
     return (
       <React.Fragment>
-        {this.props.isDesktop ? desktopItem : mobileItem}
+        {this.props.isDesktop ? this.renderDesktop() : this.renderMobile()}
         {this.state.isConfirmUnlinkDialogOpen &&
         <ConfirmUnlinkDeviceDialog
           executeOperation={this.unlinkDevice}

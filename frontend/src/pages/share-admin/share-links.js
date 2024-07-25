@@ -267,88 +267,108 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
-    const deletedTip = item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null;
-    const desktopItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onFocus={this.handleMouseEnter}>
-        <td><img src={iconUrl} width="24" alt="" /></td>
-        <td>
-          {item.is_dir ?
-            <Link to={objUrl}>{item.obj_name}</Link> :
-            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
-          }
-          {deletedTip}
-        </td>
-        <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
-        {isPro &&
-          <td>
-            <Selector
-              isDropdownToggleShown={isOpIconShown && !item.is_expired}
-              currentSelectedOption={currentSelectedPermOption}
-              options={this.permOptions}
-              selectOption={this.changePermission}
-              toggleItemFreezed={this.props.toggleItemFreezed}
-            />
-          </td>
-        }
-        <td>{item.view_cnt}</td>
-        <td>{this.renderExpiration()}</td>
-        <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-          <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
-        </td>
-      </tr>
-    );
-
-    const mobileItem = (
-      <Fragment>
-        <tr>
-          <td><img src={iconUrl} alt="" width="24" /></td>
-          <td>
-            {item.is_dir ?
-              <Link to={objUrl}>{item.obj_name}</Link> :
-              <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
-            }
-            {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
-            <br />
-            <span>{item.repo_name}</span><br />
-            <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
-            <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
-          </td>
-          <td>
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  {(isPro && !item.is_expired) && <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>}
-                  {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
-                  <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
-          </td>
-        </tr>
-        {isPermSelectDialogOpen &&
-        <ShareLinkPermissionSelect
-          currentPerm={currentPermission}
-          permissions={permissionOptions}
-          changePerm={this.changePerm}
-          toggleDialog={this.togglePermSelectDialog}
-        />
-        }
-      </Fragment>
-    );
-
     return (
       <Fragment>
-        {this.props.isDesktop ? desktopItem : mobileItem}
+        {this.props.isDesktop ?
+          <tr
+            className={this.state.highlight ? 'tr-highlight' : ''}
+            onMouseEnter={this.handleMouseEnter}
+            onMouseLeave={this.handleMouseLeave}
+            onFocus={this.handleMouseEnter}
+          >
+            <td><img src={iconUrl} width="24" alt="" /></td>
+            <td>
+              {item.is_dir ?
+                <Link to={objUrl}>{item.obj_name}</Link> :
+                <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
+              }
+              {item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null}
+            </td>
+            <td>
+              <Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link>
+            </td>
+            {isPro &&
+              <td>
+                <Selector
+                  isDropdownToggleShown={isOpIconShown && !item.is_expired}
+                  currentSelectedOption={currentSelectedPermOption}
+                  options={this.permOptions}
+                  selectOption={this.changePermission}
+                  toggleItemFreezed={this.props.toggleItemFreezed}
+                />
+              </td>
+            }
+            <td>{item.view_cnt}</td>
+            <td>{this.renderExpiration()}</td>
+            <td>
+              {!item.is_expired &&
+                <a
+                  href="#"
+                  className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  title={gettext('View')}
+                  aria-label={gettext('View')}
+                  role="button"
+                  onClick={this.viewLink}
+                >
+                </a>
+              }
+              <a
+                href="#"
+                className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                title={gettext('Remove')}
+                aria-label={gettext('Remove')}
+                role="button"
+                onClick={this.removeLink}
+              >
+              </a>
+            </td>
+          </tr>
+          :
+          <Fragment>
+            <tr>
+              <td><img src={iconUrl} alt="" width="24" /></td>
+              <td>
+                {item.is_dir ?
+                  <Link to={objUrl}>{item.obj_name}</Link> :
+                  <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
+                }
+                {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
+                <br />
+                <span>{item.repo_name}</span><br />
+                <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+                <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
+              </td>
+              <td>
+                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                  <DropdownToggle
+                    tag="i"
+                    className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+                    title={gettext('More operations')}
+                    aria-label={gettext('More operations')}
+                    data-toggle="dropdown"
+                    aria-expanded={this.state.isOpMenuOpen}
+                  />
+                  <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                    <div className="mobile-operation-menu-bg-layer"></div>
+                    <div className="mobile-operation-menu">
+                      {(isPro && !item.is_expired) && <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>}
+                      {!item.is_expired && <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>}
+                      <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
+                    </div>
+                  </div>
+                </Dropdown>
+              </td>
+            </tr>
+            {isPermSelectDialogOpen &&
+            <ShareLinkPermissionSelect
+              currentPerm={currentPermission}
+              permissions={permissionOptions}
+              changePerm={this.changePerm}
+              toggleDialog={this.togglePermSelectDialog}
+            />
+            }
+          </Fragment>
+        }
         {isLinkDialogOpen &&
         <ShareAdminLink
           link={item.link}

@@ -209,89 +209,90 @@ class Item extends Component {
     if (share_permission.startsWith('custom-')) {
       share_permission = share_permission.slice(7);
     }
-    const desktopItem = (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td><Link to={folderUrl}>{item.folder_name}</Link></td>
-        <td>
-          {item.share_type == 'personal' ?
-            <span title={item.contact_email}>{item.user_name}</span> : item.group_name}
-        </td>
-        <td>
-          {!isShowPermEditor && (
-            <div>
-              <span>{Utils.sharePerms(share_permission) || share_permission_name}</span>
-              {isOpIconShown && (
-                <a href="#"
-                  role="button"
-                  aria-label={gettext('Edit')}
-                  title={gettext('Edit')}
-                  className="sf3-font sf3-font-rename attr-action-icon"
-                  onClick={this.onEditPermission}>
-                </a>
-              )}
-            </div>
-          )}
-          {isShowPermEditor && (
-            <SharePermissionEditor
+
+    if (this.props.isDesktop) {
+      return (
+        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+          <td><Link to={folderUrl}>{item.folder_name}</Link></td>
+          <td>
+            {item.share_type == 'personal' ?
+              <span title={item.contact_email}>{item.user_name}</span> : item.group_name}
+          </td>
+          <td>
+            {!isShowPermEditor && (
+              <div>
+                <span>{Utils.sharePerms(share_permission) || share_permission_name}</span>
+                {isOpIconShown && (
+                  <a href="#"
+                    role="button"
+                    aria-label={gettext('Edit')}
+                    title={gettext('Edit')}
+                    className="sf3-font sf3-font-rename attr-action-icon"
+                    onClick={this.onEditPermission}>
+                  </a>
+                )}
+              </div>
+            )}
+            {isShowPermEditor && (
+              <SharePermissionEditor
+                repoID={item.repo_id}
+                isTextMode={true}
+                isEditIconShow={isOpIconShown}
+                isEditing={true}
+                autoFocus={true}
+                currentPermission={share_permission}
+                permissions={this.permissions}
+                onPermissionChanged={this.changePerm}
+              />
+            )}
+          </td>
+          <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+        </tr>
+      );
+    } else {
+      return (
+        <Fragment>
+          <tr>
+            <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+            <td>
+              <Link to={folderUrl}>{item.folder_name}</Link>
+              <span className="item-meta-info-highlighted">{Utils.sharePerms(share_permission)}</span>
+              <br />
+              <span className="item-meta-info">{`${gettext('Share To:')} ${item.share_type == 'personal' ? item.user_name : item.group_name}`}</span>
+            </td>
+            <td>
+              <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownToggle
+                  tag="i"
+                  className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isOpMenuOpen}
+                />
+                <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                  <div className="mobile-operation-menu-bg-layer"></div>
+                  <div className="mobile-operation-menu">
+                    <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
+                    <DropdownItem className="mobile-menu-item" onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>
+                  </div>
+                </div>
+              </Dropdown>
+            </td>
+          </tr>
+          {isPermSelectDialogOpen && (
+            <PermSelect
               repoID={item.repo_id}
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              isEditing={true}
-              autoFocus={true}
-              currentPermission={share_permission}
+              currentPerm={share_permission}
               permissions={this.permissions}
-              onPermissionChanged={this.changePerm}
+              changePerm={this.changePerm}
+              toggleDialog={this.togglePermSelectDialog}
             />
           )}
-        </td>
-        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
-      </tr>
-    );
-
-    const mobileItem = (
-      <Fragment>
-        <tr>
-          <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-          <td>
-            <Link to={folderUrl}>{item.folder_name}</Link>
-            <span className="item-meta-info-highlighted">{Utils.sharePerms(share_permission)}</span>
-            <br />
-            <span className="item-meta-info">{`${gettext('Share To:')} ${item.share_type == 'personal' ? item.user_name : item.group_name}`}</span>
-          </td>
-          <td>
-            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isOpMenuOpen}
-              />
-              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
-                  <DropdownItem className="mobile-menu-item" onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
-          </td>
-        </tr>
-        {isPermSelectDialogOpen && (
-          <PermSelect
-            repoID={item.repo_id}
-            currentPerm={share_permission}
-            permissions={this.permissions}
-            changePerm={this.changePerm}
-            toggleDialog={this.togglePermSelectDialog}
-          />
-        )}
-      </Fragment>
-    );
-
-    return this.props.isDesktop ? desktopItem : mobileItem;
+        </Fragment>
+      );
+    }
   }
 }
 
