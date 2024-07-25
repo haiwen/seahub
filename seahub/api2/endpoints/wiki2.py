@@ -120,8 +120,9 @@ class Wikis2View(APIView):
         filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
         try:
-            ccnet_db = CcnetDB()
-            group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
+            if len(group_id_in_wikis) > 0:
+                ccnet_db = CcnetDB()
+                group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
