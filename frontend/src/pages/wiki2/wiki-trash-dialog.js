@@ -11,7 +11,7 @@ import Paginator from '../../components/paginator';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
-import '../../css/trash-dialog.css';
+import '../../css/wiki-trash-dialog.css';
 import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 
 const propTypes = {
