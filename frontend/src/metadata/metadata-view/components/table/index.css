@@ -235,7 +235,7 @@
   background-color: #2d7ff9;
 }
 
-.record-header-cell .sf-metadata-result-table-cell {
+.sf-metadata-record-header-cell .sf-metadata-result-table-cell {
   overflow: unset;
 }
 
@@ -583,7 +583,7 @@
   max-width: 230px;
 }
 
-.record-header-cell .sf-metadata-dropdown-menu {
+.sf-metadata-record-header-cell .sf-metadata-dropdown-menu {
   padding: 0 5px;
   width: 20px;
 }
@@ -614,4 +614,9 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+}
+
+.sf-metadata-tip-default {
+  font-size: 13px;
+  color: #666;
 }

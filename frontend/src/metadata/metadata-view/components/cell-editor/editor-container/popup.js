@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX, getCellValueByColumn } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById } from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
@@ -64,7 +64,7 @@ class PopupEditorContainer extends React.Component {
     let editorProps = {
       ref: this.setEditorRef,
       value: value,
-      rowMetaData: this.getRowMetaData(),
+      recordMetaData: this.getRecordMetaData(),
       onBlur: this.commit,
       onCommit: this.commit,
       onCommitData: this.commitData,
@@ -94,12 +94,12 @@ class PopupEditorContainer extends React.Component {
     return null;
   };
 
-  getRowMetaData = () => {
+  getRecordMetaData = () => {
     // clone row data so editor cannot actually change this
     // convention based method to get corresponding Id or Name of any Name or Id property
-    if (typeof this.props.column.getRowMetaData === 'function') {
+    if (typeof this.props.column.getRecordMetaData === 'function') {
       const { record, column } = this.props;
-      return this.props.column.getRowMetaData(record, column);
+      return this.props.column.getRecordMetaData(record, column);
     }
   };
 
@@ -144,13 +144,10 @@ class PopupEditorContainer extends React.Component {
     const { onCommit, column, record } = this.props;
     if (!record._id) return;
     const { key: columnKey, type: columnType, name: columnName } = column;
-    const originalOldCellValue = record[columnKey];
+    const originalOldCellValue = getCellValueByColumn(record, column);
     const newValue = this.getEditor().getValue();
-    const updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
+    let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     let originalUpdates = { ...updated };
-    if (columnType === CellType.SINGLE_SELECT) {
-      originalUpdates = this.getEditor().getValueOfOptionId();
-    }
     if (
       !isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) ||
       !this.isNewValueValid(updated)
@@ -159,6 +156,9 @@ class PopupEditorContainer extends React.Component {
         this.editor.onClose();
       }
       return;
+    }
+    if (columnType === CellType.SINGLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
     }
     this.changeCommitted = true;
     const rowId = record._id;
@@ -190,15 +190,12 @@ class PopupEditorContainer extends React.Component {
     const rowId = record._id;
     const originalOldCellValue = getCellValueByColumn(record, column);
     let originalUpdates = { ...updated };
-    if (columnType === CellType.SINGLE_SELECT) {
-      originalUpdates = this.getEditor().getValueOfOptionId();
-    }
     const key = Object.keys(updated)[0];
     const value = updated[key];
     const updates = { [columnName]: value };
 
     // special treatment of long-text column types to keep the stored data consistent
-    if (column.type === CellType.LONG_TEXT) {
+    if (columnType === CellType.LONG_TEXT) {
       originalUpdates[key] = value.text;
     }
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
@@ -226,7 +223,7 @@ class PopupEditorContainer extends React.Component {
   closeEditor = (isEscapeKeydown) => {
     const { column } = this.props;
     if (column.type === CellType.DATE && !isEscapeKeydown) return null;
-    return this.onClickOutside;
+    return () => this.onClickOutside(isEscapeKeydown);
   };
 
   onClickOutside = (isEscapeKeydown) => {
@@ -267,7 +264,7 @@ PopupEditorContainer.propTypes = {
 
   record: PropTypes.object,
   column: PropTypes.object,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.bool]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.bool, PropTypes.array]),
 
   onGridKeyDown: PropTypes.func,
   onCommit: PropTypes.func,

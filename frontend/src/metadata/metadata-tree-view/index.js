@@ -32,9 +32,11 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClick = useCallback((view) => {
+  const onClick = useCallback((view, isSelected) => {
+    if (isSelected) return;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name,
@@ -53,7 +55,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       view_id: view._id,
     };
     onNodeClick(node);
-  }, [onNodeClick]);
+  }, [repoID, onNodeClick]);
 
   const openAddView = useCallback(() => {
     setSowAddViewDialog(true);
@@ -92,7 +94,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     }));
-  }, [views, onClick, viewsMap]);
+  }, [repoID, views, onClick, viewsMap]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
@@ -132,7 +134,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
                   isSelected={isSelected}
                   userPerm={userPerm}
                   view={view}
-                  onClick={onClick}
+                  onClick={(view) => onClick(view, isSelected)}
                   onDelete={() => onDeleteView(view._id, isSelected)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
                   onMove={onMoveView}

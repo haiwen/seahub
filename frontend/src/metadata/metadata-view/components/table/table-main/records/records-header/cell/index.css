@@ -1,0 +1,9 @@
+.sf-metadata-record-header-cell .sf-metadata-column-icon {
+  fill: #999;
+}
+
+.sf-metadata-record-header-cell .sf-metadata-icon-drop-down {
+  fill: #999;
+  font-size: 12px;
+  transform: scale(.8);
+}

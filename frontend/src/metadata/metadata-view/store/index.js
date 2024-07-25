@@ -4,7 +4,7 @@ import {
   getRowsByIds,
 } from '../_basic';
 import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
-  VIEW_OPERATION
+  VIEW_OPERATION, COLUMN_OPERATION
 } from './operations';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
@@ -151,7 +151,7 @@ class Store {
       this.syncOperationOnData(operation);
     }
 
-    if (VIEW_OPERATION.includes(operation.op_type)) {
+    if (VIEW_OPERATION.includes(operation.op_type) || COLUMN_OPERATION.includes(operation.op_type)) {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     }
 
@@ -365,10 +365,35 @@ class Store {
     this.applyOperation(operation);
   }
 
-  insertColumn = (name, type, { key, data }) => {
-    const _type = OPERATION_TYPE.INSERT_COLUMN;
+  // column
+  insertColumn = (name, columnType, { key, data }) => {
+    const operationType = OPERATION_TYPE.INSERT_COLUMN;
     const operation = this.createOperation({
-      type: _type, repo_id: this.repoId, name, column_type: type, key, data
+      type: operationType, repo_id: this.repoId, name, column_type: columnType, key, data
+    });
+    this.applyOperation(operation);
+  };
+
+  deleteColumn = (columnKey, column) => {
+    const type = OPERATION_TYPE.DELETE_COLUMN;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey,
+    });
+    this.applyOperation(operation);
+  };
+
+  renameColumn = (columnKey, newName, oldName) => {
+    const type = OPERATION_TYPE.RENAME_COLUMN;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey, new_name: newName, old_name: oldName
+    });
+    this.applyOperation(operation);
+  };
+
+  modifyColumnData = (columnKey, newData, oldData) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_DATA;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey, new_data: newData, old_data: oldData
     });
     this.applyOperation(operation);
   };

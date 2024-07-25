@@ -40,7 +40,7 @@ const ViewItem = ({
       value.push({ key: 'delete', value: gettext('Delete') });
     }
     return value;
-  }, [canUpdate]);
+  }, [canUpdate, canDelete]);
 
   const onMouseEnter = useCallback(() => {
     if (freeze) return;
@@ -76,7 +76,7 @@ const ViewItem = ({
       onDelete();
       return;
     }
-  }, [onDelete, view]);
+  }, [onDelete]);
 
   const closeRenameDialog = useCallback(() => {
     setRenameDialogShow(false);
@@ -98,12 +98,12 @@ const ViewItem = ({
   const onDragEnter = useCallback((event) => {
     if (!canDrop) return false;
     setDropShow(true);
-  }, [canDrop, view]);
+  }, [canDrop]);
 
   const onDragLeave = useCallback(() => {
     if (!canDrop) return false;
     setDropShow(false);
-  }, [canDrop, view]);
+  }, [canDrop]);
 
   const onDragMove = useCallback(() => {
     if (!canDrop) return false;

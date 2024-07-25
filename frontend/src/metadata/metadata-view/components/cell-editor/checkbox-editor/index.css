@@ -1,0 +1,28 @@
+.sf-metadata-checkbox-editor {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sf-metadata-checkbox-editor .sf-metadata-checkbox-editor-content {
+  height: 22px;
+  width: 22px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-metadata-checkbox-editor .sf-metadata-checkbox-editor-content .sf-metadata-icon-check-mark {
+  fill: #20c933;
+}
+
+.sf-metadata-result-table-row:hover .sf-metadata-checkbox-editor-content,
+.sf-metadata-result-table-checkbox-cell.cell-selected .sf-metadata-checkbox-editor-content {
+  border-color: #e0e0e0;
+}

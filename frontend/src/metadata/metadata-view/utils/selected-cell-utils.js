@@ -42,9 +42,7 @@ export const isSelectedCellSupportOpenEditor = (cell, columns, isGroupView, reco
 export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, columns, isGroupView, recordGetterByIndex, onCheckCellIsEditable }) => {
   const column = getSelectedColumn({ selectedPosition, columns });
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
-  if (!window.sfMetadataContext.canModifyRow(row)) {
-    return false;
-  }
+  if (!window.sfMetadataContext.canModifyRow(row)) return false;
   const isCellEditable = isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
   return isCellEditable && canEdit(column, row, enableCellSelect);
 };

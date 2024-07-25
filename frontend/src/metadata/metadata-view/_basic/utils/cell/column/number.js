@@ -1,4 +1,4 @@
-import { NPminus } from '../../helper/number-precision';
+import { NPminus, NPdivide } from '../../helper/number-precision';
 import { round } from '../../number';
 import { DEFAULT_NUMBER_FORMAT } from '../../../constants/column';
 import { DISPLAY_INTERNAL_ERRORS } from '../../../constants';
@@ -210,8 +210,73 @@ const replaceNumberNotAllowInput = (sNum, format, currencySymbol) => {
   }
 };
 
+/**
+ * @param {string} sNumber e.g. '1.23'
+ * @param {string} format e.g. 'percent'
+ * @returns float number from string. e.g. '1.23' = 1.23
+ */
+const getFloatNumber = (sNumber, format) => {
+  if (!sNumber && sNumber !== 0) {
+    return null;
+  }
+  if (typeof sNumber === 'number') return sNumber;
+  if (typeof sNumber !== 'string') return null;
+  const parsedNum = parseFloat(sNumber.replace(/[^.-\d]/g, ''));
+  if (format === 'percent' && !isNaN(parsedNum)) {
+    return NPdivide(parsedNum, 100);
+  }
+  return isNaN(parsedNum) ? null : parsedNum;
+};
+
+/**
+ * parse string to number depend on formats
+ * @param {string} sNum e.g. '1.23'
+ * @param {object} formats { format, decimal, ... }
+ * @returns parsed number
+ */
+const formatStringToNumber = (sNum, formats) => {
+  const {
+    format, decimal, thousands, enable_precision, precision,
+  } = formats || {};
+  let value = sNum;
+  if (decimal && thousands && decimal === 'comma') {
+    if (thousands === 'dot') {
+      value = value.replace(/,/, '@');
+      value = value.replace(/\./g, ',');
+      value = value.replace(/@/, '.');
+    } else {
+      value = value.replace(/\./g, '');
+      value = value.replace(/,/, '.');
+    }
+  }
+  value = getFloatNumber(value, format);
+  if (enable_precision && value) {
+    const fixedPrecision = format === 'percent' ? precision + 2 : precision;
+    value = parseFloat(round(value, fixedPrecision).toFixed(fixedPrecision));
+  }
+  return value;
+};
+
+const formatTextToNumber = (value) => {
+  if (typeof value === 'number') {
+    return value;
+  }
+  if (!value || !value.trim()) {
+    return null;
+  }
+  let newValue = value.trim();
+  let isIncludePercent = String(newValue).indexOf('%') > -1;
+  let newData = parseFloat(newValue.replace(/[^.-\d]/g, ''));
+  if (isIncludePercent && !isNaN(newData)) {
+    return newData / 100;
+  }
+  return isNaN(newData) ? null : newData;
+};
+
 export {
   getPrecisionNumber,
   getNumberDisplayString,
   replaceNumberNotAllowInput,
+  formatStringToNumber,
+  formatTextToNumber,
 };

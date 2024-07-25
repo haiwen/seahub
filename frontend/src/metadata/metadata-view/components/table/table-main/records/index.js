@@ -648,7 +648,8 @@ class Records extends Component {
   };
 
   render() {
-    const { recordIds, recordsCount, table, isGroupView, groupOffsetLeft } = this.props;
+    const { recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
+      deleteColumn } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL;
@@ -680,6 +681,9 @@ class Records extends Component {
               selectNoneRecords={this.selectNone}
               selectAllRecords={this.selectAllRecords}
               downloadColumnAllFiles={this.downloadColumnAllFiles}
+              renameColumn={renameColumn}
+              deleteColumn={deleteColumn}
+              modifyColumnData={modifyColumnData}
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
@@ -733,6 +737,9 @@ Records.propTypes = {
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,
+  renameColumn: PropTypes.func,
+  deleteColumn: PropTypes.func,
+  modifyColumnData: PropTypes.func,
 };
 
 export default Records;

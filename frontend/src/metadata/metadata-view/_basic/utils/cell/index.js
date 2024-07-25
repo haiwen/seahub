@@ -8,6 +8,8 @@ export {
   getPrecisionNumber,
   getNumberDisplayString,
   replaceNumberNotAllowInput,
+  formatStringToNumber,
+  formatTextToNumber,
   getOption,
   getColumnOptionNameById,
   getOptionName,

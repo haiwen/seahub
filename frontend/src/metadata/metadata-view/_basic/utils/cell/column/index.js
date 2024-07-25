@@ -3,6 +3,8 @@ export {
   getPrecisionNumber,
   getNumberDisplayString,
   replaceNumberNotAllowInput,
+  formatStringToNumber,
+  formatTextToNumber,
 } from './number';
 export {
   getOption,

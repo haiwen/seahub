@@ -112,6 +112,18 @@ const Container = () => {
     store.modifySorts(sorts);
   }, [store]);
 
+  const renameColumn = useCallback((columnKey, newName, oldName) => {
+    store.renameColumn(columnKey, newName, oldName);
+  }, [store]);
+
+  const deleteColumn = useCallback((columnKey, oldColumn) => {
+    store.deleteColumn(columnKey, oldColumn);
+  }, [store]);
+
+  const modifyColumnData = useCallback((columnKey, newData, oldData) => {
+    store.modifyColumnData(columnKey, newData, oldData);
+  }, [store]);
+
   const modifyGroupbys = useCallback(() => {
     // modifyGroupbys
   }, []);
@@ -184,6 +196,9 @@ const Container = () => {
                 getTableContentRect={getTableContentRect}
                 getAdjacentRowsIds={getAdjacentRowsIds}
                 loadAll={loadAll}
+                renameColumn={renameColumn}
+                deleteColumn={deleteColumn}
+                modifyColumnData={modifyColumnData}
               />
             </div>
           )}

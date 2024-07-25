@@ -33,6 +33,10 @@ const READONLY_PREVIEW_COLUMNS = [
   CellType.FILE_NAME,
 ];
 
+const NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES = [
+  CellType.CHECKBOX,
+];
+
 class InteractionMasks extends React.Component {
 
 
@@ -214,6 +218,8 @@ class InteractionMasks extends React.Component {
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = selectedColumn;
+
+    if (NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES.includes(columnType)) return null;
 
     // how to open editors?
     // 1. editor is closed

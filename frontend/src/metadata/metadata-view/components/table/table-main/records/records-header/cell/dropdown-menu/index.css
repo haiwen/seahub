@@ -1,0 +1,22 @@
+.sf-metadata-column-dropdown-menu .dropdown-item .sf-metadata-icon {
+  margin-right: 10px;
+  font-size: 14px;
+  fill: #8c8c8c;
+}
+
+.sf-metadata-column-dropdown-menu .dropdown-item:hover .sf-metadata-icon {
+  fill: #fff;
+}
+
+.sf-metadata-column-dropdown-menu .sf-metadata-column-dropdown-item .item-text {
+  width: calc(100% - 30px);
+  display: inline-block;
+}
+
+.sf-metadata-column-dropdown-menu .dropdown-toggle::after {
+  color: #8c8c8c;
+}
+
+.sf-metadata-column-dropdown-menu .dropdown-toggle:hover::after {
+  color: #fff;
+}

@@ -445,6 +445,7 @@ class RecordsBody extends Component {
       onCellMouseEnter: this.onCellMouseEnter,
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
+      modifyRecord: this.props.modifyRecord,
     };
     return this.cellMetaData;
   };

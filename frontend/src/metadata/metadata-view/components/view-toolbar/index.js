@@ -53,6 +53,7 @@ const ViewToolBar = ({ metadataViewId }) => {
       timer && clearInterval(timer);
       unsubscribeViewChange && unsubscribeViewChange();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metadataViewId]);
 
   if (!view) return null;

@@ -78,6 +78,33 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.DELETE_COLUMN: {
+        const { repo_id, column_key } = operation;
+        window.sfMetadataContext.deleteColumn(repo_id, column_key).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_insert_column' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.RENAME_COLUMN: {
+        const { repo_id, column_key, new_name } = operation;
+        window.sfMetadataContext.renameColumn(repo_id, column_key, new_name).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_rename_column' });
+        });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+        const { repo_id, column_key, new_data } = operation;
+        window.sfMetadataContext.modifyColumnData(repo_id, column_key, new_data).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_column_data' });
+        });
+        break;
+      }
       case OPERATION_TYPE.MODIFY_FILTERS: {
         const { repo_id, view_id, filter_conjunction, filters } = operation;
         window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction }).then(res => {

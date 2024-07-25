@@ -47,7 +47,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft }) => {
 
   return (
     <>
-      <div className="record-header-cell">
+      <div className="sf-metadata-record-header-cell">
         <div className="sf-metadata-result-table-cell column insert-column" style={style} id={id} ref={ref}>
           <Icon iconName="add-table" />
         </div>

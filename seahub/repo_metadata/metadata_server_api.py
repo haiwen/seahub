@@ -81,15 +81,6 @@ class MetadataServerAPI:
         if response.status_code == 404:
             return {'success': True}
         return parse_response(response)
-
-    def add_column(self, table_id, column):
-        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
-        data = {
-            'table_id': table_id,
-            'column': column
-        }
-        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
-        return parse_response(response)
     
     def insert_rows(self, table_id, rows):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/rows'
@@ -129,10 +120,38 @@ class MetadataServerAPI:
         response = requests.post(url, json=post_data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
+    # column
     def list_columns(self, table_id):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
         data = {
             'table_id': table_id
         }
         response = requests.get(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+
+    def add_column(self, table_id, column):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
+        data = {
+            'table_id': table_id,
+            'column': column
+        }
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+    
+    def delete_column(self, table_id, column_key):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
+        data = {
+            'table_id': table_id,
+            'column_key': column_key
+        }
+        response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+    
+    def update_column(self, table_id, column):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
+        data = {
+            'table_id': table_id,
+            'column': column
+        }
+        response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)

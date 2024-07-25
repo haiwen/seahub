@@ -1,0 +1,47 @@
+.sf-metadata-delete-collaborator {
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #dde2ea;
+  border-radius: 3px 3px 0 0;
+  min-height: 34px;
+  padding: 5px 10px;
+}
+
+.collaborator {
+  background: #eaeaea;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  height: 20px;
+  margin-right: 10px;
+  padding: 0 8px 0 2px;
+}
+
+.collaborator .collaborator-avatar-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collaborator .collaborator-avatar {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.collaborator .collaborator-name {
+  color: #212529;
+  margin-left: 5px;
+  max-width: 200px;
+  flex: 1 1;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collaborator .collaborator-remove .sf-metadata-icon-x-01 {
+  fill: #666;
+  font-size: 12px;
+}

@@ -26,6 +26,7 @@ const EditorContainer = (props) => {
   if (PREVIEW_EDITOR_COLUMN_TYPES.includes(column.type)) {
     return (<PreviewEditorContainer { ...props } />);
   }
+
   return (<NormalEditorContainer { ...props } />);
 };
 

@@ -283,3 +283,8 @@
   background-color: #dbecfa !important;
 }
 
+/* checkbox editor */
+.sf-metadata-result-table-cell.sf-metadata-result-table-checkbox-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+}

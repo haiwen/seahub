@@ -91,6 +91,10 @@ class Context {
     return true;
   };
 
+  canModifyColumn = (column) => {
+    return true;
+  };
+
   getPermission = () => {
     return 'rw';
   };
@@ -115,10 +119,24 @@ class Context {
     // todo
   };
 
+  // column
   insertColumn = (repoId, name, type, { key, data }) => {
     return this.metadataAPI.insertColumn(repoId, name, type, { key, data });
   };
 
+  deleteColumn = (repoId, columnKey) => {
+    return this.metadataAPI.deleteColumn(repoId, columnKey);
+  };
+
+  renameColumn = (repoId, columnKey, name) => {
+    return this.metadataAPI.renameColumn(repoId, columnKey, name);
+  };
+
+  modifyColumnData = (repoId, columnKey, data) => {
+    return this.metadataAPI.modifyColumnData(repoId, columnKey, data);
+  };
+
+  // record
   modifyRecord = (repoId, recordId, columnName, value) => {
     return this.metadataAPI.modifyRecord(repoId, recordId, columnName, value);
   };
@@ -127,6 +145,7 @@ class Context {
     return this.metadataAPI.modifyRecords(repoId, recordsData, isCopyPaste);
   };
 
+  // view
   modifyView = (repoId, viewId, viewData) => {
     return this.metadataAPI.modifyView(repoId, viewId, viewData);
   };
