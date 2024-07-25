@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.authentication import TokenAuthentication, SeafileAiAuthentication
+from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin

@@ -852,9 +852,6 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
-SEAFILE_AI_SECRET_KEY = ''
-SEAFILE_AI_SERVER_URL = ''
-
 ############################
 # HU berlin additional #
 ############################
