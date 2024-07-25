@@ -2,26 +2,20 @@
 import os
 import logging
 import posixpath
-import time
 from datetime import datetime
 
 from seaserv import seafile_api
 
-from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import Http404
+from django.shortcuts import render
 
-from seahub.share.models import FileShare
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.views import check_folder_permission
-from seahub.utils import get_file_type_and_ext, render_permission_error, is_pro_version
-from seahub.utils.file_types import IMAGE, SEADOC
-from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
+from seahub.utils import get_file_type_and_ext, render_permission_error
+from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
-from seahub.wiki2.utils import can_edit_wiki, check_wiki_permission, get_wiki_config
+from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
-from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm, get_repo_owner
+from seahub.utils.repo import get_repo_owner
 from seahub.settings import SEADOC_SERVER_URL
 
 # Get an instance of a logger
