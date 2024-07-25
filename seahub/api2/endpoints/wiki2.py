@@ -103,24 +103,44 @@ class Wikis2View(APIView):
             user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
-        wikis = []
-        filter_repo_type_ids_map = {}
+
         owned_wikis = [r for r in owned if is_wiki_repo(r)]
-        filter_repo_type_ids_map['mine'] = ([r.id for r in owned_wikis])
+        wiki_list = []
         for r in owned_wikis:
             r.owner = username
             r.permission = 'rw'
-            wikis.append(r)
-
+            wiki = Wiki(r)
+            wiki_info = wiki.to_dict()
+            repo_info = {
+                    "type": "mine",
+                    "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
+                    "permission": 'rw',
+                    "owner_nickname": email2nickname(username)
+                }
+            wiki_info.update(repo_info)
+            wiki_list.append(wiki_info)
+            
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
-        filter_repo_type_ids_map['shared'] = ([r.id for r in shared_wikis])
-
         for r in shared_wikis:
-            r.owner = r.user
-            wikis.append(r)
+            owner = r.user
+            r.owner = owner
+            wiki = Wiki(r)
+            if ('@seafile_group') in r.owner:
+                group_id = int(owner.split('@')[0])
+                owner_nickname = group_id_to_name(group_id)
+            else:
+                owner_nickname = email2nickname(owner)
+            wiki_info = wiki.to_dict()
+            repo_info = {
+                    "type": "shared",
+                    "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
+                    "permission": r.permission,
+                    "owner_nickname": owner_nickname
+                }
+            wiki_info.update(repo_info)
+            wiki_list.append(wiki_info)
 
         group_wikis = [r for r in groups if is_wiki_repo(r)]
-        filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
         try:
             group_ids_admins_map = {}
@@ -136,7 +156,6 @@ class Wikis2View(APIView):
         for r in group_wikis:
             r.owner = r.user
 
-        wiki_list = []
         group_wiki_list = []
         group_id_wikis_map = _merge_wiki_in_groups(group_wikis)
         for group_obj in user_wiki_groups:
@@ -149,40 +168,6 @@ class Wikis2View(APIView):
             }
             group_wiki_list.append(group_wiki)
         
-
-        wiki_ids_list = []
-        for w in wikis:
-            wiki = Wiki(w)
-            wiki_info = wiki.to_dict()
-            if w.id not in wiki_ids_list:
-                wiki_ids_list.append(w.id)
-            else:
-                continue
-            wiki_ids_list.append(w.id)
-            owner = w.owner
-            if ('@seafile_group') in owner:
-                group_id = int(owner.split('@')[0])
-                owner_nickname = group_id_to_name(group_id)
-            else:
-                owner_nickname = email2nickname(owner)
-            if w.id in filter_repo_type_ids_map['mine']:
-                repo_info = {
-                    "type": "mine",
-                    "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
-                    "permission": 'rw',
-                    "owner_nickname": owner_nickname
-                }
-                wiki_info.update(repo_info)
-            if w.id in filter_repo_type_ids_map['shared']:
-                repo_info = {
-                    'type': 'shared',
-                    "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
-                    "permission": w.permission,
-                    "owner_nickname": owner_nickname
-                }
-                wiki_info.update(repo_info)
-            wiki_list.append(wiki_info)
-
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
 
         return Response({'wikis': wiki_list, 'group_wikis': group_wiki_list})
