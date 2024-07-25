@@ -7,7 +7,6 @@
   ],
   "rules": {
     "jsx-a11y/anchor-is-valid": "off",
-    "react-hooks/exhaustive-deps": "off",
     "no-loop-func": "off",
     "eqeqeq": "off",
     "default-case": "off",

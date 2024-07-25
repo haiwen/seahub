@@ -42,7 +42,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
 
   const openSubMenu = useCallback(() => {
     setSubMenuShow(true);
-  }, [isSubMenuShow]);
+  }, []);
 
   const hideSubMenu = useCallback(() => {
     setSubMenuShow(false);
@@ -62,9 +62,9 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
     modifyColumnData(column.key, { options }, { options: oldData.options || [] });
   }, [column, modifyColumnData]);
 
-  const toggleDefineCascade = useCallback(() => {
+  // const toggleDefineCascade = useCallback(() => {
 
-  }, []);
+  // }, []);
 
   const onChangeDateFormat = useCallback((event, newFormat) => {
     event && event.stopPropagation();
@@ -150,7 +150,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
         </DropdownMenu>
       </Dropdown>
     );
-  }, [today, column, isMenuShow, onChangeDateFormat, openSubMenu]);
+  }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu]);
 
   const renderDropdownMenu = useCallback(() => {
     let menuStyle = { transform: 'none' };
@@ -220,7 +220,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
         </div>
       </DropdownMenu>
     );
-  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, toggleDefineCascade]);
+  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, onDelete]);
 
   return (
     <>

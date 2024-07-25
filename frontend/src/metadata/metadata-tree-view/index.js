@@ -32,6 +32,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClick = useCallback((view, isSelected) => {
@@ -54,7 +55,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       view_id: view._id,
     };
     onNodeClick(node);
-  }, [onNodeClick]);
+  }, [repoID, onNodeClick]);
 
   const openAddView = useCallback(() => {
     setSowAddViewDialog(true);
@@ -93,7 +94,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     }));
-  }, [views, onClick, viewsMap]);
+  }, [repoID, views, onClick, viewsMap]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
