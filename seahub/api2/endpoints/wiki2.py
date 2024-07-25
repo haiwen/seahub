@@ -72,8 +72,6 @@ def _merge_wiki_in_groups(group_wikis):
             owner_nickname = email2nickname(owner)
         repo_info = {
                 "type": "group",
-                "mtime": gw.last_modified,
-                "last_modified": timestamp_to_isoformat_timestr(gw.last_modified),
                 "permission": gw.permission,
                 "owner_nickname": owner_nickname
         }
@@ -113,7 +111,6 @@ class Wikis2View(APIView):
             wiki_info = wiki.to_dict()
             repo_info = {
                     "type": "mine",
-                    "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
                     "permission": 'rw',
                     "owner_nickname": email2nickname(username)
                 }
@@ -133,7 +130,6 @@ class Wikis2View(APIView):
             wiki_info = wiki.to_dict()
             repo_info = {
                     "type": "shared",
-                    "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
                     "permission": r.permission,
                     "owner_nickname": owner_nickname
                 }
