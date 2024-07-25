@@ -81,13 +81,8 @@ def check_wiki_admin_permission(wiki, username):
 
 
 def check_wiki_permission(wiki, username):
-    if is_group_wiki(wiki):
-        group_id = int(wiki.owner.split('@')[0])
-        return is_group_member(group_id, username)
-    else:
-        if username == wiki.owner:
-            return True
-    return False
+    permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
+    return permission
 
 
 def get_page_ids_in_folder(navigation, folder_id):

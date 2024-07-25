@@ -120,7 +120,8 @@ class Wikis2View(APIView):
         filter_repo_type_ids_map['group'] = ([r.id for r in group_wikis])
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
         try:
-            if len(group_id_in_wikis) > 0:
+            group_ids_admins_map = {}
+            if group_id_in_wikis:
                 ccnet_db = CcnetDB()
                 group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
         except Exception as e:
@@ -139,7 +140,7 @@ class Wikis2View(APIView):
             group_wiki = {
                 'group_name': group_obj.group_name,
                 'group_id': group_obj.id,
-                'group_admins': group_ids_admins_map.get(group_obj.id),
+                'group_admins': group_ids_admins_map.get(group_obj.id) or [],
                 "owner": group_obj.creator_name,
                 'wiki_info': group_id_wikis_map[group_obj.id]
             }

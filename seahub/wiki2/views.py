@@ -56,6 +56,7 @@ def wiki_view(request, wiki_id):
 
     # perm check
     req_user = request.user.username
+    permission = check_wiki_permission(wiki, req_user)
     if not check_wiki_permission(wiki, req_user):
         return render_permission_error(request, 'Permission denied.')
 
@@ -79,5 +80,6 @@ def wiki_view(request, wiki_id):
         "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,
         "modify_time": last_modified,
-        "seadoc_server_url": SEADOC_SERVER_URL
+        "seadoc_server_url": SEADOC_SERVER_URL,
+        "permission": permission
     })

@@ -129,6 +129,8 @@ class WikiCardItem extends Component {
     let showShare = false;
     let showDelete = false;
     let showLeaveShare = false;
+    let showDropdownMenu = false;
+
     if (isDepartment) {
       if (isAdmin) {
         if (isGroupOwner) {
@@ -149,6 +151,10 @@ class WikiCardItem extends Component {
       }
     }
 
+    if (isOldVersion || showRename || showShare || showDelete || showLeaveShare) {
+      showDropdownMenu = true;
+    }
+
     return (
       <>
         <div
@@ -157,36 +163,38 @@ class WikiCardItem extends Component {
         >
           <div className="wiki-card-item-top">
             <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown}>
-              <DropdownToggle
-                tag="i"
-                role="button"
-                tabIndex="0"
-                className="sf-dropdown-toggle sf3-font-more sf3-font"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                aria-haspopup={true}
-                style={{ 'minWidth': '0' }}
-              />
-              <DropdownMenu right={true} className="dtable-dropdown-menu">
-                {showRename &&
-                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
-                {showShare &&
-                  <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
-                }
-                {isOldVersion &&
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
-                }
-                {showDelete &&
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
-                }
-                {showLeaveShare &&
-                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
-                }
-              </DropdownMenu>
-            </Dropdown>
+            {showDropdownMenu &&
+              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown}>
+                <DropdownToggle
+                  tag="i"
+                  role="button"
+                  tabIndex="0"
+                  className="sf-dropdown-toggle sf3-font-more sf3-font"
+                  title={gettext('More operations')}
+                  aria-label={gettext('More operations')}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isItemMenuShow}
+                  aria-haspopup={true}
+                  style={{ 'minWidth': '0' }}
+                />
+                <DropdownMenu right={true} className="dtable-dropdown-menu">
+                  {showRename &&
+                    <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
+                  {showShare &&
+                    <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                  }
+                  {isOldVersion &&
+                    <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
+                  }
+                  {showDelete &&
+                    <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                  }
+                  {showLeaveShare &&
+                    <DropdownItem onClick={this.onDeleteToggle}>{gettext('Leave')}</DropdownItem>
+                  }
+                </DropdownMenu>
+              </Dropdown>
+            }
           </div>
           <div className="wiki-item-name text-truncate" title={wikiName} aria-label={wikiName}>{wikiName}</div>
           <div className="wiki-item-owner">
