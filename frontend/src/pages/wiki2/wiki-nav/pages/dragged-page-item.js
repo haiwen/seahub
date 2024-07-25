@@ -40,12 +40,12 @@ const dropTarget = {
     } else if (className.includes('dragged-page-over')) {
       move_position = 'move_into';
     }
+    if (!move_position) return;
     if (dragSource.mode === 'wiki-page') {
       const targetPage = props.page;
       const draggedPage = dragSource.data;
       const moved_page_id = draggedPage.id;
       const target_page_id = targetPage.id;
-      // Cannot move a page to itself
       if (moved_page_id === target_page_id) {
         return;
       }
@@ -53,13 +53,8 @@ const dropTarget = {
         toaster.danger(gettext('Cannot move parent page to child page'));
         return;
       }
-      // props.onMovePage({ moved_page_id, target_page_id, move_position });
       wikiAPI.moveWiki2Page(wikiId, moved_page_id, target_page_id, move_position).then(res => {
-        props.onMovePage({
-          moved_page_id,
-          target_page_id,
-          move_position,
-        });
+        props.onMovePage({ moved_page_id, target_page_id, move_position });
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
