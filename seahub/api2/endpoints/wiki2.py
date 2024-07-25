@@ -68,11 +68,18 @@ def _merge_wiki_in_groups(group_wikis):
     for gw in group_wikis:
         wiki = Wiki(gw)
         wiki_info = wiki.to_dict()
+        owner = gw.owner
+        if ('@seafile_group') in owner:
+            group_id = int(owner.split('@')[0])
+            owner_nickname = group_id_to_name(group_id)
+        else:
+            owner_nickname = email2nickname(owner)
         repo_info = {
                 "type": "group",
                 "mtime": gw.last_modified,
                 "last_modified": timestamp_to_isoformat_timestr(gw.last_modified),
                 "permission": gw.permission,
+                "owner_nickname": owner_nickname
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -156,11 +163,18 @@ class Wikis2View(APIView):
             else:
                 continue
             wiki_ids_list.append(w.id)
+            owner = w.owner
+            if ('@seafile_group') in owner:
+                group_id = int(owner.split('@')[0])
+                owner_nickname = group_id_to_name(group_id)
+            else:
+                owner_nickname = email2nickname(owner)
             if w.id in filter_repo_type_ids_map['mine']:
                 repo_info = {
                     "type": "mine",
                     "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
                     "permission": 'rw',
+                    "owner_nickname": owner_nickname
                 }
                 wiki_info.update(repo_info)
             if w.id in filter_repo_type_ids_map['shared']:
@@ -168,6 +182,7 @@ class Wikis2View(APIView):
                     'type': 'shared',
                     "last_modified": timestamp_to_isoformat_timestr(w.last_modify),
                     "permission": w.permission,
+                    "owner_nickname": owner_nickname
                 }
                 wiki_info.update(repo_info)
             wiki_list.append(wiki_info)

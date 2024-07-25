@@ -68,8 +68,6 @@ class ShareWikiDialog extends React.Component {
 
     let activeTab = this.state.activeTab;
     let { repoEncrypted, enableDirPrivateShare, itemType } = this.props;
-    // for encrypted repo, 'dir private share' is only enabled for the repo itself,
-    // not for the folders in it.
     if (repoEncrypted) {
       enableDirPrivateShare = itemType == 'library';
     }
