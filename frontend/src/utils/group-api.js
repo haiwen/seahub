@@ -34,8 +34,12 @@ class GroupAPI {
     return this;
   }
 
-  changeGroup2Department(groupID) {
-    var url = this.server + '/api/v2.1/groups/' + groupID + '/';
+  adminGroup2Department(groupID) {
+    var url = this.server + '/api/v2.1/admin/groups/' + groupID + '/';
+    return this.req.post(url);
+  }
+  orgAdminGroup2Department(orgID, groupID) {
+    var url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/';
     return this.req.post(url);
   }
 

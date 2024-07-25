@@ -367,3 +367,34 @@ class SeafileDB:
     
         with connection.cursor() as cursor:
             cursor.execute(sql)
+
+    def change_groups_into_departments(self, group_id, org_id=None):
+        creator = str(group_id) + '@seafile_group'
+        update_repo_sql = f"""
+        UPDATE `{self.db_name}`.`RepoGroup` r
+        INNER JOIN `{self.db_name}`.`RepoInfo` i
+        ON r.repo_id = i.repo_id
+        SET
+        r.user_name = '{creator}',
+        i.last_modifier = '{creator}'
+        WHERE 
+        r.group_id = {group_id}
+        """
+        update_org_repo_sql = f"""
+        UPDATE `{self.db_name}`.`OrgRepo` r
+        JOIN `{self.db_name}`.`OrgGroupRepo` g
+        ON r.repo_id = g.repo_id AND r.org_id = g.org_id
+        JOIN `{self.db_name}`.`RepoInfo` i
+        ON r.repo_id = i.repo_id
+        SET
+            r.user = '{creator}',
+            g.owner = '{creator}',
+            i.last_modifier = '{creator}'
+        WHERE
+            g.group_id = {group_id} AND g.org_id = {org_id}
+        """
+        with connection.cursor() as cursor:
+            if org_id:
+                cursor.execute(update_org_repo_sql)
+            else:
+                cursor.execute(update_repo_sql)

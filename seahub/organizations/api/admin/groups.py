@@ -113,6 +113,29 @@ class OrgAdminGroup(APIView):
 
         return Response(group_info)
 
+    def post(self, request, org_id, group_id):
+        """ Admin change a group
+
+        1. group to department
+
+        Permission checking:
+        1. Admin user;
+        """
+
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        return SysAdminGroup().post(request, group_id, org_id)
+
     def put(self, request, org_id, group_id):
         """ Admin update a group
 

@@ -18,13 +18,11 @@ import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
 import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
-import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 
 import '../../css/group-view.css';
-import { groupAPI } from '../../utils/group-api';
 
 const propTypes = {
   onGroupChanged: PropTypes.func.isRequired,
@@ -61,7 +59,6 @@ class GroupView extends React.Component {
       showTransferGroupDialog: false,
       showImportMembersDialog: false,
       showManageMembersDialog: false,
-      showChangeGroupDialog: false,
       groupMembers: [],
       isLeaveGroupDialogOpen: false,
       isMembersDialogOpen: false
@@ -267,13 +264,6 @@ class GroupView extends React.Component {
     });
   };
 
-  toggleChangeGroupDialog = () => {
-    this.setState({
-      showChangeGroupDialog: !this.state.showChangeGroupDialog,
-      showGroupDropdown: false,
-    });
-  };
-
   toggleRenameGroupDialog = () => {
     this.setState({
       showRenameGroupDialog: !this.state.showRenameGroupDialog,
@@ -327,15 +317,6 @@ class GroupView extends React.Component {
         groupMembers: res.data
       });
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  changeGroup2Department = () => {
-    groupAPI.changeGroup2Department(this.props.groupID).then((res) => {
-      this.loadGroup(this.props.groupID);
-    }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -423,8 +404,6 @@ class GroupView extends React.Component {
         if (isOwner) {
           opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog });
         }
-        opList.push({ 'text': gettext('Change group'), 'onClick': this.toggleChangeGroupDialog });
-
       }
 
       if (!isOwner && !isDepartmentGroup) {
@@ -574,13 +553,6 @@ class GroupView extends React.Component {
             toggleLeaveGroupDialog={this.toggleLeaveGroupDialog}
             groupID={this.props.groupID}
             onGroupChanged={this.props.onGroupChanged}
-          />
-        }
-        {this.state.showChangeGroupDialog &&
-          <ChangeGroupDialog
-            groupName={this.state.currentGroup.name}
-            changeGroup2Department={this.changeGroup2Department}
-            toggleDialog={this.toggleChangeGroupDialog}
           />
         }
       </Fragment>
