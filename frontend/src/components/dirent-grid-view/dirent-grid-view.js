@@ -109,8 +109,6 @@ class DirentGridView extends React.Component {
 
   onGridContainerMouseDown = (event) => {
     if (event.button === 2) {
-      event.preventDefault();
-      event.stopPropagation();
       return;
     } else if (event.button === 0) {
       hideMenu();
@@ -151,7 +149,7 @@ class DirentGridView extends React.Component {
         this.determineSelectedItems();
         this.autoScroll(e.clientY);
 
-        const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.innerText));
+        const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.lastChild.lastChild.title));
         const filteredDirentList = this.props.direntList
           .filter(dirent => selectedItemNames.has(dirent.name))
           .map(dirent => ({ ...dirent, isSelected: true }));
@@ -746,6 +744,7 @@ class DirentGridView extends React.Component {
       <Fragment>
         <ul
           className="grid-view"
+          onClick={this.gridContainerClick}
           onContextMenu={this.onGridContainerContextMenu}
           onMouseDown={this.onGridContainerMouseDown}
           onMouseMove={this.onSelectMouseMove}
@@ -899,7 +898,6 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         )}
-
       </Fragment>
     );
   }
