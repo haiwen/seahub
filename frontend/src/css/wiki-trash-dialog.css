@@ -4,10 +4,13 @@
 
 .trash-dialog .modal-header {
   align-items: center;
+  display: flex;
 }
 
-.trash-dialog .modal-header .clean {
+.trash-dialog .modal-header .but-contral {
   margin-left: auto;
+}
+.trash-dialog .modal-header .clean {
   height: 30px;
   line-height: 28px;
   padding: 0 0.5rem;

@@ -93,10 +93,12 @@ class WikiTrashDialog extends React.Component {
         <ModalHeader
           close={
             <>
-              {(isWikiAdmin && enableUserCleanTrash) &&
-                <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
-              }
-              <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
+              <div className="but-contral">
+                {(isWikiAdmin && enableUserCleanTrash) &&
+                  <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
+                }
+                <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
+              </div>
             </>
           }
         >
