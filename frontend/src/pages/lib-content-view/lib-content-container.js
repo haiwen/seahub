@@ -81,6 +81,7 @@ const propTypes = {
   isDirentDetailShow: PropTypes.bool.isRequired,
   selectedDirent: PropTypes.object,
   selectedDirentList: PropTypes.array.isRequired,
+  onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
@@ -305,6 +306,7 @@ class LibContentContainer extends React.Component {
                 isAllItemSelected={this.props.isAllDirentSelected}
                 onAllItemSelected={this.props.onAllDirentSelected}
                 selectedDirentList={this.props.selectedDirentList}
+                onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
                 onItemsMove={this.props.onItemsMove}
                 onItemsCopy={this.props.onItemsCopy}
                 onItemsDelete={this.props.onItemsDelete}

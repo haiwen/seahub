@@ -56,6 +56,7 @@
 }
 
 .dir-content-main {
+  position: relative;
   flex: 1 0 74.5%;
   display: flex;
   flex-direction: column;

@@ -46,6 +46,7 @@ class ViewFileToolbar extends React.Component {
   };
 
   onDropDownMouseMove = (e) => {
+    e.preventDefault();
     if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
       this.setState({
         isSubMenuShown: false

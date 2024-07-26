@@ -65,6 +65,7 @@ const propTypes = {
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
@@ -254,6 +255,7 @@ class DirColumnView extends React.Component {
               direntList={this.props.direntList}
               fullDirentList={this.props.fullDirentList}
               selectedDirentList={this.props.selectedDirentList}
+              onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
               onAddFile={this.props.onAddFile}
               onItemClick={this.props.onItemClick}
               onItemDelete={this.props.onItemDelete}
