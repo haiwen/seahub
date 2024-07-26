@@ -96,15 +96,13 @@ class DirentListItem extends React.Component {
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
+  componentDidUpdate(prevProps) {
+    const { isItemFreezed, activeDirent, dirent } = this.props;
+
+    if (prevProps.isItemFreezed !== isItemFreezed && !isItemFreezed) {
       this.setState({
         highlight: false,
-        isOperationShow: false,
-      }, () => {
-        if (nextProps.activeDirent && nextProps.activeDirent.name === nextProps.dirent.name) {
-          this.setState({ isOperationShow: true });
-        }
+        isOperationShow: activeDirent && activeDirent.name === dirent.name,
       });
     }
   }
@@ -192,7 +190,7 @@ class DirentListItem extends React.Component {
     // '<td>' is clicked
     e.stopPropagation();
     if (e.target.tagName == 'TD') {
-      this.props.onDirentClick(this.props.dirent);
+      this.props.onDirentClick(this.props.dirent, e);
     }
   };
 
@@ -682,7 +680,7 @@ class DirentListItem extends React.Component {
   };
 
   render() {
-    let { path, dirent, activeDirent } = this.props;
+    let { path, dirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';
     if (this.props.currentRepoInfo) {
@@ -695,10 +693,9 @@ class DirentListItem extends React.Component {
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    let isActive = (activeDirent && activeDirent.name === dirent.name) || dirent.isSelected;
+    let isActive = dirent.isSelected;
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
     trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
-    trClass += isActive ? 'tr-active' : '';
     trClass += isActive ? 'tr-active' : '';
 
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');

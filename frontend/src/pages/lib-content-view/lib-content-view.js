@@ -1360,6 +1360,7 @@ class LibContentView extends React.Component {
           return dirent;
         }),
         isDirentSelected: newSelectedDirentList.length > 0,
+        isAllDirentSelected: newSelectedDirentList.length === direntList.length,
         selectedDirentList: newSelectedDirentList,
         lastSelectedIndex: clickedIndex,
       });
@@ -1370,6 +1371,7 @@ class LibContentView extends React.Component {
           return dirent;
         }),
         isDirentSelected: false,
+        isAllDirentSelected: false,
         selectedDirentList: [],
         lastSelectedIndex: null,
       });
@@ -1414,7 +1416,6 @@ class LibContentView extends React.Component {
     let selectedDirentList = direntList.filter(item => {
       return item.isSelected;
     });
-
     if (selectedDirentList.length) {
       this.setState({ isDirentSelected: true });
       if (selectedDirentList.length === direntList.length) {
@@ -1441,29 +1442,20 @@ class LibContentView extends React.Component {
   };
 
   onAllDirentSelected = () => {
-    if (this.state.isAllDirentSelected) {
-      let direntList = this.state.direntList.map(item => {
-        item.isSelected = false;
+    this.setState(prevState => {
+      const isAllDirentSelected = !prevState.isAllDirentSelected;
+      const direntList = prevState.direntList.map(item => {
+        item.isSelected = isAllDirentSelected;
         return item;
       });
-      this.setState({
-        isDirentSelected: false,
-        isAllDirentSelected: false,
+
+      return {
+        isDirentSelected: isAllDirentSelected,
+        isAllDirentSelected: isAllDirentSelected,
         direntList: direntList,
-        selectedDirentList: [],
-      });
-    } else {
-      let direntList = this.state.direntList.map(item => {
-        item.isSelected = true;
-        return item;
-      });
-      this.setState({
-        isDirentSelected: true,
-        isAllDirentSelected: true,
-        direntList: direntList,
-        selectedDirentList: direntList,
-      });
-    }
+        selectedDirentList: isAllDirentSelected ? [...direntList] : []
+      };
+    });
   };
 
   onFileTagChanged = (dirent, direntPath) => {
