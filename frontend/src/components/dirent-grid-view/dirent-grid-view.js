@@ -469,11 +469,6 @@ class DirentGridView extends React.Component {
 
   onGridContainerContextMenu = (event) => {
     event.preventDefault();
-
-    const DIRENT_GRID_CONTAINER_MENU_ID = 'dirent-grid-container-menu';
-    const GRID_ITEM_CONTEXTMENU_ID = 'grid-item-contextmenu';
-    const DIRENTS_MENU_ID = 'dirents-menu';
-
     const hasCustomPermission = (action) => {
       const { isCustomPermission, customPermission } = Utils.getUserPermission(this.props.userPerm);
       if (isCustomPermission) {
@@ -536,12 +531,10 @@ class DirentGridView extends React.Component {
   onGridItemContextMenu = (event, dirent) => {
     if (this.props.selectedDirentList.length > 1) return;
     // Display menu items according to the current dirent permission
-    const id = 'grid-item-contextmenu';
     const menuList = this.getDirentItemMenuList(dirent, true);
+    const id = 'grid-item-contextmenu';
     this.handleContextClick(event, id, menuList, dirent);
-
     if (this.props.direntList.filter(item => item.isSelected).length > 1) return;
-
     this.props.onGridItemClick && this.props.onGridItemClick(dirent);
   };
 
@@ -581,7 +574,6 @@ class DirentGridView extends React.Component {
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-
     return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   };
 
