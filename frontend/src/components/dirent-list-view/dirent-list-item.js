@@ -505,7 +505,7 @@ class DirentListItem extends React.Component {
         return dragStartItemData;
       });
       selectedList = JSON.stringify(selectedList);
-      e.dataTransfer.setData('applicaiton/drag-item-info', selectedList);
+      e.dataTransfer.setData('application/drag-item-info', selectedList);
       return ;
     }
 
@@ -517,7 +517,7 @@ class DirentListItem extends React.Component {
     let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
     dragStartItemData = JSON.stringify(dragStartItemData);
 
-    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
+    e.dataTransfer.setData('application/drag-item-info', dragStartItemData);
   };
 
   onItemDragEnter = (e) => {
@@ -565,7 +565,7 @@ class DirentListItem extends React.Component {
     } else {
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
     if (Array.isArray(dragStartItemData)) { // move items
       let direntPaths = dragStartItemData.map(draggedItem => {

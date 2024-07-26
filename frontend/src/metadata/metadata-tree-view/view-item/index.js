@@ -92,7 +92,7 @@ const ViewItem = ({
     if (!canDrop) return false;
     const dragData = JSON.stringify({ type: 'sf-metadata-view', view_id: view._id });
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('applicaiton/drag-sf-metadata-view-info', dragData);
+    event.dataTransfer.setData('application/drag-sf-metadata-view-info', dragData);
   }, [canDrop, view]);
 
   const onDragEnter = useCallback((event) => {
@@ -114,7 +114,7 @@ const ViewItem = ({
     event.stopPropagation();
     setDropShow(false);
 
-    let dragData = event.dataTransfer.getData('applicaiton/drag-sf-metadata-view-info');
+    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view-info');
     if (!dragData) return;
     dragData = JSON.parse(dragData);
     if (dragData.type !== 'sf-metadata-view') return false;

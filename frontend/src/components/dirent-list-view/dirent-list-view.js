@@ -554,7 +554,7 @@ class DirentListView extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
 
     let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
