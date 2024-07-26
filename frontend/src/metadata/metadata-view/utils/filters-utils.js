@@ -188,7 +188,12 @@ export const getUpdatedFilterByColumn = (filters, filterIndex, column) => {
 export const getUpdatedFilterByPredicate = (filter, column, filterPredicate) => {
   let updatedFilter = Object.assign({}, filter, { filter_predicate: filterPredicate });
   let { type: columnType } = column;
-  if ([CellType.SINGLE_SELECT].includes(columnType)) {
+  if (columnType === CellType.CHECKBOX) {
+    updatedFilter.filter_term = false;
+    return updatedFilter;
+  }
+
+  if (columnType === CellType.SINGLE_SELECT) {
     if (ARRAY_PREDICATE[filterPredicate]) {
       if (ARRAY_PREDICATE[filter.filter_predicate] !== ARRAY_PREDICATE[filterPredicate]) {
         updatedFilter.filter_term = [];
