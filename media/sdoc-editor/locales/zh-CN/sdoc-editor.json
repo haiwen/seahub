@@ -561,5 +561,6 @@
   "the_past_month": "上个月",
   "the_past_year": "去年",
   "the_next_numbers_of_days": "今天之后的指定天数",
-  "the_past_numbers_of_days": "今天之前的指定天数"
+  "the_past_numbers_of_days": "今天之前的指定天数",
+  "Double_click_to_enter_edit_mode_and_adjust_field_width" : "双击可进入编辑模式并调整字段宽度"
 }
