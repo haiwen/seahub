@@ -136,9 +136,16 @@ class OrgGroups extends Component {
 
   changeGroupItem = (group) => {
     orgAdminAPI.orgAdminGroup2Department(orgID, group.id).then(res => {
-      let msg = gettext('Successfully change {name}');
-      msg = msg.replace('{name}', group.groupName);
-      toaster.success(msg);
+      let newGroupList = this.state.orgGroups.map(item => {
+        if (item.id == group.id) {
+          item = new OrgGroupInfo(res.data);
+        }
+        return item;
+      });
+      this.setState({
+        orgGroups: newGroupList
+      });
+      toaster.success(gettext('Successfully Change the group.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

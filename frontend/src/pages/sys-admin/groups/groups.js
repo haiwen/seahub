@@ -112,6 +112,15 @@ class Groups extends Component {
 
   changeGroup2Department = (groupID) => {
     systemAdminAPI.adminGroup2Department(groupID).then((res) => {
+      let newGroupList = this.state.groupList.map(item => {
+        if (item.id == groupID) {
+          item = res.data;
+        }
+        return item;
+      });
+      this.setState({
+        groupList: newGroupList
+      });
       toaster.success(gettext('Successfully Change the group.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

@@ -435,16 +435,6 @@ class AdminGroupToDeptView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        # send admin operation log signal
-        admin_op_detail = {
-            "id": group_id,
-            "name": group.group_name,
-            "from": old_owner,
-            "to": 'system admin',
-        }
-        admin_operation.send(sender=None, admin_name=request.user.username,
-                             operation=GROUP_TRANSFER, detail=admin_op_detail)
-
+        
         group_info = get_group_info(group_id)
         return Response(group_info)
