@@ -48,4 +48,4 @@ def init_metadata(metadata_server_api):
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.file_name.to_dict())
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.is_dir.to_dict())
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.file_type.to_dict())
-
+    metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.location.to_dict())
