@@ -28,13 +28,12 @@ const Cell = React.memo(({
   const className = useMemo(() => {
     const { type } = column;
     const canEditable = window.sfMetadataContext.canModifyCell(column);
-    return classnames('sf-metadata-result-table-cell', `sf-metadata-result-table-${type}-cell`, {
+    return classnames('sf-metadata-result-table-cell', `sf-metadata-result-table-${type}-cell`, highlightClassName, {
       'table-cell-uneditable': !canEditable || !TABLE_SUPPORT_EDIT_TYPE_MAP[type],
-      [highlightClassName]: highlightClassName,
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
-      // 'draging-file-to-cell': ,
+      // 'dragging-file-to-cell': ,
       // 'row-comment-cell': ,
     });
   }, [column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected]);

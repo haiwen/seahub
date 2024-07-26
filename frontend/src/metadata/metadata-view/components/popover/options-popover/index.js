@@ -157,7 +157,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     <>
       <CustomizePopover
         target={target}
-        className="sf-metadata-edit-column-options"
+        className="sf-metadata-edit-column-options-popover"
         canHide={!deletingOptionId}
         hide={onToggle}
         hideWithEsc={onToggle}

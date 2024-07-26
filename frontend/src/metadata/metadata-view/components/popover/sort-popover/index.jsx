@@ -245,7 +245,7 @@ class SortPopover extends Component {
         target={target}
         fade={false}
         hideArrow={true}
-        className="sort-popover"
+        className="sf-metadata-sort-popover"
         boundariesElement={document.body}
       >
         <div ref={ref => this.sortPopoverRef = ref} onClick={this.onPopoverInsideClick}>
@@ -264,7 +264,7 @@ class SortPopover extends Component {
             />
           }
           {(this.isNeedSubmit() && !readonly) && (
-            <div className='sort-popover-footer'>
+            <div className='sf-metadata-sort-popover-footer'>
               <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
               <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{gettext('Submit')}</Button>
             </div>

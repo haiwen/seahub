@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, lang, mediaUrl } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
 
 const propTypes = {
@@ -54,13 +54,8 @@ class DirColumnFile extends React.Component {
 
     if (this.props.content === '__sf-metadata') {
       const { repoID, currentRepoInfo, metadataViewId } = this.props;
-      window.sfMetadata = {
-        siteRoot,
-        lang,
-        mediaUrl,
-      };
 
-      return (<SeafileMetadata repoID={repoID} currentRepoInfo={currentRepoInfo} viewID={metadataViewId} />);
+      return (<SeafileMetadata mediaUrl={mediaUrl} repoID={repoID} repoInfo={currentRepoInfo} viewID={metadataViewId} />);
     }
 
     return (

@@ -1,4 +1,4 @@
-.filter-popover-footer {
+.sf-metadata-filter-popover-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -25,6 +25,6 @@
   fill: #c2c2c2;
 }
 
-.filter-popover .popover-add-tool.disabled {
+.sf-metadata-filter-popover .popover-add-tool.disabled {
   color: #c2c2c2;
 }

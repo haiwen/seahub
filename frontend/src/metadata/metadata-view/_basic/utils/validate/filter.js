@@ -8,6 +8,7 @@ import {
   FILTER_ERR_MSG,
 } from '../../constants/filter';
 import { isDateColumn } from '../column/date';
+import { getColumnOptions } from '../column';
 
 const TERM_TYPE_MAP = {
   NUMBER: 'number',
@@ -15,6 +16,11 @@ const TERM_TYPE_MAP = {
   BOOLEAN: 'boolean',
   ARRAY: 'array',
 };
+
+const PREDICATES_REQUIRE_ARRAY_TERM = [
+  FILTER_PREDICATE_TYPE.IS_ANY_OF,
+  FILTER_PREDICATE_TYPE.IS_NONE_OF,
+];
 
 const TEXT_COLUMN_TYPES = [CellType.TEXT, CellType.FILE_NAME];
 
@@ -142,7 +148,7 @@ class ValidateFilter {
     if (CHECK_EMPTY_PREDICATES.includes(predicate)) {
       return true;
     }
-    if (array_type === CellType.SINGLE_SELECT || array_type === CellType.DEPARTMENT_SINGLE_SELECT) {
+    if (array_type === CellType.SINGLE_SELECT) {
       return this.validatePredicate(predicate, { type: CellType.MULTIPLE_SELECT });
     }
     if (COLLABORATOR_COLUMN_TYPES.includes(array_type)) {
@@ -223,8 +229,12 @@ class ValidateFilter {
   static isValidTerm(term, predicate, modifier, filterColumn) {
     switch (filterColumn.type) {
       case CellType.TEXT:
+      case CellType.GEOLOCATION:
       case CellType.FILE_NAME: {
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
+      }
+      case CellType.NUMBER: {
+        return this.isValidTermType(term, TERM_TYPE_MAP.NUMBER);
       }
 
       case CellType.CHECKBOX:
@@ -243,6 +253,24 @@ class ValidateFilter {
           return this.isValidTermType(term, TERM_TYPE_MAP.NUMBER);
         }
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
+      }
+      case CellType.SINGLE_SELECT: {
+        const options = getColumnOptions(filterColumn);
+        if (PREDICATES_REQUIRE_ARRAY_TERM.includes(predicate)) {
+          if (!this.isValidTermType(term, TERM_TYPE_MAP.ARRAY)) {
+            return false;
+          }
+
+          // contains deleted option(s)
+          return this.isValidSelectedOptions(term, options);
+        }
+
+        if (!this.isValidTermType(term, TERM_TYPE_MAP.STRING)) {
+          return false;
+        }
+
+        // invalid filter_term if selected option is deleted
+        return !!options.find((option) => term === option.id);
       }
       default: {
         return false;

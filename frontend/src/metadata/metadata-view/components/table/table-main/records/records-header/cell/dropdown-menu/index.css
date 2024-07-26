@@ -1,3 +1,7 @@
+.sf-metadata-column-dropdown-menu {
+  margin-top: 20px;
+}
+
 .sf-metadata-column-dropdown-menu .dropdown-item .sf-metadata-icon {
   margin-right: 10px;
   font-size: 14px;
@@ -19,4 +23,19 @@
 
 .sf-metadata-column-dropdown-menu .dropdown-toggle:hover::after {
   color: #fff;
+}
+
+.sf-metadata-column-dropdown-menu .dropdown-item.disabled,
+.sf-metadata-column-dropdown-menu .dropdown-item:disabled {
+  pointer-events: unset !important;
+}
+
+.sf-metadata-column-dropdown-menu .disabled.dropdown-item:hover {
+  background-color: unset;
+  cursor: default;
+  color: #c2c2c2;
+}
+
+.sf-metadata-column-dropdown-menu .disabled.dropdown-item .sf-metadata-icon {
+  fill: #c2c2c2;
 }

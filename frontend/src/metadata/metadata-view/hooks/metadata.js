@@ -12,7 +12,6 @@ export const MetadataProvider = ({
   children,
   repoID,
   viewID,
-  currentRepoInfo,
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -37,11 +36,11 @@ export const MetadataProvider = ({
     setLoading(true);
     // init context
     const context = new Context();
+    window.sfMetadata = {};
     window.sfMetadataContext = context;
     window.sfMetadataContext.init({ otherSettings: params });
     window.sfMetadataContext.setSetting('viewID', viewID);
     window.sfMetadataContext.setSetting('repoID', repoID);
-    window.sfMetadataContext.setSetting('currentRepoInfo', currentRepoInfo);
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
@@ -59,6 +58,7 @@ export const MetadataProvider = ({
     const unsubscribeUpdateRows = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
 
     return () => {
+      window.sfMetadata = {};
       window.sfMetadataContext.destroy();
       window.sfMetadataStore.destroy();
       unsubscribeServerTableChanged();
@@ -67,7 +67,7 @@ export const MetadataProvider = ({
       unsubscribeUpdateRows();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, viewID, currentRepoInfo]);
+  }, [repoID, viewID]);
 
   return (
     <MetadataContext.Provider value={{ isLoading, metadata, store: storeRef.current }}>

@@ -1,0 +1,49 @@
+.sf-metadata-selector-single-select .selected-option .single-select-option,
+.sf-metadata-selector-multiple-select .selected-option .multiple-select-option {
+  display: inline-block;
+  margin: 0;
+}
+
+.sf-metadata-filters .filters-list .single-select-option,
+.sf-metadata-filters .filters-list .multiple-select-option {
+  border-radius: 10px;
+  display: block;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0;
+  max-width: 150px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: -webkit-min-content;
+  width: min-content;
+}
+
+.sf-metadata-selector-single-select .option,
+.sf-metadata-selector-multiple-select .option {
+  height: 30px;
+  padding: 0 10px;
+}
+
+.sf-metadata-selector-single-select .option:hover,
+.sf-metadata-selector-multiple-select .option:hover {
+  background-color: #f7f7f7;
+  color: #212529;
+}
+
+.sf-metadata-select .select-placeholder {
+  color: #868E96;
+}
+
+.sf-metadata-selector-multiple-select.sf-metadata-select .selected-option-show,
+.sf-metadata-selector-single-select.sf-metadata-select .selected-option-show {
+  text-overflow: clip;
+}
+
+.sf-metadata-selector-single-select .select-option-name,
+.sf-metadata-selector-multiple-select .select-option-name {
+  margin-top: 5px;
+  justify-content: space-between;
+}

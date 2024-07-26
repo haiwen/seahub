@@ -1,8 +1,10 @@
 import React, { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
-import { FILTER_PREDICATE_TYPE } from '../../../../_basic';
-import { gettext } from '../../../../utils';
+import { FILTER_PREDICATE_TYPE } from '../../../../../../_basic';
+import { gettext } from '../../../../../../utils';
+
+import './index.css';
 
 const CollaboratorFilter = ({ isLocked, filterIndex, filterTerm, collaborators, placeholder, filter_predicate, onSelectCollaborator }) => {
   const supportMultipleSelectOptions = useMemo(() => {
@@ -73,7 +75,7 @@ const CollaboratorFilter = ({ isLocked, filterIndex, filterTerm, collaborators, 
 
   return (
     <CustomizeSelect
-      className="selector-collaborator"
+      className="sf-metadata-selector-collaborator"
       value={selectValue ? { label: selectValue } : {}}
       onSelectOption={onSelectCollaborator}
       options={options}

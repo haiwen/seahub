@@ -19,6 +19,12 @@ export const CollaboratorsProvider = ({
     setCollaborators(store?.collaborators || []);
   }, [store?.collaborators]);
 
+  useEffect(() => {
+    if (!window.sfMetadata) return;
+    window.sfMetadata.collaborators = collaborators;
+    window.sfMetadata.collaboratorsCache = collaboratorsCache;
+  }, [collaborators, collaboratorsCache]);
+
   const updateCollaboratorsCache = useCallback((user) => {
     const newCollaboratorsCache = { ...collaboratorsCacheRef.current, [user.email]: user };
     collaboratorsCacheRef.current = newCollaboratorsCache;

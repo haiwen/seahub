@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledPopover } from 'reactstrap';
 import classnames from 'classnames';
-import { CellType, DEFAULT_DATE_FORMAT } from '../../../_basic';
+import { CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../_basic';
 import { gettext } from '../../../utils';
 import ObjectUtils from '../../../utils/object-utils';
 import { ValidateColumnFormFields } from './utils';
@@ -11,6 +11,7 @@ import { useMetadata } from '../../../hooks';
 import Name from './name';
 import Type from './type';
 import Data from './data';
+import { getDefaultFileStatusOptions } from '../../../utils/column-utils';
 
 import './index.css';
 
@@ -72,6 +73,10 @@ const ColumnPopover = ({ target, onChange }) => {
           data = { options: [] };
         } else if (column.type === CellType.DATE) {
           data = { format: DEFAULT_DATE_FORMAT };
+        }
+      } else {
+        if (column.type === CellType.SINGLE_SELECT && column.key === PRIVATE_COLUMN_KEY.FILE_STATUS) {
+          data = { options: getDefaultFileStatusOptions() };
         }
       }
     }
