@@ -117,7 +117,7 @@ class DirentGridItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
+    e.dataTransfer.setData('application/drag-item-info', dragStartItemData);
   };
 
   onGridItemDragEnter = (e) => {
@@ -152,7 +152,7 @@ class DirentGridItem extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('applicaiton/drag-item-info');
+    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
     dragStartItemData = JSON.parse(dragStartItemData);
     let { nodeDirent, nodeParentPath } = dragStartItemData;
     let dropItemData = this.props.dirent;
