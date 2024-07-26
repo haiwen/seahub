@@ -264,14 +264,11 @@ class OrgAdminGroupToDeptView(APIView):
             error_msg = 'Organization %s not found.' % org_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
         group_id = int(group_id)
         if get_org_id_by_group(group_id) != org_id:
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        group = ccnet_api.get_group(group_id)
-        old_owner = group.creator_name
-
+        
         try:
             # group to department
             ccnet_db = CcnetDB()
@@ -282,18 +279,7 @@ class OrgAdminGroupToDeptView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # send admin operation log signal
-        admin_op_detail = {
-            "id": group_id,
-            "name": group.group_name,
-            "from": old_owner,
-            "to": 'system admin',
-        }
-        admin_operation.send(sender=None, admin_name=request.user.username,
-                             operation=GROUP_TRANSFER, detail=admin_op_detail)
-
         group = ccnet_api.get_group(group_id)
-
         group_info = {
             "id": group.id,
             "group_name": group.group_name,

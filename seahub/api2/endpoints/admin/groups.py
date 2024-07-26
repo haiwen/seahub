@@ -424,7 +424,6 @@ class AdminGroupToDeptView(APIView):
         if not group:
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        old_owner = group.creator_name
 
         # group to department
         try:
