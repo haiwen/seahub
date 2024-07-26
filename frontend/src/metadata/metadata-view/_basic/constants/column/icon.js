@@ -14,6 +14,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.LONG_TEXT]: 'long-text',
   [CellType.SINGLE_SELECT]: 'single-select',
   [CellType.NUMBER]: 'number',
+  [CellType.GEOLOCATION]: 'location',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -30,6 +31,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.LONG_TEXT]: 'Long text',
   [CellType.SINGLE_SELECT]: 'Single select',
   [CellType.NUMBER]: 'Number',
+  [CellType.GEOLOCATION]: 'Geolocation',
 };
 
 export {

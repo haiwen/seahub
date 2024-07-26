@@ -147,4 +147,6 @@ export {
   debounce,
   throttle,
   isRegExpression,
+  getGeolocationDisplayString,
+  getGeolocationByGranularity,
 } from './utils';

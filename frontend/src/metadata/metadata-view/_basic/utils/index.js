@@ -19,6 +19,8 @@ export {
   getCollaboratorsName,
   getCollaboratorEmailsByNames,
   getLongtextDisplayString,
+  getGeolocationDisplayString,
+  getGeolocationByGranularity,
 } from './cell';
 export {
   getColumnType,

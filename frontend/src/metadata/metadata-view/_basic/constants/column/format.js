@@ -75,6 +75,15 @@ const DATE_DEFAULT_TYPES = {
   DAYS_AFTER: 'days_after',
 };
 
+const GEOLOCATION_FORMAT = {
+  LNG_LAT: 'lng_lat',
+  COUNTRY_REGION: 'country_region',
+  PROVINCE: 'province',
+  PROVINCE_CITY: 'province_city',
+  PROVINCE_CITY_DISTRICT: 'province_city_district',
+  MAP_SELECTION: 'map_selection',
+};
+
 export {
   COLLABORATOR_COLUMN_TYPES,
   DATE_COLUMN_OPTIONS,
@@ -89,4 +98,5 @@ export {
   NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP,
   MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP,
   SINGLE_CELL_VALUE_COLUMN_TYPE_MAP,
+  GEOLOCATION_FORMAT,
 };
