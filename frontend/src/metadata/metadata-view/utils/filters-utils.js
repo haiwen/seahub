@@ -188,6 +188,21 @@ export const getUpdatedFilterByColumn = (filters, filterIndex, column) => {
 export const getUpdatedFilterByPredicate = (filter, column, filterPredicate) => {
   let updatedFilter = Object.assign({}, filter, { filter_predicate: filterPredicate });
   let { type: columnType } = column;
+  if ([CellType.SINGLE_SELECT].includes(columnType)) {
+    if (ARRAY_PREDICATE[filterPredicate]) {
+      if (ARRAY_PREDICATE[filter.filter_predicate] !== ARRAY_PREDICATE[filterPredicate]) {
+        updatedFilter.filter_term = [];
+      }
+    } else if (STRING_PREDICATE[filterPredicate]) {
+      if (STRING_PREDICATE[filter.filter_predicate] !== STRING_PREDICATE[filterPredicate]) {
+        updatedFilter.filter_term = '';
+      }
+    } else {
+      updatedFilter.filter_term = '';
+    }
+    return updatedFilter;
+  }
+
   if ([CellType.CREATOR, CellType.LAST_MODIFIER].includes(columnType)) {
     if (STRING_PREDICATE[filter.filter_predicate] !== STRING_PREDICATE[filterPredicate]
       || filterPredicate === FILTER_PREDICATE_TYPE.INCLUDE_ME
