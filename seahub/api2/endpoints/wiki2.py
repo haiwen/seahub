@@ -571,6 +571,13 @@ class Wiki2PagesView(APIView):
         id_set = get_all_wiki_ids(navigation)
         target_page_id = request.data.get('target_id', '')
         moved_page_id = request.data.get('moved_id', '')
+        move_position = request.data.get('move_position', '')
+        # check arguments
+        valid_move_positions = ['move_below', 'move_above', 'move_into']
+        if move_position not in valid_move_positions:
+            error_msg = 'Invalid move_position value: ' + move_position
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         if (target_page_id not in id_set) or (moved_page_id not in id_set):
             error_msg = 'Page not found'
             logger.error(error_msg)
@@ -583,7 +590,7 @@ class Wiki2PagesView(APIView):
             logger.error(error_msg)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        move_nav(navigation, target_page_id, moved_nav)
+        move_nav(navigation, target_page_id, moved_nav, move_position)
         wiki_config['navigation'] = navigation
         wiki_config = json.dumps(wiki_config)
 

@@ -244,14 +244,23 @@ def pop_nav(navigation, page_id):
     return None
 
 
-def move_nav(navigation, target_id, moved_nav):
-    for nav in navigation:
+def move_nav(navigation, target_id, moved_nav, move_position):
+    def move_item(nav_list, nav_index, moved_nav, move_position):
+        if move_position == 'move_below':
+            nav_list.insert(nav_index + 1, moved_nav)
+        elif move_position == 'move_above':
+            nav_list.insert(nav_index, moved_nav)
+
+    for nav_index, nav in enumerate(navigation):
         if nav['id'] == target_id:
-            if 'children' in nav:
-                nav['children'].insert(0, moved_nav)
-            else:
-                nav['children'] = [moved_nav]
+            if move_position == 'move_below' or move_position == 'move_above':
+                move_item(navigation, nav_index, moved_nav, move_position)
+            if move_position == 'move_into':
+                if 'children' in nav:
+                    nav['children'].append(moved_nav)
+                else:
+                    nav['children'] = [moved_nav]
             return
         if 'children' in nav:
-            move_nav(nav['children'], target_id, moved_nav)
+            move_nav(nav['children'], target_id, moved_nav, move_position)
 

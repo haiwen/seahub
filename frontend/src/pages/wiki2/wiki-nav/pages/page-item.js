@@ -143,6 +143,9 @@ class PageItem extends Component {
         addPageInside={this.props.addPageInside}
         getFoldState={this.props.getFoldState}
         toggleExpand={this.props.toggleExpand}
+        setClassName={this.props.setClassName}
+        getClassName={this.props.getClassName}
+        layerDragProps={this.props.layerDragProps}
       />
     );
   };
@@ -157,17 +160,32 @@ class PageItem extends Component {
     this.props.addPageInside(Object.assign({ parentPageId: this.props.page.id }, newPage));
   };
 
-  render() {
-    const {
-      connectDragSource, connectDragPreview, connectDropTarget, isOver, canDrop, isDragging,
-      page, pagesLength, isEditMode, isOnlyOnePage, pathStr,
-    } = this.props;
-    const { isShowNameEditor, pageName, isSelected } = this.state;
+  getPageClassName = () => {
+    const { isOver, canDrop, isEditMode, layerDragProps } = this.props;
     const isOverPage = isOver && canDrop;
+    if (!isOverPage || ! layerDragProps || !layerDragProps.clientOffset) {
+      return classnames('wiki-page-item', { 'selected-page': this.state.isSelected }, { 'readonly': !isEditMode });
+    }
+    let y = layerDragProps.clientOffset.y;
+    let top = this.pageItemRef.getBoundingClientRect().y;
+    const className = classnames(
+      'wiki-page-item',
+      { 'dragged-page-over': (top + 10 < y && y < top + 30) },
+      { 'page-can-drop-top': (top + 10 > y) },
+      { 'page-can-drop-bottom': (top + 30 < y) },
+      { 'selected-page': this.state.isSelected },
+      { 'readonly': !isEditMode },
+    );
+    this.props.setClassName(className);
+    return className;
+  };
+
+  render() {
+    const { connectDragSource, connectDragPreview, connectDropTarget,
+      page, pagesLength, isEditMode, isOnlyOnePage, pathStr } = this.props;
+    const { isShowNameEditor, pageName, isSelected } = this.state;
     if (isSelected) this.setDocUuid(page.docUuid);
 
-    let pageCanDropTop = isOverPage && isDragging;
-    let pageCanDrop = isOverPage && !isDragging;
     let navItemId = `page-editor-${page.id}`;
     let fn = isEditMode ? connectDragSource : (argu) => { argu; };
     let childNumber = Array.isArray(page.children) ? page.children.length : 0;
@@ -180,12 +198,7 @@ class PageItem extends Component {
           fn(connectDropTarget(
             connectDragPreview(
               <div
-                className={classnames('wiki-page-item',
-                  { 'selected-page': isSelected },
-                  { 'page-can-drop-top': pageCanDropTop },
-                  { 'page-can-drop': pageCanDrop },
-                  { 'readonly': !isEditMode },
-                )}
+                className={this.getPageClassName()}
                 ref={ref => this.pageItemRef = ref}
                 onMouseEnter={this.onMouseEnter}
                 onMouseMove={this.onMouseMove}
@@ -296,6 +309,8 @@ PageItem.propTypes = {
   getFoldState: PropTypes.func,
   toggleExpand: PropTypes.func,
   updateWikiConfig: PropTypes.func,
+  getClassName: PropTypes.func,
+  setClassName: PropTypes.func,
 };
 
 export default PageItem;
