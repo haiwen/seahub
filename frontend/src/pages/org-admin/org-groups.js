@@ -343,7 +343,7 @@ class GroupItem extends React.Component {
           }
           {this.state.isChangeDialogOpen &&
             <ChangeGroupDialog
-              groupName={group.name}
+              groupName={group.groupName}
               changeGroup2Department={this.toggleChange}
               toggleDialog={this.toggleChangeDialog} />
           }
