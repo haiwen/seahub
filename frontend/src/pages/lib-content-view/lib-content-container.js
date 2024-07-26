@@ -191,6 +191,7 @@ class LibContentContainer extends React.Component {
           }
           <div className="cur-view-path d-block" style={curViewPathStyle}>
             <CurDirPath
+              currentRepoInfo={this.props.currentRepoInfo}
               repoID={repoID}
               repoName={this.props.currentRepoInfo.repo_name}
               repoEncrypted={this.props.repoEncrypted}
@@ -223,6 +224,7 @@ class LibContentContainer extends React.Component {
               onFileTagChanged={this.props.onToolbarFileTagChanged}
               repoTags={this.props.repoTags}
               metadataViewId={this.props.metadataViewId}
+              onItemMove={this.props.onItemMove}
             />
             <ToolbarForSelectedDirents
               repoID={this.props.repoID}
