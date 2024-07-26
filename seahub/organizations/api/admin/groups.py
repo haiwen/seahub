@@ -17,7 +17,6 @@ from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.utils.db_api import SeafileDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_TRANSFER
@@ -276,9 +275,7 @@ class OrgAdminGroupToDeptView(APIView):
         try:
             # group to department
             ccnet_db = CcnetDB()
-            seafile_db = SeafileDB()
             ccnet_db.change_groups_into_departments(group_id)
-            seafile_db.change_groups_into_departments(group_id, org_id)
             seafile_api.set_group_quota(group_id, -2)
         except Exception as e:
             logger.error(e)

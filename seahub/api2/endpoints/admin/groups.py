@@ -27,7 +27,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.utils.db_api import SeafileDB
 
 
 logger = logging.getLogger(__name__)
@@ -430,9 +429,7 @@ class AdminGroupToDeptView(APIView):
         # group to department
         try:
             ccnet_db = CcnetDB()
-            seafile_db = SeafileDB()
             ccnet_db.change_groups_into_departments(group_id)
-            seafile_db.change_groups_into_departments(group_id)
             seafile_api.set_group_quota(group_id, -2)
         except Exception as e:
             logger.error(e)
