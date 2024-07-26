@@ -130,7 +130,7 @@
 }
 
 .tree-node-drop {
-  background-color: rgb(255, 239, 178);
+  background-color: #FFEFB2;
 }
 
 .tree-node-icon {
@@ -280,6 +280,10 @@
 
 .dir-view-path .path-item-dropdown-toggle {
   color: #666;
+}
+
+.dir-view-path .path-item-drop{
+  background-color: #FFEFB2;
 }
 
 .dir-view-path .path-split {

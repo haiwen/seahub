@@ -38,6 +38,13 @@ const propTypes = {
 
 class DirPath extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropTargetPath: '',
+    };
+  }
+
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
@@ -54,6 +61,26 @@ class DirPath extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.onTabNavClick(tabName, id);
+  };
+
+  onDragEnter = (e) => {
+    e.preventDefault();
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    this.setState({
+      dropTargetPath: e.target.dataset.path,
+    });
+  };
+
+  onDragLeave = (e) => {
+    e.preventDefault();
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    this.setState({
+      dropTargetPath: '',
+    });
   };
 
   onDragOver = (e) => {
@@ -79,6 +106,9 @@ class DirPath extends React.Component {
 
     let selectedPath = Utils.getEventData(e, 'path');
     this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    this.setState({
+      dropTargetPath: '',
+    });
   };
 
   turnPathToLink = (path) => {
@@ -153,7 +183,16 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <span className="path-item" data-path={nodePath} onClick={this.onPathClick} onDragOver={this.onDragOver} onDrop={this.onDrop} role="button">{item}</span>
+            <span
+              className={`path-item ${nodePath === this.state.dropTargetPath ? 'path-item-drop' : ''}`}
+              data-path={nodePath} onClick={this.onPathClick}
+              onDragEnter={this.onDragEnter}
+              onDragLeave={this.onDragLeave}
+              onDragOver={this.onDragOver}
+              onDrop={this.onDrop}
+              role="button">
+              {item}
+            </span>
           </Fragment>
         );
       }
