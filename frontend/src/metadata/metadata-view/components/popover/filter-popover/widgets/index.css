@@ -226,8 +226,8 @@
 
 .filters-list .multiple-check-icon .sf-metadata-icon-check-mark,
 .filters-list .collaborator-check-icon .sf-metadata-icon-check-mark {
+  fill: #798d99;
   font-size: 12px;
-  color: #798d99;
 }
 
 .user-select-item,

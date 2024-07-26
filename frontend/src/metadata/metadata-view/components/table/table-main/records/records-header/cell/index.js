@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEYS } from '../../../../../../_basic';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../../../../_basic';
 import ResizeColumnHandle from './resize-column-handle';
 import { EVENT_BUS_TYPE } from '../../../../../../constants';
 import DropdownMenu from './dropdown-menu';
@@ -28,7 +28,6 @@ const Cell = ({
 
   const canEditColumnInfo = useMemo(() => {
     if (isHideTriangle) return false;
-    if (PRIVATE_COLUMN_KEYS.includes(column.key)) return false;
     return window.sfMetadataContext.canModifyColumn(column);
   }, [isHideTriangle, column]);
 

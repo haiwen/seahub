@@ -1,5 +1,6 @@
 import metadataAPI from '../api';
-import { UserService, LocalStorage } from './_basic';
+import { UserService, LocalStorage, PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS,
+  EDITABLE_PRIVATE_COLUMN_KEYS, PREDEFINED_COLUMN_KEYS } from './_basic';
 import EventBus from '../../components/common/event-bus';
 import { username } from '../../utils/constants';
 
@@ -12,6 +13,7 @@ class Context {
     this.userService = null;
     this.eventBus = null;
     this.hasInit = false;
+    this.permission = 'r';
   }
 
   async init({ otherSettings }) {
@@ -21,7 +23,7 @@ class Context {
     this.settings = otherSettings || {};
 
     // init metadataAPI
-    const { mediaUrl } = this.settings;
+    const { mediaUrl, repoInfo } = this.settings;
     this.metadataAPI = metadataAPI;
 
     // init localStorage
@@ -34,6 +36,8 @@ class Context {
     const eventBus = new EventBus();
     this.eventBus = eventBus;
 
+    this.permission = repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw';
+
     this.hasInit = true;
   }
 
@@ -44,6 +48,7 @@ class Context {
     this.userService = null;
     this.eventBus = null;
     this.hasInit = false;
+    this.permission = 'r';
   };
 
   getSetting = (key) => {
@@ -81,22 +86,46 @@ class Context {
     return this.metadataAPI.getView(repoID, viewId);
   };
 
+  getPermission = () => {
+    return this.permission;
+  };
+
   canModifyCell = (column) => {
+    if (this.permission === 'r') return false;
     const { editable } = column;
     if (!editable) return false;
     return true;
   };
 
   canModifyRow = (row) => {
+    if (this.permission === 'r') return false;
     return true;
   };
 
   canModifyColumn = (column) => {
+    if (this.permission === 'r') return false;
+    if (PRIVATE_COLUMN_KEYS.includes(column.key) && !EDITABLE_PRIVATE_COLUMN_KEYS.includes(column.key)) return false;
     return true;
   };
 
-  getPermission = () => {
-    return 'rw';
+  canRenameColumn = (column) => {
+    if (this.permission === 'r') return false;
+    if (PRIVATE_COLUMN_KEYS.includes(column.key)) return false;
+    return true;
+  };
+
+  canModifyColumnData = (column) => {
+    if (this.permission === 'r') return false;
+    const { key } = column;
+    if (PRIVATE_COLUMN_KEYS.includes(key)) return EDITABLE_DATA_PRIVATE_COLUMN_KEYS.includes(key);
+    return true;
+  };
+
+  canDeleteColumn = (column) => {
+    if (this.permission === 'r') return false;
+    const { key } = column;
+    if (PRIVATE_COLUMN_KEYS.includes(key)) return PREDEFINED_COLUMN_KEYS.includes(key);
+    return true;
   };
 
   getCollaboratorsFromCache = () => {

@@ -4,7 +4,6 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem as DefaultDropdown
 import classnames from 'classnames';
 import { ModalPortal, Icon } from '@seafile/sf-metadata-ui-component';
 import { isMobile, gettext } from '../../../../../../../utils';
-import { isFrozen } from '../../../../../../../utils/column-utils';
 import DropdownItem from './dropdown-item';
 import { CellType, DEFAULT_DATE_FORMAT, getDateDisplayString } from '../../../../../../../_basic';
 import { RenamePopover, OptionsPopover } from '../../../../../../popover';
@@ -153,15 +152,12 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
   }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu]);
 
   const renderDropdownMenu = useCallback(() => {
-    let menuStyle = { transform: 'none' };
     const { type } = column;
-    if (!isFrozen(column)) {
-      menuStyle['top'] = -5; // - (container padding + menu margin)
-      menuStyle['left'] = - (column.width - 30); // column width - container width - padding
-    }
-    const canModifyColumnData = window.sfMetadataContext.canModifyColumn(column);
+    const canModifyColumnData = window.sfMetadataContext.canModifyColumnData(column);
+    const canDeleteColumn = window.sfMetadataContext.canDeleteColumn(column);
+    const canRenameColumn = window.sfMetadataContext.canRenameColumn(column);
     return (
-      <DropdownMenu style={menuStyle} ref={menuRef} className="sf-metadata-column-dropdown-menu">
+      <DropdownMenu ref={menuRef} className="sf-metadata-column-dropdown-menu">
         <div ref={dropdownDomRef}>
           {type === CellType.SINGLE_SELECT && (
             <>
@@ -200,7 +196,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
             <DefaultDropdownItem key="divider-item" divider />
           )}
           <DropdownItem
-            disabled={!canModifyColumnData}
+            disabled={!canRenameColumn}
             target="sf-metadata-rename-column"
             iconName="rename"
             title={gettext('Rename Column')}
@@ -209,7 +205,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
             onMouseEnter={hideSubMenu}
           />
           <DropdownItem
-            disabled={!canModifyColumnData}
+            disabled={!canDeleteColumn}
             target="sf-metadata-delete-column"
             iconName="delete"
             title={gettext('Delete Column')}

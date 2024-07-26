@@ -255,26 +255,25 @@ const getFileTypeColumnData = (column) => {
     '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142', id: '_audio' },
     '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5', id: '_code' },
   };
-
   let newData = { ...data };
-  newData.options = Array.isArray(newData.options) ? newData.options.map(o => {
-    return { ..._OPTIONS[o.name] };
-  }) : Object.keys(_OPTIONS);
+  newData.options = Array.isArray(data.options) ? data.options.map(o => {
+    return _OPTIONS[o.name];
+  }) : Object.values(_OPTIONS);
   return newData;
+};
+
+export const getDefaultFileStatusOptions = () => {
+  return [
+    { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428', id: '_draft' },
+    { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428', id: '_in_review' },
+    { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
+  ];
 };
 
 const getFileStatusColumnData = (column) => {
   const { data } = column;
-  const _OPTIONS = {
-    '_draft': { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428', id: '_draft' },
-    '_in_review': { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428', id: '_in_review' },
-    '_done': { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
-  };
-
   let newData = { ...data };
-  newData.options = Array.isArray(newData.options) ? newData.options.map(o => {
-    return { ..._OPTIONS[o.name] };
-  }) : Object.keys(_OPTIONS);
+  newData.options = Array.isArray(data?.options) ? data.options : getDefaultFileStatusOptions();
   return newData;
 };
 
@@ -305,7 +304,6 @@ export const normalizeColumns = (columns) => {
       type: columnType,
       name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
-      editable: !key.startsWith('_') && columnType !== CellType.LONG_TEXT
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];
@@ -332,7 +330,6 @@ export function canEdit(col, record, enableCellSelect) {
   if (col.editable != null && typeof (col.editable) === 'function') {
     return enableCellSelect === true && col.editable(record);
   }
-  console.log(col);
   return enableCellSelect === true && !!col.editable;
 }
 

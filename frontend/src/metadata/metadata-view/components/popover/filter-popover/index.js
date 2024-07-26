@@ -155,7 +155,7 @@ class FilterPopover extends Component {
         target={target}
         fade={false}
         hideArrow={true}
-        className="filter-popover"
+        className="sf-metadata-filter-popover"
         boundariesElement={document.body}
       >
         {({ scheduleUpdate }) => (
@@ -180,7 +180,7 @@ class FilterPopover extends Component {
               addIconClassName="popover-add-icon"
             />
             {this.isNeedSubmit() && (
-              <div className='filter-popover-footer'>
+              <div className='sf-metadata-filter-popover-footer'>
                 <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
                 <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitFilters}>{gettext('Submit')}</Button>
               </div>

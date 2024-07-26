@@ -57,7 +57,7 @@ const FileNameEditor = ({ column, record, onCommitCancel }) => {
   if (fileType === 'image') {
     const fileExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
     const isGIF = fileExt === 'gif';
-    const useThumbnail = window.sfMetadataContext.getSetting('currentRepoInfo')?.encrypted;
+    const useThumbnail = window.sfMetadataContext.getSetting('repoInfo')?.encrypted;
     let src = '';
     if (useThumbnail && !isGIF) {
       src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;

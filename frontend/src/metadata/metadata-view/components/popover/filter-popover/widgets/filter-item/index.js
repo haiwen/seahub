@@ -9,17 +9,20 @@ import {
   filterTermModifierIsWithin,
   isDateColumn,
   FILTER_ERR_MSG,
-} from '../../../../_basic';
+  getSelectColumnOptions,
+} from '../../../../../_basic';
 import CollaboratorFilter from './collaborator-filter';
-import FilterCalendar from './filter-calendar';
-import FilterItemUtils from './filter-item-utils';
+import FilterCalendar from '../filter-calendar';
+import FilterItemUtils from '../filter-item-utils';
 import {
   getFilterByColumn, getUpdatedFilterBySelectSingle, getUpdatedFilterBySelectMultiple,
   getUpdatedFilterByCreator, getUpdatedFilterByCollaborator, getColumnOptions, getUpdatedFilterByPredicate,
-} from '../../../../utils/filters-utils';
-import { isCheckboxColumn } from '../../../../utils/column-utils';
-import { gettext } from '../../../../utils';
-import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../../constants';
+} from '../../../../../utils/filters-utils';
+import { isCheckboxColumn } from '../../../../../utils/column-utils';
+import { gettext } from '../../../../../utils';
+import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../../../constants';
+
+import './index.css';
 
 const propTypes = {
   index: PropTypes.number.isRequired,
@@ -333,7 +336,7 @@ class FilterItem extends React.Component {
     });
     return (
       <CustomizeSelect
-        className="selector-multiple-select"
+        className="sf-metadata-selector-multiple-select"
         value={selectedOptionNames}
         options={dataOptions}
         onSelectOption={this.onSelectMultiple}
@@ -344,6 +347,12 @@ class FilterItem extends React.Component {
         supportMultipleSelect={isSupportMultipleSelect}
       />
     );
+  };
+
+  getAllCollaborators = () => {
+    const collaborators = window.sfMetadata.collaborators;
+    const collaboratorsCache = window.sfMetadata.collaboratorsCache;
+    return [...collaborators, ...Object.values(collaboratorsCache)];
   };
 
   renderFilterTerm = (filterColumn) => {
@@ -409,6 +418,57 @@ class FilterItem extends React.Component {
       }
       case CellType.CHECKBOX: {
         return this.getInputComponent('checkbox');
+      }
+      case CellType.SINGLE_SELECT: {
+        // get options
+        const options = getSelectColumnOptions(filterColumn);
+        if ([FILTER_PREDICATE_TYPE.IS_ANY_OF, FILTER_PREDICATE_TYPE.IS_NONE_OF].includes(filter_predicate)) {
+          return this.renderMultipleSelectOption(options, filter_term);
+        }
+        let selectedOptionDom = { label: null };
+        if (filter_term) {
+          let selectedOption = options.find(option => option.id === filter_term);
+          const className = 'select-option-name single-select-option';
+          const style = selectedOption ?
+            { background: selectedOption.color, color: selectedOption.textColor || null } :
+            { background: DELETED_OPTION_BACKGROUND_COLOR };
+          const selectedOptionName = selectedOption ? selectedOption.name : gettext('deleted option');
+          selectedOptionDom = { label: (
+            <span className={className} style={style} title={selectedOptionName} aria-label={selectedOptionName}>{selectedOptionName}</span>
+          ) };
+        }
+
+        let dataOptions = options.map(option => {
+          return FilterItemUtils.generatorSingleSelectOption(option);
+        });
+
+        return (
+          <CustomizeSelect
+            className="sf-metadata-selector-single-select"
+            value={selectedOptionDom}
+            options={dataOptions || []}
+            onSelectOption={this.onSelectSingle}
+            placeholder={gettext('Select an option')}
+            searchable={true}
+            searchPlaceholder={gettext('Search option')}
+            noOptionsPlaceholder={gettext('No options available')}
+            isInModal={this.props.isInModal}
+          />
+        );
+      }
+      case CellType.COLLABORATOR: {
+        if (filter_predicate === FILTER_PREDICATE_TYPE.INCLUDE_ME) return null;
+        const allCollaborators = this.getAllCollaborators();
+        return (
+          <CollaboratorFilter
+            filterIndex={index}
+            filterTerm={filter_term || []}
+            filter_predicate={filter_predicate}
+            collaborators={allCollaborators}
+            placeholder={gettext('Select collaborators')}
+            onSelectCollaborator={this.onSelectCollaborator}
+          />
+        );
       }
       default: {
         return null;

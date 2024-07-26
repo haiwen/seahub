@@ -18,7 +18,6 @@
     "no-prototype-builtins": "off",
     "no-restricted-globals": "off",
     "brace-style": "off",
-    "no-console": "off",
     "no-cond-assign": "off",
     "no-var": "off",
     "no-case-declarations": "off",
