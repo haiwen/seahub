@@ -269,6 +269,11 @@ class OrgAdminGroupToDeptView(APIView):
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == 'system admin':
+            error_msg = 'Group %s is already a department' % group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         try:
             # group to department
             ccnet_db = CcnetDB()
