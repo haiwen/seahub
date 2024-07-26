@@ -27,6 +27,21 @@
   position: relative;
 }
 
+@media (max-width: 767px) {
+  .dir-content-nav {
+    position:fixed;
+    top: 0;
+    left: 0;
+    z-index: 1031;
+    width: 300px;
+    max-width: calc(100% - 40px);
+    height:100%;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+}
+
 .dir-content-nav {
   flex: 0 0 25%;
   display: flex;
