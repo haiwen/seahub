@@ -1912,7 +1912,7 @@ class LibContentView extends React.Component {
     this.setState({
       selectedDirentList: selectedDirentList,
       isDirentSelected: selectedDirentList.length > 0,
-      isAllDirentSelected: newDirentList.length && selectedDirentList.length === newDirentList.length,
+      isAllDirentSelected: newDirentList.length ? selectedDirentList.length === newDirentList.length : false,
     });
   };
 
