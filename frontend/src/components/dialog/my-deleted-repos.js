@@ -45,21 +45,21 @@ class MyLibsDeleted extends Component {
   render() {
     const { deletedRepoList: repos } = this.state;
     return (
-      <Modal isOpen={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog} className="my-deleted-repos-dialog">
         <ModalHeader toggle={this.props.toggleDialog}>
           {gettext('Deleted Libraries')}
         </ModalHeader>
         <ModalBody className="my-deleted-repos-container">
           {this.state.isLoading && <Loading />}
           {(!this.state.isLoading && repos.length === 0) &&
-          <EmptyTip forDialog={true}>
-            <h2 className="text-secondary">{gettext('No deleted libraries')}</h2>
-            <p className="text-secondary">{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
+          <EmptyTip forDialog={true} className="my-deleted-repos-empty-tip">
+            <h2 className="h6 font-weight-normal">{gettext('No deleted libraries')}</h2>
+            <p className="empty-explanation">{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
           </EmptyTip>
           }
           {repos.length !== 0 &&
           <div>
-            <p className="tip">{gettext('Tip: libraries deleted {placeholder} days ago will be cleaned automatically.').replace('{placeholder}', trashReposExpireDays)}</p>
+            <p className="tip my-deleted-repos-tip">{gettext('Tip: libraries deleted {placeholder} days ago will be cleaned automatically.').replace('{placeholder}', trashReposExpireDays)}</p>
             <table>
               <thead>
                 <tr>
