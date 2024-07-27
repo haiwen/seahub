@@ -1,0 +1,35 @@
+.my-deleted-repos-dialog {
+    max-width: 720px;
+}
+
+.my-deleted-repos-container {
+    min-height: 200px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.my-deleted-repos-empty-tip {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.my-deleted-repos-empty-tip .empty-explanation {
+    color: #666;
+    font-size: .875rem;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .my-deleted-repos-empty-tip {
+        margin: 104px 0 216px;
+    }
+
+    .my-deleted-repos-empty-tip .empty-explanation {
+        margin: 0 7rem;
+    }
+}
+
+.my-deleted-repos-tip {
+    font-size: .8125rem;
+    color: #9c9c9c;
+}

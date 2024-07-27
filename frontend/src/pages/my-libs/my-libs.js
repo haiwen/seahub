@@ -1,9 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import cookie from 'react-cookies';
-import { navigate } from '@gatsbyjs/reach-router';
-import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Repo from '../../models/repo';
@@ -14,6 +12,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ModalPortal from '../../components/modal-portal';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import DeletedReposDialog from '../../components/dialog/my-deleted-repos';
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -22,8 +21,8 @@ class MyLibraries extends Component {
       errorMsg: '',
       isLoading: true,
       repoList: [],
+      isDeletedReposDialogOpen: false,
       isCreateRepoDialogOpen: false,
-      isDropdownMenuOpen: false,
       isSortOptionsDialogOpen: false,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
@@ -129,24 +128,13 @@ class MyLibraries extends Component {
     this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
   };
 
-  toggleDropdownMenu = () => {
+  toggleDeletedReposDialog = () => {
     this.setState({
-      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+      isDeletedReposDialogOpen: !this.state.isDeletedReposDialogOpen
     });
   };
 
-  visitDeleted = () => {
-    navigate(`${siteRoot}my-libs/deleted/`);
-  };
-
-  visitDeletedviaKey = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.visiteDeleted();
-    }
-  };
-
   render() {
-    const { isDropdownMenuOpen } = this.state;
     return (
       <Fragment>
         <div className="main-panel-center flex-row">
@@ -155,25 +143,14 @@ class MyLibraries extends Component {
               <h3 className="sf-heading m-0">
                 {gettext('My Libraries')}
                 <SingleDropdownToolbar
-                  opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
+                  opList={[
+                    { 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog },
+                    { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }
+                  ]}
                 />
               </h3>
               <div>
                 {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
-                <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
-                  <DropdownToggle
-                    tag="i"
-                    className={'cur-view-path-btn sf3-font-more sf3-font ml-2'}
-                    data-toggle="dropdown"
-                    title={gettext('More operations')}
-                    aria-label={gettext('More operations')}
-                    aria-expanded={isDropdownMenuOpen}
-                  >
-                  </DropdownToggle>
-                  <DropdownMenu right={true}>
-                    <DropdownItem onClick={this.visitDeleted} onKeyDown={this.visitDeletedviaKey}>{gettext('Deleted Libraries')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </div>
             <div className="cur-view-content">
@@ -208,6 +185,13 @@ class MyLibraries extends Component {
                 libraryType='mine'
                 onCreateRepo={this.onCreateRepo}
                 onCreateToggle={this.toggleCreateRepoDialog}
+              />
+            </ModalPortal>
+          )}
+          {this.state.isDeletedReposDialogOpen && (
+            <ModalPortal>
+              <DeletedReposDialog
+                toggleDialog={this.toggleDeletedReposDialog}
               />
             </ModalPortal>
           )}
