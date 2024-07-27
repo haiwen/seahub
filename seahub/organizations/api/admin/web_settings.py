@@ -6,13 +6,14 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
+from django.conf import settings
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.organizations.models import OrgAdminSettings
 
 logger = logging.getLogger(__name__)
 
@@ -58,4 +59,14 @@ class OrgAdminWebSettings(APIView):
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
 
+            if key == 'only_sso_login':
+                org_settings = OrgAdminSettings.objects.update_or_create(org_id=org_id, key='only_sso_login',
+                                                                         defaults={'value': value})
+                # org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
+                # if not org_settings:
+                #     OrgAdminSettings.objects.create(org_id=org_id, key='only_sso_login', value=value)
+                # else:
+                #     org_settings.value = value
+                #     org_settings.save()
+                config_dict['only_sso_login'] = org_settings[0].value
         return Response(config_dict)

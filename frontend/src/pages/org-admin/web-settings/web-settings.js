@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -10,6 +10,7 @@ import InputItem from './input-item';
 import FileItem from './file-item';
 
 import '../../../css/system-admin-web-settings.css';
+import CheckboxItem from "../../sys-admin/web-settings/checkbox-item";
 
 class OrgWebSettings extends Component {
 
@@ -21,15 +22,18 @@ class OrgWebSettings extends Component {
       config_dict: null,
       logoPath: logoPath,
       file_ext_white_list: '',
+      only_sso_login: false,
     };
   }
 
   componentDidMount() {
     seafileAPI.orgAdminGetOrgInfo().then((res) => {
+      console.log(res.data)
       this.setState({
         loading: false,
         config_dict: res.data,
-        file_ext_white_list: res.data.file_ext_white_list
+        file_ext_white_list: res.data.file_ext_white_list,
+        only_sso_login: res.data.only_sso_login
       });
     }).catch((error) => {
       this.setState({
@@ -63,6 +67,18 @@ class OrgWebSettings extends Component {
     });
   };
 
+  updateSSOLgoin = (key, value) => {
+    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+      this.setState({
+        file_ext_white_list: res.data.file_ext_white_list
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
@@ -76,7 +92,7 @@ class OrgWebSettings extends Component {
   };
 
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, only_sso_login } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
@@ -126,6 +142,17 @@ class OrgWebSettings extends Component {
                       helpTip={gettext('File extension white list for file upload via web UI and API. For example, "md;txt;docx". Empty means no limit.')}
                     />
                   </Fragment>
+                </Section>
+                <Section headingText={gettext('User Login')}>
+                  {enableMultiADFS &&
+                      <CheckboxItem
+                      saveSetting={this.updateSSOLgoin}
+                      displayName='DISABEL ADFS USER PWD LOGIN'
+                      keyText='only_sso_login'
+                      value={only_sso_login}
+                      helpTip={gettext('Force user SSO login.')}
+                    />}
+
                 </Section>
               </Fragment>
               }

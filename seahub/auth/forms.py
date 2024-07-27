@@ -14,7 +14,9 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, is_user_password_strong, get_site_name
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.auth.utils import get_virtual_id_by_email
+from seahub.organizations.models import OrgAdminSettings
 
 from captcha.fields import CaptchaField
 from constance import config
@@ -81,18 +83,29 @@ class AuthenticationForm(forms.Form):
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
 
-
             # Non administrators can only log in with single sign on
-            enable_adfs = settings.ENABLE_ADFS_LOGIN
-            disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
+            multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
             saml_provider_identifier = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
+            enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+            enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
+            disable_pwd_login = False
+            if enable_adfs or enable_mul_adfs:
+                if multi_tenancy:
+                    db_api = CcnetDB()
+                    org_id = db_api.get_org_id_by_username(self.user_cache.username)
+                    org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
+                    if org_settings:
+                        disable_pwd_login = int(org_settings.value)
+                else:
+                    disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
+
             if disable_pwd_login:
                 username = self.user_cache.username
                 is_admin = self.user_cache.is_staff
                 if not is_admin:
                     adfs_user = SocialAuthUser.objects.filter(
-                        username = username,
-                        provider = saml_provider_identifier
+                        username=username,
+                        provider=saml_provider_identifier
                     )
                     if adfs_user.exists():
                         self.errors['disable_pwd_login'] = _('You cannot login with email and password.')
