@@ -56,27 +56,27 @@ class DirentGridItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const { dirent, activeDirent } = this.props;
+    const { dirent } = this.props;
 
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
       this.clickTimeout = null;
-      this.handleSingleClick(dirent, activeDirent, e);
+      this.handleSingleClick(dirent, e);
       return;
     }
 
     this.clickTimeout = setTimeout(() => {
       this.clickTimeout = null;
-      this.handleSingleClick(dirent, activeDirent, e);
+      this.handleSingleClick(dirent, e);
     }, 100); // Clicks within 100 milliseconds is considered a single click.
   };
 
-  handleSingleClick = (dirent, activeDirent, event) => {
+  handleSingleClick = (dirent, event) => {
     if (!this.canPreview) {
       return;
     }
 
-    if (dirent === activeDirent && !event.metaKey && !event.ctrlKey) {
+    if (dirent.isSelected && !event.metaKey && !event.ctrlKey) {
       this.handleDoubleClick(dirent, event);
     } else {
       this.props.onGridItemClick(dirent, event);
@@ -113,6 +113,7 @@ class DirentGridItem extends React.Component {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
+
     let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
     dragStartItemData = JSON.stringify(dragStartItemData);
 

@@ -1329,6 +1329,7 @@ class LibContentView extends React.Component {
   };
 
   onDirentClick = (clickedDirent, event) => {
+    console.log('onDirentClick:', clickedDirent);
     const { direntList, selectedDirentList, lastSelectedIndex } = this.state;
     if (clickedDirent) {
       const clickedIndex = direntList.findIndex(dirent => dirent.name === clickedDirent.name);
@@ -1391,6 +1392,7 @@ class LibContentView extends React.Component {
   };
 
   onItemClick = (dirent) => {
+    console.log('onItemClick:', dirent);
     this.resetSelected();
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);

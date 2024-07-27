@@ -597,7 +597,6 @@ class DirentGridView extends React.Component {
 
   onGridItemMouseDown = (event) => {
     event.stopPropagation();
-    event.preventDefault();
     if (event.button === 2) {
       return;
     }
