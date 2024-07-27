@@ -6,6 +6,7 @@ import DirPath from './dir-path';
 import DirTool from './dir-tool';
 
 const propTypes = {
+  currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   userPerm: PropTypes.string,
@@ -38,6 +39,7 @@ const propTypes = {
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   metadataViewId: PropTypes.string,
+  onItemMove: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -60,6 +62,7 @@ class CurDirPath extends React.Component {
     return (
       <div className="cur-dir-path d-flex justify-content-between align-items-center">
         <DirPath
+          currentRepoInfo={this.props.currentRepoInfo}
           repoID={this.props.repoID}
           repoName={this.props.repoName}
           repoEncrypted={this.props.repoEncrypted}
@@ -82,6 +85,7 @@ class CurDirPath extends React.Component {
           filePermission={this.props.filePermission}
           onFileTagChanged={this.props.onFileTagChanged}
           repoTags={this.props.repoTags}
+          onItemMove={this.props.onItemMove}
         />
         {isDesktop &&
         <DirTool

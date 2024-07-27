@@ -10,6 +10,7 @@ import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
+  currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
@@ -32,9 +33,17 @@ const propTypes = {
   repoTags: PropTypes.array.isRequired,
   filePermission: PropTypes.string,
   onFileTagChanged: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
 };
 
 class DirPath extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropTargetPath: '',
+    };
+  }
 
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
@@ -52,6 +61,54 @@ class DirPath extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.onTabNavClick(tabName, id);
+  };
+
+  onDragEnter = (e) => {
+    e.preventDefault();
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    this.setState({
+      dropTargetPath: e.target.dataset.path,
+    });
+  };
+
+  onDragLeave = (e) => {
+    e.preventDefault();
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    this.setState({
+      dropTargetPath: '',
+    });
+  };
+
+  onDragOver = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  onDrop = (e) => {
+    if (Utils.isIEBrower()) {
+      return false;
+    }
+
+    if (e.dataTransfer.files.length) {
+      return;
+    }
+
+    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
+    dragStartItemData = JSON.parse(dragStartItemData);
+    let { nodeDirent, nodeParentPath } = dragStartItemData;
+
+    let selectedPath = Utils.getEventData(e, 'path');
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    this.setState({
+      dropTargetPath: '',
+    });
   };
 
   turnPathToLink = (path) => {
@@ -126,7 +183,16 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <span className="path-item" data-path={nodePath} onClick={this.onPathClick} role="button">{item}</span>
+            <span
+              className={`path-item ${nodePath === this.state.dropTargetPath ? 'path-item-drop' : ''}`}
+              data-path={nodePath} onClick={this.onPathClick}
+              onDragEnter={this.onDragEnter}
+              onDragLeave={this.onDragLeave}
+              onDragOver={this.onDragOver}
+              onDrop={this.onDrop}
+              role="button">
+              {item}
+            </span>
           </Fragment>
         );
       }
