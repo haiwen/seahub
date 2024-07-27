@@ -97,7 +97,7 @@ class Search extends Component {
   };
 
   onDocumentKeydown = (e) => {
-    if (isHotkey('mod+f')(e)) {
+    if (isHotkey('mod+k')(e)) {
       e.preventDefault();
       this.onFocusHandler();
       if (this.inputRef && this.inputRef.current) {
@@ -666,7 +666,7 @@ class Search extends Component {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
     const { isMaskShow } = this.state;
-    const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
+    const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k )`}`;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
