@@ -26,6 +26,8 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.share.models import ExtraGroupsSharePermission
+from seahub.utils.ccnet_db import CcnetDB
+
 
 logger = logging.getLogger(__name__)
 
@@ -355,7 +357,7 @@ class AdminSearchGroup(APIView):
 
         return Response({"group_list": result})
     
-    
+
 class AdminDepartments(APIView):
     """
     List all departments
@@ -398,3 +400,44 @@ class AdminDepartments(APIView):
 
         return Response(result)
 
+
+class AdminGroupToDeptView(APIView):
+    """group to department"""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, group_id):
+        """ Admin change a group
+
+        group to department
+
+        Permission checking:
+        1. Admin user;
+        """
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # recourse check
+        group_id = int(group_id)
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == 'system admin':
+            error_msg = 'Group %s is already a department' % group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if not group:
+            error_msg = 'Group %d not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # group to department
+        try:
+            ccnet_db = CcnetDB()
+            ccnet_db.change_groups_into_departments(group_id)
+            seafile_api.set_group_quota(group_id, -2)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        group_info = get_group_info(group_id)
+        return Response(group_info)

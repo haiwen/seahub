@@ -8,6 +8,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
+import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
+import { orgAdminAPI } from '../../utils/org-admin-api';
 
 class Search extends React.Component {
 
@@ -132,6 +134,24 @@ class OrgGroups extends Component {
     });
   };
 
+  changeGroupItem = (group) => {
+    orgAdminAPI.orgAdminGroup2Department(orgID, group.id).then(res => {
+      let newGroupList = this.state.orgGroups.map(item => {
+        if (item.id == group.id) {
+          item = new OrgGroupInfo(res.data);
+        }
+        return item;
+      });
+      this.setState({
+        orgGroups: newGroupList
+      });
+      toaster.success(gettext('Successfully Change the group.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   searchItems = (keyword) => {
     navigate(`${siteRoot}org/groupadmin/search-groups/?query=${encodeURIComponent(keyword)}`);
   };
@@ -173,6 +193,7 @@ class OrgGroups extends Component {
                         onFreezedItem={this.onFreezedItem}
                         onUnfreezedItem={this.onUnfreezedItem}
                         deleteGroupItem={this.deleteGroupItem}
+                        changeGroupItem={this.changeGroupItem}
                       />
                     );
                   })}
@@ -197,6 +218,7 @@ const GroupItemPropTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   deleteGroupItem: PropTypes.func.isRequired,
+  changeGroupItem: PropTypes.func.isRequired,
 };
 
 class GroupItem extends React.Component {
@@ -206,7 +228,8 @@ class GroupItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      isChangeDialogOpen: false,
     };
   }
 
@@ -252,6 +275,16 @@ class GroupItem extends React.Component {
 
   toggleDelete = () => {
     this.props.deleteGroupItem(this.props.group);
+  };
+  toggleChange = () => {
+    this.props.changeGroupItem(this.props.group);
+  };
+
+  toggleChangeDialog = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this.setState({ isChangeDialogOpen: !this.state.isChangeDialogOpen });
   };
 
   renderGroupHref = (group) => {
@@ -304,11 +337,19 @@ class GroupItem extends React.Component {
               />
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+                <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           }
+          {this.state.isChangeDialogOpen &&
+            <ChangeGroupDialog
+              groupName={group.groupName}
+              changeGroup2Department={this.toggleChange}
+              toggleDialog={this.toggleChangeDialog} />
+          }
         </td>
       </tr>
+
     );
   }
 

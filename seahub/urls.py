@@ -151,7 +151,8 @@ from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
         AdminSystemLibraryUploadLink
 from seahub.api2.endpoints.admin.default_library import AdminDefaultLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
-from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup, AdminSearchGroup, AdminDepartments
+from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup, AdminSearchGroup, \
+        AdminDepartments, AdminGroupToDeptView
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
@@ -655,7 +656,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/$', AdminGroupOwnedLibraries.as_view(), name='api-v2.1-admin-group-owned-libraries'),
     re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupOwnedLibrary.as_view(), name='api-v2.1-admin-owned-group-library'),
-    
+    re_path(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-to-department/', AdminGroupToDeptView.as_view(), name='api-v2.1-admin-group-to-department'),
+
     ## admin::departments
     re_path(r'api/v2.1/admin/departments/$', AdminDepartments.as_view(), name='api-v2.1-admin-departments'),
     

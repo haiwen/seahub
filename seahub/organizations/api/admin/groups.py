@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.throttling import UserRateThrottle
@@ -18,6 +18,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import GROUP_TRANSFER
 
 from pysearpc import SearpcError
 
@@ -247,3 +249,48 @@ class OrgAdminDepartments(APIView):
             result.append(department_info)
         
         return Response(result)
+
+
+class OrgAdminGroupToDeptView(APIView):
+    """org group to department"""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, org_id, group_id):
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        group_id = int(group_id)
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        group = ccnet_api.get_group(group_id)
+        if group.creator_name == 'system admin':
+            error_msg = 'Group %s is already a department' % group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        try:
+            # group to department
+            ccnet_db = CcnetDB()
+            ccnet_db.change_groups_into_departments(group_id)
+            seafile_api.set_group_quota(group_id, -2)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        group = ccnet_api.get_group(group_id)
+        group_info = {
+            "id": group.id,
+            "group_name": group.group_name,
+            "ctime": timestamp_to_isoformat_timestr(group.timestamp),
+            "creator_email": group.creator_name,
+            "creator_name": email2nickname(group.creator_name),
+            'creator_contact_email': email2contact_email(group.creator_name),
+        }
+        return Response(group_info)

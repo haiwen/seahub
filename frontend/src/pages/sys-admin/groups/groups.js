@@ -9,6 +9,7 @@ import SysAdminCreateGroupDialog from '../../../components/dialog/sysadmin-dialo
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './groups-content';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 class Groups extends Component {
 
@@ -109,6 +110,24 @@ class Groups extends Component {
     });
   };
 
+  changeGroup2Department = (groupID) => {
+    systemAdminAPI.adminGroup2Department(groupID).then((res) => {
+      let newGroupList = this.state.groupList.map(item => {
+        if (item.id == groupID) {
+          item = res.data;
+        }
+        return item;
+      });
+      this.setState({
+        groupList: newGroupList
+      });
+      toaster.success(gettext('Successfully Change the group.'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   getSearch = () => {
     return <Search
       placeholder={gettext('Search groups by name')}
@@ -144,6 +163,7 @@ class Groups extends Component {
                 pageInfo={this.state.pageInfo}
                 deleteGroup={this.deleteGroup}
                 transferGroup={this.transferGroup}
+                changeGroup2Department={this.changeGroup2Department}
                 getListByPage={this.getGroupListByPage}
                 resetPerPage={this.resetPerPage}
                 curPerPage={this.state.perPage}

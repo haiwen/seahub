@@ -10,6 +10,7 @@ import Paginator from '../../../components/paginator';
 import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
+import ChangeGroupDialog from '../../../components/dialog/change-group-dialog';
 import UserLink from '../user-link';
 
 class Content extends Component {
@@ -70,6 +71,7 @@ class Content extends Component {
                   onUnfreezedItem={this.onUnfreezedItem}
                   deleteGroup={this.props.deleteGroup}
                   transferGroup={this.props.transferGroup}
+                  changeGroup2Department={this.props.changeGroup2Department}
                 />);
               })}
             </tbody>
@@ -102,6 +104,7 @@ Content.propTypes = {
   getListByPage: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
   transferGroup: PropTypes.func.isRequired,
+  changeGroup2Department: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -112,7 +115,8 @@ class Item extends Component {
       isOpIconShown: false,
       highlight: false,
       isDeleteDialogOpen: false,
-      isTransferDialogOpen: false
+      isTransferDialogOpen: false,
+      isChangeDialogOpen: false
     };
   }
 
@@ -150,6 +154,9 @@ class Item extends Component {
       case 'Transfer':
         this.toggleTransferDialog();
         break;
+      case 'Change':
+        this.toggleChangeDialog();
+        break;
       default:
         break;
     }
@@ -169,12 +176,22 @@ class Item extends Component {
     this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
+  toggleChangeDialog = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this.setState({ isChangeDialogOpen: !this.state.isChangeDialogOpen });
+  };
   deleteGroup = () => {
     this.props.deleteGroup(this.props.item.id);
   };
 
   transferGroup = (receiver) => {
     this.props.transferGroup(this.props.item.id, receiver);
+  };
+
+  changeGroup = () => {
+    this.props.changeGroup2Department(this.props.item.id);
   };
 
   translateOperations = (item) => {
@@ -186,6 +203,9 @@ class Item extends Component {
       case 'Transfer':
         translateResult = gettext('Transfer');
         break;
+      case 'Change':
+        translateResult = gettext('Change to department');
+        break;
     }
 
     return translateResult;
@@ -193,7 +213,7 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen } = this.state;
+    const { isOpIconShown, isDeleteDialogOpen, isTransferDialogOpen, isChangeDialogOpen } = this.state;
 
     let groupName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', groupName);
@@ -218,7 +238,7 @@ class Item extends Component {
           <td>
             {(isOpIconShown && item.owner != 'system admin') &&
             <OpMenu
-              operations={['Delete', 'Transfer']}
+              operations={['Delete', 'Transfer', 'Change']}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
@@ -241,6 +261,13 @@ class Item extends Component {
             groupName={item.name}
             transferGroup={this.transferGroup}
             toggleDialog={this.toggleTransferDialog}
+          />
+        }
+        {isChangeDialogOpen &&
+          <ChangeGroupDialog
+            groupName={item.name}
+            changeGroup2Department={this.changeGroup}
+            toggleDialog={this.toggleChangeDialog}
           />
         }
       </Fragment>

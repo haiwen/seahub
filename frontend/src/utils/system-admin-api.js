@@ -81,6 +81,11 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
+  adminGroup2Department(groupID) {
+    const url = this.server + '/api/v2.1/admin/groups/' + groupID + '/group-to-department/';
+    return this.req.post(url);
+  }
+
 }
 
 let systemAdminAPI = new SystemAdminAPI();

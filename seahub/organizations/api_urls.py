@@ -13,7 +13,8 @@ from .api.group_members import AdminGroupMembers, AdminGroupMember
 from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
         OrgAdminImportUsers, OrgAdminInviteUser
 from .api.admin.user_set_password import OrgAdminUserSetPassword
-from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup, OrgAdminDepartments
+from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup, \
+        OrgAdminDepartments, OrgAdminGroupToDeptView
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
 from .api.admin.trash_libraries import OrgAdminTrashLibraries, OrgAdminTrashLibrary
 from .api.admin.info import OrgAdminInfo
@@ -72,6 +73,7 @@ urlpatterns = [
     path('<int:org_id>/admin/search-group/', OrgAdminSearchGroup.as_view(), name='api-v2.1-org-admin-search-group'),
     path('<int:org_id>/admin/groups/<int:group_id>/', OrgAdminGroup.as_view(), name='api-admin-group'),
     path('<int:org_id>/admin/groups/<int:group_id>/libraries/', AdminGroupLibraries.as_view(), name='api-admin-group-libraries'),
+    path('<int:org_id>/admin/groups/<int:group_id>/group-to-department/', OrgAdminGroupToDeptView.as_view(), name='api-admin-group-to-department'),
     re_path(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupLibrary.as_view(), name='api-admin-group-library'),
 
     path('<int:org_id>/admin/groups/<int:group_id>/group-owned-libraries/', AdminGroupOwnedLibraries.as_view(), name='api-admin-group-owned-libraries'),
