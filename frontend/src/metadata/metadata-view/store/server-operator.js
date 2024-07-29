@@ -1,7 +1,5 @@
 import { OPERATION_TYPE } from './operations';
-import {
-  getColumnByKey
-} from '../_basic';
+import { getColumnByKey } from '../_basic';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -29,20 +27,20 @@ class ServerOperator {
         window.sfMetadataContext.modifyRecords(repo_id, rowsData, is_copy_paste).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_record' });
+          callback({ error: 'Failed_to_modify_records' });
         });
         break;
       }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { repo_id, rows_data } = operation;
         if (!Array.isArray(rows_data) || rows_data.length === 0) {
-          callback({ error: 'Failed_to_insert_records' });
+          callback({ error: 'Failed_to_restore_records' });
           break;
         }
         window.sfMetadataContext.restoreRows(repo_id, rows_data).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_insert_records' });
+          callback({ error: 'Failed_to_restore_records' });
         });
         break;
       }
@@ -83,7 +81,7 @@ class ServerOperator {
         window.sfMetadataContext.deleteColumn(repo_id, column_key).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_insert_column' });
+          callback({ error: 'Failed_to_delete_column' });
         });
         break;
       }
