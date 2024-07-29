@@ -112,8 +112,6 @@ class DirentGridItem extends React.Component {
       return false;
     }
 
-    // let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
-    // dragStartItemData = JSON.stringify(dragStartItemData);
     const { selectedDirentList, path } = this.props;
     const dragStartItemsData = selectedDirentList.length > 0 ? selectedDirentList.map(dirent => ({
       nodeDirent: dirent,
@@ -174,6 +172,10 @@ class DirentGridItem extends React.Component {
       }
       this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
     } else {
+      // if current dirent is a dir and selected list include it, return
+      if (dragStartItemsData.some(item => item.nodeDirent.name === this.props.dirent.name)) {
+        return;
+      }
       this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
     }
   };
