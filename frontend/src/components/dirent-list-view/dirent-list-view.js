@@ -332,15 +332,17 @@ class DirentListView extends React.Component {
 
     const direntsContainerMenuList = [
       NEW_FOLDER, NEW_FILE, 'Divider',
-      NEW_MARKDOWN_FILE,
-      NEW_EXCEL_FILE,
-      NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE
     ];
     const { currentRepoInfo } = this.props;
     if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
     }
+    direntsContainerMenuList.push(
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE
+    );
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
