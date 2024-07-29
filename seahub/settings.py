@@ -888,6 +888,9 @@ ENABLE_METADATA_MANAGEMENT = False
 METADATA_SERVER_URL = ''
 METADATA_SERVER_SECRET_KEY = ''
 
+# file tags
+ENABLE_FILE_TAGS = True
+
 METADATA_FILE_TYPES = {
     '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'mpo', 'jpe', 'xbm',
                  'svg', 'ppm', 'pcx', 'xcf', 'xpm', 'mgn', 'ufo'),

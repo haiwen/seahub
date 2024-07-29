@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, enableFileTags } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import SeahubPopover from '../common/seahub-popover';
@@ -71,7 +71,9 @@ class DirTool extends React.Component {
       return list;
     }
     const { TAGS } = TextTranslation;
-    list.push(TAGS);
+    if (enableFileTags) {
+      list.push(TAGS);
+    }
     return list;
   };
 
