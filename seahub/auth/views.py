@@ -38,6 +38,7 @@ from seahub.utils import render_error, get_site_name, is_valid_email, get_servic
 from seahub.utils.http import rate_limit
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
+from seahub.utils.password import get_password_strength_requirements
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
@@ -438,6 +439,9 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
         context_instance['validlink'] = False
         form = None
     context_instance['form'] = form
+    password_strength_requirements = get_password_strength_requirements()
+    context_instance['min_len'] = password_strength_requirements.get('min_len')
+    context_instance['level'] = len(password_strength_requirements.get('char_types'))
     return render(request, template_name, context_instance)
 
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):

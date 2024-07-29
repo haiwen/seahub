@@ -24,6 +24,8 @@ window.app.pageOptions = {
   {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
   {% endif %}
+  userUnusablePassword: {% if user_unusable_password %} true {% else %} false {% endif %},
+  userStrongPasswordRequired: {% if user_strong_password_required %} true {% else %} false {% endif %},
 
   enableGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
 

@@ -252,20 +252,6 @@ class WebSettings extends Component {
                       value={config_dict['FORCE_PASSWORD_CHANGE']}
                       helpTip={gettext('Force user to change password when account is newly added or reset by admin')}
                     />
-                    <InputItem
-                      saveSetting={this.saveSetting}
-                      displayName={gettext('password minimum length')}
-                      keyText='USER_PASSWORD_MIN_LENGTH'
-                      value={config_dict['USER_PASSWORD_MIN_LENGTH']}
-                      helpTip={gettext('The least number of characters an account password should include.')}
-                    />
-                    <InputItem
-                      saveSetting={this.saveSetting}
-                      displayName={gettext('password strength level')}
-                      keyText='USER_PASSWORD_STRENGTH_LEVEL'
-                      value={config_dict['USER_PASSWORD_STRENGTH_LEVEL']}
-                      helpTip={gettext('The level(1-4) of an account password\'s strength. For example, \'3\' means password must have at least 3 of the following: num, upper letter, lower letter and other symbols')}
-                    />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
                       displayName='enable two factor authentication'

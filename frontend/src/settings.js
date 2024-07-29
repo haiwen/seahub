@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from './utils/utils';
-import { isPro, isDBSqlite3, gettext, siteRoot } from './utils/constants';
+import { isPro, isDBSqlite3, gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import toaster from './components/toast';
 import MainPanel from './components/main-panel';
@@ -22,6 +22,8 @@ import SocialLoginDingtalk from './components/user-settings/social-login-dingtal
 import SocialLoginSAML from './components/user-settings/social-login-saml';
 import LinkedDevices from './components/user-settings/linked-devices';
 import DeleteAccount from './components/user-settings/delete-account';
+import UserSetPassword from './components/dialog/user-password-widgets/user-set-password-dialog';
+import UserUpdatePassword from './components/dialog/user-password-widgets/user-update-password-dialog';
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -40,7 +42,8 @@ const {
   isOrgContext,
   enableADFS,
   enableMultiADFS,
-  enableDeleteAccount
+  enableDeleteAccount,
+  userUnusablePassword
 } = window.app.pageOptions;
 
 class Settings extends React.Component {
@@ -63,7 +66,10 @@ class Settings extends React.Component {
 
     this.state = {
       isSidePanelClosed: false,
-      curItemID: this.sideNavItems[0].href.substr(1)
+      curItemID: this.sideNavItems[0].href.substr(1),
+      isSetPasswordDialogOpen: false,
+      isUpdatePasswordDialogOpen: false
+
     };
   }
 
@@ -120,6 +126,22 @@ class Settings extends React.Component {
     });
   };
 
+  toggleSetPassword = () => {
+    this.setState({ isSetPasswordDialogOpen: !this.state.isSetPasswordDialogOpen });
+  };
+
+  toggleUpdatePassword = () => {
+    this.setState({ isUpdatePasswordDialogOpen: !this.state.isUpdatePasswordDialogOpen });
+  };
+
+  togglePassword = () => {
+    if (userUnusablePassword) {
+      this.toggleSetPassword();
+    } else {
+      this.toggleUpdatePassword();
+    }
+  };
+
   render() {
     const { isSidePanelClosed } = this.state;
     return (
@@ -146,7 +168,7 @@ class Settings extends React.Component {
                 {canUpdatePassword &&
                 <div id="update-user-passwd" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                  <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
+                  <button className="btn btn-outline-primary ml-2 mb-2" onClick={this.togglePassword}>{passwordOperationText}</button>
                 </div>
                 }
                 {enableGetAuthToken && <WebAPIAuthToken />}
@@ -168,7 +190,19 @@ class Settings extends React.Component {
         <MediaQuery query="(max-width: 767.8px)">
           <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
         </MediaQuery>
+        {this.state.isSetPasswordDialogOpen && (
+          <UserSetPassword
+            toggle={this.toggleSetPassword}
+          />
+        )}
+        {this.state.isUpdatePasswordDialogOpen && (
+          <UserUpdatePassword
+            toggle={this.toggleUpdatePassword}
+          />
+        )}
       </div>
+
+
     );
   }
 }

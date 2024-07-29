@@ -28,7 +28,7 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 29
+        assert len(json_resp) == 27
 
     @override_settings(ENABLE_SETTINGS_VIA_WEB=False)
     def test_get_with_enable_settings(self):
@@ -58,10 +58,8 @@ class AdminWebSettingsTest(BaseTestCase):
             "ENABLE_USER_CLEAN_TRASH": True,
             "FREEZE_USER_ON_LOGIN_FAILED": False,
             "ENABLE_TWO_FACTOR_AUTH": False,
-            "USER_PASSWORD_MIN_LENGTH": 6,
             "TEXT_PREVIEW_EXT": "ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go, yml",
             "ENABLE_SIGNUP": False,
-            "USER_PASSWORD_STRENGTH_LEVEL": 3,
             "FILE_SERVER_ROOT": "http://127.0.0.1:8082",
             "LOGIN_ATTEMPT_LIMIT": 5
         }

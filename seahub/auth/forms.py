@@ -21,6 +21,9 @@ from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 from captcha.fields import CaptchaField
 from constance import config
 
+from seahub.utils.password import get_password_strength_requirements, is_password_strength_valid
+
+
 class AuthenticationForm(forms.Form):
     """
     Base class for authenticating users. Extend this to get a form that accepts
@@ -198,18 +201,16 @@ class SetPasswordForm(forms.Form):
         if 'new_password1' in self.cleaned_data:
             pwd = self.cleaned_data['new_password1']
 
-            if bool(config.USER_STRONG_PASSWORD_REQUIRED) is True:
-                if bool(is_user_password_strong(pwd)) is True:
-                    return pwd
-                else:
-                    raise forms.ValidationError(
-                        _(("%(pwd_len)s characters or more, include "
-                           "%(num_types)s types or more of these: "
-                           "letters(case sensitive), numbers, and symbols")) %
-                        {'pwd_len': config.USER_PASSWORD_MIN_LENGTH,
-                         'num_types': config.USER_PASSWORD_STRENGTH_LEVEL})
-            else:
+            if is_password_strength_valid(pwd):
                 return pwd
+            else:
+                password_strength_requirements = get_password_strength_requirements()
+                raise forms.ValidationError(
+                    _(("%(pwd_len)s characters or more, include "
+                        "%(num_types)s types or more of these: "
+                        "letters(case sensitive), numbers, and symbols")) %
+                    {'pwd_len': password_strength_requirements.get('min_len'),
+                        'num_types': len(password_strength_requirements.get('char_types'))})
 
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')

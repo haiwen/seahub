@@ -4,6 +4,7 @@
 
 {% block extra_style %}{{block.super}}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.popover.min.css" />
 {% endblock %}
 
@@ -23,10 +24,14 @@
             <label for="id_email">{% trans "Email" %}</label>
             {{ form.email }}            {{ form.email.errors }}
             <label for="id_password1">{% trans "Password" %}</label>
+            <div class="position-relative" id="password-input1">
             {{ form.password1 }}        {{ form.password1.errors }}
+            </div>
             <div id="pwd_strength"></div>
             <label for="id_password2">{% trans "Confirm Password" %}</label>
+            <div class="position-relative" id="password-input2">
             {{ form.password2 }}        {{ form.password2.errors }}
+            </div>
 
             {% if form.department.field.required %}
             <label for="id_department">{% trans "Department" %}</label>
@@ -59,28 +64,14 @@
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
-{% if strong_pwd_required %}
 {% include "snippets/password_strength_js.html" %}
 
-var passwd_tip = "{% blocktrans %}Passwords must have at least {{min_len}} characters and contain {{level}} of the following: uppercase letters, lowercase letters, numbers, and symbols.{% endblocktrans%}";
-var element = document.getElementById('id_password1')
-var popover = new bootstrap.Popover(element, {
-    container: 'body',
-    animation: false,
-    content: passwd_tip,
-    template: `<div class="popover" role="popover"><div class="popover-arrow"></div><div class="popover-inner">${passwd_tip}</div></div>`,
-    trigger: 'focus'
+$(function () {
+    // Assuming passwd_tip and template are defined somewhere in your script.
+    setupPasswordField("id_password1", 'password-input1', passwd_tip, template);
+    setupPasswordField("id_password2", 'password-input2', passwd_tip, template);
 });
-element.addEventListener('keyup', () => {
-    var pwd = $('#id_password1').val();
-    if (pwd.trim()) {
-        var level = getStrengthLevel(pwd);
-        showStrength(level);
-    } else {
-        $("#pwd_strength").html("");
-    }
-})
-{% endif %}
+
 
 $('#signup-form').on('submit', function(){
     var email = $('input[name="email"]').val().trim(),
@@ -103,13 +94,12 @@ $('#signup-form').on('submit', function(){
             $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
             return false;
         }
-        {% if strong_pwd_required %}
-            var level = getStrengthLevel(pwd1);
-            if (level < {{level}}) {
-                $('.error').html(passwd_tip).removeClass('hide');
-                return false;
-            }
-        {% endif %}
+        var level = getStrengthLevel(pwd1);
+        if (level < {{level}}) {
+            $('.error').html(passwd_tip).removeClass('hide');
+            return false;
+        }
+
    });
 </script>
 {% endblock %}
