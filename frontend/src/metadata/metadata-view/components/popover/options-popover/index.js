@@ -167,7 +167,12 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       >
         <div className="sf-metadata-edit-column-options-container">
           <div className="sf-metadata-edit-column-options-search-container">
-            <SearchInput className="sf-metadata-option-search-control" placeholder={gettext('Search option')} onChange={onSearchValueChange} autoFocus={true} />
+            <SearchInput
+              className="sf-metadata-option-search-control"
+              placeholder={gettext('Search option')}
+              onChange={onSearchValueChange}
+              autoFocus={true}
+            />
           </div>
           {renderEmptyTip()}
           <OptionsContainer
@@ -175,11 +180,20 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             viewingOptionId={viewingOptionId}
             inputRef={ref}
           />
-          <CustomizeAddTool className="sf-metadata-add-option" callBack={onAdd} footerName={gettext('Add option')} addIconClassName="sf-metadata-add-option-icon" />
+          <CustomizeAddTool
+            className="sf-metadata-add-option"
+            callBack={onAdd}
+            footerName={gettext('Add option')}
+            addIconClassName="sf-metadata-add-option-icon"
+          />
         </div>
       </CustomizePopover>
       {deletingOptionId && (
-        <ConfirmDeletePopover option={options.find(o => o.id === deletingOptionId)} onToggle={closeDeleteOption} onSubmit={onDeleteOption} />
+        <ConfirmDeletePopover
+          option={options.find(o => o.id === deletingOptionId)}
+          onToggle={closeDeleteOption}
+          onSubmit={onDeleteOption}
+        />
       )}
     </>
   );

@@ -44,12 +44,14 @@ const SingleSelectEditor = forwardRef(({
     }
     return options;
   }, [record, column, columns]);
+
   const displayOptions = useMemo(() => {
     if (!searchValue) return options;
     const value = searchValue.toLowerCase().trim();
     if (!value) return options;
     return options.filter((item) => item.name && item.name.toLowerCase().indexOf(value) > -1);
   }, [searchValue, options]);
+
   const isShowCreateBtn = useMemo(() => {
     if (!canEditData) return false;
     if (!searchValue) return false;
@@ -259,7 +261,11 @@ const SingleSelectEditor = forwardRef(({
         {renderOptions()}
       </div>
       {isShowCreateBtn && (
-        <CustomizeAddTool callBack={createOption} footerName={`${gettext('Add option')} ${searchValue}`} className="add-search-result" />
+        <CustomizeAddTool
+          callBack={createOption}
+          footerName={`${gettext('Add option')} ${searchValue}`}
+          className="add-search-result"
+        />
       )}
     </div>
   );

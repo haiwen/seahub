@@ -17,6 +17,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
   const [isSubMenuShow, setSubMenuShow] = useState(false);
   const [isRenamePopoverShow, setRenamePopoverShow] = useState(false);
   const [isOptionPopoverShow, setOptionPopoverShow] = useState(false);
+
   const today = useMemo(() => {
     let todayDate = new Date();
     let year = todayDate.getFullYear();
@@ -111,6 +112,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
     const { data = {} } = column;
     const { format = DEFAULT_DATE_FORMAT } = data;
     const withMinutes = format.indexOf('HH:mm') > -1;
+
     const options = [
       { label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', { 'HH:mm': withMinutes }))})`, value: classnames('YYYY-MM-DD', { 'HH:mm': withMinutes }) },
       { label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', { 'HH:mm': withMinutes }))})`, value: classnames('M/D/YYYY', { 'HH:mm': withMinutes }) },
@@ -240,12 +242,22 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
       </Dropdown>
       {isRenamePopoverShow && (
         <ModalPortal>
-          <RenamePopover target={`sf-metadata-column-${column.key}`} value={column.name} onToggle={closeRenamePopover} onSubmit={onRename} />
+          <RenamePopover
+            target={`sf-metadata-column-${column.key}`}
+            value={column.name}
+            onToggle={closeRenamePopover}
+            onSubmit={onRename}
+          />
         </ModalPortal>
       )}
       {isOptionPopoverShow && (
         <ModalPortal>
-          <OptionsPopover target={`sf-metadata-column-${column.key}`} column={column} onToggle={closeOptionPopover} onSubmit={onUpdateOptions} />
+          <OptionsPopover
+            target={`sf-metadata-column-${column.key}`}
+            column={column}
+            onToggle={closeOptionPopover}
+            onSubmit={onUpdateOptions}
+          />
         </ModalPortal>
       )}
     </>

@@ -82,7 +82,14 @@ const Cell = ({
             <span title={name} className={`header-name-text ${height === 56 && 'double'}`}>{name}</span>
           </div>
         </div>
-        {canEditColumnInfo && (<DropdownMenu column={column} renameColumn={renameColumn} deleteColumn={deleteColumn} modifyColumnData={modifyColumnData} />)}
+        {canEditColumnInfo && (
+          <DropdownMenu
+            column={column}
+            renameColumn={renameColumn}
+            deleteColumn={deleteColumn}
+            modifyColumnData={modifyColumnData}
+          />
+        )}
         <ResizeColumnHandle onDrag={onDrag} />
       </div>
     </div>
