@@ -17,6 +17,8 @@ const propTypes = {
   onGridItemMouseDown: PropTypes.func,
   currentRepoInfo: PropTypes.object,
   onItemMove: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
 };
 
 class DirentGridItem extends React.Component {
@@ -47,10 +49,6 @@ class DirentGridItem extends React.Component {
       clearTimeout(this.clickTimeout);
     }
   }
-
-  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
-    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
-  };
 
   onItemClick = (e) => {
     e.preventDefault();
@@ -114,11 +112,18 @@ class DirentGridItem extends React.Component {
       return false;
     }
 
-    let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
-    dragStartItemData = JSON.stringify(dragStartItemData);
+    // let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
+    // dragStartItemData = JSON.stringify(dragStartItemData);
+    const { selectedDirentList, path } = this.props;
+    const dragStartItemsData = selectedDirentList.length > 0 ? selectedDirentList.map(dirent => ({
+      nodeDirent: dirent,
+      nodeParentPath: path
+    })) : { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
+
+    const serializedData = JSON.stringify(dragStartItemsData);
 
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('application/drag-item-info', dragStartItemData);
+    e.dataTransfer.setData('application/drag-item-info', serializedData);
   };
 
   onGridItemDragEnter = (e) => {
@@ -153,21 +158,24 @@ class DirentGridItem extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
-    dragStartItemData = JSON.parse(dragStartItemData);
-    let { nodeDirent, nodeParentPath } = dragStartItemData;
-    let dropItemData = this.props.dirent;
-
-    if (nodeDirent.name === dropItemData.name) {
-      return;
-    }
-
-    if (dropItemData.type !== 'dir') {
-      return;
-    }
 
     let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
-    this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    let dragStartItemsData = e.dataTransfer.getData('application/drag-item-info');
+    dragStartItemsData = JSON.parse(dragStartItemsData);
+
+    if (!Array.isArray(dragStartItemsData)) {
+      let { nodeDirent, nodeParentPath } = dragStartItemsData;
+      let dropItemData = this.props.dirent;
+      if (nodeDirent.name === dropItemData.name) {
+        return;
+      }
+      if (dropItemData.type !== 'dir') {
+        return;
+      }
+      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    } else {
+      this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
+    }
   };
 
   onGridItemMouseDown = (event) => {

@@ -100,12 +100,17 @@ class DirPath extends React.Component {
       return;
     }
 
-    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
-    dragStartItemData = JSON.parse(dragStartItemData);
-    let { nodeDirent, nodeParentPath } = dragStartItemData;
-
     let selectedPath = Utils.getEventData(e, 'path');
-    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    let dragStartItemsData = e.dataTransfer.getData('application/drag-item-info');
+    dragStartItemsData = JSON.parse(dragStartItemsData);
+
+    if (Array.isArray(dragStartItemsData)) {
+      this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
+    } else {
+      let { nodeDirent, nodeParentPath } = dragStartItemsData;
+      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    }
+
     this.setState({
       dropTargetPath: '',
     });
