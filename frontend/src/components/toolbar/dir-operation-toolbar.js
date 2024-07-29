@@ -199,14 +199,16 @@ class DirOperationToolbar extends React.Component {
           { 'text': gettext('New Folder'), 'onClick': this.onCreateFolderToggle },
           { 'text': gettext('New File'), 'onClick': this.onCreateFileToggle },
           'Divider',
-          { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
-          { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
-          { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
-          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle }
         ];
         if (enableSeadoc && !repoEncrypted) {
           newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': this.onCreateSeaDocToggle });
         }
+        newSubOpList.push(
+          { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
+          { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
+          { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
+          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle }
+        );
         opList.push({
           'icon': 'new',
           'text': gettext('New'),
