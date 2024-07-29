@@ -179,11 +179,12 @@ class DirOperationToolbar extends React.Component {
         if (Utils.isSupportUploadFolder()) {
           opList.push({
             'icon': 'upload-files',
-            'text': gettext('Upload'),
-            subOpList: [
-              { 'text': gettext('Upload Files'), 'onClick': this.onUploadFile },
-              { 'text': gettext('Upload Folder'), 'onClick': this.onUploadFolder }
-            ]
+            'text': gettext('Upload Files'),
+            'onClick': this.onUploadFile
+          }, {
+            'icon': 'upload-files',
+            'text': gettext('Upload Folder'),
+            'onClick': this.onUploadFolder
           });
         } else {
           opList.push({
