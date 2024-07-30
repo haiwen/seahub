@@ -70,7 +70,7 @@ class OrgWebSettings extends Component {
   updateSSOLgoin = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
-        file_ext_white_list: res.data.file_ext_white_list
+        only_sso_login: res.data.only_sso_login
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -147,7 +147,7 @@ class OrgWebSettings extends Component {
                   {enableMultiADFS &&
                       <CheckboxItem
                       saveSetting={this.updateSSOLgoin}
-                      displayName='DISABEL ADFS USER PWD LOGIN'
+                      displayName='Disable adfs user pwd login'
                       keyText='only_sso_login'
                       value={only_sso_login}
                       helpTip={gettext('Force user SSO login.')}

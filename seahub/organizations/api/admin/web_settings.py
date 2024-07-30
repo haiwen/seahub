@@ -60,13 +60,12 @@ class OrgAdminWebSettings(APIView):
                     config_dict['file_ext_white_list'] = ''
 
             if key == 'only_sso_login':
-                org_settings = OrgAdminSettings.objects.update_or_create(org_id=org_id, key='only_sso_login',
-                                                                         defaults={'value': value})
-                # org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
-                # if not org_settings:
-                #     OrgAdminSettings.objects.create(org_id=org_id, key='only_sso_login', value=value)
-                # else:
-                #     org_settings.value = value
-                #     org_settings.save()
-                config_dict['only_sso_login'] = org_settings[0].value
+                try:
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key='only_sso_login',
+                                                              defaults={'value': value})
+                    config_dict['only_sso_login'] = value
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         return Response(config_dict)
