@@ -187,7 +187,7 @@ class TwoFactorVerifyView(SessionWizardView):
             )
             final_form_list.append(form_obj)
 
-        kwargs['remember_me'] = form.cleaned_data['remember_me']
+        kwargs['remember_me'] = form.cleaned_data.get('remember_me')
         done_response = self.done(final_form_list, **kwargs)
         self.storage.reset()
         return done_response
