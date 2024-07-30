@@ -260,7 +260,7 @@ class DirentGridItem extends React.Component {
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
-    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
+    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
     const showName = this.getRenderedText(dirent);
     return (
