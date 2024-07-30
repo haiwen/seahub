@@ -43,7 +43,6 @@ class GroupContainer extends Component {
   fixedFrozenDOMs = (scrollLeft, scrollTop) => {
     if (this.backDrop) {
       const { left: tableContentLeft } = this.props.getTableContentRect();
-      console.log(this.props.getTableContentRect());
       this.backDrop.style.position = 'fixed';
       this.backDrop.style.marginLeft = (tableContentLeft - SIDE_PANEL_FOLDED_WIDTH) + 'px';
       this.backDrop.style.marginTop = (-scrollTop) + 'px';

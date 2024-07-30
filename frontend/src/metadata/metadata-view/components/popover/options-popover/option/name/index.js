@@ -17,20 +17,22 @@ const Name = ({
   const ref = useRef(null);
 
   const onSave = useCallback(() => {
-    onToggleFreeze(false);
-    onClose();
     let newName = name.trim();
     if (newName === option.name || newName === '') return;
     const newOption = Object.assign({}, option, { name: newName });
-    onChange(newOption, 'name');
-  }, [name, onToggleFreeze, option, onChange, onClose]);
+    onChange(newOption, () => {
+      onToggleFreeze(false);
+      onClose();
+    }, () => {
+      onOpen(option.id);
+    });
+  }, [name, onToggleFreeze, option, onChange, onOpen, onClose]);
 
   const onClick = useCallback((event) => {
     if ((ref.current && !ref.current.contains(event.target)) && isEditing) {
       onSave();
-      onClose();
     }
-  }, [isEditing, onSave, onClose]);
+  }, [isEditing, onSave]);
 
   const onNameChange = useCallback((event) => {
     const newName = event.target.value;
@@ -42,9 +44,8 @@ const Name = ({
     if (event.keyCode === KeyCodes.Enter) {
       event.preventDefault();
       onSave();
-      onClose();
     }
-  }, [onSave, onClose]);
+  }, [onSave]);
 
   const onToggle = useCallback((event) => {
     event.stopPropagation();

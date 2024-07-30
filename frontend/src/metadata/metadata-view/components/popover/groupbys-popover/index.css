@@ -1,6 +1,6 @@
 .sf-metadata-groupbys-popover .popover {
   max-width: none;
-  min-width: 400px;
+  min-width: 510px;
 }
 
 .sf-metadata-groupbys-popover .groupbys-list {
@@ -24,6 +24,7 @@
   display: flex;
   align-items: center;
   padding: 0.25rem 0;
+  position: relative;
 }
 
 .sf-metadata-groupbys-popover .groupbys-list .groupby-item.group-can-drop {

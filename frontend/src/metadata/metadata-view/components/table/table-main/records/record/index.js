@@ -53,7 +53,6 @@ class Record extends React.Component {
 
   onSelectRecord = (e) => {
     const { groupRecordIndex, index } = this.props;
-    // console.log(groupRecordIndex, index);
     this.props.selectNoneCells();
     this.props.onSelectRecord({ groupRecordIndex, recordIndex: index }, e);
   };

@@ -320,7 +320,6 @@ class GroupBody extends Component {
 
   getGroupRecordByIndex = (groupRecordIndex) => {
     const groupMetrics = this.getGroupMetrics();
-    // console.log(groupMetrics.groupRows)
     return getGroupRecordByIndex(groupRecordIndex, groupMetrics);
   };
 
@@ -418,7 +417,6 @@ class GroupBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      // console.log(cell);
       const { columns } = this.props;
       const supportOpenEditor = isColumnSupportDirectEdit(cell, columns);
       const hasOpenPermission = isSelectedCellSupportOpenEditor(cell, columns, true, this.props.recordGetterByIndex);
@@ -800,7 +798,6 @@ class GroupBody extends Component {
           />
         );
       } else if (type === GROUP_ROW_TYPE.ROW) {
-        // console.log(groupRow);
         const { rowId, rowIdx, isLastRow } = groupRow;
         const record = rowId && this.props.recordGetterById(rowId);
         const isSelected = RecordMetrics.isRecordSelected(rowId, recordMetrics);

@@ -3,6 +3,17 @@
   font-size: 13px;
 }
 
+.sf-metadata-hide-columns-popover .empty-hide-columns-container {
+  min-height: 80px;
+  padding: 16px;
+}
+
+.sf-metadata-hide-columns-popover .empty-hide-columns-container .empty-hide-columns-list {
+  padding: 0.25rem 10px;
+  font-size: 14px;
+  color: #666666;
+}
+
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-container {
   padding: .5rem 0;
   width: 100%;

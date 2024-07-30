@@ -58,11 +58,11 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, targe
   const addGroupby = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
     const groupbyColumns = getGroupbyColumns(columns);
-    console.log(groupbyColumns);
     if (!Array.isArray(groupbyColumns) || groupbyColumns.length === 0) return;
     const groupby = generateDefaultGroupby(groupbyColumns);
-    groupbys.push(groupby);
-    updateGroups(groupbys);
+    const newGroupBys = groupbys.slice(0);
+    newGroupBys.push(groupby);
+    updateGroups(newGroupBys);
   }, [groupbys, columns, updateGroups]);
 
   const deleteGroup = useCallback((groupbyIndex) => {

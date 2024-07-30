@@ -18,6 +18,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   const [editingOptionId, setEditingOptionId] = useState(-1);
   const isFreezeRef = useRef(false);
   const ref = useRef(null);
+  const isValidEditingOption = useRef(true);
 
   const displayOptions = useMemo(() => {
     const validSearchValue = searchValue.trim().toLowerCase();
@@ -35,20 +36,21 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     setOptions(options);
   }, [onSubmit]);
 
-  const onUpdate = useCallback((newOption, type) => {
-    if (type === 'name') {
-      const newName = newOption.name;
-      const duplicateNameOption = options.find(o => o.name === newName);
-      if (duplicateNameOption) {
-        toaster.danger(gettext('There is another option with this name'));
-        return;
-      }
+  const onUpdate = useCallback((newOption, successCallback, failCallback) => {
+    const duplicateNameOption = options.find(o => o.name === newOption.name && o.id !== newOption.id);
+    if (duplicateNameOption) {
+      toaster.danger(gettext('There is another option with this name'));
+      failCallback && failCallback();
+      isValidEditingOption.current = false;
+      return;
     }
+    isValidEditingOption.current = true;
+    successCallback && successCallback();
     const newOptions = options.slice(0);
     const optionIndex = newOptions.findIndex(item => item.id === newOption.id);
     newOptions.splice(optionIndex, 1, newOption);
     onChange(newOptions);
-  }, [options, onChange]);
+  }, [options, onChange, isValidEditingOption]);
 
   const onMove = useCallback((optionSource, optionTarget) => {
     const { idx: sourceIdx } = optionSource;
@@ -99,8 +101,9 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, []);
 
   const onOpenNameEditor = useCallback((optionId) => {
+    if (!isValidEditingOption.current) return;
     setEditingOptionId(optionId);
-  }, []);
+  }, [isValidEditingOption]);
 
   const onCloseNameEditor = useCallback(() => {
     setEditingOptionId('');
@@ -158,7 +161,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       <CustomizePopover
         target={target}
         className="sf-metadata-edit-column-options-popover"
-        canHide={!deletingOptionId}
+        canHide={!deletingOptionId && isValidEditingOption.current}
         hide={onToggle}
         hideWithEsc={onToggle}
       >

@@ -54,7 +54,7 @@ const dropCollect = (connect, monitor) => ({
 const Option = ({
   isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
   isViewing, isDeleting, isEditing,
-  option, index,
+  option,
   onDelete: propsDelete, onUpdate,
   onMouseLeave, onMouseEnter: propsMouseEnter, onToggleFreeze, onOpenNameEditor, onCloseNameEditor,
 }) => {
