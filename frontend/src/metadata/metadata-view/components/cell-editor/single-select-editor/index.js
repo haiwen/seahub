@@ -223,7 +223,7 @@ const SingleSelectEditor = forwardRef(({
     // maxWidth = column.width > 200 ? column.width - 62 : 200 - 62
     const maxWidth = column.width > 200 ? column.width - 62 : 200 - 62;
     return displayOptions.map((option, i) => {
-      const isSelected = value === option.id;
+      const isSelected = value === option.name;
       return (
         <div key={option.id} className="sf-metadata-single-select-item" ref={selectItemRef}>
           <div
@@ -255,7 +255,12 @@ const SingleSelectEditor = forwardRef(({
   return (
     <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
       <div className="sf-metadata-search-single-select-options">
-        <SearchInput placeholder={gettext('Search option')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} />
+        <SearchInput
+          placeholder={gettext('Search option')}
+          onKeyDown={onKeyDown}
+          onChange={onChangeSearch}
+          autoFocus={true}
+        />
       </div>
       <div className="sf-metadata-single-select-editor-container" ref={editorContainerRef}>
         {renderOptions()}
