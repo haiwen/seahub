@@ -108,18 +108,7 @@
 .canvas-groups-rows .group-item .group-backdrop {
   position: absolute;
   left: 0;
-}
-
-.group-level-2 .canvas-groups-rows .group-item .group-backdrop {
-  background-color: #ededed;
-}
-
-.group-level-3 .canvas-groups-rows .group-item .group-backdrop {
-  background-color: #e3e3e3;
-}
-
-.group-level-4 .canvas-groups-rows .group-item .group-backdrop {
-  background-color: #dedede;
+  background-color: #fff;
 }
 
 /* group-header-left */

@@ -69,7 +69,7 @@ export const getColumnWidth = (column) => {
 };
 
 export const isNameColumn = (column) => {
-  return column.key === '0000';
+  return column.key === '_name';
 };
 
 export const handleCascadeColumn = (optionValue, columnKey, columns, row, updated = {}, processedColumns = new Set()) => {
