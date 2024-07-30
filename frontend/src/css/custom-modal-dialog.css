@@ -1,0 +1,11 @@
+.custom-modal{
+  max-width: 740px;
+}
+
+.custom-modal .repo-list-col{
+  max-width: 240px;
+}
+
+.custom-modal .file-list-col{
+  max-width: 500px;
+}

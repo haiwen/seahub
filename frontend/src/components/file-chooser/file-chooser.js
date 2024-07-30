@@ -18,7 +18,7 @@ const propTypes = {
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
-  mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
+  mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library', 'only_other_libraries', 'recently_used']),
   fileSuffixes: PropTypes.array,
   currentPath: PropTypes.string,
 };
@@ -78,6 +78,12 @@ class FileChooser extends React.Component {
         repoList = Utils.sortRepos(repoList, 'name', 'asc');
         this.setState({ repoList: repoList });
       });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.mode !== this.props.mode && this.props.mode === 'only_other_libraries') {
+      this.onOtherRepoToggle();
     }
   }
 
@@ -372,6 +378,8 @@ class FileChooser extends React.Component {
   };
 
   renderRepoListView = () => {
+    console.log(this.props.mode);
+    const recentlyUsedRepos = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
     return (
       <div className="file-chooser-container user-select-none" onScroll={this.onScroll}>
         {this.props.mode === 'current_repo_and_other_repos' && (
@@ -466,6 +474,43 @@ class FileChooser extends React.Component {
             </div>
           </div>
         )}
+        {this.props.mode === 'only_other_libraries' && (
+          <div className="list-view">
+            {!this.props.hideLibraryName &&
+            <div className="list-view-header">
+              <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
+              <span className="library">{gettext('Other Libraries')}</span>
+            </div>}
+
+            <RepoListView
+              initToShowChildren={false}
+              repoList={this.state.repoList}
+              selectedRepo={this.state.selectedRepo}
+              selectedPath={this.state.selectedPath}
+              onRepoItemClick={this.onRepoItemClick}
+              onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
+              fileSuffixes={this.props.fileSuffixes}
+              selectedItemInfo={this.state.selectedItemInfo}
+            />
+
+          </div>
+        )}
+        {this.props.mode === 'recently_used' && (
+          <div className="list-view">
+            <RepoListView
+              initToShowChildren={false}
+              repoList={recentlyUsedRepos}
+              selectedRepo={this.state.selectedRepo}
+              selectedPath={this.state.selectedPath}
+              onRepoItemClick={this.onRepoItemClick}
+              onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
+              fileSuffixes={this.props.fileSuffixes}
+              selectedItemInfo={this.state.selectedItemInfo}
+            />
+          </div>
+        )}
       </div>
     );
   };
@@ -477,14 +522,14 @@ class FileChooser extends React.Component {
 
     return (
       <Fragment>
-        {isPro && (
-          <div className="file-chooser-search-input">
-            <Input className="search-input mb-2" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
-            {this.state.searchInfo.length !== 0 && (
-              <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
-            )}
-          </div>
-        )}
+        {/* {isPro && ( */}
+        <div className="file-chooser-search-input">
+          <Input className="search-input mb-2" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+          {this.state.searchInfo.length !== 0 && (
+            <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
+          )}
+        </div>
+        {/* )} */}
         {this.state.isSearching && (
           <div className="file-chooser-search-container">
             {this.renderSearchedView()}

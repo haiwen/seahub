@@ -753,6 +753,28 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
+      const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
+      const updatedRecentlyUsed = [destRepo, ...recentlyUsed.filter(repo => repo.repo_id !== destRepo.repo_id)];
+
+      const seen = new Set();
+      const filteredRecentlyUsed = updatedRecentlyUsed.filter(repo => {
+        if (seen.has(repo.repo_id)) {
+          return false;
+        } else {
+          seen.add(repo.repo_id);
+          return true;
+        }
+      });
+
+      if (filteredRecentlyUsed.length > 10) {
+        updatedRecentlyUsed.pop(); // Limit to 5 recent directories
+      }
+
+      if (updatedRecentlyUsed.length > 10) {
+        updatedRecentlyUsed.pop(); // Limit to 5 recent directories
+      }
+      localStorage.setItem('recently-used-repos', JSON.stringify(updatedRecentlyUsed));
+
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
@@ -1222,6 +1244,25 @@ class LibContentView extends React.Component {
         message = message.replace('{name}', dirName);
         toaster.success(message);
       }
+
+      const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
+      const updatedRecentlyUsed = [destRepo, ...recentlyUsed.filter(repo => repo.repo_id !== destRepo.repo_id)];
+
+      const seen = new Set();
+      const filteredRecentlyUsed = updatedRecentlyUsed.filter(repo => {
+        if (seen.has(repo.repo_id)) {
+          return false;
+        } else {
+          seen.add(repo.repo_id);
+          return true;
+        }
+      });
+
+      if (filteredRecentlyUsed.length > 10) {
+        updatedRecentlyUsed.pop(); // Limit to 5 recent directories
+      }
+      localStorage.setItem('recently-used-repos', JSON.stringify(filteredRecentlyUsed));
+
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
