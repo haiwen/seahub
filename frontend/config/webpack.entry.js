@@ -20,7 +20,7 @@ const entryFiles = {
   sharedFileViewVideo: '/shared-file-view-video.js',
   sharedFileViewPDF: '/shared-file-view-pdf.js',
   sharedFileViewSVG: '/shared-file-view-svg.js',
-  sharedFileViewAudio:  '/shared-file-view-audio.js',
+  sharedFileViewAudio: '/shared-file-view-audio.js',
   sharedFileViewDocument: '/shared-file-view-document.js',
   sharedFileViewSpreadsheet: '/shared-file-view-spreadsheet.js',
   sharedFileViewSdoc: '/shared-file-view-sdoc.js',
