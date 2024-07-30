@@ -233,7 +233,7 @@ class DirentGridItem extends React.Component {
   };
 
   render() {
-    let { dirent, path } = this.props;
+    let { dirent, path, repoID } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let iconUrl = Utils.getDirentIcon(dirent, true);
     let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
@@ -247,11 +247,11 @@ class DirentGridItem extends React.Component {
 
     let dirHref = '';
     if (this.props.currentRepoInfo) {
-      dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+      dirHref = siteRoot + 'library/' + repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
     }
-    let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
+    let fileHref = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
     if (dirent.is_sdoc_revision && dirent.revision_id) {
-      fileHref = siteRoot + 'lib/' + this.props.repoID + '/revisions/' + dirent.revision_id + '/';
+      fileHref = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
     }
 
     let gridClass = 'grid-file-img-link cursor-pointer';
@@ -266,7 +266,7 @@ class DirentGridItem extends React.Component {
     return (
       <Fragment>
         <li
-          className={`grid-item ${this.props.dirent.isSelected ? 'grid-selected-active' : ''}`}
+          className={`grid-item ${dirent.isSelected ? 'grid-selected-active' : ''}`}
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}>
           <div
