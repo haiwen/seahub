@@ -99,17 +99,6 @@ export const getGroupsRows = (
           groupPathString,
         };
       });
-      rows.push({
-        type: GROUP_ROW_TYPE.BTN_INSERT_ROW,
-        key: `btn-insert-row_${groupKey}`,
-        visible: isBtnInsertRowVisible,
-        height: INSERT_ROW_HEIGHT,
-        level: currentLevel,
-        lastRowIndex,
-        left,
-        groupPath,
-        groupPathString,
-      });
       groupContainer.first_row_id = rows[0].rowId;
       groupContainer.count = rowsLength;
       groupContainer.height = rowsHeight + btnInsertRowHeight + GROUP_HEADER_HEIGHT;
@@ -121,7 +110,7 @@ export const getGroupsRows = (
 };
 
 export const setupGroupsRows = (groupRows, maxLevel) => {
-  let groupRowsHeight = 0;
+  let groupRowsHeight = GROUP_VIEW_OFFSET;
   let top = GROUP_VIEW_OFFSET;
   let idGroupRowMap = {};
   let pervVisibleGroupLevel;
@@ -130,7 +119,7 @@ export const setupGroupsRows = (groupRows, maxLevel) => {
     let newGroupRow = {
       ...flattenGroup,
       top,
-      groupRowIndex: index,
+      groupRecordIndex: index,
     };
     if (type === GROUP_ROW_TYPE.GROUP_CONTAINER) {
       if (visible) {

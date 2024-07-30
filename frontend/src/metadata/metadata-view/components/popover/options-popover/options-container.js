@@ -17,7 +17,7 @@ OptionsContainer.propTypes = {
   options: PropTypes.array
 };
 
-const DndOptionsContainer = DropTarget('Option', {}, connect => ({
+const DndOptionsContainer = DropTarget('sfMetadataSingleSelectOption', {}, connect => ({
   connectDropTarget: connect.dropTarget()
 }))(OptionsContainer);
 

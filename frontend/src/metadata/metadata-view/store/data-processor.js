@@ -35,7 +35,6 @@ class DataProcessor {
   static getGroupedRows(table, rows, groupbys) {
     const tableRows = isTableRows(rows) ? rows : getRowsByIds(table, rows);
     const groups = getGroupRows(table, tableRows, groupbys);
-    // todo update summaries
     return groups;
   }
 

@@ -119,7 +119,7 @@ const getSortedGroups = (groups, groupbys, level) => {
   return groups;
 };
 
-const groupRowsWithMultipleGroupbys = (groupbys, rows, value) => {
+const groupRowsWithMultipleGroupbys = (groupbys, rows) => {
   const validGroupbys = groupbys.length > MAX_GROUP_LEVEL
     ? groupbys.slice(0, MAX_GROUP_LEVEL)
     : [...groupbys];
@@ -175,7 +175,7 @@ const groupRowsWithMultipleGroupbys = (groupbys, rows, value) => {
     }
   });
 
-  groups = getSortedGroups(groups, validGroupbys, value, 0);
+  groups = getSortedGroups(groups, validGroupbys, 0);
 
   return groups;
 };

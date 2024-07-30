@@ -77,18 +77,6 @@
   user-select: none;
 }
 
-.group-level-2 .sf-metadata-result-content {
-  background-color: #ededed;
-}
-
-.group-level-3 .sf-metadata-result-content {
-  background-color: #e3e3e3;
-}
-
-.group-level-4 .sf-metadata-result-content {
-  background-color: #dedede;
-}
-
 .static-sf-metadata-result-content {
   width: 100%;
   position: relative;

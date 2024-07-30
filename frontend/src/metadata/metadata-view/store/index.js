@@ -357,10 +357,10 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifyHiddenColumns(shown_column_keys) {
+  modifyHiddenColumns(hidden_columns) {
     const type = OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS;
     const operation = this.createOperation({
-      type, shown_column_keys, repo_id: this.repoId, view_id: this.viewId
+      type, hidden_columns, repo_id: this.repoId, view_id: this.viewId
     });
     this.applyOperation(operation);
   }

@@ -3,8 +3,8 @@ import RenamePopover from './rename-popover';
 import OptionsPopover from './options-popover';
 import FilterPopover from './filter-popover';
 import SortPopover from './sort-popover';
-// import GroupbyPopover from './groupby-popover';
-// import HideColumnPopover from './hide-column-popover';
+import GroupbysPopover from './groupbys-popover';
+import HideColumnPopover from './hidden-column-popover';
 
 import './index.css';
 
@@ -14,6 +14,6 @@ export {
   OptionsPopover,
   FilterPopover,
   SortPopover,
-  // GroupbyPopover,
-  // HideColumnPopover,
+  GroupbysPopover,
+  HideColumnPopover,
 };

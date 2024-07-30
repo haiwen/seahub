@@ -2,19 +2,31 @@ import {
   CellType,
   DISPLAY_GROUP_DATE_GRANULARITY,
   GROUP_DATE_GRANULARITY,
-  FORMULA_COLUMN_TYPES_MAP,
-  FORMULA_RESULT_TYPE,
   SORT_TYPE,
   SUPPORT_GROUP_COLUMN_TYPES,
   isDateColumn,
   GROUPBY_DATE_GRANULARITY_LIST,
+  GROUP_GEOLOCATION_GRANULARITY,
+  DISPLAY_GROUP_GEOLOCATION_GRANULARITY,
 } from '../_basic';
 
-const NOT_SUPPORT_GROUPBY_ARRAY_TYPE = [CellType.LONG_TEXT, CellType.IMAGE, CellType.FILE];
+const GROUPBY_GEOLOCATION_GRANULARITY_LIST = [
+  GROUP_GEOLOCATION_GRANULARITY.COUNTRY,
+  GROUP_GEOLOCATION_GRANULARITY.PROVINCE,
+  GROUP_GEOLOCATION_GRANULARITY.CITY,
+  GROUP_GEOLOCATION_GRANULARITY.DISTRICT
+];
+
+// const NOT_SUPPORT_GROUPBY_ARRAY_TYPE = [CellType.LONG_TEXT, CellType.IMAGE, CellType.FILE];
 
 export const getDefaultCountType = (column) => {
   if (isDateColumn(column)) {
     return GROUP_DATE_GRANULARITY.MONTH;
+  }
+  if (column.type === CellType.GEOLOCATION) {
+    const { geo_format } = column.data || {};
+    if (geo_format === 'country_region') return GROUPBY_GEOLOCATION_GRANULARITY_LIST[0];
+    return GROUPBY_GEOLOCATION_GRANULARITY_LIST[1];
   }
   return null;
 };
@@ -28,17 +40,11 @@ export const getGroupbyColumns = (columns, groupbys = []) => {
     }
   });
   return columns.filter(column => {
-    const { key, type, data } = column;
+    const { key, type } = column;
     if (!SUPPORT_GROUP_COLUMN_TYPES.includes(type)) {
       return false;
     }
     if (groupbyColumnKeyMap[key]) return false; // group by has already exist
-    if (FORMULA_COLUMN_TYPES_MAP[type]) {
-      const { result_type, array_type } = data || {};
-      if (result_type === FORMULA_RESULT_TYPE.ARRAY && NOT_SUPPORT_GROUPBY_ARRAY_TYPE.includes(array_type)) {
-        return false;
-      }
-    }
     return true;
   });
 };
@@ -56,6 +62,11 @@ export const getSelectedCountType = (column, countType) => {
 
 export const isShowGroupCountType = (column) => {
   if (isDateColumn(column)) return true;
+  const data = column.data || {};
+  if (column.type === CellType.GEOLOCATION) {
+    if (data.geo_format === GROUP_GEOLOCATION_GRANULARITY.PROVINCE || data.geo_format === 'country_region') return false;
+    return true;
+  }
   return false;
 };
 
@@ -65,6 +76,14 @@ export const getGroupbyGranularityByColumn = (column) => {
   if (isDateColumn(column)) {
     granularityList = GROUPBY_DATE_GRANULARITY_LIST;
     displayGranularity = DISPLAY_GROUP_DATE_GRANULARITY;
+  } else if (column.type === CellType.GEOLOCATION) {
+    const { geo_format } = column.data || {};
+    granularityList = GROUPBY_GEOLOCATION_GRANULARITY_LIST.filter(granularity => {
+      const isGranularityProvinceOrCity = granularity === GROUP_GEOLOCATION_GRANULARITY.PROVINCE || granularity === GROUP_GEOLOCATION_GRANULARITY.CITY;
+      const isProvinceOrCity = geo_format === 'province_city' && isGranularityProvinceOrCity;
+      return geo_format === isProvinceOrCity || granularity !== GROUP_GEOLOCATION_GRANULARITY.COUNTRY;
+    });
+    displayGranularity = DISPLAY_GROUP_GEOLOCATION_GRANULARITY;
   }
   return { granularityList, displayGranularity };
 };

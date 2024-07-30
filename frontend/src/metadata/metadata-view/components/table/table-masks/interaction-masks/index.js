@@ -997,8 +997,8 @@ class InteractionMasks extends React.Component {
         this.handleDragCopy(draggedRange);
         newSelectedRange.bottomRight.rowIdx = overRecordIdx;
         newSelectedRange.cursorCell.rowIdx = overRecordIdx;
-        newSelectedRange.bottomRight.groupRowIndex = overGroupRecordIndex;
-        newSelectedRange.cursorCell.groupRowIndex = overGroupRecordIndex;
+        newSelectedRange.bottomRight.groupRecordIndex = overGroupRecordIndex;
+        newSelectedRange.cursorCell.groupRecordIndex = overGroupRecordIndex;
       }
       this.setState({ draggedRange: null, selectedRange: newSelectedRange });
     }
@@ -1130,7 +1130,6 @@ class InteractionMasks extends React.Component {
             <EditorContainer
               table={table}
               columns={columns}
-              isGroupView={isGroupView}
               scrollTop={scrollTop}
               firstEditorKeyDown={firstEditorKeyDown}
               openEditorMode={openEditorMode}

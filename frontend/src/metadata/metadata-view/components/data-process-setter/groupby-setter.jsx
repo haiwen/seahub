@@ -2,15 +2,15 @@ import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { CommonlyUsedHotkey } from '../../_basic';
+import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
 import { gettext } from '../../utils';
+import { GroupbysPopover } from '../popover';
 
-const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target }) => {
+const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const groupbys = useMemo(() => {
-    return propsGroupbys || [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return getValidGroupbys(propsGroupbys, columns) || [];
   }, [columns, propsGroupbys]);
 
   const message = useMemo(() => {
@@ -30,6 +30,11 @@ const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target 
     if (CommonlyUsedHotkey.isEnter(event) || CommonlyUsedHotkey.isSpace(event)) onSetterToggle();
   }, [onSetterToggle]);
 
+  const onChange = useCallback((groupbys) => {
+    const validGroupbys = getValidGroupbys(groupbys, columns);
+    modifyGroupbys(validGroupbys);
+  }, [columns, modifyGroupbys]);
+
   const className = classnames(wrapperClass, { 'active': groupbys.length > 0 });
   return (
     <>
@@ -45,6 +50,16 @@ const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target 
         tabIndex={0}
         id={target}
       />
+      {isShowSetter && (
+        <GroupbysPopover
+          groupbys={groupbys}
+          target={target}
+          placement="bottom-end"
+          columns={columns}
+          hidePopover={onSetterToggle}
+          onChange={onChange}
+        />
+      )}
     </>
   );
 
