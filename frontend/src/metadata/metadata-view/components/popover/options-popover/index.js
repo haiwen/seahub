@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../utils';
+import { useMetadata } from '../../../hooks';
 import { getColumnOptions, generateOptionID } from '../../../_basic';
+import { getOptionNameById } from '../../../_basic/utils/column/option';
 import { getNotDuplicateOption } from '../../../utils/column-utils';
 import OptionsContainer from './options-container';
 import Option from './option';
@@ -16,9 +18,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   const [viewingOptionId, setViewingOptionId] = useState(-1);
   const [deletingOptionId, setDeletingOptionId] = useState('');
   const [editingOptionId, setEditingOptionId] = useState(-1);
+  const [relationRowsNum, setRelationRowsNum] = useState(0);
   const isFreezeRef = useRef(false);
   const ref = useRef(null);
   const isValidEditingOption = useRef(true);
+  const { metadata } = useMetadata();
 
   const displayOptions = useMemo(() => {
     const validSearchValue = searchValue.trim().toLowerCase();
@@ -114,10 +118,6 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     setSearchValue(value);
   }, [searchValue]);
 
-  const updateDeleteOption = useCallback((optionId) => {
-    setDeletingOptionId(optionId);
-  }, []);
-
   const closeDeleteOption = useCallback(() => {
     setDeletingOptionId('');
   }, []);
@@ -125,6 +125,23 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   const onDeleteOption = useCallback(() => {
     onDelete(deletingOptionId);
   }, [deletingOptionId, onDelete]);
+
+  const updateDeleteOption = useCallback((optionId) => {
+    const optionName = getOptionNameById(column, optionId);
+    let relationRowsNum = 0;
+    metadata.rows.forEach(row => {
+      if (row[column.name] === optionName) {
+        relationRowsNum++;
+      }
+    });
+    if (relationRowsNum > 0) {
+      setDeletingOptionId(optionId);
+      setRelationRowsNum(relationRowsNum);
+    } else {
+      setRelationRowsNum(0);
+      onDelete(optionId);
+    }
+  }, [metadata, column, onDelete]);
 
   const renderEmptyTip = useCallback(() => {
     if (displayOptions.length > 0) return null;
@@ -193,6 +210,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
           option={options.find(o => o.id === deletingOptionId)}
           onToggle={closeDeleteOption}
           onSubmit={onDeleteOption}
+          deleteNumber={relationRowsNum}
         />
       )}
     </>

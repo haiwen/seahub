@@ -12,6 +12,12 @@ const getColumnOptions = (column) => {
   return column.data.options;
 };
 
+const getOptionNameById = (column, optionId) => {
+  const options = getColumnOptions(column);
+  const option = options.find(op => op.id === optionId) || {};
+  return option.name;
+};
+
 /**
  * generate unique option id
  * @param {array} options e.g. [{ id, ... }, ...]
@@ -127,6 +133,7 @@ const generatorCellOptions = (options, optionNames) => {
 
 export {
   getColumnOptions,
+  getOptionNameById,
   generateOptionID,
   createOption,
   generatorCellOption,

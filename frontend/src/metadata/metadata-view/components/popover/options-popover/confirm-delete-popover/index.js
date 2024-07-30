@@ -5,7 +5,7 @@ import { gettext } from '../../../../utils';
 
 import './index.css';
 
-const ConfirmDeletePopover = ({ option, onToggle, onSubmit }) => {
+const ConfirmDeletePopover = ({ option, onToggle, onSubmit, deleteNumber }) => {
   const [isDeleting, setDeleting] = useState(false);
 
   const toggle = useCallback(() => {
@@ -24,6 +24,7 @@ const ConfirmDeletePopover = ({ option, onToggle, onSubmit }) => {
       hideWithEsc={toggle}
     >
       <div className="sf-metadata-tip-default mt-2 mb-4">
+        {gettext('{name} rows use this option.').replace('{name}', deleteNumber)}{' '}
         {gettext('Are you sure you want to delete this option?')}
       </div>
       <div className="d-flex justify-content-end">
@@ -39,6 +40,7 @@ ConfirmDeletePopover.propTypes = {
   option: PropTypes.object,
   onToggle: PropTypes.func,
   onSubmit: PropTypes.func,
+  deleteNumber: PropTypes.number,
 };
 
 export default ConfirmDeletePopover;
