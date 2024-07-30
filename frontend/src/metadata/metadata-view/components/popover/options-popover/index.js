@@ -6,6 +6,7 @@ import { getColumnOptions } from '../../../_basic';
 import { getOptionNameById } from '../../../_basic/utils/column/option';
 import { generateNewOption } from '../../../utils/select-utils';
 import OptionsContainer from './options-container';
+import OptionFooter from './options-footer';
 import Option from './option';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import toaster from '../../../../../components/toast';
@@ -200,6 +201,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             footerName={gettext('Add option')}
             addIconClassName="sf-metadata-add-option-icon"
           />
+          <OptionFooter column={column} onToggle={onToggle} />
         </div>
       </CustomizePopover>
       {deletingOptionId && (
