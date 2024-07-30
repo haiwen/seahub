@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../utils';
 import { useMetadata } from '../../../hooks';
-import { getColumnOptions, generateOptionID } from '../../../_basic';
+import { getColumnOptions } from '../../../_basic';
 import { getOptionNameById } from '../../../_basic/utils/column/option';
-import { getNotDuplicateOption } from '../../../utils/column-utils';
+import { generateNewOption } from '../../../utils/select-utils';
 import OptionsContainer from './options-container';
 import Option from './option';
 import ConfirmDeletePopover from './confirm-delete-popover';
@@ -70,10 +70,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, [options, displayOptions, onChange]);
 
   const onAdd = useCallback(() => {
-    const defaultOption = getNotDuplicateOption(options);
-    const { COLOR: color, TEXT_COLOR: textColor, BORDER_COLOR: borderColor } = defaultOption;
-    let newOption = { name: searchValue?.trim() || '', color, textColor, borderColor };
-    newOption.id = generateOptionID(options);
+    const newOption = generateNewOption(options, searchValue?.trim() || '');
     const newOptions = options.slice(0);
     newOptions.push(newOption);
     onChange(newOptions);

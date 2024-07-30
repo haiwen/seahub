@@ -4,7 +4,6 @@ import {
   PRIVATE_COLUMN_KEY,
   NOT_DISPLAY_COLUMN_KEYS,
   PRIVATE_COLUMN_KEYS,
-  SELECT_OPTION_COLORS,
 } from '../_basic';
 import {
   SEQUENCE_COLUMN_WIDTH
@@ -12,13 +11,6 @@ import {
 import {
   gettext
 } from '../../../utils/constants';
-
-export function getSelectColumnOptions(column) {
-  if (!column || !column.data || !Array.isArray(column.data.options)) {
-    return [];
-  }
-  return column.data.options;
-}
 
 export function getDateColumnFormat(column) {
   const format = (column && column.data && column.data.format) ? column.data.format : DEFAULT_DATE_FORMAT;
@@ -332,21 +324,3 @@ export function canEdit(col, record, enableCellSelect) {
   }
   return enableCellSelect === true && !!col.editable;
 }
-
-export const getNotDuplicateOption = (options) => {
-  const defaultOptions = SELECT_OPTION_COLORS.slice(12, 24);
-  let defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
-  const adjacentOptions = options.slice(-11);
-
-  function isDuplicate(option) {
-    return option.color === defaultOption.COLOR;
-  }
-
-  let duplicateOption = adjacentOptions.find(isDuplicate);
-  while (duplicateOption) {
-    defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
-    duplicateOption = adjacentOptions.find(isDuplicate);
-  }
-
-  return defaultOption;
-};

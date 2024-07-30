@@ -31,8 +31,6 @@ export {
   isSupportDateColumnFormat,
   getDateColumnFormat,
   isPredefinedColumn,
-  getSelectColumnOptions,
-  getNotDuplicateOption,
   isNumericColumn,
   isNumberColumn,
   getColumnOptions,

@@ -2,7 +2,8 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
-import { getCellValueByColumn, getColumnByKey, getSelectColumnOptions, getNotDuplicateOption, isFunction } from '../../../_basic';
+import { getCellValueByColumn, getColumnByKey, isFunction } from '../../../_basic';
+import { generateNewOption, getSelectColumnOptions } from '../../../utils/select-utils';
 import { KeyCodes } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
 
@@ -16,6 +17,7 @@ const SingleSelectEditor = forwardRef(({
   value: oldValue,
   onCommit,
   onPressTab,
+  modifyColumnData,
 }, ref) => {
   const [value, setValue] = useState(oldValue || '');
   const [searchValue, setSearchValue] = useState('');
@@ -26,7 +28,7 @@ const SingleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = false;
+  const canEditData = true;
 
   const options = useMemo(() => {
     const options = getSelectColumnOptions(column);
@@ -53,10 +55,10 @@ const SingleSelectEditor = forwardRef(({
   }, [searchValue, options]);
 
   const isShowCreateBtn = useMemo(() => {
-    if (!canEditData) return false;
-    if (!searchValue) return false;
+    if (!canEditData || !searchValue) return false;
     return displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
   }, [canEditData, displayOptions, searchValue]);
+
   const style = useMemo(() => {
     return { width: column.width, top: height - 2 };
   }, [column, height]);
@@ -86,14 +88,12 @@ const SingleSelectEditor = forwardRef(({
 
   const createOption = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
-    const defaultOption = getNotDuplicateOption(options);
+    const newOption = generateNewOption(options, searchValue?.trim() || '');
     let newOptions = options.slice(0);
-    const newOption = { name: searchValue.trim(), color: defaultOption.COLOR, textColor: defaultOption.TEXT_COLOR };
     newOptions.push(newOption);
-    this.setState({ options }, () => {
-      onSelectOption(newOption.id);
-    });
-  }, [searchValue, options, onSelectOption]);
+    modifyColumnData(column.key, { options: newOptions }, { options: column.data.options || [] });
+    onSelectOption(newOption.id);
+  }, [column, searchValue, options, onSelectOption, modifyColumnData]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);

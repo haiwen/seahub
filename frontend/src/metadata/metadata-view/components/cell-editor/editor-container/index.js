@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NormalEditorContainer from './normal';
-import PopupEditorContainer from './popup';
-import PreviewEditorContainer from './preview';
+import NormalEditorContainer from './normal-editor-container';
+import PopupEditorContainer from './popup-editor-container';
+import PreviewEditorContainer from './preview-editor-container';
 import { CellType } from '../../../_basic';
 
 const POPUP_EDITOR_COLUMN_TYPES = [
@@ -19,17 +19,15 @@ const PREVIEW_EDITOR_COLUMN_TYPES = [
 const EditorContainer = (props) => {
   const { column } = props;
   if (!column) return null;
-  if (POPUP_EDITOR_COLUMN_TYPES.includes(column.type)) {
-    return (<PopupEditorContainer { ...props } />);
+  const { type } = column;
+  if (POPUP_EDITOR_COLUMN_TYPES.includes(type)) {
+    return <PopupEditorContainer { ...props } />;
+  } else if (PREVIEW_EDITOR_COLUMN_TYPES.includes(type)) {
+    return <PreviewEditorContainer { ...props } />;
+  } else {
+    return <NormalEditorContainer { ...props } />;
   }
-
-  if (PREVIEW_EDITOR_COLUMN_TYPES.includes(column.type)) {
-    return (<PreviewEditorContainer { ...props } />);
-  }
-
-  return (<NormalEditorContainer { ...props } />);
 };
-
 
 EditorContainer.propTypes = {
   column: PropTypes.object,

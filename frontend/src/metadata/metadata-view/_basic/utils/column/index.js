@@ -13,10 +13,6 @@ export {
   isPredefinedColumn,
 } from './predefined';
 export {
-  getSelectColumnOptions,
-  getNotDuplicateOption,
-} from './select';
-export {
   isNumericColumn,
   isNumberColumn,
 } from './number';

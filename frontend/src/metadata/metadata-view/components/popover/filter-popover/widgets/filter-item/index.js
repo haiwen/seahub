@@ -9,8 +9,8 @@ import {
   filterTermModifierIsWithin,
   isDateColumn,
   FILTER_ERR_MSG,
-  getSelectColumnOptions,
 } from '../../../../../_basic';
+import { getSelectColumnOptions } from '../../../../../utils/select-utils';
 import CollaboratorFilter from './collaborator-filter';
 import FilterCalendar from '../filter-calendar';
 import FilterItemUtils from '../filter-item-utils';

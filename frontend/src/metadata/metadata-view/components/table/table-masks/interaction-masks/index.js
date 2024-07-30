@@ -1092,6 +1092,7 @@ class InteractionMasks extends React.Component {
               value={getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex })}
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
+              modifyColumnData={this.props.modifyColumnData}
               editorPosition={editorPosition}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),
