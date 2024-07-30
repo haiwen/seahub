@@ -120,19 +120,14 @@ const SingleSelectEditor = forwardRef(({
     if (searchValue) {
       isShowCreateBtn = canEditData && displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
     }
-    if (!isShowCreateBtn) return;
-    if (displayOptions.length === 0) return;
+    if (!isShowCreateBtn || displayOptions.length === 0) return;
     createOption();
   }, [canEditData, displayOptions, highlightIndex, value, searchValue, onSelectOption, createOption]);
 
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === 0) {
-      setHighlightIndex(displayOptions.length - 1);
-      editorContainerRef.current.scrollTop = 0;
-      return;
-    }
+    if (highlightIndex === 0) return;
     setHighlightIndex(highlightIndex - 1);
     if (highlightIndex > displayOptions.length - maxItemNum) {
       editorContainerRef.current.scrollTop -= itemHeight;
@@ -142,11 +137,7 @@ const SingleSelectEditor = forwardRef(({
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === displayOptions.length - 1) {
-      setHighlightIndex(0);
-      editorContainerRef.current.scrollTop = 0;
-      return;
-    }
+    if (highlightIndex === displayOptions.length - 1) return;
     setHighlightIndex(highlightIndex + 1);
     if (highlightIndex >= maxItemNum) {
       editorContainerRef.current.scrollTop += itemHeight;
