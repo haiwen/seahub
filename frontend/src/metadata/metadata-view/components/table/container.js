@@ -142,16 +142,14 @@ const Container = () => {
   }, [metadata, recordGetterById]);
 
   const groupRecordGetter = useCallback((groupRecordIndex) => {
-    if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) {
-      return null;
-    }
+    if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) return null;
     const groupRecord = window.sfMetadataBody.getGroupRecordByIndex(groupRecordIndex);
     const recordId = groupRecord.rowId;
     return recordId && recordGetterById(recordId);
   }, [recordGetterById]);
 
   const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
-    if (isGroupView) groupRecordGetter(groupRecordIndex);
+    if (isGroupView) return groupRecordGetter(groupRecordIndex);
     return recordGetter(recordIndex);
   }, [groupRecordGetter, recordGetter]);
 

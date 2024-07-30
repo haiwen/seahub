@@ -587,22 +587,6 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
-  cacheDownloadFilesProps = (column, records) => {
-    // todo
-  };
-
-  downloadColumnAllFiles = (column) => {
-    // todo
-  };
-
-  openDownloadFilesDialog = () => {
-    // todo
-  };
-
-  closeDownloadFilesDialog = () => {
-    // todo
-  };
-
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
@@ -677,7 +661,6 @@ class Records extends Component {
               resizeColumnWidth={this.resizeColumnWidth}
               selectNoneRecords={this.selectNone}
               selectAllRecords={this.selectAllRecords}
-              downloadColumnAllFiles={this.downloadColumnAllFiles}
               renameColumn={renameColumn}
               deleteColumn={deleteColumn}
               modifyColumnData={modifyColumnData}

@@ -8,7 +8,7 @@ import {
   KeyCodes,
   isFunction,
 } from '../../../../_basic';
-import { EVENT_BUS_TYPE, TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE } from '../../../../constants';
+import { EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE } from '../../../../constants';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
@@ -231,19 +231,6 @@ class InteractionMasks extends React.Component {
         editorPosition: this.getEditorPosition()
       });
     }
-  };
-
-  openMobileEditor = () => {
-    const { recordGetterByIndex, isGroupView, columns } = this.props;
-    const { selectedPosition } = this.state;
-    const recordData = getSelectedRow({ selectedPosition, recordGetterByIndex, isGroupView });
-    const column = getSelectedColumn({ selectedPosition, columns });
-    if (!recordData || !column || !TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP[column.type]) {
-      return false;
-    }
-    const editingCell = { recordData, column };
-    this.props.editMobileCell(editingCell);
-    return true;
   };
 
   closeEditor = () => {
@@ -1065,41 +1052,6 @@ class InteractionMasks extends React.Component {
         getSelectedDimensions={this.getSelectedDimensions}
       />
     ];
-  };
-
-  renderMobileOperations = () => {
-    const { canAddRow, columns } = this.props;
-    const { selectedPosition } = this.state;
-    const isSelectCell = !(selectedPosition.idx === -1 && selectedPosition.rowIdx === -1);
-    const selectedColumn = isSelectCell && getSelectedColumn({ selectedPosition, columns });
-    const cellEditable = isSelectCell && selectedColumn && TABLE_MOBILE_SUPPORT_EDIT_CELL_TYPE_MAP[selectedColumn.type] && this.isSelectedCellEditable();
-    const style = this.props.getMobileFloatIconStyle();
-    let moreIconPositionStyle = {
-      bottom: canAddRow || cellEditable ? 102 : 42,
-    };
-    let buttons = [
-      <span className="mobile-float-icon mobile-more-icon" key="mobile-more-icon" style={Object.assign(moreIconPositionStyle, style)} onClick={this.props.onToggleMobileMoreOperations}>
-        <i className="sf-metadata-font sf-metadata-icon-more-level"></i>
-      </span>
-    ];
-
-
-    if (canAddRow && !cellEditable) {
-      buttons.push(
-        <span className="mobile-float-icon mobile-insert-row-icon" key="mobile-insert-row-icon" style={Object.assign({ bottom: 42 }, style,)} onClick={this.props.onToggleInsertRecordDialog} >
-          <i className="sf-metadata-font sf-metadata-icon-add-table"></i>
-        </span>
-      );
-    }
-
-    if (cellEditable) {
-      buttons.push(
-        <span className="mobile-float-icon mobile-edit-cell-icon" key="mobile-edit-cell-icon" style={Object.assign({ bottom: 42 }, style,)} onClick={this.openMobileEditor} >
-          <i className="sf-metadata-font sf-metadata-icon-rename"></i>
-        </span>
-      );
-    }
-    return buttons;
   };
 
   render() {

@@ -85,11 +85,11 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, targe
   }, [groupbys, updateGroups]);
 
   const hideAllGroups = useCallback(() => {
-
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.COLLAPSE_ALL_GROUPS);
   }, []);
 
   const showAllGroups = useCallback(() => {
-
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.EXPAND_ALL_GROUPS);
   }, []);
 
   const onPopoverInsideClick = useCallback((event) => {
@@ -116,7 +116,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, targe
             addIconClassName="popover-add-icon"
           />
         )}
-        {groupbys.length > 1 && (
+        {groupbys.length > 0 && (
           <div className="groupbys-tools">
             <span className="groupbys-tool-item" onClick={hideAllGroups}>{gettext('Collapse all')}</span>
             <span className="groupbys-tool-item" onClick={showAllGroups}>{gettext('Expand all')}</span>

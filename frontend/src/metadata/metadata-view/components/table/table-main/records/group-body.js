@@ -602,9 +602,7 @@ class GroupBody extends Component {
   };
 
   updateFoldedGroups = (pathFoldedGroupMap) => {
-    let localConfigs = window.sfMetadataContext.localStorage.getItem(LOCAL_FOLDED_GROUP_KEY);
-    localConfigs[LOCAL_FOLDED_GROUP_KEY] = pathFoldedGroupMap;
-    window.sfMetadataContext.localStorage.setItem(LOCAL_FOLDED_GROUP_KEY, localConfigs);
+    window.sfMetadataContext.localStorage.setItem(LOCAL_FOLDED_GROUP_KEY, pathFoldedGroupMap);
     this.selectNoneCells();
   };
 
