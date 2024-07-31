@@ -55,8 +55,9 @@ const NameDialog = ({ value: oldName, title, onSubmit, onToggle }) => {
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {
       event.preventDefault();
+      submit();
     }
-  }, []);
+  }, [submit]);
 
   useEffect(() => {
     document.addEventListener('keydown', onHotKey);

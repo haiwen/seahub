@@ -71,11 +71,12 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, [options, displayOptions, onChange]);
 
   const onAdd = useCallback(() => {
-    const newOption = generateNewOption(options, searchValue?.trim() || '');
+    const newOptionName = searchValue?.trim() || '';
+    const newOption = generateNewOption(options, newOptionName);
     const newOptions = options.slice(0);
     newOptions.push(newOption);
     onChange(newOptions);
-    setEditingOptionId(newOption.id);
+    setEditingOptionId(newOptionName ? '' : newOption.id);
   }, [searchValue, options, onChange]);
 
   const onDelete = useCallback((optionId) => {
