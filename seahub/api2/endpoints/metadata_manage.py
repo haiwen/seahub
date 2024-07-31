@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,13 +11,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata
+from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, get_sys_columns
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
-from seahub.utils.timeutils import utc_to_local, \
-        datetime_to_isoformat_timestr, datetime_to_timestamp, \
-        timestamp_to_isoformat_timestr
-from datetime import datetime
-import time
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seaserv import seafile_api
 
@@ -262,17 +260,7 @@ class MetadataRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        sys_column_names = [
-            METADATA_TABLE.columns.id.name,
-            METADATA_TABLE.columns.file_creator.name,
-            METADATA_TABLE.columns.file_ctime.name,
-            METADATA_TABLE.columns.file_modifier.name,
-            METADATA_TABLE.columns.file_mtime.name,
-            METADATA_TABLE.columns.parent_dir.name,
-            METADATA_TABLE.columns.file_name.name,
-            METADATA_TABLE.columns.is_dir.name,
-            METADATA_TABLE.columns.file_type.name,
-        ]
+        sys_column_names = [column.get('name') for column in get_sys_columns()]
 
         rows = []
         for record_data in records_data:
@@ -530,8 +518,6 @@ class MetadataColumns(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.utils import METADATA_TABLE
 
