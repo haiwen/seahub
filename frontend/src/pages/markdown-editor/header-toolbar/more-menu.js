@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import { gettext, canGenerateShareLink } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
 const { canDownloadFile } = window.app.pageOptions;
 
@@ -51,7 +52,7 @@ class MoreMenu extends React.PureComponent {
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
         <DropdownToggle id="moreButton" aria-label={gettext('More operations')}>
-          <i className="sf3-font sf3-font-more-vertical"/>
+          <Icon symbol="more-vertical" />
           <Tooltip toggle={this.tooltipToggle} delay={{ show: 0, hide: 0 }} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
           </Tooltip>
         </DropdownToggle>

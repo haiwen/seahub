@@ -124,7 +124,7 @@ class FileToolbar extends React.Component {
           )}
           <IconButton
             id="open-parent-folder"
-            icon="sf3-font sf3-font-folder-open"
+            icon="open-folder"
             text={gettext('Open parent folder')}
             tag="a"
             href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
@@ -140,7 +140,7 @@ class FileToolbar extends React.Component {
           {showShareBtn && (
             <IconButton
               id="share-file"
-              icon='sf3-font sf3-font-share'
+              icon='share'
               text={gettext('Share')}
               onClick={this.toggleShareDialog}
             />
@@ -149,25 +149,25 @@ class FileToolbar extends React.Component {
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
               <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                <i className='sf3-font sf3-font-spinner'/>
+                <Icon symbol="spinner" />
               </button>
               :
               (this.props.needSave ?
                 <IconButton
                   text={gettext('Save')}
                   id={'saveButton'}
-                  icon='sf3-font sf3-font-save'
+                  icon='save'
                   onClick={this.props.onSave}
                 />
                 :
                 <button type='button' className='btn btn-icon btn-secondary btn-active' disabled>
-                  <i className='sf3-font sf3-font-save'/>
+                  <Icon symbol="save" />
                 </button>
               ))}
           {canDownloadFile && (
             <IconButton
               id="download-file"
-              icon="sf3-font sf3-font-download1"
+              icon="download"
               text={gettext('Download')}
               tag="a"
               href="?dl=1"
@@ -175,14 +175,14 @@ class FileToolbar extends React.Component {
           )}
           <IconButton
             id="file-details"
-            icon='sf3-font sf3-font-info1'
+            icon='info'
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
           {filePerm == 'rw' && (
             <IconButton
               id="open-via-client"
-              icon="sf3-font sf3-font-desktop"
+              icon="client"
               text={gettext('Open via Client')}
               tag="a"
               href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
@@ -190,7 +190,7 @@ class FileToolbar extends React.Component {
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
-              className="file-toolbar-more-operations"
+              className="file-toolbar-more-operations btn-icon"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
             >
@@ -211,24 +211,26 @@ class FileToolbar extends React.Component {
             {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?
                   <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                    <i className='sf3-font sf3-font-spinner'/>
+                    <Icon symbol="spinner" />
                   </button>
                   :
                   (this.props.needSave ?
                     <IconButton
                       text={gettext('Save')}
                       id={'saveButton'}
-                      icon='sf3-font sf3-font-save'
+                      icon='save'
                       onClick={this.props.onSave}
                     />
                     :
                     <button type='button' className={'btn btn-icon btn-secondary btn-active'} disabled>
-                      <i className={'sf3-font sf3-font-save'}/>
+                      <Icon symbol="save" />
                     </button>
                   ))}
           </ButtonGroup>
 
-          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More operations')}></DropdownToggle>
+          <DropdownToggle className="mx-1" aria-label={gettext('More operations')}>
+            <Icon symbol="more-vertical" />
+          </DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">

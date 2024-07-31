@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -100,7 +101,7 @@ class ButtonItem extends React.Component {
         onClick ={this.onClick}
         onMouseDown={this.onMouseDown}
       >
-        <i className={icon} />
+        <Icon symbol={icon} />
         <Tooltip target={id} isOpen={tooltipOpen} delay={delay} placement='bottom' toggle={this.toggle}>
           {text}
         </Tooltip>

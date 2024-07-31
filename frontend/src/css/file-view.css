@@ -13,6 +13,10 @@ body {
   flex-shrink: 0;
 }
 
+.file-view-header .btn {
+  color: #666;
+}
+
 .file-view-header .file-toolbar-more-operations {
   height: 38px;
   padding: 0;
