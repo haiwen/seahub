@@ -4,7 +4,6 @@ import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } f
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
-import '../../css/custom-modal-dialog.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -27,7 +26,7 @@ class MoveDirent extends React.Component {
       repo: { repo_id: this.props.repoID },
       selectedPath: this.props.path,
       errMessage: '',
-      mode: 'only_current_library'
+      mode: 'only_current_library',
     };
   }
 
@@ -171,17 +170,18 @@ class MoveDirent extends React.Component {
     const { isCustomPermission } = Utils.getUserPermission(permission);
 
     const LibraryOption = ({ mode, label }) => (
-      <div className='cursor-pointer' onClick={() => this.onSelectedMode(mode)}>
+      <div className={`repo-list-item ${this.state.mode === mode ? 'active' : ''}`} onClick={() => this.onSelectedMode(mode)}>
         <span className='library'>{label}</span>
       </div>
     );
+
     return (
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
           {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
         <Row className='m-0'>
-          <Col className='repo-list-col p-0 border-right'>
+          <Col className='repo-list-col border-right'>
             <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
             {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
             <LibraryOption mode='recently_used' label={gettext('Recently Used')} />

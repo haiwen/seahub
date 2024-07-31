@@ -429,28 +429,19 @@ class FileChooser extends React.Component {
         )}
         {this.props.mode === 'only_current_library' && (
           <div className="list-view">
-            {!this.props.hideLibraryName &&
-            <div className="list-view-header">
-              <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
-              <span className="library">{gettext('Current Library')}</span>
-            </div>
-            }
-            {
-              this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-              <RepoListView
-                initToShowChildren={true}
-                currentRepoInfo={this.state.currentRepoInfo}
-                currentPath={this.props.currentPath}
-                selectedRepo={this.state.selectedRepo}
-                selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick}
-                onDirentItemClick={this.onDirentItemClick}
-                isShowFile={this.props.isShowFile}
-                fileSuffixes={this.props.fileSuffixes}
-                selectedItemInfo={this.state.selectedItemInfo}
-                hideLibraryName={this.props.hideLibraryName}
-              />
-            }
+            <RepoListView
+              initToShowChildren={true}
+              currentRepoInfo={this.state.currentRepoInfo}
+              currentPath={this.props.currentPath}
+              selectedRepo={this.state.selectedRepo}
+              selectedPath={this.state.selectedPath}
+              onRepoItemClick={this.onRepoItemClick}
+              onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
+              fileSuffixes={this.props.fileSuffixes}
+              selectedItemInfo={this.state.selectedItemInfo}
+              hideLibraryName={this.props.hideLibraryName}
+            />
           </div>
         )}
         {this.props.mode === 'only_all_repos' && (
@@ -524,7 +515,7 @@ class FileChooser extends React.Component {
       <Fragment>
         {/* {isPro && ( */}
         <div className="file-chooser-search-input">
-          <Input className="search-input mb-2" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+          <Input className="search-input" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
           {this.state.searchInfo.length !== 0 && (
             <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
           )}

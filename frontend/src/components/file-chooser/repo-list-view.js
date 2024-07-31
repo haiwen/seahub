@@ -26,12 +26,9 @@ class RepoListView extends React.Component {
       repoList = [];
       repoList.push(currentRepoInfo);
     }
-    let style = {};
-    if (this.props.hideLibraryName) {
-      style = { marginLeft: '-44px' };
-    }
+
     return (
-      <ul className="list-view-content file-chooser-item" style={style}>
+      <ul className="list-view-content file-chooser-item" >
         {repoList.length > 0 && repoList.map((repoItem, index) => {
           return (
             <RepoListItem

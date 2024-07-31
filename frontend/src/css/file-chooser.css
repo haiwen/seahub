@@ -1,27 +1,18 @@
 .file-chooser-container {
-  padding: 0.5rem;
+  padding-top: 1rem;
   height: 20rem;
-  border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 3px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  overflow: auto;
   font-size: 1rem;
 }
 
 .item-toggle{
-  position: absolute;
   height: 1.5rem;
   width: 1.5rem;
-  left: 0;
-  top: 0;
   line-height: 1.5rem !important;
   text-align: center;
   cursor: pointer;
   color: #c0c0c0;
-}
-
-.file-chooser-container .list-view {
-  margin-top: 0.25rem;
 }
 
 .list-view-header {
@@ -29,7 +20,7 @@
   padding-left: 1.5rem;
 }
 .list-view-header:hover {
-  background-color: #FDEFB9;
+  background-color: #F5F5F5;
 }
 
 .list-view-header .name {
@@ -37,42 +28,10 @@
 }
 
 .list-view-content {
+  width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.file-chooser-item {
-  position: relative;
-  padding-left: 22px;
-}
-
-.file-chooser-item .item-info {
-  height: 1.5rem;
-  cursor: pointer;
-  position: relative;
-  line-height: 1.625;
-}
-
-.file-chooser-item .item-active {
-  background: #F3AF7D !important;
-  border-radius: 2px;
-  box-shadow: inset 0 0 1px #999;
-  color: #fff;
-}
-
- .file-chooser-item .item-info:hover {
-  background: #FDEFB9;
-  border-radius: 2px;
-  box-shadow: inset 0 0 1px #999;
-}
-
-.file-chooser-item .item-info .name {
-  flex: 1;
-}
-
-.file-chooser-item .item-active .icon {
-  color: #fff !important;
 }
 
 .file-chooser-search-input {
@@ -125,24 +84,61 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0);
 }
 
+
+.file-chooser-item {
+  width: 100%;
+  position: relative;
+}
+
+.file-chooser-item .item-active {
+  background: #F2F4F6 !important;
+  border-radius: 3px;
+}
+
+.file-chooser-item .item-active::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 24px;
+  left: -8px;
+  top: 2px;
+  background-color: #FF8000;
+  border-radius: 2px;
+  z-index: 100;
+}
+
+.file-chooser-item .item-info {
+  height: 1.75rem;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  line-height: 1.625;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.file-chooser-item .item-info:hover {
+  background: #F5F5F5;
+  border-radius: 3px;
+}
+
 .file-chooser-item .item-info .item-text {
-  padding-left: 2.8rem;
-  font-size: 15px;
+  height: 100%;
+  padding-left: 0.25rem;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 24px;
+  line-height: 1.5;
+  transition: color 3.0s ease, background-color 0.3s ease;
 }
 
 .file-chooser-item .item-info .item-left-icon {
-  position: absolute;
+  height: 100%;
   display: flex;
   align-items: center;
-  top: 0;
-  left: 0;
-  padding-left: 1.5rem;
 }
-
-
-
 
