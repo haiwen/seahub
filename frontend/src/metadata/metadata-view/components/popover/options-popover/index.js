@@ -124,6 +124,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     onDelete(deletingOptionId);
   }, [deletingOptionId, onDelete]);
 
+  const onImportOptions = useCallback((options) => {
+    onSubmit(options);
+    setOptions(options);
+  }, [onSubmit]);
+
   const updateDeleteOption = useCallback((optionId) => {
     const optionName = getOptionNameById(column, optionId);
     let relationRowsNum = 0;
@@ -201,7 +206,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             footerName={gettext('Add option')}
             addIconClassName="sf-metadata-add-option-icon"
           />
-          <OptionFooter column={column} onToggle={onToggle} />
+          <OptionFooter column={column} onToggle={onToggle} onImportOptions={onImportOptions}/>
         </div>
       </CustomizePopover>
       {deletingOptionId && (
