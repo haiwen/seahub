@@ -140,7 +140,14 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
                   onMove={onMoveView}
                 />);
             })}
-            {canAdd && (<CustomizeAddTool className="sf-metadata-add-view" callBack={openAddView} footerName={gettext('Add view')} addIconClassName="sf-metadata-add-view-icon" />)}
+            {canAdd &&
+              <CustomizeAddTool
+                className="sf-metadata-add-view"
+                callBack={openAddView}
+                footerName={gettext('Add view')}
+                addIconClassName="sf-metadata-add-view-icon"
+              />
+            }
           </div>
         </div>
       </div>
