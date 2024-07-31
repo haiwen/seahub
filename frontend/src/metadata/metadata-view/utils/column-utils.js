@@ -294,7 +294,6 @@ export const normalizeColumns = (columns) => {
       ...params,
       key,
       type: columnType,
-      name: getColumnName(key, name),
       width: columnsWidth[key] || 200,
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));

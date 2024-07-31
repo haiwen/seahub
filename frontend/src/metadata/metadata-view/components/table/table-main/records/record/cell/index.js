@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { PRIVATE_COLUMN_KEY, isFunction, getCellValueByColumn } from '../../../../../../_basic';
+import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS, isFunction, getCellValueByColumn } from '../../../../../../_basic';
 import { TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
 import { isCellValueChanged } from '../../../../../../utils/cell-comparer';
 import CellOperationBtn from './operation-btn';
@@ -116,7 +116,7 @@ const Cell = React.memo(({
 
   const getOldRowData = useCallback((originalOldCellValue) => {
     const { key: columnKey, name: columnName } = column;
-    const oldRowData = { [columnName]: originalOldCellValue };
+    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: originalOldCellValue } : { [columnName]: originalOldCellValue };
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
   }, [column]);
@@ -128,10 +128,8 @@ const Cell = React.memo(({
     if (!isCellValueChanged(originalOldCellValue, updated[columnKey], columnType)) return;
     const rowId = record._id;
     const key = Object.keys(updated)[0];
-    const value = updated[key];
-    const updates = { [columnName]: value };
+    const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? updated : { [columnName]: updated[key] };
     const { oldRowData, originalOldRowData } = getOldRowData(originalOldCellValue);
-
     // updates used for update remote record data
     // originalUpdates used for update local record data
     // oldRowData ues for undo/undo modify record

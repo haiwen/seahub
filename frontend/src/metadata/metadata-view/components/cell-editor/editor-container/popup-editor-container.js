@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById, PRIVATE_COLUMN_KEYS } from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
@@ -124,18 +124,15 @@ class PopupEditorContainer extends React.Component {
   getOldRowData = (originalOldCellValue) => {
     const { column } = this.props;
     const { key: columnKey, name: columnName, type: columnType } = column;
-    let oldRowData;
+    let oldValue = originalOldCellValue;
     if (this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
-      oldRowData = { [columnName]: original[Object.keys(original)[0]] } ;
-    } else {
-      oldRowData = { [columnName]: originalOldCellValue };
+      oldValue = original[Object.keys(original)[0]];
     }
-    // long-text cell value need format to {text: '', links: [], ...}
     if (columnType === CellType.LONG_TEXT) {
-      const original = this.getEditor().getValue();
-      oldRowData = { [columnName]: original };
+      oldValue = this.getEditor().getValue(); // long-text cell value need format to {text: '', links: [], ...}
     }
+    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnName]: oldValue } : { [columnName]: oldValue } ;
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
   };
@@ -148,7 +145,11 @@ class PopupEditorContainer extends React.Component {
     const originalOldCellValue = getCellValueByColumn(record, column);
     const newValue = this.getEditor().getValue();
     let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
-    let originalUpdates = { ...updated };
+    if (columnType === CellType.SINGLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
+    }
+
+    let originalUpdates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: newValue } : { [columnName]: newValue };
     if (
       !isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) ||
       !this.isNewValueValid(updated)
@@ -157,9 +158,6 @@ class PopupEditorContainer extends React.Component {
         this.editor.onClose();
       }
       return;
-    }
-    if (columnType === CellType.SINGLE_SELECT) {
-      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
     }
     this.changeCommitted = true;
     const rowId = record._id;
@@ -193,7 +191,7 @@ class PopupEditorContainer extends React.Component {
     let originalUpdates = { ...updated };
     const key = Object.keys(updated)[0];
     const value = updated[key];
-    const updates = { [columnName]: value };
+    const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
 
     // special treatment of long-text column types to keep the stored data consistent
     if (columnType === CellType.LONG_TEXT) {

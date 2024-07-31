@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { isFunction, Z_INDEX, getCellValueByColumn } from '../../../_basic';
+import { isFunction, Z_INDEX, getCellValueByColumn, PRIVATE_COLUMN_KEYS } from '../../../_basic';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../utils/keyboard-utils';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
@@ -206,56 +206,43 @@ class NormalEditorContainer extends React.Component {
   getOldRowData = (originalOldCellValue) => {
     const { column } = this.props;
     const { key: columnKey, name: columnName } = column;
-    let oldRowData;
+    let oldValue = originalOldCellValue;
     if (this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
-      oldRowData = { [columnName]: original[Object.keys(original)[0]] } ;
-    } else {
-      oldRowData = { [columnName]: originalOldCellValue };
+      oldValue = original[Object.keys(original)[0]];
     }
+    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnName]: oldValue } : { [columnName]: oldValue } ;
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
   };
 
   commit = (args) => {
-    const { onCommit, record, column } = this.props;
-    const { key: columnKey, type: columnType, name: columnName } = column;
+    const { record, column } = this.props;
+    const { key: columnKey, type: columnType } = column;
     const originalOldCellValue = getCellValueByColumn(record, column);
     const updated = this.getEditor().getValue();
     if (!isCellValueChanged(originalOldCellValue, updated[columnKey], columnType)) {
       this.props.onCommitCancel();
       return;
     }
-    if (!this.isNewValueValid(updated)) {
-      return;
-    }
-    this.changeCommitted = true;
-    const rowId = record._id;
-    const key = Object.keys(updated)[0];
-    const value = updated[key];
-    const updates = { [columnName]: value };
-    const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
-
-    // updates used for update remote record data
-    // originalUpdates used for update local record data
-    // oldRowData ues for undo/undo modify record
-    // originalOldRowData ues for undo/undo modify record
-    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates: updated, oldRowData, originalOldRowData });
+    this.commitData(updated);
   };
 
   commitData = (updated) => {
-    if (!this.isNewValueValid(updated)) {
-      return;
-    }
+    if (!this.isNewValueValid(updated)) return;
     const { onCommit, record, column } = this.props;
-    const { key: columnKey } = column;
+    const { key: columnKey, name: columnName } = column;
     this.changeCommitted = true;
     const rowId = record._id;
     const originalOldCellValue = getCellValueByColumn(record, column);
     const key = Object.keys(updated)[0];
     const value = updated[key];
-    const updates = { [column.name]: value };
+    const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
+    // updates used for update remote record data
+    // originalUpdates used for update local record data
+    // oldRowData ues for undo/undo modify record
+    // originalOldRowData ues for undo/undo modify record
     onCommit({ rowId, cellKey: columnKey, updates, originalUpdates: updated, oldRowData, originalOldRowData }, false);
   };
 
