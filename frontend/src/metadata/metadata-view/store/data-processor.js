@@ -210,9 +210,17 @@ class DataProcessor {
         break;
       }
       case OPERATION_TYPE.MODIFY_FILTERS:
-      case OPERATION_TYPE.MODIFY_SORTS:
-      case OPERATION_TYPE.MODIFY_GROUPBYS: {
+      case OPERATION_TYPE.MODIFY_SORTS: {
         this.run(table, { collaborators });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_GROUPBYS: {
+        const { available_columns, groupbys, rows } = table.view;
+        if (!isGroupView({ groupbys }, available_columns)) {
+          table.view.groups = [];
+          break;
+        }
+        table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
         break;
       }
       case OPERATION_TYPE.INSERT_COLUMN: {
