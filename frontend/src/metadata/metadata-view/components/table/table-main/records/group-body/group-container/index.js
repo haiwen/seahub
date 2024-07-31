@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import joinClasses from 'classnames';
-import GroupContainerLeft from '../group-container-left';
-import GroupContainerRight from '../group-container-right';
+import GroupContainerLeft from './group-container-left';
+import GroupContainerRight from './group-container-right';
 import { isMobile } from '../../../../../../utils';
 import { isFrozen } from '../../../../../../utils/column-utils';
 import { GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';

@@ -32,9 +32,9 @@ class DataProcessor {
     return sortTableRows(table, tableRows, sorts, { collaborators });
   }
 
-  static getGroupedRows(table, rows, groupbys) {
+  static getGroupedRows(table, rows, groupbys, { collaborators }) {
     const tableRows = isTableRows(rows) ? rows : getRowsByIds(table, rows);
-    const groups = getGroupRows(table, tableRows, groupbys);
+    const groups = getGroupRows(table, tableRows, groupbys, { collaborators });
     return groups;
   }
 
@@ -93,7 +93,7 @@ class DataProcessor {
     if (_isSortView) {
       renderedRows = this.getSortedRows(table, renderedRows, sorts, { collaborators });
     }
-    const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys) : [];
+    const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys, { collaborators }) : [];
     const row_ids = isTableRows(renderedRows) ? renderedRows.map(row => row._id) : renderedRows;
     table.view.rows = row_ids;
     table.view.groups = groups;
@@ -232,7 +232,7 @@ class DataProcessor {
           table.view.groups = [];
           break;
         }
-        table.view.groups = this.getGroupedRows(table, rows, groupbys);
+        table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
         break;
       }
       case OPERATION_TYPE.INSERT_COLUMN: {

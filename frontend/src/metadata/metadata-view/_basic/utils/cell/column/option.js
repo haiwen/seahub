@@ -8,7 +8,7 @@ import { getColumnOptions } from '../../column';
  */
 const getOption = (options, optionId) => {
   if (!Array.isArray(options) || !optionId) return null;
-  return options.find((option) => option.id === optionId);
+  return options.find(o => o.id === optionId || o.name === optionId);
 };
 
 /**

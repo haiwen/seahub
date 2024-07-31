@@ -79,7 +79,7 @@ class DateUtils {
       case 'YEAR': {
         return `${year}`;
       }
-      case 'QUARTAR': {
+      case 'QUARTER': {
         const month = dateObject.getMonth();
         const quarter = MONTH_QUARTERS[month];
         return `${year}-Q${quarter}`;

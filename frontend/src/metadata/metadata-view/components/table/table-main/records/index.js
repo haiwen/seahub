@@ -96,7 +96,7 @@ class Records extends Component {
 
   createColumnMetrics = (props) => {
     const { columns, table } = props;
-    return recalculate(columns, [], table._id);
+    return recalculate(columns, table.columns, table._id);
   };
 
   createRowMetrics = (props = this.props) => {

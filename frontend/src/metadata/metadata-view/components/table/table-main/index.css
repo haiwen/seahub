@@ -1,0 +1,16 @@
+/* basic css */
+.sf-metadata-single-select-option {
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 6px 0;
+  max-width: 250px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: min-content;
+}
+
+

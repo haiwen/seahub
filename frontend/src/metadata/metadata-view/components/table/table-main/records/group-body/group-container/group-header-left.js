@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import GroupTitle from './group-title';
-import { Z_INDEX } from '../../../../../_basic';
-import { GROUP_HEADER_HEIGHT } from '../../../../../constants';
-import { gettext } from '../../../../../utils';
+import { Z_INDEX } from '../../../../../../_basic';
+import { GROUP_HEADER_HEIGHT } from '../../../../../../constants';
+import { gettext } from '../../../../../../utils';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 
 class GroupHeaderLeft extends Component {

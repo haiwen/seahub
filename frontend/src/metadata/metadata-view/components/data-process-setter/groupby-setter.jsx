@@ -2,12 +2,16 @@ import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
+import { CommonlyUsedHotkey, getValidGroupbys, SUPPORT_GROUP_COLUMN_TYPES } from '../../_basic';
 import { gettext } from '../../utils';
 import { GroupbysPopover } from '../popover';
 
-const GroupbySetter = ({ columns, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
+const GroupbySetter = ({ columns: allColumns, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
   const [isShowSetter, setShowSetter] = useState(false);
+
+  const columns = useMemo(() => {
+    return allColumns.filter(column => SUPPORT_GROUP_COLUMN_TYPES.includes(column.type));
+  }, [allColumns]);
 
   const groupbys = useMemo(() => {
     return getValidGroupbys(propsGroupbys, columns) || [];

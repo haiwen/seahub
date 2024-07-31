@@ -6,6 +6,8 @@ import { GROUP_VIEW_OFFSET } from '../../../constants';
 import GridUtils from '../../../utils/grid-utils';
 import { useRecordDetails } from '../../../hooks';
 
+import './index.css';
+
 const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, ...params }) => {
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords });

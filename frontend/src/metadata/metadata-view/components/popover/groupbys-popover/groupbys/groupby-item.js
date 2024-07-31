@@ -103,6 +103,7 @@ const GroupbyItem = memo(({
   }, [sortOptions, groupby]);
 
   const countTypeOptions = useMemo(() => {
+    const column = getColumnByKey(columns, groupby.column_key);
     const { granularityList, displayGranularity } = getGroupbyGranularityByColumn(column);
     return granularityList.map((granularity) => {
       return {
@@ -110,7 +111,7 @@ const GroupbyItem = memo(({
         label: <span className='select-option-name'>{gettext(displayGranularity[granularity])}</span>,
       };
     });
-  }, [column]);
+  }, [columns, groupby]);
 
   const selectedCountType = useMemo(() => {
     const { count_type } = groupby;
@@ -127,14 +128,14 @@ const GroupbyItem = memo(({
     onDelete(index);
   }, [index, onDelete]);
 
-  const selectColumn = useCallback((column) => {
+  const selectColumn = useCallback((option) => {
     const { column_key } = groupby;
-    if (column.key === column_key) return;
+    if (option.column.key === column_key) return;
     const sort_type = SORT_TYPE.UP;
-    const count_type = getDefaultCountType(column);
+    const count_type = getDefaultCountType(option.column);
     const newGroupby = {
       ...groupby,
-      ...{ column_key: column.key, sort_type, count_type }
+      ...{ column_key: option.column.key, sort_type, count_type }
     };
     onUpdate(newGroupby, index);
   }, [groupby, index, onUpdate]);
