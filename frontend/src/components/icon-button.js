@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from 'reactstrap';
+import Icon from './icon';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -25,11 +26,12 @@ class IconButton extends React.Component {
       tooltipOpen: !this.state.tooltipOpen
     });
   };
+
   render() {
     const className = 'btn-icon';
     const btnContent = (
       <React.Fragment>
-        <i className={this.props.icon}></i>
+        <Icon symbol={this.props.icon} />
         <Tooltip
           toggle={this.toggle}
           delay={{ show: 0, hide: 0 }}

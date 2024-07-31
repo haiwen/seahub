@@ -8,6 +8,7 @@ import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
+import Icon from '../../components/icon';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -90,11 +91,11 @@ class FileToolbar extends React.Component {
       if (!isLocked) {
         showLockUnlockBtn = true;
         lockUnlockText = gettext('Lock');
-        lockUnlockIcon = 'sf3-font sf3-font-lock';
+        lockUnlockIcon = 'lock';
       } else if (lockedByMe) {
         showLockUnlockBtn = true;
         lockUnlockText = gettext('Unlock');
-        lockUnlockIcon = 'sf3-font sf3-font-unlock';
+        lockUnlockIcon = 'unlock';
       }
     }
 
@@ -117,7 +118,7 @@ class FileToolbar extends React.Component {
           {fileType == 'PDF' && (
             <IconButton
               id="seafile-pdf-print"
-              icon="sf3-font sf3-font-print"
+              icon="print"
               text={gettext('Print')}
             />
           )}
@@ -188,8 +189,12 @@ class FileToolbar extends React.Component {
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle className="file-toolbar-more-operations" aria-label={gettext('More operations')}>
-              <span className="sf3-font sf3-font-more-vertical"></span>
+            <DropdownToggle
+              className="file-toolbar-more-operations"
+              aria-label={gettext('More operations')}
+              title={gettext('More operations')}
+            >
+              <Icon symbol="more-vertical" />
             </DropdownToggle>
             <DropdownMenu right={true}>
               {filePerm == 'rw' && (
