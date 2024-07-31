@@ -70,13 +70,20 @@ class ActionsCell extends Component {
         <div className='sf-metadata-result-column-content actions-checkbox'>
           <div className='select-cell-checkbox-container' onClick={this.props.onSelectRecord}>
             <input
+              id={`select-cell-checkbox-${recordId}`}
               className='select-cell-checkbox'
               type='checkbox'
               name='row-selection'
               checked={isSelected || false}
               readOnly
             />
-            <label htmlFor="select-cell-checkbox" name={gettext('Select')} title={gettext('Select')} aria-label={gettext('Select')}></label>
+            <label
+              htmlFor={`select-cell-checkbox-${recordId}`}
+              name={gettext('Select')}
+              title={gettext('Select')}
+              aria-label={gettext('Select')}
+            >
+            </label>
           </div>
         </div>
         <span className='rdg-row-expand-icon' onClick={this.props.onRowExpand}>

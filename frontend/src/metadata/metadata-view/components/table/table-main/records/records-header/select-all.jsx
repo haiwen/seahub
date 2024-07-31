@@ -61,6 +61,7 @@ class SelectAll extends Component {
             {isSelectedParts ?
               <i aria-hidden="true" className='sf-metadata-font sf-metadata-icon-partially-selected'></i> :
               <input
+                id="select-all-checkbox"
                 className='select-all-checkbox'
                 type='checkbox'
                 name={gettext('Select all')}
@@ -72,7 +73,13 @@ class SelectAll extends Component {
             }
           </>
         }
-        <label htmlFor="select-all-checkbox" name={gettext('Select all')} title={gettext('Select all')} aria-label={gettext('Select all')}></label>
+        <label
+          htmlFor="select-all-checkbox"
+          name={gettext('Select all')}
+          title={gettext('Select all')}
+          aria-label={gettext('Select all')}
+        >
+        </label>
       </div>
     );
   }
