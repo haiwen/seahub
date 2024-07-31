@@ -109,6 +109,7 @@
   position: absolute;
   left: 0;
   background-color: #fff;
+  opacity: 1;
 }
 
 /* group-header-left */
@@ -222,7 +223,7 @@
 }
 
 .canvas-groups-rows .sf-metadata-ui.cell-formatter-container {
-  overflow: unset;
+  overflow: hidden;
 }
 
 /* group rows count */

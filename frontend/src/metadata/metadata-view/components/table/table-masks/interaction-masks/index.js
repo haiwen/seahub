@@ -7,8 +7,12 @@ import {
   NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP,
   KeyCodes,
   isFunction,
+  isEmptyObject,
+  HEADER_HEIGHT_TYPE,
 } from '../../../../_basic';
-import { EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE } from '../../../../constants';
+import { EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE,
+  GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT,
+} from '../../../../constants';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
@@ -82,12 +86,18 @@ class InteractionMasks extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { columns, foldedGroups } = this.props;
     const { selectedRange, isEditorEnabled } = this.state;
     const { selectedRange: prevSelectedRange, isEditorEnabled: prevIsEditorEnabled } = prevState;
     const isEditorClosed = isEditorEnabled !== prevIsEditorEnabled && !isEditorEnabled;
     const isSelectedRangeChanged = selectedRange !== prevSelectedRange && (selectedRange.topLeft !== prevSelectedRange.topLeft || selectedRange.bottomRight !== prevSelectedRange.bottomRight);
     if (isSelectedRangeChanged || isEditorClosed) {
       this.focus();
+    }
+
+    if (columns.length !== prevProps.columns.length ||
+      (foldedGroups && prevProps.foldedGroups && foldedGroups.length !== prevProps.foldedGroups.length)) {
+      this.closeTextMask();
     }
   }
 
@@ -358,12 +368,22 @@ class InteractionMasks extends React.Component {
     }) };
   };
 
-  setScrollLeft = (scrollLeft) => {
+  setScrollLeft = (scrollLeft, scrollTop) => {
     const { selectionMask, state: { selectedPosition } } = this;
-    this.setMaskScrollLeft(selectionMask, selectedPosition, scrollLeft);
+    this.setMaskScrollLeft(selectionMask, selectedPosition, scrollLeft, scrollTop);
   };
 
-  setMaskScrollLeft = (mask, position, scrollLeft) => {
+  geHeaderHeight = () => {
+    const { table } = this.props;
+    const settings = table.header_settings || {};
+    const heightMode = isEmptyObject(settings) ? HEADER_HEIGHT_TYPE.DEFAULT : settings.header_height;
+    const containerHeight = heightMode === HEADER_HEIGHT_TYPE.DOUBLE ? GRID_HEADER_DOUBLE_HEIGHT : GRID_HEADER_DEFAULT_HEIGHT;
+    // 1: header border-bottom
+    return containerHeight + 1;
+  };
+
+  setMaskScrollLeft = (mask, position, scrollLeft, scrollTop) => {
+    const headerHeight = this.geHeaderHeight();
     if (mask) {
       const { idx, rowIdx, groupRecordIndex } = position;
       if (idx >= 0 && rowIdx >= 0) {
@@ -372,10 +392,8 @@ class InteractionMasks extends React.Component {
         const frozen = !!column.frozen;
         if (frozen) {
           // use fixed
-          const { top: containerTop } = this.container.getClientRects()[0];
-          const { left: tableContentLeft } = this.props.getTableContentRect();
-          let top = containerTop + getRowTop(isGroupView ? groupRecordIndex : rowIdx);
-          let left = tableContentLeft + column.left;
+          let top = -scrollTop + getRowTop(isGroupView ? groupRecordIndex : rowIdx) + headerHeight;
+          let left = column.left;
           if (isGroupView) {
             top += 1;
             left += groupOffsetLeft;
@@ -1121,6 +1139,7 @@ InteractionMasks.propTypes = {
   enableCellSelect: PropTypes.bool,
   getRowTop: PropTypes.func,
   scrollTop: PropTypes.number,
+  foldedGroups: PropTypes.array,
   getScrollLeft: PropTypes.func,
   getTableContentRect: PropTypes.func,
   getMobileFloatIconStyle: PropTypes.func,

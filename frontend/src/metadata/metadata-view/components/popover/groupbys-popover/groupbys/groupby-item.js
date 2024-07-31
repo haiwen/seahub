@@ -147,10 +147,10 @@ const GroupbyItem = memo(({
     onUpdate(newGroupby, index);
   }, [groupby, index, onUpdate]);
 
-  const selectSortType = useCallback((sortType) => {
+  const selectSortType = useCallback((option) => {
     const { count_type } = groupby;
-    if (sortType === count_type) return;
-    const newGroupby = { ...groupby, sort_type: sortType };
+    if (option.sortType === count_type) return;
+    const newGroupby = { ...groupby, sort_type: option.sortType };
     onUpdate(newGroupby, index);
   }, [groupby, index, onUpdate]);
 

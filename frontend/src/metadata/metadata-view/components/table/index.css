@@ -419,6 +419,7 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  transform: translateZ(10px);
 }
 
 .table-header-top {

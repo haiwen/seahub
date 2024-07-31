@@ -7,7 +7,6 @@ import { isMobile } from '../../../../../../utils';
 import { isFrozen } from '../../../../../../utils/column-utils';
 import { GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
 import { Z_INDEX } from '../../../../../../_basic';
-import { SIDE_PANEL_FOLDED_WIDTH } from '../../../../../../../../constants';
 
 import './index.css';
 
@@ -42,9 +41,8 @@ class GroupContainer extends Component {
 
   fixedFrozenDOMs = (scrollLeft, scrollTop) => {
     if (this.backDrop) {
-      const { left: tableContentLeft } = this.props.getTableContentRect();
       this.backDrop.style.position = 'fixed';
-      this.backDrop.style.marginLeft = (tableContentLeft - SIDE_PANEL_FOLDED_WIDTH) + 'px';
+      this.backDrop.style.marginLeft = '0px';
       this.backDrop.style.marginTop = (-scrollTop) + 'px';
     }
 

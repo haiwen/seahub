@@ -200,7 +200,7 @@ class Records extends Component {
       this.handleScrollbarScroll(scrollLeft);
     }
     if (this.bodyRef && this.bodyRef.interactionMask) {
-      this.bodyRef.setScrollLeft(scrollLeft);
+      this.bodyRef.setScrollLeft(scrollLeft, scrollTop);
     }
 
     this.updateHorizontalScrollState({
