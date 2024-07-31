@@ -22,7 +22,7 @@ const GroupbySetter = ({ columns: allColumns, groupbys: propsGroupbys, wrapperCl
     if (groupbysLength === 1) return gettext('Grouped by 1 column');
     if (groupbysLength > 1) return gettext('Grouped by xxx columns').replace('xxx', groupbysLength);
     // need to translate to Group
-    return gettext('Group_by');
+    return gettext('Group by');
   }, [groupbys]);
 
   const onSetterToggle = useCallback(() => {
