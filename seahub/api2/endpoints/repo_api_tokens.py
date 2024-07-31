@@ -158,7 +158,7 @@ class RepoAPITokenView(APIView):
 
         return Response(_get_repo_token_info(rat))
     
-class RepoJwtTokenView(APIView):
+class RepoNotifJwtTokenView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -177,7 +177,7 @@ class RepoJwtTokenView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            jwt_token = seafile_api.gen_jwt_token(repo_id, username)
+            jwt_token = seafile_api.gen_notif_server_jwt(repo_id, username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
