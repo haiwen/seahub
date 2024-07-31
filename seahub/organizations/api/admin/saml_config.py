@@ -29,7 +29,7 @@ def query_dns_txt_record(domain):
     except dns.resolver.NXDOMAIN:
         return True, api_error(status.HTTP_404_NOT_FOUND, '%s does not exist' % domain)
     except Exception as e:
-        logger.error(e)
+        logger.exception(e)
         return True, api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
 
 
@@ -139,7 +139,6 @@ class OrgVerifyDomain(APIView):
         error, result = query_dns_txt_record(domain)
         if error:
             return result
-
         if saml_config.dns_txt in result:
             saml_config.domain_verified = True
             saml_config.save()
