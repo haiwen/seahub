@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../../../../utils/constants';
+import { Icon } from '@seafile/sf-metadata-ui-component';
 
 class SelectAll extends Component {
 
@@ -40,36 +41,40 @@ class SelectAll extends Component {
     const { isSelectedAll } = this.state;
     const isSelectedParts = hasSelectedRecord && !isSelectedAll;
     return (
-      <div className='select-all-checkbox-container' onClick={this.onToggleSelectAll}>
+      <div className="select-all-checkbox-container" onClick={this.onToggleSelectAll}>
         {isMobile ?
           <label className='mobile-select-all-container'>
             {isSelectedParts ?
-              <i aria-hidden="true" className='sf-metadata-font sf-metadata-icon-partially-selected'></i> :
-              <>
-                <input
-                  className='mobile-select-all-checkbox'
-                  name='mobile-select-all-checkbox'
-                  type='checkbox'
-                  checked={isSelectedAll}
-                  readOnly
-                />
-                <div className='select-all-checkbox-show'></div>
-              </>
+              (<Icon iconName="partially-selected" />) :
+              (
+                <>
+                  <input
+                    className="mobile-select-all-checkbox"
+                    name="mobile-select-all-checkbox"
+                    type="checkbox"
+                    checked={isSelectedAll}
+                    readOnly
+                  />
+                  <div className='select-all-checkbox-show'></div>
+                </>
+              )
             }
           </label> :
           <>
             {isSelectedParts ?
-              <i aria-hidden="true" className='sf-metadata-font sf-metadata-icon-partially-selected'></i> :
-              <input
-                id="select-all-checkbox"
-                className='select-all-checkbox'
-                type='checkbox'
-                name={gettext('Select all')}
-                title={gettext('Select all')}
-                aria-label={gettext('Select all')}
-                checked={isSelectedAll}
-                readOnly
-              />
+              (<Icon iconName="partially-selected" />) :
+              (
+                <input
+                  id="select-all-checkbox"
+                  className="select-all-checkbox"
+                  type="checkbox"
+                  name={gettext('Select all')}
+                  title={gettext('Select all')}
+                  aria-label={gettext('Select all')}
+                  checked={isSelectedAll}
+                  readOnly
+                />
+              )
             }
           </>
         }
