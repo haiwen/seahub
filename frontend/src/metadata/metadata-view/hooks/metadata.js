@@ -38,9 +38,7 @@ export const MetadataProvider = ({
     const context = new Context();
     window.sfMetadata = {};
     window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ otherSettings: params });
-    window.sfMetadataContext.setSetting('viewID', viewID);
-    window.sfMetadataContext.setSetting('repoID', repoID);
+    window.sfMetadataContext.init({ otherSettings: { ...params, repoID, viewID } });
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();

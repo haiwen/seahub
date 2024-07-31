@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import joinClasses from 'classnames';
-import GroupContainerLeft from '../group-container-left';
-import GroupContainerRight from '../group-container-right';
+import GroupContainerLeft from './group-container-left';
+import GroupContainerRight from './group-container-right';
 import { isMobile } from '../../../../../../utils';
 import { isFrozen } from '../../../../../../utils/column-utils';
 import { GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
 import { Z_INDEX } from '../../../../../../_basic';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../../../../../../../../constants';
 
 import './index.css';
 
@@ -41,9 +42,9 @@ class GroupContainer extends Component {
 
   fixedFrozenDOMs = (scrollLeft, scrollTop) => {
     if (this.backDrop) {
-      const tableContentLeft = this.props.getTableContentRect();
+      const { left: tableContentLeft } = this.props.getTableContentRect();
       this.backDrop.style.position = 'fixed';
-      this.backDrop.style.marginLeft = tableContentLeft + 'px';
+      this.backDrop.style.marginLeft = (tableContentLeft - SIDE_PANEL_FOLDED_WIDTH) + 'px';
       this.backDrop.style.marginTop = (-scrollTop) + 'px';
     }
 
@@ -108,7 +109,7 @@ class GroupContainer extends Component {
 
     return (
       <div className={groupClassName} ref={this.setContainer} style={groupItemStyle}>
-        {(level === maxLevel && firstColumnFrozen && !isMobile) &&
+        {(level === maxLevel && firstColumnFrozen) &&
           <div className="group-backdrop" ref={this.setBackDrop} style={backDropStyle}></div>
         }
         <GroupContainerLeft

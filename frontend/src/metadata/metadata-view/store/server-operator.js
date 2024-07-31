@@ -131,8 +131,8 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS: {
-        const { repo_id, view_id, shown_column_keys } = operation;
-        window.sfMetadataContext.modifyView(repo_id, view_id, { shown_column_keys }).then(res => {
+        const { repo_id, view_id, hidden_columns } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { hidden_columns }).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: 'Failed_to_modify_hidden_columns' });

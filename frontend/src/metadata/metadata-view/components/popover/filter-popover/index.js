@@ -39,13 +39,13 @@ class FilterPopover extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.hideDTablePopover, true);
+    document.addEventListener('click', this.hideDTablePopover, true);
     document.addEventListener('keydown', this.onHotKey);
     this.unsubscribeOpenSelect = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_SELECT, this.setSelectStatus);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.hideDTablePopover, true);
+    document.removeEventListener('click', this.hideDTablePopover, true);
     document.removeEventListener('keydown', this.onHotKey);
     this.unsubscribeOpenSelect();
   }

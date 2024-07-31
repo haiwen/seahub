@@ -117,8 +117,8 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS: {
-      const { shown_column_keys } = operation;
-      data.view.shown_column_keys = shown_column_keys;
+      const { hidden_columns } = operation;
+      data.view.hidden_columns = hidden_columns;
       return data;
     }
     case OPERATION_TYPE.INSERT_COLUMN: {

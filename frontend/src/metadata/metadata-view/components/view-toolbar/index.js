@@ -9,9 +9,14 @@ const ViewToolBar = ({ metadataViewId }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
-  const columns = useMemo(() => {
+  const availableColumns = useMemo(() => {
     if (!view) return [];
     return view.available_columns;
+  }, [view]);
+
+  const viewColumns = useMemo(() => {
+    if (!view) return [];
+    return view.columns;
   }, [view]);
 
   const onHeaderClick = useCallback(() => {
@@ -26,12 +31,12 @@ const ViewToolBar = ({ metadataViewId }) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SORTS, sorts);
   }, []);
 
-  const modifyGroupbys = useCallback(() => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_GROUPBYS);
+  const modifyGroupbys = useCallback((groupbys) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_GROUPBYS, groupbys);
   }, []);
 
-  const modifyHiddenColumns = useCallback(() => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_GROUPBYS);
+  const modifyHiddenColumns = useCallback((hiddenColumns) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, hiddenColumns);
   }, []);
 
   const viewChange = useCallback((view) => {
@@ -71,7 +76,7 @@ const ViewToolBar = ({ metadataViewId }) => {
           target="sf-metadata-filter-popover"
           filterConjunction={view.filter_conjunction}
           filters={view.filters}
-          columns={columns}
+          columns={availableColumns}
           modifyFilters={modifyFilters}
           collaborators={collaborators}
         />
@@ -79,20 +84,21 @@ const ViewToolBar = ({ metadataViewId }) => {
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
           target="sf-metadata-sort-popover"
           sorts={view.sorts}
-          columns={columns}
+          columns={viewColumns}
           modifySorts={modifySorts}
         />
         <GroupbySetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
-          target={'sf-metadata-groupby-popover'}
-          columns={[]}
-          groupbys={[]}
+          target="sf-metadata-groupby-popover"
+          columns={viewColumns}
+          groupbys={view.groupbys}
           modifyGroupbys={modifyGroupbys}
         />
         <HideColumnSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
-          target={'sf-metadata-hide-column-popover'}
-          columns={[]}
+          target="sf-metadata-hide-column-popover"
+          columns={viewColumns.slice(1)}
+          hiddenColumns={view.hidden_columns || []}
           modifyHiddenColumns={modifyHiddenColumns}
         />
       </div>

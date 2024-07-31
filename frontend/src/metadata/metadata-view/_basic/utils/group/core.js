@@ -2,6 +2,7 @@ import { CellType } from '../../constants/column';
 import {
   GROUP_DATE_GRANULARITY,
   SUPPORT_GROUP_COLUMN_TYPES,
+  GROUP_GEOLOCATION_GRANULARITY,
 } from '../../constants/group';
 
 /**
@@ -15,9 +16,7 @@ const isValidGroupby = (groupby, columns) => {
 
   const { column_key } = groupby;
   const groupbyColumn = columns.find((column) => column.key === column_key);
-  if (!groupbyColumn) {
-    return false;
-  }
+  if (!groupbyColumn) return false;
 
   return SUPPORT_GROUP_COLUMN_TYPES.includes(groupbyColumn.type);
 };
@@ -29,10 +28,7 @@ const isValidGroupby = (groupby, columns) => {
  * @returns valid groupbys, array
  */
 const getValidGroupbys = (groupbys, columns) => {
-  if (!Array.isArray(groupbys) || !Array.isArray(columns)) {
-    return [];
-  }
-
+  if (!Array.isArray(groupbys) || !Array.isArray(columns)) return [];
   return groupbys.filter((groupby) => isValidGroupby(groupby, columns));
 };
 
@@ -53,9 +49,14 @@ const deleteInvalidGroupby = (groupbys, columns) => {
     const { type: columnType } = groupbyColumn;
     let newGroupby = { ...groupby, column: groupbyColumn };
     switch (columnType) {
+      case CellType.DATE:
       case CellType.CTIME:
       case CellType.MTIME: {
         newGroupby.count_type = count_type || GROUP_DATE_GRANULARITY.MONTH;
+        break;
+      }
+      case CellType.GEOLOCATION: {
+        newGroupby.count_type = count_type || GROUP_GEOLOCATION_GRANULARITY.PROVINCE;
         break;
       }
       default: {

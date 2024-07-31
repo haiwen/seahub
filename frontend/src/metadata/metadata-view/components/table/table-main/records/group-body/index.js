@@ -1,27 +1,27 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { CellType } from '../../../../_basic';
-import GroupContainer from './group-widgets/group-container';
-import InteractionMasks from '../../table-masks/interaction-masks';
-import { RightScrollbar } from '../../../scrollbar';
-import Record from './record';
-import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../../utils/group-metrics';
-import RecordMetrics from '../../../../utils/record-metrics';
-import { isFrozen, isNameColumn, isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column-utils';
-import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
-import { isSelectedCellSupportOpenEditor } from '../../../../utils/selected-cell-utils';
-import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../../utils/records-body-utils';
-import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../constants';
-import { addClassName, removeClassName } from '../../../../utils';
+import { CellType } from '../../../../../_basic';
+import GroupContainer from './group-container';
+import InteractionMasks from '../../../table-masks/interaction-masks';
+import { RightScrollbar } from '../../../../scrollbar';
+import Record from '../record';
+import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../../../utils/group-metrics';
+import RecordMetrics from '../../../../../utils/record-metrics';
+import { isFrozen, isNameColumn, isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../../utils/column-utils';
+import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
+import { isSelectedCellSupportOpenEditor } from '../../../../../utils/selected-cell-utils';
+import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../../../utils/records-body-utils';
+import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../../constants';
+import { addClassName, removeClassName } from '../../../../../utils';
 
 const ROW_HEIGHT = 32;
-const GROUP_OVERSCAN_ROWS = 10;
+const GROUP_OVER_SCAN_ROWS = 10;
 const MAX_ANIMATION_ROWS = 50;
 const LOCAL_FOLDED_GROUP_KEY = 'path_folded_group';
 const { max, min } = Math;
 
-class RecordsGroupBody extends Component {
+class GroupBody extends Component {
 
   static defaultProps = {
     editorPortalTarget: document.body,
@@ -115,8 +115,8 @@ class RecordsGroupBody extends Component {
     }
     let startRenderIndex = 0;
     let endRenderIndex = 0;
-    const GROUP_TOP_OFFSET = GROUP_HEADER_HEIGHT * maxLevel + GROUP_OVERSCAN_ROWS * rowHeight;
-    const GROUP_BOTTOM_OFFSET = GROUP_HEADER_HEIGHT * maxLevel + GROUP_OVERSCAN_ROWS * rowHeight;
+    const GROUP_TOP_OFFSET = GROUP_HEADER_HEIGHT * maxLevel + GROUP_OVER_SCAN_ROWS * rowHeight;
+    const GROUP_BOTTOM_OFFSET = GROUP_HEADER_HEIGHT * maxLevel + GROUP_OVER_SCAN_ROWS * rowHeight;
     const overScanStartTop = max(0, scrollTop - GROUP_TOP_OFFSET);
     const overScanEndTop = min(groupRowsHeight, scrollTop + gridHeight + GROUP_BOTTOM_OFFSET);
     const groupRowsLen = groupRows.length;
@@ -386,7 +386,7 @@ class RecordsGroupBody extends Component {
   };
 
   onRowExpand = (record) => {
-    this.props.expandRow(this.props.table, this.props.columns, record);
+    this.props.onRowExpand && this.props.onRowExpand(record);
   };
 
   setRightScrollbarScrollTop = (scrollTop) => {
@@ -498,36 +498,6 @@ class RecordsGroupBody extends Component {
     });
   };
 
-  onDeleteRecords = () => {
-    this.interactionMask && this.interactionMask.selectNone();
-    this.props.selectNone();
-    this.props.onDeleteRecords(this.state.activeRecords);
-  };
-
-  onInsertRecords = ({ insertRecordsNumber }) => {
-    const activeRecord = this.state.activeRecords[0];
-    const upperRecordId = activeRecord && activeRecord._id;
-    if (!upperRecordId) return;
-    this.props.insertRecords({ upperRecordId, insertRecordsNumber });
-  };
-
-  addBlankRecord = (groupRecordIndex) => {
-    const { groupMetrics } = this.state;
-    const groupRecord = groupRecordIndex > 0 && getGroupRecordByIndex(groupRecordIndex - 1, groupMetrics);
-    this.props.insertRecords({
-      upperRecordId: groupRecord && groupRecord.rowId,
-      insertRecordsNumber: 1
-    });
-  };
-
-  onDuplicateRecord = () => {
-    this.props.duplicateRecord(this.state.activeRecords[0]);
-  };
-
-  onDuplicateRecords = () => {
-    this.props.duplicateRecords(this.state.activeRecords);
-  };
-
   getNextScrollState = ({ gridHeight, scrollTop, rowHeight, groupMetrics, pathFoldedGroupMap }) => {
     const _gridHeight = gridHeight || window.innerHeight;
     const _rowHeight = rowHeight || this.getRowHeight();
@@ -564,12 +534,12 @@ class RecordsGroupBody extends Component {
     if (!currentGroupRow) {
       return [];
     }
-    const { level, groupRowIndex, type } = currentGroupRow;
-    if (groupRowIndex === 0 || (level === maxLevel && type === GROUP_ROW_TYPE.GROUP_CONTAINER)) {
+    const { level, groupRecordIndex, type } = currentGroupRow;
+    if (groupRecordIndex === 0 || (level === maxLevel && type === GROUP_ROW_TYPE.GROUP_CONTAINER)) {
       return [];
     }
     let prevGroupContainers = [];
-    let prevGroupRowIndex = groupRowIndex - 1;
+    let prevGroupRowIndex = groupRecordIndex - 1;
     while (prevGroupRowIndex > -1) {
       const prevGroupRow = groupRows[prevGroupRowIndex];
       const { type: preGroupRowType, level: prevGroupRowLevel } = prevGroupRow;
@@ -618,11 +588,11 @@ class RecordsGroupBody extends Component {
   };
 
   getFoldedGroups = () => {
-    const localPageConfigs = this.props.getLocalPageConfigs();
-    if (!localPageConfigs) {
+    const localConfigs = window.sfMetadataContext.localStorage.getItem(LOCAL_FOLDED_GROUP_KEY);
+    if (!localConfigs) {
       return {};
     }
-    return localPageConfigs[LOCAL_FOLDED_GROUP_KEY] || {};
+    return localConfigs[LOCAL_FOLDED_GROUP_KEY] || {};
   };
 
   getVisibleIndex = () => {
@@ -630,9 +600,7 @@ class RecordsGroupBody extends Component {
   };
 
   updateFoldedGroups = (pathFoldedGroupMap) => {
-    let localPageConfigs = this.props.getLocalPageConfigs();
-    localPageConfigs[LOCAL_FOLDED_GROUP_KEY] = pathFoldedGroupMap;
-    this.props.setLocalPageConfigs(localPageConfigs);
+    window.sfMetadataContext.localStorage.setItem(LOCAL_FOLDED_GROUP_KEY, pathFoldedGroupMap);
     this.selectNoneCells();
   };
 
@@ -670,7 +638,7 @@ class RecordsGroupBody extends Component {
     const { groupRows, maxLevel } = groupMetrics;
     const groupContainerRow = groupRows.find(groupRow => groupRow.groupPathString === groupPathString && groupRow.type === GROUP_ROW_TYPE.GROUP_CONTAINER);
     if (!groupContainerRow) return;
-    const { groupRowIndex: operatedGroupRowIndex, groupPath: operatedGroupPath, height: operatedGroupRowHeight, isExpanded } = groupContainerRow;
+    const { groupRecordIndex: operatedGroupRowIndex, groupPath: operatedGroupPath, height: operatedGroupRowHeight, isExpanded } = groupContainerRow;
     let updatedPathFoldedGroupMap = { ...pathFoldedGroupMap };
     if (isExpanded) {
       updatedPathFoldedGroupMap[groupPathString] = true;
@@ -784,7 +752,7 @@ class RecordsGroupBody extends Component {
 
   renderGroups = () => {
     const {
-      totalWidth: columnsWidth, containerWidth, appPage,
+      totalWidth: columnsWidth, containerWidth,
       columns, colOverScanStartIdx, colOverScanEndIdx, groupOffsetLeft,
       recordMetrics, summaryConfigs, lastFrozenColumnKey, showCellColoring, columnColors,
     } = this.props;
@@ -801,13 +769,12 @@ class RecordsGroupBody extends Component {
     let groupRowsHeight = groupMetrics.groupRowsHeight;
     visibleGroupRows.forEach(groupRow => {
       let {
-        type, level, key, left, top, isExpanded, height, groupPathString, groupRowIndex: groupRecordIndex,
+        type, level, key, left, top, isExpanded, height, groupPathString, groupRecordIndex,
       } = groupRow;
       if (type === GROUP_ROW_TYPE.GROUP_CONTAINER) {
         const groupWidth = totalColumnsWidth + (level - 1) * 2 * GROUP_VIEW_OFFSET; // columns + group offset
         const folding = this.expandingGroupPathString === groupPathString && !isExpanded;
         const backdropHeight = height + GROUP_VIEW_OFFSET;
-
         rendererGroups.push(
           <GroupContainer
             key={key}
@@ -836,9 +803,7 @@ class RecordsGroupBody extends Component {
         const isSelected = RecordMetrics.isRecordSelected(rowId, recordMetrics);
         const hasSelectedCell = this.props.hasSelectedCell({ groupRecordIndex }, selectedPosition);
         const columnColor = showCellColoring ? columnColors[rowId] : {};
-        if (!record) {
-          return;
-        }
+        if (!record) return;
         rendererGroups.push(
           <Record
             isGroupView
@@ -870,7 +835,6 @@ class RecordsGroupBody extends Component {
             lockRecordViaButton={this.props.lockRecordViaButton}
             modifyRecordViaButton={this.props.modifyRecordViaButton}
             reloadRecords={this.props.reloadRecords}
-            appPage={appPage}
             columnColor={columnColor}
           />
         );
@@ -931,7 +895,6 @@ class RecordsGroupBody extends Component {
             recordGetterByIndex={this.props.recordGetterByIndex}
             recordGetterById={this.props.recordGetterById}
             updateRecords={this.props.updateRecords}
-            deleteRecordsLinks={this.props.deleteRecordsLinks}
             paste={this.props.paste}
             editMobileCell={this.props.editMobileCell}
             frozenColumnsWidth={this.props.frozenColumnsWidth}
@@ -955,26 +918,13 @@ class RecordsGroupBody extends Component {
           onScrollbarScroll={this.onScrollbarScroll}
           onScrollbarMouseUp={this.onScrollbarMouseUp}
         />
-        {/* {this.state.isContextMenuShow &&
-          <ContextMenu
-            activeRecords={this.state.activeRecords}
-            supportDownloadFiles={this.checkSupportDownloadFiles()}
-            menuPosition={this.state.menuPosition}
-            onDeleteRecords={this.onDeleteRecords}
-            onInsertRecords={this.onInsertRecords}
-            onDuplicateRecord={this.onDuplicateRecord}
-            onDuplicateRecords={this.onDuplicateRecords}
-            onCloseContextMenu={this.onCloseContextMenu}
-            openDownloadFilesDialog={this.openDownloadFilesDialog}
-          />
-        } */}
       </Fragment>
     );
   }
 
 }
 
-RecordsGroupBody.propTypes = {
+GroupBody.propTypes = {
   gridUtils: PropTypes.object,
   table: PropTypes.object,
   allColumns: PropTypes.array,
@@ -1010,22 +960,15 @@ RecordsGroupBody.propTypes = {
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
   updateRecords: PropTypes.func,
-  deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   selectNone: PropTypes.func,
   onSelectRecord: PropTypes.func,
   expandRow: PropTypes.func,
-  getLocalPageConfigs: PropTypes.func,
-  setLocalPageConfigs: PropTypes.func,
-  duplicateRecord: PropTypes.func,
-  duplicateRecords: PropTypes.func,
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   onDeleteRecords: PropTypes.func,
   editMobileCell: PropTypes.func,
-  insertRecords: PropTypes.func,
   reloadRecords: PropTypes.func,
-  appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,
   columnColors: PropTypes.object,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
@@ -1033,4 +976,4 @@ RecordsGroupBody.propTypes = {
   cacheDownloadFilesProps: PropTypes.func,
 };
 
-export default RecordsGroupBody;
+export default GroupBody;

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import GroupTitle from './group-title';
-import { Z_INDEX } from '../../../../../_basic';
-import { GROUP_HEADER_HEIGHT } from '../../../../../constants';
-import { gettext } from '../../../../../utils';
+import { Z_INDEX } from '../../../../../../_basic';
+import { GROUP_HEADER_HEIGHT } from '../../../../../../constants';
+import { gettext } from '../../../../../../utils';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 
 class GroupHeaderLeft extends Component {
 
@@ -14,11 +15,6 @@ class GroupHeaderLeft extends Component {
       group, width,
     } = this.props;
     const { column, count, level, cell_value, original_cell_value } = group;
-    const expandIconClassName = classnames(
-      'group-expand-icon',
-      'sf-metadata-font',
-      isExpanded ? 'sf-metadata-icon-drop-down' : 'sf-metadata-icon-right-slide',
-    );
     const groupHeaderLeftStyle = {
       zIndex: firstColumnFrozen && Z_INDEX.GROUP_FROZEN_HEADER,
       height: GROUP_HEADER_HEIGHT,
@@ -32,9 +28,11 @@ class GroupHeaderLeft extends Component {
         style={groupHeaderLeftStyle}
         data-column_key={firstColumnKey}
       >
-        <div className="group-expand" onClick={this.props.onExpandGroupToggle}>
-          <span><i className={expandIconClassName}></i></span>
-        </div>
+        <IconBtn
+          className={classnames('group-toggle-btn', { 'hide': !isExpanded })}
+          iconName="drop-down"
+          onClick={this.props.onExpandGroupToggle}
+        />
         <GroupTitle
           column={column || {}}
           originalCellValue={original_cell_value}

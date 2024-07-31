@@ -171,7 +171,9 @@ const Cell = React.memo(({
     column.left !== newColumn.left ||
     column.width !== newColumn.width ||
     bgColor !== newBgColor ||
-    !ObjectUtils.isSameObject(column.data, newColumn.data)
+    !ObjectUtils.isSameObject(column.data, newColumn.data) ||
+    props.groupRecordIndex !== nextProps.groupRecordIndex ||
+    props.recordIndex !== nextProps.recordIndex
   );
   return !isChanged;
 });

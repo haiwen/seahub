@@ -77,18 +77,6 @@
   user-select: none;
 }
 
-.group-level-2 .sf-metadata-result-content {
-  background-color: #ededed;
-}
-
-.group-level-3 .sf-metadata-result-content {
-  background-color: #e3e3e3;
-}
-
-.group-level-4 .sf-metadata-result-content {
-  background-color: #dedede;
-}
-
 .static-sf-metadata-result-content {
   width: 100%;
   position: relative;
@@ -190,6 +178,7 @@
   flex: 1 1;
   position: relative;
   overflow-y: scroll;
+  min-width: 100%;
 }
 
 .sf-metadata-result-table-content .sf-metadata-result-loading {
@@ -207,18 +196,6 @@
 .draging-file-to-cell .cell-file-add {
   border: 1px dashed #f09f3f;
   background-color: #fdf5eb !important;
-}
-
-.group-level-2 .sf-metadata-result-footer {
-  background-color: #fafafa;
-}
-
-.group-level-3 .sf-metadata-result-footer {
-  background-color: #f1f1f1;
-}
-
-.group-level-4 .sf-metadata-result-footer {
-  background-color: #eee;
 }
 
 .table-main-interval {

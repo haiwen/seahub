@@ -11,6 +11,7 @@
     "eqeqeq": "off",
     "default-case": "off",
     "jsx-a11y/anchor-has-content": "off",
+    "no-console": ["warn"],
     "no-mixed-operators": "off",
     "no-useless-concat": "off",
     "no-useless-constructor": "off",

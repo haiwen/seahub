@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toaster from '../../../../components/toast';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
-import { CommonlyUsedHotkey } from '../../_basic';
+import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
 import TableMain from './table-main';
@@ -24,10 +24,10 @@ const Container = () => {
     }
   }, []);
 
-  const isGroupView = useCallback(() => {
-    // todo
-    return false;
-  }, []);
+  const isGroupView = useMemo(() => {
+    const validGroupbys = getValidGroupbys(metadata.view.groupbys, metadata.columns);
+    return validGroupbys.length > 0;
+  }, [metadata]);
 
   const onSelectCell = useCallback(() => {
     // todo
@@ -112,6 +112,14 @@ const Container = () => {
     store.modifySorts(sorts);
   }, [store]);
 
+  const modifyGroupbys = useCallback((groupbys) => {
+    store.modifyGroupbys(groupbys);
+  }, [store]);
+
+  const modifyHiddenColumns = useCallback((hiddenColumns) => {
+    store.modifyHiddenColumns(hiddenColumns);
+  }, [store]);
+
   const renameColumn = useCallback((columnKey, newName, oldName) => {
     store.renameColumn(columnKey, newName, oldName);
   }, [store]);
@@ -124,14 +132,6 @@ const Container = () => {
     store.modifyColumnData(columnKey, newData, oldData);
   }, [store]);
 
-  const modifyGroupbys = useCallback(() => {
-    // modifyGroupbys
-  }, []);
-
-  const modifyHiddenColumns = useCallback(() => {
-    // modifyHiddenColumns
-  }, []);
-
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
   }, [metadata]);
@@ -142,16 +142,14 @@ const Container = () => {
   }, [metadata, recordGetterById]);
 
   const groupRecordGetter = useCallback((groupRecordIndex) => {
-    if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) {
-      return null;
-    }
+    if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) return null;
     const groupRecord = window.sfMetadataBody.getGroupRecordByIndex(groupRecordIndex);
     const recordId = groupRecord.rowId;
     return recordId && recordGetterById(recordId);
   }, [recordGetterById]);
 
   const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
-    if (isGroupView) groupRecordGetter(groupRecordIndex);
+    if (isGroupView) return groupRecordGetter(groupRecordIndex);
     return recordGetter(recordIndex);
   }, [groupRecordGetter, recordGetter]);
 
@@ -185,7 +183,7 @@ const Container = () => {
           {!errorMsg && (
             <div className="sf-metadata-container" ref={containerRef}>
               <TableMain
-                isGroupView={isGroupView()}
+                isGroupView={isGroupView}
                 isLoadingMore={isLoadingMore}
                 loadMore={loadMore}
                 metadata={metadata}

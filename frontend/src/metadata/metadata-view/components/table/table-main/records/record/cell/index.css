@@ -206,7 +206,7 @@
 .sf-metadata-result-table-cell .select-all-checkbox-container .sf-metadata-icon-partially-selected {
   cursor: pointer;
   font-size: 12px;
-  color: #2b76f6;
+  fill: #2b76f6;
 }
 
 .sf-metadata-result-table-cell .header-action-cell-placeholder {

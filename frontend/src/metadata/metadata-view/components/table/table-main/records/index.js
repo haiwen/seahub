@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import RecordsHeader from './records-header';
-import RecordsBody from './records-body';
-import RecordsGroupBody from './records-group-body';
+import Body from './body';
+import GroupBody from './group-body';
 import RecordsFooter from './record-footer';
 import { HorizontalScrollbar } from '../../../scrollbar';
 import { recalculate, setColumnOffsets } from '../../../../utils/column-utils';
@@ -96,7 +96,7 @@ class Records extends Component {
 
   createColumnMetrics = (props) => {
     const { columns, table } = props;
-    return recalculate(columns, [], table._id);
+    return recalculate(columns, table.columns, table._id);
   };
 
   createRowMetrics = (props = this.props) => {
@@ -587,22 +587,6 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
-  cacheDownloadFilesProps = (column, records) => {
-    // todo
-  };
-
-  downloadColumnAllFiles = (column) => {
-    // todo
-  };
-
-  openDownloadFilesDialog = () => {
-    // todo
-  };
-
-  closeDownloadFilesDialog = () => {
-    // todo
-  };
-
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
@@ -625,11 +609,10 @@ class Records extends Component {
     };
     if (this.props.isGroupView) {
       return (
-        <RecordsGroupBody
-          onRef={(ref) => {
-            this.bodyRef = ref;
-          }}
+        <GroupBody
+          onRef={ref => this.bodyRef = ref}
           {...commonProps}
+          containerWidth={containerWidth}
           groups={this.props.groups}
           groupbys={this.props.groupbys}
           groupOffsetLeft={this.props.groupOffsetLeft}
@@ -637,10 +620,8 @@ class Records extends Component {
       );
     }
     return (
-      <RecordsBody
-        onRef={(ref) => {
-          this.bodyRef = ref;
-        }}
+      <Body
+        onRef={ref => this.bodyRef = ref}
         {...commonProps}
         recordIds={this.props.recordIds}
       />
@@ -680,7 +661,6 @@ class Records extends Component {
               resizeColumnWidth={this.resizeColumnWidth}
               selectNoneRecords={this.selectNone}
               selectAllRecords={this.selectAllRecords}
-              downloadColumnAllFiles={this.downloadColumnAllFiles}
               renameColumn={renameColumn}
               deleteColumn={deleteColumn}
               modifyColumnData={modifyColumnData}

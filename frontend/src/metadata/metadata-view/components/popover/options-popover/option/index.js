@@ -10,7 +10,7 @@ import './index.css';
 
 const dragSource = {
   beginDrag: props => {
-    return { idx: props.index, data: props.option, mode: 'option' };
+    return { idx: props.index, data: props.option, mode: 'sfMetadataSingleSelectOption' };
   },
   endDrag(props, monitor) {
     const optionSource = monitor.getItem();
@@ -54,7 +54,7 @@ const dropCollect = (connect, monitor) => ({
 const Option = ({
   isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
   isViewing, isDeleting, isEditing,
-  option, index,
+  option,
   onDelete: propsDelete, onUpdate,
   onMouseLeave, onMouseEnter: propsMouseEnter, onToggleFreeze, onOpenNameEditor, onCloseNameEditor,
 }) => {
@@ -131,6 +131,6 @@ Option.propTypes = {
   connectDragPreview: PropTypes.func.isRequired,
 };
 
-export default DropTarget('Option', dropTarget, dropCollect)(
-  DragSource('Option', dragSource, dragCollect)(Option)
+export default DropTarget('sfMetadataSingleSelectOption', dropTarget, dropCollect)(
+  DragSource('sfMetadataSingleSelectOption', dragSource, dragCollect)(Option)
 );

@@ -249,7 +249,7 @@ const CollaboratorEditor = forwardRef(({
 
 CollaboratorEditor.propTypes = {
   column: PropTypes.object,
-  value: PropTypes.string,
+  value: PropTypes.array,
   onCommit: PropTypes.func,
   onClose: PropTypes.func,
   onPressTab: PropTypes.func,

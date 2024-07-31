@@ -254,34 +254,6 @@ class RecordsBody extends Component {
     this.rightScrollbar && this.rightScrollbar.setScrollTop(scrollTop);
   };
 
-  onDeleteRecords = () => {
-    this.interactionMask && this.interactionMask.selectNone();
-    this.props.selectNone();
-    this.props.onDeleteRecords(this.state.activeRecords);
-  };
-
-  onInsertRecords = ({ insertRecordsNumber }) => {
-    const activeRecord = this.state.activeRecords[0];
-    const upperRecordId = activeRecord && activeRecord._id;
-    if (!upperRecordId) return;
-    this.props.insertRecords({ upperRecordId, insertRecordsNumber });
-  };
-
-  addBlankRecord = () => {
-    const { recordsCount, recordIds } = this.props;
-    const lastRecordIndex = recordsCount - 1;
-    const lastRecordId = lastRecordIndex > -1 && recordIds[lastRecordIndex];
-    this.props.insertRecords({ upperRecordId: lastRecordId, insertRecordsNumber: 1 });
-  };
-
-  onDuplicateRecord = () => {
-    this.props.duplicateRecord(this.state.activeRecords[0]);
-  };
-
-  onDuplicateRecords = () => {
-    this.props.duplicateRecords(this.state.activeRecords);
-  };
-
   selectNoneCells = () => {
     this.interactionMask && this.interactionMask.selectNone();
     const { selectedPosition } = this.state;
@@ -612,9 +584,6 @@ RecordsBody.propTypes = {
   getMobileFloatIconStyle: PropTypes.func,
   onToggleMobileMoreOperations: PropTypes.func,
   onToggleInsertRecordDialog: PropTypes.func,
-  onDeleteRecords: PropTypes.func,
-  duplicateRecord: PropTypes.func,
-  duplicateRecords: PropTypes.func,
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   editorPortalTarget: PropTypes.instanceOf(Element),
@@ -632,7 +601,6 @@ RecordsBody.propTypes = {
   scrollToRowIndex: PropTypes.number,
   frozenColumnsWidth: PropTypes.number,
   editMobileCell: PropTypes.func,
-  insertRecords: PropTypes.func,
   reloadRecords: PropTypes.func,
   appPage: PropTypes.object,
   showCellColoring: PropTypes.bool,

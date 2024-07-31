@@ -1,5 +1,5 @@
 import { normalizeColumnData } from '../../utils/column-utils';
-import { CellType, PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS } from '../../_basic';
+import { CellType, PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../_basic';
 
 class Column {
   constructor(object) {
@@ -10,7 +10,12 @@ class Column {
     this.width = object.width || 200;
     this.editable = this.enable_edit(this.key, this.type);
     this.data = normalizeColumnData(this);
+    this.frozen = this.is_frozen(this.key) || object.frozen || false;
   }
+
+  is_frozen = (key) => {
+    return key === PRIVATE_COLUMN_KEY.FILE_NAME;
+  };
 
   enable_edit = (key, type) => {
     if (PRIVATE_COLUMN_KEYS.includes(key)) return EDITABLE_PRIVATE_COLUMN_KEYS.includes(key);

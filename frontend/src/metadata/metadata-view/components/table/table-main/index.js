@@ -6,6 +6,8 @@ import { GROUP_VIEW_OFFSET } from '../../../constants';
 import GridUtils from '../../../utils/grid-utils';
 import { useRecordDetails } from '../../../hooks';
 
+import './index.css';
+
 const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, ...params }) => {
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords });
@@ -13,13 +15,18 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
   const { openRecordDetails } = useRecordDetails();
 
   const groupbysCount = useMemo(() => {
-    const groupbys = metadata?.groupbys || [];
+    const groupbys = metadata?.view?.groupbys || [];
     return groupbys.length;
   }, [metadata]);
 
   const groupOffset = useMemo(() => {
     return groupbysCount * GROUP_VIEW_OFFSET;
   }, [groupbysCount]);
+
+  const columns = useMemo(() => {
+    const { columns, hidden_columns } = metadata.view;
+    return columns.filter(column => !hidden_columns.includes(column.key));
+  }, [metadata]);
 
   const updateRecord = useCallback(({ rowId, updates, originalUpdates, oldRowData, originalOldRowData }) => {
     modifyRecord && modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
@@ -32,10 +39,10 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
   return (
     <div className={classnames('table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0 })}>
       <Records
-        columns={metadata.view.columns}
+        columns={columns}
         recordIds={metadata.view.rows || []}
-        groups={metadata.groups}
-        groupbys={metadata.groupbys}
+        groups={metadata.view.groups}
+        groupbys={metadata.view.groupbys}
         recordsCount={metadata?.view?.rows?.length || 0}
         table={metadata}
         hasMore={metadata.hasMore}

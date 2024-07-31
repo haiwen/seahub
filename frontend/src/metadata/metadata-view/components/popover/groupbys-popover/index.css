@@ -1,0 +1,124 @@
+.sf-metadata-groupbys-popover .popover {
+  max-width: none;
+  min-width: 510px;
+}
+
+.sf-metadata-groupbys-popover .groupbys-list {
+  min-height: 80px;
+  max-height: 300px;
+  padding: 15px;
+}
+
+.sf-metadata-groupbys-popover .empty-groupbys-container {
+  min-height: 80px;
+  padding: 16px;
+}
+
+.sf-metadata-groupbys-popover .empty-groupbys-container .empty-groupbys-list {
+  color: #666;
+  font-size: 14px;
+  padding: 0.25rem 0.25rem 0.25rem 0;
+}
+
+.sf-metadata-groupbys-popover .groupbys-list .groupby-item {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0;
+  position: relative;
+}
+
+.sf-metadata-groupbys-popover .groupbys-list .groupby-item.group-can-drop {
+  border-bottom: 1px solid #666;
+}
+
+.sf-metadata-groupbys-popover .groupbys-list .groupby-item.group-can-drop-top::before {
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: #666;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .delete-groupby {
+  height: 20px;
+  margin-right: 14px;
+  text-align: center;
+  width: 12px;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .delete-groupby:hover {
+  cursor: pointer;
+}
+
+.sf-metadata-groupbys-popover .delete-groupby .sf-metadata-icon-fork-number {
+  fill: #999;
+  font-size: 12px;
+}
+
+.sf-metadata-groupbys-popover .delete-groupby:hover .sf-metadata-icon-fork-number {
+  fill: #555;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .option-group {
+  overflow: auto;
+  max-height: 360px;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .condition {
+  display: flex;
+  flex: 1 1;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .condition > div {
+  height: 38px;
+  line-height: 38px;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .groupby-column {
+  width: 150px;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .groupby-count-type,
+.sf-metadata-groupbys-popover .groupby-item .groupby-predicate {
+  width: 130px;
+  margin-left: .5rem;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .groupby-drag {
+  cursor: grab;
+  margin-left: 14px;
+}
+
+.sf-metadata-groupbys-popover .groupby-drag .sf-metadata-icon-drag {
+  fill: #999;
+}
+
+.sf-metadata-groupbys-popover .popover-add-tool {
+  border-top: none;
+  color: #666666;
+}
+
+.sf-metadata-groupbys-popover .popover-add-tool .popover-add-icon {
+  margin-right: 14px;
+}
+
+.sf-metadata-groupbys-popover .groupbys-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 0 15px 15px;
+  font-size: 14px;
+  color: #666666;
+}
+
+.sf-metadata-groupbys-popover .groupbys-tools .groupbys-tool-item:first-child {
+  margin-right: 20px;
+}
+
+.sf-metadata-groupbys-popover .groupbys-tools .groupbys-tool-item:hover {
+  cursor: pointer;
+  color: #666666;
+}

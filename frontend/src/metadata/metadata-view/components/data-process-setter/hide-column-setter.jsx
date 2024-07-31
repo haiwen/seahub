@@ -4,21 +4,21 @@ import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
+import { HideColumnPopover } from '../popover';
 
-
-const HideColumnSetter = ({ columns, wrapperClass, target, localShownColumnKeys }) => {
+const HideColumnSetter = ({ columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
-  const hiddenColumns = useMemo(() => {
-    return columns.filter((column) => !localShownColumnKeys.includes(column.key));
-  }, [columns, localShownColumnKeys]);
+  const validHiddenColumns = useMemo(() => {
+    return hiddenColumns.filter(key => columns.find(column => column.key === key));
+  }, [columns, hiddenColumns]);
 
   const message = useMemo(() => {
-    const hiddenColumnsLength = hiddenColumns.length;
+    const hiddenColumnsLength = validHiddenColumns.length;
     if (hiddenColumnsLength === 1) return gettext('1 hidden column');
     if (hiddenColumnsLength > 1) return gettext('xxx hidden columns').replace('xxx', hiddenColumnsLength);
     return gettext('Hide columns');
-  }, [hiddenColumns]);
+  }, [validHiddenColumns]);
 
   const onSetterToggle = useCallback(() => {
     setShowSetter(!isShowSetter);
@@ -29,7 +29,11 @@ const HideColumnSetter = ({ columns, wrapperClass, target, localShownColumnKeys 
     if (CommonlyUsedHotkey.isEnter(event) || CommonlyUsedHotkey.isSpace(event)) onSetterToggle();
   }, [onSetterToggle]);
 
-  const className = classnames(wrapperClass, { 'active': hiddenColumns.length > 0 });
+  const onChange = useCallback((hiddenColumns) => {
+    modifyHiddenColumns(hiddenColumns);
+  }, [modifyHiddenColumns]);
+
+  const className = classnames(wrapperClass, { 'active': validHiddenColumns.length > 0 });
   return (
     <>
       <IconBtn
@@ -44,6 +48,16 @@ const HideColumnSetter = ({ columns, wrapperClass, target, localShownColumnKeys 
         tabIndex={0}
         id={target}
       />
+      {isShowSetter && (
+        <HideColumnPopover
+          hiddenColumns={validHiddenColumns}
+          target={target}
+          placement="bottom-end"
+          columns={columns}
+          hidePopover={onSetterToggle}
+          onChange={onChange}
+        />
+      )}
     </>
   );
 };
@@ -51,9 +65,7 @@ const HideColumnSetter = ({ columns, wrapperClass, target, localShownColumnKeys 
 HideColumnSetter.propTypes = {
   wrapperClass: PropTypes.string,
   target: PropTypes.string,
-  page: PropTypes.object,
-  shownColumnKeys: PropTypes.array,
-  localShownColumnKeys: PropTypes.array,
+  hiddenColumns: PropTypes.array,
   columns: PropTypes.array,
   modifyHiddenColumns: PropTypes.func,
 };
