@@ -767,9 +767,11 @@ class DirentGridView extends React.Component {
                   showImagePopup={this.showImagePopup}
                   onGridItemContextMenu={this.onGridItemContextMenu}
                   onItemMove={this.props.onItemMove}
+                  onItemsMove={this.props.onItemsMove}
                   onGridItemMouseDown={this.onGridItemMouseDown}
                   onGridItemClick={this.onGridItemClick}
                   activeDirent={this.state.activeDirent}
+                  selectedDirentList={selectedDirentList}
                 />
               );
             })
