@@ -45,8 +45,8 @@ Groupbys.propTypes = {
   onMove: PropTypes.func,
 };
 
-const DndOptionsContainer = DropTarget('sfMetadataGroupbyItem', {}, connect => ({
+const DndGroupbysContainer = DropTarget('sfMetadataGroupbyItem', {}, connect => ({
   connectDropTarget: connect.dropTarget()
 }))(Groupbys);
 
-export default html5DragDropContext(DndOptionsContainer);
+export default html5DragDropContext(DndGroupbysContainer);
