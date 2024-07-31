@@ -137,6 +137,15 @@ class MetadataServerAPI:
         }
         response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+    def add_columns(self, table_id, columns):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
+        data = {
+            'table_id': table_id,
+            'columns': columns
+        }
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
     
     def delete_column(self, table_id, column_key):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/columns'
