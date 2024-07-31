@@ -153,8 +153,8 @@ class GroupBody extends Component {
     this.resultContentRef.scrollTop = scrollTop;
   };
 
-  setScrollLeft = (scrollLeft) => {
-    this.interactionMask && this.interactionMask.setScrollLeft(scrollLeft);
+  setScrollLeft = (scrollLeft, scrollTop) => {
+    this.interactionMask && this.interactionMask.setScrollLeft(scrollLeft, scrollTop);
   };
 
   cancelSetScrollLeft = () => {
@@ -192,9 +192,7 @@ class GroupBody extends Component {
   getRowTop = (groupRecordIndex) => {
     const { groupMetrics } = this.state;
     const groupRow = getGroupRecordByIndex(groupRecordIndex, groupMetrics);
-    if (!groupRow) {
-      return 0;
-    }
+    if (!groupRow) return 0;
     return groupRow.top || 0;
   };
 
@@ -306,6 +304,7 @@ class GroupBody extends Component {
       onCellMouseEnter: this.onCellMouseEnter,
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
+      modifyRecord: this.props.modifyRecord,
     };
     return this.cellMetaData;
   };
@@ -589,10 +588,8 @@ class GroupBody extends Component {
 
   getFoldedGroups = () => {
     const localConfigs = window.sfMetadataContext.localStorage.getItem(LOCAL_FOLDED_GROUP_KEY);
-    if (!localConfigs) {
-      return {};
-    }
-    return localConfigs[LOCAL_FOLDED_GROUP_KEY] || {};
+    if (!localConfigs) return {};
+    return localConfigs;
   };
 
   getVisibleIndex = () => {

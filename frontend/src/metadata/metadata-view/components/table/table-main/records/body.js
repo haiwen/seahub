@@ -157,9 +157,9 @@ class RecordsBody extends Component {
     this.resultContentRef.scrollTop = scrollTop;
   };
 
-  setScrollLeft = (scrollLeft) => {
+  setScrollLeft = (scrollLeft, scrollTop) => {
     const { interactionMask } = this;
-    interactionMask && interactionMask.setScrollLeft(scrollLeft);
+    interactionMask && interactionMask.setScrollLeft(scrollLeft, scrollTop);
   };
 
   cancelSetScrollLeft = () => {

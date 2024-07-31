@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById, PRIVATE_COLUMN_KEYS } from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
@@ -124,48 +124,50 @@ class PopupEditorContainer extends React.Component {
   getOldRowData = (originalOldCellValue) => {
     const { column } = this.props;
     const { key: columnKey, name: columnName, type: columnType } = column;
-    let oldRowData;
+    let oldValue = originalOldCellValue;
     if (this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
-      oldRowData = { [columnName]: original[Object.keys(original)[0]] } ;
-    } else {
-      oldRowData = { [columnName]: originalOldCellValue };
+      oldValue = original[Object.keys(original)[0]];
     }
-    // long-text cell value need format to {text: '', links: [], ...}
     if (columnType === CellType.LONG_TEXT) {
-      const original = this.getEditor().getValue();
-      oldRowData = { [columnName]: original };
+      oldValue = this.getEditor().getValue(); // long-text cell value need format to {text: '', links: [], ...}
     }
+    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnName]: oldValue } : { [columnName]: oldValue } ;
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
   };
 
   // The input area in the interface loses focus. Use this.getEditor().getValue() to get data.
   commit = () => {
-    const { onCommit, column, record } = this.props;
+    const { column, record } = this.props;
     if (!record._id) return;
-    const { key: columnKey, type: columnType, name: columnName } = column;
-    const originalOldCellValue = getCellValueByColumn(record, column);
+    const { key: columnKey, type: columnType } = column;
     const newValue = this.getEditor().getValue();
     let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
+    if (columnType === CellType.SINGLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
+    }
+
+    this.commitData(updated, true);
+  };
+
+  // This is the updated data obtained by manually clicking the button
+  commitData = (updated, closeEditor = false) => {
+    const { onCommit, column, record } = this.props;
+    const { key: columnKey, type: columnType, name: columnName } = column;
+    const originalOldCellValue = getCellValueByColumn(record, column);
     let originalUpdates = { ...updated };
-    if (
-      !isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) ||
-      !this.isNewValueValid(updated)
-    ) {
-      if (typeof this.editor.onClose === 'function') {
+    if (!isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) || !this.isNewValueValid(updated)) {
+      if (closeEditor && typeof this.editor.onClose === 'function') {
         this.editor.onClose();
       }
       return;
-    }
-    if (columnType === CellType.SINGLE_SELECT) {
-      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
     }
     this.changeCommitted = true;
     const rowId = record._id;
     const key = Object.keys(updated)[0];
     const value = updated[key];
-    const updates = { [columnName]: value };
+    const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
 
     // special treatment of long-text column types to keep the stored data consistent
     if (columnType === CellType.LONG_TEXT) {
@@ -177,30 +179,7 @@ class PopupEditorContainer extends React.Component {
     // originalUpdates used for update local record data
     // oldRowData ues for undo/undo modify record
     // originalOldRowData ues for undo/undo modify record
-    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates, oldRowData, originalOldRowData });
-  };
-
-  // This is the updated data obtained by manually clicking the button
-  commitData = (updated) => {
-    if (!this.isNewValueValid(updated)) {
-      return;
-    }
-    this.changeCommitted = true;
-    const { onCommit, record, column } = this.props;
-    const { key: columnKey, type: columnType, name: columnName } = column;
-    const rowId = record._id;
-    const originalOldCellValue = getCellValueByColumn(record, column);
-    let originalUpdates = { ...updated };
-    const key = Object.keys(updated)[0];
-    const value = updated[key];
-    const updates = { [columnName]: value };
-
-    // special treatment of long-text column types to keep the stored data consistent
-    if (columnType === CellType.LONG_TEXT) {
-      originalUpdates[key] = value.text;
-    }
-    const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
-    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates, oldRowData, originalOldRowData }, false);
+    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates, oldRowData, originalOldRowData }, closeEditor);
   };
 
   commitCancel = () => {

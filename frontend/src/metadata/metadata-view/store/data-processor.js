@@ -43,6 +43,14 @@ class DataProcessor {
     // todo
   }
 
+  static hasRelatedFilters = (filters, updatedColumnKeyMap) => {
+    return filters.some(filter => updatedColumnKeyMap[filter.column_key]);
+  };
+
+  static hasRelatedSort = (sorts, updatedColumnKeyMap) => {
+    return sorts.some(sort => updatedColumnKeyMap[sort.column_key]);
+  };
+
   static hasRelatedGroupby(groupbys, updatedColumnKeyMap) {
     return groupbys.some(groupby => updatedColumnKeyMap[groupby.column_key]);
   }
@@ -99,8 +107,14 @@ class DataProcessor {
     table.view.groups = groups;
   }
 
-  static updateDataWithModifyRecords(table, relatedColumnKeyMap) {
-    // todo
+  static updateDataWithModifyRecords(table, relatedColumnKeyMap, rowIds, { collaborators }) {
+    const { available_columns, groupbys, row_ids } = table.view;
+    const _isGroupView = isGroupView({ groupbys }, available_columns);
+    const isRegroup = _isGroupView && this.hasRelatedGroupby(groupbys, relatedColumnKeyMap);
+    if (isRegroup) {
+      table.view.groups = this.getGroupedRows(table, row_ids, groupbys, { collaborators });
+    }
+    // todo update sort and filter and ui change
   }
 
   static handleReloadedRecords(table, reloadedRecords, relatedColumnKeyMap) {
@@ -140,12 +154,7 @@ class DataProcessor {
     this.updateSummaries();
   }
 
-  static updatePageDataWithCommonOperations(table, value) {
-    // todo
-  }
-
   static syncOperationOnData(table, operation, { collaborators }) {
-
     switch (operation.op_type) {
       case OPERATION_TYPE.MODIFY_RECORD:
       case OPERATION_TYPE.MODIFY_RECORDS: {
@@ -167,7 +176,7 @@ class DataProcessor {
             }
           }
         });
-        this.updateDataWithModifyRecords();
+        this.updateDataWithModifyRecords(table, relatedColumnKeyMap, row_ids, { collaborators });
         this.updateSummaries();
         break;
       }
@@ -205,25 +214,28 @@ class DataProcessor {
           });
         }
         table.view.rows = updatedRowIds;
-        this.updatePageDataWithCommonOperations();
+        this.updateDataWithModifyRecords(table, { collaborators });
         this.updateSummaries();
         break;
       }
-      case OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS:
       case OPERATION_TYPE.MODIFY_FILTERS: {
         this.run(table, { collaborators });
         break;
       }
-
       case OPERATION_TYPE.MODIFY_SORTS: {
-        const { sorts, rows } = table.view;
+        const { sorts, groupbys, rows } = table.view;
         const availableColumns = table.view.available_columns || table.columns;
-        if (!isSortView({ sorts }, availableColumns)) {
+        const _isSortView = isSortView({ sorts }, availableColumns);
+        if (!_isSortView) {
           this.run(table, { collaborators });
-          break;
+          return;
         }
-        table.view.rows = this.getSortedRows(table, rows, sorts, { collaborators });
-        this.updatePageDataWithCommonOperations();
+        const _isGroupView = isGroupView({ groupbys }, availableColumns);
+        const renderedRows = this.getSortedRows(table, rows, sorts, { collaborators });
+        const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys, { collaborators }) : [];
+        const row_ids = isTableRows(renderedRows) ? renderedRows.map(row => row._id) : renderedRows;
+        table.view.rows = row_ids;
+        table.view.groups = groups;
         break;
       }
       case OPERATION_TYPE.MODIFY_GROUPBYS: {
@@ -233,9 +245,6 @@ class DataProcessor {
           break;
         }
         table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
-        break;
-      }
-      case OPERATION_TYPE.INSERT_COLUMN: {
         break;
       }
       default: {
