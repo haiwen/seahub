@@ -86,18 +86,12 @@ class InteractionMasks extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { columns, foldedGroups } = this.props;
     const { selectedRange, isEditorEnabled } = this.state;
     const { selectedRange: prevSelectedRange, isEditorEnabled: prevIsEditorEnabled } = prevState;
     const isEditorClosed = isEditorEnabled !== prevIsEditorEnabled && !isEditorEnabled;
     const isSelectedRangeChanged = selectedRange !== prevSelectedRange && (selectedRange.topLeft !== prevSelectedRange.topLeft || selectedRange.bottomRight !== prevSelectedRange.bottomRight);
     if (isSelectedRangeChanged || isEditorClosed) {
       this.focus();
-    }
-
-    if (columns.length !== prevProps.columns.length ||
-      (foldedGroups && prevProps.foldedGroups && foldedGroups.length !== prevProps.foldedGroups.length)) {
-      this.closeTextMask();
     }
   }
 
@@ -1139,7 +1133,6 @@ InteractionMasks.propTypes = {
   enableCellSelect: PropTypes.bool,
   getRowTop: PropTypes.func,
   scrollTop: PropTypes.number,
-  foldedGroups: PropTypes.array,
   getScrollLeft: PropTypes.func,
   getTableContentRect: PropTypes.func,
   getMobileFloatIconStyle: PropTypes.func,
