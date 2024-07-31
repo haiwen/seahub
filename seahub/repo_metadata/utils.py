@@ -49,3 +49,19 @@ def init_metadata(metadata_server_api):
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.is_dir.to_dict())
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.file_type.to_dict())
     metadata_server_api.add_column(METADATA_TABLE.id, METADATA_TABLE.columns.location.to_dict())
+
+def gen_predefined_data(column, repo_id):
+    col_key = column.get('key', {})
+    if col_key == '_summary':
+        create_summary_for_all_sdocs_in_repo(repo_id)
+
+def create_summary_for_all_sdocs_in_repo(repo_id):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/create-summary-of-sdoc-in-repo')
+    params = {
+        'repo_id': repo_id
+    }
+    resp = requests.post(url, json=params, headers=headers)
+    return resp

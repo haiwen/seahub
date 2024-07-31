@@ -9,7 +9,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata
+from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
+    gen_predefined_data
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
 from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
@@ -450,6 +451,7 @@ class MetadataColumns(APIView):
 
         try:
             metadata_server_api.add_column(METADATA_TABLE.id, column)
+            gen_predefined_data(column, repo_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'

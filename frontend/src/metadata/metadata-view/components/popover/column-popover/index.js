@@ -80,7 +80,7 @@ const ColumnPopover = ({ target, onChange }) => {
         }
       }
     }
-    onChange(columnName, column.type, { key: column.unique ? column.key : '', data });
+    onChange(column.unique ? column.key : columnName, column.type, { key: column.unique ? column.key : '', data });
     toggle();
   }, [nameRef, column, metadata, onChange, toggle]);
 
