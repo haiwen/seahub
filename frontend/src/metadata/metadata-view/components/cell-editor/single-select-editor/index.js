@@ -75,7 +75,9 @@ const SingleSelectEditor = forwardRef(({
   const onSelectOption = useCallback((optionId) => {
     if (optionId === value) return;
     setValue(optionId);
-    onCommit && onCommit();
+    setTimeout(() => {
+      onCommit && onCommit();
+    }, 1);
   }, [value, onCommit]);
 
   const onMenuMouseEnter = useCallback((highlightIndex) => {
