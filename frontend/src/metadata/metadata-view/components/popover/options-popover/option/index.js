@@ -58,6 +58,7 @@ const Option = ({
   onDelete: propsDelete, onUpdate,
   onMouseLeave, onMouseEnter: propsMouseEnter, onToggleFreeze, onOpenNameEditor, onCloseNameEditor,
 }) => {
+
   const onDelete = useCallback((event) => {
     event.nativeEvent.stopImmediatePropagation();
     propsDelete(option.id);
