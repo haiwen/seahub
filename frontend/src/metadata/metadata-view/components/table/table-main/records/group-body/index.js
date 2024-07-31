@@ -907,6 +907,7 @@ class GroupBody extends Component {
             setRecordsScrollLeft={this.props.setRecordsScrollLeft}
             gridUtils={this.props.gridUtils}
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
+            modifyColumnData={this.props.modifyColumnData}
           />
           <div className="sf-metadata-result-table" ref={this.setResultRef}>
             {this.renderGroups()}

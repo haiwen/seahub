@@ -545,6 +545,7 @@ class RecordsBody extends Component {
             setRecordsScrollLeft={this.props.setRecordsScrollLeft}
             gridUtils={this.props.gridUtils}
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
+            modifyColumnData={this.props.modifyColumnData}
           />
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}

@@ -80,7 +80,7 @@ class NormalEditorContainer extends React.Component {
   };
 
   createEditor = () => {
-    const { column, record, openEditorMode, columns } = this.props;
+    const { column, record, openEditorMode, columns, modifyColumnData } = this.props;
     const editorProps = {
       ref: this.setEditorRef,
       readOnly: !canEdit(column, record, true),
@@ -96,6 +96,7 @@ class NormalEditorContainer extends React.Component {
       height: this.props.height,
       onBlur: this.commit,
       onOverrideKeyDown: this.onKeyDown,
+      modifyColumnData,
     };
     return (<Editor { ...editorProps } />);
   };

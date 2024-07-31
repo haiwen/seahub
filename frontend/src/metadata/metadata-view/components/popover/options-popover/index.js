@@ -1,9 +1,12 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { CustomizeAddTool, CustomizePopover, SearchInput } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../utils';
-import { getColumnOptions, generateOptionID } from '../../../_basic';
-import { getNotDuplicateOption } from '../../../utils/column-utils';
+import { useMetadata } from '../../../hooks';
+import { getColumnOptions } from '../../../_basic';
+import { getOptionNameById } from '../../../_basic/utils/column/option';
+import { generateNewOption } from '../../../utils/select-utils';
 import OptionsContainer from './options-container';
+import OptionFooter from './options-footer';
 import Option from './option';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import toaster from '../../../../../components/toast';
@@ -16,9 +19,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   const [viewingOptionId, setViewingOptionId] = useState(-1);
   const [deletingOptionId, setDeletingOptionId] = useState('');
   const [editingOptionId, setEditingOptionId] = useState(-1);
+  const [relationRowsNum, setRelationRowsNum] = useState(0);
   const isFreezeRef = useRef(false);
   const ref = useRef(null);
   const isValidEditingOption = useRef(true);
+  const { metadata } = useMetadata();
 
   const displayOptions = useMemo(() => {
     const validSearchValue = searchValue.trim().toLowerCase();
@@ -66,10 +71,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   }, [options, displayOptions, onChange]);
 
   const onAdd = useCallback(() => {
-    const defaultOption = getNotDuplicateOption(options);
-    const { COLOR: color, TEXT_COLOR: textColor, BORDER_COLOR: borderColor } = defaultOption;
-    let newOption = { name: searchValue?.trim() || '', color, textColor, borderColor };
-    newOption.id = generateOptionID(options);
+    const newOption = generateNewOption(options, searchValue?.trim() || '');
     const newOptions = options.slice(0);
     newOptions.push(newOption);
     onChange(newOptions);
@@ -114,10 +116,6 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     setSearchValue(value);
   }, [searchValue]);
 
-  const updateDeleteOption = useCallback((optionId) => {
-    setDeletingOptionId(optionId);
-  }, []);
-
   const closeDeleteOption = useCallback(() => {
     setDeletingOptionId('');
   }, []);
@@ -125,6 +123,28 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
   const onDeleteOption = useCallback(() => {
     onDelete(deletingOptionId);
   }, [deletingOptionId, onDelete]);
+
+  const onImportOptions = useCallback((options) => {
+    onSubmit(options);
+    setOptions(options);
+  }, [onSubmit]);
+
+  const updateDeleteOption = useCallback((optionId) => {
+    const optionName = getOptionNameById(column, optionId);
+    let relationRowsNum = 0;
+    metadata.rows.forEach(row => {
+      if (row[column.name] === optionName) {
+        relationRowsNum++;
+      }
+    });
+    if (relationRowsNum > 0) {
+      setDeletingOptionId(optionId);
+      setRelationRowsNum(relationRowsNum);
+    } else {
+      setRelationRowsNum(0);
+      onDelete(optionId);
+    }
+  }, [metadata, column, onDelete]);
 
   const renderEmptyTip = useCallback(() => {
     if (displayOptions.length > 0) return null;
@@ -167,7 +187,12 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
       >
         <div className="sf-metadata-edit-column-options-container">
           <div className="sf-metadata-edit-column-options-search-container">
-            <SearchInput className="sf-metadata-option-search-control" placeholder={gettext('Search option')} onChange={onSearchValueChange} autoFocus={true} />
+            <SearchInput
+              className="sf-metadata-option-search-control"
+              placeholder={gettext('Search option')}
+              onChange={onSearchValueChange}
+              autoFocus={true}
+            />
           </div>
           {renderEmptyTip()}
           <OptionsContainer
@@ -175,11 +200,22 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
             viewingOptionId={viewingOptionId}
             inputRef={ref}
           />
-          <CustomizeAddTool className="sf-metadata-add-option" callBack={onAdd} footerName={gettext('Add option')} addIconClassName="sf-metadata-add-option-icon" />
+          <CustomizeAddTool
+            className="sf-metadata-add-option"
+            callBack={onAdd}
+            footerName={gettext('Add option')}
+            addIconClassName="sf-metadata-add-option-icon"
+          />
+          <OptionFooter column={column} onToggle={onToggle} onImportOptions={onImportOptions}/>
         </div>
       </CustomizePopover>
       {deletingOptionId && (
-        <ConfirmDeletePopover option={options.find(o => o.id === deletingOptionId)} onToggle={closeDeleteOption} onSubmit={onDeleteOption} />
+        <ConfirmDeletePopover
+          option={options.find(o => o.id === deletingOptionId)}
+          onToggle={closeDeleteOption}
+          onSubmit={onDeleteOption}
+          deleteNumber={relationRowsNum}
+        />
       )}
     </>
   );

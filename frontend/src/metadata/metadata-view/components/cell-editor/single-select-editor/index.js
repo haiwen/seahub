@@ -2,7 +2,8 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
-import { getCellValueByColumn, getColumnByKey, getSelectColumnOptions, getNotDuplicateOption, isFunction } from '../../../_basic';
+import { getCellValueByColumn, getColumnByKey, isFunction } from '../../../_basic';
+import { generateNewOption, getSelectColumnOptions } from '../../../utils/select-utils';
 import { KeyCodes } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
 
@@ -16,6 +17,7 @@ const SingleSelectEditor = forwardRef(({
   value: oldValue,
   onCommit,
   onPressTab,
+  modifyColumnData,
 }, ref) => {
   const [value, setValue] = useState(oldValue || '');
   const [searchValue, setSearchValue] = useState('');
@@ -26,7 +28,7 @@ const SingleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = false;
+  const canEditData = true;
 
   const options = useMemo(() => {
     const options = getSelectColumnOptions(column);
@@ -44,17 +46,19 @@ const SingleSelectEditor = forwardRef(({
     }
     return options;
   }, [record, column, columns]);
+
   const displayOptions = useMemo(() => {
     if (!searchValue) return options;
     const value = searchValue.toLowerCase().trim();
     if (!value) return options;
     return options.filter((item) => item.name && item.name.toLowerCase().indexOf(value) > -1);
   }, [searchValue, options]);
+
   const isShowCreateBtn = useMemo(() => {
-    if (!canEditData) return false;
-    if (!searchValue) return false;
+    if (!canEditData || !searchValue) return false;
     return displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
   }, [canEditData, displayOptions, searchValue]);
+
   const style = useMemo(() => {
     return { width: column.width, top: height - 2 };
   }, [column, height]);
@@ -71,7 +75,9 @@ const SingleSelectEditor = forwardRef(({
   const onSelectOption = useCallback((optionId) => {
     if (optionId === value) return;
     setValue(optionId);
-    onCommit && onCommit();
+    setTimeout(() => {
+      onCommit && onCommit();
+    }, 1);
   }, [value, onCommit]);
 
   const onMenuMouseEnter = useCallback((highlightIndex) => {
@@ -84,14 +90,12 @@ const SingleSelectEditor = forwardRef(({
 
   const createOption = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
-    const defaultOption = getNotDuplicateOption(options);
+    const newOption = generateNewOption(options, searchValue?.trim() || '');
     let newOptions = options.slice(0);
-    const newOption = { name: searchValue.trim(), color: defaultOption.COLOR, textColor: defaultOption.TEXT_COLOR };
     newOptions.push(newOption);
-    this.setState({ options }, () => {
-      onSelectOption(newOption.id);
-    });
-  }, [searchValue, options, onSelectOption]);
+    modifyColumnData(column.key, { options: newOptions }, { options: column.data.options || [] });
+    onSelectOption(newOption.id);
+  }, [column, searchValue, options, onSelectOption, modifyColumnData]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -118,19 +122,14 @@ const SingleSelectEditor = forwardRef(({
     if (searchValue) {
       isShowCreateBtn = canEditData && displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
     }
-    if (!isShowCreateBtn) return;
-    if (displayOptions.length === 0) return;
+    if (!isShowCreateBtn || displayOptions.length === 0) return;
     createOption();
   }, [canEditData, displayOptions, highlightIndex, value, searchValue, onSelectOption, createOption]);
 
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === 0) {
-      setHighlightIndex(displayOptions.length - 1);
-      editorContainerRef.current.scrollTop = 0;
-      return;
-    }
+    if (highlightIndex === 0) return;
     setHighlightIndex(highlightIndex - 1);
     if (highlightIndex > displayOptions.length - maxItemNum) {
       editorContainerRef.current.scrollTop -= itemHeight;
@@ -140,11 +139,7 @@ const SingleSelectEditor = forwardRef(({
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === displayOptions.length - 1) {
-      setHighlightIndex(0);
-      editorContainerRef.current.scrollTop = 0;
-      return;
-    }
+    if (highlightIndex === displayOptions.length - 1) return;
     setHighlightIndex(highlightIndex + 1);
     if (highlightIndex >= maxItemNum) {
       editorContainerRef.current.scrollTop += itemHeight;
@@ -221,7 +216,7 @@ const SingleSelectEditor = forwardRef(({
     // maxWidth = column.width > 200 ? column.width - 62 : 200 - 62
     const maxWidth = column.width > 200 ? column.width - 62 : 200 - 62;
     return displayOptions.map((option, i) => {
-      const isSelected = value === option.id;
+      const isSelected = value === option.name;
       return (
         <div key={option.id} className="sf-metadata-single-select-item" ref={selectItemRef}>
           <div
@@ -253,13 +248,22 @@ const SingleSelectEditor = forwardRef(({
   return (
     <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
       <div className="sf-metadata-search-single-select-options">
-        <SearchInput placeholder={gettext('Search option')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} />
+        <SearchInput
+          placeholder={gettext('Search option')}
+          onKeyDown={onKeyDown}
+          onChange={onChangeSearch}
+          autoFocus={true}
+        />
       </div>
       <div className="sf-metadata-single-select-editor-container" ref={editorContainerRef}>
         {renderOptions()}
       </div>
       {isShowCreateBtn && (
-        <CustomizeAddTool callBack={createOption} footerName={`${gettext('Add option')} ${searchValue}`} className="add-search-result" />
+        <CustomizeAddTool
+          callBack={createOption}
+          footerName={`${gettext('Add option')} ${searchValue}`}
+          className="add-search-result"
+        />
       )}
     </div>
   );

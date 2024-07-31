@@ -1,13 +1,14 @@
-import { SELECT_OPTION_COLORS } from '../../constants/select-option';
+import { SELECT_OPTION_COLORS } from '../_basic/constants/select-option';
+import { generateOptionID } from '../_basic/utils/column/option';
 
-export const getSelectColumnOptions = (column) => {
+export function getSelectColumnOptions(column) {
   if (!column || !column.data || !Array.isArray(column.data.options)) {
     return [];
   }
   return column.data.options;
-};
+}
 
-export const getNotDuplicateOption = (options) => {
+const getNotDuplicateOption = (options) => {
   const defaultOptions = SELECT_OPTION_COLORS.slice(12, 24);
   let defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
   const adjacentOptions = options.slice(-11);
@@ -18,4 +19,12 @@ export const getNotDuplicateOption = (options) => {
     duplicateOption = adjacentOptions.find(_isDuplicate);
   }
   return defaultOption;
+};
+
+export const generateNewOption = (options, name) => {
+  const defaultOption = getNotDuplicateOption(options);
+  const { COLOR: color, TEXT_COLOR: textColor, BORDER_COLOR: borderColor } = defaultOption;
+  const newOption = { name, color, textColor, borderColor };
+  newOption.id = generateOptionID(options);
+  return newOption;
 };
