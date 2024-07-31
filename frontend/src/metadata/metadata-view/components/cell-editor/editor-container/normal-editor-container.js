@@ -225,10 +225,10 @@ class NormalEditorContainer extends React.Component {
       this.props.onCommitCancel();
       return;
     }
-    this.commitData(updated);
+    this.commitData(updated, true);
   };
 
-  commitData = (updated) => {
+  commitData = (updated, closeEditor = false) => {
     if (!this.isNewValueValid(updated)) return;
     const { onCommit, record, column } = this.props;
     const { key: columnKey, name: columnName } = column;
@@ -243,7 +243,7 @@ class NormalEditorContainer extends React.Component {
     // originalUpdates used for update local record data
     // oldRowData ues for undo/undo modify record
     // originalOldRowData ues for undo/undo modify record
-    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates: updated, oldRowData, originalOldRowData }, false);
+    onCommit({ rowId, cellKey: columnKey, updates, originalUpdates: updated, oldRowData, originalOldRowData }, closeEditor);
   };
 
   commitCancel = () => {
