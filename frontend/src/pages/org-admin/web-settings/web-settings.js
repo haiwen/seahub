@@ -10,7 +10,7 @@ import InputItem from './input-item';
 import FileItem from './file-item';
 
 import '../../../css/system-admin-web-settings.css';
-import CheckboxItem from "../../sys-admin/web-settings/checkbox-item";
+import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
 class OrgWebSettings extends Component {
 
@@ -28,7 +28,6 @@ class OrgWebSettings extends Component {
 
   componentDidMount() {
     seafileAPI.orgAdminGetOrgInfo().then((res) => {
-      console.log(res.data)
       this.setState({
         loading: false,
         config_dict: res.data,
@@ -77,7 +76,7 @@ class OrgWebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
@@ -145,14 +144,13 @@ class OrgWebSettings extends Component {
                 </Section>
                 <Section headingText={gettext('User Login')}>
                   {enableMultiADFS &&
-                      <CheckboxItem
+                    <CheckboxItem
                       saveSetting={this.updateSSOLgoin}
                       displayName='Disable adfs user pwd login'
                       keyText='only_sso_login'
                       value={only_sso_login}
                       helpTip={gettext('Force user SSO login.')}
                     />}
-
                 </Section>
               </Fragment>
               }
