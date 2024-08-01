@@ -129,10 +129,6 @@ class MetadataManage(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
             metadata_server_api.delete_base()
-        except ConnectionError as err:
-            logger.error(err)
-            status_code, reason = err
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
@@ -216,10 +212,6 @@ class MetadataRecords(APIView):
         
         try:
             results = list_metadata_records(repo_id, request.user.username, parent_dir, name, is_dir, start, limit, order_by)
-        except ConnectionError as err:
-            logger.error(err)
-            status_code, reason = err
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, f'error from metadata server with code {status_code}: {reason}')
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
