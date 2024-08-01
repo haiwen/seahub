@@ -150,14 +150,16 @@ class MoveDirent extends React.Component {
   };
 
   render() {
-    let title = gettext('Move {placeholder} to');
-    if (!this.props.isMultipleOperation) {
-      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
-    } else {
-      title = gettext('Move selected item(s) to:');
-    }
-    let mode = 'current_repo_and_other_repos';
     const { dirent, selectedDirentList, isMultipleOperation } = this.props;
+    let title = gettext('Move {placeholder} to');
+
+    if (isMultipleOperation) {
+      title = gettext('Move selected item(s) to:');
+    } else {
+      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+    }
+
+    let mode = 'current_repo_and_other_repos';
     const movedDirent = dirent ? dirent : selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);

@@ -18,7 +18,15 @@ class TreeViewItem extends React.Component {
 
   constructor(props) {
     super(props);
-    let filePath = this.props.filePath ? this.props.filePath + '/' + this.props.node.object.name : this.props.node.path;
+    let filePath;
+
+    if (this.props.filePath === '/') {
+      filePath = '/' + this.props.node.object.name;
+    } else if (this.props.filePath) {
+      filePath = this.props.filePath + '/' + this.props.node.object.name;
+    } else {
+      filePath = this.props.node.path;
+    }
 
     this.state = {
       filePath: filePath,

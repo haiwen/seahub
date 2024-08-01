@@ -743,6 +743,7 @@ class LibContentView extends React.Component {
 
     let dirNames = this.getSelectedDirentNames();
     let direntPaths = this.getSelectedDirentPaths();
+
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({

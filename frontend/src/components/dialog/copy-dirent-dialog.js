@@ -30,13 +30,6 @@ class CopyDirent extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.errMessage === nextState.errMessage) {
-      return false;
-    }
-    return true;
-  }
-
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
       this.copyItems();
@@ -181,6 +174,7 @@ class CopyDirent extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 onRepoItemClick={this.onRepoItemClick}
                 mode={this.state.mode}
+                hideLibraryName={false}
               />
               {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
             </ModalBody>
