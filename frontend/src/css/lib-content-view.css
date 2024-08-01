@@ -290,73 +290,81 @@
   padding: 0 2px;
 }
 
-.custom-modal{
-  max-width: 740px;
-  font-size: 15px;
+.custom-modal {
   box-sizing: border-box;
+  font-size: 1rem;
+  max-width: 740px;
 }
 
-.custom-modal .row{
+.custom-modal .row {
   margin: 0;
 }
 
-.custom-modal .modal-content{
+.custom-modal .modal-content {
   border: 0;
 }
 
 .custom-modal .modal-body {
   display: flex;
   flex-direction: column;
-  padding: 0;
   gap: 1rem;
+  padding: 1rem 0;
+  position: relative;
 }
 
-.custom-modal .repo-list-col{
+.custom-modal .modal-body .alert-message {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.custom-modal .repo-list-col {
   max-width: 240px;
-  line-height: 24px;
   padding: 1rem;
-  white-space: nowrap;
+  line-height: 24px;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.custom-modal .repo-list-item{
-  height: 28px;
+.custom-modal .repo-list-item {
   display: flex;
   align-items: center;
+  position: relative;
+  height: 28px;
   padding: 0 10px;
   cursor: pointer;
-  position: relative;
   transition: background-color 0.3s ease, font-weight 0.3s ease;
 }
 
 .custom-modal .repo-list-item.active {
-  background-color: #F2F4F6;
+  background-color: #f2f4f6;
   font-weight: 500;
   border-radius: 3px;
 }
 
 .custom-modal .repo-list-item.active::before {
   content: '';
-  position: absolute;
   display: block;
+  position: absolute;
+  top: 2px;
+  left: -8px;
   width: 4px;
   height: 24px;
-  left: -8px;
-  top: 2px;
-  background-color: #FF8000;
+  background-color: #ff8000;
   border-radius: 2px;
   z-index: 0;
 }
 
-.custom-modal .file-list-col{
+.custom-modal .file-list-col {
   max-width: 500px;
-  padding: 1rem 0;
+  padding: 0;
 }
 
+.custom-modal .file-list-col .file-chooser-container,
 .custom-modal .file-list-col .file-chooser-search-input {
-  padding: 0 1rem;
-}
-
-.custom-modal .file-list-col .file-chooser-container {
   padding: 0 1rem;
 }

@@ -149,18 +149,22 @@ class MoveDirent extends React.Component {
     this.setState({ mode: mode });
   };
 
-  render() {
-    const { dirent, selectedDirentList, isMultipleOperation } = this.props;
+  renderTitle = () => {
+    const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Move {placeholder} to');
 
     if (isMultipleOperation) {
-      title = gettext('Move selected item(s) to:');
+      return gettext('Move selected item(s) to:');
     } else {
-      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+      return title.replace('{placeholder}', `<span class="op-target text-truncate mx-1">${Utils.HTMLescape(dirent.name)}</span>`);
     }
+  };
 
-    let mode = 'current_repo_and_other_repos';
-    const movedDirent = dirent ? dirent : selectedDirentList[0];
+  render() {
+    const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
+    const { mode, errMessage } = this.state;
+
+    const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
 
@@ -173,7 +177,7 @@ class MoveDirent extends React.Component {
     return (
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
-          {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
+          {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex mw-100'></div>}
         </ModalHeader>
         <Row>
           <Col className='repo-list-col border-right' >
@@ -184,14 +188,14 @@ class MoveDirent extends React.Component {
           <Col className='file-list-col'>
             <ModalBody>
               <FileChooser
-                repoID={this.props.repoID}
-                currentPath={this.props.path}
+                repoID={repoID}
+                currentPath={path}
                 onDirentItemClick={this.onDirentItemClick}
                 onRepoItemClick={this.onRepoItemClick}
-                mode={this.state.mode}
+                mode={mode}
                 hideLibraryName={false}
               />
-              {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
+              {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

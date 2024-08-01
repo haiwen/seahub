@@ -135,18 +135,23 @@ class CopyDirent extends React.Component {
     this.setState({ mode: mode });
   };
 
-  render() {
+  renderTitle = () => {
+    const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Copy {placeholder} to');
-    if (!this.props.isMultipleOperation) {
-      title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
-    } else {
-      title = gettext('Copy selected item(s) to:');
-    }
-    let mode = 'current_repo_and_other_repos';
 
-    const { dirent, selectedDirentList, isMultipleOperation } = this.props;
-    const movedDirent = dirent ? dirent : selectedDirentList[0];
-    const { permission } = movedDirent;
+    if (isMultipleOperation) {
+      return gettext('Copy selected item(s) to:');
+    } else {
+      return title.replace('{placeholder}', `<span class="op-target text-truncate mx-1">${Utils.HTMLescape(dirent.name)}</span>`);
+    }
+  };
+
+  render() {
+    const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
+    const { mode, errMessage } = this.state;
+
+    const copiedDirent = dirent || selectedDirentList[0];
+    const { permission } = copiedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
 
     const LibraryOption = ({ mode, label }) => (
@@ -158,7 +163,7 @@ class CopyDirent extends React.Component {
     return (
       <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
-          {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
+          {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex mw-100"></div>}
         </ModalHeader>
         <Row>
           <Col className='repo-list-col border-right'>
@@ -169,14 +174,14 @@ class CopyDirent extends React.Component {
           <Col className='file-list-col'>
             <ModalBody>
               <FileChooser
-                repoID={this.props.repoID}
-                currentPath={this.props.path}
+                repoID={repoID}
+                currentPath={path}
                 onDirentItemClick={this.onDirentItemClick}
                 onRepoItemClick={this.onRepoItemClick}
-                mode={this.state.mode}
+                mode={mode}
                 hideLibraryName={false}
               />
-              {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
+              {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
