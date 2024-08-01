@@ -378,40 +378,79 @@ class FileChooser extends React.Component {
   };
 
   renderRepoListView = () => {
-    console.log(this.props.mode);
     const recentlyUsedRepos = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
     return (
-      <div className="file-chooser-container user-select-none" onScroll={this.onScroll}>
-        {this.props.mode === 'current_repo_and_other_repos' && (
-          <Fragment>
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
-                <span className="library">{gettext('Current Library')}</span>
+      <div className='scroll-wrapper' onScroll={this.onScroll}>
+        <div className="file-chooser-container user-select-none" >
+          {this.props.mode === 'current_repo_and_other_repos' && (
+            <Fragment>
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
+                  <span className="library">{gettext('Current Library')}</span>
+                </div>
+                {
+                  this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
+                  <RepoListView
+                    initToShowChildren={true}
+                    currentRepoInfo={this.state.currentRepoInfo}
+                    currentPath={this.props.currentPath}
+                    selectedRepo={this.state.selectedRepo}
+                    selectedPath={this.state.selectedPath}
+                    onRepoItemClick={this.onRepoItemClick}
+                    onDirentItemClick={this.onDirentItemClick}
+                    isShowFile={this.props.isShowFile}
+                    fileSuffixes={this.props.fileSuffixes}
+                    selectedItemInfo={this.state.selectedItemInfo}
+                  />
+                }
               </div>
-              {
-                this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-                <RepoListView
-                  initToShowChildren={true}
-                  currentRepoInfo={this.state.currentRepoInfo}
-                  currentPath={this.props.currentPath}
-                  selectedRepo={this.state.selectedRepo}
-                  selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick}
-                  onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={this.props.isShowFile}
-                  fileSuffixes={this.props.fileSuffixes}
-                  selectedItemInfo={this.state.selectedItemInfo}
-                />
-              }
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
+                  <span className="library">{gettext('Other Libraries')}</span>
+                </div>
+                {
+                  this.state.isOtherRepoShow &&
+                  <RepoListView
+                    initToShowChildren={false}
+                    repoList={this.state.repoList}
+                    selectedRepo={this.state.selectedRepo}
+                    selectedPath={this.state.selectedPath}
+                    onRepoItemClick={this.onRepoItemClick}
+                    onDirentItemClick={this.onDirentItemClick}
+                    isShowFile={this.props.isShowFile}
+                    fileSuffixes={this.props.fileSuffixes}
+                    selectedItemInfo={this.state.selectedItemInfo}
+                  />
+                }
+              </div>
+            </Fragment>
+          )}
+          {this.props.mode === 'only_current_library' && (
+            <div className="list-view">
+
+              <RepoListView
+                initToShowChildren={true}
+                currentRepoInfo={this.state.currentRepoInfo}
+                currentPath={this.props.currentPath}
+                selectedRepo={this.state.selectedRepo}
+                selectedPath={this.state.selectedPath}
+                onRepoItemClick={this.onRepoItemClick}
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={this.props.isShowFile}
+                fileSuffixes={this.props.fileSuffixes}
+                selectedItemInfo={this.state.selectedItemInfo}
+              />
             </div>
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
-                <span className="library">{gettext('Other Libraries')}</span>
-              </div>
-              {
-                this.state.isOtherRepoShow &&
+          )}
+          {this.props.mode === 'only_all_repos' && (
+            <div className="file-chooser-container">
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className="item-toggle sf3-font sf3-font-down"></span>
+                  <span className="library">{gettext('Libraries')}</span>
+                </div>
                 <RepoListView
                   initToShowChildren={false}
                   repoList={this.state.repoList}
@@ -423,34 +462,11 @@ class FileChooser extends React.Component {
                   fileSuffixes={this.props.fileSuffixes}
                   selectedItemInfo={this.state.selectedItemInfo}
                 />
-              }
-            </div>
-          </Fragment>
-        )}
-        {this.props.mode === 'only_current_library' && (
-          <div className="list-view">
-            <RepoListView
-              initToShowChildren={true}
-              currentRepoInfo={this.state.currentRepoInfo}
-              currentPath={this.props.currentPath}
-              selectedRepo={this.state.selectedRepo}
-              selectedPath={this.state.selectedPath}
-              onRepoItemClick={this.onRepoItemClick}
-              onDirentItemClick={this.onDirentItemClick}
-              isShowFile={this.props.isShowFile}
-              fileSuffixes={this.props.fileSuffixes}
-              selectedItemInfo={this.state.selectedItemInfo}
-              hideLibraryName={this.props.hideLibraryName}
-            />
-          </div>
-        )}
-        {this.props.mode === 'only_all_repos' && (
-          <div className="file-chooser-container">
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className="item-toggle sf3-font sf3-font-down"></span>
-                <span className="library">{gettext('Libraries')}</span>
               </div>
+            </div>
+          )}
+          {this.props.mode === 'only_other_libraries' && (
+            <div className="list-view">
               <RepoListView
                 initToShowChildren={false}
                 repoList={this.state.repoList}
@@ -463,45 +479,23 @@ class FileChooser extends React.Component {
                 selectedItemInfo={this.state.selectedItemInfo}
               />
             </div>
-          </div>
-        )}
-        {this.props.mode === 'only_other_libraries' && (
-          <div className="list-view">
-            {!this.props.hideLibraryName &&
-            <div className="list-view-header">
-              <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
-              <span className="library">{gettext('Other Libraries')}</span>
-            </div>}
-
-            <RepoListView
-              initToShowChildren={false}
-              repoList={this.state.repoList}
-              selectedRepo={this.state.selectedRepo}
-              selectedPath={this.state.selectedPath}
-              onRepoItemClick={this.onRepoItemClick}
-              onDirentItemClick={this.onDirentItemClick}
-              isShowFile={this.props.isShowFile}
-              fileSuffixes={this.props.fileSuffixes}
-              selectedItemInfo={this.state.selectedItemInfo}
-            />
-
-          </div>
-        )}
-        {this.props.mode === 'recently_used' && (
-          <div className="list-view">
-            <RepoListView
-              initToShowChildren={false}
-              repoList={recentlyUsedRepos}
-              selectedRepo={this.state.selectedRepo}
-              selectedPath={this.state.selectedPath}
-              onRepoItemClick={this.onRepoItemClick}
-              onDirentItemClick={this.onDirentItemClick}
-              isShowFile={this.props.isShowFile}
-              fileSuffixes={this.props.fileSuffixes}
-              selectedItemInfo={this.state.selectedItemInfo}
-            />
-          </div>
-        )}
+          )}
+          {this.props.mode === 'recently_used' && (
+            <div className="list-view">
+              <RepoListView
+                initToShowChildren={false}
+                repoList={recentlyUsedRepos}
+                selectedRepo={this.state.selectedRepo}
+                selectedPath={this.state.selectedPath}
+                onRepoItemClick={this.onRepoItemClick}
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={this.props.isShowFile}
+                fileSuffixes={this.props.fileSuffixes}
+                selectedItemInfo={this.state.selectedItemInfo}
+              />
+            </div>
+          )}
+        </div>
       </div>
     );
   };
@@ -510,17 +504,17 @@ class FileChooser extends React.Component {
     if (!this.state.selectedRepo && this.props.repoID) {
       return '';
     }
-
+    const isPro = true;
     return (
       <Fragment>
-        {/* {isPro && ( */}
-        <div className="file-chooser-search-input">
-          <Input className="search-input" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
-          {this.state.searchInfo.length !== 0 && (
-            <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
-          )}
-        </div>
-        {/* )} */}
+        {isPro && (
+          <div className="file-chooser-search-input">
+            <Input className="search-input" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            {this.state.searchInfo.length !== 0 && (
+              <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
+            )}
+          </div>
+        )}
         {this.state.isSearching && (
           <div className="file-chooser-search-container">
             {this.renderSearchedView()}

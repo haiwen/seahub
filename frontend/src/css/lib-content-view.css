@@ -296,16 +296,26 @@
   box-sizing: border-box;
 }
 
+.custom-modal .row{
+  margin: 0;
+}
+
 .custom-modal .modal-content{
   border: 0;
 }
 
+.custom-modal .modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 1rem;
+}
+
 .custom-modal .repo-list-col{
-  padding: 14px 16px;
   max-width: 240px;
   line-height: 24px;
+  padding: 1rem;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -340,4 +350,13 @@
 
 .custom-modal .file-list-col{
   max-width: 500px;
+  padding: 1rem 0;
+}
+
+.custom-modal .file-list-col .file-chooser-search-input {
+  padding: 0 1rem;
+}
+
+.custom-modal .file-list-col .file-chooser-container {
+  padding: 0 1rem;
 }

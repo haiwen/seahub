@@ -30,13 +30,6 @@ class MoveDirent extends React.Component {
     };
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (this.state.errMessage === nextState.errMessage) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
       this.moveItems();
@@ -180,13 +173,13 @@ class MoveDirent extends React.Component {
         <ModalHeader toggle={this.toggle}>
           {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
-        <Row className='m-0'>
-          <Col className='repo-list-col border-right'>
+        <Row>
+          <Col className='repo-list-col border-right' >
             <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
             {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
             <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
           </Col>
-          <Col className='file-list-col p-0'>
+          <Col className='file-list-col'>
             <ModalBody>
               <FileChooser
                 repoID={this.props.repoID}
@@ -194,7 +187,7 @@ class MoveDirent extends React.Component {
                 onDirentItemClick={this.onDirentItemClick}
                 onRepoItemClick={this.onRepoItemClick}
                 mode={this.state.mode}
-                hideLibraryName={true}
+                hideLibraryName={false}
               />
               {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
             </ModalBody>

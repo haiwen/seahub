@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
@@ -25,7 +25,8 @@ class CopyDirent extends React.Component {
     this.state = {
       repo: { repo_id: this.props.repoID },
       selectedPath: this.props.path,
-      errMessage: ''
+      errMessage: '',
+      mode: 'only_current_library',
     };
   }
 
@@ -137,6 +138,10 @@ class CopyDirent extends React.Component {
     });
   };
 
+  onSelectedMode = (mode) => {
+    this.setState({ mode: mode });
+  };
+
   render() {
     let title = gettext('Copy {placeholder} to');
     if (!this.props.isMultipleOperation) {
@@ -145,26 +150,46 @@ class CopyDirent extends React.Component {
       title = gettext('Copy selected item(s) to:');
     }
     let mode = 'current_repo_and_other_repos';
-    const { isMultipleOperation } = this.props;
+
+    const { dirent, selectedDirentList, isMultipleOperation } = this.props;
+    const movedDirent = dirent ? dirent : selectedDirentList[0];
+    const { permission } = movedDirent;
+    const { isCustomPermission } = Utils.getUserPermission(permission);
+
+    const LibraryOption = ({ mode, label }) => (
+      <div className={`repo-list-item ${this.state.mode === mode ? 'active' : ''}`} onClick={() => this.onSelectedMode(mode)}>
+        <span className='library'>{label}</span>
+      </div>
+    );
+
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal className='custom-modal' isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
           {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
-        <ModalBody>
-          <FileChooser
-            repoID={this.props.repoID}
-            currentPath={this.props.path}
-            onDirentItemClick={this.onDirentItemClick}
-            onRepoItemClick={this.onRepoItemClick}
-            mode={mode}
-          />
-          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
-        </ModalFooter>
+        <Row>
+          <Col className='repo-list-col border-right'>
+            <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
+            {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
+            <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
+          </Col>
+          <Col className='file-list-col'>
+            <ModalBody>
+              <FileChooser
+                repoID={this.props.repoID}
+                currentPath={this.props.path}
+                onDirentItemClick={this.onDirentItemClick}
+                onRepoItemClick={this.onRepoItemClick}
+                mode={this.state.mode}
+              />
+              {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+              <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+            </ModalFooter>
+          </Col>
+        </Row>
       </Modal>
     );
   }

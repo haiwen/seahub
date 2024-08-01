@@ -75,7 +75,7 @@ class TreeViewItem extends React.Component {
               selectedPath={this.props.selectedPath}
               fileSuffixes={this.props.fileSuffixes}
               filePath={this.state.filePath}
-              level={node.path === '/' ? 0 : (this.props.level || 0) + 1}
+              level={(this.props.level || 0) + 1}
             />);
         })}
       </div>
@@ -101,7 +101,6 @@ class TreeViewItem extends React.Component {
     }
 
     const paddingLeft = `${this.props.level * 20}px`;
-
     return (
       <div className="file-chooser-item">
         <div className={`${node.path === '/' ? 'hide' : ''}`}>
