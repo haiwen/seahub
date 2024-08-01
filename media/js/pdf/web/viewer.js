@@ -3220,7 +3220,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER
   };
   defaultOptions.sandboxBundleSrc = {
-    value: "../build/pdf.sandbox.js",
+    value: SEAFILE_PDFJS_DIR + "/build/pdf.sandbox.js",
     kind: OptionKind.VIEWER
   };
 }
