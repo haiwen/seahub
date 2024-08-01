@@ -10,7 +10,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    gen_predefined_data, update_single_sdoc_summary
+    gen_predefined_data, update_single_doc_summary
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
 from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
@@ -791,7 +791,7 @@ class MetadataViewsMoveView(APIView):
         return Response({'navigation': results['navigation']})
 
 
-class MetadataSummarySdoc(APIView):
+class MetadataSummarizeDoc(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -819,7 +819,7 @@ class MetadataSummarySdoc(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            update_status = update_single_sdoc_summary(repo_id, file_path)
+            update_status = update_single_doc_summary(repo_id, file_path)
         except Exception as e:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
