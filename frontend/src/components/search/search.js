@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
+import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import searchAPI from '../../utils/search-api';
@@ -131,9 +132,9 @@ class Search extends Component {
   onUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const { highlightIndex, resultItems } = this.state;
 
     if (this.state.showRecent) {
-      const { highlightIndex } = this.state;
       if (highlightIndex > 0) {
         this.setState({ highlightIndex: highlightIndex - 1 }, () => {
           if (this.highlightRef) {
@@ -147,6 +148,23 @@ class Search extends Component {
       return;
     }
 
+    // global searching, searched repos needs to support up and down keys
+    if (!this.props.repoID && resultItems.length > 0) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
+      if (highlightSearchTypesIndex < 0) {
+        highlightSearchTypesIndex = resultItems.length;
+      }
+      this.setState({ highlightSearchTypesIndex }, () => {
+        if (this.highlightRef) {
+          const { top, height } = this.highlightRef.getBoundingClientRect();
+          if (top - height < 0) {
+            this.searchResultListContainerRef.current.scrollTop -= height;
+          }
+        }
+      });
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex - 1;
       if (highlightSearchTypesIndex < 0) {
@@ -156,7 +174,6 @@ class Search extends Component {
       return;
     }
 
-    const { highlightIndex } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
         if (this.highlightRef) {
@@ -172,10 +189,10 @@ class Search extends Component {
   onDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const { highlightIndex, resultItems } = this.state;
 
     if (this.state.showRecent) {
       const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
-      const { highlightIndex } = this.state;
       if (highlightIndex < visitedItems.length - 1) {
         this.setState({ highlightIndex: highlightIndex + 1 }, () => {
           if (this.highlightRef) {
@@ -191,6 +208,25 @@ class Search extends Component {
       return;
     }
 
+    // global searching, searched repos needs to support up and down keys
+    if (!this.props.repoID && resultItems.length > 0) {
+      let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
+      if (highlightSearchTypesIndex > resultItems.length) {
+        highlightSearchTypesIndex = 0;
+      }
+      this.setState({ highlightSearchTypesIndex }, () => {
+        if (this.highlightRef) {
+          const { top, height } = this.highlightRef.getBoundingClientRect();
+          const outerHeight = 300;
+          if (top > outerHeight) {
+            const newScrollTop = this.searchResultListContainerRef.current.scrollTop + height;
+            this.searchResultListContainerRef.current.scrollTop = newScrollTop;
+          }
+        }
+      });
+      return;
+    }
+
     if (!this.state.isResultGetted) {
       let highlightSearchTypesIndex = this.state.highlightSearchTypesIndex + 1;
       if (highlightSearchTypesIndex > this.state.searchTypesMax) {
@@ -200,7 +236,6 @@ class Search extends Component {
       return;
     }
 
-    const { highlightIndex, resultItems } = this.state;
     if (highlightIndex < resultItems.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
         if (this.highlightRef) {
@@ -227,6 +262,21 @@ class Search extends Component {
         this.onItemClickHandler(item);
       }
       return;
+    }
+    // global searching, searched repos needs to support enter
+    const { highlightSearchTypesIndex, resultItems } = this.state;
+    if (!this.props.repoID && resultItems.length > 0) {
+      if (highlightSearchTypesIndex === 0) {
+        this.searchAllRepos();
+      } else {
+        let item = this.state.resultItems[highlightSearchTypesIndex - 1];
+        if (item) {
+          if (document.activeElement) {
+            document.activeElement.blur();
+          }
+          this.onItemClickHandler(item);
+        }
+      }
     }
     if (!this.state.isResultGetted) {
       let highlightDom = document.querySelector('.search-types-highlight');
@@ -509,10 +559,10 @@ class Search extends Component {
     const { resultItems } = this.state;
     if (!this.props.repoID) {
       return (
-        <div>
+        <div className="search-result-list-container" ref={this.searchResultListContainerRef}>
           <div className="search-types">
             <div
-              className="search-types-repos search-types-highlight"
+              className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
               onClick={this.searchAllRepos}
               tabIndex={0}
             >
@@ -536,6 +586,8 @@ class Search extends Component {
                       key={index}
                       item={item}
                       onClick={this.onItemClickHandler}
+                      isHighlight={highlightIndex === index + 1}
+                      setRef={highlightIndex === index + 1 ? (ref) => {this.highlightRef = ref;} : () => {}}
                     />
                   );
                 })}
