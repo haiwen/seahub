@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -10,6 +10,7 @@ import InputItem from './input-item';
 import FileItem from './file-item';
 
 import '../../../css/system-admin-web-settings.css';
+import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
 class OrgWebSettings extends Component {
 
@@ -21,6 +22,7 @@ class OrgWebSettings extends Component {
       config_dict: null,
       logoPath: logoPath,
       file_ext_white_list: '',
+      force_adfs_login: false,
     };
   }
 
@@ -29,7 +31,8 @@ class OrgWebSettings extends Component {
       this.setState({
         loading: false,
         config_dict: res.data,
-        file_ext_white_list: res.data.file_ext_white_list
+        file_ext_white_list: res.data.file_ext_white_list,
+        force_adfs_login: res.data.force_adfs_login
       });
     }).catch((error) => {
       this.setState({
@@ -63,6 +66,18 @@ class OrgWebSettings extends Component {
     });
   };
 
+  updateSSOLgoin = (key, value) => {
+    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+      this.setState({
+        force_adfs_login: res.data.force_adfs_login
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
@@ -76,7 +91,7 @@ class OrgWebSettings extends Component {
   };
 
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
@@ -127,6 +142,17 @@ class OrgWebSettings extends Component {
                     />
                   </Fragment>
                 </Section>
+                {enableMultiADFS &&
+                  <Section headingText={gettext('User')}>
+                    <CheckboxItem
+                      saveSetting={this.updateSSOLgoin}
+                      displayName={gettext('Disable SAML user email / password login')}
+                      keyText='force_adfs_login'
+                      value={force_adfs_login}
+                      helpTip={gettext('Force user to use SSO login if SAML account is bound')}
+                    />
+                  </Section>
+                }
               </Fragment>
               }
             </div>

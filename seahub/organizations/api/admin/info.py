@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
+from django.conf import settings
 
 from django.utils.translation import gettext as _
 
@@ -15,10 +16,11 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
-from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
 from seahub.organizations.api.permissions import IsOrgAdmin
+from seahub.organizations.models import OrgAdminSettings
 
 logger = logging.getLogger(__name__)
 
@@ -60,8 +62,13 @@ def get_org_info(request, org_id):
         active_members = len([m for m in org_members if m.is_active])
 
     file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
-
     info = {}
+    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
+        if org_settings:
+            info[FORCE_ADFS_LOGIN] = int(org_settings.value)
+        else:
+            info[FORCE_ADFS_LOGIN] = False
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['member_quota'] = member_quota

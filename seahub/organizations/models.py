@@ -14,6 +14,8 @@ from seahub.avatar.settings import AVATAR_STORAGE_DIR
 logger = logging.getLogger(__name__)
 
 
+FORCE_ADFS_LOGIN = 'force_adfs_login'
+
 class OrgMemberQuotaManager(models.Manager):
     def get_quota(self, org_id):
         try:
