@@ -20,6 +20,10 @@
   margin-right: 10px;
 }
 
+.sf-md-viewer-topbar .btn {
+  color: #666;
+}
+
 .collab-users-dropdown.dropdown {
   margin-right: 6px;
 }
