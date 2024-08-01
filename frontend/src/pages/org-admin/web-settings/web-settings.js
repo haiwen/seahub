@@ -146,10 +146,10 @@ class OrgWebSettings extends Component {
                   <Section headingText={gettext('User')}>
                     <CheckboxItem
                       saveSetting={this.updateSSOLgoin}
-                      displayName={gettext('Disable saml user email / password login')}
+                      displayName={gettext('Disable SAML user email / password login')}
                       keyText='force_adfs_login'
                       value={force_adfs_login}
-                      helpTip={gettext('Force user SSO login if saml connected.')}
+                      helpTip={gettext('Force user to use SSO login if SAML account is bound')}
                     />
                   </Section>
                 }
