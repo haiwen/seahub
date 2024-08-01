@@ -73,7 +73,7 @@ class DirentGridView extends React.Component {
       imageIndex: 0,
       // onmenuClick
       isShareDialogShow: false,
-      isMoveDialogShow: true,
+      isMoveDialogShow: false,
       isCopyDialogShow: false,
       isEditFileTagShow: false,
       isZipDialogOpen: false,
@@ -737,7 +737,6 @@ class DirentGridView extends React.Component {
 
   render() {
     let { direntList, selectedDirentList, path } = this.props;
-    selectedDirentList = direntList; // debug
     let dirent = this.state.activeDirent ? this.state.activeDirent : '';
     let direntPath = Utils.joinPath(path, dirent.name);
 

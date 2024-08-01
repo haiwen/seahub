@@ -504,7 +504,7 @@ class FileChooser extends React.Component {
     if (!this.state.selectedRepo && this.props.repoID) {
       return '';
     }
-    const isPro = true;
+
     return (
       <Fragment>
         {isPro && (
