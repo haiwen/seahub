@@ -89,13 +89,15 @@ class AuthenticationForm(forms.Form):
             enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
             disable_pwd_login = False
             is_admin = False
+            username = self.user_cache.username
+
             org_id = -1
-            orgs = ccnet_api.get_orgs_by_user(self.user_cache.username)
+            orgs = ccnet_api.get_orgs_by_user(username)
             if orgs:
                 org_id = orgs[0].org_id
                 
             if org_id > 0 and enable_mul_adfs:
-                is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
+                is_admin = ccnet_api.is_org_staff(org_id, username)
                 org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
                 if org_settings:
                     disable_pwd_login = int(org_settings.value)
@@ -104,7 +106,7 @@ class AuthenticationForm(forms.Form):
                 is_admin = self.user_cache.is_staff
 
             if disable_pwd_login:
-                username = self.user_cache.username
+                
                 if not is_admin:
                     adfs_user = SocialAuthUser.objects.filter(
                         username=username,
