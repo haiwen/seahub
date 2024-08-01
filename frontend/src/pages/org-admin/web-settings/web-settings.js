@@ -142,16 +142,17 @@ class OrgWebSettings extends Component {
                     />
                   </Fragment>
                 </Section>
-                <Section headingText={gettext('User Login')}>
-                  {enableMultiADFS &&
+                {enableMultiADFS &&
+                  <Section headingText={gettext('User')}>
                     <CheckboxItem
                       saveSetting={this.updateSSOLgoin}
                       displayName='Disable adfs user pwd login'
                       keyText='force_sso_login'
                       value={force_sso_login}
                       helpTip={gettext('Force user SSO login.')}
-                    />}
-                </Section>
+                    />
+                  </Section>
+                }
               </Fragment>
               }
             </div>

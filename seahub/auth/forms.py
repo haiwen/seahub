@@ -94,7 +94,7 @@ class AuthenticationForm(forms.Form):
             try:
                 db_api = CcnetDB()
                 org_id = db_api.get_org_id_by_username(self.user_cache.username)
-            except CcnetDBException as e:
+            except:
                 org_id = 0
             if org_id > 0 and enable_mul_adfs:
                 is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
@@ -102,7 +102,7 @@ class AuthenticationForm(forms.Form):
                 if org_settings:
                     disable_pwd_login = int(org_settings.value)
             elif enable_adfs:
-                disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
+                disable_pwd_login = settings.DISABLE_ADFS_USER_PWD_LOGIN
                 is_admin = self.user_cache.is_staff
 
             if disable_pwd_login:
