@@ -1132,11 +1132,12 @@ class Repos(APIView):
             return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):
             return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
-        magic = request.data.get('magic', '')
-        random_key = request.data.get('random_key', '')
-        pwd_hash = request.data.get('pwd_hash', '')
-        pwd_hash_algo = request.data.get('pwd_hash_algo', '')
-        pwd_hash_params = request.data.get('pwd_hash_params', '')
+
+        magic = request.data.get('magic', None)
+        random_key = request.data.get('random_key', None)
+        pwd_hash = request.data.get('pwd_hash', None)
+        pwd_hash_algo = request.data.get('pwd_hash_algo', None)
+        pwd_hash_params = request.data.get('pwd_hash_params', None)
 
         try:
             enc_version = int(request.data.get('enc_version', 0))
