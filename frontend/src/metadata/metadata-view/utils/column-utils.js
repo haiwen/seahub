@@ -19,8 +19,7 @@ export function getDateColumnFormat(column) {
 }
 
 export function isCheckboxColumn(column) {
-  let { type } = column;
-  return type === CellType.CHECKBOX;
+  return column.type === CellType.CHECKBOX;
 }
 
 export function getColumnByName(columnName, columns) {
@@ -288,7 +287,7 @@ export const normalizeColumns = (columns) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
   const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
-    const { type, key, name, ...params } = column;
+    const { type, key, ...params } = column;
     const columnType = getColumnType(key, type);
     return {
       ...params,
