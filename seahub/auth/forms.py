@@ -106,15 +106,14 @@ class AuthenticationForm(forms.Form):
                 is_admin = self.user_cache.is_staff
 
             if disable_pwd_login:
-                
                 if not is_admin:
                     adfs_user = SocialAuthUser.objects.filter(
                         username=username,
                         provider=saml_provider_identifier
                     )
                     if adfs_user.exists():
-                        self.errors['disable_pwd_login'] = _('You cannot login with email and password.')
-                        raise forms.ValidationError(_('You cannot login with email and password.'))
+                        self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
+                        raise forms.ValidationError(_('Please use Single Sign-On to login.'))
 
         # TODO: determine whether this should move to its own method.
         if self.request:
