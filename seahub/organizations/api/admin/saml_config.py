@@ -144,6 +144,7 @@ class OrgVerifyDomain(APIView):
             saml_config.save()
             return Response({'domain_verified': saml_config.domain_verified})
         else:
+            logger.debug(result)
             error_msg = "Failed to verify domain ownership. Please make sure you have added " \
                         "the DNS TXT to your domain's DNS records and wait 5 minutes before trying again."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
