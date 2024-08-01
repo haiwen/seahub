@@ -183,7 +183,6 @@ class CcnetDB:
                 group_admins[group_id] = [user]
         return group_admins
 
-
     def change_groups_into_departments(self, group_id):
         sql = f"""
         UPDATE `{self.db_name}`.`Group` g
