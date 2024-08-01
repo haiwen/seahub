@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import logging
-import dns.resolver
+
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def query_dns_txt_record(domain):
+    import dns.resolver
     try:
         answers = dns.resolver.resolve(domain, 'TXT')
         return None, "".join([a.to_text() for a in answers])
