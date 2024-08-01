@@ -31,6 +31,8 @@ class ExternalOperations extends React.Component {
       internalLink: '',
       isShowCreateFileDialog: false,
       fileType: '.sdoc',
+      editor: null,
+      insertSdocFileLink: null,
     };
   }
 
@@ -119,6 +121,9 @@ class ExternalOperations extends React.Component {
   };
 
   onCreateSdocFile = (params) => {
+    if (params?.editor && params?.insertSdocFileLink) {
+      this.setState({ editor: params.editor, insertSdocFileLink: params.insertSdocFileLink });
+    }
     if (params?.newFileName) {
       this.setState({ fileType: `${params.newFileName}.sdoc` });
     }
@@ -137,9 +142,11 @@ class ExternalOperations extends React.Component {
 
   onAddFile = (filePath) => {
     let repoID = this.props.repoID;
+    const { insertSdocFileLink, editor } = this.state;
     seafileAPI.createFile(repoID, filePath).then((res) => {
-      const eventBus = EventBus.getInstance();
-      eventBus.dispatch(EXTERNAL_EVENT.INSERT_LINK, { data: res.data });
+      if (insertSdocFileLink && editor) {
+        insertSdocFileLink(editor, res.data.obj_name, res.data.doc_uuid);
+      }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
