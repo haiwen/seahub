@@ -7,10 +7,16 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+
+.permission-editor__option--is-selected .permission-editor-explanation {
+  color: inherit;
+}
+
 .permission-editor .permission-editor__option {
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
 .permission-editor .permission-editor__control .permission-editor-explanation {
   display: none;
 }

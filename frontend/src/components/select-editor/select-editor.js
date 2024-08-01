@@ -107,8 +107,6 @@ class SelectEditor extends React.Component {
 
   render() {
     let { currentOption, isTextMode } = this.props;
-    // scence1: isTextMode (text)editor-icon --> select
-    // scence2: !isTextMode select
     return (
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
@@ -116,8 +114,7 @@ class SelectEditor extends React.Component {
             options={this.state.options}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
-            placeholder={this.props.translateOption(currentOption)}
-            value={currentOption}
+            value={this.state.options.filter(item => item.value == currentOption)[0]}
             onChange={this.onOptionChanged}
             captureMenuScroll={false}
             menuPlacement="auto"

@@ -251,7 +251,7 @@ class LinkDetails extends React.Component {
           )}
           {sharedLinkInfo.permissions && (
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
+              <dt className="text-secondary font-weight-normal">{gettext('Permission')}</dt>
               <dd>
                 <div className="w-50">
                   <SelectEditor
