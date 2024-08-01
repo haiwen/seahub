@@ -13,7 +13,7 @@ from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.organizations.models import OrgAdminSettings
+from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
 logger = logging.getLogger(__name__)
 
@@ -59,11 +59,11 @@ class OrgAdminWebSettings(APIView):
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
 
-            if key == 'force_sso_login':
+            if key == FORCE_ADFS_LOGIN:
                 try:
-                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_sso_login',
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=FORCE_ADFS_LOGIN,
                                                               defaults={'value': value})
-                    config_dict['force_sso_login'] = value
+                    config_dict[FORCE_ADFS_LOGIN] = value
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'

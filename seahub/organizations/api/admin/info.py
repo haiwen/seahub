@@ -16,7 +16,7 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
-from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
 from seahub.organizations.api.permissions import IsOrgAdmin
@@ -64,11 +64,11 @@ def get_org_info(request, org_id):
     file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
     info = {}
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='force_sso_login').first()
+        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
         if org_settings:
-            info['force_sso_login'] = int(org_settings.value)
+            info[FORCE_ADFS_LOGIN] = int(org_settings.value)
         else:
-            info['force_sso_login'] = False
+            info[FORCE_ADFS_LOGIN] = False
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['member_quota'] = member_quota

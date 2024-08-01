@@ -17,7 +17,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, is_user_password_strong, get_site_name
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.auth.utils import get_virtual_id_by_email
-from seahub.organizations.models import OrgAdminSettings
+from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
 from captcha.fields import CaptchaField
 from constance import config
@@ -98,7 +98,7 @@ class AuthenticationForm(forms.Form):
                 org_id = 0
             if org_id > 0 and enable_mul_adfs:
                 is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
-                org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='force_sso_login').first()
+                org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
                 if org_settings:
                     disable_pwd_login = int(org_settings.value)
             elif enable_adfs:

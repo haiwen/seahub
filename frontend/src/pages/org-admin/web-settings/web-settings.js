@@ -22,7 +22,7 @@ class OrgWebSettings extends Component {
       config_dict: null,
       logoPath: logoPath,
       file_ext_white_list: '',
-      force_sso_login: false,
+      force_adfs_login: false,
     };
   }
 
@@ -32,7 +32,7 @@ class OrgWebSettings extends Component {
         loading: false,
         config_dict: res.data,
         file_ext_white_list: res.data.file_ext_white_list,
-        force_sso_login: res.data.force_sso_login
+        force_adfs_login: res.data.force_adfs_login
       });
     }).catch((error) => {
       this.setState({
@@ -69,7 +69,7 @@ class OrgWebSettings extends Component {
   updateSSOLgoin = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
-        force_sso_login: res.data.force_sso_login
+        force_adfs_login: res.data.force_adfs_login
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -91,7 +91,7 @@ class OrgWebSettings extends Component {
   };
 
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list, force_sso_login } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
@@ -146,10 +146,10 @@ class OrgWebSettings extends Component {
                   <Section headingText={gettext('User')}>
                     <CheckboxItem
                       saveSetting={this.updateSSOLgoin}
-                      displayName='Disable adfs user pwd login'
-                      keyText='force_sso_login'
-                      value={force_sso_login}
-                      helpTip={gettext('Force user SSO login.')}
+                      displayName={gettext('Disable saml user email / password login')}
+                      keyText='force_adfs_login'
+                      value={force_adfs_login}
+                      helpTip={gettext('Force user SSO login if saml connected.')}
                     />
                   </Section>
                 }
