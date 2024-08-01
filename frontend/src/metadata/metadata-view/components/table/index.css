@@ -422,13 +422,6 @@
   transform: translateZ(10px);
 }
 
-.table-header-top {
-  z-index: 7;
-  transform: translateZ(1000px);
-  height: 10px;
-  background-color: #f5f5f5;
-}
-
 .sf-metadata-result-table .group-header-left .formatter-show {
   display: inline-flex;
   flex: 1;
