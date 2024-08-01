@@ -216,3 +216,5 @@ class CcnetDB:
             org_id = cursor.fetchone()
         if org_id:
             return org_id[0]
+        else:
+            return -1
