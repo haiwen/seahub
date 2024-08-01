@@ -79,7 +79,7 @@ const Cell = ({
             {gettext(headerIconTooltip)}
           </UncontrolledTooltip>
           <div className="header-name d-flex">
-            <span title={name} className={`header-name-text ${height === 56 && 'double'}`}>{name}</span>
+            <span title={name} className={classnames('header-name-text', { 'double': height === 56 })}>{name}</span>
           </div>
         </div>
         {canEditColumnInfo && (
