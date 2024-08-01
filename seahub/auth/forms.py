@@ -91,30 +91,19 @@ class AuthenticationForm(forms.Form):
             enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
             disable_pwd_login = False
             is_admin = False
-            db_api = CcnetDB()
-            org_id = db_api.get_org_id_by_username(self.user_cache.username)
+            try:
+                db_api = CcnetDB()
+                org_id = db_api.get_org_id_by_username(self.user_cache.username)
+            except CcnetDBException as e:
+                org_id = 0
             if org_id > 0 and enable_mul_adfs:
                 is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
-                org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
+                org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='force_sso_login').first()
                 if org_settings:
                     disable_pwd_login = int(org_settings.value)
             elif enable_adfs:
                 disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
                 is_admin = self.user_cache.is_staff
-                
-            
-                
-            # if enable_adfs or enable_mul_adfs:
-            #     if multi_tenancy:
-            #         db_api = CcnetDB()
-            #         org_id = db_api.get_org_id_by_username(self.user_cache.username)
-            #         is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
-            #         org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
-            #         if org_settings:
-            #             disable_pwd_login = int(org_settings.value)
-            #     else:
-            #         disable_pwd_login = enable_adfs and settings.DISABLE_ADFS_USER_PWD_LOGIN
-            #         is_admin = self.user_cache.is_staff
 
             if disable_pwd_login:
                 username = self.user_cache.username

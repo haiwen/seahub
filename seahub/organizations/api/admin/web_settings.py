@@ -59,11 +59,11 @@ class OrgAdminWebSettings(APIView):
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
 
-            if key == 'only_sso_login':
+            if key == 'force_sso_login':
                 try:
-                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key='only_sso_login',
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_sso_login',
                                                               defaults={'value': value})
-                    config_dict['only_sso_login'] = value
+                    config_dict['force_sso_login'] = value
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'

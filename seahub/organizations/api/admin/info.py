@@ -64,11 +64,11 @@ def get_org_info(request, org_id):
     file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
     info = {}
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='only_sso_login').first()
+        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key='force_sso_login').first()
         if org_settings:
-            info['only_sso_login'] = int(org_settings.value)
+            info['force_sso_login'] = int(org_settings.value)
         else:
-            info['only_sso_login'] = False
+            info['force_sso_login'] = False
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['member_quota'] = member_quota
