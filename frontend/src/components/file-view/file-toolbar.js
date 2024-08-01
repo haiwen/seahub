@@ -148,19 +148,19 @@ class FileToolbar extends React.Component {
 
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
-              <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
+              <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
                 <Icon symbol="spinner" />
               </button>
               :
               (this.props.needSave ?
                 <IconButton
                   text={gettext('Save')}
-                  id={'saveButton'}
+                  id='save-file'
                   icon='save'
                   onClick={this.props.onSave}
                 />
                 :
-                <button type='button' className='btn btn-icon btn-secondary btn-active' disabled>
+                <button type='button' className='btn btn-icon btn-secondary' disabled>
                   <Icon symbol="save" />
                 </button>
               ))}
@@ -210,19 +210,19 @@ class FileToolbar extends React.Component {
           <ButtonGroup >
             {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?
-                  <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
+                  <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
                     <Icon symbol="spinner" />
                   </button>
                   :
                   (this.props.needSave ?
                     <IconButton
                       text={gettext('Save')}
-                      id={'saveButton'}
+                      id="save-file"
                       icon='save'
                       onClick={this.props.onSave}
                     />
                     :
-                    <button type='button' className={'btn btn-icon btn-secondary btn-active'} disabled>
+                    <button type='button' className={'btn btn-icon btn-secondary'} disabled>
                       <Icon symbol="save" />
                     </button>
                   ))}
