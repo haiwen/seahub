@@ -108,11 +108,11 @@ class DataProcessor {
   }
 
   static updateDataWithModifyRecords(table, relatedColumnKeyMap, rowIds, { collaborators }) {
-    const { available_columns, groupbys, row_ids } = table.view;
+    const { available_columns, groupbys, rows } = table.view;
     const _isGroupView = isGroupView({ groupbys }, available_columns);
     const isRegroup = _isGroupView && this.hasRelatedGroupby(groupbys, relatedColumnKeyMap);
     if (isRegroup) {
-      table.view.groups = this.getGroupedRows(table, row_ids, groupbys, { collaborators });
+      table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
     }
     // todo update sort and filter and ui change
   }
