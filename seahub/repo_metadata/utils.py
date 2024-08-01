@@ -75,7 +75,7 @@ def create_summary_for_all_sdocs_in_repo(repo_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/create-summary-of-sdoc-in-repo')
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/create-summary-of-doc-in-repo')
     params = {
         'repo_id': repo_id
     }
@@ -83,11 +83,11 @@ def create_summary_for_all_sdocs_in_repo(repo_id):
     return resp
 
 
-def update_single_sdoc_summary(repo_id, file_path):
+def update_single_doc_summary(repo_id, file_path):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-single-sdoc-summary')
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-single-doc-summary')
     params = {
         'repo_id': repo_id,
         'file_path': file_path,
