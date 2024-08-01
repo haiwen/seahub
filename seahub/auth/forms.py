@@ -15,7 +15,6 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, is_user_password_strong, get_site_name
-from seahub.utils.ccnet_db import CcnetDB
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
@@ -85,17 +84,16 @@ class AuthenticationForm(forms.Form):
                     raise forms.ValidationError(_("This account is inactive."))
 
             # Non administrators can only log in with single sign on
-            multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
             saml_provider_identifier = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
             enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
             enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
             disable_pwd_login = False
             is_admin = False
-            try:
-                db_api = CcnetDB()
-                org_id = db_api.get_org_id_by_username(self.user_cache.username)
-            except:
-                org_id = 0
+            org_id = -1
+            orgs = ccnet_api.get_orgs_by_user(self.user_cache.username)
+            if orgs:
+                org_id = orgs[0].org_id
+                
             if org_id > 0 and enable_mul_adfs:
                 is_admin = ccnet_api.is_org_staff(org_id, self.user_cache.username)
                 org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()

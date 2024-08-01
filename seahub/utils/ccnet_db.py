@@ -201,20 +201,3 @@ class CcnetDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
             cursor.execute(structure_sql)
-
-
-    def get_org_id_by_username(self, username):
-        sql = f"""
-        SELECT org_id
-        FROM
-            `{self.db_name}`.`OrgUser`
-        WHERE 
-            email = '{username}'
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            org_id = cursor.fetchone()
-        if org_id:
-            return org_id[0]
-        else:
-            return -1
