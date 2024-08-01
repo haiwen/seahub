@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
 from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN
+from seahub.utils.file_size import get_file_size_unit
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
 from seahub.organizations.api.permissions import IsOrgAdmin
@@ -40,6 +41,13 @@ def get_org_info(request, org_id):
     except Exception as e:
         logger.error(e)
         storage_usage = 0
+
+    # user default quota
+    try:
+        user_default_quota = seafile_api.get_org_user_default_quota(org_id)
+    except Exception as e:
+        logger.error(e)
+        user_default_quota = 0
 
     # member quota
     if ORG_MEMBER_QUOTA_ENABLED:
@@ -71,6 +79,7 @@ def get_org_info(request, org_id):
             info[FORCE_ADFS_LOGIN] = False
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
+    info['user_default_quota'] = user_default_quota
     info['member_quota'] = member_quota
     info['member_usage'] = member_usage
     info['active_members'] = active_members
@@ -102,6 +111,8 @@ class OrgAdminInfo(APIView):
         """Update info of an organization
         """
 
+        org_id = request.user.org.org_id
+
         new_name = request.data.get('org_name', None)
         if new_name:
 
@@ -109,8 +120,19 @@ class OrgAdminInfo(APIView):
                 error_msg = _('Feature is not enabled.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            org_id = request.user.org.org_id
             ccnet_api.set_org_name(org_id, new_name)
+
+        user_default_quota = request.data.get('user_default_quota', None)
+        if user_default_quota:
+
+            try:
+                user_default_quota = int(user_default_quota)
+            except ValueError:
+                error_msg = 'user_default_quota invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            user_default_quota = int(user_default_quota) * get_file_size_unit('MB')
+            seafile_api.set_org_user_default_quota(org_id, user_default_quota)
 
         info = get_org_info(request, org_id)
         info['org_id'] = org_id

@@ -3,8 +3,10 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { mediaUrl, gettext, orgMemberQuotaEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
-
+import SetOrgUserDefaultQuota from '../../components/dialog/set-org-user-default-quota';
 import '../../css/org-admin-info-page.css';
+
+const { orgID } = window.org.pageOptions;
 
 class OrgInfo extends Component {
 
@@ -14,6 +16,8 @@ class OrgInfo extends Component {
       org_name: '',
       storage_quota: 0,
       storage_usage: 0,
+      isSetUserDefaultQuotaDialogOpen: false,
+      user_default_quota: 0,
       member_quota: 0,
       member_usage: 0,
       active_members: 0
@@ -25,21 +29,33 @@ class OrgInfo extends Component {
       const {
         org_id, org_name,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, user_default_quota
       } = res.data;
       this.setState({
         org_id, org_name,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, user_default_quota
       });
     });
   }
+
+  toggleSetUserDefaultQuotaDialog = () => {
+    this.setState({
+      isSetUserDefaultQuotaDialogOpen: !this.state.isSetUserDefaultQuotaDialogOpen
+    });
+  };
+
+  updateQuota = (quota) => {
+    this.setState({
+      user_default_quota: quota
+    });
+  };
 
   render() {
     const {
       org_id, org_name,
       member_quota, member_usage, active_members,
-      storage_quota, storage_usage
+      storage_quota, storage_usage, user_default_quota
     } = this.state;
     return (
       <Fragment>
@@ -104,10 +120,29 @@ class OrgInfo extends Component {
                     <p>{Utils.bytesToSize(storage_usage)}</p>
                   )}
                 </div>
+
+                <div className="info-content-item">
+                  <h4 className="info-content-item-heading">{gettext('User default quota')}</h4>
+                  <span>{Utils.bytesToSize(user_default_quota)}</span>
+                  <span
+                    title={gettext('Edit')}
+                    className={`sf3-font sf3-font-rename attr-action-icon`}
+                    onClick={this.toggleSetUserDefaultQuotaDialog}>
+                  </span>
+
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {this.state.isSetUserDefaultQuotaDialogOpen &&
+        <SetOrgUserDefaultQuota
+          orgID={orgID}
+          userDefaultQuota={this.state.user_default_quota}
+          updateQuota={this.updateQuota}
+          toggleDialog={this.toggleSetUserDefaultQuotaDialog}
+        />
+        }
       </Fragment>
     );
   }
