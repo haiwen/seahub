@@ -33,7 +33,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       });
       viewsMap.current['_person_image'] = {
         _id: '_person_image',
-        name: gettext('Person image'),
+        name: gettext('Photos - Classify By People'),
         type: PRIVATE_FILE_TYPE.PERSON_IMAGE,
       };
       setViews(navigation);
