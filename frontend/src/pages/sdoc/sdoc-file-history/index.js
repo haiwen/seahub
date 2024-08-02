@@ -125,7 +125,10 @@ class SdocFileHistory extends React.Component {
   };
 
   onSelectHistoryVersion = (currentVersion, lastVersion) => {
-    this.setState({ isLoading: true, currentVersion });
+    this.setState({
+      currentVersion,
+      currentVersionContent: null,
+    });
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
@@ -139,7 +142,13 @@ class SdocFileHistory extends React.Component {
   };
 
   setContent = (currentVersionContent = '', lastVersionContent = '') => {
-    this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
+    this.setState({
+      currentVersionContent,
+      lastVersionContent,
+      isLoading: false,
+      changes: [],
+      currentDiffIndex: 0,
+    });
   };
 
   onShowChanges = (isShowChanges, lastVersion) => {
@@ -381,11 +390,15 @@ class SdocFileHistory extends React.Component {
               </div>
             ) : (
               <>
-                <DiffViewer
-                  currentContent={currentVersionContent}
-                  lastContent={isShowChanges ? lastVersionContent : ''}
-                  didMountCallback={this.setDiffCount}
-                />
+                {currentVersionContent === null ?
+                  <Loading />
+                  :
+                  <DiffViewer
+                    currentContent={currentVersionContent}
+                    lastContent={isShowChanges ? lastVersionContent : ''}
+                    didMountCallback={this.setDiffCount}
+                  />
+                }
                 {
                   showSidePanel && (
                     <SidePanel
