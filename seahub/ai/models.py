@@ -3,7 +3,7 @@ import json
 import os
 
 from django.db import models
-from seahub.utils.timeutils import datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seaserv import seafile_api
 
 
@@ -49,7 +49,7 @@ class RepoImageFace(models.Model):
     def to_dict(self):
         return {
             'id': self.pk,
-            'assistant_uuid': self.assistant_uuid,
-            'owner': self.owner,
-            'created_at': datetime_to_isoformat_timestr(self.created_at)
+            'repo_id': self.repo_id,
+            'face_id': self.face_id,
+            'path': self.path
         }
