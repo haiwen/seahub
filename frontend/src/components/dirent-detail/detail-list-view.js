@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import Icon from '../icon';
-import { gettext } from '../../utils/constants';
+import { gettext, enableFileTags } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
 import FileTagList from '../file-tag-list';
@@ -107,7 +107,9 @@ class DetailListView extends React.Component {
             <th>{gettext('Tags')}</th>
             <td>
               <FileTagList fileTagList={this.props.fileTagList} />
-              <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
+              {enableFileTags &&
+                <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
+              }
             </td>
           </tr>
           {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
