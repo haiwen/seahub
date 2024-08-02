@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { RESIZE_BAR } from '../../constants/zIndexes';
 import './index.css';
 
 function ResizeBar(props) {
@@ -7,7 +8,7 @@ function ResizeBar(props) {
     <div
       className="resize-bar"
       ref={props.resizeBarRef}
-      style={props.resizeBarStyle}
+      style={Object.assign({ zIndex: RESIZE_BAR }, props.resizeBarStyle)}
       onMouseDown={props.onResizeMouseDown}
       onMouseOver={props.onResizeMouseOver}
     >
