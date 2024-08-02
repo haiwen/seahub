@@ -619,7 +619,15 @@ class DirentListView extends React.Component {
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
               <tr>
                 <th width="3%" className="pl10">
-                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected} aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')} />
+                  <input
+                    type="checkbox"
+                    className="vam"
+                    onChange={this.props.onAllItemSelected}
+                    checked={this.props.isAllItemSelected}
+                    title={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+                    aria-label={this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+                    disabled={direntList.length === 0}
+                  />
                 </th>
                 <th width="3%" className="pl10">{/* icon */}</th>
                 <th width="5%" className="pl10">{/* star */}</th>
