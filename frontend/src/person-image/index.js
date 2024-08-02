@@ -43,7 +43,7 @@ const PersonImage = ({ repoID }) => {
             return (
               <tr key={index}>
                 <td className="text-center"><img src={Utils.getFileIconUrl(item.file_name)} alt={gettext('File')} width="24" /></td>
-                <td><a href={`${siteRoot}lib/${repoID}/file${item.path}`}>{item.file_name}</a></td>
+                <td><a href={`${siteRoot}lib/${repoID}/file${item.path}`} target="_blank" rel="noreferrer">{item.file_name}</a></td>
                 <td>{item.parent_dir}</td>
                 <td title={moment(item.mtime).format('LLLL')}>{moment(item.mtime).format('YYYY-MM-DD')}</td>
                 <td>{Utils.bytesToSize(item.size)}</td>
