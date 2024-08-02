@@ -65,8 +65,7 @@ const ViewToolBar = ({ metadataViewId }) => {
 
   return (
     <div
-      className='sf-metadata-tool'
-      // style={{ zIndex: Z_INDEX.TABLE_HEADER, transform: 'translateZ(1000px)' }}
+      className="sf-metadata-tool"
       onClick={onHeaderClick}
     >
       <div className="sf-metadata-tool-left-operations">

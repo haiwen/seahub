@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
-import DirentDetail from '../../components/dirent-detail/dirent-details';
-import LibDetail from '../../components/dirent-detail/lib-details';
+import { LibDetail, DirentDetail } from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import ToolbarForSelectedDirents from '../../components/toolbar/selected-dirents-toolbar';
 
@@ -318,31 +317,29 @@ class LibContentContainer extends React.Component {
                 isDirentDetailShow={this.props.isDirentDetailShow}
               />
             )}
+            {this.props.isDirentDetailShow && (
+              <div className="cur-view-detail">
+                {(this.props.path === '/' && !this.state.currentDirent) ?
+                  <LibDetail
+                    currentRepo={this.props.currentRepoInfo}
+                    closeDetails={this.props.closeDirentDetail}
+                  /> :
+                  <DirentDetail
+                    repoID={repoID}
+                    path={this.props.path}
+                    dirent={this.state.currentDirent}
+                    currentRepoInfo={this.props.currentRepoInfo}
+                    repoTags={this.props.repoTags}
+                    fileTags={this.props.isViewFile ? this.props.fileTags : []}
+                    onFileTagChanged={this.props.onFileTagChanged}
+                    onItemDetailsClose={this.props.closeDirentDetail}
+                    direntDetailPanelTab={this.props.direntDetailPanelTab}
+                  />
+                }
+              </div>
+            )}
           </div>
         </div>
-        {this.props.isDirentDetailShow &&
-          <Fragment>
-            <div className="cur-view-detail">
-              {(this.props.path === '/' && !this.state.currentDirent) ?
-                <LibDetail
-                  currentRepo={this.props.currentRepoInfo}
-                  closeDetails={this.props.closeDirentDetail}
-                /> :
-                <DirentDetail
-                  repoID={repoID}
-                  path={this.props.path}
-                  dirent={this.state.currentDirent}
-                  currentRepoInfo={this.props.currentRepoInfo}
-                  repoTags={this.props.repoTags}
-                  fileTags={this.props.isViewFile ? this.props.fileTags : []}
-                  onFileTagChanged={this.props.onFileTagChanged}
-                  onItemDetailsClose={this.props.closeDirentDetail}
-                  direntDetailPanelTab={this.props.direntDetailPanelTab}
-                />
-              }
-            </div>
-          </Fragment>
-        }
       </Fragment>
     );
   }

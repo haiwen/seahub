@@ -136,7 +136,7 @@ class RecordsFooter extends React.Component {
     const recordWidth = (isLoadingMore || hasMore ? SEQUENCE_COLUMN_WIDTH + columns[0].width : SEQUENCE_COLUMN_WIDTH) + groupOffsetLeft;
 
     return (
-      <div className="sf-metadata-result-footer" style={{ zIndex: Z_INDEX.GRID_FOOTER, transform: 'translateZ(1000px)' }} ref={ref => this.ref = ref}>
+      <div className="sf-metadata-result-footer" style={{ zIndex: Z_INDEX.GRID_FOOTER }} ref={ref => this.ref = ref}>
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
           {!isLoadingMore && hasMore &&

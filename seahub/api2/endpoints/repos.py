@@ -25,6 +25,7 @@ from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
         repo_has_been_shared_out, normalize_repo_status_code
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
@@ -116,7 +117,7 @@ class ReposView(APIView):
                     
                 if is_wiki_repo(r):
                     continue
-                    
+                url, _, _ = api_avatar_url(email, int(24))
 
                 repo_info = {
                     "type": "mine",
@@ -125,6 +126,7 @@ class ReposView(APIView):
                     "owner_email": email,
                     "owner_name": email2nickname(email),
                     "owner_contact_email": email2contact_email(email),
+                    "owner_avatar": url,
                     "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
                     "modifier_email": r.last_modifier,
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
@@ -189,6 +191,7 @@ class ReposView(APIView):
 
                 owner_name = group_name if is_group_owned_repo else nickname_dict.get(owner_email, '')
                 owner_contact_email = '' if is_group_owned_repo else contact_email_dict.get(owner_email, '')
+                url, _, _ = api_avatar_url(owner_email, int(24))
 
                 repo_info = {
                     "type": "shared",
@@ -201,6 +204,7 @@ class ReposView(APIView):
                     "owner_email": owner_email,
                     "owner_name": owner_name,
                     "owner_contact_email": owner_contact_email,
+                    "owner_avatar": url,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
@@ -299,6 +303,7 @@ class ReposView(APIView):
                     continue
                 
                 repo_owner = repo_id_owner_dict[r.repo_id]
+                url, _, _ = api_avatar_url(repo_owner, int(24))
                 repo_info = {
                     "type": "public",
                     "repo_id": r.repo_id,
@@ -310,6 +315,7 @@ class ReposView(APIView):
                     "owner_email": repo_owner,
                     "owner_name": nickname_dict.get(repo_owner, ''),
                     "owner_contact_email": contact_email_dict.get(repo_owner, ''),
+                    "owner_avatar": url,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
@@ -363,13 +369,14 @@ class RepoView(APIView):
             lib_need_decrypt = True
 
         repo_owner = get_repo_owner(request, repo_id)
+        url, _, _ = api_avatar_url(repo_owner, int(24))
 
         try:
             has_been_shared_out = repo_has_been_shared_out(request, repo_id)
         except Exception as e:
             has_been_shared_out = False
             logger.error(e)
-            
+
         result = {
             "repo_id": repo.id,
             "repo_name": repo.name,
@@ -377,6 +384,7 @@ class RepoView(APIView):
             "owner_email": repo_owner,
             "owner_name": email2nickname(repo_owner),
             "owner_contact_email": email2contact_email(repo_owner),
+            "owner_avatar": url,
 
             "size": repo.size,
             "encrypted": repo.encrypted,

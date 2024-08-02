@@ -612,8 +612,8 @@ a, a:hover { color: #ec8000; }
 .side-nav {
   flex:auto;
   display:flex;
-  flex-direction:column;
-  justify-content:space-between; /* make .side-nav-footer on the bottom */
+  flex-direction: column;
+  justify-content: space-between; /* make .side-nav-footer on the bottom */
   overflow:hidden; /* for ff */
 }
 

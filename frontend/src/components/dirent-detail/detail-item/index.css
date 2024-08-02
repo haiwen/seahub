@@ -1,0 +1,51 @@
+.dirent-detail-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.dirent-detail-item .dirent-detail-item-name-container {
+  width: 160px;
+  padding: 7px 6px;
+  min-height: 34px;
+  height: fit-content;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dirent-detail-item .dirent-detail-item-name-container .sf-metadata-icon {
+  margin-right: 6px;
+  font-size: 14px;
+  fill: #999;
+}
+
+.dirent-detail-item .dirent-detail-item-value {
+  width: 200px;
+  display: flex;
+  padding: 7px 6px;
+  min-height: 34px;
+  height: fit-content;
+}
+
+.dirent-detail-item .dirent-detail-item-value.editable:hover {
+  cursor: pointer;
+}
+
+.dirent-detail-item .dirent-detail-item-name-container:hover,
+.dirent-detail-item .dirent-detail-item-value:hover {
+  background-color: #F5F5F5;
+  border-radius: 3px;
+  cursor: default;
+}
+
+.dirent-detail-item .dirent-detail-item-value .text-formatter,
+.dirent-detail-item .dirent-detail-item-value .ctime-formatter {
+  line-height: 1.5;
+}
+
+.dirent-detail-item-value .creator-formatter {
+  height: 20px;
+}

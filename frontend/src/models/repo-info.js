@@ -10,6 +10,8 @@ class RepoInfo {
     this.owner_name = object.owner_name;
     this.owner_email = object.owner_email;
     this.owner_contact_email = object.owner_contact_email;
+    this.owner_avatar = object.owner_avatar || '';
+
     // is repo shared admin;
     // is repo shared admin && is one of current ordinary group's admins;
     // is one of current group owned group's admins;

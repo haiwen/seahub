@@ -126,7 +126,7 @@ class OrgInfo extends Component {
                   <span>{Utils.bytesToSize(user_default_quota)}</span>
                   <span
                     title={gettext('Edit')}
-                    className={`sf3-font sf3-font-rename attr-action-icon`}
+                    className="sf3-font sf3-font-rename attr-action-icon"
                     onClick={this.toggleSetUserDefaultQuotaDialog}>
                   </span>
 
