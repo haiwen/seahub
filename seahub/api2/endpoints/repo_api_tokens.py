@@ -158,7 +158,7 @@ class RepoAPITokenView(APIView):
 
         return Response(_get_repo_token_info(rat))
     
-class RepoNotifJwtTokenView(APIView):
+class RepoNotificationJwtTokenView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
