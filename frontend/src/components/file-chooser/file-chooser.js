@@ -545,10 +545,10 @@ class FileChooser extends React.Component {
     if (!selectedRepo && repoID) {
       return '';
     }
-    const isPro = true;
+
     return (
       <Fragment>
-        {isPro && (
+        {isPro && this.props.mode !== 'recently_used' && (
           <div className="file-chooser-search-input">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
