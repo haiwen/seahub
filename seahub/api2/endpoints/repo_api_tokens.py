@@ -157,3 +157,29 @@ class RepoAPITokenView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))
+    
+class RepoNotificationJwtTokenView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %(repo_id)s not found.' % {'repo_id': repo_id}
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        # permission check
+        if not seafile_api.check_permission_by_path(repo_id, '/', username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            jwt_token = seafile_api.gen_notif_server_jwt(repo_id, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        return Response({'token': jwt_token})
