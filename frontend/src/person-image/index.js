@@ -60,7 +60,7 @@ const PersonImage = ({ repoID }) => {
     <>
       {
         faces.length > 0 && faces.map((item, index) => {
-          const text = `Person Image ${index + 1}`;
+          const text = gettext('Person Image') + ` ${index + 1}`;
           return (
             <div key={index}>
               <h4>{text}</h4>
