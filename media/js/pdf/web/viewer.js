@@ -12275,7 +12275,7 @@ class BasePreferences {
     "disablePageLabels": false,
     "enablePermissions": false,
     "enablePrintAutoRotate": true,
-    "enableScripting": true,
+    "enableScripting": false,
     "externalLinkTarget": 0,
     "historyUpdateUrl": false,
     "ignoreDestinationZoom": false,
@@ -12310,6 +12310,7 @@ class BasePreferences {
         }
       }
     });
+
   }
   async _writeToStorage(prefObj) {
     throw new Error("Not implemented: _writeToStorage");
@@ -12368,6 +12369,7 @@ class BasePreferences {
     for (const name in this.#defaults) {
       obj[name] = this.#prefs[name] ?? this.#defaults[name];
     }
+    console.log(obj);
     return obj;
   }
 }
