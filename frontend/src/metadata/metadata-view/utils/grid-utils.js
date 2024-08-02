@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
-import {
-  CellType,
-  NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP,
-} from '../_basic';
+import { CellType, NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP } from '../_basic';
 import { getColumnByIndex } from './column-utils';
 import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, TRANSFER_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
+import { convertCellValue } from './convert-utils';
 
 const NORMAL_RULE = ({ value }) => {
   return value;
@@ -20,16 +18,15 @@ class GridUtils {
     this.api = api;
   }
 
-  getCopiedContent({ type, copied, isGroupView }) {
+  getCopiedContent({ type, copied, isGroupView, columns }) {
     // copy from internal grid
     if (type === TRANSFER_TYPES.DTABLE_FRAGMENT) {
-      const { shownColumns: columns } = this.tablePage.state;
       const { selectedRecordIds, copiedRange } = copied;
 
       // copy from selected rows
       if (Array.isArray(selectedRecordIds) && selectedRecordIds.length > 0) {
         return {
-          copiedRecords: selectedRecordIds.map(recordId => this.tablePage.recordGetterById(recordId)),
+          copiedRecords: selectedRecordIds.map(recordId => this.api.recordGetterById(recordId)),
           copiedColumns: [...columns],
         };
       }
@@ -42,7 +39,7 @@ class GridUtils {
       const { rowIdx: maxRecordIndex, idx: maxColumnIndex } = bottomRight;
       let currentGroupIndex = minGroupRecordIndex;
       for (let i = minRecordIndex; i <= maxRecordIndex; i++) {
-        copiedRecords.push(this.tablePage.recordGetterByIndex({ isGroupView, groupRecordIndex: currentGroupIndex, recordIndex: i }));
+        copiedRecords.push(this.api.recordGetterByIndex({ isGroupView, groupRecordIndex: currentGroupIndex, recordIndex: i }));
         if (isGroupView) {
           currentGroupIndex++;
         }
@@ -58,8 +55,8 @@ class GridUtils {
     return { copiedRecords, copiedColumns };
   }
 
-  async paste({ copied, multiplePaste, pasteRange, isGroupView }) {
-    const { row_ids: renderRecordIds, columns } = this.metadata;
+  async paste({ copied, multiplePaste, pasteRange, isGroupView, columns }) {
+    const { row_ids: renderRecordIds } = this.metadata;
     const { topLeft, bottomRight = {} } = pasteRange;
     const { rowIdx: startRecordIndex, idx: startColumnIndex, groupRecordIndex } = topLeft;
     const { rowIdx: endRecordIndex, idx: endColumnIndex } = bottomRight;
@@ -72,6 +69,7 @@ class GridUtils {
 
     // need expand records
     const startExpandRecordIndex = renderRecordsCount - startRecordIndex;
+
     if ((copiedRecordsLen > startExpandRecordIndex)) return;
 
     let updateRecordIds = [];
@@ -80,8 +78,9 @@ class GridUtils {
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
     let currentGroupRecordIndex = groupRecordIndex;
+
     for (let i = 0; i < pasteRecordsLen; i++) {
-      const pasteRecord = this.tablePage.recordGetterByIndex({ isGroupView, groupRecordIndex: currentGroupRecordIndex, recordIndex: startRecordIndex + i });
+      const pasteRecord = this.api.recordGetterByIndex({ isGroupView, groupRecordIndex: currentGroupRecordIndex, recordIndex: startRecordIndex + i });
       if (isGroupView) {
         currentGroupRecordIndex++;
       }
@@ -93,6 +92,7 @@ class GridUtils {
       const copiedRecord = copiedRecords[copiedRecordIndex];
       let originalUpdate = {};
       let originalOldRecordData = {};
+
       for (let j = 0; j < pasteColumnsLen; j++) {
         const pasteColumn = getColumnByIndex(j + startColumnIndex, columns);
         if (!pasteColumn || NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[pasteColumn.type]) {
@@ -100,16 +100,16 @@ class GridUtils {
         }
         const copiedColumnIndex = j % copiedColumnsLen;
         const copiedColumn = getColumnByIndex(copiedColumnIndex, copiedColumns);
-        const { key: pasteColumnKey } = pasteColumn;
-        const { key: copiedColumnKey } = copiedColumn;
-        const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnKey) ? pasteRecord[pasteColumnKey] : null;
-        const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnKey) ? copiedRecord[copiedColumnKey] : null;
-        const update = this.convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn);
+        const { name: pasteColumnName } = pasteColumn;
+        const { name: copiedColumnName } = copiedColumn;
+        const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnName) ? pasteRecord[pasteColumnName] : null;
+        const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnName) ? copiedRecord[copiedColumnName] : null;
+        const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn);
         if (update === pasteCellValue) {
           continue;
         }
-        originalUpdate[pasteColumnKey] = update;
-        originalOldRecordData[pasteColumnKey] = pasteCellValue;
+        originalUpdate[pasteColumnName] = update;
+        originalOldRecordData[pasteColumnName] = pasteCellValue;
       }
 
       if (Object.keys(originalUpdate).length > 0) {
@@ -124,7 +124,7 @@ class GridUtils {
     }
 
     if (updateRecordIds.length === 0) return;
-    this.modifyRecords(updateRecordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste);
+    this.api.modifyRecords(updateRecordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste);
   }
 
   getLinkedRowsIdsByNameColumn(linkedTableRows, linkColumnKey, cellValue, linkItem) {

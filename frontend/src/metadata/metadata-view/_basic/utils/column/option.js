@@ -97,11 +97,10 @@ const createOption = (options, optionName, optionColor = '') => {
 const generatorCellOption = (options, optionName) => {
   const existOption = options.find((option) => option.name === optionName);
   if (existOption) {
-    return { selectedOptionId: existOption.id };
+    return existOption;
   }
-
   const newOption = createOption(options, optionName) || {};
-  return { cellOption: newOption, selectedOptionId: newOption.id };
+  return newOption;
 };
 
 /**

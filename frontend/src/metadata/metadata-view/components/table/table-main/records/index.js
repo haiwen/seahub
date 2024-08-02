@@ -720,6 +720,7 @@ Records.propTypes = {
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
+  getCopiedRecordsAndColumnsFromRange: PropTypes.func,
 };
 
 export default Records;
