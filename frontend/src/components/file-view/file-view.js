@@ -97,7 +97,7 @@ class FileView extends React.Component {
     const { isDetailsPanelOpen } = this.state;
     return (
       <div className="h-100 d-flex flex-column">
-        <div className="file-view-header d-flex justify-content-between align-items-center">
+        <div className="file-view-header d-flex justify-content-between align-items-center d-print-none">
           <FileInfo
             isStarred={this.state.isStarred}
             isLocked={this.state.isLocked}
