@@ -195,6 +195,8 @@ export const getColumnName = (key, name) => {
       return gettext('File status');
     case PRIVATE_COLUMN_KEY.LOCATION:
       return gettext('Image location');
+    case PRIVATE_COLUMN_KEY.FEATURES:
+      return gettext('Image Features');
     default:
       return name;
   }

@@ -203,7 +203,7 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import Search
+from seahub.ai.apis import Search, FaceClassify
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, Wiki2DuplicatePageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
@@ -1038,5 +1038,5 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/$', MetadataViews.as_view(), name='api-v2.1-metadata-views'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/(?P<view_id>[-0-9a-zA-Z]{4})/$', MetadataViewsDetailView.as_view(), name='api-v2.1-metadata-views-detail'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
-
+        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/face-classify/$', FaceClassify.as_view(), name='api-v2.1-face-classify'),
     ]

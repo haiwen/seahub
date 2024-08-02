@@ -186,6 +186,11 @@ class MetadataManagerAPI {
     };
     return this.req.put(url, params);
   };
+
+  faceClassify = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/face-classify/';
+    return this.req.get(url);
+  };
 }
 
 const metadataAPI = new MetadataManagerAPI();

@@ -86,7 +86,7 @@ class LibContentView extends React.Component {
       asyncOperationType: 'move',
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
-      metadataViewId: '0000',
+      viewId: '0000',
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -494,7 +494,15 @@ class LibContentView extends React.Component {
 
   showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
-    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata', metadataViewId: viewId });
+    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-view-metadata', viewId: viewId });
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name);
+    window.history.pushState({ url: url, path: '' }, '', url);
+  };
+
+  showPersonImage = (filePath, viewId) => {
+    const repoID = this.props.repoID;
+    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-view-person-image', viewId: viewId });
     const repoInfo = this.state.currentRepoInfo;
     const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name);
     window.history.pushState({ url: url, path: '' }, '', url);
@@ -1759,7 +1767,12 @@ class LibContentView extends React.Component {
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000');
         }
-      } else {
+      } else if (Utils.isPersonImage(node?.object?.type)) {
+        if (node.path !== this.state.path) {
+          this.showPersonImage(node.path, node.view_id || '0000');
+        }
+      }
+      else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         let dirent = node.object;
         if (dirent.is_sdoc_revision && dirent.revision_id) {
@@ -2123,7 +2136,7 @@ class LibContentView extends React.Component {
             isFileLoadedErr={this.state.isFileLoadedErr}
             filePermission={this.state.filePermission}
             content={this.state.content}
-            metadataViewId={this.state.metadataViewId}
+            viewId={this.state.viewId}
             lastModified={this.state.lastModified}
             latestContributor={this.state.latestContributor}
             onLinkClick={this.onLinkClick}
