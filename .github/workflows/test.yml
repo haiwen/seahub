@@ -33,8 +33,8 @@ jobs:
 
       - name: clone and build
         run: |
-          git clone --depth=1 --branch=11.0 https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
-          cd /tmp/seafile-test-deploy && git fetch origin 11.0:11.0 && git checkout 11.0
+          git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+          cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
           ./bootstrap.sh
 
       - name: pip install
@@ -48,7 +48,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
-      
+
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}

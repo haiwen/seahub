@@ -6,16 +6,24 @@ from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH, is_pro_version
 
 from constance import config
 
+
 class ServerInfoView(APIView):
     """
     Returns the server info (version, supported features).
     """
     @json_response
     def get(self, request, format=None):
+
         info = {
             'version': settings.SEAFILE_VERSION,
-            'encrypted_library_version': settings.ENCRYPTED_LIBRARY_VERSION if settings.ENCRYPTED_LIBRARY_VERSION >= 3 else 2,
         }
+
+        if settings.ENCRYPTED_LIBRARY_VERSION >= 3:
+            info['encrypted_library_version'] = settings.ENCRYPTED_LIBRARY_VERSION
+        else:
+            info['encrypted_library_version'] = 2
+        info['encrypted_library_pwd_hash_algo'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO
+        info['encrypted_library_pwd_hash_params'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
 
         features = ['seafile-basic']
 
