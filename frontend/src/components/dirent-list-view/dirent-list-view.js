@@ -73,7 +73,7 @@ class DirentListView extends React.Component {
       isCopyDialogShow: false,
       isProgressDialogShow: false,
       downloadItems: [],
-      isMutipleOperation: true,
+      isMultipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
       isShowDirentsDraggablePreview: false,
@@ -748,7 +748,7 @@ class DirentListView extends React.Component {
               path={this.props.path}
               repoID={this.props.repoID}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
               onCancelMove={this.onMoveToggle}
@@ -760,7 +760,7 @@ class DirentListView extends React.Component {
               repoID={this.props.repoID}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
               selectedDirentList={this.props.selectedDirentList}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
               onItemsCopy={this.props.onItemsCopy}
               onCancelCopy={this.onCopyToggle}
             />

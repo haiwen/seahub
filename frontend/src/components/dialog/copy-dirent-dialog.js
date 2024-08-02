@@ -10,7 +10,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   dirent: PropTypes.object,
   selectedDirentList: PropTypes.array,
-  isMutipleOperation: PropTypes.bool.isRequired,
+  isMultipleOperation: PropTypes.bool.isRequired,
   onItemCopy: PropTypes.func,
   onItemsCopy: PropTypes.func,
   onCancelCopy: PropTypes.func.isRequired,
@@ -37,7 +37,7 @@ class CopyDirent extends React.Component {
   }
 
   handleSubmit = () => {
-    if (this.props.isMutipleOperation) {
+    if (this.props.isMultipleOperation) {
       this.copyItems();
     } else {
       this.copyItem();
@@ -139,17 +139,17 @@ class CopyDirent extends React.Component {
 
   render() {
     let title = gettext('Copy {placeholder} to');
-    if (!this.props.isMutipleOperation) {
+    if (!this.props.isMultipleOperation) {
       title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     } else {
       title = gettext('Copy selected item(s) to:');
     }
     let mode = 'current_repo_and_other_repos';
-    const { isMutipleOperation } = this.props;
+    const { isMultipleOperation } = this.props;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>
-          {isMutipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
+          {isMultipleOperation ? title : <div dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></div>}
         </ModalHeader>
         <ModalBody>
           <FileChooser
