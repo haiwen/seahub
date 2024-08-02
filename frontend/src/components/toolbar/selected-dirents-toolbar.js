@@ -48,7 +48,7 @@ class MultipleDirOperationToolbar extends React.Component {
       isZipDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
-      isMutipleOperation: true,
+      ismultipleOperation: true,
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
@@ -373,7 +373,7 @@ class MultipleDirOperationToolbar extends React.Component {
             path={this.props.path}
             repoID={this.props.repoID}
             repoEncrypted={this.props.repoEncrypted}
-            isMutipleOperation={this.state.isMutipleOperation}
+            ismultipleOperation={this.state.ismultipleOperation}
             selectedDirentList={this.props.selectedDirentList}
             onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
@@ -385,7 +385,7 @@ class MultipleDirOperationToolbar extends React.Component {
             repoID={this.props.repoID}
             repoEncrypted={this.props.repoEncrypted}
             selectedDirentList={this.props.selectedDirentList}
-            isMutipleOperation={this.state.isMutipleOperation}
+            ismultipleOperation={this.state.ismultipleOperation}
             onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
           />
