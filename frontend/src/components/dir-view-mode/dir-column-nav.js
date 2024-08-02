@@ -56,7 +56,7 @@ class DirColumnNav extends React.Component {
       imageIndex: 0,
       isCopyDialogShow: false,
       isMoveDialogShow: false,
-      isMutipleOperation: false,
+      isMultipleOperation: false,
       operationList: [],
     };
     this.isNodeMenuShow = true;
@@ -376,7 +376,7 @@ class DirColumnNav extends React.Component {
               onItemCopy={this.props.onItemCopy}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
               onCancelCopy={this.onCopyToggle}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
             />
           </ModalPortal>
         )}
@@ -389,7 +389,7 @@ class DirColumnNav extends React.Component {
               onItemMove={this.props.onItemMove}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
               onCancelMove={this.onMoveToggle}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
             />
           </ModalPortal>
         )}

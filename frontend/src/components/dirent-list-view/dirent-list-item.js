@@ -84,7 +84,7 @@ class DirentListItem extends React.Component {
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isShareDialogShow: false,
-      isMutipleOperation: false,
+      isMultipleOperation: false,
       canDrag: this.canDrag,
       isShowTagTooltip: false,
       isDragTipShow: false,
@@ -851,7 +851,7 @@ class DirentListItem extends React.Component {
               path={this.props.path}
               repoID={this.props.repoID}
               dirent={this.props.dirent}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
               onItemMove={this.props.onItemMove}
               onCancelMove={this.onItemMoveToggle}
               repoEncrypted={this.props.repoEncrypted}
@@ -864,7 +864,7 @@ class DirentListItem extends React.Component {
               path={this.props.path}
               repoID={this.props.repoID}
               dirent={this.props.dirent}
-              isMutipleOperation={this.state.isMutipleOperation}
+              isMultipleOperation={this.state.isMultipleOperation}
               onItemCopy={this.props.onItemCopy}
               onCancelCopy={this.onItemCopyToggle}
               repoEncrypted={this.props.repoEncrypted}

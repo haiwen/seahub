@@ -83,7 +83,7 @@ class DirentGridView extends React.Component {
       fileType: '',
       isPermissionDialogOpen: false,
 
-      isMutipleOperation: true,
+      isMultipleOperation: true,
       isGridItemFreezed: false,
       activeDirent: null,
       downloadItems: [],
@@ -819,7 +819,7 @@ class DirentGridView extends React.Component {
             path={this.props.path}
             repoID={this.props.repoID}
             repoEncrypted={this.props.currentRepoInfo.encrypted}
-            isMutipleOperation={this.state.isMutipleOperation}
+            isMultipleOperation={this.state.isMultipleOperation}
             selectedDirentList={selectedDirentList}
             onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
@@ -841,7 +841,7 @@ class DirentGridView extends React.Component {
             path={this.props.path}
             repoID={this.props.repoID}
             repoEncrypted={this.props.currentRepoInfo.encrypted}
-            isMutipleOperation={this.state.isMutipleOperation}
+            isMultipleOperation={this.state.isMultipleOperation}
             selectedDirentList={selectedDirentList}
             onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
