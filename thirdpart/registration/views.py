@@ -218,7 +218,6 @@ def register(request, backend, success_url=None, form_class=None,
         form = form_class(initial={'email': src})
 
     context['form'] = form
-    context['min_len'] = config.USER_PASSWORD_MIN_LENGTH
     login_bg_image_path = get_login_bg_image_path()
     context['login_bg_image_path'] = login_bg_image_path
 
