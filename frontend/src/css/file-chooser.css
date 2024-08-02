@@ -57,6 +57,7 @@
   font-size: 16px;
   line-height: 1.5;
   padding-left: 0.25rem;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: color 0.3s ease, background-color 0.3s ease;
@@ -72,7 +73,6 @@
   position: relative;
   height: 20rem;
   padding: 10px;
-  border: 1px solid #eee;
   overflow: auto;
 }
 
