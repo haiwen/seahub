@@ -876,6 +876,10 @@ export const Utils = {
     return type === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
   },
 
+  isPersonImage: function (type) {
+    return type === PRIVATE_FILE_TYPE.PERSON_IMAGE;
+  },
+
   isInternalFileLink: function (url, repoID) {
     var re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*');
     return re.test(url);

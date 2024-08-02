@@ -38,7 +38,7 @@ const propTypes = {
   filePermission: PropTypes.string,
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
   onItemMove: PropTypes.func.isRequired,
 };
 
@@ -101,7 +101,7 @@ class CurDirPath extends React.Component {
           sortBy={this.props.sortBy}
           sortOrder={this.props.sortOrder}
           sortItems={this.props.sortItems}
-          metadataViewId={this.props.metadataViewId}
+          viewId={this.props.viewId}
         />}
         {!isDesktop && this.props.direntList.length > 0 &&
         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}

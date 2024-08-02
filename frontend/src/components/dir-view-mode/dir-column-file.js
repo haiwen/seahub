@@ -4,6 +4,7 @@ import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
+import PersonImage from '../../person-image';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -13,7 +14,7 @@ const propTypes = {
   isFileLoadedErr: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -52,10 +53,16 @@ class DirColumnFile extends React.Component {
       );
     }
 
-    if (this.props.content === '__sf-metadata') {
-      const { repoID, currentRepoInfo, metadataViewId } = this.props;
+    if (this.props.content === '__sf-view-metadata') {
+      const { repoID, currentRepoInfo, viewId } = this.props;
 
-      return (<SeafileMetadata mediaUrl={mediaUrl} repoID={repoID} repoInfo={currentRepoInfo} viewID={metadataViewId} />);
+      return (<SeafileMetadata mediaUrl={mediaUrl} repoID={repoID} repoInfo={currentRepoInfo} viewID={viewId} />);
+    }
+
+    if (this.props.content === '__sf-view-person-image') {
+      const { repoID } = this.props;
+
+      return (<PersonImage repoID={repoID}/>);
     }
 
     return (

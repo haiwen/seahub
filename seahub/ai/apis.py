@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from seahub.ai.models import RepoImageFace
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
@@ -22,6 +23,7 @@ from seahub.utils import is_org_context, normalize_cache_key, HAS_FILE_SEASEARCH
 from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
+from pysearpc import SearpcError
 
 logger = logging.getLogger(__name__)
 
@@ -121,3 +123,41 @@ class Search(APIView):
                     f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
         return Response(resp_json, resp.status_code)
+
+
+class FaceClassify(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+        path = '/'
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            faces = RepoImageFace.objects.get_faces_by_repo_id(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'classify_result': list(faces.values())}, status.HTTP_200_OK)
