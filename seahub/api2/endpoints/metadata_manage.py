@@ -273,6 +273,8 @@ class MetadataRecords(APIView):
                                 format = column_data.get('format', 'YYYY-MM-DD')
                                 datetime_obj = datetime.strptime(value, '%Y-%m-%d %H:%M' if 'HH:mm' in format else '%Y-%m-%d')
                                 update[column_name] = datetime_to_isoformat_timestr(datetime_obj)
+                            elif column['type'] == 'single-select' and not value:
+                                update[column_name] = None
                             else:
                                 update[column_name] = value
                         except Exception as e:
