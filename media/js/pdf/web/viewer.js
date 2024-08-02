@@ -3061,7 +3061,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   enableScripting: {
-    value: true,
+    value: false,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   externalLinkRel: {
@@ -3220,7 +3220,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER
   };
   defaultOptions.sandboxBundleSrc = {
-    value: "../build/pdf.sandbox.js",
+    value: SEAFILE_PDFJS_DIR + "/build/pdf.sandbox.js",
     kind: OptionKind.VIEWER
   };
 }
@@ -12275,7 +12275,7 @@ class BasePreferences {
     "disablePageLabels": false,
     "enablePermissions": false,
     "enablePrintAutoRotate": true,
-    "enableScripting": true,
+    "enableScripting": false,
     "externalLinkTarget": 0,
     "historyUpdateUrl": false,
     "ignoreDestinationZoom": false,
