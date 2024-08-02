@@ -13,7 +13,7 @@ class RepoImageFaceManager(models.Manager):
         records = self.filter(repo_id=repo_id)
         faces = {}
         for item in records:
-            face_ids = json.loads(item.face_ids)
+            face_id = item.face_id
             file_path = item.path
             file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
             if not file_obj:
@@ -28,18 +28,17 @@ class RepoImageFaceManager(models.Manager):
                 'size': file_size,
                 'mtime': timestamp_to_isoformat_timestr(mtime)
             }
-            for face_id in face_ids:
-                if face_id not in faces:
-                    faces[face_id] = [file_item]
-                else:
-                    faces[face_id].append(file_item)
+            if face_id not in faces:
+                faces[face_id] = [file_item]
+            else:
+                faces[face_id].append(file_item)
 
         return faces
 
 
 class RepoImageFace(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
-    face_ids = models.TextField()
+    face_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
 
     objects = RepoImageFaceManager()
