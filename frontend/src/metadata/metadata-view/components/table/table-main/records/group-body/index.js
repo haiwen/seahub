@@ -790,7 +790,6 @@ class GroupBody extends Component {
             isExpanded={isExpanded}
             folding={folding}
             lastFrozenColumnKey={lastFrozenColumnKey}
-            getTableContentRect={this.props.getTableContentRect}
             onExpandGroupToggle={this.onExpandGroupToggle}
           />
         );

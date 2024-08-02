@@ -1,0 +1,29 @@
+.detail-container .detail-image-thumbnail {
+  height: 144px;
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.detail-container .detail-image-thumbnail .thumbnail {
+  height: 100%;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  float: none;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.detail-container .empty-tip-text {
+  color: #666
+}

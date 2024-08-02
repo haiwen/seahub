@@ -44,6 +44,14 @@ class DetailListView extends React.Component {
     return position;
   };
 
+  getDirentPath = () => {
+    if (Utils.isMarkdownFile(this.props.path)) {
+      return this.props.path; // column mode: view file
+    }
+    let { dirent, path } = this.props;
+    return Utils.joinPath(path, dirent.name);
+  };
+
   onEditFileTagToggle = () => {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
@@ -53,14 +61,6 @@ class DetailListView extends React.Component {
   onFileTagChanged = () => {
     let direntPath = this.getDirentPath();
     this.props.onFileTagChanged(this.props.dirent, direntPath);
-  };
-
-  getDirentPath = () => {
-    if (Utils.isMarkdownFile(this.props.path)) {
-      return this.props.path; // column mode: view file
-    }
-    let { dirent, path } = this.props;
-    return Utils.joinPath(path, dirent.name);
   };
 
   toggleExtraMetadataPropertiesDialog = () => {

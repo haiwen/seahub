@@ -1,0 +1,45 @@
+.detail-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 2.5rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e8e8e8;
+  height: 48px;
+  padding: 8px 16px;
+}
+
+.detail-header .detail-title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: 0; /* prevent strut flex layout */
+}
+
+.detail-header .detail-title .name {
+  margin: 0 0.5rem 0 6px;
+  line-height: 1.5rem;
+  vertical-align: middle;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.detail-header .detail-control {
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.detail-header .detail-control .detail-control-close {
+  font-size: 16px;
+  fill: #666;
+}
+
+.detail-header .detail-control:hover {
+  background-color: #EFEFEF;
+  border-radius: 3px;
+}

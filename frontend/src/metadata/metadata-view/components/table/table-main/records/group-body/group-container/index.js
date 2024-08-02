@@ -133,7 +133,6 @@ class GroupContainer extends Component {
           lastFrozenColumnKey={lastFrozenColumnKey}
           columns={columns}
           summaryConfigs={summaryConfigs}
-          getTableContentRect={this.props.getTableContentRect}
         />
       </div>
     );
@@ -157,7 +156,6 @@ GroupContainer.propTypes = {
   scrollLeft: PropTypes.number,
   maxLevel: PropTypes.number,
   summaryConfigs: PropTypes.object,
-  getTableContentRect: PropTypes.func,
   onExpandGroupToggle: PropTypes.func,
   updateSummaryConfig: PropTypes.func,
 };
