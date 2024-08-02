@@ -1,7 +1,7 @@
-import { NPminus, NPdivide } from '../../helper/number-precision';
-import { round } from '../../number';
-import { DEFAULT_NUMBER_FORMAT } from '../../../constants/column';
-import { DISPLAY_INTERNAL_ERRORS } from '../../../constants';
+import { DEFAULT_NUMBER_FORMAT } from '../../_basic';
+import { DISPLAY_INTERNAL_ERRORS } from '../../_basic/constants';
+import { round } from '../../_basic/utils/number';
+import { NPminus } from '../../_basic/utils/helper/number-precision';
 
 const separatorMap = {
   comma: ',',
@@ -19,12 +19,6 @@ const _getDecimalDigits = (number) => {
   return digitsLength > 8 ? 8 : digitsLength;
 };
 
-/**
- * Get fixed number by precision
- * @param {number} number
- * @param {object} formats e.g. { enable_precision, precision, ... }
- * @returns fixed number, string
- */
 const getPrecisionNumber = (number, formats) => {
   const { precision = 2, enable_precision = false } = formats || {};
   const type = Object.prototype.toString.call(number);
@@ -38,10 +32,6 @@ const getPrecisionNumber = (number, formats) => {
   return number.toFixed(decimalDigits);
 };
 
-/**
- * removeZerosFromEnd('0.0100') // '0.01'
- * @param {string} sNumber string of numbers
- */
 const removeZerosFromEnd = (sNumber) => {
   if (typeof sNumber !== 'string') return '';
   if (sNumber.endsWith('0')) {
@@ -50,11 +40,6 @@ const removeZerosFromEnd = (sNumber) => {
   return sNumber;
 };
 
-/**
- * e.g. 1.23 // 2
- * @param {number} number
- * @returns digital length
- */
 const getDecimalDigitsFromNumber = (number) => {
   if (Number.isInteger(number)) {
     return 0;
@@ -126,12 +111,6 @@ const toThousands = (number, { formats, isCurrency = true }) => {
   return `${isMinus ? '-' : ''}${integerNumbers.join('')}${decimalPart}`;
 };
 
-/**
- * Get formatted number
- * @param {number} number e.g. 123
- * @param {object} formats e.g. { format: 'number', decimal: 'dot', ... }
- * @returns formatted number, string
- */
 const getNumberDisplayString = (number, formats) => {
   const type = Object.prototype.toString.call(number);
   if (type !== '[object Number]') {
@@ -174,13 +153,6 @@ const getNumberDisplayString = (number, formats) => {
   }
 };
 
-/**
- * Remove illegal characters
- * @param {string} sNum e.g. "1。23"
- * @param {string} format e.g. "number"
- * @param {string} currencySymbol custom symbol
- * @returns legal characters, string
- */
 const replaceNumberNotAllowInput = (sNum, format, currencySymbol) => {
   if (!sNum) {
     return '';
@@ -210,77 +182,8 @@ const replaceNumberNotAllowInput = (sNum, format, currencySymbol) => {
   }
 };
 
-/**
- * @param {string} sNumber e.g. '1.23'
- * @param {string} format e.g. 'percent'
- * @returns float number from string. e.g. '1.23' = 1.23
- */
-const getFloatNumber = (sNumber, format) => {
-  if (!sNumber && sNumber !== 0) {
-    return null;
-  }
-  if (typeof sNumber === 'number') return sNumber;
-  if (typeof sNumber !== 'string') return null;
-  const parsedNum = parseFloat(sNumber.replace(/[^.-\d]/g, ''));
-  if (format === 'percent' && !isNaN(parsedNum)) {
-    return NPdivide(parsedNum, 100);
-  }
-  return isNaN(parsedNum) ? null : parsedNum;
-};
-
-/**
- * parse string to number depend on formats
- * @param {string} sNum e.g. '1.23'
- * @param {object} formats { format, decimal, ... }
- * @returns parsed number
- */
-const formatStringToNumber = (sNum, formats) => {
-  const {
-    format, decimal, thousands, enable_precision, precision,
-  } = formats || {};
-  let value = sNum;
-  if (decimal && thousands && decimal === 'comma') {
-    if (thousands === 'dot') {
-      value = value.replace(/,/, '@');
-      value = value.replace(/\./g, ',');
-      value = value.replace(/@/, '.');
-    } else {
-      value = value.replace(/\./g, '');
-      value = value.replace(/,/, '.');
-    }
-  }
-  value = getFloatNumber(value, format);
-  if (enable_precision && value) {
-    const fixedPrecision = format === 'percent' ? precision + 2 : precision;
-    value = parseFloat(round(value, fixedPrecision).toFixed(fixedPrecision));
-  }
-  return value;
-};
-
-const formatTextToNumber = (value) => {
-  if (typeof value === 'number') {
-    return value;
-  }
-  if (!value || !value.trim()) {
-    return null;
-  }
-  let newValue = value.trim();
-  let isIncludePercent = String(newValue).indexOf('%') > -1;
-  let newData = parseFloat(newValue.replace(/[^.-\d]/g, ''));
-  if (isIncludePercent && !isNaN(newData)) {
-    return newData / 100;
-  }
-  return isNaN(newData) ? null : newData;
-};
-
-const isNumber = (number) => (number || number === 0) && Object.prototype.toString.call(number) === '[object Number]';
-
 export {
   getPrecisionNumber,
   getNumberDisplayString,
   replaceNumberNotAllowInput,
-  formatStringToNumber,
-  formatTextToNumber,
-  getFloatNumber,
-  isNumber,
 };

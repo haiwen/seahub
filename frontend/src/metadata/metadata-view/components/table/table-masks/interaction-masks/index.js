@@ -72,17 +72,18 @@ class InteractionMasks extends React.Component {
   }
 
   componentDidMount() {
-    this.unsubscribeSelectColumn = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_COLUMN, this.onColumnSelect);
-    this.unsubscribeDragEnter = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.DRAG_ENTER, this.handleDragEnter);
-    this.unsubscribeSelectCell = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, this.onSelectCell);
-    this.unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, this.selectNone);
-    this.unsubscribeSelectStart = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_START, this.onSelectCellRangeStarted);
-    this.unsubscribeSelectUpdate = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_UPDATE, this.onSelectCellRangeUpdated);
-    this.unsubscribeSelectEnd = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_END, this.onSelectCellRangeEnded);
-    this.unsubscribeOpenEditorEvent = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_EDITOR, this.onOpenEditorEvent);
-    this.unsubscribeCloseEditorEvent = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.CLOSE_EDITOR, this.onCloseEditorEvent);
-    this.unsubscribeCopy = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_CELLS, this.onCopy);
-    this.unsubscribePaste = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.PASTE_CELLS, this.onPaste);
+    const eventBus = window.sfMetadataContext.eventBus;
+    this.unsubscribeSelectColumn = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_COLUMN, this.onColumnSelect);
+    this.unsubscribeDragEnter = eventBus.subscribe(EVENT_BUS_TYPE.DRAG_ENTER, this.handleDragEnter);
+    this.unsubscribeSelectCell = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, this.onSelectCell);
+    this.unsubscribeSelectNone = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, this.selectNone);
+    this.unsubscribeSelectStart = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_START, this.onSelectCellRangeStarted);
+    this.unsubscribeSelectUpdate = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_UPDATE, this.onSelectCellRangeUpdated);
+    this.unsubscribeSelectEnd = eventBus.subscribe(EVENT_BUS_TYPE.SELECT_END, this.onSelectCellRangeEnded);
+    this.unsubscribeOpenEditorEvent = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_EDITOR, this.onOpenEditorEvent);
+    this.unsubscribeCloseEditorEvent = eventBus.subscribe(EVENT_BUS_TYPE.CLOSE_EDITOR, this.onCloseEditorEvent);
+    this.unsubscribeCopy = eventBus.subscribe(EVENT_BUS_TYPE.COPY_CELLS, this.onCopy);
+    this.unsubscribePaste = eventBus.subscribe(EVENT_BUS_TYPE.PASTE_CELLS, this.onPaste);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -111,7 +112,7 @@ class InteractionMasks extends React.Component {
   }
 
   onColumnSelect = (column) => {
-    let { columns, isGroupView } = this.props;
+    let { columns, isGroupView, recordsCount } = this.props;
     if (isGroupView) return;
     let selectColumnIndex = 0;
     for (let i = 0; i < columns.length; i++) {
@@ -120,13 +121,12 @@ class InteractionMasks extends React.Component {
         break;
       }
     }
-    const rowsCount = this.props.recordsCount;
     this.setState({
       selectedPosition: { ...this.state.selectedPosition, idx: selectColumnIndex, rowIdx: 0 },
       selectedRange: {
         startCell: { idx: selectColumnIndex, rowIdx: 0 },
         topLeft: { idx: selectColumnIndex, rowIdx: 0 },
-        bottomRight: { idx: selectColumnIndex, rowIdx: rowsCount - 1 },
+        bottomRight: { idx: selectColumnIndex, rowIdx: recordsCount - 1 },
         isDragging: false,
       }
     });

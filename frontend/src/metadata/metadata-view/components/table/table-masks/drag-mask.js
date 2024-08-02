@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import CellMask from './cell-mask';
 
 function DragMask({ draggedRange, getSelectedRangeDimensions, getSelectedDimensions }) {
   const { overRecordIdx, bottomRight } = draggedRange;
   const { idx: endColumnIdx, rowIdx: endRowIdx, groupRecordIndex: endGroupRowIndex } = bottomRight;
   if (overRecordIdx !== null && endRowIdx < overRecordIdx) {
-    const className = 'react-grid-cell-dragged-over-down';
     let dimensions = getSelectedRangeDimensions(draggedRange);
     for (let currentRowIdx = endRowIdx + 1; currentRowIdx <= overRecordIdx; currentRowIdx++) {
       const { height } = getSelectedDimensions({ idx: endColumnIdx, rowIdx: currentRowIdx, groupRecordIndex: endGroupRowIndex });
@@ -16,7 +14,7 @@ function DragMask({ draggedRange, getSelectedRangeDimensions, getSelectedDimensi
     return (
       <CellMask
         {...dimensions}
-        className={className}
+        className='react-grid-cell-dragged-over-down'
       />
     );
   }

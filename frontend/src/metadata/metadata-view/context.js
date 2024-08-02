@@ -3,6 +3,7 @@ import { UserService, LocalStorage, PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_C
   EDITABLE_PRIVATE_COLUMN_KEYS, PREDEFINED_COLUMN_KEYS } from './_basic';
 import EventBus from '../../components/common/event-bus';
 import { username } from '../../utils/constants';
+import User from './model/user';
 
 class Context {
 
@@ -14,6 +15,7 @@ class Context {
     this.eventBus = null;
     this.hasInit = false;
     this.permission = 'r';
+    this.collaboratorsCache = {};
   }
 
   async init({ otherSettings }) {
@@ -128,9 +130,22 @@ class Context {
     return true;
   };
 
-  getCollaboratorsFromCache = () => {
-    //
-  };
+  getCollaboratorFromCache(email) {
+    return this.collaboratorsCache[email];
+  }
+
+  getCollaboratorsFromCache() {
+    const collaboratorsCache = this.collaboratorsCache;
+    return Object.values(collaboratorsCache).filter(item => item.email !== 'anonymous');
+  }
+
+  updateCollaboratorsCache(email, collaborator) {
+    if (collaborator instanceof User) {
+      this.collaboratorsCache[email] = collaborator;
+      return;
+    }
+    this.collaboratorsCache[email] = new User(collaborator);
+  }
 
   restoreRows = () => {
     // todo

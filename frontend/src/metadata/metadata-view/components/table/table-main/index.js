@@ -8,10 +8,12 @@ import { useRecordDetails } from '../../../hooks';
 
 import './index.css';
 
-const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, ...params }) => {
+const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, ...params }) => {
+
   const gridUtils = useMemo(() => {
-    return new GridUtils(metadata, { modifyRecord, modifyRecords });
-  }, [metadata, modifyRecord, modifyRecords]);
+    return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById });
+  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById]);
+
   const { openRecordDetails } = useRecordDetails();
 
   const groupbysCount = useMemo(() => {
@@ -28,6 +30,10 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
     return columns.filter(column => !hidden_columns.includes(column.key));
   }, [metadata]);
 
+  const getCopiedRecordsAndColumnsFromRange = useCallback(({ type, copied, isGroupView }) => {
+    return gridUtils.getCopiedContent({ type, copied, isGroupView, columns });
+  }, [gridUtils, columns]);
+
   const updateRecord = useCallback(({ rowId, updates, originalUpdates, oldRowData, originalOldRowData }) => {
     modifyRecord && modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [modifyRecord]);
@@ -35,6 +41,10 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
   const updateRecords = useCallback(({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste = false }) => {
     modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isCopyPaste);
   }, [modifyRecords]);
+
+  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView }) => {
+    gridUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns });
+  }, [gridUtils, columns]);
 
   return (
     <div className={classnames('table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0 })}>
@@ -49,10 +59,14 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         gridUtils={gridUtils}
         scrollToLoadMore={loadMore}
         loadAll={loadAll}
+        paste={paste}
         groupOffsetLeft={groupOffset}
         modifyRecord={updateRecord}
         updateRecords={updateRecords}
         onRowExpand={openRecordDetails}
+        getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
+        recordGetterById={recordGetterById}
+        recordGetterByIndex={recordGetterByIndex}
         {...params}
       />
     </div>
