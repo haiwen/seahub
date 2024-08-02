@@ -76,8 +76,18 @@
   overflow: auto;
 }
 
-.file-chooser-search-container .tr-active {
+.file-chooser-search-container td {
   height: 40px;
+  padding: 0;
+}
+
+.file-chooser-search-container td .span {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .file-chooser-search-container .tr-highlight {
