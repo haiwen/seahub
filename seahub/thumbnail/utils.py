@@ -285,7 +285,10 @@ def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
     # extract xmind image
     xmind_file = urllib.request.urlopen(inner_path)
     xmind_file_str = BytesIO(xmind_file.read())
-    xmind_zip_file = zipfile.ZipFile(xmind_file_str, 'r')
+    try:
+        xmind_zip_file = zipfile.ZipFile(xmind_file_str, 'r')
+    except Exception as e:
+        return (False, 500)
     extracted_xmind_image = xmind_zip_file.read('Thumbnails/thumbnail.png')
     extracted_xmind_image_str = BytesIO(extracted_xmind_image)
 
