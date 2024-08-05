@@ -445,14 +445,6 @@ SHARE_LINK_EMAIL_LANGUAGE = ''
 # check virus for files uploaded form upload link
 ENABLE_UPLOAD_LINK_VIRUS_CHECK = False
 
-# mininum length for user's password
-USER_PASSWORD_MIN_LENGTH = 6
-
-# LEVEL based on four types of input:
-# num, upper letter, lower letter, other symbols
-# '3' means password must have at least 3 types of the above.
-USER_PASSWORD_STRENGTH_LEVEL = 3
-
 # default False, only check USER_PASSWORD_MIN_LENGTH
 # when True, check password strength level, STRONG(or above) is allowed
 USER_STRONG_PASSWORD_REQUIRED = False
@@ -992,8 +984,6 @@ CONSTANCE_CONFIG = {
     'FORCE_PASSWORD_CHANGE': (FORCE_PASSWORD_CHANGE, ''),
 
     'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED, ''),
-    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH, ''),
-    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL, ''),
 
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
     'SHARE_LINK_FORCE_USE_PASSWORD': (SHARE_LINK_FORCE_USE_PASSWORD, ''),
