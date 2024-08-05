@@ -4,7 +4,6 @@ import { getDirentPath, getDirentPosition } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
-import EditMetadata from './edit-metadata';
 
 const DirDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail }) => {
   const position = useMemo(() => getDirentPosition(repoInfo, dirent, path), [repoInfo, dirent, path]);
@@ -21,9 +20,6 @@ const DirDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail }
         avatar_url: repoInfo.owner_avatar,
       }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
-      {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
-        <EditMetadata repoID={repoID} direntPath={direntPath} direntType={direntType} direntDetail={direntDetail} />
-      )}
     </>
   );
 };

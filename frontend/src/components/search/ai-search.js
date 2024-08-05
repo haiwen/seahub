@@ -9,7 +9,7 @@ import Icon from '../icon';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { isMac } from '../../utils/extra-attributes';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
 const INDEX_STATE = {
@@ -19,7 +19,7 @@ const INDEX_STATE = {
 };
 
 const PER_PAGE = 10;
-const controlKey = isMac() ? '⌘' : 'Ctrl';
+const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
 
 export default class AISearch extends Component {
 

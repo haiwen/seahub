@@ -5,12 +5,12 @@ import { getDirentPath, getDirentPosition } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
-import EditMetadata from './edit-metadata';
 import EditFileTagPopover from '../../popover/edit-filetag-popover';
 import FileTagList from '../../file-tag-list';
 import { Utils } from '../../../utils/utils';
 
-const FileDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
+// direntType
+const FileDetails = ({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
 
   const position = useMemo(() => getDirentPosition(repoInfo, dirent, path), [repoInfo, dirent, path]);
@@ -29,7 +29,7 @@ const FileDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail,
     <>
       <DetailItem field={{ type: CellType.TEXT, name: gettext('File location') }} value={position} />
       <DetailItem field={{ type: 'size', name: gettext('Size') }} value={Utils.bytesToSize(direntDetail.size)} />
-      <DetailItem field={{ type: CellType.CREATOR, name: gettext('Creator') }} value={direntDetail.last_modifier_email} collaborators={[{
+      <DetailItem field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }} value={direntDetail.last_modifier_email} collaborators={[{
         name: direntDetail.last_modifier_name,
         contact_email: direntDetail.last_modifier_contact_email,
         email: direntDetail.last_modifier_email,
@@ -43,9 +43,6 @@ const FileDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail,
           <span className="empty-tip-text">{gettext('Empty')}</span>
         )}
       </DetailItem>
-      {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
-        <EditMetadata repoID={repoID} direntPath={direntPath} direntType={direntType} direntDetail={direntDetail} />
-      )}
       {isEditFileTagShow &&
         <EditFileTagPopover
           repoID={repoID}
