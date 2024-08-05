@@ -40,7 +40,7 @@ window.seafile = {
 };
 
 (function () {
-  const fileIcon = Utils.getFileIconUrl(docName, 192);
+  const fileIcon = Utils.getFileIconUrl(docName);
   document.getElementById('favicon').href = fileIcon;
 })();
 

@@ -23,7 +23,7 @@ class SearchResultItem extends React.Component {
   render() {
     let item = this.props.item;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
-    let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
+    let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
     let showName = item.repo_name + '/' + item.link_content;
     showName = showName.endsWith('/') ? showName.slice(0, showName.length - 1) : showName;
 
