@@ -63,6 +63,10 @@
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
+.file-chooser-item .recently-used .item-left-icon {
+  padding: 0 0.25rem 0 0.5rem;
+}
+
 .file-chooser-search-close {
   position: absolute;
   top: -0.5rem;
