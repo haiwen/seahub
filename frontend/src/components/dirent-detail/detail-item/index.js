@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Formatter, Icon } from '@seafile/sf-metadata-ui-component';
 import classnames from 'classnames';
 import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/metadata-view/_basic';
+import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
@@ -23,6 +24,10 @@ const DetailItem = ({ field, value, valueId, valueClick, children, ...params }) 
       </div>
     </div>
   );
+};
+
+DetailItem.defaultProps = {
+  emptyTip: gettext('Empty')
 };
 
 DetailItem.propTypes = {

@@ -200,7 +200,7 @@ export const getColumnName = (key, name) => {
   }
 };
 
-const getColumnType = (key, type) => {
+export const getColumnType = (key, type) => {
   switch (key) {
     case PRIVATE_COLUMN_KEY.CTIME:
     case PRIVATE_COLUMN_KEY.FILE_CTIME:

@@ -32,7 +32,7 @@ class DetailListView extends React.Component {
     this.tagListTitleID = `detail-list-view-tags-${uuidv4()}`;
   }
 
-  getDirentPosition = () => {
+  getFileParent = () => {
     let { repoInfo } = this.props;
     let direntPath = this.getDirentPath();
     let position = repoInfo.repo_name;
@@ -69,7 +69,7 @@ class DetailListView extends React.Component {
 
   renderTags = () => {
     const { direntType, direntDetail } = this.props;
-    const position = this.getDirentPosition();
+    const position = this.getFileParent();
     if (direntType === 'dir') {
       return (
         <table className="table-thead-hidden">

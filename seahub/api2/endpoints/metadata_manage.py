@@ -307,8 +307,8 @@ class MetadataRecordInfo(APIView):
             error_msg = 'name invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -337,39 +337,11 @@ class MetadataRecordInfo(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        sys_columns = [
-            METADATA_TABLE.columns.id.key,
-            METADATA_TABLE.columns.file_creator.key,
-            METADATA_TABLE.columns.file_ctime.key,
-            METADATA_TABLE.columns.file_modifier.key,
-            METADATA_TABLE.columns.file_mtime.key,
-            METADATA_TABLE.columns.parent_dir.key,
-            METADATA_TABLE.columns.file_name.key,
-            METADATA_TABLE.columns.is_dir.key,
-        ]
-
         rows = query_result.get('results')
 
         if not rows:
             error_msg = 'Record not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        metadata = query_result.get('metadata')
-        editable_columns = []
-        name_to_key = {}
-        for col in metadata:
-            col_key = col.get('key')
-            col_name = col.get('name')
-            name_to_key[col_name] = col_key
-            if col_key in sys_columns:
-                continue
-            editable_columns.append(col.get('name'))
-
-        row = {name_to_key[name]: value for name, value in rows[0].items()}
-        query_result['row'] = row
-        query_result['editable_columns'] = editable_columns
-
-        query_result.pop('results', None)
 
         return Response(query_result)
 

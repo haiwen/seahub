@@ -49,3 +49,9 @@
 .dirent-detail-item-value .creator-formatter {
   height: 20px;
 }
+
+.dirent-detail-item-value .sf-metadata-record-cell-empty::before {
+  content: attr(placeholder);
+  color: #666;
+  font-size: 14px;
+}
