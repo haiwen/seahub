@@ -80,6 +80,7 @@
   padding: 5px 10px;
   display: flex;
   flex: 1;
+  cursor: pointer;
 }
 
 .history-list-container .history-list-item:hover {
