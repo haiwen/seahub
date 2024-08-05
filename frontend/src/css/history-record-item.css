@@ -19,8 +19,12 @@
   justify-content: center;
 }
 
+.history-list-item .history-operation .sf3-font-more-vertical:hover {
+  text-decoration: none;
+}
+
 .history-info .time {
-  color: #000;
+  color: #212529;
 }
 
 .history-info .owner {
@@ -35,9 +39,4 @@
   height: 0.5rem;
   background-color: #549b5a;
   margin-right: 0.25rem;
-}
-
-.history-body .dropdown-menu a {
-  text-decoration: none;
-  color: #6e7687;
 }
