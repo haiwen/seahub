@@ -31,7 +31,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav, revert_pages
+    delete_page, move_nav, revert_nav, delete_nav, remove_flags, get_ids_by_page_id
 
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
@@ -734,21 +734,20 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # update navigation and page
-        pop_nav(navigation, page_id)
-        id_set = get_all_wiki_ids(navigation)
-        new_pages, old_pages = delete_page(pages, id_set)
+        delete_nav(navigation, page_id)
         # delete the folder where the sdoc is located
         try:
-            for old_page in old_pages:
-                file_id = seafile_api.get_file_id_by_path(repo_id, old_page['path'])
-                page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
-                WikiPageTrash.objects.create(repo_id=repo_id,
-                                             path=old_page['path'],
-                                             page_id=old_page['id'],
-                                             name=old_page['name'],
-                                             delete_time=datetime.datetime.utcnow(),
-                                             size=page_size)
-        except SearpcError as e:
+            for page in pages:
+                if page['id'] == page_id:
+                    file_id = seafile_api.get_file_id_by_path(repo_id, page['path'])
+                    page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
+                    WikiPageTrash.objects.create(repo_id=repo_id,
+                                                 path=page['path'],
+                                                 page_id=page['id'],
+                                                 name=page['name'],
+                                                 delete_time=datetime.datetime.utcnow(),
+                                                 size=page_size)
+        except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -756,11 +755,6 @@ class Wiki2PageView(APIView):
         # update wiki_config
         try:
             wiki_config['navigation'] = navigation
-            wiki_config['pages'] = new_pages
-            if 'trash_pages' in wiki_config:
-                wiki_config['trash_pages'].extend(old_pages)
-            else:
-                wiki_config['trash_pages'] = old_pages
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, request.user.username, wiki_config)
         except Exception as e:
@@ -981,15 +975,15 @@ class WikiPageTrashView(APIView):
         # update wiki config
         wiki_config = get_wiki_config(repo_id, username)
         navigation = wiki_config.get('navigation', [])
-        pages = wiki_config.get('pages', [])
-        trash_pages = wiki_config.get('trash_pages', [])
         try:
             page = WikiPageTrash.objects.get(page_id=page_id)
-            doc_uuid = os.path.basename(os.path.dirname(page.path))
-            revert_pages(navigation, trash_pages, pages, doc_uuid)
+            nav = revert_nav(navigation, page_id)
+            remove_flags(navigation)
+            if nav == 1:
+                moved_nav = pop_nav(navigation, page_id)
+                navigation.append(moved_nav)
             page.delete()
-            wiki_config['pages'] = pages
-            wiki_config['trash_pages'] = trash_pages
+            wiki_config['navigation'] = navigation
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, username, wiki_config)
         except Exception as e:
@@ -1039,19 +1033,28 @@ class WikiPageTrashView(APIView):
         page_ids_map = []
         _timestamp = datetime.datetime.now() - datetime.timedelta(days=keep_days)
         del_pages = WikiPageTrash.objects.filter(repo_id=repo_id, delete_time__lt=_timestamp)
+
+        navigation = wiki_config.get('navigation', [])
+        pages = wiki_config.get('pages', [])
+        id_list = []
+        for del_page in del_pages:
+            get_ids_by_page_id(navigation, del_page.page_id, id_list)
+            pop_nav(navigation, del_page.page_id)
+        id_set = set(id_list)
+        clean_pages, not_del_pages = delete_page(pages, id_set)
         try:
-            for del_page in del_pages:
+            for del_page in clean_pages:
                 # rm dir
-                page_ids_map.append(del_page.page_id)
-                sdoc_dir_path = os.path.dirname(del_page.path)
+                page_ids_map.append(del_page['id'])
+                sdoc_dir_path = os.path.dirname(del_page['path'])
                 parent_dir = os.path.dirname(sdoc_dir_path)
                 dir_name = os.path.basename(sdoc_dir_path)
                 seafile_api.del_file(repo_id, parent_dir,
                                      json.dumps([dir_name]), username)
 
                 # rm sdoc fileuuid
-                file_name = os.path.basename(del_page.path)
-                file_uuid = get_seadoc_file_uuid(repo, del_page.path)
+                file_name = os.path.basename(del_page['path'])
+                file_uuid = get_seadoc_file_uuid(repo, del_page['path'])
                 FileComment.objects.filter(uuid=file_uuid).delete()
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(repo_id, sdoc_dir_path, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
@@ -1072,14 +1075,10 @@ class WikiPageTrashView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # update wiki_config
-        trash_pages = wiki_config.get('trash_pages', [])
-        new_trash_pages = []
         try:
             del_pages.delete()
-            for trash_page in trash_pages:
-                if trash_page['id'] not in page_ids_map:
-                    new_trash_pages.append(trash_page)
-            wiki_config['trash_pages'] = new_trash_pages
+            wiki_config['navigation'] = navigation
+            wiki_config['pages'] = not_del_pages
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, username, wiki_config)
         except Exception as e:

@@ -100,11 +100,21 @@ class WikiNav extends Component {
     if (pages.length === 1) {
       isOnlyOnePage = true;
     }
+    function filterDeletedPages(navigation) {
+      return navigation
+        .filter(page => !page.is_delete)
+        .map(page => ({
+          ...page,
+          children: page.children ? filterDeletedPages(page.children) : []
+        }));
+    }
+
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
+    let new_navigation = filterDeletedPages(navigation);
     return (
       <div className='wiki-nav-body'>
-        {navigation.map((item, index) => {
+        {new_navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
       </div>

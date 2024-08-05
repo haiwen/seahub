@@ -13,6 +13,8 @@ from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
+from seahub.wiki2.models import WikiPageTrash
+
 
 logger = logging.getLogger(__name__)
 
@@ -244,6 +246,17 @@ def pop_nav(navigation, page_id):
     return None
 
 
+def delete_nav(navigation, page_id):
+    for nav in navigation:
+        if nav['id'] == page_id:
+            nav['is_delete'] = True
+            return nav
+        if 'children' in nav and nav['children']:
+            result = delete_nav(nav['children'], page_id)
+            if result:
+                return result
+    return None
+
 def move_nav(navigation, target_id, moved_nav, move_position):
     def move_item(nav_list, nav_index, moved_nav, move_position):
         if move_position == 'move_below':
@@ -265,14 +278,50 @@ def move_nav(navigation, target_id, moved_nav, move_position):
             move_nav(nav['children'], target_id, moved_nav, move_position)
 
 
-def revert_pages(navigation, trash_pages, pages, doc_uuid):
-    for trash_page in trash_pages:
-        if trash_page['docUuid'] == doc_uuid:
-            pages.append(trash_page)
-            new_nav = {
-                "id": trash_page['id'],
-                "type": "page"
-            }
-            navigation.append(new_nav)
-            trash_pages.remove(trash_page)
-            break
+def revert_nav(navigation, page_id, flag=0):
+    if flag != 1:
+        for nav in navigation:
+            if nav.get('is_delete', False):
+                nav['flag'] = 1
+    else:
+        for nav in navigation:
+            nav['flag'] = 1
+    for nav in navigation:
+        if nav['id'] == page_id:
+            nav['is_delete'] = False
+            if flag == 1:
+                return 1
+            else:
+                return nav
+        if 'children' in nav and nav['children']:
+            result = revert_nav(nav['children'], page_id, nav.get('flag'))
+            if result:
+                return result
+    return None
+
+
+def remove_flags(data):
+    for item in data:
+        if 'flag' in item:
+            del item['flag']
+        if 'children' in item:
+            remove_flags(item['children'])
+
+
+def get_ids_by_page_id(navigation, page_id, ids):
+    def recurse(items):
+        for item in items:
+            if item['id'] == page_id:
+                ids.append(item['id'])
+                add_ids_from_children(item)
+            if 'children' in item:
+                recurse(item['children'])
+
+    def add_ids_from_children(item):
+        ids.append(item['id'])
+        if 'children' in item:
+            for child in item['children']:
+                add_ids_from_children(child)
+    recurse(navigation)
+
+
