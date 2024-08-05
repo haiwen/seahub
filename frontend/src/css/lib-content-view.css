@@ -351,6 +351,7 @@
 
 .custom-modal .repo-list-item:hover{
   background-color: #f0f0f0;
+  border-radius: 3px;
 }
 
 .custom-modal .repo-list-item.active::before {
