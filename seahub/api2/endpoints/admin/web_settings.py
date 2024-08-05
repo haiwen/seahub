@@ -83,10 +83,6 @@ class AdminWebSettings(APIView):
                 else:
                     value = int(value)
 
-                if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
-                    error_msg = 'value invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
                 if key == 'SHARE_LINK_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
                     error_msg = 'value invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

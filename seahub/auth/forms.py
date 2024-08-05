@@ -14,7 +14,7 @@ from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_ldap_user, is_user_password_strong, get_site_name
+    is_ldap_user, get_site_name
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 

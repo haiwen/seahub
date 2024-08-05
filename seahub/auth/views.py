@@ -494,9 +494,7 @@ def password_change(request, template_name='registration/password_change_form.ht
 
     return render(request, template_name, {
         'form': form,
-        'min_len': config.USER_PASSWORD_MIN_LENGTH,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'level': config.USER_PASSWORD_STRENGTH_LEVEL,
         'force_passwd_change': request.session.get('force_passwd_change', False),
     })
 
