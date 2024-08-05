@@ -41,7 +41,7 @@ class WikiTrashDialog extends React.Component {
   getItems = (page) => {
     wikiAPI.getWikiTrash(wikiId, page, this.state.perPage).then((res) => {
       const { items, total_count } = res.data;
-      if (!page){
+      if (!page) {
         page = 1;
       }
       this.setState({
