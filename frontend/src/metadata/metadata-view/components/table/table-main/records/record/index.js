@@ -57,11 +57,6 @@ class Record extends React.Component {
     this.props.onSelectRecord({ groupRecordIndex, recordIndex: index }, e);
   };
 
-  onRowExpand = () => {
-    const { record } = this.props;
-    this.props.onRowExpand(record);
-  };
-
   isCellSelected = (columnIdx) => {
     const { hasSelectedCell, selectedPosition } = this.props;
     if (!selectedPosition) return false;
@@ -261,7 +256,6 @@ class Record extends React.Component {
             recordId={record._id}
             index={index}
             onSelectRecord={this.onSelectRecord}
-            onRowExpand={this.onRowExpand}
             isLastFrozenCell={!lastFrozenColumnKey}
             height={cellHeight}
           />
@@ -294,7 +288,6 @@ Record.propTypes = {
   height: PropTypes.number,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  onRowExpand: PropTypes.func,
   modifyRecord: PropTypes.func,
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,

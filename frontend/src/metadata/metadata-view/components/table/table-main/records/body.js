@@ -232,10 +232,6 @@ class RecordsBody extends Component {
     }, 300);
   };
 
-  onRowExpand = (row) => {
-    this.props.onRowExpand && this.props.onRowExpand(row);
-  };
-
   onScrollbarScroll = (scrollTop) => {
     // solve canvas&rightScrollbar circle scroll problem
     if (this.oldScrollTop === scrollTop) {
@@ -482,7 +478,6 @@ class RecordsBody extends Component {
           selectedPosition={this.state.selectedPosition}
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
-          onRowExpand={this.onRowExpand}
           modifyRecord={this.props.modifyRecord}
           searchResult={this.props.searchResult}
           columnColor={columnColor}
@@ -610,7 +605,6 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
-  onRowExpand: PropTypes.func,
 };
 
 export default RecordsBody;

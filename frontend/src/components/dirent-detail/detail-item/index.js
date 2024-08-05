@@ -32,7 +32,7 @@ DetailItem.defaultProps = {
 
 DetailItem.propTypes = {
   field: PropTypes.object.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array, PropTypes.object]),
+  value: PropTypes.any,
   children: PropTypes.any,
   valueId: PropTypes.string,
 };

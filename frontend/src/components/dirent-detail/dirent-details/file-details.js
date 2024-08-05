@@ -46,7 +46,7 @@ const FileDetails = ({ repoID, repoInfo, dirent, path, direntDetail, direntType,
         </DetailItem>
       )}
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType={direntType} direntDetail={direntDetail} />
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType={direntType} />
       )}
       {isEditFileTagShow &&
         <EditFileTagPopover

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MetadataProvider, CollaboratorsProvider, RecordDetailsProvider } from './hooks/index';
+import { MetadataProvider, CollaboratorsProvider } from './hooks/index';
 import { Table } from './components/index';
 
 const SeafileMetadata = ({ ...params }) => {
@@ -8,9 +8,7 @@ const SeafileMetadata = ({ ...params }) => {
   return (
     <MetadataProvider { ...params }>
       <CollaboratorsProvider >
-        <RecordDetailsProvider>
-          <Table />
-        </RecordDetailsProvider>
+        <Table />
       </CollaboratorsProvider>
     </MetadataProvider>
   );

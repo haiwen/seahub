@@ -28,7 +28,6 @@ class ActionsCell extends Component {
           selectNoneRecords={this.props.selectNoneRecords}
           selectAllRecords={this.props.selectAllRecords}
         />
-        <div className='header-action-cell-placeholder'></div>
       </div>
     );
   }

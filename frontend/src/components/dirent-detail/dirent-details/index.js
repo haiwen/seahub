@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -11,17 +11,17 @@ import FileDetails from './file-details';
 
 import './index.css';
 
-const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTags, onItemDetailsClose, onFileTagChanged }) => {
+const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRepoInfo, repoTags, fileTags, onItemDetailsClose, onFileTagChanged }) => {
   const [direntType, setDirentType] = useState('');
   const [direntDetail, setDirentDetail] = useState('');
-  const [folderDirent, setFolderDirent] = useState(null);
-  const direntRef = useRef(null);
+  const [dirent, setDirent] = useState(null);
 
   const updateDetailView = useCallback((repoID, dirent, direntPath) => {
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
     seafileAPI[apiName](repoID, direntPath).then(res => {
       setDirentType(dirent.type === 'file' ? 'file' : 'dir');
       setDirentDetail(res.data);
+      setDirent(dirent);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -29,11 +29,11 @@ const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTa
   }, []);
 
   useEffect(() => {
-    if (direntRef.current && dirent === direntRef.current) return;
-    direntRef.current = dirent;
-    if (dirent) {
-      const direntPath = Utils.joinPath(path, dirent.name);
-      updateDetailView(repoID, dirent, direntPath);
+    console.log('index 组件更新');
+    setDirent(null);
+    if (propsDirent) {
+      const direntPath = Utils.joinPath(path, propsDirent.name);
+      updateDetailView(repoID, propsDirent, direntPath);
       return;
     }
     const dirPath = Utils.getDirName(path);
@@ -47,25 +47,25 @@ const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTa
           break;
         }
       }
-      setFolderDirent(folderDirent);
       updateDetailView(repoID, folderDirent, path);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dirent, path, repoID]);
+  }, [propsDirent, path]);
 
-  if (!dirent && !folderDirent) return '';
-  const direntName = dirent ? dirent.name : folderDirent.name;
-  const smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
+  if (!dirent) return null;
+  const direntName = dirent.name;
+  const smallIconUrl = Utils.getDirentIcon(dirent);
   // let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
   let bigIconUrl = '';
-  const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
+  const isImg = Utils.imageCheck(dirent.name);
   // const isVideo = dirent ? Utils.videoCheck(dirent.name) : Utils.videoCheck(folderDirent.name);
   if (isImg) {
     bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
   }
+
   return (
     <div className="detail-container">
       <Header title={direntName} icon={smallIconUrl} onClose={onItemDetailsClose} />
@@ -81,7 +81,7 @@ const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTa
               <DirDetails
                 repoID={repoID}
                 repoInfo={currentRepoInfo}
-                dirent={dirent || folderDirent}
+                dirent={dirent}
                 direntType={direntType}
                 direntDetail={direntDetail}
                 path={path}
@@ -90,7 +90,7 @@ const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTa
               <FileDetails
                 repoID={repoID}
                 repoInfo={currentRepoInfo}
-                dirent={dirent || folderDirent}
+                dirent={dirent}
                 direntType={direntType}
                 path={path}
                 direntDetail={direntDetail}
@@ -104,7 +104,7 @@ const DirentDetails = ({ dirent, path, repoID, currentRepoInfo, repoTags, fileTa
       </div>
     </div>
   );
-};
+});
 
 DirentDetails.propTypes = {
   repoID: PropTypes.string.isRequired,

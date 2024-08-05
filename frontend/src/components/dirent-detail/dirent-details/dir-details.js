@@ -22,7 +22,7 @@ const DirDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail }
       }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType={direntType} direntDetail={direntDetail} />
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType={direntType} />
       )}
     </>
   );

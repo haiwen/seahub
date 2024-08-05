@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import metadataAPI from '../api';
@@ -7,14 +7,9 @@ import { normalizeFields, getCellValueByColumn } from './utils';
 import toaster from '../../components/toast';
 import DetailItem from '../../components/dirent-detail/detail-item';
 
-const MetadataDetails = ({ repoID, filePath, direntType, direntDetail, emptyTip }) => {
+const MetadataDetails = React.memo(({ repoID, filePath, direntType, emptyTip }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
-  const isEmptyFile = useMemo(() => {
-    if (direntType === 'dir') return false;
-    const direntDetailId = direntDetail?.id || '';
-    return direntDetailId === '0'.repeat(direntDetailId.length);
-  }, [direntDetail, direntType]);
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +39,7 @@ const MetadataDetails = ({ repoID, filePath, direntType, direntDetail, emptyTip 
     const value = getCellValueByColumn(record, field);
     return (<DetailItem key={field.key} field={field} value={value} emptyTip={emptyTip}/>);
   });
-};
+});
 
 MetadataDetails.propTypes = {
   repoID: PropTypes.string,

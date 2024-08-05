@@ -384,10 +384,6 @@ class GroupBody extends Component {
     }, 300);
   };
 
-  onRowExpand = (record) => {
-    this.props.onRowExpand && this.props.onRowExpand(record);
-  };
-
   setRightScrollbarScrollTop = (scrollTop) => {
     this.rightScrollbar && this.rightScrollbar.setScrollTop(scrollTop);
   };
@@ -826,7 +822,6 @@ class GroupBody extends Component {
             selectedPosition={this.state.selectedPosition}
             selectNoneCells={this.selectNoneCells}
             onSelectRecord={this.props.onSelectRecord}
-            onRowExpand={this.onRowExpand}
             modifyRecord={this.props.modifyRecord}
             lockRecordViaButton={this.props.lockRecordViaButton}
             modifyRecordViaButton={this.props.modifyRecordViaButton}
