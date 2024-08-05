@@ -56,8 +56,7 @@ class SharedFileView extends React.Component {
   };
 
   componentDidMount() {
-
-    const fileIcon = Utils.getFileIconUrl(fileName, 192);
+    const fileIcon = Utils.getFileIconUrl(fileName);
     document.getElementById('favicon').href = fileIcon;
 
     if (trafficOverLimit) {

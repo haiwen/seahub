@@ -40,7 +40,7 @@ class SearchedListItem extends React.Component {
   render() {
     let { item, currentItem } = this.props;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(false);
-    let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
+    let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
     let trClass = this.state.highlight ? 'tr-highlight' : '';
     if (currentItem) {
       if (item.repo_id === currentItem.repo_id && item.path === currentItem.path) {

@@ -103,7 +103,7 @@ class FileDetails extends React.Component {
     let { dirent, repoID, path } = this.props;
 
     const smallIconUrl = Utils.getFileIconUrl(dirent.name);
-    let bigIconUrl = Utils.getFileIconUrl(dirent.name, 192);
+    let bigIconUrl = Utils.getFileIconUrl(dirent.name);
     const isImg = Utils.imageCheck(dirent.name);
     const isVideo = Utils.videoCheck(dirent.name);
     if (isImg || (enableVideoThumbnail && isVideo)) {

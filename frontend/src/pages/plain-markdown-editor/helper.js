@@ -1,11 +1,6 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-const initFavicon = (fileName) => {
-  const fileIcon = Utils.getFileIconUrl(fileName, 192);
-  document.getElementById('favicon').href = fileIcon;
-};
-
 const getFileInfo = async (repoID, filePath) => {
   const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);
   const { mtime, size, starred, permission, last_modifier_name: lastModifier, id } = fileInfoRes.data;
@@ -38,7 +33,8 @@ const setFileContent = async (downloadUrl) => {
 };
 
 export const getPlainOptions = async ({ fileName, filePath, repoID }) => {
-  initFavicon(fileName);
+  const fileIcon = Utils.getFileIconUrl(fileName);
+  document.getElementById('favicon').href = fileIcon;
   const fileInfo = await getFileInfo(repoID, filePath);
   const downloadUrl = await getFileDownloadUrl(repoID, filePath);
   const markdownContent = await setFileContent(downloadUrl);
