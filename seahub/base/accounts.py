@@ -27,7 +27,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
-from seahub.utils import is_user_password_strong, get_site_name, \
+from seahub.utils import get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
@@ -35,6 +35,7 @@ from seahub.share.models import ExtraSharePermission
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.repo_auto_delete.models import RepoAutoDelete
+from seahub.utils.password import get_password_strength_requirements, is_password_strength_valid
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -533,6 +534,8 @@ class User(object):
         self.permissions = UserPermissions(self)
         self.admin_permissions = AdminPermissions(self)
 
+        self.password_changed = False
+
     def __unicode__(self):
         return self.username
 
@@ -576,6 +579,11 @@ class User(object):
                                                               self.password,
                                                               int(self.is_staff),
                                                               int(self.is_active))
+
+            if self.password_changed:
+                emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
+                self.enc_password = emailuser.password
+                self.password_changed = False
         else:
             result_code = ccnet_threaded_rpc.add_emailuser(self.username,
                                                            self.password,
@@ -666,6 +674,7 @@ class User(object):
         else:
             self.password = '%s' % raw_password
 
+        self.password_changed = True
         # clear web api and repo sync token
         # when user password change
         try:
@@ -1263,18 +1272,16 @@ class RegistrationForm(forms.Form):
         if 'password1' in self.cleaned_data:
             pwd = self.cleaned_data['password1']
 
-            if bool(config.USER_STRONG_PASSWORD_REQUIRED) is True:
-                if bool(is_user_password_strong(pwd)) is True:
-                    return pwd
-                else:
-                    raise forms.ValidationError(
-                        _(("%(pwd_len)s characters or more, include "
-                           "%(num_types)s types or more of these: "
-                           "letters(case sensitive), numbers, and symbols")) %
-                        {'pwd_len': config.USER_PASSWORD_MIN_LENGTH,
-                         'num_types': config.USER_PASSWORD_STRENGTH_LEVEL})
-            else:
+            if is_password_strength_valid(pwd):
                 return pwd
+            else:
+                password_strength_requirements = get_password_strength_requirements()
+                raise forms.ValidationError(
+                    _(("%(pwd_len)s characters or more, include "
+                        "%(num_types)s types or more of these: "
+                        "letters(case sensitive), numbers, and symbols")) %
+                    {'pwd_len': password_strength_requirements.get('min_len'),
+                        'num_types': len(password_strength_requirements.get('char_types'))})
 
     def clean_password2(self):
         """

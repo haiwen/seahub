@@ -1214,27 +1214,6 @@ if EVENTS_CONFIG_FILE:
 
     ENABLE_REPO_AUTO_DEL = check_repo_auto_del_enabled()
 
-
-def is_user_password_strong(password):
-    """Return ``True`` if user's password is STRONG, otherwise ``False``.
-       STRONG means password has at least USER_PASSWORD_STRENGTH_LEVEL(3) types of the bellow:
-       num, upper letter, lower letter, other symbols
-    """
-
-    if len(password) < config.USER_PASSWORD_MIN_LENGTH:
-        return False
-    else:
-        num = 0
-        for letter in password:
-            # get ascii dec
-            # bitwise OR
-            num |= get_char_mode(ord(letter))
-
-        if calculate_bitwise(num) < config.USER_PASSWORD_STRENGTH_LEVEL:
-            return False
-        else:
-            return True
-
 def get_password_strength_level(password):
 
     num = 0

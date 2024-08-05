@@ -7,11 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import gettext as _
+from django.conf import settings
 
+from seahub.auth.models import SocialAuthUser
+from seahub.base.accounts import UNUSABLE_PASSWORD, LDAP_PROVIDER
 from seahub.constants import DEFAULT_ORG
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
 from seahub.organizations.views import gen_org_url_prefix
+from seahub.password_session import update_session_auth_hash
 from seahub.utils import is_valid_email
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -25,6 +29,7 @@ import seaserv
 from seaserv import ccnet_api, seafile_api
 
 from seahub.utils.db_api import SeafileDB
+from seahub.utils.password import is_password_strength_valid
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -196,5 +201,53 @@ class UserConvertToTeamView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+class ResetPasswordView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not isinstance(request.data, dict):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Bad request')
+        old_password = request.data.get('old_password')
+        if old_password and (not isinstance(old_password, str) or len(old_password) > 4096):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Old password invalid')
+        new_password = request.data.get('new_password')
+        if not new_password or (not isinstance(new_password, str)) or len(new_password) > 4096:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'New password invalid')
+
+        if old_password == new_password:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'New password cannot be the same as old password')
+
+        if not is_password_strength_valid(new_password):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Insufficient password strength')
+
+        user = request.user
+        if user.enc_password != UNUSABLE_PASSWORD and not old_password:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Old password invalid')
+
+        has_bind_social_auth = False
+        if SocialAuthUser.objects.filter(username=request.user.username).exists():
+            has_bind_social_auth = True
+
+        can_update_password = True
+        if (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD) and has_bind_social_auth:
+            can_update_password = False
+
+        if not can_update_password:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        if old_password and not user.check_password(old_password):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Old password incorrect')
+
+        user.set_password(new_password)
+        user.save()
+
+        if not request.session.is_empty():
+            # update session auth hash
+            update_session_auth_hash(request, request.user)
 
         return Response({'success': True})

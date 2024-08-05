@@ -95,7 +95,7 @@ from seahub.api2.endpoints.repo_draft_info import RepoDraftInfo, RepoDraftCounts
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
-from seahub.api2.endpoints.user import User, UserConvertToTeamView
+from seahub.api2.endpoints.user import User, UserConvertToTeamView, ResetPasswordView
 from seahub.api2.endpoints.auth_token_by_session import AuthTokenBySession
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
 from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
@@ -324,6 +324,8 @@ urlpatterns = [
 
     # user list
     re_path(r'^api/v2.1/user-list/$', UserListView.as_view(), name='api-v2.1-user-list'),
+    
+    re_path(r'^api/v2.1/user/reset-password/$', ResetPasswordView.as_view(), name="api-v2.1-user-reset-password"),
 
     ## obtain auth token by login session
     re_path(r'^api/v2.1/auth-token-by-session/$', AuthTokenBySession.as_view(), name="api-v2.1-auth-token-by-session"),

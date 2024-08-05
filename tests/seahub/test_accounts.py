@@ -40,8 +40,8 @@ class TestRegistrationForm(TestCase):
         user_info = {
             'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'userid': randstring(40),
-            'password1': 'password',
-            'password2': 'password',
+            'password1': 'Seafile123password',
+            'password2': 'Seafile123password',
         }
 
         f = RegistrationForm(data = user_info)

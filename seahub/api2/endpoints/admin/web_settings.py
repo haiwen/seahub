@@ -22,8 +22,8 @@ DIGIT_WEB_SETTINGS = [
     'ACTIVATE_AFTER_REGISTRATION', 'REGISTRATION_SEND_MAIL',
     'LOGIN_REMEMBER_DAYS', 'REPO_PASSWORD_MIN_LENGTH',
     'ENABLE_REPO_HISTORY_SETTING', 'USER_STRONG_PASSWORD_REQUIRED',
-    'ENABLE_ENCRYPTED_LIBRARY', 'USER_PASSWORD_MIN_LENGTH',
-    'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
+    'ENABLE_ENCRYPTED_LIBRARY',
+    'SHARE_LINK_PASSWORD_MIN_LENGTH',
     'SHARE_LINK_FORCE_USE_PASSWORD', 'SHARE_LINK_PASSWORD_STRENGTH_LEVEL',
     'FORCE_PASSWORD_CHANGE',
     'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
@@ -82,10 +82,6 @@ class AdminWebSettings(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                 else:
                     value = int(value)
-
-                if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
-                    error_msg = 'value invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 if key == 'SHARE_LINK_PASSWORD_STRENGTH_LEVEL' and value not in (1, 2, 3, 4):
                     error_msg = 'value invalid.'

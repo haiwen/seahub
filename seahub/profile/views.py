@@ -26,6 +26,7 @@ from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from constance import config
 try:
     from seahub.settings import SAML_PROVIDER_IDENTIFIER
 except ImportError as e:
@@ -170,6 +171,7 @@ def edit_profile(request):
             'enable_multi_adfs': enable_multi_adfs,
             'org_saml_connected': org_saml_connected,
             'org_id': request.user.org and request.user.org.org_id or None,
+            'user_strong_password_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),
     }
 
     if show_two_factor_auth:

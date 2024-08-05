@@ -38,6 +38,8 @@ from seahub.organizations.utils import get_or_create_invitation_link
 from seahub.subscription.utils import subscription_check
 
 # Get an instance of a logger
+from seahub.utils.password import get_password_strength_requirements
+
 logger = logging.getLogger(__name__)
 
 ENABLE_MULTI_ADFS = getattr(settings, 'ENABLE_MULTI_ADFS', False)
@@ -234,6 +236,8 @@ def org_register(request):
     up = urlparse(service_url)
     service_url_scheme = up.scheme
     service_url_remaining = up.netloc + up.path
+    password_strength_requirements = get_password_strength_requirements()
+    level = len(password_strength_requirements.get('char_types'))
 
     return render(request, 'organizations/org_register.html', {
         'form': form,
@@ -241,6 +245,9 @@ def org_register(request):
         'service_url_scheme': service_url_scheme,
         'service_url_remaining': service_url_remaining,
         'org_auto_url_prefix': ORG_AUTO_URL_PREFIX,
+        'min_len': password_strength_requirements.get('min_len'),
+        'level': level
+        
     })
 
 @login_required

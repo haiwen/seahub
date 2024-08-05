@@ -129,7 +129,7 @@ class RegistrationFormTest(BaseTestCase):
 
     def test_clean_email(self):
         form = self.form_class({'email': 'some_random_user@1.com',
-                                'password1': '123',
-                                'password2': '123'})
+                                'password1': 'Seafile123',
+                                'password2': 'Seafile123'})
         assert form.is_valid() is True
         assert form.clean_email() == 'some_random_user@1.com'

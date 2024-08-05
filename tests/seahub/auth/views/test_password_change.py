@@ -18,8 +18,8 @@ class PasswordChangeTest(BaseTestCase):
         resp = self.client.post(
             reverse('auth_password_change'), {
                 'old_password': self.user_password,
-                'new_password1': '123',
-                'new_password2': '123',
+                'new_password1': 'Seafile123',
+                'new_password2': 'Seafile123',
             }
         )
         self.assertEqual(302, resp.status_code)

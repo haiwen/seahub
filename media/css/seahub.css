@@ -2073,3 +2073,81 @@ a.sf-popover-item {
 #email-audit-form .get-code-btn {
   width: 102px;
 }
+
+.registration-form-popover {
+  border: 1px solid #ddd;
+  padding: 12px;
+  width: 250px;
+  filter: none;
+  color: #212529;
+  font-size: 14px;
+}
+
+.registration-form-popover .arrow::before,
+.registration-form-popover .arrow::after {
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.registration-form-popover .arrow::before {
+  right: 1px;
+  border-left: 7px solid #ddd;
+}
+
+.registration-form-popover .arrow::after {
+  right: 2px;
+  border-left: 7px solid #fff;
+}
+/* overwrite inline style */
+.registration-form-popover.mobile {
+  top: -142px !important;
+  right: 0 !important;
+  left: unset !important;
+  transform: unset !important;
+}
+
+.registration-form-popover.mobile .arrow {
+  margin: 0;
+  top: 100% !important;
+  left: 20%;
+}
+
+.registration-form-popover.mobile .arrow::before,
+.registration-form-popover.mobile .arrow::after {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+
+.registration-form-popover.mobile .arrow::before {
+  top: 1px;
+  left: 1px;
+  border-top: 7px  solid #ddd;
+}
+
+.registration-form-popover.mobile .arrow::after {
+  top: -0.4px;
+  border-top: 7px solid #fff;
+}
+
+.popover.registration-form-popover .popover-head {
+  padding-bottom: 4px;
+}
+
+.popover.registration-form-popover .popover-content {
+  padding-top: 8px;
+  color: #666;
+  font-size: 12px;
+}
+
+.popover.registration-form-popover .progress {
+  border-radius: 0;
+  height: 4px;
+  background-color: #fff;
+}
+
+.popover.registration-form-popover .progress-bar {
+  width: 25%;
+  margin-right: 2px;
+  background-color: #DBDBDB;
+}
+

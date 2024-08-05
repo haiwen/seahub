@@ -14,6 +14,8 @@ from constance import config
 
 from seahub import settings
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.password import get_password_strength_requirements
+
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -216,11 +218,11 @@ def register(request, backend, success_url=None, form_class=None,
         form = form_class(initial={'email': src})
 
     context['form'] = form
-    context['min_len'] = config.USER_PASSWORD_MIN_LENGTH
-    context['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
-    context['level'] = config.USER_PASSWORD_STRENGTH_LEVEL
-
     login_bg_image_path = get_login_bg_image_path()
     context['login_bg_image_path'] = login_bg_image_path
+
+    password_strength_requirements = get_password_strength_requirements()
+    context['min_len'] = password_strength_requirements.get('min_len')
+    context['level'] = len(password_strength_requirements.get('char_types'))
 
     return render(request, template_name, context)
