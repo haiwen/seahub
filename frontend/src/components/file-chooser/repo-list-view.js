@@ -15,7 +15,6 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   currentPath: PropTypes.string,
-  hideLibraryName: PropTypes.bool,
 };
 
 class RepoListView extends React.Component {
@@ -26,12 +25,9 @@ class RepoListView extends React.Component {
       repoList = [];
       repoList.push(currentRepoInfo);
     }
-    let style = {};
-    if (this.props.hideLibraryName) {
-      style = { marginLeft: '-44px' };
-    }
+
     return (
-      <ul className="list-view-content file-chooser-item" style={style}>
+      <ul className="list-view-content file-chooser-item" >
         {repoList.length > 0 && repoList.map((repoItem, index) => {
           return (
             <RepoListItem
@@ -47,7 +43,6 @@ class RepoListView extends React.Component {
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
               selectedItemInfo={this.props.selectedItemInfo}
-              hideLibraryName={this.props.hideLibraryName}
             />
           );
         })}

@@ -18,9 +18,25 @@ const propTypes = {
   repoID: PropTypes.string,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
-  mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
-  fileSuffixes: PropTypes.array,
+  mode: PropTypes.oneOf([
+    'current_repo_and_other_repos',
+    'only_all_repos',
+    'only_current_library',
+    'only_other_libraries',
+    'recently_used'
+  ]).isRequired,
+  fileSuffixes: PropTypes.arrayOf(PropTypes.string),
   currentPath: PropTypes.string,
+};
+
+const defaultProps = {
+  isShowFile: false,
+  hideLibraryName: false,
+  repoID: '',
+  onDirentItemClick: () => {},
+  onRepoItemClick: () => {},
+  fileSuffixes: [],
+  currentPath: '',
 };
 
 class FileChooser extends React.Component {
@@ -46,71 +62,95 @@ class FileChooser extends React.Component {
     this.source = null;
   }
 
-  componentDidMount() {
-    if (this.props.repoID) { // current_repo_and_other_repos, only_current_library
-      let repoID = this.props.repoID;
-      seafileAPI.getRepoInfo(repoID).then(res => {
-        // need to optimized
-        let repoInfo = new RepoInfo(res.data);
+  async componentDidMount() {
+    const { repoID } = this.props;
+
+    const fetchRepoInfo = async (repoID) => {
+      try {
+        const res = await seafileAPI.getRepoInfo(repoID);
+        const repoInfo = new RepoInfo(res.data);
         this.setState({
           currentRepoInfo: repoInfo,
-          selectedRepo: repoInfo
+          selectedRepo: repoInfo,
         });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
+      } catch (error) {
+        const errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      });
-    } else { // only_all_repos
-      seafileAPI.listRepos().then(res => {
-        let repos = res.data.repos;
-        let repoList = [];
-        let repoIdList = [];
-        for (let i = 0; i < repos.length; i++) {
-          if (repos[i].permission !== 'rw') {
-            continue;
+      }
+    };
+
+    const fetchRepoList = async () => {
+      try {
+        const res = await seafileAPI.listRepos();
+        const repos = res.data.repos;
+        const repoList = [];
+        const repoIdList = [];
+
+        repos.forEach(repo => {
+          if (repo.permission !== 'rw' || repoIdList.includes(repo.repo_id)) {
+            return;
           }
-          if (repoIdList.indexOf(repos[i].repo_id) > -1) {
-            continue;
-          }
-          repoList.push(repos[i]);
-          repoIdList.push(repos[i].repo_id);
-        }
-        repoList = Utils.sortRepos(repoList, 'name', 'asc');
-        this.setState({ repoList: repoList });
-      });
+          repoList.push(repo);
+          repoIdList.push(repo.repo_id);
+        });
+
+        const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+        this.setState({ repoList: sortedRepoList });
+      } catch (error) {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+    };
+
+    if (repoID) {
+      await fetchRepoInfo(repoID);
+    } else {
+      await fetchRepoList();
     }
   }
 
-  onOtherRepoToggle = () => {
-    if (!this.state.hasRequest) {
-      let that = this;
-      seafileAPI.listRepos().then(res => {
-        // todo optimized code
-        let repos = res.data.repos;
-        let repoList = [];
-        let repoIdList = [];
-        for (let i = 0; i < repos.length; i++) {
-          if (repos[i].permission !== 'rw') {
-            continue;
-          }
-          if (that.props.repoID && (repos[i].repo_name === that.state.currentRepoInfo.repo_name)) {
-            continue;
-          }
-          if (repoIdList.indexOf(repos[i].repo_id) > -1) {
-            continue;
-          }
-          repoList.push(repos[i]);
-          repoIdList.push(repos[i].repo_id);
-        }
-        repoList = Utils.sortRepos(repoList, 'name', 'asc');
-        this.setState({
-          repoList: repoList,
-          isOtherRepoShow: !this.state.isOtherRepoShow,
-          selectedItemInfo: {}
-        });
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.mode !== this.props.mode) {
+      this.setState({
+        isSearching: false,
+        isResultGot: false,
+        searchInfo: '',
+        searchResults: [],
       });
+      if (this.props.mode === 'only_other_libraries') {
+        this.onOtherRepoToggle();
+      }
     }
-    else {
+  }
+
+  onOtherRepoToggle = async () => {
+    if (!this.state.hasRequest) {
+      try {
+        const res = await seafileAPI.listRepos();
+        const repos = res.data.repos;
+        const repoList = [];
+        const repoIdList = [];
+
+        repos.forEach(repo => {
+          if (repo.permission !== 'rw') return;
+          if (this.props.repoID && repo.repo_name === this.state.currentRepoInfo.repo_name) return;
+          if (repoIdList.includes(repo.repo_id)) return;
+
+          repoList.push(repo);
+          repoIdList.push(repo.repo_id);
+        });
+
+        const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+        this.setState({
+          repoList: sortedRepoList,
+          isOtherRepoShow: !this.state.isOtherRepoShow,
+          selectedItemInfo: {},
+        });
+      } catch (error) {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+    } else {
       this.setState({ isOtherRepoShow: !this.state.isOtherRepoShow });
     }
   };
@@ -151,32 +191,22 @@ class FileChooser extends React.Component {
 
   onSearchInfoChanged = (event) => {
     let searchInfo = event.target.value.trim();
-
-    this.setState({ searchInfo: searchInfo });
-
-    if (this.inputValue === searchInfo) {
-      return false;
-    }
-
-    this.inputValue = searchInfo;
-
-    if (searchInfo.length === 0) {
-      this.setState({
-        isSearching: false,
-        searchResults: [],
-      });
-      return false;
-    }
-
     if (!this.state.searchResults.length && searchInfo.length > 0) {
       this.setState({
         isSearching: true,
         isResultGot: false,
       });
     }
+    this.setState({ searchInfo: searchInfo });
+    if (this.inputValue === searchInfo) {
+      return false;
+    }
+    this.inputValue = searchInfo;
 
     if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
-      this.setState({ isResultGot: false });
+      this.setState({
+        isResultGot: false,
+      });
       return false;
     }
 
@@ -297,205 +327,248 @@ class FileChooser extends React.Component {
     }
   };
 
-  onSearchedItemDoubleClick = (item) => {
+  onSearchedItemDoubleClick = async (item) => {
     if (item.type !== 'dir') {
       return;
     }
 
-    let selectedItemInfo = {
+    const { repoID } = this.props;
+    const { hasRequest, currentRepoInfo } = this.state;
+
+    const selectedItemInfo = {
       repoID: item.repo_id,
       filePath: item.path,
     };
 
-    this.setState({
-      selectedItemInfo: selectedItemInfo
-    });
+    this.setState({ selectedItemInfo });
 
-    if (this.props.repoID && item.repo_id === this.props.repoID) {
-      seafileAPI.getRepoInfo(this.props.repoID).then(res => {
-        // need to optimized
-        let repoInfo = new RepoInfo(res.data);
-        let path = item.path.substring(0, (item.path.length - 1));
+    const updateStateForRepo = (repoInfo, path) => {
+      this.setState({
+        selectedRepo: repoInfo,
+        selectedPath: path,
+        isCurrentRepoShow: true,
+      });
+    };
+
+    const handleError = (error) => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    };
+
+    const fetchRepoInfo = async () => {
+      try {
+        const res = await seafileAPI.getRepoInfo(repoID);
+        const repoInfo = new RepoInfo(res.data);
+        const path = item.path.substring(0, item.path.length - 1);
+        updateStateForRepo(repoInfo, path);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    const fetchRepoList = async () => {
+      try {
+        const res = await seafileAPI.listRepos();
+        const repos = res.data.repos;
+        const repoList = [];
+        const repoIdList = [];
+
+        repos.forEach(repo => {
+          if (repo.permission !== 'rw') return;
+          if (repoID && repo.repo_name === currentRepoInfo.repo_name) return;
+          if (repoIdList.includes(repo.repo_id)) return;
+
+          repoList.push(repo);
+          repoIdList.push(repo.repo_id);
+        });
+
+        const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+        const selectedRepo = sortedRepoList.find(repo => repo.repo_id === item.repo_id);
+        const path = item.path.substring(0, item.path.length - 1);
 
         this.setState({
-          selectedRepo: repoInfo,
+          repoList: sortedRepoList,
+          isOtherRepoShow: true,
           selectedPath: path,
-          isCurrentRepoShow: true,
+          selectedRepo,
         });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      if (!this.state.hasRequest) {
-        let that = this;
-        seafileAPI.listRepos().then(res => {
-          // todo optimized code
-          let repos = res.data.repos;
-          let repoList = [];
-          let repoIdList = [];
-          for (let i = 0; i < repos.length; i++) {
-            if (repos[i].permission !== 'rw') {
-              continue;
-            }
-            if (that.props.repoID && (repos[i].repo_name === that.state.currentRepoInfo.repo_name)) {
-              continue;
-            }
-            if (repoIdList.indexOf(repos[i].repo_id) > -1) {
-              continue;
-            }
-            repoList.push(repos[i]);
-            repoIdList.push(repos[i].repo_id);
-          }
-          repoList = Utils.sortRepos(repoList, 'name', 'asc');
-          let repo = repoList.filter(repoItem => repoItem.repo_id === item.repo_id);
-          let path = item.path.substring(0, (item.path.length - 1));
-
-          let selectRepo = repo[0];
-          this.setState({
-            repoList: repoList,
-            isOtherRepoShow: true,
-            selectedPath: path,
-            selectedRepo: selectRepo,
-          });
-        });
+      } catch (error) {
+        handleError(error);
       }
-      else {
-        this.setState({ isOtherRepoShow: !this.state.isOtherRepoShow });
+    };
+
+    if (repoID && item.repo_id === repoID) {
+      await fetchRepoInfo();
+    } else {
+      if (!hasRequest) {
+        await fetchRepoList();
+      } else {
+        this.setState(prevState => ({ isOtherRepoShow: !prevState.isOtherRepoShow }));
       }
     }
+
     this.onCloseSearching();
   };
-
   onScroll = (event) => {
     event.stopPropagation();
   };
 
   renderRepoListView = () => {
+    const { mode, currentPath, isShowFile, fileSuffixes } = this.props;
+    const { isCurrentRepoShow, isOtherRepoShow, currentRepoInfo, repoList, selectedRepo, selectedPath, selectedItemInfo } = this.state;
+    const recentlyUsedRepos = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
+
     return (
-      <div className="file-chooser-container user-select-none" onScroll={this.onScroll}>
-        {this.props.mode === 'current_repo_and_other_repos' && (
-          <Fragment>
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
-                <span className="library">{gettext('Current Library')}</span>
+      <div className='scroll-wrapper' onScroll={this.onScroll}>
+        <div className="file-chooser-container user-select-none" >
+          {mode === 'current_repo_and_other_repos' && (
+            <Fragment>
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
+                  <span className="library">{gettext('Current Library')}</span>
+                </div>
+                {
+                  isCurrentRepoShow && currentRepoInfo &&
+                  <RepoListView
+                    initToShowChildren={true}
+                    currentRepoInfo={currentRepoInfo}
+                    currentPath={currentPath}
+                    selectedRepo={selectedRepo}
+                    selectedPath={selectedPath}
+                    onRepoItemClick={this.onRepoItemClick}
+                    onDirentItemClick={this.onDirentItemClick}
+                    isShowFile={isShowFile}
+                    fileSuffixes={fileSuffixes}
+                    selectedItemInfo={selectedItemInfo}
+                  />
+                }
               </div>
-              {
-                this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-                <RepoListView
-                  initToShowChildren={true}
-                  currentRepoInfo={this.state.currentRepoInfo}
-                  currentPath={this.props.currentPath}
-                  selectedRepo={this.state.selectedRepo}
-                  selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick}
-                  onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={this.props.isShowFile}
-                  fileSuffixes={this.props.fileSuffixes}
-                  selectedItemInfo={this.state.selectedItemInfo}
-                />
-              }
-            </div>
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className={`item-toggle sf3-font ${this.state.isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
-                <span className="library">{gettext('Other Libraries')}</span>
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
+                  <span className="library">{gettext('Other Libraries')}</span>
+                </div>
+                {
+                  isOtherRepoShow &&
+                  <RepoListView
+                    initToShowChildren={false}
+                    repoList={repoList}
+                    selectedRepo={selectedRepo}
+                    selectedPath={selectedPath}
+                    onRepoItemClick={this.onRepoItemClick}
+                    onDirentItemClick={this.onDirentItemClick}
+                    isShowFile={isShowFile}
+                    fileSuffixes={fileSuffixes}
+                    selectedItemInfo={selectedItemInfo}
+                  />
+                }
               </div>
-              {
-                this.state.isOtherRepoShow &&
-                <RepoListView
-                  initToShowChildren={false}
-                  repoList={this.state.repoList}
-                  selectedRepo={this.state.selectedRepo}
-                  selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick}
-                  onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={this.props.isShowFile}
-                  fileSuffixes={this.props.fileSuffixes}
-                  selectedItemInfo={this.state.selectedItemInfo}
-                />
-              }
-            </div>
-          </Fragment>
-        )}
-        {this.props.mode === 'only_current_library' && (
-          <div className="list-view">
-            {!this.props.hideLibraryName &&
-            <div className="list-view-header">
-              <span className={`item-toggle sf3-font ${this.state.isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
-              <span className="library">{gettext('Current Library')}</span>
-            </div>
-            }
-            {
-              this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
+            </Fragment>
+          )}
+          {mode === 'only_current_library' && (
+            <div className="list-view">
               <RepoListView
                 initToShowChildren={true}
-                currentRepoInfo={this.state.currentRepoInfo}
-                currentPath={this.props.currentPath}
-                selectedRepo={this.state.selectedRepo}
-                selectedPath={this.state.selectedPath}
+                currentRepoInfo={currentRepoInfo}
+                currentPath={currentPath}
+                selectedRepo={selectedRepo}
+                selectedPath={selectedPath}
                 onRepoItemClick={this.onRepoItemClick}
                 onDirentItemClick={this.onDirentItemClick}
-                isShowFile={this.props.isShowFile}
-                fileSuffixes={this.props.fileSuffixes}
-                selectedItemInfo={this.state.selectedItemInfo}
-                hideLibraryName={this.props.hideLibraryName}
-              />
-            }
-          </div>
-        )}
-        {this.props.mode === 'only_all_repos' && (
-          <div className="file-chooser-container">
-            <div className="list-view">
-              <div className="list-view-header">
-                <span className="item-toggle sf3-font sf3-font-down"></span>
-                <span className="library">{gettext('Libraries')}</span>
-              </div>
-              <RepoListView
-                initToShowChildren={false}
-                repoList={this.state.repoList}
-                selectedRepo={this.state.selectedRepo}
-                selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick}
-                onDirentItemClick={this.onDirentItemClick}
-                isShowFile={this.props.isShowFile}
-                fileSuffixes={this.props.fileSuffixes}
-                selectedItemInfo={this.state.selectedItemInfo}
+                isShowFile={isShowFile}
+                fileSuffixes={fileSuffixes}
+                selectedItemInfo={selectedItemInfo}
               />
             </div>
-          </div>
-        )}
+          )}
+          {mode === 'only_all_repos' && (
+            <div className="file-chooser-container">
+              <div className="list-view">
+                <div className="list-view-header">
+                  <span className="item-toggle sf3-font sf3-font-down"></span>
+                  <span className="library">{gettext('Libraries')}</span>
+                </div>
+                <RepoListView
+                  initToShowChildren={false}
+                  repoList={repoList}
+                  selectedRepo={selectedRepo}
+                  selectedPath={selectedPath}
+                  onRepoItemClick={this.onRepoItemClick}
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={isShowFile}
+                  fileSuffixes={fileSuffixes}
+                  selectedItemInfo={selectedItemInfo}
+                />
+              </div>
+            </div>
+          )}
+          {mode === 'only_other_libraries' && (
+            <div className="list-view">
+              <RepoListView
+                initToShowChildren={false}
+                repoList={repoList}
+                selectedRepo={selectedRepo}
+                selectedPath={selectedPath}
+                onRepoItemClick={this.onRepoItemClick}
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={isShowFile}
+                fileSuffixes={fileSuffixes}
+                selectedItemInfo={selectedItemInfo}
+              />
+            </div>
+          )}
+          {mode === 'recently_used' && (
+            <div className="list-view">
+              <RepoListView
+                initToShowChildren={false}
+                repoList={recentlyUsedRepos}
+                selectedRepo={selectedRepo}
+                selectedPath={selectedPath}
+                onRepoItemClick={this.onRepoItemClick}
+                onDirentItemClick={this.onDirentItemClick}
+                isShowFile={isShowFile}
+                fileSuffixes={fileSuffixes}
+                selectedItemInfo={selectedItemInfo}
+              />
+            </div>
+          )}
+        </div>
       </div>
     );
   };
 
   render() {
-    if (!this.state.selectedRepo && this.props.repoID) {
+    const { repoID } = this.props;
+    const { selectedRepo, searchInfo, isSearching } = this.state;
+
+    if (!selectedRepo && repoID) {
       return '';
     }
 
     return (
       <Fragment>
-        {isPro && (
+        {isPro && this.props.mode !== 'recently_used' && (
           <div className="file-chooser-search-input">
-            <Input className="search-input mb-2" placeholder={gettext('Search')} type='text' value={this.state.searchInfo} onChange={this.onSearchInfoChanged}></Input>
-            {this.state.searchInfo.length !== 0 && (
+            <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            {searchInfo.length !== 0 && (
               <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
             )}
           </div>
         )}
-        {this.state.isSearching && (
+        {isSearching ? (
           <div className="file-chooser-search-container">
             {this.renderSearchedView()}
           </div>
+        ) : (
+          this.renderRepoListView()
         )}
-        {!this.state.isSearching && this.renderRepoListView()}
       </Fragment>
     );
   }
 }
 
 FileChooser.propTypes = propTypes;
+FileChooser.defaultProps = defaultProps;
 
 export default FileChooser;

@@ -31,10 +31,12 @@ class RepoListItem extends React.Component {
       isShowChildren: this.props.initToShowChildren,
       treeData: treeHelper.buildTree(),
       hasLoaded: false,
+      isMounted: false,
     };
   }
 
   componentDidMount() {
+    this.setState({ isMounted: true });
     const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
 
     // render search result
@@ -61,27 +63,31 @@ class RepoListItem extends React.Component {
     }
   }
 
-  loadRepoDirentList = (repo) => {
+  componentWillUnmount() {
+    this.setState({ isMounted: false });
+  }
+
+  loadRepoDirentList = async (repo) => {
     const { hasLoaded } = this.state;
     if (hasLoaded) return;
 
     const repoID = repo.repo_id;
 
-    seafileAPI.listDir(repoID, '/').then(res => {
+    try {
+      const res = await seafileAPI.listDir(repoID, '/');
+      if (!this.state.isMounted) return;
+
       let tree = this.state.treeData.clone();
-      let direntList = [];
-      if (this.props.isShowFile === true) {
-        direntList = res.data.dirent_list;
-      } else {
-        direntList = res.data.dirent_list.filter(item => item.type === 'dir');
-      }
+      let direntList = this.props.isShowFile ? res.data.dirent_list : res.data.dirent_list.filter(item => item.type === 'dir');
 
       this.addResponseListToNode(direntList, tree.root);
       this.setState({ treeData: tree, hasLoaded: true });
-    }).catch(error => {
+    } catch (error) {
+      if (!this.state.isMounted) return;
+
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    });
+    }
   };
 
   addResponseListToNode = (list, node) => {
@@ -201,14 +207,14 @@ class RepoListItem extends React.Component {
       <li>
         {!this.props.hideLibraryName &&
           <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
-            <div className="item-text">
-              <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
-            </div>
             <div className="item-left-icon">
               <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
               <i className="tree-node-icon">
                 <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
               </i>
+            </div>
+            <div className="item-text">
+              <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
             </div>
           </div>
         }

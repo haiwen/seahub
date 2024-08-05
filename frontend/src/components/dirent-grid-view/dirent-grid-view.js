@@ -821,6 +821,7 @@ class DirentGridView extends React.Component {
             repoEncrypted={this.props.currentRepoInfo.encrypted}
             isMultipleOperation={this.state.isMultipleOperation}
             selectedDirentList={selectedDirentList}
+            onItemMove={this.props.onItemMove}
             onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onMoveToggle}
             dirent={this.state.activeDirent}

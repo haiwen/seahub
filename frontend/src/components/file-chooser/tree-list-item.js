@@ -11,13 +11,22 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   filePath: PropTypes.string,
   fileSuffixes: PropTypes.array,
+  level: PropTypes.number,
 };
 
 class TreeViewItem extends React.Component {
 
   constructor(props) {
     super(props);
-    let filePath = this.props.filePath ? this.props.filePath + '/' + this.props.node.object.name : this.props.node.path;
+    let filePath;
+
+    if (this.props.filePath === '/') {
+      filePath = '/' + this.props.node.object.name;
+    } else if (this.props.filePath) {
+      filePath = this.props.filePath + '/' + this.props.node.object.name;
+    } else {
+      filePath = this.props.node.path;
+    }
 
     this.state = {
       filePath: filePath,
@@ -73,6 +82,8 @@ class TreeViewItem extends React.Component {
               selectedRepo={this.props.selectedRepo}
               selectedPath={this.props.selectedPath}
               fileSuffixes={this.props.fileSuffixes}
+              filePath={this.state.filePath}
+              level={(this.props.level || 0) + 1}
             />);
         })}
       </div>
@@ -97,13 +108,15 @@ class TreeViewItem extends React.Component {
       }
     }
 
+    const paddingLeft = `${this.props.level * 20}px`;
     return (
       <div className="file-chooser-item">
         <div className={`${node.path === '/' ? 'hide' : ''}`}>
-          <div className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`} onClick={this.onItemClick}>
-            <div className="item-text">
-              <span className="name user-select-none ellipsis" title={node.object && node.object.name}>{node.object && node.object.name}</span>
-            </div>
+          <div
+            className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`}
+            onClick={this.onItemClick}
+            style={{ paddingLeft }}
+          >
             <div className="item-left-icon">
               {
                 node.object.type !== 'file' &&
@@ -112,6 +125,9 @@ class TreeViewItem extends React.Component {
               <i className="tree-node-icon">
                 <span className={`icon sf3-font ${node.object.type === 'dir' ? 'sf3-font-folder' : 'sf3-font-file'}`}></span>
               </i>
+            </div>
+            <div className="item-text">
+              <span className="name user-select-none ellipsis" title={node.object && node.object.name}>{node.object && node.object.name}</span>
             </div>
           </div>
         </div>

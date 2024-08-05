@@ -715,6 +715,27 @@ class LibContentView extends React.Component {
     });
   };
 
+  updateRecentlyUsedRepos = (destRepo) => {
+    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
+    const updatedRecentlyUsed = [destRepo, ...recentlyUsed.filter(repo => repo.repo_id !== destRepo.repo_id)];
+
+    const seen = new Set();
+    const filteredRecentlyUsed = updatedRecentlyUsed.filter(repo => {
+      if (seen.has(repo.repo_id)) {
+        return false;
+      } else {
+        seen.add(repo.repo_id);
+        return true;
+      }
+    });
+
+    if (filteredRecentlyUsed.length > 10) {
+      updatedRecentlyUsed.pop(); // Limit to 10 recent directories
+    }
+
+    localStorage.setItem('recently-used-repos', JSON.stringify(filteredRecentlyUsed));
+  };
+
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
@@ -722,6 +743,7 @@ class LibContentView extends React.Component {
 
     let dirNames = this.getSelectedDirentNames();
     let direntPaths = this.getSelectedDirentPaths();
+
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
@@ -752,6 +774,8 @@ class LibContentView extends React.Component {
         let message = Utils.getMoveSuccessMessage(dirNames);
         toaster.success(message);
       }
+
+      this.updateRecentlyUsedRepos(destRepo);
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1222,6 +1246,9 @@ class LibContentView extends React.Component {
         message = message.replace('{name}', dirName);
         toaster.success(message);
       }
+
+      this.updateRecentlyUsedRepos(destRepo);
+
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
         let errMessage = Utils.getErrorMsg(error);
