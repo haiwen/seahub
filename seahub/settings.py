@@ -888,8 +888,8 @@ ENABLE_FILE_TAGS = True
 
 METADATA_FILE_TYPES = {
     '_picture': ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif', 'mpo', 'jpe', 'xbm',
-                 'svg', 'ppm', 'pcx', 'xcf', 'xpm', 'mgn', 'ufo'),
-    '_document': ('oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'pdf', 'ai', 'xls', 'xlsx', 'ods',
+                 'svg', 'ppm', 'pcx', 'xcf', 'xpm', 'mgn', 'ufo', 'ai'),
+    '_document': ('oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'pdf', 'xls', 'xlsx', 'ods',
                   'fods', 'xmind', 'ac', 'am', 'bat', 'diff', 'json', 'org', 'properties', 'vi', 'vim', 'xml', 'log',
                   'csv', 'rst', 'patch', 'txt', 'text', 'tex', 'markdown', 'md', 'sdoc', 'doc', 'docx', ),
     '_code': ('cc', 'c', 'cmake', 'cpp', 'cs', 'css', 'el', 'h', 'html', 'htm', 'java', 'js', 'less', 'make', 'php', 'pl',
