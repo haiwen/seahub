@@ -715,16 +715,16 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateRecentlyUsedRepos = (destRepo) => {
-    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
-    const updatedRecentlyUsed = [destRepo, ...recentlyUsed.filter(repo => repo.repo_id !== destRepo.repo_id)];
+  updateRecentlyUsedRepos = (destPath) => {
+    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const updatedRecentlyUsed = [destPath, ...recentlyUsed.filter(path => path !== destPath)];
 
     const seen = new Set();
-    const filteredRecentlyUsed = updatedRecentlyUsed.filter(repo => {
-      if (seen.has(repo.repo_id)) {
+    const filteredRecentlyUsed = updatedRecentlyUsed.filter(path => {
+      if (seen.has(path)) {
         return false;
       } else {
-        seen.add(repo.repo_id);
+        seen.add(path);
         return true;
       }
     });
@@ -733,7 +733,7 @@ class LibContentView extends React.Component {
       updatedRecentlyUsed.pop(); // Limit to 10 recent directories
     }
 
-    localStorage.setItem('recently-used-repos', JSON.stringify(filteredRecentlyUsed));
+    localStorage.setItem('recently-used-list', JSON.stringify(filteredRecentlyUsed));
   };
 
   // toolbar operations
@@ -775,7 +775,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(destRepo);
+      this.updateRecentlyUsedRepos(destDirentPath);
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1247,7 +1247,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(destRepo);
+      this.updateRecentlyUsedRepos(moveToDirentPath);
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {

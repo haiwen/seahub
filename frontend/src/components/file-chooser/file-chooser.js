@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import RepoInfo from '../../models/repo-info';
 import RepoListView from './repo-list-view';
+import RecentlyUsedListView from './recently-used-list-view';
 import Loading from '../loading';
 import SearchedListView from './searched-list-view';
 
@@ -416,7 +417,7 @@ class FileChooser extends React.Component {
   renderRepoListView = () => {
     const { mode, currentPath, isShowFile, fileSuffixes } = this.props;
     const { isCurrentRepoShow, isOtherRepoShow, currentRepoInfo, repoList, selectedRepo, selectedPath, selectedItemInfo } = this.state;
-    const recentlyUsedRepos = JSON.parse(localStorage.getItem('recently-used-repos')) || [];
+    const recentlyUsedList = JSON.parse(localStorage.getItem('recently-used-list')) || [];
 
     return (
       <div className='scroll-wrapper' onScroll={this.onScroll}>
@@ -520,16 +521,10 @@ class FileChooser extends React.Component {
           )}
           {mode === 'recently_used' && (
             <div className="list-view">
-              <RepoListView
-                initToShowChildren={false}
-                repoList={recentlyUsedRepos}
+              <RecentlyUsedListView
+                recentlyUsedList={recentlyUsedList}
                 selectedRepo={selectedRepo}
-                selectedPath={selectedPath}
-                onRepoItemClick={this.onRepoItemClick}
                 onDirentItemClick={this.onDirentItemClick}
-                isShowFile={isShowFile}
-                fileSuffixes={fileSuffixes}
-                selectedItemInfo={selectedItemInfo}
               />
             </div>
           )}
