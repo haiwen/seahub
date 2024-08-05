@@ -110,6 +110,7 @@
 
 .file-chooser-search-input .search-input {
   width: 100%;
+  height: 2.375rem;
 }
 
 .file-chooser-table td {
