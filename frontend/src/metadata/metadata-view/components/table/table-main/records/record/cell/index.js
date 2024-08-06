@@ -102,6 +102,14 @@ const Cell = React.memo(({
     event.preventDefault();
   }, []);
 
+  const onContextMenu = useCallback((event) => {
+    if (column.idx !== 0) return;
+    const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
+
+    if (!isFunction(cellMetaData.onContextMenu)) return;
+    cellMetaData.onContextMenu(event, cell,);
+  }, [cellMetaData, column, groupRecordIndex, recordIndex]);
+
   const getEvents = useCallback(() => {
     return {
       onClick: onCellClick,
@@ -110,9 +118,10 @@ const Cell = React.memo(({
       onMouseEnter: onCellMouseEnter,
       onMouseMove: onCellMouseMove,
       onMouseLeave: onCellMouseLeave,
-      onDragOver: onDragOver
+      onDragOver: onDragOver,
+      onContextMenu: onContextMenu,
     };
-  }, [onCellClick, onCellDoubleClick, onCellMouseDown, onCellMouseEnter, onCellMouseMove, onCellMouseLeave, onDragOver]);
+  }, [onCellClick, onCellDoubleClick, onCellMouseDown, onCellMouseEnter, onCellMouseMove, onCellMouseLeave, onDragOver, onContextMenu]);
 
   const getOldRowData = useCallback((originalOldCellValue) => {
     const { key: columnKey, name: columnName } = column;

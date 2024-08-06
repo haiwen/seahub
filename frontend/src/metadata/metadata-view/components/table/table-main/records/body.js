@@ -15,7 +15,6 @@ const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
-
 class RecordsBody extends Component {
 
   static defaultProps = {
@@ -47,7 +46,7 @@ class RecordsBody extends Component {
   componentDidMount() {
     this.props.onRef(this);
     window.sfMetadataBody = this;
-    document.addEventListener('contextmenu', this.handleContextMenu);
+    // document.addEventListener('contextmenu', this.handleContextMenu);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -58,7 +57,7 @@ class RecordsBody extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('contextmenu', this.handleContextMenu);
+    // document.removeEventListener('contextmenu', this.handleContextMenu);
 
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
@@ -414,6 +413,7 @@ class RecordsBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
+      onContextMenu: this.props.onFileNameContextMenu
     };
     return this.cellMetaData;
   };
@@ -583,6 +583,7 @@ RecordsBody.propTypes = {
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   editorPortalTarget: PropTypes.instanceOf(Element),
+  recordGetter: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
   modifyRecord: PropTypes.func.isRequired,
@@ -605,6 +606,8 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
+  onRowExpand: PropTypes.func,
+  onFileNameContextMenu: PropTypes.func,
 };
 
 export default RecordsBody;
