@@ -28,6 +28,19 @@ body {
   border-radius: 3px;
 }
 
+.file-view-header .file-toolbar-btn.disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.file-view-header .file-toolbar-btn.disabled:hover {
+  background-color: #fff;
+}
+
+.file-view-header .file-toolbar-btn#save-file {
+  color: #eb8205;
+}
+
 .file-view-header .file-toolbar-more-operations {
   height: 38px;
   padding: 0;

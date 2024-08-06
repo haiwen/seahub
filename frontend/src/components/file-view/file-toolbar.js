@@ -160,7 +160,7 @@ class FileToolbar extends React.Component {
                   onClick={this.props.onSave}
                 />
                 :
-                <div type='button' className='file-toolbar-btn' disabled>
+                <div type='button' className='file-toolbar-btn disabled'>
                   <Icon symbol="save" />
                 </div>
               ))}
