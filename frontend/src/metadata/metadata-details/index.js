@@ -5,8 +5,11 @@ import metadataAPI from '../api';
 import Column from '../metadata-view/model/metadata/column';
 import { normalizeFields, getCellValueByColumn } from './utils';
 import DetailItem from '../../components/dirent-detail/detail-item';
+import toaster from '../../components/toast';
 
-const MetadataDetails = ({ repoID, filePath, direntType, emptyTip }) => {
+import './index.css';
+
+const MetadataDetails = ({ repoID, filePath, direntType, emptyTip, ...params }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
 
@@ -25,6 +28,8 @@ const MetadataDetails = ({ repoID, filePath, direntType, emptyTip }) => {
       setMetadata({ record, fields });
       setLoading(false);
     }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       setLoading(false);
     });
   }, [repoID, filePath, direntType]);
@@ -34,7 +39,7 @@ const MetadataDetails = ({ repoID, filePath, direntType, emptyTip }) => {
   if (!record._id) return null;
   return fields.map(field => {
     const value = getCellValueByColumn(record, field);
-    return (<DetailItem key={field.key} field={field} value={value} emptyTip={emptyTip}/>);
+    return (<DetailItem key={field.key} field={field} value={value} emptyTip={emptyTip} { ...params } />);
   });
 };
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState, useRef, useCallback, useEffect } from 'react';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { useMetadata } from './metadata';
 import { mediaUrl } from '../../../utils/constants';
 import { isValidEmail } from '../_basic';
@@ -9,7 +9,6 @@ const CollaboratorsContext = React.createContext(null);
 export const CollaboratorsProvider = ({
   children,
 }) => {
-  const collaboratorsCacheRef = useRef({});
   const [collaboratorsCache, setCollaboratorsCache] = useState({});
   const [collaborators, setCollaborators] = useState([]);
 
@@ -26,10 +25,9 @@ export const CollaboratorsProvider = ({
   }, [collaborators, collaboratorsCache]);
 
   const updateCollaboratorsCache = useCallback((user) => {
-    const newCollaboratorsCache = { ...collaboratorsCacheRef.current, [user.email]: user };
-    collaboratorsCacheRef.current = newCollaboratorsCache;
+    const newCollaboratorsCache = { ...collaboratorsCache, [user.email]: user };
     setCollaboratorsCache(newCollaboratorsCache);
-  }, []);
+  }, [collaboratorsCache]);
 
   const getCollaborator = useCallback((email) => {
     let collaborator = collaborators && collaborators.find(c => c.email === email);

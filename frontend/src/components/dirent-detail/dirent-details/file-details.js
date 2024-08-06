@@ -11,7 +11,7 @@ import { Utils } from '../../../utils/utils';
 import { MetadataDetails } from '../../../metadata';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
-const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
+const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList, ...params }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
 
   const parent = useMemo(() => getFileParent(repoInfo, dirent, path), [repoInfo, dirent, path]);
@@ -47,7 +47,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
         </DetailItem>
       )}
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="file" />
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="file" { ...params } />
       )}
       {isEditFileTagShow &&
         <EditFileTagPopover

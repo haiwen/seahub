@@ -20,7 +20,7 @@ const DetailItem = ({ field, value, valueId, valueClick, children, ...params }) 
         <span className="dirent-detail-item-name">{field.name}</span>
       </div>
       <div className={classnames('dirent-detail-item-value', { 'editable': valueClick })} id={valueId} onClick={valueClick}>
-        {children ? children : (<Formatter { ...params } field={field} value={value}/>)}
+        {children ? children : (<Formatter { ...params } field={field} value={value} />)}
       </div>
     </div>
   );

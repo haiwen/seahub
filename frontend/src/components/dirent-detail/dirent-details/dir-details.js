@@ -6,7 +6,7 @@ import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
 import { MetadataDetails } from '../../../metadata';
 
-const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail }) => {
+const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
   const parent = useMemo(() => getFileParent(repoInfo, dirent, path), [repoInfo, dirent, path]);
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
 
@@ -22,7 +22,7 @@ const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail }) => {
       }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" />
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
       )}
     </>
   );

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot } from '../../../utils/constants';
+import { siteRoot, mediaUrl } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -9,29 +9,53 @@ import Header from '../header';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
+import metadataAPI from '../../../metadata/api';
+import { User } from '../../../metadata/metadata-view/model';
+import { UserService } from '../../../metadata/metadata-view/_basic';
 
 import './index.css';
 
-const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
-  const [direntDetail, setDirentDetail] = useState('');
-  const [dirent, setDirent] = useState(null);
+class DirentDetails extends React.Component {
 
-  const updateDetailView = useCallback((repoID, dirent, direntPath) => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      direntDetail: '',
+      dirent: null,
+      collaborators: [],
+      collaboratorsCache: {},
+    };
+    this.userService = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
+  }
+
+  updateCollaboratorsCache = (user) => {
+    const newCollaboratorsCache = { ...this.state.collaboratorsCache, [user.email]: user };
+    this.setState({ collaboratorsCache: newCollaboratorsCache });
+  };
+
+  loadCollaborators = () => {
+    metadataAPI.getCollaborators(this.props.repoID).then(res => {
+      const collaborators = Array.isArray(res?.data?.user_list) ? res.data.user_list.map(user => new User(user)) : [];
+      this.setState({ collaborators });
+    }).catch(error => {
+      this.setState({ collaborators: [] });
+    });
+  };
+
+  updateDetail = (repoID, dirent, direntPath) => {
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
     seafileAPI[apiName](repoID, direntPath).then(res => {
-      setDirentDetail(res.data);
-      setDirent(dirent);
+      this.setState(({ direntDetail: res.data, dirent }));
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, []);
+  };
 
-  useEffect(() => {
-    setDirent(null);
-    if (propsDirent) {
-      const direntPath = Utils.joinPath(path, propsDirent.name);
-      updateDetailView(repoID, propsDirent, direntPath);
+  loadDetail = (repoID, dirent, path) => {
+    if (dirent) {
+      const direntPath = Utils.joinPath(path, dirent.name);
+      this.updateDetail(repoID, dirent, direntPath);
       return;
     }
     const dirPath = Utils.getDirName(path);
@@ -41,73 +65,92 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
       if (folderDirent) {
         folderDirent = new Dirent(folderDirent);
       }
-      updateDetailView(repoID, folderDirent, path);
+      this.updateDetail(repoID, folderDirent, path);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsDirent, path, repoID]);
+  };
 
-  if (!dirent) return null;
-  const direntName = dirent.name;
-  const smallIconUrl = Utils.getDirentIcon(dirent);
-  // let bigIconUrl = Utils.getDirentIcon(dirent, true);
-  let bigIconUrl = '';
-  const isImg = Utils.imageCheck(dirent.name);
-  // const isVideo = Utils.videoCheck(dirent.name);
-  if (isImg) {
-    bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+  componentDidMount() {
+    this.loadCollaborators();
+    this.loadDetail(this.props.repoID, this.props.dirent, this.props.path);
   }
 
-  return (
-    <div className="detail-container">
-      <Header title={direntName} icon={smallIconUrl} onClose={onClose} />
-      <div className="detail-body dirent-info">
-        {isImg && (
-          <div className="detail-image-thumbnail">
-            <img src={bigIconUrl} alt="" className="thumbnail" />
-          </div>
-        )}
-        {direntDetail && (
-          <div className="detail-content">
-            {dirent.type !== 'file' ? (
-              <DirDetails
-                repoID={repoID}
-                repoInfo={currentRepoInfo}
-                dirent={dirent}
-                direntDetail={direntDetail}
-                path={path}
-              />
-            ) : (
-              <FileDetails
-                repoID={repoID}
-                repoInfo={currentRepoInfo}
-                dirent={dirent}
-                path={path}
-                direntDetail={direntDetail}
-                repoTags={repoTags}
-                fileTagList={dirent ? dirent.file_tags : fileTags}
-                onFileTagChanged={onFileTagChanged}
-              />
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}, (props, nextProps) => {
-  const { dirent, path, repoID, currentRepoInfo, repoTags, fileTags } = props;
-  const isChanged = (
-    !ObjectUtils.isSameObject(currentRepoInfo, nextProps.currentRepoInfo) ||
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { dirent, path, repoID, currentRepoInfo, repoTags, fileTags } = this.props;
+    if (!ObjectUtils.isSameObject(currentRepoInfo, nextProps.currentRepoInfo) ||
     !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
     JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
     JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
     path !== nextProps.path ||
-    repoID !== nextProps.repoID
-  );
-  return !isChanged;
-});
+    repoID !== nextProps.repoID) {
+      this.setState({ dirent: null }, () => {
+        this.loadDetail(nextProps.repoID, nextProps.dirent, nextProps.path);
+      });
+    }
+  }
+
+  render() {
+    const { dirent, direntDetail, collaborators, collaboratorsCache } = this.state;
+    if (!dirent) return null;
+    const { repoID, path, fileTags } = this.props;
+    const direntName = dirent.name;
+    const smallIconUrl = Utils.getDirentIcon(dirent);
+    // let bigIconUrl = Utils.getDirentIcon(dirent, true);
+    let bigIconUrl = '';
+    const isImg = Utils.imageCheck(dirent.name);
+    // const isVideo = Utils.videoCheck(dirent.name);
+    if (isImg) {
+      bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    }
+
+    return (
+      <div className="detail-container">
+        <Header title={direntName} icon={smallIconUrl} onClose={this.props.onClose} />
+        <div className="detail-body dirent-info">
+          {isImg && (
+            <div className="detail-image-thumbnail">
+              <img src={bigIconUrl} alt="" className="thumbnail" />
+            </div>
+          )}
+          {direntDetail && (
+            <div className="detail-content">
+              {dirent.type !== 'file' ? (
+                <DirDetails
+                  repoID={repoID}
+                  repoInfo={this.props.currentRepoInfo}
+                  dirent={dirent}
+                  direntDetail={direntDetail}
+                  path={path}
+                  collaborators={collaborators}
+                  collaboratorsCache={collaboratorsCache}
+                  updateCollaboratorsCache={this.updateCollaboratorsCache}
+                  queryUserAPI={this.userService?.queryUser}
+                />
+              ) : (
+                <FileDetails
+                  repoID={repoID}
+                  repoInfo={this.props.currentRepoInfo}
+                  dirent={dirent}
+                  path={path}
+                  direntDetail={direntDetail}
+                  repoTags={this.props.repoTags}
+                  fileTagList={dirent ? dirent.file_tags : fileTags}
+                  onFileTagChanged={this.props.onFileTagChanged}
+                  collaborators={collaborators}
+                  collaboratorsCache={collaboratorsCache}
+                  updateCollaboratorsCache={this.updateCollaboratorsCache}
+                  queryUserAPI={this.userService?.queryUser}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+}
 
 DirentDetails.propTypes = {
   repoID: PropTypes.string.isRequired,
