@@ -25,6 +25,7 @@ import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../.
 import './index.css';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   index: PropTypes.number.isRequired,
   filter: PropTypes.object.isRequired,
   filterColumn: PropTypes.object.isRequired,
@@ -245,6 +246,7 @@ class FilterItem extends React.Component {
   };
 
   getInputComponent = (type) => {
+    const { readOnly } = this.props;
     const { filterTerm } = this.state;
     if (type === 'text') {
       return (
@@ -252,13 +254,16 @@ class FilterItem extends React.Component {
           value={filterTerm}
           onChange={this.onFilterTermTextChanged}
           autoFocus={false}
+          disabled={readOnly}
           className='text-truncate'
         />
       );
     } else if (type === 'checkbox') {
+      const { readOnly } = this.props;
       return (
         <input
           type="checkbox"
+          disabled={readOnly}
           checked={filterTerm}
           onChange={this.onFilterTermCheckboxChanged}
         />
@@ -267,7 +272,7 @@ class FilterItem extends React.Component {
   };
 
   renderConjunction = () => {
-    const { index, filterConjunction, conjunctionOptions } = this.props;
+    const { index, readOnly, filterConjunction, conjunctionOptions } = this.props;
     switch (index) {
       case 0: {
         return null;
@@ -276,6 +281,7 @@ class FilterItem extends React.Component {
         const activeConjunction = FilterItemUtils.getActiveConjunctionOption(filterConjunction);
         return (
           <CustomizeSelect
+            readOnly={readOnly}
             value={activeConjunction}
             options={conjunctionOptions}
             onSelectOption={this.onSelectConjunction}
@@ -356,7 +362,7 @@ class FilterItem extends React.Component {
   };
 
   renderFilterTerm = (filterColumn) => {
-    const { index, filter, collaborators } = this.props;
+    const { index, filter, collaborators, readOnly } = this.props;
     const { type } = filterColumn;
     const { filter_term, filter_predicate, filter_term_modifier } = filter;
     // predicate is empty or not empty
@@ -381,6 +387,7 @@ class FilterItem extends React.Component {
         if (filter_term_modifier === 'exact_date') {
           return (
             <FilterCalendar
+              readOnly={readOnly}
               onChange={this.onFilterExactDateChanged}
               value={this.state.filterTerm}
               filterColumn={filterColumn}
@@ -409,6 +416,7 @@ class FilterItem extends React.Component {
         const creators = collaborators;
         return (
           <CollaboratorFilter
+            readOnly={readOnly}
             filterIndex={index}
             filterTerm={filter_term || []}
             collaborators={creators}
@@ -444,6 +452,7 @@ class FilterItem extends React.Component {
 
         return (
           <CustomizeSelect
+            readOnly={readOnly}
             className="sf-metadata-selector-single-select"
             value={selectedOptionDom}
             options={dataOptions || []}
@@ -461,6 +470,7 @@ class FilterItem extends React.Component {
         const allCollaborators = this.getAllCollaborators();
         return (
           <CollaboratorFilter
+            readOnly={readOnly}
             filterIndex={index}
             filterTerm={filter_term || []}
             filter_predicate={filter_predicate}
@@ -501,7 +511,7 @@ class FilterItem extends React.Component {
 
   render() {
     const { filterPredicateOptions, filterTermModifierOptions } = this;
-    const { filter, filterColumn, filterColumnOptions } = this.props;
+    const { filter, filterColumn, filterColumnOptions, readOnly } = this.props;
     const { filter_predicate, filter_term_modifier } = filter;
     const activeColumn = FilterItemUtils.generatorColumnOption(filterColumn);
     const activePredicate = FilterItemUtils.generatorPredicateOption(filter_predicate);
@@ -521,9 +531,11 @@ class FilterItem extends React.Component {
 
     return (
       <div className="filter-item">
-        <div className="delete-filter" onClick={this.onDeleteFilter}>
-          <Icon iconName="fork-number"/>
-        </div>
+        {!readOnly && (
+          <div className="delete-filter" onClick={this.onDeleteFilter}>
+            <Icon iconName="fork-number"/>
+          </div>
+        )}
         <div className="condition">
           <div className="filter-conjunction">
             {this.renderConjunction()}
@@ -531,6 +543,7 @@ class FilterItem extends React.Component {
           <div className="filter-container">
             <div className="filter-column">
               <CustomizeSelect
+                readOnly={readOnly}
                 value={activeColumn}
                 options={filterColumnOptions}
                 onSelectOption={this.onSelectColumn}
@@ -541,6 +554,7 @@ class FilterItem extends React.Component {
             </div>
             <div className={`filter-predicate ml-2 ${_isCheckboxColumn ? 'filter-checkbox-predicate' : ''}`}>
               <CustomizeSelect
+                readOnly={readOnly}
                 value={activePredicate}
                 options={filterPredicateOptions}
                 onSelectOption={this.onSelectPredicate}
@@ -549,6 +563,7 @@ class FilterItem extends React.Component {
             {isDateColumn(filterColumn) && isNeedShowTermModifier && (
               <div className="filter-term-modifier ml-2">
                 <CustomizeSelect
+                  readOnly={readOnly}
                   value={activeTermModifier}
                   options={filterTermModifierOptions}
                   onSelectOption={this.onSelectTermModifier}

@@ -13,7 +13,7 @@ import Groupbys from './groupbys';
 
 import './index.css';
 
-const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, target, placement, columns }) => {
+const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onChange, target, placement, columns }) => {
   const [groupbys, setGroupbys] = useState(propsGroupBys);
   const isSelectOpenRef = useState(false);
   const popoverRef = useRef(null);
@@ -107,8 +107,8 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, targe
       boundariesElement={document.body}
     >
       <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-groupbys">
-        <Groupbys groupbys={groupbys} columns={columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
-        {(groupbys.length < MAX_GROUP_LEVEL) && (
+        <Groupbys readOnly={readOnly} groupbys={groupbys} columns={columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
+        {!readOnly && (groupbys.length < MAX_GROUP_LEVEL) && (
           <CustomizeAddTool
             className="popover-add-tool"
             callBack={addGroupby}
@@ -128,6 +128,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, hidePopover, onChange, targe
 };
 
 GroupbysPopover.propTypes = {
+  readOnly: PropTypes.bool,
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.node]),
   groupbys: PropTypes.array,
   columns: PropTypes.array,

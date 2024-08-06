@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { SfFilterCalendar } from '@seafile/sf-metadata-ui-component';
 import { getDateColumnFormat } from '../../../../utils/column-utils';
 
-const FilterCalendar = ({ value, filterColumn, isReadOnly, onChange }) => {
+const FilterCalendar = ({ value, filterColumn, readOnly, onChange }) => {
   const format = getDateColumnFormat(filterColumn).trim();
   const lang = window.sfMetadataContext.getSetting('lang');
   return (
     <SfFilterCalendar
-      isReadOnly={isReadOnly}
+      isReadOnly={readOnly}
       format={format}
       lang={lang}
       value={value}
@@ -22,7 +22,7 @@ FilterCalendar.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   filterColumn: PropTypes.object.isRequired,
-  isReadOnly: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 export default FilterCalendar;

@@ -145,7 +145,7 @@ class FilterPopover extends Component {
   };
 
   render() {
-    const { target, columns, placement } = this.props;
+    const { readOnly, target, columns, placement } = this.props;
     const { filters, filterConjunction } = this.state;
     const canAddFilter = columns.length > 0;
     return (
@@ -169,17 +169,19 @@ class FilterPopover extends Component {
               deleteFilter={this.deleteFilter}
               updateFilterConjunction={this.updateFilterConjunction}
               collaborators={this.props.collaborators}
-              readOnly={false}
+              readOnly={readOnly}
               scheduleUpdate={scheduleUpdate}
               isPre={this.props.isPre}
             />
-            <CustomizeAddTool
-              className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
-              callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
-              footerName={gettext('Add filter')}
-              addIconClassName="popover-add-icon"
-            />
-            {this.isNeedSubmit() && (
+            {!readOnly && (
+              <CustomizeAddTool
+                className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
+                callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
+                footerName={gettext('Add filter')}
+                addIconClassName="popover-add-icon"
+              />
+            )}
+            {!readOnly && this.isNeedSubmit() && (
               <div className='sf-metadata-filter-popover-footer'>
                 <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
                 <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitFilters}>{gettext('Submit')}</Button>
@@ -197,7 +199,7 @@ FilterPopover.propTypes = {
   filtersClassName: PropTypes.string,
   target: PropTypes.string.isRequired,
   isNeedSubmit: PropTypes.bool,
-  isLocked: PropTypes.bool,
+  readOnly: PropTypes.bool,
   columns: PropTypes.array.isRequired,
   filterConjunction: PropTypes.string,
   filters: PropTypes.array,

@@ -6,15 +6,16 @@ import html5DragDropContext from '../../../../../../pages/wiki2/wiki-nav/html5Dr
 import { gettext } from '../../../../utils';
 import GroupbyItem from './groupby-item';
 
-const Groupbys = ({ groupbys, columns, onDelete, onUpdate, onMove }) => {
+const Groupbys = ({ readOnly, groupbys, columns, onDelete, onUpdate, onMove }) => {
   const isEmpty = useMemo(() => {
     if (!Array.isArray(groupbys) || groupbys.length === 0) return true;
     return false;
   }, [groupbys]);
   const showDragBtn = useMemo(() => {
+    if (readOnly) return false;
     if (!Array.isArray(groupbys) || groupbys.length === 0) return false;
     return groupbys.length > 1;
-  }, [groupbys]);
+  }, [readOnly, groupbys]);
 
   return (
     <div className={classnames('groupbys-list', { 'empty-groupbys-container': isEmpty })}>
@@ -24,6 +25,7 @@ const Groupbys = ({ groupbys, columns, onDelete, onUpdate, onMove }) => {
           <GroupbyItem
             key={index}
             index={index}
+            readOnly={readOnly}
             showDragBtn={showDragBtn}
             groupby={groupby}
             columns={columns}

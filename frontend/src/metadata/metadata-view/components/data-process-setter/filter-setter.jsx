@@ -7,7 +7,9 @@ import { getValidFilters, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../../../utils/constants';
 import { FilterPopover } from '../popover';
 
-const FilterSetter = ({ columns,
+const FilterSetter = ({
+  readOnly,
+  columns,
   wrapperClass,
   filters: propsFilters,
   isNeedSubmit,
@@ -67,6 +69,7 @@ const FilterSetter = ({ columns,
           placement="bottom-end"
           filtersClassName={filtersClassName}
           target={target}
+          readOnly={readOnly}
           isNeedSubmit={isNeedSubmit}
           columns={columns}
           collaborators={collaborators}
@@ -83,6 +86,7 @@ const FilterSetter = ({ columns,
 };
 
 FilterSetter.propTypes = {
+  readOnly: PropTypes.bool,
   wrapperClass: PropTypes.string,
   filtersClassName: PropTypes.string,
   target: PropTypes.string,
