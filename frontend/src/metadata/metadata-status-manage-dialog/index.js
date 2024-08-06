@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import Switch from '../../components/common/switch';
@@ -45,7 +46,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggle, submi
           disabled={submitting}
           size="large"
           textPosition="right"
-          className="change-metadata-status-management w-100"
+          className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
           onChange={onValueChange}
           placeholder={gettext('Enable extended properties')}
         />

@@ -6,6 +6,11 @@
   padding-left: 0;
 }
 
+.metadata-status-management-dialog .change-metadata-status-management:not(.disabled) .custom-switch:hover,
+.metadata-status-management-dialog .change-metadata-status-management:not(.disabled) .custom-switch:hover * {
+  cursor: pointer;
+}
+
 .metadata-status-management-dialog .tip {
   font-size: 12px;
 }
