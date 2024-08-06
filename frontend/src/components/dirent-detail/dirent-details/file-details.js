@@ -9,8 +9,9 @@ import EditFileTagPopover from '../../popover/edit-filetag-popover';
 import FileTagList from '../../file-tag-list';
 import { Utils } from '../../../utils/utils';
 import { MetadataDetails } from '../../../metadata';
+import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
-const FileDetails = ({ repoID, repoInfo, dirent, path, direntDetail, direntType, onFileTagChanged, repoTags, fileTagList }) => {
+const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
 
   const parent = useMemo(() => getFileParent(repoInfo, dirent, path), [repoInfo, dirent, path]);
@@ -46,7 +47,7 @@ const FileDetails = ({ repoID, repoInfo, dirent, path, direntDetail, direntType,
         </DetailItem>
       )}
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType={direntType} />
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="file" />
       )}
       {isEditFileTagShow &&
         <EditFileTagPopover
@@ -61,13 +62,22 @@ const FileDetails = ({ repoID, repoInfo, dirent, path, direntDetail, direntType,
       }
     </>
   );
-};
+}, (props, nextProps) => {
+  const { repoID, repoInfo, dirent, path, direntDetail } = props;
+  const isChanged = (
+    repoID !== nextProps.repoID ||
+    path !== nextProps.path ||
+    !ObjectUtils.isSameObject(repoInfo, nextProps.repoInfo) ||
+    !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
+    !ObjectUtils.isSameObject(direntDetail, nextProps.direntDetail)
+  );
+  return !isChanged;
+});
 
 FileDetails.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   dirent: PropTypes.object,
-  direntType: PropTypes.string,
   path: PropTypes.string,
   direntDetail: PropTypes.object,
   onFileTagChanged: PropTypes.func,

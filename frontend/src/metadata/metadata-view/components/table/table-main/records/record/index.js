@@ -175,14 +175,15 @@ class Record extends React.Component {
   };
 
   getRecordStyle = () => {
-    const { isGroupView, height } = this.props;
-    let style = {
-      height: height + 'px',
-    };
+    const { isGroupView, height, isLastRecord } = this.props;
+    let style = { height: isLastRecord ? height - 1 : height };
     if (isGroupView) {
       const { top, left } = this.props;
-      style.top = top + 'px';
-      style.left = left + 'px';
+      style.top = top;
+      style.left = left;
+      if (isLastRecord) {
+        style.height = height + 1;
+      }
     }
     return style;
   };

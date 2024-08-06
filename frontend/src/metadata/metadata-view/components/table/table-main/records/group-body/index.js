@@ -15,7 +15,7 @@ import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } f
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../../constants';
 import { addClassName, removeClassName } from '../../../../../utils';
 
-const ROW_HEIGHT = 32;
+const ROW_HEIGHT = 33;
 const GROUP_OVER_SCAN_ROWS = 10;
 const MAX_ANIMATION_ROWS = 50;
 const LOCAL_FOLDED_GROUP_KEY = 'path_folded_group';

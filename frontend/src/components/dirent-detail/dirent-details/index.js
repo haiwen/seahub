@@ -8,18 +8,17 @@ import Dirent from '../../../models/dirent';
 import Header from '../header';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
+import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
 import './index.css';
 
-const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRepoInfo, repoTags, fileTags, onItemDetailsClose, onFileTagChanged }) => {
-  const [direntType, setDirentType] = useState('');
+const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
   const [direntDetail, setDirentDetail] = useState('');
   const [dirent, setDirent] = useState(null);
 
   const updateDetailView = useCallback((repoID, dirent, direntPath) => {
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
     seafileAPI[apiName](repoID, direntPath).then(res => {
-      setDirentType(dirent.type === 'file' ? 'file' : 'dir');
       setDirentDetail(res.data);
       setDirent(dirent);
     }).catch(error => {
@@ -29,7 +28,6 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
   }, []);
 
   useEffect(() => {
-    console.log('index 组件更新');
     setDirent(null);
     if (propsDirent) {
       const direntPath = Utils.joinPath(path, propsDirent.name);
@@ -39,13 +37,9 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
     const dirPath = Utils.getDirName(path);
     seafileAPI.listDir(repoID, dirPath).then(res => {
       const direntList = res.data.dirent_list;
-      let folderDirent = null;
-      for (let i = 0; i < direntList.length; i++) {
-        let dirent = direntList[i];
-        if (dirent.parent_dir + dirent.name === path) {
-          folderDirent = new Dirent(dirent);
-          break;
-        }
+      let folderDirent = direntList.find(item => item.parent_dir + item.name === path) || null;
+      if (folderDirent) {
+        folderDirent = new Dirent(folderDirent);
       }
       updateDetailView(repoID, folderDirent, path);
     }).catch(error => {
@@ -53,22 +47,22 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
       toaster.danger(errMessage);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsDirent, path]);
+  }, [propsDirent, path, repoID]);
 
   if (!dirent) return null;
   const direntName = dirent.name;
   const smallIconUrl = Utils.getDirentIcon(dirent);
-  // let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
+  // let bigIconUrl = Utils.getDirentIcon(dirent, true);
   let bigIconUrl = '';
   const isImg = Utils.imageCheck(dirent.name);
-  // const isVideo = dirent ? Utils.videoCheck(dirent.name) : Utils.videoCheck(folderDirent.name);
+  // const isVideo = Utils.videoCheck(dirent.name);
   if (isImg) {
     bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
   }
 
   return (
     <div className="detail-container">
-      <Header title={direntName} icon={smallIconUrl} onClose={onItemDetailsClose} />
+      <Header title={direntName} icon={smallIconUrl} onClose={onClose} />
       <div className="detail-body dirent-info">
         {isImg && (
           <div className="detail-image-thumbnail">
@@ -77,12 +71,11 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
         )}
         {direntDetail && (
           <div className="detail-content">
-            {direntType === 'dir' ? (
+            {dirent.type !== 'file' ? (
               <DirDetails
                 repoID={repoID}
                 repoInfo={currentRepoInfo}
                 dirent={dirent}
-                direntType={direntType}
                 direntDetail={direntDetail}
                 path={path}
               />
@@ -91,7 +84,6 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
                 repoID={repoID}
                 repoInfo={currentRepoInfo}
                 dirent={dirent}
-                direntType={direntType}
                 path={path}
                 direntDetail={direntDetail}
                 repoTags={repoTags}
@@ -104,6 +96,17 @@ const DirentDetails = React.memo(({ dirent: propsDirent, path, repoID, currentRe
       </div>
     </div>
   );
+}, (props, nextProps) => {
+  const { dirent, path, repoID, currentRepoInfo, repoTags, fileTags } = props;
+  const isChanged = (
+    !ObjectUtils.isSameObject(currentRepoInfo, nextProps.currentRepoInfo) ||
+    !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
+    JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
+    JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
+    path !== nextProps.path ||
+    repoID !== nextProps.repoID
+  );
+  return !isChanged;
 });
 
 DirentDetails.propTypes = {
@@ -111,9 +114,8 @@ DirentDetails.propTypes = {
   dirent: PropTypes.object,
   path: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  onItemDetailsClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  direntDetailPanelTab: PropTypes.string,
   repoTags: PropTypes.array,
   fileTags: PropTypes.array,
 };

@@ -416,7 +416,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
 
     if (!this.state.isSessionExpired) {
-      // update stste
+      // update state
       this.setState({
         isDirentListLoading: true,
         isViewFile: false,
@@ -494,7 +494,7 @@ class LibContentView extends React.Component {
 
   showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
-    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata', metadataViewId: viewId });
+    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata', metadataViewId: viewId, isDirentDetailShow: false });
     const repoInfo = this.state.currentRepoInfo;
     const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name);
     window.history.pushState({ url: url, path: '' }, '', url);

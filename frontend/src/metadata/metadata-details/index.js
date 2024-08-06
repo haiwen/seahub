@@ -4,10 +4,9 @@ import { Utils } from '../../utils/utils';
 import metadataAPI from '../api';
 import Column from '../metadata-view/model/metadata/column';
 import { normalizeFields, getCellValueByColumn } from './utils';
-import toaster from '../../components/toast';
 import DetailItem from '../../components/dirent-detail/detail-item';
 
-const MetadataDetails = React.memo(({ repoID, filePath, direntType, emptyTip }) => {
+const MetadataDetails = ({ repoID, filePath, direntType, emptyTip }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
 
@@ -26,8 +25,6 @@ const MetadataDetails = React.memo(({ repoID, filePath, direntType, emptyTip }) 
       setMetadata({ record, fields });
       setLoading(false);
     }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
       setLoading(false);
     });
   }, [repoID, filePath, direntType]);
@@ -39,7 +36,7 @@ const MetadataDetails = React.memo(({ repoID, filePath, direntType, emptyTip }) 
     const value = getCellValueByColumn(record, field);
     return (<DetailItem key={field.key} field={field} value={value} emptyTip={emptyTip}/>);
   });
-});
+};
 
 MetadataDetails.propTypes = {
   repoID: PropTypes.string,
