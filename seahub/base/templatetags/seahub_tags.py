@@ -116,7 +116,7 @@ FILEEXT_ICON_MAP = {
     'default': 'file.png',
 }
 @register.filter(name='file_icon_filter')
-def file_icon_filter(value, size=None):
+def file_icon_filter(value):
     """Get file icon according to the file postfix"""
     if value.rfind('.') > 0:
         file_ext = value.split('.')[-1].lower()
@@ -124,15 +124,9 @@ def file_icon_filter(value, size=None):
         file_ext = None
 
     if file_ext and file_ext in FILEEXT_ICON_MAP:
-        if size == 192:
-            return '192/' + FILEEXT_ICON_MAP.get(file_ext)
-        else:
-            return '24/' + FILEEXT_ICON_MAP.get(file_ext)
+        return '256/' + FILEEXT_ICON_MAP.get(file_ext)
     else:
-        if size == 192:
-            return '192/' + FILEEXT_ICON_MAP.get('default')
-        else:
-            return '24/' + FILEEXT_ICON_MAP.get('default')
+        return '256/' + FILEEXT_ICON_MAP.get('default')
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {

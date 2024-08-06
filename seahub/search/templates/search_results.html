@@ -64,7 +64,7 @@
         {% else %}
         <li class="search-results-item search-results-file-item ovhd" data-repoid="{{file.repo.id}}" data-path="{{file.fullpath}}" data-name="{{file.name}}">
             <div class="fleft search-results-file-icon-container">
-                <img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter:192 }}" width="36" height="36" alt="{% trans "File"%}" class="search-results-file-icon" />
+                <img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter }}" width="36" height="36" alt="{% trans "File"%}" class="search-results-file-icon" />
             </div>
         {% endif %}
         <div class="main-con">

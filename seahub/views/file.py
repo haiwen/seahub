@@ -1353,7 +1353,7 @@ def view_shared_file(request, fileshare):
 
     file_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % filename
-    icon_path_for_ogp = file_icon_filter(filename, size=192)
+    icon_path_for_ogp = file_icon_filter(filename)
 
     data = {'repo': repo,
             'obj_id': obj_id,
@@ -1609,7 +1609,7 @@ def view_file_via_shared_dir(request, fileshare):
 
     file_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % filename
-    icon_path_for_ogp = file_icon_filter(filename, size=192)
+    icon_path_for_ogp = file_icon_filter(filename)
 
     data = {'repo': repo,
             'obj_id': obj_id,
