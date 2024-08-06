@@ -13,11 +13,31 @@ body {
   flex-shrink: 0;
 }
 
-.file-view-header .btn {
-  color: #666;
+.file-view-header .file-toolbar-btn {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.file-view-header .btn#save-file {
+.file-view-header .file-toolbar-btn:hover {
+  background-color: #EFEFEF;
+  border-radius: 3px;
+}
+
+.file-view-header .file-toolbar-btn.disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.file-view-header .file-toolbar-btn.disabled:hover {
+  background-color: #fff;
+}
+
+.file-view-header .file-toolbar-btn#save-file {
   color: #eb8205;
 }
 

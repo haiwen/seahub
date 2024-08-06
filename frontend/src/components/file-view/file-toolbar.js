@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -114,7 +114,7 @@ class FileToolbar extends React.Component {
 
     return (
       <Fragment>
-        <ButtonGroup className="d-none d-md-block flex-shrink-0 ml-4">
+        <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
           {fileType == 'PDF' && (
             <IconButton
               id="seafile-pdf-print"
@@ -122,13 +122,6 @@ class FileToolbar extends React.Component {
               text={gettext('Print')}
             />
           )}
-          <IconButton
-            id="open-parent-folder"
-            icon="open-folder"
-            text={gettext('Open parent folder')}
-            tag="a"
-            href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
-          />
           {showLockUnlockBtn && (
             <IconButton
               id="lock-unlock-file"
@@ -148,9 +141,9 @@ class FileToolbar extends React.Component {
 
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
-              <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
+              <div type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn'}>
                 <Icon symbol="spinner" />
-              </button>
+              </div>
               :
               (this.props.needSave ?
                 <IconButton
@@ -160,9 +153,9 @@ class FileToolbar extends React.Component {
                   onClick={this.props.onSave}
                 />
                 :
-                <button type='button' className='btn btn-icon btn-secondary' disabled>
+                <div type='button' className='file-toolbar-btn disabled'>
                   <Icon symbol="save" />
-                </button>
+                </div>
               ))}
           {canDownloadFile && (
             <IconButton
@@ -188,11 +181,12 @@ class FileToolbar extends React.Component {
               href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
             />
           )}
-          <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
+          <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
-              className="file-toolbar-more-operations btn-icon"
+              className="file-toolbar-btn"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
+              tag="div"
             >
               <Icon symbol="more-vertical" />
             </DropdownToggle>
@@ -202,9 +196,12 @@ class FileToolbar extends React.Component {
                   {gettext('History')}
                 </a>
               )}
+              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
+                {gettext('Open parent folder')}
+              </a>
             </DropdownMenu>
-          </ButtonDropdown>
-        </ButtonGroup>
+          </Dropdown>
+        </div>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
           <ButtonGroup >
