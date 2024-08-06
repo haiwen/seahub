@@ -715,16 +715,16 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateRecentlyUsedRepos = (destPath) => {
+  updateRecentlyUsedRepos = (repo, destPath) => {
     const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
-    const updatedRecentlyUsed = [destPath, ...recentlyUsed.filter(path => path !== destPath)];
+    const updatedRecentlyUsed = [{ repo: repo, path: destPath }, ...recentlyUsed.filter(item => item.path !== destPath)];
 
     const seen = new Set();
-    const filteredRecentlyUsed = updatedRecentlyUsed.filter(path => {
-      if (seen.has(path)) {
+    const filteredRecentlyUsed = updatedRecentlyUsed.filter(item => {
+      if (seen.has(item.path)) {
         return false;
       } else {
-        seen.add(path);
+        seen.add(item.path);
         return true;
       }
     });
@@ -775,7 +775,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(destDirentPath);
+      this.updateRecentlyUsedRepos(destRepo, destDirentPath);
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
@@ -1247,7 +1247,7 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
 
-      this.updateRecentlyUsedRepos(moveToDirentPath);
+      this.updateRecentlyUsedRepos(destRepo, moveToDirentPath);
 
     }).catch((error) => {
       if (!error.response.data.lib_need_decrypt) {
