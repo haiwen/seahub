@@ -1,10 +1,10 @@
 import React from 'react';
 
-const RecentlyUsedListItem = ({ path, isSelected, onItemClick }) => {
-  const title = path.split('/').pop();
+const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
+  const title = item.path.split('/').pop();
 
   const handleItemClick = () => {
-    onItemClick(path);
+    onItemClick(item.repo, item.path);
   };
 
   return (

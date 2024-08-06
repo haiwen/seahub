@@ -523,7 +523,6 @@ class FileChooser extends React.Component {
             <div className="list-view">
               <RecentlyUsedListView
                 recentlyUsedList={recentlyUsedList}
-                selectedRepo={selectedRepo}
                 onDirentItemClick={this.onDirentItemClick}
               />
             </div>
