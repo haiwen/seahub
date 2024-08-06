@@ -33,7 +33,6 @@ class Wiki2(object):
         self.name = wiki.repo_name
         self.updated_at = timestamp_to_isoformat_timestr(wiki.last_modify)
         self.repo_id = wiki.repo_id
-        
     
     def to_dict(self):
         return {
@@ -45,27 +44,23 @@ class Wiki2(object):
         }
 
 
-class WikiPublish(models.Model):
-    wiki_id = models.CharField(max_length=36, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    visit_times = models.IntegerField(default=0)
-    creator = models.CharField(max_length=255)
-    custom_url = models.CharField(max_length=100, null=True, unique=True)
-    inactive = models.BooleanField(default=False)
-    version = models.IntegerField(default=1)
+class Wiki2Publish(models.Model):
+    repo_id = models.CharField(max_length=36, unique=True, db_index=True)
+    publish_url = models.CharField(max_length=40, null=True, unique=True)
+    username = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    visit_count = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'WikiPublish'
+        db_table = 'wiki_wiki2_publish'
 
     def to_dict(self):
         return {
-            'wiki_id': self.wiki_id,
+            'repo_id': self.repo_id,
+            'publish_url': self.publish_url,
+            'username': self.username,
             'created_at': self.created_at,
-            'visit_times': self.visit_times,
-            'creator': self.creator,
-            'custom_url': self.custom_url,
-            'inactive': self.inactive,
-            'version': self.version
+            'visit_count': self.visit_count
         }
 
 

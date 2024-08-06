@@ -87,11 +87,11 @@ class WikiCardItem extends Component {
   };
 
   publishWiki = (url) => {
-    const urlIndex = url.indexOf('/custom/');
-    const custom_url = url.substring(urlIndex + '/custom/'.length);
-    wikiAPI.publishWiki(this.props.wiki.id, custom_url).then((res) => {
-      const { custom_url } = res.data;
-      this.setState({ customUrl: custom_url });
+    const urlIndex = url.indexOf('/publish/');
+    const publish_url = url.substring(urlIndex + '/publish/'.length);
+    wikiAPI.publishWiki(this.props.wiki.id, publish_url).then((res) => {
+      const { publish_url } = res.data;
+      this.setState({ customUrl: publish_url });
       toaster.success(gettext('Successfully.'));
     }).catch((error) => {
       if (error.response) {
@@ -103,9 +103,9 @@ class WikiCardItem extends Component {
 
   getPublishWikiLink = () => {
     wikiAPI.getPublishWikiLink(this.props.wiki.id).then((res) => {
-      const { custom_url } = res.data;
+      const { publish_url } = res.data;
       this.setState({
-        customUrl: custom_url,
+        customUrl: publish_url,
         isShowPublishDialog: !this.state.isShowPublishDialog,
       });
     }).catch((error) => {
@@ -247,7 +247,12 @@ class WikiCardItem extends Component {
           <div className="wiki-item-owner">
             {isShowAvatar && (isDepartment ? this.renderDept() : this.renderAvatar())}
           </div>
-          <div className="wiki-item-updated-time">{moment(wiki.updated_at).fromNow()}</div>
+          <div className="wiki-item-updated-time">
+            {moment(wiki.updated_at).fromNow()}
+            {wiki.is_published &&
+              <span style={{ marginLeft: '25%' }}>published</span>
+            }
+          </div>
         </div>
         {this.state.isShowDeleteDialog &&
           <ModalPortal>

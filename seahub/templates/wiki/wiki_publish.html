@@ -28,9 +28,9 @@
             isWiki2: true,
             seadocServerUrl: "{{ seadoc_server_url }}",
             seadocAccessToken: "{{ seadoc_access_token }}",
-            permission: "r",
+            permission: "public",
         }
     };
 </script>
-{% render_bundle 'wikiPublish' 'js' %}
+{% render_bundle 'wiki2' 'js' %}
 {% endblock %}

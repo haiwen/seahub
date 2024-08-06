@@ -10,7 +10,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.models import WikiPublish
+from seahub.wiki2.models import Wiki2Publish
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
@@ -80,18 +80,18 @@ def wiki_view(request, wiki_id):
     })
 
 
-@login_required
-def wiki_publish_view(request, custom_url):
+# @login_required
+def wiki_publish_view(request, publish_url):
     """ view wiki page. for wiki2
     1 permission
        All user
     """
     # get wiki_publish object or 404
-    wiki_publish = WikiPublish.objects.filter(custom_url=custom_url).first()
+    wiki_publish = Wiki2Publish.objects.filter(publish_url=publish_url).first()
     if not wiki_publish:
         raise Http404
 
-    wiki_id = wiki_publish.wiki_id
+    wiki_id = wiki_publish.repo_id
     wiki = Wiki.objects.get(wiki_id=wiki_id)
     if not wiki:
         raise Http404
@@ -125,6 +125,13 @@ def wiki_publish_view(request, custom_url):
             logger.warning(e)
 
     last_modified = datetime.fromtimestamp(last_modified)
+    # update visit_count
+    try:
+        current_count = wiki_publish.visit_count
+        wiki_publish.visit_count = current_count + 1
+        wiki_publish.save()
+    except Exception as e:
+        logger.warning(e)
 
     return render(request, "wiki/wiki_publish.html", {
         "wiki": wiki,

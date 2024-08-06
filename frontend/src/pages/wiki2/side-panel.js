@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, isWiki2, wikiId } from '../../utils/constants';
+import { gettext, isWiki2, wikiId, publishPermission } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -146,17 +146,24 @@ class SidePanel extends Component {
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
-          <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
-            <i className='sf3-font sf3-font-new-page'></i>
-          </div>
-          <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
-            {gettext('New page')}
-          </UncontrolledTooltip>
+          {publishPermission !== 'public' &&
+            <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
+              <i className='sf3-font sf3-font-new-page'></i>
+            </div>
+          }
+          {publishPermission !== 'public' &&
+            <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
+              {gettext('New page')}
+            </UncontrolledTooltip>
+          }
+
         </div>
         <div className="wiki2-side-nav">
           {isLoading ? <Loading /> : this.renderWikiNav()}
         </div>
-        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+        {publishPermission !== 'public' &&
+          <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+        }
       </div>
     );
   }

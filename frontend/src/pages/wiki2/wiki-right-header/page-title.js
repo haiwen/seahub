@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Input } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
+import { gettext, publishPermission } from '../../../utils/constants';
 import { WIKI_COVER_LIST } from '../constant';
 import PageIcon from './page-icon';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
@@ -103,13 +103,13 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}
       <div className={classnames('wiki-page-controller', { 'show': isShowController })}>
-        {!currentPageConfig.icon && (
+        {!currentPageConfig.icon && publishPermission !== 'public' && (
           <div className='wiki-page-controller-item' onClick={handleAddIcon}>
             <i className='sf3-font sf3-font-icon'></i>
             <span className='text'>{gettext('Add icon')}</span>
           </div>
         )}
-        {!currentPageConfig.cover_img_url && (
+        {!currentPageConfig.cover_img_url && publishPermission !== 'public' && (
           <div className='wiki-page-controller-item' onClick={handleAddCover}>
             <i className='sf3-font sf3-font-image'></i>
             <span className='text'>{gettext('Add cover')}</span>

@@ -206,7 +206,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.ai.apis import Search
 from seahub.wiki2.views import wiki_view, wiki_publish_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
-    Wiki2DuplicatePageView, Wiki2PublishView
+    Wiki2DuplicatePageView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView
@@ -539,8 +539,10 @@ urlpatterns = [
     re_path(r'^api/v2.1/wikis2/$', Wikis2View.as_view(), name='api-v2.1-wikis2'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/$', Wiki2View.as_view(), name='api-v2.1-wiki2'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/config/$', Wiki2ConfigView.as_view(), name='api-v2.1-wiki2-config'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/config/', Wiki2PublishConfigView.as_view(), name='api-v2.1-wiki2-publish-config'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PublishPageView.as_view(), name='api-v2.1-wiki2-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/custom/', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
     ## user::drafts
@@ -729,7 +731,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/$', wiki_view, name='wiki'),
-    re_path(r'^publish/custom/(?P<custom_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
+    re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('group/', include('seahub.group.urls')),

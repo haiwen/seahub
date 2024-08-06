@@ -176,6 +176,11 @@ class WikiAPI {
     return this.req.get(url);
   }
 
+  getWiki2PublishConfig(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/config/';
+    return this.req.get(url);
+  }
+
   createWiki2Page(wikiId, pageName, currentId) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/pages/';
     let form = new FormData();
@@ -211,6 +216,11 @@ class WikiAPI {
     return this.req.get(url);
   }
 
+  getWiki2PublishPage(wikiId, pageId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/page/' + pageId + '/';
+    return this.req.get(url);
+  }
+
   renameWiki2(wikiId, wikiName) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/';
     let params = {
@@ -226,10 +236,10 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
-  publishWiki(wikiId, custom_url) {
+  publishWiki(wikiId, publish_url) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
     let form = new FormData();
-    form.append('custom_url', custom_url);
+    form.append('publish_url', publish_url);
     return this._sendPostRequest(url, form);
   }
 

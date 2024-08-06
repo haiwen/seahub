@@ -17,7 +17,7 @@ class PublishWikiDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: serviceURL + '/publish/custom/' + this.props.customUrl,
+      url: serviceURL + '/wiki/publish/' + this.props.customUrl,
       errMessage: '',
       isSubmitBtnActive: false,
     };
@@ -36,7 +36,7 @@ class PublishWikiDialog extends React.Component {
     if (!isValid) {
       this.setState({
         errMessage: errMessage,
-        url: serviceURL + '/publish/custom/',
+        url: serviceURL + '/wiki/publish/',
       });
     } else {
       this.props.onPublish(this.state.url.trim());
@@ -46,7 +46,7 @@ class PublishWikiDialog extends React.Component {
   deleteCustomUrl = () => {
     let wiki_id = this.props.wiki.id;
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
-      this.setState({ url: serviceURL + '/publish/custom/' });
+      this.setState({ url: serviceURL + '/wiki/publish/' });
       toaster.success(gettext('Successfully.'));
     }).catch((error) => {
       if (error.response) {
@@ -76,7 +76,7 @@ class PublishWikiDialog extends React.Component {
       errMessage = gettext('url is required.');
       return { isValid, errMessage };
     }
-    if (!(url.includes(serviceURL + '/publish/custom/'))) {
+    if (!(url.includes(serviceURL + '/wiki/publish/'))) {
       isValid = false;
       errMessage = gettext('url  need include specific prefix.');
       return { isValid, errMessage };
@@ -107,6 +107,9 @@ class PublishWikiDialog extends React.Component {
               <Button color="primary" onClick={this.copyLink} className="border-0">{gettext('Copy')}</Button>
             </InputGroupAddon>
           </InputGroup>
+          <span className='tip mb-1' style={{ fontSize: '14px' }}>
+            {gettext('The custom part of the URL must be between 5 and 30 characters long and may only contain letters (a-z), numbers, and hyphens.')}
+          </span>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
@@ -114,16 +117,6 @@ class PublishWikiDialog extends React.Component {
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
-      // <Fragment>
-      //   <div className="d-flex">
-      //     <InputGroup>
-      //       <Input type="text" readOnly={true} value={this.state.url} />
-      //       <InputGroupAddon addonType="append">
-      //         <Button color="primary" className="border-0">{gettext('Copy')}</Button>
-      //       </InputGroupAddon>
-      //     </InputGroup>
-      //   </div>
-      // </Fragment>
     );
   }
 }
