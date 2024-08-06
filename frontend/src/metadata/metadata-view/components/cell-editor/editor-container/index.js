@@ -18,8 +18,10 @@ const PREVIEW_EDITOR_COLUMN_TYPES = [
 
 const EditorContainer = (props) => {
   const { column } = props;
+  console.log('EditorContainer', column);
   if (!column) return null;
   const { type } = column;
+
   if (POPUP_EDITOR_COLUMN_TYPES.includes(type)) {
     return <PopupEditorContainer { ...props } />;
   } else if (PREVIEW_EDITOR_COLUMN_TYPES.includes(type)) {

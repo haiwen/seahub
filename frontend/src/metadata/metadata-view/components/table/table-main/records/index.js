@@ -15,6 +15,13 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
+import { hideMenu, showMenu } from '../../../../../../components/context-menu/actions';
+import ContextMenu from '../../../../../../components/context-menu/context-menu';
+import TextTranslation from '../../../../../../utils/text-translation';
+import { Utils } from '../../../../../../utils/utils';
+import { siteRoot } from '../../../../../../utils/constants';
+
+const METADATA_RECORD_CONTEXT_MENU = 'metadata-record-context-menu';
 
 class Records extends Component {
 
@@ -38,10 +45,12 @@ class Records extends Component {
         topLeft: this.initPosition,
         bottomRight: this.initPosition,
       },
+      selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
+    this.baseURI = '';
   }
 
   componentDidMount() {
@@ -587,6 +596,102 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
+  onOpenInNewTab = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { rowIdx } = this.state.selectedPosition;
+    const record = this.props.recordGetter(rowIdx);
+    const repoID = window.sfMetadataStore.repoId;
+
+    if (record._is_dir) {
+      let url;
+      if (record._parent_dir === '/') {
+        url = this.baseURI + record._parent_dir + record._name;
+      } else {
+        url = this.baseURI + record._parent_dir + '/' + record._name;
+      }
+      window.open(url, '_blank');
+    } else {
+      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(record._parent_dir + '/' + record._name);
+      window.open(url, '_blank');
+    }
+  };
+
+  onOpenParentFolder = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { rowIdx } = this.state.selectedPosition;
+    const record = this.props.recordGetter(rowIdx);
+    const parentDir = record._parent_dir;
+    const url = this.baseURI + parentDir;
+    location.href = url;
+  };
+
+  onMenuItemClick = (operation, obj, event) => {
+    hideMenu();
+    switch (operation) {
+      case 'Open file in new tab':
+        this.onOpenInNewTab(event);
+        return;
+      case 'Open parent folder':
+        this.onOpenParentFolder(event);
+        return;
+      default:
+        return;
+    }
+  };
+
+  getMenuList = () => {
+    const { OPEN_FILE_IN_NEW_TAB, OPEN_PARENT_FOLDER } = TextTranslation;
+    return [OPEN_FILE_IN_NEW_TAB, OPEN_PARENT_FOLDER];
+  };
+
+  handleContextMenu = (event, id, menuList, currentObject = null) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX || (event.touches && event.touches[0].pageX);
+    let y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    if (this.props.posX) {
+      x -= this.props.posX;
+    }
+    if (this.props.posY) {
+      y -= this.props.posY;
+    }
+
+    hideMenu();
+
+    this.setState({ activeDirent: currentObject });
+
+    if (menuList.length === 0) {
+      return;
+    }
+
+    showMenu({
+      id: id,
+      position: { x, y },
+      target: event.target,
+      currentObject: currentObject,
+      menuList: menuList,
+    });
+  };
+
+  onFileNameContextMenu = (event, cell) => {
+    this.baseURI = event.target.baseURI;
+    this.setState({ selectedPosition: cell });
+    this.handleContextMenu(event, METADATA_RECORD_CONTEXT_MENU, this.getMenuList());
+  };
+
+  getMenuContainerSize = () => {
+    if (this.resultContainerRef) {
+      const { offsetWidth: width, offsetHeight: height } = this.resultContainerRef;
+      return { width, height };
+    }
+    return { width: 0, height: 0 };
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
@@ -606,6 +711,7 @@ class Records extends Component {
       setRecordsScrollLeft: this.setScrollLeft,
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
+      onFileNameContextMenu: this.onFileNameContextMenu,
     };
     if (this.props.isGroupView) {
       return (
@@ -667,6 +773,11 @@ class Records extends Component {
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
+          <ContextMenu
+            id={METADATA_RECORD_CONTEXT_MENU}
+            onMenuItemClick={this.onMenuItemClick}
+            getMenuContainerSize={this.getMenuContainerSize}
+          />
         </div>
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar
@@ -714,6 +825,7 @@ Records.propTypes = {
   scrollToLoadMore: PropTypes.func,
   updateRecord: PropTypes.func,
   updateRecords: PropTypes.func,
+  recordGetter: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,
