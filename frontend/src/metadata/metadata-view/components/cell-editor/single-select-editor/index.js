@@ -28,7 +28,7 @@ const SingleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = true;
+  const canEditData = window.sfMetadataContext.canModifyColumnData(column);
 
   const options = useMemo(() => {
     const options = getSelectColumnOptions(column);
