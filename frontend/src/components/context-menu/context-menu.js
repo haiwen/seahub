@@ -88,9 +88,6 @@ class ContextMenu extends React.Component {
       const containerSize = this.props.getMenuContainerSize();
       const relativeX = x - (window.innerWidth - parseFloat(containerSize.width));
       const relativeY = y - (window.innerHeight - parseFloat(containerSize.height));
-      console.log('x, y:', x, y);
-      console.log('relativeX, relativeY:', relativeX, relativeY);
-      console.log('containerSize:', containerSize);
       this.setState({
         x: relativeX,
         y: relativeY,
