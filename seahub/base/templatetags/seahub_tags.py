@@ -51,8 +51,10 @@ def tsstr_day(value):
 FILEEXT_ICON_MAP = {
 
     # text file
-    'md': 'txt.png',
     'txt': 'txt.png',
+
+    # markdown file
+    'md': 'md.png',
 
     # pdf file
     'pdf': 'pdf.png',
@@ -86,7 +88,9 @@ FILEEXT_ICON_MAP = {
     'mp3': 'music.png',
     'oga': 'music.png',
     'ogg': 'music.png',
+    'wav': 'music.png',
     'flac': 'music.png',
+    'opus': 'music.png',
     'aac': 'music.png',
     'ac3': 'music.png',
     'wma': 'music.png',
@@ -99,12 +103,20 @@ FILEEXT_ICON_MAP = {
     'gif': 'pic.png',
     'bmp': 'pic.png',
     'ico': 'pic.png',
+    'psd': 'psd.png',
+
+    # style file
+    'css': 'css.png',
+
+    # sdoc file
+    'sdoc': 'sdoc.png',
+    'sdoc_notification': 'sdoc_notification.ico',
 
     # default
     'default': 'file.png',
 }
 @register.filter(name='file_icon_filter')
-def file_icon_filter(value, size=None):
+def file_icon_filter(value):
     """Get file icon according to the file postfix"""
     if value.rfind('.') > 0:
         file_ext = value.split('.')[-1].lower()
@@ -112,15 +124,9 @@ def file_icon_filter(value, size=None):
         file_ext = None
 
     if file_ext and file_ext in FILEEXT_ICON_MAP:
-        if size == 192:
-            return '192/' + FILEEXT_ICON_MAP.get(file_ext)
-        else:
-            return '24/' + FILEEXT_ICON_MAP.get(file_ext)
+        return '256/' + FILEEXT_ICON_MAP.get(file_ext)
     else:
-        if size == 192:
-            return '192/' + FILEEXT_ICON_MAP.get('default')
-        else:
-            return '24/' + FILEEXT_ICON_MAP.get('default')
+        return '256/' + FILEEXT_ICON_MAP.get('default')
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {

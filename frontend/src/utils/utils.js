@@ -53,8 +53,10 @@ export const Utils = {
   FILEEXT_ICON_MAP: {
 
     // text file
-    'md': 'txt.png',
     'txt': 'txt.png',
+
+    // markdown file
+    'md': 'md.png',
 
     // pdf file
     'pdf': 'pdf.png',
@@ -103,11 +105,17 @@ export const Utils = {
     'gif': 'pic.png',
     'bmp': 'pic.png',
     'ico': 'pic.png',
+    'psd': 'psd.png',
+
+    // style file
+    'css': 'css.png',
+
+    // sdoc file
+    'sdoc': 'sdoc.png',
+    'sdoc_notification': 'sdoc_notification.ico',
 
     // default
     'default': 'file.png',
-    'sdoc': 'sdoc.png',
-    'sdoc_notification': 'sdoc_notification.ico'
   },
 
   // check if a file is an image
