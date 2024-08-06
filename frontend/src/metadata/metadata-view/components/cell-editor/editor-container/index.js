@@ -18,7 +18,6 @@ const PREVIEW_EDITOR_COLUMN_TYPES = [
 
 const EditorContainer = (props) => {
   const { column } = props;
-  console.log('EditorContainer', column);
   if (!column) return null;
   const { type } = column;
 

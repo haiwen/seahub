@@ -27,7 +27,6 @@ class RecordsBody extends Component {
     this.state = {
       startRenderIndex: 0,
       endRenderIndex: this.getInitEndIndex(props),
-      isContextMenuShow: false,
       activeRecords: [],
       menuPosition: null,
       selectedPosition: null,
@@ -46,7 +45,6 @@ class RecordsBody extends Component {
   componentDidMount() {
     this.props.onRef(this);
     window.sfMetadataBody = this;
-    // document.addEventListener('contextmenu', this.handleContextMenu);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -57,8 +55,6 @@ class RecordsBody extends Component {
   }
 
   componentWillUnmount() {
-    // document.removeEventListener('contextmenu', this.handleContextMenu);
-
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
     this.setState = (state, callback) => {
@@ -504,7 +500,6 @@ class RecordsBody extends Component {
   };
 
   render() {
-    // const { isContextMenuShow, menuPosition, activeRecords } = this.state;
     return (
       <Fragment>
         <div id="canvas" className="sf-metadata-result-table-content" ref={this.setResultContentRef} onScroll={this.onScroll}>
@@ -583,7 +578,6 @@ RecordsBody.propTypes = {
   lockRecordViaButton: PropTypes.func,
   modifyRecordViaButton: PropTypes.func,
   editorPortalTarget: PropTypes.instanceOf(Element),
-  recordGetter: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
   modifyRecord: PropTypes.func.isRequired,
