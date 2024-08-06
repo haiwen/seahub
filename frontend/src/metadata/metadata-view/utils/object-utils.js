@@ -34,6 +34,7 @@ class ObjectUtils {
   }
 
   static isSameObject(source, comparison) {
+    if (!source && !comparison) return true;
     if (!source || !comparison) return false;
     return !this.isObjectChanged(source, comparison);
   }

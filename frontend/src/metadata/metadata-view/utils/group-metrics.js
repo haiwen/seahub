@@ -81,7 +81,7 @@ export const getGroupsRows = (
       const lastRowIndex = rowsLength - 1;
       const isRowVisible = isParentGroupVisible && isExpanded;
       const isBtnInsertRowVisible = isRowVisible && includeInsertRow;
-      const rowsHeight = isRowVisible ? rowsLength * rowHeight : 0;
+      const rowsHeight = isRowVisible ? rowsLength * rowHeight + 1 : 0;
       const btnInsertRowHeight = isBtnInsertRowVisible ? INSERT_ROW_HEIGHT : 0;
       let rows = row_ids.map((rowId, index) => {
         return {
@@ -90,7 +90,7 @@ export const getGroupsRows = (
           rowIdx: index,
           isLastRow: index === lastRowIndex,
           visible: isRowVisible,
-          height: rowHeight,
+          height: index === lastRowIndex ? rowHeight + 1 : rowHeight,
           level: currentLevel,
           rowsLength,
           left,

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Tooltip } from 'reactstrap';
-import { Icon } from '@seafile/sf-metadata-ui-component';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
 import { isMobile, gettext } from '../../../../../../utils';
 
@@ -86,9 +85,6 @@ class ActionsCell extends Component {
             </label>
           </div>
         </div>
-        <span className='rdg-row-expand-icon' onClick={this.props.onRowExpand}>
-          <Icon iconName="open-record" />
-        </span>
         {/* {this.getLockedRowTooltip()} */}
       </div>
     );
@@ -103,7 +99,6 @@ ActionsCell.propTypes = {
   index: PropTypes.number,
   height: PropTypes.number,
   onSelectRecord: PropTypes.func,
-  onRowExpand: PropTypes.func,
 };
 
 export default ActionsCell;

@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import Records from './records';
 import { GROUP_VIEW_OFFSET } from '../../../constants';
 import GridUtils from '../../../utils/grid-utils';
-import { useRecordDetails } from '../../../hooks';
 
 import './index.css';
 
@@ -13,8 +12,6 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById });
   }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById]);
-
-  const { openRecordDetails } = useRecordDetails();
 
   const groupbysCount = useMemo(() => {
     const groupbys = metadata?.view?.groupbys || [];
@@ -63,7 +60,6 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         groupOffsetLeft={groupOffset}
         modifyRecord={updateRecord}
         updateRecords={updateRecords}
-        onRowExpand={openRecordDetails}
         getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}

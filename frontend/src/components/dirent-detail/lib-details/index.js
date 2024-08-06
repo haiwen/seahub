@@ -10,14 +10,14 @@ import Loading from '../../loading';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 
-const LibDetail = React.memo(({ currentRepo, closeDetails }) => {
+const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   const [isLoading, setLoading] = useState(true);
   const [repo, setRepo] = useState({});
-  const smallIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepo), [currentRepo]);
+  const smallIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo), [currentRepoInfo]);
 
   useEffect(() => {
     setLoading(true);
-    seafileAPI.getRepoInfo(currentRepo.repo_id).then(res => {
+    seafileAPI.getRepoInfo(currentRepoInfo.repo_id).then(res => {
       const repo = new Repo(res.data);
       setRepo(repo);
       setLoading(false);
@@ -25,11 +25,11 @@ const LibDetail = React.memo(({ currentRepo, closeDetails }) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [currentRepo.repo_id]);
+  }, [currentRepoInfo.repo_id]);
 
   return (
     <div className="detail-container">
-      <Header title={currentRepo.repo_name} icon={smallIconUrl} onClose={closeDetails} />
+      <Header title={currentRepoInfo.repo_name} icon={smallIconUrl} onClose={onClose} />
       <div className="detail-body dirent-info">
         {isLoading ? (
           <div className="w-100 h-100 d-flex algin-items-center justify-content-center"><Loading /></div>
@@ -55,8 +55,8 @@ const LibDetail = React.memo(({ currentRepo, closeDetails }) => {
 });
 
 LibDetail.propTypes = {
-  currentRepo: PropTypes.object.isRequired,
-  closeDetails: PropTypes.func.isRequired,
+  currentRepoInfo: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default LibDetail;

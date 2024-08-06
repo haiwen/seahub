@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getDirentPath, getDirentPosition } from './utils';
+import { getDirentPath, getFileParent } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
-import EditMetadata from './edit-metadata';
+import { MetadataDetails } from '../../../metadata';
 
-const DirDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail }) => {
-  const position = useMemo(() => getDirentPosition(repoInfo, dirent, path), [repoInfo, dirent, path]);
+const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
+  const parent = useMemo(() => getFileParent(repoInfo, dirent, path), [repoInfo, dirent, path]);
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
 
   return (
     <>
-      <DetailItem field={{ type: CellType.TEXT, name: gettext('File location') }} value={position} />
+      <DetailItem field={{ type: CellType.TEXT, name: gettext('Parent') }} value={parent} />
       <DetailItem field={{ type: 'size', name: gettext('Size') }} value={repoInfo.size} />
       <DetailItem field={{ type: CellType.CREATOR, name: gettext('Creator') }} value={repoInfo.owner_email} collaborators={[{
         name: repoInfo.owner_name,
@@ -21,8 +21,8 @@ const DirDetails = ({ repoID, repoInfo, dirent, direntType, path, direntDetail }
         avatar_url: repoInfo.owner_avatar,
       }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
-      {direntDetail.permission === 'rw' && window.app.pageOptions.enableMetadataManagement && (
-        <EditMetadata repoID={repoID} direntPath={direntPath} direntType={direntType} direntDetail={direntDetail} />
+      {window.app.pageOptions.enableMetadataManagement && (
+        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
       )}
     </>
   );
@@ -32,7 +32,6 @@ DirDetails.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   dirent: PropTypes.object,
-  direntType: PropTypes.string,
   path: PropTypes.string,
   direntDetail: PropTypes.object,
 };

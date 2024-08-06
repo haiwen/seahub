@@ -5,7 +5,6 @@ import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
 import TableMain from './table-main';
-import RecordDetailsDialog from '../record-details-dialog';
 import { Utils } from '../../../../utils/utils';
 
 import './index.css';
@@ -202,7 +201,6 @@ const Container = () => {
           )}
         </div>
       </div>
-      <RecordDetailsDialog />
     </>
   );
 };
