@@ -1043,6 +1043,7 @@ class WikiPageTrashView(APIView):
         id_set = set(id_list)
         clean_pages, not_del_pages = delete_page(pages, id_set)
         try:
+            file_uuids = []
             for del_page in clean_pages:
                 # rm dir
                 page_ids_map.append(del_page['id'])
@@ -1053,13 +1054,13 @@ class WikiPageTrashView(APIView):
                                      json.dumps([dir_name]), username)
 
                 # rm sdoc fileuuid
-                file_name = os.path.basename(del_page['path'])
                 file_uuid = get_seadoc_file_uuid(repo, del_page['path'])
-                FileComment.objects.filter(uuid=file_uuid).delete()
-                FileUUIDMap.objects.delete_fileuuidmap_by_path(repo_id, sdoc_dir_path, file_name, is_dir=False)
-                SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+                file_uuids.append(file_uuid)
+            FileComment.objects.filter(uuid__in=file_uuids).delete()
+            FileUUIDMap.objects.filter(uuid__in=file_uuids).delete()
+            SeadocHistoryName.objects.filter(doc_uuid__in=file_uuids).delete()
+            SeadocDraft.objects.filter(doc_uuid__in=file_uuids).delete()
+            SeadocCommentReply.objects.filter(doc_uuid__in=file_uuids).delete()
         except Exception as e:
             logger.error(e)
 

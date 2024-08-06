@@ -235,6 +235,7 @@ class Wiki extends Component {
           config={this.state.config}
           saveWikiConfig={this.saveWikiConfig}
           updateWikiConfig={this.updateWikiConfig}
+          getWikiConfig={this.getWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
           onUpdatePage={this.onUpdatePage}

@@ -24,6 +24,7 @@ const propTypes = {
   config: PropTypes.object.isRequired,
   saveWikiConfig: PropTypes.func.isRequired,
   updateWikiConfig: PropTypes.func.isRequired,
+  getWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
   onUpdatePage: PropTypes.func.isRequired,
@@ -156,7 +157,6 @@ class SidePanel extends Component {
       <div className={`wiki2-side-panel${this.props.closeSideBar ? '' : ' left-zero'}`}>
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
-          <a onClick={this.toggelTrashDialog}> Trash </a>
           <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
             <i className='sf3-font sf3-font-new-page'></i>
           </div>
@@ -165,15 +165,17 @@ class SidePanel extends Component {
           </UncontrolledTooltip>
         </div>
         <div className="wiki2-side-nav">
-          {isLoading ? <Loading /> : this.renderWikiNav()}
+          {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>
-        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)}/>
         {this.state.isShowTrashDialog && (
           <WikiTrashDialog
             showTrashDialog={this.state.isShowTrashDialog}
             toggleTrashDialog={this.toggelTrashDialog}
+            getWikiConfig={this.props.getWikiConfig}
           />
         )}
+        <a className={'wiki2-trash'} onClick={this.toggelTrashDialog}> Trash </a>
       </div>
     );
   }
