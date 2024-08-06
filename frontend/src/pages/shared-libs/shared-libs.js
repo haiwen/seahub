@@ -106,7 +106,7 @@ class Content extends Component {
       );
       const content = currentViewMode == 'list' ? (
         <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
-          {isDesktop ? desktopThead : <LibsMobileThead />}
+          {isDesktop ? desktopThead : <LibsMobileThead inAllLibs={inAllLibs} />}
           <tbody>
             {itemsContent}
           </tbody>
