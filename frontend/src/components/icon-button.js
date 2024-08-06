@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Tooltip } from 'reactstrap';
+import { Tooltip } from 'reactstrap';
 import Icon from './icon';
 
 const propTypes = {
@@ -28,9 +28,8 @@ class IconButton extends React.Component {
   };
 
   render() {
-    const className = 'btn-icon';
     const btnContent = (
-      <React.Fragment>
+      <>
         <Icon symbol={this.props.icon} />
         <Tooltip
           toggle={this.toggle}
@@ -40,30 +39,30 @@ class IconButton extends React.Component {
           isOpen={this.state.tooltipOpen}>
           {this.props.text}
         </Tooltip>
-      </React.Fragment>
+      </>
     );
     if (this.props.tag && this.props.tag == 'a') {
       return (
-        <Button
+        <div
           id={this.props.id}
-          className={className}
+          className='file-toolbar-btn'
           tag="a"
           href={this.props.href}
           aria-label={this.props.text}
         >
           {btnContent}
-        </Button>
+        </div>
       );
     } else {
       return (
-        <Button
+        <div
           id={this.props.id}
-          className={className}
+          className='file-toolbar-btn'
           onClick={this.props.onClick}
           aria-label={this.props.text}
         >
           {btnContent}
-        </Button>
+        </div>
       );
     }
   }

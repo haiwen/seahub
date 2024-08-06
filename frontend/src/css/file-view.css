@@ -13,12 +13,19 @@ body {
   flex-shrink: 0;
 }
 
-.file-view-header .btn {
-  color: #666;
+.file-view-header .file-toolbar-btn {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.file-view-header .btn#save-file {
-  color: #eb8205;
+.file-view-header .file-toolbar-btn:hover {
+  background-color: #EFEFEF;
+  border-radius: 3px;
 }
 
 .file-view-header .file-toolbar-more-operations {
