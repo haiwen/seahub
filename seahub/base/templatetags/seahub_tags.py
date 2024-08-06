@@ -51,8 +51,10 @@ def tsstr_day(value):
 FILEEXT_ICON_MAP = {
 
     # text file
-    'md': 'txt.png',
     'txt': 'txt.png',
+
+    # markdown file
+    'md': 'md.png',
 
     # pdf file
     'pdf': 'pdf.png',
@@ -86,7 +88,9 @@ FILEEXT_ICON_MAP = {
     'mp3': 'music.png',
     'oga': 'music.png',
     'ogg': 'music.png',
+    'wav': 'music.png',
     'flac': 'music.png',
+    'opus': 'music.png',
     'aac': 'music.png',
     'ac3': 'music.png',
     'wma': 'music.png',
@@ -99,6 +103,14 @@ FILEEXT_ICON_MAP = {
     'gif': 'pic.png',
     'bmp': 'pic.png',
     'ico': 'pic.png',
+    'psd': 'psd.png',
+
+    # style file
+    'css': 'css.png',
+
+    # sdoc file
+    'sdoc': 'sdoc.png',
+    'sdoc_notification': 'sdoc_notification.ico',
 
     # default
     'default': 'file.png',
