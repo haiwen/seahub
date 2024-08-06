@@ -679,6 +679,11 @@ class Records extends Component {
   };
 
   onFileNameContextMenu = (event, cell) => {
+    const record = this.props.recordGetter(cell.rowIdx);
+    if (record._is_dir) {
+      return;
+    }
+
     this.baseURI = event.target.baseURI;
     this.setState({ selectedPosition: cell });
     this.handleContextMenu(event, METADATA_RECORD_CONTEXT_MENU, this.getMenuList());
