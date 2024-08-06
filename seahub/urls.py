@@ -733,6 +733,8 @@ urlpatterns = [
     path('profile/', include('seahub.profile.urls')),
     path('share/', include('seahub.share.urls')),
     path('help/', include('seahub.help.urls')),
+    path('privacy-policy/', include('seahub.privacy_policy.urls')),
+    path('terms-of-service/', include('seahub.terms_of_service.urls')),
     path('captcha/', include('captcha.urls')),
     path('thumbnail/', include('seahub.thumbnail.urls')),
     path('inst/', include(('seahub.institutions.urls', 'institutions'), namespace='institutions')),

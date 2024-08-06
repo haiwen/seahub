@@ -255,6 +255,8 @@ INSTALLED_APPS = [
     'seahub.profile',
     'seahub.share',
     'seahub.help',
+    'seahub.privacy_policy',
+    'seahub.terms_of_service',
     'seahub.thumbnail',
     'seahub.password_session',
     'seahub.admin_log',
@@ -629,9 +631,8 @@ ENABLE_SIGNUP = False
 # show 'log out' icon in top-bar or not.
 SHOW_LOGOUT_ICON = False
 
-# privacy policy link and service link
-PRIVACY_POLICY_LINK = ''
-TERMS_OF_SERVICE_LINK = ''
+ENABLE_PRIVACY_POLICY = False
+ENABLE_TERMS_OF_SERVICE = False
 
 FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 

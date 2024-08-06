@@ -24,7 +24,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, \
+    ENABLE_PRIVACY_POLICY, ENABLE_TERMS_OF_SERVICE, ENABLE_SEADOC, \
     ENABLE_SEATABLE_INTEGRATION
 
 from seahub.organizations.models import OrgAdminSettings
@@ -35,7 +35,7 @@ from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
+from seahub.utils import EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
     IS_DB_SQLITE3, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 
 try:
@@ -166,8 +166,8 @@ def base(request):
         'service_url': get_service_url().rstrip('/'),
         'enable_file_scan': ENABLE_FILE_SCAN,
         'avatar_url': avatar_url if avatar_url else '',
-        'privacy_policy_link': PRIVACY_POLICY_LINK,
-        'terms_of_service_link': TERMS_OF_SERVICE_LINK,
+        'enable_privacy_policy': ENABLE_PRIVACY_POLICY,
+        'enable_terms_of_service': ENABLE_TERMS_OF_SERVICE,
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
