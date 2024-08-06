@@ -16,7 +16,8 @@ import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 
 const propTypes = {
   showTrashDialog: PropTypes.bool.isRequired,
-  toggleTrashDialog: PropTypes.func.isRequired
+  toggleTrashDialog: PropTypes.func.isRequired,
+  getWikiConfig: PropTypes.func.isRequired
 };
 
 class WikiTrashDialog extends React.Component {
@@ -112,6 +113,7 @@ class WikiTrashDialog extends React.Component {
             hasNextPage={this.state.hasNextPage}
             getListByPage={this.getItems}
             resetPerPage={this.resetPerPage}
+            getWikiConfig={this.props.getWikiConfig}
           />
           {isCleanTrashDialogOpen &&
           <ModalPortal>
@@ -168,6 +170,7 @@ class Content extends React.Component {
               return <Item
                 key={index}
                 item={item}
+                getWikiConfig={this.props.getWikiConfig}
               />;
             })}
           </tbody>
@@ -192,6 +195,8 @@ Content.propTypes = {
   currentPage: PropTypes.number.isRequired,
   curPerPage: PropTypes.number.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getWikiConfig: PropTypes.func.isRequired
+
 };
 
 
@@ -201,7 +206,8 @@ class Item extends React.Component {
     super(props);
     this.state = {
       restored: false,
-      isIconShown: false
+      isIconShown: false,
+      getWikiConfig: PropTypes.func.isRequired
     };
   }
 
@@ -220,6 +226,7 @@ class Item extends React.Component {
       this.setState({
         restored: true
       });
+      this.props.getWikiConfig();
       toaster.success(gettext('Successfully restored 1 item.'));
     }).catch((error) => {
       let errorMsg = '';
