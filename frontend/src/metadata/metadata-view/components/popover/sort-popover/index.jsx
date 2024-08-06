@@ -18,19 +18,19 @@ import './index.css';
 const SORT_TYPES = [SORT_TYPE.UP, SORT_TYPE.DOWN];
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   target: PropTypes.string.isRequired,
   isNeedSubmit: PropTypes.bool,
   sorts: PropTypes.array,
   columns: PropTypes.array.isRequired,
   onSortComponentToggle: PropTypes.func,
   update: PropTypes.func,
-  readonly: PropTypes.bool,
 };
 
 class SortPopover extends Component {
 
   static defaultProps = {
-    readonly: false,
+    readOnly: false,
   };
 
   constructor(props) {
@@ -183,7 +183,7 @@ class SortPopover extends Component {
 
   renderSortItem = (column, sort, index) => {
     let { name, type } = column;
-    const { readonly } = this.props;
+    const { readOnly } = this.props;
     let selectedColumn = {
       label: (
         <Fragment>
@@ -200,7 +200,7 @@ class SortPopover extends Component {
 
     return (
       <div key={'sort-item-' + index} className="sort-item">
-        {!readonly &&
+        {!readOnly &&
           <div className="delete-sort" onClick={(event) => this.deleteSort(event, index)}>
             <Icon iconName="fork-number"/>
           </div>
@@ -208,7 +208,7 @@ class SortPopover extends Component {
         <div className="condition">
           <div className="sort-column">
             <CustomizeSelect
-              isLocked={readonly}
+              readOnly={readOnly}
               value={selectedColumn}
               onSelectOption={(value) => this.onSelectColumn(value, index)}
               options={this.columnsOptions}
@@ -219,7 +219,7 @@ class SortPopover extends Component {
           </div>
           <div className="sort-predicate ml-2">
             <CustomizeSelect
-              isLocked={readonly}
+              readOnly={readOnly}
               value={selectedSortType}
               onSelectOption={(value) => this.onSelectSortType(value, index)}
               options={this.sortTypeOptions}
@@ -235,7 +235,7 @@ class SortPopover extends Component {
   };
 
   render() {
-    const { target, readonly } = this.props;
+    const { target, readOnly } = this.props;
     const { sorts } = this.state;
     const isEmpty = isSortsEmpty(sorts);
     return (
@@ -255,7 +255,7 @@ class SortPopover extends Component {
               this.renderSortsList()
             }
           </div>
-          {!readonly &&
+          {!readOnly &&
             <CustomizeAddTool
               callBack={this.addSort}
               footerName={gettext('Add sort')}
@@ -263,7 +263,7 @@ class SortPopover extends Component {
               addIconClassName="popover-add-icon"
             />
           }
-          {(this.isNeedSubmit() && !readonly) && (
+          {(this.isNeedSubmit() && !readOnly) && (
             <div className='sf-metadata-sort-popover-footer'>
               <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
               <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{gettext('Submit')}</Button>

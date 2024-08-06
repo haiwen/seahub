@@ -12,7 +12,7 @@ import FilterItem from './filter-item';
 import './index.css';
 
 const propTypes = {
-  isLocked: PropTypes.bool,
+  readOnly: PropTypes.bool,
   className: PropTypes.string,
   filters: PropTypes.array,
   columns: PropTypes.array.isRequired,
@@ -81,13 +81,13 @@ class FiltersList extends Component {
   };
 
   renderFilterItem = (filter, index, errMsg, filterColumn) => {
-    const { filterConjunction, value } = this.props;
+    const { readOnly, filterConjunction, value } = this.props;
     const conjunctionOptions = this.getConjunctionOptions();
     const columnOptions = this.getColumnOptions();
     return (
       <FilterItem
         key={index}
-        isLocked={this.props.isLocked}
+        readOnly={readOnly}
         index={index}
         filter={filter}
         errMsg={errMsg}

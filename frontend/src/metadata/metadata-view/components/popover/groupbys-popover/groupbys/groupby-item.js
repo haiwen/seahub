@@ -60,7 +60,7 @@ const dropCollect = (connect, monitor) => ({
 */
 const GroupbyItem = memo(({
   isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
-  showDragBtn, index, groupby, columns, onDelete, onUpdate
+  showDragBtn, index, readOnly, groupby, columns, onDelete, onUpdate
 }) => {
   const column = useMemo(() => {
     return getColumnByKey(columns, groupby.column_key);
@@ -162,12 +162,15 @@ const GroupbyItem = memo(({
           { 'group-can-drop': isOver && canDrop && !isDragging }
         )}
       >
-        <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
-          <Icon iconName="fork-number"/>
-        </div>
+        {!readOnly && (
+          <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
+            <Icon iconName="fork-number"/>
+          </div>
+        )}
         <div className="condition">
           <div className="groupby-column">
             <CustomizeSelect
+              readOnly={readOnly}
               value={selectedColumn}
               options={columnsOptions}
               onSelectOption={selectColumn}
@@ -179,6 +182,7 @@ const GroupbyItem = memo(({
           {isShowGroupCountType(column) && (
             <div className="groupby-count-type">
               <CustomizeSelect
+                readOnly={readOnly}
                 value={selectedCountType}
                 onSelectOption={selectCountType}
                 options={countTypeOptions}
@@ -188,6 +192,7 @@ const GroupbyItem = memo(({
           <div className="groupby-predicate">
             {(!column.key || SORT_COLUMN_OPTIONS.includes(column.type)) && (
               <CustomizeSelect
+                readOnly={readOnly}
                 value={selectedSortType}
                 options={sortOptions}
                 onSelectOption={selectSortType}
@@ -195,7 +200,7 @@ const GroupbyItem = memo(({
             )}
           </div>
         </div>
-        {showDragBtn && connectDragSource(
+        {!readOnly && showDragBtn && connectDragSource(
           <div className="groupby-drag">
             <Icon iconName="drag" />
           </div>
@@ -217,6 +222,7 @@ const GroupbyItem = memo(({
 
 GroupbyItem.propTypes = {
   index: PropTypes.number,
+  readOnly: PropTypes.bool,
   groupby: PropTypes.object,
   columns: PropTypes.array,
   onDelete: PropTypes.func,

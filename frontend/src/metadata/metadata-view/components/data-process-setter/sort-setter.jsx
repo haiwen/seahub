@@ -6,7 +6,7 @@ import { getValidSorts, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { SortPopover } from '../popover';
 
-const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperClass, modifySorts }) => {
+const SortSetter = ({ target, sorts: propsSorts, readOnly, columns, isNeedSubmit, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const sorts = useMemo(() => {
@@ -53,6 +53,7 @@ const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperC
       {isShowSetter && (
         <SortPopover
           isNeedSubmit={isNeedSubmit}
+          readOnly={readOnly}
           target={target}
           columns={columns}
           sorts={sorts}
@@ -67,6 +68,7 @@ const SortSetter = ({ target, sorts: propsSorts, columns, isNeedSubmit, wrapperC
 
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   wrapperClass: PropTypes.string,
   target: PropTypes.string,
   isNeedSubmit: PropTypes.bool,

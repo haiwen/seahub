@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { gettext } from '../../../../utils';
 import HideColumn from './hide-column';
 
-const HiddenColumns = ({ columns, hiddenColumns, onChange }) => {
+const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange }) => {
   const isEmpty = useMemo(() => {
     if (!Array.isArray(columns) || columns.length === 0) return true;
     return false;
@@ -17,6 +17,7 @@ const HiddenColumns = ({ columns, hiddenColumns, onChange }) => {
         return (
           <HideColumn
             key={column.key}
+            readOnly={readOnly}
             isHidden={hiddenColumns.includes(column.key)}
             column={column}
             onChange={onChange}
@@ -28,6 +29,7 @@ const HiddenColumns = ({ columns, hiddenColumns, onChange }) => {
 };
 
 HiddenColumns.propTypes = {
+  readOnly: PropTypes.bool,
   hiddenColumns: PropTypes.array,
   columns: PropTypes.array,
   onChange: PropTypes.func,

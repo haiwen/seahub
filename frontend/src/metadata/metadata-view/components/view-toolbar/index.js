@@ -63,6 +63,8 @@ const ViewToolBar = ({ metadataViewId }) => {
 
   if (!view) return null;
 
+  const readOnly = !window.sfMetadataContext.canModifyView(view);
+
   return (
     <div
       className="sf-metadata-tool"
@@ -73,6 +75,7 @@ const ViewToolBar = ({ metadataViewId }) => {
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
           target="sf-metadata-filter-popover"
+          readOnly={readOnly}
           filterConjunction={view.filter_conjunction}
           filters={view.filters}
           columns={availableColumns}
@@ -82,6 +85,7 @@ const ViewToolBar = ({ metadataViewId }) => {
         <SortSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
           target="sf-metadata-sort-popover"
+          readOnly={readOnly}
           sorts={view.sorts}
           columns={viewColumns}
           modifySorts={modifySorts}
@@ -89,6 +93,7 @@ const ViewToolBar = ({ metadataViewId }) => {
         <GroupbySetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
           target="sf-metadata-groupby-popover"
+          readOnly={readOnly}
           columns={viewColumns}
           groupbys={view.groupbys}
           modifyGroupbys={modifyGroupbys}
@@ -96,6 +101,7 @@ const ViewToolBar = ({ metadataViewId }) => {
         <HideColumnSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
           target="sf-metadata-hide-column-popover"
+          readOnly={readOnly}
           columns={viewColumns.slice(1)}
           hiddenColumns={view.hidden_columns || []}
           modifyHiddenColumns={modifyHiddenColumns}

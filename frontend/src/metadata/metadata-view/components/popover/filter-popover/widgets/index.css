@@ -67,6 +67,10 @@
   line-height: 20px;
 }
 
+.filters-list .sf-metadata-select.disabled .selected-option-show {
+  width: 100%;
+}
+
 .filters-list .sf-metadata-select .selected-option {
   width: auto;
   overflow-x: auto;
@@ -147,7 +151,7 @@
   border-color: rgb(179, 179, 179);
 }
 
-.filters-list .filter-term input.disabled:hover {
+.filters-list .filter-term input:disabled:hover {
   border-color: rgba(0, 40, 100, 0.12);
 }
 

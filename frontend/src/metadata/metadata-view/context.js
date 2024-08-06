@@ -130,6 +130,11 @@ class Context {
     return true;
   };
 
+  canModifyView = (view) => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   getCollaboratorFromCache(email) {
     return this.collaboratorsCache[email];
   }

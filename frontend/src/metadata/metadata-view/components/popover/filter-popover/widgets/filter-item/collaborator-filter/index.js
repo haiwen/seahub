@@ -6,7 +6,7 @@ import { gettext } from '../../../../../../utils';
 
 import './index.css';
 
-const CollaboratorFilter = ({ isLocked, filterIndex, filterTerm, collaborators, placeholder, filter_predicate, onSelectCollaborator }) => {
+const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, placeholder, filter_predicate, onSelectCollaborator }) => {
   const supportMultipleSelectOptions = useMemo(() => {
     return [
       FILTER_PREDICATE_TYPE.HAS_ANY_OF,
@@ -80,7 +80,7 @@ const CollaboratorFilter = ({ isLocked, filterIndex, filterTerm, collaborators, 
       onSelectOption={onSelectCollaborator}
       options={options}
       placeholder={placeholder}
-      isLocked={isLocked}
+      readOnly={readOnly}
       supportMultipleSelect={isSupportMultipleSelect}
       searchable={true}
       searchPlaceholder={gettext('Search collaborator')}
@@ -96,7 +96,7 @@ CollaboratorFilter.propTypes = {
   filter_predicate: PropTypes.string,
   collaborators: PropTypes.array,
   onSelectCollaborator: PropTypes.func,
-  isLocked: PropTypes.bool,
+  readOnly: PropTypes.bool,
   placeholder: PropTypes.string,
 };
 

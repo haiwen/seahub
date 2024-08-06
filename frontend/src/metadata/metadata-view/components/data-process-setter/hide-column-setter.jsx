@@ -6,7 +6,7 @@ import { CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { HideColumnPopover } from '../popover';
 
-const HideColumnSetter = ({ columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns }) => {
+const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const validHiddenColumns = useMemo(() => {
@@ -50,6 +50,7 @@ const HideColumnSetter = ({ columns, wrapperClass, target, hiddenColumns, modify
       />
       {isShowSetter && (
         <HideColumnPopover
+          readOnly={readOnly}
           hiddenColumns={validHiddenColumns}
           target={target}
           placement="bottom-end"
@@ -63,6 +64,7 @@ const HideColumnSetter = ({ columns, wrapperClass, target, hiddenColumns, modify
 };
 
 HideColumnSetter.propTypes = {
+  readOnly: PropTypes.bool,
   wrapperClass: PropTypes.string,
   target: PropTypes.string,
   hiddenColumns: PropTypes.array,
