@@ -15,7 +15,6 @@ const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
-
 class RecordsBody extends Component {
 
   static defaultProps = {
@@ -28,7 +27,6 @@ class RecordsBody extends Component {
     this.state = {
       startRenderIndex: 0,
       endRenderIndex: this.getInitEndIndex(props),
-      isContextMenuShow: false,
       activeRecords: [],
       menuPosition: null,
       selectedPosition: null,
@@ -47,7 +45,6 @@ class RecordsBody extends Component {
   componentDidMount() {
     this.props.onRef(this);
     window.sfMetadataBody = this;
-    document.addEventListener('contextmenu', this.handleContextMenu);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -58,8 +55,6 @@ class RecordsBody extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('contextmenu', this.handleContextMenu);
-
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
     this.setState = (state, callback) => {
@@ -414,6 +409,7 @@ class RecordsBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
+      onContextMenu: this.props.onContextMenu
     };
     return this.cellMetaData;
   };
@@ -504,7 +500,6 @@ class RecordsBody extends Component {
   };
 
   render() {
-    // const { isContextMenuShow, menuPosition, activeRecords } = this.state;
     return (
       <Fragment>
         <div id="canvas" className="sf-metadata-result-table-content" ref={this.setResultContentRef} onScroll={this.onScroll}>
@@ -605,6 +600,7 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
+  onContextMenu: PropTypes.func,
 };
 
 export default RecordsBody;

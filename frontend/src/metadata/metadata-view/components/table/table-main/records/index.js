@@ -15,6 +15,10 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
+import TextTranslation from '../../../../../../utils/text-translation';
+import { Utils } from '../../../../../../utils/utils';
+import { siteRoot } from '../../../../../../utils/constants';
+import ContextMenu from '../../../context-menu/context-menu';
 
 class Records extends Component {
 
@@ -38,10 +42,16 @@ class Records extends Component {
         topLeft: this.initPosition,
         bottomRight: this.initPosition,
       },
+      selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
+    this.baseURI = '';
+    this.contextMenuOptions = [
+      { label: TextTranslation.OPEN_FILE_IN_NEW_TAB.value, value: 'openFileInNewTab' },
+      { label: TextTranslation.OPEN_PARENT_FOLDER.value, value: 'openParentFolder' },
+    ];
   }
 
   componentDidMount() {
@@ -587,6 +597,59 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
+  onOpenInNewTab = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { rowIdx } = this.state.selectedPosition;
+    const record = this.props.recordGetter(rowIdx);
+    const repoID = window.sfMetadataStore.repoId;
+
+    let url;
+    if (record._is_dir) {
+      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir + '/'}${record._name}`;
+    } else {
+      url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(record._parent_dir + '/' + record._name)}`;
+    }
+
+    window.open(url, '_blank');
+  };
+
+  onOpenParentFolder = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { rowIdx } = this.state.selectedPosition;
+    const record = this.props.recordGetter(rowIdx);
+    const parentDir = record._parent_dir;
+    const url = this.baseURI + parentDir;
+    window.open(url, '_blank');
+  };
+
+  onOptionClick = (event, option) => {
+
+    const handlers = {
+      openFileInNewTab: this.onOpenInNewTab.bind(this),
+      openParentFolder: this.onOpenParentFolder.bind(this),
+    };
+
+    const handler = handlers[option.value];
+    if (handler) {
+      handler(event);
+    }
+  };
+
+  onContextMenu = (event, cell) => {
+    const record = this.props.recordGetter(cell.rowIdx);
+    if (record._is_dir) {
+      return;
+    }
+
+    this.baseURI = event.target.baseURI;
+    this.setState({
+      selectedPosition: cell,
+    });
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
@@ -606,6 +669,7 @@ class Records extends Component {
       setRecordsScrollLeft: this.setScrollLeft,
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
+      onContextMenu: this.onContextMenu,
     };
     if (this.props.isGroupView) {
       return (
@@ -667,6 +731,10 @@ class Records extends Component {
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
+          <ContextMenu
+            options={this.contextMenuOptions}
+            onOptionClick={this.onOptionClick}
+          />
         </div>
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar
@@ -714,6 +782,7 @@ Records.propTypes = {
   scrollToLoadMore: PropTypes.func,
   updateRecord: PropTypes.func,
   updateRecords: PropTypes.func,
+  recordGetter: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,

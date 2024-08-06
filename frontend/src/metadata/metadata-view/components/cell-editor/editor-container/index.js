@@ -20,6 +20,7 @@ const EditorContainer = (props) => {
   const { column } = props;
   if (!column) return null;
   const { type } = column;
+
   if (POPUP_EDITOR_COLUMN_TYPES.includes(type)) {
     return <PopupEditorContainer { ...props } />;
   } else if (PREVIEW_EDITOR_COLUMN_TYPES.includes(type)) {
