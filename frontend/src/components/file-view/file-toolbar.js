@@ -122,13 +122,6 @@ class FileToolbar extends React.Component {
               text={gettext('Print')}
             />
           )}
-          <IconButton
-            id="open-parent-folder"
-            icon="open-folder"
-            text={gettext('Open parent folder')}
-            tag="a"
-            href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}
-          />
           {showLockUnlockBtn && (
             <IconButton
               id="lock-unlock-file"
@@ -203,6 +196,9 @@ class FileToolbar extends React.Component {
                   {gettext('History')}
                 </a>
               )}
+              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
+                {gettext('Open parent folder')}
+              </a>
             </DropdownMenu>
           </Dropdown>
         </div>
