@@ -5,8 +5,7 @@ import { siteRoot, gettext, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import FileTag from '../../models/file-tag';
-import FileTagList from '../file-tag-list';
+import Header from './header/index';
 
 import '../../css/dirent-detail.css';
 
@@ -23,9 +22,7 @@ class FileDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      direntType: '',
       direntDetail: '',
-      fileTagList: []
     };
   }
 
@@ -34,37 +31,13 @@ class FileDetails extends React.Component {
     let direntPath = Utils.joinPath(path, dirent.name);
     seafileAPI.getFileInfo(repoID, direntPath).then(res => {
       this.setState({
-        direntType: 'file',
         direntDetail: res.data
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    seafileAPI.listFileTags(repoID, direntPath).then(res => {
-      let fileTagList = [];
-      res.data.file_tags.forEach(item => {
-        let file_tag = new FileTag(item);
-        fileTagList.push(file_tag);
-      });
-      this.setState({ fileTagList: fileTagList });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   }
-
-  renderHeader = (smallIconUrl, direntName) => {
-    return (
-      <div className="detail-header">
-        <div className="detail-control sf2-icon-x1" onClick={this.props.togglePanel}></div>
-        <div className="detail-title dirent-title">
-          <img src={smallIconUrl} width="24" height="24" alt="" />{' '}
-          <span className="name ellipsis" title={direntName}>{direntName}</span>
-        </div>
-      </div>
-    );
-  };
 
   renderDetailBody = (bigIconUrl) => {
     const { direntDetail } = this.state;
@@ -85,12 +58,6 @@ class FileDetails extends React.Component {
               <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
               <tr><th>{gettext('Location')}</th><td>{repoName + path}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
-              <tr className="file-tag-container">
-                <th>{gettext('Tags')}</th>
-                <td>
-                  <FileTagList fileTagList={this.state.fileTagList} />
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -111,7 +78,7 @@ class FileDetails extends React.Component {
     }
     return (
       <div className="detail-container file-details-container">
-        {this.renderHeader(smallIconUrl, dirent.name)}
+        <Header title={dirent.name} icon={smallIconUrl} onClose={this.props.togglePanel} />
         {this.renderDetailBody(bigIconUrl)}
       </div>
     );
