@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext, isPro, enableSeasearch, enableElasticsearch } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import RepoInfo from '../../models/repo-info';
@@ -242,23 +242,23 @@ class FileChooser extends React.Component {
   };
 
   sendRequest = (queryData, cancelToken) => {
-    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-      if (!res.data.total) {
-        this.setState({
-          searchResults: [],
-          isResultGot: true
-        });
-        this.source = null;
-        return;
-      }
-
-      let items = this.formatResultItems(res.data.results);
-      this.setState({
-        searchResults: items,
-        isResultGot: true
+    if (isPro && enableSeasearch && !enableElasticsearch) {
+      seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
+        this.handleSearchResult(res);
       });
-      this.source = null;
+    } else {
+      seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+        this.handleSearchResult(res);
+      });
+    }
+  };
+
+  handleSearchResult = (res) => {
+    this.setState({
+      searchResults: res.data.total ? this.formatResultItems(res.data.results) : [],
+      isResultGot: true
     });
+    this.source = null;
   };
 
   cancelRequest = () => {
@@ -324,7 +324,8 @@ class FileChooser extends React.Component {
           searchResults={this.state.searchResults}
           onItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
-        />);
+        />
+      );
     }
   };
 

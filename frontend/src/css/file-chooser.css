@@ -98,13 +98,17 @@
   background-color: #f5f5f5;
 }
 
+.file-chooser-search-container .searched-list-item {
+  cursor: pointer;
+}
+
 .file-chooser-search-input {
   position: relative;
 }
 
 .file-chooser-search-input .search-control {
   position: absolute;
-  top: 0.5rem;
+  top: 13px;
   right: 1.5rem;
 }
 
