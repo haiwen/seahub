@@ -15,13 +15,10 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
-import { hideMenu, showMenu } from '../../../../../../components/context-menu/actions';
-import ContextMenu from '../../../../../../components/context-menu/context-menu';
 import TextTranslation from '../../../../../../utils/text-translation';
 import { Utils } from '../../../../../../utils/utils';
 import { siteRoot } from '../../../../../../utils/constants';
-
-const METADATA_RECORD_CONTEXT_MENU = 'metadata-record-context-menu';
+import ContextMenu from '../../../context-menu/context-menu';
 
 class Records extends Component {
 
@@ -46,11 +43,17 @@ class Records extends Component {
         bottomRight: this.initPosition,
       },
       selectedPosition: this.initPosition,
+      contextMenuPosition: { x: 0, y: 0 },
+      isContextMenuVisible: false,
       ...initHorizontalScrollState,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
     this.baseURI = '';
+    this.contextMenuOptions = [
+      { label: TextTranslation.OPEN_FILE_IN_NEW_TAB.value, value: 'openFileInNewTab' },
+      { label: TextTranslation.OPEN_PARENT_FOLDER.value, value: 'openParentFolder' },
+    ];
   }
 
   componentDidMount() {
@@ -603,18 +606,14 @@ class Records extends Component {
     const record = this.props.recordGetter(rowIdx);
     const repoID = window.sfMetadataStore.repoId;
 
+    let url;
     if (record._is_dir) {
-      let url;
-      if (record._parent_dir === '/') {
-        url = this.baseURI + record._parent_dir + record._name;
-      } else {
-        url = this.baseURI + record._parent_dir + '/' + record._name;
-      }
-      window.open(url, '_blank');
+      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir + '/'}${record._name}`;
     } else {
-      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(record._parent_dir + '/' + record._name);
-      window.open(url, '_blank');
+      url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(record._parent_dir + '/' + record._name)}`;
     }
+
+    window.open(url, '_blank');
   };
 
   onOpenParentFolder = (event) => {
@@ -628,73 +627,46 @@ class Records extends Component {
     location.href = url;
   };
 
-  onMenuItemClick = (operation, obj, event) => {
-    hideMenu();
-    switch (operation) {
-      case 'Open file in new tab':
-        this.onOpenInNewTab(event);
-        return;
-      case 'Open parent folder':
-        this.onOpenParentFolder(event);
-        return;
-      default:
-        return;
-    }
-  };
-
-  getMenuList = () => {
-    const { OPEN_FILE_IN_NEW_TAB, OPEN_PARENT_FOLDER } = TextTranslation;
-    return [OPEN_FILE_IN_NEW_TAB, OPEN_PARENT_FOLDER];
-  };
-
-  handleContextMenu = (event, id, menuList, currentObject = null) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    let x = event.clientX || (event.touches && event.touches[0].pageX);
-    let y = event.clientY || (event.touches && event.touches[0].pageY);
-
-    if (this.props.posX) {
-      x -= this.props.posX;
-    }
-    if (this.props.posY) {
-      y -= this.props.posY;
-    }
-
-    hideMenu();
-
-    this.setState({ activeDirent: currentObject });
-
-    if (menuList.length === 0) {
-      return;
-    }
-
-    showMenu({
-      id: id,
-      position: { x, y },
-      target: event.target,
-      currentObject: currentObject,
-      menuList: menuList,
+  onOptionClick = (event, option) => {
+    this.setState({
+      isContextMenuVisible: false,
     });
+
+    const handlers = {
+      openFileInNewTab: this.onOpenInNewTab.bind(this),
+      openParentFolder: this.onOpenParentFolder.bind(this),
+    };
+
+    const handler = handlers[option.value];
+    if (handler) {
+      handler(event);
+    }
   };
 
-  onFileNameContextMenu = (event, cell) => {
+  onCloseContextMenu = () => {
+    this.setState({ isContextMenuVisible: false });
+  };
+
+  onContextMenu = (event, cell) => {
     const record = this.props.recordGetter(cell.rowIdx);
     if (record._is_dir) {
       return;
     }
 
-    this.baseURI = event.target.baseURI;
-    this.setState({ selectedPosition: cell });
-    this.handleContextMenu(event, METADATA_RECORD_CONTEXT_MENU, this.getMenuList());
-  };
+    const { clientX, clientY, touches, target } = event;
 
-  getMenuContainerSize = () => {
-    if (this.resultContainerRef) {
-      const { offsetWidth: width, offsetHeight: height } = this.resultContainerRef;
-      return { width, height };
-    }
-    return { width: 0, height: 0 };
+    // Calculate x and y coordinates
+    const x = (clientX || touches?.[0]?.pageX) - this.resultContainerRef.getBoundingClientRect().left - (this.props.posX || 0);
+    const y = (clientY || touches?.[0]?.pageY) - this.resultContainerRef.getBoundingClientRect().top - (this.props.posY || 0);
+
+    const position = { x, y };
+
+    this.baseURI = target.baseURI;
+    this.setState({
+      selectedPosition: cell,
+      isContextMenuVisible: true,
+      contextMenuPosition: position
+    });
   };
 
   renderRecordsBody = ({ containerWidth }) => {
@@ -716,7 +688,7 @@ class Records extends Component {
       setRecordsScrollLeft: this.setScrollLeft,
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
-      onFileNameContextMenu: this.onFileNameContextMenu,
+      onContextMenu: this.onContextMenu,
     };
     if (this.props.isGroupView) {
       return (
@@ -779,9 +751,11 @@ class Records extends Component {
             {this.renderRecordsBody({ containerWidth })}
           </div>
           <ContextMenu
-            id={METADATA_RECORD_CONTEXT_MENU}
-            onMenuItemClick={this.onMenuItemClick}
-            getMenuContainerSize={this.getMenuContainerSize}
+            position={this.state.contextMenuPosition}
+            options={this.contextMenuOptions}
+            onOptionClick={this.onOptionClick}
+            visible={this.state.isContextMenuVisible}
+            onCloseContextMenu={this.onCloseContextMenu}
           />
         </div>
         {this.isWindows && this.isWebkit && (
