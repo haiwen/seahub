@@ -409,7 +409,7 @@ class RecordsBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
-      onContextMenu: this.props.onFileNameContextMenu
+      onContextMenu: this.props.onContextMenu
     };
     return this.cellMetaData;
   };
@@ -601,7 +601,7 @@ RecordsBody.propTypes = {
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
   onRowExpand: PropTypes.func,
-  onFileNameContextMenu: PropTypes.func,
+  onContextMenu: PropTypes.func,
 };
 
 export default RecordsBody;
