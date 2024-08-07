@@ -24,9 +24,11 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   useEffect(() => {
     metadataAPI.listViews(repoID).then(res => {
       const { navigation, views } = res.data;
-      Array.isArray(views) && views.forEach(view => {
-        viewsMap.current[view._id] = view;
-      });
+      if (Array.isArray(views)) {
+        views.forEach(view => {
+          viewsMap.current[view._id] = view;
+        });
+      }
       setViews(navigation);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -53,6 +55,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       parentNode: {},
       key: repoID,
       view_id: view._id,
+      view_name: view.name,
     };
     onNodeClick(node);
   }, [repoID, onNodeClick]);
