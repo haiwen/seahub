@@ -124,7 +124,6 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
           onCompositionEnd={onCompositionEnd}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
-          readOnly={true}
           value={pageName}
         /> : <Input
           className='wiki-sdoc-title'
