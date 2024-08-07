@@ -1,4 +1,4 @@
-.detail-container .detail-image-thumbnail {
+.detail-body .detail-image-thumbnail {
   height: 144px;
   width: 100%;
   flex-shrink: 0;
@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.detail-container .detail-image-thumbnail .thumbnail {
+.detail-body .detail-image-thumbnail .thumbnail {
   height: 100%;
   width: 100%;
   border: 0;
@@ -24,6 +24,6 @@
   max-height: 100%;
 }
 
-.detail-container .empty-tip-text {
+.detail-body .empty-tip-text {
   color: #666;
 }

@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
-
-import './index.css';
 import ObjectUtils from '../../metadata/metadata-view/utils/object-utils';
 
 const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {

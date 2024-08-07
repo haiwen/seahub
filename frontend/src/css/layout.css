@@ -178,33 +178,6 @@
   font-size: 14px;
 }
 
-.cur-view-detail {
-  display: block;
-  position: absolute;
-  right: 0;
-  background-color: #fff;
-  width: 400px;
-  height: 100%;
-  box-shadow: -1px 0 3px 0 #ccc;
-  animation: move .5s ease-in-out 1;
-  z-index: 50;
-}
-
-@keyframes move {
-  from {
-    right: -500px;
-    opacity: 0.5;
-  }
-  to {
-    right: 0px;
-    opacity: 1;
-  }
-}
-
-.cur-view-detail .detail-container {
-  height: 100%;
-}
-
 /* for reach/router */
 .reach-router,
 div[tabindex="-1"][role="group"] {

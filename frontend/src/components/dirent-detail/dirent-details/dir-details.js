@@ -7,12 +7,12 @@ import { gettext } from '../../../utils/constants';
 import { MetadataDetails } from '../../../metadata';
 
 const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
-  const parent = useMemo(() => getFileParent(repoInfo, dirent, path), [repoInfo, dirent, path]);
+  const parent = useMemo(() => getFileParent(dirent, path), [dirent, path]);
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
 
   return (
     <>
-      <DetailItem field={{ type: CellType.TEXT, name: gettext('Parent') }} value={parent} />
+      <DetailItem field={{ type: CellType.TEXT, name: gettext('Parent folder') }} value={parent} />
       <DetailItem field={{ type: 'size', name: gettext('Size') }} value={repoInfo.size} />
       <DetailItem field={{ type: CellType.CREATOR, name: gettext('Creator') }} value={repoInfo.owner_email} collaborators={[{
         name: repoInfo.owner_name,

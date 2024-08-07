@@ -250,7 +250,11 @@ class LibContentContainer extends React.Component {
               switchViewMode={this.props.switchViewMode}
             />
           </div>
-          <div className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`} onScroll={this.onItemsScroll}>
+          <div
+            className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`}
+            onScroll={this.onItemsScroll}
+
+          >
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
               <DirColumnView
@@ -318,18 +322,16 @@ class LibContentContainer extends React.Component {
               />
             )}
             {this.props.isDirentDetailShow && (
-              <div className="cur-view-detail">
-                <Detail
-                  path={path}
-                  repoID={repoID}
-                  currentRepoInfo={this.props.currentRepoInfo}
-                  dirent={this.state.currentDirent}
-                  repoTags={this.props.repoTags}
-                  fileTags={this.props.isViewFile ? this.props.fileTags : []}
-                  onFileTagChanged={this.props.onFileTagChanged}
-                  onClose={this.props.closeDirentDetail}
-                />
-              </div>
+              <Detail
+                path={path}
+                repoID={repoID}
+                currentRepoInfo={this.props.currentRepoInfo}
+                dirent={this.state.currentDirent}
+                repoTags={this.props.repoTags}
+                fileTags={this.props.isViewFile ? this.props.fileTags : []}
+                onFileTagChanged={this.props.onFileTagChanged}
+                onClose={this.props.closeDirentDetail}
+              />
             )}
           </div>
         </div>
