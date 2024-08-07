@@ -116,16 +116,28 @@ const PageTitle = ({ currentPageConfig, onUpdatePage }) => {
           </div>
         )}
       </div>
-      <Input
-        className='wiki-sdoc-title'
-        bsSize="lg"
-        onCompositionStart={onCompositionStart}
-        onCompositionEnd={onCompositionEnd}
-        onKeyDown={onKeyDown}
-        onKeyUp={onKeyUp}
-        onChange={onChange}
-        value={pageName}
-      />
+      {publishPermission === 'public' ?
+        <Input
+          className='wiki-sdoc-title'
+          bsSize="lg"
+          onCompositionStart={onCompositionStart}
+          onCompositionEnd={onCompositionEnd}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
+          readOnly={true}
+          value={pageName}
+        /> : <Input
+          className='wiki-sdoc-title'
+          bsSize="lg"
+          onCompositionStart={onCompositionStart}
+          onCompositionEnd={onCompositionEnd}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
+          onChange={onChange}
+          value={pageName}
+        />
+      }
+
     </div>
   );
 };
