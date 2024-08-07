@@ -324,7 +324,8 @@ class FileChooser extends React.Component {
           searchResults={this.state.searchResults}
           onItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
-        />);
+        />
+      );
     }
   };
 
