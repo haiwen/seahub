@@ -5,7 +5,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import Dirent from '../../../models/dirent';
-import Header from '../header';
+import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
@@ -106,9 +106,9 @@ class DirentDetails extends React.Component {
     }
 
     return (
-      <div className="detail-container">
+      <Detail>
         <Header title={direntName} icon={smallIconUrl} onClose={this.props.onClose} />
-        <div className="detail-body dirent-info">
+        <Body>
           {isImg && (
             <div className="detail-image-thumbnail">
               <img src={bigIconUrl} alt="" className="thumbnail" />
@@ -146,8 +146,8 @@ class DirentDetails extends React.Component {
               )}
             </div>
           )}
-        </div>
-      </div>
+        </Body>
+      </Detail>
     );
   }
 }

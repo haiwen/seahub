@@ -4,7 +4,7 @@ import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import toaster from '../../toast';
-import Header from '../header';
+import { Detail, Header, Body } from '../detail';
 import Repo from '../../../models/repo';
 import Loading from '../../loading';
 import DetailItem from '../detail-item';
@@ -28,9 +28,9 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   }, [currentRepoInfo.repo_id]);
 
   return (
-    <div className="detail-container">
+    <Detail>
       <Header title={currentRepoInfo.repo_name} icon={smallIconUrl} onClose={onClose} />
-      <div className="detail-body dirent-info">
+      <Body>
         {isLoading ? (
           <div className="w-100 h-100 d-flex algin-items-center justify-content-center"><Loading /></div>
         ) : (
@@ -46,8 +46,8 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
             <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={repo.last_modified} />
           </div>
         )}
-      </div>
-    </div>
+      </Body>
+    </Detail>
   );
 
 }, (props, nextProps) => {

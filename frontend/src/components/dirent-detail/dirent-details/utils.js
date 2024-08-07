@@ -6,10 +6,10 @@ export const getDirentPath = (dirent, path) => {
   return Utils.joinPath(path, dirent.name);
 };
 
-export const getFileParent = (repoInfo, dirent, path) => {
+export const getFileParent = (dirent, path) => {
   const direntPath = getDirentPath(dirent, path);
-  const position = repoInfo.repo_name;
-  if (direntPath === '/') return position;
+  if (direntPath === '/') return '/';
   const index = direntPath.lastIndexOf('/');
-  return position + direntPath.slice(0, index);
+  const positionPath = direntPath.slice(0, index);
+  return positionPath || '/';
 };

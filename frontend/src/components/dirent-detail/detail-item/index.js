@@ -15,9 +15,9 @@ const DetailItem = ({ field, value, valueId, valueClick, children, ...params }) 
 
   return (
     <div className="dirent-detail-item">
-      <div className="dirent-detail-item-name-container">
+      <div className="dirent-detail-item-name">
         <Icon iconName={icon} />
-        <span className="dirent-detail-item-name">{field.name}</span>
+        <span className="dirent-detail-item-name-value">{field.name}</span>
       </div>
       <div className={classnames('dirent-detail-item-value', { 'editable': valueClick })} id={valueId} onClick={valueClick}>
         {children ? children : (<Formatter { ...params } field={field} value={value} />)}
