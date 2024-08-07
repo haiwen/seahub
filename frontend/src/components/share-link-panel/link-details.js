@@ -193,7 +193,7 @@ class LinkDetails extends React.Component {
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Password')}</dt>
               <dd>
-                <InputGroup className="w-50">
+                <InputGroup className="share-link-details-item">
                   {this.state.storedPasswordVisible ?
                     <Input type="text" readOnly={true} value={sharedLinkInfo.password} /> :
                     <Input type="text" readOnly={true} value={'***************'} />
@@ -233,7 +233,7 @@ class LinkDetails extends React.Component {
                     </div>
                   </div>
                 ) : (
-                  <InputGroup className="w-50">
+                  <InputGroup className="share-link-details-item">
                     <Input type="text" readOnly={true} value={moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
                     <InputGroupAddon addonType="append">
                       <Button
@@ -253,7 +253,7 @@ class LinkDetails extends React.Component {
             <>
               <dt className="text-secondary font-weight-normal">{gettext('Permission')}</dt>
               <dd>
-                <div className="w-50">
+                <div className="share-link-details-item">
                   <SelectEditor
                     isTextMode={false}
                     isEditIconShow={false}
@@ -268,8 +268,8 @@ class LinkDetails extends React.Component {
           )}
           <>
             <dt className="text-secondary font-weight-normal">{gettext('Scope')}</dt>
-            <dd className="d-flex align-items-center">
-              <div className="w-50 mr-2">
+            <dd className="d-flex align-items-center flex-wrap">
+              <div className="share-link-details-item mr-2">
                 <ShareLinkScopeEditor
                   isTextMode={false}
                   isEditIconShow={false}
