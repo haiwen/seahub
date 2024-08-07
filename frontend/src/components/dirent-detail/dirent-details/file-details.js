@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
-import { getDirentPath, getFileParent } from './utils';
+import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
@@ -14,7 +14,6 @@ import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList, ...params }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
 
-  const parent = useMemo(() => getFileParent(dirent, path), [dirent, path]);
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);
 
@@ -28,7 +27,6 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
 
   return (
     <>
-      <DetailItem field={{ type: CellType.TEXT, name: gettext('Parent folder') }} value={parent} />
       <DetailItem field={{ type: 'size', name: gettext('Size') }} value={Utils.bytesToSize(direntDetail.size)} />
       <DetailItem field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }} value={direntDetail.last_modifier_email} collaborators={[{
         name: direntDetail.last_modifier_name,

@@ -91,30 +91,34 @@ class DirentDetails extends React.Component {
     }
   }
 
-  render() {
-    const { dirent, direntDetail, collaborators, collaboratorsCache } = this.state;
+  renderImage = () => {
+    const { dirent } = this.state;
     if (!dirent) return null;
-    const { repoID, path, fileTags } = this.props;
-    const direntName = dirent.name;
-    const smallIconUrl = Utils.getDirentIcon(dirent);
     // let bigIconUrl = Utils.getDirentIcon(dirent, true);
-    let bigIconUrl = '';
     const isImg = Utils.imageCheck(dirent.name);
     // const isVideo = Utils.videoCheck(dirent.name);
-    if (isImg) {
-      bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
-    }
+    if (!isImg) return null;
+    const { repoID, path } = this.props;
+    const bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    return (
+      <div className="detail-image-thumbnail">
+        <img src={bigIconUrl} alt="" className="thumbnail" />
+      </div>
+    );
+  };
+
+  render() {
+    const { dirent, direntDetail, collaborators, collaboratorsCache } = this.state;
+    const { repoID, path, fileTags } = this.props;
+    const direntName = dirent?.name || '';
+    const smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : '';
 
     return (
       <Detail>
         <Header title={direntName} icon={smallIconUrl} onClose={this.props.onClose} />
         <Body>
-          {isImg && (
-            <div className="detail-image-thumbnail">
-              <img src={bigIconUrl} alt="" className="thumbnail" />
-            </div>
-          )}
-          {direntDetail && (
+          {this.renderImage()}
+          {dirent && direntDetail && (
             <div className="detail-content">
               {dirent.type !== 'file' ? (
                 <DirDetails
