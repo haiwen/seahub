@@ -25,15 +25,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
+from seahub.onlyoffice.models import OnlyOfficeDocKey
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
-from seahub.onlyoffice.utils import get_onlyoffice_dict
+from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
         get_file_ext, get_file_type, get_internal_extension
 from seahub.onlyoffice.converter import get_converter_uri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
-        normalize_file_path, check_filename_with_rename, \
-        gen_inner_file_get_url, get_service_url
+    normalize_file_path, check_filename_with_rename, \
+    gen_inner_file_get_url, get_service_url, get_file_type_and_ext, gen_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
 
 
@@ -434,3 +435,51 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
         payload['token'] = jwt_token
 
         return Response({"data": payload})
+
+
+class OnlyofficeGetReferenceData(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+    
+    def post(self, request):
+        instance_id = request.data.get('instanceId')
+        file_key = request.data.get('fileKey')
+        payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+        source_repo_id = payload.get('repo_id')
+        source_file_path = payload.get('file_path')
+        username = payload.get('username')
+
+        doc_key = get_doc_key_by_repo_id_file_path(source_repo_id, source_file_path)
+        file_name = os.path.basename(source_file_path.rstrip('/'))
+
+        _, fileext = get_file_type_and_ext(source_file_path)
+
+        file_id = seafile_api.get_file_id_by_path(source_repo_id,
+                                                  source_file_path)
+        dl_token = seafile_api.get_fileserver_access_token(
+            source_repo_id,
+            file_id,
+            'download',
+            username,
+            use_onetime=False
+        )
+
+        doc_url = gen_file_get_url(dl_token, file_name)
+        link = "%s%s"% (instance_id, reverse('view_lib_file', args=[
+            source_repo_id, source_file_path]))
+        
+        result = {
+            "fileType": fileext,
+            "key": doc_key,
+            "path": file_name,
+            "referenceData": {
+                "fileKey": file_key,
+                "instanceId": instance_id,
+            },
+            "url": doc_url,
+            "link": link
+        }
+        result['token'] = jwt.encode(result, ONLYOFFICE_JWT_SECRET)
+        return Response({'data': result})
+

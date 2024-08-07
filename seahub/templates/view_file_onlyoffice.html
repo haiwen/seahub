@@ -75,10 +75,35 @@ html, body { padding:0; margin:0; height:100%; }
     var onRequestHistoryClose = function () {
         document.location.reload();
     };
+
+    var onRequestReferenceData = function (event) {
+        $.ajax({
+            url: '{% url "onlyoffice_api_get_reference_data" %}',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            data: event.data.referenceData,
+            beforeSend: prepareCSRFToken,
+            success: function(resp) {
+                docEditor.setReferenceData(resp.data);
+            },
+            error: function(xhr, status, error) {
+                if (!xhr.responseText) {
+                    errMsg = JSON.parse(xhr.responseText).error_msg;
+                } else {
+                    errMsg = "{% trans "Failed. Please check the network." %}";
+                }
+                docEditor.setReferenceData({
+                    "error": errMsg
+                })
+            }
+        });
+    };
     {% endif %}
     var config = {
         {% if onlyoffice_jwt_token %}
         "events": {
+            "onRequestReferenceData": onRequestReferenceData,
             "onRequestHistory": onRequestHistory,
             "onRequestHistoryData": onRequestHistoryData,
             "onRequestHistoryClose": onRequestHistoryClose,
@@ -95,7 +120,12 @@ html, body { padding:0; margin:0; height:100%; }
                 "edit": {% if can_edit %}true{% else %}false{% endif %},
                 "print": {% if can_download %}true{% else %}false{% endif %},
                 "review": true
-            }
+            },
+            "referenceData": {
+                "fileKey": '{{ file_key }}',
+                "instanceId": "{{ instance_id }}",
+                "key": "{{ doc_key }}"
+            },
         },
         "documentType": "{{ document_type }}", // 'text' | 'spreadsheet' | 'presentation',
         {% if onlyoffice_jwt_token %}
