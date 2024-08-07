@@ -5,7 +5,7 @@ import { siteRoot, gettext, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import Header from './header/index';
+import Header from './detail/header';
 
 import '../../css/dirent-detail.css';
 
