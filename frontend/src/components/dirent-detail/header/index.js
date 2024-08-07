@@ -5,7 +5,6 @@ import Icon from '../../icon';
 import './index.css';
 
 const Header = ({ title, icon, onClose }) => {
-
   return (
     <div className="detail-header">
       <div className="detail-title dirent-title">
