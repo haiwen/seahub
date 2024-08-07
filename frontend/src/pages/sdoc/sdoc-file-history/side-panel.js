@@ -102,11 +102,12 @@ class SidePanel extends Component {
   };
 
   restoreVersion = (currentItem) => {
+    console.log('currentItem', currentItem);
     const { commit_id, path } = currentItem;
     editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true }, () => {
-          this.firstLoadSdocHistory();
+          // this.firstLoadSdocHistory();
         });
       }
       let message = gettext('Successfully restored.');
