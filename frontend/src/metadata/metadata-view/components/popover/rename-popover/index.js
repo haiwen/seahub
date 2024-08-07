@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Input, PopoverBody } from 'reactstrap';
+import { Input, PopoverBody } from 'reactstrap';
 import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
 import { KeyCodes } from '../../../../../constants';
 import { ValidateColumnFormFields } from '../column-popover/utils';
@@ -23,13 +23,17 @@ const RenamePopover = ({ value: oldValue, target, onToggle, onSubmit }) => {
   }, [value]);
 
   const handleSubmit = useCallback(() => {
+    if (value === oldValue) {
+      onToggle();
+      return;
+    }
     const valueError = ValidateColumnFormFields[COMMON_FORM_FIELD_TYPE.COLUMN_NAME]({ columnName: value, metadata, gettext });
     if (valueError) {
       toaster.danger(valueError.tips);
       return;
     }
     onSubmit(value);
-  }, [value, metadata, onSubmit]);
+  }, [value, oldValue, metadata, onSubmit, onToggle]);
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === KeyCodes.Enter) {
@@ -52,12 +56,8 @@ const RenamePopover = ({ value: oldValue, target, onToggle, onSubmit }) => {
 
   return (
     <CustomizePopover target={target} className="sf-metadata-rename-column-popover" hide={handleSubmit} hideWithEsc={onToggle}>
-      <PopoverBody>
-        <Form>
-          <FormGroup>
-            <Input value={value} innerRef={inputRef} onClick={onClick} onChange={onChange} />
-          </FormGroup>
-        </Form>
+      <PopoverBody className='p-4'>
+        <Input value={value} innerRef={inputRef} onClick={onClick} onChange={onChange} />
       </PopoverBody>
     </CustomizePopover>
   );
