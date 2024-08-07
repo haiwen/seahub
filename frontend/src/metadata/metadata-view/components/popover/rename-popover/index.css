@@ -3,11 +3,3 @@
   min-width: 350px;
   width: 350px;
 }
-
-.sf-metadata-rename-column-popover .popover-body {
-  padding: 16px;
-}
-
-.sf-metadata-rename-column-popover .form-group {
-  margin-bottom: 0;
-}
