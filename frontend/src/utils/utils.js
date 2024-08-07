@@ -391,6 +391,7 @@ export const Utils = {
   },
 
   getDirentIcon: function (dirent, isBig) {
+    if (!dirent) return mediaUrl + 'img/file/256/' + this.FILEEXT_ICON_MAP['default'];
     let size = this.isHiDPI() ? 48 : 24;
     size = isBig ? 192 : size;
     if (dirent.isDir()) {

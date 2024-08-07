@@ -111,7 +111,7 @@ class DirentDetails extends React.Component {
     const { dirent, direntDetail, collaborators, collaboratorsCache } = this.state;
     const { repoID, path, fileTags } = this.props;
     const direntName = dirent?.name || '';
-    const smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : '';
+    const smallIconUrl = Utils.getDirentIcon(dirent);
 
     return (
       <Detail>
