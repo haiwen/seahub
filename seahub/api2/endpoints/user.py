@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -16,7 +17,7 @@ from seahub.organizations.models import OrgSettings
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
 from seahub.organizations.views import gen_org_url_prefix
 from seahub.password_session import update_session_auth_hash
-from seahub.utils import is_valid_email
+from seahub.utils import is_valid_email, send_html_email, get_site_name
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -250,7 +251,15 @@ class ResetPasswordView(APIView):
 
         user.set_password(new_password)
         user.save()
-
+        email_template_name = 'registration/password_change_email.html'
+        send_to = email2contact_email(request.user.username)
+        site_name = get_site_name()
+        c = {
+            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        send_html_email(_("Successfully Changed Password on %s") % site_name,
+                        email_template_name, c, None,
+                        [send_to])
         if not request.session.is_empty():
             # invalidate all active sessions after change password.
             update_session_auth_hash(request, request.user)

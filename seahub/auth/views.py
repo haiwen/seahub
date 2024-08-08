@@ -487,7 +487,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-
+            print('进入')
             email_template_name = 'registration/password_change_email.html'
             send_to = email2contact_email(request.user.username)
             site_name = get_site_name()
