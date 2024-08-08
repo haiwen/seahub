@@ -128,12 +128,14 @@ class LibContentContainer extends React.Component {
   };
 
   onDirentClick = (dirent, event) => {
-    this.setState({ currentDirent: dirent });
+    const isActive = dirent.isSelected;
+    this.setState({ currentDirent: isActive ? null : dirent });
     this.props.onDirentClick(dirent, event);
   };
 
   onItemSelected = (dirent) => {
-    this.setState({ currentDirent: dirent });
+    const isActive = dirent.isSelected;
+    this.setState({ currentDirent: isActive ? null : dirent });
     this.props.onItemSelected(dirent);
   };
 
@@ -167,7 +169,7 @@ class LibContentContainer extends React.Component {
   };
 
   render() {
-    let { path, repoID, usedRepoTags } = this.props;
+    const { path, repoID, usedRepoTags } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (usedRepoTags.length !== 0) {
