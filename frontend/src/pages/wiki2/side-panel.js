@@ -21,7 +21,6 @@ const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   config: PropTypes.object.isRequired,
-  saveWikiConfig: PropTypes.func.isRequired,
   updateWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,

@@ -20,6 +20,7 @@ const propTypes = {
   assets_url: PropTypes.string,
   config: PropTypes.object,
   currentPageId: PropTypes.string,
+  isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
   onAddWikiPage: PropTypes.func,
 };
@@ -34,16 +35,6 @@ class MainPanel extends Component {
     };
     this.scrollRef = React.createRef();
   }
-
-  getHeaderHeight = () => {
-    const pageCover = document.getElementById('wiki-page-cover');
-    const pageCoverHeight = pageCover?.offsetHeight || 0;
-    const pageTitle = document.getElementById('wiki-page-title');
-    const pageTitleHeight = pageTitle?.offsetHeight || 0;
-
-    const topNavHeight = 44;
-    return pageCoverHeight + pageTitleHeight + topNavHeight;
-  };
 
   static getDerivedStateFromProps(props, state) {
     const { seadoc_access_token, currentPageId, config } = props;
@@ -66,7 +57,7 @@ class MainPanel extends Component {
   }
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage } = this.props;
+    const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage, isUpdateBySide } = this.props;
     const { currentPageConfig = {} } = this.state;
     const isViewingFile = pathExist && !isDataLoading && isViewFile;
     const isReadOnly = !(permission === 'rw');
@@ -90,13 +81,12 @@ class MainPanel extends Component {
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
-                  <RightHeader onUpdatePage={onUpdatePage} currentPageConfig={currentPageConfig} />
+                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
                   <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}
                     scrollRef={this.scrollRef}
-                    getHeaderHeight={this.getHeaderHeight}
                   />
                 </div>
               </div>

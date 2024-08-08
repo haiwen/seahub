@@ -39,6 +39,7 @@ class Wiki extends Component {
       seadoc_access_token: '',
       assets_url: '',
       wikiRepoId: null,
+      isUpdateBySide: false,
     };
   }
 
@@ -85,19 +86,23 @@ class Wiki extends Component {
   };
 
   updateWikiConfig = (wikiConfig) => {
-    this.setState({
-      config: new WikiConfig(wikiConfig || {}),
-    });
+    this.setState({ config: new WikiConfig(wikiConfig || {}) });
   };
 
-  saveWikiConfig = (wikiConfig, onSuccess, onError) => {
+  saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
     wikiAPI.updateWiki2Config(wikiId, JSON.stringify(wikiConfig)).then(res => {
-      this.updateWikiConfig(wikiConfig);
-      onSuccess && onSuccess();
+      this.setState({
+        config: new WikiConfig(wikiConfig),
+        isUpdateBySide,
+      });
+      if (isUpdateBySide) {
+        setTimeout(() => {
+          this.setState({ isUpdateBySide: false });
+        }, 300);
+      }
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      onError && onError();
     });
   };
 
@@ -201,7 +206,7 @@ class Wiki extends Component {
     this.updateDocumentTitle(name);
   };
 
-  onUpdatePage = (pageId, newPage) => {
+  onUpdatePage = (pageId, newPage, isUpdateBySide) => {
     if (newPage.name === '') {
       toaster.danger(gettext('Page name cannot be empty'));
       return;
@@ -218,7 +223,7 @@ class Wiki extends Component {
       return page;
     });
     const newConfig = { ...config, pages: newPages };
-    this.saveWikiConfig(newConfig);
+    this.saveWikiConfig(newConfig, isUpdateBySide);
   };
 
   updateDocumentTitle = (newTitle) => {
@@ -233,7 +238,6 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide={this.onCloseSide}
           config={this.state.config}
-          saveWikiConfig={this.saveWikiConfig}
           updateWikiConfig={this.updateWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
@@ -251,6 +255,7 @@ class Wiki extends Component {
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
+          isUpdateBySide={this.state.isUpdateBySide}
         />
         <MediaQuery query="(max-width: 767.8px)">
           <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>

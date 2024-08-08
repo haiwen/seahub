@@ -73,7 +73,8 @@ class PageItem extends Component {
     const { name, id } = this.props.page;
     const pageName = this.state.pageName.trim();
     if (pageName !== name) {
-      this.props.onUpdatePage(id, { name: pageName });
+      const isUpdateBySide = true;
+      this.props.onUpdatePage(id, { name: pageName }, isUpdateBySide);
     }
   };
 
