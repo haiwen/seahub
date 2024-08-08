@@ -16,7 +16,7 @@ from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
-from seahub.utils.repo import get_repo_owner, is_repo_admin
+from seahub.utils.repo import get_repo_owner, is_repo_admin, is_repo_owner, is_group_repo_staff
 from seahub.settings import SEADOC_SERVER_URL
 
 # Get an instance of a logger
@@ -32,7 +32,7 @@ def wiki_view(request, wiki_id):
     if not wiki:
         raise Http404
     
-    
+    username = request.user.username
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
     
@@ -40,7 +40,7 @@ def wiki_view(request, wiki_id):
     file_path = ''
 
     if page_id:
-        wiki_config = get_wiki_config(wiki.repo_id, request.user.username)
+        wiki_config = get_wiki_config(wiki.repo_id, username)
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
         file_path = page_info.get('path', '')
@@ -50,27 +50,33 @@ def wiki_view(request, wiki_id):
         is_page = True
 
     # perm check
-    req_user = request.user.username
-    permission = check_wiki_permission(wiki, req_user)
-    if not check_wiki_permission(wiki, req_user):
+    permission = check_wiki_permission(wiki, username)
+    if not check_wiki_permission(wiki, username):
         return render_permission_error(request, 'Permission denied.')
 
     latest_contributor = ''
     last_modified = 0
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
-    repo = seafile_api.get_repo(wiki.repo_id)
+    repo_id = wiki.repo_id
+    repo = seafile_api.get_repo(repo_id)
     if is_page and file_type == SEADOC:
         try:
-            dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
             if dirent:
                 latest_contributor, last_modified = dirent.modifier, dirent.mtime
         except Exception as e:
             logger.warning(e)
 
+    is_admin = is_repo_owner(request, repo_id, username)
+    if not is_admin:
+        is_admin = is_repo_admin(username, repo_id)
+        if not is_admin:
+            is_admin = is_group_repo_staff(request, repo_id, username)
+            
     last_modified = datetime.fromtimestamp(last_modified)
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
-        "is_admin": is_repo_admin(req_user, wiki.repo_id),
+        "is_admin": is_admin,
         "file_path": file_path,
         "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,

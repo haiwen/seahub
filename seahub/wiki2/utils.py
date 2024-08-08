@@ -279,6 +279,10 @@ def move_nav(navigation, target_id, moved_nav, move_position):
 
 
 def revert_nav(navigation, page_id, flag=0):
+    """
+    revert nav
+    If the parent is deleted, restore the node to the root node
+    """
     if flag != 1:
         for nav in navigation:
             if nav.get('is_delete', False):
