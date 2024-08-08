@@ -126,7 +126,7 @@ class DirentDetails extends React.Component {
                   repoInfo={this.props.currentRepoInfo}
                   dirent={dirent}
                   direntDetail={direntDetail}
-                  path={path}
+                  path={this.props.dirent ? path + '/' + dirent.name : path}
                   collaborators={collaborators}
                   collaboratorsCache={collaboratorsCache}
                   updateCollaboratorsCache={this.updateCollaboratorsCache}
