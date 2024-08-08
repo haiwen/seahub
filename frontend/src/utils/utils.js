@@ -555,7 +555,7 @@ export const Utils = {
     const {
       SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT,
-      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC
+      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC
     } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -646,12 +646,13 @@ export const Utils = {
 
       if (dirent.name.endsWith('.sdoc')) {
         if (Utils.isDesktop()) {
-          let subOpList = [CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX];
+          let subOpList = [CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, EXPORT_SDOC];
           list.push({ ...CONVERT_AND_EXPORT, subOpList });
         } else {
           list.push(CONVERT_TO_MARKDOWN);
           list.push(CONVERT_TO_DOCX);
           list.push(EXPORT_DOCX);
+          list.push(EXPORT_SDOC);
         }
       }
     }

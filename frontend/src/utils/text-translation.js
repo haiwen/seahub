@@ -131,6 +131,10 @@ const TextTranslation = {
     key: 'Display files',
     value: gettext('Display files')
   },
+  'EXPORT_SDOC': {
+    key: 'Export sdoc',
+    value: gettext('Export sdoc')
+  },
 };
 
 export default TextTranslation;

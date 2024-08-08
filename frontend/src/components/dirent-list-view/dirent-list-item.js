@@ -237,6 +237,14 @@ class DirentListItem extends React.Component {
     window.location.href = exportToDocxUrl;
   };
 
+  exportSdoc = () => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
+    window.location.href = exportToSdocUrl;
+  };
+
   closeSharedDialog = () => {
     this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
@@ -292,6 +300,9 @@ class DirentListItem extends React.Component {
         break;
       case 'Export docx':
         this.exportDocx();
+        break;
+      case 'Export sdoc':
+        this.exportSdoc();
         break;
       case 'Convert to sdoc':
         this.onItemConvert(event, 'sdoc');

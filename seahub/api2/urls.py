@@ -50,6 +50,7 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-shared-links/$', RepoUploadSharedLinks.as_view(), name="api2-repo-upload-shared-links"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-shared-links/(?P<token>[a-f0-9]+)/$', RepoUploadSharedLink.as_view(), name="api2-repo-upload-shared-link"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', UploadLinkView.as_view()),
+    re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/import-sdoc/$', ImportSdoc.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-link/$', UpdateLinkView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-blks-link/$', UploadBlksLinkView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-blks-link/$', UpdateBlksLinkView.as_view()),
