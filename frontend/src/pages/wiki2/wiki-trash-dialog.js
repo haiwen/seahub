@@ -136,9 +136,8 @@ class Content extends React.Component {
     this.theadData = [
       { width: '5%', text: gettext('Name') },
       { width: '20%', text: '' },
-      { width: '40%', text: gettext('') },
-      { width: '12%', text: gettext('Delete Time') },
-      { width: '13%', text: gettext('Size') },
+      { width: '30%', text: gettext('Size') },
+      { width: '35%', text: gettext('Delete Time') },
       { width: '10%', text: '' }
     ];
   }
@@ -250,9 +249,8 @@ class Item extends React.Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
         <td>{item.name}</td>
-        <td></td>
-        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
+        <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>
           {isAdmin &&
             <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
