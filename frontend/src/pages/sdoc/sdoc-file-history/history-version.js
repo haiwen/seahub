@@ -166,7 +166,7 @@ class HistoryVersion extends React.Component {
                   aria-label={gettext('More operations')}
                 />
                 <DropdownMenu>
-                  <DropdownItem onClick={this.onRestore}>{gettext('Restore')}</DropdownItem>
+                  {(path[0] + path[1] + path[2] !== 0) && <DropdownItem onClick={this.onRestore}>{gettext('Restore')}</DropdownItem>}
                   <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
                   {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
                   <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
