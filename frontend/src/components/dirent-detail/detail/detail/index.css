@@ -1,21 +1,8 @@
-@keyframes move {
-  from {
-    right: -500px;
-    opacity: 0.5;
-  }
-  to {
-    right: 0px;
-    opacity: 1;
-  }
-}
-
 .cur-view-detail {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  width: 400px;
   height: 100%;
   border-left: 1px solid #eee;
-  animation: move .5s ease-in-out 1;
   position: relative;
 }

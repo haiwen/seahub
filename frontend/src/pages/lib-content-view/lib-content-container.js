@@ -120,12 +120,10 @@ class LibContentContainer extends React.Component {
 
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
-    this.props.closeDirentDetail();
   };
 
   onItemClick = (dirent) => {
     this.props.onItemClick(dirent);
-    this.props.closeDirentDetail();
   };
 
   onDirentClick = (dirent, event) => {

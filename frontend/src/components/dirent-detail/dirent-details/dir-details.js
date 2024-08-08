@@ -11,12 +11,6 @@ const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params })
 
   return (
     <>
-      <DetailItem field={{ type: CellType.CREATOR, name: gettext('Creator') }} value={repoInfo.owner_email} collaborators={[{
-        name: repoInfo.owner_name,
-        contact_email: repoInfo.owner_contact_email,
-        email: repoInfo.owner_email,
-        avatar_url: repoInfo.owner_avatar,
-      }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
       {window.app.pageOptions.enableMetadataManagement && (
         <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
