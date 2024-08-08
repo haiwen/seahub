@@ -98,7 +98,7 @@ const ColumnTypes = ({
     <ModalPortal>
       <div className="sf-metadata-column-types-popover" style={style} ref={popoverRef}>
         <div className="search-column-container">
-          <Input onChange={onSearchColumn} placeholder={gettext('Search column types')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
+          <Input onChange={onSearchColumn} placeholder={gettext('Search property types')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
         </div>
         {displayColumns.length > 0 && (
           <div className="select-column-wrapper">

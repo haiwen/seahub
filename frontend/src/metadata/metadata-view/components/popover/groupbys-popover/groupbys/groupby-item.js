@@ -175,7 +175,7 @@ const GroupbyItem = memo(({
               options={columnsOptions}
               onSelectOption={selectColumn}
               searchable={true}
-              searchPlaceholder={gettext('Search column')}
+              searchPlaceholder={gettext('Search property')}
               noOptionsPlaceholder={gettext('No results')}
             />
           </div>

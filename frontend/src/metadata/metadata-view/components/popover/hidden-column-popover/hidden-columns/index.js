@@ -12,7 +12,7 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange }) => {
 
   return (
     <div className={classnames('hide-columns-list', { 'empty-hide-columns-container': isEmpty })}>
-      {isEmpty && <div className="empty-hide-columns-list">{gettext('No columns available to be hidden.')}</div>}
+      {isEmpty && <div className="empty-hide-columns-list">{gettext('No properties available to be hidden')}</div>}
       {!isEmpty && columns.map((column) => {
         return (
           <HideColumn

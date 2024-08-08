@@ -19,8 +19,8 @@ const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys,
 
   const message = useMemo(() => {
     const groupbysLength = groupbys ? groupbys.length : 0;
-    if (groupbysLength === 1) return gettext('Grouped by 1 column');
-    if (groupbysLength > 1) return gettext('Grouped by xxx columns').replace('xxx', groupbysLength);
+    if (groupbysLength === 1) return gettext('Grouped by 1 property');
+    if (groupbysLength > 1) return gettext('Grouped by xxx properties').replace('xxx', groupbysLength);
     // need to translate to Group
     return gettext('Group by');
   }, [groupbys]);

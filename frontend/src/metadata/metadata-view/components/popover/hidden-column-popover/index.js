@@ -102,7 +102,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
     >
       <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-hide-columns-container">
         <div className="sf-metadata-hide-columns-search-container">
-          <SearchInput placeholder={gettext('Search column')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true}/>
+          <SearchInput placeholder={gettext('Search property')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true}/>
         </div>
         <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} />
         {!readOnly && !searchValue && (

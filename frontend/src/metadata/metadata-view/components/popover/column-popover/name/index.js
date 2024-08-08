@@ -27,7 +27,7 @@ const Name = forwardRef(({ readOnly, value }, ref) => {
   return (
     <FormGroup className={classnames('sf-metadata-column-settings-item', { 'is-invalid': error })}>
       <Input
-        placeholder={gettext('Column name')}
+        placeholder={gettext('Property name')}
         value={name}
         onChange={onNameChange}
         readOnly={readOnly}

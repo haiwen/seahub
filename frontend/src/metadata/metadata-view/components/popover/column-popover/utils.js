@@ -29,7 +29,7 @@ const _validateColumnName = ({ columnName, oldColumn, metadata, gettext }) => {
   ) {
     return {
       type: COMMON_FORM_FIELD_TYPE.COLUMN_NAME,
-      tips: gettext('There is another column with this name'),
+      tips: gettext('There is another property with this name'),
     };
   }
   return null;
@@ -39,7 +39,7 @@ const _validateColumnType = ({ column, metadata, gettext }) => {
   if (column.unique && getColumnByKey(metadata.columns, column.key)) {
     return {
       type: COMMON_FORM_FIELD_TYPE.COLUMN_TYPE,
-      tips: gettext('Another column has this column type'),
+      tips: gettext('Another property has this column type'),
     };
   }
   return null;
