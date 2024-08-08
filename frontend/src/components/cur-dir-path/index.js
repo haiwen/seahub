@@ -40,6 +40,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   metadataViewId: PropTypes.string,
   onItemMove: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -86,6 +87,7 @@ class CurDirPath extends React.Component {
           onFileTagChanged={this.props.onFileTagChanged}
           repoTags={this.props.repoTags}
           onItemMove={this.props.onItemMove}
+          loadDirentList={this.props.loadDirentList}
         />
         {isDesktop &&
         <DirTool

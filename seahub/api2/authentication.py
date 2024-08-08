@@ -2,7 +2,7 @@
 import datetime
 import logging
 from rest_framework import status
-from rest_framework.authentication import BaseAuthentication
+from rest_framework.authentication import BaseAuthentication, SessionAuthentication
 from rest_framework.exceptions import APIException
 
 from seaserv import ccnet_api
@@ -216,3 +216,19 @@ class SdocJWTTokenAuthentication(BaseAuthentication):
             return None
 
         return user, auth[1]
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    """
+    request.POST is accessed by CsrfViewMiddleware which is enabled by default.
+    This means you will need to use csrf_exempt()
+    on your view to allow you to change the upload handlers.
+
+    DRF's SessionAuthentication uses Django's session framework
+    for authentication which requires CSRF to be checked.
+
+    This Class is override enforce_csrf to solve above problem
+    """
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening

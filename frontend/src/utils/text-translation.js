@@ -27,6 +27,7 @@ const TextTranslation = {
   'CONVERT_TO_SDOC': { key: 'Convert to sdoc', value: gettext('Convert to sdoc') },
   'CONVERT_TO_DOCX': { key: 'Convert to docx', value: gettext('Convert to docx') },
   'EXPORT_DOCX': { key: 'Export docx', value: gettext('Export as docx') },
+  'EXPORT_SDOC': { key: 'Export sdoc', value: gettext('Export sdoc') },
   'HISTORY': { key: 'History', value: gettext('History') },
   'ACCESS_LOG': { key: 'Access Log', value: gettext('Access Log') },
   'PROPERTIES': { key: 'Properties', value: gettext('Properties') },
