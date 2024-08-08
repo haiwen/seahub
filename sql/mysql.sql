@@ -1495,7 +1495,7 @@ CREATE TABLE IF NOT EXISTS `FileTrash` (
   KEY `ix_FileTrash_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `WikiPageTrash` (
+CREATE TABLE IF NOT EXISTS `WikiPageTrash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
   `path` text NOT NULL,
