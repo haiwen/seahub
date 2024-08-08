@@ -39,7 +39,7 @@ from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm, get_repo_owner, is_repo_admin
+from seahub.utils.repo import parse_repo_perm, get_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
@@ -737,16 +737,14 @@ class Wiki2PageView(APIView):
         delete_nav(navigation, page_id)
         # delete the folder where the sdoc is located
         try:
-            for page in pages:
-                if page['id'] == page_id:
-                    file_id = seafile_api.get_file_id_by_path(repo_id, page['path'])
-                    page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
-                    WikiPageTrash.objects.create(repo_id=repo_id,
-                                                 path=page['path'],
-                                                 page_id=page['id'],
-                                                 name=page['name'],
-                                                 delete_time=datetime.datetime.utcnow(),
-                                                 size=page_size)
+            file_id = seafile_api.get_file_id_by_path(repo_id, page_info['path'])
+            page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
+            WikiPageTrash.objects.create(repo_id=repo_id,
+                                         path=page_info['path'],
+                                         page_id=page_info['id'],
+                                         name=page_info['name'],
+                                         delete_time=datetime.datetime.utcnow(),
+                                         size=page_size)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -895,16 +893,6 @@ class WikiPageTrashView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def get_item_info(self, trash_item):
-        item_info = {
-            'path': trash_item.path,
-            'name': trash_item.name,
-            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
-            'size': trash_item.size,
-            'page_id': trash_item.page_id
-        }
-        return item_info
-
     def get(self, request, wiki_id):
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
@@ -940,10 +928,8 @@ class WikiPageTrashView(APIView):
         total_count = trash_pages.count()
         trash_pages = trash_pages[start: end]
         items = []
-        if len(trash_pages) >= 1:
-            for item in trash_pages:
-                item_info = self.get_item_info(item)
-                items.append(item_info)
+        for item in trash_pages:
+            items.append(item.to_dict())
 
         return Response({'items': items, 'total_count': total_count})
 
@@ -962,7 +948,7 @@ class WikiPageTrashView(APIView):
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1021,16 +1007,16 @@ class WikiPageTrashView(APIView):
         # permission check
         username = request.user.username
         repo_owner = get_repo_owner(request, repo_id)
+        wiki.owner = repo_owner
         if not config.ENABLE_USER_CLEAN_TRASH:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not is_repo_admin(username, repo_id):
+        if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         wiki_config = get_wiki_config(repo_id, username)
-        page_ids_map = []
         _timestamp = datetime.datetime.now() - datetime.timedelta(days=keep_days)
         del_pages = WikiPageTrash.objects.filter(repo_id=repo_id, delete_time__lt=_timestamp)
 
@@ -1046,7 +1032,6 @@ class WikiPageTrashView(APIView):
             file_uuids = []
             for del_page in clean_pages:
                 # rm dir
-                page_ids_map.append(del_page['id'])
                 sdoc_dir_path = os.path.dirname(del_page['path'])
                 parent_dir = os.path.dirname(sdoc_dir_path)
                 dir_name = os.path.basename(sdoc_dir_path)
@@ -1066,10 +1051,6 @@ class WikiPageTrashView(APIView):
 
         try:
             seafile_api.clean_up_repo_history(repo_id, 0)
-            org_id = None if not request.user.org else request.user.org.org_id
-            clean_up_repo_trash.send(sender=None, org_id=org_id,
-                                     operator=username, repo_id=repo_id, repo_name=repo.name,
-                                     repo_owner=repo_owner, days=0)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

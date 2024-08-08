@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
-import { gettext, wikiId, username } from '../../utils/constants';
+import { gettext, wikiId } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
@@ -84,8 +84,7 @@ class WikiTrashDialog extends React.Component {
   render() {
     const { showTrashDialog, toggleTrashDialog } = this.props;
     const { isCleanTrashDialogOpen } = this.state;
-    const { isAdmin, wikiOwner, enableUserCleanTrash, repoName } = window.wiki.config;
-    const isWikiAdmin = wikiOwner === username || isAdmin;
+    const { isAdmin, enableUserCleanTrash, repoName } = window.wiki.config;
     const repoFolderName = repoName;
     let title = gettext('{placeholder} Wiki Trash');
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
@@ -95,7 +94,7 @@ class WikiTrashDialog extends React.Component {
           close={
             <>
               <div className="but-contral">
-                {(isWikiAdmin && enableUserCleanTrash) &&
+                {(isAdmin && enableUserCleanTrash) &&
                   <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                 }
                 <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
@@ -246,7 +245,7 @@ class Item extends React.Component {
     if (restored) {
       return null;
     }
-
+    const { isAdmin } = window.wiki.config;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
@@ -255,7 +254,9 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          {isAdmin &&
+            <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          }
         </td>
       </tr>
     );
