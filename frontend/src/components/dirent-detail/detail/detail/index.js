@@ -8,22 +8,22 @@ import './index.css';
 
 const Detail = ({ children, className }) => {
   const [width, setWidth] = useState(300);
-  const [inResizing, setResizing] = useState(false);
+  const [isResizing, setResizing] = useState(false);
   const resizeBarRef = useRef(null);
   const dragHandlerRef = useRef(null);
 
   const onResizeMouseMove = useCallback((e) => {
     const newWidth = Math.max(Math.min(window.innerWidth - e.clientX, 600), 300);
     if (width === newWidth) return;
+    localStorage.setItem('sf_cur_view_detail_width', newWidth);
     setWidth(newWidth);
   }, [width]);
 
   const onResizeMouseUp = useCallback(() => {
     window.removeEventListener('mousemove', onResizeMouseMove);
     window.removeEventListener('mouseup', onResizeMouseUp);
-    inResizing && setResizing(false);
-    localStorage.setItem('sf_cur_view_detail_width', width);
-  }, [width, inResizing, onResizeMouseMove]);
+    isResizing && setResizing(false);
+  }, [isResizing, onResizeMouseMove]);
 
   const onResizeMouseDown = useCallback(() => {
     window.addEventListener('mouseup', onResizeMouseUp);
@@ -55,8 +55,6 @@ const Detail = ({ children, className }) => {
         'cur-view-detail-large': width > 400
       })}
       style={{ width }}
-      // onMouseMove={inResizing ? onResizeMouseMove : null}
-      // onMouseUp={onResizeMouseUp}
     >
       {children}
       <ResizeBar
