@@ -103,10 +103,10 @@ const ColumnTypes = ({
         {displayColumns.length > 0 && (
           <div className="select-column-wrapper">
             <div className="select-column-list">
-              {basicsColumns.length > 0 && (
+              {predefinedColumns.length > 0 && (
                 <>
-                  <div className="select-column-title">{gettext('Basic')}</div>
-                  {basicsColumns.map(item => {
+                  <div className="select-column-title">{gettext('Predefined properties')}</div>
+                  {predefinedColumns.map(item => {
                     return (
                       <div
                         className={classnames('select-column-item text-truncate', { 'active': item.key === column.key })}
@@ -120,10 +120,10 @@ const ColumnTypes = ({
                   })}
                 </>
               )}
-              {predefinedColumns.length > 0 && (
+              {basicsColumns.length > 0 && (
                 <>
-                  <div className="select-column-title">{gettext('Predefined')}</div>
-                  {predefinedColumns.map(item => {
+                  <div className="select-column-title">{gettext('Custom properties')}</div>
+                  {basicsColumns.map(item => {
                     return (
                       <div
                         className={classnames('select-column-item text-truncate', { 'active': item.key === column.key })}
