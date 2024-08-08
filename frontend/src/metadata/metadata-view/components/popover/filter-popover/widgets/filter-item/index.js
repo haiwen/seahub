@@ -548,7 +548,7 @@ class FilterItem extends React.Component {
                 options={filterColumnOptions}
                 onSelectOption={this.onSelectColumn}
                 searchable={true}
-                searchPlaceholder={gettext('Search column')}
+                searchPlaceholder={gettext('Search property')}
                 noOptionsPlaceholder={gettext('No results')}
               />
             </div>
