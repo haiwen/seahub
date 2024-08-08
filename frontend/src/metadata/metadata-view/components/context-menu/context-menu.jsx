@@ -1,32 +1,43 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import './context-menu.css';
 
 const ContextMenu = ({ position, options, onOptionClick, visible, onCloseContextMenu }) => {
   const menuRef = useRef(null);
 
+  const handleCloseContextMenu = useCallback((event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      onCloseContextMenu();
+    }
+  }, [menuRef, onCloseContextMenu]);
+
   useEffect(() => {
-    const handleCloseContextMenu = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        onCloseContextMenu();
-      }
+    const handleContextMenu = (event) => {
+      event.preventDefault();
     };
 
     if (visible) {
       document.addEventListener('mousedown', handleCloseContextMenu);
+      if (menuRef.current) {
+        menuRef.current.addEventListener('contextmenu', handleContextMenu);
+      }
+    } else {
+      if (menuRef.current) {
+        menuRef.current.removeEventListener('contextmenu', handleContextMenu);
+      }
     }
 
     return () => {
       document.removeEventListener('mousedown', handleCloseContextMenu);
     };
-  }, [visible, onCloseContextMenu]);
+  }, [visible, handleCloseContextMenu]);
 
   if (!visible) return null;
 
   return (
     <ul
       ref={menuRef}
-      className='context-menu'
+      className='sf-metadata context-menu'
       style={{
         top: position.y,
         left: position.x,
@@ -35,7 +46,7 @@ const ContextMenu = ({ position, options, onOptionClick, visible, onCloseContext
       {options.map((option, index) => (
         <li
           key={index}
-          className='context-menu-item'
+          className='sf-metadata dropdown-item'
           onClick={(event) => onOptionClick(event, option)}
         >
           {option.label}
