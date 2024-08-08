@@ -1494,3 +1494,16 @@ CREATE TABLE IF NOT EXISTS `FileTrash` (
   PRIMARY KEY (`id`),
   KEY `ix_FileTrash_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `wiki_wiki2_publish` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `publish_url` varchar(40) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `visit_count` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `repo_id` (`repo_id`),
+  UNIQUE KEY `publish_url` (`publish_url`),
+  KEY `ix_wiki2_publish_repo_id` (`repo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

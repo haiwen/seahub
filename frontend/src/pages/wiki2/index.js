@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext, publishPermission } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
@@ -53,35 +53,68 @@ class Wiki extends Component {
   }
 
   handlePath = () => {
+    const custom_url = window.location.pathname.substring(1);
+    if (custom_url.includes('wiki/publish')) {
+      return custom_url;
+    }
+
     return isWiki2 ? 'wikis/' : 'published/';
   };
 
   getWikiConfig = () => {
-    wikiAPI.getWiki2Config(wikiId).then(res => {
-      const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
-      const config = new WikiConfig(wiki_config || {});
-      this.setState({
-        config,
-        isConfigLoading: false,
-        repoId: repo_id,
-        wikiRepoId,
-      }, () => {
-        let pageId = this.getFirstPageId(config);
-        // opened by url
-        const urlSearchParams = new URLSearchParams(location.search);
-        const urlPageId = urlSearchParams.get('page_id');
-        if (urlPageId) pageId = urlPageId;
-        if (pageId) {
-          this.setCurrentPage(pageId);
-        }
+    if (publishPermission === 'public') {
+      wikiAPI.getWiki2PublishConfig(wikiId).then(res => {
+        const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
+        const config = new WikiConfig(wiki_config || {});
+        this.setState({
+          config,
+          isConfigLoading: false,
+          repoId: repo_id,
+          wikiRepoId,
+        }, () => {
+          let pageId = this.getFirstPageId(config);
+          // opened by url
+          const urlSearchParams = new URLSearchParams(location.search);
+          const urlPageId = urlSearchParams.get('page_id');
+          if (urlPageId) pageId = urlPageId;
+          if (pageId) {
+            this.setCurrentPage(pageId);
+          }
+        });
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        this.setState({
+          isConfigLoading: false,
+        });
       });
-    }).catch((error) => {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-      this.setState({
-        isConfigLoading: false,
+    } else {
+      wikiAPI.getWiki2Config(wikiId).then(res => {
+        const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
+        const config = new WikiConfig(wiki_config || {});
+        this.setState({
+          config,
+          isConfigLoading: false,
+          repoId: repo_id,
+          wikiRepoId,
+        }, () => {
+          let pageId = this.getFirstPageId(config);
+          // opened by url
+          const urlSearchParams = new URLSearchParams(location.search);
+          const urlPageId = urlSearchParams.get('page_id');
+          if (urlPageId) pageId = urlPageId;
+          if (pageId) {
+            this.setCurrentPage(pageId);
+          }
+        });
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        this.setState({
+          isConfigLoading: false,
+        });
       });
-    });
+    }
   };
 
   updateWikiConfig = (wikiConfig) => {
@@ -133,25 +166,46 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
     });
-    wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
-      const { permission, seadoc_access_token, assets_url } = res.data;
-      this.setState({
-        permission,
-        seadoc_access_token,
-        assets_url,
-        isViewFile: true,
-        path: filePath,
+    if (publishPermission === 'public') {
+      wikiAPI.getWiki2PublishPage(wikiId, pageId).then(res => {
+        const { permission, seadoc_access_token, assets_url } = res.data;
+        this.setState({
+          permission,
+          seadoc_access_token,
+          assets_url,
+          isViewFile: true,
+          path: filePath,
+        });
+        const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+        this.getSdocFileContent(docUuid, seadoc_access_token);
+      }).catch(error => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
-      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
-      this.getSdocFileContent(docUuid, seadoc_access_token);
-    }).catch(error => {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-    });
+    } else {
+      wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
+        const { permission, seadoc_access_token, assets_url } = res.data;
+        this.setState({
+          permission,
+          seadoc_access_token,
+          assets_url,
+          isViewFile: true,
+          path: filePath,
+        });
+        const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+        this.getSdocFileContent(docUuid, seadoc_access_token);
+      }).catch(error => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+      });
+    }
 
     const params = new URLSearchParams(window.location.search);
     params.set('page_id', pageId);
-    const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    if (this.handlePath().includes('wiki/publish')) {
+      fileUrl = `${siteRoot}${this.handlePath()}?${params.toString()}`;
+    }
     window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
 
