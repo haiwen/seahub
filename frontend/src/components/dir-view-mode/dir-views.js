@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import TreeSection from '../tree-section';
-import { MetadataStatusManagementDialog, MetadataTreeView } from '../../metadata';
-import metadataAPI from '../../metadata/api';
-import toaster from '../toast';
+import { MetadataStatusManagementDialog, MetadataTreeView, useMetadataStatus } from '../../metadata';
 
 const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -13,9 +10,8 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement]);
 
-  const [loading, setLoading] = useState(true);
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
-  const [metadataStatus, setMetadataStatus] = useState(false);
+  const { enableExtendedProperties, updateEnableExtendedProperties } = useMetadataStatus();
   const moreOperations = useMemo(() => {
     if (!enableMetadataManagement) return [];
     if (userPerm !== 'rw' && userPerm !== 'admin') return [];
@@ -23,25 +19,6 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       { key: 'extended-properties', value: gettext('Extended properties') }
     ];
   }, [enableMetadataManagement, userPerm]);
-
-  useEffect(() => {
-    if (!enableMetadataManagement) {
-      setLoading(false);
-      return;
-    }
-
-    const repoMetadataManagementEnabledStatusRes = metadataAPI.getMetadataStatus(repoID);
-    Promise.all([repoMetadataManagementEnabledStatusRes]).then(results => {
-      const [repoMetadataManagementEnabledStatusRes] = results;
-      setMetadataStatus(repoMetadataManagementEnabledStatusRes.data.enabled);
-      setLoading(false);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error, true);
-      toaster.danger(errorMsg);
-      setLoading(false);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const moreOperationClick = useCallback((operationKey) => {
     if (operationKey === 'extended-properties') {
@@ -55,9 +32,8 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   }, []);
 
   const toggleMetadataStatus = useCallback((value) => {
-    if (metadataStatus === value) return;
-    setMetadataStatus(value);
-  }, [metadataStatus]);
+    updateEnableExtendedProperties(value);
+  }, [updateEnableExtendedProperties]);
 
   return (
     <>
@@ -67,11 +43,11 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
         moreOperations={moreOperations}
         moreOperationClick={moreOperationClick}
       >
-        {!loading && metadataStatus && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
+        {enableExtendedProperties && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog
-          value={metadataStatus}
+          value={enableExtendedProperties}
           repoID={repoID}
           toggle={closeMetadataManagementDialog}
           submit={toggleMetadataStatus}

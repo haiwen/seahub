@@ -6,6 +6,10 @@
   font-size: 14px;
 }
 
+.dirent-detail-item:last-child {
+  margin-bottom: 0;
+}
+
 .dirent-detail-item .dirent-detail-item-name {
   width: 160px;
   padding: 7px 6px;

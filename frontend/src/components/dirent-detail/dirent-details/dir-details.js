@@ -4,15 +4,16 @@ import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
-import { MetadataDetails } from '../../../metadata';
+import { MetadataDetails, useMetadataStatus } from '../../../metadata';
 
 const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
+  const { enableExtendedProperties } = useMetadataStatus();
 
   return (
     <>
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
-      {window.app.pageOptions.enableMetadataManagement && (
+      {window.app.pageOptions.enableMetadataManagement && enableExtendedProperties && (
         <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
       )}
     </>

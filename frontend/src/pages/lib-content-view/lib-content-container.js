@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import ToolbarForSelectedDirents from '../../components/toolbar/selected-dirents-toolbar';
+import { MetadataStatusProvider } from '../../metadata/hooks';
 
 import '../../css/lib-content-view.css';
 
@@ -179,7 +180,7 @@ class LibContentContainer extends React.Component {
     }
 
     return (
-      <Fragment>
+      <MetadataStatusProvider repoID={repoID}>
         <div className="cur-view-container">
           {this.props.currentRepoInfo.status === 'read-only' &&
             <div className="readonly-tip-message">
@@ -251,7 +252,6 @@ class LibContentContainer extends React.Component {
           <div
             className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`}
             onScroll={this.onItemsScroll}
-
           >
             {!this.props.pathExist && this.errMessage}
             {this.props.pathExist && (
@@ -333,7 +333,7 @@ class LibContentContainer extends React.Component {
             )}
           </div>
         </div>
-      </Fragment>
+      </MetadataStatusProvider>
     );
   }
 }
