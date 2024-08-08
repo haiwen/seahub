@@ -6,6 +6,10 @@
   font-size: 14px;
 }
 
+.dirent-detail-item:last-child {
+  margin-bottom: 0;
+}
+
 .dirent-detail-item .dirent-detail-item-name {
   width: 160px;
   padding: 7px 6px;
@@ -42,8 +46,14 @@
 }
 
 .dirent-detail-item .dirent-detail-item-value .text-formatter,
-.dirent-detail-item .dirent-detail-item-value .ctime-formatter {
+.dirent-detail-item .dirent-detail-item-value .ctime-formatter,
+.dirent-detail-item .dirent-detail-item-value .mtime-formatter,
+.dirent-detail-item .dirent-detail-item-value .date-formatter {
   line-height: 1.5;
+}
+
+.dirent-detail-item .dirent-detail-item-value .date-formatter {
+  text-align: left;
 }
 
 .dirent-detail-item-value .creator-formatter {

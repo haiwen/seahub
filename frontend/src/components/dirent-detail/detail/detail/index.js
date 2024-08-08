@@ -43,7 +43,8 @@ const Detail = ({ children, className }) => {
   }, [setDragHandlerTop]);
 
   useEffect(() => {
-    const width = localStorage.getItem('sf_cur_view_detail_width', 300);
+    const lastSettingsValue = localStorage.getItem('sf_cur_view_detail_width');
+    const width = lastSettingsValue ? parseInt(lastSettingsValue) : 300;
     setWidth(width);
   }, []);
 

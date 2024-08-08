@@ -1,27 +1,19 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getDirentPath, getFileParent } from './utils';
+import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
-import { MetadataDetails } from '../../../metadata';
+import { MetadataDetails, useMetadataStatus } from '../../../metadata';
 
 const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
-  const parent = useMemo(() => getFileParent(dirent, path), [dirent, path]);
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
+  const { enableExtendedProperties } = useMetadataStatus();
 
   return (
     <>
-      <DetailItem field={{ type: CellType.TEXT, name: gettext('Parent folder') }} value={parent} />
-      <DetailItem field={{ type: 'size', name: gettext('Size') }} value={repoInfo.size} />
-      <DetailItem field={{ type: CellType.CREATOR, name: gettext('Creator') }} value={repoInfo.owner_email} collaborators={[{
-        name: repoInfo.owner_name,
-        contact_email: repoInfo.owner_contact_email,
-        email: repoInfo.owner_email,
-        avatar_url: repoInfo.owner_avatar,
-      }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
-      {window.app.pageOptions.enableMetadataManagement && (
+      {window.app.pageOptions.enableMetadataManagement && enableExtendedProperties && (
         <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
       )}
     </>
