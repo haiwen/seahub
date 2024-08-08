@@ -104,12 +104,12 @@ const Cell = React.memo(({
 
   const onContextMenu = useCallback((event) => {
     event.preventDefault();
-    event.stopPropagation();
-    if (column.idx !== 0) return;
+
     const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
 
     if (!isFunction(cellMetaData.onContextMenu)) return;
     cellMetaData.onContextMenu(event, cell,);
+    cellMetaData.onCellClick(cell, event);
   }, [cellMetaData, column, groupRecordIndex, recordIndex]);
 
   const getEvents = useCallback(() => {

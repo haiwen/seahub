@@ -43,8 +43,6 @@ class Records extends Component {
         bottomRight: this.initPosition,
       },
       selectedPosition: this.initPosition,
-      contextMenuPosition: { x: 0, y: 0 },
-      isContextMenuVisible: false,
       ...initHorizontalScrollState,
     };
     this.isWindows = isWindowsBrowser();
@@ -643,29 +641,16 @@ class Records extends Component {
     }
   };
 
-  onCloseContextMenu = () => {
-    this.setState({ isContextMenuVisible: false });
-  };
-
   onContextMenu = (event, cell) => {
     const record = this.props.recordGetter(cell.rowIdx);
     if (record._is_dir) {
       return;
     }
 
-    const { clientX, clientY, touches, target } = event;
-
-    // Calculate x and y coordinates
-    const x = (clientX || touches?.[0]?.pageX) - this.resultContainerRef.getBoundingClientRect().left - (this.props.posX || 0);
-    const y = (clientY || touches?.[0]?.pageY) - this.resultContainerRef.getBoundingClientRect().top - (this.props.posY || 0);
-
-    const position = { x, y };
-
-    this.baseURI = target.baseURI;
+    this.baseURI = event.target.baseURI;
     this.setState({
       selectedPosition: cell,
       isContextMenuVisible: true,
-      contextMenuPosition: position
     });
   };
 
@@ -751,11 +736,8 @@ class Records extends Component {
             {this.renderRecordsBody({ containerWidth })}
           </div>
           <ContextMenu
-            position={this.state.contextMenuPosition}
             options={this.contextMenuOptions}
             onOptionClick={this.onOptionClick}
-            visible={this.state.isContextMenuVisible}
-            onCloseContextMenu={this.onCloseContextMenu}
           />
         </div>
         {this.isWindows && this.isWebkit && (
