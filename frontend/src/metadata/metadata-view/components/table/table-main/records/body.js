@@ -600,7 +600,6 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
-  onRowExpand: PropTypes.func,
   onContextMenu: PropTypes.func,
 };
 
