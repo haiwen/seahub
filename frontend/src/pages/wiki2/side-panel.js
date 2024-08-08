@@ -147,16 +147,15 @@ class SidePanel extends Component {
         <div className="wiki2-side-panel-top">
           <h4 className="text-truncate ml-0 mb-0" title={repoName}>{repoName}</h4>
           {publishPermission !== 'public' &&
-            <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
-              <i className='sf3-font sf3-font-new-page'></i>
+            <div>
+              <div id='wiki-add-new-page' className='add-new-page' onClick={this.handleAddNewPage.bind(true)}>
+                <i className='sf3-font sf3-font-new-page'></i>
+              </div>
+              <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
+                {gettext('New page')}
+              </UncontrolledTooltip>
             </div>
           }
-          {publishPermission !== 'public' &&
-            <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
-              {gettext('New page')}
-            </UncontrolledTooltip>
-          }
-
         </div>
         <div className="wiki2-side-nav">
           {isLoading ? <Loading /> : this.renderWikiNav()}

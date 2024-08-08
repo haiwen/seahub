@@ -36,7 +36,7 @@ from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
-from seahub.utils.repo import parse_repo_perm, get_repo_owner, is_repo_admin
+from seahub.utils.repo import parse_repo_perm, get_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
@@ -418,6 +418,7 @@ class Wiki2ConfigView(APIView):
 
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
+
         if not check_wiki_permission(wiki, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

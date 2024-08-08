@@ -139,5 +139,6 @@ def wiki_publish_view(request, publish_url):
         "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,
         "modify_time": last_modified,
-        "seadoc_server_url": SEADOC_SERVER_URL
+        "seadoc_server_url": SEADOC_SERVER_URL,
+        "permission": 'r'
     })
