@@ -102,12 +102,11 @@ class SidePanel extends Component {
   };
 
   restoreVersion = (currentItem) => {
-    console.log('currentItem', currentItem);
     const { commit_id, path } = currentItem;
     editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true }, () => {
-          // this.firstLoadSdocHistory();
+          this.props.reloadDocContent();
         });
       }
       let message = gettext('Successfully restored.');
@@ -295,6 +294,7 @@ SidePanel.propTypes = {
     errorMessage: PropTypes.string,
   }),
   onClose: PropTypes.func,
+  reloadDocContent: PropTypes.func,
 };
 
 export default SidePanel;

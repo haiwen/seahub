@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
 import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
+import SDocServerApi from '../../../utils/sdoc-server-api';
 import { PER_PAGE, gettext, historyRepoID } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import GoBack from '../../../components/common/go-back';
@@ -20,7 +21,7 @@ import './index.css';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
-const { repoID, fileName, filePath, docUuid, assetsUrl } = window.fileHistory.pageOptions;
+const { repoID, fileName, filePath, docUuid, assetsUrl, seadocAccessToken, seadocServerUrl } = window.fileHistory.pageOptions;
 
 window.seafile = {
   repoID,
@@ -371,6 +372,19 @@ class SdocFileHistory extends React.Component {
     });
   }
 
+  reloadDocContent() {
+    const config = {
+      docUuid,
+      sdocServer: seadocServerUrl,
+      accessToken: seadocAccessToken
+    };
+    const sdocServerApi = new SDocServerApi(config);
+    sdocServerApi.reloadDocContent(fileName).catch((error) => {
+      const errorMessage = 'there has an error in server';
+      throw Error(errorMessage);
+    });
+  }
+
   render() {
     const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, isMobile, sidePanelInitData, showSidePanel } = this.state;
     return (
@@ -408,6 +422,7 @@ class SdocFileHistory extends React.Component {
                       onShowChanges={this.onShowChanges}
                       sidePanelInitData={sidePanelInitData}
                       onClose={this.changeSidePanelStatus}
+                      reloadDocContent={this.reloadDocContent}
                     />
                   )
                 }
