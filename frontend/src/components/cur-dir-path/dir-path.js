@@ -34,6 +34,7 @@ const propTypes = {
   filePermission: PropTypes.string,
   onFileTagChanged: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirPath extends React.Component {
@@ -177,6 +178,7 @@ class DirPath extends React.Component {
                 onAddFolder={this.props.onAddFolder}
                 onUploadFile={this.props.onUploadFile}
                 onUploadFolder={this.props.onUploadFolder}
+                loadDirentList={this.props.loadDirentList}
               >
                 <span className="path-file-name">{item}</span>
               </DirOperationToolBar>

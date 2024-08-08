@@ -224,6 +224,7 @@ class LibContentContainer extends React.Component {
               repoTags={this.props.repoTags}
               metadataViewId={this.props.metadataViewId}
               onItemMove={this.props.onItemMove}
+              loadDirentList={this.props.loadDirentList}
             />
             <ToolbarForSelectedDirents
               repoID={this.props.repoID}
