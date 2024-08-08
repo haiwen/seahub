@@ -55,7 +55,6 @@ class WikiPageTrash(models.Model):
 
     class Meta:
         db_table = 'WikiPageTrash'
-        managed = False
 
     def to_dict(self):
         return {
