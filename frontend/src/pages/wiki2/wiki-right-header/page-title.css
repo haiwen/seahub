@@ -97,3 +97,7 @@
 .main-panel-center .cur-view-content .wiki-sdoc-title:focus {
   box-shadow: none;
 }
+
+.main-panel-center .cur-view-content .wiki-sdoc-title:focus-visible {
+  outline: none;
+}

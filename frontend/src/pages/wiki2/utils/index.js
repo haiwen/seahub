@@ -53,6 +53,22 @@ const getWikPageLink = (pageId) => {
   return `${origin}${pathname}?page_id=${pageId}`;
 };
 
+const throttle = (fn, delay) => {
+  let timer;
+  return function () {
+    let _this = this;
+    let args = arguments;
+    if (timer) {
+      return;
+    }
+    timer = setTimeout(function () {
+      fn.apply(_this, args);
+      timer = null;
+    }, delay);
+  };
+};
+
+
 export {
   generatorBase64Code,
   generateUniqueId,
@@ -60,4 +76,5 @@ export {
   getIconURL,
   getCurrentPageConfig,
   getWikPageLink,
+  throttle,
 };

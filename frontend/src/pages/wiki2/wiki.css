@@ -74,7 +74,7 @@ body {
   justify-content: center;
   min-height: 800px;
   width: 100%;
-  padding: 0 142px;
+  padding: 0 142px 60px;
   box-shadow: none;
   border: none;
 }

@@ -50,7 +50,7 @@ function WikiTopNav({ config, currentPageId }) {
           <Fragment key={item.id}>
             <div className='wiki2-top-nav-item d-flex'>
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
-              {item.name}
+              <span className='text-truncate'>{item.name}</span>
             </div>
             {index !== paths.length - 1 && <div>/</div>}
           </Fragment>
