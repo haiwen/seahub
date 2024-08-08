@@ -67,12 +67,8 @@ def wiki_view(request, wiki_id):
         except Exception as e:
             logger.warning(e)
 
-    is_admin = is_repo_owner(request, repo_id, username)
-    if not is_admin:
-        is_admin = is_repo_admin(username, repo_id)
-        if not is_admin:
-            is_admin = is_group_repo_staff(request, repo_id, username)
-            
+    
+    is_admin = is_repo_admin(username, repo_id)
     last_modified = datetime.fromtimestamp(last_modified)
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
