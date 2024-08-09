@@ -114,7 +114,7 @@ class ReposView(APIView):
                 # do not return virtual repos
                 if r.is_virtual:
                     continue
-                    
+
                 if is_wiki_repo(r):
                     continue
                 url, _, _ = api_avatar_url(email, int(24))
@@ -176,7 +176,7 @@ class ReposView(APIView):
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
-                
+
                 if is_wiki_repo(r):
                     continue
 
@@ -249,11 +249,11 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             for r in group_repos:
-                
+
                 if is_wiki_repo(r):
                     continue
-                
-                
+
+
                 repo_info = {
                     "type": "group",
                     "group_id": r.group_id,
@@ -298,10 +298,10 @@ class ReposView(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
-                
+
                 if is_wiki_repo(r):
                     continue
-                
+
                 repo_owner = repo_id_owner_dict[r.repo_id]
                 url, _, _ = api_avatar_url(repo_owner, int(24))
                 repo_info = {
@@ -328,8 +328,9 @@ class ReposView(APIView):
         utc_dt = datetime.datetime.utcnow()
         timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
         org_id = request.user.org.org_id if is_org_context(request) else -1
+        from seahub.utils import send_user_login_msg
         try:
-            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            send_user_login_msg(email, timestamp, org_id)
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
 

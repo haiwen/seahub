@@ -13,6 +13,7 @@ import tempfile
 import configparser
 import mimetypes
 import contextlib
+import json
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
 
@@ -397,7 +398,7 @@ def get_user_repos(username, org_id=None):
             r.id = r.repo_id
             r.name = r.repo_name
             r.last_modify = r.last_modified
-            
+
     return (owned_repos, shared_repos, groups_repos, public_repos)
 
 def get_conf_text_ext():
@@ -642,7 +643,7 @@ if EVENTS_CONFIG_FILE:
         with _get_seafevents_session() as session:
             res = seafevents_api.get_file_history_by_day(session, repo_id, path, start, count, to_tz, history_limit)
         return res
-    
+
     def get_file_daily_history_detail(repo_id, path, start_time, end_time, to_tz):
         """Return file histories detail
         """
@@ -812,7 +813,7 @@ if EVENTS_CONFIG_FILE:
 
     def get_file_history_suffix():
         return seafevents_api.get_file_history_suffix(parsed_events_conf)
-    
+
     def get_trash_records(repo_id, show_time, start, limit):
         with _get_seafevents_session() as session:
             res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
@@ -1189,7 +1190,7 @@ if EVENTS_CONFIG_FILE:
             else:
                 logging.debug('search: not enabled')
         return enabled
-    
+
     def check_seasearch_enabled():
         enabled = False
         if hasattr(seafevents_api, 'is_seasearch_enabled'):
@@ -1315,14 +1316,33 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     - `path`: dir path
     - `perm`: r or rw
     """
-    msg = 'perm-change\t%s\t%s\t%s\t%s\t%s\t%s' % \
-        (etype, from_user, to, repo_id, path, perm)
+
+    msg = {
+        'msg_type': 'perm-change',
+        'etype': etype,
+        'from_user': from_user,
+        'to': to,
+        'repo_id': repo_id,
+        'file_path': path,
+        'perm': perm,
+    }
 
     try:
-        seafile_api.publish_event('seahub.audit', msg)
+        seafile_api.publish_event('seahub.audit', json.dumps(msg))
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
+
+
+def send_user_login_msg(username, timestamp, org_id):
+    msg = {
+        'msg_type': 'user-login',
+        'user_name': username,
+        'timestamp': timestamp,
+        'org_id': org_id,
+    }
+    seafile_api.publish_event('seahub.stats', json.dumps(msg))
+
 
 def get_origin_repo_info(repo_id):
     repo = seafile_api.get_repo(repo_id)

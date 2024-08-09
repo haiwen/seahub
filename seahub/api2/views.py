@@ -1004,8 +1004,9 @@ class Repos(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        from seahub.utils import send_user_login_msg
         try:
-            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            send_user_login_msg(email, timestamp, org_id)
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,

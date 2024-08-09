@@ -1395,7 +1395,7 @@ def view_shared_file(request, fileshare):
 def view_file_via_shared_dir(request, fileshare):
     from seahub.utils import redirect_to_login
     token = fileshare.token
-    
+
     if not check_share_link_user_access(fileshare, request.user.username):
         if not request.user.username:
             return redirect_to_login(request)
@@ -1697,11 +1697,17 @@ def send_file_access_msg(request, repo, path, access_from):
     ip = get_remote_ip(request)
     user_agent = request.headers.get("user-agent")
 
-    msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
-        (access_from, username, ip, user_agent, repo.id, path)
+    msg = {
+        'msg_type': 'file-download-' + access_from,
+        'user_name': username,
+        'ip': ip,
+        'user_agent': user_agent,
+        'repo_id': repo.id,
+        'file_path': path,
+    }
 
     try:
-        seafile_api.publish_event('seahub.audit', msg)
+        seafile_api.publish_event('seahub.audit', json.dumps(msg))
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
                      (access_from, str(e)))
@@ -2150,14 +2156,14 @@ def view_sdoc_revision(request, repo_id, revision_id):
     revision = SeadocRevision.objects.get_by_revision_id(repo_id, revision_id)
     if not revision:
         return render_error(request, 'revision not found')
-    
+
     is_published = revision.is_published
     if is_published:
         origin_file_uuid = revision.origin_doc_uuid
         origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_file_uuid)
         if not origin_uuid_map:
             return render_error(request, _('The original file does not exist'))
-        
+
         parent_dir = origin_uuid_map.parent_path
         filename = origin_uuid_map.filename
         path = posixpath.join(parent_dir, filename)
