@@ -10,6 +10,7 @@
 .trash-dialog .modal-header .but-contral {
   margin-left: auto;
 }
+
 .trash-dialog .modal-header .clean {
   height: 30px;
   line-height: 28px;
@@ -26,7 +27,6 @@
 .trash-dialog .modal-header .trash-dialog-close-icon:hover {
   opacity: 0.75;
 }
-
 
 .trash-dialog .modal-body {
   height: 500px;
