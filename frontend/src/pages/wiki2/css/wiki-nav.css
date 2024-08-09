@@ -279,6 +279,7 @@
   color: #212529;
 }
 
+.wiki-nav .wiki2-trash .sf3-font,
 .wiki-nav .wiki-page-item .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level {
   color: #666;
@@ -288,4 +289,17 @@
   width: 1em;
   height: 1em;
   font-size: 16px;
+}
+
+.wiki-nav .wiki2-trash {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.wiki-nav .wiki2-trash:hover {
+  background-color: #EFEFED;
 }

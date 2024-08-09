@@ -8,11 +8,12 @@ import wikiAPI from '../../utils/wiki-api';
 import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
 import Paginator from '../../components/paginator';
+import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
+import NavItemIcon from './common/nav-item-icon';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
 import '../../css/wiki-trash-dialog.css';
-import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 
 const propTypes = {
   showTrashDialog: PropTypes.bool.isRequired,
@@ -54,7 +55,6 @@ class WikiTrashDialog extends React.Component {
     });
   };
 
-
   resetPerPage = (perPage) => {
     this.setState({
       perPage: perPage
@@ -85,9 +85,8 @@ class WikiTrashDialog extends React.Component {
     const { showTrashDialog, toggleTrashDialog } = this.props;
     const { isCleanTrashDialogOpen } = this.state;
     const { isAdmin, enableUserCleanTrash, repoName } = window.wiki.config;
-    const repoFolderName = repoName;
     let title = gettext('{placeholder} Wiki Trash');
-    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoFolderName) + '</span>');
+    title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <Modal className="trash-dialog" isOpen={showTrashDialog} toggle={toggleTrashDialog}>
         <ModalHeader
@@ -134,10 +133,10 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      { width: '5%', text: gettext('Name') },
+      { width: '3%', text: gettext('Name') },
       { width: '20%', text: '' },
       { width: '30%', text: gettext('Size') },
-      { width: '35%', text: gettext('Delete Time') },
+      { width: '37%', text: gettext('Delete Time') },
       { width: '10%', text: '' }
     ];
   }
@@ -159,17 +158,19 @@ class Content extends React.Component {
           <thead>
             <tr>
               {this.theadData.map((item, index) => {
-                return <th key={index} className={index === 0 ? 'pl-4' : ''} width={item.width}>{item.text}</th>;
+                return <th key={index} className={index === 0 ? 'pl-3' : ''} width={item.width}>{item.text}</th>;
               })}
             </tr>
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return <Item
-                key={index}
-                item={item}
-                getWikiConfig={this.props.getWikiConfig}
-              />;
+              return (
+                <Item
+                  key={index}
+                  item={item}
+                  getWikiConfig={this.props.getWikiConfig}
+                />
+              );
             })}
           </tbody>
         </table>
@@ -196,7 +197,6 @@ Content.propTypes = {
   getWikiConfig: PropTypes.func.isRequired
 
 };
-
 
 class Item extends React.Component {
 
@@ -247,7 +247,7 @@ class Item extends React.Component {
     const { isAdmin } = window.wiki.config;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-        <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
+        <td><NavItemIcon symbol={'file'} disable={true} /></td>
         <td>{item.name}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>

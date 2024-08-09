@@ -12,9 +12,9 @@ import { isObjectNotEmpty } from './utils';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
+import WikiTrashDialog from './wiki-trash-dialog';
 
 import './side-panel.css';
-import WikiTrashDialog from './wiki-trash-dialog';
 
 const { repoName } = window.wiki.config;
 
@@ -123,6 +123,7 @@ class SidePanel extends Component {
             duplicatePage={this.duplicatePage}
             currentPageId={this.props.currentPageId}
             addPageInside={this.addPageInside}
+            toggelTrashDialog={this.toggelTrashDialog}
           />
         }
       </div>
@@ -174,7 +175,6 @@ class SidePanel extends Component {
             getWikiConfig={this.props.getWikiConfig}
           />
         )}
-        <a className={'wiki2-trash'} onClick={this.toggelTrashDialog}> Trash </a>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
-import { repoID } from '../../../utils/constants';
+import { repoID, gettext } from '../../../utils/constants';
 
 import '../css/wiki-nav.css';
 
@@ -21,6 +21,7 @@ class WikiNav extends Component {
     currentPageId: PropTypes.string,
     addPageInside: PropTypes.func,
     updateWikiConfig: PropTypes.func.isRequired,
+    toggelTrashDialog: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -117,6 +118,10 @@ class WikiNav extends Component {
         {new_navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
+        <div className='wiki2-trash' onClick={this.props.toggelTrashDialog}>
+          <span className="sf3-font-recycle1 sf3-font mr-2"></span>
+          <span>{gettext('Trash')}</span>
+        </div>
       </div>
     );
   });
