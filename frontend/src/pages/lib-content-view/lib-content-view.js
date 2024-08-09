@@ -96,7 +96,6 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
-    this.viewName = '';
   }
 
   showDirentDetail = (direntDetailPanelTab) => {
