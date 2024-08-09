@@ -431,9 +431,8 @@ a, a:hover { color: #ec8000; }
 }
 
 #account .avatar {
-  vertical-align:middle;
-  border-radius:1000px;
-  margin-right: 0.25rem;
+  vertical-align: middle;
+  border-radius: 1000px;
 }
 
 @media (max-width:767px) {

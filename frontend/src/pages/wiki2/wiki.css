@@ -13,10 +13,11 @@ body {
 .wiki2-main-panel .wiki2-main-panel-north {
   height: 44px;
   position: relative;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   display: flex;
-  z-index: 100;
+  align-items: center;
   justify-content: space-between;
+  z-index: 100;
 }
 
 .main-panel-center .cur-view-content {
