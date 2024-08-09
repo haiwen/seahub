@@ -87,21 +87,21 @@ const ContextMenu = ({ options, onOptionClick }) => {
   if (!visible) return null;
 
   return (
-    <ul
+    <div
       ref={menuRef}
-      className='sf-metadata context-menu'
+      className='dropdown-menu sf-metadata-contextmenu'
       style={position}
     >
       {options.map((option, index) => (
-        <li
+        <button
           key={index}
-          className='sf-metadata dropdown-item'
+          className='dropdown-item sf-metadata-contextmenu-item'
           onClick={(event) => handleOptionClick(event, option)}
         >
           {option.label}
-        </li>
+        </button>
       ))}
-    </ul>
+    </div>
   );
 };
 
