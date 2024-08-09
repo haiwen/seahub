@@ -105,9 +105,7 @@ class SidePanel extends Component {
     const { commit_id, path } = currentItem;
     editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
-        this.setState({ isLoading: true }, () => {
-          this.props.reloadDocContent();
-        });
+        this.props.reloadDocContent();
       }
       let message = gettext('Successfully restored.');
       toaster.success(message);

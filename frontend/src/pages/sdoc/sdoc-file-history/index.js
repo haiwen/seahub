@@ -54,6 +54,12 @@ class SdocFileHistory extends React.Component {
       sidePanelInitData: {},
       showSidePanel: true,
     };
+    const config = {
+      docUuid,
+      sdocServer: seadocServerUrl,
+      accessToken: seadocAccessToken
+    };
+    this.sdocServerApi = new SDocServerApi(config);
   }
 
   componentDidMount() {
@@ -372,18 +378,12 @@ class SdocFileHistory extends React.Component {
     });
   }
 
-  reloadDocContent() {
-    const config = {
-      docUuid,
-      sdocServer: seadocServerUrl,
-      accessToken: seadocAccessToken
-    };
-    const sdocServerApi = new SDocServerApi(config);
-    sdocServerApi.reloadDocContent(fileName).catch((error) => {
+  reloadDocContent = () => {
+    this.sdocServerApi.reloadDocContent(fileName).catch((error) => {
       const errorMessage = 'there has an error in server';
       throw Error(errorMessage);
     });
-  }
+  };
 
   render() {
     const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, isMobile, sidePanelInitData, showSidePanel } = this.state;
