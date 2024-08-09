@@ -239,17 +239,17 @@ export const getColumnType = (key, type) => {
 
 const getFileTypeColumnData = (column) => {
   const { data } = column;
-  const _OPTIONS = {
-    '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428', id: '_picture' },
-    '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428', id: '_document' },
-    '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_video' },
-    '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142', id: '_audio' },
-    '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5', id: '_code' },
+  const _OPTION_NAME = {
+    '_picture': gettext('Picture'),
+    '_document': gettext('Document'),
+    '_video': gettext('Video'),
+    '_audio': gettext('Audio'),
+    '_code': gettext('Code'),
   };
   let newData = { ...data };
   newData.options = Array.isArray(data.options) ? data.options.map(o => {
-    return _OPTIONS[o.name];
-  }) : Object.values(_OPTIONS);
+    return { ...o, name: _OPTION_NAME[o.id] };
+  }) : [];
   return newData;
 };
 
