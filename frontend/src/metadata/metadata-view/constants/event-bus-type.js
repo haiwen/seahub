@@ -29,8 +29,6 @@ export const EVENT_BUS_TYPE = {
   DRAG_ENTER: 'drag_enter',
   COLLAPSE_ALL_GROUPS: 'collapse_all_groups',
   EXPAND_ALL_GROUPS: 'expand_all_groups',
-  OPEN_IN_NEW_TAB: 'open_file_in_new_tab',
-  OPEN_PARENT_FOLDER: 'open_parent_folder',
 
   // view
   MODIFY_FILTERS: 'modify_filters',

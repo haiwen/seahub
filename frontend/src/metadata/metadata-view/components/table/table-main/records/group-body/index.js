@@ -305,6 +305,7 @@ class GroupBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
+      onCellContextMenu: this.onCellContextMenu,
     };
     return this.cellMetaData;
   };
@@ -443,6 +444,10 @@ class GroupBody extends Component {
 
   onCellMouseMove = (cellPosition) => {
     this.selectUpdate(cellPosition, false, this.updateViewableArea);
+  };
+
+  onCellContextMenu = (event, cell) => {
+    this.props.onCellContextMenu(event, cell);
   };
 
   onWindowMouseUp = (event) => {
@@ -966,6 +971,7 @@ GroupBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
+  onCellContextMenu: PropTypes.func,
 };
 
 export default GroupBody;

@@ -597,16 +597,14 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
-  onOpenInNewTab = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const { rowIdx } = this.state.selectedPosition;
-    const record = this.props.recordGetter(rowIdx);
+  onOpenFileInNewTab = () => {
+    const { isGroupView, recordGetterByIndex } = this.props;
+    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
     const repoID = window.sfMetadataStore.repoId;
-
     let url;
     if (record._is_dir) {
-      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir + '/'}${record._name}`;
+      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir}/${record._name}`;
     } else {
       url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(record._parent_dir + '/' + record._name)}`;
     }
@@ -618,17 +616,18 @@ class Records extends Component {
     event.preventDefault();
     event.stopPropagation();
 
-    const { rowIdx } = this.state.selectedPosition;
-    const record = this.props.recordGetter(rowIdx);
-    const parentDir = record._parent_dir;
-    const url = this.baseURI + parentDir;
+    const { isGroupView, recordGetterByIndex } = this.props;
+    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    const url = `${this.baseURI}${record._parent_dir}`;
+
     window.open(url, '_blank');
   };
 
   onOptionClick = (event, option) => {
 
     const handlers = {
-      openFileInNewTab: this.onOpenInNewTab.bind(this),
+      openFileInNewTab: this.onOpenFileInNewTab.bind(this),
       openParentFolder: this.onOpenParentFolder.bind(this),
     };
 
@@ -638,13 +637,11 @@ class Records extends Component {
     }
   };
 
-  onContextMenu = (event, cell) => {
-    const record = this.props.recordGetter(cell.rowIdx);
-    if (record._is_dir) {
-      return;
-    }
+  onCellContextMenu = (event, cell) => {
+    const url = new URL(event.target.baseURI);
+    url.search = '';
+    this.baseURI = url.toString();
 
-    this.baseURI = event.target.baseURI;
     this.setState({
       selectedPosition: cell,
     });
@@ -669,7 +666,7 @@ class Records extends Component {
       setRecordsScrollLeft: this.setScrollLeft,
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
-      onContextMenu: this.onContextMenu,
+      onCellContextMenu: this.onCellContextMenu,
     };
     if (this.props.isGroupView) {
       return (

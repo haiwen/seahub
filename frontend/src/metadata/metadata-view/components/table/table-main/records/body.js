@@ -331,6 +331,10 @@ class RecordsBody extends Component {
     this.props.onCellRangeSelectionUpdated(selectedRange);
   };
 
+  onCellContextMenu = (event, cell) => {
+    this.props.onCellContextMenu(event, cell);
+  };
+
   /**
    * When updating the selection by moving the mouse, you need to automatically scroll to expand the visible area
    * @param {object} selectedRange
@@ -410,7 +414,7 @@ class RecordsBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
-      onContextMenu: this.props.onContextMenu
+      onCellContextMenu: this.onCellContextMenu
     };
     return this.cellMetaData;
   };
@@ -601,7 +605,7 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
-  onContextMenu: PropTypes.func,
+  onCellContextMenu: PropTypes.func,
 };
 
 export default RecordsBody;
