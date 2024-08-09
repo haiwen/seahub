@@ -2,6 +2,7 @@ import hashlib
 import os
 import logging
 import posixpath
+import json
 
 from seaserv import seafile_api
 
@@ -119,9 +120,16 @@ def send_draft_publish_msg(draft, username, path):
     repo_id = draft.origin_repo_id
     old_path = draft.draft_file_path
 
-    msg = '%s\t%s\t%s\t%s\t%s\t%s' % ("publish", "draft", repo_id, username, path, old_path)
+    msg = {
+        'msg_type': 'publish',
+        'obj_type': draft,
+        'repo_id': repo_id,
+        'user_name': username,
+        'path': path,
+        'old_path': old_path,
+    }
 
     try:
-        seafile_api.publish_event('seahub.draft', msg)
+        seafile_api.publish_event('seahub.draft', json.dumps(msg))
     except Exception as e:
         logger.error("Error when sending draft publish message: %s" % str(e))
