@@ -7,7 +7,7 @@ import GridUtils from '../../../utils/grid-utils';
 
 import './index.css';
 
-const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetter, recordGetterByIndex, recordGetterById, ...params }) => {
+const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, searchResult, recordGetterByIndex, recordGetterById, ...params }) => {
 
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, { modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById });
@@ -61,7 +61,6 @@ const TableMain = ({ metadata, modifyRecord, modifyRecords, loadMore, loadAll, s
         modifyRecord={updateRecord}
         updateRecords={updateRecords}
         getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
-        recordGetter={recordGetter}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         {...params}

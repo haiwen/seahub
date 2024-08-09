@@ -779,7 +779,6 @@ Records.propTypes = {
   scrollToLoadMore: PropTypes.func,
   updateRecord: PropTypes.func,
   updateRecords: PropTypes.func,
-  recordGetter: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,

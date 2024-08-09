@@ -90,10 +90,7 @@ const ContextMenu = ({ options, onOptionClick }) => {
     <ul
       ref={menuRef}
       className='sf-metadata context-menu'
-      style={{
-        top: position.top,
-        left: position.left,
-      }}
+      style={position}
     >
       {options.map((option, index) => (
         <li

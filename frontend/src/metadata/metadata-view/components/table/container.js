@@ -188,7 +188,6 @@ const Container = () => {
                 metadata={metadata}
                 modifyRecord={modifyRecord}
                 modifyRecords={modifyRecords}
-                recordGetter={recordGetter}
                 recordGetterById={recordGetterById}
                 recordGetterByIndex={recordGetterByIndex}
                 getTableContentRect={getTableContentRect}
