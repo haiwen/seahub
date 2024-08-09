@@ -72,6 +72,7 @@ const ViewToolBar = ({ metadataViewId }) => {
     >
       <div className="sf-metadata-tool-left-operations">
         <FilterSetter
+          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
           target="sf-metadata-filter-popover"
@@ -83,6 +84,7 @@ const ViewToolBar = ({ metadataViewId }) => {
           collaborators={collaborators}
         />
         <SortSetter
+          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-sort"
           target="sf-metadata-sort-popover"
           readOnly={readOnly}
@@ -91,6 +93,7 @@ const ViewToolBar = ({ metadataViewId }) => {
           modifySorts={modifySorts}
         />
         <GroupbySetter
+          isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
           target="sf-metadata-groupby-popover"
           readOnly={readOnly}

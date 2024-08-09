@@ -70,12 +70,8 @@ class FilterPopover extends Component {
     }
   };
 
-  isNeedSubmit = () => {
-    return this.props.isNeedSubmit;
-  };
-
   update = (filters) => {
-    if (this.isNeedSubmit()) {
+    if (this.props.isNeedSubmit) {
       const isSubmitDisabled = false;
       this.setState({ filters, isSubmitDisabled });
       return;
@@ -102,7 +98,7 @@ class FilterPopover extends Component {
   };
 
   updateFilterConjunction = (conjunction) => {
-    if (this.isNeedSubmit()) {
+    if (this.props.isNeedSubmit) {
       const isSubmitDisabled = false;
       this.setState({ filterConjunction: conjunction, isSubmitDisabled });
       return;
@@ -155,7 +151,7 @@ class FilterPopover extends Component {
         target={target}
         fade={false}
         hideArrow={true}
-        className="sf-metadata-filter-popover"
+        className=" sf-metadata-filter-popover"
         boundariesElement={document.body}
       >
         {({ scheduleUpdate }) => (
@@ -181,8 +177,8 @@ class FilterPopover extends Component {
                 addIconClassName="popover-add-icon"
               />
             )}
-            {!readOnly && this.isNeedSubmit() && (
-              <div className='sf-metadata-filter-popover-footer'>
+            {!readOnly && this.props.isNeedSubmit && (
+              <div className="sf-metadata-popover-footer">
                 <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
                 <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitFilters}>{gettext('Submit')}</Button>
               </div>

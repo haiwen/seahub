@@ -65,10 +65,6 @@ class SortPopover extends Component {
     }
   };
 
-  isNeedSubmit = () => {
-    return this.props.isNeedSubmit;
-  };
-
   onHotKey = (e) => {
     if (isHotkey('esc', e) && !this.isSelectOpen) {
       e.preventDefault();
@@ -121,7 +117,7 @@ class SortPopover extends Component {
   };
 
   updateSorts = (sorts) => {
-    if (this.isNeedSubmit()) {
+    if (this.props.isNeedSubmit) {
       const isSubmitDisabled = false;
       this.setState({ sorts, isSubmitDisabled });
       return;
@@ -263,8 +259,8 @@ class SortPopover extends Component {
               addIconClassName="popover-add-icon"
             />
           }
-          {(this.isNeedSubmit() && !readOnly) && (
-            <div className='sf-metadata-sort-popover-footer'>
+          {(this.props.isNeedSubmit && !readOnly) && (
+            <div className="sf-metadata-popover-footer">
               <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
               <Button color="primary" disabled={this.state.isSubmitDisabled} onClick={this.onSubmitSorts}>{gettext('Submit')}</Button>
             </div>

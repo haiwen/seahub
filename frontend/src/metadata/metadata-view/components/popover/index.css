@@ -1,8 +1,9 @@
-.sf-metadata-filter-popover-footer {
+.sf-metadata-popover-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 1rem;
+  border-top: 1px solid #e9ecef;
 }
 
 .popover-add-tool.sf-metadata-ui.add-item-btn {

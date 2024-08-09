@@ -43,11 +43,9 @@ class Store {
     this.startIndex = 0;
   };
 
-  async loadData(limit = PER_LOAD_NUMBER) {
-    const res = await this.context.getMetadata({ start: this.startIndex, limit });
+  async loadMetadata(view, limit) {
+    const res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
     const rows = res?.data?.results || [];
-    const viewRes = await this.context.getView(this.viewId);
-    const view = viewRes?.data?.view || {};
     const columns = normalizeColumns(res?.data?.metadata);
     let data = new Metadata({ rows, columns, view });
     data.view.rows = data.row_ids;
@@ -55,14 +53,25 @@ class Store {
     data.hasMore = loadedCount === limit;
     this.data = data;
     this.startIndex += loadedCount;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+  }
+
+  async load(limit = PER_LOAD_NUMBER) {
+    const viewRes = await this.context.getView(this.viewId);
+    const view = viewRes?.data?.view || {};
     const collaboratorsRes = await this.context.getCollaborators();
     this.collaborators = Array.isArray(collaboratorsRes?.data?.user_list) ? collaboratorsRes.data.user_list.map(user => new User(user)) : [];
-    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    await this.loadMetadata(view, limit);
+  }
+
+  async reload(limit = PER_LOAD_NUMBER) {
+    this.startIndex = 0;
+    await this.loadMetadata(this.data.view, limit);
   }
 
   async loadMore(limit) {
     if (!this.data) return;
-    const res = await this.context.getMetadata({ start: this.startIndex, limit });
+    const res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
     const rows = res?.data?.results || [];
     if (!Array.isArray(rows) || rows.length === 0) {
       this.hasMore = false;
@@ -336,7 +345,14 @@ class Store {
   modifyFilters(filterConjunction, filters) {
     const type = OPERATION_TYPE.MODIFY_FILTERS;
     const operation = this.createOperation({
-      type, filter_conjunction: filterConjunction, filters, repo_id: this.repoId, view_id: this.viewId
+      type,
+      filter_conjunction: filterConjunction,
+      filters,
+      repo_id: this.repoId,
+      view_id: this.viewId,
+      success_callback: () => {
+        this.context.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+      }
     });
     this.applyOperation(operation);
   }
@@ -344,7 +360,13 @@ class Store {
   modifySorts(sorts) {
     const type = OPERATION_TYPE.MODIFY_SORTS;
     const operation = this.createOperation({
-      type, sorts, repo_id: this.repoId, view_id: this.viewId
+      type,
+      sorts,
+      repo_id: this.repoId,
+      view_id: this.viewId,
+      success_callback: () => {
+        this.context.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+      }
     });
     this.applyOperation(operation);
   }

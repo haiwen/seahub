@@ -31,6 +31,17 @@ export const MetadataProvider = ({
     setMetadata(data);
   }, []);
 
+  const reloadMetadata = useCallback(() => {
+    setLoading(true);
+    storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
+      setMetadata(storeRef.current.data);
+      setLoading(false);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, []);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -42,18 +53,19 @@ export const MetadataProvider = ({
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
-    storeRef.current.loadData(PER_LOAD_NUMBER).then(() => {
+    storeRef.current.load(PER_LOAD_NUMBER).then(() => {
       setMetadata(storeRef.current.data);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-
-    const unsubscribeServerTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);
-    const unsubscribeTableChanged = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
-    const unsubscribeHandleTableError = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
-    const unsubscribeUpdateRows = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
+    const eventBus = window.sfMetadataContext.eventBus;
+    const unsubscribeServerTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);
+    const unsubscribeTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
+    const unsubscribeHandleTableError = eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
+    const unsubscribeUpdateRows = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
+    const unsubscribeReloadData = eventBus.subscribe(EVENT_BUS_TYPE.RELOAD_DATA, reloadMetadata);
 
     return () => {
       window.sfMetadata = {};
@@ -63,6 +75,7 @@ export const MetadataProvider = ({
       unsubscribeTableChanged();
       unsubscribeHandleTableError();
       unsubscribeUpdateRows();
+      unsubscribeReloadData();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);
