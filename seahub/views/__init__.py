@@ -58,7 +58,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER
+    DTABLE_WEB_SERVER, SEADOC_SERVER_URL
 
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
@@ -655,6 +655,7 @@ def file_revisions(request, repo_id):
 
     if file_type == 'sdoc':
         file_uuid = get_seadoc_file_uuid(repo, path)
+        from seahub.seadoc.utils import gen_seadoc_access_token
         return render(request, 'sdoc_file_revisions.html', {
             'repo': repo,
             'path': path,
@@ -664,7 +665,9 @@ def file_revisions(request, repo_id):
             'is_owner': is_owner,
             'can_compare': can_compare,
             'can_revert_file': can_revert_file,
-            'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid
+            'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
+            'seadoc_access_token': gen_seadoc_access_token(file_uuid, u_filename, username, permission='rw'),
+            'seadoc_server_url' : SEADOC_SERVER_URL
         })
 
     # Whether use new file history API which read file history from db.
