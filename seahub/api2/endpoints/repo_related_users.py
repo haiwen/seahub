@@ -15,6 +15,8 @@ from seahub.api2.utils import api_error, get_user_common_info
 from seahub.utils import is_org_context
 from seahub.views import check_folder_permission
 from seahub.utils.repo import get_related_users_by_repo
+from seahub.base.accounts import User
+
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +54,8 @@ class RepoRelatedUsersView(APIView):
 
             for email in related_user_list:
                 user_info = get_user_common_info(email)
-                user_list.append(user_info)
+                if User.objects.get(email).is_active:
+                    user_list.append(user_info)
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
