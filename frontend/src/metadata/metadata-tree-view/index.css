@@ -56,3 +56,11 @@
   line-height: 24px;
   font-weight: 400;
 }
+
+.metadata-tree-view .sf-metadata-view-input {
+  width: 100%;
+  height: 28px;
+  padding: 0;
+  position: relative;
+  text-align: center;
+}

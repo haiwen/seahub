@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import ViewItem from './view-item';
-import NameDialog from './name-dialog';
 import { useMetadata } from '../hooks';
+import { Form, Input } from 'reactstrap';
+import Icon from '../../components/icon';
+import { AddView } from '../metadata-view/components/popover/view-popover';
 
 import './index.css';
 
@@ -14,7 +16,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
     return true;
   }, [userPerm]);
-  const [showAddViewDialog, setSowAddViewDialog] = useState(false);
   const [, setState] = useState(0);
   const {
     showFirstView,
@@ -26,6 +27,11 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     updateView,
     moveView
   } = useMetadata();
+
+  const [showAddViewPopover, setShowAddViewPopover] = useState(false);
+  const [showInput, setShowInput] = useState(false);
+  const inputRef = useRef(null);
+  const [inputValue, setInputValue] = useState('Untitled');
 
   useEffect(() => {
     const { origin, pathname, search } = window.location;
@@ -49,20 +55,52 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openAddView = useCallback(() => {
-    setSowAddViewDialog(true);
-  }, []);
-
-  const closeAddView = useCallback(() => {
-    setSowAddViewDialog(false);
-  }, []);
-
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     updateView(viewId, update, () => {
       setState(n => n + 1);
       successCallback && successCallback();
     }, failCallback);
   }, [updateView]);
+
+  const togglePopover = (event) => {
+    event.stopPropagation();
+    setShowAddViewPopover(!showAddViewPopover);
+  };
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const handlePopoverOptionClick = () => {
+    setShowInput(true);
+    setShowAddViewPopover(false);
+  };
+
+  const handleInputSubmit = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    addView(inputValue);
+    setShowInput(false);
+    setInputValue('Untitled');
+  }, [inputValue, addView]);
+
+  const handleClickOutsideInput = useCallback((event) => {
+    if (inputRef.current && !inputRef.current.contains(event.target)) {
+      setShowInput(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (showInput) {
+      inputRef.current.select();
+      document.addEventListener('click', handleClickOutsideInput);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutsideInput);
+    };
+  }, [showInput, inputRef, handleClickOutsideInput]);
+
 
   return (
     <>
@@ -86,18 +124,41 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   onMove={moveView}
                 />);
             })}
-            {canAdd &&
-              <CustomizeAddTool
-                className="sf-metadata-add-view"
-                callBack={openAddView}
-                footerName={gettext('Add view')}
-                addIconClassName="sf-metadata-add-view-icon"
-              />
-            }
+            {showInput && (
+              <Form onSubmit={handleInputSubmit} className='tree-view-inner sf-metadata-view-form'>
+                <div className="left-icon">
+                  <div className="tree-node-icon">
+                    <Icon symbol="table" className="metadata-views-icon" />
+                  </div>
+                </div>
+                <Input
+                  className='sf-metadata-view-input'
+                  innerRef={inputRef}
+                  type='text'
+                  id='add-view-input'
+                  name='add-view'
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  autoFocus={true}
+                />
+              </Form>
+            )}
+            {canAdd && (
+              <div id="sf-metadata-view-popover">
+                <CustomizeAddTool
+                  className="sf-metadata-add-view"
+                  callBack={togglePopover}
+                  footerName={gettext('Add view')}
+                  addIconClassName="sf-metadata-add-view-icon"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
-      {showAddViewDialog && (<NameDialog title={gettext('Add view')} onSubmit={addView} onToggle={closeAddView} />)}
+      {showAddViewPopover && (
+        <AddView target='sf-metadata-view-popover' toggle={togglePopover} onOptionClick={handlePopoverOptionClick} />
+      )}
     </>
   );
 };
