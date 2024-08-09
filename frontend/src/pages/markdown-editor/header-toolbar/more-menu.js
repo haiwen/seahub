@@ -68,9 +68,6 @@ class MoreMenu extends React.PureComponent {
           }
           {isSmall && <DropdownItem onClick={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
           {isSmall && canGenerateShareLink && <DropdownItem onClick={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
-          {(isSmall && this.props.showFileHistory) &&
-            <DropdownItem onClick={this.props.toggleHistory}>{gettext('History')}</DropdownItem>
-          }
           {isSmall && canDownloadFile &&
             <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>
           }
