@@ -128,7 +128,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-item">{gettext('File extended properties')}</span>
+            <span className="path-item">{gettext('Views')}</span>
           </Fragment>
         );
       }

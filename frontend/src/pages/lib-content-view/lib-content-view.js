@@ -21,6 +21,7 @@ import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 
 const propTypes = {
   eventBus: PropTypes.object,
@@ -144,33 +145,20 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID, eventBus } = props;
     this.unsubscribeEvent = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
-    // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
-    let location = window.location.href.split('?')[0]; // '?': to remove the effect of '?notifications=all', which is added to the URL when the 'view all notifications' dialog is open.
-    location = decodeURIComponent(location);
-    let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
-    path = path.slice(path.indexOf('/')); // get current path
-    // If the path isn't a root path and ends with '/', delete the ending '/'
-    if (path.length > 1 && path[path.length - 1] === '/') {
-      path = path.slice(0, path.length - 1);
-    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewID = urlParams.get('view');
+    const viewName = JSON.parse(localStorage.getItem('last_visited_view'))?.viewName;
+    const path = viewID
+      ? `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewName}`
+      : this.getPathFromLocation(repoID);
 
     try {
-      const repoRes = await seafileAPI.getRepoInfo(repoID);
-      const repoInfo = new RepoInfo(repoRes.data);
-      const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+      const repoInfo = await this.fetchRepoInfo(repoID);
+      const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
 
       this.setState({
         currentRepoInfo: repoInfo,
-      });
-
-      if (repoInfo.permission.startsWith('custom-')) {
-        const permissionID = repoInfo.permission.split('-')[1];
-        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
-        window.custom_permission = permissionRes.data.permission;
-      }
-
-      this.isNeedUpdateHistoryState = false;
-      this.setState({
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
@@ -178,37 +166,61 @@ class LibContentView extends React.Component {
         path: path
       });
 
+      if (repoInfo.permission.startsWith('custom-')) {
+        await this.setCustomPermission(repoID, repoInfo.permission);
+      }
+
+      this.isNeedUpdateHistoryState = false;
+
       if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isDirentListLoading: false,
-            errorMsg: gettext('Permission denied')
-          });
+      this.handleError(error);
+    }
+  };
 
-          let errorMsg = gettext('Permission denied');
-          toaster.danger(errorMsg);
-        } else if (error.response.status == 404) {
-          this.setState({
-            isDirentListLoading: false,
-            errorMsg: gettext('Library share permission not found.')
-          });
-        } else {
-          this.setState({
-            isDirentListLoading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isDirentListLoading: false,
-          errorMsg: gettext('Please check the network.')
-        });
+  getPathFromLocation = (repoID) => {
+    let location = window.location.href.split('?')[0];
+    location = decodeURIComponent(location);
+    let path = location.slice(location.indexOf(repoID) + repoID.length + 1);
+    path = path.slice(path.indexOf('/'));
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.slice(0, -1);
+    }
+    return path;
+  };
+
+  fetchRepoInfo = async (repoID) => {
+    const repoRes = await seafileAPI.getRepoInfo(repoID);
+    return new RepoInfo(repoRes.data);
+  };
+
+  setCustomPermission = async (repoID, permission) => {
+    const permissionID = permission.split('-')[1];
+    const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+    window.custom_permission = permissionRes.data.permission;
+  };
+
+  handleError = (error) => {
+    let errorMsg = gettext('Please check the network.');
+    if (error.response) {
+      switch (error.response.status) {
+        case 403:
+          errorMsg = gettext('Permission denied');
+          break;
+        case 404:
+          errorMsg = gettext('Library share permission not found.');
+          break;
+        default:
+          errorMsg = gettext('Error');
       }
     }
+    this.setState({
+      isDirentListLoading: false,
+      errorMsg: errorMsg
+    });
+    toaster.danger(errorMsg);
   };
 
   componentWillUnmount() {
@@ -365,7 +377,15 @@ class LibContentView extends React.Component {
     this.updateUsedRepoTags();
 
     if (Utils.isMarkdownFile(path)) {
-      seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
+      this.handleMarkdownFile(path);
+    } else {
+      this.handleNonMarkdownFile(path);
+    }
+  };
+
+  handleMarkdownFile = (path) => {
+    seafileAPI.getFileInfo(this.props.repoID, path)
+      .then(() => {
         /*
         if (this.state.currentMode !== 'column') {
           cookie.save('seafile_view_mode', 'column');
@@ -374,27 +394,36 @@ class LibContentView extends React.Component {
         */
         this.loadSidePanel(path);
         this.showFile(path);
-      }).catch(() => {
-        if (this.state.isTreePanelShown) { // After an error occurs, follow dir
+      })
+      .catch(() => {
+        if (this.state.isTreePanelShown) {
           this.loadSidePanel(path);
-          this.showDir(path);
-        } else {
-          this.showDir(path);
         }
+        this.showDir(path);
       });
-    } else {
-      if (this.state.isTreePanelShown) {
-        this.loadSidePanel(path);
-        this.showDir(path);
-      } else {
-        this.showDir(path);
-      }
+  };
+
+  handleNonMarkdownFile = (path) => {
+    if (this.state.isTreePanelShown) {
+      this.loadSidePanel(path);
     }
+
+    if (path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+      this.handleFileExtendedProperties(path);
+    } else {
+      this.showDir(path);
+    }
+  };
+
+  handleFileExtendedProperties = (path) => {
+    const lastVisitedView = localStorage.getItem('last_visited_view');
+    const { viewID, viewName } = lastVisitedView ? JSON.parse(lastVisitedView) : {};
+    this.showFileMetadata(path, viewID, viewName);
   };
 
   loadSidePanel = (path) => {
     let repoID = this.props.repoID;
-    if (path === '/') {
+    if (path === '/' || path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
       seafileAPI.listDir(repoID, '/').then(res => {
         const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
@@ -492,11 +521,23 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId) => {
+  showFileMetadata = (filePath, viewId, viewName) => {
     const repoID = this.props.repoID;
-    this.setState({ path: filePath, isViewFile: true, isFileLoading: false, isFileLoadedErr: false, content: '__sf-metadata', metadataViewId: viewId, isDirentDetailShow: false });
     const repoInfo = this.state.currentRepoInfo;
-    const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name);
+
+    this.setState({
+      path: filePath,
+      isViewFile: true,
+      isFileLoading: false,
+      isFileLoadedErr: false,
+      content: '__sf-metadata',
+      metadataViewId: viewId,
+      isDirentDetailShow: false
+    });
+
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}?view=${encodeURIComponent(viewId)}`;
+
+    localStorage.setItem('last_visited_view', JSON.stringify({ viewID: viewId, viewName: viewName }));
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
@@ -1784,7 +1825,7 @@ class LibContentView extends React.Component {
         }
       } else if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000');
+          this.showFileMetadata(node.path, node.view_id || '0000', node.view_name);
         }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
