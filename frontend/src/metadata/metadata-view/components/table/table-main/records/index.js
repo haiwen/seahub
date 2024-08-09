@@ -15,6 +15,10 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
+import TextTranslation from '../../../../../../utils/text-translation';
+import { Utils } from '../../../../../../utils/utils';
+import { siteRoot } from '../../../../../../utils/constants';
+import ContextMenu from '../../../context-menu/context-menu';
 
 class Records extends Component {
 
@@ -38,10 +42,16 @@ class Records extends Component {
         topLeft: this.initPosition,
         bottomRight: this.initPosition,
       },
+      selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
+    this.baseURI = '';
+    this.contextMenuOptions = [
+      { label: TextTranslation.OPEN_FILE_IN_NEW_TAB.value, value: 'openFileInNewTab' },
+      { label: TextTranslation.OPEN_PARENT_FOLDER.value, value: 'openParentFolder' },
+    ];
   }
 
   componentDidMount() {
@@ -587,6 +597,56 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
+  onOpenFileInNewTab = () => {
+    const { isGroupView, recordGetterByIndex } = this.props;
+    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    const repoID = window.sfMetadataStore.repoId;
+    let url;
+    if (record._is_dir) {
+      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir}/${record._name}`;
+    } else {
+      url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(record._parent_dir + '/' + record._name)}`;
+    }
+
+    window.open(url, '_blank');
+  };
+
+  onOpenParentFolder = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { isGroupView, recordGetterByIndex } = this.props;
+    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    const url = `${this.baseURI}${record._parent_dir}`;
+
+    window.open(url, '_blank');
+  };
+
+  onOptionClick = (event, option) => {
+
+    const handlers = {
+      openFileInNewTab: this.onOpenFileInNewTab.bind(this),
+      openParentFolder: this.onOpenParentFolder.bind(this),
+    };
+
+    const handler = handlers[option.value];
+    if (handler) {
+      handler(event);
+    }
+  };
+
+  onCellContextMenu = (event, cell) => {
+    const url = new URL(event.target.baseURI);
+    url.search = '';
+    this.baseURI = url.toString();
+
+    this.setState({
+      selectedPosition: cell,
+    });
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
@@ -606,6 +666,7 @@ class Records extends Component {
       setRecordsScrollLeft: this.setScrollLeft,
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
+      onCellContextMenu: this.onCellContextMenu,
     };
     if (this.props.isGroupView) {
       return (
@@ -667,6 +728,10 @@ class Records extends Component {
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
+          <ContextMenu
+            options={this.contextMenuOptions}
+            onOptionClick={this.onOptionClick}
+          />
         </div>
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar

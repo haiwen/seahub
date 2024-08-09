@@ -19,6 +19,8 @@ const TextTranslation = {
   'PERMISSION': { key: 'Permission', value: gettext('Permission') },
   'DETAILS': { key: 'Details', value: gettext('Details') },
   'OPEN_VIA_CLIENT': { key: 'Open via Client', value: gettext('Open via Client') },
+  'OPEN_FILE_IN_NEW_TAB': { key: 'Open file in new tab', value: gettext('Open file in new tab') },
+  'OPEN_PARENT_FOLDER': { key: 'Open parent folder', value: gettext('Open parent folder') },
   'LOCK': { key: 'Lock', value: gettext('Lock') },
   'UNLOCK': { key: 'Unlock', value: gettext('Unlock') },
   'FREEZE_DOCUMENT': { key: 'Freeze Document', value: gettext('Freeze Document') },

@@ -28,7 +28,6 @@ class RecordsBody extends Component {
     this.state = {
       startRenderIndex: 0,
       endRenderIndex: this.getInitEndIndex(props),
-      isContextMenuShow: false,
       activeRecords: [],
       menuPosition: null,
       selectedPosition: null,
@@ -47,7 +46,6 @@ class RecordsBody extends Component {
   componentDidMount() {
     this.props.onRef(this);
     window.sfMetadataBody = this;
-    document.addEventListener('contextmenu', this.handleContextMenu);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -58,8 +56,6 @@ class RecordsBody extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('contextmenu', this.handleContextMenu);
-
     this.clearHorizontalScroll();
     this.clearScrollbarTimer();
     this.setState = (state, callback) => {
@@ -335,6 +331,10 @@ class RecordsBody extends Component {
     this.props.onCellRangeSelectionUpdated(selectedRange);
   };
 
+  onCellContextMenu = (event, cell) => {
+    this.props.onCellContextMenu(event, cell);
+  };
+
   /**
    * When updating the selection by moving the mouse, you need to automatically scroll to expand the visible area
    * @param {object} selectedRange
@@ -414,6 +414,7 @@ class RecordsBody extends Component {
       onCellMouseMove: this.onCellMouseMove,
       onDragEnter: this.handleDragEnter,
       modifyRecord: this.props.modifyRecord,
+      onCellContextMenu: this.onCellContextMenu
     };
     return this.cellMetaData;
   };
@@ -504,7 +505,6 @@ class RecordsBody extends Component {
   };
 
   render() {
-    // const { isContextMenuShow, menuPosition, activeRecords } = this.state;
     return (
       <Fragment>
         <div id="canvas" className="sf-metadata-result-table-content" ref={this.setResultContentRef} onScroll={this.onScroll}>
@@ -605,6 +605,7 @@ RecordsBody.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
+  onCellContextMenu: PropTypes.func,
 };
 
 export default RecordsBody;
