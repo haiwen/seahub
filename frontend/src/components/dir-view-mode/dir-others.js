@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import TreeSection from '../tree-section';
 import TrashDialog from '../dialog/trash-dialog';
 
@@ -26,6 +27,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
           </div>
         </div>
       }
+      {Utils.isDesktop() &&
       <div className='tree-node-inner text-nowrap' title={gettext('History')} onClick={() => location.href = historyUrl}>
         <div className="tree-node-text">{gettext('History')}</div>
         <div className="left-icon">
@@ -34,6 +36,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
           </div>
         </div>
       </div>
+      }
       {showTrashDialog && (
         <TrashDialog
           repoID={repoID}

@@ -145,6 +145,7 @@ class PublicSharedView extends React.Component {
           onItemDelete={this.onItemDelete}
           theadHidden={inAllLibs}
           currentViewMode={currentViewMode}
+          inAllLibs={inAllLibs}
         />
         }
       </>

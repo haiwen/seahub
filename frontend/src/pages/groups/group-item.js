@@ -10,6 +10,7 @@ import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import Repo from '../../models/repo';
 
 const propTypes = {
+  inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,
   updateGroup: PropTypes.func.isRequired
@@ -106,7 +107,7 @@ class GroupItem extends React.Component {
 
 
   render() {
-    const { group, currentViewMode = 'list' } = this.props;
+    const { inAllLibs = false, group, currentViewMode = 'list' } = this.props;
     const { parent_group_id, admins } = group;
     const emptyTip = <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>;
 
@@ -127,6 +128,7 @@ class GroupItem extends React.Component {
         {group.repos.length === 0 ?
           emptyTip :
           <SharedRepoListView
+            inAllLibs={inAllLibs}
             theadHidden={true}
             isShowRepoOwner={false}
             currentGroup={this.props.group}

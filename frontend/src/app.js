@@ -289,7 +289,7 @@ class App extends Component {
             toggleFoldSideNav={this.toggleFoldSideNav}
             style={sidePanelStyle}
           />
-          {!isSidePanelFolded &&
+          {Utils.isDesktop() && !isSidePanelFolded &&
             <ResizeBar
               resizeBarRef={this.resizeBarRef}
               dragHandlerRef={this.dragHandlerRef}

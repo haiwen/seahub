@@ -66,34 +66,30 @@ class EmailNotice extends React.Component {
     return (
       <div className="setting-item" id="email-notice">
         <h3 className="setting-item-heading">{gettext('Email Notification')}</h3>
-        <h6 className="">{gettext('Notifications of file changes')}</h6>
-        <p className="mb-1">{gettext('The list of added, deleted and modified files will be sent to your mailbox.')}</p>
         <form method="post" action="" id="set-email-notice-interval-form" onSubmit={this.formSubmit}>
+          <h4 className="h6">{gettext('Notifications of file changes')}</h4>
+          <p className="mb-1">{gettext('The list of added, deleted and modified files will be sent to your mailbox.')}</p>
           {this.fileUpdatesOptions.map((item, index) => {
             return (
-              <React.Fragment key={`file-updates-${index}`}>
-                <input type="radio" name="interval" value={item.interval} className="align-middle" id={`file-updates-interval-option${index + 1}`} checked={fileUpdatesEmailInterval == item.interval} onChange={this.inputFileUpdatesEmailIntervalChange} />
-                <label className="align-middle m-0 ml-2" htmlFor={`interval-option${index + 1}`}>{item.text}</label>
-                <br />
-              </React.Fragment>
+              <div className="d-flex" key={`file-updates-${index}`}>
+                <input type="radio" name="file-interval" value={item.interval} id={`file-updates-interval-option-${index + 1}`} checked={fileUpdatesEmailInterval == item.interval} onChange={this.inputFileUpdatesEmailIntervalChange} />
+                <label className="m-0 ml-2" htmlFor={`file-updates-interval-option-${index + 1}`}>{item.text}</label>
+              </div>
             );
           })}
-        </form>
 
-        <h6 className="mt-4">{gettext('Notifications of collaboration')}</h6>
-        <p className="mb-1">{gettext('Whether the notifications of collaboration such as sharing library or joining group should be sent to your mailbox.')}</p>
-        <form method="post" action="" id="set-email-notice-interval-form" onSubmit={this.formSubmit}>
+          <h4 className="mt-3 h6">{gettext('Notifications of collaboration')}</h4>
+          <p className="mb-1">{gettext('Whether the notifications of collaboration such as sharing library or joining group should be sent to your mailbox.')}</p>
           {this.collaborateOptions.map((item, index) => {
             return (
-              <React.Fragment key={`collaborate-${index}`}>
-                <input type="radio" name="interval" value={item.interval} className="align-middle" id={`collaborate-interval-option${index + 1}`} checked={collaborateEmailInterval == item.interval} onChange={this.inputCollaborateEmailIntervalChange} />
-                <label className="align-middle m-0 ml-2" htmlFor={`interval-option${index + 1}`}>{item.text}</label>
-                <br />
-              </React.Fragment>
+              <div className="d-flex align-items-start" key={`collaborate-${index}`}>
+                <input type="radio" name="col-interval" value={item.interval} className="mt-1" id={`collaborate-interval-option-${index + 1}`} checked={collaborateEmailInterval == item.interval} onChange={this.inputCollaborateEmailIntervalChange} />
+                <label className="m-0 ml-2" htmlFor={`collaborate-interval-option-${index + 1}`}>{item.text}</label>
+              </div>
             );
           })}
+          <button type="submit" className="btn btn-outline-primary mt-4">{gettext('Submit')}</button>
         </form>
-        <button type="submit" className="btn btn-outline-primary mt-2" onClick={this.formSubmit}>{gettext('Submit')}</button>
       </div>
     );
   }

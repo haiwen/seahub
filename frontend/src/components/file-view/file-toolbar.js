@@ -244,13 +244,6 @@ class FileToolbar extends React.Component {
                 {gettext('Share')}
               </DropdownItem>
             )}
-            {filePerm == 'rw' && (
-              <DropdownItem>
-                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
-                  {gettext('History')}
-                </a>
-              </DropdownItem>
-            )}
             {canDownloadFile && (
               <DropdownItem>
                 <a href="?dl=1" className="text-inherit">

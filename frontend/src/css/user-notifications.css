@@ -1,6 +1,6 @@
 .notification-list-dialog {
   width: 720px;
-  max-width: 720px;
+  max-width: calc(100% - 1rem);
   height: calc(100% - 56px);
 }
 

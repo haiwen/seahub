@@ -322,6 +322,7 @@ class Libraries extends Component {
                       return (
                         <GroupItem
                           key={index}
+                          inAllLibs={true}
                           group={group}
                           updateGroup={this.updateGroup}
                           currentViewMode={currentViewMode}
