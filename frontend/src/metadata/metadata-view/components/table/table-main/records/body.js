@@ -15,6 +15,7 @@ const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
+
 class RecordsBody extends Component {
 
   static defaultProps = {
