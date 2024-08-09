@@ -4,7 +4,6 @@ from seahub.settings import METADATA_SERVER_URL, METADATA_SERVER_SECRET_KEY
 
 def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, start=0, limit=1000, order_by=None):
     from seafevents.repo_metadata.utils import METADATA_TABLE
-
     sql = f'SELECT * FROM `{METADATA_TABLE.name}`'
 
     parameters = []
@@ -41,6 +40,14 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
     metadata_server_api = MetadataServerAPI(repo_id, user)
     response_results = metadata_server_api.query_rows(sql, parameters)
 
+    return response_results
+
+def list_metadata_view_records(repo_id, user, view, start=0, limit=1000):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, gen_view_data_sql
+    metadata_server_api = MetadataServerAPI(repo_id, user)
+    columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
+    sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit)
+    response_results = metadata_server_api.query_rows(sql, [])
     return response_results
 
 

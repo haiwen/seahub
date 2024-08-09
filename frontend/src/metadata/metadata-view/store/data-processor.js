@@ -2,8 +2,6 @@ import {
   getRowsByIds,
   sortTableRows,
   isTableRows,
-  isFilterView,
-  isSortView,
   isGroupView,
   getFilteredRows,
   getGroupRows,
@@ -85,22 +83,14 @@ class DataProcessor {
 
   static run(table, { collaborators }) {
     const rows = table.rows;
-    const { filters, filter_conjunction, sorts, groupbys } = table.view;
+    const { groupbys } = table.view;
     const availableColumns = table.view.available_columns || table.columns;
-    const _isFilterView = isFilterView({ filters }, availableColumns);
-    const _isSortView = isSortView({ sorts }, availableColumns);
     const _isGroupView = isGroupView({ groupbys }, availableColumns);
-    if (!_isFilterView && !_isSortView && !_isGroupView) {
+    if (!_isGroupView) {
       table.view.rows = table.rows.map(row => row._id);
       return;
     }
     let renderedRows = rows;
-    if (_isFilterView) {
-      renderedRows = this.getFilteredRows(table, renderedRows, filter_conjunction, filters);
-    }
-    if (_isSortView) {
-      renderedRows = this.getSortedRows(table, renderedRows, sorts, { collaborators });
-    }
     const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys, { collaborators }) : [];
     const row_ids = isTableRows(renderedRows) ? renderedRows.map(row => row._id) : renderedRows;
     table.view.rows = row_ids;
@@ -194,7 +184,6 @@ class DataProcessor {
         this.updateSummaries();
         break;
       }
-
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { rows_data, upper_row_ids } = operation;
         const { rows } = table.view;
@@ -216,26 +205,6 @@ class DataProcessor {
         table.view.rows = updatedRowIds;
         this.updateDataWithModifyRecords(table, { collaborators });
         this.updateSummaries();
-        break;
-      }
-      case OPERATION_TYPE.MODIFY_FILTERS: {
-        this.run(table, { collaborators });
-        break;
-      }
-      case OPERATION_TYPE.MODIFY_SORTS: {
-        const { sorts, groupbys, rows } = table.view;
-        const availableColumns = table.view.available_columns || table.columns;
-        const _isSortView = isSortView({ sorts }, availableColumns);
-        if (!_isSortView) {
-          this.run(table, { collaborators });
-          return;
-        }
-        const _isGroupView = isGroupView({ groupbys }, availableColumns);
-        const renderedRows = this.getSortedRows(table, rows, sorts, { collaborators });
-        const groups = _isGroupView ? this.getGroupedRows(table, renderedRows, groupbys, { collaborators }) : [];
-        const row_ids = isTableRows(renderedRows) ? renderedRows.map(row => row._id) : renderedRows;
-        table.view.rows = row_ids;
-        table.view.groups = groups;
         break;
       }
       case OPERATION_TYPE.MODIFY_GROUPBYS: {

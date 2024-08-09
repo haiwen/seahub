@@ -30,6 +30,9 @@ export const EVENT_BUS_TYPE = {
   COLLAPSE_ALL_GROUPS: 'collapse_all_groups',
   EXPAND_ALL_GROUPS: 'expand_all_groups',
 
+  // metadata
+  RELOAD_DATA: 'reload_data',
+
   // view
   MODIFY_FILTERS: 'modify_filters',
   MODIFY_SORTS: 'modify_sorts',

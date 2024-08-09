@@ -6,7 +6,7 @@ import { CommonlyUsedHotkey, getValidGroupbys, SUPPORT_GROUP_COLUMN_TYPES } from
 import { gettext } from '../../utils';
 import { GroupbysPopover } from '../popover';
 
-const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
+const GroupbySetter = ({ columns: allColumns, readOnly, isNeedSubmit, groupbys: propsGroupbys, wrapperClass, target, modifyGroupbys }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const columns = useMemo(() => {
@@ -56,6 +56,7 @@ const GroupbySetter = ({ columns: allColumns, readOnly, groupbys: propsGroupbys,
       />
       {isShowSetter && (
         <GroupbysPopover
+          isNeedSubmit={isNeedSubmit}
           readOnly={readOnly}
           groupbys={groupbys}
           target={target}

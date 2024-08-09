@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledPopover } from 'reactstrap';
+import { Button, UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import {
@@ -13,8 +13,9 @@ import Groupbys from './groupbys';
 
 import './index.css';
 
-const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onChange, target, placement, columns }) => {
+const GroupbysPopover = ({ groupbys: propsGroupBys, isNeedSubmit, readOnly, hidePopover, onChange, target, placement, columns }) => {
   const [groupbys, setGroupbys] = useState(propsGroupBys);
+  const [isChanged, setChanged] = useState(false);
   const isSelectOpenRef = useState(false);
   const popoverRef = useRef(null);
 
@@ -50,10 +51,19 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onCha
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const submitGroupsChange = useCallback(() => {
+    onChange(groupbys);
+    hidePopover();
+  }, [groupbys, onChange, hidePopover]);
+
   const updateGroups = useCallback((newGroupBys) => {
     setGroupbys(newGroupBys);
+    if (isNeedSubmit) {
+      setChanged(true);
+      return;
+    }
     onChange(newGroupBys);
-  }, [onChange]);
+  }, [isNeedSubmit, onChange]);
 
   const addGroupby = useCallback((event) => {
     event && event.nativeEvent.stopImmediatePropagation();
@@ -122,12 +132,19 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onCha
             <span className="groupbys-tool-item" onClick={showAllGroups}>{gettext('Expand all')}</span>
           </div>
         )}
+        {!readOnly && isNeedSubmit && (
+          <div className="sf-metadata-popover-footer">
+            <Button className='mr-2' onClick={hidePopover}>{gettext('Cancel')}</Button>
+            <Button color="primary" disabled={!isChanged} onClick={submitGroupsChange}>{gettext('Submit')}</Button>
+          </div>
+        )}
       </div>
     </UncontrolledPopover>
   );
 };
 
 GroupbysPopover.propTypes = {
+  isNeedSubmit: PropTypes.bool,
   readOnly: PropTypes.bool,
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.node]),
   groupbys: PropTypes.array,

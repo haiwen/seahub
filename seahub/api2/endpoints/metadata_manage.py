@@ -12,7 +12,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, get_sys_columns
-from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_records
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seaserv import seafile_api
@@ -163,12 +163,9 @@ class MetadataRecords(APIView):
         """
         
         #args check
-        parent_dir = request.GET.get('parent_dir')
-        name = request.GET.get('name')
+        view_id = request.GET.get('view_id', '')
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 100)
-        is_dir = request.GET.get('is_dir')
-        order_by = request.GET.get('order_by')
 
         try:
             start = int(start)
@@ -185,16 +182,13 @@ class MetadataRecords(APIView):
             error_msg = 'limit invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if is_dir:
-            try:
-                is_dir = to_python_boolean(is_dir)
-            except:
-                error_msg = 'is_dir is invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         # metadata enable check
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -211,7 +205,14 @@ class MetadataRecords(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         try:
-            results = list_metadata_records(repo_id, request.user.username, parent_dir, name, is_dir, start, limit, order_by)
+            view = RepoMetadataViews.objects.get_view(repo_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        try:
+            results = list_metadata_view_records(repo_id, request.user.username, view, start, limit)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
