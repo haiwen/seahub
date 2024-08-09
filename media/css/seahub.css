@@ -645,7 +645,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .tabnav-tabs,
 .tabnav-tab {
-    *display:inline;
+    display:inline;
 }
 /**** jquery tabs ****/
 .ui-tabs { position: relative; padding: .2em; zoom: 1; }
@@ -1306,8 +1306,8 @@ a.sf-popover-item {
     margin-left: 8px;
 }
 #account .avatar {
-    vertical-align:middle;
-    border-radius:1000px;
+    vertical-align: middle;
+    border-radius: 1000px;
 }
 #my-info {
     display:inline-block;
@@ -1594,7 +1594,7 @@ a.sf-popover-item {
 }
 /* file upload */
 .fileupload-buttonbar .cancel {
-    *margin-left:5px;
+    margin-left: 5px;
 }
 .fileupload-progress {
     margin-top:5px;
@@ -1664,9 +1664,9 @@ a.sf-popover-item {
     visibility:visible;/*for ie*/
 }
 #upload-file-form .tip {
-    padding-left:1.5em;
-    *padding-left:1.9em;
-    margin-top:5px;
+    padding-left: 1.5em;
+    padding-left: 1.9em;
+    margin-top: 5px;
 }
 
 /* repo-history */
