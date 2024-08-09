@@ -200,3 +200,18 @@ class CcnetDB:
         with connection.cursor() as cursor:
             cursor.execute(sql)
             cursor.execute(structure_sql)
+
+    def get_active_users_by_user_list(self, user_list):
+        user_list = tuple(user_list)
+        active_users = []
+        sql = f"""
+        SELECT `email`
+        FROM `{self.db_name}`.`EmailUser`
+        WHERE
+            email IN {user_list} AND is_active = 1 AND  email NOT LIKE '%%@seafile_group'
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            for user in cursor.fetchall():
+                active_users.append(user[0])
+        return active_users

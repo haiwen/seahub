@@ -8,7 +8,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -16,6 +16,8 @@ from seahub.api2.utils import api_error, get_user_common_info
 from seahub.utils import is_org_context
 from seahub.views import check_folder_permission
 from seahub.utils.repo import get_related_users_by_repo
+from seahub.utils.ccnet_db import CcnetDB
+
 
 logger = logging.getLogger(__name__)
 
@@ -50,13 +52,11 @@ class RepoRelatedUsersView(APIView):
 
         try:
             related_user_list = get_related_users_by_repo(repo_id, org_id)
-            email_list_json = json.dumps(related_user_list)
-            user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json)
-            
-            for user_obj in user_obj_list:
-                if user_obj.is_active and '@seafile_group' not in user_obj.email:
-                    user_info = get_user_common_info(user_obj.email)
-                    user_list.append(user_info)
+            db_api = CcnetDB()
+            user_obj_list = db_api.get_active_users_by_user_list(related_user_list)
+            for username in user_obj_list:
+                user_info = get_user_common_info(username)
+                user_list.append(user_info)
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')

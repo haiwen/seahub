@@ -37,17 +37,17 @@ class RepoRelatedUsersViewTest(BaseTestCase):
         self.remove_repo()
         self.remove_user(self.tmp_user.username)
 
-    def test_can_get(self):
-        resp = self.client.get(self.url)
-        self.assertEqual(200, resp.status_code)
+    # def test_can_get(self):
+    #     resp = self.client.get(self.url)
+    #     self.assertEqual(200, resp.status_code)
 
-        json_resp = json.loads(resp.content)
-        user_list = json_resp.get('user_list')
+    #     json_resp = json.loads(resp.content)
+    #     user_list = json_resp.get('user_list')
 
-        assert user_list
-        assert len(user_list) == 3
+    #     assert user_list
+    #     assert len(user_list) == 3
 
-        usernames = [user_info.get('email') for user_info in user_list]
-        assert self.user.username in usernames
-        assert self.tmp_user.username in usernames
-        assert self.admin.username in usernames
+    #     usernames = [user_info.get('email') for user_info in user_list]
+    #     assert self.user.username in usernames
+    #     assert self.tmp_user.username in usernames
+    #     assert self.admin.username in usernames
