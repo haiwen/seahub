@@ -622,7 +622,7 @@ class Records extends Component {
     const record = this.props.recordGetter(rowIdx);
     const parentDir = record._parent_dir;
     const url = this.baseURI + parentDir;
-    location.href = url;
+    window.open(url, '_blank');
   };
 
   onOptionClick = (event, option) => {
