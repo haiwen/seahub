@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DropTarget, DragLayer } from 'react-dnd';
 import html5DragDropContext from './html5DragDropContext';
 import DraggedPageItem from './pages/dragged-page-item';
-import { repoID } from '../../../utils/constants';
+import { repoID, gettext } from '../../../utils/constants';
 
 import '../css/wiki-nav.css';
 
@@ -21,6 +21,7 @@ class WikiNav extends Component {
     currentPageId: PropTypes.string,
     addPageInside: PropTypes.func,
     updateWikiConfig: PropTypes.func.isRequired,
+    toggelTrashDialog: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -100,13 +101,27 @@ class WikiNav extends Component {
     if (pages.length === 1) {
       isOnlyOnePage = true;
     }
+    function filterDeletedPages(navigation) {
+      return navigation
+        .filter(page => !page.is_delete)
+        .map(page => ({
+          ...page,
+          children: page.children ? filterDeletedPages(page.children) : []
+        }));
+    }
+
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
+    let new_navigation = filterDeletedPages(navigation);
     return (
       <div className='wiki-nav-body'>
-        {navigation.map((item, index) => {
+        {new_navigation.map((item, index) => {
           return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map, layerDragProps);
         })}
+        <div className='wiki2-trash' onClick={this.props.toggelTrashDialog}>
+          <span className="sf3-font-recycle1 sf3-font mr-2"></span>
+          <span>{gettext('Trash')}</span>
+        </div>
       </div>
     );
   });

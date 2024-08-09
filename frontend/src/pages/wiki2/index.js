@@ -239,6 +239,7 @@ class Wiki extends Component {
           onCloseSide={this.onCloseSide}
           config={this.state.config}
           updateWikiConfig={this.updateWikiConfig}
+          getWikiConfig={this.getWikiConfig}
           setCurrentPage={this.setCurrentPage}
           currentPageId={this.state.currentPageId}
           onUpdatePage={this.onUpdatePage}
