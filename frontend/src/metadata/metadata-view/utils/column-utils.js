@@ -255,7 +255,7 @@ const getFileTypeColumnData = (column) => {
 
 export const getDefaultFileStatusOptions = () => {
   return [
-    { id: '_draft', name: '_draft' },
+    { id: '_in_progress', name: '_in_progress' },
     { id: '_in_review', name: '_in_review' },
     { id: '_done', name: '_done' },
   ];
@@ -265,7 +265,7 @@ const getFileStatusColumnData = (column) => {
   const { data } = column;
   let newData = { ...data };
   const _OPTIONS = {
-    '_draft': { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428' },
+    '_in_progress': { name: gettext('In progress'), color: '#EED5FF', textColor: '#202428' },
     '_in_review': { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428' },
     '_done': { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
   };
