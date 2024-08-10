@@ -899,6 +899,13 @@ METADATA_FILE_TYPES = {
     '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'rm', 'mp1', 'mp2')
 }
 
+##############################
+#         seafile ai         #
+##############################
+
+SEAFILE_AI_SERVER_URL = ''
+SEAFILE_AI_SECRET_KEY = ''
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',

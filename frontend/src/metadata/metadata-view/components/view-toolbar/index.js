@@ -116,7 +116,15 @@ const ViewToolBar = ({ viewId }) => {
           modifyColumnOrder={modifyColumnOrder}
         />
       </div>
-      <div className="sf-metadata-tool-right-operations"></div>
+      <div className="sf-metadata-tool-right-operations">
+        {/* Added Button */}
+        <button 
+          className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-summary-btn"
+          style={{ backgroundColor: 'purple', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '4px' }}
+        >
+          Summarize
+        </button>
+      </div>
     </div>
   );
 };

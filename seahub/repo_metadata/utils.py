@@ -5,7 +5,7 @@ import json
 import random
 from urllib.parse import urljoin
 
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 
 
 def add_init_metadata_task(params):
@@ -65,32 +65,14 @@ def init_metadata(metadata_server_api):
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
 
 
-def gen_predefined_data(column, repo_id):
-    col_key = column.get('key', {})
-    if col_key == '_summary':
-        create_summary_for_all_sdocs_in_repo(repo_id)
-
-
-def create_summary_for_all_sdocs_in_repo(repo_id):
+def update_docs_summary(repo_id, files_info_list):
     payload = {'exp': int(time.time()) + 300, }
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/create-summary-of-doc-in-repo')
-    params = {
-        'repo_id': repo_id
-    }
-    resp = requests.post(url, json=params, headers=headers)
-    return resp
-
-
-def update_single_doc_summary(repo_id, file_path):
-    payload = {'exp': int(time.time()) + 300, }
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-single-doc-summary')
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/update-docs-summary')
     params = {
         'repo_id': repo_id,
-        'file_path': file_path,
+        'files_info_list': files_info_list,
     }
     resp = requests.post(url, json=params, headers=headers)
     return resp

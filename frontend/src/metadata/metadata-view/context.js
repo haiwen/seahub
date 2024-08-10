@@ -186,6 +186,10 @@ class Context {
     // todo
   };
 
+  // ai
+  summarizeDocs = (repoId, filesInfo) => {
+    return this.metadataAPI.summarizeDocs(repoId, filesInfo);
+  };
 }
 
 export default Context;

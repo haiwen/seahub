@@ -12,7 +12,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    gen_predefined_data, get_sys_columns
+    get_sys_columns, update_docs_summary
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
@@ -447,7 +447,6 @@ class MetadataColumns(APIView):
 
         try:
             metadata_server_api.add_column(METADATA_TABLE.id, column)
-            gen_predefined_data(column, repo_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -786,16 +785,16 @@ class MetadataViewsMoveView(APIView):
         return Response({'navigation': results['navigation']})
 
 
-class MetadataSummarizeDoc(APIView):
+class MetadataSummarizeDocs(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
-    
-    def post(self, request, repo_id):
-        file_path = request.data.get('file_path', '')
 
-        if not file_path:
-            error_msg = 'file path invalid.'
+    def post(self, request, repo_id):
+        file_paths_list = request.data.get('file_paths_list', '')
+
+        if not file_paths_list or not isinstance(file_paths_list, list):
+            error_msg = 'file_paths_list should be a non-empty list..'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         record = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -812,9 +811,21 @@ class MetadataSummarizeDoc(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
+        files_info_list = []
+        username = request.user.username
+        files_info_list = [
+            {'file_path': file_path, 'download_token': token}
+            for file_path in file_paths_list
+            if (token := get_file_download_token(
+                repo_id, 
+                seafile_api.get_file_id_by_path(repo_id, file_path), 
+                f'summarize_sdoc_{username}')
+            )
+        ]
+
         try:
-            update_status = update_single_doc_summary(repo_id, file_path)
+            update_status = update_docs_summary(repo_id, files_info_list)
         except Exception as e:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

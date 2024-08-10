@@ -186,6 +186,15 @@ class MetadataManagerAPI {
     };
     return this.req.put(url, params);
   };
+
+  // ai 
+  summarizeDocs = (repoID, filesInfo) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ai/summarize-documents/';
+    const params = {
+      files_info_list: filesInfo,
+    };
+    return this.req.post(url, params);
+  }
 }
 
 const metadataAPI = new MetadataManagerAPI();
