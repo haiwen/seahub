@@ -240,31 +240,38 @@ export const getColumnType = (key, type) => {
 const getFileTypeColumnData = (column) => {
   const { data } = column;
   const _OPTIONS = {
-    '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428', id: '_picture' },
-    '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428', id: '_document' },
-    '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_video' },
-    '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142', id: '_audio' },
-    '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5', id: '_code' },
+    '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428' },
+    '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428' },
+    '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
+    '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
+    '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
   };
   let newData = { ...data };
   newData.options = Array.isArray(data.options) ? data.options.map(o => {
-    return _OPTIONS[o.name];
-  }) : Object.values(_OPTIONS);
+    return { ...o, ..._OPTIONS[o.id] };
+  }) : [];
   return newData;
 };
 
 export const getDefaultFileStatusOptions = () => {
   return [
-    { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428', id: '_draft' },
-    { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428', id: '_in_review' },
-    { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2', id: '_done' },
+    { id: '_draft', name: '_draft' },
+    { id: '_in_review', name: '_in_review' },
+    { id: '_done', name: '_done' },
   ];
 };
 
 const getFileStatusColumnData = (column) => {
   const { data } = column;
   let newData = { ...data };
-  newData.options = Array.isArray(data?.options) ? data.options : getDefaultFileStatusOptions();
+  const _OPTIONS = {
+    '_draft': { name: gettext('Draft'), color: '#EED5FF', textColor: '#202428' },
+    '_in_review': { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428' },
+    '_done': { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
+  };
+  newData.options = Array.isArray(data?.options) ? data.options.map(o => {
+    return { ...o, ..._OPTIONS[o.id] };
+  }) : [];
   return newData;
 };
 

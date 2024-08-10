@@ -1,3 +1,4 @@
+import { PRIVATE_COLUMN_KEYS } from '../../../constants';
 import { getColumnOptions } from '../../column';
 
 /**
@@ -30,6 +31,7 @@ const getOptionName = (options, targetOptionId) => {
  * @returns option name, string
  */
 const getColumnOptionNameById = (column, optionId) => {
+  if (PRIVATE_COLUMN_KEYS.includes(column.key)) return optionId;
   const options = getColumnOptions(column);
   return getOptionName(options, optionId);
 };
