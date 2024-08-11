@@ -245,7 +245,7 @@ class FileChooser extends React.Component {
     if (isPro && enableSeasearch && !enableElasticsearch) {
       seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
         this.setState({
-          searchResults: res.results.length > 0 ? this.formatResultItems(res.results.filter(item => item.is_dir)) : [],
+          searchResults: res.data.results.length > 0 ? this.formatResultItems(res.data.results.filter(item => item.is_dir)) : [],
           isResultGot: true
         });
         this.source = null;
