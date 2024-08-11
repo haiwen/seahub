@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import { LibDetail, DirentDetail } from '../../components/dirent-detail';
@@ -171,7 +172,7 @@ class LibContentContainer extends React.Component {
     let { path, repoID, usedRepoTags } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
-      if (usedRepoTags.length !== 0) {
+      if (Utils.isDesktop() && usedRepoTags.length !== 0) {
         isRepoInfoBarShow = true;
       }
     }
