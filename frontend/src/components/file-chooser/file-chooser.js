@@ -244,21 +244,21 @@ class FileChooser extends React.Component {
   sendRequest = (queryData, cancelToken) => {
     if (isPro && enableSeasearch && !enableElasticsearch) {
       seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
-        this.handleSearchResult(res);
+        this.setState({
+          searchResults: res.results.length > 0 ? this.formatResultItems(res.results.filter(item => item.is_dir)) : [],
+          isResultGot: true
+        });
+        this.source = null;
       });
     } else {
       seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-        this.handleSearchResult(res);
+        this.setState({
+          searchResults: res.data.total ? this.formatResultItems(res.data.results) : [],
+          isResultGot: true
+        });
+        this.source = null;
       });
     }
-  };
-
-  handleSearchResult = (res) => {
-    this.setState({
-      searchResults: res.data.total ? this.formatResultItems(res.data.results) : [],
-      isResultGot: true
-    });
-    this.source = null;
   };
 
   cancelRequest = () => {
