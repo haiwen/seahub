@@ -694,7 +694,7 @@ class Records extends Component {
       deleteColumn } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
-    const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + (isGroupView ? GROUP_VIEW_OFFSET : 0);
+    const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
     const hasSelectedRecord = this.hasSelectedRecord();
     const isSelectedAll = RecordMetrics.isSelectedAll(recordIds, recordMetrics);
 
