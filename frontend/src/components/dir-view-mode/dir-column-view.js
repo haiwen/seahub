@@ -37,7 +37,7 @@ const propTypes = {
   hash: PropTypes.string,
   filePermission: PropTypes.string,
   content: PropTypes.string,
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -194,7 +194,7 @@ class DirColumnView extends React.Component {
               isFileLoadedErr={this.props.isFileLoadedErr}
               filePermission={this.props.filePermission}
               content={this.props.content}
-              metadataViewId={this.props.metadataViewId}
+              viewId={this.props.viewId}
               currentRepoInfo={this.props.currentRepoInfo}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}

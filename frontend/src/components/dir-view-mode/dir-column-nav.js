@@ -312,12 +312,7 @@ class DirColumnNav extends React.Component {
                 getMenuContainerSize={getMenuContainerSize}
               />
             </TreeSection>
-            <DirViews
-              repoID={repoID}
-              currentPath={currentPath}
-              userPerm={userPerm}
-              onNodeClick={this.onNodeClick}
-            />
+            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} />
             <DirOthers
               repoID={repoID}
               userPerm={userPerm}

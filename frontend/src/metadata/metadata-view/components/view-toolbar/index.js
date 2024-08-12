@@ -5,7 +5,7 @@ import { EVENT_BUS_TYPE } from '../../constants';
 
 import './index.css';
 
-const ViewToolBar = ({ metadataViewId }) => {
+const ViewToolBar = ({ viewId }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
@@ -59,7 +59,7 @@ const ViewToolBar = ({ metadataViewId }) => {
       unsubscribeViewChange && unsubscribeViewChange();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadataViewId]);
+  }, [viewId]);
 
   if (!view) return null;
 
@@ -116,7 +116,7 @@ const ViewToolBar = ({ metadataViewId }) => {
 };
 
 ViewToolBar.propTypes = {
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
 };
 
 export default ViewToolBar;

@@ -45,7 +45,9 @@ const NameDialog = ({ value: oldName, title, onSubmit, onToggle }) => {
       onToggle();
       return;
     }
-    onSubmit(message, (error) => {
+    onSubmit(message, () => {
+      onToggle();
+    }, (error) => {
       const errorMsg = Utils.getErrorMsg(error);
       setErrorMessage(errorMsg);
       setSubmitting(false);
