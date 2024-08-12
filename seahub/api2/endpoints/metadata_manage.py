@@ -812,15 +812,13 @@ class MetadataSummarizeDocs(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        files_info_list = []
-        username = request.user.username
         files_info_list = [
             {'file_path': file_path, 'download_token': token}
             for file_path in file_paths_list
             if (token := get_file_download_token(
                 repo_id, 
                 seafile_api.get_file_id_by_path(repo_id, file_path), 
-                f'summarize_sdoc_{username}')
+                request.user.username)
             )
         ]
 
