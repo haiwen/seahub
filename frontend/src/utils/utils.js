@@ -391,17 +391,17 @@ export const Utils = {
   },
 
   getDirentIcon: function (dirent, isBig) {
-    if (!dirent) return mediaUrl + 'img/file/256/' + this.FILEEXT_ICON_MAP['default'];
-    let size = this.isHiDPI() ? 48 : 24;
+    if (!dirent) return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP['default'];
+    let size = Utils.isHiDPI() ? 48 : 24;
     size = isBig ? 192 : size;
     if (dirent.isDir()) {
       let readonly = false;
       if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
         readonly = true;
       }
-      return this.getFolderIconUrl(readonly, size, dirent.has_been_shared_out);
+      return Utils.getFolderIconUrl(readonly, size, dirent.has_been_shared_out);
     } else {
-      return this.getFileIconUrl(dirent.name);
+      return Utils.getFileIconUrl(dirent.name);
     }
   },
 
@@ -424,15 +424,15 @@ export const Utils = {
   getFileIconUrl: function (filename) {
     let file_ext = '';
     if (filename.lastIndexOf('.') == -1) {
-      return mediaUrl + 'img/file/256/' + this.FILEEXT_ICON_MAP['default'];
+      return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP['default'];
     } else {
       file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
     }
 
-    if (this.FILEEXT_ICON_MAP[file_ext]) {
-      return mediaUrl + 'img/file/256/' + this.FILEEXT_ICON_MAP[file_ext];
+    if (Utils.FILEEXT_ICON_MAP[file_ext]) {
+      return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP[file_ext];
     } else {
-      return mediaUrl + 'img/file/256/' + this.FILEEXT_ICON_MAP['default'];
+      return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP['default'];
     }
   },
 

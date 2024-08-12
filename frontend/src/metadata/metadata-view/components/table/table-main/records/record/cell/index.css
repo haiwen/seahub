@@ -5,7 +5,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-right: 1px solid #eee;
-  padding: 6px 8px;
+  padding: 4px 8px;
   display: flex;
   justify-content: flex-start;
 }
@@ -71,7 +71,7 @@
 /* cell formatter */
 .sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container {
   height: 100%;
-  line-height: 20px;
+  line-height: 24px;
   font-size: 14px;
 }
 
