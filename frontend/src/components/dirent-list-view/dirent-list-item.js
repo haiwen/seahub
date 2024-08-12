@@ -491,7 +491,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragStart = (e) => {
-    if (Utils.isIEBrower() || !this.state.canDrag) {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
     e.dataTransfer.effectAllowed = 'move';
@@ -521,7 +521,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragEnter = (e) => {
-    if (Utils.isIEBrower() || !this.state.canDrag) {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -531,7 +531,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragOver = (e) => {
-    if (Utils.isIEBrower() || !this.state.canDrag) {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -542,7 +542,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragLeave = (e) => {
-    if (Utils.isIEBrower() || !this.state.canDrag) {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
 
@@ -553,7 +553,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemDragDrop = (e) => {
-    if (Utils.isIEBrower() || !this.state.canDrag) {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
     this.setState({ isDropTipshow: false });

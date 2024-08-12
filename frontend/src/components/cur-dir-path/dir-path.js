@@ -65,7 +65,7 @@ class DirPath extends React.Component {
 
   onDragEnter = (e) => {
     e.preventDefault();
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
     this.setState({
@@ -75,7 +75,7 @@ class DirPath extends React.Component {
 
   onDragLeave = (e) => {
     e.preventDefault();
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
     this.setState({
@@ -84,7 +84,7 @@ class DirPath extends React.Component {
   };
 
   onDragOver = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
     e.preventDefault();
@@ -92,7 +92,7 @@ class DirPath extends React.Component {
   };
 
   onDrop = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
 

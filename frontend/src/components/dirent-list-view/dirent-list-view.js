@@ -513,7 +513,7 @@ class DirentListView extends React.Component {
   };
 
   onTableDragEnter = (e) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     this.enteredCounter++;
@@ -526,7 +526,7 @@ class DirentListView extends React.Component {
   };
 
   onTableDragOver = (e) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -537,7 +537,7 @@ class DirentListView extends React.Component {
   };
 
   onTableDragLeave = (e) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     this.enteredCounter--;
@@ -547,7 +547,7 @@ class DirentListView extends React.Component {
   };
 
   tableDrop = (e) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     e.persist();

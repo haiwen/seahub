@@ -28,7 +28,7 @@ const ViewItem = ({
     return true;
   }, [userPerm]);
   const canDrop = useMemo(() => {
-    if (Utils.isIEBrower() || !canUpdate) return false;
+    if (Utils.isIEBrowser() || !canUpdate) return false;
     return true;
   }, [canUpdate]);
   const operations = useMemo(() => {
