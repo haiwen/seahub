@@ -159,7 +159,7 @@ export const recalculate = (columns, allColumns) => {
   };
 };
 
-export const getColumnName = (key, name) => {
+export const getColumnDisplayName = (key, name) => {
   switch (key) {
     case PRIVATE_COLUMN_KEY.CTIME:
     case PRIVATE_COLUMN_KEY.FILE_CTIME:
@@ -198,6 +198,12 @@ export const getColumnName = (key, name) => {
     default:
       return name;
   }
+};
+
+export const getColumnOriginName = (column) => {
+  const { key, name } = column;
+  if (PRIVATE_COLUMN_KEYS.includes(key)) return key;
+  return name;
 };
 
 export const getColumnType = (key, type) => {
@@ -323,7 +329,7 @@ export const normalizeColumns = (columns) => {
 
 export function canEdit(col, record, enableCellSelect) {
   if (!col) return false;
-  if (window.sfMetadataContext.canModifyCell(col) === false) return false;
+  if (window.sfMetadataContext.canModifyColumn(col) === false) return false;
   if (col.editable != null && typeof (col.editable) === 'function') {
     return enableCellSelect === true && col.editable(record);
   }

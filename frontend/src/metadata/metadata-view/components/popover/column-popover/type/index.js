@@ -5,18 +5,18 @@ import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEY, COLUMNS_ICON_NAME } from '../../../../_basic';
-import { getColumnName } from '../../../../utils/column-utils';
+import { getColumnDisplayName } from '../../../../utils/column-utils';
 import ColumnTypes from './column-types';
 
 import './index.css';
 
 const COLUMNS = [
-  { icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR], type: CellType.COLLABORATOR, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_COLLABORATORS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_COLLABORATORS, canChangeName: false, groupby: 'predefined' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.DATE], type: CellType.DATE, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME), unique: true, key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME, canChangeName: false, groupby: 'predefined' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.TEXT], type: CellType.TEXT, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS, canChangeName: false, groupby: 'predefined' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT], type: CellType.LONG_TEXT, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_SUMMARY), unique: true, key: PRIVATE_COLUMN_KEY.FILE_SUMMARY, canChangeName: false, groupby: 'predefined' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_EXPIRED), unique: true, key: PRIVATE_COLUMN_KEY.FILE_EXPIRED, canChangeName: false, groupby: 'predefined' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT], type: CellType.SINGLE_SELECT, name: getColumnName(PRIVATE_COLUMN_KEY.FILE_STATUS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_STATUS, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR], type: CellType.COLLABORATOR, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_COLLABORATORS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_COLLABORATORS, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.DATE], type: CellType.DATE, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME), unique: true, key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.TEXT], type: CellType.TEXT, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT], type: CellType.LONG_TEXT, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_SUMMARY), unique: true, key: PRIVATE_COLUMN_KEY.FILE_SUMMARY, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED), unique: true, key: PRIVATE_COLUMN_KEY.FILE_EXPIRED, canChangeName: false, groupby: 'predefined' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT], type: CellType.SINGLE_SELECT, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_STATUS, canChangeName: false, groupby: 'predefined' },
   { icon: COLUMNS_ICON_CONFIG[CellType.TEXT], type: CellType.TEXT, name: gettext(COLUMNS_ICON_NAME[CellType.TEXT]), canChangeName: true, key: CellType.TEXT, groupby: 'basics' },
   { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: gettext(COLUMNS_ICON_NAME[CellType.CHECKBOX]), canChangeName: true, key: CellType.CHECKBOX, groupby: 'basics' },
   { icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR], type: CellType.COLLABORATOR, name: gettext(COLUMNS_ICON_NAME[CellType.COLLABORATOR]), canChangeName: true, key: CellType.COLLABORATOR, groupby: 'basics' },

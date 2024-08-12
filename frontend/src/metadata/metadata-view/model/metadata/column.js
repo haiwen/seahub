@@ -1,10 +1,10 @@
-import { normalizeColumnData, getColumnName } from '../../utils/column-utils';
+import { normalizeColumnData, getColumnDisplayName } from '../../utils/column-utils';
 import { CellType, PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../_basic';
 
 class Column {
   constructor(object) {
     this.key = object.key || '';
-    this.name = getColumnName(this.key, object.name) || '';
+    this.name = getColumnDisplayName(this.key, object.name) || '';
     this.type = object.type || '';
     this.data = object.data || null;
     this.width = object.width || 200;

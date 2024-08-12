@@ -92,20 +92,20 @@ class Context {
     return this.permission;
   };
 
-  canModifyCell = (column) => {
+  canModifyRow = (row) => {
     if (this.permission === 'r') return false;
-    const { editable } = column;
-    if (!editable) return false;
     return true;
   };
 
-  canModifyRow = (row) => {
+  canModifyRows = () => {
     if (this.permission === 'r') return false;
     return true;
   };
 
   canModifyColumn = (column) => {
     if (this.permission === 'r') return false;
+    const { editable } = column;
+    if (!editable) return false;
     if (PRIVATE_COLUMN_KEYS.includes(column.key) && !EDITABLE_PRIVATE_COLUMN_KEYS.includes(column.key)) return false;
     return true;
   };

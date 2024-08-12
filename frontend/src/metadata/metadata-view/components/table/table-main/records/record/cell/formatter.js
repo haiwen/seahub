@@ -6,7 +6,7 @@ import CheckboxEditor from '../../../../../cell-editor/checkbox-editor';
 
 const Formatter = ({ isCellSelected, isDir, field, value, onChange }) => {
   const { type } = field;
-  if (type === CellType.CHECKBOX && window.sfMetadataContext.canModifyCell(field)) {
+  if (type === CellType.CHECKBOX && window.sfMetadataContext.canModifyColumn(field)) {
     return (<CheckboxEditor isCellSelected={isCellSelected} value={value} field={field} onChange={onChange} />);
   }
   return (<CellFormatter readonly={true} value={value} field={field} isDir={isDir} />);
