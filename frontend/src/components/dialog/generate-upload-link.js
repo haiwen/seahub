@@ -281,77 +281,78 @@ class GenerateUploadLink extends React.Component {
       let sharedUploadInfo = this.state.sharedUploadInfo;
       return (
         <div>
-          <Form className="mb-4">
-            <FormGroup>
-              <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
-              <dd>
-                <SharedLink
-                  link={sharedUploadInfo.link}
-                  linkExpired={sharedUploadInfo.is_expired}
-                  copyLink={this.onCopyUploadLink}
-                />
-              </dd>
-            </FormGroup>
+          <dl>
+            <dt className="text-secondary font-weight-normal">{gettext('Upload Link')}</dt>
+            <dd>
+              <SharedLink
+                link={sharedUploadInfo.link}
+                linkExpired={sharedUploadInfo.is_expired}
+                copyLink={this.onCopyUploadLink}
+              />
+            </dd>
 
             {sharedUploadInfo.password && (
-              <FormGroup className="mb-0">
-                <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
-                <dd className="d-flex">
-                  <div className="d-flex align-items-center">
-                    <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedUploadInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedUploadInfo.password.length, 10)} />
-                    <span
-                      tabIndex="0"
-                      role="button"
-                      aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
-                      onKeyDown={this.onIconKeyDown}
-                      onClick={this.toggleStoredPasswordVisible}
-                      className={`eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
-                    >
-                    </span>
-                  </div>
+              <>
+                <dt className="text-secondary font-weight-normal">{gettext('Password')}</dt>
+                <dd>
+                  <InputGroup className="share-link-details-item">
+                    {this.state.storedPasswordVisible ?
+                      <Input type="text" readOnly={true} value={sharedUploadInfo.password} /> :
+                      <Input type="text" readOnly={true} value={'***************'} />
+                    }
+                    <InputGroupAddon addonType="append">
+                      <Button
+                        aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
+                        onClick={this.toggleStoredPasswordVisible}
+                        className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
+                      >
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
                 </dd>
-              </FormGroup>
+              </>
             )}
 
             {sharedUploadInfo.expire_date && (
-              <FormGroup className="mb-0">
-                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                {!this.state.isEditingExpiration &&
-                  <dd style={{ width: '250px' }} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
-                    {moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
-                    {this.state.isExpirationEditIconShow && (
-                      <a href="#"
-                        role="button"
-                        aria-label={gettext('Edit')}
-                        title={gettext('Edit')}
-                        className="sf3-font sf3-font-rename attr-action-icon"
-                        onClick={this.editExpirationToggle}>
-                      </a>
-                    )}
-                  </dd>
-                }
-                {this.state.isEditingExpiration &&
-                  <div className="ml-4">
-                    <SetLinkExpiration
-                      minDays={uploadLinkExpireDaysMin}
-                      maxDays={uploadLinkExpireDaysMax}
-                      defaultDays={uploadLinkExpireDaysDefault}
-                      expType={this.state.expType}
-                      setExpType={this.setExpType}
-                      expireDays={this.state.expireDays}
-                      onExpireDaysChanged={this.onExpireDaysChanged}
-                      expDate={this.state.expDate}
-                      onExpDateChanged={this.onExpDateChanged}
-                    />
-                    <div className={this.state.expType == 'by-days' ? 'mt-2' : 'mt-3'}>
-                      <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
-                      <button className="btn btn-secondary" onClick={this.editExpirationToggle}>{gettext('Cancel')}</button>
+              <>
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date')}</dt>
+                <dd>
+                  {this.state.isEditingExpiration ? (
+                    <div className="ml-4">
+                      <SetLinkExpiration
+                        minDays={uploadLinkExpireDaysMin}
+                        maxDays={uploadLinkExpireDaysMax}
+                        defaultDays={uploadLinkExpireDaysDefault}
+                        expType={this.state.expType}
+                        setExpType={this.setExpType}
+                        expireDays={this.state.expireDays}
+                        onExpireDaysChanged={this.onExpireDaysChanged}
+                        expDate={this.state.expDate}
+                        onExpDateChanged={this.onExpDateChanged}
+                      />
+                      <div className={this.state.expType == 'by-days' ? 'mt-2' : 'mt-3'}>
+                        <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
+                        <button className="btn btn-secondary" onClick={this.editExpirationToggle}>{gettext('Cancel')}</button>
+                      </div>
                     </div>
-                  </div>
-                }
-              </FormGroup>
+                  ) : (
+                    <InputGroup className="share-link-details-item">
+                      <Input type="text" readOnly={true} value={moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')} />
+                      <InputGroupAddon addonType="append">
+                        <Button
+                          aria-label={gettext('Edit')}
+                          title={gettext('Edit')}
+                          className="link-operation-icon sf3-font sf3-font-rename"
+                          onClick={this.editExpirationToggle}
+                        >
+                        </Button>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  )}
+                </dd>
+              </>
             )}
-          </Form>
+          </dl>
           {canSendShareLinkEmail && !isSendLinkShown && <Button onClick={this.toggleSendLink} className="mr-2">{gettext('Send')}</Button>}
           {!isSendLinkShown && <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>}
           {isSendLinkShown &&
