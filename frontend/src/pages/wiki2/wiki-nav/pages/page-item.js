@@ -47,15 +47,6 @@ class PageItem extends Component {
     if (this.state.isSelected) return;
   };
 
-  onCurrentPageChanged = (currentPageId) => {
-    const { isSelected } = this.state;
-    if (currentPageId === this.props.page.id && isSelected === false) {
-      this.setState({ isSelected: true });
-    } else if (currentPageId !== this.props.page.id && isSelected === true) {
-      this.setState({ isSelected: false });
-    }
-  };
-
   toggleNameEditor = (e) => {
     if (e) e.stopPropagation();
     this.setState({ isShowNameEditor: !this.state.isShowNameEditor }, () => {
@@ -152,9 +143,16 @@ class PageItem extends Component {
   };
 
   toggleExpand = (e) => {
+    e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     this.props.toggleExpand(this.props.page.id);
     this.forceUpdate();
+  };
+
+  onClickPageItem = () => {
+    if (!this.state.isShowNameEditor) {
+      this.props.setCurrentPage(this.props.page.id);
+    }
   };
 
   onAddNewPage = (newPage) => {
@@ -206,7 +204,7 @@ class PageItem extends Component {
                 onMouseLeave={this.onMouseLeave}
                 id={navItemId}
               >
-                <div className="wiki-page-item-main" onClick={isShowNameEditor ? () => { } : (e) => this.props.setCurrentPage(page.id)}>
+                <div className="wiki-page-item-main" onClick={this.onClickPageItem}>
                   <div className='wiki-page-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
                     {childNumber === 0 && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'file'} disable={true} />)
                     }

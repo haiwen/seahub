@@ -12,7 +12,6 @@
 }
 
 .wiki-nav-body {
-  padding-bottom: 1rem;
   overflow: auto;
   user-select: none;
   max-height: 100%;
