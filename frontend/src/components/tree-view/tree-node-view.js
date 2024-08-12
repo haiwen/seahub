@@ -26,6 +26,7 @@ const propTypes = {
   handleContextClick: PropTypes.func.isRequired,
   onNodeDragEnter: PropTypes.func.isRequired,
   onNodeDragLeave: PropTypes.func.isRequired,
+  isDisplayFiles: PropTypes.bool,
 };
 
 class TreeNodeView extends React.Component {
@@ -264,6 +265,7 @@ class TreeNodeView extends React.Component {
               onNodeDragEnter={this.props.onNodeDragEnter}
               onNodeDragLeave={this.props.onNodeDragLeave}
               handleContextClick={this.props.handleContextClick}
+              isDisplayFiles={this.props.isDisplayFiles}
             />
           );
         })}
@@ -277,6 +279,10 @@ class TreeNodeView extends React.Component {
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
       hlClass = 'tree-node-hight-light';
+    }
+
+    if (node.path !== '/' && type !== 'dir' && !this.props.isDisplayFiles) {
+      return '';
     }
 
     const { isCustomPermission } = Utils.getUserPermission(userPerm);

@@ -6,6 +6,8 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 
+import '../../css/item-dropdown-menu.css';
+
 const propTypes = {
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
@@ -17,6 +19,7 @@ const propTypes = {
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
   menuStyle: PropTypes.object,
+  isDisplayFiles: PropTypes.bool,
 };
 
 class ItemDropdownMenu extends React.Component {
@@ -104,7 +107,7 @@ class ItemDropdownMenu extends React.Component {
   };
 
   onMenuItemClick = (event) => {
-    let operation = Utils.getEventData(event, 'toggle');
+    let operation = Utils.getEventData(event, 'toggle') ?? event.currentTarget.getAttribute('data-toggle');
     let item = this.props.item;
     this.props.onMenuItemClick(operation, event, item);
   };
@@ -168,7 +171,16 @@ class ItemDropdownMenu extends React.Component {
                 return <DropdownItem key={index} divider />;
               } else {
                 return (
-                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
+                  <DropdownItem className='p-0' key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>
+                    <div className='dropdown-item-wrapper'>
+                      <span className='dropdown-item-tick'>
+                        {menuItem.value === 'Display files' && this.props.isDisplayFiles && (
+                          <i className="sf2-icon-tick"></i>
+                        )}
+                      </span>
+                      <span className='dropdown-item-content'>{menuItem.value}</span>
+                    </div>
+                  </DropdownItem>
                 );
               }
             })}

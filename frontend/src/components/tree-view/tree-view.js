@@ -23,6 +23,7 @@ const propTypes = {
   posX: PropTypes.number,
   posY: PropTypes.number,
   getMenuContainerSize: PropTypes.func,
+  isDisplayFiles: PropTypes.bool,
 };
 
 const LEFT_INDENT = 20;
@@ -343,6 +344,7 @@ class TreeView extends React.Component {
           onNodeDragEnter={this.onNodeDragEnter}
           onNodeDragLeave={this.onNodeDragLeave}
           handleContextClick={this.handleContextClick}
+          isDisplayFiles={this.props.isDisplayFiles}
         />
         <ContextMenu
           id={'tree-node-contextmenu'}
