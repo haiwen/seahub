@@ -128,14 +128,12 @@ class LibContentContainer extends React.Component {
   };
 
   onDirentClick = (dirent, event) => {
-    const isActive = dirent.isSelected;
-    this.setState({ currentDirent: isActive ? null : dirent });
+    this.setState({ currentDirent: dirent && dirent.isActive ? null : dirent });
     this.props.onDirentClick(dirent, event);
   };
 
   onItemSelected = (dirent) => {
-    const isActive = dirent.isSelected;
-    this.setState({ currentDirent: isActive ? null : dirent });
+    this.setState({ currentDirent: dirent && dirent.isActive ? null : dirent });
     this.props.onItemSelected(dirent);
   };
 
