@@ -49,7 +49,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDragStart = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
     let dragStartNodeData = { nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path };
@@ -60,7 +60,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDragEnter = (e, node) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     e.persist();
@@ -72,7 +72,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDragMove = (e) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     e.preventDefault();
@@ -80,7 +80,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDragLeave = (e, node) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     if (e.target.className === 'tree-view tree tree-view-drop') {
@@ -100,7 +100,7 @@ class TreeView extends React.Component {
   };
 
   onNodeDrop = (e, node) => {
-    if (Utils.isIEBrower() || !this.canDrop) {
+    if (Utils.isIEBrowser() || !this.canDrop) {
       return false;
     }
     if (e.dataTransfer.files.length) { // uploaded files

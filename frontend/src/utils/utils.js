@@ -347,7 +347,7 @@ export const Utils = {
       navigator.userAgent.indexOf('Safari') > -1;
   },
 
-  isIEBrower: function () { // is ie <= ie11 not include Edge
+  isIEBrowser: function () { // is ie <= ie11 not include Edge
     var userAgent = navigator.userAgent;
     var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
     var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;

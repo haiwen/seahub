@@ -28,7 +28,7 @@ class DirentsDraggedPreview extends React.Component {
   };
 
   handleDragOver = (event) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrowser()) {
       return false;
     }
     event.preventDefault();

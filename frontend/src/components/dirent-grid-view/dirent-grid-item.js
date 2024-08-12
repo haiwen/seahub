@@ -108,7 +108,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragStart = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
 
@@ -125,7 +125,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragEnter = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -134,7 +134,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragOver = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     e.preventDefault();
@@ -142,14 +142,14 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemDragLeave = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     this.setState({ isGridDropTipShow: false });
   };
 
   onGridItemDragDrop = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     this.setState({ isGridDropTipShow: false });

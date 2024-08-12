@@ -108,14 +108,14 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDragStart = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     this.props.onNodeDragStart(e, this.props.node);
   };
 
   onNodeDragEnter = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     if (this.props.node.object.type === 'dir') {
@@ -125,14 +125,14 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDragMove = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     this.props.onNodeDragMove(e);
   };
 
   onNodeDragLeave = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     this.setState({ isNodeDropShow: false });
@@ -140,7 +140,7 @@ class TreeNodeView extends React.Component {
   };
 
   onNodeDrop = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
     e.stopPropagation();
