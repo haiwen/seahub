@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { CellType, NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP } from '../_basic';
-import { getColumnByIndex } from './column-utils';
+import { CellType, getCellValueByColumn } from '../_basic';
+import { getColumnByIndex, getColumnOriginName } from './column-utils';
 import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, TRANSFER_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 import { convertCellValue } from './convert-utils';
@@ -92,18 +92,19 @@ class GridUtils {
       const copiedRecord = copiedRecords[copiedRecordIndex];
       let originalUpdate = {};
       let originalOldRecordData = {};
+      const { canModifyRow, canModifyColumn } = window.sfMetadataContext;
 
       for (let j = 0; j < pasteColumnsLen; j++) {
         const pasteColumn = getColumnByIndex(j + startColumnIndex, columns);
-        if (!pasteColumn || NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[pasteColumn.type]) {
+        if (!pasteColumn || !(canModifyRow(pasteRecord) && canModifyColumn(pasteColumn))) {
           continue;
         }
         const copiedColumnIndex = j % copiedColumnsLen;
         const copiedColumn = getColumnByIndex(copiedColumnIndex, copiedColumns);
-        const { name: pasteColumnName } = pasteColumn;
-        const { name: copiedColumnName } = copiedColumn;
-        const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnName) ? pasteRecord[pasteColumnName] : null;
-        const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnName) ? copiedRecord[copiedColumnName] : null;
+        const pasteColumnName = getColumnOriginName(pasteColumn);
+        const copiedColumnName = getColumnOriginName(copiedColumn);
+        const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnName) ? getCellValueByColumn(pasteRecord, pasteColumn) : null;
+        const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnName) ? getCellValueByColumn(copiedRecord, copiedColumn) : null;
         const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn);
         if (update === pasteCellValue) {
           continue;
@@ -166,45 +167,44 @@ class GridUtils {
     const updatedRows = {};
     const oldRows = {};
     const { overRecordIdx, topLeft, bottomRight } = draggedRange;
-    let { idx: startColumnIdx } = topLeft;
-    let { idx: endColumnIdx, rowIdx: endRecordIdx, groupRecordIndex } = bottomRight;
+    const { idx: startColumnIdx } = topLeft;
+    const { idx: endColumnIdx, rowIdx: endRecordIdx, groupRecordIndex } = bottomRight;
+    const { canModifyRow, canModifyColumn } = window.sfMetadataContext;
 
-    let draggedRangeMatrix = this.getdraggedRangeMatrix(shownColumns, draggedRange, rows, groupMetrics, idRowMap);
-
-    let rules = this.getDraggedRangeRules(draggedRangeMatrix, shownColumns, startColumnIdx);
+    const draggedRangeMatrix = this.getDraggedRangeMatrix(shownColumns, draggedRange, rows, groupMetrics, idRowMap);
+    const rules = this.getDraggedRangeRules(draggedRangeMatrix, shownColumns, startColumnIdx);
 
     const selectedRowLength = draggedRangeMatrix[0].length;
     let fillingIndex = draggedRangeMatrix[0].length;
 
-    // if group view then use index of gropRows which is different from the normal rows(they represent DOMs)
+    // if group view then use index of groupRows which is different from the normal rows(they represent DOMs)
     let currentGroupRowIndex = groupRecordIndex + 1;
     for (let i = endRecordIdx + 1; i <= overRecordIdx; i++) {
       let dragRow;
-      // find the row that need to be updated (it's draged)
+      // find the row that need to be updated (it's dragged)
       if (currentGroupRowIndex) {
         const groupRow = getGroupRecordByIndex(currentGroupRowIndex, groupMetrics);
         dragRow = idRowMap[groupRow.rowId];
       } else {
         dragRow = rows[i];
       }
-      let { _id: dragRowId, _locked } = dragRow;
+      const { _id: dragRowId } = dragRow;
       fillingIndex++;
-      if (_locked) continue;
+      if (!canModifyRow(dragRow)) continue;
       rowIds.push(dragRowId);
 
-      let idx = (i - endRecordIdx - 1) % selectedRowLength;
-
+      const idx = (i - endRecordIdx - 1) % selectedRowLength;
       for (let j = startColumnIdx; j <= endColumnIdx; j++) {
         let column = shownColumns[j];
-        let { key: cellKey, type, editable } = column;
-        if (editable && !NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[type] && !NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES.includes(type)) {
-          let value = draggedRangeMatrix[j - startColumnIdx][idx];
-          let rule = rules[cellKey];
-          let fillingValue = rule({ n: fillingIndex - 1, value });
-          updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [cellKey]: fillingValue });
-          oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [cellKey]: dragRow[cellKey] });
-          // update: {[name]: value}
-          // originalUpdate: {[key]: id}
+        let { key: cellKey, type } = column;
+        const columnName = getColumnOriginName(column);
+        if (canModifyColumn(column) && !NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES.includes(type)) {
+          const value = draggedRangeMatrix[j - startColumnIdx][idx];
+          const rule = rules[cellKey];
+          const fillingValue = rule({ n: fillingIndex - 1, value });
+
+          updatedOriginalRows[dragRowId] = Object.assign({}, updatedOriginalRows[dragRowId], { [columnName]: fillingValue });
+          oldOriginalRows[dragRowId] = Object.assign({}, oldOriginalRows[dragRowId], { [columnName]: dragRow[columnName] });
           const update = updatedOriginalRows[dragRowId];
           const oldUpdate = oldOriginalRows[dragRowId];
 
@@ -218,16 +218,15 @@ class GridUtils {
     return { recordIds: rowIds, idOriginalRecordUpdates: updatedOriginalRows, idRecordUpdates: updatedRows, idOriginalOldRecordData: oldOriginalRows, idOldRecordData: oldRows };
   }
 
-  getdraggedRangeMatrix(columns, draggedRange, rows, groupMetrics, idRowMap) {
+  getDraggedRangeMatrix(columns, draggedRange, rows, groupMetrics, idRowMap) {
     let draggedRangeMatrix = [];
-    let { topLeft, bottomRight } = draggedRange;
-    let { idx: startColumnIdx, rowIdx: startRowIdx, groupRecordIndex } = topLeft;
-    let { idx: endColumnIdx, rowIdx: endRowIdx } = bottomRight;
+    const { topLeft, bottomRight } = draggedRange;
+    const { idx: startColumnIdx, rowIdx: startRowIdx, groupRecordIndex } = topLeft;
+    const { idx: endColumnIdx, rowIdx: endRowIdx } = bottomRight;
     for (let i = startColumnIdx; i <= endColumnIdx; i++) {
       let currentGroupRecordIndex = groupRecordIndex;
       draggedRangeMatrix[i - startColumnIdx] = [];
-      let column = columns[i];
-      let { key } = column;
+      const column = columns[i];
       for (let j = startRowIdx; j <= endRowIdx; j++) {
         let selectedRecord;
         if (currentGroupRecordIndex) {
@@ -236,7 +235,7 @@ class GridUtils {
         } else {
           selectedRecord = rows[j];
         }
-        draggedRangeMatrix[i - startColumnIdx][j - startRowIdx] = selectedRecord[key];
+        draggedRangeMatrix[i - startColumnIdx][j - startRowIdx] = getCellValueByColumn(selectedRecord, column);
         currentGroupRecordIndex++;
       }
     }

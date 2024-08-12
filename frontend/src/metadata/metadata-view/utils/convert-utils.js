@@ -1,4 +1,4 @@
-import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString } from '../_basic';
+import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString, PREDEFINED_COLUMN_KEYS } from '../_basic';
 import { formatTextToDate } from './date';
 import { getFloatNumber, getNumberDisplayString, formatStringToNumber, isNumber } from '../_basic/utils/cell/column/number';
 
@@ -158,7 +158,7 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
 
   const currentOptions = getSelectColumnOptions(targetColumn);
   const newOption = generatorCellOption(currentOptions, fromOptionName);
-  return newOption.name;
+  return PREDEFINED_COLUMN_KEYS.includes(targetColumn.key) ? newOption.id : newOption.name;
 }
 
 const LONG_TEXT_LENGTH_LIMIT = 10 * 10000;

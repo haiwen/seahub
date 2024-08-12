@@ -485,7 +485,7 @@ class InteractionMasks extends React.Component {
     // get editable columns from selected range
     for (let j = startColumnIdx; j <= endColumnIdx; j++) {
       const column = columns[j];
-      if (!column || NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[column.type] || !window.sfMetadataContext.canModifyCell(column)) {
+      if (!column || NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[column.type] || !window.sfMetadataContext.canModifyColumn(column)) {
         break;
       }
       const { type, data } = column;
@@ -1010,7 +1010,7 @@ class InteractionMasks extends React.Component {
       selectedPosition,
     } = this.state;
     const isDragEnabled = this.isSelectedCellEditable();
-    const canEdit = false;
+    const canEdit = window.sfMetadataContext.canModifyRows();
     const showDragHandle = (isDragEnabled && canEdit);
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = column || {};
@@ -1039,7 +1039,7 @@ class InteractionMasks extends React.Component {
     const { columns, rowHeight } = this.props;
 
     const isDragEnabled = this.isSelectedCellEditable();
-    const canEdit = false;
+    const canEdit = window.sfMetadataContext.canModifyRows();
     const showDragHandle = (isDragEnabled && canEdit);
     return [
       <SelectionRangeMask
