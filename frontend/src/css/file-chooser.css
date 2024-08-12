@@ -2,7 +2,6 @@
   position: relative;
   height: 20rem;
   border-radius: 3px;
-  font-size: 1rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -12,7 +11,7 @@
 }
 
 .file-chooser-item .item-active {
-  background: #f2f4f6 !important;
+  background: #f5f5f5;
   border-radius: 3px;
 }
 
@@ -40,7 +39,7 @@
 }
 
 .file-chooser-item .item-info:hover {
-  background: #f5f5f5;
+  background: #f0f0f0;
   border-radius: 3px;
 }
 
@@ -54,7 +53,6 @@
   display: flex;
   align-items: center;
   height: 100%;
-  font-size: 16px;
   line-height: 1.5;
   padding-left: 0.25rem;
   overflow: hidden;
@@ -76,16 +74,32 @@
 .file-chooser-search-container {
   position: relative;
   height: 20rem;
-  padding: 10px;
+  padding: 0 1rem;
   overflow: auto;
 }
 
 .file-chooser-search-container td {
-  height: 40px;
   padding: 0;
 }
 
-.file-chooser-search-container td .span {
+.file-chooser-search-container .searched-list-item {
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.file-chooser-search-container .searched-list-item.tr-active {
+  background-color: #f5f5f5 !important;
+}
+
+.file-chooser-search-container .searched-item-icon {
+  border-radius: 3px 0 0 3px;
+}
+
+.file-chooser-search-container .searched-item-link {
+  border-radius: 0 3px 3px 0;
+}
+
+.file-chooser-search-container td span {
   display: inline-block;
   max-width: 100%;
   white-space: nowrap;
@@ -95,11 +109,7 @@
 }
 
 .file-chooser-search-container .tr-highlight {
-  background-color: #f5f5f5;
-}
-
-.file-chooser-search-container .searched-list-item {
-  cursor: pointer;
+  background-color: #f0f0f0;
 }
 
 .file-chooser-search-input {

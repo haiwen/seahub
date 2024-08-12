@@ -53,10 +53,10 @@ class SearchedListItem extends React.Component {
         onMouseLeave={this.onMouseLeave}
         onDoubleClick={this.searchItemDoubleClick}
       >
-        <td className="text-center">
+        <td className="text-center searched-item-icon">
           <img className="item-img" src={fileIconUrl} alt="" width="24"/>
         </td>
-        <td>
+        <td className='searched-item-link'>
           <span className="item-link">{item.repo_name}/{item.link_content}</span>
         </td>
       </tr>
