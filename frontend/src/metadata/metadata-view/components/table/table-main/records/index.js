@@ -6,7 +6,7 @@ import GroupBody from './group-body';
 import RecordsFooter from './record-footer';
 import { HorizontalScrollbar } from '../../../scrollbar';
 import { recalculate, setColumnOffsets } from '../../../../utils/column-utils';
-import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE, GROUP_VIEW_OFFSET } from '../../../../constants';
+import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 import {
   isWindowsBrowser, isWebkitBrowser, isMobile, getEventClassName,
   addClassName, removeClassName,
