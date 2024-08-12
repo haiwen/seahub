@@ -11,7 +11,7 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
-  const { enableExtendedProperties, updateEnableExtendedProperties } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata } = useMetadataStatus();
   const moreOperations = useMemo(() => {
     if (!enableMetadataManagement) return [];
     if (userPerm !== 'rw' && userPerm !== 'admin') return [];
@@ -32,8 +32,8 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   }, []);
 
   const toggleMetadataStatus = useCallback((value) => {
-    updateEnableExtendedProperties(value);
-  }, [updateEnableExtendedProperties]);
+    updateEnableMetadata(value);
+  }, [updateEnableMetadata]);
 
   return (
     <>
@@ -43,11 +43,11 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
         moreOperations={moreOperations}
         moreOperationClick={moreOperationClick}
       >
-        {enableExtendedProperties && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
+        {enableMetadata && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog
-          value={enableExtendedProperties}
+          value={enableMetadata}
           repoID={repoID}
           toggle={closeMetadataManagementDialog}
           submit={toggleMetadataStatus}

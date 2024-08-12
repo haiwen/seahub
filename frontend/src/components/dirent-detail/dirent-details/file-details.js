@@ -13,7 +13,7 @@ import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList, ...params }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableExtendedProperties } = useMetadataStatus();
+  const { enableMetadata } = useMetadataStatus();
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);
@@ -36,7 +36,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
         avatar_url: direntDetail.last_modifier_avatar,
       }]} />
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.last_modified} />
-      {!window.app.pageOptions.enableMetadataManagement && enableExtendedProperties && (
+      {!window.app.pageOptions.enableMetadataManagement && enableMetadata && (
         <DetailItem field={{ type: CellType.SINGLE_SELECT, name: gettext('Tags') }} valueId={tagListTitleID} valueClick={onEditFileTagToggle} >
           {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
             <FileTagList fileTagList={fileTagList} />

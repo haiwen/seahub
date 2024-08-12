@@ -24,6 +24,7 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { MetadataStatusProvider } from '../../metadata/hooks';
 
 const propTypes = {
   eventBus: PropTypes.object,
@@ -540,6 +541,24 @@ class LibContentView extends React.Component {
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}?view=${encodeURIComponent(viewId)}`;
 
     localStorage.setItem('last_visited_view', JSON.stringify({ viewID: viewId, viewName: viewName }));
+    window.history.pushState({ url: url, path: '' }, '', url);
+  };
+
+  hideFileMetadata = () => {
+    const repoID = this.props.repoID;
+    const repoInfo = this.state.currentRepoInfo;
+
+    this.setState({
+      path: '',
+      isViewFile: false,
+      isFileLoading: false,
+      isFileLoadedErr: false,
+      content: '',
+      metadataViewId: '',
+      isDirentDetailShow: false
+    });
+
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
@@ -2163,7 +2182,7 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <Fragment>
+      <MetadataStatusProvider repoID={this.props.repoID} hideMetadataView={this.hideFileMetadata}>
         <div className="main-panel-center flex-row">
           <LibContentContainer
             isSidePanelFolded={this.props.isSidePanelFolded}
@@ -2281,7 +2300,7 @@ class LibContentView extends React.Component {
         <MediaQuery query="(max-width: 767.8px)">
           <Modal zIndex="1030" isOpen={!Utils.isDesktop() && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
         </MediaQuery>
-      </Fragment>
+      </MetadataStatusProvider>
     );
   }
 }

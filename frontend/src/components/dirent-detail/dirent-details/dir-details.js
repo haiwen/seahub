@@ -8,12 +8,12 @@ import { MetadataDetails, useMetadataStatus } from '../../../metadata';
 
 const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
-  const { enableExtendedProperties } = useMetadataStatus();
+  const { enableMetadata } = useMetadataStatus();
 
   return (
     <>
       <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
-      {window.app.pageOptions.enableMetadataManagement && enableExtendedProperties && (
+      {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
         <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
       )}
     </>

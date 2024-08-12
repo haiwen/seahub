@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import metadataAPI from '../api';
@@ -7,9 +8,9 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ViewItem from './view-item';
 import NameDialog from './name-dialog';
+import { useMetadataStatus } from '../hooks';
 
 import './index.css';
-import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 
 const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   const canAdd = useMemo(() => {
@@ -20,22 +21,7 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
   const [showAddViewDialog, setSowAddViewDialog] = useState(false);
   const [, setState] = useState(0);
   const viewsMap = useRef({});
-
-  useEffect(() => {
-    metadataAPI.listViews(repoID).then(res => {
-      const { navigation, views } = res.data;
-      if (Array.isArray(views)) {
-        views.forEach(view => {
-          viewsMap.current[view._id] = view;
-        });
-      }
-      setViews(navigation);
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { showFirstView, setShowFirstView } = useMetadataStatus();
 
   const onClick = useCallback((view, isSelected) => {
     if (isSelected) return;
@@ -58,7 +44,30 @@ const MetadataTreeView = ({ userPerm, repoID, currentPath, onNodeClick }) => {
       view_name: view.name,
     };
     onNodeClick(node);
+    setShowFirstView(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, onNodeClick]);
+
+  useEffect(() => {
+    metadataAPI.listViews(repoID).then(res => {
+      const { navigation, views } = res.data;
+      if (Array.isArray(views)) {
+        views.forEach(view => {
+          viewsMap.current[view._id] = view;
+        });
+      }
+      setViews(navigation);
+      const firstViewObject = navigation.find(item => item.type === 'view');
+      const firstView = firstViewObject ? viewsMap.current[firstViewObject._id] : '';
+      if (showFirstView && firstView) {
+        onClick(firstView);
+      }
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const openAddView = useCallback(() => {
     setSowAddViewDialog(true);

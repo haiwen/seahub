@@ -5,14 +5,14 @@ import toaster from '../../components/toast';
 
 const MetadataStatusContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, children }) => {
+export const MetadataStatusProvider = ({ repoID, hideMetadataView, children }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement]);
 
-
-  const [enableExtendedProperties, setEnableExtendedProperties] = useState(false);
+  const [enableMetadata, setEnableExtendedProperties] = useState(false);
+  const [showFirstView, setShowFirstView] = useState(false);
 
   useEffect(() => {
     if (!enableMetadataManagement) {
@@ -28,13 +28,18 @@ export const MetadataStatusProvider = ({ repoID, children }) => {
     });
   }, [repoID, enableMetadataManagement]);
 
-  const updateEnableExtendedProperties = useCallback((newValue) => {
-    if (newValue === enableExtendedProperties) return;
+  const updateEnableMetadata = useCallback((newValue) => {
+    if (newValue === enableMetadata) return;
+    if (!newValue) {
+      hideMetadataView && hideMetadataView();
+    } else {
+      setShowFirstView(true);
+    }
     setEnableExtendedProperties(newValue);
-  }, [enableExtendedProperties]);
+  }, [enableMetadata, hideMetadataView]);
 
   return (
-    <MetadataStatusContext.Provider value={{ enableExtendedProperties, updateEnableExtendedProperties }}>
+    <MetadataStatusContext.Provider value={{ enableMetadata, updateEnableMetadata, showFirstView, setShowFirstView }}>
       {children}
     </MetadataStatusContext.Provider>
   );
@@ -45,6 +50,6 @@ export const useMetadataStatus = () => {
   if (!context) {
     throw new Error('\'MetadataStatusContext\' is null');
   }
-  const { enableExtendedProperties, updateEnableExtendedProperties } = context;
-  return { enableExtendedProperties, updateEnableExtendedProperties };
+  const { enableMetadata, updateEnableMetadata, showFirstView, setShowFirstView } = context;
+  return { enableMetadata, updateEnableMetadata, showFirstView, setShowFirstView };
 };
