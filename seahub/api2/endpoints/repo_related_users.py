@@ -1,13 +1,14 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import logging
+import json
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -15,8 +16,6 @@ from seahub.api2.utils import api_error, get_user_common_info
 from seahub.utils import is_org_context
 from seahub.views import check_folder_permission
 from seahub.utils.repo import get_related_users_by_repo
-from seahub.base.accounts import User
-
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +50,13 @@ class RepoRelatedUsersView(APIView):
 
         try:
             related_user_list = get_related_users_by_repo(repo_id, org_id)
-
-            for email in related_user_list:
-                user_info = get_user_common_info(email)
-                if User.objects.get(email).is_active:
+            email_list_json = json.dumps(related_user_list)
+            user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json) + \
+                            ccnet_api.get_emailusers_in_list('LDAP', email_list_json)
+            
+            for user_obj in user_obj_list:
+                if user_obj.is_active and '@seafile_group' not in user_obj.email:
+                    user_info = get_user_common_info(user_obj.email)
                     user_list.append(user_info)
         except Exception as e:
             logger.error(e)
