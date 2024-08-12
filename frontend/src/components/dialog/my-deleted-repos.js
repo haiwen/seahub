@@ -63,10 +63,10 @@ class MyLibsDeleted extends Component {
             <table>
               <thead>
                 <tr>
-                  <th width="8%">{/* img*/}</th>
-                  <th width="52%">{gettext('Name')}</th>
-                  <th width="30%">{gettext('Deleted Time')}</th>
-                  <th width="10%"></th>
+                  <th width="10%">{/* img*/}</th>
+                  <th width="50%">{gettext('Name')}</th>
+                  <th width="28%">{gettext('Deleted Time')}</th>
+                  <th width="12%"></th>
                 </tr>
               </thead>
               <tbody>

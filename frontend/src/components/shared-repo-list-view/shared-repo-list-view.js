@@ -22,6 +22,7 @@ const propTypes = {
   hasNextPage: PropTypes.bool,
   onMonitorRepo: PropTypes.func,
   theadHidden: PropTypes.bool,
+  inAllLibs: PropTypes.bool,
 };
 
 class SharedRepoListView extends React.Component {
@@ -139,9 +140,10 @@ class SharedRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
+    const { inAllLibs = false } = this.props;
     return (
       <table className="table-thead-hidden">
-        <LibsMobileThead />
+        <LibsMobileThead inAllLibs={inAllLibs} />
         <tbody>
           {this.renderRepoListView()}
         </tbody>

@@ -249,18 +249,15 @@ class SharedRepoListItem extends React.Component {
     this.setState({ isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow });
   };
 
-  onItemShare = (e) => {
-    e.preventDefault();
+  onItemShare = () => {
     this.setState({ isShowSharedDialog: true });
   };
 
-  onItemUnshare = (e) => {
-    e.preventDefault();
+  onItemUnshare = () => {
     this.props.onItemUnshare(this.props.repo);
   };
 
-  onItemDeleteToggle = (e) => {
-    e.preventDefault();
+  onItemDeleteToggle = () => {
     this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
   };
 
@@ -454,7 +451,7 @@ class SharedRepoListItem extends React.Component {
         operations.push('Unshare');
       }
     } else {
-      operations = this.generatorOperations();
+      operations = this.generatorOperations().filter(item => item != 'Divider');
       if (this.isDeparementOnwerGroupMember) {
         operations.unshift('Unshare');
         operations.unshift('Share');
@@ -499,9 +496,9 @@ class SharedRepoListItem extends React.Component {
     } else {
       operations = this.generatorOperations();
     }
-    const shareOperation = <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
-    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation = <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
+    const shareOperation = <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></i>;
+    const unshareOperation = <i className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></i>;
+    const deleteOperation = <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></i>;
 
     if (this.isDeparementOnwerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();

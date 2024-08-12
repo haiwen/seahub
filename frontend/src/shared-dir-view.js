@@ -421,7 +421,7 @@ class SharedDirView extends React.Component {
         }
       });
       this.setState({ usedRepoTags: usedRepoTags });
-      if (usedRepoTags.length != 0 && relativePath == '/') {
+      if (Utils.isDesktop() && usedRepoTags.length != 0 && relativePath == '/') {
         this.setState({ isRepoInfoBarShow: true });
       }
     }).catch(error => {

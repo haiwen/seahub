@@ -109,9 +109,10 @@ class MylibRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
+    const { inAllLibs } = this.props;
     return (
       <table className="table-thead-hidden">
-        <LibsMobileThead />
+        <LibsMobileThead inAllLibs={inAllLibs} />
         <tbody>
           {this.renderRepoListView()}
         </tbody>

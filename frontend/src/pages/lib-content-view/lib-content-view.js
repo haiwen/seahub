@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -2276,6 +2278,9 @@ class LibContentView extends React.Component {
             toggleDialog={this.toggleDeleteFolderDialog}
           />
         )}
+        <MediaQuery query="(max-width: 767.8px)">
+          <Modal zIndex="1030" isOpen={!Utils.isDesktop() && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
+        </MediaQuery>
       </Fragment>
     );
   }

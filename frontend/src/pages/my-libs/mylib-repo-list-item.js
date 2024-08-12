@@ -148,8 +148,7 @@ class MylibRepoListItem extends React.Component {
     }
   };
 
-  onToggleStarRepo = (e) => {
-    e.preventDefault();
+  onToggleStarRepo = () => {
     const repoName = this.props.repo.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
@@ -194,17 +193,11 @@ class MylibRepoListItem extends React.Component {
     });
   };
 
-  onShareToggle = (e) => {
-    // when close share dialog after send share link email,
-    // there is no event
-    if (e != undefined) {
-      e.preventDefault();
-    }
+  onShareToggle = () => {
     this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
-  onDeleteToggle = (e) => {
-    e.preventDefault();
+  onDeleteToggle = () => {
     this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
   };
 
@@ -359,8 +352,8 @@ class MylibRepoListItem extends React.Component {
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div>
-              <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
-              <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+              <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
+              <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
               <MylibRepoMenu
                 isPC={true}
                 repo={this.props.repo}
@@ -413,8 +406,8 @@ class MylibRepoListItem extends React.Component {
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0">
-            <a href="#" className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
-            <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+            <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
+            <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
             <MylibRepoMenu
               isPC={true}
               repo={this.props.repo}

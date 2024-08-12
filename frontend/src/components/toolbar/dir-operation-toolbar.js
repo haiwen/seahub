@@ -289,7 +289,14 @@ class DirOperationToolbar extends React.Component {
     } else {
       content = (
         <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
-          <DropdownToggle tag="span" className="sf2-icon-plus mobile-toolbar-icon" />
+          <DropdownToggle
+            tag="div"
+            role="button"
+            className="path-item"
+          >
+            {this.props.children}
+            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+          </DropdownToggle>
           <DropdownMenu>
             {canUpload && (
               <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
