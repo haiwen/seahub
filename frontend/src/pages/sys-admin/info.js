@@ -84,8 +84,10 @@ class Info extends Component {
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container system-admin-info">
-            <h2 className="heading">{gettext('Info')}</h2>
-            <div className="content">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Info')}</h3>
+            </div>
+            <div className="cur-view-content">
               {loading && <Loading />}
               {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
               {(!loading && !errorMsg) &&
