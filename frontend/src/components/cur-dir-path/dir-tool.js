@@ -23,7 +23,7 @@ const propTypes = {
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
 };
 
 class DirTool extends React.Component {
@@ -100,7 +100,7 @@ class DirTool extends React.Component {
   render() {
     const menuItems = this.getMenu();
     const { isDropdownMenuOpen } = this.state;
-    const { repoID, currentMode, currentPath, sortBy, sortOrder, metadataViewId } = this.props;
+    const { repoID, currentMode, currentPath, sortBy, sortOrder, viewId } = this.props;
     const propertiesText = TextTranslation.PROPERTIES.value;
     const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
 
@@ -114,7 +114,7 @@ class DirTool extends React.Component {
     if (isFileExtended) {
       return (
         <div className="d-flex">
-          <MetadataViewToolBar metadataViewId={metadataViewId} />
+          <MetadataViewToolBar viewId={viewId} />
         </div>
       );
     }

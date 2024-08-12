@@ -8,12 +8,12 @@ import { gettext } from '../../../utils/constants';
 import EditFileTagPopover from '../../popover/edit-filetag-popover';
 import FileTagList from '../../file-tag-list';
 import { Utils } from '../../../utils/utils';
-import { MetadataDetails, useMetadataStatus } from '../../../metadata';
+import { MetadataDetails, useMetadata } from '../../../metadata';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList, ...params }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata } = useMetadata();
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);

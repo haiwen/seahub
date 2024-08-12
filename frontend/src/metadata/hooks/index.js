@@ -1,1 +1,1 @@
-export { MetadataStatusProvider, useMetadataStatus } from './metadata-status';
+export { MetadataProvider, useMetadata } from './metadata';

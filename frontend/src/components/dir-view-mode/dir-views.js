@@ -2,16 +2,16 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
-import { MetadataStatusManagementDialog, MetadataTreeView, useMetadataStatus } from '../../metadata';
+import { MetadataStatusManagementDialog, MetadataTreeView, useMetadata } from '../../metadata';
 
-const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
+const DirViews = ({ userPerm, repoID, currentPath }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.app.pageOptions.enableMetadataManagement]);
 
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
-  const { enableMetadata, updateEnableMetadata } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, navigation } = useMetadata();
   const moreOperations = useMemo(() => {
     if (!enableMetadataManagement) return [];
     if (userPerm !== 'rw' && userPerm !== 'admin') return [];
@@ -43,7 +43,9 @@ const DirViews = ({ userPerm, repoID, currentPath, onNodeClick }) => {
         moreOperations={moreOperations}
         moreOperationClick={moreOperationClick}
       >
-        {enableMetadata && (<MetadataTreeView userPerm={userPerm} repoID={repoID} currentPath={currentPath} onNodeClick={onNodeClick} />)}
+        {enableMetadata && Array.isArray(navigation) && navigation.length > 0 && (
+          <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
+        )}
       </TreeSection>
       {showMetadataStatusManagementDialog && (
         <MetadataStatusManagementDialog

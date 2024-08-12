@@ -39,7 +39,7 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
-  metadataViewId: PropTypes.string,
+  viewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -222,7 +222,7 @@ class LibContentContainer extends React.Component {
             filePermission={this.props.filePermission}
             onFileTagChanged={this.props.onToolbarFileTagChanged}
             repoTags={this.props.repoTags}
-            metadataViewId={this.props.metadataViewId}
+            viewId={this.props.viewId}
             onItemMove={this.props.onItemMove}
           />
           <ToolbarForSelectedDirents
@@ -282,7 +282,7 @@ class LibContentContainer extends React.Component {
               hash={this.props.hash}
               filePermission={this.props.filePermission}
               content={this.props.content}
-              metadataViewId={this.props.metadataViewId}
+              viewId={this.props.viewId}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}

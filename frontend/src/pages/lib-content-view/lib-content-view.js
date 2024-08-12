@@ -24,7 +24,7 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { MetadataStatusProvider } from '../../metadata/hooks';
+import { MetadataProvider } from '../../metadata/hooks';
 
 const propTypes = {
   eventBus: PropTypes.object,
@@ -90,7 +90,7 @@ class LibContentView extends React.Component {
       asyncOperationType: 'move',
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
-      metadataViewId: '0000',
+      viewId: '0000',
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -149,12 +149,7 @@ class LibContentView extends React.Component {
     const { repoID, eventBus } = props;
     this.unsubscribeEvent = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const viewID = urlParams.get('view');
-    const viewName = JSON.parse(localStorage.getItem('last_visited_view'))?.viewName;
-    const path = viewID
-      ? `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewName}`
-      : this.getPathFromLocation(repoID);
+    const path = this.getPathFromLocation(repoID);
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -411,17 +406,9 @@ class LibContentView extends React.Component {
       this.loadSidePanel(path);
     }
 
-    if (path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
-      this.handleFileExtendedProperties(path);
-    } else {
+    if (!path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
       this.showDir(path);
     }
-  };
-
-  handleFileExtendedProperties = (path) => {
-    const lastVisitedView = localStorage.getItem('last_visited_view');
-    const { viewID, viewName } = lastVisitedView ? JSON.parse(lastVisitedView) : {};
-    this.showFileMetadata(path, viewID, viewName);
   };
 
   loadSidePanel = (path) => {
@@ -524,7 +511,7 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId, viewName) => {
+  showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
 
@@ -534,32 +521,31 @@ class LibContentView extends React.Component {
       isFileLoading: false,
       isFileLoadedErr: false,
       content: '__sf-metadata',
-      metadataViewId: viewId,
+      viewId: viewId,
       isDirentDetailShow: false
     });
 
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}?view=${encodeURIComponent(viewId)}`;
-
-    localStorage.setItem('last_visited_view', JSON.stringify({ viewID: viewId, viewName: viewName }));
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
   hideFileMetadata = () => {
-    const repoID = this.props.repoID;
-    const repoInfo = this.state.currentRepoInfo;
-
     this.setState({
       path: '',
       isViewFile: false,
       isFileLoading: false,
       isFileLoadedErr: false,
       content: '',
-      metadataViewId: '',
+      viewId: '',
       isDirentDetailShow: false
     });
+  };
 
-    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}`;
-    window.history.pushState({ url: url, path: '' }, '', url);
+  renameMetadataView = (renamedViewId, newPath) => {
+    const { viewId, content } = this.state;
+    if (content !== '__sf-metadata') return;
+    if (viewId !== renamedViewId) return;
+    this.setState({ path: newPath });
   };
 
   loadDirentList = (path) => {
@@ -1846,7 +1832,7 @@ class LibContentView extends React.Component {
         }
       } else if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000', node.view_name);
+          this.showFileMetadata(node.path, node.view_id || '0000');
         }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
@@ -2182,7 +2168,12 @@ class LibContentView extends React.Component {
     }
 
     return (
-      <MetadataStatusProvider repoID={this.props.repoID} hideMetadataView={this.hideFileMetadata}>
+      <MetadataProvider
+        repoID={this.props.repoID}
+        selectMetadataView={this.onTreeNodeClick}
+        renameMetadataView={this.renameMetadataView}
+        hideMetadataView={this.hideFileMetadata}
+      >
         <div className="main-panel-center flex-row">
           <LibContentContainer
             isSidePanelFolded={this.props.isSidePanelFolded}
@@ -2212,7 +2203,7 @@ class LibContentView extends React.Component {
             isFileLoadedErr={this.state.isFileLoadedErr}
             filePermission={this.state.filePermission}
             content={this.state.content}
-            metadataViewId={this.state.metadataViewId}
+            viewId={this.state.viewId}
             lastModified={this.state.lastModified}
             latestContributor={this.state.latestContributor}
             onLinkClick={this.onLinkClick}
@@ -2300,7 +2291,7 @@ class LibContentView extends React.Component {
         <MediaQuery query="(max-width: 767.8px)">
           <Modal zIndex="1030" isOpen={!Utils.isDesktop() && this.state.isTreePanelShown} toggle={this.toggleTreePanel} contentClassName="d-none"></Modal>
         </MediaQuery>
-      </MetadataStatusProvider>
+      </MetadataProvider>
     );
   }
 }
