@@ -47,8 +47,10 @@ class Wiki2(object):
 
 class WikiPageTrash(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
-    path = models.TextField()
+    doc_uuid = models.TextField()
     page_id = models.CharField(max_length=4)
+    parent_page_id = models.CharField(max_length=4)
+    subpages = models.TextField()
     name = models.CharField(max_length=255)
     delete_time = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     size = models.BigIntegerField(blank=False, null=False)
@@ -60,8 +62,10 @@ class WikiPageTrash(models.Model):
         return {
             'id': self.pk,
             'repo_id': self.repo_id,
-            'path': self.path,
+            'doc_uuid': self.doc_uuid,
             'page_id': self.page_id,
+            'parent_page_id': self.parent_page_id,
+            'subpages': self.subpages,
             'name': self.name,
             'delete_time': self.delete_time,
             'size': self.size

@@ -23,15 +23,5 @@ export default class WikiConfig {
       }
     }
     traversePage({ children: this.navigation });
-    for (let key in page_id_map) {
-      if (page_id_map[key] === false) {
-        const page = this.pages.find(item => item.id === key);
-        this.navigation.push({
-          id: page.id,
-          type: 'page',
-          children: page.children || [],
-        });
-      }
-    }
   }
 }

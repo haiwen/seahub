@@ -31,7 +31,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav, revert_nav, delete_nav, remove_flags, get_ids_by_page_id
+    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack
 
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
@@ -707,14 +707,13 @@ class Wiki2PageView(APIView):
         wiki_config = get_wiki_config(repo_id, username)
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
-        path = page_info.get('path')
-
         if not page_info:
             error_msg = 'page %s not found.' % page_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check file lock
         try:
+            path = page_info.get('path')
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
         except Exception as e:
             logger.error(e)
@@ -734,14 +733,19 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # update navigation and page
-        delete_nav(navigation, page_id)
+        stack_ids = get_parent_id_stack(navigation, page_id)
+        parent_page_id = stack_ids.pop() if stack_ids else None
+        subpages = pop_nav(navigation, page_id)
         # delete the folder where the sdoc is located
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, page_info['path'])
             page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
+            doc_uuid = os.path.basename(os.path.dirname(page_info['path']))
             WikiPageTrash.objects.create(repo_id=repo_id,
-                                         path=page_info['path'],
+                                         doc_uuid=doc_uuid,
                                          page_id=page_info['id'],
+                                         parent_page_id=parent_page_id,
+                                         subpages=subpages,
                                          name=page_info['name'],
                                          delete_time=datetime.datetime.utcnow(),
                                          size=page_size)
@@ -963,13 +967,10 @@ class WikiPageTrashView(APIView):
         navigation = wiki_config.get('navigation', [])
         try:
             page = WikiPageTrash.objects.get(page_id=page_id)
-            nav = revert_nav(navigation, page_id)
-            remove_flags(navigation)
-            if nav == 1:
-                moved_nav = pop_nav(navigation, page_id)
-                navigation.append(moved_nav)
+            subpages = page.subpages
+            parent_page_id = page.parent_page_id
+            revert_nav(navigation, parent_page_id, subpages)
             page.delete()
-            wiki_config['navigation'] = navigation
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, username, wiki_config)
         except Exception as e:
@@ -1024,8 +1025,7 @@ class WikiPageTrashView(APIView):
         pages = wiki_config.get('pages', [])
         id_list = []
         for del_page in del_pages:
-            get_ids_by_page_id(navigation, del_page.page_id, id_list)
-            pop_nav(navigation, del_page.page_id)
+            get_sub_ids_by_page_id([(eval(del_page.subpages))], id_list)
         id_set = set(id_list)
         clean_pages, not_del_pages = delete_page(pages, id_set)
         try:
