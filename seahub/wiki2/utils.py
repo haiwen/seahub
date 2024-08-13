@@ -297,6 +297,9 @@ def get_sub_ids_by_page_id(subpages, ids):
 
 
 def get_parent_id_stack(navigation, page_id):
+    '''
+    DFS (Depth First Search)
+    '''
     id_list = []
 
     def return_parent_page_id(navigation, page_id, id_list):
