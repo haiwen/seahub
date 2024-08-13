@@ -43,15 +43,14 @@ class Item extends React.Component {
     });
   };
 
-  deleteItem = (e) => {
-    e.preventDefault();
+  deleteItem = () => {
     // make the icon avoid being clicked repeatedly
     this.setState({
       isOpIconShown: false
     });
     const token = this.props.invitation.token;
     seafileAPI.deleteInvitation(token).then((res) => {
-      this.setState({ deleted: true });
+      this.props.deleteItem(token);
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -63,22 +62,18 @@ class Item extends React.Component {
   };
 
   revokeItem = () => {
-    this.setState({ deleted: true });
+    const token = this.props.invitation.token;
+    this.props.deleteItem(token);
   };
 
-  toggleRevokeDialog = (e) => {
-    e.preventDefault();
+  toggleRevokeDialog = () => {
     this.setState({
       isRevokeDialogOpen: !this.state.isRevokeDialogOpen
     });
   };
 
   render() {
-    const { isOpIconShown, deleted, isRevokeDialogOpen } = this.state;
-
-    if (deleted) {
-      return null;
-    }
+    const { isOpIconShown, isRevokeDialogOpen } = this.state;
 
     const item = this.props.invitation;
 
@@ -93,20 +88,22 @@ class Item extends React.Component {
             <td>
               {isOpIconShown && (
                 item.accept_time ?
-                  <a href="#"
+                  <i
                     role="button"
                     className="action-icon sf3-font sf3-font-cancel-invitation"
                     title={gettext('Revoke Access')}
                     aria-label={gettext('Revoke Access')}
-                    onClick={this.toggleRevokeDialog}>
-                  </a> :
-                  <a href="#"
+                    onClick={this.toggleRevokeDialog}
+                  >
+                  </i> :
+                  <i
                     role="button"
                     className="action-icon sf2-icon-x3"
                     title={gettext('Delete')}
                     aria-label={gettext('Delete')}
-                    onClick={this.deleteItem}>
-                  </a>
+                    onClick={this.deleteItem}
+                  >
+                  </i>
               )}
             </td>
           </tr>
@@ -157,6 +154,7 @@ class Item extends React.Component {
 const ItemPropTypes = {
   invitation: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
+  deleteItem: PropTypes.func.isRequired
 };
 
 Item.propTypes = ItemPropTypes;
@@ -215,6 +213,7 @@ class Content extends Component {
                 key={index}
                 isDesktop={isDesktop}
                 invitation={invitation}
+                deleteItem={this.props.deleteItem}
               />
             );
           })}
@@ -257,6 +256,12 @@ class InvitationsView extends React.Component {
     });
   };
 
+  deleteItem = (token) => {
+    this.setState({
+      invitationsList: this.state.invitationsList.filter(item => item.token != token)
+    });
+  };
+
   toggleInvitePeopleDialog = () => {
     this.setState({
       isInvitePeopleDialogOpen: !this.state.isInvitePeopleDialogOpen
@@ -277,7 +282,10 @@ class InvitationsView extends React.Component {
               </h3>
             </div>
             <div className="cur-view-content">
-              <Content data={this.state} />
+              <Content
+                data={this.state}
+                deleteItem={this.deleteItem}
+              />
             </div>
           </div>
         </div>
