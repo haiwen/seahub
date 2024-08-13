@@ -239,7 +239,7 @@ class Account(APIView):
 
             if space_quota_mb < 0:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _('Space quota is too low (minimum value is 0)'))
+                        'Space quota is too low (minimum value is 0)')
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
@@ -247,7 +247,7 @@ class Account(APIView):
                         get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
                     return api_error(status.HTTP_400_BAD_REQUEST, \
-                            _('Failed to set quota: maximum quota is %d MB' % org_quota_mb))
+                            'Failed to set quota: maximum quota is %d MB' % org_quota_mb)
 
         # argument check for is_trial
         is_trial = request.data.get("is_trial", None)

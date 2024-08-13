@@ -4,7 +4,6 @@ import time
 import json
 from functools import wraps
 from django.core.cache import cache
-from django.utils.translation import gettext as _
 from django.http import HttpResponse, HttpResponseBadRequest, \
         HttpResponseForbidden
 
@@ -84,7 +83,7 @@ def rate_limit(number=REQUEST_RATE_LIMIT_NUMBER,
                 cache.set(cache_key, data, timeout=period)
 
                 if data['count'] > number:
-                    return HttpResponse(_("Too many requests"), status=429)
+                    return HttpResponse("Too many requests", status=429)
 
             return func(request, *args, **kwargs)
         return wrapped

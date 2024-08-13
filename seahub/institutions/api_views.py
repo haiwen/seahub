@@ -175,7 +175,7 @@ class InstAdminUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if quota_total_mb < 0:
-                error_msg = _("Space quota is too low (minimum value is 0).")
+                error_msg = "Space quota is too low (minimum value is 0)."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             quota = quota_total_mb * get_file_size_unit('MB')
@@ -183,7 +183,7 @@ class InstAdminUser(APIView):
             if available_quota is not None:
                 # None means has unlimit quota
                 if available_quota == 0 or available_quota < quota:
-                    error_msg = _(f"Failed to set quota: maximum quota is {available_quota} MB")
+                    error_msg = "Failed to set quota: maximum quota is %d MB" % available_quota
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             seafile_api.set_user_quota(email, quota)
