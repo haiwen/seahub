@@ -43,6 +43,7 @@ from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_fac
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.organizations.models import OrgSAMLConfig
+from seahub.sysadmin_extra.models import UserLoginLog
 
 from constance import config
 
@@ -77,7 +78,16 @@ def log_user_in(request, user, redirect_to):
 
     # Okay, security checks complete. Log the user in.
     auth_login(request, user)
-
+    # if UserLoginLog.objects.filter(username=user.username).count() == 1:
+    #     email_template_name = 'registration/password_change_email.html'
+    #     send_to = email2contact_email(request.user.username)
+    #     site_name = get_site_name()
+    #     c = {
+    #         'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    #     }
+    #     send_html_email(_("Successfully Changed Password on %s") % site_name,
+    #                     email_template_name, c, None,
+    #                     [send_to])
     return HttpResponseRedirect(redirect_to)
 
 def _handle_login_form_valid(request, user, redirect_to, remember_me):
@@ -110,15 +120,12 @@ def login(request, template_name='registration/login.html',
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
     ip = get_remote_ip(request)
-    print('ip',ip)
-    print(request.headers.get('User-Agent',None))
     if request.method == "POST":
         login = request.POST.get('login', '').strip()
         failed_attempt = get_login_failed_attempts(username=login, ip=ip)
         remember_me = True if request.POST.get('remember_me',
                                                '') == 'on' else False
         redirect_to = request.POST.get(redirect_field_name, '') or redirect_to
-
         # check the form
         used_captcha_already = False
         if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
@@ -129,7 +136,6 @@ def login(request, template_name='registration/login.html',
                 used_captcha_already = True
             else:
                 form = authentication_form(data=request.POST)
-
         if form.is_valid():
             return _handle_login_form_valid(request, form.get_user(),
                                             redirect_to, remember_me)
@@ -487,16 +493,6 @@ def password_change(request, template_name='registration/password_change_form.ht
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            print('进入')
-            email_template_name = 'registration/password_change_email.html'
-            send_to = email2contact_email(request.user.username)
-            site_name = get_site_name()
-            c = {
-                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            }
-            send_html_email(_("Successfully Changed Password on %s") % site_name,
-                            email_template_name, c, None,
-                            [send_to])
 
             if request.session.get('force_passwd_change', False):
                 del request.session['force_passwd_change']
