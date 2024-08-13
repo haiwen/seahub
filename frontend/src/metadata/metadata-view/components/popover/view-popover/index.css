@@ -61,3 +61,7 @@
 .sf-metadata-rename-view-popover-body {
   padding: 0 0.5rem;
 }
+
+.sf-metadata-addview-popover .metadata-views-icon {
+  color: #666;
+}

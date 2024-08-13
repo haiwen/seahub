@@ -22,9 +22,10 @@
 }
 
 .metadata-tree-view .metadata-views-icon {
-  height: 14px;
-  width: 14px;
+  height: 1rem;
+  width: 1rem;
   line-height: 1.5;
+  color: #666;
 }
 
 .metadata-tree-view .sf-metadata-add-view {
