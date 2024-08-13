@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { PRIVATE_COLUMN_KEY } from '../../_basic';
