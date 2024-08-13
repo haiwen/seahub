@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: left;
-  color: #666666;
+  color: #666;
   opacity: 1;
   font-size: 0.875rem;
 }
@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: left;
-  color: #666666;
+  color: #666;
   opacity: 1;
   font-size: 0.875rem;
 }
@@ -52,16 +52,17 @@
   gap: 0.5rem;
 }
 
-.dropdown-item.sf-metadata-addview-popover-item .metadata-view-item {
+.dropdown-item.sf-metadata-addview-popover-item .metadata-view-icon {
   display: flex;
   align-items: center;
   font-size: 1rem;
+  color: #666;
 }
 
 .sf-metadata-rename-view-popover-body {
   padding: 0 0.5rem;
 }
 
-.sf-metadata-addview-popover .metadata-views-icon {
-  color: #666;
+.dropdown-item:hover .metadata-view-icon {
+  color: #fff;
 }

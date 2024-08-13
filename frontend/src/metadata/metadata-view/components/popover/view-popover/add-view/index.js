@@ -41,11 +41,11 @@ const AddView = ({ target, toggle, onOptionClick }) => {
         <div className='sf-metadata-addview-popover-body'>
           <button className='dropdown-item sf-metadata-addview-popover-item' onClick={onOptionClick}>
             <div className="left-icon">
-              <div className="metadata-view-item">
-                <Icon symbol="table" className="metadata-views-icon" />
+              <div className="metadata-view-icon">
+                <Icon symbol="table" />
               </div>
             </div>
-            <div className='tree-node-text'>{gettext('Table')}</div>
+            <div>{gettext('Table')}</div>
           </button>
         </div>
       </div>
