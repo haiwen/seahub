@@ -83,6 +83,6 @@ class RepoAutoDeleteView(APIView):
             repo_auto_delete, _ = RepoAutoDelete.objects.update_or_create(repo_id=repo_id, defaults={'days':auto_delete_days})
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'auto_delete_days':repo_auto_delete.days})

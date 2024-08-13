@@ -174,7 +174,7 @@ class AdminUsersBatch(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if quota_total_mb < 0:
-                error_msg = _('Space quota is too low (minimum value is 0)')
+                error_msg = 'Space quota is too low (minimum value is 0)'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             quota_total_byte = quota_total_mb * get_file_size_unit('MB')
