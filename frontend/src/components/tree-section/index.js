@@ -5,7 +5,6 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { isMobile } from '../../utils/utils';
 
 import './index.css';
-// import TreeSectionDropdownMenu from './dropdown-menu';
 
 const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick, className, isDisplayFiles }) => {
   const [showChildren, setShowChildren] = useState(true);

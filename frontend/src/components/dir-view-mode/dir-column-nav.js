@@ -192,7 +192,6 @@ class DirColumnNav extends React.Component {
   };
 
   onDisplayFilesToggle = () => {
-    console.log('onDisplayFilesToggle');
     this.setState({ isDisplayFiles: !this.state.isDisplayFiles });
   };
 

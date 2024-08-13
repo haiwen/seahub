@@ -63,7 +63,7 @@ class CommonToolbar extends React.Component {
     const { repoID, repoName, isLibView, path, isViewFile, currentRepoInfo } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
-    const isPro = true;
+
     if (isPro) {
       if (enableSeasearch && !enableElasticsearch) {
         return (
