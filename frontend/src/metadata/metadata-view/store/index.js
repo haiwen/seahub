@@ -264,6 +264,7 @@ class Store {
     let valid_id_original_row_updates = {};
     let valid_id_old_row_data = {};
     let valid_id_original_old_row_data = {};
+    let id_obj_id = {};
     originalRows.forEach(row => {
       if (!row || !this.context.canModifyRow(row)) {
         return;
@@ -271,6 +272,7 @@ class Store {
       const rowId = row._id;
       valid_row_ids.push(rowId);
       valid_id_row_updates[rowId] = id_row_updates[rowId];
+      id_obj_id[rowId] = row._obj_id;
       valid_id_original_row_updates[rowId] = id_original_row_updates[rowId];
       valid_id_old_row_data[rowId] = id_old_row_data[rowId];
       valid_id_original_old_row_data[rowId] = id_original_old_row_data[rowId];
@@ -286,6 +288,7 @@ class Store {
       id_old_row_data: valid_id_old_row_data,
       id_original_old_row_data: valid_id_original_old_row_data,
       is_copy_paste,
+      id_obj_id: id_obj_id
     });
     this.applyOperation(operation);
   }
