@@ -13,6 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.invitations.models import Invitation
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -56,6 +57,9 @@ class InvitationView(APIView):
     @invitation_owner_check
     def delete(self, request, invitation, format=None):
         # Delete an invitation.
+        if invitation.accept_time:
+            err_msg = 'The invitation has already been accepted, please revoke it first.'
+            return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
         invitation.delete()
 
         return Response({
@@ -88,9 +92,9 @@ class InvitationRevokeView(APIView):
 
         email = invitation.accepter
         inviter = invitation.inviter
-
+        vid = get_virtual_id_by_email(email)
         try:
-            user = User.objects.get(email)
+            user = User.objects.get(vid)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
