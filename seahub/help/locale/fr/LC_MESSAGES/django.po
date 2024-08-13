@@ -10,17 +10,17 @@
 # Pierrick B. <pierrick.brun@gmail.com>, 2024
 # FLEURY Kévin <kevinfleury.todae@gmail.com>, 2024
 # Gautier Auburtin <gautier.auburtin@campus-condorcet.fr>, 2024
-# Gaspard <info@widelinkpc.be>, 2024
 # chadek <meyer.fabrice@gmx.fr>, 2024
+# Gaspard <info@widelinkpc.be>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-05 19:50+0800\n"
+"POT-Creation-Date: 2024-08-13 12:09+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: chadek <meyer.fabrice@gmx.fr>, 2024\n"
+"Last-Translator: Gaspard <info@widelinkpc.be>, 2024\n"
 "Language-Team: French (https://app.transifex.com/haiwen/teams/5086/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,138 +28,142 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: templates/help/base.html:26 templates/help/base.html:28
+#: templates/help/base.html:34
+msgid "Side Nav Menu"
+msgstr "Menu de navigation sur le côté"
+
+#: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
 msgstr "Introduction"
 
-#: templates/help/base.html:31
+#: templates/help/base.html:53
 msgid "Managing files and folders"
 msgstr "Gestion des fichiers et dossiers"
 
-#: templates/help/base.html:33 templates/help/libraries_managing.html:5
+#: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
 msgstr "Gestion des fichiers avec les librairies"
 
-#: templates/help/base.html:34
+#: templates/help/base.html:56
 msgid "Restoring deleted files"
 msgstr "Restauration des fichiers supprimés"
 
-#: templates/help/base.html:35
+#: templates/help/base.html:57
 msgid "Finding old file versions"
 msgstr "Recherche des anciennes versions de fichier"
 
-#: templates/help/base.html:36
+#: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
 msgstr "Historique des librairies et images "
 
-#: templates/help/base.html:37
+#: templates/help/base.html:59
 msgid "Setting history retention period"
 msgstr "Paramètres de période de rétention de l'historisation "
 
-#: templates/help/base.html:38 templates/help/deleting_a_library.html:5
+#: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
 msgstr "Supprimer une bibliothèque"
 
-#: templates/help/base.html:39
+#: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
 msgstr "Visualiser des fichiers depuis l'application Web"
 
-#: templates/help/base.html:40 templates/help/full_text_file_search.html:5
+#: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
 msgstr "Recherche textuel dans un fichier"
 
-#: templates/help/base.html:43
+#: templates/help/base.html:65
 msgid "Sharing and collaboration"
 msgstr "Partage et collaboration"
 
-#: templates/help/base.html:45 templates/help/sharing_files_and_folders.html:5
+#: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
 msgstr "Partage de fichiers et dossiers"
 
-#: templates/help/base.html:46 templates/help/groups_managing.html:5
+#: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
 msgstr "Gestion des groupes"
 
-#: templates/help/base.html:47
+#: templates/help/base.html:69
 msgid "Locking files"
 msgstr "Verrouiller des fichiers"
 
-#: templates/help/base.html:48
+#: templates/help/base.html:70
 msgid "Folder permission"
 msgstr "Permission de dossier"
 
-#: templates/help/base.html:49
+#: templates/help/base.html:71
 msgid "Departments sharing"
 msgstr "Partages des départements"
 
-#: templates/help/base.html:52
+#: templates/help/base.html:74
 msgid "Wiki and knowledge management"
 msgstr "Wiki et gestion de la base de connaissance "
 
-#: templates/help/base.html:54 templates/help/manage_library_as_wiki.html:5
+#: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
 msgstr "Gestion d'une librairie comme Wiki"
 
-#: templates/help/base.html:57
+#: templates/help/base.html:79
 msgid "Desktop client and syncing"
 msgstr "Client de bureau et de synchronisation"
 
-#: templates/help/base.html:59
+#: templates/help/base.html:81
 msgid "Install and sync files"
 msgstr "Installation et synchronisation des fichiers"
 
-#: templates/help/base.html:60
+#: templates/help/base.html:82
 msgid "Syncing existing folders"
 msgstr "Synchroniser les dossiers existants"
 
-#: templates/help/base.html:61 templates/help/selective_sync.html:6
+#: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
 msgstr "Synchronisation sélective de sous-dossiers"
 
-#: templates/help/base.html:62 templates/help/read-only_syncing.html:5
+#: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
 msgstr "Synchronisation en lecture seule"
 
-#: templates/help/base.html:63
+#: templates/help/base.html:85
 msgid "Unsync and resync libraries"
 msgstr "Désynchroniser et resynchroniser les bibliothèques"
 
-#: templates/help/base.html:64 templates/help/sync_interval.html:6
+#: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
 msgstr "Paramètre d'intervalle de synchronisation"
 
-#: templates/help/base.html:65
+#: templates/help/base.html:87
 msgid "Proxy settings"
 msgstr "Paramètres proxy"
 
-#: templates/help/base.html:66 templates/help/conflicts.html:5
+#: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
 msgstr "Conflit de fichier"
 
-#: templates/help/base.html:67
+#: templates/help/base.html:89
 msgid "Excluding files"
 msgstr "Exclure des fichiers/dossiers"
 
-#: templates/help/base.html:70
+#: templates/help/base.html:92
 msgid "Drive client"
 msgstr "Client Drive"
 
-#: templates/help/base.html:72 templates/help/using_drive_client.html:6
+#: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
 msgstr "Utilisation du client Seafile Drive"
 
-#: templates/help/base.html:73
+#: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
 msgstr "Utilisation du client drive 2.0 sur Windows"
 
-#: templates/help/base.html:76
+#: templates/help/base.html:98
 msgid "Security and encryption"
 msgstr "Sécurité et chiffrement"
 
-#: templates/help/base.html:78
+#: templates/help/base.html:100
 msgid "How to use encrypted libraries"
 msgstr "Comment utiliser les bibliothèques cryptées"
 
