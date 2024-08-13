@@ -9,13 +9,13 @@ import moment from 'moment';
 const OPERATIONS = [
   {
     value: 'active',
-    text: gettext('active'),
+    text: gettext('Active'),
     is_active: true,
     isSelected: false,
   },
   {
     value: 'inactive',
-    text: gettext('inactive'),
+    text: gettext('Inactive'),
     is_active: false,
     isSelected: false,
   },

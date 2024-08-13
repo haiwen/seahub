@@ -76,7 +76,7 @@ class LogsExportExcelDialog extends React.Component {
         if (error_msg && error_msg !== 'Internal Server Error') {
           toaster.danger(error_msg);
         } else {
-          toaster.danger(gettext('Internal Server Error.'));
+          toaster.danger(gettext('Internal Server Error'));
         }
       } else {
         let errMessage = Utils.getErrorMsg(error);
