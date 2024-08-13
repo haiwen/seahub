@@ -57,7 +57,7 @@ class Plans extends Component {
       assetQuota = (assetQuotaUnitCount) * currentPlan.asset_quota_unit;
       totalAmount = assetQuotaUnitCount * currentPlan.price_per_asset_quota_unit;
     } else {
-      toaster.danger(gettext('Internal Server Error.'));
+      toaster.danger(gettext('Internal Server Error'));
       return;
     }
 
@@ -264,7 +264,7 @@ class Plans extends Component {
     } else if (paymentType === 'buy_quota') {
       return this.renderBuyQuota();
     } else {
-      toaster.danger(gettext('Internal Server Error.'));
+      toaster.danger(gettext('Internal Server Error'));
       return;
     }
   }

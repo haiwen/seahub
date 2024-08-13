@@ -31,7 +31,7 @@ def query_dns_txt_record(domain):
         return True, api_error(status.HTTP_404_NOT_FOUND, '%s does not exist' % domain)
     except Exception as e:
         logger.exception(e)
-        return True, api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+        return True, api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
 
 class OrgSAMLConfigView(APIView):
