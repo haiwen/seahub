@@ -17,7 +17,7 @@ from seahub.api2.utils import api_error
 from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
 from seahub.ai.utils import search, get_file_download_token, get_search_repos, \
     RELATED_REPOS_PREFIX, RELATED_REPOS_CACHE_TIMEOUT, SEARCH_REPOS_LIMIT, \
-    format_repos
+    format_repos, ocr
 from seahub.utils import is_org_context, normalize_cache_key, HAS_FILE_SEASEARCH
 from seahub.views import check_folder_permission
 
@@ -121,3 +121,48 @@ class Search(APIView):
                     f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
         return Response(resp_json, resp.status_code)
+
+
+class OCR(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        repo_id = request.data.get('repo_id')
+        path = request.data.get('path')
+
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_obj = seafile_api.get_dirent_by_path(repo_id, path)
+        if not file_obj:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        params = {
+            'repo_id': repo_id,
+            'path': path,
+            'obj_id': file_obj.obj_id,
+        }
+
+        try:
+            ocr_result = ocr(params)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'ocr_result': ocr_result}, status.HTTP_200_OK)

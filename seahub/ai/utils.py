@@ -4,7 +4,7 @@ import jwt
 import time
 from urllib.parse import urljoin
 
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.utils import get_user_repos
 
 from seaserv import seafile_api
@@ -16,6 +16,12 @@ logger = logging.getLogger(__name__)
 SEARCH_REPOS_LIMIT = 200
 RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
 RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
+
+def gen_headers():
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
+    return {"Authorization": "Token %s" % token}
 
 
 def search(params):
@@ -65,3 +71,10 @@ def format_repos(repos):
             continue
         repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
     return searched_repos, repos_map
+
+
+def ocr(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/ocr/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
