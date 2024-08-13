@@ -131,6 +131,10 @@ const Container = () => {
     store.modifyColumnData(columnKey, newData, oldData);
   }, [store]);
 
+  const modifyColumnWidth = useCallback((columnKey, newWidth, oldWidth) => {
+    store.modifyColumnWidth(columnKey, newWidth, oldWidth);
+  }, [store]);
+
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
   }, [metadata]);
@@ -196,6 +200,7 @@ const Container = () => {
                 renameColumn={renameColumn}
                 deleteColumn={deleteColumn}
                 modifyColumnData={modifyColumnData}
+                modifyColumnWidth={modifyColumnWidth}
               />
             </div>
           )}

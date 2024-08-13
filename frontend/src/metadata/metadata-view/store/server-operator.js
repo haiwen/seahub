@@ -139,6 +139,13 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {
+        const { column_key, new_width } = operation;
+        const oldValue = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
+        window.sfMetadataContext.localStorage.setItem('columns_width', { ...oldValue, [column_key]: new_width });
+        callback({ operation });
+        break;
+      }
       default: {
         break;
       }
