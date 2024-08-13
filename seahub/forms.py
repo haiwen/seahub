@@ -153,7 +153,7 @@ class SetUserQuotaForm(forms.Form):
     """
     space_quota = forms.IntegerField(min_value=0,
                                error_messages={'required': _('Space quota can\'t be empty'),
-                                               'min_value': _('Space quota is too low (minimum value is 0)')})
+                                               'min_value': 'Space quota is too low (minimum value is 0)'})
 
 class RepoSettingForm(forms.Form):
     """

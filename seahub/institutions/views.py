@@ -240,7 +240,7 @@ def user_set_quota(request, email):
     available_quota = get_institution_available_quota(request.user.institution)
     if available_quota < quota:
         result = {}
-        result['error'] = _('Failed to set quota: maximum quota is %d MB' % (available_quota / 10 ** 6))
+        result['error'] = 'Failed to set quota: maximum quota is %d MB' % (available_quota / 10 ** 6)
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     seafile_api.set_user_quota(email, quota)

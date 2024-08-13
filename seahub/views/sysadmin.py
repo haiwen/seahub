@@ -298,8 +298,7 @@ def user_set_quota(request, email):
                 org_id = org[0].org_id
                 org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
-                    result['error'] = _('Failed to set quota: maximum quota is %d MB' % \
-                                            org_quota_mb)
+                    result['error'] = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return HttpResponse(json.dumps(result), status=400, content_type=content_type)
                 else:
                     seafile_api.set_org_user_quota(org_id, email, space_quota)

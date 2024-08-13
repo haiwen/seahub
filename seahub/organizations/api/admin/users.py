@@ -468,7 +468,7 @@ class OrgAdminUser(APIView):
 
             # -1 means org has unlimited quota
             if org_quota > 0 and quota_total_mb > org_quota_mb:
-                error_msg = _(u'Failed to set quota: maximum quota is %d MB' % org_quota_mb)
+                error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             quota_total = int(quota_total_mb) * get_file_size_unit('MB')
