@@ -90,7 +90,7 @@ class WebdavPassword extends React.Component {
     return (
       <React.Fragment>
         <div id="update-webdav-passwd" className="setting-item">
-          <h3 className="setting-item-heading">{gettext('WebDAV Password')}</h3>
+          <h3 className="setting-item-heading">{gettext('WebDAV Access')}</h3>
           <p>WebDAV URL: <a href={webdavUrl}>{webdavUrl}</a></p>
           <p>{gettext('WebDAV username:')} {username}</p>
           {!isWebdavPasswordSetted ?
