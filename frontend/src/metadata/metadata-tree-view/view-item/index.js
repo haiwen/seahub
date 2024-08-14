@@ -4,11 +4,10 @@ import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
-import NameDialog from '../name-dialog';
+import { Rename } from '../../metadata-view/components/popover/view-popover';
 import { Utils, isMobile } from '../../../utils/utils';
 
 import './index.css';
-
 
 const ViewItem = ({
   canDelete,
@@ -22,8 +21,8 @@ const ViewItem = ({
 }) => {
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
-  const [isShowRenameDialog, setRenameDialogShow] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
+  const [isShowRenamePopover, setRenamePopoverShow] = useState(false);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -72,7 +71,7 @@ const ViewItem = ({
 
   const operationClick = useCallback((operationKey) => {
     if (operationKey === 'rename') {
-      setRenameDialogShow(true);
+      setRenamePopoverShow(true);
       return;
     }
 
@@ -82,13 +81,14 @@ const ViewItem = ({
     }
   }, [onDelete]);
 
-  const closeRenameDialog = useCallback(() => {
-    setRenameDialogShow(false);
+  const closeRenamePopover = useCallback((event) => {
+    event.stopPropagation();
+    setRenamePopoverShow(false);
   }, []);
 
   const renameView = useCallback((name, failCallback) => {
     onUpdate({ name }, () => {
-      setRenameDialogShow(false);
+      setRenamePopoverShow(false);
     }, failCallback);
   }, [onUpdate]);
 
@@ -154,7 +154,7 @@ const ViewItem = ({
             <Icon symbol="table" className="metadata-views-icon" />
           </div>
         </div>
-        <div className="right-icon">
+        <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >
           {highlight && (
             <ItemDropdownMenu
               item={{ name: 'metadata-view' }}
@@ -168,11 +168,10 @@ const ViewItem = ({
           )}
         </div>
       </div>
-      {isShowRenameDialog && (
-        <NameDialog title={gettext('Rename view')} value={view.name} onSubmit={renameView} onToggle={closeRenameDialog} />
+      {isShowRenamePopover && (
+        <Rename value={view.name} target={`metadata-view-dropdown-item-${view._id}`} toggle={closeRenamePopover} onSubmit={renameView} />
       )}
     </>
-
   );
 };
 
