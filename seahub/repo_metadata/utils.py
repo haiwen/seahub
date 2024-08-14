@@ -44,7 +44,10 @@ def get_sys_columns():
         METADATA_TABLE.columns.is_dir.to_dict(),
         METADATA_TABLE.columns.file_type.to_dict(),
         METADATA_TABLE.columns.location.to_dict(),
-        METADATA_TABLE.columns.obj_id.to_dict()
+        METADATA_TABLE.columns.obj_id.to_dict(),
+        METADATA_TABLE.columns.size.to_dict(),
+        METADATA_TABLE.columns.suffix.to_dict(),
+        METADATA_TABLE.columns.file_details.to_dict(),
     ]
 
     return columns

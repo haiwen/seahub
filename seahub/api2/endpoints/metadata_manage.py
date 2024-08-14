@@ -254,20 +254,33 @@ class MetadataRecords(APIView):
 
         sys_column_names = [column.get('name') for column in get_sys_columns()]
 
+        record_id_to_record = {}
         obj_id_to_record = {}
-        sql = f'SELECT `_id`, `_obj_id`, `_file_modifier` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.obj_id.name}` in ('
+        sql = f'SELECT `_id`, `_obj_id`, `_file_modifier` FROM `{METADATA_TABLE.name}` WHERE '
+        parameters = []
         for record_data in records_data:
             record = record_data.get('record', {})
+
             obj_id = record_data.get('obj_id', '')
+            record_id = record_data.get('record_id', '')
             if not obj_id:
                 error_msg = 'obj_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            obj_id_to_record[obj_id] = record
-            sql += '?,'
+            if not record_id:
+                error_msg = 'record_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        sql = sql.rstrip(',')
-        sql += ');'
-        parameters = list(obj_id_to_record.keys())
+            sql += f' `{METADATA_TABLE.columns.id.name}` = ? OR '
+            parameters.append(record_id)
+            record_id_to_record[record_id] = record
+
+            if obj_id != '0000000000000000000000000000000000000000':
+                sql += f' `{METADATA_TABLE.columns.obj_id.name}` = ? OR '
+                parameters.append(obj_id)
+                obj_id_to_record[obj_id] = record
+
+        sql = sql.rstrip('OR ')
+        sql += ';'
 
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)
@@ -278,14 +291,17 @@ class MetadataRecords(APIView):
 
         results = query_result.get('results')
         if not results:
-            # mean file or folder has been deleted
+            # file or folder has been deleted
             return Response({'success': True})
 
         rows = []
         for record in results:
             obj_id = record.get('_obj_id')
             record_id = record.get('_id')
-            to_updated_record = obj_id_to_record[obj_id]
+            to_updated_record = record_id_to_record.get(record_id)
+            if not to_updated_record:
+                to_updated_record = obj_id_to_record.get(obj_id)
+
             update = {
                 METADATA_TABLE.columns.id.name: record_id,
             }
@@ -306,7 +322,6 @@ class MetadataRecords(APIView):
                         rows.append(update)
                     except Exception as e:
                         pass
-
         if rows:
             try:
                 metadata_server_api.update_rows(METADATA_TABLE.id, rows)
