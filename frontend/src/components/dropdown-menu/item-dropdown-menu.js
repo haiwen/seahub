@@ -16,12 +16,14 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
+  menuStyle: PropTypes.object,
 };
 
 class ItemDropdownMenu extends React.Component {
 
   static defaultProps = {
     isHandleContextMenuEvent: true,
+    menuStyle: {},
     toggleClass: 'sf3-font-more sf3-font'
   };
 
@@ -109,7 +111,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     let menuList = this.state.menuList;
-    let { toggleClass, toggleChildren, tagName } = this.props;
+    let { toggleClass, toggleChildren, tagName, menuStyle } = this.props;
     toggleClass = 'sf-dropdown-toggle ' + toggleClass;
 
     if (!menuList.length) {
@@ -160,7 +162,7 @@ class ItemDropdownMenu extends React.Component {
           // onClick={this.onDropdownToggleClick}
         />
         <ModalPortal>
-          <DropdownMenu>
+          <DropdownMenu style={menuStyle}>
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
                 return <DropdownItem key={index} divider />;

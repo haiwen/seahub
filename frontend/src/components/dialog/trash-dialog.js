@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
-import { Utils } from '../../utils/utils';
+import { Utils, isMobile } from '../../utils/utils';
 import { gettext, siteRoot, enableUserCleanTrash, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
@@ -338,7 +338,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
-          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={(isIconShown || isMobile) ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     ) : (
@@ -349,7 +349,7 @@ class Item extends React.Component {
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
+          <a href="#" className={(isIconShown || isMobile) ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     );

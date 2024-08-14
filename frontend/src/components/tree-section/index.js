@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
+import { isMobile } from '../../utils/utils';
 
 import './index.css';
 
@@ -63,6 +64,7 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
                   unfreezeItem={unfreezeItem}
                   getMenuList={() => validMoreOperations}
                   onMenuItemClick={moreOperationClick}
+                  menuStyle={isMobile ? { zIndex: 1050 } : {}}
                 />
               </div>
             </>

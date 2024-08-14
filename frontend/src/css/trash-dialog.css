@@ -42,3 +42,9 @@
   color: #000;
   background: #dfdfdf;
 }
+
+@media (max-width: 768px) {
+  .trash-dialog .modal-header .trash-dialog-old-page {
+    font-size: 14px;
+  }
+}

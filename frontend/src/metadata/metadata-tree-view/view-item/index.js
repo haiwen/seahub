@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
-import { Utils } from '../../../utils/utils';
 import { Rename } from '../../metadata-view/components/popover/view-popover';
+import { Utils, isMobile } from '../../../utils/utils';
 
 import './index.css';
 
@@ -23,14 +23,17 @@ const ViewItem = ({
   const [freeze, setFreeze] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
   const [isShowRenamePopover, setRenamePopoverShow] = useState(false);
+
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
     return true;
   }, [userPerm]);
+
   const canDrop = useMemo(() => {
     if (Utils.isIEBrowser() || !canUpdate) return false;
     return true;
   }, [canUpdate]);
+
   const operations = useMemo(() => {
     if (!canUpdate) return [];
     let value = [
@@ -160,6 +163,7 @@ const ViewItem = ({
               unfreezeItem={unfreezeItem}
               getMenuList={() => operations}
               onMenuItemClick={operationClick}
+              menuStyle={isMobile ? { zIndex: 1050 } : {}}
             />
           )}
         </div>
