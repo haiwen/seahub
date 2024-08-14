@@ -155,7 +155,7 @@ def edit_profile(request):
             'WEBDAV_URL': get_webdav_url(),
             'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
             'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
-            'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
+            'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT and not is_org_context(request),
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
@@ -256,7 +256,7 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request):
-    if not ENABLE_DELETE_ACCOUNT:
+    if not ENABLE_DELETE_ACCOUNT or is_org_context(request):
         messages.error(request, _('Permission denied.'))
         next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
