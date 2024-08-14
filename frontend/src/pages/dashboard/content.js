@@ -49,7 +49,7 @@ class FileActivitiesContent extends Component {
 
     return (
       <Fragment>
-        <table className="table-hover table-thead-hidden">
+        <table className="table-thead-hidden">
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {

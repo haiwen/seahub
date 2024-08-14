@@ -23,6 +23,7 @@ class ActivityItem extends Component {
     super(props);
     this.state = {
       isListCreatedFiles: false,
+      isHighlighted: false
     };
   }
 
@@ -32,7 +33,20 @@ class ActivityItem extends Component {
     });
   };
 
+  onMouseEnter = () => {
+    this.setState({
+      isHighlighted: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isHighlighted: false
+    });
+  }
+
   render() {
+    const { isHighlighted } = this.state;
     const isDesktop = this.props.isDesktop;
     let { item, index, items } = this.props;
     let op; let details; let moreDetails = false;
@@ -175,7 +189,7 @@ class ActivityItem extends Component {
           </tr>
         }
         {isDesktop ? (
-          <tr>
+          <tr className={isHighlighted ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <td className="text-center">
               <img src={item.avatar_url} alt="" width="32" height="32" className="avatar" />
             </td>
