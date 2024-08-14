@@ -4,7 +4,7 @@ import {
   getRowsByIds,
 } from '../_basic';
 import { Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
-  VIEW_OPERATION, COLUMN_OPERATION
+  VIEW_OPERATION, COLUMN_OPERATION_NEED_NOTICE_OTHER
 } from './operations';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
@@ -160,7 +160,7 @@ class Store {
       this.syncOperationOnData(operation);
     }
 
-    if (VIEW_OPERATION.includes(operation.op_type) || COLUMN_OPERATION.includes(operation.op_type)) {
+    if (VIEW_OPERATION.includes(operation.op_type) || COLUMN_OPERATION_NEED_NOTICE_OTHER.includes(operation.op_type)) {
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.VIEW_CHANGED, this.data.view);
     }
 
@@ -416,6 +416,14 @@ class Store {
     const type = OPERATION_TYPE.MODIFY_COLUMN_DATA;
     const operation = this.createOperation({
       type, repo_id: this.repoId, column_key: columnKey, new_data: newData, old_data: oldData
+    });
+    this.applyOperation(operation);
+  };
+
+  modifyColumnWidth = (columnKey, newWidth, oldWidth) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_WIDTH;
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey, new_width: newWidth, old_width: oldWidth
     });
     this.applyOperation(operation);
   };

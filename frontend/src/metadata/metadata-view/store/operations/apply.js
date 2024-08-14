@@ -160,6 +160,17 @@ export default function apply(data, operation) {
       data.view = new View(data.view, data.columns);
       return data;
     }
+    case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {
+      const { column_key, new_width } = operation;
+      const columnIndex = data.columns.findIndex(column => column.key === column_key);
+      if (columnIndex !== -1) {
+        const oldColumn = data.columns[columnIndex];
+        const newColumn = new Column({ ...oldColumn, width: new_width });
+        data.columns[columnIndex] = newColumn;
+      }
+      data.view = new View(data.view, data.columns);
+      return data;
+    }
     default: {
       return data;
     }
