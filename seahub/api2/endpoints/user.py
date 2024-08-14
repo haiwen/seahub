@@ -255,11 +255,16 @@ class ResetPasswordView(APIView):
         send_to = email2contact_email(request.user.username)
         site_name = get_site_name()
         c = {
+            'email': send_to,
             'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
-        send_html_email(_("Successfully Changed Password on %s") % site_name,
-                        email_template_name, c, None,
-                        [send_to])
+        try:
+            send_html_email(_("Successfully Changed Password on %s") % site_name,
+                            email_template_name, c, None,
+                            [send_to])
+        except Exception as e:
+            logger.error('Failed to send notification to %s' % send_to)
+
         if not request.session.is_empty():
             # invalidate all active sessions after change password.
             update_session_auth_hash(request, request.user)

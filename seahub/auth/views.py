@@ -78,16 +78,20 @@ def log_user_in(request, user, redirect_to):
 
     # Okay, security checks complete. Log the user in.
     auth_login(request, user)
-    # if UserLoginLog.objects.filter(username=user.username).count() == 1:
-    #     email_template_name = 'registration/password_change_email.html'
-    #     send_to = email2contact_email(request.user.username)
-    #     site_name = get_site_name()
-    #     c = {
-    #         'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    #     }
-    #     send_html_email(_("Successfully Changed Password on %s") % site_name,
-    #                     email_template_name, c, None,
-    #                     [send_to])
+    if UserLoginLog.objects.filter(username=user.username, login_success=1).count() == 1:
+        email_template_name = 'registration/browse_login_email.html'
+        send_to = email2contact_email(request.user.username)
+        site_name = get_site_name()
+        c = {
+            'email': send_to
+        }
+        try:
+            send_html_email(_("%s account login reminder") % site_name,
+                            email_template_name, c, None,
+                            [send_to])
+        except Exception as e:
+            logger.error(e)
+
     return HttpResponseRedirect(redirect_to)
 
 def _handle_login_form_valid(request, user, redirect_to, remember_me):

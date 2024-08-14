@@ -210,17 +210,18 @@ def get_token_v2(request, username, platform, device_id, device_name,
             raise serializers.ValidationError('invalid device id')
     else:
         raise serializers.ValidationError('invalid platform')
-    
-    try:
-        TokenV2.objects.get(user=username, device_id=device_id)
-    except TokenV2.DoesNotExist:
+
+    if not TokenV2.objects.filter(user=username, device_id=device_id).first():
         email_template_name='registration/new_device_login_email.html'
         send_to = email2contact_email(username)
         site_name = get_site_name()
         c = {'email': send_to}
-        send_html_email(_("New Device Login on %s") % site_name,
-                        email_template_name, c, None,
-                        [send_to])
+        try:
+            send_html_email(_("New Device Login on %s") % site_name,
+                            email_template_name, c, None,
+                            [send_to])
+        except Exception as e:
+            logger.error('Failed to send notification to %s' % send_to)
 
     return TokenV2.objects.get_or_create_token(
         username, platform, device_id, device_name,
