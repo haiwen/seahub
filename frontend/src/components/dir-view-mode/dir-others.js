@@ -4,6 +4,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TreeSection from '../tree-section';
 import TrashDialog from '../dialog/trash-dialog';
+import './dir-others.css';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
   const [showTrashDialog, setShowTrashDialog] = useState(false);
@@ -18,23 +19,15 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
       {trashUrl &&
-        <div className='tree-node-inner text-nowrap' title={gettext('Trash')} onClick={toggleTrashDialog}>
-          <div className="tree-node-text">{gettext('Trash')}</div>
-          <div className="left-icon">
-            <div className="tree-node-icon">
-              <span className="sf3-font-recycle1 sf3-font"></span>
-            </div>
-          </div>
+        <div className='dir-others-item text-nowrap' title={gettext('Trash')} onClick={toggleTrashDialog}>
+          <span className="sf3-font-recycle1 sf3-font"></span>
+          <span className="dir-others-item-text">{gettext('Trash')}</span>
         </div>
       }
       {Utils.isDesktop() &&
-      <div className='tree-node-inner text-nowrap' title={gettext('History')} onClick={() => location.href = historyUrl}>
-        <div className="tree-node-text">{gettext('History')}</div>
-        <div className="left-icon">
-          <div className="tree-node-icon">
-            <span className="sf3-font-history sf3-font"></span>
-          </div>
-        </div>
+      <div className='dir-others-item text-nowrap' title={gettext('History')} onClick={() => location.href = historyUrl}>
+        <span className="sf3-font-history sf3-font"></span>
+        <span className="dir-others-item-text">{gettext('History')}</span>
       </div>
       }
       {showTrashDialog && (

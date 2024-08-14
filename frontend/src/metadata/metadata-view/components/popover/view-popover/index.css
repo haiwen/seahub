@@ -1,16 +1,14 @@
 .sf-metadata-rename-view-popover .popover,
 .sf-metadata-addview-popover .popover {
-  max-width: none;
   min-width: 280px;
-  margin: 0;
   padding: 0.5rem 0;
-  border: 0;
 }
 
 .sf-metadata-view-form {
   display: flex;
   padding-left: 0.5rem;
   gap: 0.5rem;
+  height: 28px;
 }
 
 .sf-metadata-addview-popover .sf-metadata-addview-popover-header {

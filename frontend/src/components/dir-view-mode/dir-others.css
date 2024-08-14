@@ -1,0 +1,22 @@
+.dir-others .dir-others-item {
+  position: relative;
+  height: 28px;
+  padding-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dir-others .dir-others-item:hover {
+  background-color: #f0f0f0;
+  border-radius: 0.25rem;
+}
+
+.dir-others .dir-others-item .dir-others-item-text {
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.dir-others .dir-others-item .sf3-font {
+  color: #666666;
+}

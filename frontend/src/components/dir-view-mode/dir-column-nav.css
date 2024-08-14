@@ -5,16 +5,3 @@
 .dir-content-nav .tree-section:last-child {
   margin-bottom: 28px;
 }
-
-.dir-others .tree-node-inner:hover {
-  background-color: #f0f0f0;
-  border-radius: 0.25rem;
-}
-
-.dir-others .tree-node-inner .tree-node-text {
-  padding-left: 2rem;
-}
-
-.dir-others .tree-node-inner .left-icon {
-  padding-left: 10px;
-}
