@@ -309,9 +309,9 @@ class Wikis extends Component {
               <div className="cur-view-content">
                 <EmptyTip>
                   <h2>{gettext('No Wikis')}</h2>
-                  <p>{gettext('You have not any wikis yet.')}</p>
+                  <p>{gettext('You do not have any wikis yet.')}</p>
                   <p>{gettext('A wiki can be accessed by anyone, not only users, via its URL.')}</p>
-                  <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu bar.')}</p>
+                  <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu.')}</p>
                 </EmptyTip>
               </div>
             }
