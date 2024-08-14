@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
-import { Utils } from '../../utils/utils';
+import { Utils, isMobile } from '../../utils/utils';
 
 const LEFT_INDENT = 20;
 
@@ -325,6 +325,7 @@ class TreeNodeView extends React.Component {
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}
+                  menuStyle={isMobile ? { zIndex: 1050 } : {}}
                 />
               )}
             </div>

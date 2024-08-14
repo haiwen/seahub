@@ -5,9 +5,10 @@ import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
 import NameDialog from '../name-dialog';
+import { Utils, isMobile } from '../../../utils/utils';
 
 import './index.css';
-import { Utils } from '../../../utils/utils';
+
 
 const ViewItem = ({
   canDelete,
@@ -23,14 +24,17 @@ const ViewItem = ({
   const [freeze, setFreeze] = useState(false);
   const [isShowRenameDialog, setRenameDialogShow] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
+
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
     return true;
   }, [userPerm]);
+
   const canDrop = useMemo(() => {
     if (Utils.isIEBrowser() || !canUpdate) return false;
     return true;
   }, [canUpdate]);
+
   const operations = useMemo(() => {
     if (!canUpdate) return [];
     let value = [
@@ -159,6 +163,7 @@ const ViewItem = ({
               unfreezeItem={unfreezeItem}
               getMenuList={() => operations}
               onMenuItemClick={operationClick}
+              menuStyle={isMobile ? { zIndex: 1050 } : {}}
             />
           )}
         </div>

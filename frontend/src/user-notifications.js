@@ -104,8 +104,13 @@ class UserNotificationsDialog extends React.Component {
     return (
       <div className="notification-header-close">
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu}>
-          <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} className="notification-dropdown-toggle">
-            <span className="sf3-font sf3-font-more-level item-dropdown-icon"></span>
+          <DropdownToggle
+            tag="span"
+            data-toggle="dropdown"
+            aria-expanded={this.state.isItemMenuShow}
+            className="notification-dropdown-toggle"
+          >
+            <span className="sf3-font sf3-font-more item-dropdown-icon"></span>
           </DropdownToggle>
           <DropdownMenu right={true} className="dtable-dropdown-menu large">
             <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
