@@ -80,9 +80,9 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
-  modifyRecord = (repoID, recordID, update) => {
+  modifyRecord = (repoID, recordID, objID, update) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
-    const data = { records_data: [{ record_id: recordID, record: update }] };
+    const data = { records_data: [{ record_id: recordID, record: update, obj_id: objID }] };
     return this.req.put(url, data);
   };
 

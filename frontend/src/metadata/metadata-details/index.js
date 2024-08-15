@@ -48,7 +48,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, emptyTip }) =
       const options = getColumnOptions(field);
       update = { [fileName]: getOptionName(options, newValue) };
     }
-    metadataAPI.modifyRecord(repoID, record._id, update).then(res => {
+    metadataAPI.modifyRecord(repoID, record._id, record._obj_id, update).then(res => {
       const newMetadata = { ...metadata, record: { ...record, ...update } };
       setMetadata(newMetadata);
     }).catch(error => {
@@ -74,7 +74,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, emptyTip }) =
       if (!PREDEFINED_COLUMN_KEYS.includes(fieldKey) && newField.type === CellType.SINGLE_SELECT) {
         update = { [fileName]: getOptionName(options, newOption.id) };
       }
-      return metadataAPI.modifyRecord(repoID, record._id, update);
+      return metadataAPI.modifyRecord(repoID, record._id, record._obj_id, update);
     }).then(res => {
       const newMetadata = { ...metadata, record: { ...record, ...update }, fields: newFields };
       setMetadata(newMetadata);

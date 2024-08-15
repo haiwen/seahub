@@ -152,4 +152,6 @@ export {
   getGeolocationByGranularity,
   getFloatNumber,
   isNumber,
+  getCellValueDisplayString,
+  getCellValueStringResult,
 } from './utils';

@@ -5,12 +5,14 @@ import { KeyCodes } from '../../../_basic';
 import { getEventClassName, gettext } from '../../../utils';
 import Editor from '../../cell-editor/collaborator-editor';
 import DeleteCollaborator from '../../cell-editor/collaborator-editor/delete-collaborator';
+import { useCollaborators } from '../../../../hooks';
 
 import './index.css';
 
 const CollaboratorEditor = ({ field, value, onChange }) => {
   const ref = useRef(null);
   const [showEditor, setShowEditor] = useState(false);
+  const { getCollaborator } = useCollaborators();
 
   const onClick = useCallback((event) => {
     if (!showEditor) return;
@@ -79,6 +81,7 @@ const CollaboratorEditor = ({ field, value, onChange }) => {
     );
   }, [showEditor, onCommit, value, field]);
 
+  const validValue = Array.isArray(value) ? value.filter(email => getCollaborator(email)) : [];
 
   return (
     <div
@@ -87,7 +90,7 @@ const CollaboratorEditor = ({ field, value, onChange }) => {
       ref={ref}
       onClick={openEditor}
     >
-      {<DeleteCollaborator value={value} onDelete={deleteCollaborator} />}
+      {validValue.length > 0 && (<DeleteCollaborator value={value} onDelete={deleteCollaborator} />)}
       {renderEditor()}
     </div>
   );

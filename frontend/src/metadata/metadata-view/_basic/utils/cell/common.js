@@ -1,6 +1,8 @@
-import { DateUtils, CellType, DEFAULT_DATE_FORMAT, getCollaboratorsName, getOptionName, getDateDisplayString, getLongtextDisplayString, getNumberDisplayString } from '../../_basic';
+import { CellType, DEFAULT_DATE_FORMAT } from '../../constants';
+import { getCollaboratorsName, getOptionName, getDateDisplayString, getLongtextDisplayString, getNumberDisplayString } from './column';
+import DateUtils from '../date';
 
-const getCellValueDisplayString = (row, type, key, { data, collaborators = [] } = {}) => {
+export const getCellValueDisplayString = (row, type, key, { data, collaborators = [] } = {}) => {
   if (!row) return '';
   const cellValue = row[key];
   switch (type) {
@@ -39,7 +41,7 @@ const getCellValueDisplayString = (row, type, key, { data, collaborators = [] } 
   }
 };
 
-const getCellValueStringResult = (row, column, { collaborators = [] } = {}) => {
+export const getCellValueStringResult = (row, column, { collaborators = [] } = {}) => {
   if (!row || !column) return '';
   const { key, type, data } = column;
   let cellValue = row[key];
@@ -90,9 +92,4 @@ const getCellValueStringResult = (row, column, { collaborators = [] } = {}) => {
       return cellValue ? String(cellValue) : '';
     }
   }
-};
-
-export {
-  getCellValueDisplayString,
-  getCellValueStringResult,
 };

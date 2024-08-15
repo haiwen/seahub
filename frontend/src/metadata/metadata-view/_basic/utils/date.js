@@ -204,4 +204,5 @@ class DateUtils {
   }
 }
 
+export default DateUtils;
 export { DateUtils };

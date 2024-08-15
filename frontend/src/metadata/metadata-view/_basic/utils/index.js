@@ -23,6 +23,8 @@ export {
   getGeolocationByGranularity,
   getFloatNumber,
   isNumber,
+  getCellValueDisplayString,
+  getCellValueStringResult,
 } from './cell';
 export {
   getColumnType,

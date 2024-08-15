@@ -4,6 +4,11 @@ export {
 } from './core';
 
 export {
+  getCellValueDisplayString,
+  getCellValueStringResult,
+} from './common';
+
+export {
   getDateDisplayString,
   getPrecisionNumber,
   getNumberDisplayString,

@@ -18,12 +18,13 @@ const TextEditor = React.memo(({ value: oldValue, onChange: onChangeAPI }) => {
   }, [oldValue]);
 
   const closeEditor = useCallback(() => {
+    if (!showEditor) return;
     const value = ref.current.innerText;
     if (value !== oldValue) {
-      onChangeAPI(getTrimmedString(value) || null);
+      onChangeAPI(getTrimmedString(value) || '');
     }
     setShowEditor(false);
-  }, [oldValue, onChangeAPI]);
+  }, [showEditor, oldValue, onChangeAPI]);
 
   const onPaste = useCallback((event) => {
     event.stopPropagation();
