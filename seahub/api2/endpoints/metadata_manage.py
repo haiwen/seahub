@@ -260,12 +260,8 @@ class MetadataRecords(APIView):
         parameters = []
         for record_data in records_data:
             record = record_data.get('record', {})
-
             obj_id = record_data.get('obj_id', '')
             record_id = record_data.get('record_id', '')
-            if not obj_id:
-                error_msg = 'obj_id invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             if not record_id:
                 error_msg = 'record_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -274,7 +270,7 @@ class MetadataRecords(APIView):
             parameters.append(record_id)
             record_id_to_record[record_id] = record
 
-            if obj_id != '0000000000000000000000000000000000000000':
+            if obj_id and obj_id != '0000000000000000000000000000000000000000':
                 sql += f' `{METADATA_TABLE.columns.obj_id.name}` = ? OR '
                 parameters.append(obj_id)
                 obj_id_to_record[obj_id] = record
