@@ -164,8 +164,8 @@ class Context {
   };
 
   // record
-  modifyRecord = (repoId, recordId, columnName, value) => {
-    return this.metadataAPI.modifyRecord(repoId, recordId, columnName, value);
+  modifyRecord = (repoId, recordId, objID, update) => {
+    return this.metadataAPI.modifyRecord(repoId, recordId, objID, update);
   };
 
   modifyRecords = (repoId, recordsData, isCopyPaste) => {

@@ -3,6 +3,8 @@ import { round } from '../../number';
 import { DEFAULT_NUMBER_FORMAT } from '../../../constants/column';
 import { DISPLAY_INTERNAL_ERRORS } from '../../../constants';
 
+const SIZES = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
 const separatorMap = {
   comma: ',',
   dot: '.',
@@ -167,6 +169,13 @@ const getNumberDisplayString = (number, formats) => {
         return `${toThousands(number, { formats })}${formats.currency_symbol || ''}`;
       }
       return `${formats.currency_symbol || ''}${toThousands(number, { formats })}`;
+    }
+    case 'byte': {
+      if (number < 0) return '--';
+      if (number === 0) return number + ' ' + SIZES[0];
+      const i = parseInt(Math.floor(Math.log(number) / Math.log(1000)), 10);
+      if (i === 0) return number + ' ' + SIZES[i];
+      return (number / (1000 ** i)).toFixed(1) + ' ' + SIZES[i];
     }
     default: {
       return String(number);

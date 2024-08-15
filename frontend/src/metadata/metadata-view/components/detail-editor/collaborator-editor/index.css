@@ -34,3 +34,11 @@
 .sf-metadata-collaborator-property-editor-popover .sf-metadata-delete-collaborator {
   display: none;
 }
+
+.sf-metadata-collaborator-property-detail-editor:empty::before {
+  display: inline-block;
+  width: 100%;
+  height: 34px;
+  padding: 6.5px 6px;
+  line-height: 1.5;
+}

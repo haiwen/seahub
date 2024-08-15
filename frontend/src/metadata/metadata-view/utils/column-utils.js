@@ -195,6 +195,10 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File status');
     case PRIVATE_COLUMN_KEY.LOCATION:
       return gettext('Image location');
+    case PRIVATE_COLUMN_KEY.SIZE:
+      return gettext('Size');
+    case PRIVATE_COLUMN_KEY.FILE_DETAILS:
+      return gettext('File details');
     default:
       return name;
   }
@@ -281,11 +285,19 @@ const getFileStatusColumnData = (column) => {
   return newData;
 };
 
+const getFileSizeColumnData = (column) => {
+  return {
+    ...column.data,
+    format: 'byte'
+  };
+};
+
 export const normalizeColumnData = (column) => {
   const { key, data } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) {
     if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
     if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
+    if (key === PRIVATE_COLUMN_KEY.SIZE) return getFileSizeColumnData(column);
   }
   if (column.type === CellType.SINGLE_SELECT) {
     return { ...data, options: data?.options || [] };
