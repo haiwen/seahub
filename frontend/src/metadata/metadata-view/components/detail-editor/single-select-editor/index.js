@@ -71,7 +71,7 @@ const SingleSelectEditor = ({ field, value, record, fields, onChange, modifyColu
       >
         <Editor
           value={value}
-          column={{ ...field, width: width || 200 }}
+          column={{ ...field, width: Math.max(width - 2, 200) }}
           columns={fields}
           modifyColumnData={modifyColumnData}
           record={record}

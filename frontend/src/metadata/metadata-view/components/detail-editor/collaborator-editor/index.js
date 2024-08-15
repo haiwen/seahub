@@ -66,7 +66,7 @@ const CollaboratorEditor = ({ field, value, onChange }) => {
         fade={false}
         className="sf-metadata-property-editor-popover sf-metadata-collaborator-property-editor-popover"
         boundariesElement={document.body}
-        style={{ width: Math.max(width, 200) }}
+        style={{ width: Math.max(width - 2, 200) }}
       >
         <Editor
           saveImmediately={true}
