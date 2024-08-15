@@ -271,14 +271,16 @@ def move_nav(navigation, target_id, moved_nav, move_position):
 
 
 def revert_nav(navigation, parent_page_id, subpages):
-
+    
+    # connect the subpages to the parent_page
+    # if not parent_page_id marked as flag, connect the subpages to the root
     def recurse(navigation, parent_page_id, subpages):
         for nav in navigation:
             if nav['id'] == parent_page_id:
                 if nav['children']:
-                    nav['children'].append(eval(subpages))
+                    nav['children'].append(subpages)
                 else:
-                    nav['children'] = [eval(subpages)]
+                    nav['children'] = [subpages]
                 return nav
             if 'children' in nav and nav['children']:
                 result = recurse(nav['children'], parent_page_id, subpages)
@@ -286,7 +288,7 @@ def revert_nav(navigation, parent_page_id, subpages):
                     return result
     flag = recurse(navigation, parent_page_id, subpages)
     if not flag:
-        navigation.append(eval(subpages))
+        navigation.append(subpages)
 
 
 def get_sub_ids_by_page_id(subpages, ids):

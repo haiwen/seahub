@@ -745,7 +745,7 @@ class Wiki2PageView(APIView):
                                          doc_uuid=doc_uuid,
                                          page_id=page_info['id'],
                                          parent_page_id=parent_page_id,
-                                         subpages=subpages,
+                                         subpages=json.dumps(subpages),
                                          name=page_info['name'],
                                          delete_time=datetime.datetime.utcnow(),
                                          size=page_size)
@@ -967,7 +967,7 @@ class WikiPageTrashView(APIView):
         navigation = wiki_config.get('navigation', [])
         try:
             page = WikiPageTrash.objects.get(page_id=page_id)
-            subpages = page.subpages
+            subpages = json.loads(page.subpages)
             parent_page_id = page.parent_page_id
             revert_nav(navigation, parent_page_id, subpages)
             page.delete()
@@ -1025,7 +1025,7 @@ class WikiPageTrashView(APIView):
         pages = wiki_config.get('pages', [])
         id_list = []
         for del_page in del_pages:
-            get_sub_ids_by_page_id([(eval(del_page.subpages))], id_list)
+            get_sub_ids_by_page_id([(json.loads(del_page.subpages))], id_list)
         id_set = set(id_list)
         clean_pages, not_del_pages = delete_page(pages, id_set)
         try:
