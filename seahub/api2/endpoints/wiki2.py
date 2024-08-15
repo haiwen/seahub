@@ -848,7 +848,7 @@ class Wiki2DuplicatePageView(APIView):
             page_name = page.get('name')
 
             # An UUID object will be generated
-            # Please set it to string by str if you use it in json, database, or some other string operations
+            # Please set it to string by str if you use it in json or some other string operations
             dst_sdoc_uuid = uuid.uuid4()
 
             src_path = page.get('path')
