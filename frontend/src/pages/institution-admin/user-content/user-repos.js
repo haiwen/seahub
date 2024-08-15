@@ -26,9 +26,7 @@ export default function UserRepos() {
 
   if (repos.length === 0) {
     return (
-      <EmptyTip>
-        <h2>{gettext('No libraries')}</h2>
-      </EmptyTip>
+      <EmptyTip text={gettext('No libraries')}/>
     );
   }
 

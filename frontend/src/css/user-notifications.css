@@ -121,7 +121,7 @@
   font-size: 14px;
 }
 
-.notification-dialog-body .empty-tip {
+/* .notification-dialog-body .empty-tip {
   margin: 5.5em 1em;
   border-radius: 3px;
   padding: 30px;
@@ -138,4 +138,4 @@
   .notification-dialog-body .empty-tip {
     padding: 30px 80px;
   }
-}
+} */

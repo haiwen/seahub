@@ -1,0 +1,31 @@
+.empty-tip {
+  margin: 5.5em 1em;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.empty-tip .no-items-img-tip {
+  display: inline-block;
+  margin-bottom: 10px; 
+}
+
+.empty-tip .empty-tip-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #212529;
+}
+
+.empty-tip .empty-tip-text {
+  font-size: 14px;
+  font-weight: normal;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  .empty-tip {
+    padding: 30px 80px;
+  }
+}

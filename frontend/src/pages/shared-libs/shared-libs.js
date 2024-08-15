@@ -58,9 +58,10 @@ class Content extends Component {
 
     const emptyTip = inAllLibs ?
       <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No shared libraries')}</p> :
-      <EmptyTip>
-        <h2>{gettext('No shared libraries')}</h2>
-        <p>{gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}</p>
+      <EmptyTip
+        title={gettext('No shared libraries')}
+        text={gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}
+      >
       </EmptyTip>;
 
     if (loading) {

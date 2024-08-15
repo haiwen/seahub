@@ -180,10 +180,10 @@ class Content extends Component {
 
     if (!invitationsList.length) {
       return (
-        <EmptyTip>
-          <h2>{gettext('No guest invitations')}</h2>
-          <p>{gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" button in the menu bar.')}</p>
-        </EmptyTip>
+        <EmptyTip
+          title={gettext('No guest invitations')}
+          text={gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" button in the menu bar.')}
+        />
       );
     }
 

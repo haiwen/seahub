@@ -26,8 +26,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No groups')}</h2>
+        <EmptyTip text={gettext('No groups')}>
         </EmptyTip>
       );
       const table = (

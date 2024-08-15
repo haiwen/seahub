@@ -307,8 +307,7 @@ class Wikis extends Component {
             }
             {(!this.state.loading && this.state.wikis.length === 0 && this.state.groupWikis.length === 0) &&
               <div className="cur-view-content">
-                <EmptyTip>
-                  <h2>{gettext('No Wikis')}</h2>
+                <EmptyTip title={gettext('No Wikis')}>
                   <p>{gettext('You do not have any wikis yet.')}</p>
                   <p>{gettext('You can add a wiki by clicking the "Add Wiki" button in the menu.')}</p>
                 </EmptyTip>

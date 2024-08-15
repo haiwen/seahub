@@ -831,8 +831,6 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
-
-
       </Fragment>
     );
   }

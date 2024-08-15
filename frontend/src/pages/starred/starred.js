@@ -21,9 +21,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else if (items.length === 0) {
       return (
-        <EmptyTip>
-          <h2>{gettext('No favorites')}</h2>
-          <p>{gettext('You have not added any libraries, folders or files to your favorites yet. A favorite gives you quick access to your most frequently used objects. You can add a library, folder or file to your favorites by clicking the star to the left of its name.')}</p>
+        <EmptyTip
+          title={gettext('No favorites')}
+          text={gettext('You have not added any libraries, folders or files to your favorites yet. A favorite gives you quick access to your most frequently used objects. You can add a library, folder or file to your favorites by clicking the star to the left of its name.')}
+        >
         </EmptyTip>
       );
     } else {

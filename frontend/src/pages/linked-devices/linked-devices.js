@@ -20,10 +20,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No linked devices')}</h2>
-          <p>{gettext('You have not accessed your files with any client (desktop or mobile) yet. Configure clients on your devices to access your data more comfortably.')}</p>
-        </EmptyTip>
+        <EmptyTip
+          title={gettext('No linked devices')}
+          text={gettext('You have not accessed your files with any client (desktop or mobile) yet. Configure clients on your devices to access your data more comfortably.')}
+        />
       );
 
       const desktopThead = (

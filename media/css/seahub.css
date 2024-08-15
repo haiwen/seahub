@@ -517,6 +517,7 @@ textarea:-moz-placeholder {/* for FF */
 .avatar-circle {
     border-radius:1000px;
 }
+/* TODO */
 .empty-tips {
     padding: 30px 40px;
     background-color: #FAFAFA;
