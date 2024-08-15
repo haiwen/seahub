@@ -20,9 +20,9 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.MODIFY_RECORDS: {
-        const { repo_id, row_ids, id_row_updates, is_copy_paste } = operation;
+        const { repo_id, row_ids, id_row_updates, is_copy_paste, id_obj_id } = operation;
         const rowsData = row_ids.map(rowId => {
-          return { record_id: rowId, record: id_row_updates[rowId] };
+          return { record_id: rowId, record: id_row_updates[rowId], obj_id: id_obj_id[rowId] };
         });
         window.sfMetadataContext.modifyRecords(repo_id, rowsData, is_copy_paste).then(res => {
           callback({ operation });

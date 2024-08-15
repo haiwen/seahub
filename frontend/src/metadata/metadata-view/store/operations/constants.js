@@ -19,7 +19,7 @@ export const OPERATION_TYPE = {
 
 export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_RECORD]: ['repo_id', 'row_id', 'updates', 'old_row_data', 'original_updates', 'original_old_row_data'],
-  [OPERATION_TYPE.MODIFY_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste'],
+  [OPERATION_TYPE.MODIFY_RECORDS]: ['repo_id', 'row_ids', 'id_row_updates', 'id_original_row_updates', 'id_old_row_data', 'id_original_old_row_data', 'is_copy_paste', 'id_obj_id'],
   [OPERATION_TYPE.RESTORE_RECORDS]: ['repo_id', 'rows_data', 'original_rows', 'link_infos', 'upper_row_ids'],
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
   [OPERATION_TYPE.MODIFY_FILTERS]: ['repo_id', 'view_id', 'filter_conjunction', 'filters'],
