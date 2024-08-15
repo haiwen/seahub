@@ -5,12 +5,13 @@ import { SearchInput, Icon } from '@seafile/sf-metadata-ui-component';
 import { isFunction } from '../../../_basic';
 import { KeyCodes } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
-import { useCollaborators } from '../../../hooks';
+import { useCollaborators } from '../../../../hooks';
 import DeleteCollaborator from './delete-collaborator';
 
 import './index.css';
 
 const CollaboratorEditor = forwardRef(({
+  saveImmediately = false,
   column,
   value: oldValue,
   onCommit,
@@ -22,7 +23,6 @@ const CollaboratorEditor = forwardRef(({
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);
   const [itemHeight, setItemHeight] = useState(0);
-  const timerRef = useRef(null);
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const collaboratorItemRef = useRef(null);
@@ -70,7 +70,10 @@ const CollaboratorEditor = forwardRef(({
       newValue.push(email);
     }
     setValue(newValue);
-  }, [value]);
+    if (saveImmediately) {
+      onCommit && onCommit(newValue);
+    }
+  }, [saveImmediately, value, onCommit]);
 
   const onDeleteCollaborator = useCallback((email) => {
     const newValue = value.slice(0);
@@ -79,7 +82,10 @@ const CollaboratorEditor = forwardRef(({
       newValue.splice(collaboratorIndex, 1);
     }
     setValue(newValue);
-  }, [value]);
+    if (saveImmediately) {
+      onCommit && onCommit(newValue);
+    }
+  }, [saveImmediately, value, onCommit]);
 
   const onMenuMouseEnter = useCallback((highlightIndex) => {
     setHighlightIndex(highlightIndex);
@@ -182,8 +188,6 @@ const CollaboratorEditor = forwardRef(({
     document.addEventListener('keydown', onHotKey, true);
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
-      timerRef.current && clearTimeout(timerRef.current);
-      timerRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
@@ -214,7 +218,7 @@ const CollaboratorEditor = forwardRef(({
         <div key={collaborator.email} className="sf-metadata-collaborator-item" ref={collaboratorItemRef}>
           <div
             className={classnames('collaborator-container', { 'collaborator-container-highlight': i === highlightIndex })}
-            onMouseDown={() => onSelectCollaborator(isSelected ? null : collaborator.email)}
+            onMouseDown={() => onSelectCollaborator(collaborator.email)}
             onMouseEnter={() => onMenuMouseEnter(i)}
             onMouseLeave={() => onMenuMouseLeave(i)}
           >
@@ -238,7 +242,7 @@ const CollaboratorEditor = forwardRef(({
     <div className="sf-metadata-collaborator-editor" style={{ top: -38 }} ref={editorRef}>
       <DeleteCollaborator value={value} onDelete={onDeleteCollaborator} />
       <div className="sf-metadata-search-collaborator-options">
-        <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} />
+        <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} className="sf-metadata-search-collaborators" />
       </div>
       <div className="sf-metadata-collaborator-editor-container" ref={editorContainerRef}>
         {renderCollaborators()}
@@ -248,6 +252,7 @@ const CollaboratorEditor = forwardRef(({
 });
 
 CollaboratorEditor.propTypes = {
+  saveImmediately: PropTypes.bool,
   column: PropTypes.object,
   value: PropTypes.array,
   onCommit: PropTypes.func,

@@ -2,8 +2,8 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
-import { getCellValueByColumn, getColumnByKey, isFunction } from '../../../_basic';
-import { generateNewOption, getSelectColumnOptions } from '../../../utils/select-utils';
+import { getCellValueByColumn, getColumnByKey, isFunction, getColumnOptions } from '../../../_basic';
+import { generateNewOption } from '../../../utils/select-utils';
 import { KeyCodes } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
 
@@ -23,15 +23,14 @@ const SingleSelectEditor = forwardRef(({
   const [searchValue, setSearchValue] = useState('');
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);
-  const [itemHeight, setItemHeight] = useState(0);
-  const timerRef = useRef(null);
+  const itemHeight = 30;
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
   const canEditData = window.sfMetadataContext.canModifyColumnData(column);
 
   const options = useMemo(() => {
-    const options = getSelectColumnOptions(column);
+    const options = getColumnOptions(column);
     const { data } = column;
     const { cascade_column_key, cascade_settings } = data || {};
     if (cascade_column_key) {
@@ -64,8 +63,8 @@ const SingleSelectEditor = forwardRef(({
   }, [column, height]);
 
   const blur = useCallback(() => {
-    onCommit && onCommit();
-  }, [onCommit]);
+    onCommit && onCommit(value);
+  }, [value, onCommit]);
 
   const onChangeSearch = useCallback((newSearchValue) => {
     if (searchValue === newSearchValue) return;
@@ -76,7 +75,7 @@ const SingleSelectEditor = forwardRef(({
     if (optionId === value) return;
     setValue(optionId);
     setTimeout(() => {
-      onCommit && onCommit();
+      onCommit && onCommit(optionId);
     }, 1);
   }, [value, onCommit]);
 
@@ -89,6 +88,7 @@ const SingleSelectEditor = forwardRef(({
   }, []);
 
   const createOption = useCallback((event) => {
+    event && event.stopPropagation();
     event && event.nativeEvent.stopImmediatePropagation();
     const newOption = generateNewOption(options, searchValue?.trim() || '');
     let newOptions = options.slice(0);
@@ -180,13 +180,10 @@ const SingleSelectEditor = forwardRef(({
     }
     if (editorContainerRef.current && selectItemRef.current) {
       setMaxItemNum(getMaxItemNum());
-      setItemHeight(parseInt(getComputedStyle(selectItemRef.current, null).height));
     }
     document.addEventListener('keydown', onHotKey, true);
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
-      timerRef.current && clearTimeout(timerRef.current);
-      timerRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
@@ -211,12 +208,8 @@ const SingleSelectEditor = forwardRef(({
       return (<span className="none-search-result">{noOptionsTip}</span>);
     }
 
-    // maxWidth = single-selects-container's width - single-selects-container's padding-left and padding-right - single-select-container's padding-left - single-select-check-icon's width - The gap between the single-select-check-icon and single-select-name or scroll's width
-    // maxWidth = column.width > 200 ? column.width - 20 - 12 - 20 - 10 : 200 - 20 - 12 - 20 - 10
-    // maxWidth = column.width > 200 ? column.width - 62 : 200 - 62
-    const maxWidth = column.width > 200 ? column.width - 62 : 200 - 62;
     return displayOptions.map((option, i) => {
-      const isSelected = value === option.name;
+      const isSelected = value === option.id || value === option.name;
       return (
         <div key={option.id} className="sf-metadata-single-select-item" ref={selectItemRef}>
           <div
@@ -228,7 +221,7 @@ const SingleSelectEditor = forwardRef(({
             <div className="single-select">
               <span
                 className="single-select-name"
-                style={{ backgroundColor: option.color, color: option.textColor || null, maxWidth }}
+                style={{ backgroundColor: option.color, color: option.textColor || null }}
                 title={option.name}
                 aria-label={option.name}
               >
@@ -243,7 +236,7 @@ const SingleSelectEditor = forwardRef(({
       );
     });
 
-  }, [displayOptions, searchValue, column, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
+  }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
 
   return (
     <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
@@ -253,6 +246,7 @@ const SingleSelectEditor = forwardRef(({
           onKeyDown={onKeyDown}
           onChange={onChangeSearch}
           autoFocus={true}
+          className="sf-metadata-search-options"
         />
       </div>
       <div className="sf-metadata-single-select-editor-container" ref={editorContainerRef}>
@@ -280,4 +274,3 @@ SingleSelectEditor.propTypes = {
 };
 
 export default SingleSelectEditor;
-

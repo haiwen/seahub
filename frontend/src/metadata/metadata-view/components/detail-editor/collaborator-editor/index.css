@@ -1,0 +1,36 @@
+.sf-metadata-collaborator-property-detail-editor {
+  min-height: 34px;
+  width: 100%;
+}
+
+.sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator {
+  border-bottom: none;
+  background-color: inherit;
+  border-radius: unset;
+  padding: 2px 6px;
+}
+
+.sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator .collaborator {
+  margin: 5px 10px 5px 0;
+}
+
+.sf-metadata-collaborator-property-editor-popover .popover {
+  max-width: unset;
+}
+
+.sf-metadata-collaborator-property-editor-popover .sf-metadata-collaborator-editor {
+  width: 100%;
+  position: unset;
+  min-width: 200px;
+  padding: 0;
+  overflow: hidden;
+  opacity: 1;
+  background-color: #ffffff;
+  border: none;
+  border-radius: unset;
+  box-shadow: none;
+}
+
+.sf-metadata-collaborator-property-editor-popover .sf-metadata-delete-collaborator {
+  display: none;
+}

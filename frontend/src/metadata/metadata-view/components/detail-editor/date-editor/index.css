@@ -1,0 +1,9 @@
+.sf-metadata-date-property-detail-editor {
+  width: 100%;
+  height: 34px;
+  padding: 6.5px 6px;
+}
+
+.dirent-detail-item-value.editable .ant-calendar-picker-input {
+  display: none;
+}

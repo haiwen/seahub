@@ -1,20 +1,26 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { Formatter } from '@seafile/sf-metadata-ui-component';
 import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
 import { MetadataDetails, useMetadata } from '../../../metadata';
 
-const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail, ...params }) => {
+const DirDetails = ({ repoID, repoInfo, dirent, path, direntDetail }) => {
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const { enableMetadata } = useMetadata();
+  const lastModifiedTimeField = useMemo(() => {
+    return { type: CellType.MTIME, name: gettext('Last modified time') };
+  }, []);
 
   return (
     <>
-      <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.mtime} />
+      <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
+        <Formatter field={lastModifiedTimeField} value={direntDetail.mtime} />
+      </DetailItem>
       {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="dir" { ...params } />
+        <MetadataDetails repoID={repoID} repoInfo={repoInfo} filePath={direntPath} direntType="dir" />
       )}
     </>
   );

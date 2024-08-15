@@ -8,7 +8,7 @@ import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import { getEventClassName } from '../../../utils';
 import Editor from '../editor';
-import { canEdit } from '../../../utils/column-utils';
+import { canEditCell } from '../../../utils/column-utils';
 
 class NormalEditorContainer extends React.Component {
 
@@ -83,7 +83,7 @@ class NormalEditorContainer extends React.Component {
     const { column, record, openEditorMode, columns, modifyColumnData } = this.props;
     const editorProps = {
       ref: this.setEditorRef,
-      readOnly: !canEdit(column, record, true),
+      readOnly: !canEditCell(column, record, true),
       columns,
       column: this.props.column,
       value: this.getInitialValue(),

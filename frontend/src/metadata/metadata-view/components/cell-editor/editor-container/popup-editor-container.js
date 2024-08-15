@@ -6,7 +6,7 @@ import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNam
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
-import { canEdit } from '../../../utils/column-utils';
+import { canEditCell } from '../../../utils/column-utils';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER,
@@ -58,7 +58,7 @@ class PopupEditorContainer extends React.Component {
 
   createEditor = () => {
     const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData } = this.props;
-    const readOnly = canEdit(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
+    const readOnly = canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
     const value = this.getInitialValue(readOnly);
 
     let editorProps = {

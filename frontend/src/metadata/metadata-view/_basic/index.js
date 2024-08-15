@@ -150,4 +150,6 @@ export {
   isRegExpression,
   getGeolocationDisplayString,
   getGeolocationByGranularity,
+  getFloatNumber,
+  isNumber,
 } from './utils';

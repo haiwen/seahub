@@ -45,3 +45,9 @@
   fill: #666;
   font-size: 12px;
 }
+
+.sf-metadata-delete-collaborator .collaborator .collaborator-remove {
+  height: 14px;
+  width: 14px;
+  margin-left: 2px;
+}

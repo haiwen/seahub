@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
-import { useCollaborators } from '../../hooks';
+import { useCollaborators } from '../../../hooks';
 import { Utils } from '../../../../utils/utils';
 
 const CellFormatter = ({ readonly, value, field, ...params }) => {
-  const { collaborators, collaboratorsCache, updateCollaboratorsCache } = useCollaborators();
+  const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
   const props = useMemo(() => {
     return {
       collaborators,
@@ -14,11 +14,11 @@ const CellFormatter = ({ readonly, value, field, ...params }) => {
       readonly,
       value,
       field,
-      queryUserAPI: window.sfMetadataContext.userService.queryUser,
+      queryUserAPI: queryUser,
       getFileIconUrl: Utils.getFileIconUrl,
       getFolderIconUrl: Utils.getFolderIconUrl,
     };
-  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache]);
+  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser]);
 
   return (
     <Formatter { ...props } { ...params } />

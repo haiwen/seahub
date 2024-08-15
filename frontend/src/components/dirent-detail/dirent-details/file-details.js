@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
+import { Formatter } from '@seafile/sf-metadata-ui-component';
 import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
@@ -11,12 +12,16 @@ import { Utils } from '../../../utils/utils';
 import { MetadataDetails, useMetadata } from '../../../metadata';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
-const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList, ...params }) => {
+const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
   const { enableMetadata } = useMetadata();
 
   const direntPath = useMemo(() => getDirentPath(dirent, path), [dirent, path]);
   const tagListTitleID = useMemo(() => `detail-list-view-tags-${uuidV4()}`, []);
+  const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
+  const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
+  const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
+  const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
 
   const onEditFileTagToggle = useCallback(() => {
     setEditFileTagShow(!isEditFileTagShow);
@@ -28,25 +33,37 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
 
   return (
     <>
-      <DetailItem field={{ type: 'size', name: gettext('Size') }} value={Utils.bytesToSize(direntDetail.size)} />
-      <DetailItem field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }} value={direntDetail.last_modifier_email} collaborators={[{
-        name: direntDetail.last_modifier_name,
-        contact_email: direntDetail.last_modifier_contact_email,
-        email: direntDetail.last_modifier_email,
-        avatar_url: direntDetail.last_modifier_avatar,
-      }]} />
-      <DetailItem field={{ type: CellType.MTIME, name: gettext('Last modified time') }} value={direntDetail.last_modified} />
+      <DetailItem field={sizeField} className="sf-metadata-property-detail-formatter">
+        <Formatter field={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
+      </DetailItem>
+      <DetailItem field={lastModifierField} className="sf-metadata-property-detail-formatter">
+        <Formatter
+          field={lastModifierField}
+          value={direntDetail.last_modifier_email}
+          collaborators={[{
+            name: direntDetail.last_modifier_name,
+            contact_email: direntDetail.last_modifier_contact_email,
+            email: direntDetail.last_modifier_email,
+            avatar_url: direntDetail.last_modifier_avatar,
+          }]}
+        />
+      </DetailItem >
+      <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
+        <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
+      </DetailItem>
       {!window.app.pageOptions.enableMetadataManagement && enableMetadata && (
-        <DetailItem field={{ type: CellType.SINGLE_SELECT, name: gettext('Tags') }} valueId={tagListTitleID} valueClick={onEditFileTagToggle} >
-          {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
-            <FileTagList fileTagList={fileTagList} />
-          ) : (
-            <span className="empty-tip-text">{gettext('Empty')}</span>
-          )}
+        <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
+          <div className="" id={tagListTitleID} onClick={onEditFileTagToggle}>
+            {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
+              <FileTagList fileTagList={fileTagList} />
+            ) : (
+              <span className="empty-tip-text">{gettext('Empty')}</span>
+            )}
+          </div>
         </DetailItem>
       )}
       {window.app.pageOptions.enableMetadataManagement && (
-        <MetadataDetails repoID={repoID} filePath={direntPath} direntType="file" { ...params } />
+        <MetadataDetails repoID={repoID} filePath={direntPath} repoInfo={repoInfo} direntType="file" />
       )}
       {isEditFileTagShow &&
         <EditFileTagPopover

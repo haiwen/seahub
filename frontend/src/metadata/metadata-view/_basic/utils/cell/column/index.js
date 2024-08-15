@@ -5,6 +5,8 @@ export {
   replaceNumberNotAllowInput,
   formatStringToNumber,
   formatTextToNumber,
+  getFloatNumber,
+  isNumber,
 } from './number';
 export {
   getOption,

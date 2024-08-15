@@ -63,6 +63,7 @@
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-right: 10px;
 }
 
 .single-select-avatar {
@@ -82,12 +83,13 @@
   padding: 0px 10px;
   height: 20px;
   line-height: 20px;
-  text-align: center;
   margin-left: 0;
   border-radius: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 5px;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .sf-metadata-single-select-editor .single-select-check-icon {

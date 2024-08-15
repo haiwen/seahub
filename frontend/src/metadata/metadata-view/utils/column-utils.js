@@ -327,7 +327,7 @@ export const normalizeColumns = (columns) => {
   return displayColumns;
 };
 
-export function canEdit(col, record, enableCellSelect) {
+export function canEditCell(col, record, enableCellSelect) {
   if (!col) return false;
   if (window.sfMetadataContext.canModifyColumn(col) === false) return false;
   if (col.editable != null && typeof (col.editable) === 'function') {
