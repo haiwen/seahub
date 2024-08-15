@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
 import ObjectUtils from '../../metadata/metadata-view/utils/object-utils';
+import { MetadataContext } from '../../metadata';
+import { mediaUrl } from '../../utils/constants';
 
 const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+
+  useEffect(() => {
+    // init context
+    const context = new MetadataContext();
+    window.sfMetadataContext = context;
+    window.sfMetadataContext.init({ repoID, mediaUrl, repoInfo: currentRepoInfo });
+    return () => {
+      window.sfMetadataContext.destroy();
+      delete window['sfMetadataContext'];
+    };
+  }, [repoID, currentRepoInfo]);
 
   if (path === '/' && !dirent) {
     return (

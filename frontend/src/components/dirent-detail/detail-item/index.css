@@ -12,12 +12,12 @@
 
 .dirent-detail-item .dirent-detail-item-name {
   width: 160px;
-  padding: 7px 6px;
+  padding: 6.5px 6px;
   min-height: 34px;
   height: fit-content;
   color: #666;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .dirent-detail-item .dirent-detail-item-name .sf-metadata-icon {
@@ -29,13 +29,8 @@
 .dirent-detail-item .dirent-detail-item-value {
   width: 200px;
   display: flex;
-  padding: 7px 6px;
-  min-height: 34px;
   height: fit-content;
-}
-
-.dirent-detail-item .dirent-detail-item-value.editable:hover {
-  cursor: pointer;
+  min-height: 34px;
 }
 
 .dirent-detail-item .dirent-detail-item-name:hover,
@@ -45,10 +40,48 @@
   cursor: default;
 }
 
+.dirent-detail-item .dirent-detail-item-value.editable:hover {
+  cursor: pointer;
+}
+
+/* media */
+.cur-view-detail-small .dirent-detail-item .dirent-detail-item-name {
+  width: calc((100% - 8px) * 0.44);
+}
+
+.cur-view-detail-small .dirent-detail-item .dirent-detail-item-value {
+  width: calc((100% - 8px) * 0.56);
+}
+
+.cur-view-detail-large .dirent-detail-item .dirent-detail-item-name {
+  width: 160px;
+  margin-right: 8px;
+}
+
+.cur-view-detail-large .dirent-detail-item .dirent-detail-item-value {
+  flex: 1;
+}
+
+.dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty {
+  display: inline-block;
+  height: 34px;
+  width: 100%;
+  line-height: 1.5;
+  padding: 6.5px 6px;
+}
+
+.dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before {
+  content: attr(placeholder);
+  color: #666;
+  font-size: 14px;
+}
+
+/* formatter */
 .dirent-detail-item .dirent-detail-item-value .text-formatter,
 .dirent-detail-item .dirent-detail-item-value .ctime-formatter,
 .dirent-detail-item .dirent-detail-item-value .mtime-formatter,
 .dirent-detail-item .dirent-detail-item-value .date-formatter {
+  padding: 6.5px 6px;
   line-height: 1.5;
 }
 
@@ -57,28 +90,5 @@
 }
 
 .dirent-detail-item-value .creator-formatter {
-  height: 20px;
-}
-
-.dirent-detail-item-value .sf-metadata-record-cell-empty::before {
-  content: attr(placeholder);
-  color: #666;
-  font-size: 14px;
-}
-
-/*  */
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-name {
-  width: 44%;
-}
-
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-value {
-  width: 56%;
-}
-
-.cur-view-detail-large .dirent-detail-item .dirent-detail-item-name {
-  width: 160px;
-}
-
-.cur-view-detail-large .dirent-detail-item .dirent-detail-item-value {
-  flex: 1;
+  padding: 7px 6px;
 }

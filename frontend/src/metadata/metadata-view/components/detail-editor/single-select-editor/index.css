@@ -1,0 +1,40 @@
+.sf-metadata-single-select-property-detail-editor {
+  height: 34px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  position: relative;
+}
+
+.sf-metadata-single-select-property-detail-editor .sf-metadata-single-select-property-value {
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 6px 0;
+  max-width: 250px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: -webkit-min-content;
+  width: min-content;
+}
+
+.sf-metadata-single-select-property-editor-popover .popover {
+  max-width: unset;
+}
+
+.sf-metadata-single-select-property-editor-popover .sf-metadata-single-select-editor {
+  position: unset;
+  min-width: 200px;
+  padding: 0;
+  overflow: hidden;
+  opacity: 1;
+  background-color: #ffffff;
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+}

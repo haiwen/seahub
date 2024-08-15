@@ -19,29 +19,46 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [navigation, setNavigation] = useState([]);
   const viewsMap = useRef({});
 
+  const cancelURLView = useCallback(() => {
+    // If attribute extension is turned off, unmark the URL
+    const { origin, pathname, search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    const viewID = urlParams.get('view');
+    if (viewID) {
+      const url = `${origin}${pathname}`;
+      window.history.pushState({ url: url, path: '' }, '', url);
+    }
+  }, []);
+
   useEffect(() => {
     if (!enableMetadataManagement) {
-      setEnableExtendedProperties(false);
+      cancelURLView();
       return;
     }
     metadataAPI.getMetadataStatus(repoID).then(res => {
-      setEnableExtendedProperties(res.data.enabled);
+      const enableMetadata = res.data.enabled;
+      if (!enableMetadata) {
+        cancelURLView();
+      }
+      setEnableExtendedProperties(enableMetadata);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error, true);
       toaster.danger(errorMsg);
       setEnableExtendedProperties(false);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, enableMetadataManagement]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;
     if (!newValue) {
       hideMetadataView && hideMetadataView();
+      cancelURLView();
     } else {
       setShowFirstView(true);
     }
     setEnableExtendedProperties(newValue);
-  }, [enableMetadata, hideMetadataView]);
+  }, [enableMetadata, hideMetadataView, cancelURLView]);
 
   // views
   useEffect(() => {
@@ -61,14 +78,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       return;
     }
 
-    // If attribute extension is turned off, unmark the URL
-    const { origin, pathname, search } = window.location;
-    const urlParams = new URLSearchParams(search);
-    const viewID = urlParams.get('view');
-    if (viewID) {
-      const url = `${origin}${pathname}`;
-      window.history.pushState({ url: url, path: '' }, '', url);
-    }
     viewsMap.current = {};
     setNavigation([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,0 +1,22 @@
+.sf-metadata-checkbox-property-detail-editor {
+  height: 100%;
+  width: 100%;  
+  padding: 7px 6px;
+  cursor: pointer;
+}
+
+.sf-metadata-checkbox-property-detail-editor .sf-metadata-checkbox-property-detail-editor-content {
+  height: 20px;
+  width: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e0e0e0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.sf-metadata-checkbox-property-detail-editor .sf-metadata-checkbox-property-detail-editor-content .sf-metadata-icon-check-mark {
+  fill: #20c933;
+}

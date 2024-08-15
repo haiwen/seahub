@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, mediaUrl } from '../../../utils/constants';
+import { siteRoot } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -9,9 +9,6 @@ import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
-import metadataAPI from '../../../metadata/api';
-import { User } from '../../../metadata/metadata-view/model';
-import { UserService } from '../../../metadata/metadata-view/_basic';
 
 import './index.css';
 
@@ -22,25 +19,8 @@ class DirentDetails extends React.Component {
     this.state = {
       direntDetail: '',
       dirent: null,
-      collaborators: [],
-      collaboratorsCache: {},
     };
-    this.userService = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
   }
-
-  updateCollaboratorsCache = (user) => {
-    const newCollaboratorsCache = { ...this.state.collaboratorsCache, [user.email]: user };
-    this.setState({ collaboratorsCache: newCollaboratorsCache });
-  };
-
-  loadCollaborators = () => {
-    metadataAPI.getCollaborators(this.props.repoID).then(res => {
-      const collaborators = Array.isArray(res?.data?.user_list) ? res.data.user_list.map(user => new User(user)) : [];
-      this.setState({ collaborators });
-    }).catch(error => {
-      this.setState({ collaborators: [] });
-    });
-  };
 
   updateDetail = (repoID, dirent, direntPath) => {
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
@@ -73,7 +53,6 @@ class DirentDetails extends React.Component {
   };
 
   componentDidMount() {
-    this.loadCollaborators();
     this.loadDetail(this.props.repoID, this.props.dirent, this.props.path);
   }
 
@@ -108,7 +87,7 @@ class DirentDetails extends React.Component {
   };
 
   render() {
-    const { dirent, direntDetail, collaborators, collaboratorsCache } = this.state;
+    const { dirent, direntDetail } = this.state;
     const { repoID, path, fileTags } = this.props;
     const direntName = dirent?.name || '';
     const smallIconUrl = Utils.getDirentIcon(dirent);
@@ -127,10 +106,6 @@ class DirentDetails extends React.Component {
                   dirent={dirent}
                   direntDetail={direntDetail}
                   path={this.props.dirent ? path + '/' + dirent.name : path}
-                  collaborators={collaborators}
-                  collaboratorsCache={collaboratorsCache}
-                  updateCollaboratorsCache={this.updateCollaboratorsCache}
-                  queryUserAPI={this.userService?.queryUser}
                 />
               ) : (
                 <FileDetails
@@ -142,10 +117,6 @@ class DirentDetails extends React.Component {
                   repoTags={this.props.repoTags}
                   fileTagList={dirent ? dirent.file_tags : fileTags}
                   onFileTagChanged={this.props.onFileTagChanged}
-                  collaborators={collaborators}
-                  collaboratorsCache={collaboratorsCache}
-                  updateCollaboratorsCache={this.updateCollaboratorsCache}
-                  queryUserAPI={this.userService?.queryUser}
                 />
               )}
             </div>

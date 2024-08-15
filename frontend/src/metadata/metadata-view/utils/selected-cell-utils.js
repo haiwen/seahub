@@ -1,5 +1,5 @@
 import { Z_INDEX, getGroupByPath, isFunction, getCellValueByColumn } from '../_basic';
-import { getColumnByIndex, canEdit } from './column-utils';
+import { getColumnByIndex, canEditCell } from './column-utils';
 import { SUPPORT_PREVIEW_COLUMN_TYPES } from '../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 
@@ -44,7 +44,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
   if (!window.sfMetadataContext.canModifyRow(row)) return false;
   const isCellEditable = isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
-  return isCellEditable && canEdit(column, row, enableCellSelect);
+  return isCellEditable && canEditCell(column, row, enableCellSelect);
 };
 
 export function selectedRangeIsSingleCell(selectedRange) {

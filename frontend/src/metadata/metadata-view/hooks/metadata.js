@@ -47,9 +47,8 @@ export const MetadataProvider = ({
     setLoading(true);
     // init context
     const context = new Context();
-    window.sfMetadata = {};
     window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ otherSettings: { ...params, repoID, viewID } });
+    window.sfMetadataContext.init({ ...params, repoID, viewID });
     storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
@@ -68,7 +67,6 @@ export const MetadataProvider = ({
     const unsubscribeReloadData = eventBus.subscribe(EVENT_BUS_TYPE.RELOAD_DATA, reloadMetadata);
 
     return () => {
-      window.sfMetadata = {};
       window.sfMetadataContext.destroy();
       window.sfMetadataStore.destroy();
       unsubscribeServerTableChanged();

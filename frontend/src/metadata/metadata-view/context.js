@@ -1,9 +1,8 @@
 import metadataAPI from '../api';
-import { UserService, LocalStorage, PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS,
+import { LocalStorage, PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS,
   EDITABLE_PRIVATE_COLUMN_KEYS, PREDEFINED_COLUMN_KEYS } from './_basic';
 import EventBus from '../../components/common/event-bus';
 import { username } from '../../utils/constants';
-import User from './model/user';
 
 class Context {
 
@@ -11,29 +10,26 @@ class Context {
     this.settings = {};
     this.metadataAPI = null;
     this.localStorage = null;
-    this.userService = null;
     this.eventBus = null;
     this.hasInit = false;
     this.permission = 'r';
     this.collaboratorsCache = {};
   }
 
-  async init({ otherSettings }) {
+  async init(settings) {
     if (this.hasInit) return;
 
     // init settings
-    this.settings = otherSettings || {};
+    this.settings = settings || {};
 
     // init metadataAPI
-    const { mediaUrl, repoInfo } = this.settings;
+    const { repoInfo } = this.settings;
     this.metadataAPI = metadataAPI;
 
     // init localStorage
     const { repoID, viewID } = this.settings;
-    this.localStorage = new LocalStorage(`sf-metadata-${repoID}-${viewID}`);
-
-    // init userService
-    this.userService = new UserService({ mediaUrl, api: this.metadataAPI.listUserInfo });
+    const localStorageName = viewID ? `sf-metadata-${repoID}-${viewID}` : `sf-metadata-${repoID}`;
+    this.localStorage = new LocalStorage(localStorageName);
 
     const eventBus = new EventBus();
     this.eventBus = eventBus;
@@ -47,7 +43,6 @@ class Context {
     this.settings = {};
     this.metadataAPI = null;
     this.localStorage = null;
-    this.userService = null;
     this.eventBus = null;
     this.hasInit = false;
     this.permission = 'r';
@@ -134,23 +129,6 @@ class Context {
     if (this.permission === 'r') return false;
     return true;
   };
-
-  getCollaboratorFromCache(email) {
-    return this.collaboratorsCache[email];
-  }
-
-  getCollaboratorsFromCache() {
-    const collaboratorsCache = this.collaboratorsCache;
-    return Object.values(collaboratorsCache).filter(item => item.email !== 'anonymous');
-  }
-
-  updateCollaboratorsCache(email, collaborator) {
-    if (collaborator instanceof User) {
-      this.collaboratorsCache[email] = collaborator;
-      return;
-    }
-    this.collaboratorsCache[email] = new User(collaborator);
-  }
 
   restoreRows = () => {
     // todo

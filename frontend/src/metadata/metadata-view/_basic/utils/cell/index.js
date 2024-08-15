@@ -21,4 +21,6 @@ export {
   getLongtextDisplayString,
   getGeolocationDisplayString,
   getGeolocationByGranularity,
+  getFloatNumber,
+  isNumber,
 } from './column';

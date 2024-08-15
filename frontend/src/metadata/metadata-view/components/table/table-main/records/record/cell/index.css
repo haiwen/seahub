@@ -5,7 +5,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-right: 1px solid #eee;
-  padding: 4px 8px;
+  padding: 6px 8px;
   display: flex;
   justify-content: flex-start;
 }
@@ -71,7 +71,7 @@
 /* cell formatter */
 .sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container {
   height: 100%;
-  line-height: 24px;
+  line-height: 20px;
   font-size: 14px;
 }
 
@@ -302,4 +302,14 @@
 .sf-metadata-result-table-cell.sf-metadata-result-table-long-text-cell .sf-metadata-long-text-formatter {
   padding-top: 5.5px;
   padding-bottom: 5.5px;
+}
+
+/* file name */
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-ui.cell-formatter-container {
+  line-height: 20px;
 }

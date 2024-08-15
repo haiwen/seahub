@@ -1,13 +1,6 @@
 import { SELECT_OPTION_COLORS } from '../_basic/constants/select-option';
 import { generateOptionID } from '../_basic/utils/column/option';
 
-export function getSelectColumnOptions(column) {
-  if (!column || !column.data || !Array.isArray(column.data.options)) {
-    return [];
-  }
-  return column.data.options;
-}
-
 const getNotDuplicateOption = (options) => {
   const defaultOptions = SELECT_OPTION_COLORS.slice(12, 24);
   let defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];

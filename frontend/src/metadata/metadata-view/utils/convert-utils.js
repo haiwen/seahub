@@ -1,19 +1,13 @@
-import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString, PREDEFINED_COLUMN_KEYS } from '../_basic';
+import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString,
+  PREDEFINED_COLUMN_KEYS, getFloatNumber, getNumberDisplayString, formatStringToNumber, isNumber, getColumnOptions,
+} from '../_basic';
 import { formatTextToDate } from './date';
-import { getFloatNumber, getNumberDisplayString, formatStringToNumber, isNumber } from '../_basic/utils/cell/column/number';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER],
 };
 
 const reg_chinese_date_format = /(\d{4})年(\d{1,2})月(\d{1,2})日$/;
-
-export function getSelectColumnOptions(column) {
-  if (!column || !column.data || !Array.isArray(column.data.options)) {
-    return [];
-  }
-  return column.data.options;
-}
 
 function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;
@@ -140,7 +134,7 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
   let fromOptionName;
   switch (fromColumnType) {
     case CellType.SINGLE_SELECT: {
-      const fromOptions = getSelectColumnOptions(fromColumn);
+      const fromOptions = getColumnOptions(fromColumn);
       fromOptionName = getOptionName(fromOptions, cellValue) || '';
       break;
     }
@@ -156,7 +150,7 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
     return oldCellValue;
   }
 
-  const currentOptions = getSelectColumnOptions(targetColumn);
+  const currentOptions = getColumnOptions(targetColumn);
   const newOption = generatorCellOption(currentOptions, fromOptionName);
   return PREDEFINED_COLUMN_KEYS.includes(targetColumn.key) ? newOption.id : newOption.name;
 }
@@ -230,11 +224,11 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
       return getDateDisplayString(cellValue, fromColumnData.format || DEFAULT_DATE_FORMAT);
     }
     case CellType.SINGLE_SELECT: {
-      const options = getSelectColumnOptions(fromColumn);
+      const options = getColumnOptions(fromColumn);
       return getOptionName(options, cellValue) || null;
     }
     case CellType.COLLABORATOR: {
-      const collaborators = window.sfMetadata.collaborators || window.sfMetadataContext.getCollaboratorsFromCache();
+      const collaborators = window.sfMetadata.getCollaborators();
       return getCollaboratorsName(collaborators, cellValue);
     }
     case CellType.CREATOR:
@@ -242,7 +236,7 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
       if (!cellValue) {
         return null;
       }
-      const collaborators = window.sfMetadata.collaborators || window.sfMetadataContext.getCollaboratorsFromCache();
+      const collaborators = window.sfMetadata.getCollaborators();
       return getCollaboratorsName(collaborators, [cellValue]);
     }
     default: {
@@ -257,7 +251,7 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
       if (!Array.isArray(cellValue) || cellValue.length === 0) {
         return null;
       }
-      const collaborators = window.sfMetadata.collaborators || window.sfMetadataContext.getCollaboratorsFromCache();
+      const collaborators = window.sfMetadata.getCollaborators();
       let validEmailMap = {};
       collaborators.forEach(collaborator => validEmailMap[collaborator.email] = true);
       return cellValue.filter(email => !!validEmailMap[email]);
@@ -270,7 +264,7 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
       if (userNames.length === 0) {
         return oldCellValue;
       }
-      const collaborators = window.sfMetadata.collaborators || window.sfMetadataContext.getCollaboratorsFromCache();
+      const collaborators = window.sfMetadata.getCollaborators();
       let nameCollaboratorMap = {};
       collaborators.forEach(collaborator => nameCollaboratorMap[collaborator.name] = collaborator);
       const emails = userNames.map(name => {
@@ -284,7 +278,7 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
     }
     case CellType.CREATOR:
     case CellType.LAST_MODIFIER: {
-      const collaborators = window.sfMetadata.collaborators || window.sfMetadataContext.getCollaboratorsFromCache();
+      const collaborators = window.sfMetadata.getCollaborators();
       let validEmailMap = {};
       collaborators.forEach(collaborator => validEmailMap[collaborator.email] = true);
       if (!cellValue || !validEmailMap[cellValue]) {
