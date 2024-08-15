@@ -120,8 +120,10 @@ class SidePanel extends Component {
 
   // default page name
   handleAddNewPage = (jumpToNewPage = true, pageName = 'Untitled') => {
-    const voidFn = () => void 0;
+    if (this.isAddingPage === true) return;
+    this.isAddingPage = true;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
+      this.isAddingPage = false;
       const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
       this.onAddNewPage({
         page_id: page_id,
@@ -129,13 +131,14 @@ class SidePanel extends Component {
         icon: '',
         path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
         docUuid: doc_uuid,
-        successCallback: voidFn,
-        errorCallback: voidFn,
+        successCallback: () => {},
+        errorCallback: () => {},
         jumpToNewPage,
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      this.isAddingPage = false;
     });
   };
 
