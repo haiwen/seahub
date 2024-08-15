@@ -846,6 +846,9 @@ class Wiki2DuplicatePageView(APIView):
                 continue
 
             page_name = page.get('name')
+
+            # An UUID object will be generated
+            # Please set it to string by str if you use it in json or some other string operations
             dst_sdoc_uuid = uuid.uuid4()
 
             src_path = page.get('path')
@@ -891,7 +894,7 @@ class Wiki2DuplicatePageView(APIView):
                                   )
 
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(dst_sdoc_uuid, dst_repo_id, parent_dir, dst_dirent, is_dir=False)
-            copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_doc_uuid, dst_repo_id, dst_sdoc_uuid, username, is_async=False)
+            copy_sdoc_images_with_sdoc_uuid(src_repo_id, src_doc_uuid, dst_repo_id, str(dst_sdoc_uuid), username, is_async=False)
 
         wiki_config['pages'] = new_pages
         wiki_config = json.dumps(wiki_config)
