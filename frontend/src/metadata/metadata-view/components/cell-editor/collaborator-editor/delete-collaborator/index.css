@@ -2,8 +2,9 @@
   background-color: #f6f6f6;
   border-bottom: 1px solid #dde2ea;
   border-radius: 3px 3px 0 0;
-  min-height: 34px;
+  min-height: 35px;
   padding: 5px 10px;
+  line-height: 1;
 }
 
 .collaborator {
@@ -44,6 +45,11 @@
 .collaborator .collaborator-remove .sf-metadata-icon-x-01 {
   fill: #666;
   font-size: 12px;
+}
+
+.sf-metadata-delete-collaborator .collaborator {
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .sf-metadata-delete-collaborator .collaborator .collaborator-remove {

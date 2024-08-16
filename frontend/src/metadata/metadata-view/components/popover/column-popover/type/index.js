@@ -18,12 +18,13 @@ const COLUMNS = [
   { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED), unique: true, key: PRIVATE_COLUMN_KEY.FILE_EXPIRED, canChangeName: false, groupby: 'predefined' },
   { icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT], type: CellType.SINGLE_SELECT, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS), unique: true, key: PRIVATE_COLUMN_KEY.FILE_STATUS, canChangeName: false, groupby: 'predefined' },
   { icon: COLUMNS_ICON_CONFIG[CellType.TEXT], type: CellType.TEXT, name: gettext(COLUMNS_ICON_NAME[CellType.TEXT]), canChangeName: true, key: CellType.TEXT, groupby: 'basics' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: gettext(COLUMNS_ICON_NAME[CellType.CHECKBOX]), canChangeName: true, key: CellType.CHECKBOX, groupby: 'basics' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR], type: CellType.COLLABORATOR, name: gettext(COLUMNS_ICON_NAME[CellType.COLLABORATOR]), canChangeName: true, key: CellType.COLLABORATOR, groupby: 'basics' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.DATE], type: CellType.DATE, name: gettext(COLUMNS_ICON_NAME[CellType.DATE]), canChangeName: true, key: CellType.DATE, groupby: 'basics' },
   { icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT], type: CellType.LONG_TEXT, name: gettext(COLUMNS_ICON_NAME[CellType.LONG_TEXT]), canChangeName: true, key: CellType.LONG_TEXT, groupby: 'basics' },
-  { icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT], type: CellType.SINGLE_SELECT, name: gettext(COLUMNS_ICON_NAME[CellType.SINGLE_SELECT]), canChangeName: true, key: CellType.SINGLE_SELECT, groupby: 'basics' },
   { icon: COLUMNS_ICON_CONFIG[CellType.NUMBER], type: CellType.NUMBER, name: gettext(COLUMNS_ICON_NAME[CellType.NUMBER]), canChangeName: true, key: CellType.NUMBER, groupby: 'basics' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR], type: CellType.COLLABORATOR, name: gettext(COLUMNS_ICON_NAME[CellType.COLLABORATOR]), canChangeName: true, key: CellType.COLLABORATOR, groupby: 'basics' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX], type: CellType.CHECKBOX, name: gettext(COLUMNS_ICON_NAME[CellType.CHECKBOX]), canChangeName: true, key: CellType.CHECKBOX, groupby: 'basics' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.DATE], type: CellType.DATE, name: gettext(COLUMNS_ICON_NAME[CellType.DATE]), canChangeName: true, key: CellType.DATE, groupby: 'basics' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT], type: CellType.SINGLE_SELECT, name: gettext(COLUMNS_ICON_NAME[CellType.SINGLE_SELECT]), canChangeName: true, key: CellType.SINGLE_SELECT, groupby: 'basics' },
+  { icon: COLUMNS_ICON_CONFIG[CellType.MULTIPLE_SELECT], type: CellType.MULTIPLE_SELECT, name: gettext(COLUMNS_ICON_NAME[CellType.MULTIPLE_SELECT]), canChangeName: true, key: CellType.MULTIPLE_SELECT, groupby: 'basics' },
 ];
 
 // eslint-disable-next-line react/display-name

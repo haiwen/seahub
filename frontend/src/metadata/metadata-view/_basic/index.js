@@ -154,4 +154,6 @@ export {
   isNumber,
   getCellValueDisplayString,
   getCellValueStringResult,
+  getColumnOptionNamesByIds,
+  getColumnOptionIdsByNames,
 } from './utils';

@@ -481,6 +481,10 @@ class FilterItem extends React.Component {
           />
         );
       }
+      case CellType.MULTIPLE_SELECT: {
+        let { options = [] } = filterColumn.data || {};
+        return this.renderMultipleSelectOption(options, filter_term, readOnly);
+      }
       default: {
         return null;
       }
@@ -523,9 +527,9 @@ class FilterItem extends React.Component {
     } else if (isCheckboxColumn(filterColumn)) {
       _isCheckboxColumn = true;
     }
-    const isContainPredicate = [FILTER_PREDICATE_TYPE.CONTAINS, FILTER_PREDICATE_TYPE.NOT_CONTAIN].includes(filter_predicate);
-    const isRenderErrorTips = this.isRenderErrorTips();
-    const showToolTip = isContainPredicate && !isRenderErrorTips;
+    // const isContainPredicate = [].includes(filterColumn.type) && [FILTER_PREDICATE_TYPE.CONTAINS, FILTER_PREDICATE_TYPE.NOT_CONTAIN].includes(filter_predicate);
+    // const isRenderErrorTips = this.isRenderErrorTips();
+    // const showToolTip = isContainPredicate && !isRenderErrorTips;
 
     // current predicate is not empty
     const isNeedShowTermModifier = !EMPTY_PREDICATE.includes(filter_predicate);
@@ -574,12 +578,14 @@ class FilterItem extends React.Component {
             <div className="filter-term ml-2">
               {this.renderFilterTerm(filterColumn)}
             </div>
-            {showToolTip &&
-            <div className="ml-2">
-              <span ref={this.filterToolTip} id="filter_tool_tip" aria-hidden="true" className="sf-metadata-font sf-metadata-icon-exclamation-triangle" style={{ color: '#FFC92C' }}></span>
-              {/* <UncontrolledTooltip placement="bottom" target={this.filterToolTip}></UncontrolledTooltip> */}
-            </div>
-            }
+            {/* {showToolTip && (
+              <div className="ml-2" >
+                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" style={{ color: '#FFC92C' }} />
+                <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} >
+                  {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
+                </UncontrolledTooltip>
+              </div>
+            )} */}
             {this.renderErrorMessage()}
           </div>
         </div>

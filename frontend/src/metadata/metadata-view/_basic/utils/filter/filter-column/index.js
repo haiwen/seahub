@@ -5,3 +5,4 @@ export { checkboxFilter } from './checkbox';
 export { singleSelectFilter } from './single-select';
 export { collaboratorFilter } from './collaborator';
 export { numberFilter } from './number';
+export { multipleSelectFilter } from './multiple-select';

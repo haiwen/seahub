@@ -1,44 +1,16 @@
 import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString,
   PREDEFINED_COLUMN_KEYS, getFloatNumber, getNumberDisplayString, formatStringToNumber, isNumber, getColumnOptions,
+  generatorCellOptions,
+  getColumnOptionNamesByIds,
 } from '../_basic';
 import { formatTextToDate } from './date';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
+  [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
   [CellType.NUMBER]: [CellType.TEXT, CellType.NUMBER],
 };
 
 const reg_chinese_date_format = /(\d{4})年(\d{1,2})月(\d{1,2})日$/;
-
-function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn) {
-  const { type: fromColumnType, data: fromColumnData } = fromColumn;
-  const { type: targetColumnType, data: targetColumnData } = targetColumn;
-  switch (targetColumnType) {
-    case CellType.CHECKBOX: {
-      return convert2Checkbox(cellValue, oldCellValue, fromColumnType);
-    }
-    case CellType.NUMBER: {
-      return convert2Number(cellValue, oldCellValue, fromColumnType, targetColumnData);
-    }
-    case CellType.DATE: {
-      return convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, targetColumnData);
-    }
-    case CellType.SINGLE_SELECT: {
-      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn);
-    }
-    case CellType.LONG_TEXT: {
-      return convert2LongText(cellValue, oldCellValue, fromColumn);
-    }
-    case CellType.TEXT: {
-      return convert2Text(cellValue, oldCellValue, fromColumn);
-    }
-    case CellType.COLLABORATOR: {
-      return convert2Collaborator(cellValue, oldCellValue, fromColumnType);
-    }
-    default: {
-      return oldCellValue;
-    }
-  }
-}
 
 function convert2Checkbox(cellValue, oldCellValue, fromColumnType) {
   switch (fromColumnType) {
@@ -136,6 +108,12 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
     case CellType.SINGLE_SELECT: {
       const fromOptions = getColumnOptions(fromColumn);
       fromOptionName = getOptionName(fromOptions, cellValue) || '';
+      break;
+    }
+    case CellType.MULTIPLE_SELECT: {
+      const copiedOptions = getColumnOptions(fromColumn);
+      const copiedCellVal = cellValue[0];
+      fromOptionName = getOptionName(copiedOptions, copiedCellVal) || '';
       break;
     }
     case CellType.TEXT: {
@@ -285,6 +263,96 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
         return null;
       }
       return [cellValue];
+    }
+    default: {
+      return oldCellValue;
+    }
+  }
+}
+
+const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn) => {
+  const { type: copiedColumnType } = copiedColumn;
+  if (!copiedCellVal ||
+    (Array.isArray(copiedCellVal) && copiedCellVal.length === 0) ||
+    !SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)
+  ) {
+    return { selectedOptionIds: pasteCellVal };
+  }
+  let copiedOptionNames = [];
+  if (copiedColumnType === CellType.MULTIPLE_SELECT) {
+    const copiedOptions = getColumnOptions(copiedColumn);
+    copiedOptionNames = copiedOptions.filter((option) => copiedCellVal.includes(option.id) || copiedCellVal.includes(option.name))
+      .map((option) => option.name);
+  } else if (copiedColumnType === CellType.TEXT) {
+    const sCopiedCellVal = String(copiedCellVal);
+
+    // Pass excel test, wps test failed
+    copiedOptionNames = sCopiedCellVal.split('\n');
+
+    // get option names from string like 'a, b, c'
+    if (copiedOptionNames.length === 1) {
+      copiedOptionNames = sCopiedCellVal.split(',');
+    }
+    copiedOptionNames = copiedOptionNames.map(name => name.trim())
+      .filter(name => name !== '');
+  } else if (copiedColumnType === CellType.SINGLE_SELECT) {
+    const copiedOptions = getColumnOptions(copiedColumn);
+    copiedOptionNames = copiedOptions.filter((option) => option.id === copiedCellVal)
+      .map((option) => option.name);
+  }
+  if (copiedOptionNames.length === 0) {
+    return { selectedOptionIds: pasteCellVal };
+  }
+
+  const pasteOptions = getColumnOptions(pasteColumn);
+  const { cellOptions: newCellOptions, selectedOptionIds } = generatorCellOptions(pasteOptions, copiedOptionNames);
+  return { pasteOptions, newCellOptions, selectedOptionIds };
+};
+
+const convert2MultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn, api) => {
+  const { newCellOptions, pasteOptions, selectedOptionIds } = _getPasteMultipleSelect(copiedCellVal, pasteCellVal, copiedColumn, pasteColumn);
+  let newColumn = pasteColumn;
+
+  // the target column have no options with the same name
+  if (newCellOptions) {
+    if (!window.sfMetadataContext.canModifyColumnData(pasteColumn)) return null;
+    const updatedPasteOptions = [...pasteOptions, ...newCellOptions];
+    if (!newColumn.data) {
+      newColumn.data = {};
+    }
+    newColumn.data.options = updatedPasteOptions;
+    api.modifyColumnData(pasteColumn.key, { options: updatedPasteOptions }, pasteColumn.data);
+  }
+  return getColumnOptionNamesByIds(newColumn, selectedOptionIds);
+};
+
+function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api) {
+  const { type: fromColumnType, data: fromColumnData } = fromColumn;
+  const { type: targetColumnType, data: targetColumnData } = targetColumn;
+  switch (targetColumnType) {
+    case CellType.CHECKBOX: {
+      return convert2Checkbox(cellValue, oldCellValue, fromColumnType);
+    }
+    case CellType.NUMBER: {
+      return convert2Number(cellValue, oldCellValue, fromColumnType, targetColumnData);
+    }
+    case CellType.DATE: {
+      return convert2Date(cellValue, oldCellValue, fromColumnType, fromColumnData, targetColumnData);
+    }
+    case CellType.SINGLE_SELECT: {
+      return convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn);
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return convert2MultipleSelect(cellValue, oldCellValue, fromColumn, targetColumn, api);
+    }
+    case CellType.LONG_TEXT: {
+      return convert2LongText(cellValue, oldCellValue, fromColumn);
+    }
+    case CellType.TEXT: {
+      return convert2Text(cellValue, oldCellValue, fromColumn);
+    }
+    case CellType.COLLABORATOR: {
+      return convert2Collaborator(cellValue, oldCellValue, fromColumnType);
     }
     default: {
       return oldCellValue;

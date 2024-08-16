@@ -145,10 +145,9 @@ class ValidateFilter {
     }
 
     // Filter predicate should support: is_empty/is_not_empty(excludes checkbox and bool)
-    if (CHECK_EMPTY_PREDICATES.includes(predicate)) {
-      return true;
-    }
-    if (array_type === CellType.SINGLE_SELECT) {
+    if (CHECK_EMPTY_PREDICATES.includes(predicate)) return true;
+
+    if (array_type === CellType.SINGLE_SELECT || array_type === CellType.DEPARTMENT_SINGLE_SELECT) {
       return this.validatePredicate(predicate, { type: CellType.MULTIPLE_SELECT });
     }
     if (COLLABORATOR_COLUMN_TYPES.includes(array_type)) {
@@ -272,6 +271,15 @@ class ValidateFilter {
         // invalid filter_term if selected option is deleted
         return !!options.find((option) => term === option.id);
       }
+      case CellType.MULTIPLE_SELECT: {
+        if (!this.isValidTermType(term, TERM_TYPE_MAP.ARRAY)) {
+          return false;
+        }
+
+        // contains deleted option(s)
+        const options = getColumnOptions(filterColumn);
+        return this.isValidSelectedOptions(term, options);
+      }
       default: {
         return false;
       }
@@ -298,9 +306,6 @@ class ValidateFilter {
       return this.isValidTerm(term, predicate, modifier, {
         type: CellType.MULTIPLE_SELECT, data: array_data,
       });
-    }
-    if (array_type === CellType.DEPARTMENT_SINGLE_SELECT) {
-      return this.isValidTermType(term, TERM_TYPE_MAP.ARRAY);
     }
     if (COLLABORATOR_COLUMN_TYPES.includes(array_type)) {
       return this.isValidTerm(term, predicate, modifier, { type: CellType.COLLABORATOR });

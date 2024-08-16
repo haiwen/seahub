@@ -17,7 +17,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     return [
       { key: 'extended-properties', value: gettext('Extended properties') }
     ];
-  }, [enableMetadataManagement, userPerm]);
+  }, [enableMetadataManagement, currentRepoInfo]);
 
   const moreOperationClick = useCallback((operationKey) => {
     if (operationKey === 'extended-properties') {

@@ -6,6 +6,7 @@ import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
 import NumberEditor from './number-editor';
 import SingleSelectEditor from './single-select-editor';
+import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 
 // eslint-disable-next-line react/display-name
@@ -27,6 +28,9 @@ const Editor = React.forwardRef((props, ref) => {
     }
     case CellType.SINGLE_SELECT: {
       return (<SingleSelectEditor ref={ref} {...props} />);
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return (<MultipleSelectEditor ref={ref} {...props} />);
     }
     case CellType.COLLABORATOR: {
       return (<CollaboratorEditor ref={ref} {...props} />);

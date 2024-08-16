@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ClickOutside } from '@seafile/sf-metadata-ui-component';
-import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById, PRIVATE_COLUMN_KEYS } from '../../../_basic';
+import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNameById, PRIVATE_COLUMN_KEYS,
+  getColumnOptionNamesByIds,
+} from '../../../_basic';
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
 import { canEditCell } from '../../../utils/column-utils';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
-  CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER,
-  CellType.FILE_NAME, CellType.COLLABORATOR, CellType.LONG_TEXT, CellType.SINGLE_SELECT,
+  CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME
 ];
 
 class PopupEditorContainer extends React.Component {
@@ -146,6 +147,8 @@ class PopupEditorContainer extends React.Component {
     let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     if (columnType === CellType.SINGLE_SELECT) {
       updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
+    } else if (columnType === CellType.MULTIPLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNamesByIds(column, newValue[columnKey]) : [];
     }
 
     this.commitData(updated, true);

@@ -11,6 +11,7 @@ const CellType = {
   DATE: 'date',
   LONG_TEXT: 'long-text',
   SINGLE_SELECT: 'single-select',
+  MULTIPLE_SELECT: 'multiple-select',
   NUMBER: 'number',
   GEOLOCATION: 'geolocation',
 };

@@ -72,6 +72,16 @@ const FILTER_COLUMN_OPTIONS = {
       FILTER_PREDICATE_TYPE.NOT_EMPTY,
     ],
   },
+  [CellType.MULTIPLE_SELECT]: {
+    filterPredicateList: [
+      FILTER_PREDICATE_TYPE.HAS_ANY_OF,
+      FILTER_PREDICATE_TYPE.HAS_ALL_OF,
+      FILTER_PREDICATE_TYPE.HAS_NONE_OF,
+      FILTER_PREDICATE_TYPE.IS_EXACTLY,
+      FILTER_PREDICATE_TYPE.EMPTY,
+      FILTER_PREDICATE_TYPE.NOT_EMPTY,
+    ],
+  },
   [CellType.CTIME]: {
     filterPredicateList: datePredicates,
     filterTermModifierList: dateTermModifiers,

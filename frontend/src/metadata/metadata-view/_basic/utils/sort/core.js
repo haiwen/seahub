@@ -61,7 +61,8 @@ const deleteInvalidSort = (sorts, columns) => {
     let newSort = { ...sort, column: sortColumn };
     const { type: columnType } = sortColumn;
     switch (columnType) {
-      case CellType.SINGLE_SELECT: {
+      case CellType.SINGLE_SELECT:
+      case CellType.MULTIPLE_SELECT: {
         const options = getColumnOptions(sortColumn);
         let option_id_index_map = {};
         options.forEach((option, index) => {

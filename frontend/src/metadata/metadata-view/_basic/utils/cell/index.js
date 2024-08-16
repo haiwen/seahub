@@ -28,4 +28,6 @@ export {
   getGeolocationByGranularity,
   getFloatNumber,
   isNumber,
+  getColumnOptionNamesByIds,
+  getColumnOptionIdsByNames,
 } from './column';

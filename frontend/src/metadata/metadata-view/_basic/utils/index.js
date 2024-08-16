@@ -25,6 +25,8 @@ export {
   isNumber,
   getCellValueDisplayString,
   getCellValueStringResult,
+  getColumnOptionNamesByIds,
+  getColumnOptionIdsByNames,
 } from './cell';
 export {
   getColumnType,

@@ -1,0 +1,25 @@
+.sf-metadata-delete-select-options {
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #dde2ea;
+  border-radius: 3px 3px 0 0;
+  min-height: 35px;
+  padding: 2px 10px;
+  line-height: 1;
+}
+
+.sf-metadata-delete-select-options .sf-metadata-delete-select-option {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
+.sf-metadata-delete-select-options .sf-metadata-delete-select-option .sf-metadata-delete-select-remove {
+  height: 14px;
+  width: 14px;
+  margin-left: 2px;
+}
+
+.sf-metadata-delete-select-options .sf-metadata-delete-select-option .sf-metadata-icon-x-01 {
+  fill: inherit;
+  font-size: 12px;
+}

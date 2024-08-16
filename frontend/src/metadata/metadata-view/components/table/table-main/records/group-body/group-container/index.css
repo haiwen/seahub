@@ -213,6 +213,14 @@
   margin-right: 0;
 }
 
+.canvas-groups-rows .group-title .sf-metadata-multiple-select-option {
+  margin: 0 10px 0 0;
+}
+
+.canvas-groups-rows .group-title .sf-metadata-multiple-select-option:last-child {
+  margin-right: 0;
+}
+
 .canvas-groups-rows .collaborator-avatar,
 .canvas-groups-rows .sf-metadata-ui.collaborator-item .collaborator-avatar {
   height: 16px;

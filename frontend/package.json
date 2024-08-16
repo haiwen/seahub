@@ -14,7 +14,7 @@
     "@seafile/sdoc-editor": "1.0.50",
     "@seafile/seafile-calendar": "0.0.12",
     "@seafile/seafile-editor": "1.0.109",
-    "@seafile/sf-metadata-ui-component": "0.0.21",
+    "@seafile/sf-metadata-ui-component": "0.0.22",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/react-codemirror": "^4.19.4",
     "axios": "^1.7.3",

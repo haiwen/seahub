@@ -5,6 +5,7 @@ import CheckboxEditor from './checkbox-editor';
 import TextEditor from './text-editor';
 import NumberEditor from './number-editor';
 import SingleSelectEditor from './single-select-editor';
+import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 import DateEditor from './date-editor';
 import { lang } from '../../../../utils/constants';
@@ -15,7 +16,6 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
   const onChange = useCallback((newValue) => {
     onChangeAPI(field.key, newValue);
   }, [field, onChangeAPI]);
-
 
   switch (field.type) {
     case CellType.CHECKBOX: {
@@ -32,6 +32,9 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
     }
     case CellType.SINGLE_SELECT: {
       return (<SingleSelectEditor { ...props } field={field} onChange={onChange} />);
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return (<MultipleSelectEditor { ...props } field={field} onChange={onChange} />);
     }
     case CellType.COLLABORATOR: {
       return (<CollaboratorEditor { ...props } field={field} onChange={onChange} />);

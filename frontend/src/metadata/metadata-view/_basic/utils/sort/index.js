@@ -13,6 +13,7 @@ export {
   sortCollaborator,
   sortNumber,
   sortSingleSelect,
+  sortMultipleSelect,
 } from './sort-column';
 
 export {

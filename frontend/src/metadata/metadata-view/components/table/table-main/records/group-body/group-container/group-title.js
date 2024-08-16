@@ -45,6 +45,29 @@ const GroupTitle = ({ column, cellValue, originalCellValue }) => {
         const optionName = selectedOption ? selectedOption.name : deletedOptionTip;
         return (<div className="sf-metadata-single-select-option" style={style} key={cellValue} title={optionName}>{optionName}</div>);
       }
+      case CellType.MULTIPLE_SELECT: {
+        const options = getColumnOptions(column);
+        if (options.length === 0 || !Array.isArray(originalCellValue) || originalCellValue.length === 0) return emptyTip;
+        const selectedOptions = options.filter((option) => originalCellValue.includes(option.id) || originalCellValue.includes(option.name));
+        const invalidOptionIds = originalCellValue.filter(optionId => optionId && !options.find(o => o.id === optionId || o.name === optionId));
+        const invalidOptions = invalidOptionIds.map(optionId => ({
+          id: optionId,
+          name: deletedOptionTip,
+          color: DELETED_OPTION_BACKGROUND_COLOR,
+        }));
+        return (
+          <>
+            {selectedOptions.map(option => {
+              const style = { backgroundColor: option.color, color: option.textColor };
+              return (<div className="sf-metadata-multiple-select-option" style={style} key={option.id} title={option.name}>{option.name}</div>);
+            })}
+            {invalidOptions.map(option => {
+              const style = { backgroundColor: option.color };
+              return (<div className="sf-metadata-multiple-select-option" style={style} key={option.id} title={option.name}>{option.name}</div>);
+            })}
+          </>
+        );
+      }
       default: {
         return cellValue || emptyTip;
       }

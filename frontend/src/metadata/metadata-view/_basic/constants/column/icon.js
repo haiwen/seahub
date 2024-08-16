@@ -13,6 +13,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.DATE]: 'date',
   [CellType.LONG_TEXT]: 'long-text',
   [CellType.SINGLE_SELECT]: 'single-select',
+  [CellType.MULTIPLE_SELECT]: 'multiple-select',
   [CellType.NUMBER]: 'number',
   [CellType.GEOLOCATION]: 'location',
 };
@@ -30,6 +31,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.DATE]: 'Date',
   [CellType.LONG_TEXT]: 'Long text',
   [CellType.SINGLE_SELECT]: 'Single select',
+  [CellType.MULTIPLE_SELECT]: 'Multiple select',
   [CellType.NUMBER]: 'Number',
   [CellType.GEOLOCATION]: 'Geolocation',
 };

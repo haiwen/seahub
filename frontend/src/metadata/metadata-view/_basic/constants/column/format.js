@@ -53,6 +53,7 @@ const NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP = {
 
 const MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.COLLABORATOR]: true,
+  [CellType.MULTIPLE_SELECT]: true,
 };
 const SINGLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.TEXT]: true,

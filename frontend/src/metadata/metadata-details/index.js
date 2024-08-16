@@ -9,7 +9,7 @@ import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { DetailEditor, CellFormatter } from '../metadata-view';
 import { getColumnOriginName } from '../metadata-view/utils/column-utils';
-import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS } from '../metadata-view/_basic';
+import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS, getColumnOptionNamesByIds } from '../metadata-view/_basic';
 
 import './index.css';
 
@@ -47,6 +47,8 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, emptyTip }) =
     if (!PREDEFINED_COLUMN_KEYS.includes(field.key) && field.type === CellType.SINGLE_SELECT) {
       const options = getColumnOptions(field);
       update = { [fileName]: getOptionName(options, newValue) };
+    } else if (field.type === CellType.MULTIPLE_SELECT) {
+      update = { [fileName]: newValue ? getColumnOptionNamesByIds(field, newValue) : [] };
     }
     metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id).then(res => {
       const newMetadata = { ...metadata, record: { ...record, ...update } };
@@ -73,6 +75,9 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, emptyTip }) =
       update = { [fileName]: newOption.id };
       if (!PREDEFINED_COLUMN_KEYS.includes(fieldKey) && newField.type === CellType.SINGLE_SELECT) {
         update = { [fileName]: getOptionName(options, newOption.id) };
+      } else if (newField.type === CellType.MULTIPLE_SELECT) {
+        const oldValue = getCellValueByColumn(record, newField) || [];
+        update = { [fileName]: [...oldValue, newOption.name] };
       }
       return metadataAPI.modifyRecord(repoID, record._id, update, record._obj_id);
     }).then(res => {
