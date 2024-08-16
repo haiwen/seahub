@@ -13,7 +13,7 @@ import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS, getC
 
 import './index.css';
 
-const MetadataDetails = ({ repoID, filePath, repoInfo, direntType, emptyTip }) => {
+const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ record: {}, fields: [] });
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
