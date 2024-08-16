@@ -14,6 +14,7 @@ from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, get_sys_columns
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils.repo import is_repo_admin
 
 from seaserv import seafile_api
 
@@ -72,6 +73,10 @@ class MetadataManage(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # permission check
         permission = check_folder_permission(request, repo_id, '/')
         if not permission:
@@ -115,8 +120,7 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
+        if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
