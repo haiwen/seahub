@@ -202,6 +202,8 @@ class CcnetDB:
             cursor.execute(structure_sql)
 
     def get_active_users_by_user_list(self, user_list):
+        if not user_list:
+            return []
         user_list_str = ','.join(["'%s'" % str(user) for user in user_list])
         active_users = []
         sql = f"""
