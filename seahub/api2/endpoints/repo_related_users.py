@@ -51,8 +51,7 @@ class RepoRelatedUsersView(APIView):
         try:
             related_user_list = get_related_users_by_repo(repo_id, org_id)
             email_list_json = json.dumps(related_user_list)
-            user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json) + \
-                            ccnet_api.get_emailusers_in_list('LDAP', email_list_json)
+            user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json)
             
             for user_obj in user_obj_list:
                 if user_obj.is_active and '@seafile_group' not in user_obj.email:
