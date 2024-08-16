@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Amr Mothana <amrusud@gmail.com>, 2024
 # malnaim <malnaim@safedecision.com.sa>, 2024
+# Amr Mothana <amrusud@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-05 19:50+0800\n"
+"POT-Creation-Date: 2024-08-13 12:09+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2024\n"
+"Last-Translator: Amr Mothana <amrusud@gmail.com>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/haiwen/teams/5086/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,138 +22,142 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: templates/help/base.html:26 templates/help/base.html:28
+#: templates/help/base.html:34
+msgid "Side Nav Menu"
+msgstr "قائمة التنقل الجانبي"
+
+#: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
 msgstr "مقدمة"
 
-#: templates/help/base.html:31
+#: templates/help/base.html:53
 msgid "Managing files and folders"
 msgstr "إدارة الملفات والمجلدات"
 
-#: templates/help/base.html:33 templates/help/libraries_managing.html:5
+#: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
 msgstr "إدارة الملفات والمكتبات"
 
-#: templates/help/base.html:34
+#: templates/help/base.html:56
 msgid "Restoring deleted files"
 msgstr "إعادة الملفات المحذوفة"
 
-#: templates/help/base.html:35
+#: templates/help/base.html:57
 msgid "Finding old file versions"
 msgstr "العثور على نسخ قديمة من الملفات"
 
-#: templates/help/base.html:36
+#: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
 msgstr "تاريخ المكتبات و لقطاتها"
 
-#: templates/help/base.html:37
+#: templates/help/base.html:59
 msgid "Setting history retention period"
 msgstr "تحديد فترة الحفظ"
 
-#: templates/help/base.html:38 templates/help/deleting_a_library.html:5
+#: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
 msgstr "يتم حذف المكتبة"
 
-#: templates/help/base.html:39
+#: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
 msgstr "عرض الملفات عن طريق الويب"
 
-#: templates/help/base.html:40 templates/help/full_text_file_search.html:5
+#: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
 msgstr "البحث على النصوص في الملفات"
 
-#: templates/help/base.html:43
+#: templates/help/base.html:65
 msgid "Sharing and collaboration"
 msgstr "المشاركة والتعاون"
 
-#: templates/help/base.html:45 templates/help/sharing_files_and_folders.html:5
+#: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
 msgstr "مشاركة الملفات والمجلدات"
 
-#: templates/help/base.html:46 templates/help/groups_managing.html:5
+#: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
 msgstr "إدارة المجموعات"
 
-#: templates/help/base.html:47
+#: templates/help/base.html:69
 msgid "Locking files"
 msgstr "قفل الملفات"
 
-#: templates/help/base.html:48
+#: templates/help/base.html:70
 msgid "Folder permission"
 msgstr "إذن المجلد"
 
-#: templates/help/base.html:49
+#: templates/help/base.html:71
 msgid "Departments sharing"
 msgstr "مشاركة الإدارات"
 
-#: templates/help/base.html:52
+#: templates/help/base.html:74
 msgid "Wiki and knowledge management"
 msgstr "الويكي و إدارة المعرفة"
 
-#: templates/help/base.html:54 templates/help/manage_library_as_wiki.html:5
+#: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
 msgstr "إدارة المكتبة كـwiki"
 
-#: templates/help/base.html:57
+#: templates/help/base.html:79
 msgid "Desktop client and syncing"
 msgstr "عميل سطح المكتب و المزامنة"
 
-#: templates/help/base.html:59
+#: templates/help/base.html:81
 msgid "Install and sync files"
 msgstr "تثبيت و مزامنة ملفات"
 
-#: templates/help/base.html:60
+#: templates/help/base.html:82
 msgid "Syncing existing folders"
 msgstr "مزامنة مجلدات موجودة"
 
-#: templates/help/base.html:61 templates/help/selective_sync.html:6
+#: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
 msgstr "مزامنة مجلدات فرعية انتقائية"
 
-#: templates/help/base.html:62 templates/help/read-only_syncing.html:5
+#: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
 msgstr "مزامنة بصلاحية القراءة فقط"
 
-#: templates/help/base.html:63
+#: templates/help/base.html:85
 msgid "Unsync and resync libraries"
 msgstr "الغاء مزامنة و اعادة مزامنة مكتبات"
 
-#: templates/help/base.html:64 templates/help/sync_interval.html:6
+#: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
 msgstr "تحديد فترة المزامنة"
 
-#: templates/help/base.html:65
+#: templates/help/base.html:87
 msgid "Proxy settings"
 msgstr "إعدادات البروكسي"
 
-#: templates/help/base.html:66 templates/help/conflicts.html:5
+#: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
 msgstr "تعارضات الملف"
 
-#: templates/help/base.html:67
+#: templates/help/base.html:89
 msgid "Excluding files"
 msgstr "استثناء ملفات"
 
-#: templates/help/base.html:70
+#: templates/help/base.html:92
 msgid "Drive client"
 msgstr "عميل سطح المكتب "
 
-#: templates/help/base.html:72 templates/help/using_drive_client.html:6
+#: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
 msgstr "عميل Seafile لسطح المكتب"
 
-#: templates/help/base.html:73
+#: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
 msgstr "عميل Seafile 2.0 لسطح المكتب"
 
-#: templates/help/base.html:76
+#: templates/help/base.html:98
 msgid "Security and encryption"
 msgstr "الحماية و التشفير"
 
-#: templates/help/base.html:78
+#: templates/help/base.html:100
 msgid "How to use encrypted libraries"
 msgstr "كيفية استخدام مكتبات مشفرة"
 
@@ -2132,6 +2136,9 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"إذا لم تتم مزامنة المكتبة، فانقر نقرًا مزدوجًا فوق المكتبة في النافذة "
+"الرئيسية لعميل سيفايل Seafile. سيتم فتح نافذة متصفح الملفات السحابي، ويمكنك "
+"إنشاء رابط إلى ملف أو مجلد فيها."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
@@ -2143,6 +2150,9 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"يمكنك استخدام روابط التحميل لجمع الملفات من الآخرين. يمكنك فقط إنشاء روابط "
+"تحميل للمجلدات. لا يمكن للآخرين رؤية الملفات الموجودة في المجلدات. يمكنهم "
+"فقط تحميل الملفات إليها."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
@@ -2153,6 +2163,8 @@ msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"انتقل إلى المجلد الرئيسي الذي يحتوي على المجلد. حرك مؤشر الفأرة فوق المجلد "
+"وانقر على أيقونة \"مشاركة\" التي تظهر."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -2160,6 +2172,9 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"ستظهر نافذة منبثقة تحتوي على خيارات المشاركة. انقر فوق علامة التبويب \"تحميل"
+" الرابط\" في اللوحة اليسرى. ثم انقر فوق الزر \"إنشاء\" لإنشاء رابط. يمكنك "
+"استخدام كلمة مرور لحماية الرابط الخاص بك."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
@@ -2171,6 +2186,9 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"يمكنك مشاركة مكتبة أو مجلد مع مستخدمي سيفايل Seafile المسجلين الآخرين. ويمكن"
+" للآخرين الوصول إلى المكتبة أو المجلد المشترك باستخدام تطبيق الويب وعملاء "
+"سيفايل Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
@@ -2178,21 +2196,23 @@ msgstr "يمكنك اختيار نطاق المشاركة:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "المشاركة مع المستخدم: يمكنك المشاركة مع مستخدم واحد أو أكثر."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "المشاركة مع المجموعة: يمكنك المشاركة مع مجموعة."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"المشاركة مع المؤسسة: إذا كنت تستخدم خادمًا خاصًا، فمن المفيد أحيانًا "
+"المشاركة مع جميع الأعضاء على الخادم (المؤسسة بأكملها)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "يمكنك أيضًا تعيين الأذونات للمشاركة:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."

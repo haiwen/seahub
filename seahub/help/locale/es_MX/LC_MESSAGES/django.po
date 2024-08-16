@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-05 19:50+0800\n"
+"POT-Creation-Date: 2024-08-13 12:09+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/haiwen/teams/5086/es_MX/)\n"
@@ -22,138 +22,142 @@ msgstr ""
 "Language: es_MX\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: templates/help/base.html:26 templates/help/base.html:28
+#: templates/help/base.html:34
+msgid "Side Nav Menu"
+msgstr "Menú Lateral de Navegación"
+
+#: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
 msgstr "Introducción"
 
-#: templates/help/base.html:31
+#: templates/help/base.html:53
 msgid "Managing files and folders"
 msgstr "Administrando archivos y carpetas"
 
-#: templates/help/base.html:33 templates/help/libraries_managing.html:5
+#: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
 msgstr "Administrando archivos con bibliotecas"
 
-#: templates/help/base.html:34
+#: templates/help/base.html:56
 msgid "Restoring deleted files"
 msgstr "Restaurando archivos eliminados"
 
-#: templates/help/base.html:35
+#: templates/help/base.html:57
 msgid "Finding old file versions"
 msgstr "Buscando versiones anteriores de archivo"
 
-#: templates/help/base.html:36
+#: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
 msgstr "Historial de la biblioteca e instantáneas"
 
-#: templates/help/base.html:37
+#: templates/help/base.html:59
 msgid "Setting history retention period"
 msgstr "Estableciendo período de retención del historial"
 
-#: templates/help/base.html:38 templates/help/deleting_a_library.html:5
+#: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
 msgstr "Borrando una biblioteca"
 
-#: templates/help/base.html:39
+#: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
 msgstr "Visualizando archivos con Web App"
 
-#: templates/help/base.html:40 templates/help/full_text_file_search.html:5
+#: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
 msgstr "Búsqueda de texto completo en archivo"
 
-#: templates/help/base.html:43
+#: templates/help/base.html:65
 msgid "Sharing and collaboration"
 msgstr "Compartiendo y colaboración"
 
-#: templates/help/base.html:45 templates/help/sharing_files_and_folders.html:5
+#: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
 msgstr "Compartiendo archivos y carpetas"
 
-#: templates/help/base.html:46 templates/help/groups_managing.html:5
+#: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
 msgstr "Administrando grupos"
 
-#: templates/help/base.html:47
+#: templates/help/base.html:69
 msgid "Locking files"
 msgstr "Bloqueando archivos"
 
-#: templates/help/base.html:48
+#: templates/help/base.html:70
 msgid "Folder permission"
 msgstr "Permiso de carpeta"
 
-#: templates/help/base.html:49
+#: templates/help/base.html:71
 msgid "Departments sharing"
 msgstr "Compartiendo en departamentos"
 
-#: templates/help/base.html:52
+#: templates/help/base.html:74
 msgid "Wiki and knowledge management"
 msgstr "Administración de Wiki y conocimiento"
 
-#: templates/help/base.html:54 templates/help/manage_library_as_wiki.html:5
+#: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
 msgstr "Administrando una  biblioteca como Wiki"
 
-#: templates/help/base.html:57
+#: templates/help/base.html:79
 msgid "Desktop client and syncing"
 msgstr "Cliente de escritorio y sincronización"
 
-#: templates/help/base.html:59
+#: templates/help/base.html:81
 msgid "Install and sync files"
 msgstr "Instalar y sincronizar archivos"
 
-#: templates/help/base.html:60
+#: templates/help/base.html:82
 msgid "Syncing existing folders"
 msgstr "Sincronizando carpetas existentes"
 
-#: templates/help/base.html:61 templates/help/selective_sync.html:6
+#: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
 msgstr "Sincronizar sub-carpetas selectivamente"
 
-#: templates/help/base.html:62 templates/help/read-only_syncing.html:5
+#: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
 msgstr "Sincronización de Sólo-Lectura"
 
-#: templates/help/base.html:63
+#: templates/help/base.html:85
 msgid "Unsync and resync libraries"
 msgstr "Desincronizar y resincronizar bibliotecas"
 
-#: templates/help/base.html:64 templates/help/sync_interval.html:6
+#: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
 msgstr "Estableciendo el intervalo de sincronización"
 
-#: templates/help/base.html:65
+#: templates/help/base.html:87
 msgid "Proxy settings"
 msgstr "Configuración de proxy"
 
-#: templates/help/base.html:66 templates/help/conflicts.html:5
+#: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
 msgstr "Conflictos de archivo"
 
-#: templates/help/base.html:67
+#: templates/help/base.html:89
 msgid "Excluding files"
 msgstr "Excluyendo archivos"
 
-#: templates/help/base.html:70
+#: templates/help/base.html:92
 msgid "Drive client"
 msgstr "Cliente Drive"
 
-#: templates/help/base.html:72 templates/help/using_drive_client.html:6
+#: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
 msgstr "Utilizando el cliente drive de Seafile"
 
-#: templates/help/base.html:73
+#: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
 msgstr "Utilizando el cliente drive 2.0 en Windows"
 
-#: templates/help/base.html:76
+#: templates/help/base.html:98
 msgid "Security and encryption"
 msgstr "Seguridad y encriptación"
 
-#: templates/help/base.html:78
+#: templates/help/base.html:100
 msgid "How to use encrypted libraries"
 msgstr "Como usar bibliotecas encriptadas"
 
