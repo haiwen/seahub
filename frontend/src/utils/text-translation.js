@@ -35,6 +35,7 @@ const TextTranslation = {
   'TAGS': { key: 'Tags', value: gettext('Tags') },
   'TRASH': { key: 'Trash', value: gettext('Trash') },
   'ONLYOFFICE_CONVERT': { key: 'Convert with ONLYOFFICE', value: gettext('Convert with ONLYOFFICE') },
+  'DISPLAY_FILES': { key: 'Display files', value: gettext('Display files') },
 };
 
 export default TextTranslation;

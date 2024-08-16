@@ -1,0 +1,25 @@
+.dropdown-item-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 1.5rem;
+  padding-right: 1rem;
+}
+
+.dropdown-item-wrapper .dropdown-item-tick {
+  width: 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  color: #666666;
+}
+
+.dropdown-item:hover .dropdown-item-tick {
+  color: #fff;
+}

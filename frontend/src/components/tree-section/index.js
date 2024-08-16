@@ -6,7 +6,7 @@ import { isMobile } from '../../utils/utils';
 
 import './index.css';
 
-const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick, className }) => {
+const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationClick, className, isDisplayFiles }) => {
   const [showChildren, setShowChildren] = useState(true);
   const [highlight, setHighlight] = useState(false);
   const [freeze, setFreeze] = useState(false);
@@ -65,6 +65,7 @@ const TreeSection = ({ title, children, moreKey, moreOperations, moreOperationCl
                   getMenuList={() => validMoreOperations}
                   onMenuItemClick={moreOperationClick}
                   menuStyle={isMobile ? { zIndex: 1050 } : {}}
+                  isDisplayFiles={isDisplayFiles}
                 />
               </div>
             </>
@@ -90,6 +91,7 @@ TreeSection.propTypes = {
   moreKey: PropTypes.object,
   moreOperationClick: PropTypes.func,
   className: PropTypes.string,
+  isDisplayFiles: PropTypes.bool,
 };
 
 export default TreeSection;

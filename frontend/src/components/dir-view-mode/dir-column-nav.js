@@ -58,6 +58,7 @@ class DirColumnNav extends React.Component {
       isMoveDialogShow: false,
       isMultipleOperation: false,
       operationList: [],
+      isDisplayFiles: false,
     };
     this.isNodeMenuShow = true;
   }
@@ -75,6 +76,7 @@ class DirColumnNav extends React.Component {
     let menuList = [];
     menuList.push(TextTranslation.NEW_FOLDER);
     menuList.push(TextTranslation.NEW_FILE);
+    menuList.push(TextTranslation.DISPLAY_FILES);
     return menuList;
   };
 
@@ -126,6 +128,9 @@ class DirColumnNav extends React.Component {
         break;
       case 'Open in New Tab':
         this.onOpenFile(node);
+        break;
+      case 'Display files':
+        this.onDisplayFilesToggle();
         break;
     }
   };
@@ -184,6 +189,10 @@ class DirColumnNav extends React.Component {
   onOpenFile = (node) => {
     let newUrl = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(node.path);
     window.open(newUrl, '_blank');
+  };
+
+  onDisplayFilesToggle = () => {
+    this.setState({ isDisplayFiles: !this.state.isDisplayFiles });
   };
 
   checkDuplicatedName = (newName) => {
@@ -292,7 +301,7 @@ class DirColumnNav extends React.Component {
           <Loading />
         ) : (
           <>
-            <TreeSection title={gettext('Files')} moreKey={{ name: 'files' }} moreOperations={this.state.operationList} moreOperationClick={this.onMoreOperationClick}>
+            <TreeSection title={gettext('Files')} moreKey={{ name: 'files' }} moreOperations={this.state.operationList} moreOperationClick={this.onMoreOperationClick} isDisplayFiles={this.state.isDisplayFiles}>
               <TreeView
                 userPerm={userPerm}
                 isNodeMenuShow={this.isNodeMenuShow}
@@ -310,6 +319,7 @@ class DirColumnNav extends React.Component {
                 onItemsMove={onItemsMove}
                 repoID={repoID}
                 getMenuContainerSize={getMenuContainerSize}
+                isDisplayFiles={this.state.isDisplayFiles}
               />
             </TreeSection>
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} />
