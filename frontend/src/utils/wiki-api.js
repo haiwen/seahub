@@ -226,6 +226,33 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
+  getWikiTrash(wikiId, page, per_page) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/trash/';
+    let params = {
+      page: page || 1,
+      per_page: per_page
+    };
+    return this.req.get(url, { params: params });
+  }
+
+  revertTrashPage(wikiId, page_id) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/trash/';
+    let params = {
+      page_id: page_id
+    };
+    return this.req.put(url, params);
+  }
+
+  cleanWikiTrash(wikiId, days) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/trash/';
+    let params = {
+      keep_days: days
+    };
+    return this.req.delete(url, {
+      data: params
+    });
+  }
+
 }
 
 let wikiAPI = new WikiAPI();

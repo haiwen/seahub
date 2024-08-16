@@ -6,9 +6,11 @@ import logging
 import requests
 import posixpath
 import time
+import datetime
 import uuid
 import urllib.request, urllib.error, urllib.parse
 from copy import deepcopy
+from constance import config
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -24,11 +26,12 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean, is_wiki_repo
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
+from seahub.wiki2.models import WikiPageTrash
 from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_by_path, \
     get_wiki_config, WIKI_PAGES_DIR, WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav
+    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack
 
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
@@ -41,7 +44,7 @@ from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, c
 from seahub.settings import SEADOC_SERVER_URL, ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -51,6 +54,7 @@ from seahub.group.utils import group_id_to_name, is_group_admin
 from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
+from seahub.signals import clean_up_repo_trash
 
 HTTP_520_OPERATION_FAILED = 520
 
@@ -163,7 +167,6 @@ class Wikis2View(APIView):
                 'wiki_info': group_id_wikis_map[group_obj.id]
             }
             group_wiki_list.append(group_wiki)
-        
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
 
         return Response({'wikis': wiki_list, 'group_wikis': group_wiki_list})
@@ -249,7 +252,7 @@ class Wikis2View(APIView):
             logger.error(e)
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
-        
+
         repo = seafile_api.get_repo(repo_id)
         wiki = Wiki(repo, wiki_owner)
         wiki_info = wiki.to_dict()
@@ -258,7 +261,7 @@ class Wikis2View(APIView):
         else:
             group_id = int(wiki.owner.split('@')[0])
             wiki_info['owner_nickname'] = group_id_to_name(group_id)
-        
+
         return Response(wiki_info)
 
 
@@ -287,7 +290,7 @@ class Wiki2View(APIView):
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
-        
+
         if not repo:
             error_msg = "Wiki library not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -323,7 +326,7 @@ class Wiki2View(APIView):
         """Delete a wiki.
         """
         username = request.user.username
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = 'Wiki not found.'
@@ -335,7 +338,7 @@ class Wiki2View(APIView):
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
@@ -394,7 +397,7 @@ class Wiki2ConfigView(APIView):
 
     def get(self, request, wiki_id):
 
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -452,7 +455,7 @@ class Wiki2PagesView(APIView):
             error_msg = 'page_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -545,7 +548,7 @@ class Wiki2PagesView(APIView):
         return Response({'file_info': file_info})
 
     def put(self, request, wiki_id):
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -611,7 +614,7 @@ class Wiki2PageView(APIView):
 
     def get(self, request, wiki_id, page_id):
 
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -681,7 +684,7 @@ class Wiki2PageView(APIView):
         })
 
     def delete(self, request, wiki_id, page_id):
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -704,14 +707,13 @@ class Wiki2PageView(APIView):
         wiki_config = get_wiki_config(repo_id, username)
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
-        path = page_info.get('path')
-
         if not page_info:
             error_msg = 'page %s not found.' % page_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check file lock
         try:
+            path = page_info.get('path')
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
         except Exception as e:
             logger.error(e)
@@ -731,47 +733,30 @@ class Wiki2PageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # update navigation and page
-        pop_nav(navigation, page_id)
-        id_set = get_all_wiki_ids(navigation)
-        new_pages, old_pages = delete_page(pages, id_set)
-        for old_page in old_pages:
-            sdoc_dir_path = os.path.dirname(old_page['path'])
-            parent_dir = os.path.dirname(sdoc_dir_path)
-            dir_name = os.path.basename(sdoc_dir_path)
-            old_page['sdoc_dir_path'] = sdoc_dir_path
-            old_page['parent_dir'] = parent_dir
-            old_page['dir_name'] = dir_name
-
+        stack_ids = get_parent_id_stack(navigation, page_id)
+        parent_page_id = stack_ids.pop() if stack_ids else None
+        subpages = pop_nav(navigation, page_id)
         # delete the folder where the sdoc is located
         try:
-            for old_page in old_pages:
-                seafile_api.del_file(repo_id, old_page['parent_dir'], json.dumps([old_page['dir_name']]), username)
-        except SearpcError as e:
+            file_id = seafile_api.get_file_id_by_path(repo_id, page_info['path'])
+            page_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
+            doc_uuid = os.path.basename(os.path.dirname(page_info['path']))
+            WikiPageTrash.objects.create(repo_id=repo_id,
+                                         doc_uuid=doc_uuid,
+                                         page_id=page_info['id'],
+                                         parent_page_id=parent_page_id,
+                                         subpages=json.dumps(subpages),
+                                         name=page_info['name'],
+                                         delete_time=datetime.datetime.utcnow(),
+                                         size=page_size)
+        except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:  # rm sdoc fileuuid
-            for old_page in old_pages:
-                file_name = os.path.basename(old_page['path'])
-                file_uuid = get_seadoc_file_uuid(repo, old_page['path'])
-                FileComment.objects.filter(uuid=file_uuid).delete()
-                FileUUIDMap.objects.delete_fileuuidmap_by_path(repo_id, old_page['sdoc_dir_path'], file_name, is_dir=False)
-                SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
-        except Exception as e:
-            logger.error(e)
-
         # update wiki_config
         try:
             wiki_config['navigation'] = navigation
-            wiki_config['pages'] = new_pages
-            # TODO: add trash.
-            if 'trash_pages' in wiki_config:
-                wiki_config['trash_pages'].extend(old_pages)
-            else:
-                wiki_config['trash_pages'] = old_pages
             wiki_config = json.dumps(wiki_config)
             save_wiki_config(wiki, request.user.username, wiki_config)
         except Exception as e:
@@ -794,7 +779,7 @@ class Wiki2DuplicatePageView(APIView):
             error_msg = 'page_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        
+
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -908,3 +893,184 @@ class Wiki2DuplicatePageView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'wiki_config': wiki_config})
+
+
+class WikiPageTrashView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check argument
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+        start = (current_page - 1) * per_page
+        end = per_page + start
+
+        # check permission
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check resource
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        trash_pages = WikiPageTrash.objects.filter(repo_id=repo_id).order_by('-delete_time')
+        total_count = trash_pages.count()
+        trash_pages = trash_pages[start: end]
+        items = []
+        for item in trash_pages:
+            items.append(item.to_dict())
+
+        return Response({'items': items, 'total_count': total_count})
+
+    def put(self, request, wiki_id):
+        """revert page"""
+        page_id = request.data.get('page_id', None)
+        if not page_id:
+            error_msg = "Page not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        username = request.user.username
+        if not check_wiki_admin_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # update wiki config
+        wiki_config = get_wiki_config(repo_id, username)
+        navigation = wiki_config.get('navigation', [])
+        try:
+            page = WikiPageTrash.objects.get(page_id=page_id)
+            subpages = json.loads(page.subpages)
+            parent_page_id = page.parent_page_id
+            revert_nav(navigation, parent_page_id, subpages)
+            page.delete()
+            wiki_config = json.dumps(wiki_config)
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+    def delete(self, request, wiki_id):
+        """Clean Wiki Trash
+        Permission checking:
+        1. wiki owner can perform this action.
+        2. is group admin."""
+
+        # argument check
+        try:
+            keep_days = int(request.data.get('keep_days', 0))
+        except ValueError:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # resource check
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        wiki.owner = repo_owner
+        if not config.ENABLE_USER_CLEAN_TRASH:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not check_wiki_admin_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_config = get_wiki_config(repo_id, username)
+        _timestamp = datetime.datetime.now() - datetime.timedelta(days=keep_days)
+        del_pages = WikiPageTrash.objects.filter(repo_id=repo_id, delete_time__lt=_timestamp)
+
+        navigation = wiki_config.get('navigation', [])
+        pages = wiki_config.get('pages', [])
+        id_list = []
+        for del_page in del_pages:
+            get_sub_ids_by_page_id([(json.loads(del_page.subpages))], id_list)
+        id_set = set(id_list)
+        clean_pages, not_del_pages = delete_page(pages, id_set)
+        try:
+            file_uuids = []
+            for del_page in clean_pages:
+                # rm dir
+                sdoc_dir_path = os.path.dirname(del_page['path'])
+                parent_dir = os.path.dirname(sdoc_dir_path)
+                dir_name = os.path.basename(sdoc_dir_path)
+                seafile_api.del_file(repo_id, parent_dir,
+                                     json.dumps([dir_name]), username)
+
+                # rm sdoc fileuuid
+                file_uuid = get_seadoc_file_uuid(repo, del_page['path'])
+                file_uuids.append(file_uuid)
+            FileComment.objects.filter(uuid__in=file_uuids).delete()
+            FileUUIDMap.objects.filter(uuid__in=file_uuids).delete()
+            SeadocHistoryName.objects.filter(doc_uuid__in=file_uuids).delete()
+            SeadocDraft.objects.filter(doc_uuid__in=file_uuids).delete()
+            SeadocCommentReply.objects.filter(doc_uuid__in=file_uuids).delete()
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            seafile_api.clean_up_repo_history(repo_id, 0)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # update wiki_config
+        try:
+            del_pages.delete()
+            wiki_config['navigation'] = navigation
+            wiki_config['pages'] = not_del_pages
+            wiki_config = json.dumps(wiki_config)
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+

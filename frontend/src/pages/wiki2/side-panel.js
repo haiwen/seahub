@@ -12,6 +12,7 @@ import { isObjectNotEmpty } from './utils';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
+import WikiTrashDialog from './wiki-trash-dialog';
 
 import './side-panel.css';
 
@@ -22,13 +23,19 @@ const propTypes = {
   isLoading: PropTypes.bool.isRequired,
   config: PropTypes.object.isRequired,
   updateWikiConfig: PropTypes.func.isRequired,
+  getWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   currentPageId: PropTypes.string,
   onUpdatePage: PropTypes.func.isRequired,
 };
 
 class SidePanel extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowTrashDialog: false,
+    };
+  }
   confirmDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
     const { pages } = config;
@@ -93,6 +100,10 @@ class SidePanel extends Component {
     this.props.updateWikiConfig(config);
   };
 
+  toggelTrashDialog = () => {
+    this.setState({ 'isShowTrashDialog': !this.state.isShowTrashDialog });
+  };
+
   renderWikiNav = () => {
     const { config, onUpdatePage } = this.props;
     const { pages, navigation } = config;
@@ -112,6 +123,7 @@ class SidePanel extends Component {
             duplicatePage={this.duplicatePage}
             currentPageId={this.props.currentPageId}
             addPageInside={this.addPageInside}
+            toggelTrashDialog={this.toggelTrashDialog}
           />
         }
       </div>
@@ -156,9 +168,16 @@ class SidePanel extends Component {
           </UncontrolledTooltip>
         </div>
         <div className="wiki2-side-nav">
-          {isLoading ? <Loading /> : this.renderWikiNav()}
+          {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>
-        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)} />
+        <WikiExternalOperations onAddWikiPage={this.handleAddNewPage.bind(false)}/>
+        {this.state.isShowTrashDialog && (
+          <WikiTrashDialog
+            showTrashDialog={this.state.isShowTrashDialog}
+            toggleTrashDialog={this.toggelTrashDialog}
+            getWikiConfig={this.props.getWikiConfig}
+          />
+        )}
       </div>
     );
   }

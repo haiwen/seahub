@@ -13,6 +13,8 @@ from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
+from seahub.wiki2.models import WikiPageTrash
+
 
 logger = logging.getLogger(__name__)
 
@@ -229,6 +231,9 @@ def delete_page(pages, id_set):
             new_pages.append(page)
         else:
             old_pages.append(page)
+    for page in pages:
+        if page['id'] in id_set:
+            pages.remove(page)
     return new_pages, old_pages
 
 
@@ -264,3 +269,52 @@ def move_nav(navigation, target_id, moved_nav, move_position):
         if 'children' in nav:
             move_nav(nav['children'], target_id, moved_nav, move_position)
 
+
+def revert_nav(navigation, parent_page_id, subpages):
+    
+    # connect the subpages to the parent_page
+    # if not parent_page_id marked as flag, connect the subpages to the root
+    def recurse(navigation, parent_page_id, subpages):
+        for nav in navigation:
+            if nav['id'] == parent_page_id:
+                if nav['children']:
+                    nav['children'].append(subpages)
+                else:
+                    nav['children'] = [subpages]
+                return nav
+            if 'children' in nav and nav['children']:
+                result = recurse(nav['children'], parent_page_id, subpages)
+                if result:
+                    return result
+    flag = recurse(navigation, parent_page_id, subpages)
+    if not flag:
+        navigation.append(subpages)
+
+
+def get_sub_ids_by_page_id(subpages, ids):
+    for subpage in subpages:
+        ids.append(subpage['id'])
+        if 'children' in subpage:
+            get_sub_ids_by_page_id(subpage['children'], ids)
+
+
+def get_parent_id_stack(navigation, page_id):
+    '''
+    DFS (Depth First Search)
+    '''
+    id_list = []
+
+    def return_parent_page_id(navigation, page_id, id_list):
+        for nav in navigation:
+            id_list.append(nav['id'])
+            if nav['id'] == page_id:
+                id_list.pop()
+                return True
+            if 'children' in nav and nav['children']:
+                result = return_parent_page_id(nav['children'], page_id, id_list)
+                if result:
+                    return True
+            id_list.pop()
+    return_parent_page_id(navigation, page_id, id_list)
+
+    return id_list
