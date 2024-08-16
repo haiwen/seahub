@@ -25,6 +25,8 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMAIL, ENABLE_CONVERT_TO_TEAM_ACCOUNT
+from seahub.options.models import UserOptions
+
 
 import seaserv
 from seaserv import ccnet_api, seafile_api
@@ -246,19 +248,21 @@ class ResetPasswordView(APIView):
 
         user.set_password(new_password)
         user.save()
-        email_template_name = 'registration/password_change_email.html'
-        send_to = email2contact_email(request.user.username)
-        site_name = get_site_name()
-        c = {
-            'email': send_to,
-            'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        }
-        try:
-            send_html_email(_("Successfully Changed Password on %s") % site_name,
-                            email_template_name, c, None,
-                            [send_to])
-        except Exception as e:
-            logger.error('Failed to send notification to %s' % send_to)
+        enable_pwd_email = bool(UserOptions.objects.get_password_update_email_enable_status(user.username))
+        if enable_pwd_email:
+            email_template_name = 'registration/password_change_email.html'
+            send_to = email2contact_email(request.user.username)
+            site_name = get_site_name()
+            c = {
+                'email': send_to,
+                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+            try:
+                send_html_email(_("Successfully Changed Password on %s") % site_name,
+                                email_template_name, c, None,
+                                [send_to])
+            except Exception as e:
+                logger.error('Failed to send notification to %s' % send_to)
 
         if not request.session.is_empty():
             # update session auth hash

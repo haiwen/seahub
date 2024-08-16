@@ -37,13 +37,13 @@ class ActivityItem extends Component {
     this.setState({
       isHighlighted: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       isHighlighted: false
     });
-  }
+  };
 
   render() {
     const { isHighlighted } = this.state;
