@@ -108,6 +108,7 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
 
     # password is valid, log user in
     request.session['remember_me'] = remember_me
+
     return log_user_in(request, user, redirect_to)
 
 @csrf_protect
@@ -131,6 +132,7 @@ def login(request, template_name='registration/login.html',
         remember_me = True if request.POST.get('remember_me',
                                                '') == 'on' else False
         redirect_to = request.POST.get(redirect_field_name, '') or redirect_to
+
         # check the form
         used_captcha_already = False
         if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
@@ -141,6 +143,7 @@ def login(request, template_name='registration/login.html',
                 used_captcha_already = True
             else:
                 form = authentication_form(data=request.POST)
+
         if form.is_valid():
             return _handle_login_form_valid(request, form.get_user(),
                                             redirect_to, remember_me)

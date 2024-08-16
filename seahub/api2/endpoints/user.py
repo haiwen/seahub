@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-from datetime import datetime
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -259,8 +258,7 @@ class ResetPasswordView(APIView):
             send_to = email2contact_email(request.user.username)
             site_name = get_site_name()
             c = {
-                'email': send_to,
-                'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                'email': send_to
             }
             try:
                 send_html_email(_("Successfully Changed Password on %s") % site_name,
