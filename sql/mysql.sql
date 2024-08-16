@@ -947,6 +947,8 @@ CREATE TABLE `share_fileshare` (
   `password` varchar(128) DEFAULT NULL,
   `expire_date` datetime DEFAULT NULL,
   `permission` varchar(50) NOT NULL,
+  `authed_details` longtext DEFAULT NULL,
+  `user_scope` varchar(225) DEFAULT 'all_users',
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_fileshare_username_5cb6de75` (`username`),
@@ -1257,7 +1259,7 @@ CREATE TABLE `ocm_share` (
   KEY `ocm_share_repo_id_51937581` (`repo_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `ocm_share_received` (
+CREATE TABLE `ocm_share_received` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `shared_secret` varchar(36) NOT NULL,
   `from_user` varchar(255) NOT NULL,
@@ -1480,7 +1482,7 @@ CREATE TABLE `base_clientssotoken` (
   KEY `base_clientssotoken_accessed_at_cdc66bf3` (`accessed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `FileTrash` (
+CREATE TABLE `FileTrash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` varchar(255) NOT NULL,
   `obj_type` varchar(10) NOT NULL,
@@ -1509,3 +1511,48 @@ CREATE TABLE `WikiPageTrash` (
   KEY `ix_WikiPageTrash_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `wiki_wiki2`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `wiki_owner_repo_id_4c8925af_uniq`(`owner`, `repo_id`),
+  KEY `wiki_wiki_created_at_54930e36`(`created_at`),
+  KEY `wiki_wiki_repo_id_2ee93c31`(`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `repo_metadata`  (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` VARCHAR(36) NOT NULL,
+  `enabled` TINYINT(1) NOT NULL,
+  `modified_time` DATETIME NOT NULL,
+  `created_time` DATETIME NOT NULL,
+  `from_commit` varchar(40) NULL,
+  `to_commit` varchar(40) NULL,
+  UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
+  KEY `key_repo_metadata_enabled`(`enabled`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `repo_metadata_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `details` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_repo_meatadata_view_repo_id` (`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `sdoc_operation_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_uuid` varchar(36) NOT NULL,
+  `op_id` bigint(20) NOT NULL,
+  `op_time` bigint(20) NOT NULL,
+  `operations` longtext NOT NULL,
+  `author` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sdoc_operation_log_op_time` (`op_time`),
+  KEY `sdoc_operation_log_doc_uuid` (`doc_uuid`),
+  KEY `sdoc_idx_operation_log_doc_uuid_op_id` (`doc_uuid`,`op_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
