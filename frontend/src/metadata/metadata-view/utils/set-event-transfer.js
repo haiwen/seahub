@@ -65,7 +65,7 @@ function getCopiedTextFromSelectedCells(copiedRange, tableData, isGroupView, rec
 }
 
 function getCopiedText(records, columns) {
-  const collaborators = window.sfMetadataContext.getCollaboratorsFromCache();
+  const collaborators = window.sfMetadata.getCollaborators();
   const lastRecordIndex = records.length - 1;
   const lastColumnIndex = columns.length - 1;
   let copiedText = '';

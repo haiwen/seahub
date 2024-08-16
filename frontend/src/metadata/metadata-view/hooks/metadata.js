@@ -5,6 +5,7 @@ import Context from '../context';
 import Store from '../store';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import { Utils } from '../../../utils/utils';
+import { useCollaborators } from '../../hooks';
 
 const MetadataContext = React.createContext(null);
 
@@ -17,6 +18,7 @@ export const MetadataProvider = ({
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ rows: [], columns: [] });
   const storeRef = useRef(null);
+  const { collaborators } = useCollaborators();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -49,7 +51,7 @@ export const MetadataProvider = ({
     const context = new Context();
     window.sfMetadataContext = context;
     window.sfMetadataContext.init({ ...params, repoID, viewID });
-    storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID });
+    storeRef.current = new Store({ context: window.sfMetadataContext, repoId: repoID, viewId: viewID, collaborators });
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
     storeRef.current.load(PER_LOAD_NUMBER).then(() => {

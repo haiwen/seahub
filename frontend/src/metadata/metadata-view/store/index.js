@@ -10,7 +10,7 @@ import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import { normalizeColumns } from '../utils/column-utils';
-import { Metadata, User } from '../model';
+import { Metadata } from '../model';
 
 class Store {
 
@@ -26,7 +26,7 @@ class Store {
     this.isSendingOperation = false;
     this.isReadonly = false;
     this.serverOperator = new ServerOperator();
-    this.collaborators = [];
+    this.collaborators = props.collaborators;
   }
 
   destroy = () => {
@@ -59,8 +59,6 @@ class Store {
   async load(limit = PER_LOAD_NUMBER) {
     const viewRes = await this.context.getView(this.viewId);
     const view = viewRes?.data?.view || {};
-    const collaboratorsRes = await this.context.getCollaborators();
-    this.collaborators = Array.isArray(collaboratorsRes?.data?.user_list) ? collaboratorsRes.data.user_list.map(user => new User(user)) : [];
     await this.loadMetadata(view, limit);
   }
 
