@@ -315,7 +315,7 @@ class GenerateUploadLink extends React.Component {
 
             {sharedUploadInfo.expire_date && (
               <>
-                <dt className="text-secondary font-weight-normal">{gettext('Expiration Date')}</dt>
+                <dt className="text-secondary font-weight-normal">{gettext('Expiration date')}</dt>
                 <dd>
                   {this.state.isEditingExpiration ? (
                     <div className="ml-4">

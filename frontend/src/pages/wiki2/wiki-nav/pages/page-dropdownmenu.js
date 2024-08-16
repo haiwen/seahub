@@ -52,7 +52,7 @@ export default class PageDropdownMenu extends Component {
   };
 
   duplicatePageFailure = () => {
-    toaster.danger(gettext('Failed_to_duplicate_page'));
+    toaster.danger(gettext('Failed to duplicate page'));
   };
 
   handleCopyLink = () => {

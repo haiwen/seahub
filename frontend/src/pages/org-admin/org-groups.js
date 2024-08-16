@@ -145,7 +145,7 @@ class OrgGroups extends Component {
       this.setState({
         orgGroups: newGroupList
       });
-      toaster.success(gettext('Successfully Change the group.'));
+      toaster.success(gettext('Successfully change the group'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

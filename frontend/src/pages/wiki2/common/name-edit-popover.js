@@ -48,7 +48,7 @@ class NameEditPopover extends Component {
         boundariesElement={document.body}
       >
         <div className="name-edit-popover-header">
-          <span className='header-text'>{gettext('Modify Name')}</span>
+          <span className='header-text'>{gettext('Modify name')}</span>
         </div>
         <PopoverBody className="name-edit-content">
           <div className="item-name-editor">

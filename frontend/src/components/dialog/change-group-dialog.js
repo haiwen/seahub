@@ -26,7 +26,7 @@ class ChangeGroupDialog extends React.Component {
 
   render() {
     const groupName = '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) + '</span>';
-    const msg = gettext('Are you sure to change Group {placeholder} to Department ?').replace('{placeholder}', groupName);
+    const msg = gettext('Are you sure to change group {placeholder} to department ?').replace('{placeholder}', groupName);
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>

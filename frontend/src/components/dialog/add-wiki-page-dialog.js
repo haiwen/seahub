@@ -54,7 +54,7 @@ class AddWikiPageDialog extends React.Component {
     const { handleClose } = this.props;
     return (
       <Modal isOpen={true} toggle={handleClose} onOpened={this.onDialogLoad}>
-        <ModalHeader toggle={handleClose}>{gettext('New Wiki Page')}</ModalHeader>
+        <ModalHeader toggle={handleClose}>{gettext('New page')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

@@ -39,7 +39,7 @@ const _validateColumnType = ({ column, metadata, gettext }) => {
   if (column.unique && getColumnByKey(metadata.columns, column.key)) {
     return {
       type: COMMON_FORM_FIELD_TYPE.COLUMN_TYPE,
-      tips: gettext('Another property has this column type'),
+      tips: gettext('Another property has this property type'),
     };
   }
   return null;

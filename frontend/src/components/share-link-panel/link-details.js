@@ -179,7 +179,7 @@ class LinkDetails extends React.Component {
           </dd>
           {!sharedLinkInfo.is_dir && sharedLinkInfo.permissions.can_download && ( // just for file
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link')}</dt>
+              <dt className="text-secondary font-weight-normal">{gettext('Direct download link')}</dt>
               <dd>
                 <SharedLink
                   link={`${sharedLinkInfo.link}?dl=1`}
@@ -212,7 +212,7 @@ class LinkDetails extends React.Component {
           )}
           {sharedLinkInfo.expire_date && (
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Expiration Date')}</dt>
+              <dt className="text-secondary font-weight-normal">{gettext('Expiration date')}</dt>
               <dd>
                 {this.state.isEditingExpiration ? (
                   <div className="ml-4">
