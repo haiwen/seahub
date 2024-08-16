@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import listener from './globalEventListener';
 import { hideMenu } from './actions';
 import { callIfExists } from './helpers';
@@ -24,6 +25,8 @@ class ContextMenu extends React.Component {
       isVisible: false,
       currentObject: null,
       menuList: [],
+      isSubMenuShown: false,
+      currentItem: ''
     };
   }
 
@@ -183,6 +186,28 @@ class ContextMenu extends React.Component {
     event.stopPropagation();
   };
 
+  onDropDownMouseMove = (e) => {
+    if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
+      this.setState({
+        isSubMenuShown: false
+      });
+    }
+  };
+
+  toggleSubMenu = (e) => {
+    e.stopPropagation();
+    this.setState({
+      isSubMenuShown: !this.state.isSubMenuShown
+    });
+  };
+
+  toggleSubMenuShown = (item) => {
+    this.setState({
+      isSubMenuShown: true,
+      currentItem: item.key
+    });
+  };
+
   render() {
     const inlineStyle = { position: 'fixed', opacity: 0, pointerEvents: 'none', display: 'block' };
     return (
@@ -190,6 +215,37 @@ class ContextMenu extends React.Component {
         {this.state.menuList.map((menuItem, index) => {
           if (menuItem === 'Divider') {
             return <div key={index} className="seafile-divider dropdown-divider"></div>;
+          } else if (menuItem.subOpList) {
+            return (
+              <Dropdown
+                key={index}
+                direction="right"
+                className="w-100"
+                isOpen={this.state.isSubMenuShown && this.state.currentItem == menuItem.key}
+                toggle={this.toggleSubMenu}
+                onMouseMove={(e) => {e.stopPropagation();}}
+              >
+                <DropdownToggle
+                  tag='div'
+                  className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+                  onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
+                >
+                  <span className="mr-auto">{menuItem.value}</span>
+                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                </DropdownToggle>
+                <DropdownMenu>
+                  {menuItem.subOpList.map((item, index) => {
+                    if (item == 'Divider') {
+                      return <DropdownItem key={index} divider />;
+                    } else {
+                      return (
+                        <DropdownItem key={index} data-operation={item.key} onClick={this.onMenuItemClick} onContextMenu={this.onContextMenu}>{item.value}</DropdownItem>
+                      );
+                    }
+                  })}
+                </DropdownMenu>
+              </Dropdown>
+            );
           } else {
             return (
               <button
