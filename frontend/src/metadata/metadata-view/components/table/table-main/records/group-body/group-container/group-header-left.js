@@ -40,7 +40,7 @@ class GroupHeaderLeft extends Component {
         />
         <div className="group-rows-count">
           <div className="group-rows-count-content">
-            {level === maxLevel && <span className="count-title">{gettext('Count')}</span>}
+            {level === maxLevel && <span className="count-title">{gettext('Amount')}</span>}
             <span className="count-num">{count}</span>
           </div>
         </div>

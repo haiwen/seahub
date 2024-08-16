@@ -18,7 +18,7 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange }) => {
           <HideColumn
             key={column.key}
             readOnly={readOnly}
-            isHidden={hiddenColumns.includes(column.key)}
+            isHidden={!hiddenColumns.includes(column.key)}
             column={column}
             onChange={onChange}
           />
