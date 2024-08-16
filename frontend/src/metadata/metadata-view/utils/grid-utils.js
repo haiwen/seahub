@@ -91,7 +91,9 @@ class GridUtils {
       const copiedRecordIndex = i % copiedRecordsLen;
       const copiedRecord = copiedRecords[copiedRecordIndex];
       let originalUpdate = {};
+      let originalKeyUpdate = {};
       let originalOldRecordData = {};
+      let originalKeyOldRecordData = {};
       const { canModifyRow, canModifyColumn } = window.sfMetadataContext;
 
       for (let j = 0; j < pasteColumnsLen; j++) {
@@ -110,17 +112,17 @@ class GridUtils {
           continue;
         }
         originalUpdate[pasteColumnName] = update;
+        originalKeyUpdate[pasteColumn.key] = update;
         originalOldRecordData[pasteColumnName] = pasteCellValue;
+        originalKeyOldRecordData[pasteColumn.key] = pasteCellValue;
       }
 
       if (Object.keys(originalUpdate).length > 0) {
         updateRecordIds.push(updateRecordId);
-        const update = originalUpdate;
-        const oldRecordData = originalOldRecordData;
-        idRecordUpdates[updateRecordId] = update;
-        idOriginalRecordUpdates[updateRecordId] = originalUpdate;
-        idOldRecordData[updateRecordId] = oldRecordData;
-        idOriginalOldRecordData[updateRecordId] = originalOldRecordData;
+        idRecordUpdates[updateRecordId] = originalUpdate;
+        idOriginalRecordUpdates[updateRecordId] = originalKeyUpdate;
+        idOldRecordData[updateRecordId] = originalOldRecordData;
+        idOriginalOldRecordData[updateRecordId] = originalKeyOldRecordData;
       }
     }
 
