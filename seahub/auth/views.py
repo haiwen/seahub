@@ -43,7 +43,6 @@ from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_fac
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.organizations.models import OrgSAMLConfig
-from seahub.sysadmin_extra.models import UserLoginLog
 
 from constance import config
 
@@ -78,7 +77,9 @@ def log_user_in(request, user, redirect_to):
 
     # Okay, security checks complete. Log the user in.
     auth_login(request, user)
-    if UserLoginLog.objects.filter(username=user.username, login_success=1).count() == 1:
+    enable_login_email = bool(UserOptions.objects.get_login_email_enable_status(user.username))
+    already_logs = request.session.get('_already_logged', [])
+    if user.username not in already_logs and enable_login_email:
         email_template_name = 'registration/browse_login_email.html'
         send_to = email2contact_email(request.user.username)
         site_name = get_site_name()

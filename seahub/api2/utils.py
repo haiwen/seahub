@@ -34,6 +34,8 @@ from seahub.utils import get_user_repos, send_html_email, get_site_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
+from seahub.options.models import UserOptions
+
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
 
@@ -210,8 +212,8 @@ def get_token_v2(request, username, platform, device_id, device_name,
             raise serializers.ValidationError('invalid device id')
     else:
         raise serializers.ValidationError('invalid platform')
-
-    if not TokenV2.objects.filter(user=username, device_id=device_id).first():
+    enable_new_device_email = bool(UserOptions.objects.get_login_email_enable_status(username))
+    if not TokenV2.objects.filter(user=username, device_id=device_id).first() and enable_new_device_email:
         email_template_name='registration/new_device_login_email.html'
         send_to = email2contact_email(username)
         site_name = get_site_name()

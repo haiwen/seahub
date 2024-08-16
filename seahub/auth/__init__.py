@@ -119,7 +119,11 @@ def logout(request):
     session data.
     Also remove all passwords used to decrypt repos.
     """
+    already_logged_list = request.session.get('_already_logged', [])
     request.session.flush()
+    if request.user.username not in already_logged_list:
+        already_logged_list.append(request.user.username)
+    request.session['_already_logged'] = already_logged_list
     if hasattr(request, 'user'):
         from seahub.base.accounts import User
         if isinstance(request.user, User):

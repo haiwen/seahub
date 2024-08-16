@@ -1,12 +1,15 @@
 import React from 'react';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { userAPI } from '../../utils/user-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
 const {
   fileUpdatesEmailInterval,
-  collaborateEmailInterval
+  collaborateEmailInterval,
+  enableLoginEmail,
+  enablePasswordUpdateEmail,
+
 } = window.app.pageOptions;
 
 class EmailNotice extends React.Component {
@@ -28,9 +31,21 @@ class EmailNotice extends React.Component {
       { interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not been read within one hour, they will be sent to your mailbox.') + ')' }
     ];
 
+    this.passwordOption = [
+      { enabled: 0, text: gettext('Don\'t send emails') },
+      { enabled: 1, text: gettext('Send email after changing password') }
+    ];
+
+    this.loginOption = [
+      { enabled: 0, text: gettext('Don\'t send emails') },
+      { enabled: 1, text: gettext('Send an email when a new device or browser logs in for the first time') }
+    ];
+
     this.state = {
       fileUpdatesEmailInterval: fileUpdatesEmailInterval,
-      collaborateEmailInterval: collaborateEmailInterval
+      collaborateEmailInterval: collaborateEmailInterval,
+      enableLoginEmail: enableLoginEmail,
+      enablePasswordUpdateEmail: enablePasswordUpdateEmail
     };
   }
 
@@ -50,11 +65,27 @@ class EmailNotice extends React.Component {
     }
   };
 
+  inputPasswordEmailEnabledChange = (e) => {
+    if (e.target.checked) {
+      this.setState({
+        enablePasswordUpdateEmail: parseInt(e.target.value)
+      });
+    }
+  };
+
+  inputLoginEmailEnabledChange = (e) => {
+    if (e.target.checked) {
+      this.setState({
+        enableLoginEmail: parseInt(e.target.value)
+      });
+    }
+  };
+
   formSubmit = (e) => {
     e.preventDefault();
-    let { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;
-    seafileAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval).then((res) => {
-      toaster.success(gettext('Email notification updated'));
+    let { fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail } = this.state;
+    userAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail).then((res) => {
+      toaster.success(gettext('Success'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -62,7 +93,7 @@ class EmailNotice extends React.Component {
   };
 
   render() {
-    const { fileUpdatesEmailInterval, collaborateEmailInterval } = this.state;
+    const { fileUpdatesEmailInterval, collaborateEmailInterval, enableLoginEmail, enablePasswordUpdateEmail } = this.state;
     return (
       <div className="setting-item" id="email-notice">
         <h3 className="setting-item-heading">{gettext('Email Notification')}</h3>
@@ -85,6 +116,27 @@ class EmailNotice extends React.Component {
               <div className="d-flex align-items-start" key={`collaborate-${index}`}>
                 <input type="radio" name="col-interval" value={item.interval} className="mt-1" id={`collaborate-interval-option-${index + 1}`} checked={collaborateEmailInterval == item.interval} onChange={this.inputCollaborateEmailIntervalChange} />
                 <label className="m-0 ml-2" htmlFor={`collaborate-interval-option-${index + 1}`}>{item.text}</label>
+              </div>
+            );
+          })}
+
+          <h4 className="mt-3 h6">{gettext('Notifications of change password')}</h4>
+          {this.passwordOption.map((item, index) => {
+            return (
+              <div className="d-flex align-items-start" key={`password-${index}`}>
+                <input type="radio" name="pwd-interval" value={item.enabled} className="mt-1" id={`password-interval-option-${index + 1}`} checked={enablePasswordUpdateEmail == item.enabled} onChange={this.inputPasswordEmailEnabledChange} />
+                <label className="m-0 ml-2" htmlFor={`password-interval-option-${index + 1}`}>{item.text}</label>
+              </div>
+            );
+          })}
+
+          <h4 className="mt-3 h6">{gettext('Notifications of login')}</h4>
+          <p className="mb-1">{gettext('Send a mail as soon as a new device or browser has signed into the account (like google and many other services do).')}</p>
+          {this.loginOption.map((item, index) => {
+            return (
+              <div className="d-flex" key={`login-updates-${index}`}>
+                <input type="radio" name="login-interval" value={item.enabled} id={`login-updates-interval-option-${index + 1}`} checked={enableLoginEmail == item.enabled} onChange={this.inputLoginEmailEnabledChange} />
+                <label className="m-0 ml-2" htmlFor={`login-updates-interval-option-${index + 1}`}>{item.text}</label>
               </div>
             );
           })}
