@@ -68,7 +68,7 @@ class Content extends Component {
                   <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Created At')} {sortBy == 'ctime' ? sortIcon : initialSortIcon}</a>
                 </th>
                 <th width="10%">
-                  <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByCount}>{gettext('Count')} {sortBy == 'view_cnt' ? sortIcon : initialSortIcon}</a>
+                  <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByCount}>{gettext('Visit count')} {sortBy == 'view_cnt' ? sortIcon : initialSortIcon}</a>
                 </th>
                 <th width="11%">{gettext('Expiration')}</th>
                 <th width="10%">{/* Operations*/}</th>

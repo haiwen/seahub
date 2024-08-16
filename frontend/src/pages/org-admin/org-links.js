@@ -100,7 +100,7 @@ class OrgLinks extends React.Component {
                     <th width="50%">{gettext('Name')}</th>
                     <th width="15%">{gettext('Owner')}</th>
                     <th width="15%">{gettext('Created At')}</th>
-                    <th width="10%">{gettext('Count')}</th>
+                    <th width="10%">{gettext('Visit count')}</th>
                     <th width="10%"></th>
                   </tr>
                 </thead>

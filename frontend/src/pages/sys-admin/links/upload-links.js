@@ -48,7 +48,7 @@ class Content extends Component {
                 <th width="18%">{gettext('Token')}</th>
                 <th width="18%">{gettext('Owner')}</th>
                 <th width="15%">{gettext('Created At')}</th>
-                <th width="10%">{gettext('Count')}</th>
+                <th width="10%">{gettext('Visit count')}</th>
                 <th width="11%">{gettext('Expiration')}</th>
                 <th width="10%">{/* Operations*/}</th>
               </tr>

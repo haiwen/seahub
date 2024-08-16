@@ -4941,7 +4941,7 @@ msgstr "所有公开链接"
 #: frontend/src/pages/org-admin/org-links.js:103
 #: frontend/src/pages/sys-admin/links/share-links.js:71
 msgid "Count"
-msgstr "访问次数"
+msgstr "数量"
 
 #: frontend/src/pages/org-admin/org-links.js:217
 msgid "View Link"

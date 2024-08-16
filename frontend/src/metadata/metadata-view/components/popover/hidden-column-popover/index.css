@@ -59,7 +59,7 @@
   background: #f5f5f5;
 }
 
-.sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:not(.disabled):hover
+.sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:not(.disabled):hover,
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:not(.disabled):hover * {
   cursor: pointer;
 }
