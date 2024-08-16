@@ -35,6 +35,8 @@ class ItemDropdownMenu extends React.Component {
     this.state = {
       menuList: [],
       isItemMenuShow: false,
+      isSubMenuShown: false,
+      currentItem: ''
     };
   }
 
@@ -112,6 +114,28 @@ class ItemDropdownMenu extends React.Component {
     this.props.onMenuItemClick(operation, event, item);
   };
 
+  onDropDownMouseMove = (e) => {
+    if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
+      this.setState({
+        isSubMenuShown: false
+      });
+    }
+  };
+
+  toggleSubMenu = (e) => {
+    e.stopPropagation();
+    this.setState({
+      isSubMenuShown: !this.state.isSubMenuShown
+    });
+  };
+
+  toggleSubMenuShown = (item) => {
+    this.setState({
+      isSubMenuShown: true,
+      currentItem: item.key
+    });
+  };
+
   render() {
     let menuList = this.state.menuList;
     let { toggleClass, toggleChildren, tagName, menuStyle } = this.props;
@@ -165,10 +189,44 @@ class ItemDropdownMenu extends React.Component {
           // onClick={this.onDropdownToggleClick}
         />
         <ModalPortal>
-          <DropdownMenu style={menuStyle}>
+          <DropdownMenu
+            style={menuStyle}
+            onMouseMove={this.onDropDownMouseMove}
+          >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
                 return <DropdownItem key={index} divider />;
+              } else if (menuItem.subOpList) {
+                return (
+                  <Dropdown
+                    key={index}
+                    direction="right"
+                    className="w-100"
+                    isOpen={this.state.isSubMenuShown && this.state.currentItem == menuItem.key}
+                    toggle={this.toggleSubMenu}
+                    onMouseMove={(e) => {e.stopPropagation();}}
+                  >
+                    <DropdownToggle
+                      tag='div'
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+                      onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
+                    >
+                      <span className="mr-auto">{menuItem.value}</span>
+                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {menuItem.subOpList.map((item, index) => {
+                        if (item == 'Divider') {
+                          return <DropdownItem key={index} divider />;
+                        } else {
+                          return (
+                            <DropdownItem key={index} data-toggle={item.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{item.value}</DropdownItem>
+                          );
+                        }
+                      })}
+                    </DropdownMenu>
+                  </Dropdown>
+                );
               } else {
                 return (
                   <DropdownItem className='p-0' key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>

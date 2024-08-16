@@ -25,6 +25,7 @@ const TextTranslation = {
   'UNLOCK': { key: 'Unlock', value: gettext('Unlock') },
   'FREEZE_DOCUMENT': { key: 'Freeze Document', value: gettext('Freeze Document') },
   'UNFREEZE_DOCUMENT': { key: 'Unfreeze Document', value: gettext('Unfreeze Document') },
+  'CONVERT_AND_EXPORT': { key: 'Convert & Export', value: gettext('Convert & Export') },
   'CONVERT_TO_MARKDOWN': { key: 'Convert to Markdown', value: gettext('Convert to Markdown') },
   'CONVERT_TO_SDOC': { key: 'Convert to sdoc', value: gettext('Convert to sdoc') },
   'CONVERT_TO_DOCX': { key: 'Convert to docx', value: gettext('Convert to docx') },
