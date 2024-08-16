@@ -322,7 +322,7 @@ class DirColumnNav extends React.Component {
                 isDisplayFiles={this.state.isDisplayFiles}
               />
             </TreeSection>
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} />
+            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirOthers
               repoID={repoID}
               userPerm={userPerm}

@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 import TreeSection from '../tree-section';
 import { MetadataStatusManagementDialog, MetadataTreeView, useMetadata } from '../../metadata';
 
-const DirViews = ({ userPerm, repoID, currentPath }) => {
+const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -13,8 +13,7 @@ const DirViews = ({ userPerm, repoID, currentPath }) => {
   const [showMetadataStatusManagementDialog, setShowMetadataStatusManagementDialog] = useState(false);
   const { enableMetadata, updateEnableMetadata, navigation } = useMetadata();
   const moreOperations = useMemo(() => {
-    if (!enableMetadataManagement) return [];
-    if (userPerm !== 'rw' && userPerm !== 'admin') return [];
+    if (!enableMetadataManagement || !currentRepoInfo.is_admin) return [];
     return [
       { key: 'extended-properties', value: gettext('Extended properties') }
     ];
