@@ -15,6 +15,7 @@ const SingleSelectEditor = forwardRef(({
   columns,
   record,
   value: oldValue,
+  editorPosition = { left: 0, top: 0 },
   onCommit,
   onPressTab,
   modifyColumnData,
@@ -175,7 +176,8 @@ const SingleSelectEditor = forwardRef(({
     if (editorRef.current) {
       const { bottom } = editorRef.current.getBoundingClientRect();
       if (bottom > window.innerHeight) {
-        editorRef.current.style.top = (parseInt(editorRef.current.style.top) - bottom + window.innerHeight) + 'px';
+        editorRef.current.style.top = 'unset';
+        editorRef.current.style.bottom = editorPosition.top + height - window.innerHeight + 'px';
       }
     }
     if (editorContainerRef.current && selectItemRef.current) {
@@ -269,6 +271,7 @@ SingleSelectEditor.propTypes = {
   columns: PropTypes.array,
   record: PropTypes.object,
   value: PropTypes.string,
+  editorPosition: PropTypes.object,
   onCommit: PropTypes.func,
   onPressTab: PropTypes.func,
 };

@@ -20,8 +20,6 @@ const DeleteOption = ({ value, options, onDelete }) => {
     return [...selectedOptions, ...invalidOptions];
   }, [options, value]);
 
-  if (displayOptions.length === 0) return null;
-
   return (
     <div className="sf-metadata-delete-select-options">
       {displayOptions.map(option => {

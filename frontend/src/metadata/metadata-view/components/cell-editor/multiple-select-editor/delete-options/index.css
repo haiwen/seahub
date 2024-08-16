@@ -10,13 +10,17 @@
 .sf-metadata-delete-select-options .sf-metadata-delete-select-option {
   margin-top: 5px;
   margin-bottom: 5px;
+  margin-right: 10px;
   align-items: center;
+  max-width: 100% !important;
+  overflow: hidden
 }
 
 .sf-metadata-delete-select-options .sf-metadata-delete-select-option .sf-metadata-delete-select-remove {
   height: 14px;
   width: 14px;
-  margin-left: 2px;
+  position: relative;
+  left: 2px;
 }
 
 .sf-metadata-delete-select-options .sf-metadata-delete-select-option .sf-metadata-icon-x-01 {

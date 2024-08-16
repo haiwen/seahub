@@ -12,10 +12,6 @@
   padding: 2px 6px;
 }
 
-.sf-metadata-multiple-select-property-detail-editor .sf-metadata-delete-select-options .sf-metadata-delete-select-option {
-  margin-right: 10px;
-}
-
 .sf-metadata-multiple-select-property-editor-popover .sf-metadata-delete-select-options {
   display: none;
 }

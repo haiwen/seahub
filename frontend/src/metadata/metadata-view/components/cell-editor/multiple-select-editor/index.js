@@ -11,9 +11,11 @@ import DeleteOption from './delete-options';
 import './index.css';
 
 const MultipleSelectEditor = forwardRef(({
+  height,
   saveImmediately,
   column,
   value: oldValue,
+  editorPosition = { left: 0, top: 0 },
   onCommit,
   onPressTab,
   modifyColumnData,
@@ -179,7 +181,8 @@ const MultipleSelectEditor = forwardRef(({
     if (editorRef.current) {
       const { bottom } = editorRef.current.getBoundingClientRect();
       if (bottom > window.innerHeight) {
-        editorRef.current.style.top = (parseInt(editorRef.current.style.top) - bottom + window.innerHeight) + 'px';
+        editorRef.current.style.top = 'unset';
+        editorRef.current.style.bottom = editorPosition.top + height - window.innerHeight + 'px';
       }
     }
     if (editorContainerRef.current && selectItemRef.current) {
@@ -269,8 +272,10 @@ const MultipleSelectEditor = forwardRef(({
 });
 
 MultipleSelectEditor.propTypes = {
+  height: PropTypes.number,
   column: PropTypes.object,
   value: PropTypes.array,
+  editorPosition: PropTypes.object,
   onCommit: PropTypes.func,
   onPressTab: PropTypes.func,
 };

@@ -55,5 +55,6 @@
 .sf-metadata-delete-collaborator .collaborator .collaborator-remove {
   height: 14px;
   width: 14px;
-  margin-left: 2px;
+  position: relative;
+  left: 2px;
 }

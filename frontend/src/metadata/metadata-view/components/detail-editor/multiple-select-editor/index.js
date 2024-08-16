@@ -84,6 +84,13 @@ const MultipleSelectEditor = ({ field, value, record, fields, onChange, modifyCo
     );
   }, [showEditor, onCommit, record, value, modifyColumnData, fields, field]);
 
+  const isEmpty = useMemo(() => {
+    if (!Array.isArray(value) || value.length === 0) return true;
+    const selectedOptions = options.filter((option) => value.includes(option.id) || value.includes(option.name));
+    const invalidOptionIds = value.filter(optionId => optionId && !options.find(o => o.id === optionId || o.name === optionId));
+    return selectedOptions.length + invalidOptionIds.length === 0;
+  }, [options, value]);
+
   return (
     <div
       className="sf-metadata-property-detail-editor sf-metadata-single-select-property-detail-editor sf-metadata-multiple-select-property-detail-editor"
@@ -91,7 +98,7 @@ const MultipleSelectEditor = ({ field, value, record, fields, onChange, modifyCo
       ref={ref}
       onClick={openEditor}
     >
-      <DeleteOptions value={value} options={options} onDelete={deleteOption} />
+      {!isEmpty && (<DeleteOptions value={value} options={options} onDelete={deleteOption} />)}
       {renderEditor()}
     </div>
   );

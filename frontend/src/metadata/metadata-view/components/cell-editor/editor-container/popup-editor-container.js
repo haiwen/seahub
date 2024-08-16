@@ -22,7 +22,7 @@ class PopupEditorContainer extends React.Component {
     super(props);
     const { column, width, height, left, top } = this.props;
     let additionalStyles = {};
-    if (column.type === CellType.SINGLE_SELECT) {
+    if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
       additionalStyles = { width, height };
     }
     this.state = {
