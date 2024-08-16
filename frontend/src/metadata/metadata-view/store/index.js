@@ -26,7 +26,7 @@ class Store {
     this.isSendingOperation = false;
     this.isReadonly = false;
     this.serverOperator = new ServerOperator();
-    this.collaborators = props.collaborators;
+    this.collaborators = props.collaborators || [];
   }
 
   destroy = () => {
