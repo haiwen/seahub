@@ -130,8 +130,7 @@ class EmailNotice extends React.Component {
             );
           })}
 
-          <h4 className="mt-3 h6">{gettext('Notifications of login')}</h4>
-          <p className="mb-1">{gettext('Send a mail as soon as a new device or browser has signed into the account (like google and many other services do).')}</p>
+          <h4 className="mt-3 h6">{gettext(' Send a mail as soon as a new device or browser has signed into the account')}</h4>
           {this.loginOption.map((item, index) => {
             return (
               <div className="d-flex" key={`login-updates-${index}`}>

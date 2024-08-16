@@ -20,7 +20,7 @@ from saml2.ident import decode
 from seaserv import seafile_api, ccnet_api
 from seahub.settings import SSO_SECRET_KEY
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
-from seahub.auth import login as auth_login
+from seahub.auth import login as auth_login, SESSION_USERS_LOGIN
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
@@ -52,7 +52,7 @@ from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 from seahub.utils import send_html_email
 from django.utils.translation import gettext_lazy as _
-from seahub.base.templatetags.seahub_tags import email2contact_email
+from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -78,16 +78,16 @@ def log_user_in(request, user, redirect_to):
     # Okay, security checks complete. Log the user in.
     auth_login(request, user)
     enable_login_email = bool(UserOptions.objects.get_login_email_enable_status(user.username))
-    already_logs = request.session.get('_already_logged', [])
-    if user.username not in already_logs and enable_login_email:
-        email_template_name = 'registration/browse_login_email.html'
+    already_login_users = request.session.get(SESSION_USERS_LOGIN, [])
+    if user.username not in already_login_users and enable_login_email:
+        email_template_name = 'registration/login_email.html'
         send_to = email2contact_email(request.user.username)
         site_name = get_site_name()
         c = {
-            'email': send_to
+            'name': email2nickname(user.username)
         }
         try:
-            send_html_email(_("%s account login reminder") % site_name,
+            send_html_email(_("Welcome to %s") % site_name,
                             email_template_name, c, None,
                             [send_to])
         except Exception as e:

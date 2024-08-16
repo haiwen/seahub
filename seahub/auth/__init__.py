@@ -13,6 +13,7 @@ from constance import config
 from seaserv import ccnet_api
 
 SESSION_KEY = '_auth_user_name'
+SESSION_USERS_LOGIN = '_already_loging_users'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
 REDIRECT_FIELD_NAME = 'next'
 SESSION_MOBILE_LOGIN_KEY = "MOBILE_LOGIN"
@@ -119,12 +120,13 @@ def logout(request):
     session data.
     Also remove all passwords used to decrypt repos.
     """
-    already_logged_list = request.session.get('_already_logged', [])
+    already_logged_list = request.session.get(SESSION_USERS_LOGIN, [])
     request.session.flush()
-    if request.user.username not in already_logged_list:
-        already_logged_list.append(request.user.username)
-    request.session['_already_logged'] = already_logged_list
     if hasattr(request, 'user'):
+        username = request.user.username
+        if username not in already_logged_list:
+            already_logged_list.append(username)
+        request.session[SESSION_USERS_LOGIN] = already_logged_list
         from seahub.base.accounts import User
         if isinstance(request.user, User):
             # Do not directly/indirectly import models in package root level.
