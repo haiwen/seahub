@@ -174,7 +174,7 @@ export const getColumnDisplayName = (key, name) => {
     case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
       return gettext('Last modifier');
     case PRIVATE_COLUMN_KEY.IS_DIR:
-      return gettext('Is folder');
+      return '';
     case PRIVATE_COLUMN_KEY.PARENT_DIR:
       return gettext('Parent folder');
     case PRIVATE_COLUMN_KEY.FILE_NAME:

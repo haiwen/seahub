@@ -73,7 +73,7 @@ export default class OptionFooter extends React.Component {
   };
 
   handleImportOptionsError = () => {
-    toaster.success(gettext('Failed_imported_options_reupload'));
+    toaster.success(gettext('Failed imported options'));
   };
 
   render() {

@@ -267,7 +267,7 @@ class LinkDetails extends React.Component {
             </>
           )}
           <>
-            <dt className="text-secondary font-weight-normal">{gettext('Scope')}</dt>
+            <dt className="text-secondary font-weight-normal">{gettext('Access scope')}</dt>
             <dd className="d-flex align-items-center flex-wrap">
               <div className="share-link-details-item mr-2">
                 <ShareLinkScopeEditor
