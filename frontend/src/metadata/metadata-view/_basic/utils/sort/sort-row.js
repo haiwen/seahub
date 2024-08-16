@@ -6,6 +6,7 @@ import {
   sortNumber,
   sortCollaborator,
   sortCheckbox,
+  sortMultipleSelect,
 } from './sort-column';
 import { CellType, DATE_COLUMN_OPTIONS } from '../../constants/column';
 import { getCellValueByColumn, getCollaboratorsNames } from '../cell';
@@ -31,6 +32,8 @@ const sortRowsWithMultiSorts = (tableRows, sorts, { collaborators }) => {
         initValue = initValue || sortSingleSelect(currCellVal, nextCellVal, sort);
       } else if (NUMBER_SORTER_COLUMN_TYPES.includes(columnType)) {
         initValue = initValue || sortNumber(currCellVal, nextCellVal, sort_type);
+      } else if (columnType === CellType.MULTIPLE_SELECT) {
+        initValue = initValue || sortMultipleSelect(currCellVal, nextCellVal, sort);
       } else if (columnType === CellType.COLLABORATOR) {
         let currValidCollaborators = currCellVal;
         let nextValidCollaborators = nextCellVal;

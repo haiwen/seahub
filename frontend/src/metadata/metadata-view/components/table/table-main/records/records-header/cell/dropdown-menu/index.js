@@ -181,6 +181,16 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
               /> */}
             </>
           )}
+          {type === CellType.MULTIPLE_SELECT && (
+            <DropdownItem
+              disabled={!canModifyColumnData}
+              target="sf-metadata-edit-column-options"
+              iconName="multiple-select"
+              title={gettext('Edit multiple select')}
+              tip={gettext('You do not have permission')}
+              onChange={openOptionPopover}
+            />
+          )}
           {type === CellType.NUMBER && (
             <DropdownItem
               disabled={!canModifyColumnData}
@@ -194,7 +204,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
           {type === CellType.DATE && (
             <>{renderDateFormat(canModifyColumnData)}</>
           )}
-          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.NUMBER].includes(column.type) && (
+          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.NUMBER, CellType.MULTIPLE_SELECT].includes(column.type) && (
             <DefaultDropdownItem key="divider-item" divider />
           )}
           <DropdownItem

@@ -11,6 +11,8 @@ export {
 export {
   getOption,
   getColumnOptionNameById,
+  getColumnOptionNamesByIds,
+  getColumnOptionIdsByNames,
   getOptionName,
   getMultipleOptionName,
 } from './option';

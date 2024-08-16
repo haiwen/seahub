@@ -1,0 +1,17 @@
+.sf-metadata-multiple-select-property-detail-editor {
+  min-height: 34px;
+  width: 100%;
+  height: auto;
+}
+
+.sf-metadata-multiple-select-property-detail-editor .sf-metadata-delete-select-options {
+  min-height: 34px;
+  border-bottom: none;
+  background-color: inherit;
+  border-radius: unset;
+  padding: 2px 6px;
+}
+
+.sf-metadata-multiple-select-property-editor-popover .sf-metadata-delete-select-options {
+  display: none;
+}

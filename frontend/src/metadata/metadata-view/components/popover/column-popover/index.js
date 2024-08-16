@@ -69,7 +69,7 @@ const ColumnPopover = ({ target, onChange }) => {
     if (Object.keys(data).length === 0) {
       data = null;
       if (!column.unique) {
-        if (column.type === CellType.SINGLE_SELECT) {
+        if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
           data = { options: [] };
         } else if (column.type === CellType.DATE) {
           data = { format: DEFAULT_DATE_FORMAT };

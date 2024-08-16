@@ -11,9 +11,11 @@ import DeleteCollaborator from './delete-collaborator';
 import './index.css';
 
 const CollaboratorEditor = forwardRef(({
+  height,
   saveImmediately = false,
   column,
   value: oldValue,
+  editorPosition = { left: 0, top: 0 },
   onCommit,
   onPressTab,
   onClose,
@@ -178,7 +180,8 @@ const CollaboratorEditor = forwardRef(({
     if (editorRef.current) {
       const { bottom } = editorRef.current.getBoundingClientRect();
       if (bottom > window.innerHeight) {
-        editorRef.current.style.top = `${window.innerHeight - bottom}px`;
+        editorRef.current.style.top = 'unset';
+        editorRef.current.style.bottom = editorPosition.top + height - window.innerHeight + 'px';
       }
     }
     if (editorContainerRef.current && collaboratorItemRef.current) {
@@ -238,8 +241,10 @@ const CollaboratorEditor = forwardRef(({
 
   }, [displayCollaborators, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectCollaborator]);
 
+  const isBeyondScreen = editorPosition.left + 300 > window.innerWidth;
+
   return (
-    <div className="sf-metadata-collaborator-editor" style={{ top: -38 }} ref={editorRef}>
+    <div className="sf-metadata-collaborator-editor" style={{ top: -38, left: isBeyondScreen ? 'unset' : 0, right: isBeyondScreen ? -column.width : 'unset' }} ref={editorRef}>
       <DeleteCollaborator value={value} onDelete={onDeleteCollaborator} />
       <div className="sf-metadata-search-collaborator-options">
         <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} className="sf-metadata-search-collaborators" />
@@ -253,8 +258,10 @@ const CollaboratorEditor = forwardRef(({
 
 CollaboratorEditor.propTypes = {
   saveImmediately: PropTypes.bool,
+  height: PropTypes.number,
   column: PropTypes.object,
   value: PropTypes.array,
+  editorPosition: PropTypes.object,
   onCommit: PropTypes.func,
   onClose: PropTypes.func,
   onPressTab: PropTypes.func,

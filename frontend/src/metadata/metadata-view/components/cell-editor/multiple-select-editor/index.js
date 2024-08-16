@@ -2,25 +2,25 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { SearchInput, CustomizeAddTool, Icon } from '@seafile/sf-metadata-ui-component';
-import { getCellValueByColumn, getColumnByKey, isFunction, getColumnOptions } from '../../../_basic';
+import { isFunction, getColumnOptions, getColumnOptionIdsByNames } from '../../../_basic';
 import { generateNewOption } from '../../../utils/select-utils';
 import { KeyCodes } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
+import DeleteOption from './delete-options';
 
 import './index.css';
 
-const SingleSelectEditor = forwardRef(({
+const MultipleSelectEditor = forwardRef(({
   height,
+  saveImmediately,
   column,
-  columns,
-  record,
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
   onCommit,
   onPressTab,
   modifyColumnData,
 }, ref) => {
-  const [value, setValue] = useState(oldValue || '');
+  const [value, setValue] = useState(getColumnOptionIdsByNames(column, oldValue));
   const [searchValue, setSearchValue] = useState('');
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);
@@ -31,21 +31,8 @@ const SingleSelectEditor = forwardRef(({
   const canEditData = window.sfMetadataContext.canModifyColumnData(column);
 
   const options = useMemo(() => {
-    const options = getColumnOptions(column);
-    const { data } = column;
-    const { cascade_column_key, cascade_settings } = data || {};
-    if (cascade_column_key) {
-      const cascadeColumn = getColumnByKey(columns, cascade_column_key);
-      if (cascadeColumn) {
-        const cascadeColumnValue = getCellValueByColumn(record, cascadeColumn);
-        if (!cascadeColumnValue) return [];
-        const cascadeSetting = cascade_settings[cascadeColumnValue];
-        if (!cascadeSetting || !Array.isArray(cascadeSetting) || cascadeSetting.length === 0) return [];
-        return options.filter(option => cascadeSetting.includes(option.id));
-      }
-    }
-    return options;
-  }, [record, column, columns]);
+    return getColumnOptions(column);
+  }, [column]);
 
   const displayOptions = useMemo(() => {
     if (!searchValue) return options;
@@ -60,8 +47,8 @@ const SingleSelectEditor = forwardRef(({
   }, [canEditData, displayOptions, searchValue]);
 
   const style = useMemo(() => {
-    return { width: column.width, top: height - 2 };
-  }, [column, height]);
+    return { width: column.width };
+  }, [column]);
 
   const blur = useCallback(() => {
     onCommit && onCommit(value);
@@ -73,12 +60,18 @@ const SingleSelectEditor = forwardRef(({
   }, [searchValue]);
 
   const onSelectOption = useCallback((optionId) => {
-    if (optionId === value) return;
-    setValue(optionId);
-    setTimeout(() => {
-      onCommit && onCommit(optionId);
-    }, 1);
-  }, [value, onCommit]);
+    const newValue = value.slice(0);
+    let optionIdx = value.indexOf(optionId);
+    if (optionIdx > -1) {
+      newValue.splice(optionIdx, 1);
+    } else {
+      newValue.push(optionId);
+    }
+    setValue(newValue);
+    if (saveImmediately) {
+      onCommit && onCommit(newValue);
+    }
+  }, [saveImmediately, value, onCommit]);
 
   const onMenuMouseEnter = useCallback((highlightIndex) => {
     setHighlightIndex(highlightIndex);
@@ -97,6 +90,18 @@ const SingleSelectEditor = forwardRef(({
     modifyColumnData(column.key, { options: newOptions }, { options: column.data.options || [] });
     onSelectOption(newOption.id);
   }, [column, searchValue, options, onSelectOption, modifyColumnData]);
+
+  const onDeleteOption = useCallback((optionId) => {
+    const newValue = value.slice(0);
+    const index = newValue.indexOf(optionId);
+    if (index > -1) {
+      newValue.splice(index, 1);
+    }
+    setValue(newValue);
+    if (saveImmediately) {
+      onCommit && onCommit(newValue);
+    }
+  }, [saveImmediately, value, onCommit]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -211,12 +216,12 @@ const SingleSelectEditor = forwardRef(({
     }
 
     return displayOptions.map((option, i) => {
-      const isSelected = value === option.id || value === option.name;
+      const isSelected = value.includes(option.id);
       return (
         <div key={option.id} className="sf-metadata-single-select-item" ref={selectItemRef}>
           <div
             className={classnames('single-select-container', { 'single-select-container-highlight': i === highlightIndex })}
-            onMouseDown={() => onSelectOption(isSelected ? null : option.id)}
+            onMouseDown={() => onSelectOption(option.id)}
             onMouseEnter={() => onMenuMouseEnter(i)}
             onMouseLeave={() => onMenuMouseLeave(i)}
           >
@@ -241,7 +246,8 @@ const SingleSelectEditor = forwardRef(({
   }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
 
   return (
-    <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
+    <div className="sf-metadata-single-select-editor sf-metadata-multiple-select-editor" style={style} ref={editorRef}>
+      <DeleteOption value={value} options={options} onDelete={onDeleteOption} />
       <div className="sf-metadata-search-single-select-options">
         <SearchInput
           placeholder={gettext('Search option')}
@@ -265,15 +271,13 @@ const SingleSelectEditor = forwardRef(({
   );
 });
 
-SingleSelectEditor.propTypes = {
+MultipleSelectEditor.propTypes = {
   height: PropTypes.number,
   column: PropTypes.object,
-  columns: PropTypes.array,
-  record: PropTypes.object,
-  value: PropTypes.string,
+  value: PropTypes.array,
   editorPosition: PropTypes.object,
   onCommit: PropTypes.func,
   onPressTab: PropTypes.func,
 };
 
-export default SingleSelectEditor;
+export default MultipleSelectEditor;

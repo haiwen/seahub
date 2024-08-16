@@ -10,6 +10,7 @@ import {
   singleSelectFilter,
   collaboratorFilter,
   numberFilter,
+  multipleSelectFilter,
 } from './filter-column';
 import {
   FILTER_CONJUNCTION_TYPE,
@@ -41,6 +42,9 @@ const getFilterResult = (row, filter, { username, userId }) => {
     }
     case CellType.SINGLE_SELECT: {
       return singleSelectFilter(cellValue, filter);
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return multipleSelectFilter(cellValue, filter);
     }
     case CellType.NUMBER: {
       return numberFilter(cellValue, filter);

@@ -107,7 +107,7 @@ class GridUtils {
         const copiedColumnName = getColumnOriginName(copiedColumn);
         const pasteCellValue = Object.prototype.hasOwnProperty.call(pasteRecord, pasteColumnName) ? getCellValueByColumn(pasteRecord, pasteColumn) : null;
         const copiedCellValue = Object.prototype.hasOwnProperty.call(copiedRecord, copiedColumnName) ? getCellValueByColumn(copiedRecord, copiedColumn) : null;
-        const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn);
+        const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn, this.api);
         if (update === pasteCellValue) {
           continue;
         }

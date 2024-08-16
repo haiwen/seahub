@@ -1,5 +1,6 @@
 /* basic css */
-.sf-metadata-single-select-option {
+.sf-metadata-single-select-option,
+.sf-metadata-multiple-select-option {
   border-radius: 10px;
   font-size: 13px;
   line-height: 20px;
@@ -12,5 +13,3 @@
   white-space: nowrap;
   width: min-content;
 }
-
-

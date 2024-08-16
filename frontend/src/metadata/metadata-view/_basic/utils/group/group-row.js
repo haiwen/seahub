@@ -5,6 +5,8 @@ import {
   sortNumber,
   sortCheckbox,
   sortCollaborator,
+  sortSingleSelect,
+  sortMultipleSelect,
 } from '../sort/sort-column';
 import { MAX_GROUP_LEVEL } from '../../constants/group';
 import {
@@ -44,6 +46,9 @@ const _getFormattedCellValue = (cellValue, groupby) => {
     }
     case CellType.SINGLE_SELECT: {
       return cellValue || null;
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return Array.isArray(cellValue) ? cellValue : [];
     }
     case CellType.COLLABORATOR: {
       return Array.isArray(cellValue) ? cellValue : [];
@@ -98,8 +103,18 @@ const _findGroupIndex = (sCellValue, cellValue2GroupIndexMap, groupsLength) => {
 const getSortedGroups = (groups, groupbys, level, collaborators = []) => {
   const sortFlag = 0;
   const { column, sort_type } = groupbys[level];
-  const { type: columnType } = column;
+  const { type: columnType, data: columnData } = column;
   const normalizedSortType = sort_type || SORT_TYPE.UP;
+  let option_id_index_map = {};
+  if (columnType === CellType.SINGLE_SELECT || columnType === CellType.MULTIPLE_SELECT) {
+    const { options } = columnData || {};
+    if (Array.isArray(options)) {
+      options.forEach((option, index) => {
+        option_id_index_map[option.id] = index;
+      });
+    }
+  }
+
   groups.sort((currGroupRow, nextGroupRow) => {
     let { cell_value: currCellVal } = currGroupRow;
     let { cell_value: nextCellVal } = nextGroupRow;
@@ -121,6 +136,10 @@ const getSortedGroups = (groups, groupbys, level, collaborators = []) => {
           nextCollaborators = getCollaboratorsNames(nextCollaborators, collaborators);
         }
         sortResult = sortCollaborator(currCollaborators, nextCollaborators, normalizedSortType);
+      } else if (columnType === CellType.SINGLE_SELECT) {
+        sortResult = sortSingleSelect(currCellVal, nextCellVal, { sort_type: normalizedSortType, option_id_index_map });
+      } else if (columnType === CellType.MULTIPLE_SELECT) {
+        sortResult = sortMultipleSelect(currCellVal, nextCellVal, { sort_type: normalizedSortType, option_id_index_map });
       }
       return sortFlag || sortResult;
     }

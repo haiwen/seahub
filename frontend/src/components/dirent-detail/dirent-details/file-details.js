@@ -62,7 +62,7 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
           </div>
         </DetailItem>
       )}
-      {window.app.pageOptions.enableMetadataManagement && (
+      {window.app.pageOptions.enableMetadataManagement && enableMetadata && (
         <MetadataDetails repoID={repoID} filePath={direntPath} repoInfo={repoInfo} direntType="file" />
       )}
       {isEditFileTagShow &&
