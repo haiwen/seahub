@@ -42,6 +42,7 @@ const propTypes = {
   filePermission: PropTypes.string,
   content: PropTypes.string,
   viewId: PropTypes.string,
+  viewType: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
@@ -262,6 +263,7 @@ class LibContentContainer extends React.Component {
                 sortOrder={this.props.sortOrder}
                 sortItems={this.props.sortItems}
                 viewId={this.props.viewId}
+                viewType={this.props.viewType}
               />
             </div>
           }

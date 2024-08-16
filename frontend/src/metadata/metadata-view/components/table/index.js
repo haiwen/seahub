@@ -9,6 +9,7 @@ const Table = () => {
   const { isLoading } = useMetadata();
 
   if (isLoading) return (<CenteredLoading />);
+
   return (<Container />);
 };
 

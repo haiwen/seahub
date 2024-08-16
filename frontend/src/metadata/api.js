@@ -112,9 +112,9 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  addView = (repoID, name) => {
+  addView = (repoID, name, type = 'table') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
-    const params = { name };
+    const params = { name, type };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 

@@ -6,7 +6,7 @@ import Icon from '../../../../../../components/icon';
 
 import '../index.css';
 
-const AddView = ({ target, toggle, onOptionClick }) => {
+const AddView = ({ target, options, toggle, onOptionClick }) => {
   const popoverRef = useRef(null);
 
   const handleClickOutside = useCallback((event) => {
@@ -39,14 +39,16 @@ const AddView = ({ target, toggle, onOptionClick }) => {
       <div ref={popoverRef}>
         <div className='sf-metadata-addview-popover-header'>{gettext('New view')}</div>
         <div className='sf-metadata-addview-popover-body'>
-          <button className='dropdown-item sf-metadata-addview-popover-item' onClick={onOptionClick}>
-            <div className="left-icon">
-              <div className="metadata-view-icon">
-                <Icon symbol="table" />
-              </div>
-            </div>
-            <div>{gettext('Table')}</div>
-          </button>
+          {options.map((item, index) => {
+            return (
+              <button key={index} className='dropdown-item sf-metadata-addview-popover-item' onClick={() => onOptionClick(item)}>
+                <div className="left-icon">
+                  <Icon symbol={item.type} className='metadata-view-icon' />
+                </div>
+                <div>{gettext(item.label)}</div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </UncontrolledPopover>

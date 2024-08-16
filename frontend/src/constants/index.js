@@ -13,3 +13,16 @@ const TAG_COLORS = ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8
 export const SIDE_PANEL_FOLDED_WIDTH = 71;
 
 export { KeyCodes, zIndexes, TAG_COLORS };
+
+export const VIEW_OPTIONS = [
+  {
+    key: 'table',
+    label: 'Table',
+    type: 'table',
+  },
+  {
+    key: 'gallery',
+    label: 'Gallery',
+    type: 'image',
+  }
+];

@@ -24,6 +24,7 @@ const propTypes = {
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
   viewId: PropTypes.string,
+  viewType: PropTypes.string,
 };
 
 class DirTool extends React.Component {
@@ -113,7 +114,7 @@ class DirTool extends React.Component {
 
     if (isFileExtended) {
       return (
-        <div className="d-flex">
+        <div className="dir-tool">
           <MetadataViewToolBar viewId={viewId} />
         </div>
       );

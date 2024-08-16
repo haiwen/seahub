@@ -575,6 +575,7 @@ class MetadataViews(APIView):
     def post(self, request, repo_id):
         #  Add a metadata view
         view_name = request.data.get('name')
+        view_type = request.data.get('type', 'table')
         if not view_name:
             error_msg = 'view name is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -595,7 +596,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            new_view = RepoMetadataViews.objects.add_view(repo_id, view_name)
+            new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'

@@ -101,14 +101,15 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       parentNode: {},
       key: repoID,
       view_id: view._id,
+      view_type: view.type,
     };
     selectMetadataView(node);
     setShowFirstView(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectMetadataView]);
 
-  const addView = useCallback((name, successCallback, failCallback) => {
-    metadataAPI.addView(repoID, name).then(res => {
+  const addView = useCallback((name, type, successCallback, failCallback) => {
+    metadataAPI.addView(repoID, name, type).then(res => {
       const view = res.data.view;
       let newNavigation = navigation.slice(0);
       newNavigation.push({ _id: view._id, type: 'view' });
