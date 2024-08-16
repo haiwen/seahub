@@ -23,11 +23,3 @@
   display: flex;
   align-items: center;
 }
-
-.view-modes-dropdown-hotkey {
-  color: #999;
-}
-
-.view-modes-dropdown-hotkey:hover {
-  color: #fff;
-}

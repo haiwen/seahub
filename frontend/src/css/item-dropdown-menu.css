@@ -17,4 +17,9 @@
   top: 0;
   left: 0;
   text-align: center;
+  color: #666666;
+}
+
+.dropdown-item:hover .dropdown-item-tick {
+  color: #fff;
 }

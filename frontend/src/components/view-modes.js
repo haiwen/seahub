@@ -29,8 +29,8 @@ class ViewModes extends React.Component {
     const { isDropdownMenuOpen } = this.state;
     const { currentViewMode } = this.props;
     const options = [
-      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list', 'hotKey': 'Ctrl 1' },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid', 'hotKey': 'Ctrl 2' }
+      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list' },
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid' }
     ];
     return (
       <Dropdown
@@ -62,7 +62,6 @@ class ViewModes extends React.Component {
                     <span className={`sf3-font-${item.icon} sf3-font mr-2`}></span>
                     <span>{item.text}</span>
                   </span>
-                  <span className='view-modes-dropdown-hotkey'>{item.hotKey}</span>
                 </div>
               </DropdownItem>
             );
