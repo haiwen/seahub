@@ -376,7 +376,7 @@ class LinkCreation extends React.Component {
           {type !== 'batch' && (
             <FormGroup check>
               <Label check>
-                <span>{gettext('Set scope')}</span>
+                <span>{gettext('Set access scope')}</span>
               </Label>
               <FormGroup check className="ml-4">
                 <Label check>

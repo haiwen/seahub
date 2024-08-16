@@ -30,7 +30,7 @@ class ChangeGroupDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          {gettext('Change group to departmen')}
+          {gettext('Change group to department')}
         </ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{ __html: msg }}></p>

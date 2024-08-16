@@ -577,9 +577,7 @@ class FilterItem extends React.Component {
             {showToolTip &&
             <div className="ml-2">
               <span ref={this.filterToolTip} id="filter_tool_tip" aria-hidden="true" className="sf-metadata-font sf-metadata-icon-exclamation-triangle" style={{ color: '#FFC92C' }}></span>
-              <UncontrolledTooltip placement="bottom" target={this.filterToolTip} >
-                {gettext('Filter tip message')}
-              </UncontrolledTooltip>
+              {/* <UncontrolledTooltip placement="bottom" target={this.filterToolTip}></UncontrolledTooltip> */}
             </div>
             }
             {this.renderErrorMessage()}
