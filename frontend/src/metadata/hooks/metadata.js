@@ -101,7 +101,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       parentNode: {},
       key: repoID,
       view_id: view._id,
-      view_type: view.type,
     };
     selectMetadataView(node);
     setShowFirstView(false);

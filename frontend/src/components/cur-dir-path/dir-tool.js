@@ -24,7 +24,6 @@ const propTypes = {
   sortOrder: PropTypes.string,
   sortItems: PropTypes.func,
   viewId: PropTypes.string,
-  viewType: PropTypes.string,
 };
 
 class DirTool extends React.Component {

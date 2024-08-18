@@ -91,7 +91,6 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
-      viewType: 'table',
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -512,7 +511,7 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: filePath }, filePath, url);
   };
 
-  showFileMetadata = (filePath, viewId, viewType) => {
+  showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
 
@@ -523,7 +522,6 @@ class LibContentView extends React.Component {
       isFileLoadedErr: false,
       content: '__sf-metadata',
       viewId: viewId,
-      viewType: viewType,
       isDirentDetailShow: false
     });
 
@@ -1834,7 +1832,7 @@ class LibContentView extends React.Component {
         }
       } else if (Utils.isFileMetadata(node?.object?.type)) {
         if (node.path !== this.state.path) {
-          this.showFileMetadata(node.path, node.view_id || '0000', node.view_type || 'table');
+          this.showFileMetadata(node.path, node.view_id || '0000');
         }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
@@ -2207,7 +2205,6 @@ class LibContentView extends React.Component {
               filePermission={this.state.filePermission}
               content={this.state.content}
               viewId={this.state.viewId}
-              viewType={this.state.viewType}
               lastModified={this.state.lastModified}
               latestContributor={this.state.latestContributor}
               onLinkClick={this.onLinkClick}

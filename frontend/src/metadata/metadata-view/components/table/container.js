@@ -5,10 +5,10 @@ import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
 import TableMain from './table-main';
+import Gallery from './gallery';
 import { Utils } from '../../../../utils/utils';
 
 import './index.css';
-import Gallery from './gallery';
 
 const Container = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);

@@ -42,7 +42,6 @@ const propTypes = {
   filePermission: PropTypes.string,
   content: PropTypes.string,
   viewId: PropTypes.string,
-  viewType: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
