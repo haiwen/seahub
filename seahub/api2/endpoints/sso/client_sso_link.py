@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from seahub.api2.throttling import AnonRateThrottle
 from seahub.base.models import ClientSSOToken, STATUS_ERROR
-from seahub.utils import get_service_url, gen_token
+from seahub.utils import gen_token, get_site_scheme_and_netloc
 from seahub.api2.utils import api_error
 from seahub.settings import CLIENT_SSO_TOKEN_EXPIRATION
 
@@ -58,6 +58,5 @@ class ClientSSOLink(APIView):
             transaction.set_autocommit(True)
 
         return Response({
-            'link': get_service_url().rstrip('/') + reverse(
-                'client_sso', args=[t.token])
+            'link': get_site_scheme_and_netloc() + reverse('client_sso', args=[t.token])
         })
