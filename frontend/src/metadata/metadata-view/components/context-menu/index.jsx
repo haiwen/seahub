@@ -22,6 +22,7 @@ const ContextMenu = ({
   recordGetterByIndex,
   onClearSelected,
   onCopySelected,
+  modifySdocSummary,
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -88,6 +89,13 @@ const ContextMenu = ({
     const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
     window.open(url, '_blank');
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
+
+  const generateSummary = useCallback(() => {
+    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    if (!record) return;
+    modifySdocSummary([record[PRIVATE_COLUMN_KEY.ID]]);
+  }, [isGroupView, selectedPosition, recordGetterByIndex, modifySdocSummary]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();

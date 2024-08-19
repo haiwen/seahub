@@ -20,6 +20,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.MODIFY_SDOC_SUMMARY: {
+        const { repo_id, record_paths } = operation;
+        window.sfMetadataContext.modifySdocSummary(repo_id, record_paths).then(res => {
+          // to do
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_sdoc_summary' });
+        });
+        break;
+      }
       case OPERATION_TYPE.MODIFY_RECORDS: {
         const { repo_id, row_ids, id_row_updates, is_copy_paste, id_obj_id } = operation;
         const rowsData = row_ids.map(rowId => {

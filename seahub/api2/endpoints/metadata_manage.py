@@ -17,6 +17,7 @@ from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_met
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
 from datetime import datetime
+from seahub.ai.utils import get_file_download_token
 
 from seaserv import seafile_api
 

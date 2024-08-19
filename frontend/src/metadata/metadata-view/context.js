@@ -187,8 +187,8 @@ class Context {
   };
 
   // ai
-  summarizeDocs = (repoId, filesInfo) => {
-    return this.metadataAPI.summarizeDocs(repoId, filesInfo);
+  modifySdocSummary = (repoId, filesInfo) => {
+    return this.metadataAPI.modifySdocSummary(repoId, filesInfo);
   };
 }
 
