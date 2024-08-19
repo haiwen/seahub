@@ -1,5 +1,5 @@
 import { OPERATION_TYPE } from './operations';
-import { getColumnByKey } from '../_basic';
+import { getColumnByKey, PRIVATE_COLUMN_KEY } from '../_basic';
 import { gettext } from '../utils';
 
 const MAX_LOAD_RECORDS = 100;
@@ -17,15 +17,6 @@ class ServerOperator {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify record') });
-        });
-        break;
-      }
-      case OPERATION_TYPE.MODIFY_SDOC_SUMMARY: {
-        const { repo_id, record_paths } = operation;
-        window.sfMetadataContext.modifySdocSummary(repo_id, record_paths).then(res => {
-          // to do
-        }).catch(error => {
-          callback({ error: 'Failed_to_modify_sdoc_summary' });
         });
         break;
       }
@@ -148,6 +139,23 @@ class ServerOperator {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify hidden properties') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_SDOC_SUMMARY: {
+        const { repo_id, record_paths, record_ids } = operation;
+        const record = record_ids[0];
+        window.sfMetadataContext.modifySdocSummary(repo_id, record_paths).then(res => {
+          return window.sfMetadataContext.getRecord(record[PRIVATE_COLUMN_KEY.PARENT_DIR], record[PRIVATE_COLUMN_KEY.FILE_NAME]);
+        }).then(res => {
+          const { results } = res.data;
+          const newRecord = results[0];
+          operation.updated = {
+            [record.id]: { [PRIVATE_COLUMN_KEY.FILE_SUMMARY]: newRecord[PRIVATE_COLUMN_KEY.FILE_SUMMARY] }
+          };
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: 'Failed_to_modify_sdoc_summary' });
         });
         break;
       }
