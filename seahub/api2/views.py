@@ -3056,7 +3056,8 @@ class FileView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + quote(newname.encode('utf-8'))
+                path_param = quote(parent_dir.encode('utf-8')) + "/" + quote(newname.encode('utf-8'))
+                resp['Location'] = uri + '?p=' + path_param
                 return resp
 
         elif operation.lower() == 'move':
