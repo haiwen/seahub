@@ -3833,7 +3833,7 @@ msgstr "增加自定义权限"
 #: frontend/src/components/select-editor/share-link-scope-editor.js:17
 #: frontend/src/components/share-link-panel/link-creation.js:384
 msgid "Anyone with the link"
-msgstr "任何有链接的人"
+msgstr "任何获得链接的人"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:21
 #: frontend/src/components/share-link-panel/link-creation.js:390
@@ -3843,7 +3843,7 @@ msgstr "团队中的特定用户"
 #: frontend/src/components/select-editor/share-link-scope-editor.js:25
 #: frontend/src/components/share-link-panel/link-creation.js:405
 msgid "Specific people with email address"
-msgstr "具有邮箱的特定人员"
+msgstr "拥有指定邮箱的人"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:19
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:155
