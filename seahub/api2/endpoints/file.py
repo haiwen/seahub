@@ -856,7 +856,7 @@ class FileView(APIView):
 
         if is_locked and not locked_by_me:
             error_msg = _("File is locked")
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            return api_error(status.HTTP_423_LOCKED, error_msg)
 
         # delete file
         file_name = os.path.basename(path)
