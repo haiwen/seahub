@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext, wikiPermission } from '../../../utils/constants';
-import { Input } from 'reactstrap';
 import { WIKI_COVER_LIST } from '../constant';
 import PageIcon from './page-icon';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
@@ -71,26 +70,6 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
         )}
       </div>
       <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
-      {wikiPermission === 'public' ?
-        <Input
-          className='wiki-sdoc-title'
-          bsSize="lg"
-          onCompositionStart={onCompositionStart}
-          onCompositionEnd={onCompositionEnd}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          value={pageName}
-        /> : <Input
-          className='wiki-sdoc-title'
-          bsSize="lg"
-          onCompositionStart={onCompositionStart}
-          onCompositionEnd={onCompositionEnd}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          onChange={onChange}
-          value={pageName}
-        />
-      }
     </div>
   );
 };
