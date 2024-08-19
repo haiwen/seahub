@@ -78,12 +78,6 @@ class HeaderToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <ButtonItem
-                  text={gettext('Open parent directory')}
-                  id='parentDirectory'
-                  icon='open-folder'
-                  onMouseDown={this.openParentDirectory}
-                />
                 {(canLockUnlockFile && !isLocked) && (
                   <ButtonItem
                     id="lock-unlock-file"
