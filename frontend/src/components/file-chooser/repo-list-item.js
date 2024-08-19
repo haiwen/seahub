@@ -21,6 +21,8 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   hideLibraryName: PropTypes.bool,
+  isBrowsing: PropTypes.bool,
+  browsingPath: PropTypes.string,
 };
 
 class RepoListItem extends React.Component {
@@ -61,6 +63,30 @@ class RepoListItem extends React.Component {
         }
       }, 0);
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isBrowsing && !this.props.isBrowsing) {
+      this.setState({
+        treeData: treeHelper.buildTree(),
+        isShowChildren: this.props.initToShowChildren,
+      });
+
+      const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
+      const { repoID } = selectedItemInfo || {};
+
+      if (isCurrentRepo && !repoID) {
+        this.loadRepoDirentList(repo);
+        setTimeout(() => {
+          const repoID = repo.repo_id;
+          if (isCurrentRepo && currentPath && currentPath != '/') {
+            const expandNode = true;
+            this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
+          }
+        }, 0);
+      }
+    }
+
   }
 
   componentWillUnmount() {
@@ -205,7 +231,7 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        {!this.props.hideLibraryName &&
+        {!this.props.hideLibraryName && !this.props.isBrowsing &&
           <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
             <div className="item-left-icon">
               <span className={`item-toggle icon sf3-font ${this.state.isShowChildren ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
@@ -228,6 +254,8 @@ class RepoListItem extends React.Component {
             treeData={this.state.treeData}
             onNodeCollapse={this.onNodeCollapse}
             onNodeExpanded={this.onNodeExpanded}
+            isBrowsing={this.props.isBrowsing}
+            browsingPath={this.props.browsingPath}
           />
         )}
       </li>
