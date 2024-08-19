@@ -379,3 +379,16 @@
 .custom-modal .file-list-col .file-chooser-search-input {
   padding: 0 1rem;
 }
+
+.cur-view-container .cur-view-path {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: none;
+}
+
+.cur-view-container .cur-view-path .cur-view-path-left {
+  border-bottom: none;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
