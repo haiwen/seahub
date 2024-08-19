@@ -2,6 +2,7 @@ import logging
 import json
 import random
 import string
+import copy
 from django.db import models
 
 from seahub.utils import get_no_duplicate_obj_name
@@ -140,7 +141,27 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views.details = json.dumps(view_details)
         metadata_views.save()
         return json.loads(metadata_views.details)
-        
+
+    def duplicate_view(self, repo_id, view_id):
+        metadata_views = self.filter(repo_id=repo_id).first()
+        view_details = json.loads(metadata_views.details)
+        exist_view_ids = metadata_views.view_ids
+        new_view_id = generate_view_id(4, exist_view_ids)
+        duplicate_view = None
+        for view in view_details['views']:
+            if view.get('_id') == view_id:
+                duplicate_view = copy.deepcopy(view)
+                break
+        duplicate_view['_id'] = new_view_id
+        view_name = get_no_duplicate_obj_name(duplicate_view['name'], metadata_views.view_names)
+        duplicate_view['name'] = view_name
+        view_details['views'].append(duplicate_view)
+        view_details['navigation'].append({'_id': new_view_id, 'type': 'view'})
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save()
+
+        return duplicate_view
+
     def delete_view(self, repo_id, view_id):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_details = json.loads(metadata_views.details)

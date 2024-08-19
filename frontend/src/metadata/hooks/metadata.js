@@ -120,6 +120,20 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     });
   }, [navigation, repoID, viewsMap, selectView]);
 
+  const duplicateView = useCallback((viewId) => {
+    metadataAPI.duplicateView(repoID, viewId).then(res => {
+      const view = res.data.view;
+      let newNavigation = navigation.slice(0);
+      newNavigation.push({ _id: view._id, type: 'view' });
+      viewsMap.current[view._id] = view;
+      setNavigation(newNavigation);
+      selectView(view);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    })
+  }, [navigation, repoID, viewsMap, selectView])
+
   const deleteView = useCallback((viewId, isSelected) => {
     metadataAPI.deleteView(repoID, viewId).then(res => {
       const newNavigation = navigation.filter(item => item._id !== viewId);
@@ -170,6 +184,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       viewsMap: viewsMap.current,
       selectView,
       addView,
+      duplicateView,
       deleteView,
       updateView,
       moveView,

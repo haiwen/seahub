@@ -23,6 +23,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     viewsMap,
     selectView,
     addView,
+    duplicateView,
     deleteView,
     updateView,
     moveView
@@ -122,6 +123,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   view={view}
                   onClick={(view) => selectView(view, isSelected)}
                   onDelete={() => deleteView(view._id, isSelected)}
+                  onCopy={() => duplicateView(view._id)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
                   onMove={moveView}
                 />);
