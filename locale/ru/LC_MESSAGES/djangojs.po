@@ -763,7 +763,7 @@ msgstr "Имя"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:91
 msgid "Wiki owner"
-msgstr ""
+msgstr "Владелец Wiki"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:91
 msgid "Optional"
@@ -784,7 +784,7 @@ msgstr ""
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:464
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:152
 msgid "No options available"
-msgstr ""
+msgstr "Нет доступных опций"
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:57
 #: frontend/src/pages/wiki2/side-panel.js:167
@@ -793,11 +793,11 @@ msgstr "Новая страница"
 
 #: frontend/src/components/dialog/change-group-dialog.js:29
 msgid "Are you sure to change group {placeholder} to department ?"
-msgstr ""
+msgstr "Вы уверены, что изменить группу {placeholder} на отдел?"
 
 #: frontend/src/components/dialog/change-group-dialog.js:33
 msgid "Change group to department"
-msgstr ""
+msgstr "Изменить группу на отдел"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:49
 msgid "Please enter the old password"
@@ -1568,7 +1568,7 @@ msgstr "Удалить папку"
 
 #: frontend/src/components/dialog/delete-dialog.js:29
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:45
 #: frontend/src/components/dialog/delete-repo-dialog.js:52
@@ -1717,7 +1717,7 @@ msgstr "Показать"
 #: frontend/src/components/dialog/generate-upload-link.js:318
 #: frontend/src/components/share-link-panel/link-details.js:215
 msgid "Expiration date"
-msgstr ""
+msgstr "Дата истечения"
 
 #: frontend/src/components/dialog/generate-upload-link.js:334
 #: frontend/src/components/share-link-panel/link-details.js:231
@@ -1751,7 +1751,7 @@ msgstr "Создать"
 
 #: frontend/src/components/dialog/group-members-dialog.js:17
 msgid "Group members"
-msgstr ""
+msgstr "Члены группы"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:23
 msgid "Welcome to {site_name_placeholder}"
@@ -2188,7 +2188,7 @@ msgstr "Время удаления"
 
 #: frontend/src/components/dialog/my-deleted-repos.js:120
 msgid "Successfully restored the library {library_name}."
-msgstr ""
+msgstr "Библиотека {library_name} восстановлена."
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:53
 msgid "Add Admins"
@@ -2376,11 +2376,11 @@ msgstr "Переименовать группу в"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:70
 msgid "Rename Wiki"
-msgstr ""
+msgstr "Переименовать Wiki"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 msgid "New Wiki name"
-msgstr ""
+msgstr "Новое имя Wiki"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:47
 msgid "API token is copied to the clipboard."
@@ -2555,7 +2555,7 @@ msgstr "Установить контактный email пользователя
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:64
 msgid "Set user default quota"
-msgstr ""
+msgstr "Установить квоту пользователя по умолчанию"
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:73
 #: frontend/src/components/dialog/set-org-user-quota.js:74
@@ -2882,7 +2882,7 @@ msgstr "Передать группу {placeholder} к"
 msgid ""
 "Failed to export. Please check whether the size of table attachments exceeds"
 " the limit."
-msgstr ""
+msgstr "Не удалось экспортировать. Проверьте, не превышает ли размер вложений таблицы лимит."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:97
 msgid "Date Invalid."
@@ -2950,7 +2950,7 @@ msgstr "{placeholder} Корзина"
 
 #: frontend/src/components/dialog/trash-dialog.js:156
 msgid "Visit old version page"
-msgstr ""
+msgstr "Посетить страницу старой версии"
 
 #: frontend/src/components/dialog/trash-dialog.js:200
 #: frontend/src/repo-folder-trash.js:241
@@ -3010,14 +3010,14 @@ msgstr "Не заменять"
 
 #: frontend/src/components/dialog/user-password-widgets/password-strength-checker.js:28
 msgid "Password strength"
-msgstr ""
+msgstr "Надежность пароля"
 
 #: frontend/src/components/dialog/user-password-widgets/password-strength-checker.js:42
 msgid ""
 "Password must be at least 8 characters long and contain different "
 "characters: uppercase letters, lowercase letters, numbers, and special "
 "symbols"
-msgstr ""
+msgstr "Пароль должен иметь длину не менее 8 символов и содержать разные символы: заглавные буквы, строчные буквы, цифры и специальные символы"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:22
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:27
@@ -3027,16 +3027,16 @@ msgstr "Пароль не может быть пустым"
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:34
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:42
 msgid "Insufficient password strength"
-msgstr ""
+msgstr "Недостаточная надежность пароля"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:53
 msgid "Set password"
-msgstr ""
+msgstr "Установить пароль"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:63
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:75
 msgid "Confirm password"
-msgstr ""
+msgstr "Подтвердите пароль"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:23
 msgid "Current password cannot be blank"
@@ -3044,15 +3044,15 @@ msgstr "Пароль не может быть пустым"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:39
 msgid "New password cannot be the same as old password"
-msgstr ""
+msgstr "Новый пароль не может совпадать со старым паролем"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:59
 msgid "Update password"
-msgstr ""
+msgstr "Обновить пароль"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:64
 msgid "Current password"
-msgstr ""
+msgstr "Текущий пароль"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:70
 msgid "New password"
@@ -3076,7 +3076,7 @@ msgstr "Файл не существует."
 
 #: frontend/src/components/dir-view-mode/dir-others.js:20
 msgid "Others"
-msgstr ""
+msgstr "Другие"
 
 #: frontend/src/components/dir-view-mode/dir-others.js:22
 #: frontend/src/components/dir-view-mode/dir-others.js:24
@@ -3099,7 +3099,7 @@ msgstr "История"
 
 #: frontend/src/components/dir-view-mode/dir-views.js:19
 msgid "Extended properties"
-msgstr ""
+msgstr "Расширенные свойства"
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:80
 #: frontend/src/components/dirent-detail/detail-list-view.js:104
@@ -3111,7 +3111,7 @@ msgstr "Местонахождение"
 #: frontend/src/components/dirent-detail/detail-list-view.js:87
 #: frontend/src/components/dirent-detail/detail-list-view.js:119
 msgid "Edit metadata properties"
-msgstr ""
+msgstr "Редактировать свойства метаданных"
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:107
 #: frontend/src/components/dirent-detail/dirent-details/file-details.js:24
@@ -3126,12 +3126,12 @@ msgstr "Теги"
 #: frontend/src/components/dirent-detail/lib-details/index.js:21
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:169
 msgid "Last modified time"
-msgstr ""
+msgstr "Время последнего изменения"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details.js:22
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:175
 msgid "Last modifier"
-msgstr ""
+msgstr "Последний модификатор"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details.js:60
 #: frontend/src/metadata/metadata-details/index.js:100
@@ -3560,7 +3560,7 @@ msgstr "Клиенты"
 
 #: frontend/src/components/main-side-nav-folded.js:139
 msgid "Unfold the sidebar"
-msgstr ""
+msgstr "Развернуть боковую панель"
 
 #: frontend/src/components/main-side-nav.js:148
 #: frontend/src/components/main-side-nav.js:150
@@ -3613,11 +3613,11 @@ msgstr "Предоставленные ресурсы"
 
 #: frontend/src/components/main-side-nav.js:298
 msgid "Help and resources"
-msgstr ""
+msgstr "Помощь и ресурсы"
 
 #: frontend/src/components/main-side-nav.js:341
 msgid "Fold the sidebar"
-msgstr ""
+msgstr "Свернуть боковую панель"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
@@ -3713,7 +3713,7 @@ msgstr "Вы наблюдаете за изменениями файлов эт�
 #: frontend/src/components/repos-sort-menu.js:37
 #: frontend/src/components/repos-sort-menu.js:38
 msgid "Switch sort mode"
-msgstr ""
+msgstr "Переключить режим сортировки"
 
 #: frontend/src/components/sdoc-wiki-page-viewer/index.js:134
 #: frontend/src/components/seafile-markdown-viewer/index.js:120
@@ -3732,19 +3732,19 @@ msgstr "Результаты поиска, посещенные недавно"
 #: frontend/src/components/search/search.js:618
 #: frontend/src/components/search/search.js:635
 msgid "in all libraries"
-msgstr ""
+msgstr "во всех библиотеках"
 
 #: frontend/src/components/search/ai-search.js:588
 #: frontend/src/components/search/ai-search.js:611
 #: frontend/src/components/search/search.js:606
 #: frontend/src/components/search/search.js:629
 msgid "in this library"
-msgstr ""
+msgstr "в этой библиотеке"
 
 #: frontend/src/components/search/ai-search.js:594
 #: frontend/src/components/search/search.js:612
 msgid "in this folder"
-msgstr ""
+msgstr "в этой папке"
 
 #: frontend/src/components/search/ai-search.js:672
 #: frontend/src/components/search/search.js:543
@@ -3799,7 +3799,7 @@ msgstr "Удалить базу данных SeaTable"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/delete-seatables-dialog.js:21
 msgid "Are you sure you want to delete SeaTable {accountName}?"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить SeaTable {accountName}?"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:22
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:23
@@ -3819,17 +3819,17 @@ msgstr "Добавить собственное разрешение"
 #: frontend/src/components/select-editor/share-link-scope-editor.js:17
 #: frontend/src/components/share-link-panel/link-creation.js:384
 msgid "Anyone with the link"
-msgstr ""
+msgstr "Любой, у кого есть ссылка"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:21
 #: frontend/src/components/share-link-panel/link-creation.js:390
 msgid "Specific users in the team"
-msgstr ""
+msgstr "Конкретные пользователи в команде"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:25
 #: frontend/src/components/share-link-panel/link-creation.js:405
 msgid "Specific people with email address"
-msgstr ""
+msgstr "Конкретные люди с адресом электронной почты"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:19
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:155
@@ -3904,17 +3904,17 @@ msgstr "Удалено {number_placeholder} ссылок общего досту
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:121
 #, javascript-format
 msgid "Successfully added %s."
-msgstr ""
+msgstr "Добавлено %s."
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:187
 #: frontend/src/components/share-link-panel/link-details.js:284
 msgid "Authenticated emails"
-msgstr ""
+msgstr "Аутентифицированные электронные письма"
 
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:186
 #: frontend/src/components/share-link-panel/link-details.js:281
 msgid "Authenticated users"
-msgstr ""
+msgstr "Аутентифицированные пользователи"
 
 #: frontend/src/components/share-link-panel/link-creation.js:152
 msgid ""
@@ -3951,7 +3951,7 @@ msgstr "Установить разрешения"
 
 #: frontend/src/components/share-link-panel/link-creation.js:379
 msgid "Set access scope"
-msgstr ""
+msgstr "Установить область доступа"
 
 #: frontend/src/components/share-link-panel/link-details.js:51
 #: frontend/src/components/share-link-panel/link-item.js:59
@@ -3964,11 +3964,11 @@ msgstr "Прямая ссылка для скачивания скопирова
 
 #: frontend/src/components/share-link-panel/link-details.js:182
 msgid "Direct download link"
-msgstr ""
+msgstr "Прямая ссылка для скачивания"
 
 #: frontend/src/components/share-link-panel/link-details.js:270
 msgid "Access scope"
-msgstr ""
+msgstr "Область доступа"
 
 #: frontend/src/components/share-link-panel/link-details.js:305
 #: frontend/src/components/share-link-panel/link-item.js:118
@@ -4174,11 +4174,11 @@ msgstr "Новый"
 
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:339
 msgid "Unselect"
-msgstr ""
+msgstr "Отменить выбор"
 
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:340
 msgid "selected"
-msgstr ""
+msgstr "выбрано"
 
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:344
 #: frontend/src/utils/text-translation.js:17
@@ -4258,7 +4258,7 @@ msgid ""
 "No linked devices. You have not accessed your files with any client (desktop"
 " or mobile) yet. Configure clients on your devices to access your data more "
 "comfortably."
-msgstr ""
+msgstr "Нет связанных устройств. Вы еще не получили доступ к своим файлам ни с одним клиентом (настольным или мобильным). Настройте клиенты на своих устройствах для более удобного доступа к вашим данным."
 
 #: frontend/src/components/user-settings/linked-devices.js:28
 #: frontend/src/pages/linked-devices/linked-devices.js:32
@@ -4411,7 +4411,7 @@ msgstr "Токен:"
 
 #: frontend/src/components/user-settings/webdav-password.js:93
 msgid "WebDAV Access"
-msgstr ""
+msgstr "Доступ к WebDAV"
 
 #: frontend/src/components/user-settings/webdav-password.js:95
 msgid "WebDAV username:"
@@ -4436,16 +4436,16 @@ msgstr "Удалить пароль"
 
 #: frontend/src/components/view-modes.js:32
 msgid "List view"
-msgstr ""
+msgstr "Вид списка"
 
 #: frontend/src/components/view-modes.js:33
 msgid "Grid view"
-msgstr ""
+msgstr "Вид сетки"
 
 #: frontend/src/components/view-modes.js:44
 #: frontend/src/components/view-modes.js:45
 msgid "Switch view mode"
-msgstr ""
+msgstr "Переключить режим просмотра"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:187
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:213
@@ -4454,11 +4454,11 @@ msgstr "Отменить публикацию"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:211
 msgid "Unpublish Wiki"
-msgstr ""
+msgstr "Отменить публикацию Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:212
 msgid "Are you sure you want to unpublish Wiki"
-msgstr ""
+msgstr "Вы уверены, что хотите отменить публикацию Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:219
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:231
@@ -4468,7 +4468,7 @@ msgstr "Удалить Wiki"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:220
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:232
 msgid "Are you sure you want to delete Wiki"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:225
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:237
@@ -4531,101 +4531,101 @@ msgstr ""
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:21
 msgid "Name should be string"
-msgstr ""
+msgstr "Имя должно быть строкой"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:28
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:55
 msgid "Name cannot contain slash"
-msgstr ""
+msgstr "Имя не может содержать косую черту"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:31
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:59
 msgid "Name cannot contain backslash"
-msgstr ""
+msgstr "Имя не может содержать обратную косую черту"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:28
 msgid "Today"
-msgstr ""
+msgstr "Сегодня"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:29
 msgid "Tomorrow"
-msgstr ""
+msgstr "Завтра"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:30
 msgid "Yesterday"
-msgstr ""
+msgstr "Вчера"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:31
 msgid "One week ago"
-msgstr ""
+msgstr "Неделю назад"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:32
 msgid "One week from now"
-msgstr ""
+msgstr "Через неделю"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:33
 msgid "One month ago"
-msgstr ""
+msgstr "Месяц назад"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:34
 msgid "One month from now"
-msgstr ""
+msgstr "Через месяц"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:35
 msgid "Number of days ago"
-msgstr ""
+msgstr "Количество дней назад"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:36
 msgid "Number of days from now"
-msgstr ""
+msgstr "Количество дней с этого момента"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:37
 msgid "Exact date"
-msgstr ""
+msgstr "Определенная дата"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:38
 msgid "The past week"
-msgstr ""
+msgstr "Прошедшая неделя"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:39
 msgid "The past month"
-msgstr ""
+msgstr "Прошлый месяц"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:40
 msgid "The past year"
-msgstr ""
+msgstr "Прошлый год"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:41
 msgid "The next week"
-msgstr ""
+msgstr "Следующая неделя"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:42
 msgid "The next month"
-msgstr ""
+msgstr "Следующий месяц"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:43
 msgid "The next year"
-msgstr ""
+msgstr "Следующий год"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:44
 msgid "The next numbers of days"
-msgstr ""
+msgstr "Ближайшее количество дней"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:45
 msgid "The past numbers of days"
-msgstr ""
+msgstr "Прошедшее количество дней"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:46
 msgid "This week"
-msgstr ""
+msgstr "На этой неделе"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:47
 msgid "This month"
-msgstr ""
+msgstr "В этом месяце"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:48
 msgid "This year"
-msgstr ""
+msgstr "В этом году"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:32
 msgid "contains"
@@ -7468,11 +7468,11 @@ msgstr ""
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:69
 msgid "Gallery"
-msgstr ""
+msgstr "Галерея"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:41
 msgid "Emojis"
-msgstr ""
+msgstr "Эмодзи"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-title.js:62
 msgid "Add icon"

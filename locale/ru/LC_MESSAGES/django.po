@@ -802,17 +802,17 @@ msgstr "Вам доступна ссылка для загрузки на %s"
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Пользователь%s не существует."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "Email %s уже существует."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "Email %s недействителен."
 
 #: seahub/api2/endpoints/share_links.py:478
 #: seahub/api2/endpoints/share_links.py:487
@@ -887,7 +887,7 @@ msgstr "Необходимо имя."
 
 #: seahub/api2/utils.py:312
 msgid "A share link for you"
-msgstr ""
+msgstr "Общедоступная ссылка"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -931,7 +931,7 @@ msgstr "Эта учетная запись является неактивной
 #: seahub/auth/forms.py:118 seahub/auth/forms.py:119
 #: seahub/templates/registration/login.html:59
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Используйте Единый вход для входа."
 
 #: seahub/auth/forms.py:124
 msgid ""
@@ -2371,7 +2371,7 @@ msgstr "Библиотека %s не найдена."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Неверный код подтверждения. Повторите попытку."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
@@ -2396,26 +2396,26 @@ msgstr "Пожалуйста, введите правильный пароль."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Код подтверждения: %(code)s. Он действителен в течение одного часа."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s поделился с вами ссылкой на файл.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nВы можете нажать <a href=%(url)s>здесь</a>, чтобы подтвердить свой адрес электронной почты и посетить его.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:24
 msgid "Email address verification"
-msgstr ""
+msgstr "Проверка адреса электронной почты"
 
 #: seahub/share/templates/share/share_link_email_audit.html:25
 msgid "Please provide your email address to continue."
@@ -2423,7 +2423,7 @@ msgstr "Пожалуйста, укажите свой адрес электро�
 
 #: seahub/share/templates/share/share_link_email_audit.html:28
 msgid "Enter your email address"
-msgstr ""
+msgstr "Введите адрес электронной почты"
 
 #: seahub/share/templates/share/share_link_email_audit.html:29
 msgid "Get code"
@@ -2431,15 +2431,15 @@ msgstr "Получить код"
 
 #: seahub/share/templates/share/share_link_email_audit.html:31
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Вставьте сюда код подтверждения"
 
 #: seahub/share/templates/share/share_link_email_audit.html:64
 msgid "Resend"
-msgstr ""
+msgstr "Отправить повторно"
 
 #: seahub/share/templates/share/share_link_email_audit.html:92
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Код подтверждения был отправлен на адрес электронной почты."
 
 #: seahub/share/views.py:133
 msgid "Please choose a directory."
@@ -2887,18 +2887,18 @@ msgstr "Перейдите по ссылке, чтобы загрузить фа
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Insufficient password strength"
-msgstr ""
+msgstr "Недостаточная надежность пароля"
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:88
 msgid "Password strength"
-msgstr ""
+msgstr "Надежность пароля"
 
 #: seahub/templates/snippets/password_strength_js.html:18
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Пароль должен содержать различные типы символов, чтобы сделать его надежным: заглавные буквы, строчные буквы, цифры и специальные символы."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9

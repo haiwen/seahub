@@ -236,7 +236,7 @@ msgstr "يتم تحميل ملف. هل أنت متأكد أنك تريد مغا�
 #: frontend/src/components/cur-dir-path/dir-path.js:131
 #: frontend/src/components/dir-view-mode/dir-views.js:41
 msgid "Views"
-msgstr ""
+msgstr "طرق العرض"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:241
 #: frontend/src/components/cur-dir-path/dir-path.js:247
@@ -261,26 +261,26 @@ msgstr "ملفات"
 #: frontend/src/pages/libraries/index.js:27
 #: frontend/src/pages/share-admin/share-links.js:405
 msgid "By name ascending"
-msgstr ""
+msgstr "حسب الاسم تصاعدياً"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:40
 #: frontend/src/components/dialog/sort-options.js:20
 #: frontend/src/pages/libraries/index.js:28
 #: frontend/src/pages/share-admin/share-links.js:406
 msgid "By name descending"
-msgstr ""
+msgstr "حسب الاسم تنازلياً"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:41
 #: frontend/src/components/dialog/sort-options.js:23
 #: frontend/src/pages/libraries/index.js:29
 msgid "By time ascending"
-msgstr ""
+msgstr "حسب الزمن تصاعدياً"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:42
 #: frontend/src/components/dialog/sort-options.js:24
 #: frontend/src/pages/libraries/index.js:30
 msgid "By time descending"
-msgstr ""
+msgstr "حسب الزمن تنازلياً"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:139
 #: frontend/src/components/cur-dir-path/dir-tool.js:140
@@ -763,7 +763,7 @@ msgstr "الاسم"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:91
 msgid "Wiki owner"
-msgstr ""
+msgstr "مالك الويكي Wiki"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:91
 msgid "Optional"
@@ -772,11 +772,11 @@ msgstr "خياري"
 #: frontend/src/components/dialog/add-wiki-dialog.js:96
 #: frontend/src/components/dialog/transfer-dialog.js:154
 msgid "Select a department"
-msgstr ""
+msgstr "حدد القسم"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:100
 msgid "No department"
-msgstr ""
+msgstr "لا يوجد قسم"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:102
 #: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:207
@@ -784,20 +784,20 @@ msgstr ""
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:464
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:152
 msgid "No options available"
-msgstr ""
+msgstr "لا توجد خيارات متاحة"
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:57
 #: frontend/src/pages/wiki2/side-panel.js:167
 msgid "New page"
-msgstr ""
+msgstr "صفحة جديدة"
 
 #: frontend/src/components/dialog/change-group-dialog.js:29
 msgid "Are you sure to change group {placeholder} to department ?"
-msgstr ""
+msgstr "هل أنت متأكد من تغيير المجموعة {placeholder}  إلى القسم؟"
 
 #: frontend/src/components/dialog/change-group-dialog.js:33
 msgid "Change group to department"
-msgstr ""
+msgstr "تغيير المجموعة إلى القسم"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:49
 msgid "Please enter the old password"
@@ -1568,7 +1568,7 @@ msgstr "احذف المجلد"
 
 #: frontend/src/components/dialog/delete-dialog.js:29
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد الحذف؟"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:45
 #: frontend/src/components/dialog/delete-repo-dialog.js:52
@@ -1717,7 +1717,7 @@ msgstr "عرض"
 #: frontend/src/components/dialog/generate-upload-link.js:318
 #: frontend/src/components/share-link-panel/link-details.js:215
 msgid "Expiration date"
-msgstr ""
+msgstr "تاريخ اﻹنتهاء"
 
 #: frontend/src/components/dialog/generate-upload-link.js:334
 #: frontend/src/components/share-link-panel/link-details.js:231
@@ -1751,7 +1751,7 @@ msgstr "توليد"
 
 #: frontend/src/components/dialog/group-members-dialog.js:17
 msgid "Group members"
-msgstr ""
+msgstr "أعضاء المجموعة"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:23
 msgid "Welcome to {site_name_placeholder}"
@@ -1762,83 +1762,83 @@ msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. We have created a personal library for you. "
 "You can create more libraries later."
-msgstr ""
+msgstr "يقوم {site_name_placeholder} بتنظيم الملفات في المكتبات. يمكن مزامنة كل مكتبة ومشاركتها بشكل منفصل. لقد أنشأنا لك مكتبة شخصية. يمكنك إنشاء المزيد من المكتبات لاحقًا."
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:26
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
-msgstr ""
+msgstr "يقوم {site_name_placeholder} بتنظيم الملفات في المكتبات. يمكن مزامنة كل مكتبة ومشاركتها بشكل منفصل. ومع ذلك، نظرًا لأنك مستخدم ضيف الآن، فلا يمكنك إنشاء مكتبات."
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
 #: frontend/src/components/dialog/org-import-users-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:38
 msgid "Please choose a .xlsx file."
-msgstr ""
+msgstr "الرجاء اختيار ملف إكسل .xlsx."
 
 #: frontend/src/components/dialog/import-members-dialog.js:50
 msgid "Import members from a .xlsx file"
-msgstr ""
+msgstr "استيراد الأعضاء من ملف إكسل .xlsx"
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:53
 msgid "Download an example file"
-msgstr ""
+msgstr "تنزيل ملف العينه"
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
-msgstr ""
+msgstr "تحميل ملف"
 
 #: frontend/src/components/dialog/insert-file-dialog.js:55
 msgid "Select File"
-msgstr ""
+msgstr "إختر ملف"
 
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:57
 msgid "Select Image"
-msgstr ""
+msgstr "إختر صورة"
 
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:73
 msgid "No preview"
-msgstr ""
+msgstr "لا يوجد معاينة للملف"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:53
 #: frontend/src/components/dialog/internal-link.js:41
 #: frontend/src/components/dialog/org-admin-invite-user-via-weixin-dialog.js:22
 msgid "Internal link has been copied to clipboard"
-msgstr ""
+msgstr "تم نسخ الرابط الداخلي إلى الحافظة"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:63
 #: frontend/src/components/dialog/internal-link.js:54
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr ""
+msgstr "الرابط الداخلي هو رابط إلى ملف أو مجلد يمكن الوصول إليه من قبل المستخدمين الذين لديهم إذن قراءة الملف أو المجلد."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:67
 #: frontend/src/components/dialog/share-dialog.js:128
 #: frontend/src/components/dialog/share-dialog.js:277
 #: frontend/src/components/operations/internal-link-operation/index.js:27
 msgid "Internal Link"
-msgstr ""
+msgstr "رابط داخلي"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:34
 msgid "Successfully revoked access of user {placeholder}."
-msgstr ""
+msgstr "تم إلغاء وصول المستخدم {placeholder} بنجاح."
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:47
 msgid "Are you sure to revoke access of user {placeholder} ?"
-msgstr ""
+msgstr "هل أنت متأكد من إلغاء وصول المستخدم {placeholder}؟"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:51
 #: frontend/src/pages/invitations/invitations-view.js:94
 #: frontend/src/pages/invitations/invitations-view.js:95
 #: frontend/src/pages/invitations/invitations-view.js:132
 msgid "Revoke Access"
-msgstr ""
+msgstr "إلغاء الوصول"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:49
 #: frontend/src/components/dialog/label-repo-state-dialog.js:55
@@ -1854,17 +1854,17 @@ msgstr "مطلوب."
 #: frontend/src/components/dialog/invite-people-dialog.js:65
 #: frontend/src/components/dialog/share-to-invite-people.js:190
 msgid "Email is invalid."
-msgstr ""
+msgstr "البريد الإلكتروني غير صالح."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:79
 #: frontend/src/components/dialog/share-to-invite-people.js:205
 msgid "Successfully invited %(email)."
-msgstr ""
+msgstr "تمت الدعوة بنجاح للبريد %(email)."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:82
 #: frontend/src/components/dialog/share-to-invite-people.js:208
 msgid "Successfully invited %(email) and %(num) other people."
-msgstr ""
+msgstr "تمت دعوة %(email) و %(num) أخرون بنجاح."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:107
 #: frontend/src/components/dialog/share-dialog.js:158
@@ -1875,12 +1875,12 @@ msgstr ""
 #: frontend/src/pages/invitations/invitations-view.js:278
 #: frontend/src/pages/invitations/invitations-view.js:280
 msgid "Invite Guest"
-msgstr ""
+msgstr "دعوة ضيف"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:109
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:66
 msgid "Emails"
-msgstr ""
+msgstr "البريد الإلكتروني"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:113
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:70
@@ -1889,31 +1889,31 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:195
 #: frontend/src/components/share-link-panel/link-creation.js:408
 msgid "Emails, separated by ','"
-msgstr ""
+msgstr "عناوين بريد مفصولة بـ ','"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:67
 msgid "Successfully added label(s) for library {placeholder}"
-msgstr ""
+msgstr "تمت إضافة العلامات بنجاح للمكتبة {placeholder}"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:82
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:172
 msgid "Label Current State"
-msgstr ""
+msgstr "وضع علامة الحالة الحالية"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:27
 msgid "Leave Group"
-msgstr ""
+msgstr "مغادرة المجموعة"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:29
 msgid "Really want to leave this group?"
-msgstr ""
+msgstr "أتريد مغادرة هذه المجموعة؟"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:33
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:193
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:227
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:239
 msgid "Leave"
-msgstr ""
+msgstr "غادر"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:62
 msgid "This library is password protected"
@@ -1939,7 +1939,7 @@ msgstr "إعدادات سجل {placeholder} التاريخي"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:123
 msgid "Setting library history is disabled by Admin."
-msgstr ""
+msgstr "تم تعطيل إعداد تاريخ سجل المكتبة من المسؤول."
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:128
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:121
@@ -1965,23 +1965,23 @@ msgstr "أيام"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:47
 msgid "Please enter a positive integer"
-msgstr ""
+msgstr "الرجاء إدخال عدد صحيح موجب"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:61
 msgid "Successfully set it."
-msgstr ""
+msgstr "تم ضبطه بنجاح."
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:98
 msgid "Auto deletion"
-msgstr ""
+msgstr "الحذف التلقائي"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:104
 msgid "Do not automatically delete files"
-msgstr ""
+msgstr "لا تحذف الملفات تلقائيًا"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:108
 msgid "Automatically delete files that are not modified within certain days:"
-msgstr ""
+msgstr "حذف الملفات التي لم يتم تعديلها خلال أيام معينة تلقائيًا:"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:48
 msgid "User Permission"
@@ -1997,7 +1997,7 @@ msgstr "اذونات مجلد {placeholder}"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:89
 msgid "Set permission of {placeholder}"
-msgstr ""
+msgstr "تعيين الإذن لـ {placeholder}"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:282
 #: frontend/src/components/dialog/repo-share-admin/group-shares.js:187
