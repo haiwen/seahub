@@ -1,9 +1,9 @@
-.sf-metadata-selector-collaborator.sf-metadata-select .option {
+.sf-metadata-selector-collaborator.sf-metadata-select .sf-metadata-option {
   line-height: 20px;
   padding: 5px 10px 5px 10px !important;
 }
 
-.sf-metadata-selector-collaborator.sf-metadata-select .option:hover {
+.sf-metadata-selector-collaborator.sf-metadata-select .sf-metadata-option:hover {
   background-color: #f7f7f7;
   color: #212529;
 }

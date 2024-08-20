@@ -29,3 +29,7 @@
 .sf-metadata-filter-popover .popover-add-tool.disabled {
   color: #c2c2c2;
 }
+
+.sf-metadata-select.custom-select {
+  font-size: 14px;
+}

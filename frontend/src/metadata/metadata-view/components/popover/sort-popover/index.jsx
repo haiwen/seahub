@@ -151,8 +151,8 @@ class SortPopover extends Component {
         value: { column },
         label: (
           <Fragment>
-            <span className="filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
-            <span className='select-option-name'>{name}</span>
+            <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+            <span className=''>{name}</span>
           </Fragment>
         )
       };
@@ -163,7 +163,7 @@ class SortPopover extends Component {
     return SORT_TYPES.map(sortType => {
       return {
         value: { sortType },
-        label: <span className='select-option-name'>{gettext(sortType)}</span>
+        label: <span className="select-option-name">{gettext(sortType)}</span>
       };
     });
   };
@@ -183,15 +183,15 @@ class SortPopover extends Component {
     let selectedColumn = {
       label: (
         <Fragment>
-          <span className="filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
-          <span className='select-option-name' title={name} aria-label={name}>{name}</span>
+          <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
+          <span className="select-option-name" title={name} aria-label={name}>{name}</span>
         </Fragment>
       )
     };
 
     let selectedTypeShow = sort.sort_type;
     let selectedSortType = selectedTypeShow && {
-      label: <span className='select-option-name'>{gettext(selectedTypeShow)}</span>
+      label: <span className="select-option-name">{gettext(selectedTypeShow)}</span>
     };
 
     return (
