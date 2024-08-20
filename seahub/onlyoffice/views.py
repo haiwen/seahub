@@ -438,17 +438,25 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
 
 
 class OnlyofficeGetReferenceData(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
+    
+    throttle_classes = (UserRateThrottle, )
     
     def post(self, request):
         instance_id = request.data.get('instanceId')
         file_key = request.data.get('fileKey')
-        payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+        
+        try:
+            payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+        except:
+            err_msg = 'File key invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
+        
         source_repo_id = payload.get('repo_id')
         source_file_path = payload.get('file_path')
-        username = payload.get('username')
+        
+        if not seafile_api.get_repo(source_repo_id):
+            error_msg = 'Library %s not found.' % source_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         doc_key = get_doc_key_by_repo_id_file_path(source_repo_id, source_file_path)
         file_name = os.path.basename(source_file_path.rstrip('/'))
@@ -461,7 +469,7 @@ class OnlyofficeGetReferenceData(APIView):
             source_repo_id,
             file_id,
             'download',
-            username,
+            '',
             use_onetime=False
         )
 
