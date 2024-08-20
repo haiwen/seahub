@@ -38,8 +38,8 @@ const ContextMenu = ({
       return list;
     }
 
-    if (Object.keys(recordMetrics.idSelectedRecordMap) > 1) {
-      return [];
+    if (Object.keys(recordMetrics.idSelectedRecordMap).length > 1) {
+      return list;
     }
 
     if (!selectedPosition) return list;
