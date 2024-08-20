@@ -15,10 +15,7 @@ import RecordMetrics from '../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../utils/grid';
-import TextTranslation from '../../../../../../utils/text-translation';
-import { Utils } from '../../../../../../utils/utils';
-import { siteRoot } from '../../../../../../utils/constants';
-import ContextMenu from '../../../context-menu/context-menu';
+import ContextMenu from '../../../context-menu';
 
 class Records extends Component {
 
@@ -47,11 +44,6 @@ class Records extends Component {
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
-    this.baseURI = '';
-    this.contextMenuOptions = [
-      { label: TextTranslation.OPEN_FILE_IN_NEW_TAB.value, value: 'openFileInNewTab' },
-      { label: TextTranslation.OPEN_PARENT_FOLDER.value, value: 'openParentFolder' },
-    ];
   }
 
   componentDidMount() {
@@ -64,6 +56,7 @@ class Records extends Component {
       document.addEventListener('mousedown', this.onMouseDown);
     }
     this.unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, this.selectNone);
+    this.unsubscribeSelectCell = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, this.selectCell);
     this.getScrollPosition();
   }
 
@@ -99,6 +92,8 @@ class Records extends Component {
     }
 
     this.clearSetAbsoluteTimer();
+    this.unsubscribeSelectNone();
+    this.unsubscribeSelectCell();
     this.setState = (state, callback) => {
       return;
     };
@@ -334,10 +329,9 @@ class Records extends Component {
 
   onCellClick = (cell) => {
     if (cell) {
-      const currentPosition = { ...cell };
       this.updateSelectedRange({
-        topLeft: currentPosition,
-        bottomRight: currentPosition,
+        topLeft: this.initPosition,
+        bottomRight: this.initPosition,
       });
     }
     this.onDeselectAllRecords();
@@ -399,6 +393,10 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
+  };
+
+  selectCell = (cellPosition) => {
+    this.setState({ selectedPosition: cellPosition });
   };
 
   onSelectRecord = ({ groupRecordIndex, recordIndex }, e) => {
@@ -597,65 +595,43 @@ class Records extends Component {
     this.setState(scrollState);
   };
 
-  onOpenFileInNewTab = () => {
+  isOutSelectedRange = ({ recordIndex, idx }) => {
+    const { selectedRange } = this.state;
+    const { topLeft, bottomRight } = selectedRange;
+    const { idx: minIdx, rowIdx: minRowIdx } = topLeft;
+    const { idx: maxIdx, rowIdx: maxRowIdx } = bottomRight;
+    return idx < minIdx || idx > maxIdx || recordIndex < minRowIdx || recordIndex > maxRowIdx;
+  };
+
+  onCellContextMenu = (cell) => {
+    const { rowIdx: recordIndex, idx, groupRecordIndex } = cell;
     const { isGroupView, recordGetterByIndex } = this.props;
-    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    const repoID = window.sfMetadataStore.repoId;
-    let url;
-    if (record._is_dir) {
-      url = `${this.baseURI}${record._parent_dir === '/' ? '' : record._parent_dir}/${record._name}`;
-    } else {
-      url = `${siteRoot}lib/${repoID}/file${Utils.encodePath(record._parent_dir + '/' + record._name)}`;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
+
+    if (!record) return;
+    const { recordMetrics } = this.state;
+    const recordId = record._id;
+    if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
+      this.setState({ recordMetrics: this.createRowMetrics() });
     }
 
-    window.open(url, '_blank');
-  };
-
-  onOpenParentFolder = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { isGroupView, recordGetterByIndex } = this.props;
-    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    const url = `${this.baseURI}${record._parent_dir}`;
-
-    window.open(url, '_blank');
-  };
-
-  onOptionClick = (event, option) => {
-
-    const handlers = {
-      openFileInNewTab: this.onOpenFileInNewTab.bind(this),
-      openParentFolder: this.onOpenParentFolder.bind(this),
-    };
-
-    const handler = handlers[option.value];
-    if (handler) {
-      handler(event);
+    // select cell when click out of selectRange
+    if (this.isOutSelectedRange({ recordIndex, idx })) {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_CELL, cell, false);
     }
-  };
-
-  onCellContextMenu = (event, cell) => {
-    const url = new URL(event.target.baseURI);
-    url.search = '';
-    this.baseURI = url.toString();
-
-    this.setState({
-      selectedPosition: cell,
-    });
   };
 
   renderRecordsBody = ({ containerWidth }) => {
+    const { isGroupView, recordGetterByIndex } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const {
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
     } = columnMetrics;
+    const contextMenu = (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} />);
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
-      recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
+      recordMetrics, colOverScanStartIdx, colOverScanEndIdx, contextMenu,
       hasSelectedRecord: this.hasSelectedRecord(),
       getScrollLeft: this.getScrollLeft,
       getScrollTop: this.getScrollTop,
@@ -728,10 +704,6 @@ class Records extends Component {
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
-          <ContextMenu
-            options={this.contextMenuOptions}
-            onOptionClick={this.onOptionClick}
-          />
         </div>
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar
