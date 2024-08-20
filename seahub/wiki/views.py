@@ -32,7 +32,7 @@ from seahub.seadoc.utils import get_seadoc_file_uuid
 logger = logging.getLogger(__name__)
 
 # https://github.com/yourcelf/bleach-whitelist/blob/master/bleach_whitelist/bleach_whitelist.py#L61
-markdown_tags = [
+markdown_tags = {
     "h1", "h2", "h3", "h4", "h5", "h6",
     "b", "i", "strong", "em", "tt",
     "p", "pre", "br",
@@ -42,7 +42,7 @@ markdown_tags = [
     "a",
     "sub", "sup",
     "table", "thead", "tbody", "tr", "th", "td",
-]
+}
 
 markdown_attrs = {
     "*": ["id", "class", "width", "height"],
