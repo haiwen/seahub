@@ -4537,7 +4537,7 @@ msgid ""
 "After enable extended properties for files, you can add different properties"
 " to files, like collaborators, file expiring time, file description. You can"
 " also create different views for files based extended properties."
-msgstr "为文件启用扩展属性后，你可以向文件添加不同的属性，如协作者、文件过期时间、文件描述。你还可以为基于文件的扩展特性创建不同的视图。"
+msgstr "为文件启用扩展属性后，你可以向文件添加不同的属性，如协作者、文件过期时间、文件描述。你还可以基于文件的扩展特性创建不同的视图。"
 
 #: frontend/src/metadata/metadata-tree-view/index.js:151
 msgid "Add view"
