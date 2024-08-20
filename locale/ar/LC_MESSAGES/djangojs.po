@@ -2055,7 +2055,7 @@ msgstr "البحث عن المستخدمين"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:23
 msgid "Created Files"
-msgstr ""
+msgstr "الملفات مُنشأ"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:29
 #: frontend/src/file-history-old.js:243
@@ -2075,7 +2075,7 @@ msgstr "الوقت"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:79
 msgid "Tagged Files"
-msgstr ""
+msgstr "الملفات المُوسومة"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
 #: frontend/src/components/dialog/search-file-dialog.js:94
@@ -2143,15 +2143,15 @@ msgstr "آخر تحديث"
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:165
 #: frontend/src/pages/starred/starred.js:258
 msgid "deleted"
-msgstr ""
+msgstr "محذوف"
 
 #: frontend/src/components/dialog/manage-members-dialog.js:21
 msgid "Manage group members"
-msgstr ""
+msgstr "إدارة أعضاء المجموعة"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:154
 msgid "Move {placeholder} to"
-msgstr ""
+msgstr "نقل {placeholder} إلى:"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:157
 msgid "Move selected item(s) to:"
@@ -2161,25 +2161,25 @@ msgstr "نقل العنصر(العناصر) المحدد(ة) إلى:"
 #: frontend/src/pages/my-libs/my-libs-deleted.js:52
 #: frontend/src/pages/my-libs/my-libs.js:148
 msgid "Deleted Libraries"
-msgstr ""
+msgstr "المكتبات المحذوفة"
 
 #: frontend/src/components/dialog/my-deleted-repos.js:56
 #: frontend/src/pages/my-libs/my-libs-deleted.js:59
 msgid "No deleted libraries"
-msgstr ""
+msgstr "لا يوجد مكتبات محذوفة"
 
 #: frontend/src/components/dialog/my-deleted-repos.js:57
 #: frontend/src/pages/my-libs/my-libs-deleted.js:60
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted"
 " library will be cleaned automatically after this period."
-msgstr ""
+msgstr "لم تقم بحذف أي مكتبات خلال الأيام {placeholder} الماضية. سيتم تنظيف المكتبة المحذوفة تلقائيًا بعد هذه الفترة."
 
 #: frontend/src/components/dialog/my-deleted-repos.js:62
 #: frontend/src/pages/my-libs/my-libs-deleted.js:65
 msgid ""
 "Tip: libraries deleted {placeholder} days ago will be cleaned automatically."
-msgstr ""
+msgstr "تلميح: المكتبات المحذوفة قبل {placeholder} يوما سيتم تنظيفها تلقائياً."
 
 #: frontend/src/components/dialog/my-deleted-repos.js:68
 #: frontend/src/pages/my-libs/my-libs-deleted.js:90
@@ -2188,29 +2188,29 @@ msgstr "وقت الحذف"
 
 #: frontend/src/components/dialog/my-deleted-repos.js:120
 msgid "Successfully restored the library {library_name}."
-msgstr ""
+msgstr "تم استعادة مكتبة بإسم {library_name} بنجاح."
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:53
 msgid "Add Admins"
-msgstr ""
+msgstr "إضافة مدراء"
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:58
 msgid "Select a user as admin"
-msgstr ""
+msgstr "حدد مستخدمًا كمدير"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:66
 #: frontend/src/pages/org-admin/departments/department.js:93
 #: frontend/src/pages/sys-admin/departments/department.js:104
 msgid "New Sub-department"
-msgstr ""
+msgstr "قسم فرعي جديد"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:66
 #: frontend/src/pages/org-admin/departments/department-list.js:91
 #: frontend/src/pages/sys-admin/departments/department-list.js:89
 msgid "New Department"
-msgstr ""
+msgstr "قسم جديد"
 
 #: frontend/src/components/dialog/org-add-member-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog.js:34
@@ -2228,14 +2228,14 @@ msgstr "إضافة عضو"
 #: frontend/src/components/dialog/org-add-user-dialog.js:99
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:51
 msgid "email is required"
-msgstr ""
+msgstr "البريد الإلكتروني مطلوب"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:133
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
 #: frontend/src/pages/sys-admin/users/users.js:418
 #: frontend/src/pages/sys-admin/users/users.js:535
 msgid "Add User"
-msgstr ""
+msgstr "إضافة مستخدم"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:137
 #: frontend/src/components/dialog/share-to-invite-people.js:316
@@ -2257,13 +2257,13 @@ msgstr "تأكيد كلمة المرور"
 #: frontend/src/pages/org-admin/org-users-users.js:275
 #: frontend/src/pages/org-admin/org-users-users.js:276
 msgid "Invite users"
-msgstr ""
+msgstr "دعوة المستخدمين"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:63
 msgid ""
 "You can enter multiple emails. An invitation link will be sent to each of "
 "them."
-msgstr ""
+msgstr "يمكنك إدخال عدة عناوين بريد إلكتروني، وسيتم إرسال رابط دعوة إلى كل منها."
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:34
 #: frontend/src/components/dialog/org-delete-member-dialog.js:36
@@ -2283,12 +2283,12 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:192
 #: frontend/src/pages/sys-admin/users/users-content.js:427
 msgid "Are you sure you want to delete {placeholder} ?"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد حذف {placeholder} ؟"
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:38
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog.js:39
 msgid "Delete Department"
-msgstr ""
+msgstr "حذف القسم"
 
 #: frontend/src/components/dialog/org-delete-member-dialog.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog.js:40
@@ -2299,18 +2299,18 @@ msgstr "حذف عضو"
 #: frontend/src/components/dialog/org-import-users-dialog.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
 msgid "Import users from a .xlsx file"
-msgstr ""
+msgstr "استيراد المستخدمين من ملف إكسل .xlsx"
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:80
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:75
 #: frontend/src/pages/sys-admin/departments/department.js:103
 msgid "Rename Department"
-msgstr ""
+msgstr "إعادة تسمية القسم"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:39
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:39
 msgid "Quota is invalid."
-msgstr ""
+msgstr "الحصة غير صالحة."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:59
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:49
@@ -2323,20 +2323,20 @@ msgstr "تحديد المخصص"
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:71
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:71
 msgid "An integer that is greater than 0 or equal to -2."
-msgstr ""
+msgstr "عدد صحيح أكبر من 0 أو يساوي -2."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:72
 msgid "Tip: -2 means no limit."
-msgstr ""
+msgstr "نصيحة: -2 يعني غير محدود."
 
 #: frontend/src/components/dialog/remove-webdav-password.js:33
 msgid "Delete WebDAV Password"
-msgstr ""
+msgstr "حذف كلمة مرور WebDAV"
 
 #: frontend/src/components/dialog/remove-webdav-password.js:35
 msgid "Are you sure you want to delete WebDAV password?"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد حذف كلمة مرور WebDAV؟"
 
 #: frontend/src/components/dialog/rename-dialog.js:86
 #: frontend/src/components/dialog/rename-dirent.js:88
@@ -2359,32 +2359,32 @@ msgstr "اعادة تسمية مجلد"
 #: frontend/src/components/dialog/rename-dialog.js:123
 #: frontend/src/components/dialog/rename-dirent.js:126
 msgid "New file name"
-msgstr ""
+msgstr "اسم الملف الجديد"
 
 #: frontend/src/components/dialog/rename-dialog.js:123
 #: frontend/src/components/dialog/rename-dirent.js:126
 msgid "New folder name"
-msgstr ""
+msgstr "اسم المجلد الجديد"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:59
 msgid "Rename Group"
-msgstr ""
+msgstr "إعادة تسمية المجموعة"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:61
 msgid "Rename group to"
-msgstr ""
+msgstr "إعادة تسمية المجموعة إلى"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:70
 msgid "Rename Wiki"
-msgstr ""
+msgstr "إعادة تسمية الويكي Wiki"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 msgid "New Wiki name"
-msgstr ""
+msgstr "اسم الويكي Wiki الجديد"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:47
 msgid "API token is copied to the clipboard."
-msgstr ""
+msgstr "تمت نسخ رمز واجهة برمجة التطبيقات API إلى الحافظة."
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
 #: frontend/src/components/dialog/trash-dialog.js:125
