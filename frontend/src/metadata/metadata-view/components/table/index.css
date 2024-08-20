@@ -395,20 +395,6 @@
   flex-direction: column;
 }
 
-/* custom table filters */
-.table-filters .sf-metadata-filters-list .filter-item .filter-term {
-  max-width: unset;
-}
-
-.table-filters .sf-metadata-filters-list .sf-metadata-select.custom-select {
-  max-width: 700px;
-}
-
-.table-filters .sf-metadata-filters-list .single-select-option,
-.table-filters .sf-metadata-filters-list .multiple-select-option {
-  max-width: 250px;
-}
-
 .sf-metadata-wrapper .sf-metadata-main {
   flex: 1;
   overflow: hidden;

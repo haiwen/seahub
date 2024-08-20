@@ -387,6 +387,7 @@
 }
 
 .cur-view-container .cur-view-path .cur-view-path-left {
+  flex: 1;
   border-bottom: none;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
