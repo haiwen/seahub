@@ -1647,7 +1647,7 @@ class ReposBatchDeleteItemView(APIView):
             if dirent in list(locked_files.keys()) and \
                     locked_files[dirent] != username:
                 error_msg = _('File %s is locked.') % dirent
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                return api_error(status.HTTP_423_LOCKED, error_msg)
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
