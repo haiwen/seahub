@@ -266,10 +266,7 @@ class LibContentContainer extends React.Component {
             </div>
           }
         </div>
-        <div
-          className={`cur-view-content lib-content-container ${this.props.isTreePanelShown ? 'view-mode-container' : ''}`}
-          onScroll={this.onItemsScroll}
-        >
+        <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
           {!this.props.pathExist && this.errMessage}
           {this.props.pathExist && (
             <DirColumnView
