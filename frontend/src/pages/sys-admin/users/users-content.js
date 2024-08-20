@@ -64,13 +64,6 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
-      const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No users')}</h2>
-        </EmptyTip>
-      );
-
-
       let columns = [];
 
       let sortIcon;
@@ -177,7 +170,7 @@ class Content extends Component {
               onRoleChange={this.props.onRoleChange}
             />
           }
-          {items.length ? table : emptyTip}
+          {items.length ? table : <EmptyTip text={gettext('No users')} />}
         </div>
       );
     }

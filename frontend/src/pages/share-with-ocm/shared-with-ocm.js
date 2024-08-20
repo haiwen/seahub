@@ -15,9 +15,10 @@ class Content extends Component {
     const { loading, errorMsg, items } = this.props;
 
     const emptyTip = (
-      <EmptyTip>
-        <h2>{gettext('No libraries have been shared with you')}</h2>
-        <p>{gettext('No libraries have been shared with you from other servers.')}</p>
+      <EmptyTip
+        title={gettext('No libraries have been shared with you')}
+        text={gettext('No libraries have been shared with you from other servers.')}
+      >
       </EmptyTip>
     );
 

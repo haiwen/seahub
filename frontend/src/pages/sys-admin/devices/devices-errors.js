@@ -36,8 +36,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No sync errors')}</h2>
+        <EmptyTip text={gettext('No sync errors')}>
         </EmptyTip>
       );
       const table = (

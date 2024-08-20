@@ -52,10 +52,12 @@ class MyLibsDeleted extends Component {
         <ModalBody className="my-deleted-repos-container">
           {this.state.isLoading && <Loading />}
           {(!this.state.isLoading && repos.length === 0) &&
-          <EmptyTip forDialog={true} className="my-deleted-repos-empty-tip">
-            <h2 className="h6 font-weight-normal">{gettext('No deleted libraries')}</h2>
-            <p className="empty-explanation">{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
-          </EmptyTip>
+          <EmptyTip
+            forDialog={true}
+            className="my-deleted-repos-empty-tip"
+            title={gettext('No deleted libraries')}
+            text={gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}
+          />
           }
           {repos.length !== 0 &&
           <div>

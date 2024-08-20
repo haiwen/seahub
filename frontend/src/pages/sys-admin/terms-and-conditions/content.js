@@ -38,8 +38,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No terms and conditions')}</h2>
+        <EmptyTip text={gettext('No terms and conditions')}>
         </EmptyTip>
       );
       const table = (

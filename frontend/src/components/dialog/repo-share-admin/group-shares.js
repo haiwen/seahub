@@ -175,9 +175,7 @@ class RepoShareAdminGroupShares extends Component {
         {loading && <Loading />}
         {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
         {!loading && !errorMsg && !items.length &&
-        <EmptyTip forDialog={true}>
-          <p className="text-secondary">{gettext('No group shares')}</p>
-        </EmptyTip>
+        <EmptyTip forDialog={true} text={gettext('No group shares')}/>
         }
         {!loading && !errorMsg && items.length > 0 &&
         <table className="table-hover">

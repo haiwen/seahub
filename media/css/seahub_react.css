@@ -1117,34 +1117,6 @@ a.table-sort-op:hover {
   color: #fff;
 }
 
-/* empty-tip */
-.empty-tip {
-  margin: 5.5em 1em;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  padding: 30px;
-  background-color: #fafafa;
-  text-align: center;
-}
-
-@media (min-width: 768px) {
-  .empty-tip {
-    padding: 30px 80px;
-  }
-}
-
-.no-items-img-tip {
-  display: inline-block;
-  margin-bottom: 20px; 
-}
-
-.empty-tip h2 {
-  font-size: 1.125rem;
-  text-align: center;
-  color: #222;
-  font-weight: bold;
-}
-
 .err-tip {
   margin: 2rem auto;
   padding: 30px 40px;

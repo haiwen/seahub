@@ -139,24 +139,22 @@ class GroupView extends React.Component {
     if (currentGroup) {
       if (currentGroup.parent_group_id === 0) {
         emptyTip = (
-          <EmptyTip>
-            <h2>{gettext('No libraries shared with this group')}</h2>
-            <p>{gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}</p>
-          </EmptyTip>
+          <EmptyTip
+            title={gettext('No libraries shared with this group')}
+            text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}
+          />
         );
       } else {
         if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
           emptyTip = (
-            <EmptyTip>
-              <h2>{gettext('No libraries')}</h2>
-            </EmptyTip>
+            <EmptyTip title={gettext('No libraries')}/>
           );
         } else {
           emptyTip = (
-            <EmptyTip>
-              <h2>{gettext('No libraries')}</h2>
-              <p>{gettext('You can create libraries by clicking the "New Library" button above.')}</p>
-            </EmptyTip>
+            <EmptyTip
+              title={gettext('No libraries')}
+              text={gettext('You can create libraries by clicking the "New Library" button above.')}
+            />
           );
         }
       }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { gettext, mediaUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SeatableAccountItem from './seatable-account-setting-item';
+import EmptyTip from '../empty-tip';
 
 class SeatableAccountSettingList extends Component {
 
@@ -18,10 +19,7 @@ class SeatableAccountSettingList extends Component {
     const { seatableSettings } = this.props;
     if (!Array.isArray(seatableSettings) || seatableSettings.length === 0) {
       return (
-        <div className="no-accounts d-flex flex-column align-items-center justify-content-center">
-          <img src={`${mediaUrl}img/no-items-tip.png`} alt={gettext('No SeaTable bases')} />
-          <p>{gettext('No SeaTable bases')}</p>
-        </div>
+        <EmptyTip text={gettext('No SeaTable bases')}/>
       );
     }
     return (

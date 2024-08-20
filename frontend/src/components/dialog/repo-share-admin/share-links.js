@@ -128,9 +128,7 @@ class RepoShareAdminShareLinks extends Component {
         {loading && <Loading />}
         {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
         {!loading && !errorMsg && !items.length &&
-        <EmptyTip forDialog={true}>
-          <p className="text-secondary">{gettext('No share links')}</p>
-        </EmptyTip>
+        <EmptyTip forDialog={true} text={gettext('No share links')}/>
         }
         {!loading && !errorMsg && items.length > 0 &&
         <table className="table-hover">

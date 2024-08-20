@@ -55,10 +55,10 @@ class MyLibsDeleted extends Component {
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.deletedRepoList.length === 0) &&
-              <EmptyTip>
-                <h2>{gettext('No deleted libraries')}</h2>
-                <p>{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
-              </EmptyTip>
+              <EmptyTip
+                title={gettext('No deleted libraries')}
+                text={gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}
+              />
               }
               {this.state.deletedRepoList.length !== 0 &&
                 <div>

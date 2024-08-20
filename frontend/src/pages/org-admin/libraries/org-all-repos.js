@@ -60,9 +60,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No libraries')}</h2>
-        </EmptyTip>
+        <EmptyTip text={gettext('No libraries')}/>
       );
       const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       const sortIcon = <span className="sf3-font sf3-font-down"></span>;

@@ -32,9 +32,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No connected devices')}</h2>
-        </EmptyTip>
+        <EmptyTip text={gettext('No connected devices')}/>
       );
       const table = (
         <Fragment>

@@ -21,11 +21,6 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
-      const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No libraries')}</h2>
-        </EmptyTip>
-      );
       const table = (
         <Fragment>
           <table className="table-hover">
@@ -49,7 +44,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip;
+      return items.length ? table : <EmptyTip text={gettext('No libraries')} />;
     }
   }
 }

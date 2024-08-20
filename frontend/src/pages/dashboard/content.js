@@ -22,7 +22,7 @@ class FileActivitiesContent extends Component {
     let { items, isLoadingMore } = this.props;
 
     if (!items.length) {
-      return <EmptyTip><p>{gettext('No more activities')}</p></EmptyTip>;
+      return <EmptyTip text={gettext('No more activities')}/>;
     }
 
     const desktopThead = (

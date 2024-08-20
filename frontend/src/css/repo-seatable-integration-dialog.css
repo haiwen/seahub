@@ -140,19 +140,6 @@
   font-weight: normal;
 }
 
-.accounts-manage .no-accounts {
-  height: 400px;
-}
-
-.accounts-manage .no-accounts img {
-  width: 120px;
-}
-
-.accounts-manage .no-accounts p {
-  margin-top: 1rem;
-  color: #afafaf;
-}
-
 .accounts-manage .accounts-list-body {
   max-height: 400px;
   overflow-y: auto;

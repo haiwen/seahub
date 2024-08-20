@@ -30,9 +30,10 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No folders shared')}</h2>
-          <p>{gettext('You have not shared any folders with other users yet. You can share a folder with other users by clicking the share icon to the right of a folder\'s name.')}</p>
+        <EmptyTip
+          title={gettext('No folders shared')}
+          text={gettext('You have not shared any folders with other users yet. You can share a folder with other users by clicking the share icon to the right of a folder\'s name.')}
+        >
         </EmptyTip>
       );
 

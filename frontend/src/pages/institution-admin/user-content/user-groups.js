@@ -26,9 +26,7 @@ export default function UsersGroups() {
 
   if (groups.length === 0) {
     return (
-      <EmptyTip>
-        <h2>{gettext('This user has not created or joined any groups')}</h2>
-      </EmptyTip>
+      <EmptyTip text={gettext('This user has not created or joined any groups')}/>
     );
   }
 
