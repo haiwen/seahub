@@ -28,10 +28,6 @@ const Container = () => {
     return validGroupbys.length > 0;
   }, [metadata]);
 
-  const onSelectCell = useCallback(() => {
-    // todo
-  }, []);
-
   const loadMore = useCallback(async () => {
     if (!metadata.hasMore) return;
     setLoadingMore(true);
@@ -158,14 +154,12 @@ const Container = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
-    const unsubscribeSelectCell = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_CELL, onSelectCell);
     const unsubscribeModifyFilters = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_FILTERS, modifyFilters);
     const unsubscribeModifySorts = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SORTS, modifySorts);
     const unsubscribeModifyGroupbys = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
     const unsubscribeModifyHiddenColumns = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      unsubscribeSelectCell();
       unsubscribeModifyFilters();
       unsubscribeModifySorts();
       unsubscribeModifyGroupbys();

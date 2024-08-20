@@ -331,8 +331,8 @@ class RecordsBody extends Component {
     this.props.onCellRangeSelectionUpdated(selectedRange);
   };
 
-  onCellContextMenu = (event, cell) => {
-    this.props.onCellContextMenu(event, cell);
+  onCellContextMenu = (cellPosition) => {
+    this.props.onCellContextMenu(cellPosition);
   };
 
   /**
@@ -510,6 +510,7 @@ class RecordsBody extends Component {
         <div id="canvas" className="sf-metadata-result-table-content" ref={this.setResultContentRef} onScroll={this.onScroll}>
           <InteractionMasks
             ref={this.setInteractionMaskRef}
+            contextMenu={this.props.contextMenu}
             canAddRow={this.props.canAddRow}
             table={this.props.table}
             columns={this.props.columns}
@@ -559,6 +560,7 @@ class RecordsBody extends Component {
 
 RecordsBody.propTypes = {
   onRef: PropTypes.func,
+  contextMenu: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
   canAddRow: PropTypes.bool,
   gridUtils: PropTypes.object,
   table: PropTypes.object,

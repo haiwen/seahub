@@ -446,8 +446,8 @@ class GroupBody extends Component {
     this.selectUpdate(cellPosition, false, this.updateViewableArea);
   };
 
-  onCellContextMenu = (event, cell) => {
-    this.props.onCellContextMenu(event, cell);
+  onCellContextMenu = (cellPosition) => {
+    this.props.onCellContextMenu(cellPosition);
   };
 
   onWindowMouseUp = (event) => {

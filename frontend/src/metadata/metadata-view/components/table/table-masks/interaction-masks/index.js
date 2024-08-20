@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { isValidElement, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import toaster from '../../../../../../components/toast';
@@ -547,6 +547,10 @@ class InteractionMasks extends React.Component {
     }
   };
 
+  onCopySelected = () => {
+    this.onCopyCells();
+  };
+
   onCopy = (e) => {
     e.preventDefault();
 
@@ -1014,7 +1018,7 @@ class InteractionMasks extends React.Component {
     const showDragHandle = (isDragEnabled && canEdit);
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = column || {};
-    if (isEditorEnabled && columnType !== CellType.RATE && columnType !== CellType.CHECKBOX) return null;
+    if (isEditorEnabled && columnType !== CellType.RATE && columnType !== CellType.CHECKBOX && columnType !== CellType.FILE_NAME) return null;
     if (!this.isGridSelected()) return null;
 
     const props = {
@@ -1068,7 +1072,7 @@ class InteractionMasks extends React.Component {
 
   render() {
     const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition } = this.state;
-    const { table, columns, isGroupView, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget } = this.props;
+    const { table, columns, isGroupView, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu, recordMetrics } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div
@@ -1113,12 +1117,21 @@ class InteractionMasks extends React.Component {
             />
           </EditorPortal>
         )}
+
+        {isValidElement(contextMenu) && cloneElement(contextMenu, {
+          recordMetrics: recordMetrics,
+          selectedPosition: isSelectedSingleCell ? selectedPosition : null,
+          selectedRange: !isSelectedSingleCell ? selectedRange : null,
+          onClearSelected: this.handleSelectCellsDelete,
+          onCopySelected: this.onCopySelected,
+        })}
       </div>
     );
   }
 }
 
 InteractionMasks.propTypes = {
+  contextmenu: PropTypes.element,
   table: PropTypes.object,
   columns: PropTypes.array,
   canAddRow: PropTypes.bool,
