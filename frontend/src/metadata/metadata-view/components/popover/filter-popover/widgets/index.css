@@ -9,11 +9,11 @@
   padding: 16px;
 }
 
-.sf-metadata-filters-list.empty-filters-container .empty-sf-metadata-filters-list {
+.sf-metadata-filters-list.empty-filters-container .empty-filters-list {
   padding-left: 0;
 }
 
-.sf-metadata-filters-list .empty-sf-metadata-filters-list {
+.sf-metadata-filters-list .empty-filters-list {
   padding: 0.25rem;
   font-size: 14px;
   color: #666666;

@@ -110,7 +110,7 @@ class FiltersList extends Component {
     const isEmpty = filters.length === 0;
     return (
       <div className={classnames('sf-metadata-filters-list', { 'empty-filters-container': isEmpty }, { [className]: className })}>
-        {isEmpty && <div className="empty-sf-metadata-filters-list">{emptyPlaceholder}</div>}
+        {isEmpty && <div className="empty-filters-list">{emptyPlaceholder}</div>}
         {!isEmpty &&
           filters.map((filter, index) => {
             const { column_key } = filter;
