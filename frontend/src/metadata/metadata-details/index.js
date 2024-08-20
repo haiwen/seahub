@@ -10,6 +10,7 @@ import { gettext } from '../../utils/constants';
 import { DetailEditor, CellFormatter } from '../metadata-view';
 import { getColumnOriginName } from '../metadata-view/utils/column-utils';
 import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS, getColumnOptionNamesByIds } from '../metadata-view/_basic';
+import { SYSTEM_FOLDERS } from './constants';
 
 import './index.css';
 
@@ -20,6 +21,11 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
 
   useEffect(() => {
     setLoading(true);
+    if (SYSTEM_FOLDERS.find(folderPath => filePath.startsWith(folderPath))) {
+      setLoading(false);
+      return;
+    }
+
     const dirName = Utils.getDirName(filePath);
     const fileName = Utils.getFileName(filePath);
     let parentDir = direntType === 'file' ? dirName : dirName.slice(0, dirName.length - fileName.length - 1);
