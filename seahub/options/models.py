@@ -38,9 +38,11 @@ KEY_FILE_UPDATES_EMAIL_INTERVAL = "file_updates_email_interval"
 KEY_FILE_UPDATES_LAST_EMAILED_TIME = "file_updates_last_emailed_time"
 KEY_COLLABORATE_EMAIL_INTERVAL = 'collaborate_email_interval'
 KEY_COLLABORATE_LAST_EMAILED_TIME = 'collaborate_last_emailed_time'
+KEY_LOGIN_EMAIL_INTERVAL = 'enable_login_email'
+KEY_PASSWD_UPDATE_EMAIL_INTERVAL = 'enable_password_update_email'
 
 DEFAULT_COLLABORATE_EMAIL_INTERVAL = 3600
-
+DEFAULT_PWD_UPDATE_EMAIL_ENABLED = 1
 
 class CryptoOptionNotSetError(Exception):
     pass
@@ -345,6 +347,34 @@ class UserOptionsManager(models.Manager):
 
     def unset_collaborate_last_emailed_time(self, username):
         return self.unset_user_option(username, KEY_COLLABORATE_LAST_EMAILED_TIME)
+
+    def get_login_email_enable_status(self, username):
+        val = self.get_user_option(username, KEY_LOGIN_EMAIL_INTERVAL)
+        if not val:
+            return None
+        try:
+            return int(val)
+        except ValueError:
+            logger.error('Failed to convert string %s to int' % val)
+            return None
+
+    def set_login_email_enable_status(self, username, enable):
+        return self.set_user_option(username, KEY_LOGIN_EMAIL_INTERVAL,
+                                    str(enable))
+
+    def get_password_update_email_enable_status(self, username):
+        val = self.get_user_option(username, KEY_PASSWD_UPDATE_EMAIL_INTERVAL)
+        if not val:
+            return DEFAULT_PWD_UPDATE_EMAIL_ENABLED
+        try:
+            return int(val)
+        except ValueError:
+            logger.error('Failed to convert string %s to int' % val)
+            return None
+
+    def set_password_update_email_enable_status(self, username, enable):
+        return self.set_user_option(username, KEY_PASSWD_UPDATE_EMAIL_INTERVAL,
+                                    str(enable))
 
 
 class UserOptions(models.Model):
