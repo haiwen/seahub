@@ -21,6 +21,11 @@ export const NOT_DISPLAY_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_DETAILS,
 ];
 
+export const SYSTEM_FOLDERS = [
+  '/_Internal',
+  '/images'
+];
+
 export {
   PRIVATE_COLUMN_KEY,
 };
