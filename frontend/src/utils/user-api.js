@@ -43,7 +43,7 @@ class UserAPI {
     return this.req.post(url, data);
   }
 
-  updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail) {
+  updateEmailNotificationConfig(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail) {
     let url = this.server + '/api2/account/info/';
     let data = {
       'file_updates_email_interval': fileUpdatesEmailInterval,
