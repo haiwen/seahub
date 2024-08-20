@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { PRIVATE_COLUMN_KEY } from '../../_basic';
+import { getColumnByKey, PRIVATE_COLUMN_KEY } from '../../_basic';
 import { gettext } from '../../utils';
 import { siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
+import { useMetadata } from '../../hooks';
 
 import './index.css';
 
@@ -12,6 +13,7 @@ const OPERATION = {
   COPY_SELECTED: 'copy-selected',
   OPEN_PARENT_FOLDER: 'open-parent-folder',
   OPEN_IN_NEW_TAB: 'open-new-tab',
+  GENERATE_SUMMARY: 'generate-summary',
 };
 
 const ContextMenu = ({
@@ -27,6 +29,7 @@ const ContextMenu = ({
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const { metadata } = useMetadata();
 
   const options = useMemo(() => {
     const permission = window.sfMetadataContext.getPermission();
@@ -50,9 +53,17 @@ const ContextMenu = ({
     const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab') });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
+    const { columns } = metadata;
+    const summaryColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_SUMMARY);
+    if (summaryColumn) {
+      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+      if (Utils.isSdocFile(fileName)) {
+        list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+      }
+    }
 
     return list;
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, recordGetterByIndex]);
+  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex]);
 
   const handleHide = useCallback((event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -91,7 +102,7 @@ const ContextMenu = ({
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
 
   const generateSummary = useCallback(() => {
-    const { groupRecordIndex, rowIdx } = this.state.selectedPosition;
+    const { groupRecordIndex, rowIdx } = selectedPosition;
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
     if (!record) return;
     modifySdocSummary([record[PRIVATE_COLUMN_KEY.ID]]);
@@ -116,12 +127,16 @@ const ContextMenu = ({
         onClearSelected && onClearSelected();
         break;
       }
+      case OPERATION.GENERATE_SUMMARY: {
+        generateSummary && generateSummary();
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary]);
 
   const getMenuPosition = (x = 0, y = 0) => {
     let menuStyles = {
