@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import SelectEditor from './select-editor';
 import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import CustomPermission from '../../models/custom-permission';
 import toaster from '../toast';
 import { isPro } from '../../utils/constants';
@@ -18,6 +19,7 @@ const propTypes = {
   onPermissionChanged: PropTypes.func.isRequired,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
+  isSysAdmin: PropTypes.bool,
 };
 
 class SharePermissionEditor extends React.Component {
@@ -55,7 +57,7 @@ class SharePermissionEditor extends React.Component {
   }
 
   listCustomPermissions = () => {
-    const { repoID } = this.props;
+    const { repoID, isSysAdmin } = this.props;
     const cacheData = localStorage.getItem(this.CACHE_KEY);
     if (cacheData) {
       const { permission_list: permissions } = JSON.parse(cacheData);
@@ -66,8 +68,14 @@ class SharePermissionEditor extends React.Component {
       });
       return;
     }
+    let apiCall;
+    if (isSysAdmin) {
+      apiCall = systemAdminAPI.adminListCustomSharePermissions(repoID)
+    } else {
+      apiCall = seafileAPI.listCustomPermissions(repoID)
+    }
 
-    seafileAPI.listCustomPermissions(repoID).then(res => {
+    apiCall.then(res => {
       const { permission_list: permissions } = res.data;
       localStorage.setItem(this.CACHE_KEY, JSON.stringify(res.data));
       const customPermissions = permissions.map(item => new CustomPermission(item));

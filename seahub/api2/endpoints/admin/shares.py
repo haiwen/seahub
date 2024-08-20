@@ -13,7 +13,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.share.utils import update_user_dir_permission, \
         update_group_dir_permission, share_dir_to_user, share_dir_to_group, \
         has_shared_to_user, has_shared_to_group, check_user_share_out_permission, \
@@ -469,3 +469,28 @@ class AdminShares(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+    
+class AdminCustomSharePermissionsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, repo_id):
+        """List custom share permissions
+        """
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # main
+        try:
+            permission_query = CustomSharePermissions.objects.get_permissions_by_repo_id(repo_id)
+            permission_list = [item.to_dict() for item in permission_query]
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'permission_list': permission_list})

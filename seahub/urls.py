@@ -153,7 +153,7 @@ from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, Adm
 from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup, AdminSearchGroup, AdminDepartments
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
-from seahub.api2.endpoints.admin.shares import AdminShares
+from seahub.api2.endpoints.admin.shares import AdminShares, AdminCustomSharePermissionsView
 from seahub.api2.endpoints.admin.share_links import AdminShareLinks, AdminShareLink, \
         AdminShareLinkDownload, AdminShareLinkCheckPassword, \
         AdminShareLinkDirents
@@ -644,6 +644,8 @@ urlpatterns = [
     
     ## admin::shares
     re_path(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
+    
+    re_path(r'^api/v2.1/admin/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/$', AdminCustomSharePermissionsView.as_view(), name='api-v2.1-admin-custom-share-permissions'),
 
     ## admin::logs
     re_path(r'^api/v2.1/admin/logs/login-logs/$', AdminLogsLoginLogs.as_view(), name='api-v2.1-admin-logs-login-logs'),

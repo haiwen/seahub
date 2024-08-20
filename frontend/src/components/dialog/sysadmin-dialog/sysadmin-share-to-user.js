@@ -249,6 +249,7 @@ class SysAdminShareToUser extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
+                  isSysAdmin={true}
                 />
               </td>
               <td>
