@@ -313,7 +313,7 @@ class FilterItem extends React.Component {
     if (supportMultipleSelectOptions.includes(filter_predicate)) {
       isSupportMultipleSelect = true;
     }
-    const className = 'sf-metadata-select-option-name multiple-select-option';
+    const className = 'select-option-name multiple-select-option';
     let labelArray = [];
     if (Array.isArray(options) && Array.isArray(filterTerm)) {
       filterTerm.forEach((item) => {
@@ -437,7 +437,7 @@ class FilterItem extends React.Component {
         let selectedOptionDom = { label: null };
         if (filter_term) {
           let selectedOption = options.find(option => option.id === filter_term);
-          const className = 'sf-metadata-select-option-name single-select-option';
+          const className = 'select-option-name single-select-option';
           const style = selectedOption ?
             { background: selectedOption.color, color: selectedOption.textColor || null } :
             { background: DELETED_OPTION_BACKGROUND_COLOR };

@@ -75,7 +75,7 @@ const GroupbyItem = memo(({
         label: (
           <Fragment>
             <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
-            <span className="sf-metadata-select-option-name">{name}</span>
+            <span className="select-option-name">{name}</span>
           </Fragment>
         )
       };
@@ -90,10 +90,10 @@ const GroupbyItem = memo(({
     return [
       {
         value: { sortType: SORT_TYPE.UP },
-        label: <span className="sf-metadata-select-option-name">{gettext('Up')}</span>
+        label: <span className="select-option-name">{gettext('Up')}</span>
       }, {
         value: { sortType: SORT_TYPE.DOWN },
-        label: <span className="sf-metadata-select-option-name">{gettext('Down')}</span>
+        label: <span className="select-option-name">{gettext('Down')}</span>
       }
     ];
   }, []);
@@ -108,7 +108,7 @@ const GroupbyItem = memo(({
     return granularityList.map((granularity) => {
       return {
         value: granularity,
-        label: <span className="sf-metadata-select-option-name">{gettext(displayGranularity[granularity])}</span>,
+        label: <span className="select-option-name">{gettext(displayGranularity[granularity])}</span>,
       };
     });
   }, [columns, groupby]);
@@ -118,7 +118,7 @@ const GroupbyItem = memo(({
     const countType = getSelectedCountType(column, count_type);
     if (countType) {
       return {
-        label: <span className="sf-metadata-select-option-name">{gettext(countType)}</span>
+        label: <span className="select-option-name">{gettext(countType)}</span>
       };
     }
   }, [column, groupby]);

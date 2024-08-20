@@ -163,7 +163,7 @@ class SortPopover extends Component {
     return SORT_TYPES.map(sortType => {
       return {
         value: { sortType },
-        label: <span className="sf-metadata-select-option-name">{gettext(sortType)}</span>
+        label: <span className="select-option-name">{gettext(sortType)}</span>
       };
     });
   };
@@ -184,14 +184,14 @@ class SortPopover extends Component {
       label: (
         <Fragment>
           <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
-          <span className="sf-metadata-select-option-name" title={name} aria-label={name}>{name}</span>
+          <span className="select-option-name" title={name} aria-label={name}>{name}</span>
         </Fragment>
       )
     };
 
     let selectedTypeShow = sort.sort_type;
     let selectedSortType = selectedTypeShow && {
-      label: <span className="sf-metadata-select-option-name">{gettext(selectedTypeShow)}</span>
+      label: <span className="select-option-name">{gettext(selectedTypeShow)}</span>
     };
 
     return (

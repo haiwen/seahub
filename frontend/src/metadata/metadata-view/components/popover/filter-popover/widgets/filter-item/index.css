@@ -42,8 +42,8 @@
   text-overflow: clip;
 }
 
-.sf-metadata-selector-single-select .sf-metadata-select-option-name,
-.sf-metadata-selector-multiple-select .sf-metadata-select-option-name {
+.sf-metadata-selector-single-select .select-option-name,
+.sf-metadata-selector-multiple-select .select-option-name {
   margin-top: 5px;
   justify-content: space-between;
 }
