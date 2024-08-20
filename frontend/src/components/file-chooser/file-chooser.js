@@ -421,12 +421,12 @@ class FileChooser extends React.Component {
     const recentlyUsedList = JSON.parse(localStorage.getItem('recently-used-list')) || [];
 
     return (
-      <div className='scroll-wrapper' onScroll={this.onScroll}>
-        <div className="file-chooser-container user-select-none" >
+      <div className='file-chooser-scroll-wrapper' onScroll={this.onScroll}>
+        <div className="file-chooser-container user-select-none">
           {mode === 'current_repo_and_other_repos' && (
             <Fragment>
               <div className="list-view">
-                <div className="list-view-header">
+                <div className="file-chooser-list-view-header">
                   <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onCurrentRepoToggle}></span>
                   <span className="library">{gettext('Current Library')}</span>
                 </div>
@@ -447,7 +447,7 @@ class FileChooser extends React.Component {
                 }
               </div>
               <div className="list-view">
-                <div className="list-view-header">
+                <div className="file-chooser-list-view-header">
                   <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onOtherRepoToggle}></span>
                   <span className="library">{gettext('Other Libraries')}</span>
                 </div>
@@ -487,7 +487,7 @@ class FileChooser extends React.Component {
           {mode === 'only_all_repos' && (
             <div className="file-chooser-container">
               <div className="list-view">
-                <div className="list-view-header">
+                <div className="file-chooser-list-view-header">
                   <span className="item-toggle sf3-font sf3-font-down"></span>
                   <span className="library">{gettext('Libraries')}</span>
                 </div>
