@@ -10,10 +10,14 @@
 {% blocktrans with account=name %}Dear, {{ account }}{% endblocktrans %}
 </p>
 <p style="font-size:14px;color:#434144;">
+{% blocktrans %}
 Greetings!
+{% endblocktrans %}
 </p>
 <p style="font-size:14px;color:#434144;">
-{% trans " We are thrilled to inform you that you have successfully joined Seafile - a cloud-based platform dedicated to file management and team collaboration. Here, you'll find seamless and secure digital workspaces for document sharing, version control, and teamwork." %}
+{% blocktrans %}
+    We are thrilled to inform you that you have successfully joined {{ site_name }}  - a cloud-based platform dedicated to file management and team collaboration. Here, you'll find seamless and secure digital workspaces for document sharing, version control, and teamwork.
+{% endblocktrans %}
 </p>
 
 {% endautoescape %}

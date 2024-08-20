@@ -16,7 +16,7 @@ from seahub.organizations.models import OrgSettings
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
 from seahub.organizations.views import gen_org_url_prefix
 from seahub.password_session import update_session_auth_hash
-from seahub.utils import is_valid_email, send_html_email, get_site_name
+from seahub.utils import is_valid_email, send_html_email, get_site_name, IS_EMAIL_CONFIGURED
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -253,15 +253,17 @@ class ResetPasswordView(APIView):
         user.set_password(new_password)
         user.save()
         enable_pwd_email = bool(UserOptions.objects.get_password_update_email_enable_status(user.username))
-        if enable_pwd_email:
+        
+        if IS_EMAIL_CONFIGURED and enable_pwd_email:
             email_template_name = 'registration/password_change_email.html'
             send_to = email2contact_email(request.user.username)
             site_name = get_site_name()
             c = {
-                'email': send_to
+                'email': send_to,
+                'name': email2nickname(user.username)
             }
             try:
-                send_html_email(_("Successfully Changed Password on %s") % site_name,
+                send_html_email(_("[%s]Your Password Has Been Successfully Updated") % site_name,
                                 email_template_name, c, None,
                                 [send_to])
             except Exception as e:

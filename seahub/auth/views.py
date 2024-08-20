@@ -30,12 +30,12 @@ from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
 from seahub.auth.utils import (
     get_login_failed_attempts, incr_login_failed_attempts,
-    clear_login_failed_attempts)
+    clear_login_failed_attempts, send_login_email)
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import render_error, get_site_name, is_valid_email, get_service_url
+from seahub.utils import render_error, get_site_name, is_valid_email, get_service_url, IS_EMAIL_CONFIGURED
 from seahub.utils.http import rate_limit
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
@@ -79,19 +79,9 @@ def log_user_in(request, user, redirect_to):
     auth_login(request, user)
     enable_login_email = bool(UserOptions.objects.get_login_email_enable_status(user.username))
     already_login_users = request.session.get(SESSION_USERS_LOGIN, [])
-    if user.username not in already_login_users and enable_login_email:
-        email_template_name = 'registration/login_email.html'
-        send_to = email2contact_email(request.user.username)
-        site_name = get_site_name()
-        c = {
-            'name': email2nickname(user.username)
-        }
-        try:
-            send_html_email(_("Welcome to %s") % site_name,
-                            email_template_name, c, None,
-                            [send_to])
-        except Exception as e:
-            logger.error(e)
+    
+    if IS_EMAIL_CONFIGURED and (user.username not in already_login_users) and enable_login_email:
+        send_login_email(user.username)
 
     return HttpResponseRedirect(redirect_to)
 
