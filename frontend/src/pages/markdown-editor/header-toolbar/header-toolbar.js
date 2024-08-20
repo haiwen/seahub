@@ -78,12 +78,6 @@ class HeaderToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <ButtonItem
-                  text={gettext('Open parent directory')}
-                  id='parentDirectory'
-                  icon='open-folder'
-                  onMouseDown={this.openParentDirectory}
-                />
                 {(canLockUnlockFile && !isLocked) && (
                   <ButtonItem
                     id="lock-unlock-file"
@@ -146,6 +140,7 @@ class HeaderToolbar extends React.Component {
                 onEdit={this.props.onEdit}
                 showFileHistory={this.props.showFileHistory}
                 toggleHistory={this.props.toggleHistory}
+                openParentDirectory={this.openParentDirectory}
                 isSmallScreen={false}
               />
             </div>
@@ -225,6 +220,7 @@ class HeaderToolbar extends React.Component {
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
+                openParentDirectory={this.openParentDirectory}
                 isSmallScreen={false}
               />
             </div>
@@ -254,6 +250,7 @@ class HeaderToolbar extends React.Component {
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
+                openParentDirectory={this.openParentDirectory}
                 isSmallScreen={false}
               />
             </div>
