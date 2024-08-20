@@ -10,13 +10,7 @@
   width: 100%;
   height: calc(100% - 48px);
   border-top: 1px solid #e8e8e8;
-}
-
-.view-mode-container {
-  display: flex;
-  flex-direction: row !important;
-  overflow: hidden !important;
-  padding-left: 0 !important;
+  flex-direction: row;
   min-height: 0;
 }
 
