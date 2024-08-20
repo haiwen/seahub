@@ -84,7 +84,7 @@ class EmailNotice extends React.Component {
   formSubmit = (e) => {
     e.preventDefault();
     let { fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail } = this.state;
-    userAPI.updateEmailNotificationInterval(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail).then((res) => {
+    userAPI.updateEmailNotificationConfig(fileUpdatesEmailInterval, collaborateEmailInterval, enablePasswordUpdateEmail, enableLoginEmail).then((res) => {
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
