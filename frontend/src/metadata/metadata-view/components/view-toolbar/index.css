@@ -3,7 +3,7 @@
   display: flex;
   flex-shrink: 0;
   flex-wrap: nowrap;
-  height: 48px;
+  height: 24px;
   justify-content: space-between;
 }
 
