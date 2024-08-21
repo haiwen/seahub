@@ -4,7 +4,7 @@ import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { siteRoot } from './utils/constants';
-import { Utils } from './utils/utils';
+import { Utils, isMobile } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import EventBus from './components/common/event-bus';
 import Header from './components/header';
@@ -51,7 +51,7 @@ class App extends Component {
     }
     this.state = {
       isSidePanelClosed: false,
-      isSidePanelFolded: localStorage.getItem('sf_user_side_nav_folded') == 'true' || false,
+      isSidePanelFolded: isMobile ? false : (localStorage.getItem('sf_user_side_nav_folded') == 'true' || false),
       currentTab: '',
       pathPrefix: [],
       inResizing: false,
