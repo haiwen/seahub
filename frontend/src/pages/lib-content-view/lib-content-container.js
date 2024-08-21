@@ -110,6 +110,7 @@ class LibContentContainer extends React.Component {
     super(props);
     this.state = {
       currentDirent: null,
+      hasSelectedFile: false,
     };
 
     this.errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
@@ -118,6 +119,13 @@ class LibContentContainer extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.path !== this.props.path || nextProps.updateDetail !== this.props.updateDetail) {
       this.setState({ currentDirent: null });
+    }
+
+    if (!this.state.hasSelectedFile) {
+      const { isDirentSelected } = nextProps;
+      if (isDirentSelected) {
+        this.setState({ hasSelectedFile: true });
+      }
     }
   }
 
@@ -171,6 +179,7 @@ class LibContentContainer extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     const { path, repoID, usedRepoTags, isDirentSelected } = this.props;
+    const { hasSelectedFile } = this.state;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (isDesktop && usedRepoTags.length !== 0) {
@@ -186,65 +195,65 @@ class LibContentContainer extends React.Component {
           </div>
         }
         <div className="cur-view-path">
-          <div
-            className={classnames('cur-view-path-left', { 'w-100': !isDesktop })}
-            style={isDirentSelected ? { transform: 'translateY(-50px)' } : {}}
-          >
-            <CurDirPath
-              currentRepoInfo={this.props.currentRepoInfo}
-              repoID={repoID}
-              repoName={this.props.currentRepoInfo.repo_name}
-              repoEncrypted={this.props.repoEncrypted}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              pathPrefix={this.props.pathPrefix}
-              currentPath={this.props.path}
-              userPerm={this.props.userPerm}
-              isViewFile={this.props.isViewFile}
-              onTabNavClick={this.props.onTabNavClick}
-              onPathClick={this.onPathClick}
-              fileTags={this.props.fileTags}
-              direntList={this.props.direntList}
-              sortBy={this.props.sortBy}
-              sortOrder={this.props.sortOrder}
-              sortItems={this.props.sortItems}
-              toggleTreePanel={this.props.toggleTreePanel}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              showShareBtn={this.props.showShareBtn}
-              onAddFolder={this.props.onAddFolder}
-              onAddFile={this.props.onAddFile}
-              onUploadFile={this.props.onUploadFile}
-              onUploadFolder={this.props.onUploadFolder}
-              fullDirentList={this.props.fullDirentList}
-              filePermission={this.props.filePermission}
-              onFileTagChanged={this.props.onToolbarFileTagChanged}
-              repoTags={this.props.repoTags}
-              onItemMove={this.props.onItemMove}
-              isDesktop={isDesktop}
-            />
-            <ToolbarForSelectedDirents
-              repoID={this.props.repoID}
-              path={this.props.path}
-              userPerm={this.props.userPerm}
-              repoEncrypted={this.props.repoEncrypted}
-              repoTags={this.props.repoTags}
-              selectedDirentList={this.props.selectedDirentList}
-              direntList={this.props.direntList}
-              onItemsMove={this.props.onItemsMove}
-              onItemsCopy={this.props.onItemsCopy}
-              onItemsDelete={this.props.onItemsDelete}
-              onItemRename={this.props.onItemRename}
-              isRepoOwner={this.props.isRepoOwner}
-              currentRepoInfo={this.props.currentRepoInfo}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              updateDirent={this.props.updateDirent}
-              unSelectDirent={this.props.unSelectDirent}
-              onFilesTagChanged={this.props.onFilesTagChanged}
-              showShareBtn={this.props.showShareBtn}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              showDirentDetail={this.props.showDirentDetail}
-              currentMode={this.props.currentMode}
-              switchViewMode={this.props.switchViewMode}
-            />
+          <div className={classnames('cur-view-path-left', { 'w-100': !isDesktop, 'animation-children': hasSelectedFile })}>
+            {isDirentSelected ? (
+              <ToolbarForSelectedDirents
+                repoID={this.props.repoID}
+                path={this.props.path}
+                userPerm={this.props.userPerm}
+                repoEncrypted={this.props.repoEncrypted}
+                repoTags={this.props.repoTags}
+                selectedDirentList={this.props.selectedDirentList}
+                direntList={this.props.direntList}
+                onItemsMove={this.props.onItemsMove}
+                onItemsCopy={this.props.onItemsCopy}
+                onItemsDelete={this.props.onItemsDelete}
+                onItemRename={this.props.onItemRename}
+                isRepoOwner={this.props.isRepoOwner}
+                currentRepoInfo={this.props.currentRepoInfo}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                updateDirent={this.props.updateDirent}
+                unSelectDirent={this.props.unSelectDirent}
+                onFilesTagChanged={this.props.onFilesTagChanged}
+                showShareBtn={this.props.showShareBtn}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                showDirentDetail={this.props.showDirentDetail}
+                currentMode={this.props.currentMode}
+                switchViewMode={this.props.switchViewMode}
+              />
+            ) : (
+              <CurDirPath
+                currentRepoInfo={this.props.currentRepoInfo}
+                repoID={repoID}
+                repoName={this.props.currentRepoInfo.repo_name}
+                repoEncrypted={this.props.repoEncrypted}
+                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                pathPrefix={this.props.pathPrefix}
+                currentPath={this.props.path}
+                userPerm={this.props.userPerm}
+                isViewFile={this.props.isViewFile}
+                onTabNavClick={this.props.onTabNavClick}
+                onPathClick={this.onPathClick}
+                fileTags={this.props.fileTags}
+                direntList={this.props.direntList}
+                sortBy={this.props.sortBy}
+                sortOrder={this.props.sortOrder}
+                sortItems={this.props.sortItems}
+                toggleTreePanel={this.props.toggleTreePanel}
+                enableDirPrivateShare={this.props.enableDirPrivateShare}
+                showShareBtn={this.props.showShareBtn}
+                onAddFolder={this.props.onAddFolder}
+                onAddFile={this.props.onAddFile}
+                onUploadFile={this.props.onUploadFile}
+                onUploadFolder={this.props.onUploadFolder}
+                fullDirentList={this.props.fullDirentList}
+                filePermission={this.props.filePermission}
+                onFileTagChanged={this.props.onToolbarFileTagChanged}
+                repoTags={this.props.repoTags}
+                onItemMove={this.props.onItemMove}
+                isDesktop={isDesktop}
+              />
+            )}
           </div>
           {isDesktop &&
             <div className="cur-view-path-right py-1">

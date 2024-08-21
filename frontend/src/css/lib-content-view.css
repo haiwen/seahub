@@ -259,14 +259,29 @@
 }
 
 .dir-view-path .path-item {
+  display: inline-block;
   min-width: 0; /* overwrite some styles */
   padding: 0 6px;
   font-size: 1rem;
   color: inherit;
   border-radius: 3px;
   text-decoration: none;
+  max-width: 172px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dir-view-path .dir-operation {
+  height: 24px;
   display: flex;
   align-items: center;
+}
+
+.dir-view-path .dir-operation .path-item {
+  display: inline-flex;
+  align-items: center;
+  max-width: 252px;
 }
 
 .dir-view-path .path-item:hover {
@@ -283,6 +298,7 @@
 
 .dir-view-path .path-split {
   padding: 0 2px;
+  flex-shrink: 0;
 }
 
 .custom-modal {
@@ -376,14 +392,19 @@
 
 .cur-view-container .cur-view-path {
   display: flex;
-  align-items: flex-start;
-  border-bottom: none;
+  align-items: center;
 }
 
 .cur-view-container .cur-view-path .cur-view-path-left {
   flex: 1;
+  overflow: hidden;
   border-bottom: none;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 200ms;
+}
+
+.cur-view-container .cur-view-path .cur-view-path-right {
+  flex-shrink: 0;
+  margin-left: 10px;
 }
