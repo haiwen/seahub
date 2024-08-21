@@ -131,8 +131,8 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-    })
-  }, [navigation, repoID, viewsMap, selectView])
+    });
+  }, [navigation, repoID, viewsMap, selectView]);
 
   const deleteView = useCallback((viewId, isSelected) => {
     metadataAPI.deleteView(repoID, viewId).then(res => {

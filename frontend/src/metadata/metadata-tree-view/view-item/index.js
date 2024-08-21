@@ -39,7 +39,7 @@ const ViewItem = ({
     if (!canUpdate) return [];
     let value = [
       { key: 'rename', value: gettext('Rename') },
-      { key: 'duplicate', value: gettext('Duplicate')}
+      { key: 'duplicate', value: gettext('Duplicate') }
     ];
     if (canDelete) {
       value.push({ key: 'delete', value: gettext('Delete') });
