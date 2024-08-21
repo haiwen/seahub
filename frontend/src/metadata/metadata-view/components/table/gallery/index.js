@@ -8,11 +8,9 @@ import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
 
-const DEFAULT_COLUMNS = 8;
-
 const Gallery = () => {
   const [imageWidth, setImageWidth] = useState(100);
-  const [columns, setColumns] = useState(DEFAULT_COLUMNS);
+  const [columns, setColumns] = useState(8);
   const [containerWidth, setContainerWidth] = useState(960);
   const [adjustValue, setAdjustValue] = useState(0);
   const { isLoading, metadata } = useMetadata();
@@ -67,8 +65,8 @@ const Gallery = () => {
   }, [metadata, repoID]);
 
   useEffect(() => {
-    const columns = DEFAULT_COLUMNS - adjustValue;
-    const adjustedImageWidth = (containerWidth - 22) / columns;
+    const columns = (Utils.isDesktop() ? 8 : 4) - adjustValue;
+    const adjustedImageWidth = (containerWidth - columns * 2 - 2) / columns;
     setColumns(columns);
     setImageWidth(adjustedImageWidth);
   }, [containerWidth, adjustValue]);
