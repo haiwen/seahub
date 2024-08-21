@@ -208,7 +208,7 @@ class ItemDropdownMenu extends React.Component {
                   >
                     <DropdownToggle
                       tag='div'
-                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pl-5"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
                       <span className="mr-auto">{menuItem.value}</span>
