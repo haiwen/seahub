@@ -269,7 +269,6 @@ class FileChooser extends React.Component {
     } else {
       seafileAPI.searchFiles(queryData, cancelToken).then(res => {
         const filteredResults = filterCurrentRepo(res.data.results);
-        console.log('filteredResults:', filteredResults);
         this.setState({
           searchResults: res.data.total ? this.formatResultItems(filteredResults) : [],
           isResultGot: true

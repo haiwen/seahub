@@ -34,6 +34,7 @@ class SearchedListItem extends React.Component {
 
   searchItemDoubleClick = (e) => {
     let item = this.props.item;
+
     this.props.onSearchedItemDoubleClick(item);
   };
 
