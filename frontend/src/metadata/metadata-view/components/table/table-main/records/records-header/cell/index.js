@@ -19,10 +19,11 @@ const Cell = ({
   isHideTriangle,
   column,
   style: propsStyle,
-  resizeColumnWidth,
   renameColumn,
   deleteColumn,
   modifyColumnData,
+  modifyLocalColumnWidth,
+  modifyColumnWidth,
 }) => {
   const headerCellRef = useRef(null);
 
@@ -52,9 +53,16 @@ const Cell = ({
   const onDrag = useCallback((e) => {
     const width = getWidthFromMouseEvent(e);
     if (width > 0) {
-      resizeColumnWidth(column, width);
+      modifyLocalColumnWidth(column, width);
     }
-  }, [column, getWidthFromMouseEvent, resizeColumnWidth]);
+  }, [column, getWidthFromMouseEvent, modifyLocalColumnWidth]);
+
+  const onDragEnd = useCallback((e) => {
+    const width = getWidthFromMouseEvent(e);
+    if (width > 0) {
+      modifyColumnWidth(column, width);
+    }
+  }, [column, getWidthFromMouseEvent, modifyColumnWidth]);
 
   const handleHeaderCellClick = useCallback((column) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_COLUMN, column);
@@ -90,7 +98,7 @@ const Cell = ({
             modifyColumnData={modifyColumnData}
           />
         )}
-        <ResizeColumnHandle onDrag={onDrag} />
+        <ResizeColumnHandle onDrag={onDrag} onDragEnd={onDragEnd} />
       </div>
     </div>
   );
@@ -109,10 +117,10 @@ Cell.propTypes = {
   frozen: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
   isHideTriangle: PropTypes.bool,
-  resizeColumnWidth: PropTypes.func,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
+  modifyLocalColumnWidth: PropTypes.func,
 };
 
 export default Cell;

@@ -1,3 +1,4 @@
+import deepCopy from 'deep-copy';
 import {
   CellType,
   DEFAULT_DATE_FORMAT,
@@ -121,28 +122,23 @@ export function isColumnSupportDirectEdit(cell, columns) {
   return [CellType.CHECKBOX].includes(column?.type);
 }
 
-const _getCustomColumnsWidth = () => {
-  return window.sfMetadataContext.localStorage.getItem('columns_width') || {};
-};
-
 export const recalculate = (columns, allColumns) => {
   const displayColumns = columns;
   const displayAllColumns = allColumns;
-  const pageColumnsWidth = _getCustomColumnsWidth(); // get columns width from local storage
   const totalWidth = displayColumns.reduce((total, column) => {
-    const width = pageColumnsWidth[column.key] || column.width;
+    const width = column.width;
     total += width;
     return total;
   }, 0);
   let left = SEQUENCE_COLUMN_WIDTH;
   const frozenColumns = displayColumns.filter(c => isFrozen(c));
   const frozenColumnsWidth = frozenColumns.reduce((w, column) => {
-    const width = pageColumnsWidth[column.key] || column.width;
+    const width = column.width;
     return w + width;
   }, 0);
   const lastFrozenColumnKey = frozenColumnsWidth > 0 ? frozenColumns[frozenColumns.length - 1].key : null;
   const newColumns = displayColumns.map((column, index) => {
-    const width = pageColumnsWidth[column.key] || column.width;
+    const width = column.width;
     column.idx = index; // set column idx
     column.left = left; // set column offset
     column.width = width;
@@ -157,6 +153,19 @@ export const recalculate = (columns, allColumns) => {
     columns: newColumns,
     allColumns: displayAllColumns,
   };
+};
+
+export const recalculateColumnMetricsByResizeColumn = (columnMetrics, columnKey, width) => {
+  let newColumnMetrics = deepCopy(columnMetrics);
+  const columnIndex = columnMetrics.columns.findIndex((column) => column.key === columnKey);
+  const column = columnMetrics.columns[columnIndex];
+  const updatedColumn = { ...column, width };
+  newColumnMetrics.columns[columnIndex] = updatedColumn;
+
+  const columnAllIndex = columnMetrics.allColumns.findIndex((column) => column.key === columnKey);
+  newColumnMetrics.allColumns[columnAllIndex] = { ...columnMetrics.columns[columnIndex], width };
+
+  return recalculate(newColumnMetrics.columns, newColumnMetrics.allColumns);
 };
 
 export const getColumnDisplayName = (key, name) => {

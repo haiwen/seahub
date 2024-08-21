@@ -1,5 +1,6 @@
 import deepCopy from 'deep-copy';
 import {
+  getColumnByKey,
   getRowById,
   getRowsByIds,
 } from '../_basic';
@@ -417,6 +418,15 @@ class Store {
     const type = OPERATION_TYPE.MODIFY_COLUMN_DATA;
     const operation = this.createOperation({
       type, repo_id: this.repoId, column_key: columnKey, new_data: newData, old_data: oldData
+    });
+    this.applyOperation(operation);
+  };
+
+  modifyColumnWidth = (columnKey, newWidth) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_WIDTH;
+    const column = getColumnByKey(this.data.columns, columnKey);
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, column_key: columnKey, new_width: newWidth, old_width: column.width
     });
     this.applyOperation(operation);
   };
