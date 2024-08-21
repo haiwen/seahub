@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-16 16:30+0800\n"
+"POT-Creation-Date: 2024-08-21 10:06+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -52,7 +52,7 @@ msgstr "退出机构管理"
 
 #: frontend/src/components/common/account.js:127
 #: frontend/src/pages/sys-admin/side-panel.js:33
-#: frontend/src/pages/sys-admin/users/users-content.js:318
+#: frontend/src/pages/sys-admin/users/users-content.js:311
 msgid "System Admin"
 msgstr "系统管理"
 
@@ -248,7 +248,7 @@ msgid "A file is being uploaded. Are you sure you want to leave this page?"
 msgstr "正在上传一个文件。你确定要离开这当前网页吗?"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:131
-#: frontend/src/components/dir-view-mode/dir-views.js:41
+#: frontend/src/components/dir-view-mode/dir-views.js:40
 msgid "Views"
 msgstr "视图"
 
@@ -261,26 +261,26 @@ msgstr "视图"
 #: frontend/src/components/main-side-nav.js:227
 #: frontend/src/components/main-side-nav.js:229
 #: frontend/src/pages/libraries/index.js:238
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:79
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:82
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:77
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:161
 #: frontend/src/pages/sys-admin/info.js:118
-#: frontend/src/pages/sys-admin/repos/repos.js:81
-#: frontend/src/pages/sys-admin/repos/repos.js:84
+#: frontend/src/pages/sys-admin/repos/repos.js:80
+#: frontend/src/pages/sys-admin/repos/repos.js:83
 msgid "Files"
 msgstr "文件"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:39
 #: frontend/src/components/dialog/sort-options.js:19
 #: frontend/src/pages/libraries/index.js:27
-#: frontend/src/pages/share-admin/share-links.js:405
+#: frontend/src/pages/share-admin/share-links.js:406
 msgid "By name ascending"
 msgstr "按名称升序"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:40
 #: frontend/src/components/dialog/sort-options.js:20
 #: frontend/src/pages/libraries/index.js:28
-#: frontend/src/pages/share-admin/share-links.js:406
+#: frontend/src/pages/share-admin/share-links.js:407
 msgid "By name descending"
 msgstr "按名称降序"
 
@@ -302,10 +302,10 @@ msgstr "按时间降序"
 #: frontend/src/components/dialog/op-menu.js:54
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:813
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:814
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:130
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:131
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:160
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:163
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:154
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:155
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:184
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:187
 #: frontend/src/components/file-view/file-toolbar.js:228
 #: frontend/src/components/history-list-view/history-list-item.js:99
 #: frontend/src/components/history-list-view/history-list-item.js:100
@@ -319,8 +319,8 @@ msgstr "按时间降序"
 #: frontend/src/components/user-settings/linked-devices.js:162
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:173
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:174
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:231
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:232
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:241
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:242
 #: frontend/src/pages/file-history-old/history-item.js:119
 #: frontend/src/pages/file-history-old/history-item.js:120
 #: frontend/src/pages/invitations/invitations-view.js:123
@@ -332,8 +332,8 @@ msgstr "按时间降序"
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:210
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:263
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:264
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:260
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:261
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:258
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:259
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:107
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:108
 #: frontend/src/pages/org-admin/org-groups.js:332
@@ -348,20 +348,20 @@ msgstr "按时间降序"
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:130
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:165
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:166
-#: frontend/src/pages/share-admin/folders.js:269
 #: frontend/src/pages/share-admin/folders.js:270
-#: frontend/src/pages/share-admin/libraries.js:282
+#: frontend/src/pages/share-admin/folders.js:271
 #: frontend/src/pages/share-admin/libraries.js:283
-#: frontend/src/pages/share-admin/share-links.js:346
+#: frontend/src/pages/share-admin/libraries.js:284
 #: frontend/src/pages/share-admin/share-links.js:347
-#: frontend/src/pages/share-admin/upload-links.js:175
+#: frontend/src/pages/share-admin/share-links.js:348
 #: frontend/src/pages/share-admin/upload-links.js:176
-#: frontend/src/pages/shared-libs/shared-libs.js:319
+#: frontend/src/pages/share-admin/upload-links.js:177
 #: frontend/src/pages/shared-libs/shared-libs.js:320
-#: frontend/src/pages/shared-libs/shared-libs.js:369
+#: frontend/src/pages/shared-libs/shared-libs.js:321
 #: frontend/src/pages/shared-libs/shared-libs.js:370
-#: frontend/src/pages/shared-libs/shared-libs.js:417
-#: frontend/src/pages/starred/starred.js:224
+#: frontend/src/pages/shared-libs/shared-libs.js:371
+#: frontend/src/pages/shared-libs/shared-libs.js:418
+#: frontend/src/pages/starred/starred.js:225
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:120
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:121
 #: frontend/src/pages/sys-admin/logs-page/file-access-item-menu.js:35
@@ -405,9 +405,9 @@ msgstr "联系人为必填项。"
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:62
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:74
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:86
-#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:102
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:309
-#: frontend/src/pages/sys-admin/logs-page/login-logs.js:117
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:101
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:308
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:116
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:48
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:78
 #: frontend/src/settings.js:92
@@ -696,13 +696,14 @@ msgstr "添加知识库"
 #: frontend/src/components/dialog/create-tag-dialog.js:79
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
-#: frontend/src/components/dialog/my-deleted-repos.js:67
+#: frontend/src/components/dialog/my-deleted-repos.js:69
 #: frontend/src/components/dialog/org-add-department-dialog.js:73
 #: frontend/src/components/dialog/org-add-repo-dialog.js:69
 #: frontend/src/components/dialog/org-add-user-dialog.js:141
 #: frontend/src/components/dialog/org-rename-department-dialog.js:87
-#: frontend/src/components/dialog/repo-share-admin/share-links.js:140
-#: frontend/src/components/dialog/repo-share-admin/upload-links.js:130
+#: frontend/src/components/dialog/repo-share-admin/group-shares.js:184
+#: frontend/src/components/dialog/repo-share-admin/share-links.js:138
+#: frontend/src/components/dialog/repo-share-admin/user-shares.js:184
 #: frontend/src/components/dialog/search-file-dialog.js:93
 #: frontend/src/components/dialog/share-repo-dialog.js:128
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:73
@@ -719,20 +720,21 @@ msgstr "添加知识库"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:124
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:23
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:77
-#: frontend/src/pages/institution-admin/user-content/user-groups.js:39
+#: frontend/src/pages/institution-admin/user-content/user-groups.js:37
 #: frontend/src/pages/institution-admin/user-content/user-info.js:52
-#: frontend/src/pages/institution-admin/user-content/user-repos.js:40
+#: frontend/src/pages/institution-admin/user-content/user-repos.js:38
 #: frontend/src/pages/institution-admin/user-list-search/index.js:67
 #: frontend/src/pages/institution-admin/user-list/index.js:108
 #: frontend/src/pages/libraries/index.js:258
 #: frontend/src/pages/my-libs/my-libs-deleted.js:89
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:93
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:160
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:161
 #: frontend/src/pages/org-admin/departments/department-libraries.js:68
 #: frontend/src/pages/org-admin/departments/department-list.js:118
 #: frontend/src/pages/org-admin/departments/department-members.js:177
 #: frontend/src/pages/org-admin/departments/sub-departments.js:128
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:75
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:73
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:62
 #: frontend/src/pages/org-admin/org-admin-list.js:50
 #: frontend/src/pages/org-admin/org-group-info.js:73
 #: frontend/src/pages/org-admin/org-group-members.js:81
@@ -745,30 +747,45 @@ msgstr "添加知识库"
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:76
 #: frontend/src/pages/org-admin/org-users-list.js:72
 #: frontend/src/pages/org-admin/org-users-search-users.js:35
-#: frontend/src/pages/share-admin/folders.js:50
-#: frontend/src/pages/share-admin/libraries.js:49
-#: frontend/src/pages/share-admin/share-links.js:87
-#: frontend/src/pages/share-admin/upload-links.js:50
+#: frontend/src/pages/share-admin/folders.js:51
+#: frontend/src/pages/share-admin/libraries.js:50
+#: frontend/src/pages/share-admin/share-links.js:88
+#: frontend/src/pages/share-admin/upload-links.js:51
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:97
-#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:34
-#: frontend/src/pages/shared-libs/shared-libs.js:82
-#: frontend/src/pages/starred/starred.js:37
+#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:35
+#: frontend/src/pages/shared-libs/shared-libs.js:83
+#: frontend/src/pages/starred/starred.js:38
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:45
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:44
 #: frontend/src/pages/sys-admin/departments/department-libraries.js:84
 #: frontend/src/pages/sys-admin/departments/department-list.js:119
 #: frontend/src/pages/sys-admin/departments/department-members.js:127
 #: frontend/src/pages/sys-admin/departments/sub-departments.js:109
-#: frontend/src/pages/sys-admin/groups/group-members.js:57
-#: frontend/src/pages/sys-admin/groups/group-repos.js:40
+#: frontend/src/pages/sys-admin/groups/group-members.js:56
+#: frontend/src/pages/sys-admin/groups/group-repos.js:39
+#: frontend/src/pages/sys-admin/groups/groups-content.js:57
 #: frontend/src/pages/sys-admin/groups/search-groups.js:118
-#: frontend/src/pages/sys-admin/links/share-links.js:64
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:87
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:33
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:49
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:60
+#: frontend/src/pages/sys-admin/institutions/institutions.js:47
+#: frontend/src/pages/sys-admin/links/share-links.js:63
+#: frontend/src/pages/sys-admin/links/upload-links.js:46
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:86
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:44
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:44
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:37
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:32
+#: frontend/src/pages/sys-admin/orgs/org-users.js:56
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:55
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:114
 #: frontend/src/pages/sys-admin/repos/dir-content.js:102
-#: frontend/src/pages/sys-admin/repos/repos.js:77
-#: frontend/src/pages/sys-admin/users/user-links.js:49
-#: frontend/src/pages/sys-admin/users/user-repos.js:54
-#: frontend/src/pages/sys-admin/users/user-shared-repos.js:35
+#: frontend/src/pages/sys-admin/repos/repos.js:76
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:65
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:49
+#: frontend/src/pages/sys-admin/users/user-groups.js:46
+#: frontend/src/pages/sys-admin/users/user-links.js:48
+#: frontend/src/pages/sys-admin/users/user-repos.js:53
+#: frontend/src/pages/sys-admin/users/user-shared-repos.js:30
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:136
 #: frontend/src/repo-folder-trash.js:240 frontend/src/repo-snapshot.js:200
 #: frontend/src/shared-dir-view.js:665
@@ -793,7 +810,8 @@ msgid "No department"
 msgstr "没有部门"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:102
-#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:207
+#: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:214
+#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:209
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:352
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:464
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:152
@@ -886,12 +904,12 @@ msgstr "清除成功。"
 #: frontend/src/components/dialog/clean-trash.js:62
 #: frontend/src/components/dialog/trash-dialog.js:158
 #: frontend/src/components/dialog/wiki-clean-trash.js:62
-#: frontend/src/pages/org-admin/devices/devices-errors.js:193
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:375
-#: frontend/src/pages/share-admin/share-links.js:603
-#: frontend/src/pages/share-admin/upload-links.js:301
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:197
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:400
+#: frontend/src/pages/org-admin/devices/devices-errors.js:191
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:373
+#: frontend/src/pages/share-admin/share-links.js:604
+#: frontend/src/pages/share-admin/upload-links.js:302
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:196
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:399
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:97
 #: frontend/src/repo-folder-trash.js:208
 msgid "Clean"
@@ -1006,7 +1024,7 @@ msgstr "确定要注销该账号吗？"
 #: frontend/src/components/share-link-panel/link-item.js:113
 #: frontend/src/components/share-link-panel/link-item.js:121
 #: frontend/src/components/share-link-panel/link-list.js:69
-#: frontend/src/components/share-link-panel/link-list.js:129
+#: frontend/src/components/share-link-panel/link-list.js:127
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:501
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:354
 #: frontend/src/components/user-settings/delete-account.js:38
@@ -1028,9 +1046,9 @@ msgstr "确定要注销该账号吗？"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:410
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:145
 #: frontend/src/pages/org-admin/departments/group-item.js:53
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:267
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:198
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:256
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:265
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:196
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:254
 #: frontend/src/pages/org-admin/org-group-repos.js:174
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:114
 #: frontend/src/pages/org-admin/org-groups.js:339
@@ -1038,35 +1056,41 @@ msgstr "确定要注销该账号吗？"
 #: frontend/src/pages/org-admin/org-user-item.js:188
 #: frontend/src/pages/org-admin/org-user-repos.js:170
 #: frontend/src/pages/sys-admin/departments/group-item.js:69
-#: frontend/src/pages/sys-admin/groups/groups-content.js:201
-#: frontend/src/pages/sys-admin/groups/groups-content.js:255
-#: frontend/src/pages/sys-admin/institutions/institutions.js:135
-#: frontend/src/pages/sys-admin/institutions/institutions.js:143
-#: frontend/src/pages/sys-admin/notifications/notifications.js:160
-#: frontend/src/pages/sys-admin/notifications/notifications.js:209
-#: frontend/src/pages/sys-admin/orgs/org-groups.js:120
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:117
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:125
-#: frontend/src/pages/sys-admin/orgs/org-users.js:298
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:205
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:213
+#: frontend/src/pages/sys-admin/groups/groups-content.js:200
+#: frontend/src/pages/sys-admin/groups/groups-content.js:254
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:183
+#: frontend/src/pages/sys-admin/institutions/institutions.js:134
+#: frontend/src/pages/sys-admin/institutions/institutions.js:142
+#: frontend/src/pages/sys-admin/invitations/invitations.js:155
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:118
+#: frontend/src/pages/sys-admin/notifications/notifications.js:159
+#: frontend/src/pages/sys-admin/notifications/notifications.js:208
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:119
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:127
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:116
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:124
+#: frontend/src/pages/sys-admin/orgs/org-users.js:194
+#: frontend/src/pages/sys-admin/orgs/org-users.js:297
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:204
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:212
 #: frontend/src/pages/sys-admin/repos/dir-content.js:61
-#: frontend/src/pages/sys-admin/repos/repos.js:265
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:200
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:258
+#: frontend/src/pages/sys-admin/repos/repos.js:264
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:199
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:257
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:111
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:155
 #: frontend/src/pages/sys-admin/users/search-users.js:355
-#: frontend/src/pages/sys-admin/users/user-repos.js:163
-#: frontend/src/pages/sys-admin/users/user-repos.js:218
-#: frontend/src/pages/sys-admin/users/users-content.js:385
-#: frontend/src/pages/sys-admin/users/users-content.js:584
+#: frontend/src/pages/sys-admin/users/user-links.js:135
+#: frontend/src/pages/sys-admin/users/user-repos.js:162
+#: frontend/src/pages/sys-admin/users/user-repos.js:217
+#: frontend/src/pages/sys-admin/users/users-content.js:378
+#: frontend/src/pages/sys-admin/users/users-content.js:577
 #: frontend/src/pages/sys-admin/users/users.js:553
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:65
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:69
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:402
 #: frontend/src/pages/wiki2/common/delete-dialog.js:26
-#: frontend/src/utils/text-translation.js:15
+#: frontend/src/utils/text-translation.js:44
 msgid "Delete"
 msgstr "删除"
 
@@ -1089,8 +1113,8 @@ msgid "Are you sure you want to disconnect?"
 msgstr "你确定要断开连接吗？"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:31
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:264
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:266
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:262
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:265
 msgid "Restore Library"
 msgstr "还原资料库"
 
@@ -1099,19 +1123,19 @@ msgid "Are you sure you want to restore this library?"
 msgstr "确定要还原该资料库？"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:37
-#: frontend/src/components/dialog/my-deleted-repos.js:146
-#: frontend/src/components/dialog/my-deleted-repos.js:147
+#: frontend/src/components/dialog/my-deleted-repos.js:148
+#: frontend/src/components/dialog/my-deleted-repos.js:149
 #: frontend/src/components/dialog/trash-dialog.js:341
 #: frontend/src/components/dialog/trash-dialog.js:352
 #: frontend/src/components/history-list-view/history-list-item.js:103
 #: frontend/src/pages/file-history-old/history-item.js:126
 #: frontend/src/pages/my-libs/my-libs-deleted.js:172
 #: frontend/src/pages/my-libs/my-libs-deleted.js:173
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:195
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:267
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:193
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:265
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:169
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:197
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:269
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:196
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:268
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:256
 #: frontend/src/repo-folder-trash.js:364 frontend/src/repo-folder-trash.js:375
 #: frontend/src/repo-snapshot.js:170 frontend/src/repo-snapshot.js:299
@@ -1140,8 +1164,8 @@ msgstr "在此设备下次上线时删除此设备上的文件。"
 #: frontend/src/components/user-settings/linked-devices.js:169
 #: frontend/src/pages/linked-devices/linked-devices.js:142
 #: frontend/src/pages/linked-devices/linked-devices.js:171
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:148
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:151
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:146
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:150
 msgid "Unlink"
 msgstr "断开连接"
 
@@ -1225,7 +1249,7 @@ msgstr "名称“{name}”已被占用，请选取一个不同的名字。"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:201
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:307
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:176
-#: frontend/src/utils/text-translation.js:7
+#: frontend/src/utils/text-translation.js:12
 msgid "New File"
 msgstr "新建文件"
 
@@ -1234,7 +1258,7 @@ msgstr "新建文件"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:306
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:175
 #: frontend/src/pages/sys-admin/repos/dir-view.js:176
-#: frontend/src/utils/text-translation.js:6
+#: frontend/src/utils/text-translation.js:8
 msgid "New Folder"
 msgstr "新建文件夹"
 
@@ -1275,11 +1299,11 @@ msgstr "两次输入的密码不一致"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:64
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:59
 #: frontend/src/pages/groups/group-item.js:123
-#: frontend/src/pages/groups/group-view.js:393
+#: frontend/src/pages/groups/group-view.js:391
 #: frontend/src/pages/libraries/index.js:275
-#: frontend/src/pages/my-libs/my-libs.js:147
+#: frontend/src/pages/my-libs/my-libs.js:148
 #: frontend/src/pages/org-admin/departments/department.js:99
-#: frontend/src/pages/shared-with-all/index.js:232
+#: frontend/src/pages/shared-with-all/index.js:233
 #: frontend/src/pages/sys-admin/departments/department.js:106
 #: frontend/src/pages/sys-admin/repos/all-repos.js:153
 msgid "New Library"
@@ -1299,6 +1323,8 @@ msgstr "存储后端"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:286
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:266
 #: frontend/src/components/dialog/repo-api-token-dialog.js:223
+#: frontend/src/components/dialog/repo-share-admin/group-shares.js:186
+#: frontend/src/components/dialog/repo-share-admin/user-shares.js:186
 #: frontend/src/components/dialog/share-repo-dialog.js:130
 #: frontend/src/components/dialog/share-to-group.js:322
 #: frontend/src/components/dialog/share-to-invite-people.js:274
@@ -1311,19 +1337,19 @@ msgstr "存储后端"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:229
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:279
 #: frontend/src/components/share-link-panel/link-details.js:254
-#: frontend/src/components/share-link-panel/link-list.js:88
-#: frontend/src/components/share-link-panel/link-list.js:100
+#: frontend/src/components/share-link-panel/link-list.js:86
+#: frontend/src/components/share-link-panel/link-list.js:98
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:83
 #: frontend/src/pages/org-admin/org-logs.js:40
-#: frontend/src/pages/share-admin/folders.js:52
-#: frontend/src/pages/share-admin/folders.js:277
-#: frontend/src/pages/share-admin/libraries.js:51
-#: frontend/src/pages/share-admin/libraries.js:290
-#: frontend/src/pages/share-admin/share-links.js:89
-#: frontend/src/pages/share-admin/share-links.js:354
+#: frontend/src/pages/share-admin/folders.js:53
+#: frontend/src/pages/share-admin/folders.js:278
+#: frontend/src/pages/share-admin/libraries.js:52
+#: frontend/src/pages/share-admin/libraries.js:291
+#: frontend/src/pages/share-admin/share-links.js:90
+#: frontend/src/pages/share-admin/share-links.js:355
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:18
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:48
-#: frontend/src/utils/text-translation.js:19
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:47
+#: frontend/src/utils/text-translation.js:60
 msgid "Permission"
 msgstr "权限"
 
@@ -1331,14 +1357,14 @@ msgstr "权限"
 #: frontend/src/components/dialog/share-repo-dialog.js:40
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:22
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:698
+#: frontend/src/utils/utils.js:706
 msgid "Read-Write"
 msgstr "可读写"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:227
 #: frontend/src/components/dialog/share-repo-dialog.js:41
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:701
+#: frontend/src/utils/utils.js:709
 msgid "Read-Only"
 msgstr "只读"
 
@@ -1409,10 +1435,10 @@ msgstr "选择一个颜色"
 #: frontend/src/components/dialog/create-tag-dialog.js:109
 #: frontend/src/components/file-view/file-toolbar.js:150
 #: frontend/src/components/file-view/file-toolbar.js:216
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:117
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:167
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:215
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:244
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:111
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:162
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:210
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:240
 #: frontend/src/shared-dir-view.js:490
 msgid "Save"
 msgstr "保存"
@@ -1449,6 +1475,7 @@ msgstr "权限名称"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:79
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:89
+#: frontend/src/pages/sys-admin/users/user-links.js:197
 #: frontend/src/pages/upload-link/file-uploader.js:624
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:66
 #: frontend/src/shared-dir-view.js:474
@@ -1469,9 +1496,9 @@ msgstr "上传"
 #: frontend/src/components/shared-file-view/shared-file-view.js:132
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:359
 #: frontend/src/pages/file-history-old/history-item.js:127
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:129
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:123
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:253
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:254
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:63
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:73
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:83
@@ -1484,12 +1511,12 @@ msgstr "上传"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:74
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
-#: frontend/src/pages/sys-admin/users/user-links.js:202
+#: frontend/src/pages/sys-admin/users/user-links.js:201
 #: frontend/src/repo-snapshot.js:309 frontend/src/shared-dir-view.js:773
 #: frontend/src/shared-dir-view.js:800 frontend/src/shared-dir-view.js:848
 #: frontend/src/shared-dir-view.js:880 frontend/src/shared-dir-view.js:949
 #: frontend/src/shared-dir-view.js:967
-#: frontend/src/utils/text-translation.js:14
+#: frontend/src/utils/text-translation.js:40
 msgid "Download"
 msgstr "下载"
 
@@ -1498,6 +1525,7 @@ msgid "Create"
 msgstr "创建"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:169
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:116
 #: frontend/src/translate.js:7
 msgid "Modify"
 msgstr "修改"
@@ -1523,7 +1551,7 @@ msgstr "修改包括修改文件，移动/重命名文件和目录"
 #: frontend/src/pages/org-admin/org-saml-config.js:208
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:147
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:171
-#: frontend/src/utils/text-translation.js:18
+#: frontend/src/utils/text-translation.js:56
 msgid "Copy"
 msgstr "复制"
 
@@ -1557,15 +1585,15 @@ msgstr "生成共享链接"
 #: frontend/src/pages/org-admin/org-user-profile.js:145
 #: frontend/src/pages/org-admin/org-user-profile.js:154
 #: frontend/src/pages/sdoc-revision/index.js:121
-#: frontend/src/pages/share-admin/folders.js:229
 #: frontend/src/pages/share-admin/folders.js:230
-#: frontend/src/pages/share-admin/libraries.js:242
+#: frontend/src/pages/share-admin/folders.js:231
 #: frontend/src/pages/share-admin/libraries.js:243
+#: frontend/src/pages/share-admin/libraries.js:244
 #: frontend/src/pages/sys-admin/departments/group-item.js:120
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:28
 #: frontend/src/pages/sys-admin/orgs/org-info.js:41
 #: frontend/src/pages/sys-admin/users/user-info.js:89
-#: frontend/src/pages/sys-admin/users/users-content.js:538
+#: frontend/src/pages/sys-admin/users/users-content.js:531
 #: frontend/src/pages/wiki/main-panel.js:106
 #: frontend/src/pages/wiki/main-panel.js:107 frontend/src/repo-history.js:306
 msgid "Edit"
@@ -1605,17 +1633,18 @@ msgstr "该资料库已被共享给 {user_amount} 个用户和 {group_amount} �
 #: frontend/src/components/dialog/delete-repo-dialog.js:66
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:33
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:253
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:101
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:122
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:255
-#: frontend/src/pages/sys-admin/users/user-repos.js:215
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:251
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:100
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:121
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:254
+#: frontend/src/pages/sys-admin/users/user-repos.js:214
 msgid "Delete Library"
 msgstr "删除资料库"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:105
-#: frontend/src/pages/sys-admin/groups/groups-content.js:252
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:104
+#: frontend/src/pages/sys-admin/groups/groups-content.js:251
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:124
 msgid "Delete Group"
 msgstr "删除群组"
 
@@ -2014,7 +2043,6 @@ msgid "Set permission of {placeholder}"
 msgstr "设置 {placeholder} 的权限"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:282
-#: frontend/src/components/dialog/repo-share-admin/group-shares.js:187
 #: frontend/src/components/dialog/share-to-group.js:321
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:240
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:287
@@ -2024,7 +2052,8 @@ msgstr "群组"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:284
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:264
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:85
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:50
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:91
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:49
 msgid "Folder"
 msgstr "目录"
 
@@ -2033,15 +2062,18 @@ msgid "Select a group"
 msgstr "选择一个群组"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:262
-#: frontend/src/components/dialog/repo-share-admin/user-shares.js:187
 #: frontend/src/components/dialog/share-to-user.js:349
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:228
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:278
 #: frontend/src/pages/dashboard/content.js:32
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:42
+#: frontend/src/pages/org-admin/devices/devices-errors.js:46
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:146
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:43
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:47
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:182
 msgid "User"
@@ -2074,13 +2106,13 @@ msgstr "创建的文件"
 #: frontend/src/components/dialog/list-created-files-dialog.js:29
 #: frontend/src/file-history-old.js:243
 #: frontend/src/pages/dashboard/content.js:35
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:162
-#: frontend/src/pages/org-admin/devices/devices-errors.js:53
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:163
+#: frontend/src/pages/org-admin/devices/devices-errors.js:51
 #: frontend/src/pages/sys-admin/abuse-reports.js:96
-#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:49
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:48
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:53
-#: frontend/src/pages/sys-admin/logs-page/login-logs.js:48
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:48
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:52
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:47
 #: frontend/src/repo-history.js:141 frontend/src/repo-history.js:148
 #: frontend/src/user-notifications.js:136
 #: frontend/src/user-notifications.js:140
@@ -2103,25 +2135,28 @@ msgstr "打标签的文件"
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
 #: frontend/src/file-history-old.js:245
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:199
-#: frontend/src/pages/institution-admin/user-content/user-repos.js:41
+#: frontend/src/pages/institution-admin/user-content/user-repos.js:39
 #: frontend/src/pages/libraries/index.js:260
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:74
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:95
 #: frontend/src/pages/org-admin/departments/department-libraries.js:69
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:78
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:80
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:82
 #: frontend/src/pages/org-admin/org-group-repos.js:84
 #: frontend/src/pages/org-admin/org-user-repos.js:80
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:78
 #: frontend/src/pages/search/advanced-search.js:78
 #: frontend/src/pages/search/advanced-search.js:226
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:99
-#: frontend/src/pages/shared-libs/shared-libs.js:84
+#: frontend/src/pages/shared-libs/shared-libs.js:85
 #: frontend/src/pages/sys-admin/departments/department-libraries.js:85
+#: frontend/src/pages/sys-admin/groups/group-repos.js:40
 #: frontend/src/pages/sys-admin/repos/dir-content.js:104
-#: frontend/src/pages/sys-admin/repos/repos.js:82
-#: frontend/src/pages/sys-admin/repos/repos.js:84
-#: frontend/src/pages/sys-admin/users/user-shared-repos.js:37
+#: frontend/src/pages/sys-admin/repos/repos.js:81
+#: frontend/src/pages/sys-admin/repos/repos.js:83
+#: frontend/src/pages/sys-admin/users/user-links.js:49
+#: frontend/src/pages/sys-admin/users/user-repos.js:54
+#: frontend/src/pages/sys-admin/users/user-shared-repos.js:32
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:138
 #: frontend/src/repo-folder-trash.js:243 frontend/src/repo-snapshot.js:201
 #: frontend/src/shared-dir-view.js:667
@@ -2137,7 +2172,7 @@ msgstr "大小"
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:638
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:127
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
-#: frontend/src/pages/institution-admin/user-content/user-repos.js:42
+#: frontend/src/pages/institution-admin/user-content/user-repos.js:40
 #: frontend/src/pages/libraries/index.js:261
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:76
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:97
@@ -2146,16 +2181,16 @@ msgstr "大小"
 #: frontend/src/pages/search/advanced-search.js:75
 #: frontend/src/pages/search/advanced-search.js:198
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:100
-#: frontend/src/pages/shared-libs/shared-libs.js:85
-#: frontend/src/pages/starred/starred.js:39
+#: frontend/src/pages/shared-libs/shared-libs.js:86
+#: frontend/src/pages/starred/starred.js:40
 #: frontend/src/pages/sys-admin/repos/dir-content.js:105
-#: frontend/src/pages/sys-admin/users/user-repos.js:56
+#: frontend/src/pages/sys-admin/users/user-repos.js:55
 #: frontend/src/shared-dir-view.js:668
 msgid "Last Update"
 msgstr "更新时间"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:165
-#: frontend/src/pages/starred/starred.js:258
+#: frontend/src/pages/starred/starred.js:259
 msgid "deleted"
 msgstr "已删除"
 
@@ -2173,34 +2208,36 @@ msgstr "将已选条目移动到："
 
 #: frontend/src/components/dialog/my-deleted-repos.js:50
 #: frontend/src/pages/my-libs/my-libs-deleted.js:52
-#: frontend/src/pages/my-libs/my-libs.js:148
+#: frontend/src/pages/my-libs/my-libs.js:149
 msgid "Deleted Libraries"
 msgstr "已删除的资料库"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:56
+#: frontend/src/components/dialog/my-deleted-repos.js:58
 #: frontend/src/pages/my-libs/my-libs-deleted.js:59
 msgid "No deleted libraries"
 msgstr "没有已删除的资料库"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:57
+#: frontend/src/components/dialog/my-deleted-repos.js:59
 #: frontend/src/pages/my-libs/my-libs-deleted.js:60
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted"
 " library will be cleaned automatically after this period."
 msgstr "在过去 {placeholder} 天你没有删除任何资料库。一个被删除的资料库将在这个时间段后被自动清除。"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:62
+#: frontend/src/components/dialog/my-deleted-repos.js:64
 #: frontend/src/pages/my-libs/my-libs-deleted.js:65
 msgid ""
 "Tip: libraries deleted {placeholder} days ago will be cleaned automatically."
 msgstr "提示：{placeholder} 天前删除的资料库会被自动清除。"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:68
+#: frontend/src/components/dialog/my-deleted-repos.js:70
 #: frontend/src/pages/my-libs/my-libs-deleted.js:90
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:64
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:67
 msgid "Deleted Time"
 msgstr "删除时间"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:120
+#: frontend/src/components/dialog/my-deleted-repos.js:122
 msgid "Successfully restored the library {library_name}."
 msgstr "已成功还原资料库 {library_name} 。"
 
@@ -2233,9 +2270,9 @@ msgstr "新建部门"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:39
 #: frontend/src/pages/org-admin/departments/department.js:96
 #: frontend/src/pages/sys-admin/departments/department.js:105
-#: frontend/src/pages/sys-admin/groups/group-members.js:324
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:362
-#: frontend/src/pages/sys-admin/orgs/org-users.js:434
+#: frontend/src/pages/sys-admin/groups/group-members.js:323
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:361
+#: frontend/src/pages/sys-admin/orgs/org-users.js:433
 msgid "Add Member"
 msgstr "添加成员"
 
@@ -2245,7 +2282,7 @@ msgid "email is required"
 msgstr "请输入邮箱"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:133
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:105
 #: frontend/src/pages/sys-admin/users/users.js:418
 #: frontend/src/pages/sys-admin/users/users.js:535
 msgid "Add User"
@@ -2259,6 +2296,7 @@ msgstr "添加用户"
 #: frontend/src/pages/institution-admin/user-list-search/index.js:67
 #: frontend/src/pages/institution-admin/user-list/index.js:108
 #: frontend/src/pages/invitations/invitations-view.js:196
+#: frontend/src/pages/sys-admin/users/ldap-users.js:44
 #: frontend/src/pages/sys-admin/users/user-info.js:118
 msgid "Email"
 msgstr "邮箱"
@@ -2287,15 +2325,15 @@ msgstr "你可以输入多个邮箱。每个邮箱都将收到一个邀请链接
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:29
 #: frontend/src/pages/institution-admin/user-list-search/index.js:30
 #: frontend/src/pages/institution-admin/user-list/index.js:71
-#: frontend/src/pages/sys-admin/groups/groups-content.js:219
-#: frontend/src/pages/sys-admin/institutions/institutions.js:127
-#: frontend/src/pages/sys-admin/orgs/org-groups.js:107
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:100
-#: frontend/src/pages/sys-admin/orgs/org-users.js:228
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:138
+#: frontend/src/pages/sys-admin/groups/groups-content.js:218
+#: frontend/src/pages/sys-admin/institutions/institutions.js:126
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:106
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:99
+#: frontend/src/pages/sys-admin/orgs/org-users.js:227
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:137
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:125
-#: frontend/src/pages/sys-admin/users/user-repos.js:192
-#: frontend/src/pages/sys-admin/users/users-content.js:427
+#: frontend/src/pages/sys-admin/users/user-repos.js:191
+#: frontend/src/pages/sys-admin/users/users-content.js:420
 msgid "Are you sure you want to delete {placeholder} ?"
 msgstr "确定要删除 {placeholder} 吗？"
 
@@ -2306,7 +2344,7 @@ msgstr "删除部门"
 
 #: frontend/src/components/dialog/org-delete-member-dialog.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog.js:40
-#: frontend/src/pages/sys-admin/orgs/org-users.js:295
+#: frontend/src/pages/sys-admin/orgs/org-users.js:294
 msgid "Delete Member"
 msgstr "删除成员"
 
@@ -2403,7 +2441,7 @@ msgstr "API token 已复制到剪贴板。"
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
 #: frontend/src/components/dialog/trash-dialog.js:125
 #: frontend/src/pages/lib-content-view/lib-content-view.js:208
-#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1207
+#: frontend/src/repo-folder-trash.js:132 frontend/src/utils/utils.js:1215
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -2426,16 +2464,18 @@ msgstr "没有权限"
 #: frontend/src/pages/my-libs/my-libs-deleted.js:148
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:282
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:304
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
 #: frontend/src/pages/search/main-panel.js:80
 #: frontend/src/pages/search/main-panel.js:185
 #: frontend/src/pages/search/main-panel.js:197
-#: frontend/src/pages/shared-libs/shared-libs.js:205
+#: frontend/src/pages/shared-libs/shared-libs.js:206
 #: frontend/src/pages/shared-with-all/index.js:75
 #: frontend/src/pages/sys-admin/abuse-reports.js:45
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
 #: frontend/src/pages/upload-link/file-uploader.js:432
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:232
 #: frontend/src/repo-folder-trash.js:137 frontend/src/repo-folder-trash.js:334
-#: frontend/src/utils/utils.js:1212
+#: frontend/src/utils/utils.js:1220
 msgid "Error"
 msgstr "错误"
 
@@ -2449,7 +2489,7 @@ msgstr "错误"
 #: frontend/src/repo-folder-trash.js:143 frontend/src/repo-folder-trash.js:336
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1215 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1223 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
@@ -2471,15 +2511,15 @@ msgid "{placeholder} Share Admin"
 msgstr "{placeholder} 共享管理"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:67
-#: frontend/src/pages/share-admin/share-links.js:563
-#: frontend/src/pages/share-admin/upload-links.js:274
+#: frontend/src/pages/share-admin/share-links.js:564
+#: frontend/src/pages/share-admin/upload-links.js:275
 #: frontend/src/pages/sys-admin/links/links-nav.js:15
 msgid "Share Links"
 msgstr "共享链接"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:74
-#: frontend/src/pages/share-admin/share-links.js:570
-#: frontend/src/pages/share-admin/upload-links.js:278
+#: frontend/src/pages/share-admin/share-links.js:571
+#: frontend/src/pages/share-admin/upload-links.js:279
 #: frontend/src/pages/sys-admin/links/links-nav.js:16
 msgid "Upload Links"
 msgstr "上传链接"
@@ -2496,30 +2536,32 @@ msgstr "群组共享"
 msgid "Successfully deleted 1 item"
 msgstr "成功删除 1 个条目"
 
-#: frontend/src/components/dialog/repo-share-admin/share-links.js:132
-#: frontend/src/components/share-link-panel/link-list.js:77
+#: frontend/src/components/dialog/repo-share-admin/share-links.js:131
+#: frontend/src/components/share-link-panel/link-list.js:76
 #: frontend/src/translate.js:14
 msgid "No share links"
 msgstr "没有共享外链"
 
-#: frontend/src/components/dialog/repo-share-admin/share-links.js:139
+#: frontend/src/components/dialog/repo-share-admin/share-links.js:137
+#: frontend/src/components/dialog/repo-share-admin/upload-links.js:127
 #: frontend/src/components/dirent-detail/lib-details/index.js:20
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:172
 #: frontend/src/pages/org-admin/org-group-info.js:76
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:157
 #: frontend/src/pages/org-admin/org-groups.js:181
-#: frontend/src/pages/sys-admin/orgs/org-groups.js:39
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:57
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:38
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:56
 msgid "Creator"
 msgstr "创建者"
 
-#: frontend/src/components/dialog/repo-share-admin/share-links.js:141
+#: frontend/src/components/dialog/repo-share-admin/share-links.js:139
+#: frontend/src/components/dialog/repo-share-admin/upload-links.js:129
 #: frontend/src/components/dialog/share-admin-link.js:29
 #: frontend/src/components/dialog/view-link-dialog.js:32
 #: frontend/src/components/share-link-panel/link-details.js:168
 #: frontend/src/components/share-link-panel/link-details.js:172
-#: frontend/src/components/share-link-panel/link-list.js:87
-#: frontend/src/components/share-link-panel/link-list.js:99
+#: frontend/src/components/share-link-panel/link-list.js:85
+#: frontend/src/components/share-link-panel/link-list.js:97
 msgid "Link"
 msgstr "链接"
 
@@ -2632,23 +2674,23 @@ msgstr "共享到其他服务器"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:223
 #: frontend/src/components/toolbar/view-file-toolbar.js:136
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:184
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:106
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:100
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:70
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:355
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:409
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:142
-#: frontend/src/pages/shared-libs/shared-libs.js:309
-#: frontend/src/pages/shared-libs/shared-libs.js:359
-#: frontend/src/pages/shared-libs/shared-libs.js:425
-#: frontend/src/pages/sys-admin/repos/repos.js:262
-#: frontend/src/utils/text-translation.js:13
+#: frontend/src/pages/shared-libs/shared-libs.js:310
+#: frontend/src/pages/shared-libs/shared-libs.js:360
+#: frontend/src/pages/shared-libs/shared-libs.js:426
+#: frontend/src/pages/sys-admin/repos/repos.js:261
+#: frontend/src/utils/text-translation.js:36
 msgid "Share"
 msgstr "共享"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:35
 #: frontend/src/pages/org-admin/departments/department-libraries.js:126
-#: frontend/src/pages/starred/starred.js:207
-#: frontend/src/pages/starred/starred.js:252
+#: frontend/src/pages/starred/starred.js:208
+#: frontend/src/pages/starred/starred.js:253
 #: frontend/src/pages/sys-admin/departments/repo-item.js:37
 msgid "icon"
 msgstr "图标"
@@ -2667,20 +2709,21 @@ msgid "Select groups"
 msgstr "选择群组"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:318
-#: frontend/src/components/share-link-panel/link-list.js:89
-#: frontend/src/components/share-link-panel/link-list.js:101
+#: frontend/src/components/share-link-panel/link-list.js:87
+#: frontend/src/components/share-link-panel/link-list.js:99
 #: frontend/src/pages/invitations/invitations-view.js:115
 #: frontend/src/pages/invitations/invitations-view.js:198
-#: frontend/src/pages/share-admin/share-links.js:91
-#: frontend/src/pages/share-admin/share-links.js:339
-#: frontend/src/pages/share-admin/upload-links.js:53
-#: frontend/src/pages/share-admin/upload-links.js:168
-#: frontend/src/pages/sys-admin/links/share-links.js:73
-#: frontend/src/pages/sys-admin/links/upload-links.js:52
+#: frontend/src/pages/share-admin/share-links.js:92
+#: frontend/src/pages/share-admin/share-links.js:340
+#: frontend/src/pages/share-admin/upload-links.js:54
+#: frontend/src/pages/share-admin/upload-links.js:169
+#: frontend/src/pages/sys-admin/links/share-links.js:72
+#: frontend/src/pages/sys-admin/links/upload-links.js:51
 msgid "Expiration"
 msgstr "过期时间"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:319
+#: frontend/src/pages/sys-admin/invitations/invitations.js:58
 msgid "Inviter"
 msgstr "邀请者"
 
@@ -2695,13 +2738,13 @@ msgid "User Email"
 msgstr "用户邮箱"
 
 #: frontend/src/components/dialog/share-to-other-server.js:193
-#: frontend/src/pages/groups/group-view.js:288
+#: frontend/src/pages/groups/group-view.js:286
 #: frontend/src/pages/org-admin/org-user-item.js:77
 #: frontend/src/pages/org-admin/org-users-users.js:157
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:168
-#: frontend/src/pages/sys-admin/users/users-content.js:285
-#: frontend/src/pages/sys-admin/users/users-content.js:346
-#: frontend/src/pages/sys-admin/users/users-content.js:351
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:167
+#: frontend/src/pages/sys-admin/users/users-content.js:278
+#: frontend/src/pages/sys-admin/users/users-content.js:339
+#: frontend/src/pages/sys-admin/users/users-content.js:344
 #: frontend/src/pages/sys-admin/users/users.js:307
 #: frontend/src/pages/sys-admin/users/users.js:331
 msgid "It may take some time, please wait."
@@ -2709,22 +2752,23 @@ msgstr "请稍候。"
 
 #: frontend/src/components/dialog/share-to-other-server.js:199
 #: frontend/src/pages/invitations/invitations-view.js:54
-#: frontend/src/pages/share-admin/share-links.js:525
-#: frontend/src/pages/share-admin/upload-links.js:243
+#: frontend/src/pages/share-admin/share-links.js:526
+#: frontend/src/pages/share-admin/upload-links.js:244
 #: frontend/src/pages/sys-admin/groups/groups.js:88
 #: frontend/src/pages/sys-admin/groups/search-groups.js:54
-#: frontend/src/pages/sys-admin/institutions/institutions.js:228
-#: frontend/src/pages/sys-admin/invitations/invitations.js:300
-#: frontend/src/pages/sys-admin/notifications/notifications.js:274
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:176
-#: frontend/src/pages/sys-admin/orgs/org-users.js:390
+#: frontend/src/pages/sys-admin/institutions/institutions.js:227
+#: frontend/src/pages/sys-admin/invitations/invitations.js:299
+#: frontend/src/pages/sys-admin/notifications/notifications.js:273
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:182
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:175
+#: frontend/src/pages/sys-admin/orgs/org-users.js:389
 #: frontend/src/pages/sys-admin/orgs/orgs.js:105
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:69
 #: frontend/src/pages/sys-admin/repos/dir-view.js:96
 #: frontend/src/pages/sys-admin/terms-and-conditions/terms-and-conditions.js:73
-#: frontend/src/pages/sys-admin/users/user-links.js:300
-#: frontend/src/pages/sys-admin/users/user-links.js:313
-#: frontend/src/pages/sys-admin/users/user-repos.js:282
+#: frontend/src/pages/sys-admin/users/user-links.js:299
+#: frontend/src/pages/sys-admin/users/user-links.js:312
+#: frontend/src/pages/sys-admin/users/user-repos.js:281
 msgid "Successfully deleted 1 item."
 msgstr "成功删除 1 个条目。"
 
@@ -2788,11 +2832,14 @@ msgid "Version Number"
 msgstr "版本号"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:117
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:71
 #: frontend/src/pages/search/advanced-search.js:18
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
 msgid "Text"
 msgstr "文本"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:121
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:53
 msgid "Activated"
 msgstr "已激活"
 
@@ -2819,22 +2866,24 @@ msgstr "添加机构"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:74
 #: frontend/src/components/group-members.js:125
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:128
-#: frontend/src/pages/groups/group-view.js:356
+#: frontend/src/pages/groups/group-view.js:354
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:27
 #: frontend/src/pages/libraries/index.js:262
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:86
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:65
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:84
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:63
 #: frontend/src/pages/org-admin/org-group-members.js:109
 #: frontend/src/pages/org-admin/org-links.js:101
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:77
-#: frontend/src/pages/shared-libs/shared-libs.js:86
-#: frontend/src/pages/sys-admin/groups/group-members.js:166
-#: frontend/src/pages/sys-admin/groups/groups-content.js:59
-#: frontend/src/pages/sys-admin/links/share-links.js:66
-#: frontend/src/pages/sys-admin/orgs/org-repos.js:35
-#: frontend/src/pages/sys-admin/repos/repos.js:88
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:67
-#: frontend/src/pages/sys-admin/users/user-groups.js:119
+#: frontend/src/pages/shared-libs/shared-libs.js:87
+#: frontend/src/pages/sys-admin/groups/group-members.js:165
+#: frontend/src/pages/sys-admin/groups/groups-content.js:58
+#: frontend/src/pages/sys-admin/links/share-links.js:65
+#: frontend/src/pages/sys-admin/links/upload-links.js:48
+#: frontend/src/pages/sys-admin/orgs/org-repos.js:34
+#: frontend/src/pages/sys-admin/repos/repos.js:87
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:66
+#: frontend/src/pages/sys-admin/users/user-groups.js:118
+#: frontend/src/pages/sys-admin/users/user-links.js:158
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:170
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:188
 msgid "Owner"
@@ -2845,7 +2894,7 @@ msgid "Owner can use admin panel in an organization, must be a new account."
 msgstr "拥有者能使用机构的管理员面板, 必须是一个新的账号。"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog.js:41
-#: frontend/src/pages/sys-admin/notifications/notifications.js:303
+#: frontend/src/pages/sys-admin/notifications/notifications.js:302
 msgid "Add new notification"
 msgstr "添加新通知"
 
@@ -2855,12 +2904,15 @@ msgstr "名字（可选）"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:140
 #: frontend/src/components/group-members.js:31
-#: frontend/src/pages/institution-admin/user-content/user-groups.js:40
+#: frontend/src/pages/institution-admin/user-content/user-groups.js:38
 #: frontend/src/pages/org-admin/departments/department-members.js:178
 #: frontend/src/pages/org-admin/org-group-members.js:82
 #: frontend/src/pages/sys-admin/departments/department-members.js:128
-#: frontend/src/pages/sys-admin/users/user-groups.js:48
-#: frontend/src/pages/sys-admin/users/users-content.js:96
+#: frontend/src/pages/sys-admin/groups/group-members.js:57
+#: frontend/src/pages/sys-admin/orgs/org-users.js:58
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:57
+#: frontend/src/pages/sys-admin/users/user-groups.js:47
+#: frontend/src/pages/sys-admin/users/users-content.js:89
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:86
 msgid "Role"
 msgstr "用户角色"
@@ -2945,7 +2997,7 @@ msgid "Transfer to department"
 msgstr "转让给部门"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:55
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:104
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:103
 msgid "Transfer Group"
 msgstr "转让群组"
 
@@ -2996,6 +3048,7 @@ msgstr "目录"
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
 #: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:92
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:91
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
 #: frontend/src/repo-folder-trash.js:369 frontend/src/repo-folder-trash.js:426
 #: frontend/src/repo-snapshot.js:304
@@ -3098,7 +3151,7 @@ msgstr "其他"
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:16
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:17
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:113
-#: frontend/src/utils/text-translation.js:36
+#: frontend/src/utils/text-translation.js:124
 msgid "Trash"
 msgstr "回收站"
 
@@ -3107,11 +3160,11 @@ msgstr "回收站"
 #: frontend/src/components/file-view/file-toolbar.js:196
 #: frontend/src/components/toolbar/view-file-toolbar.js:143
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:65
-#: frontend/src/utils/text-translation.js:32
+#: frontend/src/utils/text-translation.js:108
 msgid "History"
 msgstr "历史"
 
-#: frontend/src/components/dir-view-mode/dir-views.js:19
+#: frontend/src/components/dir-view-mode/dir-views.js:18
 msgid "Extended properties"
 msgstr "扩展属性"
 
@@ -3131,7 +3184,7 @@ msgstr "编辑元数据属性"
 #: frontend/src/components/dirent-detail/dirent-details/file-details.js:24
 #: frontend/src/components/toolbar/view-file-toolbar.js:142
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:78
-#: frontend/src/utils/text-translation.js:35
+#: frontend/src/utils/text-translation.js:120
 msgid "Tags"
 msgstr "标签"
 
@@ -3148,9 +3201,10 @@ msgid "Last modifier"
 msgstr "修改者"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details.js:60
-#: frontend/src/metadata/metadata-details/index.js:100
+#: frontend/src/metadata/metadata-details/index.js:111
 #: frontend/src/metadata/metadata-view/components/detail-editor/collaborator-editor/index.js:89
 #: frontend/src/metadata/metadata-view/components/detail-editor/date-editor/index.js:34
+#: frontend/src/metadata/metadata-view/components/detail-editor/multiple-select-editor/index.js:97
 #: frontend/src/metadata/metadata-view/components/detail-editor/number-editor/index.js:73
 #: frontend/src/metadata/metadata-view/components/detail-editor/single-select-editor/index.js:88
 #: frontend/src/metadata/metadata-view/components/detail-editor/text-editor/index.js:74
@@ -3200,13 +3254,13 @@ msgstr "选择该条目"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:393
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:394
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:139
-#: frontend/src/pages/shared-libs/shared-libs.js:293
 #: frontend/src/pages/shared-libs/shared-libs.js:294
-#: frontend/src/pages/shared-libs/shared-libs.js:347
+#: frontend/src/pages/shared-libs/shared-libs.js:295
 #: frontend/src/pages/shared-libs/shared-libs.js:348
-#: frontend/src/pages/shared-libs/shared-libs.js:424
-#: frontend/src/pages/starred/starred.js:231
-#: frontend/src/pages/starred/starred.js:271
+#: frontend/src/pages/shared-libs/shared-libs.js:349
+#: frontend/src/pages/shared-libs/shared-libs.js:425
+#: frontend/src/pages/starred/starred.js:232
+#: frontend/src/pages/starred/starred.js:272
 msgid "Unstar"
 msgstr "取消星标"
 
@@ -3218,9 +3272,9 @@ msgstr "取消星标"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:326
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:327
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:136
-#: frontend/src/pages/shared-libs/shared-libs.js:293
 #: frontend/src/pages/shared-libs/shared-libs.js:294
-#: frontend/src/pages/shared-libs/shared-libs.js:424
+#: frontend/src/pages/shared-libs/shared-libs.js:295
+#: frontend/src/pages/shared-libs/shared-libs.js:425
 msgid "Star"
 msgstr "添加星标"
 
@@ -3260,7 +3314,7 @@ msgstr "当前资料库"
 #: frontend/src/pages/org-admin/side-panel.js:63
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/search/advanced-search.js:91
-#: frontend/src/pages/share-admin/libraries.js:360
+#: frontend/src/pages/share-admin/libraries.js:361
 #: frontend/src/pages/sys-admin/departments/department.js:45
 #: frontend/src/pages/sys-admin/groups/group-nav.js:17
 #: frontend/src/pages/sys-admin/info.js:118
@@ -3328,8 +3382,8 @@ msgstr "剩余"
 #: frontend/src/components/file-view/file-toolbar.js:210
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:96
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:122
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:112
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:162
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:106
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:157
 #: frontend/src/pages/upload-link/upload-list-item.js:96
 #: frontend/src/pages/upload-link/upload-list-item.js:122
 msgid "Saving..."
@@ -3429,14 +3483,14 @@ msgid "unstarred"
 msgstr "未加星标"
 
 #: frontend/src/components/file-view/file-toolbar.js:93
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:91
-#: frontend/src/utils/text-translation.js:24
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:85
+#: frontend/src/utils/text-translation.js:72
 msgid "Lock"
 msgstr "锁定"
 
 #: frontend/src/components/file-view/file-toolbar.js:97
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:99
-#: frontend/src/utils/text-translation.js:25
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:93
+#: frontend/src/utils/text-translation.js:76
 msgid "Unlock"
 msgstr "解锁"
 
@@ -3447,20 +3501,19 @@ msgstr "打印"
 #: frontend/src/components/file-view/file-toolbar.js:172
 #: frontend/src/components/file-view/file-toolbar.js:254
 #: frontend/src/pages/org-admin/org-logs-file-update.js:260
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
-#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:20
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:136
+#: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:64
 msgid "Details"
 msgstr "详情"
 
 #: frontend/src/components/file-view/file-toolbar.js:179
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:137
-#: frontend/src/utils/text-translation.js:21
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:131
+#: frontend/src/utils/text-translation.js:68
 msgid "Open via Client"
 msgstr "客户端打开"
 
 #: frontend/src/components/file-view/file-toolbar.js:200
 #: frontend/src/components/file-view/file-toolbar.js:234
-#: frontend/src/utils/text-translation.js:23
 msgid "Open parent folder"
 msgstr "打开父目录"
 
@@ -3472,29 +3525,33 @@ msgstr "此文件格式不支持云端查看"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
-#: frontend/src/pages/groups/group-view.js:350
+#: frontend/src/pages/groups/group-view.js:348
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:22
 #: frontend/src/pages/org-admin/departments/department-members.js:225
 #: frontend/src/pages/org-admin/org-group-members.js:111
 #: frontend/src/pages/org-admin/org-users-nav.js:16
 #: frontend/src/pages/org-admin/side-panel.js:34
 #: frontend/src/pages/sys-admin/departments/member-item.js:27
-#: frontend/src/pages/sys-admin/groups/group-members.js:109
-#: frontend/src/pages/sys-admin/users/user-groups.js:122
+#: frontend/src/pages/sys-admin/groups/group-members.js:108
+#: frontend/src/pages/sys-admin/orgs/org-users.js:216
+#: frontend/src/pages/sys-admin/users/user-groups.js:121
+#: frontend/src/pages/sys-admin/users/user-links.js:161
 #: frontend/src/pages/sys-admin/users/users-nav.js:25
-#: frontend/src/utils/utils.js:704
+#: frontend/src/utils/utils.js:712
 msgid "Admin"
 msgstr "管理"
 
 #: frontend/src/components/group-members.js:75
 #: frontend/src/components/group-members.js:122
-#: frontend/src/pages/groups/group-view.js:353
+#: frontend/src/pages/groups/group-view.js:351
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:31
 #: frontend/src/pages/org-admin/departments/department-members.js:226
 #: frontend/src/pages/org-admin/org-group-members.js:113
 #: frontend/src/pages/sys-admin/departments/member-item.js:28
-#: frontend/src/pages/sys-admin/groups/group-members.js:110
-#: frontend/src/pages/sys-admin/users/user-groups.js:125
+#: frontend/src/pages/sys-admin/groups/group-members.js:109
+#: frontend/src/pages/sys-admin/orgs/org-users.js:218
+#: frontend/src/pages/sys-admin/users/user-groups.js:124
+#: frontend/src/pages/sys-admin/users/user-links.js:164
 msgid "Member"
 msgstr "群组成员"
 
@@ -3502,11 +3559,11 @@ msgstr "群组成员"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:281
 #: frontend/src/pages/lib-content-view/lib-content-view.js:959
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:300
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:157
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:155
 #: frontend/src/pages/org-admin/org-group-repos.js:146
 #: frontend/src/pages/org-admin/org-user-repos.js:142
-#: frontend/src/pages/sys-admin/repos/repos.js:162
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:159
+#: frontend/src/pages/sys-admin/repos/repos.js:161
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:158
 msgid "Successfully deleted {name}."
 msgstr " {name}  删除成功。"
 
@@ -3518,7 +3575,7 @@ msgstr "当前路径："
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:123
 #: frontend/src/pages/libraries/index.js:257
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
-#: frontend/src/pages/shared-libs/shared-libs.js:81
+#: frontend/src/pages/shared-libs/shared-libs.js:82
 msgid "Library Type"
 msgstr "资料库类型"
 
@@ -3527,7 +3584,8 @@ msgstr "资料库类型"
 #: frontend/src/pages/libraries/index.js:259
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:94
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:82
-#: frontend/src/pages/shared-libs/shared-libs.js:83
+#: frontend/src/pages/shared-libs/shared-libs.js:84
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:46
 msgid "Actions"
 msgstr "操作"
 
@@ -3542,7 +3600,7 @@ msgstr "搜索群组成员"
 #: frontend/src/components/main-side-nav-folded.js:52
 #: frontend/src/components/main-side-nav.js:260
 #: frontend/src/components/main-side-nav.js:262
-#: frontend/src/pages/starred/starred.js:321
+#: frontend/src/pages/starred/starred.js:322
 msgid "Favorites"
 msgstr "收藏夹"
 
@@ -3587,7 +3645,7 @@ msgstr "链接"
 
 #: frontend/src/components/main-side-nav.js:180
 #: frontend/src/components/main-side-nav.js:182
-#: frontend/src/pages/share-admin/folders.js:369
+#: frontend/src/pages/share-admin/folders.js:370
 msgid "Folders"
 msgstr "文件夹"
 
@@ -3599,22 +3657,22 @@ msgstr "个人工作台"
 #: frontend/src/components/main-side-nav.js:237
 #: frontend/src/pages/libraries/index.js:273
 #: frontend/src/pages/my-libs/my-libs-deleted.js:50
-#: frontend/src/pages/my-libs/my-libs.js:144
+#: frontend/src/pages/my-libs/my-libs.js:145
 msgid "My Libraries"
 msgstr "我的资料库"
 
 #: frontend/src/components/main-side-nav.js:242
 #: frontend/src/components/main-side-nav.js:244
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:100
-#: frontend/src/pages/shared-libs/shared-libs.js:562
-#: frontend/src/pages/shared-libs/shared-libs.js:572
+#: frontend/src/pages/shared-libs/shared-libs.js:563
+#: frontend/src/pages/shared-libs/shared-libs.js:573
 msgid "Shared with me"
 msgstr "共享给我的"
 
 #: frontend/src/components/main-side-nav.js:249
 #: frontend/src/components/main-side-nav.js:251
-#: frontend/src/pages/shared-with-all/index.js:212
-#: frontend/src/pages/shared-with-all/index.js:227
+#: frontend/src/pages/shared-with-all/index.js:213
+#: frontend/src/pages/shared-with-all/index.js:228
 msgid "Shared with all"
 msgstr "公共资料库"
 
@@ -3631,14 +3689,14 @@ msgstr "帮助和资源"
 
 #: frontend/src/components/main-side-nav.js:341
 msgid "Fold the sidebar"
-msgstr "折叠侧边栏"
+msgstr "收起侧边栏"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
 msgstr "显示更多"
 
 #: frontend/src/components/org-admin-group-nav.js:26
-#: frontend/src/pages/groups/group-view.js:395
+#: frontend/src/pages/groups/group-view.js:393
 #: frontend/src/pages/org-admin/departments/department.js:43
 #: frontend/src/pages/sys-admin/departments/department.js:44
 #: frontend/src/pages/sys-admin/groups/group-nav.js:18
@@ -3790,12 +3848,12 @@ msgid "Check"
 msgstr "检查"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:140
-#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:32
+#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:30
 msgid "SeaTable base name"
 msgstr "SeaTable 表格名称"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/add-seatable-account-setting.js:144
-#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:33
+#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:31
 msgid "SeaTable server URL"
 msgstr "SeaTable 服务器 URL"
 
@@ -3816,11 +3874,11 @@ msgid "Are you sure you want to delete SeaTable {accountName}?"
 msgstr "你确定要删除 SeaTable {accountName} ?"
 
 #: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:22
-#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:23
 msgid "No SeaTable bases"
 msgstr "没有 SeaTable 表格"
 
-#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:64
+#: frontend/src/components/seatable-integration-account-setting-widgets/seatable-account-setting-list.js:62
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:114
 #: frontend/src/pages/sys-admin/terms-and-conditions/terms-and-conditions.js:85
 msgid "Add"
 msgstr "添加"
@@ -3846,17 +3904,21 @@ msgid "Specific people with email address"
 msgstr "拥有指定邮箱的人"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:19
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:155
+#: frontend/src/pages/sys-admin/invitations/invitations.js:181
+#: frontend/src/pages/sys-admin/invitations/invitations.js:184
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:154
 #: frontend/src/pages/sys-admin/users/user-info.js:324
-#: frontend/src/pages/sys-admin/users/users-content.js:305
+#: frontend/src/pages/sys-admin/users/users-content.js:298
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:33
 msgid "Default"
 msgstr "默认"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:21
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:157
+#: frontend/src/pages/sys-admin/invitations/invitations.js:175
+#: frontend/src/pages/sys-admin/invitations/invitations.js:178
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:156
 #: frontend/src/pages/sys-admin/users/user-info.js:326
-#: frontend/src/pages/sys-admin/users/users-content.js:307
+#: frontend/src/pages/sys-admin/users/users-content.js:300
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:35
 msgid "Guest"
 msgstr "访客"
@@ -3998,11 +4060,11 @@ msgstr "确定删除该共享链接吗？"
 msgid "Export"
 msgstr "导出"
 
-#: frontend/src/components/share-link-panel/link-list.js:126
+#: frontend/src/components/share-link-panel/link-list.js:124
 msgid "Delete share links"
 msgstr "删除共享链接"
 
-#: frontend/src/components/share-link-panel/link-list.js:127
+#: frontend/src/components/share-link-panel/link-list.js:125
 msgid "Are you sure you want to delete the selected share link(s) ?"
 msgstr "确定要删除勾选的共享链接吗？"
 
@@ -4051,13 +4113,13 @@ msgstr "删除 {name} 失败。"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:327
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:182
 #: frontend/src/metadata/metadata-tree-view/view-item/index.js:40
-#: frontend/src/pages/groups/group-view.js:398
+#: frontend/src/pages/groups/group-view.js:396
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:148
 #: frontend/src/pages/org-admin/departments/group-item.js:50
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:152
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:172
 #: frontend/src/pages/sys-admin/departments/group-item.js:66
-#: frontend/src/utils/text-translation.js:16
+#: frontend/src/utils/text-translation.js:48
 msgid "Rename"
 msgstr "重命名"
 
@@ -4068,18 +4130,18 @@ msgstr "目录权限"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:333
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:500
-#: frontend/src/pages/share-admin/folders.js:250
-#: frontend/src/pages/share-admin/folders.js:278
-#: frontend/src/pages/share-admin/libraries.js:263
-#: frontend/src/pages/share-admin/libraries.js:291
-#: frontend/src/pages/sys-admin/groups/group-repos.js:140
-#: frontend/src/pages/sys-admin/groups/group-repos.js:148
+#: frontend/src/pages/share-admin/folders.js:251
+#: frontend/src/pages/share-admin/folders.js:279
+#: frontend/src/pages/share-admin/libraries.js:264
+#: frontend/src/pages/share-admin/libraries.js:292
+#: frontend/src/pages/sys-admin/groups/group-repos.js:139
+#: frontend/src/pages/sys-admin/groups/group-repos.js:147
 msgid "Unshare"
 msgstr "取消共享"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:339
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:154
-#: frontend/src/pages/sys-admin/repos/repos.js:271
+#: frontend/src/pages/sys-admin/repos/repos.js:270
 msgid "History Setting"
 msgstr "历史设置"
 
@@ -4091,25 +4153,26 @@ msgstr "修改密码"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:348
 #: frontend/src/components/user-settings/webdav-password.js:104
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:160
-#: frontend/src/pages/sys-admin/orgs/org-users.js:304
-#: frontend/src/pages/sys-admin/users/users-content.js:388
-#: frontend/src/pages/sys-admin/users/users-content.js:590
+#: frontend/src/pages/sys-admin/orgs/org-users.js:197
+#: frontend/src/pages/sys-admin/orgs/org-users.js:303
+#: frontend/src/pages/sys-admin/users/users-content.js:381
+#: frontend/src/pages/sys-admin/users/users-content.js:583
 msgid "Reset Password"
 msgstr "重置密码"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:351
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:163
-#: frontend/src/pages/shared-libs/shared-libs.js:325
-#: frontend/src/pages/shared-libs/shared-libs.js:375
-#: frontend/src/pages/shared-libs/shared-libs.js:427
+#: frontend/src/pages/shared-libs/shared-libs.js:326
+#: frontend/src/pages/shared-libs/shared-libs.js:376
+#: frontend/src/pages/shared-libs/shared-libs.js:428
 msgid "Watch File Changes"
 msgstr "关注文件改动"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:354
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:166
-#: frontend/src/pages/shared-libs/shared-libs.js:325
-#: frontend/src/pages/shared-libs/shared-libs.js:375
-#: frontend/src/pages/shared-libs/shared-libs.js:427
+#: frontend/src/pages/shared-libs/shared-libs.js:326
+#: frontend/src/pages/shared-libs/shared-libs.js:376
+#: frontend/src/pages/shared-libs/shared-libs.js:428
 msgid "Unwatch File Changes"
 msgstr "取消文件改动关注"
 
@@ -4130,13 +4193,13 @@ msgstr "SeaTable 集成"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:610
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:156
-#: frontend/src/pages/shared-libs/shared-libs.js:222
+#: frontend/src/pages/shared-libs/shared-libs.js:223
 msgid "Successfully unstarred {library_name_placeholder}."
 msgstr "成功取消星标 {library_name_placeholder}"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:620
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:166
-#: frontend/src/pages/shared-libs/shared-libs.js:232
+#: frontend/src/pages/shared-libs/shared-libs.js:233
 msgid "Successfully starred {library_name_placeholder}."
 msgstr "成功添加星标 {library_name_placeholder}"
 
@@ -4158,27 +4221,27 @@ msgid "Upload Folder"
 msgstr "上传目录"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:205
-#: frontend/src/utils/text-translation.js:12
+#: frontend/src/utils/text-translation.js:32
 msgid "New SeaDoc File"
 msgstr "新建 SeaDoc 文件"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:208
-#: frontend/src/utils/text-translation.js:8
+#: frontend/src/utils/text-translation.js:16
 msgid "New Markdown File"
 msgstr "新建 Markdown 文件"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:209
-#: frontend/src/utils/text-translation.js:9
+#: frontend/src/utils/text-translation.js:20
 msgid "New Excel File"
 msgstr "新建 Excel 文件"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:210
-#: frontend/src/utils/text-translation.js:10
+#: frontend/src/utils/text-translation.js:24
 msgid "New PowerPoint File"
 msgstr "新建 PowerPoint 文件"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:211
-#: frontend/src/utils/text-translation.js:11
+#: frontend/src/utils/text-translation.js:28
 msgid "New Word File"
 msgstr "新建 Word 文件"
 
@@ -4195,7 +4258,7 @@ msgid "selected"
 msgstr "已选择"
 
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:344
-#: frontend/src/utils/text-translation.js:17
+#: frontend/src/utils/text-translation.js:52
 msgid "Move"
 msgstr "移动"
 
@@ -4276,30 +4339,36 @@ msgstr "没有链接的设备。你尚未使用任何客户端（台式机或移
 
 #: frontend/src/components/user-settings/linked-devices.js:28
 #: frontend/src/pages/linked-devices/linked-devices.js:32
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:45
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:45
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:43
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
 msgid "Platform"
 msgstr "平台"
 
 #: frontend/src/components/user-settings/linked-devices.js:29
 #: frontend/src/pages/linked-devices/linked-devices.js:33
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:45
 msgid "Device Name"
 msgstr "设备名称"
 
 #: frontend/src/components/user-settings/linked-devices.js:30
 #: frontend/src/pages/linked-devices/linked-devices.js:34
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:47
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:45
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:101
-#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:47
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:47
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:89
-#: frontend/src/pages/sys-admin/logs-page/login-logs.js:46
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:46
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:46
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:49
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:45
 msgid "IP"
 msgstr "IP"
 
 #: frontend/src/components/user-settings/linked-devices.js:31
 #: frontend/src/pages/linked-devices/linked-devices.js:35
-#: frontend/src/pages/sys-admin/users/users-content.js:91
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:47
+#: frontend/src/pages/sys-admin/users/users-content.js:84
 msgid "Last Access"
 msgstr "最后访问时间"
 
@@ -4717,31 +4786,34 @@ msgstr "是任意一个..."
 msgid "is none of..."
 msgstr "不是任意一个..."
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:211
+#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:214
 msgid "No collaborators available"
 msgstr "没有可获取的协作人"
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:211
+#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:214
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/collaborator-filter/index.js:88
 msgid "No collaborators"
 msgstr "没有协作人"
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:245
+#: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:250
 msgid "Search collaborators"
 msgstr "搜索协作人"
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:207
+#: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:214
+#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:209
 msgid "No option"
 msgstr "没有选项"
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:245
+#: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:253
+#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:247
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:351
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:463
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:193
 msgid "Search option"
 msgstr "选择标签"
 
-#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:258
+#: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:266
+#: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:260
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:207
 msgid "Add option"
 msgstr "增加选项"
@@ -4794,9 +4866,45 @@ msgstr "预定义属性"
 msgid "Custom properties"
 msgstr "自定义属性"
 
-#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:63
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:79
+msgid "Long text"
+msgstr "长文本"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:87
+msgid "Number"
+msgstr "数字"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:95
+msgid "Collaborator"
+msgstr "协作人"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:103
+msgid "Checkbox"
+msgstr "勾选"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:111
+#: frontend/src/pages/org-admin/org-logs-file-audit.js:102
+#: frontend/src/pages/org-admin/org-logs-file-update.js:116
+#: frontend/src/pages/org-admin/org-logs-perm-audit.js:86
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:89
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:45
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:50
+msgid "Date"
+msgstr "日期"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:119
+msgid "Single select"
+msgstr "单选"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:127
+msgid "Multiple select"
+msgstr "多选"
+
+#: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:168
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:100
-#: frontend/src/pages/sys-admin/users/user-links.js:51
+#: frontend/src/pages/sys-admin/invitations/invitations.js:60
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:87
+#: frontend/src/pages/sys-admin/users/user-links.js:50
 msgid "Type"
 msgstr "类型"
 
@@ -4867,17 +4975,17 @@ msgstr "选择标签"
 msgid "Select collaborators"
 msgstr "选择协作人"
 
-#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:507
+#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:511
 msgid "Invalid filter"
 msgstr "无效的过滤器"
 
-#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:552
+#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:556
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:178
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/index.js:105
 msgid "Search property"
 msgstr "搜索属性"
 
-#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:553
+#: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:557
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:179
 msgid "No results"
 msgstr "没有结果"
@@ -5046,15 +5154,16 @@ msgstr "打开文件夹"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:106
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:136
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:189
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:199
 msgid "Edit format settings"
 msgstr "编辑格式设置"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:107
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:171
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:190
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:205
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:214
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:200
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:215
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:224
 msgid "You do not have permission"
 msgstr "你没有权限"
 
@@ -5062,27 +5171,31 @@ msgstr "你没有权限"
 msgid "Edit single select"
 msgstr "编辑单选"
 
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:204
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:189
+msgid "Edit multiple select"
+msgstr "编辑多选"
+
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:214
 msgid "Rename property"
 msgstr "重命名属性"
 
-#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:213
+#: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:223
 msgid "Delete property"
 msgstr "删除属性"
 
-#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:645
+#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:649
 msgid "xxx rows are copied."
 msgstr "已复制 xxx 行。"
 
-#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:645
+#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:649
 msgid "1 row is copied."
 msgstr "已复制 1 行。"
 
-#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:677
+#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:681
 msgid "xxx cells copied"
 msgstr "已复制 xxx 单元格"
 
-#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:677
+#: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:681
 msgid "1 cell copied"
 msgstr "已复制 1 个单元格"
 
@@ -5271,29 +5384,6 @@ msgstr "移动文件夹"
 msgid "No more activities"
 msgstr " 没有更多活动了"
 
-#: frontend/src/pages/dashboard/content.js:33
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:46
-msgid "Operation"
-msgstr "操作"
-
-#: frontend/src/pages/dashboard/content.js:34
-#: frontend/src/pages/org-admin/devices/devices-errors.js:51
-#: frontend/src/pages/org-admin/org-logs-file-audit.js:103
-#: frontend/src/pages/org-admin/org-logs-file-update.js:117
-#: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
-#: frontend/src/pages/share-admin/share-links.js:88
-#: frontend/src/pages/share-admin/upload-links.js:51
-#: frontend/src/pages/starred/starred.js:38
-#: frontend/src/pages/sys-admin/abuse-reports.js:91
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:51
-#: frontend/src/pages/sys-admin/file-scan-records.js:29
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:91
-#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:169
-#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:187
-#: frontend/src/pages/sys-admin/web-settings/web-settings.js:265
-msgid "Library"
-msgstr "资料库"
-
 #: frontend/src/pages/dashboard/files-activities.js:247
 msgid "All Activities"
 msgstr "所有活动"
@@ -5319,11 +5409,12 @@ msgid "(current version)"
 msgstr "(当前版本)"
 
 #: frontend/src/pages/file-history-old/history-item.js:128
-#: frontend/src/pages/share-admin/share-links.js:308
 #: frontend/src/pages/share-admin/share-links.js:309
-#: frontend/src/pages/share-admin/share-links.js:355
-#: frontend/src/pages/share-admin/upload-links.js:156
-#: frontend/src/pages/share-admin/upload-links.js:183
+#: frontend/src/pages/share-admin/share-links.js:310
+#: frontend/src/pages/share-admin/share-links.js:356
+#: frontend/src/pages/share-admin/upload-links.js:157
+#: frontend/src/pages/share-admin/upload-links.js:184
+#: frontend/src/pages/sys-admin/users/user-links.js:132
 msgid "View"
 msgstr "查看"
 
@@ -5337,13 +5428,14 @@ msgid "Successfully restored."
 msgstr "恢复成功。"
 
 #: frontend/src/pages/groups/group-item.js:112
-#: frontend/src/pages/groups/group-view.js:151
-#: frontend/src/pages/groups/group-view.js:157
-#: frontend/src/pages/institution-admin/user-content/user-repos.js:30
+#: frontend/src/pages/groups/group-view.js:150
+#: frontend/src/pages/groups/group-view.js:155
+#: frontend/src/pages/institution-admin/user-content/user-repos.js:29
 #: frontend/src/pages/libraries/index.js:284
 #: frontend/src/pages/my-libs/my-libs.js:33
 #: frontend/src/pages/org-admin/departments/department-libraries.js:87
 #: frontend/src/pages/sys-admin/departments/department-libraries.js:98
+#: frontend/src/pages/sys-admin/users/user-shared-repos.js:47
 msgid "No libraries"
 msgstr "没有资料库"
 
@@ -5359,36 +5451,36 @@ msgid ""
 "with this group by clicking the \"New Library\" button in the menu bar."
 msgstr "还没有资料库被共享到当前群组。资料库被共享到一个群组时，所有群组成员都可以访问它。可以在“我的资料库”页面将一个资料库共享到一个群组，也可以点击上方菜单栏中的“新建资料库”按钮创建一个资料库共享到当前群组。"
 
-#: frontend/src/pages/groups/group-view.js:158
+#: frontend/src/pages/groups/group-view.js:156
 msgid "You can create libraries by clicking the \"New Library\" button above."
 msgstr "你可以点击上面的“新建资料库”按扭创建资料库。"
 
-#: frontend/src/pages/groups/group-view.js:400
+#: frontend/src/pages/groups/group-view.js:398
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:151
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:268
-#: frontend/src/pages/sys-admin/groups/groups-content.js:204
-#: frontend/src/pages/sys-admin/repos/repos.js:268
-#: frontend/src/pages/sys-admin/users/user-repos.js:166
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:266
+#: frontend/src/pages/sys-admin/groups/groups-content.js:203
+#: frontend/src/pages/sys-admin/repos/repos.js:267
+#: frontend/src/pages/sys-admin/users/user-repos.js:165
 msgid "Transfer"
 msgstr "转让"
 
-#: frontend/src/pages/groups/group-view.js:402
+#: frontend/src/pages/groups/group-view.js:400
 msgid "Import members"
 msgstr "导入成员"
 
-#: frontend/src/pages/groups/group-view.js:403
+#: frontend/src/pages/groups/group-view.js:401
 msgid "Manage members"
 msgstr "管理成员"
 
-#: frontend/src/pages/groups/group-view.js:405
+#: frontend/src/pages/groups/group-view.js:403
 msgid "Delete group"
 msgstr "删除群组"
 
-#: frontend/src/pages/groups/group-view.js:410
+#: frontend/src/pages/groups/group-view.js:408
 msgid "Leave group"
 msgstr "退出群组"
 
-#: frontend/src/pages/groups/group-view.js:437
+#: frontend/src/pages/groups/group-view.js:435
 msgid "This is a special group representing a department."
 msgstr "该群组代表一个部门。"
 
@@ -5434,17 +5526,17 @@ msgstr "信息"
 msgid "Groups"
 msgstr "群组"
 
-#: frontend/src/pages/institution-admin/user-content/user-groups.js:30
+#: frontend/src/pages/institution-admin/user-content/user-groups.js:29
 msgid "This user has not created or joined any groups"
 msgstr "此用户没有创建或加入群组"
 
-#: frontend/src/pages/institution-admin/user-content/user-groups.js:41
+#: frontend/src/pages/institution-admin/user-content/user-groups.js:39
 #: frontend/src/pages/institution-admin/user-list-search/index.js:70
 #: frontend/src/pages/institution-admin/user-list/index.js:111
 msgid "Create At"
 msgstr "创建时间"
 
-#: frontend/src/pages/institution-admin/user-content/user-groups.js:42
+#: frontend/src/pages/institution-admin/user-content/user-groups.js:40
 #: frontend/src/pages/institution-admin/user-list-search/index.js:71
 #: frontend/src/pages/institution-admin/user-list/index.js:112
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:159
@@ -5464,15 +5556,15 @@ msgid "Space Used / Quota"
 msgstr "已用空间 / 容量 "
 
 #: frontend/src/pages/institution-admin/user-content/user-repo-item.js:28
-#: frontend/src/pages/sys-admin/users/user-repos.js:154
-#: frontend/src/pages/sys-admin/users/user-shared-repos.js:75
+#: frontend/src/pages/sys-admin/users/user-repos.js:153
+#: frontend/src/pages/sys-admin/users/user-shared-repos.js:70
 msgid "Broken ({repo_id_placeholder})"
 msgstr "已损坏 ({repo_id_placeholder})"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:67
 #: frontend/src/pages/institution-admin/user-list/index.js:108
 #: frontend/src/pages/org-admin/org-user-profile.js:142
-#: frontend/src/pages/sys-admin/users/users-content.js:90
+#: frontend/src/pages/sys-admin/users/users-content.js:83
 msgid "Contact Email"
 msgstr "联系人邮箱"
 
@@ -5481,11 +5573,13 @@ msgstr "联系人邮箱"
 #: frontend/src/pages/org-admin/org-admin-list.js:51
 #: frontend/src/pages/org-admin/org-users-list.js:73
 #: frontend/src/pages/org-admin/org-users-search-users.js:36
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:51
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:62
-#: frontend/src/pages/sys-admin/orgs/org-users.js:58
-#: frontend/src/pages/sys-admin/users/users-content.js:95
-#: frontend/src/pages/sys-admin/users/users-content.js:101
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:47
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:50
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:61
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:46
+#: frontend/src/pages/sys-admin/orgs/org-users.js:57
+#: frontend/src/pages/sys-admin/users/users-content.js:88
+#: frontend/src/pages/sys-admin/users/users-content.js:94
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:172
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:190
 msgid "Status"
@@ -5496,11 +5590,13 @@ msgstr "状态"
 #: frontend/src/pages/org-admin/org-admin-list.js:52
 #: frontend/src/pages/org-admin/org-users-list.js:75
 #: frontend/src/pages/org-admin/org-users-search-users.js:38
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:51
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:62
 #: frontend/src/pages/sys-admin/orgs/org-info.js:82
-#: frontend/src/pages/sys-admin/orgs/org-users.js:60
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:59
-#: frontend/src/pages/sys-admin/users/ldap-users.js:46
-#: frontend/src/pages/sys-admin/users/users-content.js:83
+#: frontend/src/pages/sys-admin/orgs/org-users.js:59
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:58
+#: frontend/src/pages/sys-admin/users/ldap-users.js:45
+#: frontend/src/pages/sys-admin/users/users-content.js:76
 msgid "Space Used"
 msgstr "已用空间"
 
@@ -5509,23 +5605,26 @@ msgstr "已用空间"
 #: frontend/src/pages/org-admin/org-admin-list.js:53
 #: frontend/src/pages/org-admin/org-users-list.js:77
 #: frontend/src/pages/org-admin/org-users-search-users.js:40
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:53
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:64
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:63
+#: frontend/src/pages/sys-admin/orgs/org-users.js:60
+#: frontend/src/pages/sys-admin/users/ldap-users.js:46
 msgid "Last Login"
 msgstr "上次登录"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:89
 #: frontend/src/pages/institution-admin/user-list/index.js:141
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:107
-#: frontend/src/pages/sys-admin/users/users-content.js:581
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
+#: frontend/src/pages/sys-admin/users/users-content.js:574
 msgid "Delete User"
 msgstr "删除用户"
 
 #: frontend/src/pages/institution-admin/user-list/user-item.js:12
 #: frontend/src/pages/org-admin/org-user-item.js:123
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:172
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:208
-#: frontend/src/pages/sys-admin/users/users-content.js:331
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:171
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:207
+#: frontend/src/pages/sys-admin/orgs/org-users.js:207
+#: frontend/src/pages/sys-admin/users/users-content.js:324
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:24
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:72
 msgid "Active"
@@ -5533,9 +5632,10 @@ msgstr "激活"
 
 #: frontend/src/pages/institution-admin/user-list/user-item.js:18
 #: frontend/src/pages/org-admin/org-user-item.js:125
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:172
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:208
-#: frontend/src/pages/sys-admin/users/users-content.js:333
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:171
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:207
+#: frontend/src/pages/sys-admin/orgs/org-users.js:209
+#: frontend/src/pages/sys-admin/users/users-content.js:326
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:22
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:75
 msgid "Inactive"
@@ -5563,13 +5663,13 @@ msgid ""
 "button in the menu bar."
 msgstr "你还没有邀请任何访客。一个访客可以通过 web 界面访问被共享的资料库，在协作时比通过外链更高效。可以点击上方的“邀请访客”按钮邀请一个访客。"
 
-#: frontend/src/pages/lib-content-view/lib-content-container.js:113
+#: frontend/src/pages/lib-content-view/lib-content-container.js:115
 #: frontend/src/pages/wiki/main-panel.js:82
 #: frontend/src/pages/wiki2/main-panel.js:78
 msgid "Folder does not exist."
 msgstr "文件夹不存在。"
 
-#: frontend/src/pages/lib-content-view/lib-content-container.js:186
+#: frontend/src/pages/lib-content-view/lib-content-container.js:185
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr "此库已由管理员设置为只读，无法更新。"
 
@@ -5632,7 +5732,7 @@ msgstr "重命名{name}失败"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1199
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1227
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:377
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:375
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:229
 #: frontend/src/pages/org-admin/org-groups.js:128
 msgid "Successfully deleted {name}"
@@ -5653,7 +5753,7 @@ msgstr "移动 {name} 失败。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1352
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:127
-#: frontend/src/utils/utils.js:1308
+#: frontend/src/utils/utils.js:1316
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
 
@@ -5674,11 +5774,11 @@ msgid "Failed to convert {name}."
 msgstr "{name} 转换失败"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2141
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:255
-#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:107
-#: frontend/src/pages/shared-libs/shared-libs.js:311
-#: frontend/src/pages/shared-libs/shared-libs.js:361
-#: frontend/src/pages/shared-libs/shared-libs.js:426
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:256
+#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:108
+#: frontend/src/pages/shared-libs/shared-libs.js:312
+#: frontend/src/pages/shared-libs/shared-libs.js:362
+#: frontend/src/pages/shared-libs/shared-libs.js:427
 msgid "Leave Share"
 msgstr "退出共享"
 
@@ -5692,11 +5792,6 @@ msgid ""
 "Configure clients on your devices to access your data more comfortably."
 msgstr "你还没有通过任何（桌面或移动）客户端访问文件。可以配置下客户端，这样可以更方便地访问数据。"
 
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:82
-#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:69
-msgid "Open parent directory"
-msgstr "打开父目录"
-
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:61
 msgid "Switch to plain text editor"
 msgstr "切换至普通文本编辑器"
@@ -5704,6 +5799,10 @@ msgstr "切换至普通文本编辑器"
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:63
 msgid "Switch to rich text editor"
 msgstr "切换至富文本编辑器"
+
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:69
+msgid "Open parent directory"
+msgstr "打开父目录"
 
 #: frontend/src/pages/markdown-editor/index.js:116
 msgid "This file has been updated."
@@ -5728,8 +5827,8 @@ msgid "Failed to save"
 msgstr "保存失败"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:143
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:169
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:171
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:167
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:170
 #: frontend/src/repo-snapshot.js:121
 msgid "Successfully restored the library."
 msgstr "资料库还原成功。"
@@ -5748,9 +5847,9 @@ msgid ""
 msgstr "你还没创建任何资料库。资料库可用来组织文件和目录。资料库也可以共享给其他人，同步到其他已连接的设备。可以点击上方的“新建资料库”按钮创建一个资料库。"
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:278
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:234
-#: frontend/src/pages/sys-admin/repos/repos.js:175
-#: frontend/src/pages/sys-admin/users/user-repos.js:295
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:232
+#: frontend/src/pages/sys-admin/repos/repos.js:174
+#: frontend/src/pages/sys-admin/users/user-repos.js:294
 msgid "Successfully transferred the library."
 msgstr "资料库转让成功。"
 
@@ -5761,9 +5860,9 @@ msgid "Broken (please contact your administrator to fix this library)"
 msgstr "Broken (请联系你的管理员来修复该资料库)"
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:51
-#: frontend/src/pages/share-admin/folders.js:148
-#: frontend/src/pages/share-admin/libraries.js:178
-#: frontend/src/pages/shared-libs/shared-libs.js:201
+#: frontend/src/pages/share-admin/folders.js:149
+#: frontend/src/pages/share-admin/libraries.js:179
+#: frontend/src/pages/shared-libs/shared-libs.js:202
 #: frontend/src/pages/shared-with-all/index.js:71
 msgid "Successfully unshared {name}"
 msgstr "成功取消共享 {name}"
@@ -5778,18 +5877,18 @@ msgstr "还没有任何资料库被共享给你"
 msgid "No libraries have been shared with you from other servers."
 msgstr "还没有共享自其他服务器的资料库。"
 
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:161
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:162
 #: frontend/src/pages/org-admin/org-group-repos.js:85
-#: frontend/src/pages/sys-admin/groups/group-repos.js:42
+#: frontend/src/pages/sys-admin/groups/group-repos.js:41
 msgid "Shared By"
 msgstr "共享来源"
 
-#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:321
+#: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:322
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:15
 #: frontend/src/pages/org-admin/org-users-nav.js:15
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/share-with-ocm/remote-dir-path.js:56
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:134
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:133
 #: frontend/src/pages/sys-admin/repos/dir-path-bar.js:57
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:15
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:26
@@ -5820,12 +5919,17 @@ msgstr "组织架构"
 #: frontend/src/pages/org-admin/org-users-search-users.js:40
 #: frontend/src/pages/sys-admin/departments/department-list.js:120
 #: frontend/src/pages/sys-admin/departments/sub-departments.js:110
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:53
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:64
-#: frontend/src/pages/sys-admin/institutions/institutions.js:49
-#: frontend/src/pages/sys-admin/links/share-links.js:68
-#: frontend/src/pages/sys-admin/links/upload-links.js:50
-#: frontend/src/pages/sys-admin/users/users-content.js:91
+#: frontend/src/pages/sys-admin/groups/groups-content.js:59
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:63
+#: frontend/src/pages/sys-admin/institutions/institutions.js:48
+#: frontend/src/pages/sys-admin/links/share-links.js:67
+#: frontend/src/pages/sys-admin/links/upload-links.js:49
+#: frontend/src/pages/sys-admin/orgs/org-groups.js:39
+#: frontend/src/pages/sys-admin/orgs/org-users.js:60
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:59
+#: frontend/src/pages/sys-admin/users/user-groups.js:48
+#: frontend/src/pages/sys-admin/users/users-content.js:84
 msgid "Created At"
 msgstr "创建时间"
 
@@ -5836,8 +5940,8 @@ msgstr "创建时间"
 #: frontend/src/pages/org-admin/org-users-search-users.js:38
 #: frontend/src/pages/sys-admin/departments/department-list.js:121
 #: frontend/src/pages/sys-admin/departments/sub-departments.js:111
-#: frontend/src/pages/sys-admin/users/ldap-users.js:46
-#: frontend/src/pages/sys-admin/users/users-content.js:88
+#: frontend/src/pages/sys-admin/users/ldap-users.js:45
+#: frontend/src/pages/sys-admin/users/users-content.js:81
 msgid "Quota"
 msgstr "配额"
 
@@ -5865,30 +5969,49 @@ msgstr "编辑"
 msgid "No sub-departments"
 msgstr "没有子部门"
 
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:45
-#: frontend/src/pages/org-admin/devices/devices-errors.js:49
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:45
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:49
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:43
+#: frontend/src/pages/org-admin/devices/devices-errors.js:47
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
 #: frontend/src/pages/sys-admin/info.js:115
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:50
 #: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Version"
 msgstr "版本"
 
-#: frontend/src/pages/org-admin/devices/devices-by-platform.js:121
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:124
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:119
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:123
 msgid "Successfully unlinked the device."
 msgstr "成功断开连接该设备 。"
 
-#: frontend/src/pages/org-admin/devices/devices-errors.js:49
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:49
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:89
+#: frontend/src/pages/org-admin/devices/devices-errors.js:47
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
 #: frontend/src/repo-history.js:143 frontend/src/repo-history.js:150
 msgid "Device"
 msgstr "设备"
 
-#: frontend/src/pages/org-admin/devices/devices-errors.js:173
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:177
+#: frontend/src/pages/org-admin/devices/devices-errors.js:49
+#: frontend/src/pages/org-admin/org-logs-file-audit.js:103
+#: frontend/src/pages/org-admin/org-logs-file-update.js:117
+#: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
+#: frontend/src/pages/share-admin/share-links.js:89
+#: frontend/src/pages/share-admin/upload-links.js:52
+#: frontend/src/pages/starred/starred.js:39
+#: frontend/src/pages/sys-admin/abuse-reports.js:91
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:50
+#: frontend/src/pages/sys-admin/file-scan-records.js:29
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:90
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:46
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:48
+#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:169
+#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:187
+#: frontend/src/pages/sys-admin/web-settings/web-settings.js:265
+msgid "Library"
+msgstr "资料库"
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:171
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:176
 msgid "Successfully cleaned all errors."
 msgstr "成功清除所有错误。"
 
@@ -5917,50 +6040,43 @@ msgid ""
 "follows:"
 msgstr "复制 IdP 的证书，粘贴到此处。证书格式如下所示："
 
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:208
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:206
 #: frontend/src/utils/utils.js:443
 msgid "Encrypted library"
 msgstr "加密资料库"
 
-#: frontend/src/pages/org-admin/libraries/org-all-repos.js:211
+#: frontend/src/pages/org-admin/libraries/org-all-repos.js:209
 #: frontend/src/utils/utils.js:449
 msgid "Read-Write library"
 msgstr "可读写资料库"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:59
-#: frontend/src/translate.js:18
-msgid ""
-"Tip: libraries deleted {trashReposExpireDays} days ago will be cleaned "
-"automatically."
-msgstr "提示：{trashReposExpireDays} 天前删除的资料库会被自动清空。"
-
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:254
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:256
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:252
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:255
 msgid "Are you sure you want to delete {placeholder} completely?"
 msgstr "确定要彻底删除 {placeholder} 吗？"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:265
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:267
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:263
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:266
 msgid "Are you sure you want to restore {placeholder}?"
 msgstr "确定要恢复 {placeholder} 吗？"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:360
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:362
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:358
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:361
 msgid "Successfully cleared trash."
 msgstr "成功清空回收站。"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:399
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:424
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:397
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:423
 msgid "Clear Trash"
 msgstr "清空回收站"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:400
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:425
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:398
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:424
 msgid "Are you sure you want to clear trash?"
 msgstr "确定要清空回收站吗？"
 
-#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:402
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:427
+#: frontend/src/pages/org-admin/libraries/org-repo-trash.js:400
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:426
 #: frontend/src/user-notifications.js:117
 msgid "Clear"
 msgstr "清空"
@@ -6018,7 +6134,7 @@ msgid "Next"
 msgstr "下一页"
 
 #: frontend/src/pages/org-admin/org-groups.js:340
-#: frontend/src/pages/sys-admin/groups/groups-content.js:207
+#: frontend/src/pages/sys-admin/groups/groups-content.js:206
 msgid "Change to department"
 msgstr "更改为部门"
 
@@ -6056,20 +6172,14 @@ msgid "All Public Links"
 msgstr "所有公开链接"
 
 #: frontend/src/pages/org-admin/org-links.js:103
-#: frontend/src/pages/sys-admin/links/share-links.js:71
+#: frontend/src/pages/sys-admin/links/share-links.js:70
+#: frontend/src/pages/sys-admin/links/upload-links.js:50
 msgid "Visit count"
 msgstr "访问次数"
 
 #: frontend/src/pages/org-admin/org-links.js:217
 msgid "View Link"
 msgstr "查看链接"
-
-#: frontend/src/pages/org-admin/org-logs-file-audit.js:102
-#: frontend/src/pages/org-admin/org-logs-file-update.js:116
-#: frontend/src/pages/org-admin/org-logs-perm-audit.js:86
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:46
-msgid "Date"
-msgstr "日期"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:190
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:231
@@ -6080,18 +6190,19 @@ msgid "Only Show"
 msgstr "只显示"
 
 #: frontend/src/pages/org-admin/org-logs-file-update.js:118
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:48
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:47
 msgid "Action"
 msgstr "操作"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:80
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:44
 msgid "Share From"
 msgstr "共享来源"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:81
-#: frontend/src/pages/share-admin/folders.js:51
-#: frontend/src/pages/share-admin/libraries.js:50
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:46
+#: frontend/src/pages/share-admin/folders.js:52
+#: frontend/src/pages/share-admin/libraries.js:51
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:45
 msgid "Share To"
 msgstr "共享给"
 
@@ -6174,14 +6285,14 @@ msgid "Resetting user's password, please wait for a moment."
 msgstr "重置用户密码，请稍等。"
 
 #: frontend/src/pages/org-admin/org-user-item.js:112
-#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:102
-#: frontend/src/pages/sys-admin/logs-page/login-logs.js:117
+#: frontend/src/pages/sys-admin/admin-logs/login-logs.js:101
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:116
 msgid "Failed"
 msgstr "失败"
 
 #: frontend/src/pages/org-admin/org-user-item.js:151
-#: frontend/src/pages/sys-admin/orgs/org-users.js:230
-#: frontend/src/pages/sys-admin/users/users-content.js:430
+#: frontend/src/pages/sys-admin/orgs/org-users.js:229
+#: frontend/src/pages/sys-admin/users/users-content.js:423
 msgid "Are you sure you want to set {user_placeholder} inactive?"
 msgstr "确定要将 {user_placeholder} 设置为“未激活”状态?"
 
@@ -6190,22 +6301,22 @@ msgid "ResetPwd"
 msgstr "重置密码"
 
 #: frontend/src/pages/org-admin/org-user-item.js:190
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:152
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:192
-#: frontend/src/pages/sys-admin/users/users-content.js:391
-#: frontend/src/pages/sys-admin/users/users-content.js:599
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:151
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:191
+#: frontend/src/pages/sys-admin/users/users-content.js:384
+#: frontend/src/pages/sys-admin/users/users-content.js:592
 msgid "Revoke Admin"
 msgstr "撤销管理权限"
 
 #: frontend/src/pages/org-admin/org-user-item.js:198
-#: frontend/src/pages/sys-admin/orgs/org-users.js:313
-#: frontend/src/pages/sys-admin/users/users-content.js:608
+#: frontend/src/pages/sys-admin/orgs/org-users.js:312
+#: frontend/src/pages/sys-admin/users/users-content.js:601
 msgid "Set user inactive"
 msgstr "将用户设置为“未激活”"
 
 #: frontend/src/pages/org-admin/org-user-item.js:201
-#: frontend/src/pages/sys-admin/orgs/org-users.js:316
-#: frontend/src/pages/sys-admin/users/users-content.js:611
+#: frontend/src/pages/sys-admin/orgs/org-users.js:315
+#: frontend/src/pages/sys-admin/users/users-content.js:604
 msgid "Set"
 msgstr "设置"
 
@@ -6320,8 +6431,10 @@ msgid "Modified"
 msgstr "修改了"
 
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:60
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:133
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:148
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:211
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:132
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:135
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:147
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:82
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:90
@@ -6552,8 +6665,8 @@ msgstr "输入文件后缀，以','分隔"
 
 #: frontend/src/pages/search/advanced-search.js:242
 #: frontend/src/pages/search/advanced-search.js:264
-#: frontend/src/pages/sys-admin/orgs/org-users.js:307
-#: frontend/src/pages/sys-admin/users/users-content.js:593
+#: frontend/src/pages/sys-admin/orgs/org-users.js:306
+#: frontend/src/pages/sys-admin/users/users-content.js:586
 msgid "Reset"
 msgstr "重置"
 
@@ -6574,21 +6687,14 @@ msgstr "结果"
 msgid "results"
 msgstr "结果"
 
-#: frontend/src/pages/share-admin/folders.js:35
-msgid ""
-"You have not shared any folders with other users yet. You can share a folder"
-" with other users by clicking the share icon to the right of a folder's "
-"name."
-msgstr "你还没共享任何文件夹给其他用户。可以通过点击文件夹名称旁边的共享图标来共享一个文件夹。"
-
-#: frontend/src/pages/share-admin/folders.js:178
-#: frontend/src/pages/share-admin/libraries.js:153
-#: frontend/src/pages/share-admin/share-links.js:240
+#: frontend/src/pages/share-admin/folders.js:179
+#: frontend/src/pages/share-admin/libraries.js:154
+#: frontend/src/pages/share-admin/share-links.js:241
 msgid "Successfully modified permission."
 msgstr "成功更改权限。"
 
-#: frontend/src/pages/share-admin/folders.js:262
-#: frontend/src/pages/share-admin/libraries.js:275
+#: frontend/src/pages/share-admin/folders.js:263
+#: frontend/src/pages/share-admin/libraries.js:276
 msgid "Share To:"
 msgstr "共享给："
 
@@ -6603,85 +6709,72 @@ msgid ""
 "library's name in \"My Libraries\"."
 msgstr "你还没共享任何资料库给其他用户。可以在“我的资料库”页面通过点击资料库名称旁边的共享图标来共享一个资料库。"
 
-#: frontend/src/pages/share-admin/libraries.js:215
+#: frontend/src/pages/share-admin/libraries.js:216
 msgid "all members"
 msgstr "所有成员"
 
-#: frontend/src/pages/share-admin/share-links.js:69
-msgid ""
-"You have not created any share links yet. A share link can be used to share "
-"files and folders with anyone. You can create a share link for a file or "
-"folder by clicking the share icon to the right of its name."
-msgstr "你还没创建任何共享外链。一个共享外链可以用来共享文件和文件夹给任何人。可以通过点击其名称旁边的共享图标来给一个文件或文件夹创建一个共享外链。"
-
-#: frontend/src/pages/share-admin/share-links.js:90
-#: frontend/src/pages/share-admin/share-links.js:338
-#: frontend/src/pages/share-admin/upload-links.js:52
-#: frontend/src/pages/share-admin/upload-links.js:167
+#: frontend/src/pages/share-admin/share-links.js:91
+#: frontend/src/pages/share-admin/share-links.js:339
+#: frontend/src/pages/share-admin/upload-links.js:53
+#: frontend/src/pages/share-admin/upload-links.js:168
+#: frontend/src/pages/sys-admin/users/user-links.js:51
 msgid "Visits"
 msgstr "访问次数"
 
-#: frontend/src/pages/share-admin/share-links.js:285
-#: frontend/src/pages/share-admin/upload-links.js:150
+#: frontend/src/pages/share-admin/share-links.js:286
+#: frontend/src/pages/share-admin/upload-links.js:151
 msgid "(deleted)"
 msgstr "（已删除）"
 
-#: frontend/src/pages/share-admin/share-links.js:318
 #: frontend/src/pages/share-admin/share-links.js:319
-#: frontend/src/pages/share-admin/share-links.js:356
-#: frontend/src/pages/share-admin/upload-links.js:157
-#: frontend/src/pages/share-admin/upload-links.js:184
-#: frontend/src/pages/sys-admin/groups/group-members.js:178
-#: frontend/src/pages/sys-admin/groups/group-members.js:187
-#: frontend/src/pages/sys-admin/links/share-links.js:169
-#: frontend/src/pages/sys-admin/links/upload-links.js:147
+#: frontend/src/pages/share-admin/share-links.js:320
+#: frontend/src/pages/share-admin/share-links.js:357
+#: frontend/src/pages/share-admin/upload-links.js:158
+#: frontend/src/pages/share-admin/upload-links.js:185
+#: frontend/src/pages/sys-admin/groups/group-members.js:177
+#: frontend/src/pages/sys-admin/groups/group-members.js:186
+#: frontend/src/pages/sys-admin/links/share-links.js:168
+#: frontend/src/pages/sys-admin/links/upload-links.js:146
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:70
 #: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:42
 msgid "Remove"
 msgstr "删除"
 
-#: frontend/src/pages/share-admin/share-links.js:407
+#: frontend/src/pages/share-admin/share-links.js:408
 msgid "By expiration ascending"
 msgstr "按过期时间升序"
 
-#: frontend/src/pages/share-admin/share-links.js:408
+#: frontend/src/pages/share-admin/share-links.js:409
 msgid "By expiration descending"
 msgstr "按过期时间降序"
 
-#: frontend/src/pages/share-admin/share-links.js:547
+#: frontend/src/pages/share-admin/share-links.js:548
 msgid "Successfully cleaned invalid share links."
 msgstr "无效的共享链接已清除。"
 
-#: frontend/src/pages/share-admin/share-links.js:565
-#: frontend/src/pages/share-admin/share-links.js:600
+#: frontend/src/pages/share-admin/share-links.js:566
+#: frontend/src/pages/share-admin/share-links.js:601
 msgid "Clean invalid share links"
 msgstr "清除无效的共享链接"
 
-#: frontend/src/pages/share-admin/share-links.js:601
+#: frontend/src/pages/share-admin/share-links.js:602
 msgid "Are you sure you want to clean invalid share links?"
 msgstr "确定要清除无效的共享链接吗？"
 
-#: frontend/src/pages/share-admin/upload-links.js:39
-msgid ""
-"You have not created any upload links yet. An upload link allows anyone to "
-"upload files to a folder or library. You can create an upload link for a "
-"folder or library by clicking the share icon to the right of its name."
-msgstr "你还没创建任何上传外链。一个上传外链允许任何人上传文件到一个文件夹或资料库。可以通过点击其名称旁边的共享图标来给一个文件夹或资料库创建一个上传外链。"
-
-#: frontend/src/pages/share-admin/upload-links.js:259
+#: frontend/src/pages/share-admin/upload-links.js:260
 msgid "Successfully cleaned invalid upload links."
 msgstr "无效的上传链接已清除。"
 
-#: frontend/src/pages/share-admin/upload-links.js:280
-#: frontend/src/pages/share-admin/upload-links.js:298
+#: frontend/src/pages/share-admin/upload-links.js:281
+#: frontend/src/pages/share-admin/upload-links.js:299
 msgid "Clean invalid upload links"
 msgstr "清除无效的上传链接"
 
-#: frontend/src/pages/share-admin/upload-links.js:299
+#: frontend/src/pages/share-admin/upload-links.js:300
 msgid "Are you sure you want to clean invalid upload links?"
 msgstr "确定要清除无效的上传链接吗？"
 
-#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:36
+#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:37
 msgid "At server"
 msgstr "所在服务器"
 
@@ -6689,14 +6782,7 @@ msgstr "所在服务器"
 msgid "No shared libraries"
 msgstr "没有共享的资料库"
 
-#: frontend/src/pages/shared-libs/shared-libs.js:63
-msgid ""
-"No libraries have been shared directly with you. A shared library can be "
-"shared with full or restricted permission. If you need access to a library "
-"owned by another user, ask the user to share the library with you."
-msgstr "没有资料库被直接共享给你。一个资料库可以以完全的或受限的权限被共享。如果你需要访问其他用户拥有的一个资料库，你可以要求这个用户把这个资料库共享给你。"
-
-#: frontend/src/pages/shared-libs/shared-libs.js:206
+#: frontend/src/pages/shared-libs/shared-libs.js:207
 #: frontend/src/pages/shared-with-all/index.js:76
 msgid "Failed to unshare {name}"
 msgstr "{name} 取消共享失败"
@@ -6705,24 +6791,9 @@ msgstr "{name} 取消共享失败"
 msgid "No public libraries"
 msgstr "没有公共资料库"
 
-#: frontend/src/pages/shared-with-all/index.js:129
-msgid ""
-"No public libraries have been created yet. A public library is accessible by"
-" all users. You can create a public library by clicking the \"Add Library\" "
-"button in the menu bar."
-msgstr "还没有公共资料库被创建。一个公共资料库可被所有用户访问。可以点击上方的“添加资料库“按钮创建一个公共资料库。"
-
-#: frontend/src/pages/shared-with-all/index.js:231
+#: frontend/src/pages/shared-with-all/index.js:232
 msgid "Share existing libraries"
 msgstr "共享已有资料库 "
-
-#: frontend/src/pages/starred/starred.js:26
-msgid ""
-"You have not added any libraries, folders or files to your favorites yet. A "
-"favorite gives you quick access to your most frequently used objects. You "
-"can add a library, folder or file to your favorites by clicking the star to "
-"the left of its name."
-msgstr "你还没添加任何资料库，文件夹或文件到你的收藏夹。收藏夹可以让你快速访问最常用的条目。你可以通过点击其名称左侧的星标，将一个资料库，文件夹或文件添加到收藏夹。"
 
 #: frontend/src/pages/sys-admin/abuse-reports.js:85
 #: frontend/src/pages/sys-admin/side-panel.js:284
@@ -6745,47 +6816,55 @@ msgstr "管理员操作日志"
 msgid "Admin Login Logs"
 msgstr "管理员登录日志"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:100
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:45
+msgid "Operation"
+msgstr "操作"
+
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:46
+msgid "Detail"
+msgstr "修改内容"
+
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:99
 msgid "Create Library"
 msgstr "创建资料库"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:102
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:101
 msgid "Transfer Library"
 msgstr "转让资料库"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:103
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:102
 msgid "Create Group"
 msgstr "创建群组"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:135
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:134
 msgid "Created library {library_name} with {owner} as its owner"
 msgstr "创建资料库 {library_name} 并把资料库拥有者设为 {owner}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:145
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:144
 msgid "Deleted library {library_name}"
 msgstr "删除资料库 {library_name}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:150
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:149
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
 msgstr "已把资料库 {library_name} 从 {user_from} 转让给 {user_to}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:161
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:160
 msgid "Created group {group_name}"
 msgstr "已创建群组 {group_name}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:166
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:165
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
 msgstr "已把群组 {group_name} 从 {user_from} 转让给 {user_to}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:173
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:172
 msgid "Deleted group {group_name}"
 msgstr "已删除群组 {group_name}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:178
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:177
 msgid "Added user {user}"
 msgstr "已添加用户 {user}"
 
-#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:183
+#: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:182
 msgid "Deleted user {user}"
 msgstr "已删除用户 {user}"
 
@@ -6805,35 +6884,35 @@ msgstr "建议"
 msgid "Content Scan Records"
 msgstr "文件扫描记录"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:150
+#: frontend/src/pages/sys-admin/groups/group-members.js:149
 msgid "Are you sure you want to remove {placeholder} ?"
 msgstr "确定要移除 {placeholder} 吗？"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:184
+#: frontend/src/pages/sys-admin/groups/group-members.js:183
 msgid "Remove Member"
 msgstr "移除成员"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:269
+#: frontend/src/pages/sys-admin/groups/group-members.js:268
 msgid "Successfully added {email_placeholder}"
 msgstr "成功添加 {email_placeholder}"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:275
+#: frontend/src/pages/sys-admin/groups/group-members.js:274
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr "添加 {email_placeholder} 失败： {error_msg_placeholder}"
 
-#: frontend/src/pages/sys-admin/groups/group-members.js:294
+#: frontend/src/pages/sys-admin/groups/group-members.js:293
 msgid "Successfully removed {placeholder}."
 msgstr "成功移除 {placeholder}。"
 
-#: frontend/src/pages/sys-admin/groups/group-repos.js:128
+#: frontend/src/pages/sys-admin/groups/group-repos.js:127
 msgid "Are you sure you want to unshare {placeholder} ?"
 msgstr "确定要取消共享 {placeholder} 吗？"
 
-#: frontend/src/pages/sys-admin/groups/group-repos.js:145
+#: frontend/src/pages/sys-admin/groups/group-repos.js:144
 msgid "Unshare Library"
 msgstr "取消共享资料库"
 
-#: frontend/src/pages/sys-admin/groups/group-repos.js:197
+#: frontend/src/pages/sys-admin/groups/group-repos.js:196
 msgid "Successfully unshared library {placeholder}"
 msgstr "成功取消共享资料库 {placeholder}"
 
@@ -6843,9 +6922,10 @@ msgid "Successfully transferred the group."
 msgstr "群组转让成功。"
 
 #: frontend/src/pages/sys-admin/groups/groups.js:150
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:221
-#: frontend/src/pages/sys-admin/logs-page/login-logs.js:187
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:219
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:333
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:220
+#: frontend/src/pages/sys-admin/logs-page/login-logs.js:186
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:218
 #: frontend/src/pages/sys-admin/users/users.js:411
 #: frontend/src/pages/sys-admin/users/users.js:419
 msgid "Export Excel"
@@ -6924,18 +7004,18 @@ msgstr "用户数限制"
 msgid "Organizations"
 msgstr "机构"
 
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:163
-#: frontend/src/pages/sys-admin/users/users-content.js:429
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:162
+#: frontend/src/pages/sys-admin/users/users-content.js:422
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
 msgstr "确定要撤销 {placeholder} 的管理权限吗？"
 
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:195
-#: frontend/src/pages/sys-admin/users/users-content.js:602
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:194
+#: frontend/src/pages/sys-admin/users/users-content.js:595
 msgid "Revoke"
 msgstr "撤销"
 
-#: frontend/src/pages/sys-admin/institutions/institution-admins.js:253
+#: frontend/src/pages/sys-admin/institutions/institution-admins.js:252
 #: frontend/src/pages/sys-admin/users/search-users.js:247
 #: frontend/src/pages/sys-admin/users/users.js:396
 msgid "Successfully revoked the admin permission of {placeholder}."
@@ -6946,55 +7026,60 @@ msgid "Admins"
 msgstr "管理员"
 
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:28
-#: frontend/src/pages/sys-admin/institutions/institutions.js:245
+#: frontend/src/pages/sys-admin/institutions/institutions.js:244
 #: frontend/src/pages/sys-admin/side-panel.js:150
 msgid "Institutions"
 msgstr "机构"
 
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:199
-msgid "Are you sure you want to set {placeholder} as Admin?"
-msgstr "确定要将 {placeholder} 设为管理员？"
-
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:228
-#: frontend/src/pages/sys-admin/institutions/institution-users.js:232
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:186
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:227
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:231
 msgid "Set Admin"
 msgstr "设为管理员"
 
-#: frontend/src/pages/sys-admin/institutions/institutions.js:140
+#: frontend/src/pages/sys-admin/institutions/institution-users.js:198
+msgid "Are you sure you want to set {placeholder} as Admin?"
+msgstr "确定要将 {placeholder} 设为管理员？"
+
+#: frontend/src/pages/sys-admin/institutions/institutions.js:139
 msgid "Delete Institution"
 msgstr "删除机构"
 
-#: frontend/src/pages/sys-admin/institutions/institutions.js:240
+#: frontend/src/pages/sys-admin/institutions/institutions.js:239
 msgid "Add Institution"
 msgstr "添加机构"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:60
+#: frontend/src/pages/sys-admin/invitations/invitations.js:59
 msgid "Accepter"
 msgstr "接受者"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:62
+#: frontend/src/pages/sys-admin/invitations/invitations.js:61
 msgid "Invited at"
 msgstr "邀请时间"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:64
+#: frontend/src/pages/sys-admin/invitations/invitations.js:62
+msgid "Accepted at"
+msgstr "接受时间"
+
+#: frontend/src/pages/sys-admin/invitations/invitations.js:63
 msgid "Expired at"
 msgstr "过期时间"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:315
+#: frontend/src/pages/sys-admin/invitations/invitations.js:314
 msgid "Operation succeeded."
 msgstr "操作成功"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:335
+#: frontend/src/pages/sys-admin/invitations/invitations.js:334
 msgid "Delete Expired Invitations"
 msgstr "删除过期邀请"
 
-#: frontend/src/pages/sys-admin/invitations/invitations.js:340
+#: frontend/src/pages/sys-admin/invitations/invitations.js:339
 #: frontend/src/pages/sys-admin/side-panel.js:222
 msgid "Invitations"
 msgstr "邀请"
 
-#: frontend/src/pages/sys-admin/links/share-links.js:65
-#: frontend/src/pages/sys-admin/links/upload-links.js:48
+#: frontend/src/pages/sys-admin/links/share-links.js:64
+#: frontend/src/pages/sys-admin/links/upload-links.js:47
 msgid "Token"
 msgstr "验证码"
 
@@ -7010,23 +7095,28 @@ msgstr "登录"
 msgid "Side Nav Menu"
 msgstr "侧边导航菜单"
 
-#: frontend/src/pages/sys-admin/notifications/notifications.js:157
+#: frontend/src/pages/sys-admin/notifications/notifications.js:47
+#: frontend/src/translate.js:13
+msgid "Notification Detail"
+msgstr "通知内容"
+
+#: frontend/src/pages/sys-admin/notifications/notifications.js:156
 msgid "Set to current"
 msgstr "设为当前通知"
 
-#: frontend/src/pages/sys-admin/notifications/notifications.js:188
+#: frontend/src/pages/sys-admin/notifications/notifications.js:187
 msgid "(current notification)"
 msgstr "（当前通知）"
 
-#: frontend/src/pages/sys-admin/notifications/notifications.js:205
+#: frontend/src/pages/sys-admin/notifications/notifications.js:204
 msgid "Delete Notification"
 msgstr "删除通知"
 
-#: frontend/src/pages/sys-admin/notifications/notifications.js:206
+#: frontend/src/pages/sys-admin/notifications/notifications.js:205
 msgid "Are you sure you want to delete the notification ?"
 msgstr "确定要删除该通知吗？"
 
-#: frontend/src/pages/sys-admin/notifications/notifications.js:308
+#: frontend/src/pages/sys-admin/notifications/notifications.js:307
 msgid "All Notifications"
 msgstr "所有通知"
 
@@ -7034,18 +7124,18 @@ msgstr "所有通知"
 msgid "Number of groups"
 msgstr "群组数量"
 
-#: frontend/src/pages/sys-admin/orgs/org-users.js:229
-#: frontend/src/pages/sys-admin/users/users-content.js:428
+#: frontend/src/pages/sys-admin/orgs/org-users.js:228
+#: frontend/src/pages/sys-admin/users/users-content.js:421
 msgid "Are you sure you want to reset the password of {placeholder} ?"
 msgstr "确定要重置 {placeholder} 的密码吗？"
 
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:140
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:139
 msgid ""
 "{userCount} user(s) and {repoCount} libraries of this organization will also"
 " be deleted."
 msgstr "该机构中的 {userCount} 个用户和 {repoCount} 个资料库也将被删除。"
 
-#: frontend/src/pages/sys-admin/orgs/orgs-content.js:210
+#: frontend/src/pages/sys-admin/orgs/orgs-content.js:209
 msgid "Delete Organization"
 msgstr "删除团体"
 
@@ -7073,7 +7163,14 @@ msgstr "提示：可以用名称或 ID 中的关键词来搜索。"
 msgid "Name or ID"
 msgstr "名称或 ID"
 
-#: frontend/src/pages/sys-admin/repos/trash-repos.js:371
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:60
+#: frontend/src/translate.js:18
+msgid ""
+"Tip: libraries deleted {trashReposExpireDays} days ago will be cleaned "
+"automatically."
+msgstr "提示：{trashReposExpireDays} 天前删除的资料库会被自动清空。"
+
+#: frontend/src/pages/sys-admin/repos/trash-repos.js:370
 msgid "Search libraries by owner"
 msgstr "根据拥有者搜索资料库"
 
@@ -7094,7 +7191,7 @@ msgstr "软件使用条款"
 msgid "Admin Logs"
 msgstr "管理员日志"
 
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:53
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:52
 msgid "Created"
 msgstr "已创建"
 
@@ -7140,19 +7237,23 @@ msgstr "设置联系邮箱"
 msgid "Shared Links"
 msgstr "共享链接"
 
-#: frontend/src/pages/sys-admin/users/users-content.js:107
+#: frontend/src/pages/sys-admin/users/users-content.js:100
 msgid "Institution"
 msgstr "机构"
 
-#: frontend/src/pages/sys-admin/users/users-content.js:316
+#: frontend/src/pages/sys-admin/users/users-content.js:173
+msgid "No users"
+msgstr "没有用户"
+
+#: frontend/src/pages/sys-admin/users/users-content.js:309
 msgid "Default Admin"
 msgstr "默认管理员"
 
-#: frontend/src/pages/sys-admin/users/users-content.js:320
+#: frontend/src/pages/sys-admin/users/users-content.js:313
 msgid "Daily Admin"
 msgstr "日常管理员"
 
-#: frontend/src/pages/sys-admin/users/users-content.js:322
+#: frontend/src/pages/sys-admin/users/users-content.js:315
 msgid "Audit Admin"
 msgstr "审计管理员"
 
@@ -7500,15 +7601,15 @@ msgstr "增加封面"
 msgid "{placeholder} Wiki Trash"
 msgstr "{placeholder} 知识库回收站"
 
-#: frontend/src/pages/wikis/wikis.js:311
+#: frontend/src/pages/wikis/wikis.js:310
 msgid "No Wikis"
 msgstr "没有知识库"
 
-#: frontend/src/pages/wikis/wikis.js:312
+#: frontend/src/pages/wikis/wikis.js:311
 msgid "You do not have any wikis yet."
 msgstr "你还没有任何知识库。"
 
-#: frontend/src/pages/wikis/wikis.js:313
+#: frontend/src/pages/wikis/wikis.js:312
 msgid "You can add a wiki by clicking the \"Add Wiki\" button in the menu."
 msgstr "你可以通过单击菜单中的“添加知识库”按钮来添加知识库。"
 
@@ -7643,10 +7744,6 @@ msgstr "没有群组"
 msgid "No notifications"
 msgstr "没有通知"
 
-#: frontend/src/translate.js:13
-msgid "Notification Detail"
-msgstr "通知内容"
-
 #: frontend/src/translate.js:15
 msgid "No upload links"
 msgstr "没有上传外链"
@@ -7700,47 +7797,47 @@ msgstr "全部设为已读"
 msgid "Message"
 msgstr "消息"
 
-#: frontend/src/utils/text-translation.js:22
-msgid "Open file in new tab"
-msgstr "在新标签中打开文件"
-
-#: frontend/src/utils/text-translation.js:26
+#: frontend/src/utils/text-translation.js:80
 msgid "Freeze Document"
 msgstr "冻结文档"
 
-#: frontend/src/utils/text-translation.js:27
+#: frontend/src/utils/text-translation.js:84
 msgid "Unfreeze Document"
 msgstr "解除冻结"
 
-#: frontend/src/utils/text-translation.js:28
+#: frontend/src/utils/text-translation.js:88
+msgid "Convert & Export"
+msgstr "转换 & 导出"
+
+#: frontend/src/utils/text-translation.js:92
 msgid "Convert to Markdown"
 msgstr "转换为 Markdown"
 
-#: frontend/src/utils/text-translation.js:29
+#: frontend/src/utils/text-translation.js:96
 msgid "Convert to sdoc"
 msgstr "转换为 sdoc"
 
-#: frontend/src/utils/text-translation.js:30
+#: frontend/src/utils/text-translation.js:100
 msgid "Convert to docx"
 msgstr "转换为 docx"
 
-#: frontend/src/utils/text-translation.js:31
+#: frontend/src/utils/text-translation.js:104
 msgid "Export as docx"
 msgstr "导出为 docx"
 
-#: frontend/src/utils/text-translation.js:33
+#: frontend/src/utils/text-translation.js:112
 msgid "Access Log"
 msgstr "访问日志"
 
-#: frontend/src/utils/text-translation.js:34
+#: frontend/src/utils/text-translation.js:116
 msgid "Properties"
 msgstr "属性"
 
-#: frontend/src/utils/text-translation.js:37
+#: frontend/src/utils/text-translation.js:128
 msgid "Convert with ONLYOFFICE"
 msgstr "用 ONLYOFFICE 转换"
 
-#: frontend/src/utils/text-translation.js:38
+#: frontend/src/utils/text-translation.js:132
 msgid "Display files"
 msgstr "显示文件"
 
@@ -7776,96 +7873,96 @@ msgstr "仅云端读写文件夹"
 msgid "Online Read-Only folder"
 msgstr "仅云端预览文件夹"
 
-#: frontend/src/utils/utils.js:707
+#: frontend/src/utils/utils.js:715
 msgid "Online Read-Write"
 msgstr "仅云端读写"
 
-#: frontend/src/utils/utils.js:710
+#: frontend/src/utils/utils.js:718
 msgid "Online Read-Only"
 msgstr "仅云端预览"
 
-#: frontend/src/utils/utils.js:713
+#: frontend/src/utils/utils.js:721
 msgid "Invisible"
 msgstr "不可见"
 
-#: frontend/src/utils/utils.js:723
+#: frontend/src/utils/utils.js:731
 msgid "User can read, write, upload, download and sync files."
 msgstr "用户可以查看、修改、上传、下载和同步文件。"
 
-#: frontend/src/utils/utils.js:726
+#: frontend/src/utils/utils.js:734
 msgid "User can read, download and sync files."
 msgstr "用户可以查看、下载和同步文件。"
 
-#: frontend/src/utils/utils.js:729
+#: frontend/src/utils/utils.js:737
 msgid "Besides Write permission, user can also share the library."
 msgstr "除了可读写权限，用户还可以共享资料库。"
 
-#: frontend/src/utils/utils.js:732
+#: frontend/src/utils/utils.js:740
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
 msgstr "用户可以通过浏览器在线查看和编辑文件。 文件不能被下载。"
 
-#: frontend/src/utils/utils.js:735
+#: frontend/src/utils/utils.js:743
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr "用户只能通过浏览器在线查看文件。文件不能被下载。"
 
-#: frontend/src/utils/utils.js:738
+#: frontend/src/utils/utils.js:746
 msgid "User can not see this folder."
 msgstr "该目录不可见。"
 
-#: frontend/src/utils/utils.js:749
+#: frontend/src/utils/utils.js:757
 msgid "Preview and download"
 msgstr "预览与下载"
 
-#: frontend/src/utils/utils.js:759
+#: frontend/src/utils/utils.js:767
 msgid "Preview only"
 msgstr "仅查看"
 
-#: frontend/src/utils/utils.js:769
+#: frontend/src/utils/utils.js:777
 msgid "Download and upload"
 msgstr "下载和上传"
 
-#: frontend/src/utils/utils.js:779
+#: frontend/src/utils/utils.js:787
 msgid "Edit on cloud and download"
 msgstr "云端编辑与下载"
 
-#: frontend/src/utils/utils.js:789
+#: frontend/src/utils/utils.js:797
 msgid "Edit on cloud only"
 msgstr "仅云端编辑"
 
-#: frontend/src/utils/utils.js:1310
+#: frontend/src/utils/utils.js:1318
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功复制 %(name)s 和另1项条目。"
 
-#: frontend/src/utils/utils.js:1312
+#: frontend/src/utils/utils.js:1320
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功复制 %(name)s 和其他 %(amount)s 项条目。"
 
-#: frontend/src/utils/utils.js:1323
+#: frontend/src/utils/utils.js:1331
 msgid "Successfully moved %(name)s."
 msgstr "成功移动 %(name)s。"
 
-#: frontend/src/utils/utils.js:1325
+#: frontend/src/utils/utils.js:1333
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移动 %(name)s 和另1项条目。"
 
-#: frontend/src/utils/utils.js:1327
+#: frontend/src/utils/utils.js:1335
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移动 %(name)s 和其他 %(amount)s 项条目。"
 
-#: frontend/src/utils/utils.js:1339
+#: frontend/src/utils/utils.js:1347
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "复制 %(name)s 和其他 %(amount)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1342
+#: frontend/src/utils/utils.js:1350
 msgid "Failed to copy %(name)s."
 msgstr "复制 %(name)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1352
+#: frontend/src/utils/utils.js:1360
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "移动 %(name)s 和其他 %(amount)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1355
+#: frontend/src/utils/utils.js:1363
 msgid "Failed to move %(name)s."
 msgstr "移动 %(name)s 项条目失败。"
