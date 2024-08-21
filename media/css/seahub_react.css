@@ -1103,11 +1103,6 @@ a.table-sort-op:hover {
   color: #798d99;
 }
 
-.dropdown-item:hover .sf2-icon-tick,
-.dropdown-item:focus .sf2-icon-tick {
-  color: #fff !important;
-}
-
 .btn-secondary.dropdown-toggle.dropdown-item {
   line-height: 1.5;
 }
@@ -1122,7 +1117,9 @@ a.table-sort-op:hover {
 .dropdown-item:hover .dropdown-item-icon,
 .dropdown-item:hover .btn .dropdown-item-icon,
 .dropdown-item:focus .dropdown-item-icon,
-.dropdown-item:focus .btn .dropdown-item-icon {
+.dropdown-item:focus .btn .dropdown-item-icon,
+.dropdown-item:hover .sf2-icon-tick,
+.dropdown-item:focus .sf2-icon-tick {
   color: #fff;
 }
 
