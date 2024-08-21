@@ -3689,7 +3689,7 @@ msgstr "帮助和资源"
 
 #: frontend/src/components/main-side-nav.js:341
 msgid "Fold the sidebar"
-msgstr "折叠侧边栏"
+msgstr "收起侧边栏"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
