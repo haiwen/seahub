@@ -74,7 +74,7 @@ class SharePermissionEditor extends React.Component {
       });
       return;
     }
-  
+
     seafileAPI.listCustomPermissions(repoID).then(res => {
       const { permission_list: permissions } = res.data;
       localStorage.setItem(this.CACHE_KEY, JSON.stringify(res.data));
