@@ -118,7 +118,7 @@ class RepoShareAdminUploadLinks extends Component {
         {loading && <Loading />}
         {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
         {!loading && !errorMsg && !items.length &&
-        <EmptyTip forDialog={true} text={gettext('No upload links')}/>
+        <EmptyTip text={gettext('No upload links')}/>
         }
         {!loading && !errorMsg && items.length > 0 &&
         <table className="table-hover">
