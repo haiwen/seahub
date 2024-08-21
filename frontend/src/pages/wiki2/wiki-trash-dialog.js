@@ -133,10 +133,10 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.theadData = [
-      { width: '3%', text: gettext('Name') },
+      { width: '5%', text: gettext('Name') },
       { width: '20%', text: '' },
       { width: '30%', text: gettext('Size') },
-      { width: '37%', text: gettext('Delete Time') },
+      { width: '35%', text: gettext('Delete Time') },
       { width: '10%', text: '' }
     ];
   }
