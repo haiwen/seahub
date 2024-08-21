@@ -232,6 +232,7 @@ def client_sso_complete(request, token):
         else:
             logger.warning('Client SSO token is not waiting, skip.')
 
-        return HttpResponseRedirect(reverse('libraries'))
+        template_name = 'client_login_complete.html'
+        return render(request, template_name, {})
     else:
         return render_permission_error(request, _('Permission denied.'))
