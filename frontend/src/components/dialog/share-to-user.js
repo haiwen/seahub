@@ -154,7 +154,7 @@ const propTypes = {
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
-  repoType: PropTypes.string.isRequired,
+  repoType: PropTypes.string,
   onAddCustomPermissionToggle: PropTypes.func,
 };
 

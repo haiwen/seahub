@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 09:57+0800\n"
+"POT-Creation-Date: 2024-08-21 16:04+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -538,7 +538,7 @@ msgstr "未找到用户 %s 。"
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:617 seahub/views/ajax.py:83
-#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:237
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:238
 msgid "Permission denied."
 msgstr "没有权限"
 
@@ -2511,9 +2511,13 @@ msgstr "创建个人账号"
 msgid "Create an organization account"
 msgstr "创建组织账号"
 
+#: seahub/templates/client_login_complete.html:6
+msgid "The client has logged in. Please open the client to confirm."
+msgstr "客户端已登录。请打开客户端进行确认。"
+
 #: seahub/templates/client_login_confirm.html:6
-msgid "Desktop Client Login Confirm"
-msgstr "桌面客户端登录确认"
+msgid "Client Login Confirm"
+msgstr "客户端登录确认"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"

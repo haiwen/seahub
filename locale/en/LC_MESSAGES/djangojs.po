@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 10:06+0800\n"
+"POT-Creation-Date: 2024-08-21 16:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -679,7 +679,7 @@ msgstr ""
 #: frontend/src/components/dialog/create-tag-dialog.js:79
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
-#: frontend/src/components/dialog/my-deleted-repos.js:69
+#: frontend/src/components/dialog/my-deleted-repos.js:68
 #: frontend/src/components/dialog/org-add-department-dialog.js:73
 #: frontend/src/components/dialog/org-add-repo-dialog.js:69
 #: frontend/src/components/dialog/org-add-user-dialog.js:141
@@ -1106,8 +1106,8 @@ msgid "Are you sure you want to restore this library?"
 msgstr ""
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/dialog/my-deleted-repos.js:147
 #: frontend/src/components/dialog/my-deleted-repos.js:148
-#: frontend/src/components/dialog/my-deleted-repos.js:149
 #: frontend/src/components/dialog/trash-dialog.js:341
 #: frontend/src/components/dialog/trash-dialog.js:352
 #: frontend/src/components/history-list-view/history-list-item.js:103
@@ -1179,7 +1179,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:171
 #: frontend/src/components/dialog/move-dirent-dialog.js:185
-#: frontend/src/components/file-chooser/file-chooser.js:452
+#: frontend/src/components/file-chooser/file-chooser.js:474
 msgid "Other Libraries"
 msgstr ""
 
@@ -2195,32 +2195,32 @@ msgstr ""
 msgid "Deleted Libraries"
 msgstr ""
 
-#: frontend/src/components/dialog/my-deleted-repos.js:58
+#: frontend/src/components/dialog/my-deleted-repos.js:57
 #: frontend/src/pages/my-libs/my-libs-deleted.js:59
 msgid "No deleted libraries"
 msgstr ""
 
-#: frontend/src/components/dialog/my-deleted-repos.js:59
+#: frontend/src/components/dialog/my-deleted-repos.js:58
 #: frontend/src/pages/my-libs/my-libs-deleted.js:60
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted "
 "library will be cleaned automatically after this period."
 msgstr ""
 
-#: frontend/src/components/dialog/my-deleted-repos.js:64
+#: frontend/src/components/dialog/my-deleted-repos.js:63
 #: frontend/src/pages/my-libs/my-libs-deleted.js:65
 msgid ""
 "Tip: libraries deleted {placeholder} days ago will be cleaned automatically."
 msgstr ""
 
-#: frontend/src/components/dialog/my-deleted-repos.js:70
+#: frontend/src/components/dialog/my-deleted-repos.js:69
 #: frontend/src/pages/my-libs/my-libs-deleted.js:90
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:64
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:67
 msgid "Deleted Time"
 msgstr ""
 
-#: frontend/src/components/dialog/my-deleted-repos.js:122
+#: frontend/src/components/dialog/my-deleted-repos.js:121
 msgid "Successfully restored the library {library_name}."
 msgstr ""
 
@@ -2574,7 +2574,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/search-file-dialog.js:77
 #: frontend/src/components/dialog/search-file-dialog.js:81
-#: frontend/src/components/file-chooser/file-chooser.js:548
+#: frontend/src/components/file-chooser/file-chooser.js:574
 msgid "Search"
 msgstr ""
 
@@ -3279,17 +3279,17 @@ msgstr ""
 msgid "You can create files quickly"
 msgstr ""
 
-#: frontend/src/components/file-chooser/file-chooser.js:318
+#: frontend/src/components/file-chooser/file-chooser.js:331
 #: frontend/src/components/search/ai-search.js:678
 #: frontend/src/components/search/wiki-search.js:193
 msgid "No results matching"
 msgstr ""
 
-#: frontend/src/components/file-chooser/file-chooser.js:431
+#: frontend/src/components/file-chooser/file-chooser.js:453
 msgid "Current Library"
 msgstr ""
 
-#: frontend/src/components/file-chooser/file-chooser.js:492
+#: frontend/src/components/file-chooser/file-chooser.js:516
 #: frontend/src/components/main-side-nav.js:172
 #: frontend/src/components/main-side-nav.js:174
 #: frontend/src/components/org-admin-group-nav.js:23
@@ -7768,6 +7768,34 @@ msgstr ""
 
 #: frontend/src/translate.js:26
 msgid "No file access logs"
+msgstr ""
+
+#: frontend/src/translate.js:28
+msgid ""
+"You have not shared any folders with other users yet. You can share a folder "
+"with other users by clicking the share icon to the right of a folder's name."
+msgstr ""
+
+#: frontend/src/translate.js:29
+msgid ""
+"You have not created any share links yet. A share link can be used to share "
+"files and folders with anyone. You can create a share link for a file or "
+"folder by clicking the share icon to the right of its name."
+msgstr ""
+
+#: frontend/src/translate.js:30
+msgid ""
+"You have not created any upload links yet. An upload link allows anyone to "
+"upload files to a folder or library. You can create an upload link for a "
+"folder or library by clicking the share icon to the right of its name."
+msgstr ""
+
+#: frontend/src/translate.js:31
+msgid ""
+"You have not added any libraries, folders or files to your favorites yet. A "
+"favorite gives you quick access to your most frequently used objects. You "
+"can add a library, folder or file to your favorites by clicking the star to "
+"the left of its name."
 msgstr ""
 
 #: frontend/src/user-notifications.js:116

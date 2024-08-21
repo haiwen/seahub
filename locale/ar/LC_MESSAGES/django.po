@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 09:57+0800\n"
+"POT-Creation-Date: 2024-08-21 16:04+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023-2024\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -522,7 +522,7 @@ msgstr " لم يتم العثور على المستخدم %s ."
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:617 seahub/views/ajax.py:83
-#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:237
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:238
 msgid "Permission denied."
 msgstr "الترخيص مرفوض."
 
@@ -2535,9 +2535,13 @@ msgstr "إنشاء"
 msgid "Create an organization account"
 msgstr "إنشاء حساب تنظيم"
 
+#: seahub/templates/client_login_complete.html:6
+msgid "The client has logged in. Please open the client to confirm."
+msgstr ""
+
 #: seahub/templates/client_login_confirm.html:6
-msgid "Desktop Client Login Confirm"
-msgstr "تأكيد تسجيل الدخول من برنامج سطح المكتب"
+msgid "Client Login Confirm"
+msgstr ""
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
@@ -2887,12 +2891,12 @@ msgstr "يمكنك الانتقال إلى الصفحة التالية وتحم�
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Insufficient password strength"
-msgstr ""
+msgstr "قوة كلمة المرور غير كافية"
 
 #: seahub/templates/snippets/password_strength_js.html:11
 #: seahub/templates/snippets/password_strength_js.html:88
 msgid "Password strength"
-msgstr ""
+msgstr "قوة كلمة المرور"
 
 #: seahub/templates/snippets/password_strength_js.html:18
 msgid ""

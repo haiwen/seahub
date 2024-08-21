@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 09:57+0800\n"
+"POT-Creation-Date: 2024-08-21 16:04+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022-2023\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -530,7 +530,7 @@ msgstr "%s felhasználó nem található."
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:617 seahub/views/ajax.py:83
-#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:237
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:238
 msgid "Permission denied."
 msgstr "Jogosultság megtagadva"
 
@@ -2511,8 +2511,12 @@ msgstr "Személyes fiók készítése"
 msgid "Create an organization account"
 msgstr "Szervezeti fiók készítése"
 
+#: seahub/templates/client_login_complete.html:6
+msgid "The client has logged in. Please open the client to confirm."
+msgstr ""
+
 #: seahub/templates/client_login_confirm.html:6
-msgid "Desktop Client Login Confirm"
+msgid "Client Login Confirm"
 msgstr ""
 
 #: seahub/templates/client_login_confirm.html:8

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 10:06+0800\n"
+"POT-Creation-Date: 2024-08-21 16:17+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2024\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -680,7 +680,7 @@ msgstr "위키 추가"
 #: frontend/src/components/dialog/create-tag-dialog.js:79
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
-#: frontend/src/components/dialog/my-deleted-repos.js:69
+#: frontend/src/components/dialog/my-deleted-repos.js:68
 #: frontend/src/components/dialog/org-add-department-dialog.js:73
 #: frontend/src/components/dialog/org-add-repo-dialog.js:69
 #: frontend/src/components/dialog/org-add-user-dialog.js:141
@@ -1107,8 +1107,8 @@ msgid "Are you sure you want to restore this library?"
 msgstr "이 라이브러리를 정말로 복원할까요?"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:37
+#: frontend/src/components/dialog/my-deleted-repos.js:147
 #: frontend/src/components/dialog/my-deleted-repos.js:148
-#: frontend/src/components/dialog/my-deleted-repos.js:149
 #: frontend/src/components/dialog/trash-dialog.js:341
 #: frontend/src/components/dialog/trash-dialog.js:352
 #: frontend/src/components/history-list-view/history-list-item.js:103
@@ -1180,7 +1180,7 @@ msgstr "선택한 항목을 복사할 위치:"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:171
 #: frontend/src/components/dialog/move-dirent-dialog.js:185
-#: frontend/src/components/file-chooser/file-chooser.js:452
+#: frontend/src/components/file-chooser/file-chooser.js:474
 msgid "Other Libraries"
 msgstr "다른 라이브러리"
 
@@ -2196,32 +2196,32 @@ msgstr "선택한 항목을 옮길 위치:"
 msgid "Deleted Libraries"
 msgstr "삭제한 라이브러리"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:58
+#: frontend/src/components/dialog/my-deleted-repos.js:57
 #: frontend/src/pages/my-libs/my-libs-deleted.js:59
 msgid "No deleted libraries"
 msgstr "삭제한 라이브러리 없음"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:59
+#: frontend/src/components/dialog/my-deleted-repos.js:58
 #: frontend/src/pages/my-libs/my-libs-deleted.js:60
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted"
 " library will be cleaned automatically after this period."
 msgstr "최근 {placeholder}일동안 삭제한 어떤 라이브러리도 없습니다. 삭제한 라이브러리는 이 기간이 지나면 자동으로 지워집니다."
 
-#: frontend/src/components/dialog/my-deleted-repos.js:64
+#: frontend/src/components/dialog/my-deleted-repos.js:63
 #: frontend/src/pages/my-libs/my-libs-deleted.js:65
 msgid ""
 "Tip: libraries deleted {placeholder} days ago will be cleaned automatically."
 msgstr "참고: {placeholder}일 전에 삭제한 라이브러리는 자동으로 지워집니다."
 
-#: frontend/src/components/dialog/my-deleted-repos.js:70
+#: frontend/src/components/dialog/my-deleted-repos.js:69
 #: frontend/src/pages/my-libs/my-libs-deleted.js:90
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:64
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:67
 msgid "Deleted Time"
 msgstr "삭제 시각"
 
-#: frontend/src/components/dialog/my-deleted-repos.js:122
+#: frontend/src/components/dialog/my-deleted-repos.js:121
 msgid "Successfully restored the library {library_name}."
 msgstr ""
 
@@ -2575,7 +2575,7 @@ msgstr "다음에 저장:"
 
 #: frontend/src/components/dialog/search-file-dialog.js:77
 #: frontend/src/components/dialog/search-file-dialog.js:81
-#: frontend/src/components/file-chooser/file-chooser.js:548
+#: frontend/src/components/file-chooser/file-chooser.js:574
 msgid "Search"
 msgstr "검색"
 
@@ -3280,17 +3280,17 @@ msgstr "이 폴더에는 현재 내용이 없습니다."
 msgid "You can create files quickly"
 msgstr "파일을 간단하게 만들 수 있습니다"
 
-#: frontend/src/components/file-chooser/file-chooser.js:318
+#: frontend/src/components/file-chooser/file-chooser.js:331
 #: frontend/src/components/search/ai-search.js:678
 #: frontend/src/components/search/wiki-search.js:193
 msgid "No results matching"
 msgstr "일치하는 결과 없음"
 
-#: frontend/src/components/file-chooser/file-chooser.js:431
+#: frontend/src/components/file-chooser/file-chooser.js:453
 msgid "Current Library"
 msgstr "현재 라이브러리"
 
-#: frontend/src/components/file-chooser/file-chooser.js:492
+#: frontend/src/components/file-chooser/file-chooser.js:516
 #: frontend/src/components/main-side-nav.js:172
 #: frontend/src/components/main-side-nav.js:174
 #: frontend/src/components/org-admin-group-nav.js:23
@@ -7771,6 +7771,35 @@ msgstr "파일 업데이트 로그 없음"
 #: frontend/src/translate.js:26
 msgid "No file access logs"
 msgstr "파일 접근 로그 없음"
+
+#: frontend/src/translate.js:28
+msgid ""
+"You have not shared any folders with other users yet. You can share a folder"
+" with other users by clicking the share icon to the right of a folder's "
+"name."
+msgstr "아직 다른 사용자과 공유한 어떤 폴더도 없습니다. 폴더 이름의 오른편에 있는 공유 아이콘을 눌러 다른 사용자와 폴더를 공유할 수 있습니다."
+
+#: frontend/src/translate.js:29
+msgid ""
+"You have not created any share links yet. A share link can be used to share "
+"files and folders with anyone. You can create a share link for a file or "
+"folder by clicking the share icon to the right of its name."
+msgstr "아직 어떤 공유 링크도 만들지 않았습니다. 공유 링크는 다른 어떤 누군가와 파일 및 폴더를 공유할 때 활용할 수 있습니다. 파일 또는 폴더 이름 오른편에 있는 공유 아이콘을 눌러 파일 또는 폴더를 공유하는 링크를 만들 수 있습니다."
+
+#: frontend/src/translate.js:30
+msgid ""
+"You have not created any upload links yet. An upload link allows anyone to "
+"upload files to a folder or library. You can create an upload link for a "
+"folder or library by clicking the share icon to the right of its name."
+msgstr "아직 어떤 업로드 링크도 만들지 않았습니다. 업로드 링크는 누군가에게 폴더 또는 라이브러리에 파일을 업로드하게끔 해줍니다. 폴더 또는 라이브러리 이름의 오른편에 있는 공유 아이콘을 눌러 파일을 업로드하는 링크를 만들 수 있습니다."
+
+#: frontend/src/translate.js:31
+msgid ""
+"You have not added any libraries, folders or files to your favorites yet. A "
+"favorite gives you quick access to your most frequently used objects. You "
+"can add a library, folder or file to your favorites by clicking the star to "
+"the left of its name."
+msgstr "아직 어떤 라이브러리, 폴더, 파일도 즐겨찾기에 추가하지 않았습니다. 즐겨찾기 항목은 주로 자주 사용하는 항목에 간편하게 접근할 수 있게 해줍니다. 라이브러리, 폴더, 파일의 왼편에 있는 별표 표시를 눌러 즐겨찾기에 추가할 수 있습니다."
 
 #: frontend/src/user-notifications.js:116
 msgid "Mark all read"

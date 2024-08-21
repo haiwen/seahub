@@ -53,7 +53,6 @@ class MyLibsDeleted extends Component {
           {this.state.isLoading && <Loading />}
           {(!this.state.isLoading && repos.length === 0) &&
           <EmptyTip
-            forDialog={true}
             className="my-deleted-repos-empty-tip"
             title={gettext('No deleted libraries')}
             text={gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}
