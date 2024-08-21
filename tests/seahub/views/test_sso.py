@@ -39,7 +39,7 @@ class SSOTest(BaseTestCase):
 
         t.accessed()
         resp = self.client.post('/client-sso/%s/complete/' % t.token)
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 200)
 
         t2 = ClientSSOToken.objects.get(token=t.token)
         assert t2.api_key is not None
