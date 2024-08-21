@@ -264,19 +264,19 @@ class WikiAPI {
   }
 
   publishWiki(wikiId, publish_url) {
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/';
     let form = new FormData();
     form.append('publish_url', publish_url);
     return this._sendPostRequest(url, form);
   }
 
   getPublishWikiLink(wikiId) {
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/';
     return this.req.get(url);
   }
 
   deletePublishWikiLink(wikiId, customUrl) {
-    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/custom/';
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/';
     return this.req.delete(url);
   }
 

@@ -63,7 +63,7 @@ HTTP_520_OPERATION_FAILED = 520
 logger = logging.getLogger(__name__)
 
 
-def _merge_wiki_in_groups(group_wikis, publish_all_repo_ids):
+def _merge_wiki_in_groups(group_wikis, publish_wiki_ids):
     
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
@@ -80,7 +80,7 @@ def _merge_wiki_in_groups(group_wikis, publish_all_repo_ids):
                 "type": "group",
                 "permission": gw.permission,
                 "owner_nickname": owner_nickname,
-                "is_published": True if wiki.repo_id in publish_all_repo_ids else False
+                "is_published": True if wiki.repo_id in publish_wiki_ids else False
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -112,10 +112,10 @@ class Wikis2View(APIView):
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
         group_wikis = [r for r in groups if is_wiki_repo(r)]
         wiki_ids = [w.repo_id for w in owned_wikis + shared_wikis + group_wikis]
-        publish_all_repo_ids = []
-        publish_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
-        for w in publish_wikis:
-            publish_all_repo_ids.append(w.repo_id)
+        publish_wiki_ids = []
+        published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
+        for w in published_wikis:
+            publish_wiki_ids.append(w.repo_id)
         wiki_list = []
         for r in owned_wikis:
             r.owner = username
@@ -126,7 +126,7 @@ class Wikis2View(APIView):
                     "type": "mine",
                     "permission": 'rw',
                     "owner_nickname": email2nickname(username),
-                    "is_published": True if wiki_info['repo_id'] in publish_all_repo_ids else False
+                    "is_published": True if wiki_info['repo_id'] in publish_wiki_ids else False
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -145,7 +145,7 @@ class Wikis2View(APIView):
                     "type": "shared",
                     "permission": r.permission,
                     "owner_nickname": owner_nickname,
-                    "is_published": True if wiki_info['repo_id'] in publish_all_repo_ids else False
+                    "is_published": True if wiki_info['repo_id'] in publish_wiki_ids else False
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -166,7 +166,7 @@ class Wikis2View(APIView):
             r.owner = r.user
 
         group_wiki_list = []
-        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_all_repo_ids)
+        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_wiki_ids)
         for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
@@ -363,9 +363,7 @@ class Wiki2View(APIView):
         else:
             seafile_api.remove_repo(wiki.repo_id)
 
-        wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki.repo_id)
-        if wiki_publish:
-            wiki_publish.delete()
+        Wiki2Publish.objects.filter(repo_id=wiki.repo_id).delete()
 
         return Response()
 
@@ -698,9 +696,6 @@ class Wiki2PageView(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
-        # send stats message
-        send_file_access_msg(request, repo, path, 'api')
-
         filename = os.path.basename(path)
         try:
             dirent = seafile_api.get_dirent_by_path(repo.repo_id, path)
@@ -828,7 +823,7 @@ class Wiki2PublishPageView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        wiki_config = get_wiki_config(repo_id, username)
+        wiki_config = get_wiki_config(repo_id, "")
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
         path = page_info.get('path')
@@ -1245,19 +1240,19 @@ class Wiki2PublishView(APIView):
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        if Wiki2Publish.objects.filter(publish_url=publish_url).exists():
-            error_msg = _('This custom domain is already in use and cannot be used for your wiki')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        try:
-            defaults = {
-                'username': username,
-                'publish_url': publish_url
-            }
-            Wiki2Publish.objects.update_or_create(repo_id=wiki.repo_id, defaults=defaults)
-        except Exception as e:
-            logger.error(e)
-            error_msg = _('Internal Server Error')
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        wiki_pub = Wiki2Publish.objects.filter(publish_url=publish_url).first()
+        if wiki_pub:
+            if wiki_pub.repo_id != wiki_id:
+                error_msg = _('This custom domain is already in use and cannot be used for your wiki')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            return Response({"publish_url": publish_url})
+
+        wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki.repo_id).first()
+        if not wiki_publish:
+            wiki_publish = Wiki2Publish(repo_id=wiki.repo_id, username=username, publish_url=publish_url)
+        else:
+            wiki_publish.publish_url = publish_url
+        wiki_publish.save()
 
         return Response({"publish_url": publish_url})
 
