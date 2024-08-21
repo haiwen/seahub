@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
