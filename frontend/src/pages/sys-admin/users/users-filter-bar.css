@@ -27,8 +27,3 @@
   display: flex;
   justify-content: space-between;
 }
-
-.users-filter-bar .dropdown-menu .dropdown-item:hover .sf2-icon-tick,
-.users-filter-bar .dropdown-menu .dropdown-item:focus .sf2-icon-tick {
-  color: #fff !important;
-}
