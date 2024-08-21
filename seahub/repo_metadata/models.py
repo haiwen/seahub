@@ -84,7 +84,7 @@ class RepoView(object):
 
 class RepoMetadataViewsManager(models.Manager):
     
-    def add_view(self, repo_id, view_name, view_type):
+    def add_view(self, repo_id, view_name, view_type='table'):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
             new_view = RepoView(view_name)
