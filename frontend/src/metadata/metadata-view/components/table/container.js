@@ -194,7 +194,7 @@ const Container = () => {
                   modifyColumnData={modifyColumnData}
                 />
               )}
-              {metadata.view.type === 'image' && (<Gallery containerRef={containerRef} />)}
+              {metadata.view.type === 'image' && (<Gallery />)}
             </div>
           )}
         </div>

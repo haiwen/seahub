@@ -1,4 +1,4 @@
-.gallery-container {
+.metadata-gallery-container {
   height: calc(100vh - 100px);
   position: relative;
   display: flex;
@@ -7,7 +7,7 @@
   overflow-y: auto;
 }
 
-.image-list {
+.metadata-gallery-image-list {
   position: absolute;
   top: 2px;
   left: 2px;
@@ -18,13 +18,13 @@
   margin: 0;
 }
 
-.image-item {
+.metadata-gallery-image-item {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.grid-image {
+.metadata-gallery-grid-image {
   width: 100%;
   height: 100%;
   object-fit: cover;

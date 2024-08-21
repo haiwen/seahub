@@ -26,12 +26,17 @@ const Gallery = () => {
       }
     };
 
-    handleResize();
+    const resizeObserver = new ResizeObserver(handleResize);
+    const currentContainer = containerRef.current;
 
-    window.addEventListener('resize', handleResize);
+    if (currentContainer) {
+      resizeObserver.observe(currentContainer);
+    }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (currentContainer) {
+        resizeObserver.unobserve(currentContainer);
+      }
     };
   }, []);
 
@@ -63,19 +68,19 @@ const Gallery = () => {
 
   useEffect(() => {
     const columns = DEFAULT_COLUMNS - adjustValue;
-    const adjustedImageWidth = (containerWidth - 20) / columns;
+    const adjustedImageWidth = (containerWidth - 22) / columns;
     setColumns(columns);
     setImageWidth(adjustedImageWidth);
   }, [containerWidth, adjustValue]);
 
   if (isLoading) return (<CenteredLoading />);
   return (
-    <div ref={containerRef} className="gallery-container">
-      <ul className="image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+    <div ref={containerRef} className="metadata-gallery-container">
+      <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
         {imageItems.map((img, index) => (
-          <li key={index} className='image-item' style={{ width: imageWidth, height: imageWidth }}>
+          <li key={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
             <img
-              className="grid-image"
+              className="metadata-gallery-grid-image"
               src={img.src}
               alt={img.name}
             />
