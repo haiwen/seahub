@@ -23,7 +23,7 @@ cffi==1.17.0
 captcha==0.6.*
 openpyxl==3.1.*
 Markdown==3.6.*
-bleach==6.1.*
+bleach==5.0.*
 python-ldap==3.4.*
 pypinyin==0.52.*
 PyMuPDF==1.24.*
