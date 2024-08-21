@@ -61,7 +61,7 @@ class RepoMetadata(models.Model):
 
 class RepoView(object):
     
-    def __init__(self, name, type= 'table', view_ids=None):
+    def __init__(self, name, type='table', view_ids=None):
         self.name = name
         self.type = type
         self.view_json = {}
