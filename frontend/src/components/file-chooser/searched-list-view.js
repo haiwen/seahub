@@ -13,12 +13,44 @@ class SearchedListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentItem: null,
+      currentItem: props.searchResults.length > 0 ? props.searchResults[0] : null,
+      currentIndex: props.searchResults.length > 0 ? 0 : -1,
     };
+    this.itemRef = React.createRef();
   }
 
-  onItemClick = (item) => {
-    this.setState({ currentItem: item });
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = (event) => {
+    const { searchResults } = this.props;
+    const { currentIndex } = this.state;
+
+    if (event.key === 'ArrowDown') {
+      const nextIndex = (currentIndex + 1) % searchResults.length;
+      this.setState({
+        currentItem: searchResults[nextIndex],
+        currentIndex: nextIndex,
+      });
+    } else if (event.key === 'ArrowUp') {
+      const prevIndex = (currentIndex - 1 + searchResults.length) % searchResults.length;
+      this.setState({
+        currentItem: searchResults[prevIndex],
+        currentIndex: prevIndex,
+      });
+    } else if (event.key === 'Enter') {
+      this.onItemClick(searchResults[currentIndex], currentIndex);
+      this.props.onSearchedItemDoubleClick(searchResults[currentIndex]);
+    }
+  };
+
+  onItemClick = (item, index) => {
+    this.setState({ currentItem: item, currentIndex: index });
     this.props.onItemClick(item);
   };
 
@@ -36,9 +68,10 @@ class SearchedListView extends React.Component {
             return (
               <SearchedListItem
                 key={index}
+                ref={this.itemRef}
                 item={item}
                 currentItem={this.state.currentItem}
-                onItemClick={this.onItemClick}
+                onItemClick={() => this.onItemClick(item, index)}
                 onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               />
             );

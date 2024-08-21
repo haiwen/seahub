@@ -12,6 +12,7 @@ const propTypes = {
   filePath: PropTypes.string,
   fileSuffixes: PropTypes.array,
   level: PropTypes.number,
+  isBrowsing: PropTypes.bool,
 };
 
 class TreeViewItem extends React.Component {
@@ -96,7 +97,7 @@ class TreeViewItem extends React.Component {
     if (this.props.selectedRepo) {
       isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
     }
-    let isCurrentPath = this.props.selectedPath === this.state.filePath;
+    let isCurrentPath = this.props.selectedPath === this.state.filePath || this.props.selectedPath === node.path;
 
     const fileName = node.object.name;
     if (this.props.fileSuffixes && fileName && node.object.type === 'file') {

@@ -15,6 +15,8 @@ const propTypes = {
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
   currentPath: PropTypes.string,
+  isBrowsing: PropTypes.bool,
+  browsingPath: PropTypes.string,
 };
 
 class RepoListView extends React.Component {
@@ -43,6 +45,8 @@ class RepoListView extends React.Component {
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}
               selectedItemInfo={this.props.selectedItemInfo}
+              isBrowsing={this.props.isBrowsing}
+              browsingPath={this.props.browsingPath}
             />
           );
         })}

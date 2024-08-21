@@ -57,6 +57,8 @@ class FileChooser extends React.Component {
       searchInfo: '',
       searchResults: [],
       selectedItemInfo: {},
+      isBrowsing: false,
+      browsingPath: '',
     };
     this.inputValue = '';
     this.timer = null;
@@ -115,6 +117,8 @@ class FileChooser extends React.Component {
       this.setState({
         isSearching: false,
         isResultGot: false,
+        isBrowsing: false,
+        browsingPath: '',
         searchInfo: '',
         searchResults: [],
       });
@@ -182,8 +186,12 @@ class FileChooser extends React.Component {
     this.setState({
       isSearching: false,
       isResultGot: false,
+      isBrowsing: false,
+      browsingPath: '',
       searchInfo: '',
       searchResults: [],
+      selectedPath: this.props.currentPath,
+      selectedItemInfo: {},
     });
     this.inputValue = '';
     this.timer = null;
@@ -204,7 +212,7 @@ class FileChooser extends React.Component {
     }
     this.inputValue = searchInfo;
 
-    if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
+    if (this.inputValue === '') {
       this.setState({
         isResultGot: false,
       });
@@ -242,18 +250,27 @@ class FileChooser extends React.Component {
   };
 
   sendRequest = (queryData, cancelToken) => {
+    const filterCurrentRepo = (results) => {
+      if (this.props.mode === 'only_other_libraries') {
+        return results.filter(item => item.repo_id !== this.state.currentRepoInfo.repo_id);
+      }
+      return results;
+    };
+
     if (isPro && enableSeasearch && !enableElasticsearch) {
       seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
+        const filteredResults = filterCurrentRepo(res.data.results.filter(item => item.is_dir));
         this.setState({
-          searchResults: res.data.results.length > 0 ? this.formatResultItems(res.data.results.filter(item => item.is_dir)) : [],
+          searchResults: filteredResults.length > 0 ? this.formatResultItems(filteredResults) : [],
           isResultGot: true
         });
         this.source = null;
       });
     } else {
       seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+        const filteredResults = filterCurrentRepo(res.data.results);
         this.setState({
-          searchResults: res.data.total ? this.formatResultItems(res.data.results) : [],
+          searchResults: res.data.total ? this.formatResultItems(filteredResults) : [],
           isResultGot: true
         });
         this.source = null;
@@ -306,10 +323,6 @@ class FileChooser extends React.Component {
   };
 
   renderSearchedView = () => {
-    if (this.getValueLength(this.inputValue) < 3) {
-      return '';
-    }
-
     if (!this.state.isResultGot) {
       return (<Loading />);
     }
@@ -409,7 +422,16 @@ class FileChooser extends React.Component {
       }
     }
 
-    this.onCloseSearching();
+    this.setState({
+      isSearching: false,
+      isResultGot: false,
+      searchResults: [],
+      isBrowsing: true,
+      browsingPath: item.path.substring(0, item.path.length - 1),
+    });
+    this.inputValue = '';
+    this.timer = null;
+    this.source = null;
   };
   onScroll = (event) => {
     event.stopPropagation();
@@ -481,6 +503,8 @@ class FileChooser extends React.Component {
                 isShowFile={isShowFile}
                 fileSuffixes={fileSuffixes}
                 selectedItemInfo={selectedItemInfo}
+                isBrowsing={this.state.isBrowsing}
+                browsingPath={this.state.browsingPath}
               />
             </div>
           )}
@@ -517,6 +541,8 @@ class FileChooser extends React.Component {
                 isShowFile={isShowFile}
                 fileSuffixes={fileSuffixes}
                 selectedItemInfo={selectedItemInfo}
+                isBrowsing={this.state.isBrowsing}
+                browsingPath={this.state.browsingPath}
               />
             </div>
           )}
@@ -534,7 +560,7 @@ class FileChooser extends React.Component {
   };
 
   render() {
-    const { repoID } = this.props;
+    const { repoID, mode } = this.props;
     const { selectedRepo, searchInfo, isSearching } = this.state;
 
     if (!selectedRepo && repoID) {
@@ -543,7 +569,7 @@ class FileChooser extends React.Component {
 
     return (
       <Fragment>
-        {isPro && this.props.mode !== 'recently_used' && (
+        {isPro && mode !== 'recently_used' && (
           <div className="file-chooser-search-input">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
