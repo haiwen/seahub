@@ -50,6 +50,7 @@ class UserItem extends React.Component {
             currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
+            isSysAdmin={true}
           />
         </td>
         <td>
