@@ -95,6 +95,20 @@
   border-bottom: 1px solid #eee;
 }
 
+@keyframes displayDirPath {
+  from {
+    top: -32px;
+  }
+  to {
+    top: 0;
+  }
+}
+
+.cur-view-path .animation-children .cur-dir-path {
+  position: relative;
+  animation: displayDirPath .3s ease-in-out 1;
+}
+
 .cur-view-path .cur-dir-path {
   height: 32px;
 }
@@ -289,6 +303,7 @@ img[src=""],img:not([src]) { /* for first loading img*/
   word-break: keep-all;
   max-width: 80%;
   height: 24px;
+  overflow: hidden;
 }
 
 .path-container a, .path-container span {
@@ -306,7 +321,8 @@ img[src=""],img:not([src]) { /* for first loading img*/
   flex-shrink: 0;
 }
 
-.path-container span.path-file-name, .path-container span.path-repo-name {
+.path-container span.path-file-name,
+.path-container span.path-repo-name {
   flex-shrink: 1;
 }
 

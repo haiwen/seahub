@@ -1,6 +1,16 @@
+@keyframes displayDirentToolbar {
+  from {
+    top: 24px;
+  }
+  to {
+    top: 0;
+  }
+}
+
 .cur-view-path .selected-dirents-toolbar {
-  margin-top: 24px;
   height: 24px;
+  position: relative;
+  animation: displayDirentToolbar .3s ease-in-out 1;
 }
 
 .cur-view-path .selected-dirents-toolbar .cur-view-path-btn {

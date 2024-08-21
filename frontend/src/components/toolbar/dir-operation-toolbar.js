@@ -239,7 +239,7 @@ class DirOperationToolbar extends React.Component {
               {this.props.children}
               <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
             </DropdownToggle>
-            <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
+            <DropdownMenu onMouseMove={this.onDropDownMouseMove} positionFixed={true}>
               {opList.map((item, index) => {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
