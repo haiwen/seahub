@@ -297,7 +297,7 @@ class DirOperationToolbar extends React.Component {
             {this.props.children}
             <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu>
+          <DropdownMenu positionFixed={true}>
             {canUpload && (
               <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
             )}
