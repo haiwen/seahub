@@ -208,7 +208,8 @@ from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
-    Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView
+    Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
+    WikiSearch
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
@@ -554,6 +555,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/trash/', WikiPageTrashView.as_view(), name='api-v2.1-wiki2-trash'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/$', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
+    re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
+
     ## user::drafts
     re_path(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
     re_path(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
