@@ -1099,6 +1099,15 @@ a.table-sort-op:hover {
   color: #8c8c8c;
 }
 
+.dropdown-item .sf2-icon-tick {
+  color: #798d99;
+}
+
+.dropdown-item:hover .sf2-icon-tick,
+.dropdown-item:focus .sf2-icon-tick {
+  color: #fff !important;
+}
+
 .btn-secondary.dropdown-toggle.dropdown-item {
   line-height: 1.5;
 }
