@@ -50,6 +50,7 @@ class UserItem extends React.Component {
             currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
+            isSysAdmin={true}
           />
         </td>
         <td>
@@ -249,6 +250,7 @@ class SysAdminShareToUser extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
+                  isSysAdmin={true}
                 />
               </td>
               <td>
