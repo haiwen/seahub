@@ -7,4 +7,3 @@ splinter
 pytest==7.4.4
 pytest-django
 selenium
-PyMuPDF==1.24.3
