@@ -70,9 +70,9 @@ class SharePermissionEditor extends React.Component {
     }
     let apiCall;
     if (isSysAdmin) {
-      apiCall = systemAdminAPI.adminListCustomSharePermissions(repoID)
+      apiCall = systemAdminAPI.adminListCustomSharePermissions(repoID);
     } else {
-      apiCall = seafileAPI.listCustomPermissions(repoID)
+      apiCall = seafileAPI.listCustomPermissions(repoID);
     }
 
     apiCall.then(res => {
