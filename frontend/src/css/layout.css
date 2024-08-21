@@ -339,3 +339,10 @@ img[src=""],img:not([src]) { /* for first loading img*/
 .dir-tool>div {
   margin-left: 8px;
 }
+
+.dir-tool {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}

@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { Form, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, VIEW_OPTIONS } from '../../constants';
 import ViewItem from './view-item';
 import { useMetadata } from '../hooks';
-import { Form, Input } from 'reactstrap';
-import Icon from '../../components/icon';
 import { AddView } from '../metadata-view/components/popover/view-popover';
 
 import './index.css';
@@ -27,6 +27,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     updateView,
     moveView
   } = useMetadata();
+  const [newView, setNewView] = useState(null);
 
   const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
@@ -71,7 +72,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     setInputValue(event.target.value);
   };
 
-  const handlePopoverOptionClick = () => {
+  const handlePopoverOptionClick = (option) => {
+    setNewView(option);
     setShowInput(true);
     setShowAddViewPopover(false);
   };
@@ -79,10 +81,10 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   const handleInputSubmit = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    addView(inputValue);
+    addView(inputValue, newView.type);
     setShowInput(false);
     setInputValue('Untitled');
-  }, [inputValue, addView]);
+  }, [inputValue, addView, newView]);
 
   const handleClickOutsideInput = useCallback((event) => {
     if (inputRef.current && !inputRef.current.contains(event.target)) {
@@ -127,9 +129,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
             {showInput && (
               <Form onSubmit={handleInputSubmit} className='tree-view-inner sf-metadata-view-form'>
                 <div className="left-icon">
-                  <div className="tree-node-icon">
-                    <Icon symbol="table" className="metadata-views-icon" />
-                  </div>
+                  <Icon symbol={newView.type} className="metadata-views-icon" />
                 </div>
                 <Input
                   className='sf-metadata-view-input'
@@ -157,7 +157,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
         </div>
       </div>
       {showAddViewPopover && (
-        <AddView target='sf-metadata-view-popover' toggle={togglePopover} onOptionClick={handlePopoverOptionClick} />
+        <AddView target='sf-metadata-view-popover' options={VIEW_OPTIONS} toggle={togglePopover} onOptionClick={handlePopoverOptionClick} />
       )}
     </>
   );

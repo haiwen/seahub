@@ -113,7 +113,7 @@ class DirTool extends React.Component {
 
     if (isFileExtended) {
       return (
-        <div className="d-flex">
+        <div className="dir-tool">
           <MetadataViewToolBar viewId={viewId} />
         </div>
       );

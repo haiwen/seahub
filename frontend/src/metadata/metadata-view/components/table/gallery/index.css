@@ -1,0 +1,31 @@
+.metadata-gallery-container {
+  height: calc(100vh - 100px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.metadata-gallery-image-list {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: grid;
+  gap: 2px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.metadata-gallery-image-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.metadata-gallery-grid-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

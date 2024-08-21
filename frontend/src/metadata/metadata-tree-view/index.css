@@ -65,3 +65,7 @@
   font-size: 14px;
   margin-top: 2px;
 }
+
+.metadata-tree-view .metadata-views-icon {
+  fill: #666;
+}

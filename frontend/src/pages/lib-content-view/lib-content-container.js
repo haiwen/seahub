@@ -271,6 +271,7 @@ class LibContentContainer extends React.Component {
                 sortOrder={this.props.sortOrder}
                 sortItems={this.props.sortItems}
                 viewId={this.props.viewId}
+                viewType={this.props.viewType}
               />
             </div>
           }

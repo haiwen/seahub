@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
+import { SliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
 import { EVENT_BUS_TYPE } from '../../constants';
 
 import './index.css';
@@ -71,6 +71,7 @@ const ViewToolBar = ({ viewId }) => {
       onClick={onHeaderClick}
     >
       <div className="sf-metadata-tool-left-operations">
+        {view.type === 'image' && <SliderSetter />}
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"

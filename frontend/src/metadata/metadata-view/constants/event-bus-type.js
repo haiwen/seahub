@@ -47,4 +47,6 @@ export const EVENT_BUS_TYPE = {
   SAVED: 'saved',
   ERROR: 'error',
 
+  // gallery
+  MODIFY_GALLERY_COLUMNS: 'modify_gallery_columns',
 };

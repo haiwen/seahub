@@ -5,6 +5,7 @@ import { CommonlyUsedHotkey, getValidGroupbys } from '../../_basic';
 import { gettext } from '../../utils';
 import { useMetadata } from '../../hooks';
 import TableMain from './table-main';
+import Gallery from './gallery';
 import { Utils } from '../../../../utils/utils';
 
 import './index.css';
@@ -175,22 +176,25 @@ const Container = () => {
           {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
           {!errorMsg && (
             <div className="sf-metadata-container" ref={containerRef}>
-              <TableMain
-                isGroupView={isGroupView}
-                isLoadingMore={isLoadingMore}
-                loadMore={loadMore}
-                metadata={metadata}
-                modifyRecord={modifyRecord}
-                modifyRecords={modifyRecords}
-                recordGetterById={recordGetterById}
-                recordGetterByIndex={recordGetterByIndex}
-                getTableContentRect={getTableContentRect}
-                getAdjacentRowsIds={getAdjacentRowsIds}
-                loadAll={loadAll}
-                renameColumn={renameColumn}
-                deleteColumn={deleteColumn}
-                modifyColumnData={modifyColumnData}
-              />
+              {metadata.view.type === 'table' && (
+                <TableMain
+                  isGroupView={isGroupView}
+                  isLoadingMore={isLoadingMore}
+                  loadMore={loadMore}
+                  metadata={metadata}
+                  modifyRecord={modifyRecord}
+                  modifyRecords={modifyRecords}
+                  recordGetterById={recordGetterById}
+                  recordGetterByIndex={recordGetterByIndex}
+                  getTableContentRect={getTableContentRect}
+                  getAdjacentRowsIds={getAdjacentRowsIds}
+                  loadAll={loadAll}
+                  renameColumn={renameColumn}
+                  deleteColumn={deleteColumn}
+                  modifyColumnData={modifyColumnData}
+                />
+              )}
+              {metadata.view.type === 'image' && (<Gallery />)}
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ class View {
   constructor(object, columns) {
 
     this._id = object._id || '';
+    this.type = object.type || 'table';
 
     // filter
     this.filters = object.filters || [];

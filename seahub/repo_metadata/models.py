@@ -61,8 +61,9 @@ class RepoMetadata(models.Model):
 
 class RepoView(object):
     
-    def __init__(self, name, view_ids=None):
+    def __init__(self, name, type= 'table', view_ids=None):
         self.name = name
+        self.type = type
         self.view_json = {}
         
         self.init_view(view_ids)
@@ -77,12 +78,13 @@ class RepoView(object):
             "groupbys": [],
             "filter_conjunction": "And",
             "hidden_columns": [],
+            "type": self.type,
         }
 
 
 class RepoMetadataViewsManager(models.Manager):
     
-    def add_view(self, repo_id, view_name):
+    def add_view(self, repo_id, view_name, view_type):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
             new_view = RepoView(view_name)
@@ -100,7 +102,7 @@ class RepoMetadataViewsManager(models.Manager):
             view_details = json.loads(metadata_views.details)
             view_name = get_no_duplicate_obj_name(view_name, metadata_views.view_names)
             exist_view_ids = metadata_views.view_ids
-            new_view = RepoView(view_name, exist_view_ids)
+            new_view = RepoView(view_name, view_type, exist_view_ids)
             view_json = new_view.view_json
             view_id = view_json.get('_id')
             view_details['views'].append(view_json)
