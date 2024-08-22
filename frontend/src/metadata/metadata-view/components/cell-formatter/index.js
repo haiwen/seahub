@@ -17,6 +17,7 @@ const CellFormatter = ({ readonly, value, field, ...params }) => {
       queryUserAPI: queryUser,
       getFileIconUrl: Utils.getFileIconUrl,
       getFolderIconUrl: Utils.getFolderIconUrl,
+      isBaiduMap: true,
     };
   }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser]);
 

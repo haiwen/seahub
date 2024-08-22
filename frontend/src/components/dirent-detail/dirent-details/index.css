@@ -27,3 +27,18 @@
 .detail-body .empty-tip-text {
   color: #666;
 }
+
+.detail-body .sf-metadata-property-detail-tags {
+  padding: 7px 6px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.detail-body .sf-metadata-property-detail-tags .file-tag-list {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.detail-body .sf-metadata-property-detail-tags.tags-empty {
+  padding: 6.5px 6px;;
+}
