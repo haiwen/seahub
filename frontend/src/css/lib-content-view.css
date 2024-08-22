@@ -253,8 +253,12 @@
   background: #f5f5f5;
 }
 
-.dir-view-path .cur-view-path-btn {
-  margin-left: -4px;
+.cur-view-path.lib-cur-view-path {
+  padding-left: 12px;
+}
+
+.cur-view-path.lib-cur-view-path .selected-dirents-toolbar {
+  padding-left: 4px;
 }
 
 .dir-view-path .path-item {
