@@ -26,8 +26,8 @@ class OrgWebSettings extends Component {
       logoPath: logoPath,
       file_ext_white_list: '',
       force_adfs_login: false,
-      enable_org_encrypted_library: false,
-      enable_org_user_clean_trash: false
+      disable_org_encrypted_library: false,
+      disable_org_user_clean_trash: false
     };
   }
 
@@ -38,8 +38,8 @@ class OrgWebSettings extends Component {
         config_dict: res.data,
         file_ext_white_list: res.data.file_ext_white_list,
         force_adfs_login: res.data.force_adfs_login,
-        enable_org_encrypted_library: res.data.enable_org_encrypted_library,
-        enable_org_user_clean_trash: res.data.enable_org_user_clean_trash
+        disable_org_encrypted_library: res.data.disable_org_encrypted_library,
+        disable_org_user_clean_trash: res.data.disable_org_user_clean_trash
       });
     }).catch((error) => {
       this.setState({
@@ -92,7 +92,7 @@ class OrgWebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
@@ -107,10 +107,9 @@ class OrgWebSettings extends Component {
   };
 
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, enable_org_encrypted_library, enable_org_user_clean_trash } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, disable_org_encrypted_library, disable_org_user_clean_trash } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
-    console.log(sysEnableUserCleanTrash, sysEnableEncryptedLibrary)
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -176,18 +175,18 @@ class OrgWebSettings extends Component {
                       <CheckboxItem
                         saveSetting={this.orgSaveSetting}
                         displayName='Encrypted library'
-                        keyText='enable_org_encrypted_library'
-                        value={enable_org_encrypted_library}
-                        helpTip={gettext('Allow user to create encrypted libraries')}
+                        keyText='disable_org_encrypted_library'
+                        value={disable_org_encrypted_library}
+                        helpTip={gettext('Not allow user to create encrypted libraries')}
                       />
                     }
                     {sysEnableUserCleanTrash &&
                       <CheckboxItem
                         saveSetting={this.orgSaveSetting}
-                        displayName='Enable user clean trash'
-                        keyText='enable_org_user_clean_trash'
-                        value={enable_org_user_clean_trash}
-                        helpTip={gettext('Allow user to clean library trash')}
+                        displayName='Disable user clean trash'
+                        keyText='disable_org_user_clean_trash'
+                        value={disable_org_user_clean_trash}
+                        helpTip={gettext('Not allow user to clean library trash')}
                       />
                     }
                   </Fragment>

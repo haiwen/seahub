@@ -4,7 +4,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { Utils, isMobile } from '../../utils/utils';
-import { gettext, siteRoot, enableUserCleanTrash, username } from '../../utils/constants';
+import { gettext, siteRoot, enableUserCleanTrash, username, disableOrgUserCleanTrash } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repotrashAPI } from '../../utils/repo-trash-api';
 import ModalPortal from '../../components/modal-portal';
@@ -154,7 +154,7 @@ class TrashDialog extends React.Component {
           close={
             <>
               <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
-              {(enableUserCleanTrash && !showFolder && isRepoAdmin) &&
+              {(enableUserCleanTrash && !showFolder && isRepoAdmin && !disableOrgUserCleanTrash) &&
                 <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
               }
               <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>

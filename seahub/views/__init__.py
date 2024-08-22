@@ -68,7 +68,7 @@ from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
-from seahub.organizations.models import OrgAdminSettings, ENABLE_ORG_ENCRYPTED_LIBRARY, ENABLE_ORG_USER_CLEAN_TRASH
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
@@ -309,6 +309,11 @@ def repo_folder_trash(request, repo_id):
         raise Http404
 
     repo_admin = is_repo_admin(username, repo_id)
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+    org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
+    disable_user_clean_trash = int(org_setting.value) if org_setting else False
+
 
     if path == '/':
         name = repo.name
@@ -320,7 +325,8 @@ def repo_folder_trash(request, repo_id):
             'repo_folder_name': name,
             'path': path,
             'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
-            'is_repo_admin': repo_admin
+            'is_repo_admin': repo_admin,
+            'disable_user_clean_trash': disable_user_clean_trash
             })
 
 def can_access_repo_setting(request, repo_id, username):
@@ -1087,11 +1093,11 @@ def react_fake_view(request, **kwargs):
         org_id = request.user.org.org_id
         org_settings = OrgAdminSettings.objects.filter(org_id=org_id)
         for org_config in org_settings:
-            if ENABLE_ORG_ENCRYPTED_LIBRARY == org_config.key:
-                org_setting[ENABLE_ORG_ENCRYPTED_LIBRARY] = int(org_config.value)
-            if org_config.key == ENABLE_ORG_USER_CLEAN_TRASH:
-                org_setting[ENABLE_ORG_USER_CLEAN_TRASH] = int(org_config.value)
-    print('userCLeanTrash', config.ENABLE_USER_CLEAN_TRASH)
+            if DISABLE_ORG_ENCRYPTED_LIBRARY == org_config.key:
+                org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY] = int(org_config.value)
+            if org_config.key == DISABLE_ORG_USER_CLEAN_TRASH:
+                org_setting[DISABLE_ORG_USER_CLEAN_TRASH] = int(org_config.value)
+
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1109,10 +1115,10 @@ def react_fake_view(request, **kwargs):
         'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
         'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
-        'enable_org_encrypted_library': org_setting.get(ENABLE_ORG_ENCRYPTED_LIBRARY, False),
+        'disable_org_encrypted_library': org_setting.get(DISABLE_ORG_ENCRYPTED_LIBRARY, False),
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
-        'enable_org_user_clean_trash': org_setting.get(ENABLE_ORG_USER_CLEAN_TRASH, False),
+        'disable_org_user_clean_trash': org_setting.get(DISABLE_ORG_USER_CLEAN_TRASH, False),
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),

@@ -16,7 +16,7 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
-from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN, ENABLE_ORG_ENCRYPTED_LIBRARY, ENABLE_ORG_USER_CLEAN_TRASH
+from seahub.organizations.models import OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, DISABLE_ORG_USER_CLEAN_TRASH
 from seahub.utils.file_size import get_file_size_unit
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
         ORG_ENABLE_ADMIN_CUSTOM_NAME
@@ -75,15 +75,15 @@ def get_org_info(request, org_id):
     org_settings = OrgAdminSettings.objects.filter(org_id=org_id)
     for setting in org_settings:
         setting_items[setting.key] = setting.value
-    if ENABLE_ORG_ENCRYPTED_LIBRARY not in setting_items:
-        info[ENABLE_ORG_ENCRYPTED_LIBRARY] = False
+    if DISABLE_ORG_ENCRYPTED_LIBRARY not in setting_items:
+        info[DISABLE_ORG_ENCRYPTED_LIBRARY] = False
     else:
-        info[ENABLE_ORG_ENCRYPTED_LIBRARY] = int(setting_items[ENABLE_ORG_ENCRYPTED_LIBRARY])
+        info[DISABLE_ORG_ENCRYPTED_LIBRARY] = int(setting_items[DISABLE_ORG_ENCRYPTED_LIBRARY])
     
-    if ENABLE_ORG_USER_CLEAN_TRASH not in setting_items:
-        info[ENABLE_ORG_USER_CLEAN_TRASH] = False
+    if DISABLE_ORG_USER_CLEAN_TRASH not in setting_items:
+        info[DISABLE_ORG_USER_CLEAN_TRASH] = False
     else:
-        info[ENABLE_ORG_USER_CLEAN_TRASH] = int(setting_items[ENABLE_ORG_USER_CLEAN_TRASH])
+        info[DISABLE_ORG_USER_CLEAN_TRASH] = int(setting_items[DISABLE_ORG_USER_CLEAN_TRASH])
 
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         # org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()

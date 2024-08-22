@@ -16,7 +16,8 @@ window.app.pageOptions = {
   repoFolderName: '{{repo_folder_name|escapejs}}',
   path: '{{path|escapejs}}',
   enableUserCleanTrash: {% if enable_user_clean_trash %} true {% else %} false {% endif %},
-  isRepoAdmin: {% if is_repo_admin %} true {% else %} false {% endif %}
+  isRepoAdmin: {% if is_repo_admin %} true {% else %} false {% endif %},
+  disableOrgUserCleanTrash: {% if disable_user_clean_trash %} true {% else %} false {% endif %}
 };
 </script>
 {% render_bundle 'repoFolderTrash' 'js' %}

@@ -111,7 +111,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 from seahub.subscription.utils import subscription_check
-from seahub.organizations.models import OrgAdminSettings, ENABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -1069,7 +1069,6 @@ class Repos(APIView):
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
-        print(222)
         req_from = request.GET.get('from', "")
         if req_from == 'web':
             gen_sync_token = False  # Do not generate repo sync token
@@ -1125,7 +1124,6 @@ class Repos(APIView):
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
         passwd = request.data.get("passwd", None)
-        print('passwd', passwd)
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
         if not passwd:
@@ -1136,9 +1134,8 @@ class Repos(APIView):
                              'NOT allow to create encrypted library.')
 
         if org_id and org_id > 0:
-            enable_encrypted_library = int(OrgAdminSettings.objects.filter(org_id=org_id, key=ENABLE_ORG_ENCRYPTED_LIBRARY).first().value())
-            print(enable_encrypted_library)
-            if not enable_encrypted_library:
+            org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (org_setting is not None) and int(org_setting.value):
                 return None, api_error(status.HTTP_403_FORBIDDEN,
                                        'NOT allow to create encrypted library.')
             repo_id = seafile_api.create_org_repo(repo_name,
