@@ -124,9 +124,9 @@ class Search(APIView):
 
 
 class OCR(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    # authentication_classes = (TokenAuthentication, SessionAuthentication)
+    # permission_classes = (IsAuthenticated, )
+    # throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
         repo_id = request.data.get('repo_id')
@@ -148,9 +148,9 @@ class OCR(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # if not check_folder_permission(request, repo_id, path):
+        #     error_msg = 'Permission denied.'
+        #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         params = {
             'repo_id': repo_id,
@@ -159,10 +159,11 @@ class OCR(APIView):
         }
 
         try:
-            ocr_result = ocr(params)
+            resp = ocr(params)
+            resp_json = resp.json()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'ocr_result': ocr_result}, status.HTTP_200_OK)
+        return Response(resp_json, resp.status_code)
