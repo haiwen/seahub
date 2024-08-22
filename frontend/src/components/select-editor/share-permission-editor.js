@@ -19,6 +19,7 @@ const propTypes = {
   onPermissionChanged: PropTypes.func.isRequired,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
+  isSysAdmin: PropTypes.bool,
 };
 
 class SharePermissionEditor extends React.Component {
@@ -56,7 +57,14 @@ class SharePermissionEditor extends React.Component {
   }
 
   listCustomPermissions = () => {
-    const { repoID } = this.props;
+    const { repoID, isSysAdmin } = this.props;
+    if (isSysAdmin) {
+      this.setState({
+        isLoading: false,
+        customPermissions: []
+      });
+      return;
+    }
     const cacheData = localStorage.getItem(this.CACHE_KEY);
     if (cacheData) {
       const { permission_list: permissions } = JSON.parse(cacheData);
