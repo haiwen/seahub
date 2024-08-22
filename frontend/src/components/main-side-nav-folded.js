@@ -55,6 +55,12 @@ class MainSideNavFolded extends React.Component {
     });
   };
 
+  filesOnMouseOver = () => {
+    if (!this.state.isFilesSubNavShown) {
+      this.toggleSubNav();
+    }
+  };
+
   tabItemClick = (e, param, id) => {
     if (window.uploader &&
       window.uploader.isUploadProgressDialogShow &&
@@ -67,6 +73,7 @@ class MainSideNavFolded extends React.Component {
     }
     this.props.tabItemClick(param, id);
 
+    /*
     if (this.props.currentTab == 'libraries' && param == 'libraries') {
       e.stopPropagation();
       this.toggleSubNav();
@@ -75,6 +82,10 @@ class MainSideNavFolded extends React.Component {
         isFilesSubNavShown: false
       });
     }
+    */
+    this.setState({
+      isFilesSubNavShown: false
+    });
   };
 
   getActiveClass = (tab) => {
@@ -108,7 +119,12 @@ class MainSideNavFolded extends React.Component {
           <ul className="nav nav-pills flex-column nav-container">
 
             <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+              <Link
+                to={ siteRoot + 'libraries/' }
+                className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
+                onClick={(e) => this.tabItemClick(e, 'libraries')}
+                onMouseOver={this.filesOnMouseOver}
+              >
                 <span className="sf3-font-files sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-files"></span>
                 <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
               </Link>

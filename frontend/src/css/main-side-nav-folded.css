@@ -17,5 +17,5 @@
 .side-nav-folded #files-sub-nav {
   width: 240px;
   background: #fff;
-  z-index: 1;
+  z-index: 2;
 }
