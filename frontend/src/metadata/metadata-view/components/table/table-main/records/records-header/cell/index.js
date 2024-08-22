@@ -60,7 +60,7 @@ const Cell = ({
   const onDragEnd = useCallback((e) => {
     const width = getWidthFromMouseEvent(e);
     if (width > 0) {
-      modifyColumnWidth(column, width);
+      modifyColumnWidth(column, Math.max(width, 50));
     }
   }, [column, getWidthFromMouseEvent, modifyColumnWidth]);
 
