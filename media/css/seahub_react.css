@@ -672,9 +672,7 @@ a, a:hover { color: #ec8000; }
 
 .side-panel-folded .heading,
 .side-panel-folded .nav-item#share-admin-nav,
-.side-panel-folded .nav-item .nav-text,
-.side-panel-folded .nav-item .toggle-icon,
-.side-panel-folded .nav-item .sub-nav {
+.side-panel-folded .nav-item .toggle-icon {
   display: none!important;
 }
 
@@ -814,6 +812,10 @@ a, a:hover { color: #ec8000; }
   padding-left: 2.25rem;
   display: flex;
   align-items: center;
+}
+
+.side-nav-folded .sub-nav#files-sub-nav .nav-item .nav-link {
+  padding-left: .5rem;
 }
 
 .side-nav-con .sub-nav#files-sub-nav .nav-item .nav-link .nav-icon {

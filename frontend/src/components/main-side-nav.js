@@ -12,14 +12,14 @@ import { Utils } from '../utils/utils';
 import Group from '../models/group';
 import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
+import FilesSubNav from '../components/files-sub-nav';
+import { SUB_NAV_ITEM_HEIGHT } from '../constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
   toggleFoldSideNav: PropTypes.func
 };
-
-const SUB_NAV_ITEM_HEIGHT = 28;
 
 class MainSideNav extends React.Component {
   constructor(props) {
@@ -42,7 +42,6 @@ class MainSideNav extends React.Component {
   };
 
   loadGroups = () => {
-    let _this = this;
     seafileAPI.listGroups().then(res => {
       let groupList = res.data.map(item => {
         let group = new Group(item);
@@ -50,7 +49,7 @@ class MainSideNav extends React.Component {
       });
 
       this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
-      _this.setState({
+      this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
         })
@@ -94,23 +93,9 @@ class MainSideNav extends React.Component {
     });
   };
 
-  renderSharedGroups() {
+  renderAddGroup() {
     return (
       <>
-        {this.state.groupItems.map(item => {
-          return (
-            <li key={item.id} className={`nav-item ${this.getActiveClass(item.name)}`}>
-              <Link
-                to={siteRoot + 'group/' + item.id + '/'}
-                className={`nav-link ellipsis ${this.getActiveClass(item.name)}`}
-                onClick={(e) => this.tabItemClick(e, item.name, item.id)}
-              >
-                <span className={`${item.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
-                <span className="nav-text">{item.name}</span>
-              </Link>
-            </li>
-          );
-        })}
         {canAddGroup && (
           <>
             <li className='nav-item' onClick={this.toggleCreateGroupDialog}>
@@ -217,7 +202,7 @@ class MainSideNav extends React.Component {
 
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
-    const { filesNavUnfolded } = this.state;
+    const { filesNavUnfolded, groupItems } = this.state;
     return (
       <div className="side-nav">
         <div className={'side-nav-con d-flex flex-column'}>
@@ -230,29 +215,12 @@ class MainSideNav extends React.Component {
                 <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
               </Link>
               <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{ height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0 }}>
-                {canAddRepo && (
-                  <li className={`nav-item ${this.getActiveClass('my-libs') || this.getActiveClass('deleted')}`}>
-                    <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
-                      <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
-                      <span className="nav-text">{gettext('My Libraries')}</span>
-                    </Link>
-                  </li>
-                )}
-                <li className={`nav-item ${this.getActiveClass('shared-libs')}`}>
-                  <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={(e) => this.tabItemClick(e, 'shared-libs')}>
-                    <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
-                    <span className="nav-text">{gettext('Shared with me')}</span>
-                  </Link>
-                </li>
-                {canViewOrg &&
-                <li className={`nav-item ${this.getActiveClass('org')}`} onClick={(e) => this.tabItemClick(e, 'org')}>
-                  <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
-                    <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
-                    <span className="nav-text">{gettext('Shared with all')}</span>
-                  </Link>
-                </li>
-                }
-                {this.renderSharedGroups()}
+                <FilesSubNav
+                  groupItems={groupItems}
+                  tabItemClick={this.tabItemClick}
+                  currentTab={this.props.currentTab}
+                />
+                {this.renderAddGroup()}
               </ul>
             </li>
 

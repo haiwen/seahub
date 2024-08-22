@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
   isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl } from '../utils/constants';
+import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
+import FilesSubNav from '../components/files-sub-nav';
+import { seafileAPI } from '../utils/seafile-api';
+import { Utils } from '../utils/utils';
+import Group from '../models/group';
+import toaster from './toast';
+
 
 import '../css/main-side-nav-folded.css';
 
@@ -14,6 +21,39 @@ const propTypes = {
 };
 
 class MainSideNavFolded extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      groupItems: [],
+      isFilesSubNavShown: false
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick = (e) => {
+    const { isFilesSubNavShown } = this.state;
+    if (isFilesSubNavShown && !this.filesSubNav.contains(e.target)) {
+      this.toggleSubNav();
+    }
+  };
+
+  toggleSubNav = () => {
+    this.setState({
+      isFilesSubNavShown: !this.state.isFilesSubNavShown
+    }, () => {
+      if (this.state.isFilesSubNavShown) {
+        this.loadGroups();
+      }
+    });
+  };
 
   tabItemClick = (e, param, id) => {
     if (window.uploader &&
@@ -26,24 +66,69 @@ class MainSideNavFolded extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.tabItemClick(param, id);
+
+    if (this.props.currentTab == 'libraries' && param == 'libraries') {
+      e.stopPropagation();
+      this.toggleSubNav();
+    } else {
+      this.setState({
+        isFilesSubNavShown: false
+      });
+    }
   };
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
+  loadGroups = () => {
+    seafileAPI.listGroups().then(res => {
+      let groupList = res.data.map(item => {
+        let group = new Group(item);
+        return group;
+      });
+
+      this.setState({
+        groupItems: groupList.sort((a, b) => {
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        })
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     let showActivity = isDocs || isPro || !isDBSqlite3;
+    const { groupItems, isFilesSubNavShown } = this.state;
     return (
       <div className="side-nav side-nav-folded">
         <div className={'side-nav-con d-flex flex-column'}>
           <ul className="nav nav-pills flex-column nav-container">
 
             <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+              <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                 <span className="sf3-font-files sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-files"></span>
                 <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
               </Link>
+              {isFilesSubNavShown &&
+              <ul
+                id="files-sub-nav"
+                className="sub-nav position-fixed rounded border shadow p-4 o-auto"
+                style={{
+                  'left': SIDE_PANEL_FOLDED_WIDTH + 4,
+                  'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2
+                }}
+                ref={ref => this.filesSubNav = ref}
+              >
+                <FilesSubNav
+                  groupItems={groupItems}
+                  tabItemClick={this.tabItemClick}
+                  currentTab={this.props.currentTab}
+                />
+              </ul>
+              }
             </li>
 
             <li className={`nav-item ${this.getActiveClass('starred')}`}>
