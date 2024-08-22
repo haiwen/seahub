@@ -137,6 +137,8 @@ class LibContentView extends React.Component {
 
   componentDidMount() {
     this.calculatePara(this.props);
+
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -144,6 +146,14 @@ class LibContentView extends React.Component {
       this.calculatePara(nextProps);
     }
   }
+
+  onKeyDown = (event) => {
+    if (event.shiftKey && event.keyCode === 49) {
+      this.switchViewMode('list');
+    } else if (event.shiftKey && event.keyCode === 50) {
+      this.switchViewMode('grid');
+    }
+  };
 
   calculatePara = async (props) => {
     const { repoID, eventBus } = props;
@@ -222,6 +232,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
     window.onpopstate = this.oldonpopstate;
     collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
     this.unsubscribeEvent();
