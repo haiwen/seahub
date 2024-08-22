@@ -156,7 +156,7 @@ function kill_all () {
     pkill -f "seaf-server -c ${default_ccnet_conf_dir}"
     pkill -f "fileserver -c ${default_ccnet_conf_dir}"
     pkill -f "seafevents.main"
-    pkill -f  "wsgidav.server.server_cli"
+    pkill -9 -f "wsgidav.server.server_cli"
     pkill -f  "notification-server -c ${central_config_dir}"
     pkill -f  "seafile-monitor.sh"
 }
