@@ -16,8 +16,6 @@ from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, \
 
 from seahub import auth
 from seahub.base.accounts import User
-from seahub.auth.models import SocialAuthUser
-from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -179,7 +177,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             p.nickname = nickname.encode("iso-8859-1").decode('utf8')
 
         if institution:
-            p.institution = institution
+            p.institution = institution.encode("iso-8859-1").decode('utf8')
 
         if contact_email:
             p.contact_email = contact_email
