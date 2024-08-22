@@ -34,15 +34,43 @@ const ContextMenu = ({
   const options = useMemo(() => {
     const permission = window.sfMetadataContext.getPermission();
     const isReadonly = permission === 'r';
+    const { columns } = metadata;
+    const summaryColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_SUMMARY);
     let list = [];
 
     if (selectedRange) {
       !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
+
+      if (summaryColumn) {
+        const { topLeft, bottomRight } = selectedRange;
+        for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
+          const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
+          const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+          if (Utils.isSdocFile(fileName)) {
+            list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+            break;
+          }
+        }
+      }
       return list;
     }
 
-    if (Object.keys(recordMetrics.idSelectedRecordMap).length > 1) {
+    const selectedRecords = Object.keys(recordMetrics.idSelectedRecordMap);
+    if (selectedRecords.length > 1) {
+      if (summaryColumn) {
+        const isIncludeSdocRecord = selectedRecords.filter(id => {
+          const record = metadata.id_row_map[id];
+          if (record) {
+            const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+            return Utils.isSdocFile(fileName);
+          }
+          return false;
+        });
+        if (isIncludeSdocRecord.length > 0) {
+          list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+        }
+      }
       return list;
     }
 
@@ -53,8 +81,6 @@ const ContextMenu = ({
     const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab') });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
-    const { columns } = metadata;
-    const summaryColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_SUMMARY);
     if (summaryColumn) {
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
       if (Utils.isSdocFile(fileName)) {
@@ -102,11 +128,36 @@ const ContextMenu = ({
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
 
   const generateSummary = useCallback(() => {
-    const { groupRecordIndex, rowIdx } = selectedPosition;
-    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-    if (!record) return;
-    modifySdocSummary([record[PRIVATE_COLUMN_KEY.ID]]);
-  }, [isGroupView, selectedPosition, recordGetterByIndex, modifySdocSummary]);
+    const selectedRecords = Object.keys(recordMetrics.idSelectedRecordMap);
+    let recordIds = [];
+    if (selectedRange) {
+      const { topLeft, bottomRight } = selectedRange;
+      for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
+        const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
+        const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+        if (Utils.isSdocFile(fileName)) {
+          recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
+        }
+      }
+    } else if (selectedRecords.length > 0) {
+      selectedRecords.forEach(recordId => {
+        const record = metadata.id_row_map[recordId];
+        const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+        if (Utils.isSdocFile(fileName)) {
+          recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
+        }
+      });
+    } else if (selectedPosition) {
+      const { groupRecordIndex, rowIdx } = selectedPosition;
+      const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+      if (Utils.isSdocFile(fileName)) {
+        recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
+      }
+    }
+    if (recordIds.length === 0) return;
+    modifySdocSummary(recordIds);
+  }, [isGroupView, selectedRange, selectedPosition, recordMetrics, metadata, recordGetterByIndex, modifySdocSummary]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
