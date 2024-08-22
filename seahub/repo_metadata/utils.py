@@ -75,4 +75,4 @@ def update_docs_summary(repo_id, files_info_list):
         'files_info_list': files_info_list,
     }
     resp = requests.post(url, json=params, headers=headers)
-    return resp
+    return json.loads(resp.text)
