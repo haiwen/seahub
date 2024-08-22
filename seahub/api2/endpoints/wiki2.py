@@ -37,7 +37,6 @@ from seahub.wiki2.utils import is_valid_wiki_name, can_edit_wiki, get_wiki_dirs_
 from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url, \
     normalize_dir_path, is_pro_version, check_filename_with_rename, is_valid_dirent_name, get_no_duplicate_obj_name
 from seahub.views import check_folder_permission
-from seahub.views.file import send_file_access_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.utils.repo import parse_repo_perm, get_repo_owner
@@ -841,9 +840,6 @@ class Wiki2PublishPageView(APIView):
                              "Failed to get file id by path.")
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
-
-        # send stats message
-        send_file_access_msg(request, repo, path, 'api')
 
         filename = os.path.basename(path)
         try:
