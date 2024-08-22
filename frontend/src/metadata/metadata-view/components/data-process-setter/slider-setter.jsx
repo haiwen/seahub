@@ -1,9 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Input } from 'reactstrap';
 import { EVENT_BUS_TYPE } from '../../constants';
 
 const SliderSetter = () => {
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(() => {
+    const savedValue = localStorage.getItem('sliderValue');
+    return savedValue !== null ? parseInt(savedValue, 10) : 0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('sliderValue', sliderValue);
+  }, [sliderValue]);
 
   const handleGalleryColumnsChange = useCallback((e) => {
     const adjust = parseInt(e.target.value, 10);

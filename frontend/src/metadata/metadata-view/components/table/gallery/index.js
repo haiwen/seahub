@@ -53,7 +53,7 @@ const Gallery = () => {
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = item[PRIVATE_COLUMN_KEY.FILE_CTIME].split('T')[0];
 
-        const src = `${siteRoot}repo/${repoID}/raw${path}`;
+        const src = `${siteRoot}thumbnail/${repoID}/480${path}`;
 
         return {
           name: fileName,
