@@ -80,7 +80,8 @@
 .dirent-detail-item .dirent-detail-item-value .text-formatter,
 .dirent-detail-item .dirent-detail-item-value .ctime-formatter,
 .dirent-detail-item .dirent-detail-item-value .mtime-formatter,
-.dirent-detail-item .dirent-detail-item-value .date-formatter {
+.dirent-detail-item .dirent-detail-item-value .date-formatter,
+.dirent-detail-item .dirent-detail-item-value .geolocation-formatter {
   padding: 6.5px 6px;
   line-height: 1.5;
 }

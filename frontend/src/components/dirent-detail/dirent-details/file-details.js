@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
+import classnames from 'classnames';
 import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
 import { CellType } from '../../../metadata/metadata-view/_basic';
@@ -51,9 +52,13 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
-      {!window.app.pageOptions.enableMetadataManagement && enableMetadata && (
+      {window.app.pageOptions.enableFileTags && !enableMetadata && (
         <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
-          <div className="" id={tagListTitleID} onClick={onEditFileTagToggle}>
+          <div
+            className={classnames('sf-metadata-property-detail-tags', { 'tags-empty': !Array.isArray(fileTagList) || fileTagList.length === 0 })}
+            id={tagListTitleID}
+            onClick={onEditFileTagToggle}
+          >
             {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
               <FileTagList fileTagList={fileTagList} />
             ) : (
@@ -79,13 +84,15 @@ const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, 
     </>
   );
 }, (props, nextProps) => {
-  const { repoID, repoInfo, dirent, path, direntDetail } = props;
+  const { repoID, repoInfo, dirent, path, direntDetail, repoTags, fileTagList } = props;
   const isChanged = (
     repoID !== nextProps.repoID ||
     path !== nextProps.path ||
     !ObjectUtils.isSameObject(repoInfo, nextProps.repoInfo) ||
     !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
-    !ObjectUtils.isSameObject(direntDetail, nextProps.direntDetail)
+    !ObjectUtils.isSameObject(direntDetail, nextProps.direntDetail) ||
+    repoTags !== nextProps.repoTags ||
+    fileTagList !== nextProps.fileTagList
   );
   return !isChanged;
 });

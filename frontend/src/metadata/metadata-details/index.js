@@ -9,7 +9,7 @@ import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
 import { DetailEditor, CellFormatter } from '../metadata-view';
 import { getColumnOriginName } from '../metadata-view/utils/column-utils';
-import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS, getColumnOptionNamesByIds } from '../metadata-view/_basic';
+import { CellType, getColumnOptions, getOptionName, PREDEFINED_COLUMN_KEYS, getColumnOptionNamesByIds, PRIVATE_COLUMN_KEY } from '../metadata-view/_basic';
 import { SYSTEM_FOLDERS } from './constants';
 
 import './index.css';
@@ -35,7 +35,10 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
     metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      const fields = normalizeFields(metadata).map(field => new Column(field));
+      let fields = normalizeFields(metadata).map(field => new Column(field));
+      if (!Utils.imageCheck(fileName)) {
+        fields = fields.filter(filed => filed.key !== PRIVATE_COLUMN_KEY.LOCATION);
+      }
       setMetadata({ record, fields });
       setLoading(false);
     }).catch(error => {
