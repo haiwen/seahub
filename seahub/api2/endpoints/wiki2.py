@@ -458,7 +458,7 @@ class Wiki2PublishConfigView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         wiki = wiki.to_dict()
-        wiki_config = get_wiki_config(repo.repo_id, request.user.username)
+        wiki_config = get_wiki_config(repo.repo_id, '')
 
         wiki['wiki_config'] = wiki_config
 
@@ -812,7 +812,6 @@ class Wiki2PublishPageView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = wiki.repo_id
-        username = request.user.username
         if not Wiki2Publish.objects.filter(repo_id=repo_id).exists():
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
