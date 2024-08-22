@@ -61,6 +61,7 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
+from seahub.wiki2.models import Wiki2Publish
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, ai_search_files, format_repos
 
@@ -410,11 +411,13 @@ class SeadocDownloadImage(APIView):
 
         repo_id = uuid_map.repo_id
         username = request.user.username
+        wiki_publish = Wiki2Publish.objects.filter(repo_id=repo_id).first()
         # permission check
-        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
-        if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not wiki_publish:
+            file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+            if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # main
         parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
