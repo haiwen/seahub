@@ -284,7 +284,7 @@ class Wikis extends Component {
                     <DropdownToggle tag="i" className="px-1">
                       <span className="sf3-font sf3-font-down" aria-hidden="true"></span>
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu positionFixed={true}>
                       <DropdownItem onClick={() => {this.toggelAddWikiDialog();}}>{gettext('Add Wiki')}</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
