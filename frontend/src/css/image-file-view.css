@@ -2,44 +2,50 @@
   position: relative;
   text-align: center;
 }
+
 .image-file-view:before {
-    content: ' '; 
-    display: inline-block;
-    vertical-align: middle;
-    height: 100%;
-    font-size: 0;
-    line-height: 0;
+  content: ' ';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  font-size: 0;
+  line-height: 0;
 }
+
 #image-view {
-    padding: 1px; 
-    background: #fff;
-    border: 1px solid #eee;
-    width: auto;
-    height: auto;
-    max-width: calc(100% - 4px);
-    max-height: calc(100% - 4px);
-    font-size: 0;
-    line-height: 0;
+  padding: 1px;
+  background: #fff;
+  border: 1px solid #eee;
+  width: auto;
+  height: auto;
+  max-width: calc(100% - 4px);
+  max-height: calc(100% - 4px);
+  font-size: 0;
+  line-height: 0;
 }
+
 #img-prev,
 #img-next {
-    position:absolute;
-    top:48%;
-    text-decoration:none;
-    color:#888;
-    width:50px;
-    height:50px;
-    background:#fff;
-    border-radius:100%;
-    line-height:50px;
+  position: absolute;
+  top: 48%;
+  text-decoration: none;
+  color: #888;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  border-radius: 100%;
+  line-height: 50px;
 }
+
 #img-prev {
-    left:15px;
+  left: 15px;
 }
+
 #img-next {
-    right:15px;
+  right: 15px;
 }
+
 #img-prev:hover,
 #img-next:hover {
-    color:#212529;
+  color: #212529;
 }

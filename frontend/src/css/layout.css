@@ -132,7 +132,7 @@
 
 .cur-view-path .cur-view-path-btn:hover {
   background-color: #EFEFEF;
-  border-radius: 3px;  
+  border-radius: 3px;
 }
 
 .cur-view-path .cur-view-path-btn .sf3-font-down {
@@ -169,7 +169,7 @@
 }
 
 .table-drop-active::before {
-  border: 1px solid rgba(69, 170, 242); 
+  border: 1px solid rgba(69, 170, 242);
   content: '';
   position: absolute;
   display: block;

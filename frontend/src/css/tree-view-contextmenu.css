@@ -38,6 +38,7 @@
   border: 0;
   cursor: pointer;
 }
+
 .right-tree-item:hover {
   color: #15181A;
   background-color: #F8F9FA;
