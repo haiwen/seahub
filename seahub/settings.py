@@ -777,6 +777,13 @@ CLIENT_SSO_TOKEN_EXPIRATION = 5 * 60
 ENABLE_GLOBAL_ADDRESSBOOK = True
 ENABLE_ADDRESSBOOK_OPT_IN = False
 
+#####################
+# Seafile AI #
+#####################
+SEAFILE_AI_SERVER_URL = ''
+SEAFILE_AI_SECRET_KEY = ''
+ENABLE_SEAFILE_AI = False
+
 ####################
 # Guest Invite     #
 ####################
