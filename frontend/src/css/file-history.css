@@ -70,7 +70,7 @@
 }
 
 .history-list-container {
-  flex: 1; 
+  flex: 1;
   flex-direction: column;
   min-height: 0;
   overflow: auto;

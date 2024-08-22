@@ -170,7 +170,7 @@ input#pageNumber {
 }
 
 #thumbnailView .thumbnail.selected {
-  background: #f0f0f0; 
+  background: #f0f0f0;
 }
 
 #thumbnailView .thumbnail .thumbnail-page-number {
