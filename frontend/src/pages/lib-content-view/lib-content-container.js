@@ -194,7 +194,7 @@ class LibContentContainer extends React.Component {
             {gettext('This library has been set to read-only by admin and cannot be updated.')}
           </div>
         }
-        <div className="cur-view-path">
+        <div className="cur-view-path lib-cur-view-path">
           <div className={classnames('cur-view-path-left', { 'w-100': !isDesktop, 'animation-children': hasSelectedFile })}>
             {isDirentSelected ? (
               <ToolbarForSelectedDirents
