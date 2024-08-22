@@ -14,6 +14,8 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
 };
 
+const MENU_BORDER_INDENT = 10;
+
 class ContextMenu extends React.Component {
 
   constructor(props) {
@@ -155,8 +157,12 @@ class ContextMenu extends React.Component {
       innerHeight = parseFloat(containerSize.height);
     }
 
-    if (y + rect.height > innerHeight) {
-      menuStyles.top -= rect.height;
+    if (y + rect.height > innerHeight - MENU_BORDER_INDENT) {
+      menuStyles.top = innerHeight - rect.height - MENU_BORDER_INDENT;
+    }
+
+    if (x + rect.width > innerWidth - MENU_BORDER_INDENT) {
+      menuStyles.left = innerWidth - rect.width - MENU_BORDER_INDENT;
     }
 
     if (menuStyles.left < 0) {
@@ -165,10 +171,6 @@ class ContextMenu extends React.Component {
 
     if (menuStyles.top < 0) {
       menuStyles.top = rect.height < innerHeight ? (innerHeight - rect.height) / 2 : 0;
-    }
-
-    if (menuStyles.left + rect.width > innerWidth) {
-      menuStyles.left = innerWidth - rect.width;
     }
 
     return menuStyles;

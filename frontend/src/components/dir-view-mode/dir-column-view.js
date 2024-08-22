@@ -129,7 +129,8 @@ class DirColumnView extends React.Component {
   };
 
   getMenuContainerSize = () => {
-    return window.getComputedStyle(this.viewModeContainer.current);
+    const { innerWidth, innerHeight } = window;
+    return { width: innerWidth, height: innerHeight };
   };
 
   render() {
