@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 
 import logging
+from constance import config
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -13,7 +14,7 @@ from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
+from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN, ENABLE_ORG_ENCRYPTED_LIBRARY, ENABLE_ORG_USER_CLEAN_TRASH
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,26 @@ class OrgAdminWebSettings(APIView):
                     OrgAdminSettings.objects.update_or_create(org_id=org_id, key=FORCE_ADFS_LOGIN,
                                                               defaults={'value': value})
                     config_dict[FORCE_ADFS_LOGIN] = value
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            sys_enable_encrypted_library = getattr(config, 'ENABLE_ENCRYPTED_LIBRARY', True)
+            sys_enable_user_clean_trash = getattr(config, 'ENABLE_USER_CLEAN_TRASH', True)
+            if key == ENABLE_ORG_ENCRYPTED_LIBRARY:
+                try:
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=ENABLE_ORG_ENCRYPTED_LIBRARY,
+                                                              defaults={'value': value})
+                    config_dict[ENABLE_ORG_ENCRYPTED_LIBRARY] = value
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if key == ENABLE_ORG_USER_CLEAN_TRASH:
+                try:
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=ENABLE_ORG_USER_CLEAN_TRASH,
+                                                              defaults={'value': value})
+                    config_dict[ENABLE_ORG_USER_CLEAN_TRASH] = value
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'

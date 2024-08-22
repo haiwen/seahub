@@ -12,6 +12,9 @@ import FileItem from './file-item';
 import '../../../css/system-admin-web-settings.css';
 import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
+const { sysEnableUserCleanTrash, sysEnableEncryptedLibrary } = window.org.pageOptions;
+
+
 class OrgWebSettings extends Component {
 
   constructor(props) {
@@ -23,6 +26,8 @@ class OrgWebSettings extends Component {
       logoPath: logoPath,
       file_ext_white_list: '',
       force_adfs_login: false,
+      enable_org_encrypted_library: false,
+      enable_org_user_clean_trash: false
     };
   }
 
@@ -32,7 +37,9 @@ class OrgWebSettings extends Component {
         loading: false,
         config_dict: res.data,
         file_ext_white_list: res.data.file_ext_white_list,
-        force_adfs_login: res.data.force_adfs_login
+        force_adfs_login: res.data.force_adfs_login,
+        enable_org_encrypted_library: res.data.enable_org_encrypted_library,
+        enable_org_user_clean_trash: res.data.enable_org_user_clean_trash
       });
     }).catch((error) => {
       this.setState({
@@ -78,6 +85,15 @@ class OrgWebSettings extends Component {
     });
   };
 
+  orgSaveSetting = (key, value) => {
+    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
       this.setState({
@@ -91,9 +107,10 @@ class OrgWebSettings extends Component {
   };
 
   render() {
-    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list, force_adfs_login, enable_org_encrypted_library, enable_org_user_clean_trash } = this.state;
     let logoPath = this.state.logoPath;
     logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
+    console.log(sysEnableUserCleanTrash, sysEnableEncryptedLibrary)
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -153,6 +170,28 @@ class OrgWebSettings extends Component {
                     />
                   </Section>
                 }
+                <Section headingText={gettext('Library')}>
+                  <Fragment>
+                    {sysEnableEncryptedLibrary &&
+                      <CheckboxItem
+                        saveSetting={this.orgSaveSetting}
+                        displayName='Encrypted library'
+                        keyText='enable_org_encrypted_library'
+                        value={enable_org_encrypted_library}
+                        helpTip={gettext('Allow user to create encrypted libraries')}
+                      />
+                    }
+                    {sysEnableUserCleanTrash &&
+                      <CheckboxItem
+                        saveSetting={this.orgSaveSetting}
+                        displayName='Enable user clean trash'
+                        keyText='enable_org_user_clean_trash'
+                        value={enable_org_user_clean_trash}
+                        helpTip={gettext('Allow user to clean library trash')}
+                      />
+                    }
+                  </Fragment>
+                </Section>
               </Fragment>
               }
             </div>

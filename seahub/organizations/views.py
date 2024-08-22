@@ -4,6 +4,8 @@
 import logging
 import json
 from urllib.parse import urlparse
+from constance import config
+
 
 from django.conf import settings
 from django.contrib import messages
@@ -253,7 +255,6 @@ def react_fake_view(request, **kwargs):
     org = request.user.org
 
     invitation_link = get_or_create_invitation_link(org.org_id) if ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN else ''
-
     # Whether use new page
     return render(request, "organizations/org_admin_react.html", {
         'org': org,
@@ -265,6 +266,8 @@ def react_fake_view(request, **kwargs):
         'invitation_link': invitation_link,
         'enable_multi_adfs': ENABLE_MULTI_ADFS,
         'enable_subscription': subscription_check(),
+        'sys_enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
+        'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY
         })
 
 @login_required

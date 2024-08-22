@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages, libraryTemplates, enableOrgEncryptedLibrary } from '../../utils/constants';
 import { SeahubSelect } from '../common/select';
 
 const propTypes = {
@@ -179,6 +179,7 @@ class CreateRepoDialog extends React.Component {
   };
 
   render() {
+    console.log(enableOrgEncryptedLibrary, enableEncryptedLibrary)
     return (
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
@@ -228,7 +229,7 @@ class CreateRepoDialog extends React.Component {
                 </Input>
               </FormGroup>
             )}
-            {enableEncryptedLibrary &&
+            {(enableEncryptedLibrary || !enableOrgEncryptedLibrary) &&
               <div>
                 <FormGroup check>
                   <Input type="checkbox" id="encrypt" onChange={this.onEncrypted} />

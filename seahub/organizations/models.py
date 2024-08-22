@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 FORCE_ADFS_LOGIN = 'force_adfs_login'
+ENABLE_ORG_USER_CLEAN_TRASH = 'enable_org_user_clean_trash'
+ENABLE_ORG_ENCRYPTED_LIBRARY = 'enable_org_encrypted_library'
 
 class OrgMemberQuotaManager(models.Manager):
     def get_quota(self, org_id):
