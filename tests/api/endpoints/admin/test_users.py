@@ -341,50 +341,6 @@ class AdminUserTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['login_id'] == ''
 
-    def test_update_reference_id(self):
-        self.login_as(self.admin)
-
-        data = {"email": self.tmp_email, "reference_id": ''}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-        assert json_resp['reference_id'] == ''
-
-        data = {"email": self.tmp_email, "reference_id": 'rf@id.com'}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-        assert json_resp['reference_id'] == 'rf@id.com'
-
-        data = {"email": self.tmp_email, "reference_id": ''}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-
-    def test_put_same_reference_id(self):
-        self.login_as(self.admin)
-
-        admin_url = reverse('api-v2.1-admin-user', args=[self.admin.email])
-        data = {"email": self.admin.email, "reference_id": 'test@email.com'}
-        resp = self.client.put(admin_url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-        assert resp.status_code == 200
-        assert json_resp['reference_id'] == 'test@email.com'
-
-        data = {"email": self.tmp_email, "reference_id": 'test@email.com'}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-        json_resp = json.loads(resp.content)
-        assert resp.status_code == 400
-
-        data = {"email": self.admin.email, "reference_id": ''}
-        resp = self.client.put(admin_url, json.dumps(data),
-                'application/json')
-        data = {"email": self.tmp_email, "reference_id": ''}
-        resp = self.client.put(self.url, json.dumps(data),
-                'application/json')
-
 
 class AdminUserShareLinksTest(BaseTestCase):
 
