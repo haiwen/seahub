@@ -18,9 +18,8 @@ const dragSource = {
     }
   },
   isDragging(props) {
-    const { column, dragged } = props;
-    const { key } = dragged;
-    return key === column.key;
+    const { columnIndex, currentIndex } = props;
+    return currentIndex > columnIndex;
   }
 };
 const dropTarget = {
@@ -56,8 +55,11 @@ const HideColumnItem = ({
   connectDropTarget,
   readOnly,
   column,
+  columnIndex,
   isHidden,
-  onChange
+  onChange,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
 
   const update = useCallback(() => {
@@ -69,11 +71,15 @@ const HideColumnItem = ({
     <>
       {connectDropTarget(
         connectDragPreview(
-          <div className={classNames('hide-column-item', {
-            'disabled': readOnly,
-            'hide-column-can-drop-top': isOver && canDrop && isDragging,
-            'hide-column-can-drop': isOver && canDrop && !isDragging
-          })}>
+          <div
+            className={classNames('hide-column-item', {
+              'disabled': readOnly,
+              'hide-column-can-drop-top': isOver && canDrop && isDragging,
+              'hide-column-can-drop': isOver && canDrop && !isDragging
+            })}
+            onMouseEnter={() => onMouseEnter(columnIndex)}
+            onMouseLeave={onMouseLeave}
+          >
             {!readOnly && (
               <>
                 {connectDragSource(
@@ -105,8 +111,13 @@ const HideColumnItem = ({
 HideColumnItem.propTypes = {
   readOnly: PropTypes.bool,
   isHidden: PropTypes.bool,
+  columnIndex: PropTypes.number,
+  currentIndex: PropTypes.number,
   column: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  onMove: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
 };
 
 export default DropTarget('sfMetadataHiddenColumns', dropTarget, dropCollect)(
