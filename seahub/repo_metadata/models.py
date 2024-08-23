@@ -147,11 +147,7 @@ class RepoMetadataViewsManager(models.Manager):
         view_details = json.loads(metadata_views.details)
         exist_view_ids = metadata_views.view_ids
         new_view_id = generate_view_id(4, exist_view_ids)
-        duplicate_view = None
-        for view in view_details['views']:
-            if view.get('_id') == view_id:
-                duplicate_view = copy.deepcopy(view)
-                break
+        duplicate_view = next((copy.deepcopy(view) for view in view_details['views'] if view.get('_id') == view_id), None)
         duplicate_view['_id'] = new_view_id
         view_name = get_no_duplicate_obj_name(duplicate_view['name'], metadata_views.view_names)
         duplicate_view['name'] = view_name
