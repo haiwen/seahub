@@ -18,7 +18,7 @@ from seahub.share.models import FileShare, check_share_link_access, check_share_
 from seahub.utils import is_windows_operating_system, is_pro_version, \
         normalize_dir_path
 from seahub.utils.repo import parse_repo_perm
-from seahub.settings import ENABLE_SHARE_LINK_AUDIT, SHARE_LINK_LOGIN_REQUIRED
+from seahub.settings import SHARE_LINK_LOGIN_REQUIRED
 
 from seaserv import seafile_api
 
@@ -124,7 +124,7 @@ class ShareLinkZipTaskView(APIView):
 
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
-        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
         3, If share link is encrypted, share link password must have been checked.
         """
 
