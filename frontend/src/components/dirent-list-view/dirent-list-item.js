@@ -166,8 +166,6 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
 
-    e.preventDefault();
-
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
         this.props.updateDirent(this.props.dirent, 'starred', false);
@@ -736,9 +734,13 @@ class DirentListItem extends React.Component {
             </td>
             <td className="pl10">
               {dirent.starred !== undefined &&
-              <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
-                <i className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}></i>
-              </a>
+                <i
+                  role="button"
+                  aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')}
+                  onClick={this.onItemStarred}
+                  className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
+                >
+                </i>
               }
             </td>
             <td className="pl10">
