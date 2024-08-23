@@ -129,7 +129,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { hidden_columns }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: gettext('Failed to modify hidden columns') });
+          callback({ error: gettext('Failed to modify hidden properties') });
         });
         break;
       }

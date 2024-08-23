@@ -3,7 +3,7 @@
 {% for dirent in dir_entries %}
 {% if dirent.is_dir %}
 <tr>
-    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory" %}" /></td>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Folder" %}" /></td>
     {% if show_recycle_root %}
     <td><a href="?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&dir_path={{dir_path|urlencode}}&referer={{referer|urlencode}}">{{ dirent.obj_name }}</a></td>
     <td>{{ dirent.delete_time|translate_seahub_time }}</td>

@@ -60,7 +60,7 @@
     {% for file in results %}
         {% if file.is_dir %}
         <li class="search-results-item ovhd">
-        <img src="{{ MEDIA_URL }}img/folder-192.png" width="36" height="36" alt="{% trans "Directory icon"%}" class="fleft" />
+        <img src="{{ MEDIA_URL }}img/folder-192.png" width="36" height="36" alt="{% trans "Folder icon"%}" class="fleft" />
         {% else %}
         <li class="search-results-item search-results-file-item ovhd" data-repoid="{{file.repo.id}}" data-path="{{file.fullpath}}" data-name="{{file.name}}">
             <div class="fleft search-results-file-icon-container">

@@ -130,7 +130,7 @@ def save_shared_link(request):
         next_page = SITE_ROOT
 
     if not dst_repo_id or not dst_path:
-        messages.error(request, _('Please choose a directory.'))
+        messages.error(request, _('Please choose a folder.'))
         return HttpResponseRedirect(next_page)
 
     if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
@@ -255,7 +255,7 @@ def ajax_private_share_dir(request):
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-        result['error'] = _('Directory does not exist.')
+        result['error'] = _('Folder does not exist.')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     if path != '/':

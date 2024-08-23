@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022-2023\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -487,8 +487,8 @@ msgstr "Kvóta túllépés."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr "A(z) %(src)s könyvtárat nem lehet átmozgatni a(z) %(des)s alkönyvtárába"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
+msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -774,13 +774,13 @@ msgid "A file is shared to you on %s"
 msgstr "Fájlt osztottak meg Önnel itt: %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
-msgstr "könyvtár"
+msgid "folder"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
-msgstr "Könyvtárat osztottak meg Önnel itt: %s"
+msgid "A folder is shared to you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -1189,20 +1189,22 @@ msgid "Moved"
 msgstr "Áthelyezve"
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
-msgstr "Könyvtár létrehozva"
+msgid "Added folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
-msgstr "Könyvtár eltávolítva"
+msgid "Removed folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
-msgstr "Könyvtár átnevezve"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr "Átnevezett mappa"
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
-msgstr "Könyvtár áthelyezve"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr "Áthelyezett mappa"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Added or modified"
@@ -1221,8 +1223,8 @@ msgstr "„%(file)s” fájl visszaállítva erre az állapotra: %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
-msgstr "Törölt könyvtár visszaállítva"
+msgid "Recovered deleted folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:167
 #: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
@@ -1682,14 +1684,6 @@ msgstr "Törölt mappa"
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
 msgstr "Visszaállított mappa"
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr "Átnevezett mappa"
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
-msgstr "Áthelyezett mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
 #, python-format
@@ -2305,8 +2299,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
-msgstr "Könyvtárikon"
+msgid "Folder icon"
+msgstr ""
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2418,8 +2412,8 @@ msgid "A verification code has been sent to the email address."
 msgstr ""
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
-msgstr "Válasszon könyvtárat."
+msgid "Please choose a folder."
+msgstr ""
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2468,8 +2462,8 @@ msgid "Library does not exist."
 msgstr "A kötet nem létezik."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
-msgstr "A könyvtár nem létezik."
+msgid "Folder does not exist."
+msgstr "A mappa nem létezik."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2839,8 +2833,8 @@ msgstr "Sikertelen. Ellenőrizze a hálózatot."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
-msgstr "Ha fájlt vagy könyvtárat szeretne megosztani kérem adja meg a jelszót."
+"Please input the password if you want to browse the shared file/folder."
+msgstr ""
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2903,7 +2897,7 @@ msgid "Password is too short"
 msgstr "A jelszó túl rövid"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
+msgid "Folder"
 msgstr "Könyvtár"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11

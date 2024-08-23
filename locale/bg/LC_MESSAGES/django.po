@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Веселин Панайотов <support@ivexbg.com>, 2015\n"
 "Language-Team: Bulgarian (http://app.transifex.com/haiwen/seahub/language/bg/)\n"
@@ -478,7 +478,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
@@ -765,12 +765,12 @@ msgid "A file is shared to you on %s"
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
+msgid "folder"
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
+msgid "A folder is shared to you on %s"
 msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
@@ -1180,19 +1180,21 @@ msgid "Moved"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
+msgid "Added folder"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
+msgid "Removed folder"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:143
@@ -1212,7 +1214,7 @@ msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
+msgid "Recovered deleted folder"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:167
@@ -1672,14 +1674,6 @@ msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr ""
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr ""
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
 msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
@@ -2296,8 +2290,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
-msgstr "Икона на папка"
+msgid "Folder icon"
+msgstr ""
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2409,7 +2403,7 @@ msgid "A verification code has been sent to the email address."
 msgstr ""
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
+msgid "Please choose a folder."
 msgstr ""
 
 #: seahub/share/views.py:157
@@ -2459,7 +2453,7 @@ msgid "Library does not exist."
 msgstr ""
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
+msgid "Folder does not exist."
 msgstr ""
 
 #: seahub/share/views.py:306
@@ -2830,7 +2824,7 @@ msgstr "Грешка. Моля проверете връзката."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
+"Please input the password if you want to browse the shared file/folder."
 msgstr ""
 
 #: seahub/templates/shared_link_email.html:12
@@ -2894,7 +2888,7 @@ msgid "Password is too short"
 msgstr ""
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
+msgid "Folder"
 msgstr ""
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11

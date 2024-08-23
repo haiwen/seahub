@@ -97,8 +97,8 @@ class SendShareLinkView(APIView):
                 c['file_shared_type'] = _("file")
                 title = _('A file is shared to you on %s') % get_site_name()
             else:
-                c['file_shared_type'] = _("directory")
-                title = _('A directory is shared to you on %s') % get_site_name()
+                c['file_shared_type'] = _("folder")
+                title = _('A folder is shared to you on %s') % get_site_name()
 
             # send email
             try:
