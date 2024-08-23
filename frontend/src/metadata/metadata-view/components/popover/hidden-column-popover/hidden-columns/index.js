@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { DropTarget } from 'react-dnd';
 import { gettext } from '../../../../utils';
 import HideColumn from './hide-column';
+import html5DragDropContext from '../../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 
-const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange }) => {
+const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
   const isEmpty = useMemo(() => {
     if (!Array.isArray(columns) || columns.length === 0) return true;
     return false;
@@ -21,6 +23,7 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange }) => {
             isHidden={!hiddenColumns.includes(column.key)}
             column={column}
             onChange={onChange}
+            onMove={modifyColumnOrder}
           />
         );
       })}
@@ -33,6 +36,11 @@ HiddenColumns.propTypes = {
   hiddenColumns: PropTypes.array,
   columns: PropTypes.array,
   onChange: PropTypes.func,
+  modifyColumnOrder: PropTypes.func,
 };
 
-export default HiddenColumns;
+const DndHiddenColumns = DropTarget('sfMetadataHiddenColumns', {}, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))(HiddenColumns);
+
+export default html5DragDropContext(DndHiddenColumns);
