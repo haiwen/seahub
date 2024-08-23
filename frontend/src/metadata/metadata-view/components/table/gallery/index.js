@@ -74,15 +74,15 @@ const Gallery = () => {
       });
   }, [metadata, repoID]);
 
-  const handleScroll = useCallback(() => {
-    if (visibleItems >= imageItems.length) return;
-    if (containerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        setVisibleItems(prev => Math.min(prev + BATCH_SIZE, imageItems.length));
+  const groupedImages = useMemo(() => {
+    return imageItems.reduce((acc, item) => {
+      if (!acc[item.date]) {
+        acc[item.date] = [];
       }
-    }
-  }, [visibleItems, imageItems.length]);
+      acc[item.date].push(item);
+      return acc;
+    }, {});
+  }, [imageItems]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -95,17 +95,22 @@ const Gallery = () => {
   if (isLoading) return (<CenteredLoading />);
   return (
     <div ref={containerRef} className="metadata-gallery-container">
-      <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-        {imageItems.slice(0, visibleItems).map((img, index) => (
-          <li key={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
-            <img
-              className="metadata-gallery-grid-image"
-              src={img.src}
-              alt={img.name}
-            />
-          </li>
-        ))}
-      </ul>
+      {Object.keys(groupedImages).map(date => (
+        <div key={date} className="metadata-gallery-date-group">
+          <div className="metadata-gallery-date-tag">{date}</div>
+          <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+            {groupedImages[date].map((img, index) => (
+              <li key={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
+                <img
+                  className="metadata-gallery-grid-image"
+                  src={img.src}
+                  alt={img.name}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
