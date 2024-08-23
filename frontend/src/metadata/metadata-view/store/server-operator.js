@@ -142,17 +142,6 @@ class ServerOperator {
         });
         break;
       }
-      case OPERATION_TYPE.MODIFY_SDOC_SUMMARY: {
-        const { repo_id, record_paths } = operation;
-        window.sfMetadataContext.modifySdocSummary(repo_id, record_paths).then(res => {
-          const rows = res.data.rows;
-          operation.records = rows;
-          callback({ operation });
-        }).catch(error => {
-          callback({ error: 'Failed_to_modify_sdoc_summary' });
-        });
-        break;
-      }
       default: {
         break;
       }

@@ -192,8 +192,9 @@ class Context {
   };
 
   // ai
-  modifySdocSummary = (repoId, filesInfo) => {
-    return this.metadataAPI.modifySdocSummary(repoId, filesInfo);
+  generateSummary = (filePaths) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.generateSummary(repoID, filePaths);
   };
 }
 

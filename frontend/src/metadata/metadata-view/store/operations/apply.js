@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../../_basic';
+import { UTC_FORMAT_DEFAULT } from '../../_basic';
 import { OPERATION_TYPE } from './constants';
 import Column from '../../model/metadata/column';
 import View from '../../model/metadata/view';

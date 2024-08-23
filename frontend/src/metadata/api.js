@@ -188,7 +188,7 @@ class MetadataManagerAPI {
   };
 
   // ai
-  modifySdocSummary = (repoID, filePaths) => {
+  generateSummary = (repoID, filePaths) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/ai/summarize-documents/';
     const params = {
       file_paths_list: filePaths,

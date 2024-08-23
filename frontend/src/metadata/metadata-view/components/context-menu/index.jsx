@@ -5,6 +5,7 @@ import { gettext } from '../../utils';
 import { siteRoot } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadata } from '../../hooks';
+import toaster from '../../../../components/toast';
 
 import './index.css';
 
@@ -24,7 +25,7 @@ const ContextMenu = ({
   recordGetterByIndex,
   onClearSelected,
   onCopySelected,
-  modifySdocSummary,
+  updateRecords,
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -32,10 +33,12 @@ const ContextMenu = ({
   const { metadata } = useMetadata();
 
   const options = useMemo(() => {
+    if (!visible) return [];
     const permission = window.sfMetadataContext.getPermission();
     const isReadonly = permission === 'r';
     const { columns } = metadata;
     const summaryColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_SUMMARY);
+    const canModifyRow = window.sfMetadataContext.canModifyRow;
     let list = [];
 
     if (selectedRange) {
@@ -47,7 +50,7 @@ const ContextMenu = ({
         for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
           const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
           const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-          if (Utils.isSdocFile(fileName)) {
+          if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
             list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
             break;
           }
@@ -63,7 +66,7 @@ const ContextMenu = ({
           const record = metadata.id_row_map[id];
           if (record) {
             const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-            return Utils.isSdocFile(fileName);
+            return Utils.isSdocFile(fileName) && canModifyRow(record);
           }
           return false;
         });
@@ -83,13 +86,13 @@ const ContextMenu = ({
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
     if (summaryColumn) {
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (Utils.isSdocFile(fileName)) {
+      if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
       }
     }
 
     return list;
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex]);
+  }, [visible, isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex]);
 
   const handleHide = useCallback((event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -128,36 +131,64 @@ const ContextMenu = ({
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
 
   const generateSummary = useCallback(() => {
+    const canModifyRow = window.sfMetadataContext.canModifyRow;
     const selectedRecords = Object.keys(recordMetrics.idSelectedRecordMap);
-    let recordIds = [];
+    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_SUMMARY;
+    let paths = [];
+    let idOldRecordData = {};
+    let idOriginalOldRecordData = {};
     if (selectedRange) {
       const { topLeft, bottomRight } = selectedRange;
       for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
         const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
+        if (!canModifyRow(record)) continue;
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-        if (Utils.isSdocFile(fileName)) {
-          recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
-        }
+        if (!Utils.isSdocFile(fileName)) continue;
+        const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+        paths.push(Utils.joinPath(parentDir, fileName));
+        idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+        idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
       }
     } else if (selectedRecords.length > 0) {
       selectedRecords.forEach(recordId => {
         const record = metadata.id_row_map[recordId];
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-        if (Utils.isSdocFile(fileName)) {
-          recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
+        if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
+          const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+          paths.push(Utils.joinPath(parentDir, fileName));
+          idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+          idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
         }
       });
     } else if (selectedPosition) {
       const { groupRecordIndex, rowIdx } = selectedPosition;
       const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (Utils.isSdocFile(fileName)) {
-        recordIds.push(record[PRIVATE_COLUMN_KEY.ID]);
+      if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
+        const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+        paths.push(Utils.joinPath(parentDir, fileName));
+        idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+        idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
       }
     }
-    if (recordIds.length === 0) return;
-    modifySdocSummary(recordIds);
-  }, [isGroupView, selectedRange, selectedPosition, recordMetrics, metadata, recordGetterByIndex, modifySdocSummary]);
+    if (paths.length === 0) return;
+    window.sfMetadataContext.generateSummary(paths).then(res => {
+      const updatedRecords = res.data.rows;
+      let recordIds = [];
+      let idRecordUpdates = {};
+      let idOriginalRecordUpdates = {};
+      updatedRecords.forEach(updatedRecord => {
+        const { _id: updateRecordId, _summary } = updatedRecord;
+        recordIds.push(updateRecordId);
+        idRecordUpdates[updateRecordId] = { [summaryColumnKey]: _summary };
+        idOriginalRecordUpdates[updateRecordId] = { [summaryColumnKey]: _summary };
+      });
+      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+    }).catch(error => {
+      const errorMessage = gettext('Failed to generate summary');
+      toaster.danger(errorMessage);
+    });
+  }, [isGroupView, selectedRange, selectedPosition, recordMetrics, metadata, recordGetterByIndex, updateRecords]);
 
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
