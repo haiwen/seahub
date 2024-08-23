@@ -32,7 +32,7 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
-from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
+from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access, check_share_link_access_by_scope
 from seahub.share.decorators import check_share_link_count
 from seahub.share.utils import VALID_SHARE_LINK_SCOPE, SCOPE_SPECIFIC_USERS, SCOPE_SPECIFIC_EMAILS
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
@@ -49,7 +49,7 @@ from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-        ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
+        ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
@@ -889,7 +889,7 @@ class ShareLinkDirents(APIView):
 
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
-        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
         3, If share link is encrypted, share link password must have been checked.
         """
 
@@ -909,22 +909,19 @@ class ShareLinkDirents(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # check share link audit
-        if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated and \
-                not request.session.get('anonymous_email'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         # resource check
         try:
-            share_link = FileShare.objects.get(token=token)
+            share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check share link password
         if share_link.is_encrypted() and not check_share_link_access(request, token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not check_share_link_access_by_scope(request, share_link):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1016,7 +1013,7 @@ class ShareLinkUpload(APIView):
         """ Only used for get seafhttp upload link for a folder share link.
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
-        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
         3, If share link is encrypted, share link password must have been checked.
         4, Share link must be a folder share link and has can_upload permission.
         """
@@ -1027,16 +1024,9 @@ class ShareLinkUpload(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # check share link audit
-        if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated and \
-                not request.session.get('anonymous_email'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         # resource check
         try:
-            share_link = FileShare.objects.get(token=token)
+            share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -1065,6 +1055,10 @@ class ShareLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if share_link.is_encrypted() and not check_share_link_access(request, token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not check_share_link_access_by_scope(request, share_link):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1112,7 +1106,7 @@ class ShareLinkUploadDone(APIView):
 
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
-        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
         3, If share link is encrypted, share link password must have been checked.
         4, Share link must be a folder share link and has can_upload permission.
         """
@@ -1123,7 +1117,7 @@ class ShareLinkUploadDone(APIView):
         upload_link = None
 
         try:
-            share_link = FileShare.objects.get(token=token)
+            share_link = FileShare.objects.get_valid_dir_link_by_token(token=token)
         except FileShare.DoesNotExist:
             upload_link = UploadLinkShare.objects.get(token=token)
         except UploadLinkShare.DoesNotExist:
@@ -1138,16 +1132,13 @@ class ShareLinkUploadDone(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            # check share link audit
-            if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                    not request.user.is_authenticated and \
-                    not request.session.get('anonymous_email'):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             # check share link validation
             if share_link.is_encrypted() and not check_share_link_access(request, token):
                 error_msg = 'Share link is encrypted.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not check_share_link_access_by_scope(request, share_link):
+                error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             if not share_link.get_permissions()['can_upload']:
