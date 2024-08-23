@@ -16,9 +16,8 @@ from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, in
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
-from datetime import datetime
 from seahub.ai.utils import get_file_download_token
-
+from pysearpc import SearpcError
 from seaserv import seafile_api
 
 
@@ -813,15 +812,27 @@ class MetadataSummarizeDocs(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        files_info_list = [
-            {'file_path': file_path, 'download_token': token}
-            for file_path in file_paths_list
-            if (token := get_file_download_token(
-                repo_id, 
-                seafile_api.get_file_id_by_path(repo_id, file_path), 
-                request.user.username)
-            )
-        ]
+        files_info_list = []
+        for file_path in file_paths_list:
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(
+                    status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error'
+                )
+            if not file_id:
+                return api_error(
+                    status.HTTP_404_NOT_FOUND, f"File {file_path} not found"
+                )
+
+            if token := get_file_download_token(repo_id, file_id, request.user.username):
+                files_info_list.append(
+                    {'file_path': file_path, 'download_token': token}
+                )
+            else:
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
             resp = update_docs_summary(repo_id, files_info_list)
@@ -829,5 +840,5 @@ class MetadataSummarizeDocs(APIView):
         except Exception as e:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response(resp_json, resp.status_code)
