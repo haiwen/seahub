@@ -47,8 +47,17 @@
   overflow: hidden;
 }
 
+.metadata-gallery-image-item:focus {
+  border: 2px solid #ff8000;
+}
+
 .metadata-gallery-grid-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.2s ease-in-out;
+}
+
+.metadata-gallery-grid-image:hover {
+  transform: scale(1.05);
 }

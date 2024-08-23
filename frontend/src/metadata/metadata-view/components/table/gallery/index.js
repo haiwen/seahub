@@ -100,7 +100,7 @@ const Gallery = () => {
           <div className="metadata-gallery-date-tag">{date}</div>
           <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {groupedImages[date].map((img, index) => (
-              <li key={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
+              <li key={index} tabindex={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
                 <img
                   className="metadata-gallery-grid-image"
                   src={img.src}
