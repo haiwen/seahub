@@ -19,6 +19,22 @@ class ViewModes extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  onKeyDown = (event) => {
+    if (event.shiftKey && event.keyCode === 49) {
+      this.props.switchViewMode('list');
+    } else if (event.shiftKey && event.keyCode === 50) {
+      this.props.switchViewMode('grid');
+    }
+  };
+
   toggleDropdownMenu = () => {
     this.setState({
       isDropdownMenuOpen: !this.state.isDropdownMenuOpen
