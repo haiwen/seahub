@@ -41,24 +41,33 @@ class MainSideNavFolded extends React.Component {
   handleOutsideClick = (e) => {
     const { isFilesSubNavShown } = this.state;
     if (isFilesSubNavShown && !this.filesSubNav.contains(e.target)) {
-      this.toggleSubNav();
+      this.closeSubNav();
     }
   };
 
-  toggleSubNav = () => {
-    this.setState({
-      isFilesSubNavShown: !this.state.isFilesSubNavShown
-    }, () => {
-      if (this.state.isFilesSubNavShown) {
-        this.loadGroups();
-      }
+  openSubNav = () => {
+    if (this.state.isFilesSubNavShown) return;
+    seafileAPI.listGroups().then(res => {
+      this.canCloseNav = false;
+      this.setState({
+        groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
+        isFilesSubNavShown: true
+      }, () => {
+        setTimeout(() => {
+          this.canCloseNav = true;
+        }, 500);
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
-  filesOnMouseOver = () => {
-    if (!this.state.isFilesSubNavShown) {
-      this.toggleSubNav();
-    }
+  closeSubNav = () => {
+    if (!this.state.isFilesSubNavShown || !this.canCloseNav) return;
+    this.setState({
+      isFilesSubNavShown: false
+    });
   };
 
   tabItemClick = (e, param, id) => {
@@ -72,17 +81,6 @@ class MainSideNavFolded extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.tabItemClick(param, id);
-
-    /*
-    if (this.props.currentTab == 'libraries' && param == 'libraries') {
-      e.stopPropagation();
-      this.toggleSubNav();
-    } else {
-      this.setState({
-        isFilesSubNavShown: false
-      });
-    }
-    */
     this.setState({
       isFilesSubNavShown: false
     });
@@ -90,24 +88,6 @@ class MainSideNavFolded extends React.Component {
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
-  };
-
-  loadGroups = () => {
-    seafileAPI.listGroups().then(res => {
-      let groupList = res.data.map(item => {
-        let group = new Group(item);
-        return group;
-      });
-
-      this.setState({
-        groupItems: groupList.sort((a, b) => {
-          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-        })
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   render() {
@@ -123,20 +103,20 @@ class MainSideNavFolded extends React.Component {
                 to={ siteRoot + 'libraries/' }
                 className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
                 onClick={(e) => this.tabItemClick(e, 'libraries')}
-                onMouseOver={this.filesOnMouseOver}
+                onMouseOver={this.openSubNav}
               >
-                <span className="sf3-font-files sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-files"></span>
-                <Tip target="main-side-nav-folded-files" text={gettext('Files')} />
+                <span className="sf3-font-files sf3-font mr-0" aria-hidden="true"></span>
               </Link>
-              {isFilesSubNavShown &&
               <ul
                 id="files-sub-nav"
                 className="sub-nav position-fixed rounded border shadow p-4 o-auto"
                 style={{
-                  'left': SIDE_PANEL_FOLDED_WIDTH + 4,
-                  'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2
+                  'left': isFilesSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
+                  'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2,
+                  'opacity': isFilesSubNavShown ? 1 : 0.5,
                 }}
                 ref={ref => this.filesSubNav = ref}
+                onMouseLeave={this.closeSubNav}
               >
                 <FilesSubNav
                   groupItems={groupItems}
@@ -144,10 +124,9 @@ class MainSideNavFolded extends React.Component {
                   currentTab={this.props.currentTab}
                 />
               </ul>
-              }
             </li>
 
-            <li className={`nav-item ${this.getActiveClass('starred')}`}>
+            <li className={`nav-item ${this.getActiveClass('starred')}`} onMouseEnter={this.closeSubNav}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
                 <span className="sf3-font-starred sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-starred"></span>
                 <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
@@ -156,7 +135,7 @@ class MainSideNavFolded extends React.Component {
 
             {showActivity &&
               <>
-                <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
+                <li className={`nav-item ${this.getActiveClass('dashboard')}`} onMouseEnter={this.closeSubNav}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
                     <span className="sf3-font-activities sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-dashboard"></span>
                     <Tip target="main-side-nav-folded-dashboard" text={gettext('Activities')} />
@@ -165,7 +144,7 @@ class MainSideNavFolded extends React.Component {
               </>
             }
 
-            <li className={`nav-item ${this.getActiveClass('published')}`}>
+            <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeSubNav}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} onClick={(e) => this.tabItemClick(e, 'published')}>
                 <span className="sf3-font-wiki sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wikis"></span>
                 <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
@@ -173,7 +152,7 @@ class MainSideNavFolded extends React.Component {
             </li>
 
             {canInvitePeople &&
-              <li className={`nav-item ${this.getActiveClass('invitations')}`}>
+              <li className={`nav-item ${this.getActiveClass('invitations')}`} onMouseEnter={this.closeSubNav}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} onClick={(e) => this.tabItemClick(e, 'invitations')}>
                   <span className="sf3-font-invite-visitors sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-invitations"></span>
                   <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
