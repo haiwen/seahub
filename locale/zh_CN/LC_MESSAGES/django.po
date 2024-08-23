@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2024\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -495,7 +495,7 @@ msgstr "空间已超"
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
@@ -782,12 +782,12 @@ msgid "A file is shared to you on %s"
 msgstr "有人在 %s 上共享了一个文件给你"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
+msgid "folder"
 msgstr "目录"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
+msgid "A folder is shared to you on %s"
 msgstr "在 %s 上，有一文件夹共享给你。"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
@@ -1197,20 +1197,22 @@ msgid "Moved"
 msgstr "移动了"
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
+msgid "Added folder"
 msgstr "新建了目录"
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
+msgid "Removed folder"
 msgstr "删除了目录"
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
-msgstr "重命名了目录"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr "重命名文件夹"
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
-msgstr "移动了目录"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr "移动文件夹"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Added or modified"
@@ -1229,7 +1231,7 @@ msgstr "文件\"%(file)s\"还原到%(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
+msgid "Recovered deleted folder"
 msgstr "还原已删除的目录"
 
 #: seahub/base/templatetags/seahub_tags.py:167
@@ -1684,14 +1686,6 @@ msgstr "删除文件夹"
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
 msgstr "恢复文件夹"
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr "重命名文件夹"
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
-msgstr "移动文件夹"
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
 #, python-format
@@ -2305,7 +2299,7 @@ msgid_plural "%(total)s results"
 msgstr[0] "%(total)s 结果"
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
+msgid "Folder icon"
 msgstr "目录图标"
 
 #: seahub/search/templates/search_results.html:168
@@ -2418,7 +2412,7 @@ msgid "A verification code has been sent to the email address."
 msgstr "验证码已发送到邮箱。"
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
+msgid "Please choose a folder."
 msgstr "请选择目录。"
 
 #: seahub/share/views.py:157
@@ -2468,8 +2462,8 @@ msgid "Library does not exist."
 msgstr "资料库不存在"
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
-msgstr "目录不存在"
+msgid "Folder does not exist."
+msgstr "文件夹不存在。"
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2839,7 +2833,7 @@ msgstr "操作失败。请检查网络是否已连接。"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
+"Please input the password if you want to browse the shared file/folder."
 msgstr "如需查看共享的文件/目录，请输入解密密码。"
 
 #: seahub/templates/shared_link_email.html:12
@@ -2903,7 +2897,7 @@ msgid "Password is too short"
 msgstr "密码太短"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
+msgid "Folder"
 msgstr "目录"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
