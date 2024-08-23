@@ -19,6 +19,22 @@ class ViewModes extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  onKeyDown = (event) => {
+    if (event.shiftKey && event.keyCode === 49) {
+      this.props.switchViewMode('list');
+    } else if (event.shiftKey && event.keyCode === 50) {
+      this.props.switchViewMode('grid');
+    }
+  };
+
   toggleDropdownMenu = () => {
     this.setState({
       isDropdownMenuOpen: !this.state.isDropdownMenuOpen
@@ -29,8 +45,8 @@ class ViewModes extends React.Component {
     const { isDropdownMenuOpen } = this.state;
     const { currentViewMode } = this.props;
     const options = [
-      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list' },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid' }
+      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list', 'shortcut': 'Shift 1' },
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid', 'shortcut': 'Shift 2' }
     ];
     return (
       <Dropdown
@@ -61,6 +77,9 @@ class ViewModes extends React.Component {
                   <span className="view-modes-dropdown-content">
                     <span className={`sf3-font-${item.icon} sf3-font mr-2`}></span>
                     <span>{item.text}</span>
+                  </span>
+                  <span className="view-modes-dropdown-shortcut">
+                    <span>{item.shortcut}</span>
                   </span>
                 </div>
               </DropdownItem>

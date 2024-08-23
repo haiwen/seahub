@@ -23,3 +23,13 @@
   display: flex;
   align-items: center;
 }
+
+.view-modes-dropdown-shortcut {
+  display: flex;
+  align-items: center;
+  color: #999;
+}
+
+.dropdown-item:hover .view-modes-dropdown-shortcut {
+  color: #fff;
+}
