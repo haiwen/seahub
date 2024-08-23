@@ -237,10 +237,8 @@ class RepoTrash(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
-        if org_id and org_id > 0:
             disable_clean_trash = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
             if (disable_clean_trash is not None) and int(disable_clean_trash.value):
                 error_msg = 'Permission denied.'

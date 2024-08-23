@@ -1069,6 +1069,7 @@ class Repos(APIView):
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
+
         req_from = request.GET.get('from', "")
         if req_from == 'web':
             gen_sync_token = False  # Do not generate repo sync token
@@ -1124,6 +1125,7 @@ class Repos(APIView):
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
         passwd = request.data.get("passwd", None)
+
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
         if not passwd:
@@ -1134,8 +1136,8 @@ class Repos(APIView):
                              'NOT allow to create encrypted library.')
 
         if org_id and org_id > 0:
-            org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
-            if (org_setting is not None) and int(org_setting.value):
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
                 return None, api_error(status.HTTP_403_FORBIDDEN,
                                        'NOT allow to create encrypted library.')
             repo_id = seafile_api.create_org_repo(repo_name,

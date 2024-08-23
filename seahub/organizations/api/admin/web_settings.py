@@ -18,6 +18,9 @@ from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN, DISA
 
 logger = logging.getLogger(__name__)
 
+org_admin_setting_keys = [
+    FORCE_ADFS_LOGIN, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
+]
 
 class OrgAdminWebSettings(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -59,32 +62,15 @@ class OrgAdminWebSettings(APIView):
                 else:
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
+            
+            if key in org_admin_setting_keys:
+                try:
+                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=key,
+                                                              defaults={'value': value})
+                    config_dict[key] = value
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if key == FORCE_ADFS_LOGIN:
-                try:
-                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=FORCE_ADFS_LOGIN,
-                                                              defaults={'value': value})
-                    config_dict[FORCE_ADFS_LOGIN] = value
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            if key == DISABLE_ORG_ENCRYPTED_LIBRARY:
-                try:
-                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY,
-                                                              defaults={'value': value})
-                    config_dict[DISABLE_ORG_ENCRYPTED_LIBRARY] = value
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            if key == DISABLE_ORG_USER_CLEAN_TRASH:
-                try:
-                    OrgAdminSettings.objects.update_or_create(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH,
-                                                              defaults={'value': value})
-                    config_dict[DISABLE_ORG_USER_CLEAN_TRASH] = value
-                except Exception as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         return Response(config_dict)

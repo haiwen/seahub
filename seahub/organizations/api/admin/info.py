@@ -70,28 +70,22 @@ def get_org_info(request, org_id):
         active_members = len([m for m in org_members if m.is_active])
 
     file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
-    info = {}
+    info = {
+        DISABLE_ORG_ENCRYPTED_LIBRARY: False,
+        DISABLE_ORG_USER_CLEAN_TRASH: False,
+        FORCE_ADFS_LOGIN: False
+    }
     setting_items = {}
     org_settings = OrgAdminSettings.objects.filter(org_id=org_id)
-    for setting in org_settings:
-        setting_items[setting.key] = setting.value
-    if DISABLE_ORG_ENCRYPTED_LIBRARY not in setting_items:
-        info[DISABLE_ORG_ENCRYPTED_LIBRARY] = False
-    else:
-        info[DISABLE_ORG_ENCRYPTED_LIBRARY] = int(setting_items[DISABLE_ORG_ENCRYPTED_LIBRARY])
-    
-    if DISABLE_ORG_USER_CLEAN_TRASH not in setting_items:
-        info[DISABLE_ORG_USER_CLEAN_TRASH] = False
-    else:
-        info[DISABLE_ORG_USER_CLEAN_TRASH] = int(setting_items[DISABLE_ORG_USER_CLEAN_TRASH])
+    setting_items = {item.key: item.value for item in org_settings}
+    for key, value in info.items():
+        if key in setting_items:
+            info[key] = int(setting_items[key])
 
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        # org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
         if FORCE_ADFS_LOGIN in setting_items:
             info[FORCE_ADFS_LOGIN] = int(setting_items[FORCE_ADFS_LOGIN])
-        else:
-            info[FORCE_ADFS_LOGIN] = False
-    
+
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['user_default_quota'] = user_default_quota

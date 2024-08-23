@@ -73,32 +73,8 @@ class OrgWebSettings extends Component {
     });
   };
 
-  updateSSOLgoin = (key, value) => {
-    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
-      this.setState({
-        force_adfs_login: res.data.force_adfs_login
-      });
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   orgSaveSetting = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  updateFileExtWhiteList = (key, value) => {
-    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
-      this.setState({
-        file_ext_white_list: res.data.file_ext_white_list
-      });
       toaster.success(gettext('Success'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -150,7 +126,7 @@ class OrgWebSettings extends Component {
                 <Section headingText={gettext('File Upload')}>
                   <Fragment>
                     <InputItem
-                      saveSetting={this.updateFileExtWhiteList}
+                      saveSetting={this.orgSaveSetting}
                       displayName={gettext('File extension white list')}
                       keyText='file_ext_white_list'
                       value={file_ext_white_list}
@@ -161,7 +137,7 @@ class OrgWebSettings extends Component {
                 {enableMultiADFS &&
                   <Section headingText={gettext('User')}>
                     <CheckboxItem
-                      saveSetting={this.updateSSOLgoin}
+                      saveSetting={this.orgSaveSetting}
                       displayName={gettext('Disable SAML user email / password login')}
                       keyText='force_adfs_login'
                       value={force_adfs_login}
@@ -169,28 +145,30 @@ class OrgWebSettings extends Component {
                     />
                   </Section>
                 }
-                <Section headingText={gettext('Library')}>
-                  <Fragment>
-                    {sysEnableEncryptedLibrary &&
-                      <CheckboxItem
-                        saveSetting={this.orgSaveSetting}
-                        displayName='Encrypted library'
-                        keyText='disable_org_encrypted_library'
-                        value={disable_org_encrypted_library}
-                        helpTip={gettext('Not allow user to create encrypted libraries')}
-                      />
-                    }
-                    {sysEnableUserCleanTrash &&
-                      <CheckboxItem
-                        saveSetting={this.orgSaveSetting}
-                        displayName='Disable user clean trash'
-                        keyText='disable_org_user_clean_trash'
-                        value={disable_org_user_clean_trash}
-                        helpTip={gettext('Not allow user to clean library trash')}
-                      />
-                    }
-                  </Fragment>
-                </Section>
+                {(sysEnableUserCleanTrash || sysEnableEncryptedLibrary) &&
+                  <Section headingText={gettext('Library')}>
+                    <Fragment>
+                      {sysEnableEncryptedLibrary &&
+                        <CheckboxItem
+                          saveSetting={this.orgSaveSetting}
+                          displayName='Encrypted library'
+                          keyText='disable_org_encrypted_library'
+                          value={disable_org_encrypted_library}
+                          helpTip={gettext('Not allow user to create encrypted libraries')}
+                        />
+                      }
+                      {sysEnableUserCleanTrash &&
+                        <CheckboxItem
+                          saveSetting={this.orgSaveSetting}
+                          displayName='Disable user clean trash'
+                          keyText='disable_org_user_clean_trash'
+                          value={disable_org_user_clean_trash}
+                          helpTip={gettext('Not allow user to clean library trash')}
+                        />
+                      }
+                    </Fragment>
+                  </Section>
+                }
               </Fragment>
               }
             </div>
