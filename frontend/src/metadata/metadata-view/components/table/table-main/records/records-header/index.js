@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { DropTarget } from 'react-dnd';
 import {
   HEADER_HEIGHT_TYPE,
   isEmptyObject,
@@ -12,6 +13,7 @@ import { getFrozenColumns } from '../../../../../utils/table-utils';
 import { isFrozen, recalculateColumnMetricsByResizeColumn } from '../../../../../utils/column-utils';
 import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../../constants';
 import InsertColumn from './insert-column';
+import html5DragDropContext from '../../../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 
 const RecordsHeader = ({
   isGroupView,
@@ -28,6 +30,7 @@ const RecordsHeader = ({
   selectNoneRecords,
   selectAllRecords,
   modifyColumnWidth: modifyColumnWidthAPI,
+  modifyColumnOrder: modifyColumnOrderAPI,
   ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
@@ -74,8 +77,13 @@ const RecordsHeader = ({
     modifyColumnWidthAPI && modifyColumnWidthAPI(column, newWidth);
   }, [modifyColumnWidthAPI]);
 
+  const modifyColumnOrder = useCallback((source, target) => {
+    modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
+  }, [modifyColumnOrderAPI]);
+
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
+  const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, 0);
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
@@ -104,9 +112,11 @@ const RecordsHeader = ({
                 column={column}
                 style={style}
                 isLastFrozenCell={isLastFrozenCell}
+                frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}
                 modifyLocalColumnWidth={modifyLocalColumnWidth}
                 modifyColumnWidth={modifyColumnWidth}
+                onMove={modifyColumnOrder}
                 {...props}
               />
             );
@@ -121,8 +131,10 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              frozenColumnsWidth={frozenColumnsWidth}
               modifyLocalColumnWidth={modifyLocalColumnWidth}
               modifyColumnWidth={modifyColumnWidth}
+              onMove={modifyColumnOrder}
               {...props}
             />
           );
@@ -131,7 +143,6 @@ const RecordsHeader = ({
       </div>
     </div>
   );
-
 };
 
 RecordsHeader.propTypes = {
@@ -150,4 +161,9 @@ RecordsHeader.propTypes = {
   selectAllRecords: PropTypes.func,
 };
 
-export default RecordsHeader;
+const DndRecordHeaderContainer = DropTarget('sfMetadataRecordHeaderCell', {}, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))(RecordsHeader);
+
+export default html5DragDropContext(DndRecordHeaderContainer);
+

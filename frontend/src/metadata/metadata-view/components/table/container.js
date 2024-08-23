@@ -132,6 +132,10 @@ const Container = () => {
     store.modifyColumnWidth(columnKey, newWidth);
   }, [store]);
 
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    store.modifyColumnOrder(sourceColumnKey, targetColumnKey);
+  }, [store]);
+
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
   }, [metadata]);
@@ -197,6 +201,7 @@ const Container = () => {
                   deleteColumn={deleteColumn}
                   modifyColumnData={modifyColumnData}
                   modifyColumnWidth={modifyColumnWidth}
+                  modifyColumnOrder={modifyColumnOrder}
                 />
               )}
               {metadata.view.type === 'image' && (<Gallery />)}

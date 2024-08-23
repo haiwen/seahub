@@ -171,6 +171,11 @@ export default function apply(data, operation) {
       data.view = new View(data.view, data.columns);
       return data;
     }
+    case OPERATION_TYPE.MODIFY_COLUMN_ORDER: {
+      const { new_columns_keys } = operation;
+      data.view = new View({ ...data.view, columns_keys: new_columns_keys }, data.columns);
+      return data;
+    }
     default: {
       return data;
     }

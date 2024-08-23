@@ -431,6 +431,19 @@ class Store {
     this.applyOperation(operation);
   };
 
+  modifyColumnOrder = (sourceColumnKey, targetColumnKey) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_ORDER;
+    const { columns_keys } = this.data.view;
+    const targetColumnIndex = columns_keys.indexOf(targetColumnKey);
+    let newColumnsKeys = columns_keys.slice(0);
+    newColumnsKeys = newColumnsKeys.filter(key => key !== sourceColumnKey);
+    newColumnsKeys.splice(targetColumnIndex, 0, sourceColumnKey);
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: this.viewId, new_columns_keys: newColumnsKeys, old_columns_keys: columns_keys
+    });
+    this.applyOperation(operation);
+  };
+
 }
 
 export default Store;

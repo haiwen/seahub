@@ -125,6 +125,11 @@ class Context {
     return true;
   };
 
+  canModifyColumnOrder = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   canModifyView = (view) => {
     if (this.permission === 'r') return false;
     return true;

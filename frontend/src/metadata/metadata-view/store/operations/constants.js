@@ -16,6 +16,7 @@ export const OPERATION_TYPE = {
   RENAME_COLUMN: 'rename_column',
   MODIFY_COLUMN_DATA: 'modify_column_data',
   MODIFY_COLUMN_WIDTH: 'modify_column_width',
+  MODIFY_COLUMN_ORDER: 'modify_column_order',
 };
 
 export const OPERATION_ATTRIBUTES = {
@@ -33,7 +34,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RENAME_COLUMN]: ['repo_id', 'column_key', 'new_name', 'old_name'],
   [OPERATION_TYPE.MODIFY_COLUMN_DATA]: ['repo_id', 'column_key', 'new_data', 'old_data'],
   [OPERATION_TYPE.DELETE_COLUMN]: ['repo_id', 'column_key', 'column'],
-  [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['repo_id', 'column_key', 'new_width', 'old_width'],
+  [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
+  [OPERATION_TYPE.MODIFY_COLUMN_ORDER]: ['repo_id', 'view_id', 'new_columns_keys', 'old_columns_keys'],
 };
 
 export const UNDO_OPERATION_TYPE = [
@@ -61,6 +63,7 @@ export const NEED_APPLY_AFTER_SERVER_OPERATION = [
   OPERATION_TYPE.RENAME_COLUMN,
   OPERATION_TYPE.MODIFY_COLUMN_DATA,
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
+  OPERATION_TYPE.MODIFY_COLUMN_ORDER,
 ];
 
 export const VIEW_OPERATION = [
@@ -76,4 +79,5 @@ export const COLUMN_OPERATION = [
   OPERATION_TYPE.RENAME_COLUMN,
   OPERATION_TYPE.MODIFY_COLUMN_DATA,
   OPERATION_TYPE.MODIFY_COLUMN_WIDTH,
+  OPERATION_TYPE.MODIFY_COLUMN_ORDER,
 ];
