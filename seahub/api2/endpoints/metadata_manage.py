@@ -824,11 +824,10 @@ class MetadataSummarizeDocs(APIView):
         ]
 
         try:
-            resp, status_code = update_docs_summary(repo_id, files_info_list)
-            if status_code == 400:
-                return Response(resp, status_code)
+            resp = update_docs_summary(repo_id, files_info_list)
+            resp_json = resp.json()
         except Exception as e:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        return Response({'rows': resp})
+        return Response(resp_json, resp.status_code)
