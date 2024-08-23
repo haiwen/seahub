@@ -14,11 +14,11 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 from seahub.views.file import send_file_access_msg
-from seahub.share.models import FileShare, check_share_link_access
+from seahub.share.models import FileShare, check_share_link_access, check_share_link_access_by_scope
 from seahub.utils import is_windows_operating_system, is_pro_version, \
         normalize_dir_path
 from seahub.utils.repo import parse_repo_perm
-from seahub.settings import ENABLE_SHARE_LINK_AUDIT, SHARE_LINK_LOGIN_REQUIRED
+from seahub.settings import SHARE_LINK_LOGIN_REQUIRED
 
 from seaserv import seafile_api
 
@@ -30,23 +30,7 @@ class ShareLinkZipTaskView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
-        """ Only used for download dir when view dir share link from web.
-
-
-        Permission checking:
-        1. authenticated user OR anonymous user has passed email code check(if necessary);
-        """
-
-        # permission check
-        if is_pro_version() and settings.ENABLE_SHARE_LINK_AUDIT:
-            if not request.user.is_authenticated and \
-                    not request.session.get('anonymous_email'):
-                # if anonymous user has passed email code check,
-                # then his/her email info will be in session.
-
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+       
         # argument check
         share_link_token = request.GET.get('share_link_token', None)
         if not share_link_token:
@@ -67,6 +51,10 @@ class ShareLinkZipTaskView(APIView):
         # check share link password
         if fileshare.is_encrypted() and not check_share_link_access(request,
                                                                     share_link_token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not check_share_link_access_by_scope(request, fileshare):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -136,7 +124,7 @@ class ShareLinkZipTaskView(APIView):
 
         Permission checking:
         1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
-        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        2, If enable SHARE_LINK_SCOPE, user must have been authenticated by specific scope.
         3, If share link is encrypted, share link password must have been checked.
         """
 
@@ -158,7 +146,7 @@ class ShareLinkZipTaskView(APIView):
 
         # resource check
         try:
-            share_link = FileShare.objects.get(token=share_link_token)
+            share_link = FileShare.objects.get_valid_dir_link_by_token(token=share_link_token)
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % share_link_token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -188,19 +176,16 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # check share link audit
-        if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated and \
-                not request.session.get('anonymous_email'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         # check share link password
         if share_link.is_encrypted() and not check_share_link_access(request,
                                                                      share_link_token):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not check_share_link_access_by_scope(request, share_link):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         # check if has download permission for share link creator
         if not parse_repo_perm(seafile_api.check_permission_by_path(
                     repo_id, full_parent_dir, share_link.username)).can_download:

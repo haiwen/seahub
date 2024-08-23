@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import check_password
 
+
 from seahub.signals import repo_deleted
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils.hasher import AESPasswordHasher
@@ -71,6 +72,40 @@ def check_share_link_access(request, token, is_upload_link=False):
         return False
 
 
+def check_share_link_access_by_scope(request, sharelink):
+    from seahub.share.utils import SCOPE_ALL_USERS, SCOPE_SPECIFIC_EMAILS, SCOPE_SPECIFIC_USERS
+    scope = sharelink.user_scope
+    username = request.user.username
+    if sharelink.username == username:
+        return True
+    
+    if scope == SCOPE_ALL_USERS:
+        return True
+    
+    if scope == SCOPE_SPECIFIC_USERS:
+        try:
+            authed_details = json.loads(sharelink.authed_details)
+        except:
+            authed_details = {}
+
+        authed_users = authed_details.get('authed_users', [])
+        if username in authed_users:
+            return True
+        
+    if scope == SCOPE_SPECIFIC_EMAILS:
+        try:
+            authed_details = json.loads(sharelink.authed_details)
+        except:
+            authed_details = {}
+        
+        authed_emails = authed_details.get('authed_emails', [])
+        session_key = "link_authed_email_%s" % sharelink.token
+        email = request.session.get(session_key)
+        if email in authed_emails:
+            return True
+        
+    return False
+    
 def check_share_link_common(request, sharelink, is_upload_link=False):
     """Check if user can view a share link
     """
