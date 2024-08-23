@@ -304,6 +304,10 @@
   flex-shrink: 0;
 }
 
+.dir-view-path .view-file-toolbar-dropdown {
+  height: 24px;
+}
+
 .custom-modal {
   box-sizing: border-box;
   font-size: 0.875rem;
