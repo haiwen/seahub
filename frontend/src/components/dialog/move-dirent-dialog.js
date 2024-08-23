@@ -78,7 +78,7 @@ class MoveDirent extends React.Component {
     });
 
     if (isChildPath) {
-      message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
+      message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
       message = message.replace('%(src)s', moveDirentPath);
       message = message.replace('%(des)s', selectedPath);
       this.setState({ errMessage: message });
@@ -114,7 +114,7 @@ class MoveDirent extends React.Component {
 
     // copy the dirent to it's child. eg: A/B -> A/B/C
     if (selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
-      message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
+      message = gettext('Can not move folder %(src)s to its subfolder %(des)s');
       message = message.replace('%(src)s', direntPath);
       message = message.replace('%(des)s', selectedPath);
       this.setState({ errMessage: message });

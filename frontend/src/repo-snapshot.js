@@ -292,7 +292,7 @@ class FolderItem extends React.Component {
 
     return item.type == 'dir' ? (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
+        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td></td>
         <td>
