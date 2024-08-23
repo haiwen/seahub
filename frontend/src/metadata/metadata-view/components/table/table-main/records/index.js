@@ -5,7 +5,7 @@ import Body from './body';
 import GroupBody from './group-body';
 import RecordsFooter from './record-footer';
 import { HorizontalScrollbar } from '../../../scrollbar';
-import { recalculate, setColumnOffsets } from '../../../../utils/column-utils';
+import { recalculate } from '../../../../utils/column-utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 import {
   isWindowsBrowser, isWebkitBrowser, isMobile, getEventClassName,
@@ -114,20 +114,8 @@ class Records extends Component {
     this.resultContainerRef.scrollLeft = scrollLeft;
   };
 
-  resizeColumnWidth = (column, width) => {
-    if (width < 50) return;
-    const { columns } = this.props;
-    const newColumn = Object.assign({}, column, { width });
-    const index = columns.findIndex(item => item.key === column.key);
-    let updateColumns = columns.slice(0);
-    updateColumns[index] = newColumn;
-    updateColumns = setColumnOffsets(updateColumns);
-    const columnMetrics = recalculate(updateColumns, columns);
-    this.setState({ columnMetrics }, () => {
-      const oldValue = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
-      window.sfMetadataContext.localStorage.setItem('columns_width', { ...oldValue, [column.key]: width });
-
-    });
+  modifyColumnWidth = (column, width) => {
+    this.props.modifyColumnWidth(column.key, width);
   };
 
   getScrollPosition = () => {
@@ -687,7 +675,7 @@ class Records extends Component {
               onRef={(ref) => this.headerFrozenRef = ref}
               containerWidth={containerWidth}
               table={table}
-              columns={columns}
+              columnMetrics={columnMetrics}
               colOverScanStartIdx={colOverScanStartIdx}
               colOverScanEndIdx={colOverScanEndIdx}
               hasSelectedRecord={hasSelectedRecord}
@@ -695,7 +683,7 @@ class Records extends Component {
               isGroupView={isGroupView}
               groupOffsetLeft={groupOffsetLeft}
               lastFrozenColumnKey={lastFrozenColumnKey}
-              resizeColumnWidth={this.resizeColumnWidth}
+              modifyColumnWidth={this.modifyColumnWidth}
               selectNoneRecords={this.selectNone}
               selectAllRecords={this.selectAllRecords}
               renameColumn={renameColumn}
@@ -757,6 +745,7 @@ Records.propTypes = {
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
+  modifyColumnWidth: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
 };
 

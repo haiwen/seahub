@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   HEADER_HEIGHT_TYPE,
@@ -9,7 +9,7 @@ import Cell from './cell';
 import ActionsCell from './actions-cell';
 import { isMobile } from '../../../../../utils';
 import { getFrozenColumns } from '../../../../../utils/table-utils';
-import { isFrozen } from '../../../../../utils/column-utils';
+import { isFrozen, recalculateColumnMetricsByResizeColumn } from '../../../../../utils/column-utils';
 import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../../constants';
 import InsertColumn from './insert-column';
 
@@ -21,14 +21,16 @@ const RecordsHeader = ({
   lastFrozenColumnKey,
   groupOffsetLeft,
   table,
-  columns,
+  columnMetrics: propsColumnMetrics,
   onRef,
   colOverScanStartIdx,
   colOverScanEndIdx,
   selectNoneRecords,
   selectAllRecords,
+  modifyColumnWidth: modifyColumnWidthAPI,
   ...props
 }) => {
+  const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
   const settings = useMemo(() => table.header_settings || {}, [table]);
   const isHideTriangle = useMemo(() => settings && settings.is_hide_triangle, [settings]);
   const height = useMemo(() => {
@@ -43,7 +45,14 @@ const RecordsHeader = ({
       height
     };
   }, [containerWidth, height]);
+
+  const columnMetrics = useMemo(() => {
+    if (resizingColumnMetrics) return resizingColumnMetrics;
+    return propsColumnMetrics;
+  }, [resizingColumnMetrics, propsColumnMetrics]);
+
   const wrapperStyle = useMemo(() => {
+    const { columns } = columnMetrics;
     let value = {
       position: (isMobile ? 'absolute' : 'fixed'),
       marginLeft: '0px',
@@ -54,9 +63,19 @@ const RecordsHeader = ({
       value.position = 'absolute';
     }
     return value;
-  }, [isGroupView, columns, height]);
-  const frozenColumns = useMemo(() => getFrozenColumns(columns), [columns]);
-  const displayColumns = useMemo(() => columns.slice(colOverScanStartIdx, colOverScanEndIdx), [columns, colOverScanStartIdx, colOverScanEndIdx]);
+  }, [isGroupView, columnMetrics, height]);
+
+  const modifyLocalColumnWidth = useCallback((column, width) => {
+    setResizingColumnMetrics(recalculateColumnMetricsByResizeColumn(propsColumnMetrics, column.key, Math.max(width, 50)));
+  }, [propsColumnMetrics]);
+
+  const modifyColumnWidth = useCallback((column, newWidth) => {
+    setResizingColumnMetrics(null);
+    modifyColumnWidthAPI && modifyColumnWidthAPI(column, newWidth);
+  }, [modifyColumnWidthAPI]);
+
+  const frozenColumns = getFrozenColumns(columnMetrics.columns);
+  const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
@@ -86,6 +105,8 @@ const RecordsHeader = ({
                 style={style}
                 isLastFrozenCell={isLastFrozenCell}
                 isHideTriangle={isHideTriangle}
+                modifyLocalColumnWidth={modifyLocalColumnWidth}
+                modifyColumnWidth={modifyColumnWidth}
                 {...props}
               />
             );
@@ -100,11 +121,13 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
+              modifyLocalColumnWidth={modifyLocalColumnWidth}
+              modifyColumnWidth={modifyColumnWidth}
               {...props}
             />
           );
         })}
-        <InsertColumn lastColumn={columns[columns.length - 1]} groupOffsetLeft={groupOffsetLeft} height={height} />
+        <InsertColumn lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]} groupOffsetLeft={groupOffsetLeft} height={height} />
       </div>
     </div>
   );
@@ -113,7 +136,7 @@ const RecordsHeader = ({
 
 RecordsHeader.propTypes = {
   containerWidth: PropTypes.number,
-  columns: PropTypes.array.isRequired,
+  columnMetrics: PropTypes.object.isRequired,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   table: PropTypes.object,
@@ -123,7 +146,6 @@ RecordsHeader.propTypes = {
   groupOffsetLeft: PropTypes.number,
   lastFrozenColumnKey: PropTypes.string,
   onRef: PropTypes.func,
-  resizeColumnWidth: PropTypes.func,
   selectNoneRecords: PropTypes.func,
   selectAllRecords: PropTypes.func,
 };

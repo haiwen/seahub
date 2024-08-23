@@ -27,6 +27,7 @@ class ResizeColumnHandle extends Component {
   };
 
   onMouseUp = (e) => {
+    this.props.onDragEnd && this.props.onDragEnd(e);
     this.cleanUp();
   };
 
@@ -42,6 +43,7 @@ class ResizeColumnHandle extends Component {
     return (
       <div
         className="record-HeaderCell__draggable"
+        onClick={(e) => e.stopPropagation()}
         onDrag={this.props.onDrag}
         onMouseDown={this.onMouseDown}
         onTouchStart={this.onMouseDown}
@@ -51,7 +53,8 @@ class ResizeColumnHandle extends Component {
 }
 
 ResizeColumnHandle.propTypes = {
-  onDrag: PropTypes.func
+  onDrag: PropTypes.func,
+  onDragEnd: PropTypes.func,
 };
 
 export default ResizeColumnHandle;

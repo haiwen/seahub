@@ -25,8 +25,7 @@ export const MetadataProvider = ({
   }, []);
 
   const handleTableError = useCallback((error) => {
-    const errorMsg = Utils.getErrorMsg(error);
-    toaster.danger(errorMsg);
+    toaster.danger(error.error);
   }, []);
 
   const updateMetadata = useCallback((data) => {

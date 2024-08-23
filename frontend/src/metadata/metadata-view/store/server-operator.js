@@ -1,5 +1,6 @@
 import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../_basic';
+import { gettext } from '../utils';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -15,7 +16,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyRecords(repo_id, rowsData).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_record' });
+          callback({ error: gettext('Failed to modify record') });
         });
         break;
       }
@@ -27,43 +28,25 @@ class ServerOperator {
         window.sfMetadataContext.modifyRecords(repo_id, rowsData, is_copy_paste).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_records' });
+          callback({ error: gettext('Failed to modify records') });
         });
         break;
       }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { repo_id, rows_data } = operation;
         if (!Array.isArray(rows_data) || rows_data.length === 0) {
-          callback({ error: 'Failed_to_restore_records' });
+          callback({ error: gettext('Failed to restore records') });
           break;
         }
         window.sfMetadataContext.restoreRows(repo_id, rows_data).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_restore_records' });
+          callback({ error: gettext('Failed to restore records') });
         });
         break;
       }
       case OPERATION_TYPE.RELOAD_RECORDS: {
         callback({ operation });
-        break;
-      }
-      case OPERATION_TYPE.LOCK_RECORD_VIA_BUTTON: {
-        const { repo_id, row_id, button_column_key } = operation;
-        window.sfMetadataContext.lockRowViaButton(repo_id, row_id, button_column_key).then(res => {
-          callback({ operation });
-        }).catch(error => {
-          callback({ error: 'Failed_to_lock_row_via_button' });
-        });
-        break;
-      }
-      case OPERATION_TYPE.MODIFY_RECORD_VIA_BUTTON: {
-        const { repo_id, row_id, button_column_key, updates } = operation;
-        window.sfMetadataContext.updateRowViaButton(repo_id, row_id, button_column_key, updates).then(res => {
-          callback({ operation });
-        }).catch(error => {
-          callback({ error: 'Failed_to_modify_row_via_button' });
-        });
         break;
       }
       case OPERATION_TYPE.INSERT_COLUMN: {
@@ -72,7 +55,7 @@ class ServerOperator {
           operation.column = res.data.column;
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_insert_column' });
+          callback({ error: gettext('Failed to insert property') });
         });
         break;
       }
@@ -81,7 +64,7 @@ class ServerOperator {
         window.sfMetadataContext.deleteColumn(repo_id, column_key).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_delete_column' });
+          callback({ error: gettext('Failed to delete property') });
         });
         break;
       }
@@ -90,7 +73,7 @@ class ServerOperator {
         window.sfMetadataContext.renameColumn(repo_id, column_key, new_name).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_rename_column' });
+          callback({ error: gettext('Failed to rename property') });
         });
         break;
       }
@@ -99,8 +82,19 @@ class ServerOperator {
         window.sfMetadataContext.modifyColumnData(repo_id, column_key, new_data).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_column_data' });
+          callback({ error: gettext('Failed to modify property data') });
         });
+        break;
+      }
+      case OPERATION_TYPE.MODIFY_COLUMN_WIDTH: {
+        const { column_key, new_width } = operation;
+        try {
+          const oldValue = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
+          window.sfMetadataContext.localStorage.setItem('columns_width', { ...oldValue, [column_key]: new_width });
+          callback({ operation });
+        } catch {
+          callback({ error: gettext('Failed to modify property width') });
+        }
         break;
       }
       case OPERATION_TYPE.MODIFY_FILTERS: {
@@ -108,7 +102,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_filter' });
+          callback({ error: gettext('Failed to modify filter') });
         });
         break;
       }
@@ -117,7 +111,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { sorts }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_sort' });
+          callback({ error: gettext('Failed to modify sort') });
         });
         break;
       }
@@ -126,7 +120,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { groupbys }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_group' });
+          callback({ error: gettext('Failed to modify group') });
         });
         break;
       }
@@ -135,7 +129,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { hidden_columns }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: 'Failed_to_modify_hidden_columns' });
+          callback({ error: gettext('Failed to modify hidden columns') });
         });
         break;
       }
