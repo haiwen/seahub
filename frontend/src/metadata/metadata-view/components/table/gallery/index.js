@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../../hooks';
 import { Utils } from '../../../../../utils/utils';
@@ -8,11 +8,17 @@ import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
 
+const BATCH_SIZE = 100;
+const CONCURRENCY_LIMIT = 3;
+
 const Gallery = () => {
   const [imageWidth, setImageWidth] = useState(100);
   const [columns, setColumns] = useState(8);
   const [containerWidth, setContainerWidth] = useState(960);
   const [adjustValue, setAdjustValue] = useState(0);
+  const [visibleItems, setVisibleItems] = useState(BATCH_SIZE);
+  const [loadingQueue, setLoadingQueue] = useState([]);
+  const [concurrentLoads, setConcurrentLoads] = useState(0);
   const { isLoading, metadata } = useMetadata();
   const containerRef = useRef(null);
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -81,6 +87,57 @@ const Gallery = () => {
     }, {});
   }, [imageItems]);
 
+  const handleScroll = useCallback(() => {
+    if (visibleItems >= imageItems.length) return;
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setVisibleItems(prev => Math.min(prev + BATCH_SIZE, imageItems.length));
+      }
+    }
+  }, [visibleItems, imageItems.length]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
+
+  const loadNextImage = useCallback(() => {
+    if (loadingQueue.length === 0 || concurrentLoads >= CONCURRENCY_LIMIT) return;
+
+    const nextImage = loadingQueue.shift();
+    setConcurrentLoads(prev => prev + 1);
+
+    const img = new Image();
+    img.src = nextImage.src;
+    img.onload = () => {
+      setConcurrentLoads(prev => {
+        const newCount = prev - 1;
+        return newCount;
+      });
+      loadNextImage();
+    };
+    img.onerror = () => {
+      setConcurrentLoads(prev => {
+        const newCount = prev - 1;
+        return newCount;
+      });
+      loadNextImage();
+    };
+  }, [loadingQueue, concurrentLoads]);
+
+  useEffect(() => {
+    loadNextImage();
+  }, [loadingQueue, concurrentLoads, loadNextImage]);
+
+  const addToQueue = (image) => {
+    setLoadingQueue(prev => [...prev, image]);
+    loadNextImage();
+  };
+
   if (isLoading) return (<CenteredLoading />);
   return (
     <div ref={containerRef} className="metadata-gallery-container">
@@ -88,12 +145,13 @@ const Gallery = () => {
         <div key={date} className="metadata-gallery-date-group">
           <div className="metadata-gallery-date-tag">{date}</div>
           <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-            {groupedImages[date].map((img, index) => (
+            {groupedImages[date].slice(0, visibleItems).map((img, index) => (
               <li key={index} tabIndex={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
                 <img
                   className="metadata-gallery-grid-image"
                   src={img.src}
                   alt={img.name}
+                  onLoad={() => addToQueue(img)}
                 />
               </li>
             ))}
