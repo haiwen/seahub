@@ -33,7 +33,9 @@ const SliderSetter = () => {
 
   return (
     <div className='custom-slider-container'>
-      <Button className="slider-icon-button" onClick={handleImageShrink}>−</Button>
+      <Button className="slider-icon-button" onClick={handleImageShrink}>
+        <span className='slider-icon-button-text'>-</span>
+      </Button>
       <Input
         type="range"
         min="-2"
@@ -43,7 +45,9 @@ const SliderSetter = () => {
         onChange={handleGalleryColumnsChange}
         className="custom-slider"
       />
-      <Button className="slider-icon-button" onClick={handleImageExpand} >+</Button>
+      <Button className="slider-icon-button" onClick={handleImageExpand} >
+        <span className='slider-icon-button-text'>+</span>
+      </Button>
     </div>
   );
 };

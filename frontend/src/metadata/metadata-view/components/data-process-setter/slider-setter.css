@@ -47,7 +47,15 @@
 
 .slider-icon-button {
   min-width: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   padding: 0;
+  font-weight: 800;
+  color: #999;
 }
 
+.slider-icon-button-text {
+  transform: translateY(-1px);
+}
