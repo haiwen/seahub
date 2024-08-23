@@ -11,11 +11,13 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, get_sys_columns
+from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
+    get_sys_columns, update_docs_summary
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
-
+from seahub.ai.utils import get_file_download_token
+from pysearpc import SearpcError
 from seaserv import seafile_api
 
 
@@ -781,3 +783,62 @@ class MetadataViewsMoveView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'navigation': results['navigation']})
+
+
+class MetadataSummarizeDocs(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        file_paths_list = request.data.get('file_paths_list', '')
+
+        if not file_paths_list or not isinstance(file_paths_list, list):
+            error_msg = 'file_paths_list should be a non-empty list..'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        files_info_list = []
+        for file_path in file_paths_list:
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(
+                    status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error'
+                )
+            if not file_id:
+                return api_error(
+                    status.HTTP_404_NOT_FOUND, f"File {file_path} not found"
+                )
+
+            if token := get_file_download_token(repo_id, file_id, request.user.username):
+                files_info_list.append(
+                    {'file_path': file_path, 'download_token': token}
+                )
+            else:
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            resp = update_docs_summary(repo_id, files_info_list)
+            resp_json = resp.json()
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)

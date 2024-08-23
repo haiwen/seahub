@@ -610,14 +610,14 @@ class Records extends Component {
   };
 
   renderRecordsBody = ({ containerWidth }) => {
-    const { isGroupView, recordGetterByIndex } = this.props;
+    const { isGroupView, recordGetterByIndex, updateRecords } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
-      contextMenu: (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} />),
+      contextMenu: (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} updateRecords={updateRecords} />),
       hasSelectedRecord: this.hasSelectedRecord(),
       getScrollLeft: this.getScrollLeft,
       getScrollTop: this.getScrollTop,
