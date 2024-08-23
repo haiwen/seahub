@@ -39,6 +39,10 @@ const ViewToolBar = ({ viewId }) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, hiddenColumns);
   }, []);
 
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, sourceColumnKey, targetColumnKey);
+  }, []);
+
   const viewChange = useCallback((view) => {
     setView(view);
   }, []);
@@ -109,6 +113,7 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns.slice(1)}
           hiddenColumns={view.hidden_columns || []}
           modifyHiddenColumns={modifyHiddenColumns}
+          modifyColumnOrder={modifyColumnOrder}
         />
       </div>
       <div className="sf-metadata-tool-right-operations"></div>

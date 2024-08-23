@@ -655,7 +655,7 @@ class Records extends Component {
 
   render() {
     const { recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn } = this.props;
+      deleteColumn, modifyColumnOrder } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
@@ -689,6 +689,7 @@ class Records extends Component {
               renameColumn={renameColumn}
               deleteColumn={deleteColumn}
               modifyColumnData={modifyColumnData}
+              modifyColumnOrder={modifyColumnOrder}
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
@@ -746,6 +747,7 @@ Records.propTypes = {
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
   modifyColumnWidth: PropTypes.func,
+  modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
 };
 

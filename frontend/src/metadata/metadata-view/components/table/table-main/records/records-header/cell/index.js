@@ -2,8 +2,9 @@ import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
+import { DragSource, DropTarget } from 'react-dnd';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../../../../_basic';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY } from '../../../../../../_basic';
 import ResizeColumnHandle from './resize-column-handle';
 import { EVENT_BUS_TYPE } from '../../../../../../constants';
 import DropdownMenu from './dropdown-menu';
@@ -11,7 +12,73 @@ import { gettext } from '../../../../../../utils';
 
 import './index.css';
 
+
+const dragSource = {
+  beginDrag: props => {
+    return { key: props.column.key, column: props.column };
+  },
+  endDrag(props, monitor) {
+    const source = monitor.getItem();
+    const didDrop = monitor.didDrop();
+    let target = {};
+    if (!didDrop) {
+      return { source, target };
+    }
+  },
+  isDragging(props) {
+    const { column, dragged } = props;
+    const { key } = dragged;
+    return key === column.key;
+  }
+};
+
+const dropTarget = {
+  hover(props, monitor, component) {
+    // This is fired very often and lets you perform side effects.
+    if (!window.sfMetadataBody) return;
+    const defaultColumnWidth = 200;
+    const offsetX = monitor.getClientOffset().x;
+    const width = document.querySelector('.sf-metadata-wrapper')?.clientWidth;
+    const left = window.innerWidth - width;
+    if (offsetX > width - defaultColumnWidth) {
+      window.sfMetadataBody.scrollToRight();
+    } else if (offsetX < props.frozenColumnsWidth + defaultColumnWidth + left) {
+      window.sfMetadataBody.scrollToLeft();
+    } else {
+      window.sfMetadataBody.clearHorizontalScroll();
+    }
+  },
+  drop(props, monitor) {
+    const source = monitor.getItem();
+    const { column: targetColumn } = props;
+    if (targetColumn.key !== source.key && source.column.frozen === targetColumn.frozen) {
+      let target = { key: targetColumn.key };
+      props.onMove(source, target);
+      window.sfMetadataBody.clearHorizontalScroll();
+    }
+  }
+};
+
+const dragCollect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+});
+
+const dropCollect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
+  dragged: monitor.getItem(),
+});
+
 const Cell = ({
+  isOver,
+  isDragging,
+  canDrop,
+  connectDragSource,
+  connectDragPreview,
+  connectDropTarget,
   frozen,
   groupOffsetLeft,
   isLastFrozenCell,
@@ -68,41 +135,67 @@ const Cell = ({
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_COLUMN, column);
   }, []);
 
+  const onContextMenu = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
   const { key, name, type } = column;
   const headerIconTooltip = COLUMNS_ICON_NAME[type];
-  return (
-    <div key={key} className="sf-metadata-record-header-cell">
-      <div
-        className={classnames('sf-metadata-result-table-cell column', { 'table-last--frozen': isLastFrozenCell })}
-        ref={headerCellRef}
-        style={style}
-        id={`sf-metadata-column-${key}`}
-        onClick={() => handleHeaderCellClick(column, frozen)}
-      >
-        <div className="sf-metadata-result-column-content sf-metadata-record-header-cell-left d-flex align-items-center text-truncate">
-          <span className="mr-2" id={`header-icon-${key}`}>
-            <Icon iconName={COLUMNS_ICON_CONFIG[type]} className="sf-metadata-column-icon" />
-          </span>
-          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover">
-            {gettext(headerIconTooltip)}
-          </UncontrolledTooltip>
-          <div className="header-name d-flex">
-            <span title={name} className={classnames('header-name-text', { 'double': height === 56 })}>{name}</span>
-          </div>
+  const canModifyColumnOrder = window.sfMetadataContext.canModifyColumnOrder();
+  const cell = (
+    <div
+      className={classnames('sf-metadata-result-table-cell column', { 'table-last--frozen': isLastFrozenCell })}
+      ref={headerCellRef}
+      style={style}
+      id={`sf-metadata-column-${key}`}
+      onClick={() => handleHeaderCellClick(column, frozen)}
+      onContextMenu={onContextMenu}
+    >
+      <div className="sf-metadata-result-column-content sf-metadata-record-header-cell-left d-flex align-items-center text-truncate">
+        <span className="mr-2" id={`header-icon-${key}`}>
+          <Icon iconName={COLUMNS_ICON_CONFIG[type]} className="sf-metadata-column-icon" />
+        </span>
+        <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover">
+          {gettext(headerIconTooltip)}
+        </UncontrolledTooltip>
+        <div className="header-name d-flex">
+          <span title={name} className={classnames('header-name-text', { 'double': height === 56 })}>{name}</span>
         </div>
-        {canEditColumnInfo && (
-          <DropdownMenu
-            column={column}
-            renameColumn={renameColumn}
-            deleteColumn={deleteColumn}
-            modifyColumnData={modifyColumnData}
-          />
-        )}
-        <ResizeColumnHandle onDrag={onDrag} onDragEnd={onDragEnd} />
       </div>
+      {canEditColumnInfo && (
+        <DropdownMenu
+          column={column}
+          renameColumn={renameColumn}
+          deleteColumn={deleteColumn}
+          modifyColumnData={modifyColumnData}
+        />
+      )}
+      <ResizeColumnHandle onDrag={onDrag} onDragEnd={onDragEnd} />
     </div>
   );
 
+  if (!canModifyColumnOrder || column.key === PRIVATE_COLUMN_KEY.FILE_NAME) {
+    return (
+      <div key={key} className="sf-metadata-record-header-cell">
+        {cell}
+      </div>
+    );
+  }
+
+  return (
+    <div key={key} className="sf-metadata-record-header-cell">
+      {connectDropTarget(
+        connectDragPreview(
+          connectDragSource(
+            <div style={{ opacity: isDragging ? 0.2 : 1 }} className={classnames('rdg-can-drop', { 'rdg-dropping': isOver && canDrop })}>
+              {cell}
+            </div>
+          )
+        )
+      )}
+    </div>
+  );
 };
 
 Cell.defaultProps = {
@@ -123,4 +216,6 @@ Cell.propTypes = {
   modifyLocalColumnWidth: PropTypes.func,
 };
 
-export default Cell;
+export default DropTarget('sfMetadataRecordHeaderCell', dropTarget, dropCollect)(
+  DragSource('sfMetadataRecordHeaderCell', dragSource, dragCollect)(Cell)
+);
