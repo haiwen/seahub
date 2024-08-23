@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../../hooks';
 import { Utils } from '../../../../../utils/utils';
@@ -8,15 +8,12 @@ import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
 
-const BATCH_SIZE = 100;
-
 const Gallery = () => {
   const [imageWidth, setImageWidth] = useState(100);
   const [columns, setColumns] = useState(8);
   const [containerWidth, setContainerWidth] = useState(960);
   const [adjustValue, setAdjustValue] = useState(0);
   const { isLoading, metadata } = useMetadata();
-  const [visibleItems, setVisibleItems] = useState(BATCH_SIZE);
   const containerRef = useRef(null);
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
@@ -84,14 +81,6 @@ const Gallery = () => {
     }, {});
   }, [imageItems]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [handleScroll]);
-
   if (isLoading) return (<CenteredLoading />);
   return (
     <div ref={containerRef} className="metadata-gallery-container">
@@ -100,7 +89,7 @@ const Gallery = () => {
           <div className="metadata-gallery-date-tag">{date}</div>
           <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {groupedImages[date].map((img, index) => (
-              <li key={index} tabindex={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
+              <li key={index} tabIndex={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
                 <img
                   className="metadata-gallery-grid-image"
                   src={img.src}
