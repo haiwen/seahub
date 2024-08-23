@@ -19,6 +19,7 @@ const Gallery = () => {
   const [visibleItems, setVisibleItems] = useState(BATCH_SIZE);
   const [loadingQueue, setLoadingQueue] = useState([]);
   const [concurrentLoads, setConcurrentLoads] = useState(0);
+  const imageRefs = useRef([]);
   const { isLoading, metadata } = useMetadata();
   const containerRef = useRef(null);
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -112,6 +113,7 @@ const Gallery = () => {
     setConcurrentLoads(prev => prev + 1);
 
     const img = new Image();
+    imageRefs.current.push(img);
     img.src = nextImage.src;
     img.onload = () => {
       setConcurrentLoads(prev => {
@@ -132,6 +134,17 @@ const Gallery = () => {
   useEffect(() => {
     loadNextImage();
   }, [loadingQueue, concurrentLoads, loadNextImage]);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup image references on unmount
+      imageRefs.current.forEach(img => {
+        img.onload = null;
+        img.onerror = null;
+      });
+      imageRefs.current = [];
+    };
+  }, []);
 
   const addToQueue = (image) => {
     setLoadingQueue(prev => [...prev, image]);
