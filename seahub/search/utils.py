@@ -13,7 +13,6 @@ from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
 from seahub.utils import get_user_repos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
-from seahub.utils import HAS_FILE_SEASEARCH, HAS_FILE_SEARCH
 
 import seaserv
 from seaserv import seafile_api
@@ -140,26 +139,7 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
     # search file
     if len(repos_map) > 1:
         search_path = None
-    if HAS_FILE_SEARCH:
-        files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size, search_filename_only)
-    elif HAS_FILE_SEASEARCH:
-        suffixes = obj_desc.get('suffixes')
-        searched_repos = [(repo.id, repo.origin_repo_id, repo.origin_path) for repo in repos_map.values()]
-        params = {
-            'query': keyword,
-            'repos': searched_repos,
-            'count': size,
-            'suffixes': suffixes,
-        }
-
-        resp = search(params)
-        if resp.status_code == 500:
-            raise Exception('search in library error status: %s body: %s', resp.status_code, resp.text)
-        resp_json = resp.json()
-        files_found = resp_json.get('results')
-        total = len(files_found)
-    else:
-        return [], 0
+    files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size, search_filename_only)
 
     result = []
     for f in files_found:
@@ -216,6 +196,25 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
 
     return result, total
 
+
+def ai_search_files(keyword, searched_repos, count, suffixes):
+    params = {
+        'query': keyword,
+        'repos': searched_repos,
+        'count': count,
+        'suffixes': suffixes,
+    }
+
+    resp = search(params)
+    if resp.status_code == 500:
+        raise Exception('search in library error status: %s body: %s', resp.status_code, resp.text)
+    resp_json = resp.json()
+    files_found = resp_json.get('results')
+    total = len(files_found)
+
+    return files_found, total
+
+
 def is_valid_date_type(data):
     try:
         data = int(data)
@@ -234,6 +233,10 @@ def is_valid_size_type(data):
     else:
         return True
 
+SEARCH_REPOS_LIMIT = 200
+RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
+RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
 
 def search(params):
     payload = {'exp': int(time.time()) + 300, }
@@ -242,3 +245,20 @@ def search(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/search')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
+
+def format_repos(repos):
+    searched_repos = []
+    repos_map = {}
+    for repo in repos:
+        real_repo_id = repo[0]
+        origin_repo_id = repo[1]
+        origin_path = repo[2]
+        repo_name = repo[3]
+        searched_repos.append((real_repo_id, origin_repo_id, origin_path))
+
+        if origin_repo_id:
+            repos_map[origin_repo_id] = (real_repo_id, origin_path, repo_name)
+            continue
+        repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
+    return searched_repos, repos_map

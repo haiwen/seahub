@@ -58,7 +58,7 @@ from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.utils import search_files
+    from seahub.search.utils import search_files, ai_search_files, format_repos
 
 
 logger = logging.getLogger(__name__)
@@ -2933,46 +2933,72 @@ class SeadocSearchFilenameView(APIView):
 
         search_filename_only = True
         suffixes = ['sdoc',]
+        if HAS_FILE_SEARCH:
+            org_id = get_org_id_by_repo_id(repo_id)
+            map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
+            repo_id_map = {map_id: repo}
+            keyword = query
+            start = (current_page - 1) * per_page
+            size = per_page
+            search_path = None
+            time_range = (None, None)
+            size_range = (None, None)
+            obj_type = 'file'
+            obj_desc = {
+                'obj_type': obj_type,
+                'suffixes': suffixes,
+                'time_range': time_range,
+                'size_range': size_range,
+            }
 
-        org_id = get_org_id_by_repo_id(repo_id)
-        map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
-        repo_id_map = {map_id: repo}
-        keyword = query
-        start = (current_page - 1) * per_page
-        size = per_page
-        search_path = None
-        time_range = (None, None)
-        size_range = (None, None)
-        obj_type = 'file'
-        obj_desc = {
-            'obj_type': obj_type,
-            'suffixes': suffixes,
-            'time_range': time_range,
-            'size_range': size_range,
-        }
-        # search file
-        try:
-            results, total = search_files(
-                repo_id_map, search_path, keyword, obj_desc, start, size, org_id, search_filename_only)
-        except Exception as e:
-            logger.error(e)
-            results, total = [], 0
+            try:
+                results, total = search_files(
+                    repo_id_map, search_path, keyword, obj_desc, start, size, org_id, search_filename_only)
+            except Exception as e:
+                logger.error(e)
+                results, total = [], 0
+                return Response({"total": total, "results": results, "has_more": False})
+
+            for f in results:
+                f.pop('repo', None)
+                f.pop('exists', None)
+                f.pop('last_modified_by', None)
+                f.pop('name_highlight', None)
+                f.pop('score', None)
+                f.pop('content_highlight', None)
+                f.pop('last_modified', None)
+                f.pop('repo_owner_contact_email', None)
+                f.pop('repo_owner_email', None)
+                f.pop('repo_owner_name', None)
+                f.pop('thumbnail_url', None)
+                f.pop('size', None)
+                f['doc_uuid'] = get_seadoc_file_uuid(repo, f['fullpath'])
+
+            has_more = True if total > current_page * per_page else False
+            return Response({"total":total, "results":results, "has_more":has_more})
+
+        elif HAS_FILE_SEASEARCH:
+            repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
+            searched_repos, repos_map = format_repos(repos)
+            results, total = ai_search_files(query, searched_repos, per_page, suffixes)
+
+            for f in results:
+                repo_id = f['repo_id']
+                repo = repos_map.get(repo_id, None)
+                if not repo:
+                    continue
+                real_repo_id = repo[0]
+                origin_path = repo[1]
+                repo_name = repo[2]
+                f['repo_name'] = repo_name
+                f.pop('_id', None)
+
+                if origin_path:
+                    if not f['fullpath'].startswith(origin_path):
+                        # this operation will reduce the result items, but it will not happen now
+                        continue
+                    else:
+                        f['repo_id'] = real_repo_id
+                        f['fullpath'] = f['fullpath'].split(origin_path)[-1]
+
             return Response({"total": total, "results": results, "has_more": False})
-
-        for f in results:
-            f.pop('repo', None)
-            f.pop('exists', None)
-            f.pop('last_modified_by', None)
-            f.pop('name_highlight', None)
-            f.pop('score', None)
-            f.pop('content_highlight', None)
-            f.pop('last_modified', None)
-            f.pop('repo_owner_contact_email', None)
-            f.pop('repo_owner_email', None)
-            f.pop('repo_owner_name', None)
-            f.pop('thumbnail_url', None)
-            f.pop('size', None)
-            f['doc_uuid'] = get_seadoc_file_uuid(repo, f['fullpath'])
-
-        has_more = True if total > current_page * per_page else False
-        return Response({"total":total, "results":results, "has_more":has_more})
