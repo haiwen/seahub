@@ -13,7 +13,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
 from seahub.profile.models import Profile
-from seahub.utils import is_org_context
+from seahub.utils import is_org_context, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_SIZE_FOR_GRID
@@ -24,7 +24,12 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def search(request):
-
+    if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
+        data = {
+            'error': True,
+            'error_msg': _('Search not supported.')
+        }
+        return render(request, 'search_results.html', data)
     custom_search = False
     invalid_argument = False
     need_return_custom_search = False

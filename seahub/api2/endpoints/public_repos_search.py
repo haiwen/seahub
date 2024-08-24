@@ -12,10 +12,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils.repo import is_valid_repo_id_format
-from seahub.utils import HAS_FILE_SEARCH
+from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
 from seahub.wiki.models import Wiki
-if HAS_FILE_SEARCH:
-    from seahub.search.utils import search_files
+from seahub.search.utils import search_files
 
 
 logger = logging.getLogger('seafes')
@@ -30,7 +29,7 @@ class PublishedRepoSearchView(APIView):
 
     def get(self, request):
         # is search supported
-        if not HAS_FILE_SEARCH:
+        if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 

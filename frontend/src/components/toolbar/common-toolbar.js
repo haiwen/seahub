@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon, enableSeasearch, enableElasticsearch } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
 import Search from '../search/search';
-import AISearch from '../search/ai-search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
 import Account from '../common/account';
@@ -60,35 +59,21 @@ class CommonToolbar extends React.Component {
   };
 
   renderSearch = () => {
-    const { repoID, repoName, isLibView, path, isViewFile, currentRepoInfo } = this.state;
+    const { repoID, repoName, isLibView, path, isViewFile } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
 
     if (isPro) {
-      if (enableSeasearch && !enableElasticsearch) {
-        return (
-          <AISearch
-            repoID={repoID}
-            path={path}
-            isViewFile={isViewFile}
-            placeholder={placeholder}
-            currentRepoInfo={currentRepoInfo}
-            onSearchedClick={this.onSearchedClick}
-            isLibView={isLibView}
-          />
-        );
-      } else {
-        return (
-          <Search
-            repoID={repoID}
-            placeholder={placeholder}
-            onSearchedClick={this.onSearchedClick}
-            isViewFile={isViewFile}
-            isPublic={false}
-            path={path}
-          />
-        );
-      }
+      return (
+        <Search
+          repoID={repoID}
+          placeholder={placeholder}
+          onSearchedClick={this.onSearchedClick}
+          isViewFile={isViewFile}
+          isPublic={false}
+          path={path}
+        />
+      );
     } else {
       if (isLibView) {
         return (

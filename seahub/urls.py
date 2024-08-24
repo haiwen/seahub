@@ -25,7 +25,7 @@ from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
 
 from seahub.api2.endpoints.search_file import SearchFile
 
-from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken 
+from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
 from seahub.api2.endpoints.departments import Departments
@@ -203,7 +203,6 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import Search
 from seahub.wiki2.views import wiki_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView
@@ -319,13 +318,13 @@ urlpatterns = [
 
     ## user
     re_path(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
-    
+
     # user:convert to team account
     re_path(r'^api/v2.1/user/convert-to-team/$', UserConvertToTeamView.as_view(), name="api-v2.1-user-convert-to-team"),
 
     # user list
     re_path(r'^api/v2.1/user-list/$', UserListView.as_view(), name='api-v2.1-user-list'),
-    
+
     re_path(r'^api/v2.1/user/reset-password/$', ResetPasswordView.as_view(), name="api-v2.1-user-reset-password"),
 
     ## obtain auth token by login session
@@ -463,7 +462,7 @@ urlpatterns = [
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/(?P<app_name>.*)/$', RepoAPITokenView.as_view(), name='api-v2.1-repo-api-token'),
-    
+
     ## user:: repo-jwt-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-notification-jwt-token/$', RepoNotificationJwtTokenView.as_view(), name='api-v2.1-repo-jwt-token'),
 
@@ -667,7 +666,7 @@ urlpatterns = [
 
     ## admin::departments
     re_path(r'api/v2.1/admin/departments/$', AdminDepartments.as_view(), name='api-v2.1-admin-departments'),
-    
+
     ## admin::shares
     re_path(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
 
@@ -783,7 +782,7 @@ urlpatterns = [
 
     ## internal
     re_path(r'^api/v2.1/internal/user-list/$', InternalUserListView.as_view(), name="api-v2.1-internal-user-list"),
-    
+
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     path('sys/useradmin/export-excel/', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
@@ -893,13 +892,11 @@ urlpatterns += [
     re_path(r'^demo/', demo),
 ]
 
-from seahub.utils import HAS_FILE_SEARCH
-if HAS_FILE_SEARCH:
-    from seahub.search.views import search, pubuser_search
-    urlpatterns += [
-        path('search/', search, name='search'),
-        path('pubinfo/users/search/', pubuser_search, name='pubuser_search'),
-    ]
+from seahub.search.views import search, pubuser_search
+urlpatterns += [
+    path('search/', search, name='search'),
+    path('pubinfo/users/search/', pubuser_search, name='pubuser_search'),
+]
 
 from seahub.utils import is_pro_version
 if is_pro_version():
@@ -1014,10 +1011,6 @@ if getattr(settings, 'ENABLE_SEADOC', False):
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
     ]
 
-# Seasearch
-urlpatterns += [
-    re_path(r'^api/v2.1/ai/search/$', Search.as_view(), name='api-v2.1-ai-search'),
-]
 
 if getattr(settings, 'CLIENT_SSO_VIA_LOCAL_BROWSER', False):
     urlpatterns += [

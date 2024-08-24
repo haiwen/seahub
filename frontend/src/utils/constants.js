@@ -100,10 +100,6 @@ export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeCo
 
 export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 
-// search
-export const enableElasticsearch = window.app.pageOptions.enableElasticsearch || false;
-export const enableSeasearch = window.app.pageOptions.enableSeasearch || false;
-
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;

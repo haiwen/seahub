@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro, enableSeasearch, enableElasticsearch } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import RepoInfo from '../../models/repo-info';

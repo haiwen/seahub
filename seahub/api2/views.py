@@ -74,7 +74,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, \
-    normalize_cache_key
+    normalize_cache_key, HAS_FILE_SEASEARCH
 
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -97,8 +97,8 @@ from seahub.utils.timeutils import utc_to_local, \
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
-if HAS_FILE_SEARCH:
-    from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
+
+from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -446,8 +446,7 @@ class Search(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-
-        if not HAS_FILE_SEARCH:
+        if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -642,7 +641,7 @@ class Search(APIView):
                 e['thumbnail_url'] = thumbnail_url + params
 
         has_more = True if total > current_page * per_page else False
-        return Response({"total":total, "results":results, "has_more":has_more})
+        return Response({"total": total, "results": results, "has_more": has_more})
 
 
 class ItemsSearch(APIView):
