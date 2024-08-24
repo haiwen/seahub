@@ -12,11 +12,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
-    get_sys_columns, update_docs_summary
+    get_sys_columns, update_docs_summary, get_file_download_token
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import is_repo_admin
-from seahub.ai.utils import get_file_download_token
 from pysearpc import SearpcError
 from seaserv import seafile_api
 

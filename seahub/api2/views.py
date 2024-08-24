@@ -74,7 +74,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, \
-    normalize_cache_key
+    normalize_cache_key, HAS_FILE_SEASEARCH
 
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -97,8 +97,9 @@ from seahub.utils.timeutils import utc_to_local, \
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
-if HAS_FILE_SEARCH:
-    from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
+        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -446,8 +447,7 @@ class Search(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-
-        if not HAS_FILE_SEARCH:
+        if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -572,77 +572,125 @@ class Search(APIView):
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
-        repo_id_map = {}
-        # check recourse and permissin when search in a single repo
-        if is_valid_repo_id_format(search_repo):
-            repo_id = search_repo
-            repo = seafile_api.get_repo(repo_id)
-            # recourse check
-            if not repo:
-                error_msg = 'Library %s not found.' % repo_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if HAS_FILE_SEARCH:
+            repo_id_map = {}
+            # check recourse and permissin when search in a single repo
+            if is_valid_repo_id_format(search_repo):
+                repo_id = search_repo
+                repo = seafile_api.get_repo(repo_id)
+                # recourse check
+                if not repo:
+                    error_msg = 'Library %s not found.' % repo_id
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            # permission check
-            if not check_folder_permission(request, repo_id, '/'):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
-            repo_id_map[map_id] = repo
-            repo_type_map = {}
-        else:
-            shared_from = request.GET.get('shared_from', None)
-            not_shared_from = request.GET.get('not_shared_from', None)
-            repo_id_map, repo_type_map = get_search_repos_map(search_repo,
-                    username, org_id, shared_from, not_shared_from)
-
-        obj_desc = {
-            'obj_type': obj_type,
-            'suffixes': suffixes,
-            'time_range': time_range,
-            'size_range': size_range
-        }
-        # search file
-        try:
-            results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id,
-                                          search_filename_only)
-        except Exception as e:
-            logger.error(e)
-            results, total = [], 0
-            return Response({"total": total, "results": results, "has_more": False})
-
-        for e in results:
-            e.pop('repo', None)
-            e.pop('exists', None)
-            e.pop('last_modified_by', None)
-            e.pop('name_highlight', None)
-            e.pop('score', None)
-
-            repo_id = e['repo_id']
-
-            if with_permission.lower() == 'true':
-                permission = check_folder_permission(request, repo_id, '/')
-                if not permission:
-                    continue
-                e['permission'] = permission
-
-            # get repo type
-            if repo_id in repo_type_map:
-                e['repo_type'] = repo_type_map[repo_id]
+                # permission check
+                if not check_folder_permission(request, repo_id, '/'):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
+                repo_id_map[map_id] = repo
+                repo_type_map = {}
             else:
-                e['repo_type'] = ''
+                shared_from = request.GET.get('shared_from', None)
+                not_shared_from = request.GET.get('not_shared_from', None)
+                repo_id_map, repo_type_map = get_search_repos_map(search_repo,
+                        username, org_id, shared_from, not_shared_from)
 
-            e['thumbnail_url'] = ''
-            filetype, fileext = get_file_type_and_ext(e.get('name', ''))
+            obj_desc = {
+                'obj_type': obj_type,
+                'suffixes': suffixes,
+                'time_range': time_range,
+                'size_range': size_range
+            }
+            # search file
+            try:
+                results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id,
+                                              search_filename_only)
+            except Exception as e:
+                logger.error(e)
+                results, total = [], 0
+                return Response({"total": total, "results": results, "has_more": False})
 
-            if filetype == IMAGE:
-                thumbnail_url = reverse('api2-thumbnail',
-                                        args=[e.get('repo_id', '')],
-                                        request=request)
-                params = '?p={}&size={}'.format(quote(e.get('fullpath', '').encode('utf-8')), 72)
-                e['thumbnail_url'] = thumbnail_url + params
+            for e in results:
+                e.pop('repo', None)
+                e.pop('exists', None)
+                e.pop('last_modified_by', None)
+                e.pop('name_highlight', None)
+                e.pop('score', None)
 
-        has_more = True if total > current_page * per_page else False
-        return Response({"total":total, "results":results, "has_more":has_more})
+                repo_id = e['repo_id']
+
+                if with_permission.lower() == 'true':
+                    permission = check_folder_permission(request, repo_id, '/')
+                    if not permission:
+                        continue
+                    e['permission'] = permission
+
+                # get repo type
+                if repo_id in repo_type_map:
+                    e['repo_type'] = repo_type_map[repo_id]
+                else:
+                    e['repo_type'] = ''
+
+                e['thumbnail_url'] = ''
+                filetype, fileext = get_file_type_and_ext(e.get('name', ''))
+
+                if filetype == IMAGE:
+                    thumbnail_url = reverse('api2-thumbnail',
+                                            args=[e.get('repo_id', '')],
+                                            request=request)
+                    params = '?p={}&size={}'.format(quote(e.get('fullpath', '').encode('utf-8')), 72)
+                    e['thumbnail_url'] = thumbnail_url + params
+
+            has_more = True if total > current_page * per_page else False
+            return Response({"total": total, "results": results, "has_more": has_more})
+
+        elif HAS_FILE_SEASEARCH:
+            if search_repo == 'all':
+                org_id = request.user.org.org_id if is_org_context(request) else None
+                key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
+                repos = cache.get(key, [])
+                if not repos:
+                    repos = get_search_repos(username, org_id)[:SEARCH_REPOS_LIMIT]
+                    cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
+            else:
+                try:
+                    repo = seafile_api.get_repo(search_repo)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Library %s not found.' % search_repo
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                # permission check
+                if not check_folder_permission(request, search_repo, '/'):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
+
+            searched_repos, repos_map = format_repos(repos)
+            results, total = ai_search_files(keyword, searched_repos, per_page, suffixes)
+
+            for f in results:
+                repo_id = f['repo_id']
+                repo = repos_map.get(repo_id, None)
+                if not repo:
+                    continue
+                real_repo_id = repo[0]
+                origin_path = repo[1]
+                repo_name = repo[2]
+                f['repo_name'] = repo_name
+                f.pop('_id', None)
+
+                if origin_path:
+                    if not f['fullpath'].startswith(origin_path):
+                        # this operation will reduce the result items, but it will not happen now
+                        continue
+                    else:
+                        f['repo_id'] = real_repo_id
+                        f['fullpath'] = f['fullpath'].split(origin_path)[-1]
+
+            return Response({"total": total, "results": results, "has_more": False})
 
 
 class ItemsSearch(APIView):

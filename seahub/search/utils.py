@@ -2,8 +2,12 @@
 
 import logging
 import os
+import requests
+import jwt
+import time
+from urllib.parse import urljoin
 
-from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE
+from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE, SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
         MARKDOWN, VIDEO, AUDIO, TEXT, SEADOC
 from seahub.utils import get_user_repos
@@ -192,6 +196,25 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
 
     return result, total
 
+
+def ai_search_files(keyword, searched_repos, count, suffixes):
+    params = {
+        'query': keyword,
+        'repos': searched_repos,
+        'count': count,
+        'suffixes': suffixes,
+    }
+
+    resp = search(params)
+    if resp.status_code == 500:
+        raise Exception('search in library error status: %s body: %s', resp.status_code, resp.text)
+    resp_json = resp.json()
+    files_found = resp_json.get('results')
+    total = len(files_found)
+
+    return files_found, total
+
+
 def is_valid_date_type(data):
     try:
         data = int(data)
@@ -209,3 +232,33 @@ def is_valid_size_type(data):
         return False
     else:
         return True
+
+SEARCH_REPOS_LIMIT = 200
+RELATED_REPOS_PREFIX = 'RELATED_REPOS_'
+RELATED_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
+
+
+def search(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/search')
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
+
+
+def format_repos(repos):
+    searched_repos = []
+    repos_map = {}
+    for repo in repos:
+        real_repo_id = repo[0]
+        origin_repo_id = repo[1]
+        origin_path = repo[2]
+        repo_name = repo[3]
+        searched_repos.append((real_repo_id, origin_repo_id, origin_path))
+
+        if origin_repo_id:
+            repos_map[origin_repo_id] = (real_repo_id, origin_path, repo_name)
+            continue
+        repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
+    return searched_repos, repos_map

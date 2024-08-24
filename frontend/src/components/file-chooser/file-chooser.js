@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro, enableSeasearch, enableElasticsearch } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import RepoInfo from '../../models/repo-info';
@@ -257,16 +257,7 @@ class FileChooser extends React.Component {
       return results;
     };
 
-    if (isPro && enableSeasearch && !enableElasticsearch) {
-      seafileAPI.aiSearchFiles(queryData, cancelToken).then(res => {
-        const filteredResults = filterCurrentRepo(res.data.results.filter(item => item.is_dir));
-        this.setState({
-          searchResults: filteredResults.length > 0 ? this.formatResultItems(filteredResults) : [],
-          isResultGot: true
-        });
-        this.source = null;
-      });
-    } else {
+    if (isPro) {
       seafileAPI.searchFiles(queryData, cancelToken).then(res => {
         const filteredResults = filterCurrentRepo(res.data.results);
         this.setState({

@@ -1,6 +1,6 @@
 import React from 'react';
 import deepCopy from 'deep-copy';
-import { gettext, enableSeasearch, enableElasticsearch } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
 import AdvancedSearch from './advanced-search';
@@ -49,12 +49,7 @@ class SearchViewPanel extends React.Component {
       isLoading: true,
       isResultGot: false,
     });
-
-    if (enableSeasearch && !enableElasticsearch) {
-      this.onAiSearch(params);
-    } else {
-      this.onNormalSearch(params);
-    }
+    this.onNormalSearch(params);
   }
 
   onNormalSearch = (params) => {
@@ -84,24 +79,6 @@ class SearchViewPanel extends React.Component {
     });
   };
 
-  onAiSearch = (params) => {
-    let results = [];
-    seafileAPI.aiSearchFiles(params, null).then(res => {
-      results = [...results, ...this.formatResultItems(res.data.results)];
-      this.setState({
-        resultItems: results,
-        isResultGetted: true,
-        isLoading: false,
-        hasMore: false,
-      });
-    }).catch(error => {
-      /* eslint-disable */
-      console.log(error);
-      this.setState({ isLoading: false });
-    });
-  };
-
-
   handleSearchParams = (page) => {
     let params = { q: this.state.q.trim(), page: page };
     const ftype = this.getFileTypesList();
@@ -112,7 +89,7 @@ class SearchViewPanel extends React.Component {
     const { time_from, time_to } = this.state;
     if (time_from) {params.time_from = parseInt(time_from.valueOf() / 1000);}
     if (time_to) {params.time_to = parseInt(time_to.valueOf() / 1000);}
-    if (this.state.size_from) {params.size_from = this.state.size_from * 1000 *1000;}
+    if (this.state.size_from) {params.size_from = this.state.size_from * 1000 * 1000;}
     if (this.state.size_to) {params.size_to = this.state.size_to * 1000 * 1000;}
     if (ftype.length !== 0) {params.ftype = ftype;}
     return params;
@@ -177,32 +154,33 @@ class SearchViewPanel extends React.Component {
   handlePrevious = (e) => {
     e.preventDefault();
     if (this.stateHistory && this.state.page > 1) {
-      this.setState(this.stateHistory,() => {
+      this.setState(this.stateHistory, () => {
         const params = this.handleSearchParams(this.state.page - 1);
         this.getSearchResults(params);
       });
     } else {
-      toaster.danger(gettext('Error'), {duration: 3});
+      toaster.danger(gettext('Error'), { duration: 3 });
     }
   };
 
   handleNext = (e) => {
     e.preventDefault();
     if (this.stateHistory && this.state.hasMore) {
-      this.setState(this.stateHistory,() => {
+      this.setState(this.stateHistory, () => {
         const params = this.handleSearchParams(this.state.page + 1);
         this.getSearchResults(params);
       });
     } else {
-      toaster.danger(gettext('Error'), {duration: 3});
+      toaster.danger(gettext('Error'), { duration: 3 });
     }
   };
 
   getValueLength(str) {
-    let code, len = 0;
+    let code = 0;
+    let len = 0;
     for (let i = 0, length = str.length; i < length; i++) {
       code = str.charCodeAt(i);
-      if (code === 10) { //solve enter problem
+      if (code === 10) { // solve enter problem
         len += 2;
       } else if (code < 0x007f) {
         len += 1;
@@ -216,7 +194,7 @@ class SearchViewPanel extends React.Component {
   }
 
   toggleCollapse = () => {
-    this.setState({isCollapseOpen: !this.state.isCollapseOpen});
+    this.setState({ isCollapseOpen: !this.state.isCollapseOpen });
     this.hideSearchFilter();
   };
 
@@ -238,7 +216,7 @@ class SearchViewPanel extends React.Component {
 
   handleSearchInput = (event) => {
     this.setState({ q: event.target.value });
-    if (this.state.errorMsg) this.setState({ errorMsg: ''});
+    if (this.state.errorMsg) this.setState({ errorMsg: '' });
     if (this.state.errorSizeMsg) this.setState({ errorSizeMsg: '' });
     if (this.state.errorDateMsg) this.setState({ errorDateMsg: '' });
   };
@@ -287,13 +265,13 @@ class SearchViewPanel extends React.Component {
 
   handleTimeFromInput = (value) => {
     // set the time to be '00:00:00'
-    this.setState({time_from: value ? value.hours(0).minutes(0).seconds(0) : value});
+    this.setState({ time_from: value ? value.hours(0).minutes(0).seconds(0) : value });
     if (this.state.errorDateMsg) this.setState({ errorDateMsg: '' });
   };
 
   handleTimeToInput = (value) => {
     // set the time to be '23:59:59'
-    this.setState({time_to: value ? value.hours(23).minutes(59).seconds(59) : value});
+    this.setState({ time_to: value ? value.hours(23).minutes(59).seconds(59) : value });
     if (this.state.errorDateMsg) this.setState({ errorDateMsg: '' });
   };
 

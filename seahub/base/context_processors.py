@@ -36,7 +36,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
-    IS_DB_SQLITE3, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+    IS_DB_SQLITE3
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -172,8 +172,6 @@ def base(request):
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_seadoc': ENABLE_SEADOC,
-        'enable_elasticsearch': HAS_FILE_SEARCH,
-        'enable_seasearch': HAS_FILE_SEASEARCH,
         'enable_seatable_integration': ENABLE_SEATABLE_INTEGRATION
     }
 

@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 
+from seaserv import seafile_api
 
 def add_init_metadata_task(params):
     payload = {'exp': int(time.time()) + 300, }
@@ -76,3 +77,6 @@ def update_docs_summary(repo_id, files_info_list):
     }
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
+def get_file_download_token(repo_id, file_id, username):
+    return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
