@@ -57,7 +57,8 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
-from seahub.search.utils import search_files
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_files
 
 
 logger = logging.getLogger(__name__)

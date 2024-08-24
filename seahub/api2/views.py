@@ -98,7 +98,8 @@ from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
 
-from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
