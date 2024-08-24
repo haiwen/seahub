@@ -232,7 +232,7 @@ class ItemDropdownMenu extends React.Component {
                   <DropdownItem className='p-0' key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>
                     <div className='dropdown-item-wrapper'>
                       <span className='dropdown-item-tick'>
-                        {menuItem.value === 'Display files' && this.props.isDisplayFiles && (
+                        {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
                           <i className="sf2-icon-tick"></i>
                         )}
                       </span>
