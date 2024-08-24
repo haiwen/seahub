@@ -3,7 +3,7 @@ import hashlib
 import logging
 import urllib.parse
 import posixpath
-
+import json
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 
@@ -141,8 +141,9 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     base_url = get_site_scheme_and_netloc()
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
     callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
-
+    obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     avatar_url, _, _ = api_avatar_url(username, 72)
+    import jwt
     return_dict = {
         'repo_id': repo_id,
         'path': file_path,
@@ -160,10 +161,16 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
+        'file_key': jwt.encode({
+            'repo_id': origin_repo_id,
+            'file_path': origin_file_path,
+            
+        }, ONLYOFFICE_JWT_SECRET),
+        'instance_id': base_url,
     }
 
     if ONLYOFFICE_JWT_SECRET:
-        import jwt
+       
         config = {
             "document": {
                 "fileType": fileext,
