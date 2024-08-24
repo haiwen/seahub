@@ -36,6 +36,8 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
     normalize_file_path, check_filename_with_rename, \
     gen_inner_file_get_url, get_service_url, get_file_type_and_ext, gen_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
+from seahub.views import check_folder_permission
+from seahub.utils.file_types import SPREADSHEET
 
 
 # Get an instance of a logger
@@ -444,6 +446,8 @@ class OnlyofficeGetReferenceData(APIView):
     def post(self, request):
         instance_id = request.data.get('instanceId')
         file_key = request.data.get('fileKey')
+
+        username = request.user.username
         
         try:
             payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
@@ -457,11 +461,23 @@ class OnlyofficeGetReferenceData(APIView):
         if not seafile_api.get_repo(source_repo_id):
             error_msg = 'Library %s not found.' % source_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        file_id = seafile_api.get_file_id_by_path(source_repo_id, source_file_path)
+        if not file_id:
+            error_msg = 'Souce file does not exist'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         doc_key = get_doc_key_by_repo_id_file_path(source_repo_id, source_file_path)
         file_name = os.path.basename(source_file_path.rstrip('/'))
+        parent_dir = os.path.dirname(source_file_path.rstrip('/'))
+        if check_folder_permission(request, source_repo_id, parent_dir) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        _, fileext = get_file_type_and_ext(source_file_path)
+        filetype, fileext = get_file_type_and_ext(source_file_path)
+        if filetype != SPREADSHEET:
+            err_msg = 'file type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
 
         file_id = seafile_api.get_file_id_by_path(source_repo_id,
                                                   source_file_path)
@@ -469,7 +485,7 @@ class OnlyofficeGetReferenceData(APIView):
             source_repo_id,
             file_id,
             'download',
-            '',
+            username,
             use_onetime=False
         )
 
