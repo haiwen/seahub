@@ -18,6 +18,7 @@ const FilterSetter = ({
   filtersClassName,
   target,
   filterConjunction,
+  basicFilters,
   modifyFilters
 }) => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -26,12 +27,15 @@ const FilterSetter = ({
     return deepCopy(getValidFilters(propsFilters || [], columns));
   }, [propsFilters, columns]);
 
+  const filtersCount = useMemo(() => {
+    return filters.length + basicFilters.length;
+  }, [filters, basicFilters]);
+
   const message = useMemo(() => {
-    const filtersLength = filters.length;
-    if (filtersLength === 1) return isNeedSubmit ? gettext('1 preset filter') : gettext('1 filter');
-    if (filtersLength > 1) return filtersLength + ' ' + (isNeedSubmit ? gettext('Preset filters') : gettext('Filters'));
+    if (filtersCount === 1) return isNeedSubmit ? gettext('1 preset filter') : gettext('1 filter');
+    if (filtersCount > 1) return filtersCount + ' ' + (isNeedSubmit ? gettext('Preset filters') : gettext('Filters'));
     return isNeedSubmit ? gettext('Preset filter') : gettext('Filter');
-  }, [isNeedSubmit, filters]);
+  }, [isNeedSubmit, filtersCount]);
 
   const onSetterToggle = useCallback(() => {
     setShowSetter(!isShowSetter);
@@ -43,13 +47,13 @@ const FilterSetter = ({
   }, [onSetterToggle]);
 
   const onChange = useCallback((update) => {
-    const { filters, filter_conjunction } = update || {};
+    const { filters, filter_conjunction, basic_filters } = update || {};
     const validFilters = getValidFilters(filters, columns);
-    modifyFilters(validFilters, filter_conjunction);
+    modifyFilters(validFilters, filter_conjunction, basic_filters);
   }, [columns, modifyFilters]);
 
   if (!columns) return null;
-  const className = classnames(wrapperClass, { 'active': filters.length > 0 });
+  const className = classnames(wrapperClass, { 'active': filtersCount > 0 });
   return (
     <>
       <IconBtn
@@ -75,6 +79,7 @@ const FilterSetter = ({
           collaborators={collaborators}
           filterConjunction={filterConjunction}
           filters={filters}
+          basicFilters={basicFilters}
           hidePopover={onSetterToggle}
           update={onChange}
           isPre={isPre}
@@ -97,11 +102,13 @@ FilterSetter.propTypes = {
   modifyFilters: PropTypes.func,
   collaborators: PropTypes.array,
   isPre: PropTypes.bool,
+  basicFilters: PropTypes.array,
 };
 
 FilterSetter.defaultProps = {
   target: 'sf-metadata-filter-popover',
   isNeedSubmit: false,
+  basicFilters: [],
 };
 
 export default FilterSetter;

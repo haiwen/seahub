@@ -1,0 +1,30 @@
+.sf-metadata-basic-filters-select {
+  width: 200px;
+}
+
+.select-basic-filter-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.select-basic-filter-option .select-basic-filter-option-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-basic-filter-option .select-basic-filter-option-check-icon {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.sf-metadata-option.sf-metadata-option-active .sf-metadata-icon-check-mark {
+  fill: #fff;
+}

@@ -1,12 +1,11 @@
 .sf-metadata-filters-list {
   min-height: 120px;
   max-height: 100%;
-  padding: 15px;
 }
 
 .sf-metadata-filters-list.empty-filters-container {
   min-height: 80px;
-  padding: 16px;
+  padding: 0;
 }
 
 .sf-metadata-filters-list.empty-filters-container .empty-filters-list {

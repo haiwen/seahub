@@ -100,8 +100,8 @@ const Container = () => {
     return { rowIdsInOrder, upperRowIds, belowRowIds };
   }, [metadata]);
 
-  const modifyFilters = useCallback((filters, filterConjunction) => {
-    store.modifyFilters(filterConjunction, filters);
+  const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
+    store.modifyFilters(filterConjunction, filters, basicFilters);
   }, [store]);
 
   const modifySorts = useCallback((sorts) => {
