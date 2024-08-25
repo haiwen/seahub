@@ -27,6 +27,7 @@ from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, get_user_common_info
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
@@ -2900,6 +2901,7 @@ class SeadocEditorCallBack(APIView):
 class SeadocSearchFilenameView(APIView):
 
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
