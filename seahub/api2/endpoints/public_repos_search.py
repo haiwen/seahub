@@ -10,6 +10,7 @@ from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 from seahub.utils.repo import is_valid_repo_id_format
 from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
@@ -25,7 +26,7 @@ class PublishedRepoSearchView(APIView):
     """ Search public repos
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsProVersion)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
