@@ -60,6 +60,11 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     setEnableExtendedProperties(newValue);
   }, [enableMetadata, hideMetadataView, cancelURLView]);
 
+  useEffect(() => {
+    if (!showFirstView) return;
+    toaster.success(gettext('The file\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
+  }, [showFirstView]);
+
   // views
   useEffect(() => {
     if (enableMetadata) {
