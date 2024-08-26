@@ -1124,6 +1124,8 @@ class InteractionMasks extends React.Component {
           selectedRange: !isSelectedSingleCell ? selectedRange : null,
           onClearSelected: this.handleSelectCellsDelete,
           onCopySelected: this.onCopySelected,
+          getTableContentRect: this.props.getTableContentRect,
+          getTableCanvasContainerRect: this.props.getTableCanvasContainerRect
         })}
       </div>
     );
@@ -1178,6 +1180,7 @@ InteractionMasks.propTypes = {
   gridUtils: PropTypes.object,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   onCommit: PropTypes.func,
+  getTableCanvasContainerRect: PropTypes.func,
 };
 
 export default InteractionMasks;

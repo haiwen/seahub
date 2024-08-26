@@ -609,6 +609,10 @@ class Records extends Component {
     }
   };
 
+  getTableCanvasContainerRect = () => {
+    return this.resultContainerRef.getBoundingClientRect();
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView, recordGetterByIndex, updateRecords } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -629,6 +633,7 @@ class Records extends Component {
       hasSelectedCell: this.hasSelectedCell,
       cacheScrollTop: this.storeScrollTop,
       onCellContextMenu: this.onCellContextMenu,
+      getTableCanvasContainerRect: this.getTableCanvasContainerRect,
     };
     if (this.props.isGroupView) {
       return (
