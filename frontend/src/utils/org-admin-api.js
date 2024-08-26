@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
-import { siteRoot } from './constants';
+import {orgID, siteRoot} from './constants';
 
 class OrgAdminAPI {
 
@@ -47,6 +47,21 @@ class OrgAdminAPI {
   orgAdminGroup2Department(orgID, groupID) {
     var url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/group-to-department/';
     return this.req.post(url);
+  }
+
+  orgAdminExportLogsExcel(orhID, start, end, logType) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/logs/export-excel/';
+    const params = {
+      start: start,
+      end: end,
+      logType: logType
+    };
+    return this.req.get(url, { params: params });
+  }
+
+  queryAsyncOperationExportExcel(task_id) {
+    const url = this.server + '/api/v2.1/org/admin/query-export-status/?task_id=' + task_id;
+    return this.req.get(url);
   }
 
 }

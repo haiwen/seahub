@@ -3,21 +3,38 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import MainPanelTopbar from './main-panel-topbar';
+import {Button} from "reactstrap";
+import ModalPortal from "../../components/modal-portal";
+import OrgLogsExportExcelDialog from "../../components/dialog/org-admin-logs-export-excel-dialog";
 
 class OrgLogs extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isExportExcelDialogOpen: false,
+      logType: 'logadmin',
+    }
   }
 
+  toggleExportExcelDialog = () => {
+    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
+  };
   tabItemClick = (param) => {
+    this.setState({
+      logType: param
+    })
     this.props.tabItemClick(param);
   };
 
   render() {
+    const { isExportExcelDialogOpen, logType } = this.state
+    console.log(logType)
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar {...this.props}>
+          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
+        </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path org-user-nav">
@@ -45,6 +62,14 @@ class OrgLogs extends Component {
             {this.props.children}
           </div>
         </div>
+        {isExportExcelDialogOpen &&
+          <ModalPortal>
+            <OrgLogsExportExcelDialog
+              logType={logType}
+              toggle={this.toggleExportExcelDialog}
+            />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }

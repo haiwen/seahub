@@ -31,6 +31,8 @@ from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgUserTrafficExcelView, OrgUserStorageExcelView
 from .api.admin.saml_config import OrgSAMLConfigView, OrgVerifyDomain
 
+from .org_logs_export import OrgLogsExport, OrgLogsExportStatus, org_log_export_excel
+
 
 urlpatterns = [
     path('<int:org_id>/admin/statistics/file-operations/',
@@ -101,5 +103,9 @@ urlpatterns = [
     path('admin/logs/file-update/', OrgAdminLogsFileUpdate.as_view(), name='api-v2.1-org-admin-logs-file-update'),
     path('admin/logs/repo-permission/', OrgAdminLogsPermAudit.as_view(), name='api-v2.1-org-admin-logs-repo-permission'),
     path('<int:org_id>/admin/departments/', OrgAdminDepartments.as_view(), name='api-v2.1-org-admin-departments'),
+    path('<int:org_id>/admin/logs/export-excel/', OrgLogsExport.as_view(), name='api-v2.1-org-logs-export-excel'),
+    re_path(r'^admin/query-export-status/$', OrgLogsExportStatus.as_view(), name='api-v2.1-query-export-status'),
+    path('admin/log/export-excel/', org_log_export_excel, name='org_log_export_excel'),
+
 ]
 
