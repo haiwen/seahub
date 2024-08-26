@@ -94,9 +94,7 @@ export default class Toast extends React.PureComponent {
   startCloseTimer = () => {
     if (this.props.duration) {
       this.closeTimer = setTimeout(() => {
-        if (this._isMounted) {
-          this.close();
-        }
+        this.close();
       }, this.props.duration * 1000);
     }
   };
