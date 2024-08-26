@@ -33,6 +33,14 @@ class MainSideNavFolded extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.handleOutsideClick);
+    seafileAPI.listGroups().then(res => {
+      this.setState({
+        groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   componentWillUnmount() {
@@ -48,27 +56,12 @@ class MainSideNavFolded extends React.Component {
 
   openSubNav = () => {
     if (this.state.isFilesSubNavShown) return;
-    seafileAPI.listGroups().then(res => {
-      this.canCloseNav = false;
-      this.setState({
-        groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
-        isFilesSubNavShown: true
-      }, () => {
-        setTimeout(() => {
-          this.canCloseNav = true;
-        }, 500);
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    this.setState({ isFilesSubNavShown: true });
   };
 
   closeSubNav = () => {
-    if (!this.state.isFilesSubNavShown || !this.canCloseNav) return;
-    this.setState({
-      isFilesSubNavShown: false
-    });
+    if (!this.state.isFilesSubNavShown) return;
+    this.setState({ isFilesSubNavShown: false });
   };
 
   tabItemClick = (e, param, id) => {
@@ -124,7 +117,7 @@ class MainSideNavFolded extends React.Component {
         <div className="side-nav side-nav-folded h-100 position-relative" style={{ zIndex: FOLDED_SIDE_NAV }}>
           <div className='side-nav-con d-flex flex-column'>
             <ul className="nav nav-pills flex-column nav-container">
-              <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`} onClick={this.openSubNav}>
+              <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
                 <Link
                   to={ siteRoot + 'libraries/' }
                   className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
