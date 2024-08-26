@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {
-  VIEW_NOT_DISPLAY_COLUMN_KEYS,
   FILTER_COLUMN_OPTIONS,
   ValidateFilter,
   getColumnByKey,
@@ -20,7 +19,7 @@ const propTypes = {
   filterConjunction: PropTypes.string.isRequired,
   updateFilter: PropTypes.func.isRequired,
   deleteFilter: PropTypes.func.isRequired,
-  updateFilterConjunction: PropTypes.func,
+  modifyFilterConjunction: PropTypes.func,
   emptyPlaceholder: PropTypes.string,
   value: PropTypes.object,
   collaborators: PropTypes.array,
@@ -53,7 +52,7 @@ class FiltersList extends Component {
   };
 
   updateConjunction = (filterConjunction) => {
-    this.props.updateFilterConjunction(filterConjunction);
+    this.props.modifyFilterConjunction(filterConjunction);
   };
 
   getConjunctionOptions = () => {
@@ -66,8 +65,7 @@ class FiltersList extends Component {
   getFilterColumns = () => {
     const { columns } = this.props;
     return columns.filter(column => {
-      let { type, key } = column;
-      if (VIEW_NOT_DISPLAY_COLUMN_KEYS.includes(key)) return false;
+      let { type } = column;
       return Object.prototype.hasOwnProperty.call(FILTER_COLUMN_OPTIONS, type);
     });
   };

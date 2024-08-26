@@ -107,8 +107,8 @@ class ServerOperator {
         break;
       }
       case OPERATION_TYPE.MODIFY_FILTERS: {
-        const { repo_id, view_id, filter_conjunction, filters } = operation;
-        window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction }).then(res => {
+        const { repo_id, view_id, filter_conjunction, filters, basic_filters } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction, basic_filters }).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify filter') });

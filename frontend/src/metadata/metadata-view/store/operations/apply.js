@@ -101,9 +101,10 @@ export default function apply(data, operation) {
       return data;
     }
     case OPERATION_TYPE.MODIFY_FILTERS: {
-      const { filter_conjunction, filters } = operation;
+      const { filter_conjunction, filters, basic_filters } = operation;
       data.view.filter_conjunction = filter_conjunction;
       data.view.filters = filters;
+      data.view.basic_filters = basic_filters;
       return data;
     }
     case OPERATION_TYPE.MODIFY_SORTS: {

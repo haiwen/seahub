@@ -344,12 +344,13 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifyFilters(filterConjunction, filters) {
+  modifyFilters(filterConjunction, filters, basicFilters = []) {
     const type = OPERATION_TYPE.MODIFY_FILTERS;
     const operation = this.createOperation({
       type,
       filter_conjunction: filterConjunction,
       filters,
+      basic_filters: basicFilters,
       repo_id: this.repoId,
       view_id: this.viewId,
       success_callback: () => {

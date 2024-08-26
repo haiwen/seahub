@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
-import { Button, UncontrolledPopover } from 'reactstrap';
+import { Button, FormGroup, Label, UncontrolledPopover } from 'reactstrap';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import {
   FILTER_COLUMN_OPTIONS,
@@ -11,6 +11,7 @@ import { getEventClassName, gettext } from '../../../utils';
 import { getFilterByColumn } from '../../../utils/filters-utils';
 import FiltersList from './widgets';
 import { EVENT_BUS_TYPE } from '../../../constants';
+import BasicFilters from './basic-filters';
 
 import './index.css';
 
@@ -32,6 +33,7 @@ class FilterPopover extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      basicFilters: props.basicFilters,
       filters: getValidFilters(props.filters, props.columns),
       filterConjunction: props.filterConjunction || 'And',
     };
@@ -97,7 +99,7 @@ class FilterPopover extends Component {
     this.update(filters);
   };
 
-  updateFilterConjunction = (conjunction) => {
+  modifyFilterConjunction = (conjunction) => {
     if (this.props.isNeedSubmit) {
       const isSubmitDisabled = false;
       this.setState({ filterConjunction: conjunction, isSubmitDisabled });
@@ -130,8 +132,8 @@ class FilterPopover extends Component {
   };
 
   onSubmitFilters = () => {
-    const { filters, filterConjunction } = this.state;
-    const update = { filters, filter_conjunction: filterConjunction };
+    const { filters, filterConjunction, basicFilters } = this.state;
+    const update = { filters, filter_conjunction: filterConjunction, basic_filters: basicFilters };
     this.props.update(update);
     this.props.hidePopover();
   };
@@ -140,9 +142,21 @@ class FilterPopover extends Component {
     e.stopPropagation();
   };
 
+  onBasicFilterChange = (value) => {
+    if (this.props.isNeedSubmit) {
+      const isSubmitDisabled = false;
+      this.setState({ basicFilters: value, isSubmitDisabled });
+      return;
+    }
+    this.setState({ basicFilters: value }, () => {
+      const update = { filters: this.state.filters, filter_conjunction: this.state.filterConjunction, basic_filters: value };
+      this.props.update(update);
+    });
+  };
+
   render() {
     const { readOnly, target, columns, placement } = this.props;
-    const { filters, filterConjunction } = this.state;
+    const { filters, filterConjunction, basicFilters } = this.state;
     const canAddFilter = columns.length > 0;
     return (
       <UncontrolledPopover
@@ -151,32 +165,38 @@ class FilterPopover extends Component {
         target={target}
         fade={false}
         hideArrow={true}
-        className=" sf-metadata-filter-popover"
+        className="sf-metadata-filter-popover"
         boundariesElement={document.body}
       >
         {({ scheduleUpdate }) => (
           <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
-            <FiltersList
-              filterConjunction={filterConjunction}
-              filters={filters}
-              columns={columns}
-              emptyPlaceholder={gettext('No filters')}
-              updateFilter={this.updateFilter}
-              deleteFilter={this.deleteFilter}
-              updateFilterConjunction={this.updateFilterConjunction}
-              collaborators={this.props.collaborators}
-              readOnly={readOnly}
-              scheduleUpdate={scheduleUpdate}
-              isPre={this.props.isPre}
-            />
-            {!readOnly && (
-              <CustomizeAddTool
-                className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
-                callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
-                footerName={gettext('Add filter')}
-                addIconClassName="popover-add-icon"
-              />
-            )}
+            <BasicFilters filters={basicFilters} onChange={this.onBasicFilterChange} />
+            <FormGroup className="filter-group-advanced filter-group mb-0">
+              <Label className="filter-group-name">{gettext('Advanced')}</Label>
+              <div className="filter-group-container">
+                <FiltersList
+                  filterConjunction={filterConjunction}
+                  filters={filters}
+                  columns={columns}
+                  emptyPlaceholder={gettext('No filters')}
+                  updateFilter={this.updateFilter}
+                  deleteFilter={this.deleteFilter}
+                  modifyFilterConjunction={this.modifyFilterConjunction}
+                  collaborators={this.props.collaborators}
+                  readOnly={readOnly}
+                  scheduleUpdate={scheduleUpdate}
+                  isPre={this.props.isPre}
+                />
+                {!readOnly && (
+                  <CustomizeAddTool
+                    className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
+                    callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
+                    footerName={gettext('Add filter')}
+                    addIconClassName="popover-add-icon"
+                  />
+                )}
+              </div>
+            </FormGroup>
             {!readOnly && this.props.isNeedSubmit && (
               <div className="sf-metadata-popover-footer">
                 <Button className='mr-2' onClick={this.onClosePopover}>{gettext('Cancel')}</Button>
@@ -201,6 +221,7 @@ FilterPopover.propTypes = {
   filters: PropTypes.array,
   collaborators: PropTypes.array,
   isPre: PropTypes.bool,
+  basicFilters: PropTypes.array,
   hidePopover: PropTypes.func,
   update: PropTypes.func,
 };

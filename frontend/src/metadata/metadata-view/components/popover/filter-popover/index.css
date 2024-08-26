@@ -2,3 +2,39 @@
   max-width: none;
   min-width: 300px;
 }
+
+.sf-metadata-filter-popover .sf-metadata-filters {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+}
+
+.sf-metadata-filter-popover .filter-group-name {
+  margin-bottom: 10px;
+}
+
+.sf-metadata-filter-popover .filter-group-advanced {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sf-metadata-filter-popover .filter-group-advanced .filter-group-name {
+  padding: 0 16px;
+}
+
+.sf-metadata-filter-popover .filter-group-advanced .filter-group-container {
+  flex: 1;
+  padding: 0 16px;
+}
+
+.sf-metadata-filter-popover .add-item-btn.popover-add-tool {
+  height: 28px;
+  padding: 0 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 8px;
+  border-radius: 3px;
+  font-weight: 400;
+  margin-left: -6px;
+}
