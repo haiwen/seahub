@@ -6,6 +6,8 @@ import Alert from './alert';
 const ANIMATION_DURATION = 240;
 
 export default class Toast extends React.PureComponent {
+  _isMounted = false;
+
   static propTypes = {
     /**
      * The z-index of the toast.
@@ -67,10 +69,12 @@ export default class Toast extends React.PureComponent {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.startCloseTimer();
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     this.clearCloseTimer();
   }
 
@@ -80,9 +84,11 @@ export default class Toast extends React.PureComponent {
       event.stopPropagation();
     }
     this.clearCloseTimer();
-    this.setState({
-      isShown: false
-    });
+    if (this._isMounted) {
+      this.setState({
+        isShown: false
+      });
+    }
   };
 
   startCloseTimer = () => {
