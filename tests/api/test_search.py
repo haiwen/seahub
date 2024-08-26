@@ -8,6 +8,11 @@ from seahub.test_utils import BaseTestCase, TRAVIS
 
 from seaserv import seafile_api
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
 
 class SearchTest(BaseTestCase):
     def setUp(self):
@@ -35,8 +40,13 @@ class SearchTest(BaseTestCase):
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
     @patch('seahub.api2.views.search_files')
+    @patch('seahub.api2.views.is_pro_version')
     @pytest.mark.skipif(TRAVIS, reason="")
-    def test_can_search_file(self, mock_search_files):
+    def test_can_search_file(self, mock_search_files, mock_is_pro_version):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
         mock_search_files.return_value = self.mock_results, \
                 self.mock_total
 
@@ -50,22 +60,37 @@ class SearchTest(BaseTestCase):
         assert json_resp['results'][0]['repo_id'] == self.mock_results[0]['repo_id']
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
-    def test_can_not_search_with_invalid_repo_permission(self):
+    @patch('seahub.api2.views.is_pro_version')
+    def test_can_not_search_with_invalid_repo_permission(self, mock_is_pro_version):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
         self.login_as(self.admin)
         resp = self.client.get(self.url + '?q=lian&search_repo=%s' %
                 self.repo_id)
         self.assertEqual(403, resp.status_code)
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
-    def test_can_not_search_without_q_parameter(self):
+    @patch('seahub.api2.views.is_pro_version')
+    def test_can_not_search_without_q_parameter(self, mock_is_pro_version):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
         self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(400, resp.status_code)
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
     @patch('seahub.api2.views.search_files')
+    @patch('seahub.api2.views.is_pro_version')
     @pytest.mark.skipif(TRAVIS, reason="")
-    def test_can_search_with_search_path(self, mock_search_files):
+    def test_can_search_with_search_path(self, mock_search_files, mock_is_pro_version):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        mock_is_pro_version.return_value = True
         mock_search_files.return_value = self.mock_results, \
                 self.mock_total
 

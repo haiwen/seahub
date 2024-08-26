@@ -9,11 +9,6 @@ const ViewToolBar = ({ viewId }) => {
   const [view, setView] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
 
-  const availableColumns = useMemo(() => {
-    if (!view) return [];
-    return view.available_columns;
-  }, [view]);
-
   const viewColumns = useMemo(() => {
     if (!view) return [];
     return view.columns;
@@ -23,8 +18,8 @@ const ViewToolBar = ({ viewId }) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, []);
 
-  const modifyFilters = useCallback((filters, filterConjunction) => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_FILTERS, filters, filterConjunction);
+  const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_FILTERS, filters, filterConjunction, basicFilters);
   }, []);
 
   const modifySorts = useCallback((sorts) => {
@@ -37,6 +32,10 @@ const ViewToolBar = ({ viewId }) => {
 
   const modifyHiddenColumns = useCallback((hiddenColumns) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, hiddenColumns);
+  }, []);
+
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, sourceColumnKey, targetColumnKey);
   }, []);
 
   const viewChange = useCallback((view) => {
@@ -79,8 +78,9 @@ const ViewToolBar = ({ viewId }) => {
           target="sf-metadata-filter-popover"
           readOnly={readOnly}
           filterConjunction={view.filter_conjunction}
+          basicFilters={view.basic_filters}
           filters={view.filters}
-          columns={availableColumns}
+          columns={viewColumns}
           modifyFilters={modifyFilters}
           collaborators={collaborators}
         />
@@ -102,7 +102,7 @@ const ViewToolBar = ({ viewId }) => {
             columns={viewColumns}
             groupbys={view.groupbys}
             modifyGroupbys={modifyGroupbys}
-          />
+        />
         )}
         {view.type !== 'image' && (
           <HideColumnSetter
@@ -112,7 +112,8 @@ const ViewToolBar = ({ viewId }) => {
             columns={viewColumns.slice(1)}
             hiddenColumns={view.hidden_columns || []}
             modifyHiddenColumns={modifyHiddenColumns}
-          />
+            modifyColumnOrder={modifyColumnOrder}
+        />
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>

@@ -383,7 +383,7 @@ def get_file_upload_url_ul(request, token):
 
     dir_id = seafile_api.get_dir_id_by_path(uls.repo_id, uls.path)
     if not dir_id:
-        return HttpResponse(json.dumps({"error": _("Directory does not exist.")}),
+        return HttpResponse(json.dumps({"error": _("Folder does not exist.")}),
                             status=404, content_type=content_type)
 
     obj_id = json.dumps({'parent_dir': uls.path})

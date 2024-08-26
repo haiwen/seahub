@@ -610,16 +610,14 @@ class Records extends Component {
   };
 
   renderRecordsBody = ({ containerWidth }) => {
-    const { isGroupView, recordGetterByIndex } = this.props;
+    const { isGroupView, recordGetterByIndex, updateRecords } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
-    const {
-      columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
-    } = columnMetrics;
-    const contextMenu = (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} />);
+    const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
-      recordMetrics, colOverScanStartIdx, colOverScanEndIdx, contextMenu,
+      recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
+      contextMenu: (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} updateRecords={updateRecords} />),
       hasSelectedRecord: this.hasSelectedRecord(),
       getScrollLeft: this.getScrollLeft,
       getScrollTop: this.getScrollTop,
@@ -655,7 +653,7 @@ class Records extends Component {
 
   render() {
     const { recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn } = this.props;
+      deleteColumn, modifyColumnOrder } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
@@ -689,6 +687,7 @@ class Records extends Component {
               renameColumn={renameColumn}
               deleteColumn={deleteColumn}
               modifyColumnData={modifyColumnData}
+              modifyColumnOrder={modifyColumnOrder}
             />
             {this.renderRecordsBody({ containerWidth })}
           </div>
@@ -746,6 +745,7 @@ Records.propTypes = {
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,
   modifyColumnWidth: PropTypes.func,
+  modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
 };
 

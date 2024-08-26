@@ -100,8 +100,8 @@ const Container = () => {
     return { rowIdsInOrder, upperRowIds, belowRowIds };
   }, [metadata]);
 
-  const modifyFilters = useCallback((filters, filterConjunction) => {
-    store.modifyFilters(filterConjunction, filters);
+  const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
+    store.modifyFilters(filterConjunction, filters, basicFilters);
   }, [store]);
 
   const modifySorts = useCallback((sorts) => {
@@ -132,6 +132,10 @@ const Container = () => {
     store.modifyColumnWidth(columnKey, newWidth);
   }, [store]);
 
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    store.modifyColumnOrder(sourceColumnKey, targetColumnKey);
+  }, [store]);
+
   const recordGetterById = useCallback((recordId) => {
     return metadata.id_row_map[recordId];
   }, [metadata]);
@@ -159,16 +163,19 @@ const Container = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
-    const unsubscribeModifyFilters = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_FILTERS, modifyFilters);
-    const unsubscribeModifySorts = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SORTS, modifySorts);
-    const unsubscribeModifyGroupbys = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
-    const unsubscribeModifyHiddenColumns = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
+    const eventBus = window.sfMetadataContext.eventBus;
+    const unsubscribeModifyFilters = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_FILTERS, modifyFilters);
+    const unsubscribeModifySorts = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SORTS, modifySorts);
+    const unsubscribeModifyGroupbys = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
+    const unsubscribeModifyHiddenColumns = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
+    const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       unsubscribeModifyFilters();
       unsubscribeModifySorts();
       unsubscribeModifyGroupbys();
       unsubscribeModifyHiddenColumns();
+      unsubscribeModifyColumnOrder();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -197,6 +204,7 @@ const Container = () => {
                   deleteColumn={deleteColumn}
                   modifyColumnData={modifyColumnData}
                   modifyColumnWidth={modifyColumnWidth}
+                  modifyColumnOrder={modifyColumnOrder}
                 />
               )}
               {metadata.view.type === 'image' && (<Gallery />)}

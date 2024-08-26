@@ -97,9 +97,18 @@ class ServerOperator {
         }
         break;
       }
+      case OPERATION_TYPE.MODIFY_COLUMN_ORDER: {
+        const { repo_id, view_id, new_columns_keys } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { columns_keys: new_columns_keys }).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to modify property order') });
+        });
+        break;
+      }
       case OPERATION_TYPE.MODIFY_FILTERS: {
-        const { repo_id, view_id, filter_conjunction, filters } = operation;
-        window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction }).then(res => {
+        const { repo_id, view_id, filter_conjunction, filters, basic_filters } = operation;
+        window.sfMetadataContext.modifyView(repo_id, view_id, { filters, filter_conjunction, basic_filters }).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify filter') });
@@ -129,7 +138,7 @@ class ServerOperator {
         window.sfMetadataContext.modifyView(repo_id, view_id, { hidden_columns }).then(res => {
           callback({ operation });
         }).catch(error => {
-          callback({ error: gettext('Failed to modify hidden columns') });
+          callback({ error: gettext('Failed to modify hidden properties') });
         });
         break;
       }

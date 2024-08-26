@@ -9,7 +9,7 @@ import { getEventClassName, gettext } from '../../../utils';
 
 import './index.css';
 
-const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns }) => {
+const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns, modifyColumnOrder }) => {
   const [searchValue, setSearchValue] = useState('');
   const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns);
   const displayColumns = useMemo(() => {
@@ -104,7 +104,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
         <div className="sf-metadata-hide-columns-search-container">
           <SearchInput placeholder={gettext('Search property')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true}/>
         </div>
-        <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} />
+        <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} modifyColumnOrder={modifyColumnOrder} />
         {!readOnly && !searchValue && (
           <div className="sf-metadata-hide-columns-operations">
             <div className="sf-metadata-hide-columns-operation px-2" onClick={hideAll} aria-label={gettext('Hide all')}>{gettext('Hide all')}</div>
@@ -125,6 +125,7 @@ HideColumnPopover.propTypes = {
   columns: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   hidePopover: PropTypes.func.isRequired,
+  modifyColumnOrder: PropTypes.func,
 };
 
 export default HideColumnPopover;

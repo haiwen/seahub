@@ -27,6 +27,7 @@ from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, get_user_common_info
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
@@ -57,10 +58,8 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
-if HAS_FILE_SEARCH:
-    from seahub.search.utils import search_files
-if HAS_FILE_SEASEARCH:
-    from seahub.ai.utils import search, format_repos
+if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
+    from seahub.search.utils import search_files, ai_search_files, format_repos
 
 
 logger = logging.getLogger(__name__)
@@ -799,7 +798,7 @@ class SeadocDailyHistoryDetail(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         name_dict = {}
         obj_id_list = [commit.file_id for commit in file_revisions]
         if obj_id_list:
@@ -1362,7 +1361,7 @@ class SeadocCommentRepliesView(APIView):
         detail = {
             'author': username,
             'comment_id': int(comment_id),
-            'reply_id': reply.pk,  
+            'reply_id': reply.pk,
             'reply' : str(reply_content),
             'msg_type': 'reply',
             'created_at': datetime_to_isoformat_timestr(reply.created_at),
@@ -2902,6 +2901,7 @@ class SeadocEditorCallBack(APIView):
 class SeadocSearchFilenameView(APIView):
 
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
@@ -2935,7 +2935,6 @@ class SeadocSearchFilenameView(APIView):
 
         search_filename_only = True
         suffixes = ['sdoc',]
-
         if HAS_FILE_SEARCH:
             org_id = get_org_id_by_repo_id(repo_id)
             map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
@@ -2953,7 +2952,7 @@ class SeadocSearchFilenameView(APIView):
                 'time_range': time_range,
                 'size_range': size_range,
             }
-            # search file
+
             try:
                 results, total = search_files(
                     repo_id_map, search_path, keyword, obj_desc, start, size, org_id, search_filename_only)
@@ -2980,29 +2979,12 @@ class SeadocSearchFilenameView(APIView):
             has_more = True if total > current_page * per_page else False
             return Response({"total":total, "results":results, "has_more":has_more})
 
-        if HAS_FILE_SEASEARCH:
-            repos = [repo,]
+        elif HAS_FILE_SEASEARCH:
+            repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
             searched_repos, repos_map = format_repos(repos)
-            count = per_page
+            results, total = ai_search_files(query, searched_repos, per_page, suffixes)
 
-            params = {
-                'query': query,
-                'repos': searched_repos,
-                'count': count,
-                'suffixes': suffixes,
-                'search_filename_only': search_filename_only,
-            }
-            try:
-                resp = search(params)
-                if resp.status_code == 500:
-                    logger.error('search in library error status: %s body: %s', resp.status_code, resp.text)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-                resp_json = resp.json()
-            except Exception as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-            for f in resp_json.get('results'):
+            for f in results:
                 repo_id = f['repo_id']
                 repo = repos_map.get(repo_id, None)
                 if not repo:
@@ -3020,6 +3002,5 @@ class SeadocSearchFilenameView(APIView):
                     else:
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
-                f['doc_uuid'] = get_seadoc_file_uuid(repo, e['fullpath'])
 
-            return Response(resp_json, resp.status_code)
+            return Response({"total": total, "results": results, "has_more": False})

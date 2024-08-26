@@ -105,6 +105,11 @@ FILEEXT_ICON_MAP = {
     'ico': 'pic.png',
     'psd': 'psd.png',
 
+    # zip file
+    'zip': 'zip.png',
+    'rar': 'zip.png',
+    'tar': 'zip.png',
+
     # style file
     'css': 'css.png',
 
@@ -136,10 +141,10 @@ COMMIT_MSG_TRANSLATION_MAP = {
     'Modified': _('Modified'),
     'Renamed': _('Renamed'),
     'Moved': _('Moved'),
-    'Added directory': _('Added directory'),
-    'Removed directory': _('Removed directory'),
-    'Renamed directory': _('Renamed directory'),
-    'Moved directory': _('Moved directory'),
+    'Added directory': _('Added folder'),
+    'Removed directory': _('Removed folder'),
+    'Renamed directory': _('Renamed folder'),
+    'Moved directory': _('Moved folder'),
     'Added or modified': _('Added or modified'),
 }
 @register.filter(name='translate_commit_desc')
@@ -162,7 +167,7 @@ def translate_commit_desc(value):
                 {'file':matchobj.group(1), 'time':matchobj.group(2)}
         return re.sub('Reverted file "(.*)" to status at (.*)', repl, value)
     elif value.startswith('Recovered deleted directory'):
-        return value.replace('Recovered deleted directory', _('Recovered deleted directory'))
+        return value.replace('Recovered deleted directory', _('Recovered deleted folder'))
     elif value.startswith('Changed library'):
         return value.replace('Changed library name or description', _('Changed library name or description'))
     elif value.startswith('Merged') or value.startswith('Auto merge'):
@@ -233,7 +238,7 @@ def translate_commit_desc_escape(value):
                 {'file':matchobj.group(1), 'time':matchobj.group(2)}
         return_value = escape(re.sub('Reverted file "(.*)" to status at (.*)', repl, value))
     elif value.startswith('Recovered deleted directory'):
-        return_value = escape(value.replace('Recovered deleted directory', _('Recovered deleted directory')))
+        return_value = escape(value.replace('Recovered deleted directory', _('Recovered deleted folder')))
     elif value.startswith('Changed library'):
         return_value = escape(value.replace('Changed library name or description', _('Changed library name or description')))
     elif value.startswith('Merged') or value.startswith('Auto merge'):

@@ -8,7 +8,7 @@ import { CellType, isFunction, Z_INDEX, getCellValueByColumn, getColumnOptionNam
 import { isCellValueChanged } from '../../../utils/cell-comparer';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import Editor from '../editor';
-import { canEditCell } from '../../../utils/column-utils';
+import { canEditCell, getColumnOriginName } from '../../../utils/column-utils';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME
@@ -124,7 +124,8 @@ class PopupEditorContainer extends React.Component {
 
   getOldRowData = (originalOldCellValue) => {
     const { column } = this.props;
-    const { key: columnKey, name: columnName, type: columnType } = column;
+    const columnName = getColumnOriginName(column);
+    const { key: columnKey, type: columnType } = column;
     let oldValue = originalOldCellValue;
     if (this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
@@ -133,7 +134,7 @@ class PopupEditorContainer extends React.Component {
     if (columnType === CellType.LONG_TEXT) {
       oldValue = this.getEditor().getValue(); // long-text cell value need format to {text: '', links: [], ...}
     }
-    const oldRowData = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnName]: oldValue } : { [columnName]: oldValue } ;
+    const oldRowData = { [columnName]: oldValue };
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
   };

@@ -161,7 +161,7 @@ class CopyMoveTaskView(APIView):
             if dirent_type == 'dir' and src_repo_id == dst_repo_id and \
                     dst_parent_dir.startswith(src_dirent_path + '/'):
 
-                error_msg = _('Can not move directory %(src)s to its subdirectory %(des)s') \
+                error_msg = _('Can not move folder %(src)s to its subfolder %(des)s') \
                     % {'src': escape(src_dirent_path), 'des': escape(dst_parent_dir)}
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

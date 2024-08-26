@@ -73,6 +73,11 @@ class Context {
     return this.metadataAPI.getMetadata(repoID, params);
   };
 
+  getRecord = (parentDir, fileName) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.getMetadataRecordInfo(repoID, parentDir, fileName);
+  };
+
   getViews = () => {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.listViews(repoID);
@@ -122,6 +127,11 @@ class Context {
     if (this.permission === 'r') return false;
     const { key } = column;
     if (PRIVATE_COLUMN_KEYS.includes(key)) return PREDEFINED_COLUMN_KEYS.includes(key);
+    return true;
+  };
+
+  canModifyColumnOrder = () => {
+    if (this.permission === 'r') return false;
     return true;
   };
 
@@ -181,6 +191,11 @@ class Context {
     // todo
   };
 
+  // ai
+  generateSummary = (filePaths) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.generateSummary(repoID, filePaths);
+  };
 }
 
 export default Context;

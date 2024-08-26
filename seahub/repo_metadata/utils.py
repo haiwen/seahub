@@ -5,8 +5,9 @@ import json
 import random
 from urllib.parse import urljoin
 
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 
+from seaserv import seafile_api
 
 def add_init_metadata_task(params):
     payload = {'exp': int(time.time()) + 300, }
@@ -63,3 +64,19 @@ def init_metadata(metadata_server_api):
     # init sys column
     sys_columns = get_sys_columns()
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
+
+
+def update_docs_summary(repo_id, files_info_list):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/update-docs-summary')
+    params = {
+        'repo_id': repo_id,
+        'files_info_list': files_info_list,
+    }
+    resp = requests.post(url, json=params, headers=headers)
+    return resp
+
+def get_file_download_token(repo_id, file_id, username):
+    return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)

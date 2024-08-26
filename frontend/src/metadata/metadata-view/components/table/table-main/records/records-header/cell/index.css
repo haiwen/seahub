@@ -7,3 +7,11 @@
   font-size: 12px;
   transform: scale(.8);
 }
+
+.sf-metadata-record-header-cell .rdg-can-drop > .sf-metadata-result-table-cell.column {
+  cursor: move;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping > .sf-metadata-result-table-cell.column {
+  background: #ececec;
+}

@@ -344,12 +344,13 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifyFilters(filterConjunction, filters) {
+  modifyFilters(filterConjunction, filters, basicFilters = []) {
     const type = OPERATION_TYPE.MODIFY_FILTERS;
     const operation = this.createOperation({
       type,
       filter_conjunction: filterConjunction,
       filters,
+      basic_filters: basicFilters,
       repo_id: this.repoId,
       view_id: this.viewId,
       success_callback: () => {
@@ -427,6 +428,19 @@ class Store {
     const column = getColumnByKey(this.data.columns, columnKey);
     const operation = this.createOperation({
       type, repo_id: this.repoId, column_key: columnKey, new_width: newWidth, old_width: column.width
+    });
+    this.applyOperation(operation);
+  };
+
+  modifyColumnOrder = (sourceColumnKey, targetColumnKey) => {
+    const type = OPERATION_TYPE.MODIFY_COLUMN_ORDER;
+    const { columns_keys } = this.data.view;
+    const targetColumnIndex = columns_keys.indexOf(targetColumnKey);
+    let newColumnsKeys = columns_keys.slice(0);
+    newColumnsKeys = newColumnsKeys.filter(key => key !== sourceColumnKey);
+    newColumnsKeys.splice(targetColumnIndex, 0, sourceColumnKey);
+    const operation = this.createOperation({
+      type, repo_id: this.repoId, view_id: this.viewId, new_columns_keys: newColumnsKeys, old_columns_keys: columns_keys
     });
     this.applyOperation(operation);
   };

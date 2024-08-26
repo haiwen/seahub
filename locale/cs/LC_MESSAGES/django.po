@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Tomáš Kubalík <tkubalik@ifrog.cz>, 2017,2019-2020,2024\n"
 "Language-Team: Czech (http://app.transifex.com/haiwen/seahub/language/cs/)\n"
@@ -483,8 +483,8 @@ msgstr "Nedostatek úložného prostoru - mimo kvótu."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr "Nemohu přesunout adresář %(src)s do podadresáře %(des)s"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
+msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -770,13 +770,13 @@ msgid "A file is shared to you on %s"
 msgstr "Na %s je s vámi sdílen soubor"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
-msgstr "adresář"
+msgid "folder"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
-msgstr "Na %s je s vámi sdílen adresář"
+msgid "A folder is shared to you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -1185,20 +1185,22 @@ msgid "Moved"
 msgstr "Přesunut"
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
-msgstr "Přidán adresář"
+msgid "Added folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
-msgstr "Odstraněn adresář"
+msgid "Removed folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
-msgstr "Přejmenován adresář"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr "Přejmenovaná složka"
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
-msgstr "Přesunutý adresář"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr "Přesunutá složka"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Added or modified"
@@ -1217,8 +1219,8 @@ msgstr "Vrácen soubor \"%(file)s\" na status v %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
-msgstr "Smazaný adresář byl obnoven"
+msgid "Recovered deleted folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:167
 #: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
@@ -1690,14 +1692,6 @@ msgstr "Smazaná složka"
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
 msgstr "Obnovit složku"
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr "Přejmenovaná složka"
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
-msgstr "Přesunutá složka"
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
 #, python-format
@@ -2317,8 +2311,8 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
-msgstr "Ikona adresáře"
+msgid "Folder icon"
+msgstr ""
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2430,8 +2424,8 @@ msgid "A verification code has been sent to the email address."
 msgstr ""
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
-msgstr "Prosím vyberte adresář."
+msgid "Please choose a folder."
+msgstr ""
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2480,8 +2474,8 @@ msgid "Library does not exist."
 msgstr "Knihovna neexistuje"
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
-msgstr "Adresář neexistuje."
+msgid "Folder does not exist."
+msgstr "Složka neexistuje."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2851,8 +2845,8 @@ msgstr "Chyba. Prosím zkontrolujte připojení k síti."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
-msgstr "Prosím zadejte heslo pokud chcete procházet sdílené soubory/adresáře."
+"Please input the password if you want to browse the shared file/folder."
+msgstr ""
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2915,8 +2909,8 @@ msgid "Password is too short"
 msgstr "Heslo je příliš krátké."
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
-msgstr "Adresář"
+msgid "Folder"
+msgstr "Složka"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26

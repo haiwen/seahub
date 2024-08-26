@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2024\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
@@ -495,8 +495,8 @@ msgstr "Превышение квоты дискового пространст�
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr "Не удается переместить каталог %(src)s в подкаталог %(des)s"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
+msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -782,13 +782,13 @@ msgid "A file is shared to you on %s"
 msgstr "Пользователь поделился с вами файлом на %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
-msgstr "каталог"
+msgid "folder"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
-msgstr "Пользователь поделился с вами каталогом на %s"
+msgid "A folder is shared to you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -1197,20 +1197,22 @@ msgid "Moved"
 msgstr "Перемещен"
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
-msgstr "Добавлен каталог"
+msgid "Added folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
-msgstr "Удален каталог"
+msgid "Removed folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
-msgstr "Переименован каталог"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr "Переименованная папка"
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
-msgstr "Перемещен каталог"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr "Перемещенная папка"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Added or modified"
@@ -1229,8 +1231,8 @@ msgstr "Статус файла восстановлен \"%(file)s\" в %(time)
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
-msgstr "Восстановлено удаленных файлов"
+msgid "Recovered deleted folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:167
 #: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
@@ -1702,14 +1704,6 @@ msgstr "Удаленная папка"
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
 msgstr "Восстановленная папка"
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr "Переименованная папка"
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
-msgstr "Перемещенная папка"
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
 #, python-format
@@ -2329,8 +2323,8 @@ msgstr[2] "%(total)s результатов"
 msgstr[3] "%(total)s результатов"
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
-msgstr "Значок каталога"
+msgid "Folder icon"
+msgstr ""
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2442,8 +2436,8 @@ msgid "A verification code has been sent to the email address."
 msgstr "Код подтверждения был отправлен на адрес электронной почты."
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
-msgstr "Пожалуйста, выберите папку."
+msgid "Please choose a folder."
+msgstr ""
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2492,8 +2486,8 @@ msgid "Library does not exist."
 msgstr "Библиотека не существует"
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
-msgstr "Каталог не существует"
+msgid "Folder does not exist."
+msgstr "Папка не существует."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2537,11 +2531,11 @@ msgstr "Создать аккаунт организации"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "Клиент вошел в систему. Откройте клиент для подтверждения."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Подтверждение Входа Клиента в систему"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
@@ -2863,8 +2857,8 @@ msgstr "Не удалось. Пожалуйста, проверьте сеть."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
-msgstr "Введите пароль, если вы хотите просмотреть файл или каталог."
+"Please input the password if you want to browse the shared file/folder."
+msgstr ""
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2927,8 +2921,8 @@ msgid "Password is too short"
 msgstr "Пароль слишком короткий"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
-msgstr "Каталог"
+msgid "Folder"
+msgstr "Папка"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26

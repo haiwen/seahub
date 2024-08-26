@@ -236,6 +236,8 @@ class WOPIFilesView(APIView):
             return HttpResponse(json.dumps({}), status=500,
                                 content_type=json_content_type)
 
+        result['IsAdminUser'] = False
+
         # optional
         if request_user != ANONYMOUS_EMAIL:
             result['UserFriendlyName'] = email2nickname(request_user)

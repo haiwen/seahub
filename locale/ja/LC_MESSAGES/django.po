@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-21 16:04+0800\n"
+"POT-Creation-Date: 2024-08-23 15:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
@@ -483,7 +483,7 @@ msgstr "クォータを超えています"
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
-msgid "Can not move directory %(src)s to its subdirectory %(des)s"
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
@@ -770,13 +770,13 @@ msgid "A file is shared to you on %s"
 msgstr "%sのファイルが共有されました。"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-msgid "directory"
-msgstr "ディレクトリ"
+msgid "folder"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
-msgid "A directory is shared to you on %s"
-msgstr "%sのディレクトリが共有されました。"
+msgid "A folder is shared to you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -1185,20 +1185,22 @@ msgid "Moved"
 msgstr "移動"
 
 #: seahub/base/templatetags/seahub_tags.py:139
-msgid "Added directory"
-msgstr "追加されたディレクトリ"
+msgid "Added folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:140
-msgid "Removed directory"
-msgstr "削除されたディレクトリ"
+msgid "Removed folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
-msgid "Renamed directory"
-msgstr "改名されたディレクトリ"
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:142
-msgid "Moved directory"
-msgstr "フォルダ移動"
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Added or modified"
@@ -1217,8 +1219,8 @@ msgstr "ファイル名\\\"%(file)s\\\"を%(time)sの時点へ復元する。"
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
-msgid "Recovered deleted directory"
-msgstr "削除されたフォルダを復元"
+msgid "Recovered deleted folder"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:167
 #: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
@@ -1671,14 +1673,6 @@ msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr ""
-
-#: seahub/notifications/management/commands/send_file_updates.py:172
-msgid "Renamed folder"
-msgstr ""
-
-#: seahub/notifications/management/commands/send_file_updates.py:177
-msgid "Moved folder"
 msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:277
@@ -2293,8 +2287,8 @@ msgid_plural "%(total)s results"
 msgstr[0] ""
 
 #: seahub/search/templates/search_results.html:63
-msgid "Directory icon"
-msgstr "フォルダアイコン"
+msgid "Folder icon"
+msgstr ""
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2406,8 +2400,8 @@ msgid "A verification code has been sent to the email address."
 msgstr ""
 
 #: seahub/share/views.py:133
-msgid "Please choose a directory."
-msgstr "目的のディレクトリを選択"
+msgid "Please choose a folder."
+msgstr ""
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2456,7 +2450,7 @@ msgid "Library does not exist."
 msgstr "ライブラリが存在しません。"
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
-msgid "Directory does not exist."
+msgid "Folder does not exist."
 msgstr ""
 
 #: seahub/share/views.py:306
@@ -2827,7 +2821,7 @@ msgstr "操作に失敗しました。ネットワークをご確認ください
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
-"Please input the password if you want to browse the shared file/directory."
+"Please input the password if you want to browse the shared file/folder."
 msgstr ""
 
 #: seahub/templates/shared_link_email.html:12
@@ -2891,8 +2885,8 @@ msgid "Password is too short"
 msgstr "パスワードが短すぎます。"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
-msgid "Directory"
-msgstr "ディレクトリ"
+msgid "Folder"
+msgstr "フォルダ"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26
