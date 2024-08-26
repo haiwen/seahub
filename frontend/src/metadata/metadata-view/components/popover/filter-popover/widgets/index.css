@@ -229,7 +229,7 @@
 
 .sf-metadata-filters-list .multiple-check-icon .sf-metadata-icon-check-mark,
 .sf-metadata-filters-list .collaborator-check-icon .sf-metadata-icon-check-mark {
-  fill: #798d99;
+  fill: #798d99 !important;
   font-size: 12px;
 }
 

@@ -99,7 +99,7 @@ class FilterPopover extends Component {
     this.update(filters);
   };
 
-  updateFilterConjunction = (conjunction) => {
+  modifyFilterConjunction = (conjunction) => {
     if (this.props.isNeedSubmit) {
       const isSubmitDisabled = false;
       this.setState({ filterConjunction: conjunction, isSubmitDisabled });
@@ -169,7 +169,7 @@ class FilterPopover extends Component {
         boundariesElement={document.body}
       >
         {({ scheduleUpdate }) => (
-          <div ref={ref => this.dtablePopoverRef = ref} style={{ maxHeight: window.innerHeight - 100 }} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
+          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={this.props.filtersClassName}>
             <BasicFilters filters={basicFilters} onChange={this.onBasicFilterChange} />
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>
@@ -181,7 +181,7 @@ class FilterPopover extends Component {
                   emptyPlaceholder={gettext('No filters')}
                   updateFilter={this.updateFilter}
                   deleteFilter={this.deleteFilter}
-                  updateFilterConjunction={this.updateFilterConjunction}
+                  modifyFilterConjunction={this.modifyFilterConjunction}
                   collaborators={this.props.collaborators}
                   readOnly={readOnly}
                   scheduleUpdate={scheduleUpdate}

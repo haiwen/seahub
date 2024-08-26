@@ -19,7 +19,7 @@ const propTypes = {
   filterConjunction: PropTypes.string.isRequired,
   updateFilter: PropTypes.func.isRequired,
   deleteFilter: PropTypes.func.isRequired,
-  updateFilterConjunction: PropTypes.func,
+  modifyFilterConjunction: PropTypes.func,
   emptyPlaceholder: PropTypes.string,
   value: PropTypes.object,
   collaborators: PropTypes.array,
@@ -52,7 +52,7 @@ class FiltersList extends Component {
   };
 
   updateConjunction = (filterConjunction) => {
-    this.props.updateFilterConjunction(filterConjunction);
+    this.props.modifyFilterConjunction(filterConjunction);
   };
 
   getConjunctionOptions = () => {

@@ -4,7 +4,6 @@
 }
 
 .sf-metadata-filter-popover .sf-metadata-filters {
-  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   min-width: 400px;
@@ -16,7 +15,6 @@
 
 .sf-metadata-filter-popover .filter-group-advanced {
   flex: 1;
-  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -27,7 +25,6 @@
 
 .sf-metadata-filter-popover .filter-group-advanced .filter-group-container {
   flex: 1;
-  overflow-y: scroll;
   padding: 0 16px;
 }
 
