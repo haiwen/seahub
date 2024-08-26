@@ -904,6 +904,7 @@ class GroupBody extends Component {
             gridUtils={this.props.gridUtils}
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
             modifyColumnData={this.props.modifyColumnData}
+            getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
           <div className="sf-metadata-result-table" ref={this.setResultRef}>
             {this.renderGroups()}
@@ -972,6 +973,7 @@ GroupBody.propTypes = {
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
   onCellContextMenu: PropTypes.func,
+  getTableCanvasContainerRect: PropTypes.func,
 };
 
 export default GroupBody;

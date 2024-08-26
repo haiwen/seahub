@@ -542,6 +542,7 @@ class RecordsBody extends Component {
             gridUtils={this.props.gridUtils}
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
             modifyColumnData={this.props.modifyColumnData}
+            getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}
@@ -608,6 +609,7 @@ RecordsBody.propTypes = {
   openDownloadFilesDialog: PropTypes.func,
   cacheDownloadFilesProps: PropTypes.func,
   onCellContextMenu: PropTypes.func,
+  getTableCanvasContainerRect: PropTypes.func,
 };
 
 export default RecordsBody;

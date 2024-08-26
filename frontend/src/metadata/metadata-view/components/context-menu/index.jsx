@@ -26,6 +26,8 @@ const ContextMenu = ({
   onClearSelected,
   onCopySelected,
   updateRecords,
+  getTableContentRect,
+  getTableCanvasContainerRect,
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -220,41 +222,33 @@ const ContextMenu = ({
     setVisible(false);
   }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary]);
 
-  const getMenuPosition = (x = 0, y = 0) => {
+  const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
       top: y,
       left: x
     };
     if (!menuRef.current) return menuStyles;
-
-    const { innerWidth, innerHeight } = window;
     const rect = menuRef.current.getBoundingClientRect();
+    const tableCanvasContainerRect = getTableCanvasContainerRect();
+    const tableContentRect = getTableContentRect();
+    const { right: innerWidth, bottom: innerHeight } = tableContentRect;
+    menuStyles.top = menuStyles.top - tableCanvasContainerRect.top;
+    menuStyles.left = menuStyles.left - tableCanvasContainerRect.left;
 
-    // Calculate the offset of the parent components
-    const parentRect = menuRef.current.parentElement.getBoundingClientRect();
-    const offsetX = parentRect.left;
-    const offsetY = parentRect.top;
-
-    // Adjust the position based on the offset
-    menuStyles.top = y - offsetY;
-    menuStyles.left = x - offsetX;
-
-    const metadataResultFooterHeight = 32;
-    const contentHeight = innerHeight - metadataResultFooterHeight;
-    if (y + rect.height > contentHeight) {
+    if (y + rect.height > innerHeight - 10) {
       menuStyles.top -= rect.height;
     }
     if (x + rect.width > innerWidth) {
       menuStyles.left -= rect.width;
     }
     if (menuStyles.top < 0) {
-      menuStyles.top = rect.height < contentHeight ? (contentHeight - rect.height) / 2 : 0;
+      menuStyles.top = rect.bottom > innerHeight ? (innerHeight - 10 - rect.height) / 2 : 0;
     }
     if (menuStyles.left < 0) {
       menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
     }
     return menuStyles;
-  };
+  }, [getTableContentRect, getTableCanvasContainerRect]);
 
   useEffect(() => {
     const handleShow = (event) => {
@@ -272,6 +266,7 @@ const ContextMenu = ({
     return () => {
       document.removeEventListener('contextmenu', handleShow);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -313,6 +308,7 @@ ContextMenu.propTypes = {
   selectedRange: PropTypes.object,
   selectedPosition: PropTypes.object,
   recordMetrics: PropTypes.object,
+  getTableContentRect: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
 };
 

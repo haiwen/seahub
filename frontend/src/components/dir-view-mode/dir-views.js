@@ -34,6 +34,8 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     updateEnableMetadata(value);
   }, [updateEnableMetadata]);
 
+  if (!enableMetadataManagement) return null;
+
   return (
     <>
       <TreeSection
