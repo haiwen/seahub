@@ -15,13 +15,22 @@ const Gallery = () => {
   const [imageWidth, setImageWidth] = useState(100);
   const [columns, setColumns] = useState(8);
   const [containerWidth, setContainerWidth] = useState(960);
-  const [adjustValue, setAdjustValue] = useState(0);
+  const [adjustValue, setAdjustValue] = useState(() => {
+    try {
+      const savedValue = localStorage.getItem('sliderValue');
+      return savedValue !== null ? Number(savedValue) : 0;
+    } catch (error) {
+      return 0;
+    }
+  });
   const [visibleItems, setVisibleItems] = useState(BATCH_SIZE);
   const [loadingQueue, setLoadingQueue] = useState([]);
   const [concurrentLoads, setConcurrentLoads] = useState(0);
+
   const imageRefs = useRef([]);
-  const { isLoading, metadata } = useMetadata();
   const containerRef = useRef(null);
+
+  const { isLoading, metadata } = useMetadata();
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
   useEffect(() => {
