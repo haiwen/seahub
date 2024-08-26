@@ -1421,10 +1421,34 @@ class LibContentView extends React.Component {
           newSelectedDirentList.push(clickedDirent);
         }
       } else if (isShiftKeyPressed && lastSelectedIndex !== null) {
-        // Shift key is pressed: Select all items between the last selected and the clicked item
-        const rangeStart = Math.min(this.state.lastSelectedIndex, clickedIndex);
-        const rangeEnd = Math.max(this.state.lastSelectedIndex, clickedIndex);
-        newSelectedDirentList = direntList.slice(rangeStart, rangeEnd + 1);
+        // Shift key is pressed: Select or unselect items based on the clicked index
+        const firstSelectedIndex = direntList.findIndex(dirent => dirent.name === newSelectedDirentList[0].name);
+        if (clickedIndex < firstSelectedIndex) {
+          // Selected all the items between the clicked item and the first selected item
+          const rangeSelectedDirents = direntList.slice(clickedIndex, firstSelectedIndex + 1);
+          const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
+          newSelectedDirentList = [
+            ...newSelectedDirentList.filter(dirent => rangeSelectedNames.has(dirent.name)),
+            ...rangeSelectedDirents
+          ];
+        } else if (clickedIndex >= firstSelectedIndex && clickedIndex < lastSelectedIndex) {
+          // Unselect items between clicked item and the last selected item
+          const rangeSelectedDirents = direntList.slice(firstSelectedIndex, clickedIndex + 1);
+          const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
+          newSelectedDirentList = newSelectedDirentList.filter(dirent => rangeSelectedNames.has(dirent.name));
+        } else {
+          // Select all items between the first selected and the clicked item
+          const rangeStart = Math.min(firstSelectedIndex, clickedIndex);
+          const rangeEnd = Math.max(firstSelectedIndex, clickedIndex);
+          const rangeSelectedDirents = direntList.slice(rangeStart, rangeEnd + 1);
+
+          // Merge the new range selection with the existing selection
+          const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
+          newSelectedDirentList = [
+            ...newSelectedDirentList.filter(dirent => !rangeSelectedNames.has(dirent.name)),
+            ...rangeSelectedDirents
+          ];
+        }
       } else {
         newSelectedDirentList = [clickedDirent];
       }
