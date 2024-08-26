@@ -16,7 +16,6 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
-from seahub.base.decorators import sys_staff_required
 from seahub.organizations.api.permissions import IsOrgAdmin
 
 
@@ -46,9 +45,6 @@ class OrgLogsExportStatus(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """
-        Get task status by task id
-        """
         task_id = request.GET.get('task_id', '')
         if not task_id:
             error_msg = 'task_id invalid.'
@@ -71,12 +67,11 @@ class OrgLogsExportStatus(APIView):
 def org_log_export_excel(request):
     task_id = request.GET.get('task_id', None)
     log_type = request.GET.get('log_type', None)
-    print(log_type)
     if not task_id:
         error_msg = 'task_id invalid.'
         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-    if log_type == 'loginadmin':
+    if log_type == 'fileaudit':
         excel_name = 'file-access-logs.xlsx'
     elif log_type == 'fileupdate':
         excel_name = 'file-update-logs.xlsx'

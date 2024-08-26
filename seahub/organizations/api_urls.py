@@ -104,7 +104,7 @@ urlpatterns = [
     path('admin/logs/repo-permission/', OrgAdminLogsPermAudit.as_view(), name='api-v2.1-org-admin-logs-repo-permission'),
     path('<int:org_id>/admin/departments/', OrgAdminDepartments.as_view(), name='api-v2.1-org-admin-departments'),
     path('<int:org_id>/admin/logs/export-excel/', OrgLogsExport.as_view(), name='api-v2.1-org-logs-export-excel'),
-    re_path(r'^admin/query-export-status/$', OrgLogsExportStatus.as_view(), name='api-v2.1-query-export-status'),
+    path('admin/query-export-status/', OrgLogsExportStatus.as_view(), name='api-v2.1-org-query-export-status'),
     path('admin/log/export-excel/', org_log_export_excel, name='org_log_export_excel'),
 
 ]

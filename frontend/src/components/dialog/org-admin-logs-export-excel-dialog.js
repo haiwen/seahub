@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext, siteRoot, orgID } from '../../utils/constants';
-import { orgAdminAPI } from "../../utils/org-admin-api";
+import { orgAdminAPI } from '../../utils/org-admin-api';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import moment from 'moment';
@@ -24,26 +24,24 @@ class OrgLogsExportExcelDialog extends React.Component {
     if (!this.isValidDateStr()) {
       return;
     }
-    console.log(this.props.logType)
     switch (this.props.logType) {
       case 'logadmin':
-        this.sysExportLogs('loginadmin');
+        this.orgAdminExportLogs('fileaudit');
         break;
       case 'file-update':
-        this.sysExportLogs('fileupdate');
+        this.orgAdminExportLogs('fileupdate');
         break;
       case 'perm-audit':
-        this.sysExportLogs('permaudit');
+        this.orgAdminExportLogs('permaudit');
         break;
     }
   };
 
-  sysExportLogs = (logType) => {
+  orgAdminExportLogs = (logType) => {
     let { startDateStr, endDateStr } = this.state;
     let task_id = '';
     orgAdminAPI.orgAdminExportLogsExcel(orgID, startDateStr, endDateStr, logType).then(res => {
       task_id = res.data.task_id;
-      console.log(res.data)
       this.setState({
         taskId: task_id
       });
@@ -56,7 +54,6 @@ class OrgLogsExportExcelDialog extends React.Component {
         this.timer = setInterval(() => {
           orgAdminAPI.queryAsyncOperationExportExcel(task_id).then(res => {
             if (res.data.is_finished === true) {
-              this.setState({ isFinished: true });
               clearInterval(this.timer);
               location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
             }

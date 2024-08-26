@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
-import {orgID, siteRoot} from './constants';
+import { orgID, siteRoot } from './constants';
 
 class OrgAdminAPI {
 

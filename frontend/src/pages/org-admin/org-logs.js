@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import MainPanelTopbar from './main-panel-topbar';
-import {Button} from "reactstrap";
-import ModalPortal from "../../components/modal-portal";
-import OrgLogsExportExcelDialog from "../../components/dialog/org-admin-logs-export-excel-dialog";
+import { Button } from 'reactstrap';
+import ModalPortal from '../../components/modal-portal';
+import OrgLogsExportExcelDialog from '../../components/dialog/org-admin-logs-export-excel-dialog';
 
 class OrgLogs extends Component {
 
@@ -14,7 +14,7 @@ class OrgLogs extends Component {
     this.state = {
       isExportExcelDialogOpen: false,
       logType: 'logadmin',
-    }
+    };
   }
 
   toggleExportExcelDialog = () => {
@@ -23,16 +23,15 @@ class OrgLogs extends Component {
   tabItemClick = (param) => {
     this.setState({
       logType: param
-    })
+    });
     this.props.tabItemClick(param);
   };
 
   render() {
-    const { isExportExcelDialogOpen, logType } = this.state
-    console.log(logType)
+    const { isExportExcelDialogOpen, logType } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props}>
+        <MainPanelTopbar>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
