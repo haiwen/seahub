@@ -13,7 +13,7 @@ const propTypes = {
   loadDirentList: PropTypes.func.isRequired,
 };
 
-class UploadSdocDialog extends React.Component {
+class ImportSdocDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,9 +48,9 @@ class UploadSdocDialog extends React.Component {
     }
     // check file extension
     let fileName = this.fileInputRef.current.files[0].name;
-    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'zsdoc') {
+    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'sdoczip') {
       this.setState({
-        errorMsg: gettext('Please choose a .zsdoc file.')
+        errorMsg: gettext('Please choose a .zip file.')
       });
       return;
     }
@@ -77,6 +77,6 @@ class UploadSdocDialog extends React.Component {
   }
 }
 
-UploadSdocDialog.propTypes = propTypes;
+ImportSdocDialog.propTypes = propTypes;
 
-export default UploadSdocDialog;
+export default ImportSdocDialog;

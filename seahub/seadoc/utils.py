@@ -25,7 +25,7 @@ from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 
 logger = logging.getLogger(__name__)
 
-ZSDOC = 'zsdoc'
+ZSDOC = 'sdoczip'
 
 
 def uuid_str_to_32_chars(file_uuid):
@@ -138,7 +138,7 @@ def get_seadoc_download_link(uuid_map, is_inner=False):
         repo_id, obj_id, 'view', '', use_onetime=False)
     if not token:
         return None
-    
+
     if is_inner:
         download_link = gen_inner_file_get_url(token, filename)
     else:

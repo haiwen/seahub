@@ -7,7 +7,7 @@ import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
-import UploadSdocDialog from '../dialog/upload-sdoc-dialog';
+import ImportSdocDialog from '../dialog/import-sdoc-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -40,7 +40,7 @@ class DirOperationToolbar extends React.Component {
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
       isMobileOpMenuOpen: false,
-      isUploadSdocDialogOpen: false,
+      isImportSdocDialogOpen: false,
     };
   }
 
@@ -159,8 +159,8 @@ class DirOperationToolbar extends React.Component {
     }
   };
 
-  onToggleUploadSdoc = () => {
-    this.setState({ isUploadSdocDialogOpen: !this.state.isUploadSdocDialogOpen });
+  onToggleImportSdoc = () => {
+    this.setState({ isImportSdocDialogOpen: !this.state.isImportSdocDialogOpen });
   };
 
   render() {
@@ -193,9 +193,9 @@ class DirOperationToolbar extends React.Component {
             'text': gettext('Upload Folder'),
             'onClick': this.onUploadFolder
           }, {
-            'icon': 'upload-sdoc',
-            'text': gettext('Upload Sdoc'),
-            'onClick': this.onToggleUploadSdoc
+            'icon': 'import-sdoc',
+            'text': gettext('Import Sdoc'),
+            'onClick': this.onToggleImportSdoc
           });
         } else {
           opList.push({
@@ -366,9 +366,9 @@ class DirOperationToolbar extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isUploadSdocDialogOpen &&
-          <UploadSdocDialog
-            toggle={this.onToggleUploadSdoc}
+        {this.state.isImportSdocDialogOpen &&
+          <ImportSdocDialog
+            toggle={this.onToggleImportSdoc}
             repoID={this.props.repoID}
             itemPath={this.props.path}
             loadDirentList={this.props.loadDirentList}

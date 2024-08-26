@@ -133,7 +133,7 @@ const TextTranslation = {
   },
   'EXPORT_SDOC': {
     key: 'Export sdoc',
-    value: gettext('Export sdoc')
+    value: gettext('Export as zip')
   },
 };
 

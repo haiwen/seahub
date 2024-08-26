@@ -11,6 +11,7 @@ import time
 import shutil
 from datetime import datetime, timedelta
 from pypinyin import lazy_pinyin
+from zipfile import is_zipfile, ZipFile
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,11 +24,12 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
+from django.core.files.uploadhandler import TemporaryFileUploadHandler
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
 from seahub.views import check_folder_permission
-from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
+from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication, CsrfExemptSessionAuthentication
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, get_user_common_info
 from seahub.api2.throttling import UserRateThrottle
@@ -42,7 +44,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
         gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
         get_service_url, is_valid_username, is_pro_version, \
-        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH
+        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -69,6 +71,10 @@ try:
     TO_TZ = time.strftime('%z')[:3] + ':' + time.strftime('%z')[3:]
 except Exception as error:
     TO_TZ = '+00:00'
+
+
+HTTP_443_ABOVE_QUOTA = 443
+HTTP_447_TOO_MANY_FILES_IN_LIBRARY = 447
 
 
 class SeadocAccessToken(APIView):
@@ -3009,7 +3015,7 @@ class SeadocSearchFilenameView(APIView):
 
 
 class SeadocExportView(APIView):
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -3049,3 +3055,132 @@ class SeadocExportView(APIView):
             shutil.rmtree(tmp_dir)
 
         return response
+
+
+class SdocImportView(APIView):
+    authentication_classes = (TokenAuthentication, CsrfExemptSessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        # use TemporaryFileUploadHandler, which contains TemporaryUploadedFile
+        # TemporaryUploadedFile has temporary_file_path() method
+        # in order to change upload_handlers, we must exempt csrf check
+        request.upload_handlers = [TemporaryFileUploadHandler(request=request)]
+        username = request.user.username
+        relative_path = request.data.get('relative_path', '/').strip('/')
+        parent_dir = request.data.get('parent_dir', '/')
+        replace = request.data.get('replace', 'False')
+        try:
+            replace = to_python_boolean(replace)
+        except ValueError:
+            error_msg = 'replace invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file = request.FILES.get('file', None)
+        if not file:
+            error_msg = 'file can not be found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        filename = file.name
+        uploaded_temp_path = file.temporary_file_path()
+        extension = filename.split('.')[-1].lower()
+
+        if not (extension == 'sdoczip' and is_zipfile(uploaded_temp_path)):
+            error_msg = 'file format not supported.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_upload is False:
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
+
+        obj_id = json.dumps({'parent_dir': parent_dir})
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload', username, use_onetime=False)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        upload_link = gen_file_upload_url(token, 'upload-api')
+        upload_link += '?ret-json=1'
+        if replace:
+            upload_link += '&replace=1'
+
+        # upload file
+        tmp_dir = str(uuid.uuid4())
+        tmp_extracted_path = os.path.join('/tmp/seahub', str(repo_id), 'sdoc_zip_extracted/', tmp_dir)
+        try:
+            with ZipFile(uploaded_temp_path) as zip_file:
+                zip_file.extractall(tmp_extracted_path)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        sdoc_file_name = filename.replace(ZSDOC, 'sdoc')
+        new_file_path = os.path.join(parent_dir, relative_path, sdoc_file_name)
+
+        data = {'parent_dir': parent_dir, 'target_file': new_file_path, 'relative_path': relative_path}
+        if replace:
+            data['replace'] = 1
+        sdoc_file_path = os.path.join(tmp_extracted_path, 'content.json')
+        new_sdoc_file_path = os.path.join(tmp_extracted_path, sdoc_file_name)
+        os.rename(sdoc_file_path, new_sdoc_file_path)
+
+        files = {'file': open(new_sdoc_file_path, 'rb')}
+        resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.error('save file: %s failed: %s' % (filename, resp.text))
+            return api_error(resp.status_code, resp.content)
+
+        sdoc_name = json.loads(resp.content)[0].get('name')
+        new_sdoc_file_path = os.path.join(parent_dir, relative_path, sdoc_name)
+        doc_uuid = get_seadoc_file_uuid(repo, new_sdoc_file_path)
+
+        # upload sdoc images
+        image_dir = os.path.join(tmp_extracted_path, 'images/')
+        if os.path.exists(image_dir):
+            batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir)
+
+        # remove tmp file
+        if os.path.exists(tmp_extracted_path):
+            shutil.rmtree(tmp_extracted_path)
+
+        return Response({'success': True})
+
+
+def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
+    parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, username)
+    upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
+
+    file_list = os.listdir(image_dir)
+
+    for filename in file_list:
+        file_path = posixpath.join(parent_path, filename)
+        image_path = os.path.join(image_dir, filename)
+        image_file = open(image_path, 'rb')
+        files = {'file': image_file}
+        data = {'parent_dir': parent_path, 'filename': filename, 'target_file': file_path}
+        resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.warning('upload sdoc image: %s failed: %s', filename, resp.text)
