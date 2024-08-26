@@ -105,6 +105,11 @@ FILEEXT_ICON_MAP = {
     'ico': 'pic.png',
     'psd': 'psd.png',
 
+    # zip file
+    'zip': 'zip.png',
+    'rar': 'zip.png',
+    'tar': 'zip.png',
+
     # style file
     'css': 'css.png',
 
