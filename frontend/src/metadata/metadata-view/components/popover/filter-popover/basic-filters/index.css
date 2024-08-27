@@ -1,5 +1,28 @@
-.sf-metadata-basic-filters-select {
-  width: 200px;
+.sf-metadata-basic-filters-select.custom-select {
+  width: fit-content;
+  max-width: 100%;
+  background-image: none;
+  border: none;
+  padding: 0 6px;
+  margin-left: -6px;
+  height: 28px;
+}
+
+.sf-metadata-basic-filters-select.custom-select:hover {
+  background: #f5f5f5;
+}
+
+.sf-metadata-basic-filters-select.custom-select .selected-option {
+  background-color: inherit;
+}
+
+.sf-metadata-basic-filters-select.custom-select.focus {
+  border-color: unset;
+  box-shadow: none;
+}
+
+.sf-metadata-basic-filters-select .selected-option-show {
+  margin-right: 8px;
 }
 
 .select-basic-filter-option {
@@ -27,4 +50,8 @@
 
 .sf-metadata-option.sf-metadata-option-active .sf-metadata-icon-check-mark {
   fill: #fff;
+}
+
+.sf-metadata-basic-filters-select .sf-metadata-option-group {
+  margin-left: 6px;
 }

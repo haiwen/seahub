@@ -179,6 +179,10 @@ class LibContentView extends React.Component {
   };
 
   getPathFromLocation = (repoID) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewID = urlParams.get('view');
+    if (viewID) return `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`;
+
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
     let path = location.slice(location.indexOf(repoID) + repoID.length + 1);
@@ -525,7 +529,7 @@ class LibContentView extends React.Component {
       isDirentDetailShow: false
     });
 
-    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}?view=${encodeURIComponent(viewId)}`;
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 

@@ -36,6 +36,7 @@ class FilterPopover extends Component {
       basicFilters: props.basicFilters,
       filters: getValidFilters(props.filters, props.columns),
       filterConjunction: props.filterConjunction || 'And',
+      isSubmitDisabled: true,
     };
     this.isSelectOpen = false;
   }
