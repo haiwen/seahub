@@ -59,7 +59,6 @@ class GroupView extends React.Component {
       showTransferGroupDialog: false,
       showImportMembersDialog: false,
       showManageMembersDialog: false,
-      groupMembers: [],
       isLeaveGroupDialogOpen: false,
       isMembersDialogOpen: false
     };
@@ -93,7 +92,6 @@ class GroupView extends React.Component {
         repoList: [] // empty it for the current group
       }, () => {
         this.loadRepos(this.state.currentPage);
-        this.listGroupMembers();
       });
     }).catch((error) => {
       this.setState({
@@ -309,29 +307,6 @@ class GroupView extends React.Component {
     });
   };
 
-  listGroupMembers = () => {
-    seafileAPI.listGroupMembers(this.props.groupID).then((res) => {
-      this.setState({
-        groupMembers: res.data
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  toggleGroupMembersPopover = (state) => {
-    if (state === 'open') {
-      this.listGroupMembers();
-      this.setState({
-        showGroupMembersPopover: true
-      });
-    } else {
-      this.setState({
-        showGroupMembersPopover: false
-      });
-    }
-  };
 
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -414,7 +389,7 @@ class GroupView extends React.Component {
 
   render() {
     const { errMessage, emptyTip, currentGroup, isDepartmentGroup,
-      groupMembers, isMembersDialogOpen
+      isMembersDialogOpen
     } = this.state;
 
     let useRate = 0;
@@ -502,7 +477,7 @@ class GroupView extends React.Component {
         }
         {isMembersDialogOpen &&
         <GroupMembersDialog
-          members={groupMembers}
+          groupID={this.props.groupID}
           toggleDialog={this.toggleMembersDialog}
         />
         }
