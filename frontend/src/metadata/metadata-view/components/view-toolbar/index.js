@@ -93,24 +93,28 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        <GroupbySetter
-          isNeedSubmit={true}
-          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
-          target="sf-metadata-groupby-popover"
-          readOnly={readOnly}
-          columns={viewColumns}
-          groupbys={view.groupbys}
-          modifyGroupbys={modifyGroupbys}
-        />
-        <HideColumnSetter
-          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
-          target="sf-metadata-hide-column-popover"
-          readOnly={readOnly}
-          columns={viewColumns.slice(1)}
-          hiddenColumns={view.hidden_columns || []}
-          modifyHiddenColumns={modifyHiddenColumns}
-          modifyColumnOrder={modifyColumnOrder}
-        />
+        {view.type !== 'image' && (
+          <GroupbySetter
+            isNeedSubmit={true}
+            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
+            target="sf-metadata-groupby-popover"
+            readOnly={readOnly}
+            columns={viewColumns}
+            groupbys={view.groupbys}
+            modifyGroupbys={modifyGroupbys}
+          />
+        )}
+        {view.type !== 'image' && (
+          <HideColumnSetter
+            wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
+            target="sf-metadata-hide-column-popover"
+            readOnly={readOnly}
+            columns={viewColumns.slice(1)}
+            hiddenColumns={view.hidden_columns || []}
+            modifyHiddenColumns={modifyHiddenColumns}
+            modifyColumnOrder={modifyColumnOrder}
+          />
+        )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
     </div>

@@ -1,9 +1,18 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Input } from 'reactstrap';
 import { EVENT_BUS_TYPE } from '../../constants';
+import Icon from '../../../../components/icon';
+import './slider-setter.css';
 
 const SliderSetter = () => {
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(() => {
+    const savedValue = localStorage.getItem('sliderValue');
+    return savedValue !== null ? parseInt(savedValue, 10) : 0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('sliderValue', sliderValue);
+  }, [sliderValue]);
 
   const handleGalleryColumnsChange = useCallback((e) => {
     const adjust = parseInt(e.target.value, 10);
@@ -24,8 +33,10 @@ const SliderSetter = () => {
   }, [sliderValue]);
 
   return (
-    <>
-      <Button type="button" size='sm' onClick={handleImageShrink} >-</Button>
+    <div className='metadata-slider-container'>
+      <Button className="metadata-slider-icon-button" onClick={handleImageShrink}>
+        <Icon symbol='minus_sign' className='metadata-slider-icon' />
+      </Button>
       <Input
         type="range"
         min="-2"
@@ -33,10 +44,12 @@ const SliderSetter = () => {
         step="1"
         value={sliderValue}
         onChange={handleGalleryColumnsChange}
-        className="custom-slider ml-2 mr-2"
+        className="metadata-slider"
       />
-      <Button type="button" size='sm' onClick={handleImageExpand} className='mr-2' >+</Button>
-    </>
+      <Button className="metadata-slider-icon-button" onClick={handleImageExpand} >
+        <Icon symbol='plus_sign' className='metadata-slider-icon' />
+      </Button>
+    </div>
   );
 };
 
