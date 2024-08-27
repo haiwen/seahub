@@ -688,7 +688,7 @@ if EVENTS_CONFIG_FILE:
             events = seafevents_api.get_file_audit_events_by_path(session,
                 email, org_id, repo_id, file_path, start, limit)
 
-        return events if events else None
+        return events if events else []
 
     def get_file_audit_events(email, org_id, repo_id, start, limit):
         """Return file audit events list. (If no file audit, return 'None')

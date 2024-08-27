@@ -53,7 +53,6 @@ from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
-    get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
@@ -1931,84 +1930,6 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename):
         content_type = mimetypes.guess_type(filename)[0] or 'text/html'
     resp['Content-Type'] = content_type
     return resp
-
-@login_required
-def file_access(request, repo_id):
-    """List file access log.
-    """
-
-    if not is_pro_version() or not FILE_AUDIT_ENABLED:
-        raise Http404
-
-    referer = request.headers.get('referer', None)
-    next_page = settings.SITE_ROOT if referer is None else referer
-
-    repo = get_repo(repo_id)
-    if not repo:
-        messages.error(request, _("Library does not exist"))
-        return HttpResponseRedirect(next_page)
-
-    path = request.GET.get('p', None)
-    if not path:
-        messages.error(request, _("Argument missing"))
-        return HttpResponseRedirect(next_page)
-
-    if not seafile_api.get_file_id_by_path(repo_id, path):
-        messages.error(request, _("File does not exist"))
-        return HttpResponseRedirect(next_page)
-
-    # perm check
-    if check_folder_permission(request, repo_id, path) != 'rw':
-        messages.error(request, _("Permission denied"))
-        return HttpResponseRedirect(next_page)
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
-    except ValueError:
-        current_page = 1
-        per_page = 100
-
-    start = per_page * (current_page - 1)
-    limit = per_page + 1
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        events = get_file_audit_events_by_path(None, org_id, repo_id, path, start, limit)
-    else:
-        events = get_file_audit_events_by_path(None, 0, repo_id, path, start, limit)
-
-    events = events if events else []
-    if len(events) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    events = events[:per_page]
-
-    for ev in events:
-        ev.repo = get_repo(ev.repo_id)
-        ev.filename = os.path.basename(ev.file_path)
-        ev.time = utc_to_local(ev.timestamp)
-        ev.event_type, ev.show_device = generate_file_audit_event_type(ev)
-
-    filename = os.path.basename(path)
-    zipped = gen_path_link(path, repo.name)
-    extra_href = "&p=%s" % quote(path)
-    return render(request, 'file_access.html', {
-        'repo': repo,
-        'path': path,
-        'filename': filename,
-        'zipped': zipped,
-        'events': events,
-        'extra_href': extra_href,
-        'current_page': current_page,
-        'prev_page': current_page-1,
-        'next_page': current_page+1,
-        'per_page': per_page,
-        'page_next': page_next,
-        })
 
 
 def view_media_file_via_share_link(request):
