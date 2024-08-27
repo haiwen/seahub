@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
-import { PRIVATE_FILE_TYPE, VIEW_OPTIONS } from '../../constants';
+import { PRIVATE_FILE_TYPE } from '../../constants';
 import ViewItem from './view-item';
 import { useMetadata } from '../hooks';
 import { AddView } from '../metadata-view/components/popover/view-popover';
@@ -157,7 +157,11 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
         </div>
       </div>
       {showAddViewPopover && (
-        <AddView target='sf-metadata-view-popover' options={VIEW_OPTIONS} toggle={togglePopover} onOptionClick={handlePopoverOptionClick} />
+        <AddView
+          target='sf-metadata-view-popover'
+          toggle={togglePopover}
+          onOptionClick={handlePopoverOptionClick}
+        />
       )}
     </>
   );

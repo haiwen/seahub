@@ -6,7 +6,18 @@ import Icon from '../../../../../../components/icon';
 
 import '../index.css';
 
-const AddView = ({ target, options, toggle, onOptionClick }) => {
+const VIEW_OPTIONS = [
+  {
+    key: 'table',
+    type: 'table',
+  },
+  {
+    key: 'gallery',
+    type: 'image',
+  }
+];
+
+const AddView = ({ target, toggle, onOptionClick }) => {
   const popoverRef = useRef(null);
 
   const handleClickOutside = useCallback((event) => {
@@ -25,6 +36,17 @@ const AddView = ({ target, options, toggle, onOptionClick }) => {
     };
   }, [handleClickOutside]);
 
+  const translateLabel = useCallback((type) => {
+    switch (type) {
+      case 'table':
+        return gettext('Table');
+      case 'image':
+        return gettext('Gallery');
+      default:
+        return type;
+    }
+  }, []);
+
   return (
     <UncontrolledPopover
       className='sf-metadata-addview-popover'
@@ -39,13 +61,13 @@ const AddView = ({ target, options, toggle, onOptionClick }) => {
       <div ref={popoverRef}>
         <div className='sf-metadata-addview-popover-header'>{gettext('New view')}</div>
         <div className='sf-metadata-addview-popover-body'>
-          {options.map((item, index) => {
+          {VIEW_OPTIONS.map((item, index) => {
             return (
               <button key={index} className='dropdown-item sf-metadata-addview-popover-item' onClick={() => onOptionClick(item)}>
                 <div className="left-icon">
                   <Icon symbol={item.type} className='metadata-view-icon' />
                 </div>
-                <div>{gettext(item.label)}</div>
+                <div>{translateLabel(item.type)}</div>
               </button>
             );
           })}

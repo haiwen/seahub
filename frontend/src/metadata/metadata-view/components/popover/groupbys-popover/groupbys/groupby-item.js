@@ -102,26 +102,36 @@ const GroupbyItem = memo(({
     return sortOptions.find(option => option.value.sortType === groupby.sort_type);
   }, [sortOptions, groupby]);
 
+  const DISPLAY_GROUP_DATE_GRANULARITY_TEXT = useMemo(() => {
+    return {
+      'By day': gettext('By day'),
+      'By week': gettext('By week'),
+      'By month': gettext('By month'),
+      'By quarter': gettext('By quarter'),
+      'By year': gettext('By year'),
+    };
+  }, []);
+
   const countTypeOptions = useMemo(() => {
     const column = getColumnByKey(columns, groupby.column_key);
     const { granularityList, displayGranularity } = getGroupbyGranularityByColumn(column);
     return granularityList.map((granularity) => {
       return {
         value: granularity,
-        label: <span className="select-option-name">{gettext(displayGranularity[granularity])}</span>,
+        label: <span className="select-option-name">{DISPLAY_GROUP_DATE_GRANULARITY_TEXT[displayGranularity[granularity]]}</span>,
       };
     });
-  }, [columns, groupby]);
+  }, [columns, groupby, DISPLAY_GROUP_DATE_GRANULARITY_TEXT]);
 
   const selectedCountType = useMemo(() => {
     const { count_type } = groupby;
     const countType = getSelectedCountType(column, count_type);
     if (countType) {
       return {
-        label: <span className="select-option-name">{gettext(countType)}</span>
+        label: <span className="select-option-name">{DISPLAY_GROUP_DATE_GRANULARITY_TEXT[countType]}</span>
       };
     }
-  }, [column, groupby]);
+  }, [column, groupby, DISPLAY_GROUP_DATE_GRANULARITY_TEXT]);
 
   const deleteGroupby = useCallback((event) => {
     event.nativeEvent.stopImmediatePropagation();
