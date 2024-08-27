@@ -273,6 +273,7 @@ class App extends Component {
           onShowSidePanel={this.onShowSidePanel}
           onSearchedClick={this.onSearchedClick}
           eventBus={this.eventBus}
+          isSidePanelFolded={isSidePanelFolded}
         />
         <div
           id="main"
@@ -288,6 +289,7 @@ class App extends Component {
             tabItemClick={this.tabItemClick}
             toggleFoldSideNav={this.toggleFoldSideNav}
             style={sidePanelStyle}
+            eventBus={this.eventBus}
           />
           {Utils.isDesktop() && !isSidePanelFolded &&
             <ResizeBar
