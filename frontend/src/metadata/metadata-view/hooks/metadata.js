@@ -57,7 +57,7 @@ export const MetadataProvider = ({
     storeRef.current.initStartIndex();
     storeRef.current.load(PER_LOAD_NUMBER).then(() => {
       if (showFirstView && storeRef.current.data.rows.length === 0) {
-        toaster.success(gettext('The files\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
+        toaster.success(gettext('The files\' metadata is being created. This may take a minute or so. Please refresh the page later.'));
       }
       setMetadata(storeRef.current.data);
       setShowFirstView(false);
