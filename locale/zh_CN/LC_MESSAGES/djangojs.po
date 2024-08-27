@@ -6372,7 +6372,7 @@ msgstr "ID"
 
 #: frontend/src/pages/org-admin/org-info.js:89
 msgid "Active users"
-msgstr "活跃东湖"
+msgstr "活跃用户"
 
 #: frontend/src/pages/org-admin/org-info.js:94
 msgid "Total users"
