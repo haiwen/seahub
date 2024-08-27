@@ -156,6 +156,7 @@ class LibContentView extends React.Component {
       const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
 
       this.setState({
+        treeData: treeHelper.buildTree(),
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
@@ -163,6 +164,10 @@ class LibContentView extends React.Component {
         isGroupOwnedRepo: isGroupOwnedRepo,
         path: path
       });
+
+      if (this.state.isTreePanelShown) {
+        this.loadSidePanel(path);
+      }
 
       if (repoInfo.permission.startsWith('custom-')) {
         await this.setCustomPermission(repoID, repoInfo.permission);
