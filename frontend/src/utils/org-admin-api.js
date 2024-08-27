@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
-import { orgID, siteRoot } from './constants';
+import { siteRoot } from './constants';
 
 class OrgAdminAPI {
 
@@ -49,7 +49,7 @@ class OrgAdminAPI {
     return this.req.post(url);
   }
 
-  orgAdminExportLogsExcel(orhID, start, end, logType) {
+  orgAdminExportLogsExcel(orgID, start, end, logType) {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/logs/export-excel/';
     const params = {
       start: start,

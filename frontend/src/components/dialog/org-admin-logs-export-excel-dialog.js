@@ -58,10 +58,8 @@ class OrgLogsExportExcelDialog extends React.Component {
               location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
             }
           }).catch(err => {
-            if (this.state.isFinished === false) {
-              clearInterval(this.timer);
-              toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
-            }
+            clearInterval(this.timer);
+            toaster.danger(gettext('Failed to export. Please check whether the size of table attachments exceeds the limit.'));
           });
         }, 1000);
       }

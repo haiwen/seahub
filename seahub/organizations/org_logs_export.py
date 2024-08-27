@@ -17,6 +17,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.auth.decorators import login_required
 from seahub.organizations.api.permissions import IsOrgAdmin
+from seahub.organizations.decorators import org_staff_required
+
 
 
 logger = logging.getLogger(__name__)
@@ -63,6 +65,7 @@ class OrgLogsExportStatus(APIView):
 
 
 @login_required
+@org_staff_required
 @api_view(('GET',))
 def org_log_export_excel(request):
     task_id = request.GET.get('task_id', None)
