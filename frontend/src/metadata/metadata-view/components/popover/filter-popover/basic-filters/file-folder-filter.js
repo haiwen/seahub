@@ -51,6 +51,11 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
       value={displayValue}
       options={options}
       onSelectOption={onChange}
+      component={{
+        DropDownIcon: (
+          <i className="sf3-font sf3-font-down"></i>
+        )
+      }}
     />
   );
 };
