@@ -827,8 +827,9 @@ class OrgAdminInviteUser(APIView):
 
         for email in email_list:
 
+            vid = get_virtual_id_by_email(email)
             try:
-                User.objects.get(email=email)
+                User.objects.get(email=vid)
                 result['failed'].append({
                     'email': email,
                     'error_msg': _(f'User {email} already exists.')
