@@ -4,7 +4,8 @@ from django.views.generic import TemplateView
 
 from seahub.ai.apis import ImageCaption, GenerateSummary
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
-from seahub.api2.endpoints.internal_api import InternalUserListView, InternalShareLinkInfo
+from seahub.api2.endpoints.internal_api import InternalUserListView, InternalShareLinkInfo, \
+    InternalCheckFileOperationAccess
 from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
 from seahub.views.mobile import mobile_login
@@ -787,6 +788,7 @@ urlpatterns = [
     ## internal
     re_path(r'^api/v2.1/internal/user-list/$', InternalUserListView.as_view(), name="api-v2.1-internal-user-list"),
     re_path(r'^api/v2.1/internal/share-link-info/$', InternalShareLinkInfo.as_view(), name="api-v2.1-internal-share-link-info"),
+    re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-access/$', InternalCheckFileOperationAccess.as_view(), name="api-v2.1-internal-check-file-op-access"),
     
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
