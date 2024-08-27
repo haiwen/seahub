@@ -71,11 +71,18 @@ class GroupMembers extends React.Component {
 
   render() {
     const {
-      isLoading, hasNextPage, groupMembers
+      isLoading, hasNextPage, groupMembers, perPage
     } = this.state;
+
+    let memberNumber;
+    if (groupMembers.length < perPage) {
+      memberNumber = groupMembers.length;
+    } else {
+      memberNumber = `${perPage}+`;
+    }
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{`${gettext('Group members')} (${groupMembers.length})`}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleDialog}>{`${gettext('Group members')} (${memberNumber})`}</ModalHeader>
         <ModalBody className="px-0 group-members-container" onScroll={this.handleScroll}>
           {isLoading ? <Loading /> : (
             <>
