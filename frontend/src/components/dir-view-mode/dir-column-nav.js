@@ -248,7 +248,8 @@ class DirColumnNav extends React.Component {
       return {
         'name': name,
         'url': `${siteRoot}lib/${repoID}/file${path}`,
-        'src': src
+        'src': src,
+        'node': items.find(item => item.path.split('/').pop() === name),
       };
     };
 
@@ -273,6 +274,27 @@ class DirColumnNav extends React.Component {
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
+  };
+
+  deleteImage = () => {
+    const imageNodeItems = this.state.imageNodeItems.filter((item, index) => index !== this.state.imageIndex);
+
+    if (!imageNodeItems.length) {
+      this.setState({
+        isNodeImagePopupOpen: false,
+        imageNodeItems: [],
+        imageIndex: 0
+      });
+    } else {
+      this.setState({
+        imageNodeItems: imageNodeItems,
+        imageIndex: 0
+      });
+
+      if (imageNodeItems.length > this.state.imageIndex) {
+        this.props.onDeleteNode(this.state.imageNodeItems[this.state.imageIndex].node);
+      }
+    }
   };
 
   stopTreeScrollPropagation = (e) => {
@@ -406,6 +428,7 @@ class DirColumnNav extends React.Component {
               closeImagePopup={this.closeNodeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}
+              onDeleteImage={this.deleteImage}
             />
           </ModalPortal>
         )}

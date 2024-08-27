@@ -9,10 +9,30 @@ const propTypes = {
   imageIndex: PropTypes.number.isRequired,
   closeImagePopup: PropTypes.func.isRequired,
   moveToPrevImage: PropTypes.func.isRequired,
-  moveToNextImage: PropTypes.func.isRequired
+  moveToNextImage: PropTypes.func.isRequired,
+  onDeleteImage: PropTypes.func
 };
 
 class ImageDialog extends React.Component {
+
+  downloadImage = (imageSrc) => {
+    let downloadUrl = imageSrc.indexOf('?dl=1') > -1 ? imageSrc : imageSrc + '?dl=1';
+
+    if (document.getElementById('downloadFrame')) {
+      document.body.removeChild(document.getElementById('downloadFrame'));
+    }
+
+    let iframe = document.createElement('iframe');
+    iframe.setAttribute('id', 'downloadFrame');
+    iframe.style.display = 'none';
+    iframe.src = downloadUrl;
+    document.body.appendChild(iframe);
+  };
+
+  onViewOriginal = () => {
+    const imageSrc = this.props.imageItems[this.props.imageIndex].url;
+    window.open(imageSrc, '_blank');
+  };
 
   render() {
     const imageItems = this.props.imageItems;
@@ -23,6 +43,7 @@ class ImageDialog extends React.Component {
 
     return (
       <Lightbox
+        wrapperClassName='custom-image-previewer'
         imageTitle={imageTitle}
         mainSrc={imageItems[imageIndex].src}
         nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
@@ -37,6 +58,11 @@ class ImageDialog extends React.Component {
         closeLabel={gettext('Close (Esc)')}
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
+        enableRotate={true}
+        onClickDownload={() => this.downloadImage(imageItems[imageIndex].url)}
+        onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
+        onViewOriginal={this.onViewOriginal}
+        viewOriginalImageLabel={gettext('查看原图')}
       />
     );
   }

@@ -99,6 +99,26 @@ class DirentListView extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.fullDirentList !== this.props.fullDirentList) {
+      let imageItems = [];
+      if (this.props.fullDirentList.length > 0) {
+        let items = this.props.fullDirentList.filter((item) => {
+          return Utils.imageCheck(item.name);
+        });
+        imageItems = items.map((item) => {
+          return this.prepareImageItem(item);
+        });
+      }
+
+      this.setState({
+        isImagePopupOpen: imageItems.length > 0,
+        imageItems: imageItems,
+        imageIndex: imageItems.length > 0 ? this.state.imageIndex % imageItems.length : 0,
+      });
+    }
+  }
+
   freezeItem = () => {
     this.setState({ isItemFreezed: true });
   };
@@ -197,6 +217,11 @@ class DirentListView extends React.Component {
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
+  };
+
+  deleteImage = (name) => {
+    const item = this.props.fullDirentList.find((item) => item.name === name);
+    this.props.onItemDelete(item);
   };
 
   closeImagePopup = () => {
@@ -727,6 +752,7 @@ class DirentListView extends React.Component {
                 closeImagePopup={this.closeImagePopup}
                 moveToPrevImage={this.moveToPrevImage}
                 moveToNextImage={this.moveToNextImage}
+                onDeleteImage={this.deleteImage}
               />
             </ModalPortal>
           )}
