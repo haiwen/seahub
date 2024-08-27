@@ -5,6 +5,7 @@
   border: none;
   padding: 0 6px;
   margin-left: -6px;
+  height: 28px;
 }
 
 .sf-metadata-basic-filters-select.custom-select:hover {
