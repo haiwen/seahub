@@ -5,7 +5,8 @@ import Context from '../context';
 import Store from '../store';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../constants';
 import { Utils } from '../../../utils/utils';
-import { useCollaborators } from '../../hooks';
+import { useCollaborators, useMetadata as usePropsMetadata } from '../../hooks';
+import { gettext } from '../utils';
 
 const MetadataContext = React.createContext(null);
 
@@ -19,6 +20,7 @@ export const MetadataProvider = ({
   const [metadata, setMetadata] = useState({ rows: [], columns: [] });
   const storeRef = useRef(null);
   const { collaborators } = useCollaborators();
+  const { showFirstView, setShowFirstView } = usePropsMetadata();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -54,7 +56,11 @@ export const MetadataProvider = ({
     window.sfMetadataStore = storeRef.current;
     storeRef.current.initStartIndex();
     storeRef.current.load(PER_LOAD_NUMBER).then(() => {
+      if (showFirstView && storeRef.current.data.rows.length === 0) {
+        toaster.success(gettext('The files\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
+      }
       setMetadata(storeRef.current.data);
+      setShowFirstView(false);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);

@@ -60,11 +60,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     setEnableExtendedProperties(newValue);
   }, [enableMetadata, hideMetadataView, cancelURLView]);
 
-  useEffect(() => {
-    if (!showFirstView) return;
-    toaster.success(gettext('The files\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
-  }, [showFirstView]);
-
   // views
   useEffect(() => {
     if (enableMetadata) {
@@ -108,7 +103,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       view_id: view._id,
     };
     selectMetadataView(node);
-    setShowFirstView(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectMetadataView]);
 
@@ -171,6 +165,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       enableMetadata,
       updateEnableMetadata,
       showFirstView,
+      setShowFirstView,
       navigation,
       viewsMap: viewsMap.current,
       selectView,
