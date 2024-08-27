@@ -13,15 +13,21 @@ const propTypes = {
   onShowSidePanel: PropTypes.func,
   onSearchedClick: PropTypes.func,
   searchPlaceholder: PropTypes.string,
-  showSearch: PropTypes.bool
+  showSearch: PropTypes.bool,
+  isSidePanelFolded: PropTypes.bool,
 };
-
 class Header extends React.Component {
+
+  onMouseEnter = () => {
+    if (this.props.isSidePanelFolded) {
+      this.props.eventBus.dispatch('top-header-mouse-enter');
+    }
+  };
 
   render() {
     const { onShowSidePanel, onSearchedClick, showSearch, children } = this.props;
     return (
-      <div id="header" className="top-header d-flex justify-content-between flex-shrink-0">
+      <div id="header" className="top-header d-flex justify-content-between flex-shrink-0" onMouseEnter={this.onMouseEnter}>
         <div className={'flex-shrink-0 d-none d-md-flex'}>
           <Logo onCloseSidePanel={this.props.onCloseSidePanel} />
         </div>

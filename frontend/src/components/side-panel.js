@@ -14,6 +14,7 @@ const propTypes = {
   tabItemClick: PropTypes.func,
   children: PropTypes.object,
   style: PropTypes.object,
+  eventBus: PropTypes.object,
   isSidePanelFolded: PropTypes.bool,
   toggleFoldSideNav: PropTypes.func
 };
@@ -21,7 +22,7 @@ const propTypes = {
 class SidePanel extends React.Component {
 
   render() {
-    const { children, isSidePanelFolded, style } = this.props;
+    const { children, isSidePanelFolded, style, eventBus } = this.props;
     return (
       <div
         className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })}
@@ -47,6 +48,7 @@ class SidePanel extends React.Component {
               tabItemClick={this.props.tabItemClick}
               currentTab={this.props.currentTab}
               toggleFoldSideNav={this.props.toggleFoldSideNav}
+              eventBus={eventBus}
             />
           }
         </div>

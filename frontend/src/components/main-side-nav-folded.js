@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks,
-  isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl } from '../utils/constants';
+  isDocs, isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
@@ -18,6 +18,7 @@ import '../css/main-side-nav-folded.css';
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
+  eventBus: PropTypes.object,
   toggleFoldSideNav: PropTypes.func
 };
 
@@ -33,6 +34,7 @@ class MainSideNavFolded extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.handleOutsideClick);
+    this.unsubscribeHeaderEvent = this.props.eventBus.subscribe('top-header-mouse-enter', this.closeSubNav);
     seafileAPI.listGroups().then(res => {
       this.setState({
         groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
@@ -45,6 +47,7 @@ class MainSideNavFolded extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleOutsideClick);
+    this.unsubscribeHeaderEvent();
   }
 
   handleOutsideClick = (e) => {
@@ -56,6 +59,11 @@ class MainSideNavFolded extends React.Component {
 
   openSubNav = () => {
     if (this.state.isFilesSubNavShown) return;
+    if (curNoteMsg) {
+      const infoBar = document.getElementById('info-bar');
+      const top = (60 + (infoBar ? infoBar.clientHeight : 0)) + 'px';
+      this.filesSubNav.style.top = top;
+    }
     this.setState({ isFilesSubNavShown: true });
   };
 
@@ -122,7 +130,7 @@ class MainSideNavFolded extends React.Component {
                   to={ siteRoot + 'libraries/' }
                   className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
                   onClick={(e) => this.tabItemClick(e, 'libraries')}
-                  onMouseOver={this.openSubNav}
+                  onMouseEnter={this.openSubNav}
                 >
                   <span className="sf3-font-files sf3-font mr-0" aria-hidden="true"></span>
                 </Link>
