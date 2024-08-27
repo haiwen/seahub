@@ -266,6 +266,7 @@ class DirPath extends React.Component {
             onAddFolder={this.props.onAddFolder}
             onUploadFile={this.props.onUploadFile}
             onUploadFolder={this.props.onUploadFolder}
+            loadDirentList={this.props.loadDirentList}
           >
             <span className="path-repo-name">{repoName}</span>
           </DirOperationToolBar> :

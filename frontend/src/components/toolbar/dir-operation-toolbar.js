@@ -7,7 +7,8 @@ import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
-import ImportSdocDialog from '../dialog/import-sdoc-dialog';
+import toaster from '../toast';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -39,9 +40,9 @@ class DirOperationToolbar extends React.Component {
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
-      isMobileOpMenuOpen: false,
-      isImportSdocDialogOpen: false,
+      isMobileOpMenuOpen: false
     };
+    this.fileInputRef = React.createRef();
   }
 
   toggleDesktopOpMenu = () => {
@@ -159,8 +160,31 @@ class DirOperationToolbar extends React.Component {
     }
   };
 
-  onToggleImportSdoc = () => {
-    this.setState({ isImportSdocDialogOpen: !this.state.isImportSdocDialogOpen });
+  onUploadSdoc = (e) => {
+    this.fileInputRef.current.click();
+  };
+
+  uploadSdoc = (e) => {
+    // no file selected
+    if (!this.fileInputRef.current.files.length) {
+      return;
+    }
+    // check file extension
+    let fileName = this.fileInputRef.current.files[0].name;
+    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'sdoczip') {
+      toaster.warning(gettext('Please choose a .sdoczip file.'));
+      return;
+    }
+    const file = this.fileInputRef.current.files[0];
+    toaster.notify(gettext('It may take some time, please wait.'));
+    let { repoID, path } = this.props;
+    seafileAPI.importSdoc(file, repoID, path).then((res) => {
+      this.props.loadDirentList(path);
+
+    }).catch((error) => {
+      let errMsg = Utils.getErrorMsg(error);
+      toaster.danger(errMsg);
+    });
   };
 
   render() {
@@ -194,8 +218,8 @@ class DirOperationToolbar extends React.Component {
             'onClick': this.onUploadFolder
           }, {
             'icon': 'import-sdoc',
-            'text': gettext('Import Sdoc'),
-            'onClick': this.onToggleImportSdoc
+            'text': gettext('Import sdoc'),
+            'onClick': this.onUploadSdoc
           });
         } else {
           opList.push({
@@ -366,14 +390,9 @@ class DirOperationToolbar extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isImportSdocDialogOpen &&
-          <ImportSdocDialog
-            toggle={this.onToggleImportSdoc}
-            repoID={this.props.repoID}
-            itemPath={this.props.path}
-            loadDirentList={this.props.loadDirentList}
-          />
-        }
+        <div>
+          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} />
+        </div>
       </Fragment>
     );
   }
