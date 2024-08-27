@@ -103,7 +103,6 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       view_id: view._id,
     };
     selectMetadataView(node);
-    setShowFirstView(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectMetadataView]);
 
@@ -166,6 +165,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       enableMetadata,
       updateEnableMetadata,
       showFirstView,
+      setShowFirstView,
       navigation,
       viewsMap: viewsMap.current,
       selectView,
