@@ -102,7 +102,7 @@ const ViewToolBar = ({ viewId }) => {
             columns={viewColumns}
             groupbys={view.groupbys}
             modifyGroupbys={modifyGroupbys}
-        />
+          />
         )}
         {view.type !== 'image' && (
           <HideColumnSetter
@@ -113,7 +113,7 @@ const ViewToolBar = ({ viewId }) => {
             hiddenColumns={view.hidden_columns || []}
             modifyHiddenColumns={modifyHiddenColumns}
             modifyColumnOrder={modifyColumnOrder}
-        />
+          />
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
