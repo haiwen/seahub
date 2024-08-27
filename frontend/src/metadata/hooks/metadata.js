@@ -62,7 +62,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
 
   useEffect(() => {
     if (!showFirstView) return;
-    toaster.success(gettext('The file\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
+    toaster.success(gettext('The files\'s metadata is being created. This may take a minute or so. Please refresh the page later.'));
   }, [showFirstView]);
 
   // views
