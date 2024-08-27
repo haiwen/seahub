@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Input } from 'reactstrap';
 import { EVENT_BUS_TYPE } from '../../constants';
 import './slider-setter.css';
+import Icon from '../../../../components/icon';
 
 const SliderSetter = () => {
   const [sliderValue, setSliderValue] = useState(() => {
@@ -32,9 +33,9 @@ const SliderSetter = () => {
   }, [sliderValue]);
 
   return (
-    <div className='custom-slider-container'>
-      <Button className="slider-icon-button" onClick={handleImageShrink}>
-        <span className='slider-icon-button-text'>-</span>
+    <div className='metadata-slider-container'>
+      <Button className="metadata-slider-icon-button" onClick={handleImageShrink}>
+        <Icon symbol='minus_sign' className='metadata-slider-icon' />
       </Button>
       <Input
         type="range"
@@ -43,10 +44,10 @@ const SliderSetter = () => {
         step="1"
         value={sliderValue}
         onChange={handleGalleryColumnsChange}
-        className="custom-slider"
+        className="metadata-slider"
       />
-      <Button className="slider-icon-button" onClick={handleImageExpand} >
-        <span className='slider-icon-button-text'>+</span>
+      <Button className="metadata-slider-icon-button" onClick={handleImageExpand} >
+        <Icon symbol='plus_sign' className='metadata-slider-icon' />
       </Button>
     </div>
   );
