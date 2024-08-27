@@ -12,19 +12,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='RepoAPITokens',
+            name='WikiPageTrash',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('repo_id', models.CharField(db_index=True, max_length=36)),
-                ('app_name', models.CharField(db_index=True, max_length=255)),
-                ('token', models.CharField(max_length=40, unique=True)),
-                ('generated_at', models.DateTimeField(auto_now_add=True)),
-                ('generated_by', models.CharField(max_length=255)),
-                ('last_access', models.DateTimeField(auto_now=True)),
-                ('permission', models.CharField(max_length=15)),
+                ('doc_uuid', models.TextField()),
+                ('page_id', models.CharField(max_length=4)),
+                ('parent_page_id', models.CharField(max_length=4)),
+                ('subpages', models.TextField()),
+                ('name', models.CharField(max_length=255)),
+                ('delete_time', models.DateTimeField(auto_now_add=True)),
+                ('size', models.BigIntegerField()),
             ],
             options={
-                'db_table': 'repo_api_tokens',
+                'db_table': 'WikiPageTrash',
             },
         ),
     ]
