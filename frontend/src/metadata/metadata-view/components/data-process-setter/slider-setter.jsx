@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Input } from 'reactstrap';
 import { EVENT_BUS_TYPE } from '../../constants';
-import './slider-setter.css';
 import Icon from '../../../../components/icon';
+import './slider-setter.css';
 
 const SliderSetter = () => {
   const [sliderValue, setSliderValue] = useState(() => {
