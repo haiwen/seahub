@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-23 15:25+0800\n"
+"POT-Creation-Date: 2024-08-27 11:49+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023-2024\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -79,12 +79,12 @@ msgid "Failed to unbind SAML, please set a contact email first."
 msgstr "فشل إلغاء ربط SAML، يرجى تعيين بريد إلكتروني للاتصال أولاً."
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:95
-#: seahub/api2/views.py:365
+#: seahub/api2/views.py:367
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "الاسم طويل جدا (الحد الأقصى 64 حرف)"
 
 #: seahub/api2/endpoints/admin/account.py:190 seahub/api2/endpoints/user.py:99
-#: seahub/api2/views.py:369 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:371 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "الاسم لا يجب ان يحتوي على '/'."
 
@@ -120,7 +120,7 @@ msgstr "يجب أن يكون عدد صحيح أكبر من أو يساوي 0."
 #: seahub/api2/endpoints/admin/groups.py:134
 #: seahub/api2/endpoints/admin/groups.py:273
 #: seahub/api2/endpoints/groups.py:229 seahub/api2/endpoints/groups.py:302
-#: seahub/api2/views.py:4680 seahub/group/forms.py:36
+#: seahub/api2/views.py:4729 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -171,12 +171,12 @@ msgstr " فشل في إضافة %s إلى المنشأة: ينتمي المست�
 msgid "System library can not be deleted."
 msgstr "لا يمكن حذف مكتبة النظام"
 
-#: seahub/api2/endpoints/admin/libraries.py:388 seahub/api2/views.py:1781
+#: seahub/api2/endpoints/admin/libraries.py:388 seahub/api2/views.py:1830
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr " فشل النقل: دور %s , هو %s ، لا يمكن إضافة مكتبة."
 
-#: seahub/api2/endpoints/admin/libraries.py:409 seahub/api2/views.py:1786
+#: seahub/api2/endpoints/admin/libraries.py:409 seahub/api2/views.py:1835
 msgid "Library can not be transferred to owner."
 msgstr " لا يمكن نقل المكتبة إلى المالك."
 
@@ -441,13 +441,13 @@ msgstr "ملف الفيروس لم يعثر عليه."
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/wiki2.py:419 seahub/api2/endpoints/wiki_pages.py:135
-#: seahub/api2/views.py:4014 seahub/notifications/models.py:536
+#: seahub/api2/views.py:4063 seahub/notifications/models.py:536
 #: seahub/notifications/models.py:577 seahub/notifications/models.py:619
 #: seahub/notifications/models.py:670 seahub/notifications/models.py:726
 #: seahub/notifications/models.py:756 seahub/notifications/models.py:778
 #: seahub/notifications/models.py:804 seahub/notifications/models.py:821
 #: seahub/notifications/models.py:838 seahub/notifications/models.py:867
-#: seahub/seadoc/apis.py:2763 seahub/search/views.py:200
+#: seahub/seadoc/apis.py:2762 seahub/search/views.py:200
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:178 seahub/utils/__init__.py:1176
 #: seahub/views/__init__.py:810 seahub/views/ajax.py:401
@@ -468,19 +468,19 @@ msgstr "مسار الوجهة غير صحيح"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1927
-#: seahub/api2/views.py:1967 seahub/api2/views.py:2028
-#: seahub/api2/views.py:2072 seahub/api2/views.py:2118
-#: seahub/api2/views.py:2167 seahub/api2/views.py:2580
-#: seahub/api2/views.py:2688 seahub/seadoc/apis.py:368
-#: seahub/seadoc/apis.py:455
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1976
+#: seahub/api2/views.py:2016 seahub/api2/views.py:2077
+#: seahub/api2/views.py:2121 seahub/api2/views.py:2167
+#: seahub/api2/views.py:2216 seahub/api2/views.py:2629
+#: seahub/api2/views.py:2737 seahub/seadoc/apis.py:367
+#: seahub/seadoc/apis.py:454
 msgid "Out of quota."
 msgstr "نفدت المساحة المخصصة."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات المتفرعة منه %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -516,7 +516,7 @@ msgstr " لم يتم العثور على المستخدم %s ."
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/wikis.py:115 seahub/api2/endpoints/wikis.py:210
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:260 seahub/seadoc/apis.py:2747
+#: seahub/profile/views.py:260 seahub/seadoc/apis.py:2746
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/search/views.py:174
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -529,7 +529,7 @@ msgstr "الترخيص مرفوض."
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:480
 #: seahub/api2/endpoints/via_repo_token.py:848
 #: seahub/api2/endpoints/wiki2.py:504 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1975
+#: seahub/api2/views.py:2024
 msgid "The number of files in library exceeds the limit"
 msgstr "عدد الملفات في المكتبة يتجاوز الحد المسموح"
 
@@ -541,7 +541,7 @@ msgstr "الملف غير مقفل."
 msgid "You can not refresh this file's lock."
 msgstr "لا يمكنك تحديث قفل هذا الملف."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2754
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2753
 msgid "The participant already exists."
 msgstr "المُشارك موجود بالفعل."
 
@@ -561,7 +561,7 @@ msgstr "المستخدم %s عضو في المجموعة بالفعل."
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:352
-#: seahub/api2/endpoints/group_members.py:500 seahub/api2/views.py:1776
+#: seahub/api2/endpoints/group_members.py:500 seahub/api2/views.py:1825
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:342
@@ -631,8 +631,8 @@ msgstr "فشل ارسال البريد، خدمة البريد الالكترو�
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
 #: seahub/api2/endpoints/share_links.py:335
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4167
-#: seahub/api2/views.py:4287
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4216
+#: seahub/api2/views.py:4336
 msgid "Password is required."
 msgstr "كلمة المرور مطلوبة."
 
@@ -664,7 +664,7 @@ msgstr "كلمة المرور يجب أن تحتوي على رقم و حرف ك�
 #: seahub/api2/endpoints/share_links.py:372
 #: seahub/api2/endpoints/share_links.py:713
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3581
+#: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3630
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "يجب أن تكون أيام انتهاء الصلاحية أكبر من أو تساوي %s"
@@ -674,7 +674,7 @@ msgstr "يجب أن تكون أيام انتهاء الصلاحية أكبر م�
 #: seahub/api2/endpoints/share_links.py:378
 #: seahub/api2/endpoints/share_links.py:719
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3587
+#: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3636
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "يجب أن تكون أيام انتهاء الصلاحية أقل من أو تساوي %s"
@@ -700,7 +700,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "يجب أن تكون أيام انتهاء الصلاحية قبل %s"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:508
+#: seahub/seadoc/apis.py:507
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -726,11 +726,11 @@ msgstr "لا يمكن إعادة تعيين كلمة مرور هذه المكت�
 msgid "New password of library %s"
 msgstr "كلمة مرور جديدة للمكتبة %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4011
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4060
 msgid "Wrong password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4017
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4066
 msgid "Decrypt library error"
 msgstr "خطأ فك تشفير المكتبة"
 
@@ -767,12 +767,12 @@ msgstr "تم مشاركة ملف معك على %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
 msgid "folder"
-msgstr ""
+msgstr "مجلد"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "تم مشاركة مجلد معك على %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -786,17 +786,17 @@ msgstr "تم مشاركة رابط تحميل معك على %s"
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "المستخدم %s غير موجود."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "البريد الالكتروني %s موجود مسبقاً."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "البريد الالكتروني %s غير صالح."
 
 #: seahub/api2/endpoints/share_links.py:478
 #: seahub/api2/endpoints/share_links.py:487
@@ -871,7 +871,7 @@ msgstr "الاسم مطلوب."
 
 #: seahub/api2/utils.py:312
 msgid "A share link for you"
-msgstr ""
+msgstr "رابط مشاركة لك"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -915,7 +915,7 @@ msgstr "هذا الحساب غير فعال."
 #: seahub/auth/forms.py:118 seahub/auth/forms.py:119
 #: seahub/templates/registration/login.html:59
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "يرجى استخدام تسجيل الدخول الأحادي SSO لتسجيل الدخول."
 
 #: seahub/auth/forms.py:124
 msgid ""
@@ -1085,7 +1085,7 @@ msgid "File Path"
 msgstr "مسار الملف"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
-#: seahub/base/templatetags/seahub_tags.py:134
+#: seahub/base/templatetags/seahub_tags.py:139
 msgid "Deleted"
 msgstr "محذوف"
 
@@ -1160,86 +1160,86 @@ msgstr "ضيف"
 msgid "Default"
 msgstr "افتراضي"
 
-#: seahub/base/templatetags/seahub_tags.py:133
+#: seahub/base/templatetags/seahub_tags.py:138
 msgid "Added"
 msgstr "مضاف"
 
-#: seahub/base/templatetags/seahub_tags.py:135
+#: seahub/base/templatetags/seahub_tags.py:140
 msgid "Removed"
 msgstr "محذوف"
 
-#: seahub/base/templatetags/seahub_tags.py:136
+#: seahub/base/templatetags/seahub_tags.py:141
 msgid "Modified"
 msgstr "معدل"
 
-#: seahub/base/templatetags/seahub_tags.py:137
+#: seahub/base/templatetags/seahub_tags.py:142
 msgid "Renamed"
 msgstr "معاد تسميته"
 
-#: seahub/base/templatetags/seahub_tags.py:138
+#: seahub/base/templatetags/seahub_tags.py:143
 msgid "Moved"
 msgstr "منقول"
 
-#: seahub/base/templatetags/seahub_tags.py:139
+#: seahub/base/templatetags/seahub_tags.py:144
 msgid "Added folder"
-msgstr ""
+msgstr "مجلد تمت إضافته"
 
-#: seahub/base/templatetags/seahub_tags.py:140
+#: seahub/base/templatetags/seahub_tags.py:145
 msgid "Removed folder"
-msgstr ""
+msgstr "مجلد تمت إزالته"
 
-#: seahub/base/templatetags/seahub_tags.py:141
+#: seahub/base/templatetags/seahub_tags.py:146
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
 msgstr "مجلد معاد تسميته"
 
-#: seahub/base/templatetags/seahub_tags.py:142
+#: seahub/base/templatetags/seahub_tags.py:147
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
 msgstr "مجلد تم نقله"
 
-#: seahub/base/templatetags/seahub_tags.py:143
+#: seahub/base/templatetags/seahub_tags.py:148
 msgid "Added or modified"
 msgstr "مضاف أو معدل"
 
-#: seahub/base/templatetags/seahub_tags.py:158
-#: seahub/base/templatetags/seahub_tags.py:229
+#: seahub/base/templatetags/seahub_tags.py:163
+#: seahub/base/templatetags/seahub_tags.py:234
 msgid "Reverted library to status at"
 msgstr "مكتبة معادة الى الحالة في"
 
-#: seahub/base/templatetags/seahub_tags.py:161
-#: seahub/base/templatetags/seahub_tags.py:232
+#: seahub/base/templatetags/seahub_tags.py:166
+#: seahub/base/templatetags/seahub_tags.py:237
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr "ملف \"%(file)s\" معاد الى الحالة في %(time)s."
 
-#: seahub/base/templatetags/seahub_tags.py:165
-#: seahub/base/templatetags/seahub_tags.py:236
+#: seahub/base/templatetags/seahub_tags.py:170
+#: seahub/base/templatetags/seahub_tags.py:241
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "تم استعادة مجلد محذوف"
 
-#: seahub/base/templatetags/seahub_tags.py:167
-#: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
+#: seahub/base/templatetags/seahub_tags.py:172
+#: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:460
 msgid "Changed library name or description"
 msgstr "تم تغيير اسم او وصف المكتبة"
 
-#: seahub/base/templatetags/seahub_tags.py:169
-#: seahub/base/templatetags/seahub_tags.py:240
+#: seahub/base/templatetags/seahub_tags.py:174
+#: seahub/base/templatetags/seahub_tags.py:245
 msgid "Auto merge by seafile system"
 msgstr "دمج تلقائي بواسطة نظام seafile"
 
-#: seahub/base/templatetags/seahub_tags.py:171
-#: seahub/base/templatetags/seahub_tags.py:242
+#: seahub/base/templatetags/seahub_tags.py:176
+#: seahub/base/templatetags/seahub_tags.py:247
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Created library"
 msgstr "مكتبة منشأة"
 
-#: seahub/base/templatetags/seahub_tags.py:322
-#: seahub/base/templatetags/seahub_tags.py:358
+#: seahub/base/templatetags/seahub_tags.py:327
+#: seahub/base/templatetags/seahub_tags.py:363
 msgid "Just now"
 msgstr "الان"
 
-#: seahub/base/templatetags/seahub_tags.py:333
+#: seahub/base/templatetags/seahub_tags.py:338
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
@@ -1250,7 +1250,7 @@ msgstr[3] "منذ %(days)d أيام"
 msgstr[4] "منذ %(days)d يوما"
 msgstr[5] "منذ %(days)d يوم"
 
-#: seahub/base/templatetags/seahub_tags.py:340
+#: seahub/base/templatetags/seahub_tags.py:345
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
@@ -1261,7 +1261,7 @@ msgstr[3] "منذ %(hours)d ساعات"
 msgstr[4] "منذ %(hours)d ساعة"
 msgstr[5] "منذ %(hours)d ساعة"
 
-#: seahub/base/templatetags/seahub_tags.py:347
+#: seahub/base/templatetags/seahub_tags.py:352
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
@@ -1272,7 +1272,7 @@ msgstr[3] "منذ %(minutes)d دقائق"
 msgstr[4] "منذ %(minutes)d دقيقة"
 msgstr[5] "منذ %(minutes)d دقيقة"
 
-#: seahub/base/templatetags/seahub_tags.py:353
+#: seahub/base/templatetags/seahub_tags.py:358
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
@@ -1283,16 +1283,16 @@ msgstr[3] "منذ %(seconds)d ثواني"
 msgstr[4] "منذ %(seconds)d ثانية"
 msgstr[5] "منذ %(seconds)d ثانية"
 
-#: seahub/base/templatetags/seahub_tags.py:478
+#: seahub/base/templatetags/seahub_tags.py:483
 msgid "Read-Write"
 msgstr "قراءة-كتابة"
 
-#: seahub/base/templatetags/seahub_tags.py:480
+#: seahub/base/templatetags/seahub_tags.py:485
 msgid "Read-Only"
 msgstr "للقراءة فقط"
 
-#: seahub/base/templatetags/seahub_tags.py:504
-#: seahub/base/templatetags/seahub_tags.py:516
+#: seahub/base/templatetags/seahub_tags.py:509
+#: seahub/base/templatetags/seahub_tags.py:521
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
@@ -1303,27 +1303,27 @@ msgstr[3] "%(size)d بايتات"
 msgstr[4] "%(size)d بايت"
 msgstr[5] "%(size)d بايت"
 
-#: seahub/base/templatetags/seahub_tags.py:518
+#: seahub/base/templatetags/seahub_tags.py:523
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: seahub/base/templatetags/seahub_tags.py:520
+#: seahub/base/templatetags/seahub_tags.py:525
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: seahub/base/templatetags/seahub_tags.py:522
+#: seahub/base/templatetags/seahub_tags.py:527
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: seahub/base/templatetags/seahub_tags.py:524
+#: seahub/base/templatetags/seahub_tags.py:529
 #, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#: seahub/base/templatetags/seahub_tags.py:526
+#: seahub/base/templatetags/seahub_tags.py:531
 #, python-format
 msgid "%s PB"
 msgstr "%s PB"
@@ -2324,7 +2324,7 @@ msgstr[5] "%(total)s نتيجة"
 
 #: seahub/search/templates/search_results.html:63
 msgid "Folder icon"
-msgstr ""
+msgstr "أيقونة المجلد"
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2365,7 +2365,7 @@ msgstr "لم يتم العثور على المكتبة %s."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
@@ -2379,37 +2379,37 @@ msgstr "انتهت صلاحية الرابط."
 msgid "The number of share link exceeds the limit."
 msgstr "تجاوز عدد روابط المشاركة الحد."
 
-#: seahub/share/models.py:92
+#: seahub/share/models.py:127
 msgid "Password can't be empty"
 msgstr "كلمة المرور لا يمكن أن تكون فارغة"
 
-#: seahub/share/models.py:99
+#: seahub/share/models.py:134
 msgid "Please enter a correct password."
 msgstr "الرجاء ادخال كلمة مرور صحيحة."
 
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "رمز التحقق هو %(code)s . وهو صالح لمدة ساعة واحدة."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n%(shared_from)s شارك رابط ملف معك.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nيمكنك النقر <a href=%(url)s>هنا</a> للتحقق من عنوان بريدك الإلكتروني وزيارته.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:24
 msgid "Email address verification"
-msgstr ""
+msgstr "التحقق من عنوان البريد الإلكتروني"
 
 #: seahub/share/templates/share/share_link_email_audit.html:25
 msgid "Please provide your email address to continue."
@@ -2417,7 +2417,7 @@ msgstr "الرجاء ادخال عنوان بريدك للمواصلة."
 
 #: seahub/share/templates/share/share_link_email_audit.html:28
 msgid "Enter your email address"
-msgstr ""
+msgstr "أدخل عنوان بريدك الإلكتروني"
 
 #: seahub/share/templates/share/share_link_email_audit.html:29
 msgid "Get code"
@@ -2425,19 +2425,19 @@ msgstr "الحصول على شفرة"
 
 #: seahub/share/templates/share/share_link_email_audit.html:31
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "الصق رمز التحقق هنا"
 
 #: seahub/share/templates/share/share_link_email_audit.html:64
 msgid "Resend"
-msgstr ""
+msgstr "ارسال"
 
 #: seahub/share/templates/share/share_link_email_audit.html:92
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "تم إرسال رمز التحقق إلى عنوان البريد الإلكتروني."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "الرجاء اختيار مجلد."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2487,7 +2487,7 @@ msgstr "المكتبة غير موجودة."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:386
 msgid "Folder does not exist."
-msgstr ""
+msgstr "المجلد غير موجود."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2531,11 +2531,11 @@ msgstr "إنشاء حساب تنظيم"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "قام العميل بتسجيل الدخول. يرجى فتح العميل للتأكيد."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "تأكيد تسجيل دخول العميل"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
@@ -2850,15 +2850,16 @@ msgstr "لقطه"
 
 #: seahub/templates/sdoc_file_view_react.html:64
 #: seahub/templates/sdoc_file_view_react.html:87
-#: seahub/templates/view_file_onlyoffice.html:153
-#: seahub/templates/view_file_onlyoffice.html:176
+#: seahub/templates/view_file_onlyoffice.html:94
+#: seahub/templates/view_file_onlyoffice.html:182
+#: seahub/templates/view_file_onlyoffice.html:205
 msgid "Failed. Please check the network."
 msgstr "فشل. الرجاء التحقق من الشبكة."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "يرجى إدخال كلمة المرور إذا كنت تريد تصفح الملف / المجلد المشترك."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2896,7 +2897,7 @@ msgstr "قوة كلمة المرور"
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "يجب أن تحتوي كلمة المرور على أنواع مختلفة من الأحرف لجعلها قوية: الأحرف الكبيرة والأحرف الصغيرة والأرقام والأحرف الخاصة."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9

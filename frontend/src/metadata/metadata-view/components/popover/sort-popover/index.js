@@ -15,7 +15,16 @@ import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
 
-const SORT_TYPES = [SORT_TYPE.UP, SORT_TYPE.DOWN];
+const SORT_TYPES = [
+  {
+    name: gettext('Up'),
+    value: SORT_TYPE.UP,
+  },
+  {
+    name: gettext('Down'),
+    value: SORT_TYPE.DOWN,
+  },
+];
 
 const propTypes = {
   readOnly: PropTypes.bool,
@@ -162,8 +171,8 @@ class SortPopover extends Component {
   createSortTypeOptions = () => {
     return SORT_TYPES.map(sortType => {
       return {
-        value: { sortType },
-        label: <span className="select-option-name">{gettext(sortType)}</span>
+        value: { sortType: sortType.value },
+        label: <span className="select-option-name">{sortType.name}</span>
       };
     });
   };

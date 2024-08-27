@@ -14,16 +14,3 @@ export const SIDE_PANEL_FOLDED_WIDTH = 71;
 export const SUB_NAV_ITEM_HEIGHT = 28;
 
 export { KeyCodes, zIndexes, TAG_COLORS };
-
-export const VIEW_OPTIONS = [
-  {
-    key: 'table',
-    label: 'Table',
-    type: 'table',
-  },
-  {
-    key: 'gallery',
-    label: 'Gallery',
-    type: 'image',
-  }
-];

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-23 15:25+0800\n"
+"POT-Creation-Date: 2024-08-27 11:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,12 +77,12 @@ msgid "Failed to unbind SAML, please set a contact email first."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:95
-#: seahub/api2/views.py:365
+#: seahub/api2/views.py:367
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:190 seahub/api2/endpoints/user.py:99
-#: seahub/api2/views.py:369 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:371 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 #: seahub/api2/endpoints/admin/groups.py:134
 #: seahub/api2/endpoints/admin/groups.py:273
 #: seahub/api2/endpoints/groups.py:229 seahub/api2/endpoints/groups.py:302
-#: seahub/api2/views.py:4680 seahub/group/forms.py:36
+#: seahub/api2/views.py:4729 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -168,12 +168,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:388 seahub/api2/views.py:1781
+#: seahub/api2/endpoints/admin/libraries.py:388 seahub/api2/views.py:1830
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:409 seahub/api2/views.py:1786
+#: seahub/api2/endpoints/admin/libraries.py:409 seahub/api2/views.py:1835
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -437,13 +437,13 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129 seahub/api2/endpoints/wiki2.py:419
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4014
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4063
 #: seahub/notifications/models.py:536 seahub/notifications/models.py:577
 #: seahub/notifications/models.py:619 seahub/notifications/models.py:670
 #: seahub/notifications/models.py:726 seahub/notifications/models.py:756
 #: seahub/notifications/models.py:778 seahub/notifications/models.py:804
 #: seahub/notifications/models.py:821 seahub/notifications/models.py:838
-#: seahub/notifications/models.py:867 seahub/seadoc/apis.py:2763
+#: seahub/notifications/models.py:867 seahub/seadoc/apis.py:2762
 #: seahub/search/views.py:200 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:178
 #: seahub/utils/__init__.py:1176 seahub/views/__init__.py:810
@@ -464,12 +464,12 @@ msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1927
-#: seahub/api2/views.py:1967 seahub/api2/views.py:2028
-#: seahub/api2/views.py:2072 seahub/api2/views.py:2118
-#: seahub/api2/views.py:2167 seahub/api2/views.py:2580
-#: seahub/api2/views.py:2688 seahub/seadoc/apis.py:368
-#: seahub/seadoc/apis.py:455
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1976
+#: seahub/api2/views.py:2016 seahub/api2/views.py:2077
+#: seahub/api2/views.py:2121 seahub/api2/views.py:2167
+#: seahub/api2/views.py:2216 seahub/api2/views.py:2629
+#: seahub/api2/views.py:2737 seahub/seadoc/apis.py:367
+#: seahub/seadoc/apis.py:454
 msgid "Out of quota."
 msgstr ""
 
@@ -511,7 +511,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:112 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/drafts/views.py:31
 #: seahub/profile/forms.py:24 seahub/profile/views.py:260
-#: seahub/seadoc/apis.py:2747 seahub/seadoc/views.py:31
+#: seahub/seadoc/apis.py:2746 seahub/seadoc/views.py:31
 #: seahub/seadoc/views.py:85 seahub/seadoc/views.py:168
 #: seahub/search/views.py:174 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:51
@@ -524,7 +524,7 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:218 seahub/api2/endpoints/upload_links.py:480
 #: seahub/api2/endpoints/via_repo_token.py:848
 #: seahub/api2/endpoints/wiki2.py:504 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:1975
+#: seahub/api2/views.py:2024
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -536,7 +536,7 @@ msgstr ""
 msgid "You can not refresh this file's lock."
 msgstr ""
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2754
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2753
 msgid "The participant already exists."
 msgstr ""
 
@@ -556,7 +556,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:352
-#: seahub/api2/endpoints/group_members.py:500 seahub/api2/views.py:1776
+#: seahub/api2/endpoints/group_members.py:500 seahub/api2/views.py:1825
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:342
@@ -626,8 +626,8 @@ msgstr ""
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
 #: seahub/api2/endpoints/share_links.py:335
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4167
-#: seahub/api2/views.py:4287
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4216
+#: seahub/api2/views.py:4336
 msgid "Password is required."
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 #: seahub/api2/endpoints/share_links.py:372
 #: seahub/api2/endpoints/share_links.py:713
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3581
+#: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3630
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
@@ -669,7 +669,7 @@ msgstr ""
 #: seahub/api2/endpoints/share_links.py:378
 #: seahub/api2/endpoints/share_links.py:719
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3587
+#: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3636
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
@@ -695,7 +695,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:508
+#: seahub/seadoc/apis.py:507
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -721,11 +721,11 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4011
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4060
 msgid "Wrong password"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4017
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4066
 msgid "Decrypt library error"
 msgstr ""
 
@@ -1080,7 +1080,7 @@ msgid "File Path"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:85
-#: seahub/base/templatetags/seahub_tags.py:134
+#: seahub/base/templatetags/seahub_tags.py:139
 msgid "Deleted"
 msgstr ""
 
@@ -1155,150 +1155,150 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:133
+#: seahub/base/templatetags/seahub_tags.py:138
 msgid "Added"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:135
+#: seahub/base/templatetags/seahub_tags.py:140
 msgid "Removed"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:136
+#: seahub/base/templatetags/seahub_tags.py:141
 msgid "Modified"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:137
+#: seahub/base/templatetags/seahub_tags.py:142
 msgid "Renamed"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:138
+#: seahub/base/templatetags/seahub_tags.py:143
 msgid "Moved"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:139
+#: seahub/base/templatetags/seahub_tags.py:144
 msgid "Added folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:140
+#: seahub/base/templatetags/seahub_tags.py:145
 msgid "Removed folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:141
+#: seahub/base/templatetags/seahub_tags.py:146
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:142
+#: seahub/base/templatetags/seahub_tags.py:147
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:143
+#: seahub/base/templatetags/seahub_tags.py:148
 msgid "Added or modified"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:158
-#: seahub/base/templatetags/seahub_tags.py:229
+#: seahub/base/templatetags/seahub_tags.py:163
+#: seahub/base/templatetags/seahub_tags.py:234
 msgid "Reverted library to status at"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:161
-#: seahub/base/templatetags/seahub_tags.py:232
+#: seahub/base/templatetags/seahub_tags.py:166
+#: seahub/base/templatetags/seahub_tags.py:237
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:165
-#: seahub/base/templatetags/seahub_tags.py:236
+#: seahub/base/templatetags/seahub_tags.py:170
+#: seahub/base/templatetags/seahub_tags.py:241
 msgid "Recovered deleted folder"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:167
-#: seahub/base/templatetags/seahub_tags.py:238 seahub/views/ajax.py:460
+#: seahub/base/templatetags/seahub_tags.py:172
+#: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:460
 msgid "Changed library name or description"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:169
-#: seahub/base/templatetags/seahub_tags.py:240
+#: seahub/base/templatetags/seahub_tags.py:174
+#: seahub/base/templatetags/seahub_tags.py:245
 msgid "Auto merge by seafile system"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:171
-#: seahub/base/templatetags/seahub_tags.py:242
+#: seahub/base/templatetags/seahub_tags.py:176
+#: seahub/base/templatetags/seahub_tags.py:247
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Created library"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:322
-#: seahub/base/templatetags/seahub_tags.py:358
+#: seahub/base/templatetags/seahub_tags.py:327
+#: seahub/base/templatetags/seahub_tags.py:363
 msgid "Just now"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:333
+#: seahub/base/templatetags/seahub_tags.py:338
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:340
+#: seahub/base/templatetags/seahub_tags.py:345
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:347
+#: seahub/base/templatetags/seahub_tags.py:352
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:353
+#: seahub/base/templatetags/seahub_tags.py:358
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:478
+#: seahub/base/templatetags/seahub_tags.py:483
 msgid "Read-Write"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:480
+#: seahub/base/templatetags/seahub_tags.py:485
 msgid "Read-Only"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:504
-#: seahub/base/templatetags/seahub_tags.py:516
+#: seahub/base/templatetags/seahub_tags.py:509
+#: seahub/base/templatetags/seahub_tags.py:521
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:518
+#: seahub/base/templatetags/seahub_tags.py:523
 #, python-format
 msgid "%s KB"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:520
+#: seahub/base/templatetags/seahub_tags.py:525
 #, python-format
 msgid "%s MB"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:522
+#: seahub/base/templatetags/seahub_tags.py:527
 #, python-format
 msgid "%s GB"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:524
+#: seahub/base/templatetags/seahub_tags.py:529
 #, python-format
 msgid "%s TB"
 msgstr ""
 
-#: seahub/base/templatetags/seahub_tags.py:526
+#: seahub/base/templatetags/seahub_tags.py:531
 #, python-format
 msgid "%s PB"
 msgstr ""
@@ -2340,11 +2340,11 @@ msgstr ""
 msgid "The number of share link exceeds the limit."
 msgstr ""
 
-#: seahub/share/models.py:92
+#: seahub/share/models.py:127
 msgid "Password can't be empty"
 msgstr ""
 
-#: seahub/share/models.py:99
+#: seahub/share/models.py:134
 msgid "Please enter a correct password."
 msgstr ""
 
@@ -2812,8 +2812,9 @@ msgstr ""
 
 #: seahub/templates/sdoc_file_view_react.html:64
 #: seahub/templates/sdoc_file_view_react.html:87
-#: seahub/templates/view_file_onlyoffice.html:153
-#: seahub/templates/view_file_onlyoffice.html:176
+#: seahub/templates/view_file_onlyoffice.html:94
+#: seahub/templates/view_file_onlyoffice.html:182
+#: seahub/templates/view_file_onlyoffice.html:205
 msgid "Failed. Please check the network."
 msgstr ""
 
