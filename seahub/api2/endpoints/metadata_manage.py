@@ -713,6 +713,17 @@ class MetadataViewsDuplicateView(APIView):
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        views = RepoMetadataViews.objects.filter(
+            repo_id=repo_id
+        ).first()
+        if not views:
+            error_msg = 'The metadata views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if view_id not in views.view_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
