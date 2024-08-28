@@ -171,7 +171,7 @@ def edit_profile(request):
             'enable_multi_adfs': enable_multi_adfs,
             'org_saml_connected': org_saml_connected,
             'org_id': request.user.org and request.user.org.org_id or None,
-            'user_strong_password_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),
+            'strong_pwd_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),
     }
 
     if show_two_factor_auth:
