@@ -16,6 +16,7 @@ const ViewItem = ({
   view,
   onClick,
   onDelete,
+  onCopy,
   onUpdate,
   onMove,
 }) => {
@@ -38,6 +39,7 @@ const ViewItem = ({
     if (!canUpdate) return [];
     let value = [
       { key: 'rename', value: gettext('Rename') },
+      { key: 'duplicate', value: gettext('Duplicate') }
     ];
     if (canDelete) {
       value.push({ key: 'delete', value: gettext('Delete') });
@@ -75,11 +77,16 @@ const ViewItem = ({
       return;
     }
 
+    if (operationKey === 'duplicate') {
+      onCopy();
+      return;
+    }
+
     if (operationKey === 'delete') {
       onDelete();
       return;
     }
-  }, [onDelete]);
+  }, [onDelete, onCopy]);
 
   const closeRenamePopover = useCallback((event) => {
     event.stopPropagation();

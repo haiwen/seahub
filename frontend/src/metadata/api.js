@@ -118,6 +118,12 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
+  duplicateView = (repoID, viewId) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/duplicate-view/';
+    const params = { view_id: viewId };
+    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
+
   modifyView = (repoID, viewId, viewData) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     const params = {
