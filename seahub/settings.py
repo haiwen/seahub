@@ -257,6 +257,7 @@ INSTALLED_APPS = [
     'seahub.profile',
     'seahub.share',
     'seahub.help',
+    'seahub.ai',
     'seahub.thumbnail',
     'seahub.password_session',
     'seahub.admin_log',
@@ -907,6 +908,7 @@ METADATA_FILE_TYPES = {
 
 SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
+ENABLE_SEAFILE_AI = False
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(

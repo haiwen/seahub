@@ -2,6 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from seahub.ai.apis import ImageCaption
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView
 from seahub.auth.views import multi_adfs_sso
@@ -1040,4 +1041,9 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/ai/summarize-documents/$', MetadataSummarizeDocs.as_view(), name='api-v2.1-metadata-summarize-documents'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
+    ]
+
+if settings.ENABLE_SEAFILE_AI:
+    urlpatterns += [
+        re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
     ]

@@ -201,6 +201,15 @@ class MetadataManagerAPI {
     };
     return this.req.post(url, params);
   };
+
+  imageCaption = (repoID, filePath) => {
+    const url = this.server + '/api/v2.1/ai/image-caption/';
+    const params = {
+      path: filePath,
+      repo_id: repoID,
+    };
+    return this.req.post(url, params);
+  };
 }
 
 const metadataAPI = new MetadataManagerAPI();

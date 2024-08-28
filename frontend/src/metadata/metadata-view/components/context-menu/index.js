@@ -15,6 +15,7 @@ const OPERATION = {
   OPEN_PARENT_FOLDER: 'open-parent-folder',
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_SUMMARY: 'generate-summary',
+  IMAGE_CAPTION: 'image-caption',
 };
 
 const ContextMenu = ({
@@ -90,6 +91,8 @@ const ContextMenu = ({
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
       if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+      } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
+        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate Image Description') });
       }
     }
 
@@ -192,6 +195,37 @@ const ContextMenu = ({
     });
   }, [isGroupView, selectedRange, selectedPosition, recordMetrics, metadata, recordGetterByIndex, updateRecords]);
 
+  const imageCaption = useCallback(() => {
+    const canModifyRow = window.sfMetadataContext.canModifyRow;
+    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_SUMMARY;
+    let path = '';
+    let idOldRecordData = {};
+    let idOriginalOldRecordData = {};
+    const { groupRecordIndex, rowIdx } = selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+    if (Utils.imageCheck(fileName) && canModifyRow(record)) {
+      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+      path = Utils.joinPath(parentDir, fileName);
+      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+    }
+    if (path === '') return;
+    window.sfMetadataContext.imageCaption(path).then(res => {
+      const desc = res.data.desc;
+      const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
+      const recordIds = [updateRecordId];
+      let idRecordUpdates = {};
+      let idOriginalRecordUpdates = {};
+      idRecordUpdates[updateRecordId] = { [summaryColumnKey]: desc };
+      idOriginalRecordUpdates[updateRecordId] = { [summaryColumnKey]: desc };
+      updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
+    }).catch(error => {
+      const errorMessage = gettext('Failed to generate image description');
+      toaster.danger(errorMessage);
+    });
+  }, [isGroupView, selectedPosition, recordGetterByIndex, updateRecords]);
+
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
     switch (option.value) {
@@ -215,12 +249,16 @@ const ContextMenu = ({
         generateSummary && generateSummary();
         break;
       }
+      case OPERATION.IMAGE_CAPTION: {
+        imageCaption && imageCaption();
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary, imageCaption]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

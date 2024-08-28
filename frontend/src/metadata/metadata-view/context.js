@@ -196,6 +196,11 @@ class Context {
     const repoID = this.settings['repoID'];
     return this.metadataAPI.generateSummary(repoID, filePaths);
   };
+
+  imageCaption = (filePath) => {
+    const repoID = this.settings['repoID'];
+    return this.metadataAPI.imageCaption(repoID, filePath);
+  };
 }
 
 export default Context;
