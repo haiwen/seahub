@@ -492,10 +492,14 @@ def password_change(request, template_name='registration/password_change_form.ht
     else:
         form = password_change_form(user=request.user)
 
+    password_strength_requirements = get_password_strength_requirements()
+
     return render(request, template_name, {
         'form': form,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
         'force_passwd_change': request.session.get('force_passwd_change', False),
+        'min_len': password_strength_requirements.get('min_len'),
+        'level': len(password_strength_requirements.get('char_types')),
     })
 
 def password_change_done(request, template_name='registration/password_change_done.html'):
