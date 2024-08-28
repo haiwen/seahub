@@ -439,7 +439,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
         form = None
     context_instance['form'] = form
 
-    context_instance['user_strong_password'] = config.USER_STRONG_PASSWORD_REQUIRED
+    context_instance['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
     return render(request, template_name, context_instance)
 
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):
