@@ -1689,7 +1689,6 @@ export const evaluatePasswordStrength = (password) => {
   else if (length >= 12) strength += 3;
   else if (length >= 8) strength += 2;
   else if (length >= 6) strength += 1;
-  else if (length < 6) return 'too_short';
 
   // Increased strength based on character type
   if (hasUppercase) strength += 1;

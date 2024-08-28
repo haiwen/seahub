@@ -87,16 +87,15 @@ $('#signup-form').on('submit', function(){
             $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
             return false;
         }
-        var level = getStrengthLevel(pwd1);
-        if (level < {{level}}) {
+        if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
             $('.error').html(passwd_tip).removeClass('hide');
             return false;
         }
    });
 $(function () {
     // Assuming passwd_tip and template are defined somewhere in your script.
-    setupPasswordField("password1", 'password-input1', passwd_tip, template);
-    setupPasswordField("password2", 'password-input2', passwd_tip, template);
+    setupPasswordField("password1", passwd_tip, template);
+    setupPasswordField("password2", passwd_tip, template);
 });
 </script>
 {% endblock %}

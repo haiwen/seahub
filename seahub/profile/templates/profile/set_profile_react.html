@@ -25,7 +25,7 @@ window.app.pageOptions = {
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
   {% endif %}
   userUnusablePassword: {% if user_unusable_password %} true {% else %} false {% endif %},
-  userStrongPasswordRequired: {% if user_strong_password_required %} true {% else %} false {% endif %},
+  userStrongPasswordRequired: {% if strong_pwd_required %} true {% else %} false {% endif %},
 
   enableGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
 

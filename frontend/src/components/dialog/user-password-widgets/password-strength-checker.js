@@ -10,7 +10,6 @@ const propTypes = {
 
 const PASSWORD_STRENGTH_VALUES = {
   empty: { classNames: ['default', 'default', 'default', 'default'], textValue: '' },
-  too_short: { classNames: ['too-short', 'default', 'default', 'default'], textValue: 'too short' },
   weak: { classNames: ['weak', 'default', 'default', 'default'], textValue: 'weak' },
   medium: { classNames: ['medium', 'medium', 'default', 'default'], textValue: 'medium' },
   strong: { classNames: ['strong', 'strong', 'strong', 'default'], textValue: 'strong' },
