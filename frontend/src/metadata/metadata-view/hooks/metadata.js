@@ -45,7 +45,6 @@ export const MetadataProvider = ({
     });
   }, []);
 
-
   const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
     window.sfMetadataStore.modifyFilters(filterConjunction, filters, basicFilters);
   }, []);
