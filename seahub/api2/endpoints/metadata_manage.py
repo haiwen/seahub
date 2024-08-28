@@ -722,7 +722,7 @@ class MetadataViewsDuplicateView(APIView):
 
         if view_id not in views.view_ids:
             error_msg = 'view_id %s does not exists.' % view_id
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
