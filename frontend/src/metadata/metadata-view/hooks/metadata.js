@@ -45,6 +45,26 @@ export const MetadataProvider = ({
     });
   }, []);
 
+  const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
+    window.sfMetadataStore.modifyFilters(filterConjunction, filters, basicFilters);
+  }, []);
+
+  const modifySorts = useCallback((sorts) => {
+    window.sfMetadataStore.modifySorts(sorts);
+  }, []);
+
+  const modifyGroupbys = useCallback((groupbys) => {
+    window.sfMetadataStore.modifyGroupbys(groupbys);
+  }, []);
+
+  const modifyHiddenColumns = useCallback((hiddenColumns) => {
+    window.sfMetadataStore.modifyHiddenColumns(hiddenColumns);
+  }, []);
+
+  const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
+    window.sfMetadataStore.modifyColumnOrder(sourceColumnKey, targetColumnKey);
+  }, []);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -72,6 +92,11 @@ export const MetadataProvider = ({
     const unsubscribeHandleTableError = eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
     const unsubscribeUpdateRows = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
     const unsubscribeReloadData = eventBus.subscribe(EVENT_BUS_TYPE.RELOAD_DATA, reloadMetadata);
+    const unsubscribeModifyFilters = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_FILTERS, modifyFilters);
+    const unsubscribeModifySorts = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SORTS, modifySorts);
+    const unsubscribeModifyGroupbys = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
+    const unsubscribeModifyHiddenColumns = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
+    const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
 
     return () => {
       window.sfMetadataContext.destroy();
@@ -81,6 +106,11 @@ export const MetadataProvider = ({
       unsubscribeHandleTableError();
       unsubscribeUpdateRows();
       unsubscribeReloadData();
+      unsubscribeModifyFilters();
+      unsubscribeModifySorts();
+      unsubscribeModifyGroupbys();
+      unsubscribeModifyHiddenColumns();
+      unsubscribeModifyColumnOrder();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);
