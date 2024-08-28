@@ -124,6 +124,9 @@ def get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_
         repo_type_map.update(get_repo_type_map(group_repos, 'group'))
 
     for repo in repo_list:
+        # Skip the special repo
+        if repo.repo_type is not None:
+            continue
         subrepo_tag = False
         search_repo_id = repo.id
         if repo.origin_repo_id:

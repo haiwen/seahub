@@ -22,7 +22,7 @@ def restore_all_repo():
     start, count = 0, 1000
     while True:
         try:
-            repo_commits = repo_data.get_repo_id_commit_id(start, count)
+            repo_commits = repo_data.get_normal_repo_commit(start, count)
         except Exception as e:
             logging.error("Error: %s" % e)
             return

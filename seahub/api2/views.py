@@ -580,7 +580,8 @@ class Search(APIView):
                 repo_id = search_repo
                 repo = seafile_api.get_repo(repo_id)
                 # recourse check
-                if not repo:
+                # Skip specical repo
+                if not repo or repo.repo_type is not None:
                     error_msg = 'Library %s not found.' % repo_id
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
