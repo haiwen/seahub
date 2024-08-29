@@ -580,7 +580,7 @@ class FilterItem extends React.Component {
             </div>
             {/* {showToolTip && (
               <div className="ml-2" >
-                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" style={{ color: '#FFC92C' }} />
+                <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" />
                 <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} >
                   {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
                 </UncontrolledTooltip>

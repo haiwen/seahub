@@ -37,9 +37,10 @@
   padding: .5em 0;
   background: #efefef;
   border: 0;
-  color: #777;
+  color: #666;
   border-radius: 2px;
 }
+
 .old-history-main .get-more-btn:hover {
   color: #444;
 }

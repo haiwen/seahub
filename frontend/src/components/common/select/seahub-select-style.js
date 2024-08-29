@@ -68,7 +68,7 @@ const UserSelectStyle = {
       color: '#666',
       ':hover': {
         backgroundColor: 'transparent',
-        color: '#555555',
+        color: '#666666',
       }
     };
   },
