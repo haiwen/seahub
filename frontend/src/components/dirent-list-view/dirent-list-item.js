@@ -18,6 +18,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
+import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
 
@@ -81,6 +82,7 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
       highlight: false,
       isZipDialogOpen: false,
+      isFileAccessLogDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isShareDialogShow: false,
@@ -298,7 +300,7 @@ class DirentListItem extends React.Component {
         this.onHistory();
         break;
       case 'Access Log':
-        this.onAccessLog();
+        this.toggleFileAccessLogDialog();
         break;
       case 'Properties':
         this.props.onDirentClick(this.props.dirent);
@@ -415,10 +417,10 @@ class DirentListItem extends React.Component {
     location.href = url;
   };
 
-  onAccessLog = () => {
-    let filePath = this.getDirentPath(this.props.dirent);
-    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
-    window.open(path);
+  toggleFileAccessLogDialog = () => {
+    this.setState({
+      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen
+    });
   };
 
   onOpenViaClient = () => {
@@ -932,6 +934,16 @@ class DirentListItem extends React.Component {
               folderPath={direntPath}
               folderName={dirent.name}
               isDepartmentRepo={this.props.isGroupOwnedRepo}
+            />
+          </ModalPortal>
+        }
+        {this.state.isFileAccessLogDialogOpen &&
+          <ModalPortal>
+            <FileAccessLog
+              repoID={this.props.repoID}
+              filePath={direntPath}
+              fileName={dirent.name}
+              toggleDialog={this.toggleFileAccessLogDialog}
             />
           </ModalPortal>
         }

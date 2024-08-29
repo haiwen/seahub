@@ -21,6 +21,7 @@ import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
+import FileAccessLog from '../dialog/file-access-log';
 
 import '../../css/grid-view.css';
 
@@ -72,6 +73,7 @@ class DirentGridView extends React.Component {
       imageItems: [],
       imageIndex: 0,
       // onmenuClick
+      isFileAccessLogDialogOpen: false,
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
@@ -377,7 +379,7 @@ class DirentGridView extends React.Component {
         this.onCreateFileToggle('.sdoc');
         break;
       case 'Access Log':
-        this.onAccessLog(currentObject);
+        this.toggleFileAccessLogDialog();
         break;
       case 'Properties':
         this.props.showDirentDetail('info');
@@ -526,10 +528,10 @@ class DirentGridView extends React.Component {
     location.href = url;
   };
 
-  onAccessLog = (currentObject) => {
-    let filePath = this.getDirentPath(currentObject);
-    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
-    window.open(path);
+  toggleFileAccessLogDialog = () => {
+    this.setState({
+      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen
+    });
   };
 
   onOpenViaClient = (currentObject) => {
@@ -905,6 +907,16 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isFileAccessLogDialogOpen &&
+          <ModalPortal>
+            <FileAccessLog
+              repoID={this.props.repoID}
+              filePath={direntPath}
+              fileName={dirent.name}
+              toggleDialog={this.toggleFileAccessLogDialog}
+            />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }
