@@ -113,11 +113,11 @@ class LongTextEditor extends React.PureComponent {
     const suffix = fileName.slice(fileName.indexOf('.') + 1);
     const eventBus = EventBus.getInstance();
     if (IMAGE_SUFFIXES.includes(suffix)) {
-      let innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
+      const innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
       eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, isImage: true, selection });
       return;
     }
-    let innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
+    const innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection });
   };
 
