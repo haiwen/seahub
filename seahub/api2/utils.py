@@ -38,7 +38,6 @@ import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
 
-
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
     return Response(err_resp, status=code)
@@ -331,7 +330,7 @@ def get_jwt_private_key():
     return key
 
 def is_valid_internal_jwt(auth):
-    
+
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
