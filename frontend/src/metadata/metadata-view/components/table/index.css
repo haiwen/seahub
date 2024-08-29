@@ -428,26 +428,6 @@
   width: 20px;
 }
 
-.table-more-operations-dropdown-toggle {
-  display: inline-flex;
-  align-items: center;
-  height: 22px;
-  padding: 0 .5rem;
-  transition: all .1s ease-in;
-  border-radius: 3px;
-}
-
-.table-more-operations-dropdown-toggle:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-.table-more-operations-dropdown-toggle .sf-metadata-font {
-  font-size: 14px;
-  line-height: 22px;
-  color: #666;
-}
-
 .sf-metadata-wrapper .table-main-container {
   display: flex;
   flex: 1 1;
@@ -459,4 +439,9 @@
 .sf-metadata-tip-default {
   font-size: 13px;
   color: #666;
+}
+
+.sf-metadata-select.custom-select,
+.sf-metadata-select.custom-select .select-option-name {
+  color: #212529;
 }

@@ -44,6 +44,8 @@ export {
   createOption,
   generatorCellOption,
   generatorCellOptions,
+  isLongTextValueExceedLimit,
+  getValidLongTextValue,
 } from './column';
 export {
   getValidFilters,

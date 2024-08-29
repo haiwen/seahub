@@ -4,7 +4,6 @@ import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
 import ObjectUtils from '../../metadata/metadata-view/utils/object-utils';
 import { MetadataContext } from '../../metadata';
-import { mediaUrl } from '../../utils/constants';
 
 const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
 
@@ -12,7 +11,7 @@ const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fil
     // init context
     const context = new MetadataContext();
     window.sfMetadataContext = context;
-    window.sfMetadataContext.init({ repoID, mediaUrl, repoInfo: currentRepoInfo });
+    window.sfMetadataContext.init({ repoID, repoInfo: currentRepoInfo });
     return () => {
       window.sfMetadataContext.destroy();
       delete window['sfMetadataContext'];

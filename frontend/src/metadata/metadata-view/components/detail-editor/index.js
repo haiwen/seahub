@@ -8,6 +8,7 @@ import SingleSelectEditor from './single-select-editor';
 import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 import DateEditor from './date-editor';
+import LongTextEditor from './long-text-editor';
 import { lang } from '../../../../utils/constants';
 
 import './index.css';
@@ -38,6 +39,9 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
     }
     case CellType.COLLABORATOR: {
       return (<CollaboratorEditor { ...props } field={field} onChange={onChange} />);
+    }
+    case CellType.LONG_TEXT: {
+      return (<LongTextEditor { ...props } field={field} onChange={onChange} />);
     }
     default: {
       return null;

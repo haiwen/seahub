@@ -59,7 +59,7 @@ class PopupEditorContainer extends React.Component {
 
   createEditor = () => {
     const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData } = this.props;
-    const readOnly = canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
+    const readOnly = !canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
     const value = this.getInitialValue(readOnly);
 
     let editorProps = {
