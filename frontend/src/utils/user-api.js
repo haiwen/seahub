@@ -42,6 +42,11 @@ class UserAPI {
     };
     return this.req.post(url, data);
   }
+
+  queryAsyncOperationExportExcel(task_id) {
+    const url = this.server + '/api/v2.1/query-export-status/?task_id=' + task_id;
+    return this.req.get(url);
+  }
 }
 
 let userAPI = new UserAPI();

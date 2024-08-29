@@ -59,11 +59,6 @@ class OrgAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  queryAsyncOperationExportExcel(task_id) {
-    const url = this.server + '/api/v2.1/org/admin/query-export-status/?task_id=' + task_id;
-    return this.req.get(url);
-  }
-
 }
 
 let orgAdminAPI = new OrgAdminAPI();

@@ -1,7 +1,4 @@
 import os
-import logging
-import time
-import json
 from shutil import rmtree
 from django.http import FileResponse
 from rest_framework.authentication import SessionAuthentication
@@ -39,30 +36,6 @@ class SysLogsExport(APIView):
         return Response(res_data)
 
 
-class FileLogsExportStatus(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser, IsProVersion)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request):
-        """
-        Get task status by task id
-        """
-        task_id = request.GET.get('task_id', '')
-        if not task_id:
-            error_msg = 'task_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        resp = event_export_status(task_id)
-        if resp.status_code == 500:
-            logger.error('query export status error: %s, %s' % (task_id, resp.content))
-            return api_error(500, 'Internal Server Error')
-        if not resp.status_code == 200:
-            return api_error(resp.status_code, resp.content)
-
-        is_finished = json.loads(resp.content)['is_finished']
-
-        return Response({'is_finished': is_finished})
 
 
 @login_required

@@ -124,7 +124,7 @@ from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
 
 # Admin
-from seahub.api2.endpoints.admin.logs_export import SysLogsExport, FileLogsExportStatus, sys_log_export_excel
+from seahub.api2.endpoints.admin.logs_export import SysLogsExport, sys_log_export_excel
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
 from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
@@ -211,6 +211,7 @@ from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPla
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataSummarizeDocs, MetadataViewsDuplicateView
 from seahub.api2.endpoints.user_list import UserListView
+from seahub.api2.endpoints.seahub_io import FileLogsExportStatus
 
 
 urlpatterns = [

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { userAPI } from '../../../utils/user-api';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import moment from 'moment';
@@ -49,13 +50,13 @@ class LogsExportExcelDialog extends React.Component {
         taskId: task_id
       });
       this.props.toggle();
-      return systemAdminAPI.queryAsyncOperationExportExcel(task_id);
+      return userAPI.queryAsyncOperationExportExcel(task_id);
     }).then(res => {
       if (res.data.is_finished === true) {
         location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
       } else {
         this.timer = setInterval(() => {
-          systemAdminAPI.queryAsyncOperationExportExcel(task_id).then(res => {
+          userAPI.queryAsyncOperationExportExcel(task_id).then(res => {
             if (res.data.is_finished === true) {
               this.setState({ isFinished: true });
               clearInterval(this.timer);
