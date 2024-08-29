@@ -943,7 +943,7 @@ def load_local_settings(module):
                 globals()[name] = value
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
-
+JWT_PRIVATE_KEY = ''
 # Load local_settings.py
 try:
     import seahub.local_settings
@@ -969,6 +969,8 @@ else:
 
     load_local_settings(seahub_settings)
     del seahub_settings
+
+JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
 # Remove install_topdir from path
 sys.path.pop(0)

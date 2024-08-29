@@ -35,6 +35,7 @@ from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
 
+JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
 
 logger = logging.getLogger(__name__)
 
@@ -322,15 +323,8 @@ def send_share_link_emails(emails, fs, shared_from):
             logger.error('Failed to send code via email to %s' % email)
             continue
             
-def get_jwt_private_key():
-    key = os.environ.get('JWT_PRIVATE_KEY', '')
-    if not key:
-        key = getattr(settings, 'JWT_PRIVATE_KEY', '')
-        
-    return key
 
 def is_valid_internal_jwt(auth):
-
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
@@ -338,9 +332,8 @@ def is_valid_internal_jwt(auth):
     if not token:
         return False
     
-    jwt_private_key = get_jwt_private_key()
     try:
-        payload = jwt.decode(token, jwt_private_key, algorithms=['HS256'])
+        payload = jwt.decode(token, JWT_PRIVATE_KEY, algorithms=['HS256'])
     except:
         return False
     else:
