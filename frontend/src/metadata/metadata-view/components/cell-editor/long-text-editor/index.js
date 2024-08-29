@@ -95,7 +95,6 @@ class LongTextEditor extends React.PureComponent {
         autoSave={true}
         saveDelay={20 * 1000}
         isCheckBrowser={true}
-        isSupportInsertNetworkImage={false}
         editorApi={this.api}
         // mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
         onSaveEditorValue={this.onSaveEditorValue}
