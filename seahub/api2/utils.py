@@ -37,7 +37,7 @@ import seahub.settings as settings
 
 
 logger = logging.getLogger(__name__)
-JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
+
 
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
@@ -322,18 +322,26 @@ def send_share_link_emails(emails, fs, shared_from):
         if not send_success:
             logger.error('Failed to send code via email to %s' % email)
             continue
+            
+def get_jwt_private_key():
+    key = os.environ.get('JWT_PRIVATE_KEY', '')
+    if not key:
+        key = getattr(settings, 'JWT_PRIVATE_KEY', '')
+        
+    return key
 
 def is_valid_internal_jwt(auth):
-
+    
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
     token = auth[1]
     if not token:
         return False
-
+    
+    jwt_private_key = get_jwt_private_key()
     try:
-        payload = jwt.decode(token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, jwt_private_key, algorithms=['HS256'])
     except:
         return False
     else:
