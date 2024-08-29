@@ -33,10 +33,6 @@
   color: #212529;
 }
 
-.sf-metadata-select .select-placeholder {
-  color: #868E96;
-}
-
 .sf-metadata-selector-multiple-select.sf-metadata-select .selected-option-show,
 .sf-metadata-selector-single-select.sf-metadata-select .selected-option-show {
   text-overflow: clip;

@@ -136,9 +136,6 @@ input#pageNumber {
   padding: 0;
 }
 
-#thumbnails-header {
-}
-
 #thumbnails-header .title {
   font-size: 1rem;
 }
@@ -153,7 +150,7 @@ input#pageNumber {
 }
 
 #thumbnails-header .close-thumbnail-panel:hover {
-  color: #555;
+  color: #666;
 }
 
 #thumbnailView .thumbnail {
