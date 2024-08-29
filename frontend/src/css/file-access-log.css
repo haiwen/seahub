@@ -1,0 +1,10 @@
+@media(min-width:768px) {
+  .file-access-log-container {
+    max-width: 1100px;
+  }
+}
+
+.file-access-log-content-container {
+  max-height: 500px;
+  overflow: auto;
+}

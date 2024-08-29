@@ -973,9 +973,9 @@ table th {
   border-bottom: 1px solid #e8e8e8;
   text-align: left;
   font-weight: normal;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.6;
-  color: #9c9c9c;
+  color: #666;
 }
 
 table td {
