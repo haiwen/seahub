@@ -1,7 +1,6 @@
 import { CellType, DEFAULT_DATE_FORMAT, generatorCellOption, getCollaboratorsName, getOptionName, getDateDisplayString,
   PREDEFINED_COLUMN_KEYS, getFloatNumber, getNumberDisplayString, formatStringToNumber, isNumber, getColumnOptions,
-  generatorCellOptions,
-  getColumnOptionNamesByIds,
+  generatorCellOptions, getColumnOptionNamesByIds, isLongTextValueExceedLimit, getValidLongTextValue,
 } from '../_basic';
 import { formatTextToDate } from './date';
 
@@ -132,21 +131,6 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn)
   const newOption = generatorCellOption(currentOptions, fromOptionName);
   return PREDEFINED_COLUMN_KEYS.includes(targetColumn.key) ? newOption.id : newOption.name;
 }
-
-const LONG_TEXT_LENGTH_LIMIT = 10 * 10000;
-
-export const isLongTextValueExceedLimit = (value) => {
-  const { text } = value;
-  return text ? text.length >= LONG_TEXT_LENGTH_LIMIT : false;
-};
-
-export const getValidLongTextValue = (value) => {
-  const newValue = { ...value };
-  const { text, preview } = newValue;
-  newValue.text = text ? text.slice(0, LONG_TEXT_LENGTH_LIMIT) : '';
-  newValue.preview = preview ? preview.slice(0, LONG_TEXT_LENGTH_LIMIT) : '';
-  return newValue;
-};
 
 function convert2LongText(cellValue, oldCellValue, fromColumn) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;

@@ -51,7 +51,7 @@ class InsertFileDialog extends React.Component {
   render() {
     const toggle = this.props.toggleCancel;
     return (
-      <Modal isOpen={true} toggle={toggle} >
+      <Modal isOpen={true} toggle={toggle} zIndex={1071}>
         <ModalHeader toggle={toggle}>{gettext('Select File')}</ModalHeader>
         <ModalBody>
           <FileChooser

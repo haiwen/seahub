@@ -1,5 +1,5 @@
 import { normalizeColumnData, getColumnDisplayName } from '../../utils/column-utils';
-import { CellType, PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../_basic';
+import { PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../_basic';
 
 class Column {
   constructor(object) {
@@ -19,7 +19,7 @@ class Column {
 
   enable_edit = (key, type) => {
     if (PRIVATE_COLUMN_KEYS.includes(key)) return EDITABLE_PRIVATE_COLUMN_KEYS.includes(key);
-    return type !== CellType.LONG_TEXT;
+    return true;
   };
 
 }
