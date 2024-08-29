@@ -10,6 +10,8 @@ import { lang, serviceURL, mediaUrl } from '../../../../../utils/constants';
 import InsertFileDialog from '../../../../../components/dialog/insert-file-dialog';
 import { Utils } from '../../../../../utils/utils';
 
+import './index.css';
+
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
 
 class LongTextEditor extends React.PureComponent {
@@ -126,6 +128,7 @@ class LongTextEditor extends React.PureComponent {
     return (
       <>
         <LongTextEditorDialog
+          className="sf-metadata-long-text-editor-dialog"
           lang={lang}
           readOnly={readOnly}
           headerName={headerName}
