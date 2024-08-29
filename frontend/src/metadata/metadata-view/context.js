@@ -2,12 +2,12 @@ import metadataAPI from '../api';
 import { LocalStorage, PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS,
   EDITABLE_PRIVATE_COLUMN_KEYS, PREDEFINED_COLUMN_KEYS } from './_basic';
 import EventBus from '../../components/common/event-bus';
-import { username } from '../../utils/constants';
+import { username, lang } from '../../utils/constants';
 
 class Context {
 
   constructor() {
-    this.settings = {};
+    this.settings = { lang };
     this.metadataAPI = null;
     this.localStorage = null;
     this.eventBus = null;
@@ -20,7 +20,7 @@ class Context {
     if (this.hasInit) return;
 
     // init settings
-    this.settings = settings || {};
+    this.settings = { ...this.settings, ...settings };
 
     // init metadataAPI
     const { repoInfo } = this.settings;
@@ -199,7 +199,8 @@ class Context {
 
   imageCaption = (filePath) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.imageCaption(repoID, filePath);
+    const lang = this.settings['lang'];
+    return this.metadataAPI.imageCaption(repoID, filePath, lang);
   };
 }
 

@@ -27,11 +27,15 @@ class ImageCaption(APIView):
     def post(self, request):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
+        lang = request.data.get('lang')
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
+        if not lang:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type != IMAGE:
             return api_error(status.HTTP_400_BAD_REQUEST, 'file type not image')
@@ -63,6 +67,7 @@ class ImageCaption(APIView):
         params = {
             'path': path,
             'download_token': token,
+            'lang': lang
         }
 
         try:
