@@ -126,7 +126,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   onCopy={() => duplicateView(view._id)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
                   onMove={moveView}
-                />);
+                />
+              );
             })}
             {showInput && (
               <Form onSubmit={handleInputSubmit} className='tree-view-inner sf-metadata-view-form'>

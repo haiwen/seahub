@@ -121,9 +121,9 @@
 
 .tree-node-inner .left-icon {
   position: absolute;
-  display:flex;
+  display: flex;
   justify-content:center;
-  align-items:center;
+  align-items: center;
   top: 2px;
   left: 0;
   padding-left: 1.5rem;
