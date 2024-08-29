@@ -122,6 +122,8 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
+JWT_PRIVATE_KEY = ''
+
 ENABLE_REMOTE_USER_AUTHENTICATION = False
 
 # Order is important
@@ -943,7 +945,7 @@ def load_local_settings(module):
                 globals()[name] = value
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
-JWT_PRIVATE_KEY = ''
+
 # Load local_settings.py
 try:
     import seahub.local_settings
