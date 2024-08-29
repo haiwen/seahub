@@ -35,7 +35,7 @@ class OrgLogs extends Component {
           <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
+          <div className="cur-view-container h-100">
             <div className="cur-view-path org-user-nav">
               <ul className="nav">
                 <li className="nav-item" onClick={() => this.tabItemClick('logadmin')}>
@@ -58,7 +58,9 @@ class OrgLogs extends Component {
                 </li>
               </ul>
             </div>
-            {this.props.children}
+            <div className="h-100 o-auto">
+              {this.props.children}
+            </div>
           </div>
         </div>
         {isExportExcelDialogOpen &&
