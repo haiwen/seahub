@@ -17,15 +17,10 @@ class InternalUserListView(APIView):
     def post(self, request):
         # permission check
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
-        remote_addr = request.META.get('REMOTE_ADDR')
-        if '127.0.0.1' not in remote_addr:
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        # is_valid = is_valid_internal_jwt(auth)
-        # if not is_valid:
-        #     error_msg = 'Permission denied.'
-        #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         # argument check
         user_id_list = request.data.get('user_id_list')

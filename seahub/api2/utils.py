@@ -33,9 +33,11 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import get_user_repos
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
-from seahub.settings import SECRET_KEY
+import seahub.settings as settings
+
 
 logger = logging.getLogger(__name__)
+JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
 
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
@@ -331,7 +333,7 @@ def is_valid_internal_jwt(auth):
         return False
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, JWT_PRIVATE_KEY, algorithms=['HS256'])
     except:
         return False
     else:
