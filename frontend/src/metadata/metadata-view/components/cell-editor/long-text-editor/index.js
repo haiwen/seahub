@@ -1,18 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LongTextEditorDialog, getPreviewContent, EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
+import { LongTextEditorDialog, getPreviewContent } from '@seafile/seafile-editor';
 import LongtextAPI from './api';
 import { getValidLongTextValue, isLongTextValueExceedLimit, LONG_TEXT_EXCEED_LIMIT_MESSAGE,
   LONG_TEXT_EXCEED_LIMIT_SUGGEST,
 } from '../../../_basic';
 import toaster from '../../../../../components/toast';
-import { lang, serviceURL, mediaUrl } from '../../../../../utils/constants';
-import InsertFileDialog from '../../../../../components/dialog/insert-file-dialog';
-import { Utils } from '../../../../../utils/utils';
+import { lang, serviceURL } from '../../../../../utils/constants';
 
 import './index.css';
-
-const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
 
 class LongTextEditor extends React.PureComponent {
 
@@ -24,11 +20,7 @@ class LongTextEditor extends React.PureComponent {
     const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
     const { repo_name } = repoInfo;
     this.api = new LongtextAPI({ repoID: this.repoID, repoName: repo_name, server: serviceURL });
-    this.editorSelection = null;
     this.value = this.initEditorValue();
-    this.state = {
-      showInsertFileDialog: false,
-    };
   }
 
   initEditorValue = () => {
@@ -51,24 +43,6 @@ class LongTextEditor extends React.PureComponent {
 
     return { text: '', preview: '', links: [], images: [], checklist: { completed: 0, count: 0 } };
   };
-
-  onInsertImageToggle = (selection) => {
-    this.editorSelection = selection;
-    this.setState({ showInsertFileDialog: true });
-  };
-
-  closeInsertImage = () => {
-    this.setState({ showInsertFileDialog: false });
-  };
-
-  componentDidMount() {
-    const eventBus = EventBus.getInstance();
-    this.unsubscribeInsertSeafileImage = eventBus.subscribe(EXTERNAL_EVENTS.ON_INSERT_IMAGE, this.onInsertImageToggle);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeInsertSeafileImage();
-  }
 
   getValue = () => {
     const updated = {};
@@ -107,51 +81,27 @@ class LongTextEditor extends React.PureComponent {
     this.props.onCommitCancel();
   };
 
-  getInsertLink = (repoID, filePath) => {
-    const selection = this.editorSelection;
-    const fileName = Utils.getFileName(filePath);
-    const suffix = fileName.slice(fileName.indexOf('.') + 1);
-    const eventBus = EventBus.getInstance();
-    if (IMAGE_SUFFIXES.includes(suffix)) {
-      const innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
-      eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, isImage: true, selection });
-      return;
-    }
-    const innerURL = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
-    eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection });
-  };
-
   render() {
     const { column, readOnly } = this.props;
     const headerName = column.name;
 
     return (
-      <>
-        <LongTextEditorDialog
-          className="sf-metadata-long-text-editor-dialog"
-          lang={lang}
-          readOnly={readOnly}
-          headerName={headerName}
-          value={this.value.text}
-          autoSave={true}
-          saveDelay={20 * 1000}
-          isCheckBrowser={true}
-          isSupportInsertSeafileImage={true}
-          editorApi={this.api}
-          mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-          onSaveEditorValue={this.onSaveEditorValue}
-          onEditorValueChanged={this.onEditorValueChanged}
-          onCloseEditorDialog={this.onCloseEditorDialog}
-        />
-        {this.state.showInsertFileDialog &&
-          <InsertFileDialog
-            repoID={this.repoID}
-            filePath={this.filePath}
-            toggleCancel={this.closeInsertImage}
-            getInsertLink={this.getInsertLink}
-          />
-        }
-      </>
+      <LongTextEditorDialog
+        className="sf-metadata-long-text-editor-dialog"
+        lang={lang}
+        readOnly={readOnly}
+        headerName={headerName}
+        value={this.value.text}
+        autoSave={true}
+        saveDelay={20 * 1000}
+        isCheckBrowser={true}
+        isSupportInsertNetworkImage={false}
+        editorApi={this.api}
+        // mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+        onSaveEditorValue={this.onSaveEditorValue}
+        onEditorValueChanged={this.onEditorValueChanged}
+        onCloseEditorDialog={this.onCloseEditorDialog}
+      />
     );
   }
 }

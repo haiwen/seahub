@@ -64,24 +64,6 @@ class LongtextAPI {
     return re.test(url);
   }
 
-  getFiles() {
-    const rootPath = '/';
-    return seafileAPI.listDir(this.repoID, rootPath, { recursive: true }).then((response) => {
-      var files = response.data.dirent_list.map((item) => {
-        return {
-          name: item.name,
-          type: item.type === 'dir' ? 'dir' : 'file',
-          parent_path: item.parent_dir
-        };
-      });
-      return files;
-    });
-  }
-
-  getRepoInfo(newRepoID) {
-    return seafileAPI.getRepoInfo(newRepoID);
-  }
-
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);
   }

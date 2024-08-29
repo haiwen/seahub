@@ -460,7 +460,7 @@ class MarkdownEditor extends React.Component {
               onSave={this.onSaveEditorContent}
               onContentChanged={this.onContentChanged}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              isSupportInsertSeafileImage={true}
+              // isSupportInsertSeafileImage={true}
             >
               <DetailListView fileInfo={fileInfo} fileTagList={fileTagList} onFileTagChanged={this.onFileTagChanged}/>
             </SeafileMarkdownEditor>
@@ -470,7 +470,7 @@ class MarkdownEditor extends React.Component {
               isFetching={loading}
               value={markdownContent}
               mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              isSupportInsertSeafileImage={true}
+              // isSupportInsertSeafileImage={true}
               isShowOutline={true}
             >
             </SeafileMarkdownViewer>
