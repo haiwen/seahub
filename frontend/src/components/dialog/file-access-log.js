@@ -44,7 +44,6 @@ class FileAccessLog extends React.Component {
     const avatarSize = 24 * 2;
     fileAccessLogAPI.listFileAccessLog(repoID, filePath, page, perPage, avatarSize).then((res) => {
       const { data: newItems } = res.data;
-      console.log(newItems);
       this.setState({
         isLoading: false,
         isLoadingMore: false,
