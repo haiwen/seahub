@@ -14,7 +14,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption
+from seahub.ai.utils import image_caption, verify_ai_config
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,9 @@ class ImageCaption(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         lang = request.data.get('lang')

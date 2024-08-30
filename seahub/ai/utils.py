@@ -15,6 +15,12 @@ def gen_headers():
     return {"Authorization": "Token %s" % token}
 
 
+def verify_ai_config():
+    if not SEAFILE_AI_SERVER_URL or not SEAFILE_AI_SECRET_KEY:
+        return False
+    return True
+
+
 def image_caption(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/image-caption/')

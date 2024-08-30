@@ -1043,7 +1043,7 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
     ]
 
-if settings.ENABLE_SEAFILE_AI:
-    urlpatterns += [
-        re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
-    ]
+# ai API
+urlpatterns += [
+    re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
+]

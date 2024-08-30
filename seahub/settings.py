@@ -908,7 +908,6 @@ METADATA_FILE_TYPES = {
 
 SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
-ENABLE_SEAFILE_AI = False
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
