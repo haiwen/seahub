@@ -302,9 +302,9 @@ def export_logs_to_excel(start, end, log_type, org_id=None):
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     if not org_id:
-        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-export-log-task')
+        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-export-log-task')
     else:
-        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-org-export-log-task')
+        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-org-export-log-task')
     params = {'start_time': start_time, 'end_time': end_time, 'log_type': log_type, 'org_id': org_id}
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
