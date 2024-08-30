@@ -192,9 +192,9 @@ class Context {
   };
 
   // ai
-  generateSummary = (filePaths) => {
+  generateSummary = (filePath) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.generateSummary(repoID, filePaths);
+    return this.metadataAPI.generateSummary(repoID, filePath);
   };
 
   imageCaption = (filePath) => {

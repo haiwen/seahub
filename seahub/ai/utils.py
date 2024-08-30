@@ -26,3 +26,10 @@ def image_caption(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/image-caption/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
+
+
+def generate_summary(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-summary')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
