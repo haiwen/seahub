@@ -313,7 +313,7 @@ def repo_folder_trash(request, repo_id):
     if is_org_context(request):
         org_id = request.user.org.org_id
         org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
-    disable_user_clean_trash = int(org_setting.value) if org_setting else False
+    disable_org_user_clean_trash = int(org_setting.value) if org_setting else False
 
     if path == '/':
         name = repo.name
@@ -326,7 +326,7 @@ def repo_folder_trash(request, repo_id):
             'path': path,
             'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
             'is_repo_admin': repo_admin,
-            'disable_user_clean_trash': disable_user_clean_trash
+            'disable_org_user_clean_trash': disable_org_user_clean_trash
             })
 
 def can_access_repo_setting(request, repo_id, username):
@@ -1094,11 +1094,12 @@ def react_fake_view(request, **kwargs):
     }
     if is_org_context(request):
         org_id = request.user.org.org_id
-        org_configs = OrgAdminSettings.objects.filter(org_id=org_id)
-        org_configs = {item.key: item.value for item in org_configs}
-        for key, value in org_setting.items():
-            if key in org_configs:
-                org_setting[key] = int(org_configs[key])
+        if org_id and org_id > 0:
+            org_configs = OrgAdminSettings.objects.filter(org_id=org_id)
+            org_configs = {item.key: item.value for item in org_configs}
+            for key, value in org_setting.items():
+                if key in org_configs:
+                    org_setting[key] = int(org_configs[key])
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1140,5 +1141,5 @@ def react_fake_view(request, **kwargs):
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
-        'enable_file_tags': settings.ENABLE_FILE_TAGS,
+        'enable_file_tags': settings.ENABLE_FILE_TAGS
     })

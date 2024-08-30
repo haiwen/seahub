@@ -239,10 +239,11 @@ class RepoTrash(APIView):
 
         if is_org_context(request):
             org_id = request.user.org.org_id
-            disable_clean_trash = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
-            if (disable_clean_trash is not None) and int(disable_clean_trash.value):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            if org_id and org_id > 0:
+                disable_clean_trash = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
+                if (disable_clean_trash is not None) and int(disable_clean_trash.value):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         try:
             seafile_api.clean_up_repo_history(repo_id, keep_days)
             org_id = None if not request.user.org else request.user.org.org_id

@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 
 import logging
-from constance import config
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
