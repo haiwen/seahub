@@ -51,11 +51,18 @@ function validate_running_user () {
     fi
 }
 
-export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:${central_config_dir}:$PYTHONPATH
 if [[ -d ${INSTALLPATH}/pro ]]; then
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
     export SEAFES_DIR=$seafesdir
 fi
+
+function set_jwt_private_key () {
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        jwt_pk=$(python3 parse_jwt_pk.py)
+        export JWT_PRIVATE_KEY=$jwt_pk
+    fi
+}
 
 function validate_central_conf_dir () {
     if [[ ! -d ${central_config_dir} ]]; then
@@ -109,6 +116,7 @@ function validate_already_running () {
 }
 
 function start_seafile_server () {
+    set_jwt_private_key;
     validate_already_running;
     validate_central_conf_dir;
     validate_seafile_data_dir;
