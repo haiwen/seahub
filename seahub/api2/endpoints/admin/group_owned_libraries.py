@@ -106,8 +106,8 @@ class AdminGroupOwnedLibraries(APIView):
 
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
                         permission, password, enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
                         storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
@@ -115,27 +115,27 @@ class AdminGroupOwnedLibraries(APIView):
                     repo_id = seafile_api.org_add_group_owned_repo(
                         org_id, group_id, repo_name, permission, password,
                         enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
                 else:
                     repo_id = seafile_api.add_group_owned_repo(
                         group_id, repo_name, permission, password,
                         enc_version=ENCRYPTED_LIBRARY_VERSION,
-                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+                        pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                        pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
         else:
             if org_id and org_id > 0:
                 repo_id = seafile_api.org_add_group_owned_repo(
                     org_id, group_id, repo_name, permission, password,
                     enc_version=ENCRYPTED_LIBRARY_VERSION,
-                    pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                    pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+                    pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                    pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
             else:
                 repo_id = seafile_api.add_group_owned_repo(group_id, repo_name,
                                                            permission, password,
                                                            enc_version=ENCRYPTED_LIBRARY_VERSION,
-                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
 
         # for activities
         username = request.user.username

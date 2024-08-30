@@ -56,14 +56,14 @@ class RPCWrapper(object):
             return seafile_api.org_add_group_owned_repo(
                 org_id, group_id, repo_name, permission, password,
                 enc_version=ENCRYPTED_LIBRARY_VERSION,
-                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS)
+                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
         else:
             return seafile_api.add_group_owned_repo(
                 group_id, repo_name, permission, password,
                 enc_version=ENCRYPTED_LIBRARY_VERSION,
-                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
+                pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
                 storage_id=storage_id)
 
     def delete_group_owned_repo(self, group_id, repo_id, org_id=None):
