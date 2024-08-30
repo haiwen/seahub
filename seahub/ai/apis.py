@@ -48,7 +48,7 @@ class ImageCaption(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = check_folder_permission(request, repo_id, path)
+        permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -105,7 +105,7 @@ class GenerateSummary(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = check_folder_permission(request, repo_id, path)
+        permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
