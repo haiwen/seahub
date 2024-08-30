@@ -22,8 +22,10 @@ class ServerInfoView(APIView):
             info['encrypted_library_version'] = settings.ENCRYPTED_LIBRARY_VERSION
         else:
             info['encrypted_library_version'] = 2
-        info['encrypted_library_pwd_hash_algo'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO
-        info['encrypted_library_pwd_hash_params'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
+
+        if settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO:
+            info['encrypted_library_pwd_hash_algo'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO
+            info['encrypted_library_pwd_hash_params'] = settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
 
         features = ['seafile-basic']
 
