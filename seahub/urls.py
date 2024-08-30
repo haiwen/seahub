@@ -2,6 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from seahub.ai.apis import ImageCaption, GenerateSummary
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView
 from seahub.auth.views import multi_adfs_sso
@@ -209,7 +210,7 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
     Wiki2DuplicatePageView, WikiPageTrashView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
-    MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataSummarizeDocs, MetadataViewsDuplicateView
+    MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView
 from seahub.api2.endpoints.user_list import UserListView
 
 
@@ -1038,6 +1039,11 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/$', MetadataViews.as_view(), name='api-v2.1-metadata-views'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/(?P<view_id>[-0-9a-zA-Z]{4})/$', MetadataViewsDetailView.as_view(), name='api-v2.1-metadata-views-detail'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/ai/summarize-documents/$', MetadataSummarizeDocs.as_view(), name='api-v2.1-metadata-summarize-documents'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
     ]
+
+# ai API
+urlpatterns += [
+    re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
+    re_path(r'^api/v2.1/ai/generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),
+]

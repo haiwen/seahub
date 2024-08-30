@@ -257,6 +257,7 @@ INSTALLED_APPS = [
     'seahub.profile',
     'seahub.share',
     'seahub.help',
+    'seahub.ai',
     'seahub.thumbnail',
     'seahub.password_session',
     'seahub.admin_log',
