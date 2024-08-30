@@ -1,7 +1,11 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+import os
 import datetime
-
+from io import BytesIO
+import json
+import requests
+from PIL import Image
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,10 +22,12 @@ from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
+from seahub.thumbnail.utils import remove_thumbnail_by_id
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
 from seahub.group.utils import group_id_to_name
-from seahub.utils import is_org_context, is_pro_version
+from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url, gen_file_upload_url, \
+    get_file_type_and_ext, file_types
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
         repo_has_been_shared_out, normalize_repo_status_code
@@ -523,3 +529,103 @@ class RepoShareInfoView(APIView):
         }
 
         return Response(result)
+    
+class RepoImageRotateView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        # arguments check
+        path = request.data.get('path')
+        if not path:
+            error_msg = 'path is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        angle = request.data.get('angle')
+        if not angle or angle not in ('90', '180', '270'):
+            error_msg = 'angle is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        angle = {'90': 2, '180': 3, '270': 4}[angle]
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        parent_dir = os.path.dirname(path)
+        asset_path = path
+        asset_id = seafile_api.get_file_id_by_path(repo_id, asset_path)
+        if not asset_id:
+            error_msg = 'Picture %s not found.' % (path,)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        asset_name = os.path.basename(path)
+        file_type, _ = get_file_type_and_ext(asset_name)
+        
+        if file_type != file_types.IMAGE:
+            error_msg = '%s is not a picture.' % (path,)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get token
+        try:
+            token = seafile_api.get_fileserver_access_token(
+                repo_id, asset_id, 'view', '', use_onetime=False
+            )
+        except Exception as e:
+            logger.error('get view token error: %s', e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        asset_url = gen_inner_file_get_url(token, asset_name)
+
+        # request pic
+        try:
+            response = requests.get(asset_url)
+            if response.status_code != 200:
+                logger.error('request asset url: %s response code: %s', asset_url, response.status_code)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except Exception as e:
+            logger.error('request: %s error: %s', asset_url, e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        img = response.content
+
+        # get upload link
+        old_img = Image.open(BytesIO(img))
+        obj_id = json.dumps({'parent_dir': parent_dir})
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload',
+                                                            '', use_onetime=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        upload_link = gen_file_upload_url(token, 'upload-api')
+
+        # upload
+        try:
+            # rotate and save to fp
+            fp = BytesIO()
+            content_type = response.headers['Content-Type']
+            old_img.transpose(angle).save(fp, content_type.split('/')[1])
+            response = requests.post(upload_link, data={'parent_dir': parent_dir, 'relative_path': os.path.dirname(path.strip('/')), 'replace': 1}, files={
+                'file': (asset_name, fp.getvalue(), content_type)
+            })
+            if response.status_code != 200:
+                logger.error('upload: %s status code: %s', upload_link, response.status_code)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except Exception as e:
+            logger.error('upload rotated image error: %s', e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # remove thumbnails
+        remove_thumbnail_by_id(asset_id)
+
+        return Response({'success': True})
