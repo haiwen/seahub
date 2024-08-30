@@ -53,7 +53,7 @@ const ContextMenu = ({
         for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
           const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
           const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-          if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
+          if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
             list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
             break;
           }
@@ -69,7 +69,7 @@ const ContextMenu = ({
           const record = metadata.id_row_map[id];
           if (record) {
             const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-            return Utils.isSdocFile(fileName) && canModifyRow(record);
+            return Utils.isSummarySupportedFile(fileName) && canModifyRow(record);
           }
           return false;
         });
@@ -89,7 +89,7 @@ const ContextMenu = ({
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
     if (summaryColumn) {
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
+      if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
       } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description') });
@@ -144,7 +144,7 @@ const ContextMenu = ({
     const { groupRecordIndex, rowIdx } = selectedPosition;
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
     const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
+    if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
       const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
       path = Utils.joinPath(parentDir, fileName);
       idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };

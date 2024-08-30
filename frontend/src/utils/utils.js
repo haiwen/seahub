@@ -890,6 +890,10 @@ export const Utils = {
     }
   },
 
+  isSummarySupportedFile: function (filePath) {
+    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath);
+  },
+
   isFileMetadata: function (type) {
     return type === PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES;
   },
