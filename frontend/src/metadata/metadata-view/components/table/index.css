@@ -440,8 +440,3 @@
   font-size: 13px;
   color: #666;
 }
-
-.sf-metadata-select.custom-select,
-.sf-metadata-select.custom-select .select-option-name {
-  color: #212529;
-}
