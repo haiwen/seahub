@@ -92,7 +92,7 @@ const ContextMenu = ({
       if (Utils.isSdocFile(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
       } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
-        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate Image Description') });
+        list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description') });
       }
     }
 
