@@ -147,8 +147,8 @@ class GroupOwnedLibraries(APIView):
                                                            permission,
                                                            password,
                                                            enc_version=ENCRYPTED_LIBRARY_VERSION,
-                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO,
-                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS,
+                                                           pwd_hash_algo=ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
+                                                           pwd_hash_params=ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
                                                            storage_id=storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
