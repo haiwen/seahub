@@ -151,8 +151,7 @@ class PopupEditorContainer extends React.Component {
     } else if (columnType === CellType.MULTIPLE_SELECT) {
       updated[columnKey] = newValue[columnKey] ? getColumnOptionNamesByIds(column, newValue[columnKey]) : [];
     }
-
-    this.commitData(updated, true);
+    this.commitData(updated, columnType !== CellType.LONG_TEXT);
   };
 
   // This is the updated data obtained by manually clicking the button
