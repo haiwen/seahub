@@ -103,16 +103,12 @@ class DirentGridView extends React.Component {
     window.addEventListener('mouseup', this.onGlobalMouseUp);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.fullDirentList !== this.props.fullDirentList) {
-      if (this.props.fullDirentList.length === 0) {
-        this.setState({
-          isImagePopupOpen: false,
-          imageItems: [],
-          imageIndex: 0,
-        });
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.direntList !== this.props.direntList) {
+      if (prevState.imageItems.length === 0) {
+        this.closeImagePopup();
       } else {
-        let imageItems = this.props.fullDirentList
+        let imageItems = this.props.direntList
           .filter((item) => Utils.imageCheck(item.name))
           .map((item) => this.prepareImageItem(item));
 
@@ -617,6 +613,12 @@ class DirentGridView extends React.Component {
     this.props.onItemDelete(item);
   };
 
+  // onRotateImage = (imageIndex, degree) => {
+  //   if (imageIndex >= 0 && degree !== 0) {
+
+  //   }
+  // };
+
   checkDuplicatedName = (newName) => {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
   };
@@ -920,7 +922,7 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isImagePopupOpen && (
+        {this.state.isImagePopupOpen && this.state.imageItems.length && (
           <ModalPortal>
             <ImageDialog
               imageItems={this.state.imageItems}

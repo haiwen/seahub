@@ -40,6 +40,7 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   getMenuContainerSize: PropTypes.func,
+  direntList: PropTypes.array
 };
 
 class DirColumnNav extends React.Component {
@@ -61,10 +62,27 @@ class DirColumnNav extends React.Component {
       isDisplayFiles: false,
     };
     this.isNodeMenuShow = true;
+    this.imageItemsSnapshot = [];
+    this.imageIndexSnamshot = 0;
   }
 
   componentDidMount() {
     this.initMenuList();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.direntList.length < this.props.direntList.length && this.state.isNodeImagePopupOpen) {
+      if (this.state.imageNodeItems.length === 0) {
+        this.setState({
+          isNodeImagePopupOpen: false,
+        });
+      } else {
+        this.setState({
+          imageNodeItems: this.imageItemsSnapshot,
+          imageIndex: this.imageIndexSnamshot,
+        });
+      }
+    }
   }
 
   initMenuList = () => {
@@ -277,6 +295,12 @@ class DirColumnNav extends React.Component {
   };
 
   deleteImage = () => {
+    this.imageItemsSnapshot = this.state.imageNodeItems;
+    this.imageIndexSnamshot = this.state.imageIndex;
+
+    if (this.state.imageNodeItems.length > this.state.imageIndex) {
+      this.props.onDeleteNode(this.state.imageNodeItems[this.state.imageIndex].node);
+    }
     const imageNodeItems = this.state.imageNodeItems.filter((item, index) => index !== this.state.imageIndex);
 
     if (!imageNodeItems.length) {
@@ -286,14 +310,10 @@ class DirColumnNav extends React.Component {
         imageIndex: 0
       });
     } else {
-      this.setState({
+      this.setState((prevState) => ({
         imageNodeItems: imageNodeItems,
-        imageIndex: 0
-      });
-
-      if (imageNodeItems.length > this.state.imageIndex) {
-        this.props.onDeleteNode(this.state.imageNodeItems[this.state.imageIndex].node);
-      }
+        imageIndex: (prevState.imageIndex + 1) % imageNodeItems.length,
+      }));
     }
   };
 

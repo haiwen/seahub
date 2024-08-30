@@ -62,7 +62,7 @@ class ImageDialog extends React.Component {
         onClickDownload={() => this.downloadImage(imageItems[imageIndex].url)}
         onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
         onViewOriginal={this.onViewOriginal}
-        viewOriginalImageLabel={gettext('查看原图')}
+        viewOriginalImageLabel={gettext('View original image')}
       />
     );
   }
