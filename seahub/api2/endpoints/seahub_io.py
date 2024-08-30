@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error
 logger = logging.getLogger(__name__)
 
 
-class FileLogsExportStatus(APIView):
+class SeahubIOStatus(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsProVersion,)
     throttle_classes = (UserRateThrottle,)

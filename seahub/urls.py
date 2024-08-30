@@ -211,7 +211,7 @@ from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPla
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
     MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataSummarizeDocs, MetadataViewsDuplicateView
 from seahub.api2.endpoints.user_list import UserListView
-from seahub.api2.endpoints.seahub_io import FileLogsExportStatus
+from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 
 
 urlpatterns = [
@@ -911,7 +911,7 @@ if is_pro_version():
         re_path(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
 
         re_path(r'^api/v2.1/admin/logs/export-excel/$', SysLogsExport.as_view(), name='api-v2.1-admin-logs-export-excel'),
-        re_path(r'^api/v2.1/query-export-status/$', FileLogsExportStatus.as_view(), name='api-v2.1-query-export-status'),
+        re_path(r'^api/v2.1/query-io-status/$', SeahubIOStatus.as_view(), name='api-v2.1-query-export-status'),
         path('sys/log/export-excel/', sys_log_export_excel, name='sys_log_export_excel'),
 
 

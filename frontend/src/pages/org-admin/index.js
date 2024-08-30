@@ -73,7 +73,14 @@ class Org extends React.Component {
     if (location.href.indexOf(`${siteRoot}org/departmentadmin`) != -1) {
       currentTab = 'departmentadmin';
     }
-    this.setState({ currentTab: currentTab });
+    if (location.href.indexOf(`${siteRoot}org/logadmin/`) != -1) {
+      if (currentTab === 'logadmin') {
+        currentTab = 'fileaudit';
+      }
+    }
+    this.setState({
+      currentTab: currentTab
+    });
   }
 
   onCloseSidePanel = () => {

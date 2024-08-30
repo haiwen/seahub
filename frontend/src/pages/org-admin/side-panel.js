@@ -95,8 +95,8 @@ class SidePanel extends React.Component {
                     <span className="nav-text">{gettext('Links')}</span>
                   </Link>
                 </li>
-                <li className={`nav-item ${this.getActiveClass('logadmin') || this.getActiveClass('file-update') || this.getActiveClass('perm-audit')}`}>
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('logadmin') || this.getActiveClass('file-update') || this.getActiveClass('perm-audit')}`} to={siteRoot + 'org/logadmin/'} onClick={() => this.tabItemClick('logadmin')} >
+                <li className={`nav-item ${this.getActiveClass('fileaudit') || this.getActiveClass('file-update') || this.getActiveClass('perm-audit')}`}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('fileaudit') || this.getActiveClass('file-update') || this.getActiveClass('perm-audit')}`} to={siteRoot + 'org/logadmin/'} onClick={() => this.tabItemClick('fileaudit')} >
                     <span className="sf2-icon-clock"></span>
                     <span className="nav-text">{gettext('Logs')}</span>
                   </Link>

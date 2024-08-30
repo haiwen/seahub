@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.decorators import api_view
 from urllib.parse import quote
 
 from seahub.api2.authentication import TokenAuthentication
@@ -40,6 +41,7 @@ class SysLogsExport(APIView):
 
 @login_required
 @sys_staff_required
+@api_view(('GET',))
 def sys_log_export_excel(request):
     task_id = request.GET.get('task_id', None)
     log_type = request.GET.get('log_type', None)

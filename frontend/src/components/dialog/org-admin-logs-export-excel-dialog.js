@@ -26,7 +26,7 @@ class OrgLogsExportExcelDialog extends React.Component {
       return;
     }
     switch (this.props.logType) {
-      case 'logadmin':
+      case 'fileaudit':
         this.orgAdminExportLogs('fileaudit');
         break;
       case 'file-update':
@@ -47,13 +47,13 @@ class OrgLogsExportExcelDialog extends React.Component {
         taskId: task_id
       });
       this.props.toggle();
-      return userAPI.queryAsyncOperationExportExcel(task_id);
+      return userAPI.queryIOStatus(task_id);
     }).then(res => {
       if (res.data.is_finished === true) {
         location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
       } else {
         this.timer = setInterval(() => {
-          userAPI.queryAsyncOperationExportExcel(task_id).then(res => {
+          userAPI.queryIOStatus(task_id).then(res => {
             if (res.data.is_finished === true) {
               clearInterval(this.timer);
               location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;

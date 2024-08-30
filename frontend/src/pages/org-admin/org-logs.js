@@ -13,8 +13,17 @@ class OrgLogs extends Component {
     super(props);
     this.state = {
       isExportExcelDialogOpen: false,
-      logType: 'logadmin',
+      logType: '',
     };
+  }
+
+  componentDidMount() {
+    let href = window.location.href.split('/');
+    let logtype = href[href.length - 2];
+    if (logtype === 'logadmin') {
+      logtype = 'fileaudit';
+    }
+    this.setState({ logType: logtype });
   }
 
   toggleExportExcelDialog = () => {
@@ -38,9 +47,9 @@ class OrgLogs extends Component {
           <div className="cur-view-container h-100">
             <div className="cur-view-path org-user-nav">
               <ul className="nav">
-                <li className="nav-item" onClick={() => this.tabItemClick('logadmin')}>
+                <li className="nav-item" onClick={() => this.tabItemClick('fileaudit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'logadmin' ? 'active' : ''}`}
+                    className={`nav-link ${this.props.currentTab === 'fileaudit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/'} title={gettext('File Access')}>{gettext('File Access')}
                   </Link>
                 </li>
