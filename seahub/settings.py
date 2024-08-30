@@ -975,7 +975,8 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '') or ENABLE_SEADOC
 SEADOC_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or SEADOC_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
-FILE_CONVERTER_SERVER_URL = os.environ.get('SEADOC_FILE_CONVERTER_SERVER_URL', '') or FILE_CONVERTER_SERVER_URL
+if os.environ.get('SEADOC_SERVER_URL', ''):
+    FILE_CONVERTER_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '').rstrip('/') + '/converter'
 
 # Remove install_topdir from path
 sys.path.pop(0)
