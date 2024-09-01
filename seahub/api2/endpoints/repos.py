@@ -613,7 +613,7 @@ class RepoImageRotateView(APIView):
             fp = BytesIO()
             content_type = response.headers['Content-Type']
             old_img.transpose(angle).save(fp, content_type.split('/')[1])
-            response = requests.post(upload_link, data={'parent_dir': parent_dir, 'relative_path': os.path.dirname(path.strip('/')), 'replace': 1}, files={
+            response = requests.post(upload_link, data={'parent_dir': parent_dir, 'replace': 1}, files={
                 'file': (asset_name, fp.getvalue(), content_type)
             })
             if response.status_code != 200:
@@ -621,6 +621,7 @@ class RepoImageRotateView(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         except Exception as e:
+            raise
             logger.error('upload rotated image error: %s', e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

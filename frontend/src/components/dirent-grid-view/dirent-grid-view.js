@@ -21,6 +21,7 @@ import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
+import imageAPI from '../../utils/image-api';
 
 import '../../css/grid-view.css';
 
@@ -565,7 +566,8 @@ class DirentGridView extends React.Component {
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
 
-    const src = `${siteRoot}repo/${repoID}/raw${path}`;
+    const cacheBuster = new Date().getTime();
+    const src = `${siteRoot}repo/${repoID}/raw${path}?t=${cacheBuster}`;
 
     return {
       'name': name,
@@ -613,11 +615,34 @@ class DirentGridView extends React.Component {
     this.props.onItemDelete(item);
   };
 
-  // onRotateImage = (imageIndex, degree) => {
-  //   if (imageIndex >= 0 && degree !== 0) {
+  rotateImage = (imageIndex, angle) => {
+    if (imageIndex >= 0 && angle !== 0) {
+      const path = this.state.path === '/' ? this.props.path + this.state.imageItems[imageIndex].name : this.props.path + '/' + this.state.imageItems[imageIndex].name;
+      imageAPI.rotateImage(this.props.repoID, path, 360 - angle).then((res) => {
+        seafileAPI.createThumbnail(this.props.repoID, path, 48).then((res) => {
+          // Generate a unique query parameter to bust the cache
+          const cacheBuster = new Date().getTime();
+          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
 
-  //   }
-  // };
+          this.setState((prevState) => {
+            const updatedImageItems = [...prevState.imageItems];
+            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            return { imageItems: updatedImageItems };
+          });
+
+          // Update the thumbnail URL with the cache-busting query parameter
+          const item = this.props.direntList.find((item) => item.name === this.state.imageItems[imageIndex].name);
+          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  };
 
   checkDuplicatedName = (newName) => {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
@@ -931,6 +956,7 @@ class DirentGridView extends React.Component {
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}
               onDeleteImage={this.deleteImage}
+              onRotateImage={this.rotateImage}
             />
           </ModalPortal>
         )}

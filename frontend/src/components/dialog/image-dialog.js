@@ -10,7 +10,8 @@ const propTypes = {
   closeImagePopup: PropTypes.func.isRequired,
   moveToPrevImage: PropTypes.func.isRequired,
   moveToNextImage: PropTypes.func.isRequired,
-  onDeleteImage: PropTypes.func
+  onDeleteImage: PropTypes.func,
+  onRotateImage: PropTypes.func,
 };
 
 class ImageDialog extends React.Component {
@@ -63,6 +64,7 @@ class ImageDialog extends React.Component {
         onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}
+        onRotateImage={(angle) => this.props.onRotateImage(imageIndex, angle)}
       />
     );
   }
