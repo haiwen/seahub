@@ -53,6 +53,9 @@ export {
   EDITABLE_PRIVATE_COLUMN_KEYS,
   EDITABLE_DATA_PRIVATE_COLUMN_KEYS,
   DELETABLE_PRIVATE_COLUMN_KEY,
+  INPUT_LENGTH_LIMIT,
+  LONG_TEXT_EXCEED_LIMIT_MESSAGE,
+  LONG_TEXT_EXCEED_LIMIT_SUGGEST,
 } from './constants';
 
 export {
@@ -156,4 +159,6 @@ export {
   getCellValueStringResult,
   getColumnOptionNamesByIds,
   getColumnOptionIdsByNames,
+  isLongTextValueExceedLimit,
+  getValidLongTextValue,
 } from './utils';

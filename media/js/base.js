@@ -2,7 +2,7 @@ $('table').on('mouseenter', 'tr:gt(0)', function() {
     if (app.ui.currentDropDown || app.ui.freezeItemHightlight) {
         return;
     }
-    
+
     app.ui.currentHightlightedItem = this;
     $(this).addClass('hl').find('.op-icon, .op').removeClass('vh');
 })
@@ -23,8 +23,6 @@ $('table').on('mouseenter', 'tr:gt(0)', function() {
     var $tr = $(e.target).closest('tr');
     $tr.addClass('hl').find('.op-icon, .op').removeClass('vh');
 });
-
-$('input, textarea').placeholder();
 
 // clear repo enc info when log out
 $('#logout').on('click', function() {

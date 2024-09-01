@@ -14,6 +14,8 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
+import FileAccessLog from '../dialog/file-access-log';
+
 import '../../css/selected-dirents-toolbar.css';
 
 const propTypes = {
@@ -46,6 +48,7 @@ class MultipleDirOperationToolbar extends React.Component {
     super(props);
     this.state = {
       isZipDialogOpen: false,
+      isFileAccessLogDialogOpen: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       isMultipleOperation: true,
@@ -184,7 +187,7 @@ class MultipleDirOperationToolbar extends React.Component {
         this.onHistory(dirent);
         break;
       case 'Access Log':
-        this.onAccessLog(dirent);
+        this.toggleFileAccessLogDialog();
         break;
       case 'Properties':
         this.props.showDirentDetail('info');
@@ -247,10 +250,11 @@ class MultipleDirOperationToolbar extends React.Component {
     location.href = url;
   };
 
-  onAccessLog = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
-    window.open(path);
+  toggleFileAccessLogDialog = () => {
+    this.setState({
+      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen,
+      showLibContentViewDialogs: !this.state.isFileAccessLogDialogOpen
+    });
   };
 
   toggleCancel = () => {
@@ -449,6 +453,16 @@ class MultipleDirOperationToolbar extends React.Component {
                   onFileTagChanged={this.onMenuFileTagChanged}
                 />
               </ModalPortal>
+            }
+            {this.state.isFileAccessLogDialogOpen &&
+            <ModalPortal>
+              <FileAccessLog
+                repoID={this.props.repoID}
+                filePath={direntPath}
+                fileName={dirent.name}
+                toggleDialog={this.toggleFileAccessLogDialog}
+              />
+            </ModalPortal>
             }
           </Fragment>
         )}

@@ -6,7 +6,9 @@ from seahub.test_utils import BaseTestCase
 
 import datetime
 
+
 class FileTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.user)
         self.video = self.create_file(repo_id=self.repo.id,
@@ -103,6 +105,7 @@ class FileTest(BaseTestCase):
 
 
 class FileAccessLogTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.user)
         self.file_path = self.file
@@ -110,6 +113,15 @@ class FileAccessLogTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo()
+
+    def get_type(self, etype):
+        return {
+            'file-download-web': 'web',
+            'file-download-share-link': 'share-link',
+            'file-download-api': 'API',
+            'repo-download-sync': 'download-sync',
+            'repo-upload-sync': 'upload-sync',
+        }[etype]
 
     def generate_file_audit_event_type(self, e):
         return {
@@ -120,21 +132,24 @@ class FileAccessLogTest(BaseTestCase):
             'repo-upload-sync': ('upload-sync', e.device),
         }[e.etype]
 
-    @patch('seahub.views.file.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
     def test_can_not_render_if_not_pro(self, mock_is_pro_version):
 
         mock_is_pro_version.return_value = False
-
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
-        self.assertEqual(404, resp.status_code)
+        self.assertEqual(501, resp.status_code)
 
-    @patch('seahub.views.file.generate_file_audit_event_type')
-    @patch('seahub.views.file.get_file_audit_events_by_path')
-    @patch('seahub.views.file.is_pro_version')
-    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
-    def test_can_show_web_type(self, mock_file_audit_enabled, mock_is_pro_version,
-            mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
+    @patch('seahub.api2.endpoints.file_access_log.generate_file_audit_event_type')
+    @patch('seahub.api2.endpoints.file_access_log.get_file_audit_events_by_path')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.FILE_AUDIT_ENABLED')
+    def test_can_show_web_type(self,
+                               mock_file_audit_enabled,
+                               mock_is_pro_version,
+                               mock_get_file_audit_events_by_path,
+                               mock_generate_file_audit_event_type):
 
         etype = 'file-download-web'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
@@ -144,18 +159,22 @@ class FileAccessLogTest(BaseTestCase):
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
 
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_access.html')
-        self.assertContains(resp, 'web')
+        for access_log in resp.data.get('data'):
+            self.assertEqual(self.get_type(etype), access_log['etype'])
 
-    @patch('seahub.views.file.generate_file_audit_event_type')
-    @patch('seahub.views.file.get_file_audit_events_by_path')
-    @patch('seahub.views.file.is_pro_version')
-    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
-    def test_can_show_share_link_type(self, mock_file_audit_enabled, mock_is_pro_version,
-            mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
+    @patch('seahub.api2.endpoints.file_access_log.generate_file_audit_event_type')
+    @patch('seahub.api2.endpoints.file_access_log.get_file_audit_events_by_path')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.FILE_AUDIT_ENABLED')
+    def test_can_show_share_link_type(self,
+                                      mock_file_audit_enabled,
+                                      mock_is_pro_version,
+                                      mock_get_file_audit_events_by_path,
+                                      mock_generate_file_audit_event_type):
 
         etype = 'file-download-share-link'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
@@ -165,18 +184,22 @@ class FileAccessLogTest(BaseTestCase):
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
 
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_access.html')
-        self.assertContains(resp, 'share-link')
+        for access_log in resp.data.get('data'):
+            self.assertEqual(self.get_type(etype), access_log['etype'])
 
-    @patch('seahub.views.file.generate_file_audit_event_type')
-    @patch('seahub.views.file.get_file_audit_events_by_path')
-    @patch('seahub.views.file.is_pro_version')
-    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
-    def test_can_show_api_type(self, mock_file_audit_enabled, mock_is_pro_version,
-            mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
+    @patch('seahub.api2.endpoints.file_access_log.generate_file_audit_event_type')
+    @patch('seahub.api2.endpoints.file_access_log.get_file_audit_events_by_path')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.FILE_AUDIT_ENABLED')
+    def test_can_show_api_type(self,
+                               mock_file_audit_enabled,
+                               mock_is_pro_version,
+                               mock_get_file_audit_events_by_path,
+                               mock_generate_file_audit_event_type):
 
         etype = 'file-download-api'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
@@ -186,18 +209,22 @@ class FileAccessLogTest(BaseTestCase):
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
 
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_access.html')
-        self.assertContains(resp, 'API')
+        for access_log in resp.data.get('data'):
+            self.assertEqual(self.get_type(etype), access_log['etype'])
 
-    @patch('seahub.views.file.generate_file_audit_event_type')
-    @patch('seahub.views.file.get_file_audit_events_by_path')
-    @patch('seahub.views.file.is_pro_version')
-    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
-    def test_can_show_download_sync_type(self, mock_file_audit_enabled, mock_is_pro_version,
-            mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
+    @patch('seahub.api2.endpoints.file_access_log.generate_file_audit_event_type')
+    @patch('seahub.api2.endpoints.file_access_log.get_file_audit_events_by_path')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.FILE_AUDIT_ENABLED')
+    def test_can_show_download_sync_type(self,
+                                         mock_file_audit_enabled,
+                                         mock_is_pro_version,
+                                         mock_get_file_audit_events_by_path,
+                                         mock_generate_file_audit_event_type):
 
         etype = 'repo-download-sync'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
@@ -207,18 +234,22 @@ class FileAccessLogTest(BaseTestCase):
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
 
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_access.html')
-        self.assertContains(resp, 'download-sync')
+        for access_log in resp.data.get('data'):
+            self.assertEqual(self.get_type(etype), access_log['etype'])
 
-    @patch('seahub.views.file.generate_file_audit_event_type')
-    @patch('seahub.views.file.get_file_audit_events_by_path')
-    @patch('seahub.views.file.is_pro_version')
-    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
-    def test_can_show_upload_sync_type(self, mock_file_audit_enabled, mock_is_pro_version,
-            mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
+    @patch('seahub.api2.endpoints.file_access_log.generate_file_audit_event_type')
+    @patch('seahub.api2.endpoints.file_access_log.get_file_audit_events_by_path')
+    @patch('seahub.api2.endpoints.file_access_log.is_pro_version')
+    @patch('seahub.api2.endpoints.file_access_log.FILE_AUDIT_ENABLED')
+    def test_can_show_upload_sync_type(self,
+                                       mock_file_audit_enabled,
+                                       mock_is_pro_version,
+                                       mock_get_file_audit_events_by_path,
+                                       mock_generate_file_audit_event_type):
 
         etype = 'repo-upload-sync'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
@@ -228,11 +259,12 @@ class FileAccessLogTest(BaseTestCase):
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
 
-        url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
+        url = reverse('api-v2.1-file-access-log-view',
+                      args=[self.repo_id]) + '?path=' + self.file_path
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'file_access.html')
-        self.assertContains(resp, 'upload-sync')
+        for access_log in resp.data.get('data'):
+            self.assertEqual(self.get_type(etype), access_log['etype'])
 
 
 class Event(object):

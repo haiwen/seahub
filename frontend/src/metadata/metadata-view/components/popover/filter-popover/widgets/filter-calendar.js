@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SfFilterCalendar } from '@seafile/sf-metadata-ui-component';
 import { getDateColumnFormat } from '../../../../utils/column-utils';
+import { lang } from '../../../../../../utils/constants';
 
 const FilterCalendar = ({ value, filterColumn, readOnly, onChange }) => {
   const format = getDateColumnFormat(filterColumn).trim();
-  const lang = window.sfMetadataContext.getSetting('lang');
   return (
     <SfFilterCalendar
       isReadOnly={readOnly}

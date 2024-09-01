@@ -2,6 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from seahub.ai.apis import ImageCaption, GenerateSummary
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView
 from seahub.auth.views import multi_adfs_sso
@@ -15,7 +16,7 @@ from seahub.views.sso_to_thirdpart import sso_to_thirdpart
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
-    file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
+    view_lib_file_via_smart_link, view_media_file_via_share_link, \
     view_media_file_via_public_wiki, view_sdoc_revision
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
@@ -62,6 +63,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchDeleteItemView
 from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView, RepoImageRotateView
 from seahub.api2.endpoints.file import FileView
+from seahub.api2.endpoints.file_access_log import FileAccessLogView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
@@ -208,7 +210,7 @@ from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, 
     Wiki2DuplicatePageView, WikiPageTrashView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.metadata_manage import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecordInfo, \
-    MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataSummarizeDocs, MetadataViewsDuplicateView
+    MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView
 from seahub.api2.endpoints.user_list import UserListView
 
 
@@ -240,7 +242,6 @@ urlpatterns = [
     re_path(r'^repo/sdoc_revision/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revision, name='sdoc_revision'),
     re_path(r'^repo/sdoc_revisions/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revisions, name='sdoc_revisions'),
     re_path(r'^repo/sdoc_export_to_docx/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_to_docx, name='sdoc_export_to_docx'),
-    re_path(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
     re_path(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     re_path(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     re_path(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
@@ -429,6 +430,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/$', ReposView.as_view(), name='api-v2.1-repos-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/access-log/$', FileAccessLogView.as_view(), name='api-v2.1-file-access-log-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/history/$', FileHistoryView.as_view(), name='api-v2.1-file-history-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/new_history/$', NewFileHistoryView.as_view(), name='api-v2.1-new-file-history-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
@@ -1038,6 +1040,11 @@ if settings.ENABLE_METADATA_MANAGEMENT:
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/$', MetadataViews.as_view(), name='api-v2.1-metadata-views'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/views/(?P<view_id>[-0-9a-zA-Z]{4})/$', MetadataViewsDetailView.as_view(), name='api-v2.1-metadata-views-detail'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
-        re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/ai/summarize-documents/$', MetadataSummarizeDocs.as_view(), name='api-v2.1-metadata-summarize-documents'),
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
     ]
+
+# ai API
+urlpatterns += [
+    re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
+    re_path(r'^api/v2.1/ai/generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),
+]

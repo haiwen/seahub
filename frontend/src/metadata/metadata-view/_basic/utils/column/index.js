@@ -23,4 +23,8 @@ export {
   generatorCellOption,
   generatorCellOptions,
 } from './option';
+export {
+  isLongTextValueExceedLimit,
+  getValidLongTextValue,
+} from './long-text';
 

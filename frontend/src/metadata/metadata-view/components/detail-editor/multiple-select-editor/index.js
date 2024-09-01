@@ -8,7 +8,7 @@ import DeleteOptions from '../../cell-editor/multiple-select-editor/delete-optio
 
 import './index.css';
 
-const MultipleSelectEditor = ({ field, value, record, fields, onChange, modifyColumnData }) => {
+const MultipleSelectEditor = ({ field, value, onChange, modifyColumnData }) => {
   const ref = useRef(null);
   const [showEditor, setShowEditor] = useState(false);
   const options = useMemo(() => getColumnOptions(field), [field]);
@@ -75,14 +75,12 @@ const MultipleSelectEditor = ({ field, value, record, fields, onChange, modifyCo
           saveImmediately={true}
           value={value}
           column={{ ...field, width: Math.max(width - 2, 200) }}
-          columns={fields}
           modifyColumnData={modifyColumnData}
-          record={record}
           onCommit={onCommit}
         />
       </Popover>
     );
-  }, [showEditor, onCommit, record, value, modifyColumnData, fields, field]);
+  }, [showEditor, onCommit, value, modifyColumnData, field]);
 
   const isEmpty = useMemo(() => {
     if (!Array.isArray(value) || value.length === 0) return true;
@@ -108,6 +106,7 @@ MultipleSelectEditor.propTypes = {
   field: PropTypes.object.isRequired,
   value: PropTypes.array,
   onChange: PropTypes.func.isRequired,
+  modifyColumnData: PropTypes.func,
 };
 
 export default MultipleSelectEditor;
