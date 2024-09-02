@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import Lightbox from '@seafile/react-image-lightbox';
+import Lightbox from '../../react-image-lightbox';
+import AIAPI from '../../utils/ai-api';
+
 import '@seafile/react-image-lightbox/style.css';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+
 
 const propTypes = {
   imageItems: PropTypes.array.isRequired,
@@ -13,6 +18,19 @@ const propTypes = {
 };
 
 class ImageDialog extends React.Component {
+
+  ocrRecognition = (src, successCallBack) => {
+    const repoIndex = src.indexOf('/repo/') + 6;
+    const rawIndex = src.indexOf('/raw/');
+    const repoId = src.slice(repoIndex, rawIndex);
+    const path = decodeURIComponent(src.slice(rawIndex + 4));
+    AIAPI.ocrRecognition(repoId, path).then(res => {
+      successCallBack(res.data.ocr_result);
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error);
+      toaster.danger(errorMessage);
+    });
+  };
 
   render() {
     const imageItems = this.props.imageItems;
@@ -37,6 +55,7 @@ class ImageDialog extends React.Component {
         closeLabel={gettext('Close (Esc)')}
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
+        ocrRecognition={this.ocrRecognition}
       />
     );
   }
