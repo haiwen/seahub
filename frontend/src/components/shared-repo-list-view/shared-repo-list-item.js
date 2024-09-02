@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel, enableSeaTableIntegration } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
@@ -12,7 +12,6 @@ import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
-import RepoSeaTableIntegrationDialog from '../../components/dialog/repo-seatable-integration-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
@@ -55,8 +54,7 @@ class SharedRepoListItem extends React.Component {
       isRepoDeleted: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false,
-      isOldFilesAutoDelDialogOpen: false,
-      isSeaTableIntegrationShow: false,
+      isOldFilesAutoDelDialogOpen: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -196,9 +194,6 @@ class SharedRepoListItem extends React.Component {
       case 'Old Files Auto Delete':
         this.toggleOldFilesAutoDelDialog();
         break;
-      case 'SeaTable integration':
-        this.onSeaTableIntegrationToggle();
-        break;
       // no default
     }
   };
@@ -304,10 +299,6 @@ class SharedRepoListItem extends React.Component {
     this.setState({ isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen });
   };
 
-  onSeaTableIntegrationToggle = () => {
-    this.setState({ isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow });
-  };
-
   onAPITokenToggle = () => {
     this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
   };
@@ -376,9 +367,6 @@ class SharedRepoListItem extends React.Component {
     operations.push('API Token');
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
-    }
-    if (enableSeaTableIntegration) {
-      operations.push('SeaTable integration');
     }
     return operations;
   };
@@ -820,14 +808,6 @@ class SharedRepoListItem extends React.Component {
             <LibOldFilesAutoDelDialog
               repoID={repo.repo_id}
               toggleDialog={this.toggleOldFilesAutoDelDialog}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isSeaTableIntegrationShow && (
-          <ModalPortal>
-            <RepoSeaTableIntegrationDialog
-              repo={repo}
-              onSeaTableIntegrationToggle={this.onSeaTableIntegrationToggle}
             />
           </ModalPortal>
         )}
