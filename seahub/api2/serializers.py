@@ -7,12 +7,15 @@ from seaserv import ccnet_api
 from seahub.auth import authenticate
 from seahub.api2.models import DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
+from seahub.auth.utils import incr_login_failed_attempts
+from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.two_factor.models import default_device
 from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
 from seahub.settings import ENABLE_LDAP
+from constance import config
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +88,7 @@ class AuthTokenSerializer(serializers.Serializer):
                     user = authenticate(ldap_user=username, password=password)
 
                 if user is None:
+                    self._handle_failed_login(username)
                     raise serializers.ValidationError('Unable to login with provided credentials.')
                 elif not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
@@ -134,6 +138,23 @@ class AuthTokenSerializer(serializers.Serializer):
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is invalid.'
             raise serializers.ValidationError(msg)
+        
+    def _handle_failed_login(self, login_id):
+        failed_attempt = incr_login_failed_attempts(username=login_id)
+        if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
+            if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
+                email = Profile.objects.get_username_by_login_id(login_id)
+                if email is None:
+                    email = Profile.objects.get_username_by_contact_email(login_id)
+                    if email is None:
+                        email = login_id
+                try:
+                    user = User.objects.get(email)
+                    if user.is_active:
+                        user.freeze_user(notify_admins=True, notify_org_admins=True)
+                except User.DoesNotExist:
+                    pass
+                raise serializers.ValidationError('This account has been frozen due to too many failed login attempts.')
 
 
 class AccountSerializer(serializers.Serializer):
