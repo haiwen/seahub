@@ -21,17 +21,15 @@ class AddMemberDialog extends React.Component {
       selectedOption: null,
       errMessage: '',
     };
-    this.Options = [];
   }
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
-    this.Options = [];
   };
 
   handleSubmit = () => {
     if (!this.state.selectedOption) return;
-    const email = this.state.selectedOption.email;
+    const email = this.state.selectedOption[0].email;
     this.refs.orgSelect.clearSelect();
     this.setState({ errMessage: [] });
     seafileAPI.orgAdminAddGroupMember(orgID, this.props.groupID, email).then((res) => {
