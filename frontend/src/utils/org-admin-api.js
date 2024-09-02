@@ -49,6 +49,16 @@ class OrgAdminAPI {
     return this.req.post(url);
   }
 
+  orgAdminExportLogsExcel(orgID, start, end, logType) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/logs/export-excel/';
+    const params = {
+      start: start,
+      end: end,
+      logType: logType
+    };
+    return this.req.get(url, { params: params });
+  }
+
 }
 
 let orgAdminAPI = new OrgAdminAPI();

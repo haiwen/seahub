@@ -76,11 +76,6 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
-  queryAsyncOperationExportExcel(task_id) {
-    const url = this.server + '/api/v2.1/query-export-status/?task_id=' + task_id;
-    return this.req.get(url);
-  }
-
   adminGroup2Department(groupID) {
     const url = this.server + '/api/v2.1/admin/groups/' + groupID + '/group-to-department/';
     return this.req.post(url);

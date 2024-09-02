@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { userAPI } from '../../../utils/user-api';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
+import { gettext, siteRoot, orgID } from '../../utils/constants';
+import { orgAdminAPI } from '../../utils/org-admin-api';
+import { userAPI } from '../../utils/user-api';
+import toaster from '../../components/toast';
+import { Utils } from '../../utils/utils';
 import moment from 'moment';
 
-class LogsExportExcelDialog extends React.Component {
+class OrgLogsExportExcelDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,25 +26,22 @@ class LogsExportExcelDialog extends React.Component {
       return;
     }
     switch (this.props.logType) {
-      case 'login':
-        this.sysExportLogs('loginadmin');
+      case 'fileaudit':
+        this.orgAdminExportLogs('fileaudit');
         break;
-      case 'fileAccess':
-        this.sysExportLogs('fileaudit');
+      case 'file-update':
+        this.orgAdminExportLogs('fileupdate');
         break;
-      case 'fileUpdate':
-        this.sysExportLogs('fileupdate');
-        break;
-      case 'sharePermission':
-        this.sysExportLogs('permaudit');
+      case 'perm-audit':
+        this.orgAdminExportLogs('permaudit');
         break;
     }
   };
 
-  sysExportLogs = (logType) => {
+  orgAdminExportLogs = (logType) => {
     let { startDateStr, endDateStr } = this.state;
     let task_id = '';
-    systemAdminAPI.sysAdminExportLogsExcel(startDateStr, endDateStr, logType).then(res => {
+    orgAdminAPI.orgAdminExportLogsExcel(orgID, startDateStr, endDateStr, logType).then(res => {
       task_id = res.data.task_id;
       this.setState({
         taskId: task_id
@@ -53,13 +50,13 @@ class LogsExportExcelDialog extends React.Component {
       return userAPI.queryIOStatus(task_id);
     }).then(res => {
       if (res.data.is_finished === true) {
-        location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
+        location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
       } else {
         this.timer = setInterval(() => {
           userAPI.queryIOStatus(task_id).then(res => {
             if (res.data.is_finished === true) {
               clearInterval(this.timer);
-              location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
+              location.href = siteRoot + 'api/v2.1/org/admin/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
             }
           }).catch(err => {
             clearInterval(this.timer);
@@ -156,6 +153,6 @@ const propTypes = {
   logType: PropTypes.string.isRequired,
 };
 
-LogsExportExcelDialog.propTypes = propTypes;
+OrgLogsExportExcelDialog.propTypes = propTypes;
 
-export default LogsExportExcelDialog;
+export default OrgLogsExportExcelDialog;

@@ -3,28 +3,53 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import MainPanelTopbar from './main-panel-topbar';
+import { Button } from 'reactstrap';
+import ModalPortal from '../../components/modal-portal';
+import OrgLogsExportExcelDialog from '../../components/dialog/org-admin-logs-export-excel-dialog';
 
 class OrgLogs extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isExportExcelDialogOpen: false,
+      logType: '',
+    };
   }
 
+  componentDidMount() {
+    let href = window.location.href.split('/');
+    let logtype = href[href.length - 2];
+    if (logtype === 'logadmin') {
+      logtype = 'fileaudit';
+    }
+    this.setState({ logType: logtype });
+  }
+
+  toggleExportExcelDialog = () => {
+    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
+  };
   tabItemClick = (param) => {
+    this.setState({
+      logType: param
+    });
     this.props.tabItemClick(param);
   };
 
   render() {
+    const { isExportExcelDialogOpen, logType } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar>
+          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
+        </MainPanelTopbar>
         <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
+          <div className="cur-view-container h-100">
             <div className="cur-view-path org-user-nav">
               <ul className="nav">
-                <li className="nav-item" onClick={() => this.tabItemClick('logadmin')}>
+                <li className="nav-item" onClick={() => this.tabItemClick('fileaudit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'logadmin' ? 'active' : ''}`}
+                    className={`nav-link ${this.props.currentTab === 'fileaudit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/'} title={gettext('File Access')}>{gettext('File Access')}
                   </Link>
                 </li>
@@ -42,9 +67,19 @@ class OrgLogs extends Component {
                 </li>
               </ul>
             </div>
-            {this.props.children}
+            <div className="h-100 o-auto">
+              {this.props.children}
+            </div>
           </div>
         </div>
+        {isExportExcelDialogOpen &&
+          <ModalPortal>
+            <OrgLogsExportExcelDialog
+              logType={logType}
+              toggle={this.toggleExportExcelDialog}
+            />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }

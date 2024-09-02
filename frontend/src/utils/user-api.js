@@ -42,6 +42,11 @@ class UserAPI {
     };
     return this.req.post(url, data);
   }
+
+  queryIOStatus(task_id) {
+    const url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
+    return this.req.get(url);
+  }
 }
 
 let userAPI = new UserAPI();
