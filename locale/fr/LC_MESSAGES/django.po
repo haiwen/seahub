@@ -38,7 +38,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 11:49+0800\n"
+"POT-Creation-Date: 2024-09-02 10:07+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Konstantin <kostya49.fr@gmail.com>, 2024\n"
 "Language-Team: French (http://app.transifex.com/haiwen/seahub/language/fr/)\n"
@@ -253,7 +253,6 @@ msgstr "Heure"
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/api/admin/statistics.py:334
-#: seahub/templates/file_access.html:24
 msgid "User"
 msgstr "Utilisateur"
 
@@ -401,7 +400,7 @@ msgid ""
 "configuration."
 msgstr "Édité avec succès, mais échec de l'envoi de l'e-mail, veuillez vérifier votre configuration."
 
-#: seahub/api2/endpoints/admin/users.py:1524 seahub/auth/views.py:370
+#: seahub/api2/endpoints/admin/users.py:1524 seahub/auth/views.py:369
 msgid "Unable to reset password."
 msgstr ""
 
@@ -606,7 +605,7 @@ msgid "User %s is an organization user."
 msgstr "L'utilisateur %s est un utilisateur de l'organisation"
 
 #: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:464
+#: seahub/group/error_msg.py:23 seahub/views/file.py:463
 msgid "Group does not exist"
 msgstr "Le groupe n'existe pas"
 
@@ -898,7 +897,7 @@ msgstr "Wiki introuvable."
 msgid "Name is required."
 msgstr "Le nom est requis."
 
-#: seahub/api2/utils.py:312
+#: seahub/api2/utils.py:314
 msgid "A share link for you"
 msgstr ""
 
@@ -991,19 +990,19 @@ msgstr "Mot de passe (encore)"
 msgid "A user with this email already exists."
 msgstr "Un utilisateur avec cette adresse e-mail existe déjà."
 
-#: seahub/auth/views.py:158
+#: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Ce compte a été bloqué suite à de trop nombreuses tentatives de connexions."
 
-#: seahub/auth/views.py:322
+#: seahub/auth/views.py:321
 msgid "Logged out"
 msgstr "Déconnecté"
 
-#: seahub/auth/views.py:391
+#: seahub/auth/views.py:390
 msgid "Failed to send email, please contact administrator."
 msgstr "Échec de l'envoi de l'e-mail, veuillez contacter l'administrateur."
 
-#: seahub/auth/views.py:466
+#: seahub/auth/views.py:464
 msgid "Unable to change password."
 msgstr ""
 
@@ -1079,12 +1078,10 @@ msgid "Enter a valid e-mail address."
 msgstr "Entrez une adresse e-mail valide."
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:25
 msgid "Type"
 msgstr "Type"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:26
 msgid "IP"
 msgstr "IP"
 
@@ -1093,7 +1090,6 @@ msgid "Device"
 msgstr "Appareil"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:27
 msgid "Date"
 msgstr "Date"
 
@@ -1119,7 +1115,6 @@ msgid "Deleted"
 msgstr "Supprimé"
 
 #: seahub/base/management/commands/export_file_access_log.py:88
-#: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
 msgstr "Utilisateur anonyme"
@@ -1400,7 +1395,7 @@ msgstr "Le nom %s n'est pas valide"
 
 #: seahub/forms.py:97 seahub/share/views.py:200 seahub/views/ajax.py:308
 #: seahub/views/ajax.py:312 seahub/views/ajax.py:316 seahub/views/ajax.py:327
-#: seahub/views/ajax.py:447 seahub/views/file.py:1953
+#: seahub/views/ajax.py:447
 msgid "Argument missing"
 msgstr "Argument manquant"
 
@@ -1429,7 +1424,7 @@ msgstr "Le nom de la bibliothèque est requis"
 msgid "Please enter a number"
 msgstr "Veuillez entrer un numéro"
 
-#: seahub/forms.py:184 seahub/templates/snippets/repo_create_js.html:34
+#: seahub/forms.py:184
 msgid "Name is required"
 msgstr "Le nom est requis"
 
@@ -1524,11 +1519,11 @@ msgstr "L'équipe de %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:442 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1167
-#: seahub/views/file.py:1192 seahub/views/file.py:1402
-#: seahub/views/file.py:1439 seahub/views/file.py:1962
-#: seahub/views/repo.py:115 seahub/views/repo.py:172 seahub/views/repo.py:230
-#: seahub/views/repo.py:259 seahub/views/repo.py:288 seahub/views/repo.py:406
+#: seahub/views/ajax.py:427 seahub/views/file.py:1166
+#: seahub/views/file.py:1191 seahub/views/file.py:1401
+#: seahub/views/file.py:1438 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
+#: seahub/views/repo.py:406
 msgid "Permission denied"
 msgstr "Autorisation refusée"
 
@@ -2131,7 +2126,7 @@ msgstr ""
 msgid "The number of users exceeds the limit"
 msgstr ""
 
-#: seahub/organizations/api/admin/users.py:834
+#: seahub/organizations/api/admin/users.py:835
 #, python-brace-format
 msgid "User {email} already exists."
 msgstr ""
@@ -2184,54 +2179,49 @@ msgstr "L'adresse e-mail ne peut pas être vide"
 
 #: seahub/organizations/templates/organizations/org_register.html:79
 #: seahub/templates/registration/login.html:193
-#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/password_change_form.html:55
 #: seahub/templates/registration/password_reset_confirm.html:58
-#: seahub/templates/registration/password_set_form.html:67
+#: seahub/templates/registration/password_set_form.html:53
 #: seahub/templates/registration/registration_form.html:86
 #: seahub/templates/sysadmin/sudo_mode.html:70
 msgid "Password cannot be blank"
 msgstr "Le mot de passe ne peut pas être vide"
 
 #: seahub/organizations/templates/organizations/org_register.html:83
-#: seahub/templates/registration/password_change_form.html:73
+#: seahub/templates/registration/password_change_form.html:59
 #: seahub/templates/registration/password_reset_confirm.html:62
-#: seahub/templates/registration/password_set_form.html:71
+#: seahub/templates/registration/password_set_form.html:57
 #: seahub/templates/registration/registration_form.html:90
-#: seahub/templates/snippets/repo_create_js.html:54
 msgid "Please enter the password again"
 msgstr "Veuillez ressaisir le mot de passe"
 
 #: seahub/organizations/templates/organizations/org_register.html:87
-#: seahub/templates/registration/password_change_form.html:77
+#: seahub/templates/registration/password_change_form.html:63
 #: seahub/templates/registration/password_reset_confirm.html:66
-#: seahub/templates/registration/password_set_form.html:75
+#: seahub/templates/registration/password_set_form.html:61
 #: seahub/templates/registration/registration_form.html:94
-#: seahub/templates/snippets/repo_create_js.html:58
 msgid "Passwords don't match"
 msgstr "Les mots de passe ne correspondent pas"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/search/templates/search_results.html:98
-#: seahub/templates/file_access.html:55
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
 msgstr "Précédent"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
 #: seahub/search/templates/search_results.html:101
-#: seahub/templates/file_access.html:58
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Suivant"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
-#: seahub/templates/file_access.html:63
 #: seahub/templates/snippets/admin_paginator.html:12
 msgid "Per page: "
 msgstr "Par page : "
 
-#: seahub/organizations/views.py:284 seahub/thumbnail/views.py:154
+#: seahub/organizations/views.py:280 seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Token non valide."
 
@@ -2291,7 +2281,6 @@ msgstr "%s définie comme votre bibliothèque par défaut avec succès."
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:433
 #: seahub/views/__init__.py:476 seahub/views/__init__.py:612
 #: seahub/views/__init__.py:774 seahub/views/ajax.py:376
-#: seahub/views/file.py:1948
 msgid "Library does not exist"
 msgstr "La bibliothèque n'existe pas"
 
@@ -2561,22 +2550,6 @@ msgstr "Veuillez entrer le mot de passe."
 msgid "Download"
 msgstr "Télécharger"
 
-#: seahub/templates/file_access.html:4 seahub/templates/file_access.html:7
-msgid "Access Log"
-msgstr "Fichier journaux"
-
-#: seahub/templates/file_access.html:10 seahub/templates/text_diff.html:21
-msgid "Current Path:"
-msgstr "Chemin d'accès actuel :"
-
-#: seahub/templates/file_access.html:26
-msgid "Device Name"
-msgstr "Nom de l'appareil"
-
-#: seahub/templates/file_access.html:82
-msgid "This file has (apparently) not been accessed yet"
-msgstr "Ce fichier n'a (apparemment) pas encore été consulté"
-
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
 msgstr "Importer un dossier"
@@ -2714,15 +2687,7 @@ msgstr "Mot de passe actuel"
 msgid "New Password"
 msgstr "Nouveau mot de passe"
 
-#: seahub/templates/registration/password_change_form.html:39
-#: seahub/templates/registration/password_set_form.html:42
-#, python-format
-msgid ""
-"Passwords must have at least %(min_len)s characters and contain %(level)s of"
-" the following: uppercase letters, lowercase letters, numbers, and symbols."
-msgstr "Le mot de passe doit avoir au moins %(min_len)s caractères et contenir %(level)s des éléments suivants : lettres majuscules, lettres minuscules,  chiffres et symboles."
-
-#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/password_change_form.html:51
 msgid "Current password cannot be blank"
 msgstr "Le mot de passe actuel ne peut être vide"
 
@@ -2853,11 +2818,11 @@ msgstr "Historique"
 msgid "Snapshot"
 msgstr "Instantané"
 
-#: seahub/templates/sdoc_file_view_react.html:64
-#: seahub/templates/sdoc_file_view_react.html:87
-#: seahub/templates/view_file_onlyoffice.html:94
-#: seahub/templates/view_file_onlyoffice.html:182
-#: seahub/templates/view_file_onlyoffice.html:205
+#: seahub/templates/sdoc_file_view_react.html:63
+#: seahub/templates/sdoc_file_view_react.html:86
+#: seahub/templates/view_file_onlyoffice.html:93
+#: seahub/templates/view_file_onlyoffice.html:181
+#: seahub/templates/view_file_onlyoffice.html:204
 msgid "Failed. Please check the network."
 msgstr "Échec. Veuillez vérifier le réseau."
 
@@ -2894,7 +2859,7 @@ msgid "Insufficient password strength"
 msgstr ""
 
 #: seahub/templates/snippets/password_strength_js.html:11
-#: seahub/templates/snippets/password_strength_js.html:88
+#: seahub/templates/snippets/password_strength_js.html:85
 msgid "Password strength"
 msgstr ""
 
@@ -2913,18 +2878,6 @@ msgstr "Politique de vie privée"
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
 msgstr "Conditions générales"
-
-#: seahub/templates/snippets/repo_create_js.html:38
-msgid "Description is required"
-msgstr "La description est requise"
-
-#: seahub/templates/snippets/repo_create_js.html:46
-msgid "Please enter password"
-msgstr "Veuillez entrer le mot de passe"
-
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "Le mot de passe est trop court"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
@@ -3012,6 +2965,10 @@ msgstr "Détails de la modification"
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Back"
 msgstr "Retour"
+
+#: seahub/templates/text_diff.html:21
+msgid "Current Path:"
+msgstr "Chemin d'accès actuel :"
 
 #: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
@@ -3210,10 +3167,10 @@ msgstr "Mauvais ID de repo"
 msgid "Bad upload link token."
 msgstr "Mauvais token de lien d'envoi."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1187 seahub/views/file.py:1434
-#: seahub/views/file.py:1957 seahub/views/file.py:2172
-#: seahub/views/file.py:2177 seahub/views/file.py:2184
+#: seahub/views/ajax.py:338 seahub/views/file.py:457 seahub/views/file.py:488
+#: seahub/views/file.py:1186 seahub/views/file.py:1433
+#: seahub/views/file.py:2093 seahub/views/file.py:2098
+#: seahub/views/file.py:2105
 msgid "File does not exist"
 msgstr "Le fichier n'existe pas"
 
@@ -3225,73 +3182,73 @@ msgstr "Mauvais id de dépôt dans le lien d'envoi."
 msgid "No conflict in the merge."
 msgstr "Pas de conflit dans la fusion."
 
-#: seahub/views/file.py:192
+#: seahub/views/file.py:191
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: impossible d'ouvrir le fichier en ligne"
 
-#: seahub/views/file.py:196
+#: seahub/views/file.py:195
 msgid "URLError: failed to open file online"
 msgstr "URLError: impossible d'ouvrir le fichier en ligne"
 
-#: seahub/views/file.py:203
+#: seahub/views/file.py:202
 msgid "The encoding you chose is not proper."
 msgstr "L'encodage que vous avez choisi n'est pas approprié."
 
-#: seahub/views/file.py:220 seahub/views/file.py:223
+#: seahub/views/file.py:219 seahub/views/file.py:222
 msgid "Unknown file encoding"
 msgstr "Encodage de fichier inconnu"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:690
-#: seahub/views/file.py:786 seahub/views/file.py:908
+#: seahub/views/file.py:342 seahub/views/file.py:377 seahub/views/file.py:689
+#: seahub/views/file.py:785 seahub/views/file.py:907
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "La taille du fichier dépasse %s, il ne peut donc pas être visionné en ligne."
 
-#: seahub/views/file.py:350 seahub/views/file.py:821
+#: seahub/views/file.py:349 seahub/views/file.py:820
 msgid "The library is encrypted, can not open file online."
 msgstr "La bibliothèque est cryptée. Elle ne peut pas être ouverte en ligne."
 
-#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:776 seahub/views/file.py:1041
-#: seahub/views/file.py:1067 seahub/views/file.py:1097
-#: seahub/views/file.py:1233 seahub/views/file.py:1339
-#: seahub/views/file.py:1475 seahub/views/file.py:1592
+#: seahub/views/file.py:444 seahub/views/file.py:466 seahub/views/file.py:471
+#: seahub/views/file.py:512 seahub/views/file.py:775 seahub/views/file.py:1040
+#: seahub/views/file.py:1066 seahub/views/file.py:1096
+#: seahub/views/file.py:1232 seahub/views/file.py:1338
+#: seahub/views/file.py:1474 seahub/views/file.py:1591
 msgid "Unable to view file"
 msgstr "Impossible d'afficher le fichier"
 
-#: seahub/views/file.py:845 seahub/views/file.py:989 seahub/views/file.py:1300
-#: seahub/views/file.py:1530
+#: seahub/views/file.py:844 seahub/views/file.py:988 seahub/views/file.py:1299
+#: seahub/views/file.py:1529
 msgid "Error when prepare Office Online file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du document Office Online"
 
-#: seahub/views/file.py:877 seahub/views/file.py:1001
-#: seahub/views/file.py:1319 seahub/views/file.py:1546
+#: seahub/views/file.py:876 seahub/views/file.py:1000
+#: seahub/views/file.py:1318 seahub/views/file.py:1545
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du fichier OnlyOffice"
 
-#: seahub/views/file.py:1133
+#: seahub/views/file.py:1132
 msgid "Unable to download file, invalid file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier invalide"
 
-#: seahub/views/file.py:1142
+#: seahub/views/file.py:1141
 msgid "Unable to download file, wrong file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier erroné"
 
-#: seahub/views/file.py:1149
+#: seahub/views/file.py:1148
 msgid "Unable to download file."
 msgstr "Impossible de télécharger le fichier."
 
-#: seahub/views/file.py:1355 seahub/views/file.py:1611
+#: seahub/views/file.py:1354 seahub/views/file.py:1610
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
 msgstr "Partager le lien pour %s."
 
-#: seahub/views/file.py:1743 seahub/views/file.py:1748
+#: seahub/views/file.py:1742 seahub/views/file.py:1747
 msgid "Unable to download file"
 msgstr "Impossible de télécharger le fichier"
 
-#: seahub/views/file.py:2165
+#: seahub/views/file.py:2086
 msgid "The original file does not exist"
 msgstr ""
 
