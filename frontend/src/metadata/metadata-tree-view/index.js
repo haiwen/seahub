@@ -113,7 +113,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
           <div className="children">
             {navigation.map((item, index) => {
               const view = viewsMap[item._id];
-              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name;
+              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
               const isSelected = currentPath === viewPath;
               return (
                 <ViewItem

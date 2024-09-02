@@ -8,7 +8,7 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView, renameMetadataView, children }) => {
+export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView, children }) => {
   const enableMetadataManagement = useMemo(() => {
     return window.app.pageOptions.enableMetadataManagement;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -17,6 +17,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
   const [enableMetadata, setEnableExtendedProperties] = useState(false);
   const [showFirstView, setShowFirstView] = useState(false);
   const [navigation, setNavigation] = useState([]);
+  const [, setCount] = useState(0);
   const viewsMap = useRef({});
 
   const cancelURLView = useCallback(() => {
@@ -87,7 +88,7 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     if (isSelected) return;
     const node = {
       children: [],
-      path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name,
+      path: '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id,
       isExpanded: false,
       isLoaded: true,
       isPreload: true,
@@ -155,14 +156,12 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
       const currentView = viewsMap.current[viewId];
       viewsMap.current[viewId] = { ...currentView, ...update };
-      if (Object.prototype.hasOwnProperty.call(update, 'name')) {
-        renameMetadataView(viewId, '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + update['name']);
-      }
+      setCount(n => n + 1);
       successCallback && successCallback();
     }).catch(error => {
       failCallback && failCallback(error);
     });
-  }, [repoID, viewsMap, renameMetadataView]);
+  }, [repoID, viewsMap]);
 
   const moveView = useCallback((sourceViewId, targetViewId) => {
     metadataAPI.moveView(repoID, sourceViewId, targetViewId).then(res => {
