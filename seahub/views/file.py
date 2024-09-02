@@ -571,6 +571,7 @@ def view_lib_file(request, repo_id, path):
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
+        'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
     }
 
     # check whether file is starred
@@ -2111,6 +2112,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
 
     org_id = request.user.org.org_id if is_org_context(request) else -1
     # basic file info
+
     return_dict = {
         'is_pro': is_pro_version(),
         'repo': repo,

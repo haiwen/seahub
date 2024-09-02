@@ -1,94 +1,106 @@
-import React, { Fragment } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SimpleEditor } from '@seafile/sdoc-editor';
 import ExternalOperations from './external-operations';
 import { seafileAPI } from '../../../utils/seafile-api';
 import Dirent from '../../../models/dirent';
 import { Utils } from '../../../utils/utils';
+import { useCollaborators } from '../../../metadata';
+import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 
-export default class SdocEditor extends React.Component {
+const SdocEditor = () => {
+  const [isStarred, setStarted] = useState(window.app.pageOptions.isStarred);
+  const [isDraft] = useState(window.app.pageOptions.isSdocDraft);
+  const [direntList, setDirentList] = useState([]);
+  const [currentDirent, setCurrentDirent] = useState(null);
+  const { collaborators } = useCollaborators();
+  const plugins = useMemo(() => {
+    const { repoID, docPath, docPerm } = window.seafile;
+    return [
+      {
+        name: 'sdoc-info',
+        icon: 'sdoc-info',
+        resizable_width: true,
+        display_type: 'right-panel',
+        component: ({ onClose, width }) => {
+          return (<EmbeddedFileDetails repoID={repoID} onClose={onClose} path={docPath} dirent={currentDirent} repoInfo={{ permission: docPerm }} width={width} />);
+        },
+      }
+    ];
+  }, [currentDirent]);
 
-  constructor(props) {
-    super(props);
-    const { isStarred, isSdocDraft } = window.app.pageOptions;
-    this.state = {
-      isStarred: isStarred,
-      isDraft: isSdocDraft,
-      direntList: []
-    };
-  }
-
-  componentDidMount() {
-    this.onSetFavicon();
-    this.getDirentList();
-  }
-
-  toggleStar = (isStarred) => {
-    this.setState({ isStarred: isStarred });
-  };
-
-  onSetFavicon = (suffix) => {
-    let { docName } = window.seafile;
-    if (suffix) {
-      docName = docName + suffix;
-    }
-    const fileIcon = Utils.getFileIconUrl(docName);
-    document.getElementById('favicon').href = fileIcon;
-  };
-
-  onNewNotification = () => {
-    this.onSetFavicon('_notification');
-  };
-
-  onClearNotification = () => {
-    this.onSetFavicon();
-  };
-
-  getDirPath = () => {
+  const dirPath = useMemo(() => {
     const { docPath } = window.seafile;
     const index = docPath.lastIndexOf('/');
     if (index) {
       return docPath.slice(0, index);
     }
     return '/';
+  }, []);
+
+  const onSetFavicon = useCallback((suffix) => {
+    let { docName } = window.seafile;
+    if (suffix) {
+      docName = docName + suffix;
+    }
+    const fileIcon = Utils.getFileIconUrl(docName);
+    document.getElementById('favicon').href = fileIcon;
+  }, []);
+
+  const toggleStar = (isStarred) => {
+    setStarted(isStarred);
   };
 
-  getDirentList = () => {
-    const { repoID } = window.seafile;
-    const path = this.getDirPath();
-    seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
+  const onNewNotification = useCallback(() => {
+    onSetFavicon('_notification');
+  }, [onSetFavicon]);
+
+  const onClearNotification = useCallback(() => {
+    onSetFavicon();
+  }, [onSetFavicon]);
+
+  const getDirentList = () => {
+    const { repoID, docPath } = window.seafile;
+    seafileAPI.listDir(repoID, dirPath, { 'with_thumbnail': true }).then(res => {
       let direntList = [];
       res.data.dirent_list.forEach(item => {
-        let dirent = new Dirent(item);
+        const dirent = new Dirent(item);
+        if (Utils.joinPath(item.parent_dir, item.name) === docPath) {
+          setCurrentDirent(dirent);
+        }
         direntList.push(dirent);
       });
-      this.setState({
-        direntList: direntList
-      });
+      setDirentList(direntList);
     }).catch((err) => {
       Utils.getErrorMsg(err, true);
     });
   };
 
-  render() {
-    const { repoID, docPath, docName, docPerm } = window.seafile;
-    const { isStarred, isDraft, direntList } = this.state;
-    const dirPath = this.getDirPath();
-    return (
-      <Fragment>
-        <SimpleEditor isStarred={isStarred} isDraft={isDraft} />
-        <ExternalOperations
-          repoID={repoID}
-          docPath={docPath}
-          docName={docName}
-          docPerm={docPerm}
-          isStarred={isStarred}
-          direntList={direntList}
-          dirPath={dirPath}
-          toggleStar={this.toggleStar}
-          onNewNotification={this.onNewNotification}
-          onClearNotification={this.onClearNotification}
-        />
-      </Fragment>
-    );
-  }
-}
+  useEffect(() => {
+    onSetFavicon();
+    getDirentList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { repoID, docPath, docName, docPerm } = window.seafile;
+  return (
+    <>
+      <SimpleEditor isStarred={isStarred} isDraft={isDraft} plugins={plugins} collaborators={collaborators} showComment={true} />
+      <ExternalOperations
+        repoID={repoID}
+        docPath={docPath}
+        docName={docName}
+        docPerm={docPerm}
+        isStarred={isStarred}
+        direntList={direntList}
+        dirPath={dirPath}
+        toggleStar={toggleStar}
+        onNewNotification={onNewNotification}
+        onClearNotification={onClearNotification}
+      />
+    </>
+  );
+
+};
+
+export default SdocEditor;
+
