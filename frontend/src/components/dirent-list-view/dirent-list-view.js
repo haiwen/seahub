@@ -17,6 +17,7 @@ import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -55,6 +56,7 @@ const propTypes = {
   posX: PropTypes.string,
   posY: PropTypes.string,
   getMenuContainerSize: PropTypes.func,
+  eventBus: PropTypes.object,
 };
 
 class DirentListView extends React.Component {
@@ -99,24 +101,24 @@ class DirentListView extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.fullDirentList !== this.props.fullDirentList) {
-      let imageItems = [];
-      if (this.props.fullDirentList.length > 0) {
-        let items = this.props.fullDirentList.filter((item) => {
-          return Utils.imageCheck(item.name);
-        });
-        imageItems = items.map((item) => {
-          return this.prepareImageItem(item);
-        });
-      }
+  componentDidMount() {
+    this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_IMAGE, this.recalculateImageItems);
+  }
 
-      this.setState({
-        isImagePopupOpen: imageItems.length > 0,
-        imageItems: imageItems,
-        imageIndex: imageItems.length > 0 ? this.state.imageIndex % imageItems.length : 0,
-      });
-    }
+  recalculateImageItems = () => {
+    if (!this.state.isImagePopupOpen) return;
+    let imageItems = this.props.direntList
+      .filter((item) => Utils.imageCheck(item.name))
+      .map((item) => this.prepareImageItem(item));
+
+    this.setState({
+      imageItems: imageItems,
+      imageIndex: this.state.imageIndex % imageItems.length,
+    });
+  };
+
+  componentWillUnmount() {
+    this.unsubscribeEvent();
   }
 
   freezeItem = () => {
@@ -222,6 +224,16 @@ class DirentListView extends React.Component {
   deleteImage = (name) => {
     const item = this.props.fullDirentList.find((item) => item.name === name);
     this.props.onItemDelete(item);
+
+    const newImageItems = this.props.fullDirentList
+      .filter((item) => item.name !== name && Utils.imageCheck(item.name))
+      .map((item) => this.prepareImageItem(item));
+
+    this.setState((prevState) => ({
+      isImagePopupOpen: newImageItems.length > 0,
+      imageItems: newImageItems,
+      imageIndex: prevState.imageIndex % newImageItems.length,
+    }));
   };
 
   closeImagePopup = () => {

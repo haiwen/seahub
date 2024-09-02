@@ -42,6 +42,7 @@ const propTypes = {
   loadDirentList: PropTypes.func,
   fullDirentList: PropTypes.array,
   getMenuContainerSize: PropTypes.func,
+  eventBus: PropTypes.object,
 };
 
 class DirListView extends React.Component {
@@ -105,6 +106,7 @@ class DirListView extends React.Component {
           showDirentDetail={this.props.showDirentDetail}
           loadDirentList={this.props.loadDirentList}
           getMenuContainerSize={this.props.getMenuContainerSize}
+          eventBus={this.props.eventBus}
         />
       </Fragment>
     );

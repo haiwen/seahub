@@ -35,6 +35,12 @@ class ImageDialog extends React.Component {
     window.open(imageSrc, '_blank');
   };
 
+  onRotateImage = (angle) => {
+    if (this.props.onRotateImage) {
+      this.props.onRotateImage(this.props.imageIndex, angle);
+    }
+  };
+
   render() {
     const imageItems = this.props.imageItems;
     const imageIndex = this.props.imageIndex;
@@ -64,7 +70,7 @@ class ImageDialog extends React.Component {
         onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}
-        onRotateImage={(angle) => this.props.onRotateImage(imageIndex, angle)}
+        onRotateImage={this.onRotateImage}
       />
     );
   }

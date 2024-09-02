@@ -63,7 +63,7 @@ class DirColumnNav extends React.Component {
     };
     this.isNodeMenuShow = true;
     this.imageItemsSnapshot = [];
-    this.imageIndexSnamshot = 0;
+    this.imageIndexSnapshot = 0;
   }
 
   componentDidMount() {
@@ -79,7 +79,7 @@ class DirColumnNav extends React.Component {
       } else {
         this.setState({
           imageNodeItems: this.imageItemsSnapshot,
-          imageIndex: this.imageIndexSnamshot,
+          imageIndex: this.imageIndexSnapshot,
         });
       }
     }
@@ -296,7 +296,7 @@ class DirColumnNav extends React.Component {
 
   deleteImage = () => {
     this.imageItemsSnapshot = this.state.imageNodeItems;
-    this.imageIndexSnamshot = this.state.imageIndex;
+    this.imageIndexSnapshot = this.state.imageIndex;
 
     if (this.state.imageNodeItems.length > this.state.imageIndex) {
       this.props.onDeleteNode(this.state.imageNodeItems[this.state.imageIndex].node);

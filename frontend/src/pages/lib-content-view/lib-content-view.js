@@ -914,6 +914,9 @@ class LibContentView extends React.Component {
           }
           if (parentPath === this.state.path && !this.state.isViewFile) {
             this.addDirent(name, 'file');
+            if (Utils.imageCheck(name)) {
+              this.props.eventBus.dispatch(EVENT_BUS_TYPE.RESTORE_IMAGE);
+            }
           }
         } else {
           if (this.state.isTreePanelShown) {
@@ -2293,6 +2296,7 @@ class LibContentView extends React.Component {
               showShareBtn={showShareBtn}
               onUploadFile={this.onUploadFile}
               onUploadFolder={this.onUploadFolder}
+              eventBus={this.props.eventBus}
             />
             {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader
