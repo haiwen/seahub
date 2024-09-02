@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 11:49+0800\n"
+"POT-Creation-Date: 2024-09-02 10:07+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2024\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -225,7 +225,6 @@ msgstr "시간"
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/api/admin/statistics.py:334
-#: seahub/templates/file_access.html:24
 msgid "User"
 msgstr "사용자"
 
@@ -373,7 +372,7 @@ msgid ""
 "configuration."
 msgstr "편집에 성공했지만 전자메일 보내기에 실패했습니다. 전자메일 설정을 확인해주세요."
 
-#: seahub/api2/endpoints/admin/users.py:1524 seahub/auth/views.py:370
+#: seahub/api2/endpoints/admin/users.py:1524 seahub/auth/views.py:369
 msgid "Unable to reset password."
 msgstr "암호를 초기화할 수 없습니다."
 
@@ -387,7 +386,7 @@ msgstr "%s 암호 재설정"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "암호 초기화 링크를 {contact_email}(으)로 보냈습니다."
 
 #: seahub/api2/endpoints/admin/users.py:1572 seahub/views/sysadmin.py:486
 #, python-format
@@ -481,7 +480,7 @@ msgstr "제한 용량을 넘었습니다."
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "%(src)s 폴더를 %(des)s 하위 폴더로 이동할 수 없습니다"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:336 seahub/api2/endpoints/file.py:425
@@ -578,7 +577,7 @@ msgid "User %s is an organization user."
 msgstr "%s 사용자는 조직 사용자입니다."
 
 #: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:464
+#: seahub/group/error_msg.py:23 seahub/views/file.py:463
 msgid "Group does not exist"
 msgstr "그룹이 없습니다"
 
@@ -768,12 +767,12 @@ msgstr "%s에서 파일을 공유했습니다"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
 msgid "folder"
-msgstr ""
+msgstr "폴더"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "%s에서 폴더를 공유했습니다"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -787,17 +786,17 @@ msgstr "%s에서 업로드 링크를 공유했습니다"
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "%s  사용자가 없습니다."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "%s 전자메일 주소가 이미 있습니다."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "%s 전자메일 주소가 올바르지 않습니다."
 
 #: seahub/api2/endpoints/share_links.py:478
 #: seahub/api2/endpoints/share_links.py:487
@@ -870,9 +869,9 @@ msgstr "위키가 없습니다."
 msgid "Name is required."
 msgstr "이름이 필요합니다."
 
-#: seahub/api2/utils.py:312
+#: seahub/api2/utils.py:314
 msgid "A share link for you"
-msgstr ""
+msgstr "사용자 분께 공유한 링크"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -916,7 +915,7 @@ msgstr "이 계정은 비활성화 상태입니다."
 #: seahub/auth/forms.py:118 seahub/auth/forms.py:119
 #: seahub/templates/registration/login.html:59
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "로그인 하려면 단일 로그인 방식을 사용하세요."
 
 #: seahub/auth/forms.py:124
 msgid ""
@@ -963,19 +962,19 @@ msgstr "암호(다시 입력)"
 msgid "A user with this email already exists."
 msgstr "이 전자메일 사용자가 이미 있습니다."
 
-#: seahub/auth/views.py:158
+#: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "수많은 로그인 시도에 실패하여 이 계정의 사용을 중단했습니다."
 
-#: seahub/auth/views.py:322
+#: seahub/auth/views.py:321
 msgid "Logged out"
 msgstr "로그아웃했습니다"
 
-#: seahub/auth/views.py:391
+#: seahub/auth/views.py:390
 msgid "Failed to send email, please contact administrator."
 msgstr "전자메일 보내기에 실패했습니다. 관리자에게 알려주세요."
 
-#: seahub/auth/views.py:466
+#: seahub/auth/views.py:464
 msgid "Unable to change password."
 msgstr "암호를 바꿀 수 없습니다."
 
@@ -1051,12 +1050,10 @@ msgid "Enter a valid e-mail address."
 msgstr "올바른 전자메일 주소를 입력하세요."
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:25
 msgid "Type"
 msgstr "형식"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:26
 msgid "IP"
 msgstr "IP"
 
@@ -1065,7 +1062,6 @@ msgid "Device"
 msgstr "장치"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:27
 msgid "Date"
 msgstr "날짜"
 
@@ -1091,7 +1087,6 @@ msgid "Deleted"
 msgstr "삭제함"
 
 #: seahub/base/management/commands/export_file_access_log.py:88
-#: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
 msgstr "손님 사용자"
@@ -1183,11 +1178,11 @@ msgstr "이동함"
 
 #: seahub/base/templatetags/seahub_tags.py:144
 msgid "Added folder"
-msgstr ""
+msgstr "폴더를 추가했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:145
 msgid "Removed folder"
-msgstr ""
+msgstr "폴더를 제거했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:146
 #: seahub/notifications/management/commands/send_file_updates.py:172
@@ -1217,7 +1212,7 @@ msgstr "%(time)s의 상태로 \"%(file)s\" 파일을 되돌렸습니다."
 #: seahub/base/templatetags/seahub_tags.py:170
 #: seahub/base/templatetags/seahub_tags.py:241
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "삭제한 폴더를 복원했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:172
 #: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:460
@@ -1362,7 +1357,7 @@ msgstr "%s 이름이 잘못되었습니다"
 
 #: seahub/forms.py:97 seahub/share/views.py:200 seahub/views/ajax.py:308
 #: seahub/views/ajax.py:312 seahub/views/ajax.py:316 seahub/views/ajax.py:327
-#: seahub/views/ajax.py:447 seahub/views/file.py:1953
+#: seahub/views/ajax.py:447
 msgid "Argument missing"
 msgstr "인자가 빠졌습니다"
 
@@ -1391,7 +1386,7 @@ msgstr "라이브러리 이름이 필요합니다"
 msgid "Please enter a number"
 msgstr "숫자를 입력하세요"
 
-#: seahub/forms.py:184 seahub/templates/snippets/repo_create_js.html:34
+#: seahub/forms.py:184
 msgid "Name is required"
 msgstr "이름이 필요합니다"
 
@@ -1486,11 +1481,11 @@ msgstr "%(site_name)s 팀"
 
 #: seahub/group/views.py:105 seahub/share/views.py:137
 #: seahub/views/__init__.py:442 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1167
-#: seahub/views/file.py:1192 seahub/views/file.py:1402
-#: seahub/views/file.py:1439 seahub/views/file.py:1962
-#: seahub/views/repo.py:115 seahub/views/repo.py:172 seahub/views/repo.py:230
-#: seahub/views/repo.py:259 seahub/views/repo.py:288 seahub/views/repo.py:406
+#: seahub/views/ajax.py:427 seahub/views/file.py:1166
+#: seahub/views/file.py:1191 seahub/views/file.py:1401
+#: seahub/views/file.py:1438 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:259 seahub/views/repo.py:288
+#: seahub/views/repo.py:406
 msgid "Permission denied"
 msgstr "권한이 거부되었습니다"
 
@@ -1697,19 +1692,19 @@ msgstr "<a href='%(file_link)s'>%(file_name)s</a> 파일을 <a href='%(link)s'>%
 #: seahub/notifications/models.py:561
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "<strong>%(file_name)s</strong> 파일을 업로드했습니다"
 
 #: seahub/notifications/models.py:596
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "<a href='%(folder_link)s'>%(folder_name)s</a> 폴더를 <a href='%(link)s'>%(name)s</a>에 업로드했습니다"
 
 #: seahub/notifications/models.py:603
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "<strong>%(folder_name)s</strong> 폴더를 업로드했습니다"
 
 #: seahub/notifications/models.py:737
 #, python-format
@@ -1816,7 +1811,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "<a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> 폴더를 <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a> 폴더에 업로드했습니다."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -2089,7 +2084,7 @@ msgstr "실패. 구성원 {org_members_quota} 명까지만 초대할 수 있습�
 msgid "The number of users exceeds the limit"
 msgstr "한계 사용자 수를 넘었습니다."
 
-#: seahub/organizations/api/admin/users.py:834
+#: seahub/organizations/api/admin/users.py:835
 #, python-brace-format
 msgid "User {email} already exists."
 msgstr "{email} 사용자가 이미 있습니다."
@@ -2142,54 +2137,49 @@ msgstr "전자메일 주소는 비워둘 수 없습니다"
 
 #: seahub/organizations/templates/organizations/org_register.html:79
 #: seahub/templates/registration/login.html:193
-#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/password_change_form.html:55
 #: seahub/templates/registration/password_reset_confirm.html:58
-#: seahub/templates/registration/password_set_form.html:67
+#: seahub/templates/registration/password_set_form.html:53
 #: seahub/templates/registration/registration_form.html:86
 #: seahub/templates/sysadmin/sudo_mode.html:70
 msgid "Password cannot be blank"
 msgstr "암호는 비워둘 수 없습니다"
 
 #: seahub/organizations/templates/organizations/org_register.html:83
-#: seahub/templates/registration/password_change_form.html:73
+#: seahub/templates/registration/password_change_form.html:59
 #: seahub/templates/registration/password_reset_confirm.html:62
-#: seahub/templates/registration/password_set_form.html:71
+#: seahub/templates/registration/password_set_form.html:57
 #: seahub/templates/registration/registration_form.html:90
-#: seahub/templates/snippets/repo_create_js.html:54
 msgid "Please enter the password again"
 msgstr "암호를 다시 입력해주세요"
 
 #: seahub/organizations/templates/organizations/org_register.html:87
-#: seahub/templates/registration/password_change_form.html:77
+#: seahub/templates/registration/password_change_form.html:63
 #: seahub/templates/registration/password_reset_confirm.html:66
-#: seahub/templates/registration/password_set_form.html:75
+#: seahub/templates/registration/password_set_form.html:61
 #: seahub/templates/registration/registration_form.html:94
-#: seahub/templates/snippets/repo_create_js.html:58
 msgid "Passwords don't match"
 msgstr "암호가 일치하지 않습니다"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/search/templates/search_results.html:98
-#: seahub/templates/file_access.html:55
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
 msgstr "이전"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
 #: seahub/search/templates/search_results.html:101
-#: seahub/templates/file_access.html:58
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "다음"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
-#: seahub/templates/file_access.html:63
 #: seahub/templates/snippets/admin_paginator.html:12
 msgid "Per page: "
 msgstr "페이지당:"
 
-#: seahub/organizations/views.py:284 seahub/thumbnail/views.py:154
+#: seahub/organizations/views.py:280 seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "부적절한 토큰"
 
@@ -2249,7 +2239,6 @@ msgstr "\"%s\" 기본 라이브러리 설정에 성공했습니다."
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:433
 #: seahub/views/__init__.py:476 seahub/views/__init__.py:612
 #: seahub/views/__init__.py:774 seahub/views/ajax.py:376
-#: seahub/views/file.py:1948
 msgid "Library does not exist"
 msgstr "라이브러리가 없습니다"
 
@@ -2285,7 +2274,7 @@ msgstr[0] "결과 %(total)s건"
 
 #: seahub/search/templates/search_results.html:63
 msgid "Folder icon"
-msgstr ""
+msgstr "폴더 아이콘"
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
@@ -2326,7 +2315,7 @@ msgstr "%s 라이브러리가 없습니다."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "잘못된 검증 코드입니다. 다시 시도하세요."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
@@ -2351,26 +2340,26 @@ msgstr "올바른 암호를 입력해주세요."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "검증 코드는 %(code)s 입니다. 한시간동안 유효합니다."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s 에서 사용자 분께 파일 링크를 공유했습니다.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\n메일 주소를 검증하고 방문하려면 <a href=%(url)s>이곳</a> 을 누르시면 됩니다.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:24
 msgid "Email address verification"
-msgstr ""
+msgstr "전자메일 주소 검증"
 
 #: seahub/share/templates/share/share_link_email_audit.html:25
 msgid "Please provide your email address to continue."
@@ -2378,7 +2367,7 @@ msgstr "계속하려면 전자메일 주소를 입력하세요."
 
 #: seahub/share/templates/share/share_link_email_audit.html:28
 msgid "Enter your email address"
-msgstr ""
+msgstr "전자메일 주소를 입력하세요"
 
 #: seahub/share/templates/share/share_link_email_audit.html:29
 msgid "Get code"
@@ -2386,19 +2375,19 @@ msgstr "코드 발급"
 
 #: seahub/share/templates/share/share_link_email_audit.html:31
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "인증 코드를 여기에 붙여넣으세요"
 
 #: seahub/share/templates/share/share_link_email_audit.html:64
 msgid "Resend"
-msgstr ""
+msgstr "다시 보내기"
 
 #: seahub/share/templates/share/share_link_email_audit.html:92
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "검증 코드를 지정 전자메일 주소로 보냈습니다."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "폴더를 선택하세요."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2492,11 +2481,11 @@ msgstr "조직 계정 만들기"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "클라이언트가 로그인 상태입니다. 클라이언트를 열어 확인하세요."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "클라이언트 로그인 확인"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
@@ -2516,22 +2505,6 @@ msgstr "암호를 입력하세요."
 #: seahub/templates/download.html:4
 msgid "Download"
 msgstr "다운로드"
-
-#: seahub/templates/file_access.html:4 seahub/templates/file_access.html:7
-msgid "Access Log"
-msgstr "접근 기록"
-
-#: seahub/templates/file_access.html:10 seahub/templates/text_diff.html:21
-msgid "Current Path:"
-msgstr "현재 경로:"
-
-#: seahub/templates/file_access.html:26
-msgid "Device Name"
-msgstr "장치 이름"
-
-#: seahub/templates/file_access.html:82
-msgid "This file has (apparently) not been accessed yet"
-msgstr "이 파일은 아직 누구도 접근하지 않(은 것 같)았습니다"
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2670,15 +2643,7 @@ msgstr "현재 암호"
 msgid "New Password"
 msgstr "새 암호"
 
-#: seahub/templates/registration/password_change_form.html:39
-#: seahub/templates/registration/password_set_form.html:42
-#, python-format
-msgid ""
-"Passwords must have at least %(min_len)s characters and contain %(level)s of"
-" the following: uppercase letters, lowercase letters, numbers, and symbols."
-msgstr "암호 문자 갯수는 최소 %(min_len)s개여야 하며, %(level)s 암호 수준에 대소문자, 숫자, 기호 문자가 들어갑니다."
-
-#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/password_change_form.html:51
 msgid "Current password cannot be blank"
 msgstr "현재 암호를 비워둘 수 없습니다"
 
@@ -2720,7 +2685,7 @@ msgstr "메일함에 암호 재설정 전자메일을 보냈습니다."
 
 #: seahub/templates/registration/password_reset_done.html:32
 msgid "Back to login page"
-msgstr ""
+msgstr "로그인 페이지로 복귀"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2739,7 +2704,7 @@ msgstr "새 암호를 설정할 전자메일을 보내겠습니다"
 
 #: seahub/templates/registration/password_reset_form.html:38
 msgid "Your email used in login"
-msgstr ""
+msgstr "전자메일 주소를 로그인에 사용합니다"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
@@ -2809,18 +2774,18 @@ msgstr "이력"
 msgid "Snapshot"
 msgstr "스냅샷"
 
-#: seahub/templates/sdoc_file_view_react.html:64
-#: seahub/templates/sdoc_file_view_react.html:87
-#: seahub/templates/view_file_onlyoffice.html:94
-#: seahub/templates/view_file_onlyoffice.html:182
-#: seahub/templates/view_file_onlyoffice.html:205
+#: seahub/templates/sdoc_file_view_react.html:63
+#: seahub/templates/sdoc_file_view_react.html:86
+#: seahub/templates/view_file_onlyoffice.html:93
+#: seahub/templates/view_file_onlyoffice.html:181
+#: seahub/templates/view_file_onlyoffice.html:204
 msgid "Failed. Please check the network."
 msgstr "실패했습니다. 네트워크를 확인하세요."
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "공유 파일/폴더를 탐색하려면 암호를 입력하세요."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2847,18 +2812,18 @@ msgstr "다음 페이지로 가서 파일을 업로드할 수 있습니다:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Insufficient password strength"
-msgstr ""
+msgstr "암호 세기가 충분하지 않습니다"
 
 #: seahub/templates/snippets/password_strength_js.html:11
-#: seahub/templates/snippets/password_strength_js.html:88
+#: seahub/templates/snippets/password_strength_js.html:85
 msgid "Password strength"
-msgstr ""
+msgstr "암호 세기"
 
 #: seahub/templates/snippets/password_strength_js.html:18
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "암호를 더 강력하게 하려면 서로 다른 문자가 들어있어야 합니다: 대문자, 소문자, 숫자, 특수문자가 이에 해당합니다."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
@@ -2869,18 +2834,6 @@ msgstr "개인 정보 정책"
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
 msgstr "서비스 이용 약관"
-
-#: seahub/templates/snippets/repo_create_js.html:38
-msgid "Description is required"
-msgstr "설명이 필요합니다"
-
-#: seahub/templates/snippets/repo_create_js.html:46
-msgid "Please enter password"
-msgstr "암호를 입력해주세요"
-
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "암호가 너무 짧습니다"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
@@ -2903,7 +2856,7 @@ msgstr "%(repo_name)s 라이브러리의 새 암호는 %(password)s 입니다. �
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "%(site_name)s 사이트의 관리자가 %(account)s 계정의 암호를 초기화합니다. 계속하려면 다음 링크를 누르세요:"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Confirm password to continue"
@@ -2968,6 +2921,10 @@ msgstr "수정 세부 내용"
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Back"
 msgstr "뒤로"
+
+#: seahub/templates/text_diff.html:21
+msgid "Current Path:"
+msgstr "현재 경로:"
 
 #: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
@@ -3166,10 +3123,10 @@ msgstr "잘못된 저장소 ID 입니다"
 msgid "Bad upload link token."
 msgstr "잘못된 업로드 링크 토큰입니다."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1187 seahub/views/file.py:1434
-#: seahub/views/file.py:1957 seahub/views/file.py:2172
-#: seahub/views/file.py:2177 seahub/views/file.py:2184
+#: seahub/views/ajax.py:338 seahub/views/file.py:457 seahub/views/file.py:488
+#: seahub/views/file.py:1186 seahub/views/file.py:1433
+#: seahub/views/file.py:2093 seahub/views/file.py:2098
+#: seahub/views/file.py:2105
 msgid "File does not exist"
 msgstr "파일이 없습니다"
 
@@ -3181,73 +3138,73 @@ msgstr "업로드 링크에 잘못된 저장소 ID가 있습니다."
 msgid "No conflict in the merge."
 msgstr "합친 내용에 충돌이 없습니다."
 
-#: seahub/views/file.py:192
+#: seahub/views/file.py:191
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 온라인 파일 열기에 실패했습니다"
 
-#: seahub/views/file.py:196
+#: seahub/views/file.py:195
 msgid "URLError: failed to open file online"
 msgstr "URLError: 온라인 파일 열기에 실패했습니다"
 
-#: seahub/views/file.py:203
+#: seahub/views/file.py:202
 msgid "The encoding you chose is not proper."
 msgstr "선택한 인코딩이 적합하지 않습니다"
 
-#: seahub/views/file.py:220 seahub/views/file.py:223
+#: seahub/views/file.py:219 seahub/views/file.py:222
 msgid "Unknown file encoding"
 msgstr "알 수 없는 파일 인코딩"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:690
-#: seahub/views/file.py:786 seahub/views/file.py:908
+#: seahub/views/file.py:342 seahub/views/file.py:377 seahub/views/file.py:689
+#: seahub/views/file.py:785 seahub/views/file.py:907
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
-#: seahub/views/file.py:350 seahub/views/file.py:821
+#: seahub/views/file.py:349 seahub/views/file.py:820
 msgid "The library is encrypted, can not open file online."
 msgstr "라이브러리를 암호화했습니다. 온라인에서 파일을 열어볼 수 없습니다."
 
-#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:776 seahub/views/file.py:1041
-#: seahub/views/file.py:1067 seahub/views/file.py:1097
-#: seahub/views/file.py:1233 seahub/views/file.py:1339
-#: seahub/views/file.py:1475 seahub/views/file.py:1592
+#: seahub/views/file.py:444 seahub/views/file.py:466 seahub/views/file.py:471
+#: seahub/views/file.py:512 seahub/views/file.py:775 seahub/views/file.py:1040
+#: seahub/views/file.py:1066 seahub/views/file.py:1096
+#: seahub/views/file.py:1232 seahub/views/file.py:1338
+#: seahub/views/file.py:1474 seahub/views/file.py:1591
 msgid "Unable to view file"
 msgstr "파일을 볼 수 없습니다"
 
-#: seahub/views/file.py:845 seahub/views/file.py:989 seahub/views/file.py:1300
-#: seahub/views/file.py:1530
+#: seahub/views/file.py:844 seahub/views/file.py:988 seahub/views/file.py:1299
+#: seahub/views/file.py:1529
 msgid "Error when prepare Office Online file preview page."
 msgstr "오피스 온라인 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:877 seahub/views/file.py:1001
-#: seahub/views/file.py:1319 seahub/views/file.py:1546
+#: seahub/views/file.py:876 seahub/views/file.py:1000
+#: seahub/views/file.py:1318 seahub/views/file.py:1545
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "오피스 파일 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:1133
+#: seahub/views/file.py:1132
 msgid "Unable to download file, invalid file path"
 msgstr "파일을 다운로드할 수 없습니다. 부적절한 파일 경로입니다."
 
-#: seahub/views/file.py:1142
+#: seahub/views/file.py:1141
 msgid "Unable to download file, wrong file path"
 msgstr "파일 경로가 잘못되어 파일을 다운로드할 수 없습니다"
 
-#: seahub/views/file.py:1149
+#: seahub/views/file.py:1148
 msgid "Unable to download file."
 msgstr "파일을 다운로드할 수 없습니다."
 
-#: seahub/views/file.py:1355 seahub/views/file.py:1611
+#: seahub/views/file.py:1354 seahub/views/file.py:1610
 #: seahub/views/repo.py:350
 #, python-format
 msgid "Share link for %s."
-msgstr "%s 링크를 공유합니다."
+msgstr "%s(에)게 링크를 공유합니다."
 
-#: seahub/views/file.py:1743 seahub/views/file.py:1748
+#: seahub/views/file.py:1742 seahub/views/file.py:1747
 msgid "Unable to download file"
 msgstr "파일을 다운로드 할 수 없습니다."
 
-#: seahub/views/file.py:2165
+#: seahub/views/file.py:2086
 msgid "The original file does not exist"
 msgstr "원본 파일이 없습니다"
 
