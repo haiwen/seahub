@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
-import FileDetails from '../dirent-detail/old-file-details';
+import FileDetails from '../dirent-detail/file-details';
 
 import '../../css/file-view.css';
 
