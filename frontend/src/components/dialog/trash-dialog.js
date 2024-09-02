@@ -221,7 +221,7 @@ class Content extends React.Component {
           <thead>
             <tr>
               {this.theadData.map((item, index) => {
-                return <th key={index} className={index === 0 ? 'pl-4' : ''} width={item.width}>{item.text}</th>;
+                return <th key={index} className={index === 0 ? 'pl10' : ''} width={item.width}>{item.text}</th>;
               })}
             </tr>
           </thead>
@@ -332,7 +332,7 @@ class Item extends React.Component {
 
     return item.is_dir ? (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
+        <td className="pl10"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
         <td>{item.parent_dir}</td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
@@ -343,7 +343,7 @@ class Item extends React.Component {
       </tr>
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
-        <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
+        <td className="pl10"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${this.props.repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank" rel="noreferrer">{item.obj_name}</a></td>
         <td>{item.parent_dir}</td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
@@ -392,7 +392,7 @@ class FolderItem extends React.Component {
 
     return item.type == 'dir' ? (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
+        <td className="pl10"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td>{item.parent_dir}</td>
         <td></td>
@@ -401,7 +401,7 @@ class FolderItem extends React.Component {
       </tr>
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td className="text-center">
+        <td className="pl10">
           <img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" />
         </td>
         <td>
