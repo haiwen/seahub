@@ -14,16 +14,16 @@ const SdocEditor = () => {
   const [currentDirent, setCurrentDirent] = useState(null);
   const { collaborators } = useCollaborators();
   const plugins = useMemo(() => {
-    const { repoID, docPath } = window.seafile;
+    const { repoID, docPath, docPerm } = window.seafile;
     return [
       {
         name: 'sdoc-info',
         icon: 'sdoc-info',
         resizable_width: true,
-        display_type: 'inlay-right',
-        Component: ({ onClose, width }) => {
-          return (<EmbeddedFileDetails repoID={repoID} onClose={onClose} path={docPath} dirent={currentDirent} repoInfo={{ permission: 'rw' }} width={width} />);
-        }
+        display_type: 'right-panel',
+        component: ({ onClose, width }) => {
+          return (<EmbeddedFileDetails repoID={repoID} onClose={onClose} path={docPath} dirent={currentDirent} repoInfo={{ permission: docPerm }} width={width} />);
+        },
       }
     ];
   }, [currentDirent]);
