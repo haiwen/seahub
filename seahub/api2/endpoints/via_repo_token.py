@@ -1124,7 +1124,7 @@ class ViaRepoTokenFile(APIView):
 
         operation = operation.lower()
         if operation not in ('lock', 'unlock'):
-            error_msg = "operation can only be 'lock', 'unlock' or 'refresh-lock'."
+            error_msg = "operation can only be 'lock', 'unlock'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -1324,10 +1324,6 @@ class ViaRepoShareLink(APIView):
     def post(self, request):
         # argument check
         repo_id = request.repo_api_token_obj.repo_id
-
-        if not repo_id:
-            error_msg = 'repo_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         path = request.data.get('path', None)
         if not path:
