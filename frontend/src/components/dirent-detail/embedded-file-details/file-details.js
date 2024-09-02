@@ -6,9 +6,8 @@ import { CellType } from '../../../metadata/metadata-view/_basic';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { MetadataDetails, useEnableMetadata } from '../../../metadata';
-import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
 
-const FileDetails = React.memo(({ repoID, repoInfo, path, direntDetail }) => {
+const FileDetails = ({ repoID, repoInfo, path, direntDetail }) => {
   const { enableMetadata } = useEnableMetadata();
 
   const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
@@ -40,22 +39,11 @@ const FileDetails = React.memo(({ repoID, repoInfo, path, direntDetail }) => {
       )}
     </>
   );
-}, (props, nextProps) => {
-  const { repoID, repoInfo, dirent, path, direntDetail } = props;
-  const isChanged = (
-    repoID !== nextProps.repoID ||
-    path !== nextProps.path ||
-    !ObjectUtils.isSameObject(repoInfo, nextProps.repoInfo) ||
-    !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
-    !ObjectUtils.isSameObject(direntDetail, nextProps.direntDetail)
-  );
-  return !isChanged;
-});
+};
 
 FileDetails.propTypes = {
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
-  dirent: PropTypes.object,
   path: PropTypes.string,
   direntDetail: PropTypes.object,
 };
