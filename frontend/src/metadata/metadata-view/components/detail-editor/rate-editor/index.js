@@ -8,9 +8,8 @@ import './index.css';
 const RateEditor = ({ value, field, onChange: onChangeAPI }) => {
 
   const onChange = useCallback((update) => {
-    console.log(update);
-    // onChangeAPI(newValue);
-  }, [onChangeAPI]);
+    onChangeAPI(update[field.key]);
+  }, [field, onChangeAPI]);
 
   return (
     <div
@@ -20,6 +19,12 @@ const RateEditor = ({ value, field, onChange: onChangeAPI }) => {
       <Editor isCellSelected={true} field={field} value={value} onChange={onChange} />
     </div>
   );
+};
+
+RateEditor.propTypes = {
+  value: PropTypes.number,
+  field: PropTypes.object,
+  onChange: PropTypes.func,
 };
 
 export default RateEditor;
