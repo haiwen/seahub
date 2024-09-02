@@ -9,7 +9,7 @@ import {
 } from '../../../_basic';
 import { getEventClassName, gettext } from '../../../utils';
 import { getFilterByColumn } from '../../../utils/filters-utils';
-import FiltersList from './widgets';
+import AdvancedFilters from './advanced-filters';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import BasicFilters from './basic-filters';
 
@@ -175,7 +175,7 @@ class FilterPopover extends Component {
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>
               <div className="filter-group-container">
-                <FiltersList
+                <AdvancedFilters
                   filterConjunction={filterConjunction}
                   filters={filters}
                   columns={columns}

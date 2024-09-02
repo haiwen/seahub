@@ -39,7 +39,6 @@ const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
       {showEditor && (
         <SfCalendar lang={lang} format={format} value={value} onChange={onChange} onClose={closeEditor} onClear={onClear} />
       )}
-
     </>
   );
 };

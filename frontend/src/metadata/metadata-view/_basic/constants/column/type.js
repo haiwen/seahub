@@ -14,6 +14,7 @@ const CellType = {
   MULTIPLE_SELECT: 'multiple-select',
   NUMBER: 'number',
   GEOLOCATION: 'geolocation',
+  RATE: 'rate',
 };
 
 export default CellType;

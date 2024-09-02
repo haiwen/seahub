@@ -7,6 +7,7 @@ const DATE_COLUMN_OPTIONS = [
 ];
 const NUMERIC_COLUMNS_TYPES = [
   CellType.NUMBER,
+  CellType.RATE,
 ];
 const COLLABORATOR_COLUMN_TYPES = [
   CellType.CREATOR,

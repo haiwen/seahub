@@ -16,6 +16,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.MULTIPLE_SELECT]: 'multiple-select',
   [CellType.NUMBER]: 'number',
   [CellType.GEOLOCATION]: 'location',
+  [CellType.RATE]: 'rate',
 };
 
 const COLUMNS_ICON_NAME = {
@@ -34,6 +35,7 @@ const COLUMNS_ICON_NAME = {
   [CellType.MULTIPLE_SELECT]: 'Multiple select',
   [CellType.NUMBER]: 'Number',
   [CellType.GEOLOCATION]: 'Geolocation',
+  [CellType.RATE]: 'Rate',
 };
 
 export {

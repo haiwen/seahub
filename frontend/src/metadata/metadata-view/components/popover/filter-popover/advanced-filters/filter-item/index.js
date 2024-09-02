@@ -21,6 +21,7 @@ import {
 import { isCheckboxColumn } from '../../../../../utils/column-utils';
 import { gettext } from '../../../../../utils';
 import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../../../constants';
+import RateItem from '../../../../cell-editor/rate-editor/rate-item';
 
 import './index.css';
 
@@ -48,7 +49,7 @@ class FilterItem extends React.Component {
     super(props);
     this.state = {
       filterTerm: props.filter.filter_term,
-      enterRateItemIndex: 0,
+      enterRateItemIndex: -1,
     };
     this.filterPredicateOptions = null;
     this.filterTermModifierOptions = null;
@@ -69,7 +70,7 @@ class FilterItem extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const currentProps = this.props;
     const shouldUpdated = (
       nextProps.index !== currentProps.index ||
@@ -77,7 +78,8 @@ class FilterItem extends React.Component {
       nextProps.filterColumn !== currentProps.filterColumn ||
       nextProps.filterConjunction !== currentProps.filterConjunction ||
       nextProps.conjunctionOptions !== currentProps.conjunctionOptions ||
-      nextProps.filterColumnOptions !== currentProps.filterColumnOptions
+      nextProps.filterColumnOptions !== currentProps.filterColumnOptions ||
+      nextState.enterRateItemIndex !== this.state.enterRateItemIndex
     );
     return shouldUpdated;
   }
@@ -238,7 +240,7 @@ class FilterItem extends React.Component {
   };
 
   onMouseLeaveRateItem = () => {
-    this.setState({ enterRateItemIndex: 0 });
+    this.setState({ enterRateItemIndex: -1 });
   };
 
   onChangeRateNumber = (index) => {
@@ -484,6 +486,31 @@ class FilterItem extends React.Component {
       case CellType.MULTIPLE_SELECT: {
         let { options = [] } = filterColumn.data || {};
         return this.renderMultipleSelectOption(options, filter_term, readOnly);
+      }
+      case CellType.RATE: {
+        const { max } = filterColumn.data || {};
+        let rateList = [];
+        for (let i = 0; i < max; i++) {
+          const rateItem = (
+            <RateItem
+              key={i}
+              enterIndex={this.state.enterRateItemIndex}
+              index={i + 1}
+              onMouseEnter={this.onMouseEnterRateItem}
+              onMouseLeave={this.onMouseLeaveRateItem}
+              value={Number(filter_term) || max}
+              field={filterColumn}
+              isShowRateItem={true}
+              onChange={this.onChangeRateNumber}
+            />
+          );
+          rateList.push(rateItem);
+        }
+        return (
+          <div className="filter-rate-list">
+            {rateList}
+          </div>
+        );
       }
       default: {
         return null;

@@ -49,3 +49,9 @@ export {
   LONG_TEXT_EXCEED_LIMIT_MESSAGE,
   LONG_TEXT_EXCEED_LIMIT_SUGGEST,
 } from './limit';
+
+export {
+  RATE_COLORS,
+  RATE_MAX_NUMBER,
+  RATE_TYPES,
+} from './rate';

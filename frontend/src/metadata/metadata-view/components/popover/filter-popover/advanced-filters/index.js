@@ -27,7 +27,7 @@ const propTypes = {
   isPre: PropTypes.bool,
 };
 
-class FiltersList extends Component {
+class AdvancedFilters extends Component {
 
   constructor(props) {
     super(props);
@@ -124,6 +124,6 @@ class FiltersList extends Component {
   }
 }
 
-FiltersList.propTypes = propTypes;
+AdvancedFilters.propTypes = propTypes;
 
-export default FiltersList;
+export default AdvancedFilters;
