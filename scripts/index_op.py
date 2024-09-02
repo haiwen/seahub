@@ -20,8 +20,6 @@ def show_all_task():
 
 def restore_all_repo():
     start, count = 0, 1000
-    virtual_repos = repo_data.get_all_virtual_repos()
-    virtual_repo_set = {repo[0] for repo in virtual_repos}
     while True:
         try:
             repo_commits = repo_data.get_normal_repo_commit(start, count)
@@ -31,6 +29,9 @@ def restore_all_repo():
         else:
             if len(repo_commits) == 0:
                 break
+            repo_ids = [repo[0] for repo in repo_commits]
+            virtual_repos = repo_data.get_virtual_repo_in_repos(repo_ids)
+            virtual_repo_set = {repo[0] for repo in virtual_repos}
             for repo_id, commit_id in repo_commits:
                 if repo_id in virtual_repo_set:
                     continue
