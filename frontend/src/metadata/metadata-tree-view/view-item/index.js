@@ -6,6 +6,7 @@ import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
 import { Rename } from '../../metadata-view/components/popover/view-popover';
 import { Utils, isMobile } from '../../../utils/utils';
+import { VIEW_TYPE_ICON } from '../../metadata-view/_basic';
 
 import './index.css';
 
@@ -158,7 +159,7 @@ const ViewItem = ({
         </div>
         <div className="left-icon">
           <div className="tree-node-icon">
-            <Icon symbol={view.type ? view.type : 'table'} className="metadata-views-icon" />
+            <Icon symbol={VIEW_TYPE_ICON[view.type] || 'table'} className="metadata-views-icon" />
           </div>
         </div>
         <div className="right-icon" id={`metadata-view-dropdown-item-${view._id}`} >

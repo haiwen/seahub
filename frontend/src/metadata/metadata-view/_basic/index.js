@@ -57,6 +57,7 @@ export {
   LONG_TEXT_EXCEED_LIMIT_MESSAGE,
   LONG_TEXT_EXCEED_LIMIT_SUGGEST,
   VIEW_TYPE,
+  VIEW_TYPE_ICON,
 } from './constants';
 
 export {
