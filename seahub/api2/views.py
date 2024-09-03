@@ -53,7 +53,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT, \
-        PERMISSION_INVISIBLE
+        PERMISSION_INVISIBLE, REPO_TYPE_WIKI
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -581,7 +581,7 @@ class Search(APIView):
                 repo = seafile_api.get_repo(repo_id)
                 # recourse check
                 # Skip specical repo
-                if not repo or repo.repo_type is not None:
+                if not repo or repo.repo_type == REPO_TYPE_WIKI:
                     error_msg = 'Library %s not found.' % repo_id
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 

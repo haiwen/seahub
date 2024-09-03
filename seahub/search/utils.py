@@ -13,6 +13,7 @@ from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
 from seahub.utils import get_user_repos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     email2contact_email
+from seahub.constants import REPO_TYPE_WIKI
 
 import seaserv
 from seaserv import seafile_api
@@ -125,7 +126,7 @@ def get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_
 
     for repo in repo_list:
         # Skip the special repo
-        if repo.repo_type is not None:
+        if repo.repo_type == REPO_TYPE_WIKI:
             continue
         subrepo_tag = False
         search_repo_id = repo.id
