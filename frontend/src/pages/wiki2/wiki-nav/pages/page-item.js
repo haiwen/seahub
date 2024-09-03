@@ -99,10 +99,9 @@ class PageItem extends Component {
     window.seafile['docUuid'] = docUuid;
   };
 
-  getPageChildrenHeight = () => {
+  getPageChildrenStyle = () => {
     const folded = this.props.getFoldState(this.props.page.id);
-    if (folded) return 0;
-    return 'auto';
+    return folded ? { height: 0, overflowY: 'hidden' } : { height: 'auto', overflowY: 'visible' };
   };
 
   onClickPageChildren = (e) => {
@@ -269,7 +268,7 @@ class PageItem extends Component {
         }
         <div
           className="page-children"
-          style={{ height: this.getPageChildrenHeight() }}
+          style={this.getPageChildrenStyle()}
           onClick={this.onClickPageChildren}
         >
           {page.children &&
