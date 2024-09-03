@@ -313,8 +313,8 @@ def repo_folder_trash(request, repo_id):
     if is_org_context(request):
         org_id = request.user.org.org_id
         org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
-    enable_clean_trash = True
-    if config.ENABLE_USER_CLEAN_TRASH:
+    enable_clean_trash = config.ENABLE_USER_CLEAN_TRASH
+    if enable_clean_trash:
         enable_clean_trash = int(not org_setting.value) if org_setting else True
 
     if path == '/':
