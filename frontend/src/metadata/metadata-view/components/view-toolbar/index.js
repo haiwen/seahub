@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { SliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
 import { EVENT_BUS_TYPE } from '../../constants';
+import { VIEW_TYPE } from '../../_basic';
 
 import './index.css';
 
@@ -70,7 +71,7 @@ const ViewToolBar = ({ viewId }) => {
       onClick={onHeaderClick}
     >
       <div className="sf-metadata-tool-left-operations">
-        {view.type === 'image' && <SliderSetter />}
+        {view.type === VIEW_TYPE.GALLERY && <SliderSetter />}
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
@@ -93,7 +94,7 @@ const ViewToolBar = ({ viewId }) => {
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        {view.type !== 'image' && (
+        {view.type !== VIEW_TYPE.GALLERY && (
           <GroupbySetter
             isNeedSubmit={true}
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
@@ -104,7 +105,7 @@ const ViewToolBar = ({ viewId }) => {
             modifyGroupbys={modifyGroupbys}
           />
         )}
-        {view.type !== 'image' && (
+        {view.type !== VIEW_TYPE.GALLERY && (
           <HideColumnSetter
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
             target="sf-metadata-hide-column-popover"

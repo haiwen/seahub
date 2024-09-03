@@ -3,17 +3,18 @@ import { UncontrolledPopover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils';
 import Icon from '../../../../../../components/icon';
+import { VIEW_TYPE } from '../../../../_basic';
 
 import '../index.css';
 
 const VIEW_OPTIONS = [
   {
     key: 'table',
-    type: 'table',
+    type: VIEW_TYPE.TABLE,
   },
   {
     key: 'gallery',
-    type: 'image',
+    type: VIEW_TYPE.GALLERY,
   }
 ];
 
@@ -38,9 +39,9 @@ const AddView = ({ target, toggle, onOptionClick }) => {
 
   const translateLabel = useCallback((type) => {
     switch (type) {
-      case 'table':
+      case VIEW_TYPE.TABLE:
         return gettext('Table');
-      case 'image':
+      case VIEW_TYPE.GALLERY:
         return gettext('Gallery');
       default:
         return type;
