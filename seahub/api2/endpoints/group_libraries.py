@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 
 from seahub.signals import repo_created
 from seahub.group.utils import is_group_member, is_group_admin, \
@@ -189,7 +190,7 @@ class GroupLibraries(APIView):
         if password and not config.ENABLE_ENCRYPTED_LIBRARY:
             error_msg = 'NOT allow to create encrypted library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
@@ -213,6 +214,12 @@ class GroupLibraries(APIView):
         if is_org_context(request):
             is_org = True
             org_id = request.user.org.org_id
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id,
+                                                                        key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
+                return None, api_error(status.HTTP_403_FORBIDDEN,
+                                       'NOT allow to create encrypted library.')
+            
             repo_id = seafile_api.create_org_repo(repo_name, '', username, org_id, password,
                                                   enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
                                                   pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO,

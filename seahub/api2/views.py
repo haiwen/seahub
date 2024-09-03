@@ -1185,6 +1185,11 @@ class Repos(APIView):
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
         if not config.ENABLE_ENCRYPTED_LIBRARY:
             return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
+        if org_id and org_id > 0:
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
+                return None, api_error(status.HTTP_403_FORBIDDEN,
+                                       'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):
             return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
 
@@ -1321,6 +1326,11 @@ class PubRepos(APIView):
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id,
+                                                                        key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
+                return None, api_error(status.HTTP_403_FORBIDDEN,
+                                       'NOT allow to create encrypted library.')
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                   username, org_id, passwd,
                                                   enc_version=settings.ENCRYPTED_LIBRARY_VERSION,

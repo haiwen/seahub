@@ -1100,6 +1100,13 @@ def react_fake_view(request, **kwargs):
             for key, value in org_setting.items():
                 if key in org_configs:
                     org_setting[key] = int(org_configs[key])
+                    
+    enable_encryped_lib, enable_clean_trash = config.ENABLE_ENCRYPTED_LIBRARY, config.ENABLE_USER_CLEAN_TRASH
+    if enable_encryped_lib:
+        enable_encryped_lib = int(not org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY])
+    if enable_clean_trash:
+        enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
+    
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1116,11 +1123,9 @@ def react_fake_view(request, **kwargs):
         'upload_link_expire_days_default': UPLOAD_LINK_EXPIRE_DAYS_DEFAULT,
         'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
         'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
-        'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
-        'disable_org_encrypted_library': org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY],
+        'enable_encrypted_library': enable_encryped_lib,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
-        'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
-        'disable_org_user_clean_trash': org_setting[DISABLE_ORG_USER_CLEAN_TRASH],
+        'enable_user_clean_trash': enable_clean_trash,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
