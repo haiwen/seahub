@@ -313,7 +313,9 @@ def repo_folder_trash(request, repo_id):
     if is_org_context(request):
         org_id = request.user.org.org_id
         org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
-    disable_org_user_clean_trash = int(org_setting.value) if org_setting else False
+    enable_clean_trash = True
+    if config.ENABLE_USER_CLEAN_TRASH:
+        enable_clean_trash = int(not org_setting.value) if org_setting else True
 
     if path == '/':
         name = repo.name
@@ -324,9 +326,8 @@ def repo_folder_trash(request, repo_id):
             'repo': repo,
             'repo_folder_name': name,
             'path': path,
-            'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
-            'is_repo_admin': repo_admin,
-            'disable_org_user_clean_trash': disable_org_user_clean_trash
+            'enable_user_clean_trash': enable_clean_trash,
+            'is_repo_admin': repo_admin
             })
 
 def can_access_repo_setting(request, repo_id, username):
@@ -1100,7 +1101,7 @@ def react_fake_view(request, **kwargs):
             for key, value in org_setting.items():
                 if key in org_configs:
                     org_setting[key] = int(org_configs[key])
-                    
+
     enable_encryped_lib, enable_clean_trash = config.ENABLE_ENCRYPTED_LIBRARY, config.ENABLE_USER_CLEAN_TRASH
     if enable_encryped_lib:
         enable_encryped_lib = int(not org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY])
