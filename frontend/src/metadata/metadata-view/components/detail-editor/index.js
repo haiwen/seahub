@@ -51,8 +51,6 @@ const DetailEditor = ({ field, onChange: onChangeAPI, ...props }) => {
       return null;
     }
   }
-
-
 };
 
 DetailEditor.propTypes = {
