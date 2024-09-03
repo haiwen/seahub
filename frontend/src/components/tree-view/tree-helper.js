@@ -48,7 +48,9 @@ class TreeHelper {
   deleteNodeByPath(tree, nodePath) {
     let treeCopy = tree.clone();
     let node = treeCopy.getNodeByPath(nodePath);
-    treeCopy.deleteNode(node);
+    if (node) {
+      treeCopy.deleteNode(node);
+    }
     return treeCopy;
   }
 
@@ -56,7 +58,9 @@ class TreeHelper {
     let treeCopy = tree.clone();
     nodePaths.forEach(nodePath => {
       let node = treeCopy.getNodeByPath(nodePath);
-      treeCopy.deleteNode(node);
+      if (node) {
+        treeCopy.deleteNode(node);
+      }
     });
     return treeCopy;
   }
