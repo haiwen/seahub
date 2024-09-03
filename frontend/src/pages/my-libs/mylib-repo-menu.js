@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel, enableSeaTableIntegration } from '../../utils/constants';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -122,9 +122,6 @@ class MylibRepoMenu extends React.Component {
     }
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
-    }
-    if (enableSeaTableIntegration) {
-      operations.push('SeaTable integration');
     }
     return operations;
   };
