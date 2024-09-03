@@ -19,8 +19,7 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_COLLABORATORS,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.DATE],
     type: CellType.DATE,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME),
@@ -28,8 +27,7 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS),
@@ -37,8 +35,7 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_SUMMARY),
@@ -46,8 +43,7 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_SUMMARY,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX],
     type: CellType.CHECKBOX,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED),
@@ -55,8 +51,7 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_EXPIRED,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],
     type: CellType.SINGLE_SELECT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS),
@@ -64,69 +59,68 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_STATUS,
     canChangeName: false,
     groupby: 'predefined'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: gettext('Text'),
     canChangeName: true,
     key: CellType.TEXT,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
     name: gettext('Long text'),
     canChangeName: true,
     key: CellType.LONG_TEXT,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.NUMBER],
     type: CellType.NUMBER,
     name: gettext('Number'),
     canChangeName: true,
     key: CellType.NUMBER,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR],
     type: CellType.COLLABORATOR,
     name: gettext('Collaborator'),
     canChangeName: true,
     key: CellType.COLLABORATOR,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX],
     type: CellType.CHECKBOX,
     name: gettext('Checkbox'),
     canChangeName: true,
     key: CellType.CHECKBOX,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.DATE],
     type: CellType.DATE,
     name: gettext('Date'),
     canChangeName: true,
     key: CellType.DATE,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],
     type: CellType.SINGLE_SELECT,
     name: gettext('Single select'),
     canChangeName: true,
     key: CellType.SINGLE_SELECT,
     groupby: 'basics'
-  },
-  {
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.MULTIPLE_SELECT],
     type: CellType.MULTIPLE_SELECT,
     name: gettext('Multiple select'),
     canChangeName: true,
     key: CellType.MULTIPLE_SELECT,
+    groupby: 'basics'
+  }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.RATE],
+    type: CellType.RATE,
+    name: gettext('Rate'),
+    canChangeName: true,
+    key: CellType.RATE,
     groupby: 'basics'
   },
 ];

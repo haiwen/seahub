@@ -33,9 +33,9 @@ const ColumnPopover = ({ target, onChange }) => {
 
   const toggle = useCallback((event) => {
     if (typeRef.current?.getIsPopoverShow()) return;
+    if (dataRef.current?.getIsPopoverShow()) return;
     popoverRef.current.toggle();
-  }, [typeRef]);
-
+  }, [typeRef, dataRef]);
 
   const onColumnChange = useCallback((newColumn) => {
     setTimeout(() => {

@@ -78,7 +78,8 @@ const TextEditor = React.memo(({ value: oldValue, onChange: onChangeAPI }) => {
   );
 }, (props, nextProps) => {
   const isChanged = isCellValueChanged(props.value, nextProps.value, nextProps.field.type) ||
-    !ObjectUtils.isSameObject(props.field, nextProps.field);
+    !ObjectUtils.isSameObject(props.field, nextProps.field) ||
+    props.onChange !== nextProps.onChange;
   return !isChanged;
 });
 

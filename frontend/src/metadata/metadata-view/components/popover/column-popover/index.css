@@ -3,6 +3,11 @@
   max-width: none;
 }
 
+.sf-metadata-column-popover label {
+  color: #666;
+  font-size: 13px;
+}
+
 .sf-metadata-column-popover .sf-metadata-column-popover-inner {
   max-height: calc(100vh - 170px);
   min-width: 350px;

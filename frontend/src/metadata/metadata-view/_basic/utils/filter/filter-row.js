@@ -46,7 +46,8 @@ const getFilterResult = (row, filter, { username, userId }) => {
     case CellType.MULTIPLE_SELECT: {
       return multipleSelectFilter(cellValue, filter);
     }
-    case CellType.NUMBER: {
+    case CellType.NUMBER:
+    case CellType.RATE: {
       return numberFilter(cellValue, filter);
     }
     case CellType.COLLABORATOR: {

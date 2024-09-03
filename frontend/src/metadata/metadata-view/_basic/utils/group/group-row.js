@@ -38,7 +38,8 @@ const _getFormattedCellValue = (cellValue, groupby) => {
     case CellType.MTIME: {
       return DateUtils.getDateByGranularity(cellValue, countType) || null;
     }
-    case CellType.NUMBER: {
+    case CellType.NUMBER:
+    case CellType.RATE: {
       return (cellValue || cellValue === 0) ? cellValue : null;
     }
     case CellType.CHECKBOX: {

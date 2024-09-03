@@ -413,3 +413,8 @@
   -webkit-transition-property: none;
   -moz-transition-property: none;
 }
+
+.canvas-groups-rows .group-title .group-cell-value .sf-metadata-group-title-rate-item .sf-metadata-icon {
+  font-size: 16px;
+  fill: inherit;
+}

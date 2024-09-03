@@ -39,6 +39,7 @@ const READONLY_PREVIEW_COLUMNS = [
 
 const NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES = [
   CellType.CHECKBOX,
+  CellType.RATE,
 ];
 
 class InteractionMasks extends React.Component {

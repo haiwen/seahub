@@ -3,7 +3,7 @@ import { UncontrolledPopover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils';
 import Icon from '../../../../../../components/icon';
-import { VIEW_TYPE } from '../../../../_basic';
+import { VIEW_TYPE, VIEW_TYPE_ICON } from '../../../../_basic';
 
 import '../index.css';
 
@@ -66,7 +66,7 @@ const AddView = ({ target, toggle, onOptionClick }) => {
             return (
               <button key={index} className='dropdown-item sf-metadata-addview-popover-item' onClick={() => onOptionClick(item)}>
                 <div className="left-icon">
-                  <Icon symbol={item.type} className='metadata-view-icon' />
+                  <Icon symbol={VIEW_TYPE_ICON[item.type] || 'table'} className='metadata-view-icon' />
                 </div>
                 <div>{translateLabel(item.type)}</div>
               </button>

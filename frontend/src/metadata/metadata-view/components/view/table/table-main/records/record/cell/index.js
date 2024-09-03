@@ -156,7 +156,7 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...props}>
-      <Formatter isCellSelected={isCellSelected} isDir={isDir} value={cellValue} field={column} onChange={modifyRecord} />
+      <Formatter isCellSelected={isCellSelected} isDir={isDir} value={cellValue} field={column} onChange={modifyRecord} record={record} />
       {isCellSelected && (<CellOperationBtn value={cellValue} column={column} isDir={isDir} />)}
     </div>
   );

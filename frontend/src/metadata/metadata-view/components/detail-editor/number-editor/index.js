@@ -87,7 +87,9 @@ const NumberEditor = React.memo(({ value: oldValue, field, onChange: onChangeAPI
 
 }, (props, nextProps) => {
   const isChanged = isCellValueChanged(props.value, nextProps.value, nextProps.field.type) ||
-    !ObjectUtils.isSameObject(props.field, nextProps.field);
+    !ObjectUtils.isSameObject(props.field, nextProps.field) ||
+    props.onChange !== nextProps.onChange
+    ;
   return !isChanged;
 });
 

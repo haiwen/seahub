@@ -140,6 +140,9 @@ const FILTER_COLUMN_OPTIONS = {
       FILTER_PREDICATE_TYPE.NOT_EMPTY,
     ],
   },
+  [CellType.RATE]: {
+    filterPredicateList: numberPredicates,
+  },
 };
 
 export {

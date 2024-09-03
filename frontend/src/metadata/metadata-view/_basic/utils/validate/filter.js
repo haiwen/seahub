@@ -232,7 +232,8 @@ class ValidateFilter {
       case CellType.FILE_NAME: {
         return this.isValidTermType(term, TERM_TYPE_MAP.STRING);
       }
-      case CellType.NUMBER: {
+      case CellType.NUMBER:
+      case CellType.RATE: {
         return this.isValidTermType(term, TERM_TYPE_MAP.NUMBER);
       }
 

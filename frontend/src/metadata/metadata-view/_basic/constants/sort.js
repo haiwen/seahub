@@ -16,10 +16,11 @@ const SORT_COLUMN_OPTIONS = [
   CellType.COLLABORATOR,
   CellType.CHECKBOX,
   CellType.NUMBER,
+  CellType.RATE,
 ];
 
 const TEXT_SORTER_COLUMN_TYPES = [CellType.TEXT];
-const NUMBER_SORTER_COLUMN_TYPES = [CellType.NUMBER];
+const NUMBER_SORTER_COLUMN_TYPES = [CellType.NUMBER, CellType.RATE];
 
 export {
   SORT_TYPE,

@@ -7,6 +7,7 @@ const DATE_COLUMN_OPTIONS = [
 ];
 const NUMERIC_COLUMNS_TYPES = [
   CellType.NUMBER,
+  CellType.RATE,
 ];
 const COLLABORATOR_COLUMN_TYPES = [
   CellType.CREATOR,
@@ -67,6 +68,7 @@ const SINGLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.LONG_TEXT]: true,
   [CellType.SINGLE_SELECT]: true,
   [CellType.NUMBER]: true,
+  [CellType.RATE]: true,
 };
 
 const DATE_DEFAULT_TYPES = {
