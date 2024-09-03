@@ -309,3 +309,8 @@ def get_thumbnail_image_path(obj_id, image_size):
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))
     thumbnail_image_path = os.path.join(thumbnail_dir, obj_id)
     return thumbnail_image_path
+
+def remove_thumbnail_by_id(file_id):
+    for size_dir in [item for item in os.listdir(THUMBNAIL_ROOT) if os.path.isdir(os.path.join(THUMBNAIL_ROOT, item))]:
+        if os.path.exists(os.path.join(THUMBNAIL_ROOT, size_dir, file_id)):
+            os.remove(os.path.join(THUMBNAIL_ROOT, size_dir, file_id))

@@ -74,7 +74,8 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
   onItemsScroll: PropTypes.func.isRequired,
-  isDirentDetailShow: PropTypes.bool.isRequired
+  isDirentDetailShow: PropTypes.bool.isRequired,
+  eventBus: PropTypes.object,
 };
 
 class DirColumnView extends React.Component {
@@ -170,6 +171,7 @@ class DirColumnView extends React.Component {
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
               getMenuContainerSize={this.getMenuContainerSize}
+              direntList={this.props.direntList}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}
@@ -239,6 +241,7 @@ class DirColumnView extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
               showDirentDetail={this.props.showDirentDetail}
               getMenuContainerSize={this.getMenuContainerSize}
+              eventBus={this.props.eventBus}
             /> :
             <DirGridView
               path={this.props.path}
@@ -274,6 +277,7 @@ class DirColumnView extends React.Component {
               onItemRename={this.props.onItemRename}
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
+              eventBus={this.props.eventBus}
             />
           )}
         </div>

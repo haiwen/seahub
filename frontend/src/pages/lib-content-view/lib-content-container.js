@@ -15,7 +15,6 @@ const propTypes = {
   isSidePanelFolded: PropTypes.bool,
   switchViewMode: PropTypes.func.isRequired,
   isCustomPermission: PropTypes.bool,
-
   pathPrefix: PropTypes.array.isRequired,
   isTreePanelShown: PropTypes.bool.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
@@ -101,7 +100,8 @@ const propTypes = {
   showShareBtn: PropTypes.bool.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
-  onToolbarFileTagChanged: PropTypes.func.isRequired
+  onToolbarFileTagChanged: PropTypes.func.isRequired,
+  eventBus: PropTypes.object,
 };
 
 class LibContentContainer extends React.Component {
@@ -341,6 +341,7 @@ class LibContentContainer extends React.Component {
               showDirentDetail={this.props.showDirentDetail}
               onItemsScroll={this.onItemsScroll}
               isDirentDetailShow={this.props.isDirentDetailShow}
+              eventBus={this.props.eventBus}
             />
           )}
           {this.props.isDirentDetailShow && (

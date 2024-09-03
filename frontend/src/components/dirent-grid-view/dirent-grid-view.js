@@ -21,7 +21,9 @@ import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
+import imageAPI from '../../utils/image-api';
 import FileAccessLog from '../dialog/file-access-log';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 import '../../css/grid-view.css';
 
@@ -59,6 +61,7 @@ const propTypes = {
   posY: PropTypes.number,
   dirent: PropTypes.object,
   getMenuContainerSize: PropTypes.func,
+  eventBus: PropTypes.object,
 };
 
 const DIRENT_GRID_CONTAINER_MENU_ID = 'dirent-grid-container-menu';
@@ -103,10 +106,24 @@ class DirentGridView extends React.Component {
 
   componentDidMount() {
     window.addEventListener('mouseup', this.onGlobalMouseUp);
+    this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_IMAGE, this.recalculateImageItems);
   }
+
+  recalculateImageItems = () => {
+    if (!this.state.isImagePopupOpen) return;
+    let imageItems = this.props.direntList
+      .filter((item) => Utils.imageCheck(item.name))
+      .map((item) => this.prepareImageItem(item));
+
+    this.setState({
+      imageItems: imageItems,
+      imageIndex: this.state.imageIndex % imageItems.length,
+    });
+  };
 
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.onGlobalMouseUp);
+    this.unsubscribeEvent();
   }
 
   onGridContainerMouseDown = (event) => {
@@ -550,7 +567,8 @@ class DirentGridView extends React.Component {
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
 
-    const src = `${siteRoot}repo/${repoID}/raw${path}`;
+    const cacheBuster = new Date().getTime();
+    const src = `${siteRoot}repo/${repoID}/raw${path}?t=${cacheBuster}`;
 
     return {
       'name': name,
@@ -591,6 +609,50 @@ class DirentGridView extends React.Component {
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
+  };
+
+  deleteImage = (name) => {
+    const item = this.props.fullDirentList.find((item) => item.name === name);
+    this.props.onItemDelete(item);
+
+    const newImageItems = this.props.fullDirentList
+      .filter((item) => item.name !== name && Utils.imageCheck(item.name))
+      .map((item) => this.prepareImageItem(item));
+
+    this.setState((prevState) => ({
+      isImagePopupOpen: newImageItems.length > 0,
+      imageItems: newImageItems,
+      imageIndex: prevState.imageIndex % newImageItems.length,
+    }));
+  };
+
+  rotateImage = (imageIndex, angle) => {
+    if (imageIndex >= 0 && angle !== 0) {
+      const path = this.state.path === '/' ? this.props.path + this.state.imageItems[imageIndex].name : this.props.path + '/' + this.state.imageItems[imageIndex].name;
+      imageAPI.rotateImage(this.props.repoID, path, 360 - angle).then((res) => {
+        seafileAPI.createThumbnail(this.props.repoID, path, 48).then((res) => {
+          // Generate a unique query parameter to bust the cache
+          const cacheBuster = new Date().getTime();
+          const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+
+          this.setState((prevState) => {
+            const updatedImageItems = [...prevState.imageItems];
+            updatedImageItems[imageIndex].src = newThumbnailSrc;
+            return { imageItems: updatedImageItems };
+          });
+
+          // Update the thumbnail URL with the cache-busting query parameter
+          const item = this.props.direntList.find((item) => item.name === this.state.imageItems[imageIndex].name);
+          this.props.updateDirent(item, 'encoded_thumbnail_src', newThumbnailSrc);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
   };
 
   checkDuplicatedName = (newName) => {
@@ -896,7 +958,7 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isImagePopupOpen && (
+        {this.state.isImagePopupOpen && this.state.imageItems.length && (
           <ModalPortal>
             <ImageDialog
               imageItems={this.state.imageItems}
@@ -904,6 +966,8 @@ class DirentGridView extends React.Component {
               closeImagePopup={this.closeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}
+              onDeleteImage={this.deleteImage}
+              onRotateImage={this.rotateImage}
             />
           </ModalPortal>
         )}
