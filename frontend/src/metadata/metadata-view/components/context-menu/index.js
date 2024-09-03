@@ -130,7 +130,12 @@ const ContextMenu = ({
     const { groupRecordIndex, rowIdx } = selectedPosition;
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
     if (!record) return;
-    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    let parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+
+    if (window.location.pathname.endsWith('/')) {
+      parentDir = parentDir.slice(1);
+    }
+
     const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
     window.open(url, '_blank');
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
