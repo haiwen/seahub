@@ -5,11 +5,13 @@
 
 .seafile-btn-view-review .tag:hover {
   cursor: pointer;
+  background-color: #EFEFEF;
 }
 
 .topbar-btn-container {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .seafile-btn-add-review {
@@ -21,13 +23,46 @@
 }
 
 .sf-md-viewer-topbar .btn {
-  color: #666;
+  color: #212529;
+  border: none !important;
+  font-size: .9375rem;
+  height: 28px;
+  width: 28px;
+  min-width: 0;
+  padding-left: 7px;
+  padding-top: 0;
+  border-radius: 3px !important;
+  margin-right: 10px;
 }
 
 .collab-users-dropdown.dropdown {
   margin-right: 6px;
 }
 
-.btn-active[data-active=true] {
+.btn-active[data-active=true]#saveButton {
   color: #eb8205;
 }
+
+.sf-md-viewer-topbar .btn:focus, 
+.sf-md-viewer-topbar .btn:active {
+  box-shadow: none !important;
+  background-color: #EFEFEF;
+}
+
+.sf-md-viewer-topbar .btn:hover {
+  background-color: #EFEFEF;
+}
+
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: #EFEFEF;
+}
+
+.btn-active[data-active=false]#saveButton:hover {
+  background-color: #fff;
+  cursor: default;
+}
+
+
+
