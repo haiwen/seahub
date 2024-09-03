@@ -890,8 +890,22 @@ export const Utils = {
     }
   },
 
+  isDocxFile: function (filePath) {
+    let index = filePath.lastIndexOf('.');
+    if (index === -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type === '.docx') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+
   isSummarySupportedFile: function (filePath) {
-    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath);
+    return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath) || Utils.pdfCheck(filePath) || Utils.isDocxFile(filePath);
   },
 
   isFileMetadata: function (type) {
