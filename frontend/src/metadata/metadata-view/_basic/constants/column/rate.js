@@ -1,4 +1,3 @@
-
 export const RATE_COLORS = [
   '#FF8000',
   '#FFB600',
