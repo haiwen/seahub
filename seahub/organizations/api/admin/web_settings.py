@@ -17,7 +17,7 @@ from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN, DISA
 
 logger = logging.getLogger(__name__)
 
-org_admin_setting_keys = [
+ORG_ADMIN_SETTING_KEYS = [
     FORCE_ADFS_LOGIN, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
 ]
 
@@ -62,7 +62,7 @@ class OrgAdminWebSettings(APIView):
                     seafile_api.org_del_file_ext_white_list(org_id)
                     config_dict['file_ext_white_list'] = ''
             
-            if key in org_admin_setting_keys:
+            if key in ORG_ADMIN_SETTING_KEYS:
                 try:
                     OrgAdminSettings.objects.update_or_create(org_id=org_id, key=key,
                                                               defaults={'value': value})

@@ -154,7 +154,7 @@ class TrashDialog extends React.Component {
           close={
             <>
               <a className="trash-dialog-old-page" href={oldTrashUrl}>{gettext('Visit old version page')}</a>
-              {enableUserCleanTrash && !showFolder && isRepoAdmin &&
+              {(enableUserCleanTrash && !showFolder && isRepoAdmin) &&
                 <button className="btn btn-secondary clean flex-shrink-0 ml-4" onClick={this.cleanTrash}>{gettext('Clean')}</button>
               }
               <span aria-hidden="true" className="trash-dialog-close-icon sf3-font sf3-font-x-01 ml-4" onClick={toggleTrashDialog}></span>
