@@ -1,10 +1,14 @@
-import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY, FILTER_PREDICATE_TYPE } from '../../_basic';
+import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY, FILTER_PREDICATE_TYPE, VIEW_TYPE } from '../../_basic';
 
 class View {
   constructor(object, columns) {
 
     this._id = object._id || '';
     this.type = object.type || 'table';
+
+    if (this.type === 'image') {
+      this.type = VIEW_TYPE.GALLERY;
+    }
 
     // filter
     this.filters = object.filters || [];

@@ -9,6 +9,7 @@ export * from './reg';
 export * from './select-option';
 export * from './sort';
 export * from './error';
+export * from './view';
 
 export {
   KeyCodes,
