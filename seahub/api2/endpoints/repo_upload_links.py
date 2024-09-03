@@ -23,6 +23,7 @@ from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
+
 def get_upload_link_info(upload_link):
 
     data = {}
@@ -55,6 +56,7 @@ def get_upload_link_info(upload_link):
     data['link'] = gen_shared_upload_link(token)
     data['ctime'] = ctime
     data['expire_date'] = expire_date
+    data['view_cnt'] = upload_link.view_cnt
 
     return data
 

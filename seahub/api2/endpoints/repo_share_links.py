@@ -61,6 +61,7 @@ def get_share_link_info(fileshare):
     data['link'] = gen_shared_link(token, fileshare.s_type)
     data['ctime'] = ctime
     data['expire_date'] = expire_date
+    data['view_cnt'] = fileshare.view_cnt
 
     return data
 
