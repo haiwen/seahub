@@ -52,9 +52,11 @@ const RateItem = ({
       >
         <Icon iconName={type || 'rate'} />
       </div>
-      <UncontrolledTooltip placement='bottom' target={ref} modifiers={{ preventOverflow: { boundariesElement: document.body } }}>
-        {enterIndex}
-      </UncontrolledTooltip>
+      {enterIndex !== -1 && (
+        <UncontrolledTooltip placement='bottom' target={ref} modifiers={{ preventOverflow: { boundariesElement: document.body } }}>
+          {enterIndex}
+        </UncontrolledTooltip>
+      )}
     </>
   );
 
