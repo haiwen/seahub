@@ -8,6 +8,7 @@ import {
 import { DELETED_OPTION_BACKGROUND_COLOR } from '../../../../../../../constants';
 import { gettext } from '../../../../../../../utils';
 import CellFormatter from '../../../../../../cell-formatter';
+import { IconBtn } from '@seafile/sf-metadata-ui-component';
 
 const GroupTitle = ({ column, cellValue, originalCellValue }) => {
   const emptyTip = useMemo(() => `(${gettext('Empty')})`, []);
@@ -67,6 +68,18 @@ const GroupTitle = ({ column, cellValue, originalCellValue }) => {
             })}
           </>
         );
+      }
+      case CellType.RATE: {
+        const { color, type } = column.data || {};
+        const rateShowType = type || 'rate';
+        if (!cellValue || !color) return emptyTip;
+        let rateList = [];
+        for (let i = 0; i < cellValue; i++) {
+          rateList.push(
+            <IconBtn key={i} style={{ fill: color, height: 16, width: 16 }} iconName={rateShowType} className="sf-metadata-group-title-rate-item" />
+          );
+        }
+        return rateList;
       }
       default: {
         return cellValue || emptyTip;
