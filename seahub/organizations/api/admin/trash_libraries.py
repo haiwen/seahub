@@ -8,6 +8,7 @@ from rest_framework import status
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH
 from seahub.utils import is_valid_username
 from seahub.utils.db_api import SeafileDB
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -20,6 +21,7 @@ from seahub.group.utils import group_id_to_name
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.organizations.views import org_user_exists
+from constance import config
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +100,17 @@ class OrgAdminTrashLibraries(APIView):
         """
 
         org_id = int(org_id)
+        if not config.ENABLE_USER_CLEAN_TRASH:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+
+        if org_id and org_id > 0:
+            disable_clean_trash = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
+            if (disable_clean_trash is not None) and int(disable_clean_trash.value):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         try:
             
             db_api = SeafileDB()

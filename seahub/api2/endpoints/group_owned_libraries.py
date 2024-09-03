@@ -24,6 +24,7 @@ from seahub.api2.endpoints.utils import (
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin
 from seahub.utils import is_valid_dirent_name, is_org_context, \
@@ -102,6 +103,12 @@ class GroupOwnedLibraries(APIView):
         if password and not config.ENABLE_ENCRYPTED_LIBRARY:
             error_msg = 'NOT allow to create encrypted library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if org_id and org_id > 0:
+            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
+                return None, api_error(status.HTTP_403_FORBIDDEN,
+                                       'NOT allow to create encrypted library.')
 
         permission = request.data.get('permission', PERMISSION_READ_WRITE)
         if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:

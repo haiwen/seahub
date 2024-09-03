@@ -68,6 +68,8 @@ from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
+from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
+
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
@@ -307,6 +309,13 @@ def repo_folder_trash(request, repo_id):
         raise Http404
 
     repo_admin = is_repo_admin(username, repo_id)
+    org_setting = None
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
+    enable_clean_trash = config.ENABLE_USER_CLEAN_TRASH
+    if enable_clean_trash:
+        enable_clean_trash = int(not org_setting.value) if org_setting else True
 
     if path == '/':
         name = repo.name
@@ -317,7 +326,7 @@ def repo_folder_trash(request, repo_id):
             'repo': repo,
             'repo_folder_name': name,
             'path': path,
-            'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
+            'enable_user_clean_trash': enable_clean_trash,
             'is_repo_admin': repo_admin
             })
 
@@ -1080,6 +1089,25 @@ def react_fake_view(request, **kwargs):
         logger.error(e)
         max_upload_file_size = -1
 
+    org_setting = {
+        DISABLE_ORG_ENCRYPTED_LIBRARY: False,
+        DISABLE_ORG_USER_CLEAN_TRASH: False
+    }
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        if org_id and org_id > 0:
+            org_configs = OrgAdminSettings.objects.filter(org_id=org_id)
+            org_configs = {item.key: item.value for item in org_configs}
+            for key, value in org_setting.items():
+                if key in org_configs:
+                    org_setting[key] = int(org_configs[key])
+
+    enable_encryped_lib, enable_clean_trash = config.ENABLE_ENCRYPTED_LIBRARY, config.ENABLE_USER_CLEAN_TRASH
+    if enable_encryped_lib:
+        enable_encryped_lib = int(not org_setting[DISABLE_ORG_ENCRYPTED_LIBRARY])
+    if enable_clean_trash:
+        enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
+    
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
@@ -1096,9 +1124,9 @@ def react_fake_view(request, **kwargs):
         'upload_link_expire_days_default': UPLOAD_LINK_EXPIRE_DAYS_DEFAULT,
         'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
         'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
-        'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+        'enable_encrypted_library': enable_encryped_lib,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
-        'enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
+        'enable_user_clean_trash': enable_clean_trash,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
