@@ -42,8 +42,8 @@ class ImageDialog extends React.Component {
   };
 
   render() {
-    const imageItems = this.props.imageItems;
-    const imageIndex = this.props.imageIndex;
+    const { imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage } = this.props;
+
     const imageItemsLength = imageItems.length;
     const name = imageItems[imageIndex].name;
     const imageTitle = `${name} (${imageIndex + 1}/${imageItemsLength})`;
@@ -61,9 +61,9 @@ class ImageDialog extends React.Component {
         mainSrc={mainSrc}
         nextSrc={nextSrc}
         prevSrc={prevSrc}
-        onCloseRequest={this.props.closeImagePopup}
-        onMovePrevRequest={this.props.moveToPrevImage}
-        onMoveNextRequest={this.props.moveToNextImage}
+        onCloseRequest={closeImagePopup}
+        onMovePrevRequest={moveToPrevImage}
+        onMoveNextRequest={moveToNextImage}
         imagePadding={70}
         imageLoadErrorMessage={gettext('The image could not be loaded.')}
         prevLabel={gettext('Previous (Left arrow key)')}
@@ -72,8 +72,8 @@ class ImageDialog extends React.Component {
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
         enableRotate={true}
-        onClickDownload={() => this.downloadImage(imageItems[imageIndex].downloadURL)}
-        onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
+        onClickDownload={() => this.downloadImage(imageItems[imageIndex].url)}
+        onClickDelete={onDeleteImage ? () => onDeleteImage(imageItems[imageIndex].name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}
         onRotateImage={this.onRotateImage}

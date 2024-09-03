@@ -43,7 +43,7 @@
   overflow: hidden;
 }
 
-.metadata-gallery-image-item:focus {
+.metadata-gallery-image-item-selected {
   border: 2px solid #ff8000;
 }
 
