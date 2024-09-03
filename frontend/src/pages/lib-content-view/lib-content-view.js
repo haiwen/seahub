@@ -1853,6 +1853,9 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) { // isDir
+      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+        this.isNeedUpdateHistoryState = true;
+      }
       this.showDir(node.path);
     } else {
       if (Utils.isMarkdownFile(node.path)) {
