@@ -189,7 +189,7 @@ class ContextMenu extends React.Component {
   };
 
   onDropDownMouseMove = (e) => {
-    if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
+    if (this.state.isSubMenuShown) {
       this.setState({
         isSubMenuShown: false
       });
@@ -256,6 +256,7 @@ class ContextMenu extends React.Component {
                 data-operation={menuItem.key}
                 onClick={this.onMenuItemClick}
                 onContextMenu={this.onContextMenu}
+                onMouseMove={this.onDropDownMouseMove}
               >
                 {menuItem.value}
               </button>

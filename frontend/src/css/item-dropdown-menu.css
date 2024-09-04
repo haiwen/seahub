@@ -1,13 +1,4 @@
-.dropdown-item-wrapper {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding-left: 1.5rem;
-  padding-right: 1rem;
-}
-
-.dropdown-item-wrapper .dropdown-item-tick {
+.dropdown-item .dropdown-item-tick {
   width: 1.5rem;
   height: 100%;
   display: flex;
