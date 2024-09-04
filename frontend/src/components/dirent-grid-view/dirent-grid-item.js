@@ -4,7 +4,6 @@ import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import axios from 'axios';
 
 const propTypes = {
@@ -21,7 +20,6 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
-  eventBus: PropTypes.object,
 };
 
 class DirentGridItem extends React.Component {
@@ -32,7 +30,6 @@ class DirentGridItem extends React.Component {
       isGridDropTipShow: false,
       imageSrc: '',
       abortController: new AbortController(),
-      cancelLoadImage: false,
     };
 
     const { dirent } = this.props;
@@ -51,8 +48,6 @@ class DirentGridItem extends React.Component {
   }
 
   componentDidMount() {
-    this.unsubscribeCancelLoadImage = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CANCEL_PREVIOUS_PENDING_IMAGES, () => this.setState({ imageSrc: '' }));
-
     const { dirent } = this.props;
     if (this.canPreview && dirent.encoded_thumbnail_src) {
       let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
@@ -77,7 +72,6 @@ class DirentGridItem extends React.Component {
     if (this.state.abortController) {
       this.state.abortController.abort();
     }
-    this.unsubscribeCancelLoadImage();
   }
 
   onItemClick = (e) => {

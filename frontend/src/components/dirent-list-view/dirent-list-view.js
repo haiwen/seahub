@@ -724,6 +724,7 @@ class DirentListView extends React.Component {
                   onItemsMove={this.props.onItemsMove}
                   onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
                   loadDirentList={this.props.loadDirentList}
+                  eventBus={this.props.eventBus}
                 />
               );
             })}

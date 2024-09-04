@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,8 +22,10 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 import '../../css/dirent-list-item.css';
+
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -59,6 +62,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
   loadDirentList: PropTypes.func,
+  eventBus: PropTypes.object,
 };
 
 class DirentListItem extends React.Component {
@@ -93,9 +97,20 @@ class DirentListItem extends React.Component {
       isDropTipshow: false,
       isEditFileTagShow: false,
       isPermissionDialogOpen: false,
-      isOpMenuOpen: false // for mobile
+      isOpMenuOpen: false, // for mobile
+      imageSrc: '',
+      abortController: new AbortController(),
     };
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
+  }
+
+  componentDidMount() {
+    this.unsubscribeCancelLoadImage = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CANCEL_PREVIOUS_PENDING_IMAGES, () => this.setState({ imageSrc: '' }));
+
+    const { dirent } = this.props;
+    if (this.canPreview && Utils.imageCheck(dirent.name)) {
+      this.setImageSrc(`${siteRoot}${dirent.encoded_thumbnail_src}`);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -107,7 +122,45 @@ class DirentListItem extends React.Component {
         isOperationShow: activeDirent && activeDirent.name === dirent.name,
       });
     }
+
+    if (prevProps.dirent.encoded_thumbnail_src !== dirent.encoded_thumbnail_src) {
+      if (this.canPreview && Utils.imageCheck(dirent.name)) {
+        this.setImageSrc(`${siteRoot}${dirent.encoded_thumbnail_src}`);
+      }
+    }
   }
+
+  componentWillUnmount() {
+    if (this.state.abortController) {
+      this.state.abortController.abort();
+    }
+    this.unsubscribeCancelLoadImage();
+  }
+
+  setImageSrc = (src) => {
+    if (!src) return;
+
+    if (this.state.abortController) {
+      this.state.abortController.abort();
+    }
+
+    const newAbortController = new AbortController();
+    this.setState({ abortController: newAbortController });
+
+    axios.get(src, {
+      responseType: 'blob',
+      signal: newAbortController.signal
+    })
+      .then(response => {
+        const imageUrl = URL.createObjectURL(response.data);
+        this.setState({ imageSrc: imageUrl });
+      })
+      .catch(error => {
+        if (!axios.isCancel(error)) {
+          // Handle other errors silently
+        }
+      });
+  };
 
   toggleOpMenu = () => {
     this.setState({
@@ -759,7 +812,8 @@ class DirentListItem extends React.Component {
             <td className="pl10">
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                  // <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+                  <img ref='drag_icon' src={this.state.imageSrc} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
                   <img ref='drag_icon' src={iconUrl} width="24" alt='' />
                 }
                 {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}

@@ -7,7 +7,6 @@ import { siteRoot, thumbnailSizeForGrid } from '../../../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../constants';
 import Main from './main';
 import toaster from '../../../../../components/toast';
-import useCancellableImageLoader from '../../../../../utils/useCancellableImageLoader';
 
 import './index.css';
 
@@ -23,7 +22,6 @@ const Gallery = () => {
   const renderMoreTimer = useRef(null);
 
   const { metadata, store } = useMetadata();
-  const { imageSrc, loadImage } = useCancellableImageLoader();
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
   // Number of images per row
