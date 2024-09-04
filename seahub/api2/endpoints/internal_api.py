@@ -65,13 +65,13 @@ class InternalShareLinkInfo(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         link_token = request.GET.get('token')
-        
+
         share_obj = UploadLinkShare.objects.filter(token=link_token).first()
         if share_obj:
             share_obj.s_type = 'u'
         else:
             share_obj = FileShare.objects.filter(token=link_token).first()
-            
+        
         if not share_obj:
             error_msg = 'Share link does not exist.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -79,8 +79,7 @@ class InternalShareLinkInfo(APIView):
         if share_obj.is_expired():
             error_msg = 'Link is expired.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        
+
         repo_id = share_obj.repo_id
         file_path, parent_dir = '', ''
         share_path = share_obj.path
@@ -96,7 +95,7 @@ class InternalShareLinkInfo(APIView):
             'parent_dir': parent_dir,
             'share_type': share_type
         }
-        return Response({'share_link_info': resp_json})
+        return Response(resp_json)
 
 
 class InternalCheckFileOperationAccess(APIView):

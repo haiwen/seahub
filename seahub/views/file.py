@@ -56,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
-    normalize_cache_key
+    normalize_cache_key, gen_file_get_url_by_sharelink
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
@@ -1136,19 +1136,12 @@ def _download_file_from_share_link(request, fileshare):
     else:
         real_path = fileshare.path
 
-    filename = os.path.basename(real_path)
     obj_id = seafile_api.get_file_id_by_path(repo.id, real_path)
     if not obj_id:
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
 
-    dl_token = seafile_api.get_fileserver_access_token(repo.id,
-            obj_id, 'download-link', fileshare.username, use_onetime=False)
-
-    if not dl_token:
-        messages.error(request, _('Unable to download file.'))
-
-    return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
+    return HttpResponseRedirect(gen_file_get_url_by_sharelink(fileshare.token))
 
 @ensure_csrf_cookie
 @share_link_audit
