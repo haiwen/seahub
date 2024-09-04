@@ -90,7 +90,8 @@ class AuthTokenSerializerTest(BaseTestCase):
         }
 
         s = AuthTokenSerializer(data=d, context={'request': self.fake_request})
-        self.assertFailed(s)
+        assert s.is_valid() is False
+        assert 'User account is disabled.' in s.errors['non_field_errors']
 
     def test_login_failed(self):
         d = {
