@@ -5,7 +5,7 @@ import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -636,11 +636,10 @@ class LibContentView extends React.Component {
     }
     const _this = this;
     const len = items.length;
-    const thumbnailSize = 48;
     let getThumbnail = (i) => {
       const curItem = items[i];
       const curItemPath = [path, curItem.name].join('/');
-      seafileAPI.createThumbnail(repoID, curItemPath, thumbnailSize).then((res) => {
+      seafileAPI.createThumbnail(repoID, curItemPath, thumbnailDefaultSize).then((res) => {
         curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
       }).catch((error) => {
         // do nothing

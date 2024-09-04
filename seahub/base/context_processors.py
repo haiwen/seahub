@@ -22,9 +22,9 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, APPLE_TOUCH_ICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
-    ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
+    ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, THUMBNAIL_DEFAULT_SIZE, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
-    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -154,6 +154,8 @@ def base(request):
         'enableOnlyoffice': ENABLE_ONLYOFFICE,
         'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
+        'thumbnail_size_for_grid': THUMBNAIL_SIZE_FOR_GRID,
+        'thumbnail_default_size': THUMBNAIL_DEFAULT_SIZE,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,

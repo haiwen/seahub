@@ -738,8 +738,8 @@ else:
 THUMBNAIL_EXTENSION = 'png'
 
 # for thumbnail: height(px) and width(px)
-THUMBNAIL_DEFAULT_SIZE = 48
-THUMBNAIL_SIZE_FOR_GRID = 192
+THUMBNAIL_DEFAULT_SIZE = 256
+THUMBNAIL_SIZE_FOR_GRID = 512
 THUMBNAIL_SIZE_FOR_ORIGINAL = 1024
 
 # size(MB) limit for generate thumbnail

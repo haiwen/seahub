@@ -30,7 +30,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 
-from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
+from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -265,7 +265,7 @@ class DirView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         with_thumbnail = to_python_boolean(with_thumbnail)
-        thumbnail_size = request.GET.get('thumbnail_size', 48)
+        thumbnail_size = request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE)
         try:
             thumbnail_size = int(thumbnail_size)
         except ValueError:

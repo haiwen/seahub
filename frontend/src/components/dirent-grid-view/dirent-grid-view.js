@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -630,7 +630,7 @@ class DirentGridView extends React.Component {
     if (imageIndex >= 0 && angle !== 0) {
       const path = this.state.path === '/' ? this.props.path + this.state.imageItems[imageIndex].name : this.props.path + '/' + this.state.imageItems[imageIndex].name;
       imageAPI.rotateImage(this.props.repoID, path, 360 - angle).then((res) => {
-        seafileAPI.createThumbnail(this.props.repoID, path, 48).then((res) => {
+        seafileAPI.createThumbnail(this.props.repoID, path, thumbnailDefaultSize).then((res) => {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
