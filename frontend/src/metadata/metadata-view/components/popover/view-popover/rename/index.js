@@ -1,55 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input, UncontrolledPopover } from 'reactstrap';
+import { Alert, Input } from 'reactstrap';
 import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils';
 import { isValidViewName } from '../../../../_basic';
-import { useMetadata } from '../../../../../hooks';
 
 import '../index.css';
+import { isEnter } from '../../../../_basic/utils/hotkey';
 
-const Rename = ({ value, target, toggle, onSubmit }) => {
+const Rename = ({ value, target, otherViewsName, toggle, onSubmit }) => {
   const [inputValue, setInputValue] = useState(value || '');
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
-  const { navigation } = useMetadata();
 
   const onChange = useCallback((e) => {
     setInputValue(e.target.value);
   }, []);
 
   const onToggle = useCallback(() => {
-    console.log('onToggle')
-  }, []);
+    toggle();
+  }, [toggle]);
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { isValid, message } = isValidViewName(inputValue, []);
+  const handleSubmit = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { isValid, message } = isValidViewName(inputValue, otherViewsName);
     if (!isValid) {
       setErrorMessage(message);
       inputRef.current.focus();
       return;
     }
+    if (message === value) {
+      onToggle();
+      return;
+    }
     onSubmit(message);
-  }, [inputValue, navigation, onSubmit]);
+  }, [value, inputValue, otherViewsName, onSubmit, onToggle]);
 
-  // useEffect(() => {
-  //   const handleClickOutSide = (event) => {
-  //     if (inputRef.current && !inputRef.current.contains(event.target)) {
-  //       toggle(event);
-  //     }
-  //   };
-
-  //   if (inputRef.current) {
-  //     inputRef.current.select();
-  //     document.addEventListener('mousedown', handleClickOutSide);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutSide);
-  //   };
-  // }, [toggle]);
+  const onKeyDown = useCallback((event) => {
+    if (isEnter(event)) {
+      handleSubmit(event);
+    }
+  }, [handleSubmit]);
 
   return (
     <CustomizePopover
@@ -70,15 +62,14 @@ const Rename = ({ value, target, toggle, onSubmit }) => {
       <div className='sf-metadata-rename-view-popover-body'>
         <Input
           innerRef={inputRef}
-          className='sf-metadata-view-input'
-          type='text'
-          id="rename-input"
-          name='rename'
+          className="sf-metadata-view-rename-input"
           value={inputValue}
           onChange={onChange}
           autoFocus={true}
           onBlur={handleSubmit}
+          onKeyDown={onKeyDown}
         />
+        {errorMessage && (<Alert color="danger" className="mt-2 mb-0">{errorMessage}</Alert>)}
       </div>
     </CustomizePopover>
   );
@@ -87,6 +78,7 @@ const Rename = ({ value, target, toggle, onSubmit }) => {
 Rename.propTypes = {
   value: PropTypes.string,
   target: PropTypes.string.isRequired,
+  otherViewsName: PropTypes.array,
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

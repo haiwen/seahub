@@ -9,6 +9,7 @@ import { Utils, isMobile } from '../../../utils/utils';
 import { VIEW_TYPE_ICON } from '../../metadata-view/_basic';
 
 import './index.css';
+import { useMetadata } from '../../hooks';
 
 const ViewItem = ({
   canDelete,
@@ -25,6 +26,9 @@ const ViewItem = ({
   const [freeze, setFreeze] = useState(false);
   const [isDropShow, setDropShow] = useState(false);
   const [isShowRenamePopover, setRenamePopoverShow] = useState(false);
+  const { viewsMap } = useMetadata();
+
+  const otherViewsName = Object.values(viewsMap).filter(v => v._id !== view._id).map(v => v.name);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -89,8 +93,7 @@ const ViewItem = ({
     }
   }, [onDelete, onCopy]);
 
-  const closeRenamePopover = useCallback((event) => {
-    event.stopPropagation();
+  const closeRenamePopover = useCallback(() => {
     setRenamePopoverShow(false);
   }, []);
 
@@ -177,7 +180,7 @@ const ViewItem = ({
         </div>
       </div>
       {isShowRenamePopover && (
-        <Rename value={view.name} target={`metadata-view-dropdown-item-${view._id}`} toggle={closeRenamePopover} onSubmit={renameView} />
+        <Rename value={view.name} otherViewsName={otherViewsName} target={`metadata-view-dropdown-item-${view._id}`} toggle={closeRenamePopover} onSubmit={renameView} />
       )}
     </>
   );
