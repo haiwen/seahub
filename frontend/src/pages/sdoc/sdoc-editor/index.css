@@ -7,4 +7,19 @@
   height: 46px;
   padding-top: 7px;
   padding-bottom: 7px;
+  line-height: 1.5;
+}
+
+.sdoc-content-right-panel .detail-header .detail-control:hover {
+  background-color: inherit;
+}
+
+.sdoc-content-right-panel .detail-header .sdoc-sm-close {
+  color: #999;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.sdoc-content-right-panel .detail-header .detail-control:hover .sdoc-sm-close {
+  color: #5a5a5a;
 }

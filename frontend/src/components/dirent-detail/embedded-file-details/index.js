@@ -10,8 +10,8 @@ import { MetadataContext } from '../../../metadata';
 
 import './index.css';
 
-const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className }) => {
-
+const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component }) => {
+  const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       })}
       style={{ width }}
     >
-      <Header title={direntName} icon={smallIconUrl} onClose={onClose} />
+      <Header title={direntName} icon={smallIconUrl} onClose={onClose} component={headerComponent} />
       <Body>
         {dirent && direntDetail && (
           <div className="detail-content">
@@ -66,6 +66,7 @@ EmbeddedFileDetails.propTypes = {
   dirent: PropTypes.object,
   path: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
+  component: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };
 

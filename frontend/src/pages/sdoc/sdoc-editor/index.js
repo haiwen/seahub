@@ -24,7 +24,21 @@ const SdocEditor = () => {
         resizable_width: true,
         display_type: 'right-panel',
         component: ({ onClose, width }) => {
-          return (<EmbeddedFileDetails repoID={repoID} onClose={onClose} path={docPath} dirent={currentDirent} repoInfo={{ permission: docPerm }} width={width} />);
+          return (
+            <EmbeddedFileDetails
+              repoID={repoID}
+              path={docPath}
+              dirent={currentDirent}
+              repoInfo={{ permission: docPerm }}
+              width={width - 1}
+              component={{
+                headerComponent: {
+                  closeIcon: (<i className="sdocfont sdoc-sm-close"></i>)
+                }
+              }}
+              onClose={onClose}
+            />
+          );
         },
       }
     ];
