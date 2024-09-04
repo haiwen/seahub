@@ -70,7 +70,7 @@ class Context {
   // metadata
   getMetadata = (params) => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.getMetadata(repoID, params);
+    return this.metadataAPI ? this.metadataAPI.getMetadata(repoID, params) : null;
   };
 
   getRecord = (parentDir, fileName) => {
