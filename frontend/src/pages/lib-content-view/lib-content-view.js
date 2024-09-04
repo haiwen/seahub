@@ -1807,7 +1807,6 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) {
-      let isLoaded = node.isLoaded;
       if (!node.isLoaded) {
         let tree = this.state.treeData.clone();
         node = tree.getNodeByPath(node.path);
@@ -1820,7 +1819,7 @@ class LibContentView extends React.Component {
           toaster.danger(errMessage);
         });
       }
-      if (isLoaded && node.path === this.state.path) {
+      if (node.isLoaded && node.path === this.state.path) {
         if (node.isExpanded) {
           let tree = treeHelper.collapseNode(this.state.treeData, node);
           this.setState({ treeData: tree });
@@ -1842,6 +1841,7 @@ class LibContentView extends React.Component {
         this.isNeedUpdateHistoryState = true;
       }
       this.showDir(node.path);
+      this.props.eventBus.dispatch(EVENT_BUS_TYPE.CANCEL_PREVIOUS_PENDING_IMAGES);
     } else {
       if (Utils.isMarkdownFile(node.path)) {
         if (node.path !== this.state.path) {

@@ -852,6 +852,7 @@ class DirentGridView extends React.Component {
                   onGridItemClick={this.onGridItemClick}
                   activeDirent={this.state.activeDirent}
                   selectedDirentList={selectedDirentList}
+                  eventBus={this.props.eventBus}
                 />
               );
             })

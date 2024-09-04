@@ -4,6 +4,8 @@ import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import axios from 'axios';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -19,6 +21,7 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  eventBus: PropTypes.object,
 };
 
 class DirentGridItem extends React.Component {
@@ -27,6 +30,9 @@ class DirentGridItem extends React.Component {
     super(props);
     this.state = {
       isGridDropTipShow: false,
+      imageSrc: '',
+      abortController: new AbortController(),
+      cancelLoadImage: false,
     };
 
     const { dirent } = this.props;
@@ -44,10 +50,34 @@ class DirentGridItem extends React.Component {
     this.clickTimeout = null;
   }
 
+  componentDidMount() {
+    this.unsubscribeCancelLoadImage = this.props.eventBus.subscribe(EVENT_BUS_TYPE.CANCEL_PREVIOUS_PENDING_IMAGES, () => this.setState({ imageSrc: '' }));
+
+    const { dirent } = this.props;
+    if (this.canPreview && dirent.encoded_thumbnail_src) {
+      let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
+      this.setImageSrc(`${siteRoot}${fileUrl}`);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { dirent } = this.props;
+    if (prevProps.dirent.encoded_thumbnail_src !== dirent.encoded_thumbnail_src) {
+      if (this.canPreview && dirent.encoded_thumbnail_src) {
+        let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
+        this.setImageSrc(`${siteRoot}${fileUrl}`);
+      }
+    }
+  }
+
   componentWillUnmount() {
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
     }
+    if (this.state.abortController) {
+      this.state.abortController.abort();
+    }
+    this.unsubscribeCancelLoadImage();
   }
 
   onItemClick = (e) => {
@@ -192,6 +222,31 @@ class DirentGridItem extends React.Component {
     return fileUrl;
   };
 
+  setImageSrc = (src) => {
+    if (!src) return;
+
+    if (this.state.abortController) {
+      this.state.abortController.abort();
+    }
+
+    const newAbortController = new AbortController();
+    this.setState({ abortController: newAbortController });
+
+    axios.get(src, {
+      responseType: 'blob',
+      signal: newAbortController.signal
+    })
+      .then(response => {
+        const imageUrl = URL.createObjectURL(response.data);
+        this.setState({ imageSrc: imageUrl });
+      })
+      .catch(error => {
+        if (!axios.isCancel(error)) {
+          // Handle other errors silently
+        }
+      });
+  };
+
   onGridItemContextMenu = (event) => {
     let dirent = this.props.dirent;
     this.props.onGridItemContextMenu(event, dirent);
@@ -245,7 +300,6 @@ class DirentGridItem extends React.Component {
     let { dirent, path, repoID } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let iconUrl = Utils.getDirentIcon(dirent, true);
-    let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
 
     let toolTipID = '';
     let tagTitle = '';
@@ -289,7 +343,7 @@ class DirentGridItem extends React.Component {
             onDrop={this.onGridItemDragDrop}
           >
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
-              <img src={`${siteRoot}${fileUrl}`} className="thumbnail" onClick={this.onItemClick} alt=""/> :
+              <img src={this.state.imageSrc} className="thumbnail" onClick={this.onItemClick} alt=""/> :
               <img src={iconUrl} width="96" alt='' />
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
