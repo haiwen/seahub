@@ -11,6 +11,7 @@ import { AddView } from '../metadata-view/components/popover/view-popover';
 import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
 
 import './index.css';
+import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
 
 const MetadataTreeView = ({ userPerm, currentPath }) => {
   const canAdd = useMemo(() => {
