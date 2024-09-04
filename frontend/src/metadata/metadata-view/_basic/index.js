@@ -106,4 +106,5 @@ export {
   getColumnOptionIdsByNames,
   isLongTextValueExceedLimit,
   getValidLongTextValue,
+  isValidViewName,
 } from './utils';
