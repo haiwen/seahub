@@ -1713,3 +1713,29 @@ export const validatePassword = (password) => {
   const requiredStrengths = userStrongPasswordRequired ? ['strong', 'very_strong'] : ['medium', 'strong', 'very_strong'];
   return requiredStrengths.includes(passwordStrength);
 };
+
+export const validateName = (newName) => {
+  let isValid = true;
+  let errMessage = '';
+  if (!newName || !newName.trim()) {
+    isValid = false;
+    errMessage = gettext('Name is required');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('/')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain slash');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('`')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backtick');
+    return { isValid, errMessage };
+  }
+  if (newName.includes('\\')) {
+    isValid = false;
+    errMessage = gettext('Name cannot contain backslash');
+    return { isValid, errMessage };
+  }
+  return { isValid, errMessage };
+};

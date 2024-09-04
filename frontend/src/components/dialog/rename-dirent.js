@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
 
 const propTypes = {
@@ -47,20 +47,21 @@ class Rename extends React.Component {
   };
 
   handleSubmit = () => {
-    let { isValid, errMessage } = this.validateInput();
+    let newName = this.state.newName.trim();
+    let { isValid, errMessage } = validateName(newName);
     if (!isValid) {
-      this.setState({ errMessage: errMessage });
-    } else {
-      let isDuplicated = this.checkDuplicatedName();
-      if (isDuplicated) {
-        let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-        errMessage = errMessage.replace('{name}', Utils.HTMLescape(this.state.newName));
-        this.setState({ errMessage: errMessage });
-      } else {
-        this.props.onRename(this.state.newName);
-        this.props.toggleCancel();
-      }
+      this.setState({ errMessage });
+      return;
     }
+    let isDuplicated = this.props.checkDuplicatedName(newName);
+    if (isDuplicated) {
+      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
+      this.setState({ errMessage });
+      return;
+    }
+    this.props.onRename(newName);
+    this.props.toggleCancel();
   };
 
   handleKeyDown = (e) => {
@@ -77,30 +78,6 @@ class Rename extends React.Component {
   changeState = (dirent) => {
     let name = dirent.name;
     this.setState({ newName: name });
-  };
-
-  validateInput = () => {
-    let newName = this.state.newName.trim();
-    let isValid = true;
-    let errMessage = '';
-    if (!newName) {
-      isValid = false;
-      errMessage = gettext('Name is required.');
-      return { isValid, errMessage };
-    }
-
-    if (newName.indexOf('/') > -1) {
-      isValid = false;
-      errMessage = gettext('Name should not include ' + '\'/\'' + '.');
-      return { isValid, errMessage };
-    }
-
-    return { isValid, errMessage };
-  };
-
-  checkDuplicatedName = () => {
-    let isDuplicated = this.props.checkDuplicatedName(this.state.newName);
-    return isDuplicated;
   };
 
   onAfterModelOpened = () => {
