@@ -10,7 +10,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_info
 from seahub.base.accounts import User
 from seahub.repo_api_tokens.models import RepoAPITokens
-from seahub.share.models import UploadLinkShare, FileShare
+from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 
@@ -53,7 +53,8 @@ class InternalUserListView(APIView):
         return Response({'user_list': user_list})
 
 
-class InternalShareLinkInfo(APIView):
+class InternalCheckShareLinkAccess(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
     throttle_classes = (UserRateThrottle, )
     
     def get(self, request):
@@ -71,7 +72,7 @@ class InternalShareLinkInfo(APIView):
             share_obj.s_type = 'u'
         else:
             share_obj = FileShare.objects.filter(token=link_token).first()
-        
+            
         if not share_obj:
             error_msg = 'Share link does not exist.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -79,6 +80,17 @@ class InternalShareLinkInfo(APIView):
         if share_obj.is_expired():
             error_msg = 'Link is expired.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if share_obj.s_type != 'u':
+        
+            if share_obj.is_encrypted() and not check_share_link_access(request,
+                                                                        link_token):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+    
+            if not check_share_link_access_by_scope(request, share_obj):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = share_obj.repo_id
         file_path, parent_dir = '', ''
