@@ -29,7 +29,12 @@ def restore_all_repo():
         else:
             if len(repo_commits) == 0:
                 break
-            for repo_id, commit_id in repo_commits:
+            repo_ids = [repo[0] for repo in repo_commits if repo[2] != 'wiki']
+            virtual_repos = repo_data.get_virtual_repo_in_repos(repo_ids)
+            virtual_repo_set = {repo[0] for repo in virtual_repos}
+            for repo_id, commit_id, repo_type in repo_commits:
+                if repo_id in virtual_repo_set or repo_type == 'wiki':
+                    continue
                 put_to_redis(repo_id, commit_id)
             start += 1000
 

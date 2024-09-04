@@ -299,6 +299,9 @@ def get_search_repos(username, org_id):
 
     repo_id_set = set()
     for repo in repo_list:
+        # Skip the special repo
+        if repo.repo_type == REPO_TYPE_WIKI:
+            continue
         repo_id = repo.id
         if repo.origin_repo_id:
             repo_id = repo.origin_repo_id
