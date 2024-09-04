@@ -10,9 +10,18 @@ const View = () => {
   const { isLoading, metadata, errorMsg } = useMetadata();
 
   const renderView = useCallback((metadata) => {
+    if (!metadata) return false;
     const viewType = metadata.view.type;
-    if (viewType === VIEW_TYPE.GALLERY) return (<Gallery />);
-    return (<Table />);
+    switch (viewType) {
+      case VIEW_TYPE.GALLERY: {
+        return <Gallery />;
+      }
+      case VIEW_TYPE.TABLE: {
+        return <Table />;
+      }
+      default:
+        return null;
+    }
   }, []);
 
   if (isLoading) return (<CenteredLoading />);
@@ -20,8 +29,7 @@ const View = () => {
   return (
     <div className="sf-metadata-wrapper">
       <div className="sf-metadata-main">
-        {errorMsg && (<div className="d-center-middle error">{gettext(errorMsg)}</div>)}
-        {!errorMsg && renderView(metadata)}
+        {errorMsg ? <div className="d-center-middle error">{gettext(errorMsg)}</div> : renderView(metadata)}
       </div>
     </div>
   );
