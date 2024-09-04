@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 
 const propTypes = {
   fileType: PropTypes.string,
@@ -54,19 +54,21 @@ class CreateFile extends React.Component {
     if (!this.state.isSubmitBtnActive) {
       return;
     }
-
-    let isDuplicated = this.checkDuplicatedName();
-    let newName = this.state.childName;
-
+    let newName = this.state.childName.trim();
+    let { isValid, errMessage } = validateName(newName);
+    if (!isValid) {
+      this.setState({ errMessage });
+      return;
+    }
+    let isDuplicated = this.props.checkDuplicatedName(newName);
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      this.setState({ errMessage: errMessage });
-    } else {
-      let path = this.state.parentPath + newName;
-      this.props.onAddFile(path);
-      this.props.toggleDialog();
+      this.setState({ errMessage });
+      return;
     }
+    this.props.onAddFile(this.state.parentPath + newName);
+    this.props.toggleDialog();
   };
 
   handleKeyDown = (e) => {
@@ -74,11 +76,6 @@ class CreateFile extends React.Component {
       this.handleSubmit();
       e.preventDefault();
     }
-  };
-
-  checkDuplicatedName = () => {
-    let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
-    return isDuplicated;
   };
 
   onAfterModelOpened = () => {

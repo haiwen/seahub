@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, validateName } from '../../utils/utils';
 
 const propTypes = {
   fileType: PropTypes.string,
@@ -46,18 +46,20 @@ class CreateForder extends React.Component {
     if (!this.state.isSubmitBtnActive) {
       return;
     }
-
     let newName = this.state.childName;
-    let isDuplicated = this.checkDuplicatedName();
-
+    let { isValid, errMessage } = validateName(newName);
+    if (!isValid) {
+      this.setState({ errMessage });
+      return;
+    }
+    let isDuplicated = this.props.checkDuplicatedName(newName);
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      this.setState({ errMessage: errMessage });
-    } else {
-      let path = this.state.parentPath + newName;
-      this.props.onAddFolder(path);
+      this.setState({ errMessage });
+      return;
     }
+    this.props.onAddFolder(this.state.parentPath + newName);
   };
 
   handleKeyDown = (e) => {
@@ -69,11 +71,6 @@ class CreateForder extends React.Component {
 
   toggle = () => {
     this.props.addFolderCancel();
-  };
-
-  checkDuplicatedName = () => {
-    let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
-    return isDuplicated;
   };
 
   render() {
