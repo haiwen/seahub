@@ -23,6 +23,7 @@ const propTypes = {
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentNode: PropTypes.object,
+  currentDirent: PropTypes.object,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
@@ -41,6 +42,7 @@ const propTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
+  onCloseMarkdownViewDialog: PropTypes.func,
   // repo content
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
@@ -136,13 +138,14 @@ class DirColumnView extends React.Component {
 
   render() {
     const { currentMode, isTreePanelShown } = this.props;
+    console.log(33, this.props);
     const { navRate, inResizing } = this.state;
     const onResizeMove = inResizing ? this.onResizeMouseMove : null;
     const select = inResizing ? 'none' : '';
     const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
       <div
-        className="dir-column-view"
+        className="dir-column-view 123"
         onMouseMove={onResizeMove}
         onMouseUp={this.onResizeMouseUp}
         ref={this.viewModeContainer}
@@ -198,10 +201,12 @@ class DirColumnView extends React.Component {
               filePermission={this.props.filePermission}
               content={this.props.content}
               viewId={this.props.viewId}
+              currentDirent={this.props.currentDirent}
               currentRepoInfo={this.props.currentRepoInfo}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}
+              onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
             />
           ) : (currentMode == 'list' ?
             <DirListView

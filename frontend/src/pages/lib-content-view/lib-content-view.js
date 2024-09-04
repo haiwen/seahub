@@ -91,6 +91,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
+      currentDirent: null
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -466,7 +467,7 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: path }, path, url);
   };
 
-  showFile = (filePath) => {
+  showFile = (filePath, noRedirection) => {
     let repoID = this.props.repoID;
 
     if (this.state.isTreePanelShown) {
@@ -513,6 +514,8 @@ class LibContentView extends React.Component {
         isFileLoadedErr: true,
       });
     });
+
+    if (noRedirection) return;
 
     // update location
     let repoInfo = this.state.currentRepoInfo;
@@ -1494,6 +1497,7 @@ class LibContentView extends React.Component {
   };
 
   onItemClick = (dirent) => {
+    console.log('onItemClick', dirent);
     this.resetSelected();
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
@@ -1504,6 +1508,7 @@ class LibContentView extends React.Component {
       this.showDir(direntPath);
     } else { // is file
       if (this.state.isTreePanelShown && Utils.isMarkdownFile(direntPath)) {
+        this.setState({ currentDirent: dirent });
         this.showColumnMarkdownFile(direntPath);
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
@@ -1879,17 +1884,25 @@ class LibContentView extends React.Component {
   showColumnMarkdownFile = (filePath) => {
     let repoID = this.props.repoID;
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
+      console.log('res', res);
       if (res.data.size === 0) {
         // loading of asynchronously obtained data may be blocked
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
         w.location.href = url;
       } else {
-        this.showFile(filePath);
+        this.showFile(filePath, true);
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  };
+
+  onCloseMarkdownViewDialog = () => {
+    this.setState({
+      isViewFile: false,
+      path: '/'
     });
   };
 
@@ -2179,7 +2192,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, currentDirent } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -2256,6 +2269,7 @@ class LibContentView extends React.Component {
               fullDirentList={this.state.direntList}
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
+              currentDirent={currentDirent}
               sortItems={this.sortItems}
               updateDirent={this.updateDirent}
               onDirentClick={this.onDirentClick}
@@ -2291,6 +2305,7 @@ class LibContentView extends React.Component {
               onUploadFile={this.onUploadFile}
               onUploadFolder={this.onUploadFolder}
               eventBus={this.props.eventBus}
+              onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
             />
             {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader

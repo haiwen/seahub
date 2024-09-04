@@ -43,7 +43,9 @@ const propTypes = {
   viewId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
+  currentDirent: PropTypes.object,
   onLinkClick: PropTypes.func.isRequired,
+  onCloseMarkdownViewDialog: PropTypes.func,
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
@@ -283,6 +285,7 @@ class LibContentContainer extends React.Component {
               isSidePanelFolded={this.props.isSidePanelFolded}
               isTreePanelShown={this.props.isTreePanelShown}
               currentMode={this.props.currentMode}
+              currentDirent={this.props.currentDirent}
               path={this.props.path}
               repoID={repoID}
               currentRepoInfo={this.props.currentRepoInfo}
@@ -342,6 +345,7 @@ class LibContentContainer extends React.Component {
               onItemsScroll={this.onItemsScroll}
               isDirentDetailShow={this.props.isDirentDetailShow}
               eventBus={this.props.eventBus}
+              onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
             />
           )}
           {this.props.isDirentDetailShow && (
