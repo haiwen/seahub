@@ -74,14 +74,23 @@ class AuthTokenSerializer(serializers.Serializer):
             raise serializers.ValidationError('invalid params')
 
         if login_id and password:
-            user = authenticate(username=login_id, password=password)
-            if user:
+            # First check the user is active or not
+            username = Profile.objects.convert_login_str_to_username(login_id)
+            if username is None:
+                username = login_id
+            try:
+                user = User.objects.get(username)
                 if not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
-            else:
+            except User.DoesNotExist:
+                pass
+            
+            # Second check the password correct or not
+            user = authenticate(username=login_id, password=password)
+            if not user:
                 """try login id/contact email"""
                 # convert login id or contact email to username if any
-                username = Profile.objects.convert_login_str_to_username(login_id)
+                # username = Profile.objects.convert_login_str_to_username(login_id)
                 user = authenticate(username=username, password=password)
                 # After local user authentication process is completed, authenticate LDAP user
                 if user is None and ENABLE_LDAP:
