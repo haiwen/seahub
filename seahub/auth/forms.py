@@ -46,6 +46,17 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
+            # First check user account active or not
+            email = Profile.objects.convert_login_str_to_username(username)
+            try:
+                user = User.objects.get(email=email)
+                if not user.is_active:
+                    self.errors['inactive'] = _("This account is inactive.")
+                    raise forms.ValidationError(_("This account is inactive."))
+            except User.DoesNotExist:
+                pass
+            
+            # Second check the password correct or not
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
