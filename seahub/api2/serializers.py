@@ -90,7 +90,6 @@ class AuthTokenSerializer(serializers.Serializer):
             if not user:
                 """try login id/contact email"""
                 # convert login id or contact email to username if any
-                # username = Profile.objects.convert_login_str_to_username(login_id)
                 user = authenticate(username=username, password=password)
                 # After local user authentication process is completed, authenticate LDAP user
                 if user is None and ENABLE_LDAP:
