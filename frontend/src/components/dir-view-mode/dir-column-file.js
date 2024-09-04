@@ -5,7 +5,6 @@ import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
-import Loading from '../loading';
 
 import './dir-column-file.css';
 
@@ -23,6 +22,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object,
   currentDirent: PropTypes.object,
+  onCloseMarkdownViewDialog: PropTypes.func
 };
 
 class DirColumnFile extends React.Component {
@@ -47,12 +47,11 @@ class DirColumnFile extends React.Component {
     e.preventDefault();
     let { path, repoID } = this.props;
     let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path);
-    console.log('newUrl', newUrl);
     window.open(newUrl, '_blank');
   };
 
   render() {
-    const { isFileLoading, currentDirent } = this.props;
+    const { currentDirent } = this.props;
     const { name } = currentDirent;
 
     if (this.props.isFileLoadedErr) {
@@ -71,37 +70,27 @@ class DirColumnFile extends React.Component {
       <Modal isOpen={true} className='seafile-markdown-viewer-modal' contentClassName='seafile-markdown-viewer-modal-content' zIndex={1046}>
         <div className='seafile-markdown-viewer-modal-header'>
           <div className='seafile-markdown-viewer-modal-header-left-name'>
-            <span className='sf3-font sf3-font-info'>
-              <img ref='drag_icon' src={`${siteRoot}11`} className="thumbnail cursor-pointer" alt="" /> :
-            </span>
+            <span ><img src={`${mediaUrl}img/file/256/md.png`} width='24' alt='' /></span>
             <span>{name}</span>
           </div>
           <div className='seafile-markdown-viewer-modal-header-right-tool'>
-            <span className='sf3-font sf3-font-open' onClick={this.props.onOpenFile}></span>
-            <span className='sf3-font sf3-font-more'></span>
+            {/* <span className='sf3-font sf3-font-more'></span> */}
+            <span className='sf3-font sf3-font-open' onClick={this.onOpenFile}></span>
             <span className='sf3-font sf3-font-x-01' onClick={this.props.onCloseMarkdownViewDialog}></span>
           </div>
         </div>
         <ModalBody className='seafile-markdown-viewer-modal-body'>
-          {/* {isFileLoading && (
-            <Loading />
-          )} */}
-          {true && (
-            <SeafileMarkdownViewer
-              isTOCShow={false}
-              isFileLoading={this.props.isFileLoading}
-              markdownContent={this.props.content}
-              lastModified = {this.props.lastModified}
-              latestContributor={this.props.latestContributor}
-              onLinkClick={this.props.onLinkClick}
-              repoID={this.props.repoID}
-              path={this.props.path}
-            >
-              {/* <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
-              <i className="sf3-font sf3-font-expand-arrows-alt"></i>
-            </span> */}
-            </SeafileMarkdownViewer>
-          )}
+          <SeafileMarkdownViewer
+            isTOCShow={false}
+            isFileLoading={this.props.isFileLoading}
+            markdownContent={this.props.content}
+            lastModified = {this.props.lastModified}
+            latestContributor={this.props.latestContributor}
+            onLinkClick={this.props.onLinkClick}
+            repoID={this.props.repoID}
+            path={this.props.path}
+          >
+          </SeafileMarkdownViewer>
         </ModalBody>
       </Modal>
     );

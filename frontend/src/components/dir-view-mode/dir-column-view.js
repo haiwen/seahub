@@ -138,7 +138,6 @@ class DirColumnView extends React.Component {
 
   render() {
     const { currentMode, isTreePanelShown } = this.props;
-    console.log(33, this.props);
     const { navRate, inResizing } = this.state;
     const onResizeMove = inResizing ? this.onResizeMouseMove : null;
     const select = inResizing ? 'none' : '';

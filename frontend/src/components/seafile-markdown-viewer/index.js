@@ -103,8 +103,6 @@ class SeafileMarkdownViewer extends React.Component {
   };
 
   render() {
-
-    console.log('this.props.isFileLoading', this.props.isFileLoading);
     if (this.props.isFileLoading) {
       return <Loading />;
     }

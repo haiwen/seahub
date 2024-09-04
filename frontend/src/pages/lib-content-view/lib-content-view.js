@@ -1497,7 +1497,6 @@ class LibContentView extends React.Component {
   };
 
   onItemClick = (dirent) => {
-    console.log('onItemClick', dirent);
     this.resetSelected();
     let repoID = this.props.repoID;
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
@@ -1884,7 +1883,6 @@ class LibContentView extends React.Component {
   showColumnMarkdownFile = (filePath) => {
     let repoID = this.props.repoID;
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      console.log('res', res);
       if (res.data.size === 0) {
         // loading of asynchronously obtained data may be blocked
         const w = window.open('about:blank');

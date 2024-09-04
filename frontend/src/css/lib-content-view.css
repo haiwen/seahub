@@ -198,29 +198,6 @@
   width: 100%;
 }
 
-/* wiki-page-content children */
-.dir-content-main .wiki-open-file {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 50%;
-  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
-  user-select: none;
-  border: none;
-  right: 10px;
-  bottom: 10px;
-  color: #999;
-  z-index: 1050;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.dir-content-main .wiki-open-file:hover {
-  background-color: #f6f6f6;
-}
-
 .dir-content-main .sf-slate-viewer-scroll-container {
   padding: 0;
   background-color: #fff;
