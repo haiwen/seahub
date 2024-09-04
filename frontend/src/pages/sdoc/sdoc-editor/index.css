@@ -1,0 +1,10 @@
+.sdoc-content-right-panel .cur-view-detail {
+  border-left: none;
+}
+
+.sdoc-content-right-panel .cur-view-detail .detail-header {
+  border-bottom-color: #EAECEF;
+  height: 46px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}

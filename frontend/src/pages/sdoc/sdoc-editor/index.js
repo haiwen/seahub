@@ -7,6 +7,8 @@ import { Utils } from '../../../utils/utils';
 import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 
+import './index.css';
+
 const SdocEditor = () => {
   const [isStarred, setStarted] = useState(window.app.pageOptions.isStarred);
   const [isDraft] = useState(window.app.pageOptions.isSdocDraft);
