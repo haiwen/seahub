@@ -267,6 +267,7 @@ class DirColumnNav extends React.Component {
         'name': name,
         'url': `${siteRoot}lib/${repoID}/file${path}`,
         'src': src,
+        'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
         'node': items.find(item => item.path.split('/').pop() === name),
       };
     };
