@@ -96,6 +96,7 @@ export {
   isValidEmail,
   ValidateFilter,
   DATE_MODIFIERS_REQUIRE_TERM,
+  isValidViewName,
 } from './validate';
 export {
   getViewById,

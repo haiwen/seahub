@@ -6,3 +6,4 @@ export {
 export {
   isValidPosition,
 } from './geolocation';
+export { isValidViewName } from './view';

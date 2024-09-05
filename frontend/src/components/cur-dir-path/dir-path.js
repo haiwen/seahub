@@ -8,6 +8,7 @@ import { InternalLinkOperation } from '../operations';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import MetadataViewId2Name from '../../metadata/metadata-view-id-2-name';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -137,7 +138,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-item">{item}</span>
+            <span className="path-item"><MetadataViewId2Name id={item} /></span>
           </Fragment>
         );
       }

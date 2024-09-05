@@ -550,13 +550,6 @@ class LibContentView extends React.Component {
     });
   };
 
-  renameMetadataView = (renamedViewId, newPath) => {
-    const { viewId, content } = this.state;
-    if (content !== '__sf-metadata') return;
-    if (viewId !== renamedViewId) return;
-    this.setState({ path: newPath });
-  };
-
   loadDirentList = (path) => {
     let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
@@ -1860,6 +1853,9 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) { // isDir
+      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) {
+        this.isNeedUpdateHistoryState = true;
+      }
       this.showDir(node.path);
     } else {
       if (Utils.isMarkdownFile(node.path)) {
@@ -2207,7 +2203,6 @@ class LibContentView extends React.Component {
       <MetadataProvider
         repoID={this.props.repoID}
         selectMetadataView={this.onTreeNodeClick}
-        renameMetadataView={this.renameMetadataView}
         hideMetadataView={this.hideFileMetadata}
       >
         <CollaboratorsProvider repoID={this.props.repoID}>

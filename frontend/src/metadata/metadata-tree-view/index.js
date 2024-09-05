@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { Form, Input } from 'reactstrap';
+import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
 import Icon from '../../components/icon';
@@ -8,7 +8,9 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import ViewItem from './view-item';
 import { useMetadata } from '../hooks';
 import { AddView } from '../metadata-view/components/popover/view-popover';
-import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
+import { isValidViewName, VIEW_TYPE_ICON } from '../metadata-view/_basic';
+import { isEnter } from '../metadata-view/_basic/utils/hotkey';
+import toaster from '../../components/toast';
 
 import './index.css';
 
@@ -34,7 +36,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
   const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const inputRef = useRef(null);
-  const [inputValue, setInputValue] = useState('Untitled');
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const { origin, pathname, search } = window.location;
@@ -74,37 +76,38 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     setInputValue(event.target.value);
   };
 
-  const handlePopoverOptionClick = (option) => {
+  const handlePopoverOptionClick = useCallback((option) => {
     setNewView(option);
+    let newViewName = gettext('Untitled');
+    const otherViewsName = Object.values(viewsMap).map(v => v.name);
+    let i = 1;
+    while (otherViewsName.includes(newViewName)) {
+      newViewName = gettext('Untitled') + ' (' + (i++) + ')';
+    }
+    setInputValue(newViewName);
     setShowInput(true);
     setShowAddViewPopover(false);
-  };
+  }, [viewsMap]);
 
   const handleInputSubmit = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    addView(inputValue, newView.type);
+    const viewNames = Object.values(viewsMap).map(v => v.name);
+    const { isValid, message } = isValidViewName(inputValue, viewNames);
+    if (!isValid) {
+      toaster.danger(message);
+      inputRef.current.focus();
+      return;
+    }
+    addView(message, newView.type);
     setShowInput(false);
-    setInputValue('Untitled');
-  }, [inputValue, addView, newView]);
+  }, [inputValue, viewsMap, addView, newView]);
 
-  const handleClickOutsideInput = useCallback((event) => {
-    if (inputRef.current && !inputRef.current.contains(event.target)) {
-      setShowInput(false);
+  const onKeyDown = useCallback((event) => {
+    if (isEnter(event)) {
+      handleInputSubmit(event);
     }
-  }, []);
-
-  useEffect(() => {
-    if (showInput) {
-      inputRef.current.select();
-      document.addEventListener('click', handleClickOutsideInput);
-    }
-
-    return () => {
-      document.removeEventListener('click', handleClickOutsideInput);
-    };
-  }, [showInput, inputRef, handleClickOutsideInput]);
-
+  }, [handleInputSubmit]);
 
   return (
     <>
@@ -113,7 +116,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
           <div className="children">
             {navigation.map((item, index) => {
               const view = viewsMap[item._id];
-              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view.name;
+              const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
               const isSelected = currentPath === viewPath;
               return (
                 <ViewItem
@@ -131,21 +134,20 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
               );
             })}
             {showInput && (
-              <Form onSubmit={handleInputSubmit} className='tree-view-inner sf-metadata-view-form'>
+              <div className="tree-view-inner sf-metadata-view-form">
                 <div className="left-icon">
                   <Icon symbol={VIEW_TYPE_ICON[newView.type] || 'table'} className="metadata-views-icon" />
                 </div>
                 <Input
-                  className='sf-metadata-view-input'
+                  className="sf-metadata-view-input"
                   innerRef={inputRef}
-                  type='text'
-                  id='add-view-input'
-                  name='add-view'
                   value={inputValue}
                   onChange={handleInputChange}
                   autoFocus={true}
+                  onBlur={handleInputSubmit}
+                  onKeyDown={onKeyDown}
                 />
-              </Form>
+              </div>
             )}
             {canAdd && (
               <div id="sf-metadata-view-popover">
