@@ -4,7 +4,8 @@ import Icon from '../../../icon';
 
 import './index.css';
 
-const Header = ({ title, icon, onClose }) => {
+const Header = ({ title, icon, onClose, component = {} }) => {
+  const { closeIcon } = component;
   return (
     <div className="detail-header">
       <div className="detail-title dirent-title">
@@ -12,7 +13,7 @@ const Header = ({ title, icon, onClose }) => {
         <span className="name ellipsis" title={title}>{title}</span>
       </div>
       <div className="detail-control" onClick={onClose}>
-        <Icon symbol="close" className="detail-control-close" />
+        {closeIcon ? closeIcon : (<Icon symbol="close" className="detail-control-close" />)}
       </div>
     </div>
   );
@@ -21,6 +22,7 @@ const Header = ({ title, icon, onClose }) => {
 Header.propTypes = {
   title: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
+  component: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };
 

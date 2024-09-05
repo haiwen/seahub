@@ -7,6 +7,8 @@ import { Utils } from '../../../utils/utils';
 import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 
+import './index.css';
+
 const SdocEditor = () => {
   const [isStarred, setStarted] = useState(window.app.pageOptions.isStarred);
   const [isDraft] = useState(window.app.pageOptions.isSdocDraft);
@@ -22,7 +24,21 @@ const SdocEditor = () => {
         resizable_width: true,
         display_type: 'right-panel',
         component: ({ onClose, width }) => {
-          return (<EmbeddedFileDetails repoID={repoID} onClose={onClose} path={docPath} dirent={currentDirent} repoInfo={{ permission: docPerm }} width={width} />);
+          return (
+            <EmbeddedFileDetails
+              repoID={repoID}
+              path={docPath}
+              dirent={currentDirent}
+              repoInfo={{ permission: docPerm }}
+              width={width - 1}
+              component={{
+                headerComponent: {
+                  closeIcon: (<i className="sdocfont sdoc-sm-close"></i>)
+                }
+              }}
+              onClose={onClose}
+            />
+          );
         },
       }
     ];
