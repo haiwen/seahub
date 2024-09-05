@@ -49,6 +49,7 @@ class SortPopover extends Component {
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
+      isSubmitDisabled: true,
     };
     this.isSelectOpen = false;
   }
@@ -187,9 +188,9 @@ class SortPopover extends Component {
   };
 
   renderSortItem = (column, sort, index) => {
-    let { name, type } = column;
+    const { name, type } = column;
     const { readOnly } = this.props;
-    let selectedColumn = {
+    const selectedColumn = {
       label: (
         <Fragment>
           <span className="sf-metadata-filter-header-icon"><Icon iconName={COLUMNS_ICON_CONFIG[type]} /></span>
@@ -198,9 +199,10 @@ class SortPopover extends Component {
       )
     };
 
-    let selectedTypeShow = sort.sort_type;
-    let selectedSortType = selectedTypeShow && {
-      label: <span className="select-option-name">{gettext(selectedTypeShow)}</span>
+    const selectedType = sort.sort_type;
+    const selectedTypeOption = SORT_TYPES.find(sortType => sortType.value === selectedType);
+    const selectedSortType = selectedType && {
+      label: <span className="select-option-name">{selectedTypeOption?.name || gettext('Up')}</span>
     };
 
     return (
