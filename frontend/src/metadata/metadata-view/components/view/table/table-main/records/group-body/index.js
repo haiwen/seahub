@@ -870,6 +870,7 @@ class GroupBody extends Component {
           <InteractionMasks
             isGroupView
             ref={this.setInteractionMaskRef}
+            contextMenu={this.props.contextMenu}
             table={this.props.table}
             columns={this.props.columns}
             recordsCount={this.props.recordsCount}

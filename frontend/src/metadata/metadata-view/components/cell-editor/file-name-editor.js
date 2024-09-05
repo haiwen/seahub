@@ -108,7 +108,11 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
   if (!fileType || fileType === 'sdoc') {
     window.open(url);
   } else {
-    window.open(window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
+    let validParentDir = parentDir;
+    if (window.location.pathname.endsWith('/')) {
+      validParentDir = parentDir.slice(1);
+    }
+    window.open(window.location.origin + window.location.pathname + Utils.encodePath(Utils.joinPath(validParentDir, fileName)));
   }
   return null;
 };
