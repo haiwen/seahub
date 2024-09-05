@@ -4,9 +4,9 @@ import { Alert, Input } from 'reactstrap';
 import { CustomizePopover } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../utils';
 import { isValidViewName } from '../../../../_basic';
+import { isEnter } from '../../../../_basic/utils/hotkey';
 
 import '../index.css';
-import { isEnter } from '../../../../_basic/utils/hotkey';
 
 const Rename = ({ value, target, otherViewsName, toggle, onSubmit }) => {
   const [inputValue, setInputValue] = useState(value || '');
