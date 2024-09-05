@@ -201,12 +201,13 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
     return result, total
 
 
-def ai_search_files(keyword, searched_repos, count, suffixes):
+def ai_search_files(keyword, searched_repos, count, suffixes, search_path):
     params = {
         'query': keyword,
         'repos': searched_repos,
         'count': count,
         'suffixes': suffixes,
+        'search_path': search_path,
     }
 
     resp = search(params)
