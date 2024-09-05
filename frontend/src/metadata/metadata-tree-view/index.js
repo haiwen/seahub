@@ -8,7 +8,6 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import ViewItem from './view-item';
 import { useMetadata } from '../hooks';
 import { AddView } from '../metadata-view/components/popover/view-popover';
-import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
 
 import './index.css';
 
