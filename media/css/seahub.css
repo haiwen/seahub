@@ -350,7 +350,7 @@ table img { vertical-align:middle; }
 .inline-block { display: inline-block; }
 .hide { display:none; }
 .error { color:red; }
-.errorlist { color:red; }
+.errorlist { color:red; padding: 0; }
 .error-tip { text-align:center; margin-top:5em; }
 .ovhd { overflow:hidden; }
 .ov-auto { overflow:auto; }
