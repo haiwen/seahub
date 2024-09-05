@@ -11,7 +11,7 @@ import ActionsCell from './actions-cell';
 import { isMobile } from '../../../../../../utils';
 import { getFrozenColumns } from '../../../../../../utils/table-utils';
 import { isFrozen, recalculateColumnMetricsByResizeColumn } from '../../../../../../utils/column-utils';
-import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT, SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
+import { GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT } from '../../../../../../constants';
 import InsertColumn from './insert-column';
 import html5DragDropContext from '../../../../../../../../pages/wiki2/wiki-nav/html5DragDropContext';
 
@@ -83,7 +83,7 @@ const RecordsHeader = ({
 
   const frozenColumns = getFrozenColumns(columnMetrics.columns);
   const displayColumns = columnMetrics.columns.slice(colOverScanStartIdx, colOverScanEndIdx);
-  const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, groupOffsetLeft + SEQUENCE_COLUMN_WIDTH);
+  const frozenColumnsWidth = frozenColumns.reduce((total, c) => total + c.width, 0);
 
   return (
     <div className="static-sf-metadata-result-content grid-header" style={{ height: height + 1 }}>
