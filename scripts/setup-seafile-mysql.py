@@ -1034,6 +1034,14 @@ class SeahubConfigurator(AbstractConfigurator):
     def ask_questions(self):
         pass
 
+    def get_proto(self):
+        is_https = os.environ.get('SEAFILE_SERVER_LETSENCRYPT', 'false').lower() == 'true'
+        proto = 'https' if is_https else 'http'
+        force_https_in_conf = os.environ.get('FORCE_HTTPS_IN_CONF', 'false').lower() == 'true'
+        if force_https_in_conf:
+            proto = 'https'
+        return proto
+
     def generate(self):
         '''Generating seahub_settings.py'''
         print('Generating seahub configuration ...\n')
@@ -1042,7 +1050,7 @@ class SeahubConfigurator(AbstractConfigurator):
             fp.write('\n')
             self.write_secret_key(fp)
             fp.write('\n')
-            fp.write('SERVICE_URL = "http://%s"' % ccnet_config.ip_or_domain)
+            fp.write('SERVICE_URL = "%s://%s"' % (self.get_proto(), ccnet_config.ip_or_domain))
             fp.write('\n')
             self.write_database_config(fp)
 
