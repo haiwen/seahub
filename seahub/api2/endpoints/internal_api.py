@@ -82,13 +82,18 @@ class InternalCheckShareLinkAccess(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         if share_obj.s_type != 'u':
-        
+
             if share_obj.is_encrypted() and not check_share_link_access(request,
                                                                         link_token):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-    
+
             if not check_share_link_access_by_scope(request, share_obj):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            can_download = share_obj.get_permissions()['can_download']
+            if not can_download:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
