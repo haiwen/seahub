@@ -141,6 +141,43 @@ class TrashDialog extends React.Component {
     });
   };
 
+
+  clickFolderPath = (folderPath, e) => {
+    e.preventDefault();
+    const { commitID, baseDir } = this.state;
+    this.renderFolder(commitID, baseDir, folderPath);
+  };
+
+  clickRoot = (e) => {
+    e.preventDefault();
+    this.refreshTrash2();
+  };
+
+  renderFolderPath = () => {
+    const pathList = this.state.folderPath.split('/');
+    const repoFolderName = this.props.currentRepoInfo.repo_name;
+
+    return (
+      <React.Fragment>
+        <a href="#" onClick={this.clickRoot} className="text-truncate cur-path" title={repoFolderName}>{repoFolderName}</a>
+        <span className="mx-1">/</span>
+        {pathList.map((item, index) => {
+          if (index > 0 && index != pathList.length - 1) {
+            return (
+              <React.Fragment key={index}>
+                <a className="text-truncate cur-path" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
+                <span className="mx-1">/</span>
+              </React.Fragment>
+            );
+          }
+          return null;
+        }
+        )}
+        <span className="text-truncate" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { showTrashDialog, toggleTrashDialog } = this.props;
     const { isCleanTrashDialogOpen, showFolder, isLoading, items } = this.state;
@@ -164,6 +201,13 @@ class TrashDialog extends React.Component {
           }
         >
           <div dangerouslySetInnerHTML={{ __html: title }}></div>
+          <p className="m-0 text-truncate d-flex cur-title">
+            <span className="mr-1">{gettext('Current path: ')}</span>
+            {showFolder ?
+              this.renderFolderPath() :
+              <span className="text-truncate cur-path" title={repoFolderName}>{repoFolderName}</span>}
+          </p>
+
         </ModalHeader>
         <ModalBody>
           {isLoading && <Loading />}
