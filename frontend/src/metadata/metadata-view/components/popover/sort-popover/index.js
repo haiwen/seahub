@@ -49,6 +49,7 @@ class SortPopover extends Component {
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
+      isSubmitDisabled: true,
     };
     this.isSelectOpen = false;
   }
