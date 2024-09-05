@@ -27,6 +27,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
         return {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
+          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           src: src,
         };
       });

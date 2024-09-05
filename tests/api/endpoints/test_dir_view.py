@@ -11,7 +11,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
 
 from tests.common.utils import randstring
-from seahub.settings import THUMBNAIL_ROOT
+from seahub.settings import THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -266,8 +266,7 @@ class DirViewTest(BaseTestCase):
         file_id = json_resp['dirent_list'][0]['id']
 
         # prepare thumbnail
-        size = 48
-        thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
+        thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE))
         if not os.path.exists(thumbnail_dir):
             os.makedirs(thumbnail_dir)
         thumbnail_file = os.path.join(thumbnail_dir, file_id)

@@ -5,7 +5,7 @@ import { Link, navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -87,11 +87,10 @@ class TableBody extends Component {
     }
 
     const len = items.length;
-    const thumbnailSize = 48;
     const _this = this;
     let getThumbnail = function (i) {
       const curItem = items[i];
-      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailSize).then((res) => {
+      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailDefaultSize).then((res) => {
         curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
       }).catch((error) => {
         // do nothing

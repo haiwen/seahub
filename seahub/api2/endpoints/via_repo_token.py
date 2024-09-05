@@ -100,7 +100,7 @@ class ViaRepoDirView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         with_thumbnail = to_python_boolean(with_thumbnail)
-        thumbnail_size = request.GET.get('thumbnail_size', 48)
+        thumbnail_size = request.GET.get('thumbnail_size', settings.THUMBNAIL_DEFAULT_SIZE)
         try:
             thumbnail_size = int(thumbnail_size)
         except ValueError:

@@ -48,7 +48,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
-        SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+        SHARE_LINK_EXPIRE_DAYS_DEFAULT, THUMBNAIL_DEFAULT_SIZE, \
         ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
@@ -894,7 +894,7 @@ class ShareLinkDirents(APIView):
         """
 
         # argument check
-        thumbnail_size = request.GET.get('thumbnail_size', 48)
+        thumbnail_size = request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE)
         try:
             thumbnail_size = int(thumbnail_size)
         except ValueError:

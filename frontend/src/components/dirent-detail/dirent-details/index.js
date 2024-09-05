@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -25,7 +25,10 @@ class DirentDetails extends React.Component {
   updateDetail = (repoID, dirent, direntPath) => {
     const apiName = dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo';
     seafileAPI[apiName](repoID, direntPath).then(res => {
-      this.setState(({ direntDetail: res.data, dirent }));
+      this.setState(({
+        direntDetail: res.data,
+        dirent,
+      }));
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -59,11 +62,12 @@ class DirentDetails extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { dirent, path, repoID, currentRepoInfo, repoTags, fileTags } = this.props;
     if (!ObjectUtils.isSameObject(currentRepoInfo, nextProps.currentRepoInfo) ||
-    !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
-    JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
-    JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
-    path !== nextProps.path ||
-    repoID !== nextProps.repoID) {
+        !ObjectUtils.isSameObject(dirent, nextProps.dirent) ||
+        JSON.stringify(repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
+        JSON.stringify(fileTags || []) !== JSON.stringify(nextProps.fileTags || []) ||
+        path !== nextProps.path ||
+        repoID !== nextProps.repoID
+    ) {
       this.setState({ dirent: null }, () => {
         this.loadDetail(nextProps.repoID, nextProps.dirent, nextProps.path);
       });
@@ -73,12 +77,10 @@ class DirentDetails extends React.Component {
   renderImage = () => {
     const { dirent } = this.state;
     if (!dirent) return null;
-    // let bigIconUrl = Utils.getDirentIcon(dirent, true);
     const isImg = Utils.imageCheck(dirent.name);
-    // const isVideo = Utils.videoCheck(dirent.name);
     if (!isImg) return null;
     const { repoID, path } = this.props;
-    const bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+    const bigIconUrl = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     return (
       <div className="detail-image-thumbnail">
         <img src={bigIconUrl} alt="" className="thumbnail" />

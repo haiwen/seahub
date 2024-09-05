@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useMetadata } from '../../../hooks';
 import { Utils } from '../../../../../utils/utils';
 import { PRIVATE_COLUMN_KEY } from '../../../_basic';
-import { siteRoot } from '../../../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid } from '../../../../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../../constants';
 
 import './index.css';
@@ -74,9 +74,7 @@ const Gallery = () => {
         const parentDir = item[PRIVATE_COLUMN_KEY.PARENT_DIR];
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
         const date = item[PRIVATE_COLUMN_KEY.FILE_CTIME].split('T')[0];
-
-        const src = `${siteRoot}thumbnail/${repoID}/192${path}`;
-
+        const src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`;
         return {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,

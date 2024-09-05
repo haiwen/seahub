@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, username, enableSeadoc } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
@@ -182,12 +182,12 @@ class DirentListView extends React.Component {
     const name = item.name;
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
-    const src = `${siteRoot}repo/${repoID}/raw${path}`;
 
     return {
       'name': name,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
-      'src': src
+      'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
+      'src': `${siteRoot}repo/${repoID}/raw${path}`,
     };
   };
 

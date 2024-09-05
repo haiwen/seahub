@@ -18,6 +18,8 @@ previousImage: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}false{% endif
 nextImage: {% if img_next %}'{{ img_next|escapejs }}'{% else %}false{% endif %},
 fileExt: '{{ fileext|escapejs }}',
 thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
+thumbnailSizeForGrid: {{ thumbnail_size_for_grid }},
+thumbnailDefaultSize: {{ thumbnail_default_size }},
 {% endif %}
 
 {% if filetype == 'Video' %}

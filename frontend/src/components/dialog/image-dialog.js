@@ -47,14 +47,20 @@ class ImageDialog extends React.Component {
     const imageItemsLength = imageItems.length;
     const name = imageItems[imageIndex].name;
     const imageTitle = `${name} (${imageIndex + 1}/${imageItemsLength})`;
+    const mainImg = imageItems[imageIndex];
+    const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
+    const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
+    const mainSrc = mainImg.thumbnail || mainImg.src;
+    const nextSrc = nextImg.thumbnail || nextImg.src;
+    const prevSrc = prevImg.thumbnail || prevImg.src;
 
     return (
       <Lightbox
         wrapperClassName='custom-image-previewer'
         imageTitle={imageTitle}
-        mainSrc={imageItems[imageIndex].src}
-        nextSrc={imageItems[(imageIndex + 1) % imageItemsLength].src}
-        prevSrc={imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength].src}
+        mainSrc={mainSrc}
+        nextSrc={nextSrc}
+        prevSrc={prevSrc}
         onCloseRequest={this.props.closeImagePopup}
         onMovePrevRequest={this.props.moveToPrevImage}
         onMoveNextRequest={this.props.moveToNextImage}
