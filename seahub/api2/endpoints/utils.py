@@ -243,7 +243,7 @@ def convert_file(path, username, doc_uuid, download_token, upload_token, src_typ
         'src_type': src_type,
         'dst_type': dst_type,
     }
-    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/file-convert/')
+    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/file-convert/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
 
     return resp
