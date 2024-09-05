@@ -65,6 +65,8 @@ const PasswordInput = ({ value, labelValue, enableCheckStrength, onChangeValue }
 
 PasswordInput.propTypes = propTypes;
 
-PasswordInput.defaultProps = { enableCheckStrength: true };
+PasswordInput.defaultProps = {
+  enableCheckStrength: true
+};
 
 export default PasswordInput;
