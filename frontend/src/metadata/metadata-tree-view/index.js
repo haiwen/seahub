@@ -11,7 +11,6 @@ import { AddView } from '../metadata-view/components/popover/view-popover';
 import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
 
 import './index.css';
-import { VIEW_TYPE_ICON } from '../metadata-view/_basic';
 
 const MetadataTreeView = ({ userPerm, currentPath }) => {
   const canAdd = useMemo(() => {
@@ -134,7 +133,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
             {showInput && (
               <Form onSubmit={handleInputSubmit} className='tree-view-inner sf-metadata-view-form'>
                 <div className="left-icon">
-                  <Icon symbol={VIEW_TYPE_ICON[newView.type] || 'table'} className="metadata-views-icon" />
+                  <Icon symbol={newView.type} className="metadata-views-icon" />
                 </div>
                 <Input
                   className='sf-metadata-view-input'
