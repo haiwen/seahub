@@ -41,7 +41,7 @@ jobs:
       - name: run pytest
         run: |
           cd $GITHUB_WORKSPACE
-          export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1 JWT_PRIVATE_KEY=qwertyuiop
+          export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1 JWT_PRIVATE_KEY='n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
 
       - uses: actions/setup-node@v2
