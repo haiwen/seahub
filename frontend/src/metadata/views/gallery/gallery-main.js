@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
-import { gettext } from '../../../utils/constants';
+import { gettext, GALLERY_DATE_MODE } from '../../../utils/constants';
 
-const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
+const GalleryMain = ({ groups, overScan, columns, size, gap, mode }) => {
   const imageHeight = useMemo(() => size + gap, [size, gap]);
 
   const renderDisplayGroup = useCallback((group) => {
@@ -32,9 +32,13 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
       childrenEndIndex = childrenEndIndex - 1;
     }
 
+    if (childrenEndIndex === -1) {
+      childrenEndIndex = children.length - 1;
+    }
+
     return (
       <div key={name} className="metadata-gallery-date-group w-100" style={{ height }}>
-        {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
+        {mode !== GALLERY_DATE_MODE.ALL && <div className="metadata-gallery-date-tag">{name}</div>}
         <div
           className="metadata-gallery-image-list"
           style={{
@@ -55,7 +59,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
         </div>
       </div>
     );
-  }, [overScan, columns, size, imageHeight]);
+  }, [overScan, mode, columns, imageHeight, size]);
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return <EmptyTip text={gettext('No record')}/>;
@@ -71,6 +75,8 @@ GalleryMain.propTypes = {
   overScan: PropTypes.object,
   columns: PropTypes.number,
   size: PropTypes.number,
+  gap: PropTypes.number,
+  mode: PropTypes.string,
 };
 
 export default GalleryMain;

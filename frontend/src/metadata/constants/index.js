@@ -118,3 +118,10 @@ export {
   TRANSFER_TYPES,
   metadataZIndexes,
 };
+
+export const GALLERY_DATE_MODE = {
+  YEAR: 'year',
+  MONTH: 'month',
+  DAY: 'day',
+  ALL: 'all',
+};

@@ -15,20 +15,13 @@
 }
 
 .metadata-gallery-date-tag {
-  width: 6rem;
-  height: 1.5rem;
-  top: 1rem;
-  left: 1rem;
-  position: absolute;
+  height: 2rem;
+  position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
-  border-radius: 12px;
-  background-color: #fafaf7;
   font-size: 0.875rem;
-  text-align: center;
   z-index: 1;
-  opacity: 0.9;
   user-select: none;
 }
 

@@ -42,6 +42,10 @@ const getDateDisplayString = (date, format) => {
       return dateObj.format('DD.MM.YYYY');
     case 'DD.MM.YYYY HH:mm':
       return dateObj.format('DD.MM.YYYY HH:mm');
+    case 'YYYY':
+      return dateObj.format('YYYY');
+    case 'YYYY-MM':
+      return dateObj.format('YYYY-MM');
     default:
       // Compatible with older versions: if format is null, use defaultFormat
       return dateObj.format('YYYY-MM-DD');
