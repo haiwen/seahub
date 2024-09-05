@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import { DragSource, DropTarget } from 'react-dnd';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY } from '../../../../../../../_basic';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../../../../../_basic';
 import ResizeColumnHandle from './resize-column-handle';
 import { EVENT_BUS_TYPE } from '../../../../../../../constants';
 import DropdownMenu from './dropdown-menu';
@@ -36,11 +36,14 @@ const dropTarget = {
   hover(props, monitor, component) {
     // This is fired very often and lets you perform side effects.
     if (!window.sfMetadataBody) return;
-    const defaultColumnWidth = 200;
+    let defaultColumnWidth = 200;
     const offsetX = monitor.getClientOffset().x;
     const width = document.querySelector('.sf-metadata-wrapper')?.clientWidth;
     const left = window.innerWidth - width;
-    if (offsetX > width - defaultColumnWidth) {
+    if (width <= 800) {
+      defaultColumnWidth = 20;
+    }
+    if (offsetX > window.innerWidth - defaultColumnWidth) {
       window.sfMetadataBody.scrollToRight();
     } else if (offsetX < props.frozenColumnsWidth + defaultColumnWidth + left) {
       window.sfMetadataBody.scrollToLeft();
@@ -175,7 +178,7 @@ const Cell = ({
     </div>
   );
 
-  if (!canModifyColumnOrder || column.key === PRIVATE_COLUMN_KEY.FILE_NAME) {
+  if (!canModifyColumnOrder) {
     return (
       <div key={key} className="sf-metadata-record-header-cell">
         {cell}
