@@ -26,7 +26,6 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 import '../../css/dirent-list-item.css';
 
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
@@ -812,7 +811,6 @@ class DirentListItem extends React.Component {
             <td className="pl10">
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  // <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
                   <img ref='drag_icon' src={this.state.imageSrc} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
                   <img ref='drag_icon' src={iconUrl} width="24" alt='' />
                 }
