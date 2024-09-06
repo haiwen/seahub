@@ -128,7 +128,7 @@ except ImportError:
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
 except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED= False
+    ORG_MEMBER_QUOTA_ENABLED = False
 
 try:
     from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
