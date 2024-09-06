@@ -628,8 +628,6 @@ SHOW_LOGOUT_ICON = False
 PRIVACY_POLICY_LINK = ''
 TERMS_OF_SERVICE_LINK = ''
 
-FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
-
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
 ALLOWED_HOSTS = ['*']
@@ -820,6 +818,7 @@ DTABLE_WEB_SERVER = ''
 ENABLE_SEADOC = False
 SEADOC_PRIVATE_KEY = ''
 SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
+FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
 
 ############################
@@ -970,7 +969,14 @@ else:
     load_local_settings(seahub_settings)
     del seahub_settings
 
+# config in env
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
+
+if os.environ.get('ENABLE_SEADOC', ''):
+    ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
+SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
+SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
+FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
 
 # Remove install_topdir from path
 sys.path.pop(0)
