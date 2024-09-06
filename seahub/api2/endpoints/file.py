@@ -21,7 +21,7 @@ from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
     gen_inner_file_upload_url, is_valid_dirent_name, normalize_file_path, \
-    normalize_dir_path, get_file_type_and_ext, check_filename_or_rename
+    normalize_dir_path, get_file_type_and_ext, check_filename_or_rename, gen_file_get_url, gen_file_upload_url
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
@@ -620,6 +620,7 @@ class FileView(APIView):
                                                                      file_id,
                                                                      'download',
                                                                      username)
+            download_url = gen_file_get_url(download_token, filename)
 
             obj_id = json.dumps({'parent_dir': parent_dir})
             upload_token = seafile_api.get_fileserver_access_token(repo_id,
@@ -627,6 +628,9 @@ class FileView(APIView):
                                                                    'upload-link',
                                                                    username,
                                                                    use_onetime=True)
+
+            upload_url = gen_file_upload_url(upload_token, 'upload-api')
+
             if extension == '.sdoc':
                 doc_uuid = get_seadoc_file_uuid(repo, path)
             else:
@@ -636,7 +640,7 @@ class FileView(APIView):
                 # md, docx file convert to sdoc
                 try:
                     resp = convert_file(path, username, doc_uuid,
-                                        download_token, upload_token,
+                                        download_url, upload_url,
                                         src_type, dst_type)
                 except Exception as e:
                     logger.error(e)
@@ -652,7 +656,7 @@ class FileView(APIView):
                 # sdoc file convert to docx
                 try:
                     resp = sdoc_convert_to_docx(path, username, doc_uuid,
-                                                download_token, upload_token,
+                                                download_url, upload_url,
                                                 src_type, dst_type)
                 except Exception as e:
                     logger.error(e)
