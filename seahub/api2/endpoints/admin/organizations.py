@@ -12,6 +12,7 @@ from rest_framework import status
 from seaserv import ccnet_api, seafile_api
 
 from seahub.auth.utils import get_virtual_id_by_email
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
 from seahub.utils import is_valid_email
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -233,6 +234,20 @@ class AdminOrganizations(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        quota = request.data.get('quota', None)
+        if quota:
+            try:
+                quota_mb = int(quota)
+                quota = quota_mb * get_file_size_unit('MB')
+                seafile_api.set_org_quota(org_id, quota)
+            except ValueError as e:
+                logger.error(e)
+                return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
+            
+        if ORG_MEMBER_QUOTA_ENABLED:
+            member_limit = request.data.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
+            OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
         org = ccnet_api.get_org_by_id(org_id)
         try:
