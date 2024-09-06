@@ -30,6 +30,7 @@ from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from seahub.auth.utils import get_virtual_id_by_email
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
@@ -5349,9 +5350,10 @@ class OrganizationView(APIView):
         except ValueError as e:
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
-
+        
+        vid = get_virtual_id_by_email(username)
         try:
-            User.objects.get(email = username)
+            User.objects.get(email = vid)
             user_exist = True
         except User.DoesNotExist:
             user_exist = False
@@ -5367,8 +5369,8 @@ class OrganizationView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, "An organization with this prefix already exists")
 
         try:
-            User.objects.create_user(username, password, is_staff=False, is_active=True)
-            create_org(org_name, prefix, username)
+            new_user = User.objects.create_user(username, password, is_staff=False, is_active=True)
+            create_org(org_name, prefix, new_user.username)
 
             org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
             org_id = org.org_id
