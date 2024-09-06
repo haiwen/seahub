@@ -62,6 +62,7 @@ const UserSetPassword = ({ toggle }) => {
             value={confirmedPassword}
             labelValue={gettext('Confirm password')}
             onChangeValue={setConfirmedPassword}
+            enableCheckStrength={false}
           />
         </Form>
         {errorMessage && (
