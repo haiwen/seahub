@@ -535,6 +535,27 @@ def gen_file_get_url(token, filename):
     """
     return '%s/files/%s/%s' % (get_fileserver_root(), token, quote(filename))
 
+
+def gen_file_get_url_by_sharelink(token):
+    """
+    Generate fileserver file url by sharelink.
+    Format: http://<domain:port>/f/<token>/
+    """
+    return '%s/f/%s/' % (get_fileserver_root(), token)
+
+def gen_file_get_url_new(repo_id, filepath, op='download'):
+    """
+    Generate fileserver file url.
+    Format: http://<domain:port>/repos/<repo_id>files/<filepath>/?op=download
+    """
+    
+    return '%s/repos/%s/files/%s/?op=%s' % (
+        get_fileserver_root(),
+        repo_id,
+        quote(filepath.strip('/')),
+        op
+    )
+
 def gen_file_upload_url(token, op, replace=False):
     url = '%s/%s/%s' % (get_fileserver_root(), op, token)
     if replace is True:

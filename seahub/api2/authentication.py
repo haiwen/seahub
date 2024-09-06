@@ -216,3 +216,24 @@ class SdocJWTTokenAuthentication(BaseAuthentication):
             return None
 
         return user, auth[1]
+
+
+class SessionCRSFCheckFreeAuthentication(BaseAuthentication):
+    """
+    Use Django's session framework for authentication.
+    """
+
+    def authenticate(self, request):
+        """
+        Returns a `User` if the request session currently has a logged in user.
+        Otherwise returns `None`.
+        """
+
+        # Get the session-based user from the underlying HttpRequest object
+        user = getattr(request._request, 'user', None)
+
+        if not user or not user.is_active:
+            return None
+
+
+        return (user, None)
