@@ -232,14 +232,14 @@ def convert_file_gen_headers():
     return {"Authorization": "Token %s" % token}
 
 
-def convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type):
+def convert_file(path, username, doc_uuid, download_url, upload_url, src_type, dst_type):
     headers = convert_file_gen_headers()
     params = {
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_token': download_token,
-        'upload_token': upload_token,
+        'download_url': download_url,
+        'upload_url': upload_url,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -249,16 +249,16 @@ def convert_file(path, username, doc_uuid, download_token, upload_token, src_typ
     return resp
 
 
-def sdoc_convert_to_docx(path, username, doc_uuid, download_token,
-                         upload_token, src_type, dst_type):
+def sdoc_convert_to_docx(path, username, doc_uuid, download_url,
+                         upload_url, src_type, dst_type):
 
     headers = convert_file_gen_headers()
     params = {
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_token': download_token,
-        'upload_token': upload_token,
+        'download_url': download_url,
+        'upload_url': upload_url,
         'src_type': src_type,
         'dst_type': dst_type,
     }
@@ -268,7 +268,7 @@ def sdoc_convert_to_docx(path, username, doc_uuid, download_token,
     return resp
 
 
-def sdoc_export_to_docx(path, username, doc_uuid, download_token,
+def sdoc_export_to_docx(path, username, doc_uuid, download_url,
                         src_type, dst_type):
 
     headers = convert_file_gen_headers()
@@ -276,7 +276,7 @@ def sdoc_export_to_docx(path, username, doc_uuid, download_token,
         'path': path,
         'username': username,
         'doc_uuid': doc_uuid,
-        'download_token': download_token,
+        'download_url': download_url,
         'src_type': src_type,
         'dst_type': dst_type,
     }

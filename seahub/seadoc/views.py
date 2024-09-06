@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from seaserv import get_repo, seafile_api
 
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error, normalize_file_path
+from seahub.utils import render_error, normalize_file_path, gen_file_get_url
 from seahub.views import check_folder_permission, validate_owner, get_seadoc_file_uuid
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
@@ -173,11 +173,12 @@ def sdoc_to_docx(request, repo_id):
     doc_uuid = get_seadoc_file_uuid(repo, file_path)
     download_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
                                                              'download', username)
+    download_url = gen_file_get_url(download_token, filename)
 
     src_type = 'sdoc'
     dst_type = 'docx'
     resp_with_docx_file = sdoc_export_to_docx(file_path, username, doc_uuid,
-                                              download_token, src_type, dst_type)
+                                              download_url, src_type, dst_type)
 
     docx_mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     response = HttpResponse(content_type=docx_mime_type)
