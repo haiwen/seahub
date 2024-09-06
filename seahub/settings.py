@@ -972,7 +972,8 @@ else:
 # config in env
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
-ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '') or ENABLE_SEADOC
+if os.environ.get('ENABLE_SEADOC', ''):
+    ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
 SEADOC_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or SEADOC_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
