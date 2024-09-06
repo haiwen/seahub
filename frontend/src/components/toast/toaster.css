@@ -85,6 +85,9 @@
 
 .seahub-toast-alert-container.notify-in-progress .loading-icon {
   margin: 0;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
 }
 
 .seahub-toast-alert-container .toast-alert-icon {
