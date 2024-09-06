@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import listener from '../context-menu/globalEventListener';
+import classnames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
@@ -114,8 +115,8 @@ class ItemDropdownMenu extends React.Component {
     this.props.onMenuItemClick(operation, event, item);
   };
 
-  onDropDownMouseMove = (e) => {
-    if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
+  onDropDownMouseMove = () => {
+    if (this.state.isSubMenuShown) {
       this.setState({
         isSubMenuShown: false
       });
@@ -191,7 +192,6 @@ class ItemDropdownMenu extends React.Component {
         <ModalPortal>
           <DropdownMenu
             style={menuStyle}
-            onMouseMove={this.onDropDownMouseMove}
           >
             {menuList.map((menuItem, index) => {
               if (menuItem === 'Divider') {
@@ -208,7 +208,7 @@ class ItemDropdownMenu extends React.Component {
                   >
                     <DropdownToggle
                       tag='div'
-                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pl-5"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
                       <span className="mr-auto">{menuItem.value}</span>
@@ -229,15 +229,21 @@ class ItemDropdownMenu extends React.Component {
                 );
               } else {
                 return (
-                  <DropdownItem className='p-0' key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>
-                    <div className='dropdown-item-wrapper'>
-                      <span className='dropdown-item-tick'>
-                        {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
-                          <i className="sf2-icon-tick"></i>
-                        )}
-                      </span>
-                      <span className='dropdown-item-content'>{menuItem.value}</span>
-                    </div>
+                  <DropdownItem
+                    key={index}
+                    className={classnames({
+                      'pl-5': this.props.isDisplayFiles != undefined,
+                      'position-relative': this.props.isDisplayFiles
+                    })}
+                    data-toggle={menuItem.key}
+                    onClick={this.onMenuItemClick}
+                    onKeyDown={this.onMenuItemKeyDown}
+                    onMouseMove={this.onDropDownMouseMove}
+                  >
+                    {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
+                      <i className="dropdown-item-tick sf2-icon-tick"></i>
+                    )}
+                    {menuItem.value}
                   </DropdownItem>
                 );
               }
