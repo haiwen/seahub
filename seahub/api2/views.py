@@ -28,7 +28,7 @@ from django.http import HttpResponse
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
 from django.utils.translation import gettext as _
-
+from seahub.auth.utils import get_virtual_id_by_email
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
