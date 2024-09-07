@@ -35,8 +35,12 @@
   margin: 40px 60px 0px 60px;
 }
 
+.seafile-markdown-viewer-modal-body .wiki-page-container .empty-loading-page {
+  display: none;
+}
+
 .seafile-markdown-viewer-modal-body .loading-tip {
-  margin-top: 20%;
+  margin-top: 30%;
 }
 
 .seafile-markdown-viewer-modal-body .sf-slate-viewer-scroll-container {

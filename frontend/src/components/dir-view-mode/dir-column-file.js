@@ -67,7 +67,13 @@ class DirColumnFile extends React.Component {
     }
 
     return (
-      <Modal isOpen={true} className='seafile-markdown-viewer-modal' contentClassName='seafile-markdown-viewer-modal-content' zIndex={1046}>
+      <Modal
+        isOpen={true}
+        className='seafile-markdown-viewer-modal'
+        toggle={this.props.onCloseMarkdownViewDialog}
+        contentClassName='seafile-markdown-viewer-modal-content'
+        zIndex={1046}
+      >
         <div className='seafile-markdown-viewer-modal-header'>
           <div className='seafile-markdown-viewer-modal-header-left-name'>
             <span ><img src={`${mediaUrl}img/file/256/md.png`} width='24' alt='' /></span>
