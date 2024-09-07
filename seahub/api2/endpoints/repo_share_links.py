@@ -90,8 +90,17 @@ class RepoShareLinks(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        offset = per_page * (current_page - 1)
+
         result = []
-        fileshares = FileShare.objects.filter(repo_id=repo_id)
+        fileshares = FileShare.objects.filter(repo_id=repo_id)[offset:offset + per_page]
 
         for fileshare in fileshares:
             link_info = get_share_link_info(fileshare)
