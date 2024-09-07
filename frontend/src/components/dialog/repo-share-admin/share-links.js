@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -7,6 +8,7 @@ import { gettext, siteRoot } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -30,9 +32,18 @@ class Item extends Component {
     this.setState({ isOperationShow: false });
   };
 
-  onDeleteLink = (e) => {
-    e.preventDefault();
+  onDeleteLink = () => {
     this.props.deleteItem(this.props.item);
+  };
+
+  cutLink = (link) => {
+    let length = link.length;
+    return link.slice(0, 9) + '...' + link.slice(length - 5);
+  };
+
+  toggleSelectLink = (e) => {
+    const { item } = this.props;
+    this.props.toggleSelectLink(item, e.target.checked);
   };
 
   render() {
@@ -48,6 +59,14 @@ class Item extends Component {
 
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        <td className="text-center">
+          <input
+            type="checkbox"
+            checked={item.isSelected || false}
+            className="vam"
+            onChange={this.toggleSelectLink}
+          />
+        </td>
         <td className="name">{item.creator_name}</td>
         <td>
           {item.is_dir ?
@@ -57,19 +76,25 @@ class Item extends Component {
           }
         </td>
         <td>
-          <a href={item.link} target="_blank" rel="noreferrer">{item.link}</a>
+          <a href={item.link} target="_blank" rel="noreferrer">
+            {this.cutLink(item.link)}
+          </a>
         </td>
         <td>
-          <span
+          {item.expire_date ? moment(item.expire_date).format('YYYY-MM-DD HH:mm') : '--'}
+        </td>
+        <td>{item.view_cnt}</td>
+        <td>
+          <i
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
+            className={`sf3-font-delete1 sf3-font action-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
             onClick={this.onDeleteLink}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-          </span>
+          </i>
         </td>
       </tr>
     );
@@ -89,7 +114,8 @@ class RepoShareAdminShareLinks extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      items: []
+      items: [],
+      isDeleteShareLinksDialogOpen: false
     };
   }
 
@@ -121,10 +147,57 @@ class RepoShareAdminShareLinks extends Component {
     });
   };
 
+  toggleDeleteShareLinksDialog = () => {
+    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
+  };
+
+  toggleSelectAllLinks = (e) => {
+    this._toggleSelectAllLinks(e.target.checked);
+  };
+
+  cancelSelectAllLinks = () => {
+    this._toggleSelectAllLinks(false);
+  };
+
+  _toggleSelectAllLinks = (isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        item.isSelected = isSelected;
+        return item;
+      })
+    });
+  };
+
+  toggleSelectLink = (link, isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        if (item.token == link.token) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    });
+  };
+
   render() {
-    const { loading, errorMsg, items } = this.state;
+    const { loading, errorMsg, items, isDeleteShareLinksDialogOpen } = this.state;
+    const selectedLinks = items.filter(item => item.isSelected);
+    const isAllLinksSelected = items.length == selectedLinks.length;
     return (
       <Fragment>
+        <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
+          <h6 className="font-weight-normal m-0">{gettext('Share Links')}</h6>
+          <div className="d-flex">
+            {selectedLinks.length > 0 && (
+              <>
+                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
+                <button className="btn btn-sm btn-secondary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
+              </>
+            )}
+          </div>
+        </div>
         {loading && <Loading />}
         {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
         {!loading && !errorMsg && !items.length &&
@@ -134,10 +207,15 @@ class RepoShareAdminShareLinks extends Component {
         <table className="table-hover">
           <thead>
             <tr>
-              <th width="22%">{gettext('Creator')}</th>
-              <th width="20%">{gettext('Name')}</th>
-              <th width="50%">{gettext('Link')}</th>
-              <th width="8%"></th>
+              <th width="5%" className="text-center">
+                <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />
+              </th>
+              <th width="20%">{gettext('Creator')}</th>
+              <th width="24%">{gettext('Name')}</th>
+              <th width="19%">{gettext('Link')}</th>
+              <th width="17%">{gettext('Expiration')}</th>
+              <th width="8%">{gettext('Visits')}</th>
+              <th width="7%"></th>
             </tr>
           </thead>
           <tbody>
@@ -147,12 +225,22 @@ class RepoShareAdminShareLinks extends Component {
                   key={index}
                   item={item}
                   deleteItem={this.deleteItem}
+                  toggleSelectLink={this.toggleSelectLink}
                 />
               );
             })}
           </tbody>
         </table>
         }
+        {isDeleteShareLinksDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete share links')}
+            message={gettext('Are you sure you want to delete the selected share link(s) ?')}
+            executeOperation={this.props.deleteShareLinks}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteShareLinksDialog}
+          />
+        )}
       </Fragment>
     );
   }

@@ -8,6 +8,8 @@ import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
 import RepoShareAdminGroupShares from './repo-share-admin/group-shares';
 
+import '../../css/repo-share-admin.css';
+
 const propTypes = {
   repo: PropTypes.object.isRequired,
   toggleDialog: PropTypes.func.isRequired,
@@ -53,11 +55,11 @@ class RepoShareAdminDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <div>
-        <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} className="repo-share-admin-container share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
           </ModalHeader>
-          <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
+          <ModalBody className="repo-share-admin-content-container share-dialog-content" role="tablist">
             <Fragment>
               <div className="share-dialog-side">
                 <Nav pills>

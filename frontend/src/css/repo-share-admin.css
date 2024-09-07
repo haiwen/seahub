@@ -1,0 +1,9 @@
+@media(min-width:768px) {
+  .repo-share-admin-container {
+    max-width: 1100px;
+  }
+}
+
+.repo-share-admin-content-container {
+  max-height: 500px;
+}
