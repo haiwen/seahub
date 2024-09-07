@@ -144,7 +144,7 @@ class DirColumnView extends React.Component {
     const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
     return (
       <div
-        className="dir-column-view 123"
+        className="dir-column-view"
         onMouseMove={onResizeMove}
         onMouseUp={this.onResizeMouseUp}
         ref={this.viewModeContainer}

@@ -42,4 +42,5 @@
 .seafile-markdown-viewer-modal-body .sf-slate-viewer-scroll-container {
   background: #fff;
   padding: 0px 0 0px;
+  overflow: hidden;
 }

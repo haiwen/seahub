@@ -74,6 +74,7 @@ class DirColumnFile extends React.Component {
             <span>{name}</span>
           </div>
           <div className='seafile-markdown-viewer-modal-header-right-tool'>
+            {/* Hidden for now, operations may be added later */}
             {/* <span className='sf3-font sf3-font-more'></span> */}
             <span className='sf3-font sf3-font-open' onClick={this.onOpenFile}></span>
             <span className='sf3-font sf3-font-x-01' onClick={this.props.onCloseMarkdownViewDialog}></span>
