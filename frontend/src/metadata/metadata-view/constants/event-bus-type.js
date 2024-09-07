@@ -51,5 +51,5 @@ export const EVENT_BUS_TYPE = {
   ERROR: 'error',
 
   // gallery
-  MODIFY_GALLERY_ZOOM_GEAR: 'modify_gallery_columns',
+  MODIFY_GALLERY_ZOOM_GEAR: 'modify_gallery_zoom_gear',
 };
