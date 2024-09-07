@@ -129,7 +129,12 @@ class SeafileMarkdownViewer extends React.Component {
 
   render() {
     const { isMarkdownEditorRenderCompleted } = this.state;
-    const { isWiki, containerClassName = '' } = this.props;
+    const { isFileLoading, isWiki, containerClassName = '' } = this.props;
+
+    if (isFileLoading) {
+      return <Loading />;
+    }
+
     const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
