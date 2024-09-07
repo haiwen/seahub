@@ -27,7 +27,7 @@
 
 .seafile-markdown-viewer-modal-body {
   padding: 0;
-  height: 600px;
+  height: calc(100vh / 2 + 130px);
   overflow: auto;
 }
 
