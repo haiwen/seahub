@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Modal, ModalBody } from 'reactstrap';
 import { SeafileMetadata } from '../../metadata';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import SeafileMarkdownViewer from '../seafile-markdown-viewer';
+
+import './dir-column-file.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -18,6 +21,8 @@ const propTypes = {
   latestContributor: PropTypes.string,
   onLinkClick: PropTypes.func.isRequired,
   currentRepoInfo: PropTypes.object,
+  currentDirent: PropTypes.object,
+  onCloseMarkdownViewDialog: PropTypes.func
 };
 
 class DirColumnFile extends React.Component {
@@ -46,6 +51,9 @@ class DirColumnFile extends React.Component {
   };
 
   render() {
+    const { currentDirent } = this.props;
+    const { name } = currentDirent;
+
     if (this.props.isFileLoadedErr) {
       return (
         <div className="message err-tip">{gettext('File does not exist.')}</div>
@@ -59,20 +67,39 @@ class DirColumnFile extends React.Component {
     }
 
     return (
-      <SeafileMarkdownViewer
-        isTOCShow={false}
-        isFileLoading={this.props.isFileLoading}
-        markdownContent={this.props.content}
-        lastModified = {this.props.lastModified}
-        latestContributor={this.props.latestContributor}
-        onLinkClick={this.props.onLinkClick}
-        repoID={this.props.repoID}
-        path={this.props.path}
+      <Modal
+        isOpen={true}
+        className='seafile-markdown-viewer-modal'
+        toggle={this.props.onCloseMarkdownViewDialog}
+        contentClassName='seafile-markdown-viewer-modal-content'
+        zIndex={1046}
       >
-        <span className='wiki-open-file position-fixed' onClick={this.onOpenFile}>
-          <i className="sf3-font sf3-font-expand-arrows-alt"></i>
-        </span>
-      </SeafileMarkdownViewer>
+        <div className='seafile-markdown-viewer-modal-header'>
+          <div className='seafile-markdown-viewer-modal-header-left-name'>
+            <span ><img src={`${mediaUrl}img/file/256/md.png`} width='24' alt='' /></span>
+            <span>{name}</span>
+          </div>
+          <div className='seafile-markdown-viewer-modal-header-right-tool'>
+            {/* Hidden for now, operations may be added later */}
+            {/* <span className='sf3-font sf3-font-more'></span> */}
+            <span className='sf3-font sf3-font-open' onClick={this.onOpenFile}></span>
+            <span className='sf3-font sf3-font-x-01' onClick={this.props.onCloseMarkdownViewDialog}></span>
+          </div>
+        </div>
+        <ModalBody className='seafile-markdown-viewer-modal-body'>
+          <SeafileMarkdownViewer
+            isTOCShow={false}
+            isFileLoading={this.props.isFileLoading}
+            markdownContent={this.props.content}
+            lastModified = {this.props.lastModified}
+            latestContributor={this.props.latestContributor}
+            onLinkClick={this.props.onLinkClick}
+            repoID={this.props.repoID}
+            path={this.props.path}
+          >
+          </SeafileMarkdownViewer>
+        </ModalBody>
+      </Modal>
     );
   }
 }

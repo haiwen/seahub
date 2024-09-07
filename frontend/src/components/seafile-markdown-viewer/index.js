@@ -28,7 +28,32 @@ class SeafileMarkdownViewer extends React.Component {
   constructor(props) {
     super(props);
     this.scrollRef = React.createRef();
+    this.seafileMarkdownViewerRef = null;
+    this.timer = null;
+    this.state = {
+      isMarkdownEditorRenderCompleted: false,
+    };
   }
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.checkMarkdownEditorRenderCompleted();
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    if (this.timer) clearInterval(this.timer);
+  }
+
+  checkMarkdownEditorRenderCompleted = () => {
+    if (this.seafileMarkdownViewerRef) {
+      const firstEl = this.seafileMarkdownViewerRef.firstElementChild;
+      if (firstEl.className !== 'empty-loading-page') {
+        this.setState({ isMarkdownEditorRenderCompleted: true });
+        if (this.timer) clearInterval(this.timer);
+      }
+    }
+  };
 
   onLinkClick = (link) => {
     this.props.onLinkClick(link);
@@ -103,22 +128,30 @@ class SeafileMarkdownViewer extends React.Component {
   };
 
   render() {
-    if (this.props.isFileLoading) {
+    const { isMarkdownEditorRenderCompleted } = this.state;
+    const { isFileLoading, isWiki, containerClassName = '' } = this.props;
+
+    if (isFileLoading) {
       return <Loading />;
     }
-    const { isWiki, containerClassName = '' } = this.props;
+
     const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
     const contentClassName = `wiki-page-content ${isWiki ? '' : 'w-100'}`;
     return (
       <div ref={this.scrollRef} className={containerClass}>
-        <div className={contentClassName}>
+        <div className={contentClassName} ref={ref => this.seafileMarkdownViewerRef = ref}>
           {this.props.children}
           {this.renderMarkdown()}
-          <p id="wiki-page-last-modified">
-            {gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span>
-          </p>
+          {isMarkdownEditorRenderCompleted && (
+            <p id="wiki-page-last-modified">
+              {gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span>
+            </p>
+          )}
+          {!isMarkdownEditorRenderCompleted && (
+            <Loading />
+          )}
         </div>
       </div>
     );
