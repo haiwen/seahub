@@ -63,6 +63,7 @@ const ViewToolBar = ({ viewId }) => {
 
   if (!view) return null;
 
+  const viewType = view.type;
   const readOnly = !window.sfMetadataContext.canModifyView(view);
 
   return (
@@ -91,10 +92,11 @@ const ViewToolBar = ({ viewId }) => {
           target="sf-metadata-sort-popover"
           readOnly={readOnly}
           sorts={view.sorts}
+          type={viewType}
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        {view.type !== VIEW_TYPE.GALLERY && (
+        {viewType !== VIEW_TYPE.GALLERY && (
           <GroupbySetter
             isNeedSubmit={true}
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
@@ -105,7 +107,7 @@ const ViewToolBar = ({ viewId }) => {
             modifyGroupbys={modifyGroupbys}
           />
         )}
-        {view.type !== VIEW_TYPE.GALLERY && (
+        {viewType !== VIEW_TYPE.GALLERY && (
           <HideColumnSetter
             wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
             target="sf-metadata-hide-column-popover"

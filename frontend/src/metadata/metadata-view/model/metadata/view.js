@@ -1,4 +1,4 @@
-import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY, FILTER_PREDICATE_TYPE, VIEW_TYPE } from '../../_basic';
+import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE } from '../../_basic';
 
 class View {
   constructor(object, columns) {
@@ -14,7 +14,7 @@ class View {
     this.filters = object.filters || [];
     this.filter_conjunction = object.filter_conjunction || 'Or';
 
-    this.basic_filters = object.basic_filters && object.basic_filters.length > 0 ? object.basic_filters : [{ column_key: PRIVATE_COLUMN_KEY.IS_DIR, filter_predicate: FILTER_PREDICATE_TYPE.IS, filter_term: 'all' }];
+    this.basic_filters = object.basic_filters && object.basic_filters.length > 0 ? object.basic_filters : VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type];
 
     // sort
     this.sorts = object.sorts || [];

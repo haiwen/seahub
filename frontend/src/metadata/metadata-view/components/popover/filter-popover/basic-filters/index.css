@@ -55,3 +55,7 @@
 .sf-metadata-basic-filters-select .sf-metadata-option-group {
   margin-left: 6px;
 }
+
+.filter-group-basic .sf-metadata-filters-list {
+  min-height: unset;
+}

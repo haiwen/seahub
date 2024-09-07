@@ -1,6 +1,7 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { siteRoot } from '../utils/constants';
+import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './metadata-view/_basic';
 
 class MetadataManagerAPI {
   init({ server, username, password, token }) {
@@ -114,7 +115,14 @@ class MetadataManagerAPI {
 
   addView = (repoID, name, type = 'table') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
-    const params = { name, type };
+    let params = {
+      name,
+      type,
+      data: {
+        basic_filters: VIEW_TYPE_DEFAULT_BASIC_FILTER[type],
+        sorts: VIEW_TYPE_DEFAULT_SORTS[type],
+      }
+    };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 

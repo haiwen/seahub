@@ -1,4 +1,4 @@
-.metadata-gallery-container {
+.sf-metadata-gallery-container {
   height: calc(100vh - 100px);
   margin: 2px;
   position: relative;
@@ -60,4 +60,13 @@
 
 .metadata-gallery-grid-image:hover {
   transform: scale(1.05);
+}
+
+.sf-metadata-gallery-loading-more {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }

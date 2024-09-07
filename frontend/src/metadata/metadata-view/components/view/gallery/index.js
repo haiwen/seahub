@@ -1,116 +1,106 @@
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../../hooks';
 import { Utils } from '../../../../../utils/utils';
-import { PRIVATE_COLUMN_KEY } from '../../../_basic';
-import { siteRoot, thumbnailSizeForGrid } from '../../../../../utils/constants';
-import { EVENT_BUS_TYPE } from '../../../constants';
+import { getDateDisplayString, PRIVATE_COLUMN_KEY } from '../../../_basic';
+import { siteRoot } from '../../../../../utils/constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../constants';
+import Main from './main';
+import toaster from '../../../../../components/toast';
 
 import './index.css';
 
-const BATCH_SIZE = 100;
 const CONCURRENCY_LIMIT = 3;
+const IMAGE_GAP = 2;
 
 const Gallery = () => {
-  const [imageWidth, setImageWidth] = useState(100);
-  const [columns, setColumns] = useState(8);
-  const [containerWidth, setContainerWidth] = useState(960);
-  const [adjustValue, setAdjustValue] = useState(() => {
-    try {
-      const savedValue = localStorage.getItem('sliderValue');
-      return savedValue !== null ? Number(savedValue) : 0;
-    } catch (error) {
-      return 0;
-    }
-  });
-  const [visibleItems, setVisibleItems] = useState(BATCH_SIZE);
-  const [loadingQueue, setLoadingQueue] = useState([]);
-  const [concurrentLoads, setConcurrentLoads] = useState(0);
-
   const imageRefs = useRef([]);
   const containerRef = useRef(null);
+  const [isFirstLoading, setFirstLoading] = useState(true);
+  const [isLoadingMore, setLoadingMore] = useState(false);
+  const [zoomGear, setZoomGear] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [loadingQueue, setLoadingQueue] = useState([]);
+  const [concurrentLoads, setConcurrentLoads] = useState(0);
+  const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
 
-  const { metadata } = useMetadata();
+  const { metadata, store } = useMetadata();
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
+  // Number of images per row
+  const columns = useMemo(() => {
+    return 8 - zoomGear;
+  }, [zoomGear]);
+
+  const imageSize = useMemo(() => {
+    return (containerWidth - columns * 2 - 2) / columns;
+  }, [containerWidth, columns]);
+
+  const groups = useMemo(() => {
+    if (isFirstLoading) return [];
+    const firstSort = metadata.view.sorts[0];
+    let init = metadata.rows.reduce((_init, record) => {
+      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+      const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+      const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
+      const img = {
+        name: fileName,
+        url: `${siteRoot}lib/${repoID}/file${path}`,
+        src: `${siteRoot}thumbnail/${repoID}/192${path}`,
+        date: date,
+      };
+      let _group = _init.find(g => g.name === date);
+      if (_group) {
+        _group.children.push(img);
+      } else {
+        _init.push({
+          name: date,
+          children: [img],
+        });
       }
-    };
+      return _init;
+    }, []);
 
-    const resizeObserver = new ResizeObserver(handleResize);
-    const currentContainer = containerRef.current;
-
-    if (currentContainer) {
-      resizeObserver.observe(currentContainer);
-    }
-
-    return () => {
-      if (currentContainer) {
-        resizeObserver.unobserve(currentContainer);
+    let _groups = [];
+    init.forEach((_init, index) => {
+      const { children } = _init;
+      const childrenCount = children.length;
+      const value = childrenCount / columns;
+      const rows = childrenCount % columns ? Math.ceil(value) : ~~(value);
+      const height = rows * (imageSize + IMAGE_GAP);
+      let top = 0;
+      if (index > 0) {
+        const lastGroup = _groups[index - 1];
+        const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
+        top = lastGroupTop + lastGroupHeight;
       }
-    };
-  }, []);
-
-  useEffect(() => {
-    window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_COLUMNS, (adjust) => {
-      setAdjustValue(adjust);
-    });
-  }, [columns]);
-
-  useEffect(() => {
-    const columns = (Utils.isDesktop() ? 8 : 4) - adjustValue;
-    const adjustedImageWidth = (containerWidth - columns * 2 - 2) / columns;
-    setColumns(columns);
-    setImageWidth(adjustedImageWidth);
-  }, [containerWidth, adjustValue]);
-
-  const imageItems = useMemo(() => {
-    return metadata.rows
-      .filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
-      .map(item => {
-        const fileName = item[PRIVATE_COLUMN_KEY.FILE_NAME];
-        const parentDir = item[PRIVATE_COLUMN_KEY.PARENT_DIR];
-        const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = item[PRIVATE_COLUMN_KEY.FILE_CTIME].split('T')[0];
-        const src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`;
-        return {
-          name: fileName,
-          url: `${siteRoot}lib/${repoID}/file${path}`,
-          src: src,
-          date: date,
-        };
+      _groups.push({
+        ..._init,
+        top,
+        height,
       });
-  }, [metadata, repoID]);
+    });
+    return _groups;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize]);
 
-  const groupedImages = useMemo(() => {
-    return imageItems.reduce((acc, item) => {
-      if (!acc[item.date]) {
-        acc[item.date] = [];
-      }
-      acc[item.date].push(item);
-      return acc;
-    }, {});
-  }, [imageItems]);
+  const loadMore = useCallback(async () => {
+    if (isLoadingMore) return;
+    if (!metadata.hasMore) return;
+    setLoadingMore(true);
 
-  const handleScroll = useCallback(() => {
-    if (visibleItems >= imageItems.length) return;
-    if (containerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        setVisibleItems(prev => Math.min(prev + BATCH_SIZE, imageItems.length));
-      }
+    try {
+      await store.loadMore(PER_LOAD_NUMBER);
+      setLoadingMore(false);
+    } catch (error) {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setLoadingMore(false);
+      return;
     }
-  }, [visibleItems, imageItems.length]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [handleScroll]);
+  }, [isLoadingMore, metadata, store]);
 
   const loadNextImage = useCallback(() => {
     if (loadingQueue.length === 0 || concurrentLoads >= CONCURRENCY_LIMIT) return;
@@ -142,7 +132,38 @@ const Gallery = () => {
   }, [loadingQueue, concurrentLoads, loadNextImage]);
 
   useEffect(() => {
+    const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
+    setZoomGear(gear);
+
+    const container = containerRef.current;
+    if (container) {
+      const { offsetWidth, clientHeight } = container;
+      setContainerWidth(offsetWidth);
+
+      // Calculate initial overScan information
+      const columns = 8 - gear;
+      const imageSize = (offsetWidth - columns * 2 - 2) / columns;
+      setOverScan({ top: 0, bottom: clientHeight + (imageSize + IMAGE_GAP) * 2 });
+    }
+    setFirstLoading(false);
+
+    // resize
+    const handleResize = () => {
+      if (!containerRef.current) return;
+      setContainerWidth(containerRef.current.offsetWidth);
+    };
+    const resizeObserver = new ResizeObserver(handleResize);
+    container && resizeObserver.observe(container);
+
+    // op
+    const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
+      window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
+      setZoomGear(zoomGear);
+    });
     return () => {
+      container && resizeObserver.unobserve(container);
+      modifyGalleryZoomGearSubscribe();
+
       // Cleanup image references on unmount
       imageRefs.current.forEach(img => {
         img.onload = null;
@@ -152,6 +173,18 @@ const Gallery = () => {
     };
   }, []);
 
+  const handleScroll = useCallback(() => {
+    if (!containerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      loadMore();
+    } else {
+      const overScanTop = Math.max(0, scrollTop - (imageSize + IMAGE_GAP) * 3);
+      const overScanBottom = scrollTop + clientHeight + (imageSize + IMAGE_GAP) * 3;
+      setOverScan({ top: overScanTop, bottom: overScanBottom });
+    }
+  }, [imageSize, loadMore]);
+
   const addToQueue = (image) => {
     setLoadingQueue(prev => [...prev, image]);
     loadNextImage();
@@ -159,24 +192,15 @@ const Gallery = () => {
 
   return (
     <div className="sf-metadata-container">
-      <div ref={containerRef} className="metadata-gallery-container">
-        {Object.keys(groupedImages).map(date => (
-          <div key={date} className="metadata-gallery-date-group">
-            <div className="metadata-gallery-date-tag">{date}</div>
-            <ul className="metadata-gallery-image-list" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-              {groupedImages[date].slice(0, visibleItems).map((img, index) => (
-                <li key={index} tabIndex={index} className='metadata-gallery-image-item' style={{ width: imageWidth, height: imageWidth }}>
-                  <img
-                    className="metadata-gallery-grid-image"
-                    src={img.src}
-                    alt={img.name}
-                    onLoad={() => addToQueue(img)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
+        {!isFirstLoading && (
+          <>
+            {Array.isArray(groups) && groups.length > 0 && (
+              <Main groups={groups} size={imageSize} onLoad={addToQueue} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
+            )}
+            {isLoadingMore && (<div className="sf-metadata-gallery-loading-more"><CenteredLoading /></div>)}
+          </>
+        )}
       </div>
     </div>
   );
