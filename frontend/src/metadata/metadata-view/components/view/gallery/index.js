@@ -3,7 +3,7 @@ import { CenteredLoading } from '@seafile/sf-metadata-ui-component';
 import { useMetadata } from '../../../hooks';
 import { Utils } from '../../../../../utils/utils';
 import { getDateDisplayString, PRIVATE_COLUMN_KEY } from '../../../_basic';
-import { siteRoot } from '../../../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid } from '../../../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../constants';
 import Main from './main';
 import toaster from '../../../../../components/toast';
@@ -47,7 +47,7 @@ const Gallery = () => {
       const img = {
         name: fileName,
         url: `${siteRoot}lib/${repoID}/file${path}`,
-        src: `${siteRoot}thumbnail/${repoID}/192${path}`,
+        src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
         date: date,
       };
       let _group = _init.find(g => g.name === date);
