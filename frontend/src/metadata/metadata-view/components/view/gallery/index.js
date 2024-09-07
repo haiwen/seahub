@@ -23,6 +23,7 @@ const Gallery = () => {
   const [loadingQueue, setLoadingQueue] = useState([]);
   const [concurrentLoads, setConcurrentLoads] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
+  const renderMoreTimer = useRef(null);
 
   const { metadata, store } = useMetadata();
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -170,6 +171,7 @@ const Gallery = () => {
         img.onerror = null;
       });
       imageRefs.current = [];
+      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
   }, []);
 
@@ -179,11 +181,16 @@ const Gallery = () => {
     if (scrollTop + clientHeight >= scrollHeight - 10) {
       loadMore();
     } else {
-      const overScanTop = Math.max(0, scrollTop - (imageSize + IMAGE_GAP) * 3);
-      const overScanBottom = scrollTop + clientHeight + (imageSize + IMAGE_GAP) * 3;
-      setOverScan({ top: overScanTop, bottom: overScanBottom });
+      renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
+      renderMoreTimer.current = setTimeout(() => {
+        const { scrollTop, clientHeight } = containerRef.current;
+        const overScanTop = Math.max(0, scrollTop - (imageSize + IMAGE_GAP) * 3);
+        const overScanBottom = scrollTop + clientHeight + (imageSize + IMAGE_GAP) * 3;
+        setOverScan({ top: overScanTop, bottom: overScanBottom });
+        renderMoreTimer.current = null;
+      }, 200);
     }
-  }, [imageSize, loadMore]);
+  }, [imageSize, loadMore, renderMoreTimer]);
 
   const addToQueue = (image) => {
     setLoadingQueue(prev => [...prev, image]);
@@ -195,9 +202,7 @@ const Gallery = () => {
       <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            {Array.isArray(groups) && groups.length > 0 && (
-              <Main groups={groups} size={imageSize} onLoad={addToQueue} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
-            )}
+            <Main groups={groups} size={imageSize} onLoad={addToQueue} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
             {isLoadingMore && (<div className="sf-metadata-gallery-loading-more"><CenteredLoading /></div>)}
           </>
         )}

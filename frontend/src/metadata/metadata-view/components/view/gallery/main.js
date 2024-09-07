@@ -48,6 +48,7 @@ const Main = ({ groups, overScan, columns, onLoad, size, gap }) => {
     );
   }, [overScan, columns, onLoad, size, gap]);
 
+  if (!Array.isArray(groups) || groups.length === 0) return null;
   return groups.map((group, index) => {
     return renderDisplayGroup(group, index);
   });
