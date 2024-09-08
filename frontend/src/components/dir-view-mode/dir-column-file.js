@@ -52,7 +52,7 @@ class DirColumnFile extends React.Component {
 
   render() {
     const { currentDirent } = this.props;
-    const { name } = currentDirent;
+    const { name } = currentDirent || {};
 
     if (this.props.isFileLoadedErr) {
       return (

@@ -91,7 +91,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
-      currentDirent: null
+      currentDirent: {}
     };
 
     this.oldonpopstate = window.onpopstate;
