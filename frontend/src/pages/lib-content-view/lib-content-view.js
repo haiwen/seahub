@@ -550,6 +550,8 @@ class LibContentView extends React.Component {
       content: '',
       viewId: '',
       isDirentDetailShow: false
+    }, () => {
+      this.showDir('/');
     });
   };
 

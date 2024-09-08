@@ -101,7 +101,7 @@ class MetadataManage(APIView):
             task_id = add_init_metadata_task(params=params)
             metadata_view = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
             if not metadata_view:
-                RepoMetadataViews.objects.add_view(repo_id, 'All files')
+                RepoMetadataViews.objects.add_view(repo_id, 'All files', 'table')
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -576,6 +576,7 @@ class MetadataViews(APIView):
         #  Add a metadata view
         view_name = request.data.get('name')
         view_type = request.data.get('type', 'table')
+        view_data = request.data.get('data', {})
         if not view_name:
             error_msg = 'view name is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -596,7 +597,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type)
+            new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type, view_data)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'

@@ -5,8 +5,10 @@ import { Button, UncontrolledPopover } from 'reactstrap';
 import { CustomizeAddTool, CustomizeSelect, Icon } from '@seafile/sf-metadata-ui-component';
 import {
   COLUMNS_ICON_CONFIG,
-  SORT_COLUMN_OPTIONS,
+  VIEW_SORT_COLUMN_OPTIONS,
+  VIEW_FIRST_SORT_COLUMN_OPTIONS,
   SORT_TYPE,
+  VIEW_TYPE,
   getColumnByKey,
 } from '../../../_basic';
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
@@ -28,8 +30,9 @@ const SORT_TYPES = [
 
 const propTypes = {
   readOnly: PropTypes.bool,
-  target: PropTypes.string.isRequired,
   isNeedSubmit: PropTypes.bool,
+  target: PropTypes.string.isRequired,
+  type: PropTypes.string,
   sorts: PropTypes.array,
   columns: PropTypes.array.isRequired,
   onSortComponentToggle: PropTypes.func,
@@ -44,8 +47,10 @@ class SortPopover extends Component {
 
   constructor(props) {
     super(props);
-    const { sorts, columns } = this.props;
+    const { sorts, columns, type } = this.props;
     this.sortTypeOptions = this.createSortTypeOptions();
+    this.supportFirstSortColumnOptions = VIEW_FIRST_SORT_COLUMN_OPTIONS[type || VIEW_TYPE.TABLE];
+    this.supportSortColumnOptions = VIEW_SORT_COLUMN_OPTIONS[type || VIEW_TYPE.TABLE];
     this.columnsOptions = this.createColumnsOptions(columns);
     this.state = {
       sorts: getDisplaySorts(sorts, columns),
@@ -154,7 +159,7 @@ class SortPopover extends Component {
   };
 
   createColumnsOptions = (columns = []) => {
-    const sortableColumns = columns.filter(column => SORT_COLUMN_OPTIONS.includes(column.type));
+    const sortableColumns = columns.filter(column => this.supportSortColumnOptions.includes(column.type));
     return sortableColumns.map((column) => {
       const { type, name } = column;
       return {
@@ -189,7 +194,7 @@ class SortPopover extends Component {
 
   renderSortItem = (column, sort, index) => {
     const { name, type } = column;
-    const { readOnly } = this.props;
+    const { readOnly, type: viewType } = this.props;
     const selectedColumn = {
       label: (
         <Fragment>
@@ -205,11 +210,16 @@ class SortPopover extends Component {
       label: <span className="select-option-name">{selectedTypeOption?.name || gettext('Up')}</span>
     };
 
+    let columnsOptions = this.columnsOptions;
+    if (index === 0) {
+      columnsOptions = columnsOptions.filter(o => this.supportFirstSortColumnOptions.includes(o.value.column.type));
+    }
+
     return (
       <div key={'sort-item-' + index} className="sort-item">
         {!readOnly &&
-          <div className="delete-sort" onClick={(event) => this.deleteSort(event, index)}>
-            <Icon iconName="fork-number"/>
+          <div className="delete-sort" onClick={!(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
+            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon iconName="fork-number"/>}
           </div>
         }
         <div className="condition">
@@ -218,7 +228,7 @@ class SortPopover extends Component {
               readOnly={readOnly}
               value={selectedColumn}
               onSelectOption={(value) => this.onSelectColumn(value, index)}
-              options={this.columnsOptions}
+              options={columnsOptions}
               searchable={true}
               searchPlaceholder={gettext('Search property')}
               noOptionsPlaceholder={gettext('No results')}

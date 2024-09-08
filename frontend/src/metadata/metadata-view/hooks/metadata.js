@@ -17,7 +17,7 @@ export const MetadataProvider = ({
   ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
-  const [metadata, setMetadata] = useState({ rows: [], columns: [] });
+  const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const storeRef = useRef(null);
   const { collaborators } = useCollaborators();
   const { showFirstView, setShowFirstView } = usePropsMetadata();
