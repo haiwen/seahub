@@ -40,28 +40,30 @@ const Gallery = () => {
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
-    let init = metadata.rows.reduce((_init, record) => {
-      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
-      const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-      const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
-      const img = {
-        name: fileName,
-        url: `${siteRoot}lib/${repoID}/file${path}`,
-        src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
-        date: date,
-      };
-      let _group = _init.find(g => g.name === date);
-      if (_group) {
-        _group.children.push(img);
-      } else {
-        _init.push({
-          name: date,
-          children: [img],
-        });
-      }
-      return _init;
-    }, []);
+    let init = metadata.rows
+      .filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
+      .reduce((_init, record) => {
+        const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+        const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+        const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+        const date = firstSort ? getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD') : record[PRIVATE_COLUMN_KEY.FILE_CTIME].split('T')[0];
+        const img = {
+          name: fileName,
+          url: `${siteRoot}lib/${repoID}/file${path}`,
+          src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
+          date: date,
+        };
+        let _group = _init.find(g => g.name === date);
+        if (_group) {
+          _group.children.push(img);
+        } else {
+          _init.push({
+            name: date,
+            children: [img],
+          });
+        }
+        return _init;
+      }, []);
 
     let _groups = [];
     init.forEach((_init, index) => {
