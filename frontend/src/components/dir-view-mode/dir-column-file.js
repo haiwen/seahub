@@ -36,17 +36,11 @@ class DirColumnFile extends React.Component {
     }
   }
 
-  onEditClick = (e) => {
-    e.preventDefault();
-    let { path, repoID } = this.props;
-    let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
-    window.open(url);
-  };
-
   onOpenFile = (e) => {
     e.preventDefault();
-    let { path, repoID } = this.props;
-    let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path);
+    let { path, repoID, currentDirent } = this.props;
+    let { name } = currentDirent || {};
+    let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '/' + name;
     window.open(newUrl, '_blank');
   };
 
