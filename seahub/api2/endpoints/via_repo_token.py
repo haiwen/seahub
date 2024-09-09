@@ -780,7 +780,7 @@ class ViaRepoTokenFile(APIView):
         """
         repo_id = request.repo_api_token_obj.repo_id
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1095,7 +1095,7 @@ class ViaRepoTokenFile(APIView):
 
         repo_id = request.repo_api_token_obj.repo_id
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1328,7 +1328,7 @@ class ViaRepoShareLink(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
