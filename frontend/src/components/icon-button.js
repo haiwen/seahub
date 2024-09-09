@@ -8,7 +8,6 @@ const propTypes = {
   icon: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  tag: PropTypes.string,
   href: PropTypes.string
 };
 
@@ -41,14 +40,13 @@ class IconButton extends React.Component {
         </Tooltip>
       </>
     );
-    if (this.props.tag && this.props.tag == 'a') {
+    if (this.props.href) {
       return (
         <div
           id={this.props.id}
           className='file-toolbar-btn'
-          tag="a"
-          href={this.props.href}
           aria-label={this.props.text}
+          onClick={() => window.open(this.props.href)}
         >
           {btnContent}
         </div>

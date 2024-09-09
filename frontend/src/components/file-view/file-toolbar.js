@@ -162,7 +162,6 @@ class FileToolbar extends React.Component {
               id="download-file"
               icon="download"
               text={gettext('Download')}
-              tag="a"
               href="?dl=1"
             />
           )}
@@ -177,7 +176,6 @@ class FileToolbar extends React.Component {
               id="open-via-client"
               icon="client"
               text={gettext('Open via Client')}
-              tag="a"
               href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
             />
           )}
