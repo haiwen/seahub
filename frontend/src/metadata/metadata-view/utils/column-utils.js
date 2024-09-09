@@ -208,6 +208,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('Size');
     case PRIVATE_COLUMN_KEY.FILE_DETAILS:
       return gettext('File details');
+    case PRIVATE_COLUMN_KEY.IMAGE_FEATURE:
+      return gettext('Image feature');
     default:
       return name;
   }

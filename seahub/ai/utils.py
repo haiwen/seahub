@@ -4,7 +4,7 @@ import jwt
 import time
 from urllib.parse import urljoin
 
-from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL, SECRET_KEY, SEAFEVENTS_SERVER_URL
 
 logger = logging.getLogger(__name__)
 
@@ -32,4 +32,13 @@ def generate_summary(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-summary')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
+
+
+def image_search(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/image-search')
+    resp = requests.post(url, json=params, headers=headers)
     return resp

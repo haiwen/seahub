@@ -50,6 +50,7 @@ def get_sys_columns():
         METADATA_TABLE.columns.size.to_dict(),
         METADATA_TABLE.columns.suffix.to_dict(),
         METADATA_TABLE.columns.file_details.to_dict(),
+        METADATA_TABLE.columns.image_feature.to_dict(),
     ]
 
     return columns
