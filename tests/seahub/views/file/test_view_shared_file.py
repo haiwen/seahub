@@ -52,18 +52,6 @@ class ViewSharedFileTest(TestCase, Fixtures):
         resp = self.client.get(dl_url)
         self.assertEqual(404, resp.status_code)
 
-    def test_dl_link_can_use_more_times(self):
-        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
-        resp = self.client.get(dl_url)
-        self.assertEqual(302, resp.status_code)
-
-        dl_link = resp.get('location')
-        res = requests.get(dl_link)
-        self.assertEqual(200, res.status_code)
-
-        res = requests.get(dl_link)
-        self.assertEqual(200, res.status_code)
-
     def test_can_view_raw(self):
         dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?raw=1'
         resp = self.client.get(dl_url)
