@@ -715,13 +715,19 @@ class ViaRepoTokenFile(APIView):
         if file_obj:
             file_name = file_obj.obj_name
             file_size = file_obj.size
-            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
-            can_edit, error_msg = can_edit_file(file_name, file_size, repo)
+            can_preview, _ = can_preview_file(file_name, file_size, repo)
+            can_edit, _ = can_edit_file(file_name, file_size, repo)
         else:
             file_name = os.path.basename(file_path.rstrip('/'))
             file_size = ''
             can_preview = False
             can_edit = False
+
+        try:
+            is_locked, _ = check_file_lock(repo_id, file_path, '')
+        except Exception as e:
+            logger.error(e)
+            is_locked = False
 
         file_info = {
             'type': 'file',
@@ -733,6 +739,7 @@ class ViaRepoTokenFile(APIView):
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
             'can_preview': can_preview,
             'can_edit': can_edit,
+            'is_locked': is_locked,
         }
 
         return file_info
