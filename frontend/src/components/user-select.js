@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
 import { seafileAPI } from '../utils/seafile-api';
-import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
+import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 import { UserSelectStyle } from './common/select';
@@ -54,24 +54,21 @@ class UserSelect extends React.Component {
             let obj = {};
             obj.value = item.name;
             obj.email = item.email;
-            if (enableShowContactEmailWhenSearchUser) {
-              obj.label = (
-                <div className="d-flex">
-                  <img src={item.avatar_url} className="avatar" width="24" alt="" />
-                  <div className="ml-2">
-                    <span className="user-option-name">{item.name}</span><br />
-                    <span className="user-option-email">{item.contact_email}</span>
-                  </div>
+            obj.label = (enableShowContactEmailWhenSearchUser || enableShowLoginIDWhenSearchUser) ? (
+              <div className="d-flex">
+                <img src={item.avatar_url} className="avatar" width="24" alt="" />
+                <div className="ml-2">
+                  <span className="user-option-name">{item.name}</span><br />
+                  {enableShowContactEmailWhenSearchUser && <span className="user-option-email">{item.contact_email}</span>}
+                  {enableShowLoginIDWhenSearchUser && <span className="user-option-email">{item.login_id}</span>}
                 </div>
-              );
-            } else {
-              obj.label = (
-                <>
-                  <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-                  <span className='select-module select-module-name'>{item.name}</span>
-                </>
-              );
-            }
+              </div>
+            ) : (
+              <React.Fragment>
+                <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
+                <span className='select-module select-module-name'>{item.name}</span>
+              </React.Fragment>
+            );
             this.options.push(obj);
           }
           callback(this.options);
