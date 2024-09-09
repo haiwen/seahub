@@ -41,7 +41,7 @@ class ViewSharedFileTest(TestCase, Fixtures):
         dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
         resp = self.client.get(dl_url)
         self.assertEqual(302, resp.status_code)
-        assert '8082/files/' in resp.get('location')
+        assert '8082/f/' in resp.get('location')
 
     def test_can_not_download_viewonly(self):
         assert self.fs.get_permissions()['can_download'] is True
