@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sf3-font"; /* Project id 1230969 */
-  src: url('./iconfont.eot?t=1725352415161'); /* IE9 */
-  src: url('./iconfont.eot?t=1725352415161#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('./iconfont.woff2?t=1725352415161') format('woff2'),
-       url('./iconfont.woff?t=1725352415161') format('woff'),
-       url('./iconfont.ttf?t=1725352415161') format('truetype'),
-       url('./iconfont.svg?t=1725352415161#sf3-font') format('svg');
+  src: url('iconfont.eot?t=1725848878923'); /* IE9 */
+  src: url('iconfont.eot?t=1725848878923#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1725848878923') format('woff2'),
+       url('iconfont.woff?t=1725848878923') format('woff'),
+       url('iconfont.ttf?t=1725848878923') format('truetype'),
+       url('iconfont.svg?t=1725848878923#sf3-font') format('svg');
 }
 
 .sf3-font {
