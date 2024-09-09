@@ -7,6 +7,9 @@ import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
+import toaster from '../toast';
+import { seafileAPI } from '../../utils/seafile-api';
+import TipDialog from '../dialog/tip-dailog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -22,7 +25,8 @@ const propTypes = {
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
-  children: PropTypes.object
+  children: PropTypes.object,
+  loadDirentList: PropTypes.func
 };
 
 class DirOperationToolbar extends React.Component {
@@ -37,8 +41,10 @@ class DirOperationToolbar extends React.Component {
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
-      isMobileOpMenuOpen: false
+      isMobileOpMenuOpen: false,
+      isImportingSdoc: false,
     };
+    this.fileInputRef = React.createRef();
   }
 
   toggleDesktopOpMenu = () => {
@@ -156,6 +162,38 @@ class DirOperationToolbar extends React.Component {
     }
   };
 
+  onUploadSdoc = (e) => {
+    this.fileInputRef.current.click();
+  };
+
+  uploadSdoc = (e) => {
+    // no file selected
+    if (!this.fileInputRef.current.files.length) {
+      return;
+    }
+    // check file extension
+    let fileName = this.fileInputRef.current.files[0].name;
+    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'sdoczip') {
+      toaster.warning(gettext('Please choose a .sdoczip file.'), { hasCloseButton: true, duration: null });
+      return;
+    }
+    this.setState({ isImportingSdoc: true });
+    const file = this.fileInputRef.current.files[0];
+    let { repoID, path } = this.props;
+    seafileAPI.importSdoc(file, repoID, path).then((res) => {
+      this.props.loadDirentList(path);
+
+    }).catch((error) => {
+      let errMsg = Utils.getErrorMsg(error);
+      toaster.danger(errMsg);
+    }).finally(() => {
+      this.fileInputRef.current.value = '';
+      setTimeout(() => {
+        this.setState({ isImportingSdoc: false });
+      }, 500);
+    });
+  };
+
   render() {
     let { path, repoName, userPerm } = this.props;
 
@@ -185,6 +223,10 @@ class DirOperationToolbar extends React.Component {
             'icon': 'upload-files',
             'text': gettext('Upload Folder'),
             'onClick': this.onUploadFolder
+          }, {
+            'icon': 'import-sdoc',
+            'text': gettext('Import sdoc'),
+            'onClick': this.onUploadSdoc
           });
         } else {
           opList.push({
@@ -355,6 +397,12 @@ class DirOperationToolbar extends React.Component {
             />
           </ModalPortal>
         }
+        {this.state.isImportingSdoc && (
+          <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
+        )}
+        <div>
+          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} />
+        </div>
       </Fragment>
     );
   }

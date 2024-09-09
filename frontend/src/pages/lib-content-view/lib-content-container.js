@@ -254,6 +254,7 @@ class LibContentContainer extends React.Component {
                 repoTags={this.props.repoTags}
                 onItemMove={this.props.onItemMove}
                 isDesktop={isDesktop}
+                loadDirentList={this.props.loadDirentList}
               />
             )}
           </div>

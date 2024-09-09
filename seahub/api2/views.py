@@ -112,6 +112,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -2064,6 +2065,7 @@ class UploadLinkView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response(url)
+
 
 class UpdateLinkView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

@@ -32,6 +32,7 @@ const propTypes = {
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
@@ -77,6 +78,7 @@ class CurDirPath extends React.Component {
           onFileTagChanged={this.props.onFileTagChanged}
           repoTags={this.props.repoTags}
           onItemMove={this.props.onItemMove}
+          loadDirentList={this.props.loadDirentList}
         />
         {!this.props.isDesktop && this.props.direntList.length > 0 &&
         <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
