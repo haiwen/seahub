@@ -182,10 +182,7 @@ class DirentListView extends React.Component {
     const name = item.name;
     const repoID = this.props.repoID;
     const path = Utils.encodePath(Utils.joinPath(this.props.path, name));
-    let src = `${siteRoot}repo/${repoID}/raw${path}`;
-    if (path.endsWith('.heic')) {
-      src = `${siteRoot}thumbnail/${repoID}/1024${path}`;
-    }
+
     return {
       'name': name,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
