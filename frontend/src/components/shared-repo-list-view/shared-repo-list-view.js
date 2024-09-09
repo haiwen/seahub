@@ -6,6 +6,7 @@ import SharedRepoListItem from './shared-repo-list-item';
 import toaster from '../toast';
 import LibsMobileThead from '../libs-mobile-thead';
 import Loading from '../loading';
+import { LIST_MODE } from '../dir-view-mode/constants';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -86,7 +87,7 @@ class SharedRepoListView extends React.Component {
   };
 
   renderRepoListView = () => {
-    const { currentViewMode = 'list' } = this.props;
+    const { currentViewMode = LIST_MODE } = this.props;
     return (
       <Fragment>
         {this.props.repoList.map(repo => {
@@ -112,10 +113,10 @@ class SharedRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { theadHidden = false, currentViewMode = 'list' } = this.props;
+    const { theadHidden = false, currentViewMode = LIST_MODE } = this.props;
     const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
-    return currentViewMode == 'list' ? (
+    return currentViewMode == LIST_MODE ? (
       <table className={theadHidden ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>

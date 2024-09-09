@@ -34,8 +34,6 @@ const propTypes = {
   onMainNavBarClick: PropTypes.func.isRequired,
   // file
   isViewFile: PropTypes.bool.isRequired,
-  isFileLoadedErr: PropTypes.bool.isRequired,
-  hash: PropTypes.string,
   fileTags: PropTypes.array.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
@@ -305,8 +303,6 @@ class LibContentContainer extends React.Component {
               onDeleteNode={this.props.onDeleteNode}
               isViewFile={this.props.isViewFile}
               isFileLoading={this.props.isFileLoading}
-              isFileLoadedErr={this.props.isFileLoadedErr}
-              hash={this.props.hash}
               filePermission={this.props.filePermission}
               content={this.props.content}
               viewId={this.props.viewId}

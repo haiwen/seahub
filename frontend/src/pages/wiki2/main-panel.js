@@ -12,7 +12,6 @@ import RightHeader from './wiki-right-header';
 const propTypes = {
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
-  isViewFile: PropTypes.bool.isRequired,
   isDataLoading: PropTypes.bool.isRequired,
   editorContent: PropTypes.object,
   permission: PropTypes.string,
@@ -57,9 +56,9 @@ class MainPanel extends Component {
   }
 
   render() {
-    const { permission, pathExist, isDataLoading, isViewFile, config, onUpdatePage, isUpdateBySide } = this.props;
+    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide } = this.props;
     const { currentPageConfig = {} } = this.state;
-    const isViewingFile = pathExist && !isDataLoading && isViewFile;
+    const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = !(permission === 'rw');
 
     return (

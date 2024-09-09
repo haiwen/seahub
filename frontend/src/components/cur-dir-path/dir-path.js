@@ -1,12 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { InternalLinkOperation } from '../operations';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
-import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import MetadataViewId2Name from '../../metadata/metadata-view-id-2-name';
 
@@ -151,42 +148,24 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            {this.props.isViewFile ?
-              <ViewFileToolbar
-                path={this.props.currentPath}
-                repoID={this.props.repoID}
-                userPerm={this.props.userPerm}
-                repoEncrypted={this.props.repoEncrypted}
-                enableDirPrivateShare={this.props.enableDirPrivateShare}
-                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                filePermission={this.props.filePermission}
-                fileTags={this.props.fileTags}
-                onFileTagChanged={this.props.onFileTagChanged}
-                showShareBtn={this.props.showShareBtn}
-                repoTags={this.props.repoTags}
-              >
-                <span className="path-file-name">{item}</span>
-              </ViewFileToolbar>
-              :
-              <DirOperationToolBar
-                path={this.props.currentPath}
-                repoID={this.props.repoID}
-                repoName={this.props.repoName}
-                repoEncrypted={this.props.repoEncrypted}
-                direntList={this.props.direntList}
-                showShareBtn={this.props.showShareBtn}
-                enableDirPrivateShare={this.props.enableDirPrivateShare}
-                userPerm={this.props.userPerm}
-                isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                onAddFile={this.props.onAddFile}
-                onAddFolder={this.props.onAddFolder}
-                onUploadFile={this.props.onUploadFile}
-                onUploadFolder={this.props.onUploadFolder}
-                loadDirentList={this.props.loadDirentList}
-              >
-                <span className="path-file-name">{item}</span>
-              </DirOperationToolBar>
-            }
+            <DirOperationToolBar
+              path={this.props.currentPath}
+              repoID={this.props.repoID}
+              repoName={this.props.repoName}
+              repoEncrypted={this.props.repoEncrypted}
+              direntList={this.props.direntList}
+              showShareBtn={this.props.showShareBtn}
+              enableDirPrivateShare={this.props.enableDirPrivateShare}
+              userPerm={this.props.userPerm}
+              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+              onAddFile={this.props.onAddFile}
+              onAddFolder={this.props.onAddFolder}
+              onUploadFile={this.props.onUploadFile}
+              onUploadFolder={this.props.onUploadFolder}
+              loadDirentList={this.props.loadDirentList}
+            >
+              <span className="path-file-name">{item}</span>
+            </DirOperationToolBar>
           </Fragment>
         );
       } else {
@@ -219,16 +198,8 @@ class DirPath extends React.Component {
   };
 
   render() {
-    let { currentPath, repoName, fileTags } = this.props;
+    let { currentPath, repoName } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
-
-    let tagTitle = '';
-    if (fileTags.length > 0) {
-      fileTags.forEach(item => {
-        tagTitle += item.name + ' ';
-      });
-    }
-
     return (
       <div className="path-container dir-view-path">
         <span className="cur-view-path-btn mr-1" onClick={this.props.toggleTreePanel}>
@@ -276,19 +247,6 @@ class DirPath extends React.Component {
           <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
         }
         {pathElem}
-        {this.props.isViewFile && !this.isViewMetadata() && (
-          <InternalLinkOperation repoID={this.props.repoID} path={this.props.currentPath}/>
-        )}
-        {(this.props.isViewFile && fileTags.length !== 0) &&
-          <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1 d-flex align-items-center">
-            {fileTags.map((fileTag, index) => {
-              return (<span className="file-tag" key={fileTag.id} style={{ zIndex: index, backgroundColor: fileTag.color }}></span>);
-            })}
-            <UncontrolledTooltip target="column-mode-file-tags" placement="bottom">
-              {tagTitle}
-            </UncontrolledTooltip>
-          </span>
-        }
       </div>
     );
   }

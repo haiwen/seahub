@@ -344,7 +344,13 @@ class DirColumnNav extends React.Component {
           <Loading />
         ) : (
           <>
-            <TreeSection title={gettext('Files')} moreKey={{ name: 'files' }} moreOperations={this.state.operationList} moreOperationClick={this.onMoreOperationClick} isDisplayFiles={this.state.isDisplayFiles}>
+            <TreeSection
+              title={gettext('Files')}
+              moreKey={{ name: 'files' }}
+              moreOperations={this.state.operationList}
+              moreOperationClick={this.onMoreOperationClick}
+              isDisplayFiles={this.state.isDisplayFiles}
+            >
               <TreeView
                 userPerm={userPerm}
                 isNodeMenuShow={this.isNodeMenuShow}

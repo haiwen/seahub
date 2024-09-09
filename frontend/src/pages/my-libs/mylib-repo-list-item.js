@@ -22,6 +22,7 @@ import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -304,12 +305,12 @@ class MylibRepoListItem extends React.Component {
 
   renderPCUI = () => {
     const { isStarred } = this.state;
-    const { repo, currentViewMode = 'list' } = this.props;
-    let useBigLibaryIcon = currentViewMode == 'grid';
+    const { repo, currentViewMode = LIST_MODE } = this.props;
+    let useBigLibaryIcon = currentViewMode == GRID_MODE;
     let iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
-    return currentViewMode == 'list' ? (
+    return currentViewMode == LIST_MODE ? (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus}>
         <td className="text-center">
           <i
