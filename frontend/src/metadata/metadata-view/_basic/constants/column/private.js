@@ -26,6 +26,7 @@ export const PRIVATE_COLUMN_KEY = {
   SIZE: '_size',
   SUFFIX: '_suffix',
   FILE_DETAILS: '_file_details',
+  IMAGE_FEATURE: '_image_feature',
 };
 
 export const PRIVATE_COLUMN_KEYS = [
@@ -53,6 +54,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.SIZE,
   PRIVATE_COLUMN_KEY.SUFFIX,
   PRIVATE_COLUMN_KEY.FILE_DETAILS,
+  PRIVATE_COLUMN_KEY.IMAGE_FEATURE,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [

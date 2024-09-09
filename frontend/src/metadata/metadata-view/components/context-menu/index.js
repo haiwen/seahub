@@ -16,6 +16,7 @@ const OPERATION = {
   OPEN_IN_NEW_TAB: 'open-new-tab',
   GENERATE_SUMMARY: 'generate-summary',
   IMAGE_CAPTION: 'image-caption',
+  IMAGE_SEARCH: 'image-search',
 };
 
 const ContextMenu = ({
@@ -29,6 +30,7 @@ const ContextMenu = ({
   updateRecords,
   getTableContentRect,
   getTableCanvasContainerRect,
+  searchSimilarImages: searchSimilarImagesAPI,
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -87,13 +89,16 @@ const ContextMenu = ({
     const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab') });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
+    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
     if (summaryColumn) {
-      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
       if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
       } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description') });
       }
+    }
+    if (Utils.imageCheck(fileName) && canModifyRow(record)) {
+      list.push({ value: OPERATION.IMAGE_SEARCH, label: gettext('Search similar images') });
     }
 
     return list;
@@ -202,6 +207,13 @@ const ContextMenu = ({
     });
   }, [isGroupView, selectedPosition, recordGetterByIndex, updateRecords]);
 
+  const searchSimilarImages = useCallback(() => {
+    const { groupRecordIndex, rowIdx } = selectedPosition;
+    const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
+    if (!record) return;
+    searchSimilarImagesAPI && searchSimilarImagesAPI(record);
+  }, [isGroupView, selectedPosition, recordGetterByIndex, searchSimilarImagesAPI]);
+
   const handleOptionClick = useCallback((event, option) => {
     event.stopPropagation();
     switch (option.value) {
@@ -229,12 +241,16 @@ const ContextMenu = ({
         imageCaption && imageCaption();
         break;
       }
+      case OPERATION.IMAGE_SEARCH: {
+        searchSimilarImages && searchSimilarImages();
+        break;
+      }
       default: {
         break;
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary, imageCaption]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary, imageCaption, searchSimilarImages]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

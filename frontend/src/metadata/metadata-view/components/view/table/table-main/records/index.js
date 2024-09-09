@@ -16,6 +16,7 @@ import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../../utils/viewport';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../../utils/grid';
 import ContextMenu from '../../../../context-menu';
+import SimilarImageDialog from '../../../../dialog/similar-image';
 
 class Records extends Component {
 
@@ -613,6 +614,14 @@ class Records extends Component {
     return this.resultContainerRef.getBoundingClientRect();
   };
 
+  searchSimilarImages = (record) => {
+    this.setState({ similarImageRecord: record });
+  };
+
+  closeSimilarImages = () => {
+    this.setState({ similarImageRecord: null });
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView, recordGetterByIndex, updateRecords } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -621,7 +630,7 @@ class Records extends Component {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
-      contextMenu: (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} updateRecords={updateRecords} />),
+      contextMenu: (<ContextMenu isGroupView={isGroupView} recordGetterByIndex={recordGetterByIndex} updateRecords={updateRecords} searchSimilarImages={this.searchSimilarImages} />),
       hasSelectedRecord: this.hasSelectedRecord(),
       getScrollLeft: this.getScrollLeft,
       getScrollTop: this.getScrollTop,
@@ -659,7 +668,9 @@ class Records extends Component {
   render() {
     const { recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
       deleteColumn, modifyColumnOrder } = this.props;
-    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
+    const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx,
+      similarImageRecord
+    } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = totalWidth + SEQUENCE_COLUMN_WIDTH + CANVAS_RIGHT_INTERVAL + groupOffsetLeft;
     const hasSelectedRecord = this.hasSelectedRecord();
@@ -721,6 +732,7 @@ class Records extends Component {
           getRecordsSummaries={() => {}}
           loadAll={this.props.loadAll}
         />
+        {similarImageRecord && <SimilarImageDialog repoID={window.sfMetadataStore.repoId} onToggle={this.closeSimilarImages} record={similarImageRecord} />}
       </Fragment>
     );
   }
