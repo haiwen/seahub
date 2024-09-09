@@ -9,6 +9,7 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
 import toaster from '../toast';
 import { seafileAPI } from '../../utils/seafile-api';
+import TipDialog from '../dialog/tip-dailog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -40,7 +41,8 @@ class DirOperationToolbar extends React.Component {
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
-      isMobileOpMenuOpen: false
+      isMobileOpMenuOpen: false,
+      isImportingSdoc: false,
     };
     this.fileInputRef = React.createRef();
   }
@@ -172,11 +174,11 @@ class DirOperationToolbar extends React.Component {
     // check file extension
     let fileName = this.fileInputRef.current.files[0].name;
     if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'sdoczip') {
-      toaster.warning(gettext('Please choose a .sdoczip file.'));
+      toaster.warning(gettext('Please choose a .sdoczip file.'), { hasCloseButton: true, duration: null });
       return;
     }
+    this.setState({ isImportingSdoc: true });
     const file = this.fileInputRef.current.files[0];
-    toaster.notify(gettext('It may take some time, please wait.'));
     let { repoID, path } = this.props;
     seafileAPI.importSdoc(file, repoID, path).then((res) => {
       this.props.loadDirentList(path);
@@ -184,6 +186,11 @@ class DirOperationToolbar extends React.Component {
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
+    }).finally(() => {
+      this.fileInputRef.current.value = '';
+      setTimeout(() => {
+        this.setState({ isImportingSdoc: false });
+      }, 500);
     });
   };
 
@@ -390,6 +397,9 @@ class DirOperationToolbar extends React.Component {
             />
           </ModalPortal>
         }
+        {this.state.isImportingSdoc && (
+          <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
+        )}
         <div>
           <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} />
         </div>
