@@ -1136,10 +1136,9 @@ class Repos(APIView):
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return None, api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
-
         if org_id and org_id > 0:
             disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
-            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
+            if (disable_encrypted_library is not None) and int(disable_encrypted_library.value) and (passwd is not None):
                 return None, api_error(status.HTTP_403_FORBIDDEN,
                                        'NOT allow to create encrypted library.')
             repo_id = seafile_api.create_org_repo(repo_name,
