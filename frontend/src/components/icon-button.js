@@ -46,7 +46,7 @@ class IconButton extends React.Component {
           id={this.props.id}
           className='file-toolbar-btn'
           aria-label={this.props.text}
-          onClick={() => window.open(this.props.href)}
+          onClick={() => window.open(this.props.href, '_parent')}
         >
           {btnContent}
         </div>
