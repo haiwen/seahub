@@ -9,7 +9,6 @@ import subprocess
 from io import BytesIO
 import zipfile
 from fitz import open as fitz_open
-import pyheif
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -134,10 +133,6 @@ def generate_thumbnail(request, repo_id, size, path):
         return create_psd_thumbnails(repo, file_id, path, size,
                                            thumbnail_file, file_size)
 
-    if fileext.lower() == 'heic':
-        return create_heic_thumbnails(repo, file_id, path, size,
-                                           thumbnail_file, file_size)
-
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
 
@@ -254,44 +249,6 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
         logger.error(e)
         os.unlink(tmp_path)
         return (False, 500)
-
-
-def create_heic_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
-    t1 = timeit.default_timer()
-    token = seafile_api.get_fileserver_access_token(repo.id,
-                                                    file_id, 'view', '', use_onetime=False)
-
-    if not token:
-        return (False, 500)
-
-    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
-    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
-    try:
-        heif_file = urllib.request.urlopen(inner_path).read()
-        heif_data = pyheif.read(heif_file)
-        image = Image.frombytes(
-            heif_data.mode,
-            heif_data.size,
-            heif_data.data,
-            "raw", heif_data.mode, heif_data.stride,
-        )
-        image.save(tmp_path, format="PNG")
-    except Exception as e:
-        logger.error(e)
-        return (False, 500)
-
-    t2 = timeit.default_timer()
-    logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
-
-    try:
-        ret = _create_thumbnail_common(tmp_path, thumbnail_file, size)
-        os.unlink(tmp_path)
-        return ret
-    except Exception as e:
-        logger.error(e)
-        os.unlink(tmp_path)
-        return (False, 500)
-
 
 def _create_thumbnail_common(fp, thumbnail_file, size):
     """Common logic for creating image thumbnail.
