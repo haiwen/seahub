@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from django.contrib.sessions.backends.db import SessionStore
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,6 +15,7 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -198,3 +200,25 @@ class InternalCheckFileOperationAccess(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'user': rat.app_name})
+
+class CheckThumbnailAccess(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
+
+    def post(self, request, repo_id):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        path = request.data.get('path')
+        session_key = request.COOKIES.get('session_key')
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not path:
+            error_msg = 'path invalid'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        session_data = SessionStore(session_key=session_key).load()
+        if session_data:
+            request.user.username = session_data['_auth_user_name']
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        return Response({'success': True})
