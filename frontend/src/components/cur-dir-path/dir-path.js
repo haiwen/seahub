@@ -249,7 +249,7 @@ class DirPath extends React.Component {
             <span className="path-split">/</span>
           </Fragment>
         )}
-        {(currentPath === '/' || currentPath === '' || Utils.isMarkdownFile(this.props.currentPath)) ?
+        {(currentPath === '/' || currentPath === '') ?
           <DirOperationToolBar
             path={this.props.currentPath}
             repoID={this.props.repoID}
@@ -269,8 +269,8 @@ class DirPath extends React.Component {
           </DirOperationToolBar> :
           <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
         }
-        {Utils.isMarkdownFile(this.props.currentPath) ? null : pathElem}
-        {this.props.isViewFile && !Utils.isMarkdownFile(this.props.currentPath) && !this.isViewMetadata() && (
+        {pathElem}
+        {this.props.isViewFile && !this.isViewMetadata() && (
           <InternalLinkOperation repoID={this.props.repoID} path={this.props.currentPath}/>
         )}
         {(this.props.isViewFile && fileTags.length !== 0) &&

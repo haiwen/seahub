@@ -485,7 +485,7 @@ class LibContentView extends React.Component {
     // update state
     this.setState({
       isFileLoading: true,
-      path: filePath,
+      path: noRedirection ? this.state.path : filePath,
       isViewFile: true
     });
 
@@ -1902,7 +1902,7 @@ class LibContentView extends React.Component {
   onCloseMarkdownViewDialog = () => {
     this.setState({
       isViewFile: false,
-      path: '/'
+      currentDirent: {},
     });
   };
 
