@@ -20,7 +20,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo }) => {
     <TreeSection title={gettext('Others')} className="dir-others">
       {trashUrl &&
         <div className='dir-others-item text-nowrap' title={gettext('Trash')} onClick={toggleTrashDialog}>
-          <span className="sf3-font-recycle1 sf3-font"></span>
+          <span className="sf3-font-trash sf3-font"></span>
           <span className="dir-others-item-text">{gettext('Trash')}</span>
         </div>
       }
