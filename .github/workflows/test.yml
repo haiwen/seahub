@@ -30,6 +30,7 @@ jobs:
         run: |
           git clone --depth=1 --branch=master https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
           cd /tmp/seafile-test-deploy && git fetch origin master:master && git checkout master
+          export JWT_PRIVATE_KEY=qwertyuiop SITE_ROOT=/
           ./bootstrap.sh
 
       - name: pip install
