@@ -481,7 +481,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/via-repo-token/sync-batch-copy-item/$', ViaRepoBatchCopy.as_view(), name='via-repo-token-copy'),
     re_path(r'^api/v2.1/via-repo-token/batch-delete-item/$', ViaRepoBatchDelete.as_view(), name='via-repo-token-delete'),
     re_path(r'^api/v2.1/via-repo-token/file/$', ViaRepoTokenFile.as_view(), name='via-repo-token-file'),
-    re_path(r'^api/v2.1/via-repo-token/move-folder-merge/$', ViaRepoMoveDir.as_view(), name='via-repo-token-move-folder'),
+    re_path(r'^api/v2.1/via-repo-token/move-dir/$', ViaRepoMoveDir.as_view(), name='via-repo-token-move-dir'),
     re_path(r'^api/v2.1/via-repo-token/share-links/$', ViaRepoShareLink.as_view(), name='via-repo-token-share-links'),
 
     # user::related-files

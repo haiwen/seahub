@@ -999,14 +999,7 @@ class ViaRepoTokenFile(APIView):
 
             dst_dir = normalize_dir_path(dst_dir)
 
-            # resource check for source file
-            try:
-                file_id = seafile_api.get_file_id_by_path(repo_id, path)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
             if not file_id:
                 error_msg = 'File %s not found.' % path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -1025,7 +1018,7 @@ class ViaRepoTokenFile(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            if is_locked and not locked_by_me:
+            if is_locked:
                 error_msg = _("File is locked")
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1111,9 +1104,9 @@ class ViaRepoTokenFile(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # argument check
-        path = request.GET.get('p', None)
+        path = request.GET.get('path', None)
         if not path:
-            error_msg = 'p invalid.'
+            error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         path = normalize_file_path(path)
 
@@ -1298,6 +1291,10 @@ class ViaRepoMoveDir(APIView):
         src_folder_path = posixpath.join(src_parent_dir, src_folder_name)
         if not seafile_api.get_dir_id_by_path(repo_id, src_folder_path):
             error_msg = 'Folder %s not found.' % src_folder_path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
