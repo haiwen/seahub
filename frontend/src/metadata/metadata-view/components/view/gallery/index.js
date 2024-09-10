@@ -13,7 +13,6 @@ import './index.css';
 const IMAGE_GAP = 2;
 
 const Gallery = () => {
-  const containerRef = useRef(null);
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [zoomGear, setZoomGear] = useState(0);
