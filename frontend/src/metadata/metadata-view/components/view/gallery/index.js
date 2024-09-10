@@ -42,7 +42,7 @@ const Gallery = () => {
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
         const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = firstSort ? getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD') : record[PRIVATE_COLUMN_KEY.FILE_CTIME].split('T')[0];
+        const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
         const img = {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
