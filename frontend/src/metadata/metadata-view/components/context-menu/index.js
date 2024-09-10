@@ -14,7 +14,7 @@ const OPERATION = {
   COPY_SELECTED: 'copy-selected',
   OPEN_PARENT_FOLDER: 'open-parent-folder',
   OPEN_IN_NEW_TAB: 'open-new-tab',
-  GENERATE_SUMMARY: 'generate-summary',
+  GENERATE_DESCRIPTION: 'generate-description',
   IMAGE_CAPTION: 'image-caption',
 };
 
@@ -40,7 +40,7 @@ const ContextMenu = ({
     const permission = window.sfMetadataContext.getPermission();
     const isReadonly = permission === 'r';
     const { columns } = metadata;
-    const summaryColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_SUMMARY);
+    const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const canModifyRow = window.sfMetadataContext.canModifyRow;
     let list = [];
 
@@ -48,13 +48,13 @@ const ContextMenu = ({
       !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
 
-      if (summaryColumn) {
+      if (descriptionColumn) {
         const { topLeft, bottomRight } = selectedRange;
         for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
           const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
           const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-          if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
-            list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+          if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
+            list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
             break;
           }
         }
@@ -64,17 +64,17 @@ const ContextMenu = ({
 
     const selectedRecords = Object.keys(recordMetrics.idSelectedRecordMap);
     if (selectedRecords.length > 1) {
-      if (summaryColumn) {
+      if (descriptionColumn) {
         const isIncludeSdocRecord = selectedRecords.filter(id => {
           const record = metadata.id_row_map[id];
           if (record) {
             const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-            return Utils.isSummarySupportedFile(fileName) && canModifyRow(record);
+            return Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record);
           }
           return false;
         });
         if (isIncludeSdocRecord.length > 0) {
-          list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+          list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
         }
       }
       return list;
@@ -87,10 +87,10 @@ const ContextMenu = ({
     const isFolder = record[PRIVATE_COLUMN_KEY.IS_DIR];
     list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab') });
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder') });
-    if (summaryColumn) {
+    if (descriptionColumn) {
       const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
-        list.push({ value: OPERATION.GENERATE_SUMMARY, label: gettext('Generate summary') });
+      if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
+        list.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description') });
       } else if (Utils.imageCheck(fileName) && canModifyRow(record)) {
         list.push({ value: OPERATION.IMAGE_CAPTION, label: gettext('Generate image description') });
       }
@@ -140,40 +140,40 @@ const ContextMenu = ({
     window.open(url, '_blank');
   }, [isGroupView, recordGetterByIndex, selectedPosition]);
 
-  const generateSummary = useCallback(() => {
+  const generateDescription = useCallback(() => {
     const canModifyRow = window.sfMetadataContext.canModifyRow;
-    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_SUMMARY;
+    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
     const { groupRecordIndex, rowIdx } = selectedPosition;
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
     const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.isSummarySupportedFile(fileName) && canModifyRow(record)) {
+    if (Utils.isDescriptionSupportedFile(fileName) && canModifyRow(record)) {
       const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
       path = Utils.joinPath(parentDir, fileName);
-      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
-      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [summaryColumnKey]: record[summaryColumnKey] };
+      idOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
+      idOriginalOldRecordData[record[PRIVATE_COLUMN_KEY.ID]] = { [descriptionColumnKey]: record[descriptionColumnKey] };
     }
     if (path === '') return;
-    window.sfMetadataContext.generateSummary(path).then(res => {
-      const summary = res.data.summary;
+    window.sfMetadataContext.generateDescription(path).then(res => {
+      const description = res.data.summary;
       const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
       const recordIds = [updateRecordId];
       let idRecordUpdates = {};
       let idOriginalRecordUpdates = {};
-      idRecordUpdates[updateRecordId] = { [summaryColumnKey]: summary };
-      idOriginalRecordUpdates[updateRecordId] = { [summaryColumnKey]: summary };
+      idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
+      idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description };
       updateRecords({ recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData });
     }).catch(error => {
-      const errorMessage = gettext('Failed to generate summary');
+      const errorMessage = gettext('Failed to generate description');
       toaster.danger(errorMessage);
     });
   }, [isGroupView, selectedPosition, recordGetterByIndex, updateRecords]);
 
   const imageCaption = useCallback(() => {
     const canModifyRow = window.sfMetadataContext.canModifyRow;
-    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_SUMMARY;
+    const summaryColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let path = '';
     let idOldRecordData = {};
     let idOriginalOldRecordData = {};
@@ -221,8 +221,8 @@ const ContextMenu = ({
         onClearSelected && onClearSelected();
         break;
       }
-      case OPERATION.GENERATE_SUMMARY: {
-        generateSummary && generateSummary();
+      case OPERATION.GENERATE_DESCRIPTION: {
+        generateDescription && generateDescription();
         break;
       }
       case OPERATION.IMAGE_CAPTION: {
@@ -234,7 +234,7 @@ const ContextMenu = ({
       }
     }
     setVisible(false);
-  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateSummary, imageCaption]);
+  }, [onOpenFileInNewTab, onOpenParentFolder, onCopySelected, onClearSelected, generateDescription, imageCaption]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {

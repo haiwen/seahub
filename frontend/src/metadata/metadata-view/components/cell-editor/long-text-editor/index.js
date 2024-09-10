@@ -44,6 +44,16 @@ class LongTextEditor extends React.PureComponent {
     return { text: '', preview: '', links: [], images: [], checklist: { completed: 0, count: 0 } };
   };
 
+  getOldValue = () => {
+    const value = this.props.value;
+    if (value) {
+      if (typeof value === 'object') return value.text;
+      if (typeof value === 'string') return value;
+      return '';
+    }
+    return '';
+  };
+
   getValue = () => {
     const updated = {};
     updated[this.props.column.key] = this.value.text;

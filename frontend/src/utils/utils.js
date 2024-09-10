@@ -905,7 +905,7 @@ export const Utils = {
     }
   },
 
-  isSummarySupportedFile: function (filePath) {
+  isDescriptionSupportedFile: function (filePath) {
     return Utils.isSdocFile(filePath) || Utils.isMarkdownFile(filePath) || Utils.pdfCheck(filePath) || Utils.isDocxFile(filePath);
   },
 

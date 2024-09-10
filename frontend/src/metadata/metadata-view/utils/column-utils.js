@@ -196,8 +196,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File expire time');
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
       return gettext('Document keywords');
-    case PRIVATE_COLUMN_KEY.FILE_SUMMARY:
-      return gettext('Document summary');
+    case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION:
+      return gettext('Description');
     case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
       return gettext('Is expired');
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
@@ -243,7 +243,7 @@ export const getColumnType = (key, type) => {
       return CellType.DATE;
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
       return CellType.TEXT;
-    case PRIVATE_COLUMN_KEY.FILE_SUMMARY:
+    case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION:
       return CellType.LONG_TEXT;
     case PRIVATE_COLUMN_KEY.FILE_EXPIRED:
       return CellType.CHECKBOX;
