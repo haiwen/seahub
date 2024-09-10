@@ -58,6 +58,7 @@ Main.propTypes = {
   overScan: PropTypes.object,
   columns: PropTypes.number,
   size: PropTypes.number,
+  gap: PropTypes.number,
 };
 
 export default Main;

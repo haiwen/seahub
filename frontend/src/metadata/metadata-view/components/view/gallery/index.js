@@ -25,9 +25,7 @@ const Gallery = () => {
   const repoID = window.sfMetadataContext.getSetting('repoID');
 
   // Number of images per row
-  const columns = useMemo(() => {
-    return 8 - zoomGear;
-  }, [zoomGear]);
+  const columns = useMemo(() => 8 - zoomGear, [zoomGear]);
 
   const imageSize = useMemo(() => {
     return (containerWidth - columns * 2 - 2) / columns;
@@ -49,6 +47,7 @@ const Gallery = () => {
           src: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${path}`,
           date: date,
         };
+
         let _group = _init.find(g => g.name === date);
         if (_group) {
           _group.children.push(img);
@@ -90,18 +89,15 @@ const Gallery = () => {
   }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize]);
 
   const loadMore = useCallback(async () => {
-    if (isLoadingMore) return;
-    if (!metadata.hasMore) return;
+    if (isLoadingMore || !metadata.hasMore) return;
     setLoadingMore(true);
 
     try {
       await store.loadMore(PER_LOAD_NUMBER);
-      setLoadingMore(false);
     } catch (error) {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
+      toaster.danger(Utils.getErrorMsg(error));
+    } finally {
       setLoadingMore(false);
-      return;
     }
 
   }, [isLoadingMore, metadata, store]);
@@ -128,7 +124,7 @@ const Gallery = () => {
       setContainerWidth(container.offsetWidth);
     };
     const resizeObserver = new ResizeObserver(handleResize);
-    container && resizeObserver.observe(container);
+    if (container) resizeObserver.observe(container);
 
     // op
     const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
