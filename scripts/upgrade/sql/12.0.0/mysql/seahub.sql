@@ -75,3 +75,5 @@ CREATE TABLE IF NOT EXISTS `sdoc_operation_log` (
 
 ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `user_scope` varchar(225) DEFAULT 'all_users';
 ALTER TABLE share_fileshare ADD COLUMN IF NOT EXISTS `authed_details` LONGTEXT DEFAULT NULL;
+
+ALTER TABLE profile_profile ADD COLUMN IF NOT EXISTS `is_manually_set_contact_email` tinyint(1) DEFAULT 0;
