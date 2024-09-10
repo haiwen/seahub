@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import GalleryImage from './image';
 
 const Main = ({ groups, overScan, columns, size, gap }) => {
   const imageHeight = useMemo(() => size + gap, [size, gap]);
@@ -36,9 +37,7 @@ const Main = ({ groups, overScan, columns, size, gap }) => {
           {children.slice(childrenStartIndex, childrenEndIndex + 1).map((row) => {
             return row.children.map(img => {
               return (
-                <div key={img.src} tabIndex={1} className="metadata-gallery-image-item" style={{ width: size, height: size, background: '#f1f1f1' }}>
-                  <img className="metadata-gallery-grid-image" src={img.src} alt={img.name} />
-                </div>
+                <GalleryImage key={img.src} src={img.src} size={size} alt={img.name} />
               );
             });
           })}
