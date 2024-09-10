@@ -8,11 +8,7 @@ import { gettext } from '../../../../../../../../utils';
 
 import './index.css';
 
-const CellOperationBtn = ({
-  isDir,
-  column,
-  value,
-}) => {
+const CellOperationBtn = ({ isDir, column, value }) => {
 
   const openFile = useCallback((event) => {
     event.stopPropagation();
@@ -20,27 +16,23 @@ const CellOperationBtn = ({
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
   }, []);
 
-  if (!value) return null;
-  const { type } = column;
-  if (type === CellType.FILE_NAME) {
-    const target = 'sf-metadata-cell-open-file-btn';
-    return (
-      <>
-        <IconBtn id={target} className="sf-metadata-cell-operation-btn" size={20} iconName="open-file" onClick={openFile} />
-        <UncontrolledTooltip
-          hideArrow
-          target={target}
-          placement="bottom"
-          fade={false}
-          delay={{ show: 0, hide: 0 }}
-          modifiers={{ preventOverflow: { boundariesElement: document.body } }}
-        >
-          {gettext(isDir ? 'Open folder' : 'Open file')}
-        </UncontrolledTooltip>
-      </>
-    );
-  }
-  return null;
+  if (!value || column.type !== CellType.FILE_NAME) return null;
+
+  return (
+    <>
+      <IconBtn id={'sf-metadata-cell-open-file-btn'} className="sf-metadata-cell-operation-btn" size={20} iconName="open-file" onClick={openFile} />
+      <UncontrolledTooltip
+        hideArrow
+        target={'sf-metadata-cell-open-file-btn'}
+        placement="bottom"
+        fade={false}
+        delay={{ show: 0, hide: 0 }}
+        modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+      >
+        {isDir ? gettext('Open folder') : gettext('Open file')}
+      </UncontrolledTooltip>
+    </>
+  );
 };
 
 CellOperationBtn.propTypes = {
