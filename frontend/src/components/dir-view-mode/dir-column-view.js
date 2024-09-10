@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
-import DirColumnFile from './dir-column-file';
+import MarkdownViewerDialog from './markdown-viewer-dialog';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
+import { SeafileMetadata } from '../../metadata';
+import { mediaUrl } from '../../utils/constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE } from './constants';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -34,8 +37,6 @@ const propTypes = {
   // file
   isViewFile: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
-  isFileLoadedErr: PropTypes.bool.isRequired,
-  hash: PropTypes.string,
   filePermission: PropTypes.string,
   content: PropTypes.string,
   viewId: PropTypes.string,
@@ -139,13 +140,14 @@ class DirColumnView extends React.Component {
   render() {
     const { currentMode, isTreePanelShown } = this.props;
     const { navRate, inResizing } = this.state;
-    const onResizeMove = inResizing ? this.onResizeMouseMove : null;
-    const select = inResizing ? 'none' : '';
-    const mainFlex = '1 0 ' + (1 - navRate) * 100 + '%';
+    const dirContentMainStyle = {
+      userSelect: inResizing ? 'none' : '',
+      flex: '1 0 ' + (1 - navRate) * 100 + '%',
+    };
     return (
       <div
         className="dir-column-view"
-        onMouseMove={onResizeMove}
+        onMouseMove={inResizing ? this.onResizeMouseMove : null}
         onMouseUp={this.onResizeMouseUp}
         ref={this.viewModeContainer}
       >
@@ -186,28 +188,19 @@ class DirColumnView extends React.Component {
           </>
         )}
         <div
-          className="dir-content-main" style={{ userSelect: select, flex: mainFlex }}
+          className="dir-content-main" style={dirContentMainStyle}
           onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
           ref={this.dirContentMain}
         >
-          {this.props.isViewFile ? (
-            <DirColumnFile
-              path={this.props.path}
+          {currentMode === METADATA_MODE &&
+            <SeafileMetadata
+              mediaUrl={mediaUrl}
               repoID={this.props.repoID}
-              hash={this.props.hash}
-              isFileLoading={this.props.isFileLoading}
-              isFileLoadedErr={this.props.isFileLoadedErr}
-              filePermission={this.props.filePermission}
-              content={this.props.content}
-              viewId={this.props.viewId}
-              currentDirent={this.props.currentDirent}
-              currentRepoInfo={this.props.currentRepoInfo}
-              lastModified={this.props.lastModified}
-              latestContributor={this.props.latestContributor}
-              onLinkClick={this.props.onLinkClick}
-              onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
+              repoInfo={this.props.currentRepoInfo}
+              viewID={this.props.viewId}
             />
-          ) : (currentMode == 'list' ?
+          }
+          {currentMode === LIST_MODE &&
             <DirListView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -246,7 +239,9 @@ class DirColumnView extends React.Component {
               showDirentDetail={this.props.showDirentDetail}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
-            /> :
+            />
+          }
+          {currentMode === GRID_MODE &&
             <DirGridView
               path={this.props.path}
               repoID={this.props.repoID}
@@ -283,7 +278,20 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
             />
-          )}
+          }
+          {this.props.isViewFile &&
+            <MarkdownViewerDialog
+              path={this.props.path}
+              repoID={this.props.repoID}
+              isFileLoading={this.props.isFileLoading}
+              content={this.props.content}
+              currentDirent={this.props.currentDirent}
+              lastModified={this.props.lastModified}
+              latestContributor={this.props.latestContributor}
+              onLinkClick={this.props.onLinkClick}
+              onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
+            />
+          }
         </div>
       </div>
     );

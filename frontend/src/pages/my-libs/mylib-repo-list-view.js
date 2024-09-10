@@ -4,6 +4,7 @@ import MediaQuery from 'react-responsive';
 import { gettext, storages } from '../../utils/constants';
 import MylibRepoListItem from './mylib-repo-list-item';
 import LibsMobileThead from '../../components/libs-mobile-thead';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 const propTypes = {
   sortBy: PropTypes.string.isRequired,
@@ -80,11 +81,11 @@ class MylibRepoListView extends React.Component {
   };
 
   renderPCUI = () => {
-    const { inAllLibs, currentViewMode = 'list' } = this.props;
+    const { inAllLibs, currentViewMode = LIST_MODE } = this.props;
     const showStorageBackend = !inAllLibs && storages.length > 0;
     const sortIcon = this.props.sortOrder === 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
 
-    return currentViewMode == 'list' ? (
+    return currentViewMode == LIST_MODE ? (
       <table className={inAllLibs ? 'table-thead-hidden' : ''}>
         <thead>
           <tr>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
+import { GRID_MODE, LIST_MODE } from './dir-view-mode/constants';
 
 import '../css/view-modes.css';
 
@@ -29,9 +30,9 @@ class ViewModes extends React.Component {
 
   onKeyDown = (event) => {
     if (event.shiftKey && event.keyCode === 49) {
-      this.props.switchViewMode('list');
+      this.props.switchViewMode(LIST_MODE);
     } else if (event.shiftKey && event.keyCode === 50) {
-      this.props.switchViewMode('grid');
+      this.props.switchViewMode(GRID_MODE);
     }
   };
 
@@ -45,8 +46,8 @@ class ViewModes extends React.Component {
     const { isDropdownMenuOpen } = this.state;
     const { currentViewMode } = this.props;
     const options = [
-      { 'icon': 'list-view', 'text': gettext('List view'), 'value': 'list', 'shortcut': 'Shift 1' },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': 'grid', 'shortcut': 'Shift 2' }
+      { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': 'Shift 1' },
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': 'Shift 2' }
     ];
     return (
       <Dropdown

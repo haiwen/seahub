@@ -14,6 +14,7 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import ModalPortal from '../../components/modal-portal';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -120,7 +121,7 @@ class PublicSharedView extends React.Component {
   };
 
   renderContent = () => {
-    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = LIST_MODE } = this.props; // inAllLibs: in 'All Libs'('Files') page
     const { errMessage } = this.state;
     const emptyTip = inAllLibs ?
       <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p> : (
@@ -202,12 +203,12 @@ class PublicSharedView extends React.Component {
   };
 
   render() {
-    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = LIST_MODE } = this.props; // inAllLibs: in 'All Libs'('Files') page
 
     if (inAllLibs) {
       return (
         <>
-          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
+          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
             <h4 className="sf-heading m-0">
               <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
               {gettext('Shared with all')}

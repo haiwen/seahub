@@ -18,6 +18,7 @@ import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 import RepoInfoBar from './components/repo-info-bar';
 import RepoTag from './models/repo-tag';
+import { GRID_MODE, LIST_MODE } from './components/dir-view-mode/constants';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -454,14 +455,14 @@ class SharedDirView extends React.Component {
                   <div className="view-mode btn-group">
                     <a
                       href={`?p=${encodeURIComponent(relativePath)}&mode=list`}
-                      className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`}
+                      className={`${modeBaseClass} sf2-icon-list-view ${mode == LIST_MODE ? 'current-mode' : ''}`}
                       title={gettext('List')}
                       aria-label={gettext('List')}
                     >
                     </a>
                     <a
                       href={`?p=${encodeURIComponent(relativePath)}&mode=grid`}
-                      className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`}
+                      className={`${modeBaseClass} sf2-icon-grid-view ${mode == GRID_MODE ? 'current-mode' : ''}`}
                       title={gettext('Grid')}
                       aria-label={gettext('Grid')}
                     >
@@ -653,7 +654,7 @@ class Content extends React.Component {
     }
 
     const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
-    return mode == 'list' ? (
+    return mode == LIST_MODE ? (
       <table className="table-hover">
         <thead>
           <tr>

@@ -1,5 +1,10 @@
 .seafile-markdown-viewer-modal {
   max-width: 950px;
+  height: calc(100% - 56px);
+}
+
+.seafile-markdown-viewer-modal .seafile-markdown-viewer-modal-content {
+  height: 100%;
 }
 
 .seafile-markdown-viewer-modal-header {

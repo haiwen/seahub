@@ -28,7 +28,6 @@ class Wiki extends Component {
       path: '',
       pathExist: true,
       closeSideBar: false,
-      isViewFile: true,
       isDataLoading: false,
       editorContent: {},
       permission: '',
@@ -144,7 +143,6 @@ class Wiki extends Component {
         permission,
         seadoc_access_token,
         assets_url,
-        isViewFile: true,
         path: filePath,
       });
       const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
@@ -249,7 +247,6 @@ class Wiki extends Component {
           config={this.state.config}
           currentPageId={this.state.currentPageId}
           pathExist={this.state.pathExist}
-          isViewFile={this.state.isViewFile}
           isDataLoading={this.state.isDataLoading}
           editorContent={this.state.editorContent}
           permission={this.state.permission}

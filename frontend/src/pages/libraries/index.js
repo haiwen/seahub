@@ -17,6 +17,7 @@ import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibs from '../../pages/shared-libs/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
 import GroupItem from '../../pages/groups/group-item';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 import '../../css/files.css';
 
@@ -41,7 +42,7 @@ class Libraries extends Component {
       sharedRepoList: [],
       publicRepoList: [],
       isCreateRepoDialogOpen: false,
-      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || 'list',
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
     };
@@ -249,7 +250,7 @@ class Libraries extends Component {
               <Loading /> :
               <div className="cur-view-content" id="files-content-container">
 
-                {(Utils.isDesktop() && currentViewMode == 'list') && (
+                {(Utils.isDesktop() && currentViewMode == LIST_MODE) && (
                   <table aria-hidden={true} className="my-3">
                     <thead>
                       <tr>
@@ -267,7 +268,7 @@ class Libraries extends Component {
 
                 {canAddRepo && (
                   <div className="pb-3">
-                    <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
+                    <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
                       <h4 className="sf-heading m-0 d-flex align-items-center">
                         <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
                         {gettext('My Libraries')}

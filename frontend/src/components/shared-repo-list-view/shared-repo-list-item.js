@@ -19,6 +19,7 @@ import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import { GRID_MODE, LIST_MODE } from '../dir-view-mode/constants';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -141,7 +142,7 @@ class SharedRepoListItem extends React.Component {
   getRepoComputeParams = () => {
     const { repo, currentViewMode } = this.props;
 
-    const useBigLibaryIcon = currentViewMode == 'grid';
+    const useBigLibaryIcon = currentViewMode == GRID_MODE;
     const iconUrl = Utils.getLibIconUrl(repo, useBigLibaryIcon);
     let iconTitle = Utils.getLibIconTitle(repo);
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -619,7 +620,7 @@ class SharedRepoListItem extends React.Component {
     const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     const { repo, currentViewMode } = this.props;
-    return currentViewMode == 'list' ? (
+    return currentViewMode == LIST_MODE ? (
       <tr
         className={this.state.highlight ? 'tr-highlight' : ''}
         onMouseEnter={this.onMouseEnter}

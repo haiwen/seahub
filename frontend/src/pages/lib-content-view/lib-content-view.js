@@ -25,6 +25,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
+import { LIST_MODE, METADATA_MODE } from '../../components/dir-view-mode/constants';
 
 const propTypes = {
   eventBus: PropTypes.object,
@@ -45,12 +46,11 @@ class LibContentView extends React.Component {
       isTreePanelShown = storedTreePanelState == 'true';
     }
     this.state = {
-      currentMode: cookie.load('seafile_view_mode') || 'list',
+      currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
       path: '',
       pathExist: true,
       isViewFile: false,
-      hash: '',
       currentRepoInfo: null,
       repoName: '',
       repoEncrypted: false,
@@ -66,7 +66,6 @@ class LibContentView extends React.Component {
       treeData: treeHelper.buildTree(),
       currentNode: null,
       isFileLoading: true,
-      isFileLoadedErr: false,
       filePermission: '',
       content: '',
       lastModified: '',
@@ -128,13 +127,6 @@ class LibContentView extends React.Component {
       direntDetailPanelTab: '',
     });
   };
-
-  UNSAFE_componentWillMount() {
-    const hash = window.location.hash;
-    if (hash.slice(0, 1) === '#') {
-      this.setState({ hash: hash });
-    }
-  }
 
   componentDidMount() {
     this.calculatePara(this.props);
@@ -362,14 +354,12 @@ class LibContentView extends React.Component {
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
-            isFileLoadedErr: false,
           });
         });
       });
     }).catch(() => {
       this.setState({
         isFileLoading: false,
-        isFileLoadedErr: true,
       });
     });
   };
@@ -500,7 +490,6 @@ class LibContentView extends React.Component {
             latestContributor: last_modifier_name,
             lastModified: moment.unix(mtime).fromNow(),
             isFileLoading: false,
-            isFileLoadedErr: false,
           });
         });
       });
@@ -511,7 +500,6 @@ class LibContentView extends React.Component {
       }
       this.setState({
         isFileLoading: false,
-        isFileLoadedErr: true,
       });
     });
 
@@ -526,28 +514,20 @@ class LibContentView extends React.Component {
   showFileMetadata = (filePath, viewId) => {
     const repoID = this.props.repoID;
     const repoInfo = this.state.currentRepoInfo;
-
     this.setState({
+      currentMode: METADATA_MODE,
       path: filePath,
-      isViewFile: true,
-      isFileLoading: false,
-      isFileLoadedErr: false,
-      content: '__sf-metadata',
       viewId: viewId,
       isDirentDetailShow: false
     });
-
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
   hideFileMetadata = () => {
     this.setState({
+      currentMode: LIST_MODE,
       path: '',
-      isViewFile: false,
-      isFileLoading: false,
-      isFileLoadedErr: false,
-      content: '',
       viewId: '',
       isDirentDetailShow: false
     }, () => {
@@ -2019,6 +1999,11 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
+    if (this.state.currentMode === METADATA_MODE) {
+      this.setState({
+        currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
+      });
+    }
   };
 
   recalculateSelectedDirents = (unSelectNames, newDirentList) => {
@@ -2241,10 +2226,8 @@ class LibContentView extends React.Component {
               onTabNavClick={this.props.onTabNavClick}
               onMainNavBarClick={this.onMainNavBarClick}
               isViewFile={this.state.isViewFile}
-              hash={this.state.hash}
               fileTags={this.state.fileTags}
               isFileLoading={this.state.isFileLoading}
-              isFileLoadedErr={this.state.isFileLoadedErr}
               filePermission={this.state.filePermission}
               content={this.state.content}
               viewId={this.state.viewId}

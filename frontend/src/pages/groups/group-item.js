@@ -8,6 +8,7 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import Repo from '../../models/repo';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
 const propTypes = {
   inAllLibs: PropTypes.bool,
@@ -107,14 +108,14 @@ class GroupItem extends React.Component {
 
 
   render() {
-    const { inAllLibs = false, group, currentViewMode = 'list' } = this.props;
+    const { inAllLibs = false, group, currentViewMode = LIST_MODE } = this.props;
     const { parent_group_id, admins } = group;
     const emptyTip = <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>;
 
     const isDeptAdmin = parent_group_id != 0 && admins.indexOf(username) > -1;
     return (
       <div className="pb-3">
-        <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
+        <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
           <h4 className="sf-heading m-0 d-flex align-items-center">
             <span className={`${group.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
             <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>

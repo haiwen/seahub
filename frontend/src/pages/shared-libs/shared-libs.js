@@ -16,6 +16,7 @@ import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
+import { GRID_MODE, LIST_MODE } from '../../components/dir-view-mode/constants';
 
 class Content extends Component {
 
@@ -105,7 +106,7 @@ class Content extends Component {
           })}
         </>
       );
-      const content = currentViewMode == 'list' ? (
+      const content = currentViewMode == LIST_MODE ? (
         <table className={(isDesktop && !theadHidden) ? '' : 'table-thead-hidden'}>
           {isDesktop ? desktopThead : <LibsMobileThead inAllLibs={inAllLibs} />}
           <tbody>
@@ -270,8 +271,8 @@ class Item extends Component {
     }
 
     const { isStarred } = this.state;
-    const { data, currentViewMode = 'list' } = this.props;
-    const useBigLibaryIcon = currentViewMode == 'grid';
+    const { data, currentViewMode = LIST_MODE } = this.props;
+    const useBigLibaryIcon = currentViewMode == GRID_MODE;
     data.icon_url = Utils.getLibIconUrl(data, useBigLibaryIcon);
     data.icon_title = Utils.getLibIconTitle(data);
 
@@ -286,7 +287,7 @@ class Item extends Component {
     if (this.props.isDesktop) {
       return (
         <Fragment>
-          {currentViewMode == 'list' ? (
+          {currentViewMode == LIST_MODE ? (
             <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
               <td className="text-center">
                 <i
@@ -525,7 +526,7 @@ class SharedLibraries extends Component {
   };
 
   renderContent = () => {
-    const { inAllLibs = false, currentViewMode = 'list', repoList } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = LIST_MODE, repoList } = this.props; // inAllLibs: in 'All Libs'('Files') page
     const { items } = this.state;
     return (
       <Content
@@ -552,12 +553,12 @@ class SharedLibraries extends Component {
   };
 
   render() {
-    const { inAllLibs = false, currentViewMode = 'list' } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode = LIST_MODE } = this.props; // inAllLibs: in 'All Libs'('Files') page
     return (
       <Fragment>
         {inAllLibs ? (
           <>
-            <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == 'list' ? 'sf-border-bottom' : ''}`}>
+            <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
               <h4 className="sf-heading m-0">
                 <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
                 {gettext('Shared with me')}
