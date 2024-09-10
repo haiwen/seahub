@@ -7,3 +7,8 @@
 .repo-share-admin-content-container {
   max-height: 500px;
 }
+
+.repo-share-admin-content-container .table-real-container {
+  height: 20rem;
+  overflow: auto;
+}

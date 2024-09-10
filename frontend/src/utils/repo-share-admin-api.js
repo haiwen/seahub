@@ -51,6 +51,21 @@ class RepoShareAdminAPI {
     return this.req.get(url, { params: params });
   }
 
+  listRepoUploadLinks(repoID, page, perPage) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/upload-links/';
+    const params = {
+      page: page || 1,
+      per_page: perPage || 25
+    };
+    return this.req.get(url, { params: params });
+  }
+
+  deleteUploadLinks(tokens) {
+    const url = this.server + '/api/v2.1/upload-links/';
+    let param = { tokens: tokens };
+    return this.req.delete(url, { data: param });
+  }
+
 }
 
 let repoShareAdminAPI = new RepoShareAdminAPI();
