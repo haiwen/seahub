@@ -124,8 +124,8 @@ const Gallery = () => {
 
     // resize
     const handleResize = () => {
-      if (!containerRef.current) return;
-      setContainerWidth(containerRef.current.offsetWidth);
+      if (!container) return;
+      setContainerWidth(container.offsetWidth);
     };
     const resizeObserver = new ResizeObserver(handleResize);
     container && resizeObserver.observe(container);
@@ -134,6 +134,9 @@ const Gallery = () => {
     const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
       window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
       setZoomGear(zoomGear);
+      setTimeout(() => {
+        container.scrollTop += zoomGear * 10;
+      }, 200);
     });
     return () => {
       container && resizeObserver.unobserve(container);
@@ -158,7 +161,6 @@ const Gallery = () => {
       }, 200);
     }
   }, [imageSize, loadMore, renderMoreTimer]);
-
 
   return (
     <div className="sf-metadata-container">
