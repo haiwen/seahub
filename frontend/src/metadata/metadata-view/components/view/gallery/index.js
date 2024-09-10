@@ -18,6 +18,7 @@ const Gallery = () => {
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
+  const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
 
   const { metadata, store } = useMetadata();
