@@ -733,7 +733,7 @@ if os.path.exists(SEAHUB_DATA_ROOT):
 else:
     THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
 
-THUMBNAIL_EXTENSION = 'png'
+THUMBNAIL_EXTENSION = 'jpeg'
 
 # for thumbnail: height(px) and width(px)
 THUMBNAIL_DEFAULT_SIZE = 256
