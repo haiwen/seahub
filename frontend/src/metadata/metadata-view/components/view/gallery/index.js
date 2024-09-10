@@ -10,18 +10,14 @@ import toaster from '../../../../../components/toast';
 
 import './index.css';
 
-const CONCURRENCY_LIMIT = 3;
 const IMAGE_GAP = 2;
 
 const Gallery = () => {
-  const imageRefs = useRef([]);
   const containerRef = useRef(null);
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [loadingQueue, setLoadingQueue] = useState([]);
-  const [concurrentLoads, setConcurrentLoads] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
   const renderMoreTimer = useRef(null);
 
@@ -66,22 +62,27 @@ const Gallery = () => {
       }, []);
 
     let _groups = [];
+    const imageHeight = imageSize + IMAGE_GAP;
     init.forEach((_init, index) => {
-      const { children } = _init;
-      const childrenCount = children.length;
-      const value = childrenCount / columns;
-      const rows = childrenCount % columns ? Math.ceil(value) : ~~(value);
-      const height = rows * (imageSize + IMAGE_GAP);
+      const { children, ...__init } = _init;
       let top = 0;
+      let rows = [];
       if (index > 0) {
         const lastGroup = _groups[index - 1];
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
         top = lastGroupTop + lastGroupHeight;
       }
+      children.forEach((child, childIndex) => {
+        const rowIndex = ~~(childIndex / columns);
+        if (!rows[rowIndex]) rows[rowIndex] = { top: top + rowIndex * imageHeight, children: [] };
+        rows[rowIndex].children.push(child);
+      });
+      const height = rows.length * imageHeight;
       _groups.push({
-        ..._init,
+        ...__init,
         top,
         height,
+        children: rows
       });
     });
     return _groups;
@@ -105,35 +106,6 @@ const Gallery = () => {
 
   }, [isLoadingMore, metadata, store]);
 
-  const loadNextImage = useCallback(() => {
-    if (loadingQueue.length === 0 || concurrentLoads >= CONCURRENCY_LIMIT) return;
-
-    const nextImage = loadingQueue.shift();
-    setConcurrentLoads(prev => prev + 1);
-
-    const img = new Image();
-    imageRefs.current.push(img);
-    img.src = nextImage.src;
-    img.onload = () => {
-      setConcurrentLoads(prev => {
-        const newCount = prev - 1;
-        return newCount;
-      });
-      loadNextImage();
-    };
-    img.onerror = () => {
-      setConcurrentLoads(prev => {
-        const newCount = prev - 1;
-        return newCount;
-      });
-      loadNextImage();
-    };
-  }, [loadingQueue, concurrentLoads]);
-
-  useEffect(() => {
-    loadNextImage();
-  }, [loadingQueue, concurrentLoads, loadNextImage]);
-
   useEffect(() => {
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
@@ -152,8 +124,8 @@ const Gallery = () => {
 
     // resize
     const handleResize = () => {
-      if (!containerRef.current) return;
-      setContainerWidth(containerRef.current.offsetWidth);
+      if (!container) return;
+      setContainerWidth(container.offsetWidth);
     };
     const resizeObserver = new ResizeObserver(handleResize);
     container && resizeObserver.observe(container);
@@ -162,17 +134,13 @@ const Gallery = () => {
     const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
       window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
       setZoomGear(zoomGear);
+      setTimeout(() => {
+        container.scrollTop += zoomGear * 10;
+      }, 200);
     });
     return () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
-
-      // Cleanup image references on unmount
-      imageRefs.current.forEach(img => {
-        img.onload = null;
-        img.onerror = null;
-      });
-      imageRefs.current = [];
       renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
   }, []);
@@ -194,17 +162,12 @@ const Gallery = () => {
     }
   }, [imageSize, loadMore, renderMoreTimer]);
 
-  const addToQueue = (image) => {
-    setLoadingQueue(prev => [...prev, image]);
-    loadNextImage();
-  };
-
   return (
     <div className="sf-metadata-container">
       <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            <Main groups={groups} size={imageSize} onLoad={addToQueue} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
+            <Main groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
             {isLoadingMore && (<div className="sf-metadata-gallery-loading-more"><CenteredLoading /></div>)}
           </>
         )}
