@@ -202,7 +202,7 @@ class MetadataManagerAPI {
   };
 
   // ai
-  generateSummary = (repoID, filePath) => {
+  generateDescription = (repoID, filePath) => {
     const url = this.server + '/api/v2.1/ai/generate-summary/';
     const params = {
       path: filePath,

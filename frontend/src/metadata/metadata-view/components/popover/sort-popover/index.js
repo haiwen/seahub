@@ -218,7 +218,7 @@ class SortPopover extends Component {
     return (
       <div key={'sort-item-' + index} className="sort-item">
         {!readOnly &&
-          <div className="delete-sort" onClick={!(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
+          <div className="delete-sort" onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
             {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon iconName="fork-number"/>}
           </div>
         }

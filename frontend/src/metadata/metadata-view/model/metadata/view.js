@@ -1,4 +1,4 @@
-import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE } from '../../_basic';
+import { getColumnByKey, VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS } from '../../_basic';
 
 class View {
   constructor(object, columns) {
@@ -17,7 +17,7 @@ class View {
     this.basic_filters = object.basic_filters && object.basic_filters.length > 0 ? object.basic_filters : VIEW_TYPE_DEFAULT_BASIC_FILTER[this.type];
 
     // sort
-    this.sorts = object.sorts || [];
+    this.sorts = object.sorts && object.sorts.length > 0 ? object.sorts : VIEW_TYPE_DEFAULT_SORTS[this.type];
 
     // group
     this.groupbys = object.groupbys || [];

@@ -38,9 +38,9 @@ const COLUMNS = [
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
-    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_SUMMARY),
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION),
     unique: true,
-    key: PRIVATE_COLUMN_KEY.FILE_SUMMARY,
+    key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION,
     canChangeName: false,
     groupby: 'predefined'
   }, {

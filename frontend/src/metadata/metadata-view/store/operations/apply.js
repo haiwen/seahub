@@ -40,9 +40,7 @@ export default function apply(data, operation) {
         const rowId = row._id;
         const originalRowUpdates = id_original_row_updates[rowId];
         const rowUpdates = id_row_updates[rowId];
-        if (!rowUpdates && !originalRowUpdates) {
-          return;
-        }
+        if (!rowUpdates && !originalRowUpdates) return;
         const updatedRow = Object.assign({}, row, rowUpdates, originalRowUpdates, {
           '_mtime': modifyTime,
           '_last_modifier': modifier,

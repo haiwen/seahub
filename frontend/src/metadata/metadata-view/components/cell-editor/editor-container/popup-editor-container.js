@@ -125,14 +125,11 @@ class PopupEditorContainer extends React.Component {
   getOldRowData = (originalOldCellValue) => {
     const { column } = this.props;
     const columnName = getColumnOriginName(column);
-    const { key: columnKey, type: columnType } = column;
+    const { key: columnKey } = column;
     let oldValue = originalOldCellValue;
     if (this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
       oldValue = original[Object.keys(original)[0]];
-    }
-    if (columnType === CellType.LONG_TEXT) {
-      oldValue = this.getEditor().getValue(); // long-text cell value need format to {text: '', links: [], ...}
     }
     const oldRowData = { [columnName]: oldValue };
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
@@ -171,11 +168,6 @@ class PopupEditorContainer extends React.Component {
     const key = Object.keys(updated)[0];
     const value = updated[key];
     const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
-
-    // special treatment of long-text column types to keep the stored data consistent
-    if (columnType === CellType.LONG_TEXT) {
-      originalUpdates[key] = value.text;
-    }
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
 
     // updates used for update remote record data
