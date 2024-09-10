@@ -504,7 +504,7 @@ class ShareLinks(APIView):
                     except User.DoesNotExist:
                         continue
                     emails_to_add.append(username)
-        
+
                 fs.authed_details = json.dumps(
                     {'authed_users': emails_to_add}
                 )
@@ -515,7 +515,7 @@ class ShareLinks(APIView):
                 fs.authed_details = json.dumps(
                     {'authed_emails': emails_list}
                 )
-                
+
             fs.user_scope = user_scope
             fs.save()
         if emails_list:
@@ -563,7 +563,7 @@ class ShareLinks(APIView):
             if not fs.is_owner(username):
                 result['failed'].append({
                     'token': token,
-                    'error_msg': 'Permission denied.'
+                    'error_msg': _('Permission denied.')
                     })
                 continue
 
@@ -583,7 +583,7 @@ class ShareLinks(APIView):
                 logger.error(e)
                 result['failed'].append({
                     'token': token,
-                    'error_msg': 'Internal Server Error'
+                    'error_msg': _('Internal Server Error')
                     })
                 continue
 
@@ -920,7 +920,7 @@ class ShareLinkDirents(APIView):
         if share_link.is_encrypted() and not check_share_link_access(request, token):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         if not check_share_link_access_by_scope(request, share_link):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1057,7 +1057,7 @@ class ShareLinkUpload(APIView):
         if share_link.is_encrypted() and not check_share_link_access(request, token):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         if not check_share_link_access_by_scope(request, share_link):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1423,7 +1423,10 @@ class ShareLinkRepoTags(APIView):
         tag_id_file_list_dict = defaultdict(list)
         for repo_tag in repo_tags:
             tagged_files = get_tagged_files(repo, repo_tag.pk)['tagged_files']
-            tagged_files = [item for item in tagged_files if item.get('parent_path') and item.get('parent_path').startswith(share_link.path.rstrip('/'))]
+            tagged_files = [
+                item for item in tagged_files
+                if item.get('parent_path') and item.get('parent_path').startswith(share_link.path.rstrip('/'))
+            ]
             tag_id_file_list_dict[repo_tag.pk] = tagged_files
 
         # generate response

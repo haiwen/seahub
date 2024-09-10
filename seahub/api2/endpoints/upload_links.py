@@ -313,7 +313,7 @@ class UploadLinks(APIView):
             if not upload_link.is_owner(username):
                 result['failed'].append({
                     'token': token,
-                    'error_msg': 'Permission denied.'
+                    'error_msg': _('Permission denied.')
                     })
                 continue
 
@@ -326,7 +326,7 @@ class UploadLinks(APIView):
                 logger.error(e)
                 result['failed'].append({
                     'token': token,
-                    'error_msg': 'Internal Server Error'
+                    'error_msg': _('Internal Server Error')
                     })
                 continue
 
