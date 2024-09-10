@@ -630,6 +630,17 @@ class ShareToNextcloud(APIView):
             logger.error(error_msg)
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        path = request.GET.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            logger.error(error_msg)
+            return api_error(400, error_msg)
+
+        if not seafile_api.get_file_id_by_path(repo_id, path):
+            error_msg = 'File %s not found.' % path
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # permission check
         username = request.user.username
         if not is_repo_owner(request, repo_id, username):
@@ -637,7 +648,11 @@ class ShareToNextcloud(APIView):
             logger.error(error_msg)
             return api_error(403, error_msg)
 
-        shares = Shares.objects.filter(repo_id=repo_id)
+        params = {
+            "repo_id": repo_id,
+            "path": path,
+        }
+        shares = Shares.objects.filter(**params)
 
         ocm_share_list = []
         for share in shares:
@@ -660,14 +675,13 @@ class ShareToNextcloud(APIView):
             else:
                 ocm_info['accepte_status'] = 'not accepted'
 
-            ocm_info['to_server_name'] = ''
-            for name_domain_dict in OCM_VIA_WEBDAV_REMOTE_SERVERS:
-                if name_domain_dict['server_url'] == to_server_url:
-                    ocm_info['to_server_name'] = name_domain_dict['server_name']
+            ocm_info['repo_id'] = share.repo_id
+            ocm_info['path'] = share.path
+            ocm_info['shared_secret'] = share.shared_secret
 
             ocm_share_list.append(ocm_info)
 
-        return Response({'ocm_share_list': ocm_share_list})
+        return Response({'data': ocm_share_list})
 
     def post(self, request):
         """
@@ -713,6 +727,20 @@ class ShareToNextcloud(APIView):
             logger.error(error_msg)
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not seafile_api.get_file_id_by_path(repo_id, path):
+            error_msg = 'File %s not found.' % path
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        params = {
+            "repo_id": repo_id,
+            "path": path,
+        }
+        if Shares.objects.filter(**params):
+            error_msg = f'Share for repo_id: {repo_id} path: {path} already exists.'
+            logger.error(error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # permission check
         username = request.user.username
         if not is_repo_owner(request, repo_id, username):
@@ -730,7 +758,7 @@ class ShareToNextcloud(APIView):
         post_data_owner_display_name = email2nickname(username)
 
         post_data_protocol_name = 'webdav'
-        post_data_permissions = 'read'
+        post_data_permissions = "{http://open-cloud-mesh.org/ns}share-permissions"
 
         # TODO
         share_info = f"{repo_id}:{path}"
@@ -835,22 +863,20 @@ class ShareToNextcloud(APIView):
             #     "singleProtocolLegacy": {
             #         "name": "webdav",
             #         "options": {
-            #             "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
-            #             "permissions": "read"
+            #             "sharedSecret": post_data_shared_secret,
+            #             "permissions": ["read"]
             #         }
             #     },
             #     "singleProtocolNew": {
             #         "name": "webdav",
             #         "options": {
-            #             "sharedSecret": "hfiuhworzwnur98d3wjiwhr"
+            #             "sharedSecret": post_data_shared_secret
             #         },
             #         "webdav": {
-            #             "sharedSecret": "hfiuhworzwnur98d3wjiwhr",
-            #             "permissions": [
-            #                 "read",
-            #             ],
+            #             "sharedSecret": post_data_shared_secret,
+            #             "permissions": ["read"],
             #             "uri": (
-            #                 "https://test.seafile.com/lian-test/path/to/resource.txt"
+            #                 "https://test.seafile.com/seafdav/lian%20lib%20on%20test.seafile.com/789.md"
             #             )
             #         }
             #     },
@@ -943,7 +969,7 @@ class ShareToNextcloud(APIView):
 
         # get remote server endpoint
         remote_domain = share.share_with.split('@')[-1]
-        ocm_endpoint = get_remote_ocm_endpoint(remote_domain)
+        ocm_endpoint = get_remote_ocm_endpoint(f"https://{remote_domain}")
         if not ocm_endpoint:
             error_msg = 'Internal Server Error'
             logger.error(error_msg)
