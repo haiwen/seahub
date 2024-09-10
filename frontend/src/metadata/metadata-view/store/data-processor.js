@@ -187,7 +187,7 @@ class DataProcessor {
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { rows_data, upper_row_ids } = operation;
         const { rows } = table.view;
-        const insertRowIds = rows_data.map(rowData => rowData._id);
+        const insertRowIds = rows_data.map(recordData => recordData._id);
         let updatedRowIds = [...rows];
         if (!Array.isArray(upper_row_ids) || upper_row_ids.length === 0) {
           updatedRowIds.push(...insertRowIds);

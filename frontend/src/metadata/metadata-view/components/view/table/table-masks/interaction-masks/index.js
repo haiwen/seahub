@@ -9,6 +9,7 @@ import {
   isFunction,
   isEmptyObject,
   HEADER_HEIGHT_TYPE,
+  getCellValueByColumn,
 } from '../../../../../_basic';
 import { EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE,
   GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT,
@@ -21,7 +22,7 @@ import {
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../../utils/keyboard-utils';
 import SelectionRangeMask from '../selection-range-mask';
 import SelectionMask from '../selection-mask';
-import { getFormatRowData } from '../../../../../utils/cell-format-utils';
+import { getFormatRecordData } from '../../../../../utils/cell-format-utils';
 import RecordMetrics from '../../../../../utils/record-metrics';
 import setEventTransfer from '../../../../../utils/set-event-transfer';
 import getEventTransfer from '../../../../../utils/get-event-transfer';
@@ -514,8 +515,8 @@ class InteractionMasks extends React.Component {
       let linkItem = {};
       let oldLinkItem = {};
       editableColumns.forEach(column => {
-        const { key, name } = column;
-        const cellVal = record[key] || record[name];
+        const { key } = column;
+        const cellVal = getCellValueByColumn(record, column);
         if (cellVal || cellVal === 0 || (Array.isArray(cellVal) && cellVal.length > 0)) {
           originalOldRecordData[key] = cellVal;
           originalUpdate[key] = null;
@@ -530,8 +531,8 @@ class InteractionMasks extends React.Component {
 
       if (Object.keys(originalUpdate).length > 0) {
         updateRecordIds.push(_id);
-        const update = getFormatRowData(editableColumns, originalUpdate);
-        const oldRecordData = getFormatRowData(editableColumns, originalOldRecordData);
+        const update = getFormatRecordData(editableColumns, originalUpdate);
+        const oldRecordData = getFormatRecordData(editableColumns, originalOldRecordData);
         idRecordUpdates[_id] = update;
         idOriginalRecordUpdates[_id] = originalUpdate;
         idOldRecordData[_id] = oldRecordData;

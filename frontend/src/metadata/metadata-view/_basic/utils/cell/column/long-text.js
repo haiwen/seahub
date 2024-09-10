@@ -5,7 +5,10 @@
  */
 const getLongtextDisplayString = (longText) => {
   if (!longText) return '';
-  return longText.text || '';
+  const longTextType = typeof longText;
+  if (longTextType === 'string') return longText;
+  if (longTextType === 'object') return longText.text || '';
+  return '';
 };
 
 export {
