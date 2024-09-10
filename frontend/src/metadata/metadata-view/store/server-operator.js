@@ -12,8 +12,8 @@ class ServerOperator {
     switch (op_type) {
       case OPERATION_TYPE.MODIFY_RECORD: {
         const { repo_id, row_id, updates } = operation;
-        const rowsData = [{ record_id: row_id, record: updates }];
-        window.sfMetadataContext.modifyRecords(repo_id, rowsData).then(res => {
+        const recordsData = [{ record_id: row_id, record: updates }];
+        window.sfMetadataContext.modifyRecords(repo_id, recordsData).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify record') });
@@ -22,10 +22,10 @@ class ServerOperator {
       }
       case OPERATION_TYPE.MODIFY_RECORDS: {
         const { repo_id, row_ids, id_row_updates, is_copy_paste, id_obj_id } = operation;
-        const rowsData = row_ids.map(rowId => {
+        const recordsData = row_ids.map(rowId => {
           return { record_id: rowId, record: id_row_updates[rowId], obj_id: id_obj_id[rowId] };
         });
-        window.sfMetadataContext.modifyRecords(repo_id, rowsData, is_copy_paste).then(res => {
+        window.sfMetadataContext.modifyRecords(repo_id, recordsData, is_copy_paste).then(res => {
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to modify records') });
@@ -300,9 +300,9 @@ class ServerOperator {
     if (!recordUpdates) return [];
     const rowIds = Object.keys(recordUpdates);
     return rowIds.reduce((keys, rowId) => {
-      const rowData = recordUpdates[rowId];
-      if (rowData) {
-        keys.push(...Object.keys(rowData));
+      const recordData = recordUpdates[rowId];
+      if (recordData) {
+        keys.push(...Object.keys(recordData));
       }
       return keys;
     }, []);

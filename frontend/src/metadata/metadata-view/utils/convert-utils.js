@@ -254,6 +254,27 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
   }
 }
 
+// copiedCellVal, pasteCellVal
+const convert2Rate = (cellValue, oldCellValue, fromColumn, targetColumn) => {
+  const { type: fromColumnType } = fromColumn;
+  if (cellValue === '' || [CellType.TEXT, CellType.NUMBER, CellType.RATE].includes(fromColumnType)) {
+    if (cellValue === 0) return 0;
+    if (!cellValue) return null;
+    let copiedDateFormat = fromColumnType === CellType.NUMBER ? fromColumn?.data?.format : null;
+    if (copiedDateFormat === 'percent') {
+      cellValue *= 100;
+    }
+    const newCellVal = getFloatNumber(cellValue.toString(), copiedDateFormat);
+    if (newCellVal > 0) {
+      const { max = 5 } = targetColumn.data;
+      const pasteCellVal = Number(newCellVal.toFixed(0));
+      return pasteCellVal < max ? pasteCellVal : max;
+    }
+    return null;
+  }
+  return null;
+};
+
 const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn) => {
   const { type: copiedColumnType } = copiedColumn;
   if (!copiedCellVal ||
@@ -337,6 +358,9 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
     }
     case CellType.COLLABORATOR: {
       return convert2Collaborator(cellValue, oldCellValue, fromColumnType);
+    }
+    case CellType.RATE: {
+      return convert2Rate(cellValue, oldCellValue, fromColumn, targetColumn);
     }
     default: {
       return oldCellValue;

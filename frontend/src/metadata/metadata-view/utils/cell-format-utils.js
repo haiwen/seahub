@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
 import {
   CellType,
+  getCellValueByColumn,
+  getCellValueDisplayString,
 } from '../_basic';
+import { getColumnOriginName } from './column-utils';
 
 const getAutoTimeDisplayString = (autoTime) => {
   if (!autoTime) {
@@ -12,58 +15,60 @@ const getAutoTimeDisplayString = (autoTime) => {
   return date.format('YYYY-MM-DD HH:mm:ss');
 };
 
-export const getClientCellValueDisplayString = (row, type, key, { data, collaborators = [] } = {}) => {
-  const cellValue = row[key];
+export const getClientCellValueDisplayString = (record, column, { collaborators = [] } = {}) => {
+  const cellValue = getCellValueByColumn(record, column);
+  const { type } = column;
   if (type === CellType.CTIME || type === CellType.MTIME) {
     return getAutoTimeDisplayString(cellValue);
   }
-  return row[key];
+  return getCellValueDisplayString(record, column, { collaborators });
 };
 
-export const getFormatRowData = (columns, rowData) => {
+export const getFormatRecordData = (columns, recordData) => {
   let keyColumnMap = {};
   columns.forEach(column => {
     keyColumnMap[column.key] = column;
   });
-  return convertedToRecordData(rowData, keyColumnMap);
+  return convertedToRecordData(recordData, keyColumnMap);
 };
 
-export const getFormattedRowsData = (rowsData, columns, excludesColumnTypes) => {
+export const getFormattedRecordsData = (recordsData, columns, excludesColumnTypes) => {
   let keyColumnMap = {};
   columns.forEach(column => {
     keyColumnMap[column.key] = column;
   });
-  return rowsData.map(rowData => {
-    let formattedRowsData = convertedToRecordData(rowData, keyColumnMap, excludesColumnTypes);
-    if (rowData._id) {
-      formattedRowsData._id = rowData._id;
+  return recordsData.map(recordData => {
+    let formattedRecordsData = convertedToRecordData(recordData, keyColumnMap, excludesColumnTypes);
+    if (recordData._id) {
+      formattedRecordsData._id = recordData._id;
     }
-    if (Object.prototype.hasOwnProperty.call(rowData, '_archived')) {
-      formattedRowsData._archived = rowData._archived ? 'true' : 'false';
+    if (Object.prototype.hasOwnProperty.call(recordData, '_archived')) {
+      formattedRecordsData._archived = recordData._archived ? 'true' : 'false';
     }
-    return formattedRowsData;
+    return formattedRecordsData;
   });
 };
 
 // { [column.key]: cellValue } -> { [column.name]: cellValue }
 // { [option-column.key]: option.id } -> { [option-column.name]: option.name }
-function convertedToRecordData(rowData, keyColumnMap, excludesColumnTypes = []) {
-  if (!rowData || !keyColumnMap) {
+function convertedToRecordData(originRecordData, keyColumnMap, excludesColumnTypes = []) {
+  if (!originRecordData || !keyColumnMap) {
     return {};
   }
   let recordData = {};
-  Object.keys(rowData).forEach(key => {
+  Object.keys(originRecordData).forEach(key => {
     const column = keyColumnMap[key];
     if (!column) {
       return;
     }
 
-    const { name: colName, type } = column;
+    const { type } = column;
+    const colName = getColumnOriginName(column);
     if (excludesColumnTypes && excludesColumnTypes.includes(type)) {
       return;
     }
 
-    let cellValue = rowData[key];
+    let cellValue = originRecordData[key];
     recordData[colName] = cellValue;
     switch (type) {
       case CellType.TEXT: {

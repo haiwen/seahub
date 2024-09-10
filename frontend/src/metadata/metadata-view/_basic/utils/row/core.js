@@ -9,10 +9,10 @@ const isTableRows = (rows) => (
   Array.isArray(rows) && typeof rows[0] === 'object'
 );
 
-const updateTableRowsWithRowsData = (tables, tableId, rowsData = []) => {
+const updateTableRowsWithRowsData = (tables, tableId, recordsData = []) => {
   let table = getTableById(tables, tableId);
   let idRowDataMap = {};
-  rowsData.forEach((rowData) => idRowDataMap[rowData._id] = rowData);
+  recordsData.forEach((recordData) => idRowDataMap[recordData._id] = recordData);
   table.rows.forEach((row, index) => {
     const rowId = row._id;
     const newRowData = idRowDataMap[rowId];

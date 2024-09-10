@@ -39,7 +39,7 @@ export default function invert(operation) {
     }
     case OPERATION_TYPE.RESTORE_RECORDS: {
       const { page_id, rows_data, original_rows, link_infos, upper_row_ids, } = operation;
-      const row_ids = rows_data.map(rowData => rowData._id);
+      const row_ids = rows_data.map(recordData => recordData._id);
       return createOperation({
         type: OPERATION_TYPE.DELETE_RECORDS,
         page_id,

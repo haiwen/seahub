@@ -1,4 +1,3 @@
-import { CellType } from '../_basic';
 import { toggleSelection } from './toggle-selection';
 import { TRANSFER_TYPES } from '../constants';
 import { getClientCellValueDisplayString } from './cell-format-utils';
@@ -71,13 +70,7 @@ function getCopiedText(records, columns) {
   let copiedText = '';
   records.forEach((record, recordIndex) => {
     columns.forEach((column, columnIndex) => {
-      const { key, type, data } = column || {};
-      if (type === CellType.LONG_TEXT) {
-        const cellValue = record[key];
-        copiedText += cellValue || '';
-      } else {
-        copiedText += (record && getClientCellValueDisplayString(record, type, key, { data, collaborators })) || '';
-      }
+      copiedText += (record && getClientCellValueDisplayString(record, column, { collaborators })) || '';
       if (columnIndex < lastColumnIndex) {
         copiedText += '\t';
       }

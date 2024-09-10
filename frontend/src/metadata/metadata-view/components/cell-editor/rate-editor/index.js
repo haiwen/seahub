@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import RateItem from './rate-item';
 
@@ -7,6 +7,10 @@ import './index.css';
 const RateEditor = ({ isCellSelected, field, value: oldValue, onChange }) => {
   const [value, setValue] = useState(oldValue || 0);
   const [enterIndex, setEnterIndex] = useState(-1);
+
+  useEffect(() => {
+    setValue(oldValue || 0);
+  }, [oldValue]);
 
   const onMouseEnterRateItem = useCallback((index) => {
     setEnterIndex(index);

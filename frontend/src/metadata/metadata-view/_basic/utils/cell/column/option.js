@@ -65,7 +65,7 @@ const getColumnOptionIdsByNames = (column, names) => {
     const option = getOption(options, name);
     if (option) return option.id;
     return null;
-  }).filter(name => name);
+  }).filter(id => id);
 };
 
 /**
