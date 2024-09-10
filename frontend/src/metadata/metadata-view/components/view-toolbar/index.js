@@ -72,7 +72,7 @@ const ViewToolBar = ({ viewId }) => {
       onClick={onHeaderClick}
     >
       <div className="sf-metadata-tool-left-operations">
-        {view.type === VIEW_TYPE.GALLERY && <SliderSetter />}
+        {view.type === VIEW_TYPE.GALLERY && <SliderSetter view={view} />}
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
