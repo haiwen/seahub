@@ -116,8 +116,10 @@ def thumbnail_get(request, repo_id, size, path):
         try:
             with open(thumbnail_file, 'rb') as f:
                 thumbnail = f.read()
-            return HttpResponse(content=thumbnail,
+            resp = HttpResponse(content=thumbnail,
                                 content_type='image/' + THUMBNAIL_EXTENSION)
+            resp['Cache-Control'] = 'public, max-age=604800'
+            return resp
         except IOError as e:
             logger.error(e)
             return HttpResponse(status=500)
