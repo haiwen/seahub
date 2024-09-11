@@ -112,7 +112,7 @@ class FileAccessLog extends React.Component {
                           <tr key={index}>
                             <td className="pl10">
                               <img src={item.avatar_url} alt='' width="24" className="rounded-circle mr-2" />
-                              {item.email ? <a href={`${siteRoot}profile/${encodeURIComponent(item.email)}/`} target="_blank" rel="noreferrer">{item.name}</a> : <span>{gettext('Anonymous User')}</span>}
+                              {item.email ? <a href={`${siteRoot}profile/${encodeURIComponent(item.email)}/`} target="_blank" rel="noreferrer" className="align-middle">{item.name}</a> : <span>{gettext('Anonymous User')}</span>}
                             </td>
                             <td>{item.etype}</td>
                             <td className="pr-4">
