@@ -98,6 +98,11 @@ class App extends Component {
     // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
     if (location.pathname == siteRoot) {
       currentTab = 'libraries';
+    // when visit a 'dir view' page(http://127.0.0.1:8000/library/1137c0c3-5a5d-4da1-8fd0-69e227a9a23e/My%20Library/) directly via URL,
+    // emulate visiting it from 'Files' page(get the `currentTab` & `pathPrefix`)
+    } else if (location.pathname.split('/')[1] == 'library') {
+      this.tabItemClick('libraries');
+      return;
     } else {
       let href = window.location.href.split('/');
       currentTab = href[href.length - 2];
