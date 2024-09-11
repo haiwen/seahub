@@ -117,7 +117,20 @@ class ViewFileText extends React.Component {
 
   componentDidMount() {
     this.getParticipants();
+    window.addEventListener('keydown', this.saveFile);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.saveFile);
+  }
+
+  saveFile = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key == 's' && this.state.needSave) {
+      // `Ctrl + S` or `Cmd + S`(in Mac)
+      e.preventDefault();
+      this.onSave();
+    }
+  };
 
   render() {
     return (
