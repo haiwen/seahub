@@ -15,7 +15,7 @@ except:
     from urllib.request import urlretrieve
 
 from PIL import Image
-from pillow_heif import register_heif_opener
+
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
@@ -24,11 +24,16 @@ from seahub.utils.file_types import VIDEO, XMIND, PDF
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
+try:
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+except ImportError:
+    pass
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 XMIND_IMAGE_SIZE = 1024
-register_heif_opener()
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
