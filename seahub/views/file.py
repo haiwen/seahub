@@ -1122,7 +1122,7 @@ def view_snapshot_file(request, repo_id):
     #return render(request, 'view_snapshot_file.html', ret_dict)
     return render(request, 'history_file_view_react.html', ret_dict)
 
-def _download_file_from_share_link(request, fileshare):
+def _download_file_from_share_link(request, fileshare, use_tmp_token=False):
     """Download shared file.
     `path` need to be provided by frontend, if missing, use `fileshare.path`
     """
@@ -1143,10 +1143,19 @@ def _download_file_from_share_link(request, fileshare):
     else:
         real_path = fileshare.path
 
+    filename = os.path.basename(real_path)
     obj_id = seafile_api.get_file_id_by_path(repo.id, real_path)
     if not obj_id:
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
+    
+    if use_tmp_token:
+        dl_token = seafile_api.get_fileserver_access_token(repo.id,
+            obj_id, 'download-link', fileshare.username, use_onetime=False)
+        if not dl_token:
+            messages.error(request, _('Unable to download file.'))
+        
+        return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
     return HttpResponseRedirect(gen_file_get_url_by_sharelink(fileshare.token))
 
@@ -1466,7 +1475,7 @@ def view_file_via_shared_dir(request, fileshare):
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
 
-        return _download_file_from_share_link(request, fileshare)
+        return _download_file_from_share_link(request, fileshare, use_tmp_token=True)
 
     # get raw file
     access_token = seafile_api.get_fileserver_access_token(repo.id,
