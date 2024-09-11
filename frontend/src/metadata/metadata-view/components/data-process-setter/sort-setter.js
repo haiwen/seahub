@@ -1,10 +1,11 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
 import { getValidSorts, CommonlyUsedHotkey } from '../../_basic';
 import { gettext } from '../../utils';
 import { SortPopover } from '../popover';
+import { EVENT_BUS_TYPE } from '../../constants';
 
 const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeedSubmit, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -19,6 +20,19 @@ const SortSetter = ({ target, type, sorts: propsSorts, readOnly, columns, isNeed
     if (sortsLength > 1) return sortsLength + ' ' + (isNeedSubmit ? gettext('preset sorts') : gettext('sorts'));
     return isNeedSubmit ? gettext('Preset sort') : gettext('Sort');
   }, [isNeedSubmit, sorts]);
+
+  const displaySetter = useCallback(() => {
+    setShowSetter(true);
+  }, []);
+
+  useEffect(() => {
+    const eventBus = window.sfMetadataContext.eventBus;
+    const unsubscribeDisplaySorts = eventBus.subscribe(EVENT_BUS_TYPE.DISPLAY_SORTS, displaySetter);
+    return () => {
+      unsubscribeDisplaySorts();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSetterToggle = useCallback(() => {
     setShowSetter(!isShowSetter);

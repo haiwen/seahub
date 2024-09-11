@@ -41,7 +41,7 @@ const ColumnDropdownItem = ({ disabled, iconName, target, title, tip, className,
         <Icon iconName={iconName} />
         <span className="item-text">{title}</span>
         {isShowToolTip && (
-          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }}>
+          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-metadata-tooltip">
             {tip}
           </UncontrolledTooltip>
         )}

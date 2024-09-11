@@ -204,11 +204,31 @@
   background-color: #f9f9f9;
 }
 
-.tooltip-inner {
+.sf-metadata-tooltip .tooltip-inner {
   max-width: 242px;
   font-weight: lighter;
   text-align: start;
   background-color: #303133;
+}
+
+.sf-metadata-tooltip .bs-tooltip-right .arrow::before,
+.sf-metadata-tooltip .bs-tooltip-auto[x-placement^="right"] .arrow::before {
+  border-right-color: #303133;
+}
+
+.sf-metadata-tooltip .bs-tooltip-top .arrow::before,
+.sf-metadata-tooltip .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+  border-top-color: #303133;
+}
+
+.sf-metadata-tooltip .bs-tooltip-bottom .arrow::before,
+.sf-metadata-tooltip .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+  border-bottom-color: #303133;
+}
+
+.sf-metadata-tooltip .bs-tooltip-left .arrow::before,
+.sf-metadata-tooltip .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+  border-left-color: #303133;
 }
 
 /* records count */

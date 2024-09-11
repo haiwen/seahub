@@ -360,7 +360,7 @@ class Store {
     this.applyOperation(operation);
   }
 
-  modifySorts(sorts) {
+  modifySorts(sorts, displaySorts = false) {
     const type = OPERATION_TYPE.MODIFY_SORTS;
     const operation = this.createOperation({
       type,
@@ -369,6 +369,7 @@ class Store {
       view_id: this.viewId,
       success_callback: () => {
         this.context.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+        displaySorts && this.context.eventBus.dispatch(EVENT_BUS_TYPE.DISPLAY_SORTS);
       }
     });
     this.applyOperation(operation);
