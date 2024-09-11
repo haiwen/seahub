@@ -49,8 +49,8 @@ export const MetadataProvider = ({
     window.sfMetadataStore.modifyFilters(filterConjunction, filters, basicFilters);
   }, []);
 
-  const modifySorts = useCallback((sorts) => {
-    window.sfMetadataStore.modifySorts(sorts);
+  const modifySorts = useCallback((sorts, displaySorts = false) => {
+    window.sfMetadataStore.modifySorts(sorts, displaySorts);
   }, []);
 
   const modifyGroupbys = useCallback((groupbys) => {

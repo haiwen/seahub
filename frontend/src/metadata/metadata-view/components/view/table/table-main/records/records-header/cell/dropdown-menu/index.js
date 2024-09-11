@@ -5,12 +5,15 @@ import classnames from 'classnames';
 import { ModalPortal, Icon } from '@seafile/sf-metadata-ui-component';
 import { isMobile, gettext } from '../../../../../../../../utils';
 import DropdownItem from './dropdown-item';
-import { CellType, DEFAULT_DATE_FORMAT, getDateDisplayString } from '../../../../../../../../_basic';
+import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE,
+  getDateDisplayString
+} from '../../../../../../../../_basic';
 import { RenamePopover, OptionsPopover } from '../../../../../../../popover';
+import { EVENT_BUS_TYPE } from '../../../../../../../../constants';
 
 import './index.css';
 
-const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColumn }) => {
+const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, deleteColumn }) => {
   const menuRef = createRef();
   const dropdownDomRef = createRef();
   const [isMenuShow, setMenuShow] = useState(false);
@@ -153,11 +156,38 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
     );
   }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu]);
 
+  const modifySort = useCallback((type, event) => {
+    const canModifyView = window.sfMetadataContext.canModifyView();
+    if (!canModifyView) {
+      event.stopPropagation();
+      return;
+    }
+    const sorts = view.sorts.slice(0);
+    const { key } = column;
+    const sortIndex = sorts.findIndex(sort => sort.column_key === key);
+    const sort = sorts[sortIndex];
+    const newSort = { column_key: column.key, sort_type: type };
+    const eventBus = window.sfMetadataContext.eventBus;
+    if (!sort) {
+      sorts.push(newSort);
+      eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SORTS, sorts, true);
+      return;
+    }
+    if (sort && sort.sort_type !== type) {
+      sorts.splice(sortIndex, 1, newSort);
+      eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SORTS, sorts, true);
+      return;
+    }
+    eventBus.dispatch(EVENT_BUS_TYPE.DISPLAY_SORTS);
+  }, [view, column]);
+
   const renderDropdownMenu = useCallback(() => {
     const { type } = column;
     const canModifyColumnData = window.sfMetadataContext.canModifyColumnData(column);
     const canDeleteColumn = window.sfMetadataContext.canDeleteColumn(column);
     const canRenameColumn = window.sfMetadataContext.canRenameColumn(column);
+    const canModifyView = window.sfMetadataContext.canModifyView();
+
     return (
       <DropdownMenu ref={menuRef} className="sf-metadata-column-dropdown-menu">
         <div ref={dropdownDomRef}>
@@ -216,6 +246,28 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
             onChange={openRenamePopover}
             onMouseEnter={hideSubMenu}
           />
+          {(SORT_COLUMN_OPTIONS.includes(column.type) || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)) && (
+            <>
+              <DropdownItem
+                disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
+                target="sf-metadata-sort-ascending-column"
+                iconName="sort-ascending"
+                title={gettext('Sort ascending')}
+                tip={!canModifyView ? gettext('You do not have permission') : gettext('This property does not support sorting')}
+                onChange={() => modifySort(SORT_TYPE.UP)}
+                onMouseEnter={hideSubMenu}
+              />
+              <DropdownItem
+                disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
+                target="sf-metadata-sort-descending-column"
+                iconName="sort-descending"
+                title={gettext('Sort descending')}
+                tip={!canModifyView ? gettext('You do not have permission') : gettext('This property does not support sorting')}
+                onChange={() => modifySort(SORT_TYPE.DOWN)}
+                onMouseEnter={hideSubMenu}
+              />
+            </>
+          )}
           <DropdownItem
             disabled={!canDeleteColumn}
             target="sf-metadata-delete-column"
@@ -228,7 +280,7 @@ const HeaderDropdownMenu = ({ column, renameColumn, modifyColumnData, deleteColu
         </div>
       </DropdownMenu>
     );
-  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, onDelete]);
+  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, modifySort, onDelete]);
 
   return (
     <>

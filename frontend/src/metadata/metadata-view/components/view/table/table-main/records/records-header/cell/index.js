@@ -89,6 +89,7 @@ const Cell = ({
   isHideTriangle,
   column,
   style: propsStyle,
+  view,
   renameColumn,
   deleteColumn,
   modifyColumnData,
@@ -99,8 +100,8 @@ const Cell = ({
 
   const canEditColumnInfo = useMemo(() => {
     if (isHideTriangle) return false;
-    return window.sfMetadataContext.canModifyColumn(column);
-  }, [isHideTriangle, column]);
+    return window.sfMetadataContext.canModify();
+  }, [isHideTriangle]);
 
   const style = useMemo(() => {
     const { left, width } = column;
@@ -159,7 +160,7 @@ const Cell = ({
         <span className="mr-2" id={`header-icon-${key}`}>
           <Icon iconName={COLUMNS_ICON_CONFIG[type]} className="sf-metadata-column-icon" />
         </span>
-        <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover">
+        <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-metadata-tooltip">
           {gettext(headerIconTooltip)}
         </UncontrolledTooltip>
         <div className="header-name d-flex">
@@ -169,6 +170,7 @@ const Cell = ({
       {canEditColumnInfo && (
         <DropdownMenu
           column={column}
+          view={view}
           renameColumn={renameColumn}
           deleteColumn={deleteColumn}
           modifyColumnData={modifyColumnData}
@@ -213,6 +215,7 @@ Cell.propTypes = {
   frozen: PropTypes.bool,
   isLastFrozenCell: PropTypes.bool,
   isHideTriangle: PropTypes.bool,
+  view: PropTypes.object,
   renameColumn: PropTypes.func,
   deleteColumn: PropTypes.func,
   modifyColumnData: PropTypes.func,

@@ -534,6 +534,7 @@ class FilterItem extends React.Component {
           target={this.invalidFilterTip}
           placement='bottom'
           fade={false}
+          className="sf-metadata-tooltip"
         >
           {gettext('Invalid filter')}
         </UncontrolledTooltip>
@@ -608,7 +609,7 @@ class FilterItem extends React.Component {
             {/* {showToolTip && (
               <div className="ml-2" >
                 <IconBtn id={`filter-tool-tip-${filterColumn.key}`} iconName="exclamation-triangle" />
-                <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} >
+                <UncontrolledTooltip placement="bottom" target={`filter-tool-tip-${filterColumn.key}`} className="sf-metadata-tooltip">
                   {gettext('If there are multiple items in the cell, a random one will be chosen and be compared with the filter value.')}
                 </UncontrolledTooltip>
               </div>

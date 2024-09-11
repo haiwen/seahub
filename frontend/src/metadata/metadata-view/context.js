@@ -92,6 +92,11 @@ class Context {
     return this.permission;
   };
 
+  canModify = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   canModifyRow = (row) => {
     if (this.permission === 'r') return false;
     return true;

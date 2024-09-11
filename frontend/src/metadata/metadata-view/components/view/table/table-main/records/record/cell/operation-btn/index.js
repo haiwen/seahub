@@ -28,6 +28,7 @@ const CellOperationBtn = ({ isDir, column, value }) => {
         fade={false}
         delay={{ show: 0, hide: 0 }}
         modifiers={{ preventOverflow: { boundariesElement: document.body } }}
+        className="sf-metadata-tooltip"
       >
         {isDir ? gettext('Open folder') : gettext('Open file')}
       </UncontrolledTooltip>
