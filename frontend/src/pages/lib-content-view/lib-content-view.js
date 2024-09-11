@@ -99,6 +99,9 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
+    this.markdownFileName = '';
+    this.markdownFileParentDir = '';
+    this.unsubscribeEventBus = null;
   }
 
   showDirentDetail = (direntDetailPanelTab) => {
@@ -129,6 +132,7 @@ class LibContentView extends React.Component {
   };
 
   componentDidMount() {
+    this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.calculatePara(this.props);
   }
 
@@ -139,8 +143,7 @@ class LibContentView extends React.Component {
   }
 
   calculatePara = async (props) => {
-    const { repoID, eventBus } = props;
-    this.unsubscribeEvent = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
+    const { repoID } = props;
 
     const path = this.getPathFromLocation(repoID);
 
@@ -227,6 +230,7 @@ class LibContentView extends React.Component {
     window.onpopstate = this.oldonpopstate;
     collabServer.unwatchRepo(this.props.repoID, this.onRepoUpdateEvent);
     this.unsubscribeEvent();
+    this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -457,6 +461,13 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: path }, path, url);
   };
 
+  openMarkDownDialog = (parentDir, fileName) => {
+    this.markdownFileParentDir = parentDir;
+    this.markdownFileName = fileName;
+    const markdownFilePath = Utils.joinPath(parentDir, fileName);
+    this.showFile(markdownFilePath, true);
+  };
+
   showFile = (filePath, noRedirection) => {
     let repoID = this.props.repoID;
 
@@ -519,6 +530,10 @@ class LibContentView extends React.Component {
       path: filePath,
       viewId: viewId,
       isDirentDetailShow: false
+    }, () => {
+      setTimeout(() => {
+        this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
+      }, 1);
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
@@ -2003,7 +2018,25 @@ class LibContentView extends React.Component {
       this.setState({
         currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
       });
+      this.markdownFileName = '';
+      this.markdownFileParentDir = '';
     }
+  };
+
+  getMarkDownFilePath = () => {
+    return this.markdownFileParentDir || this.state.path || '';
+  };
+
+  getMarkDownFileName = () => {
+    return this.markdownFileName || this.state.currentDirent.name || '';
+  };
+
+  openMarkdownFile = () => {
+    let { repoID } = this.props;
+    let path = this.getMarkDownFilePath();
+    let name = this.getMarkDownFileName();
+    let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + (path.endsWith('/') ? '' : '/') + name;
+    window.open(newUrl, '_blank');
   };
 
   recalculateSelectedDirents = (unSelectNames, newDirentList) => {
@@ -2289,6 +2322,9 @@ class LibContentView extends React.Component {
               onUploadFolder={this.onUploadFolder}
               eventBus={this.props.eventBus}
               onCloseMarkdownViewDialog={this.onCloseMarkdownViewDialog}
+              getMarkDownFilePath={this.getMarkDownFilePath}
+              getMarkDownFileName={this.getMarkDownFileName}
+              openMarkdownFile={this.openMarkdownFile}
             />
             {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader

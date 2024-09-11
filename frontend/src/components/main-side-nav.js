@@ -152,7 +152,7 @@ class MainSideNav extends React.Component {
         className={`nav sub-nav nav-pills flex-column ${this.state.sharedExtended ? 'side-panel-slide-share-admin' : 'side-panel-slide-up-share-admin'}`}
         style={style}
       >
-        {canAddRepo && canShareRepo && (
+        {canAddRepo && canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-libs')}`}>
             <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
               <span aria-hidden="true" className="sharp">#</span>
@@ -160,7 +160,7 @@ class MainSideNav extends React.Component {
             </Link>
           </li>
         )}
-        {canShareRepo && (
+        {canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-folders')}`}>
             <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
               <span aria-hidden="true" className="sharp">#</span>
@@ -168,7 +168,7 @@ class MainSideNav extends React.Component {
             </Link>
           </li>
         )}
-        {linksNavItem}
+        { height !== 0 && linksNavItem}
       </ul>
     );
   }

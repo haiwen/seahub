@@ -343,6 +343,9 @@ class LibContentContainer extends React.Component {
               isDirentDetailShow={this.props.isDirentDetailShow}
               eventBus={this.props.eventBus}
               onCloseMarkdownViewDialog={this.props.onCloseMarkdownViewDialog}
+              getMarkDownFilePath={this.props.getMarkDownFilePath}
+              getMarkDownFileName={this.props.getMarkDownFileName}
+              openMarkdownFile={this.props.openMarkdownFile}
             />
           )}
           {this.props.isDirentDetailShow && (

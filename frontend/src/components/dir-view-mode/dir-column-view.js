@@ -281,11 +281,12 @@ class DirColumnView extends React.Component {
           }
           {this.props.isViewFile &&
             <MarkdownViewerDialog
-              path={this.props.path}
               repoID={this.props.repoID}
+              filePath={this.props.getMarkDownFilePath()}
+              fileName={this.props.getMarkDownFileName()}
+              openMarkdownFile={this.props.openMarkdownFile}
               isFileLoading={this.props.isFileLoading}
               content={this.props.content}
-              currentDirent={this.props.currentDirent}
               lastModified={this.props.lastModified}
               latestContributor={this.props.latestContributor}
               onLinkClick={this.props.onLinkClick}

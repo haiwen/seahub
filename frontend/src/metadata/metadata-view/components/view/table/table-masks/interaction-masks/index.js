@@ -1011,16 +1011,15 @@ class InteractionMasks extends React.Component {
 
   renderSingleCellSelectView = () => {
     const { columns } = this.props;
-    const {
-      isEditorEnabled,
-      selectedPosition,
-    } = this.state;
+    const { isEditorEnabled, selectedPosition } = this.state;
     const isDragEnabled = this.isSelectedCellEditable();
     const canEdit = window.sfMetadataContext.canModifyRows();
     const showDragHandle = (isDragEnabled && canEdit);
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = column || {};
-    if (isEditorEnabled && columnType !== CellType.RATE && columnType !== CellType.CHECKBOX && columnType !== CellType.FILE_NAME) return null;
+    if (isEditorEnabled && columnType !== CellType.RATE && columnType !== CellType.CHECKBOX && columnType !== CellType.FILE_NAME) {
+      return null;
+    }
     if (!this.isGridSelected()) return null;
 
     const props = {
@@ -1030,12 +1029,7 @@ class InteractionMasks extends React.Component {
     };
     return (
       <SelectionMask {...props}>
-        {showDragHandle ?
-          <DragHandler
-            onDragStart={this.handleDragStart}
-            onDragEnd={this.handleDragEnd}
-          />
-          : null}
+        {showDragHandle && <DragHandler onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} />}
       </SelectionMask>
     );
   };
@@ -1056,12 +1050,7 @@ class InteractionMasks extends React.Component {
         rowHeight={rowHeight}
         getSelectedRangeDimensions={this.getSelectedRangeDimensions}
       >
-        {showDragHandle ?
-          <DragHandler
-            onDragStart={this.handleDragStart}
-            onDragEnd={this.handleDragEnd}
-          />
-          : null}
+        {showDragHandle && <DragHandler onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} />}
       </SelectionRangeMask>,
       <SelectionMask
         key="selection-mask"
@@ -1093,8 +1082,7 @@ class InteractionMasks extends React.Component {
             getSelectedRangeDimensions={this.getSelectedRangeDimensions}
           />
         )}
-        {isSelectedSingleCell && this.renderSingleCellSelectView()}
-        {!isSelectedSingleCell && this.renderCellRangeSelectView()}
+        {isSelectedSingleCell ? this.renderSingleCellSelectView() : this.renderCellRangeSelectView()}
         {isEditorEnabled && (
           <EditorPortal target={editorPortalTarget}>
             <EditorContainer
