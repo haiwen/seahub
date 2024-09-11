@@ -16,6 +16,8 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils import gen_shared_link
@@ -27,7 +29,7 @@ from seahub.share.models import FileShare
 logger = logging.getLogger(__name__)
 
 
-def get_share_link_info(fileshare):
+def get_share_link_info(fileshare, avatar_size=AVATAR_DEFAULT_SIZE):
 
     data = {}
     token = fileshare.token
@@ -53,6 +55,9 @@ def get_share_link_info(fileshare):
     data['creator_name'] = email2nickname(creator_email)
     data['creator_contact_email'] = email2contact_email(creator_email)
 
+    url, _, _ = api_avatar_url(creator_email, avatar_size)
+    data['creator_avatar'] = url
+
     data['path'] = path
     data['obj_name'] = obj_name
     data['is_dir'] = True if fileshare.s_type == 'd' else False
@@ -61,6 +66,7 @@ def get_share_link_info(fileshare):
     data['link'] = gen_shared_link(token, fileshare.s_type)
     data['ctime'] = ctime
     data['expire_date'] = expire_date
+    data['view_cnt'] = fileshare.view_cnt
 
     return data
 
@@ -90,11 +96,25 @@ class RepoShareLinks(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        offset = per_page * (current_page - 1)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
         result = []
-        fileshares = FileShare.objects.filter(repo_id=repo_id)
+        fileshares = FileShare.objects.filter(repo_id=repo_id)[offset:offset + per_page]
 
         for fileshare in fileshares:
-            link_info = get_share_link_info(fileshare)
+            link_info = get_share_link_info(fileshare, avatar_size)
             link_info['repo_id'] = repo_id
             link_info['repo_name'] = repo.name
             result.append(link_info)

@@ -282,6 +282,56 @@ class UploadLinks(APIView):
         link_info = get_upload_link_info(uls)
         return Response(link_info)
 
+    def delete(self, request):
+        """ Delete upload links.
+
+        Permission checking:
+        1. default(NOT guest) user;
+        2. link owner;
+        """
+
+        token_list = request.data.get('tokens')
+        if not token_list:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        username = request.user.username
+        for token in token_list:
+
+            try:
+                upload_link = UploadLinkShare.objects.get(token=token)
+            except UploadLinkShare.DoesNotExist:
+                result['success'].append({
+                    'token': token,
+                })
+                continue
+
+            if not upload_link.is_owner(username):
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': _('Permission denied.')
+                    })
+                continue
+
+            try:
+                upload_link.delete()
+                result['success'].append({
+                    'token': token,
+                })
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': _('Internal Server Error')
+                    })
+                continue
+
+        return Response(result)
+
 
 class UploadLink(APIView):
 
