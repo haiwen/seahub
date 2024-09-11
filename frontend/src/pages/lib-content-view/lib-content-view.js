@@ -1596,18 +1596,10 @@ class LibContentView extends React.Component {
 
   onFileUploadSuccess = (direntObject) => {
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
-
     if (isExist) {
-      const updatedDirentList = this.state.direntList.map(dirent => {
-        if (dirent.name === direntObject.name && dirent.type === direntObject.type) {
-          const mtime = moment.unix(direntObject.mtime).fromNow();
-
-          return this.updateDirent(dirent, 'mtime', mtime); // Note: Consider updating file size here as well
-        }
-        return dirent;
-      });
-
-      this.setState({ direntList: updatedDirentList });
+      const dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
+      const mtime = moment.unix(direntObject.mtime).fromNow();
+      dirent && this.updateDirent(dirent, 'mtime', mtime);
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
