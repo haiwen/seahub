@@ -647,7 +647,7 @@ class FileView(APIView):
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-                if resp.status_code == 500:
+                if resp.status_code != 200:
                     logger.error('convert file error status: %s body: %s',
                                  resp.status_code, resp.text)
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
