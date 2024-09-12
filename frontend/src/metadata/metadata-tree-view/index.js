@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { DropTarget } from 'react-dnd';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
+import html5DragDropContext from '../../pages/wiki2/wiki-nav/html5DragDropContext';
 import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
@@ -109,6 +111,10 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     }
   }, [handleInputSubmit]);
 
+  const handleMove = useCallback((draggedViewId, targetViewId) => {
+    moveView(draggedViewId, targetViewId);
+  }, [moveView]);
+
   return (
     <>
       <div className="tree-view tree metadata-tree-view">
@@ -129,7 +135,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   onDelete={() => deleteView(view._id, isSelected)}
                   onCopy={() => duplicateView(view._id)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
-                  onMove={moveView}
+                  onMove={handleMove}
+                  index={index}
                 />
               );
             })}
@@ -178,4 +185,8 @@ MetadataTreeView.propTypes = {
   currentPath: PropTypes.string,
 };
 
-export default MetadataTreeView;
+const DndMetadataTreeViewContainer = DropTarget('sfMetadataTreeViewItem', {}, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))(MetadataTreeView);
+
+export default html5DragDropContext(DndMetadataTreeViewContainer);
