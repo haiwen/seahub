@@ -17,12 +17,15 @@ from seahub.auth.decorators import login_required_ajax, login_required
 from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT
+import seahub.settings as settings
 from seahub.thumbnail.utils import generate_thumbnail, \
     get_thumbnail_src, get_share_link_thumbnail_src
 from seahub.share.models import FileShare, check_share_link_common
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+THUMBNAIL_CACHE_DAYS = getattr(settings, 'THUMBNAIL_CACHE_DAYS', 7)
 
 @login_required_ajax
 def thumbnail_create(request, repo_id):
@@ -116,8 +119,11 @@ def thumbnail_get(request, repo_id, size, path):
         try:
             with open(thumbnail_file, 'rb') as f:
                 thumbnail = f.read()
-            return HttpResponse(content=thumbnail,
+            resp = HttpResponse(content=thumbnail,
                                 content_type='image/' + THUMBNAIL_EXTENSION)
+            
+            resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
+            return resp
         except IOError as e:
             logger.error(e)
             return HttpResponse(status=500)

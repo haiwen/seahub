@@ -74,8 +74,8 @@ class InternalCheckShareLinkAccess(APIView):
             share_obj = FileShare.objects.filter(token=link_token).first()
             
         if not share_obj:
-            error_msg = 'Share link does not exist.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            error_msg = 'Link does not exist.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if share_obj.is_expired():
             error_msg = 'Link is expired.'
