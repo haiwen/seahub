@@ -28,14 +28,14 @@ const COLUMNS = [
     canChangeName: false,
     groupby: 'predefined'
   }, {
-    icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
-    type: CellType.TEXT,
-    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS),
-    unique: true,
-    key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS,
-    canChangeName: false,
-    groupby: 'predefined'
-  }, {
+  //   icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
+  //   type: CellType.TEXT,
+  //   name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_KEYWORDS),
+  //   unique: true,
+  //   key: PRIVATE_COLUMN_KEY.FILE_KEYWORDS,
+  //   canChangeName: false,
+  //   groupby: 'predefined'
+  // }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION),
@@ -44,14 +44,14 @@ const COLUMNS = [
     canChangeName: false,
     groupby: 'predefined'
   }, {
-    icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX],
-    type: CellType.CHECKBOX,
-    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED),
-    unique: true,
-    key: PRIVATE_COLUMN_KEY.FILE_EXPIRED,
-    canChangeName: false,
-    groupby: 'predefined'
-  }, {
+  //   icon: COLUMNS_ICON_CONFIG[CellType.CHECKBOX],
+  //   type: CellType.CHECKBOX,
+  //   name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRED),
+  //   unique: true,
+  //   key: PRIVATE_COLUMN_KEY.FILE_EXPIRED,
+  //   canChangeName: false,
+  //   groupby: 'predefined'
+  // }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],
     type: CellType.SINGLE_SELECT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS),
