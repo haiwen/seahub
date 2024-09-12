@@ -118,7 +118,7 @@ class RecordsFooter extends React.Component {
       return gettext('xxx cells selected').replace('xxx', selectedCellsCount);
     }
 
-    let recordsCountText = gettext('No record');
+    let recordsCountText;
     if (recordsCount > 1) {
       recordsCountText = gettext('xxx records').replace('xxx', recordsCount);
     } else if (recordsCount === 1) {

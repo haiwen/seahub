@@ -5,7 +5,7 @@ import { Utils } from '../../../../../utils/utils';
 import { getDateDisplayString, PRIVATE_COLUMN_KEY } from '../../../_basic';
 import { siteRoot, thumbnailSizeForGrid } from '../../../../../utils/constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../constants';
-import Main from './main';
+import GalleryMain from './gallery-main';
 import toaster from '../../../../../components/toast';
 
 import './index.css';
@@ -167,8 +167,12 @@ const Gallery = () => {
       <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            <Main groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
-            {isLoadingMore && (<div className="sf-metadata-gallery-loading-more"><CenteredLoading /></div>)}
+            <GalleryMain groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
+            {isLoadingMore &&
+              <div className="sf-metadata-gallery-loading-more">
+                <CenteredLoading />
+              </div>
+            }
           </>
         )}
       </div>
