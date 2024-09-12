@@ -12,7 +12,6 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
-  isViewFile: PropTypes.bool,
   fileTags: PropTypes.array.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
   direntList: PropTypes.array,
@@ -64,7 +63,6 @@ class CurDirPath extends React.Component {
           userPerm={this.props.userPerm}
           onPathClick={this.props.onPathClick}
           onTabNavClick={this.props.onTabNavClick}
-          isViewFile={this.props.isViewFile}
           fileTags={this.props.fileTags}
           toggleTreePanel={this.props.toggleTreePanel}
           enableDirPrivateShare={this.props.enableDirPrivateShare}

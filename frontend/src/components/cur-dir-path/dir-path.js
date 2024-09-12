@@ -15,7 +15,6 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
   pathPrefix: PropTypes.array,
-  isViewFile: PropTypes.bool,
   fileTags: PropTypes.array.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,

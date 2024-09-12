@@ -231,7 +231,6 @@ class LibContentContainer extends React.Component {
                 pathPrefix={this.props.pathPrefix}
                 currentPath={this.props.path}
                 userPerm={this.props.userPerm}
-                isViewFile={this.props.isViewFile}
                 onTabNavClick={this.props.onTabNavClick}
                 onPathClick={this.onPathClick}
                 fileTags={this.props.fileTags}
