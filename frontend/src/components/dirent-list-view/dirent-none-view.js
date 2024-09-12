@@ -14,7 +14,7 @@ const propTypes = {
   onAddFile: PropTypes.func.isRequired
 };
 
-class DirentNodeView extends React.Component {
+class DirentNoneView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -88,6 +88,6 @@ class DirentNodeView extends React.Component {
   }
 }
 
-DirentNodeView.propTypes = propTypes;
+DirentNoneView.propTypes = propTypes;
 
-export default DirentNodeView;
+export default DirentNoneView;

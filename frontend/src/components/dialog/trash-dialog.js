@@ -11,6 +11,8 @@ import ModalPortal from '../../components/modal-portal';
 import toaster from '../../components/toast';
 import CleanTrash from '../../components/dialog/clean-trash';
 import Paginator from '../paginator';
+import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
@@ -141,7 +143,7 @@ class TrashDialog extends React.Component {
 
   render() {
     const { showTrashDialog, toggleTrashDialog } = this.props;
-    const { isCleanTrashDialogOpen, showFolder } = this.state;
+    const { isCleanTrashDialogOpen, showFolder, isLoading, items } = this.state;
     const isRepoAdmin = this.props.currentRepoInfo.owner_email === username || this.props.currentRepoInfo.is_admin;
     const repoFolderName = this.props.currentRepoInfo.repo_name;
     const oldTrashUrl = siteRoot + 'repo/' + this.props.repoID + '/trash/';
@@ -164,6 +166,11 @@ class TrashDialog extends React.Component {
           <div dangerouslySetInnerHTML={{ __html: title }}></div>
         </ModalHeader>
         <ModalBody>
+          {isLoading && <Loading />}
+          {!isLoading && items.length === 0 &&
+            <EmptyTip text={gettext('No file')} className="m-0" />
+          }
+          {!isLoading && items.length > 0 &&
           <Content
             data={this.state}
             repoID={this.props.repoID}
@@ -175,6 +182,7 @@ class TrashDialog extends React.Component {
             getListByPage={this.getItems2}
             resetPerPage={this.resetPerPage}
           />
+          }
           {isCleanTrashDialogOpen &&
           <ModalPortal>
             <CleanTrash
