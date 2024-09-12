@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext, wikiPermission } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
@@ -53,11 +53,21 @@ class Wiki extends Component {
   }
 
   handlePath = () => {
+    const custom_url = window.location.pathname.substring(1);
+    if (custom_url.includes('wiki/publish')) {
+      return custom_url;
+    }
+
     return isWiki2 ? 'wikis/' : 'published/';
   };
-
   getWikiConfig = () => {
-    wikiAPI.getWiki2Config(wikiId).then(res => {
+    let wikiAPIConfig;
+    if (wikiPermission === 'public') {
+      wikiAPIConfig = wikiAPI.getWiki2PublishConfig(wikiId);
+    } else {
+      wikiAPIConfig = wikiAPI.getWiki2Config(wikiId);
+    }
+    wikiAPIConfig.then(res => {
       const { wiki_config, repo_id, id: wikiRepoId } = res.data.wiki;
       const config = new WikiConfig(wiki_config || {});
       this.setState({
@@ -137,7 +147,13 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
     });
-    wikiAPI.getWiki2Page(wikiId, pageId).then(res => {
+    let getWikiPage;
+    if (wikiPermission === 'public') {
+      getWikiPage = wikiAPI.getWiki2PublishPage(wikiId, pageId);
+    } else {
+      getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
+    }
+    getWikiPage.then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
       this.setState({
         permission,
@@ -154,7 +170,10 @@ class Wiki extends Component {
 
     const params = new URLSearchParams(window.location.search);
     params.set('page_id', pageId);
-    const fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    let fileUrl = `${siteRoot}${this.handlePath()}${wikiId}/?${params.toString()}`;
+    if (this.handlePath().includes('wiki/publish')) {
+      fileUrl = `${siteRoot}${this.handlePath()}?${params.toString()}`;
+    }
     window.history.pushState({ url: fileUrl, path: filePath }, filePath, fileUrl);
   };
 

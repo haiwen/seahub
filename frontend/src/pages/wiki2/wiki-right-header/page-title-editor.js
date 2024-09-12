@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { throttle } from '../utils';
+import { wikiPermission } from '../../../utils/constants';
 
 function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 
@@ -87,18 +88,28 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 
 
   return (
-    <div
-      className='wiki-sdoc-title'
-      contentEditable
-      suppressContentEditableWarning
-      ref={contentEditableRef}
-      onInput={handleInput}
-      onKeyDown={onKeyDown}
-      onCompositionStart={onCompositionStart}
-      onCompositionEnd={onCompositionEnd}
-    >
-      {pageName}
+    <div>
+      {wikiPermission === 'public' ?
+        <div
+          className='wiki-sdoc-title'
+        >
+          {pageName}
+        </div> :
+        <div
+          className='wiki-sdoc-title'
+          contentEditable
+          suppressContentEditableWarning
+          ref={contentEditableRef}
+          onInput={handleInput}
+          onKeyDown={onKeyDown}
+          onCompositionStart={onCompositionStart}
+          onCompositionEnd={onCompositionEnd}
+        >
+          {pageName}
+        </div>
+      }
     </div>
+
   );
 }
 
