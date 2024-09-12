@@ -206,7 +206,6 @@ from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
-from seahub.ai.apis import Search
 from seahub.wiki2.views import wiki_view, wiki_publish_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView
