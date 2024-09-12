@@ -262,7 +262,7 @@ def sdoc_convert_to_docx(path, username, doc_uuid, download_url,
         'src_type': src_type,
         'dst_type': dst_type,
     }
-    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/sdoc-convert-to-docx/')
+    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-convert-to-docx/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
 
     return resp
@@ -280,7 +280,7 @@ def sdoc_export_to_docx(path, username, doc_uuid, download_url,
         'src_type': src_type,
         'dst_type': dst_type,
     }
-    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/sdoc-export-to-docx/')
+    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-export-to-docx/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
 
     return resp
