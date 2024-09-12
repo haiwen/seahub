@@ -2318,7 +2318,7 @@ class LibContentView extends React.Component {
               getMarkDownFileName={this.getMarkDownFileName}
               openMarkdownFile={this.openMarkdownFile}
             />
-            {canUpload && this.state.pathExist && !this.state.isViewFile && (
+            {canUpload && this.state.pathExist && !this.state.isViewFile && this.state.currentMode !== METADATA_MODE && (
               <FileUploader
                 ref={uploader => this.uploader = uploader}
                 dragAndDrop={true}
