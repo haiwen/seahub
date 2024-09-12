@@ -18,6 +18,7 @@ import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import EmptyTip from '../empty-tip';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -651,6 +652,7 @@ class DirentListView extends React.Component {
         onDragLeave={this.onTableDragLeave}
         onDrop={this.tableDrop}
       >
+        {direntList.length > 0 &&
         <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? (
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
@@ -729,6 +731,10 @@ class DirentListView extends React.Component {
             })}
           </tbody>
         </table>
+        }
+        {direntList.length === 0 &&
+          <EmptyTip text={gettext('No file')}/>
+        }
         <Fragment>
           <ContextMenu
             id={'dirent-container-menu'}

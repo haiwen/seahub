@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -24,6 +24,7 @@ import toaster from '../toast';
 import imageAPI from '../../utils/image-api';
 import FileAccessLog from '../dialog/file-access-log';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import EmptyTip from '../empty-tip';
 
 import '../../css/grid-view.css';
 
@@ -826,16 +827,16 @@ class DirentGridView extends React.Component {
 
     return (
       <Fragment>
-        <ul
-          className="grid-view"
-          onClick={this.gridContainerClick}
-          onContextMenu={this.onGridContainerContextMenu}
-          onMouseDown={this.onGridContainerMouseDown}
-          onMouseMove={this.onSelectMouseMove}
-          ref={this.containerRef}
-        >
-          {
-            direntList.length !== 0 && direntList.map((dirent, index) => {
+        {direntList.length > 0 ?
+          <ul
+            className="grid-view"
+            onClick={this.gridContainerClick}
+            onContextMenu={this.onGridContainerContextMenu}
+            onMouseDown={this.onGridContainerMouseDown}
+            onMouseMove={this.onSelectMouseMove}
+            ref={this.containerRef}
+          >
+            {direntList.map((dirent, index) => {
               return (
                 <DirentGridItem
                   key={index}
@@ -854,10 +855,21 @@ class DirentGridView extends React.Component {
                   selectedDirentList={selectedDirentList}
                 />
               );
-            })
-          }
-          {this.renderSelectionBox()}
-        </ul>
+            })}
+            {this.renderSelectionBox()}
+          </ul>
+          :
+          <ul
+            className="grid-view"
+            onClick={this.gridContainerClick}
+            onContextMenu={this.onGridContainerContextMenu}
+            onMouseDown={this.onGridContainerMouseDown}
+            onMouseMove={this.onSelectMouseMove}
+            ref={this.containerRef}
+          >
+            <EmptyTip text={gettext('No file')} className='w-100' />
+          </ul>
+        }
         <ContextMenu
           id={GRID_ITEM_CONTEXTMENU_ID}
           onMenuItemClick={this.onMenuItemClick}

@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import EmptyTip from '../../../../../components/empty-tip';
+import { gettext } from '../../../utils';
 
-const Main = ({ groups, overScan, columns, size, gap }) => {
+const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
   const imageHeight = useMemo(() => size + gap, [size, gap]);
 
   const renderDisplayGroup = useCallback((group) => {
@@ -47,17 +49,20 @@ const Main = ({ groups, overScan, columns, size, gap }) => {
     );
   }, [overScan, columns, size, imageHeight]);
 
-  if (!Array.isArray(groups) || groups.length === 0) return null;
+  if (!Array.isArray(groups) || groups.length === 0) {
+    return <EmptyTip text={gettext('No record')}/>;
+  }
+
   return groups.map((group, index) => {
     return renderDisplayGroup(group, index);
   });
 };
 
-Main.propTypes = {
+GalleryMain.propTypes = {
   groups: PropTypes.array,
   overScan: PropTypes.object,
   columns: PropTypes.number,
   size: PropTypes.number,
 };
 
-export default Main;
+export default GalleryMain;

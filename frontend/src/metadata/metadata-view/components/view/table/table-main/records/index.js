@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RecordsHeader from './records-header';
 import Body from './body';
@@ -9,8 +9,9 @@ import { recalculate } from '../../../../../utils/column-utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../../constants';
 import {
   isWindowsBrowser, isWebkitBrowser, isMobile, getEventClassName,
-  addClassName, removeClassName,
+  addClassName, removeClassName, gettext,
 } from '../../../../../utils';
+import EmptyTip from '../../../../../../../components/empty-tip';
 import RecordMetrics from '../../../../../utils/record-metrics';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { getVisibleBoundaries } from '../../../../../utils/viewport';
@@ -665,8 +666,12 @@ class Records extends Component {
     const hasSelectedRecord = this.hasSelectedRecord();
     const isSelectedAll = RecordMetrics.isSelectedAll(recordIds, recordMetrics);
 
+    if (recordsCount === 0) {
+      return (<EmptyTip text={gettext('No record')} />);
+    }
+
     return (
-      <Fragment>
+      <>
         <div
           className={`sf-metadata-result-container ${this.isWindows ? 'windows-browser' : ''}`}
           ref={this.setResultContainerRef}
@@ -721,7 +726,7 @@ class Records extends Component {
           getRecordsSummaries={() => {}}
           loadAll={this.props.loadAll}
         />
-      </Fragment>
+      </>
     );
   }
 }
