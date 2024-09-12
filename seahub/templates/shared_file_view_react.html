@@ -96,6 +96,7 @@ body {
       prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
       nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %},
       assetsUrl: '{{ assets_url }}',
+      sharedFileDownloadURL: {% if shared_file_download_url %}'{{ shared_file_download_url }}'{% else %}''{% endif %},
 
       {% if filetype == 'SDoc' %}
         docPath: '{{ path|escapejs }}',

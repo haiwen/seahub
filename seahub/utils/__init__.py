@@ -549,7 +549,7 @@ def gen_file_get_url_new(repo_id, filepath, op='download'):
     Format: http://<domain:port>/repos/<repo_id>files/<filepath>/?op=download
     """
     
-    return '%s/repos/%s/files/%s/?op=%s' % (
+    return '%s/repos/%s/files/?p=%s&op=%s' % (
         get_fileserver_root(),
         repo_id,
         quote(filepath.strip('/')),
