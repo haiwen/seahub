@@ -119,6 +119,8 @@ export {
   metadataZIndexes,
 };
 
+export const DATE_TAG_HEIGHT = 32;
+
 export const GALLERY_DATE_MODE = {
   YEAR: 'year',
   MONTH: 'month',

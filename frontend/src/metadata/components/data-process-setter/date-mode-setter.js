@@ -2,24 +2,22 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { EVENT_BUS_TYPE, GALLERY_DATE_MODE } from '../../constants';
 import { gettext } from '../../utils';
 
-const DateModeSetter = ({ viewID }) => {
+const DateModeSetter = ({ view }) => {
   const [currentMode, setCurrentMode] = useState(() => {
-    try {
-      return localStorage.getItem(`gallery-mode-${viewID}`) || GALLERY_DATE_MODE.ALL;
-    } catch (error) {
-      return GALLERY_DATE_MODE.ALL;
-    }
+    const savedValue = window.sfMetadataContext.localStorage.getItem(`gallery-mode-${view?._id}`, GALLERY_DATE_MODE.ALL);
+    return savedValue || GALLERY_DATE_MODE.ALL;
   });
 
   const handleModeChange = useCallback((newMode) => {
     setCurrentMode(newMode);
-    localStorage.setItem(`gallery-mode-${viewID}`, newMode);
+    window.sfMetadataContext.localStorage.setItem(`gallery-mode-${view?._id}`, newMode);
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_GALLERY_MODE, newMode);
-  }, [viewID]);
+  }, [view?._id]);
 
   useEffect(() => {
-    setCurrentMode(localStorage.getItem(`gallery-mode-${viewID}`));
-  }, [viewID]);
+    const savedValue = window.sfMetadataContext.localStorage.getItem(`gallery-mode-${view?._id}`, GALLERY_DATE_MODE.ALL);
+    setCurrentMode(savedValue || GALLERY_DATE_MODE.ALL);
+  }, [view?._id]);
 
   return (
     <div className="metadata-date-mode-setter">

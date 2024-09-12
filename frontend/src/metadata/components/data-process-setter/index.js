@@ -1,5 +1,5 @@
 import DateModeSetter from './date-mode-setter';
-import SliderSetter from './slider-setter';
+import SliderSetter from './slider-setter/index';
 import FilterSetter from './filter-setter';
 import SortSetter from './sort-setter';
 import GroupbySetter from './groupby-setter';

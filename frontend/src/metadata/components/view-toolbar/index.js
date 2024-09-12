@@ -73,8 +73,8 @@ const ViewToolBar = ({ viewId }) => {
       <div className="sf-metadata-tool-left-operations">
         {viewType === VIEW_TYPE.GALLERY && (
           <>
-            <DateModeSetter viewID={viewId} />
-            <SliderSetter />
+            <DateModeSetter view={view} />
+            <SliderSetter view={view} />
           </>
         )}
         <FilterSetter

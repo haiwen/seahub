@@ -6,12 +6,11 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString } from '../../utils/cell';
 import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT } from '../../constants';
 
 import './index.css';
 
 const IMAGE_GAP = 2;
-const DATE_TAG_HEIGHT = 32;
 
 const Gallery = () => {
   const renderMoreTimer = useRef(null);
@@ -27,11 +26,8 @@ const Gallery = () => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
   const [mode, setMode] = useState(() => {
-    try {
-      return localStorage.getItem(`gallery-mode-${viewID}`) || GALLERY_DATE_MODE.ALL;
-    } catch (error) {
-      return GALLERY_DATE_MODE.ALL;
-    }
+    const savedValue = window.sfMetadataContext.localStorage.getItem(`gallery-mode-${viewID}`, GALLERY_DATE_MODE.ALL);
+    return savedValue || GALLERY_DATE_MODE.ALL;
   });
 
   // Number of images per row
@@ -137,7 +133,7 @@ const Gallery = () => {
       EVENT_BUS_TYPE.SWITCH_GALLERY_MODE,
       (mode) => {
         setMode(mode);
-        localStorage.setItem(`gallery-mode-${viewID}`, mode);
+        window.sfMetadataContext.localStorage.setItem(`gallery-mode-${viewID}`, mode);
       }
     );
 
