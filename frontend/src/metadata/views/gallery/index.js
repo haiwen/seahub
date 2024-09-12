@@ -13,22 +13,18 @@ import './index.css';
 const IMAGE_GAP = 2;
 
 const Gallery = () => {
-  const renderMoreTimer = useRef(null);
-  const containerRef = useRef(null);
-
-  const { metadata, store } = useMetadataView();
-  const repoID = window.sfMetadataContext.getSetting('repoID');
-  const viewID = window.sfMetadataContext.getSetting('viewID');
-
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
-  const [mode, setMode] = useState(() => {
-    const savedValue = window.sfMetadataContext.localStorage.getItem(`gallery-mode-${viewID}`, GALLERY_DATE_MODE.ALL);
-    return savedValue || GALLERY_DATE_MODE.ALL;
-  });
+  const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
+
+  const containerRef = useRef(null);
+  const renderMoreTimer = useRef(null);
+
+  const { metadata, store } = useMetadataView();
+  const repoID = window.sfMetadataContext.getSetting('repoID');
 
   // Number of images per row
   const columns = useMemo(() => {
@@ -39,7 +35,7 @@ const Gallery = () => {
     return (containerWidth - columns * 2 - 2) / columns;
   }, [containerWidth, columns]);
 
-  const dateMode = useCallback(() => {
+  const dateMode = useMemo(() => {
     switch (mode) {
       case GALLERY_DATE_MODE.YEAR:
         return 'YYYY';
@@ -61,7 +57,7 @@ const Gallery = () => {
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
         const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode()) : '';
+        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
@@ -89,18 +85,21 @@ const Gallery = () => {
       if (index > 0) {
         const lastGroup = _groups[index - 1];
         const { top: lastGroupTop, height: lastGroupHeight } = lastGroup;
-        top = lastGroupTop + lastGroupHeight + DATE_TAG_HEIGHT;
+        top = lastGroupTop + lastGroupHeight;
       }
       children.forEach((child, childIndex) => {
         const rowIndex = ~~(childIndex / columns);
         if (!rows[rowIndex]) rows[rowIndex] = { top: top + rowIndex * imageHeight, children: [] };
         rows[rowIndex].children.push(child);
       });
-      const height = rows.length * imageHeight + DATE_TAG_HEIGHT;
+
+      const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+      const height = rows.length * imageHeight + paddingTop;
       _groups.push({
         ...__init,
         top,
         height,
+        paddingTop,
         children: rows
       });
     });
@@ -129,11 +128,14 @@ const Gallery = () => {
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
 
+    const mode = window.sfMetadataContext.localStorage.getItem('gallery-mode', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    setMode(mode);
+
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
       EVENT_BUS_TYPE.SWITCH_GALLERY_MODE,
       (mode) => {
         setMode(mode);
-        window.sfMetadataContext.localStorage.setItem(`gallery-mode-${viewID}`, mode);
+        window.sfMetadataContext.localStorage.setItem('gallery-mode', mode);
       }
     );
 
@@ -169,10 +171,9 @@ const Gallery = () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
       switchGalleryModeSubscribe();
-
       renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
-  }, [viewID]);
+  }, []);
 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
@@ -196,7 +197,7 @@ const Gallery = () => {
       <div className="sf-metadata-gallery-container" ref={containerRef} onScroll={handleScroll} >
         {!isFirstLoading && (
           <>
-            <GalleryMain groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} mode={mode} />
+            <GalleryMain groups={groups} size={imageSize} columns={columns} overScan={overScan} gap={IMAGE_GAP} />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
                 <CenteredLoading />

@@ -16,11 +16,14 @@
 
 .metadata-gallery-date-tag {
   height: 2rem;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: left;
   align-items: center;
   font-size: 0.875rem;
+  font-weight: 500;
   z-index: 1;
   user-select: none;
 }

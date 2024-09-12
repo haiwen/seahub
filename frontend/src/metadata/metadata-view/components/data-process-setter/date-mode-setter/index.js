@@ -30,13 +30,13 @@ const DateModeSetter = ({ view }) => {
   return (
     <div className="metadata-date-mode-setter">
       {Object.entries(DATE_MODE_MAP).map(([dateMode, label]) => (
-        <button
+        <div
           key={dateMode}
           className={classnames('metadata-date-mode-button', { active: currentMode === dateMode })}
           onClick={() => handleModeChange(dateMode)}
         >
-          <span>{label}</span>
-        </button>
+          {label}
+        </div>
       ))}
     </div>
   );
