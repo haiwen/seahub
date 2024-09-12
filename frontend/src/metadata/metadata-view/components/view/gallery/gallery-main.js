@@ -10,13 +10,21 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
     const { name, children, height, top } = group;
 
-    // group not in render area, return empty div
+    // group not in rendering area, return empty div
     if (top >= overScanBottom || top + height <= overScanTop) {
       return (<div key={name} className="w-100" style={{ height, flexShrink: 0 }}></div>);
     }
 
-    const childrenStartIndex = children.findIndex(r => r.top >= overScanTop);
+    let childrenStartIndex = children.findIndex(r => r.top >= overScanTop);
     let childrenEndIndex = children.findIndex(r => r.top >= overScanBottom);
+
+    // group in rendering area, but the image not need to render. eg: overScan: { top: 488, bottom: 1100 }, group: { top: 0, height: 521 },
+    // in this time, part of an image is in the rendering area, don't render image
+    if (childrenStartIndex === -1 && childrenEndIndex === -1) {
+      return (<div key={name} className="w-100" style={{ height, flexShrink: 0 }}></div>);
+    }
+
+    childrenStartIndex = Math.max(childrenStartIndex, 0);
     if (childrenEndIndex === -1) {
       childrenEndIndex = children.length;
     }
