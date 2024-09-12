@@ -277,7 +277,10 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
 
     image = get_rotated_image(image)
     image.thumbnail((size, size), Image.Resampling.LANCZOS)
-    image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+    save_type = THUMBNAIL_EXTENSION
+    if image.mode == 'RGBA':
+        save_type = 'png'
+    image.save(thumbnail_file, save_type)
     return (True, 200)
 
 def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
