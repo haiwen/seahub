@@ -1,0 +1,35 @@
+{% extends "base_for_react.html" %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+{% block extra_ogp_tags %}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:url" content="{{ service_url }}{{ request.path }}" />
+<meta property="og:title" content="{{ repo_name }}" />
+<meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ filename|file_icon_filter }}" />
+<meta property="og:description" content="{{ filename }}" />
+{% endblock %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
+{% render_bundle 'wiki2' 'css' %}
+{% endblock %}
+
+{% block wiki_title %}{{repo_name}}{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.wiki = {
+        config: {
+            wikiId: "{{ wiki.id }}",
+            repoName: "{{ wiki.name }}",
+            initial_path: "{{ file_path|escapejs }}",
+            isWiki2: true,
+            seadocServerUrl: "{{ seadoc_server_url }}",
+            permission: "{{ permission }}",
+        }
+    };
+</script>
+{% render_bundle 'wiki2' 'js' %}
+{% endblock %}

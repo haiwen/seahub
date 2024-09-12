@@ -3,7 +3,7 @@ import { UncontrolledPopover } from 'reactstrap';
 import classNames from 'classnames';
 import Picker from '@emoji-mart/react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext, wikiPermission } from '../../../utils/constants';
 import { data } from './../utils/emoji-utils';
 
 const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
@@ -27,32 +27,34 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
           <span>{currentPageConfig.icon}</span>
         </div>
       </div>
-      <UncontrolledPopover
-        ref={popoverRef}
-        flip
-        target="wiki-page-icon-container"
-        placement="bottom"
-        hideArrow={true}
-        popperClassName='wiki-page-icon-popover'
-        innerClassName='wiki-page-icon-panel wiki-page-panel'
-        trigger="legacy"
-      >
-        <div className='wiki-page-icon-panel__header popover-header'>
-          <span>{gettext('Emojis')}</span>
-          <span onClick={handleIconRemove} className='wiki-remove-icon-btn'>{gettext('Remove')}</span>
-        </div>
-        <div className='wiki-page-icon-panel__body popover-body'>
-          <Picker
-            data={data}
-            onEmojiSelect={(emoji) => handleSetIcon(emoji.native)}
-            previewPosition="none"
-            skinTonePosition="none"
-            locale={window.seafile.lang.slice(0, 2)}
-            maxFrequentRows={2}
-            theme="light"
-          />
-        </div>
-      </UncontrolledPopover>
+      {wikiPermission !== 'public' &&
+        <UncontrolledPopover
+          ref={popoverRef}
+          flip
+          target="wiki-page-icon-container"
+          placement="bottom"
+          hideArrow={true}
+          popperClassName='wiki-page-icon-popover'
+          innerClassName='wiki-page-icon-panel wiki-page-panel'
+          trigger="legacy"
+        >
+          <div className='wiki-page-icon-panel__header popover-header'>
+            <span>{gettext('Emojis')}</span>
+            <span onClick={handleIconRemove} className='wiki-remove-icon-btn'>{gettext('Remove')}</span>
+          </div>
+          <div className='wiki-page-icon-panel__body popover-body'>
+            <Picker
+              data={data}
+              onEmojiSelect={(emoji) => handleSetIcon(emoji.native)}
+              previewPosition="none"
+              skinTonePosition="none"
+              locale={window.seafile.lang.slice(0, 2)}
+              maxFrequentRows={2}
+              theme="light"
+            />
+          </div>
+        </UncontrolledPopover>
+      }
     </>
   );
 };
