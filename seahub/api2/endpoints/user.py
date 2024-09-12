@@ -65,6 +65,7 @@ class User(APIView):
         # update account contact email
         if info_dict['contact_email']:
             Profile.objects.add_or_update(email, contact_email=info_dict['contact_email'])
+            Profile.objects.filter(user=email).update(is_manually_set_contact_email=True)
 
         # update account telephone
         if info_dict['telephone']:
