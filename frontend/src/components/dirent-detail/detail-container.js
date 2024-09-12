@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
-import ObjectUtils from '../../metadata/metadata-view/utils/object-utils';
+import ObjectUtils from '../../metadata/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 
 const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {

@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
+import MetadataViewName from '../../metadata/components/metadata-view-name';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import MetadataViewId2Name from '../../metadata/metadata-view-id-2-name';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -138,7 +138,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-item"><MetadataViewId2Name id={item} /></span>
+            <span className="path-item"><MetadataViewName id={item} /></span>
           </Fragment>
         );
       }

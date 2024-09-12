@@ -1,9 +1,10 @@
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { siteRoot } from '../utils/constants';
-import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './metadata-view/_basic';
+import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
 class MetadataManagerAPI {
+
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;

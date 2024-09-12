@@ -9,7 +9,7 @@ import { Detail, Header, Body } from './detail';
 import Repo from '../../models/repo';
 import Loading from '../loading';
 import DetailItem from './detail-item';
-import { CellType } from '../../metadata/metadata-view/_basic';
+import { CellType } from '../../metadata/constants';
 
 const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   const [isLoading, setLoading] = useState(true);

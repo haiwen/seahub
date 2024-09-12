@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
-import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/metadata-view/_basic';
+import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/constants';
 
 import './index.css';
 
@@ -37,4 +37,3 @@ DetailItem.propTypes = {
 };
 
 export default DetailItem;
-
