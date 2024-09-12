@@ -122,7 +122,7 @@ def thumbnail_get(request, repo_id, size, path):
             resp = HttpResponse(content=thumbnail,
                                 content_type='image/' + THUMBNAIL_EXTENSION)
             
-            resp['Cache-Control'] = 'public, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
+            resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
             return resp
         except IOError as e:
             logger.error(e)
