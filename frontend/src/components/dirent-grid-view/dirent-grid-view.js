@@ -839,7 +839,7 @@ class DirentGridView extends React.Component {
             {direntList.map((dirent, index) => {
               return (
                 <DirentGridItem
-                  key={index}
+                  key={dirent.name} // dirent.id is not unique, so use dirent.name as key
                   dirent={dirent}
                   repoID={this.props.repoID}
                   path={this.props.path}
