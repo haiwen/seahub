@@ -691,7 +691,7 @@ class DirentListView extends React.Component {
               return (
                 <DirentListItem
                   ref={this.setDirentItemRef(index)}
-                  key={index}
+                  key={dirent.name} // dirent.id is not unique, so use dirent.name as key
                   dirent={dirent}
                   path={this.props.path}
                   repoID={this.props.repoID}

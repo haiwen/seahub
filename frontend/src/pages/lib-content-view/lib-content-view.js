@@ -551,6 +551,10 @@ class LibContentView extends React.Component {
   };
 
   loadDirentList = (path) => {
+    this.setState({
+      isDirentListLoading: true,
+      direntList: [],
+    });
     let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
       let direntList = [];
