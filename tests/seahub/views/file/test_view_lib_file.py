@@ -190,7 +190,7 @@ class ViewLibFileTest(BaseTestCase):
         assert '8082/repos/' in resp.get('location')
 
         resp = requests.request('GET', resp.get('location'))
-        cont_disp = resp.headers['content-disposition']
+        cont_disp = resp.headers['Content-Disposition']
         assert 'inline' not in cont_disp
         assert 'attachment' in cont_disp
 
