@@ -195,7 +195,6 @@ class CheckThumbnailAccess(APIView):
     def post(self, request, repo_id):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         path = request.data.get('path')
-        session_key = request.COOKIES.get('session_key')
         is_valid = is_valid_internal_jwt(auth)
         if not is_valid:
             error_msg = 'Permission denied.'
@@ -203,10 +202,40 @@ class CheckThumbnailAccess(APIView):
         if not path:
             error_msg = 'path invalid'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        session_data = SessionStore(session_key=session_key).load()
-        if session_data:
-            request.user.username = session_data['_auth_user_name']
         if check_folder_permission(request, repo_id, path) is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        return Response({'success': True})
+    
+class CheckShareLinkThumbnailAccess(APIView):
+    authentication_classes = (SessionCRSFCheckFreeAuthentication,)
+    
+    def post(self, request):
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        link_token = request.data.get('token')
+        is_valid = is_valid_internal_jwt(auth)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        
+        share_obj = FileShare.objects.filter(token=link_token).first()
+
+        if not share_obj:
+            error_msg = 'Link does not exist.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_obj.is_expired():
+            error_msg = 'Link is expired.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if share_obj.is_encrypted() and not check_share_link_access(request,
+                                                                    link_token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not check_share_link_access_by_scope(request, share_obj):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         return Response({'success': True})
