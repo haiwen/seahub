@@ -56,7 +56,7 @@ class FileTest(BaseTestCase):
         dl_url = reverse('view_lib_file', args=[self.repo.id, self.file]) + '?dl=1'
         resp = self.client.get(dl_url)
         self.assertEqual(302, resp.status_code)
-        assert '8082/files/' in resp.get('location')
+        assert '8082/repos/' in resp.get('location')
 
         resp = requests.request('GET', resp.get('location'))
         cont_disp = resp.headers['content-disposition']

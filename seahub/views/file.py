@@ -511,14 +511,17 @@ def view_lib_file(request, repo_id, path):
             return HttpResponseRedirect(file_url)
 
         operation = 'download' if dl else 'view'
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, file_id, operation, username,
-            use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+        if dl:
+            dl_or_raw_url = gen_file_get_url_new(repo_id, path)
+        else:
+            token = seafile_api.get_fileserver_access_token(
+                repo_id, file_id, operation, username,
+                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+        
+            if not token:
+                return render_permission_error(request, _('Unable to view file'))
 
-        if not token:
-            return render_permission_error(request, _('Unable to view file'))
-
-        dl_or_raw_url = gen_file_get_url_new(repo_id, path)
+            dl_or_raw_url = gen_file_get_url(token, filename)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
