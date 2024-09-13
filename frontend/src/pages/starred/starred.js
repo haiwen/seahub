@@ -109,32 +109,13 @@ class TableBody extends Component {
   }
 
   render() {
-
-    let listItems = this.state.items.map(function (item, index) {
-
-      if (item.path === '/') {
-        item.item_icon_url = Utils.getDefaultLibIconUrl(false);
-      } else {
-        item.item_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
-      }
-
-      item.encoded_path = Utils.encodePath(item.path);
-
-      item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
-      item.dirent_view_url = item.is_dir ? `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}` : `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
-      // item is folder or file
-      if (item.encoded_path !== '/') {
-        item.dirent_view_url = item.dirent_view_url.replace(/\/+$/, '');
-      }
-
-      item.mtime_relative = moment(item.mtime).fromNow();
-
-
-      return <Item key={index} data={item} isDesktop={this.props.isDesktop} />;
-    }, this);
-
+    const { items } = this.state;
     return (
-      <tbody>{listItems}</tbody>
+      <tbody>
+        {items.map((item, index) => {
+          return <Item key={index} data={item} isDesktop={this.props.isDesktop} />;
+        })}
+      </tbody>
     );
   }
 }
@@ -174,9 +155,7 @@ class Item extends Component {
     });
   };
 
-  unstar = (e) => {
-    e.preventDefault();
-
+  unstar = () => {
     const data = this.props.data;
     seafileAPI.unstarItem(data.repo_id, data.path).then((res) => {
       this.setState({ unstarred: true });
@@ -208,10 +187,16 @@ class Item extends Component {
           }
         </td>
         <td onClick={this.visitItem}>
-          {data.is_dir ?
-            <Link to={linkUrl}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
-          }
+          {data.deleted ? (
+            <>
+              {data.obj_name}
+              <span className="error ml-1">{gettext('deleted')}</span>
+            </>
+          ) : (
+            data.is_dir ?
+              <Link to={linkUrl}>{data.obj_name}</Link> :
+              <a className="normal" href={linkUrl} target="_blank" rel="noreferrer">{data.obj_name}</a>
+          )}
           <br />
           <span className="item-meta-info">{data.repo_name}</span>
           <span className="item-meta-info" dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></span>
@@ -240,8 +225,6 @@ class Item extends Component {
 
   renderDesktop = () => {
     const data = this.props.data;
-    let opClasses = 'sf2-icon-x3 unstar action-icon';
-    opClasses += this.state.showOpIcon ? '' : ' invisible';
     const linkUrl = data.dirent_view_url;
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -252,23 +235,29 @@ class Item extends Component {
               <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
-        <Fragment>
-          {data.deleted ?
-            <td>
-              {data.obj_name}{' '}<span style={{ color: 'red' }}>{gettext('deleted')}</span>
-            </td> :
-            <td>
-              { data.is_dir ?
-                <Link to={linkUrl}>{data.obj_name}</Link> :
-                <a className="normal" href={linkUrl} target="_blank" rel="noreferrer">{data.obj_name}</a>
-              }
-            </td>
-          }
-        </Fragment>
+        <td>
+          {data.deleted ? (
+            <>
+              {data.obj_name}
+              <span className="error ml-1">{gettext('deleted')}</span>
+            </>
+          ) : (
+            data.is_dir ?
+              <Link to={linkUrl}>{data.obj_name}</Link> :
+              <a className="normal" href={linkUrl} target="_blank" rel="noreferrer">{data.obj_name}</a>
+          )}
+        </td>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></td>
         <td>
-          <a href="#" role="button" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
+          <i
+            role="button"
+            className={`sf2-icon-x3 unstar action-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
+            title={gettext('Unstar')}
+            aria-label={gettext('Unstar')}
+            onClick={this.unstar}
+          >
+          </i>
         </td>
       </tr>
     );
@@ -276,6 +265,24 @@ class Item extends Component {
   };
 
   render() {
+    const { data: item } = this.props;
+    if (item.path === '/') {
+      item.item_icon_url = Utils.getDefaultLibIconUrl(false);
+    } else {
+      item.item_icon_url = item.is_dir ? Utils.getFolderIconUrl(false) : Utils.getFileIconUrl(item.obj_name);
+    }
+
+    item.encoded_path = Utils.encodePath(item.path);
+
+    item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
+    item.dirent_view_url = item.is_dir ? `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}` : `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
+    // item is folder or file
+    if (item.encoded_path !== '/') {
+      item.dirent_view_url = item.dirent_view_url.replace(/\/+$/, '');
+    }
+
+    item.mtime_relative = item.mtime ? moment(item.mtime).fromNow() : '--';
+
     if (this.state.unstarred) {
       return null;
     }
