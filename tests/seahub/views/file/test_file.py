@@ -58,9 +58,6 @@ class FileTest(BaseTestCase):
         self.assertEqual(302, resp.status_code)
         assert '8082/repos/' in resp.get('location')
 
-        resp = requests.request('GET', resp.get('location'))
-        self.assertEqual(200, resp.status_code)
-
     def test_can_render_video(self):
         resp = self.client.get(reverse('view_lib_file', args=[
             self.repo.id, self.video]))

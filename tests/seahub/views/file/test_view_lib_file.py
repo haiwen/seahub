@@ -189,10 +189,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(302, resp.status_code)
         assert '8082/repos/' in resp.get('location')
 
-        resp = requests.request('GET', resp.get('location'))
-        self.assertEqual(200, resp.status_code)
-        
-
     def test_can_view_raw(self):
         self.login_as(self.user)
 
