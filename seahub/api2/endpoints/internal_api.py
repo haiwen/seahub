@@ -253,6 +253,7 @@ class CheckShareLinkThumbnailAccess(APIView):
         resp_json = {
             'success': True,
             'repo_id': share_obj.repo_id,
-            'file_path': share_obj.path,
+            'share_path': share_obj.path,
+            'share_type': share_obj.s_type
         }
         return Response(resp_json)
