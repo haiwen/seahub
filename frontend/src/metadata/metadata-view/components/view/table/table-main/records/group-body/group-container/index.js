@@ -77,7 +77,7 @@ class GroupContainer extends Component {
   render() {
     const {
       group, columns, width, isExpanded, folding, summaryConfigs, height, backdropHeight, top,
-      groupOffsetLeft, lastFrozenColumnKey, maxLevel,
+      groupOffsetLeft, lastFrozenColumnKey, maxLevel, scrollLeft,
     } = this.props;
     const { left, level } = group;
     const firstLevelGroup = level === 1;
@@ -101,7 +101,7 @@ class GroupContainer extends Component {
     };
     let backDropStyle = {
       height: backdropHeight,
-      width: leftPaneWidth + GROUP_VIEW_OFFSET,
+      width: leftPaneWidth + scrollLeft ? GROUP_VIEW_OFFSET : 0,
       zIndex: Z_INDEX.GROUP_BACKDROP
     };
 
