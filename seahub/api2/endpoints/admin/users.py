@@ -51,7 +51,6 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.constants import DEFAULT_ADMIN
 from seahub.constants import DEFAULT_ADMIN, DEFAULT_ORG
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_available_roles
@@ -357,7 +356,7 @@ def create_user_info(request, email, role, nickname,
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
-                     nickname, login_id, contact_email, reference_id,
+                     nickname, login_id, contact_email,
                      quota_total_mb, institution_name,
                      upload_rate_limit, download_rate_limit):
 
@@ -366,7 +365,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
     # update basic user info
     if is_active is not None:
         user.is_active = is_active
-        if is_active == False:
+        if not is_active:
             # del tokens and personal repo api tokens (not department)
             from seahub.utils import inactive_user
             try:
@@ -399,13 +398,6 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         Profile.objects.add_or_update(email, contact_email=contact_email)
         key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
         cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
-
-    if reference_id is not None:
-        if reference_id.strip():
-            ccnet_api.set_reference_id(email, reference_id.strip())
-        else:
-            # remove reference id
-            ccnet_api.set_reference_id(email, None)
 
     if institution_name is not None:
         Profile.objects.add_or_update(email, institution=institution_name)
@@ -445,7 +437,6 @@ def get_user_info(email):
 
     info['is_staff'] = user.is_staff
     info['is_active'] = user.is_active
-    info['reference_id'] = user.reference_id if user.reference_id else ''
 
     orgs = ccnet_api.get_orgs_by_user(email)
     try:
@@ -591,7 +582,7 @@ class AdminUsers(APIView):
             users = [u for u in users if u.is_active]
         elif is_active == '0':
             users = [u for u in users if not u.is_active]
-            
+
         if role:
             users = [u for u in users if get_user_role(u) == role]
 
@@ -1335,14 +1326,6 @@ class AdminUser(APIView):
 
         password = request.data.get("password")
 
-        reference_id = request.data.get("reference_id", None)
-        if reference_id:
-            if ' ' in reference_id:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID can not contain spaces.')
-            primary_id = ccnet_api.get_primary_id(reference_id)
-            if primary_id:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s already exists.' % reference_id)
-
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
             try:
@@ -1422,7 +1405,6 @@ class AdminUser(APIView):
                              nickname=name,
                              login_id=login_id,
                              contact_email=contact_email,
-                             reference_id=reference_id,
                              quota_total_mb=quota_total_mb,
                              institution_name=institution,
                              upload_rate_limit=upload_rate_limit,
@@ -2150,12 +2132,12 @@ class AdminUserConvertToTeamView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
-    
+
     def post(self, request):
         username = request.data.get('email')
         if not username:
             return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
-        
+
         # resource check
         try:
             user = User.objects.get(email=username)
@@ -2183,7 +2165,7 @@ class AdminUserConvertToTeamView(APIView):
             else:
                 nickname_characters.append(character)
         org_name = ''.join(nickname_characters)
-        
+
         try:
             # 1. Create a new org, and add the user(username) to org as a team admin
             #    by ccnet_api.create_org
@@ -2200,5 +2182,5 @@ class AdminUserConvertToTeamView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response({'success': True})

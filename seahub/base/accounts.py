@@ -293,7 +293,6 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
-        user.reference_id = emailuser.reference_id
 
         if user.is_staff:
             try:
@@ -330,7 +329,6 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
-        user.reference_id = emailuser.reference_id
 
         if user.is_staff:
             try:
