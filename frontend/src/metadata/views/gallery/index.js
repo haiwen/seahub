@@ -32,7 +32,7 @@ const Gallery = () => {
   }, [zoomGear]);
 
   const imageSize = useMemo(() => {
-    return (containerWidth - columns * 2 - 2) / columns;
+    return (containerWidth - (columns - 1) * 2 - 32) / columns;
   }, [containerWidth, columns]);
 
   const dateMode = useMemo(() => {
