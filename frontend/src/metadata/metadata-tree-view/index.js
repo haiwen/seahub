@@ -111,10 +111,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     }
   }, [handleInputSubmit]);
 
-  const handleMove = useCallback((draggedViewId, targetViewId) => {
-    moveView(draggedViewId, targetViewId);
-  }, [moveView]);
-
   return (
     <>
       <div className="tree-view tree metadata-tree-view">
@@ -135,7 +131,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   onDelete={() => deleteView(view._id, isSelected)}
                   onCopy={() => duplicateView(view._id)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
-                  onMove={handleMove}
+                  onMove={moveView}
                   index={index}
                 />
               );
