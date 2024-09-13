@@ -132,7 +132,6 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
                   onCopy={() => duplicateView(view._id)}
                   onUpdate={(update, successCallback, failCallback) => onUpdateView(view._id, update, successCallback, failCallback)}
                   onMove={moveView}
-                  index={index}
                 />
               );
             })}

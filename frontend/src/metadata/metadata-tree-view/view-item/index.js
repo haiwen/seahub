@@ -16,7 +16,6 @@ const viewItemSource = {
   beginDrag(props) {
     return {
       id: props.view._id,
-      index: props.index,
       view: props.view
     };
   },
@@ -207,7 +206,6 @@ ViewItem.propTypes = {
   onCopy: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onMove: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired,
