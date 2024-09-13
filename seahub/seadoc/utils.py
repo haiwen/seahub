@@ -10,7 +10,7 @@ import shutil
 import requests
 from zipfile import ZipFile, is_zipfile
 
-from seaserv import seafile_api
+from seaserv import seafile_api, USE_GO_FILESERVER
 
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
@@ -351,13 +351,14 @@ def export_sdoc_prepare_images_folder(repo_id, doc_uuid, images_dir_id, username
     except Exception as e:
         raise e
 
-    progress = {'zipped': 0, 'total': 1}
-    while progress['zipped'] != progress['total']:
-        time.sleep(0.5)  # sleep 0.5 second
-        try:
-            progress = json.loads(seafile_api.query_zip_progress(token))
-        except Exception as e:
-            raise e
+    if not USE_GO_FILESERVER:
+        progress = {'zipped': 0, 'total': 1}
+        while progress['zipped'] != progress['total']:
+            time.sleep(0.5)  # sleep 0.5 second
+            try:
+                progress = json.loads(seafile_api.query_zip_progress(token))
+            except Exception as e:
+                raise e
 
     asset_url = '%s/zip/%s' % (get_inner_fileserver_root(), token)
     try:
