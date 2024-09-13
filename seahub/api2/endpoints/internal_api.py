@@ -249,5 +249,10 @@ class CheckShareLinkThumbnailAccess(APIView):
         if not check_share_link_access_by_scope(request, share_obj):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        return Response({'success': True})
+
+        resp_json = {
+            'success': True,
+            'repo_id': share_obj.repo_id,
+            'file_path': share_obj.path,
+        }
+        return Response(resp_json)
