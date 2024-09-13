@@ -186,7 +186,26 @@ function start_seahub () {
     echo
 }
 
+function set_jwt_private_key () {
+    if [[ -z "${JWT_PRIVATE_KEY}" && -z "${SITE_ROOT}" && ! -e "${central_config_dir}/.env" ]]; then
+        echo "Error: .env file not found."
+        echo "Please follow the upgrade manual to set the .env file."
+        echo ""
+        exit -1;
+    fi
+
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        jwt_key=`awk -F'=' '/JWT_PRIVATE_KEY/ {print $2}' ${central_config_dir}/.env`
+        export JWT_PRIVATE_KEY=$jwt_key
+    fi
+    if [ -z "${SITE_ROOT}" ]; then
+        site_root=`awk -F'=' '/SITE_ROOT/ {print $2}' ${central_config_dir}/.env`
+        export SITE_ROOT=$site_root
+    fi
+}
+
 function prepare_env() {
+    set_jwt_private_key;
     check_python_executable;
     validate_seafile_data_dir;
 
