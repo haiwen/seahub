@@ -93,7 +93,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
-      currentDirent: {},
+      currentDirent: {}
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -2193,6 +2193,8 @@ class LibContentView extends React.Component {
   };
 
   render() {
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, currentDirent,
+      path, usedRepoTags } = this.state;
     if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
@@ -2223,7 +2225,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, currentDirent } = this.state;
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
     let isAdmin = currentRepoInfo.is_admin;
@@ -2242,7 +2244,6 @@ class LibContentView extends React.Component {
     }
 
     const isDesktop = Utils.isDesktop();
-    const { path, usedRepoTags } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
       if (isDesktop && usedRepoTags.length !== 0) {
@@ -2289,7 +2290,7 @@ class LibContentView extends React.Component {
                       updateDirent={this.updateDirent}
                       unSelectDirent={this.unSelectDirent}
                       onFilesTagChanged={this.onFileTagChanged}
-                      showShareBtn={Utils.isHasPermissionToShare(currentRepoInfo, userPerm)}
+                      showShareBtn={showShareBtn}
                       isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                       showDirentDetail={this.showDirentDetail}
                       currentMode={this.state.currentMode}
@@ -2314,7 +2315,7 @@ class LibContentView extends React.Component {
                       sortItems={this.sortItems}
                       toggleTreePanel={this.toggleTreePanel}
                       enableDirPrivateShare={enableDirPrivateShare}
-                      showShareBtn={Utils.isHasPermissionToShare(currentRepoInfo, userPerm)}
+                      showShareBtn={showShareBtn}
                       onAddFolder={this.onAddFolder}
                       onAddFile={this.onAddFile}
                       onUploadFile={this.onUploadFile}
