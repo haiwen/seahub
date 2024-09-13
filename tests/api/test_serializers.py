@@ -1,18 +1,17 @@
 from mock import patch
-from seaserv import ccnet_api
 
 from seahub.test_utils import BaseTestCase
 from seahub.api2.serializers import AuthTokenSerializer
 from seahub.profile.models import Profile
 
+
 class AuthTokenSerializerTest(BaseTestCase):
+
     def setUp(self):
         self.inactive_user = self.create_user('inactive@test.com', is_active=False)
         Profile.objects.add_or_update(self.user.username,
                                       login_id='user_login_id',
                                       contact_email='contact@test.com')
-
-        ccnet_api.set_reference_id(self.user.username, 'another_email@test.com')
 
     def assertSuccess(self, s):
         assert s.is_valid() is True
