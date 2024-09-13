@@ -5,7 +5,7 @@ import DirentDetail from './dirent-details';
 import ObjectUtils from '../../metadata/metadata-view/utils/object-utils';
 import { MetadataContext } from '../../metadata';
 
-const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+const DetailContainer = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
 
   useEffect(() => {
     // init context
@@ -45,7 +45,7 @@ const Index = React.memo(({ repoID, path, dirent, currentRepoInfo, repoTags, fil
   return !isChanged;
 });
 
-Index.propTypes = {
+DetailContainer.propTypes = {
   repoID: PropTypes.string,
   path: PropTypes.string,
   dirent: PropTypes.object,
@@ -56,4 +56,4 @@ Index.propTypes = {
   onFileTagChanged: PropTypes.func,
 };
 
-export default Index;
+export default DetailContainer;

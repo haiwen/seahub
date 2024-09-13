@@ -42,7 +42,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
-class MultipleDirOperationToolbar extends React.Component {
+class SelectedDirentsToolbar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -471,6 +471,6 @@ class MultipleDirOperationToolbar extends React.Component {
   }
 }
 
-MultipleDirOperationToolbar.propTypes = propTypes;
+SelectedDirentsToolbar.propTypes = propTypes;
 
-export default MultipleDirOperationToolbar;
+export default SelectedDirentsToolbar;

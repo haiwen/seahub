@@ -101,7 +101,7 @@ class DirentDetails extends React.Component {
           {this.renderImage()}
           {dirent && direntDetail && (
             <div className="detail-content">
-              {dirent.type !== 'file' ? (
+              {dirent.type !== 'file' ?
                 <DirDetails
                   repoID={repoID}
                   repoInfo={this.props.currentRepoInfo}
@@ -109,7 +109,7 @@ class DirentDetails extends React.Component {
                   direntDetail={direntDetail}
                   path={this.props.dirent ? path + '/' + dirent.name : path}
                 />
-              ) : (
+                :
                 <FileDetails
                   repoID={repoID}
                   repoInfo={this.props.currentRepoInfo}
@@ -120,7 +120,7 @@ class DirentDetails extends React.Component {
                   fileTagList={dirent ? dirent.file_tags : fileTags}
                   onFileTagChanged={this.props.onFileTagChanged}
                 />
-              )}
+              }
             </div>
           )}
         </Body>

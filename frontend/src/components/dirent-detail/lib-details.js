@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
-import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
-import toaster from '../../toast';
-import { Detail, Header, Body } from '../detail';
-import Repo from '../../../models/repo';
-import Loading from '../../loading';
-import DetailItem from '../detail-item';
-import { CellType } from '../../../metadata/metadata-view/_basic';
+import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
+import { Detail, Header, Body } from './detail';
+import Repo from '../../models/repo';
+import Loading from '../loading';
+import DetailItem from './detail-item';
+import { CellType } from '../../metadata/metadata-view/_basic';
 
 const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   const [isLoading, setLoading] = useState(true);
@@ -36,9 +36,9 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
     <Detail>
       <Header title={currentRepoInfo.repo_name} icon={smallIconUrl} onClose={onClose} />
       <Body>
-        {isLoading ? (
+        {isLoading ?
           <div className="w-100 h-100 d-flex algin-items-center justify-content-center"><Loading /></div>
-        ) : (
+          :
           <div className="detail-content">
             <DetailItem field={filesField} value={repo.file_count || 0} className="sf-metadata-property-detail-formatter">
               <Formatter field={filesField} value={repo.file_count || 0} />
@@ -62,7 +62,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
               <Formatter field={mtimeField} value={repo.last_modified} />
             </DetailItem>
           </div>
-        )}
+        }
       </Body>
     </Detail>
   );
