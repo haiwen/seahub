@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
 import DetailItem from '../detail-item';
-import { CellType } from '../../../metadata/metadata-view/_basic';
+import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { MetadataDetails, useEnableMetadata } from '../../../metadata';
