@@ -59,8 +59,22 @@ fi
 
 function set_jwt_private_key () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
-        jwt_pk=$(python3 parse_jwt_pk.py)
-        export JWT_PRIVATE_KEY=$jwt_pk
+        if [ ! -e "${central_config_dir}/.env" ]; then
+            echo "Error: .env file not found."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+
+        # load the .env file
+        source "${central_config_dir}/.env"
+
+        if [ -z "${JWT_PRIVATE_KEY}" ]; then
+            echo "Error: JWT_PRIVATE_KEY not found in .env file."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
     fi
 }
 
