@@ -3730,7 +3730,7 @@ msgstr "目录"
 
 #: frontend/src/components/main-side-nav.js:209
 msgid "Workspace"
-msgstr "个人工作台"
+msgstr "工作区"
 
 #: frontend/src/components/main-side-nav.js:256
 #: frontend/src/components/main-side-nav.js:258

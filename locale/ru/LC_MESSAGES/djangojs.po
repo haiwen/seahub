@@ -1672,7 +1672,7 @@ msgstr "Изменить метки"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
-msgstr ""
+msgstr "{placeholder} Журнал доступа"
 
 #: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:262
@@ -4650,19 +4650,19 @@ msgstr "Имя не может содержать обратную косую ч
 
 #: frontend/src/metadata/metadata-tree-view/view-item/index.js:42
 msgid "Duplicate"
-msgstr ""
+msgstr "Дублировать"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/column/limit.js:15
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " the content cannot be saved"
-msgstr ""
+msgstr "Содержание документа превысило лимит в 100000 символов, и его невозможно сохранить"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/column/limit.js:16
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " only the first 100000 characters are saved"
-msgstr ""
+msgstr "Содержание документа превысило лимит в 100000 символов, и сохранены только первые 100000 символов"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:28
 msgid "Today"
@@ -4880,7 +4880,7 @@ msgstr "Открыть файл в новой вкладке"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:95
 msgid "Generate image description"
-msgstr ""
+msgstr "Создать описание изображения"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:35
 msgid "1 preset filter"
