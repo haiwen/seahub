@@ -183,18 +183,8 @@ class DirentGridItem extends React.Component {
     this.props.onGridItemMouseDown(event);
   };
 
-  getFileUrl = (url) => {
-    let fileUrlArr = url.split('/');
-    if (fileUrlArr.indexOf('48') !== -1) {
-      fileUrlArr.splice(fileUrlArr.indexOf('48'), 1, '192');
-    }
-    let fileUrl = fileUrlArr.join('/');
-    return fileUrl;
-  };
-
   onGridItemContextMenu = (event) => {
-    let dirent = this.props.dirent;
-    this.props.onGridItemContextMenu(event, dirent);
+    this.props.onGridItemContextMenu(event, this.props.dirent);
   };
 
   getTextRenderWidth = (text, font) => {
@@ -245,7 +235,6 @@ class DirentGridItem extends React.Component {
     let { dirent, path, repoID } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let iconUrl = Utils.getDirentIcon(dirent, true);
-    let fileUrl = dirent.encoded_thumbnail_src ? this.getFileUrl(dirent.encoded_thumbnail_src) : '';
 
     let toolTipID = '';
     let tagTitle = '';
@@ -289,7 +278,7 @@ class DirentGridItem extends React.Component {
             onDrop={this.onGridItemDragDrop}
           >
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
-              <img src={`${siteRoot}${fileUrl}`} className="thumbnail" onClick={this.onItemClick} alt=""/> :
+              <img src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}`} className="thumbnail" onClick={this.onItemClick} alt=""/> :
               <img src={iconUrl} width="96" alt='' />
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
