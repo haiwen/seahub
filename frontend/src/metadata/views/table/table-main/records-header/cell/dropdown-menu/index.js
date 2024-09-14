@@ -220,20 +220,20 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
               onChange={openOptionPopover}
             />
           )}
-          {type === CellType.NUMBER && (
+          {/* {type === CellType.NUMBER && (
+            TODO:
             <DropdownItem
-              disabled={!canModifyColumnData}
+              disabled={canModifyColumnData}
               target="sf-metadata-edit-column-format"
               iconName="set-up"
               title={gettext('Edit format settings')}
-              tip={gettext('You do not have permission')}
-              onChange={openOptionPopover}
+              onChange={() => {}}
             />
-          )}
+          )} */}
           {type === CellType.DATE && (
             <>{renderDateFormat(canModifyColumnData)}</>
           )}
-          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.NUMBER, CellType.MULTIPLE_SELECT].includes(column.type) && (
+          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.MULTIPLE_SELECT].includes(column.type) && (
             <DefaultDropdownItem key="divider-item" divider />
           )}
           <DropdownItem

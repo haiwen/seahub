@@ -107,7 +107,7 @@ class DirentDetails extends React.Component {
                   repoInfo={this.props.currentRepoInfo}
                   dirent={dirent}
                   direntDetail={direntDetail}
-                  path={this.props.dirent ? path + '/' + dirent.name : path}
+                  path={this.props.dirent ? Utils.joinPath(path, dirent.name) : path}
                 />
                 :
                 <FileDetails

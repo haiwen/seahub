@@ -1551,7 +1551,7 @@ class LibContentView extends React.Component {
       currentDirent: dirent && dirent.isActive ? null : dirent
     });
     let direntList = this.state.direntList.map(item => {
-      if (item.name === dirent.name) {
+      if (dirent && item.name === dirent.name) {
         item.isSelected = !item.isSelected;
       }
       return item;
@@ -2044,7 +2044,8 @@ class LibContentView extends React.Component {
   };
 
   getMarkDownFileName = () => {
-    return this.markdownFileName || this.state.currentDirent.name || '';
+    const { currentDirent } = this.state;
+    return this.markdownFileName || (currentDirent && currentDirent.name) || '';
   };
 
   openMarkdownFile = () => {
@@ -2144,7 +2145,7 @@ class LibContentView extends React.Component {
       direntList,
       selectedDirentList: []
     });
-    const dirent = {};
+    const dirent = null;
     this.onDirentSelected(dirent);
   };
 

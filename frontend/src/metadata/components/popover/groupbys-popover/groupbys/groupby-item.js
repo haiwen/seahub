@@ -1,10 +1,9 @@
-import React, { Fragment, memo, useCallback, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DragSource, DropTarget } from 'react-dnd';
 import { Icon, CustomizeSelect } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
-import ObjectUtils from '../../../../utils/object-utils';
 import { getColumnByKey } from '../../../../utils/column';
 import { COLUMNS_ICON_CONFIG, SORT_TYPE, SORT_COLUMN_OPTIONS } from '../../../../constants';
 import { getGroupbyGranularityByColumn, isShowGroupCountType, getSelectedCountType, getDefaultCountType } from '../../../../utils/group';
@@ -59,7 +58,7 @@ const dropCollect = (connect, monitor) => ({
     sort_type: 'xxx',
   }
 */
-const GroupbyItem = memo(({
+const GroupbyItem = ({
   isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
   showDragBtn, index, readOnly, groupby, columns, onDelete, onUpdate
 }) => {
@@ -220,16 +219,7 @@ const GroupbyItem = memo(({
     )
   );
 
-}, (props, nextProps) => {
-  const isChanged =
-    props.index !== nextProps.index ||
-    !ObjectUtils.isSameObject(props.groupby, nextProps.groupby) ||
-    props.isDragging !== nextProps.isDragging ||
-    props.isOver !== nextProps.isOver ||
-    props.canDrop !== nextProps.canDrop ||
-    props.showDragBtn !== nextProps.showDragBtn;
-  return !isChanged;
-});
+};
 
 GroupbyItem.propTypes = {
   index: PropTypes.number,
