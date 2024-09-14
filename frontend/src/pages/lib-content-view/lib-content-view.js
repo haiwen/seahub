@@ -93,7 +93,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
       viewId: '0000',
-      currentDirent: {}
+      currentDirent: null,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -1914,10 +1914,7 @@ class LibContentView extends React.Component {
   };
 
   onCloseMarkdownViewDialog = () => {
-    this.setState({
-      isViewFile: false,
-      currentDirent: {},
-    });
+    this.setState({ isViewFile: false });
   };
 
   onTreeNodeCollapse = (node) => {
@@ -2193,7 +2190,7 @@ class LibContentView extends React.Component {
   };
 
   render() {
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, currentDirent,
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen,
       path, usedRepoTags } = this.state;
     if (this.state.libNeedDecrypt) {
       return (
@@ -2358,7 +2355,6 @@ class LibContentView extends React.Component {
                     isSidePanelFolded={this.props.isSidePanelFolded}
                     isTreePanelShown={this.state.isTreePanelShown}
                     currentMode={this.state.currentMode}
-                    currentDirent={currentDirent}
                     path={this.state.path}
                     repoID={this.props.repoID}
                     currentRepoInfo={this.state.currentRepoInfo}
