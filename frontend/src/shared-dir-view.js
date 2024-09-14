@@ -327,7 +327,7 @@ class SharedDirView extends React.Component {
       'url': fileURL,
       'thumbnail': `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${item.file_path}`,
       'src': src,
-      'downloadURL': src,
+      'downloadURL': fileURL + '&dl=1',
     };
   };
 
