@@ -28,6 +28,7 @@ const {
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile,
+  fileDownloadURL,
 } = window.app.pageOptions;
 
 class FileToolbar extends React.Component {
@@ -162,7 +163,7 @@ class FileToolbar extends React.Component {
               id="download-file"
               icon="download"
               text={gettext('Download')}
-              href="?dl=1"
+              href={fileDownloadURL}
             />
           )}
           <IconButton

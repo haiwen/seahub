@@ -33,7 +33,8 @@ enablePDFThumbnail: {% if enable_pdf_thumbnail %} true {% else %} false {% endif
 {% if filetype == 'XMind' %}
 xmindImageSrc: '{{ xmind_image_src|escapejs }}',
 {% endif %}
-rawPath: '{{ raw_path|escapejs }}'
+rawPath: '{{ raw_path|escapejs }}',
+fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
 {% endblock %}
 
 {% block render_bundle %}

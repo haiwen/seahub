@@ -582,6 +582,7 @@ def view_lib_file(request, repo_id, path):
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
+        'file_download_url': gen_file_get_url_new(repo_id, path)
     }
 
     # check whether file is starred
@@ -644,6 +645,8 @@ def view_lib_file(request, repo_id, path):
     template = '%s_file_view_react.html' % filetype.lower()
 
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
+        if filetype == VIDEO:
+            raw_path = gen_file_get_url_new(repo_id, path)
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
@@ -1258,6 +1261,9 @@ def view_shared_file(request, fileshare):
     filetype, fileext = get_file_type_and_ext(filename)
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
+    
+    if filetype == VIDEO:
+        raw_path = gen_file_get_url_new(repo_id, path)
 
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, path)

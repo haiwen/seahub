@@ -15,7 +15,8 @@ class FileContent extends React.Component {
       preload: 'auto',
       playbackRates: [0.5, 1, 1.5, 2],
       sources: [{
-        src: rawPath
+        src: rawPath,
+        type: "video/mp4"
       }]
     };
     return (
