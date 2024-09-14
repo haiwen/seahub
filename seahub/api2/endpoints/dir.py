@@ -105,19 +105,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             logger.error(e)
             files_tags_in_dir = {}
 
-        try:
-            from seahub.tags.models import FileUUIDMap
-            from seahub.seadoc.models import SeadocDraft, SeadocRevision
-            file_uuid_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(
-                repo_id, parent_dir)
-            file_uuid_list = [item.uuid for item in file_uuid_queryset]
-            seadoc_draft_queryset = SeadocDraft.objects.list_by_doc_uuids(
-                file_uuid_list)
-            seadoc_revision_queryset = SeadocRevision.objects.list_by_doc_uuids(
-                file_uuid_list)
-        except Exception as e:
-            logger.error(e)
-
         for dirent in file_list:
 
             file_name = dirent.obj_name
@@ -186,30 +173,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
                         file_info['encoded_thumbnail_src'] = quote(src)
-
-            # sdoc
-            filetype, fileext = get_file_type_and_ext(file_info['name'])
-            if filetype == SEADOC:
-                try:
-                    file_uuid_map = file_uuid_queryset.filter(
-                        filename=file_name).first()
-                    if file_uuid_map:
-                        sdoc_draft = seadoc_draft_queryset.filter(
-                            doc_uuid=file_uuid_map.uuid).first()
-                        if sdoc_draft:
-                            file_info['is_sdoc_draft'] = True
-                        else:
-                            file_info['is_sdoc_draft'] = False
-                        sdoc_revision = seadoc_revision_queryset.filter(
-                            doc_uuid=file_uuid_map.uuid).first()
-                        if sdoc_revision:
-                            file_info['is_sdoc_revision'] = True
-                            file_info['revision_id'] = sdoc_revision.revision_id
-                        else:
-                            file_info['is_sdoc_revision'] = False
-                except Exception as e:
-                    logger.error(e)
-
             file_info_list.append(file_info)
 
     dir_info_list.sort(key=lambda x: x['name'].lower())
