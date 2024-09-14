@@ -2295,6 +2295,7 @@ class LibContentView extends React.Component {
                       showDirentDetail={this.showDirentDetail}
                       currentMode={this.state.currentMode}
                       switchViewMode={this.switchViewMode}
+                      onItemConvert={this.onConvertItem}
                     />
                     :
                     <CurDirPath
