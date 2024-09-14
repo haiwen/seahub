@@ -256,6 +256,7 @@ const getFileTypeColumnData = (column) => {
     '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
     '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
     '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
+    '_compressed': { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
   };
   let newData = { ...data };
   newData.options = Array.isArray(data.options) ? data.options.map(o => {
