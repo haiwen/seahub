@@ -32,7 +32,7 @@ from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, \
         MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
         DOCX_SUPPORT_CONVERT_TYPES
 from seahub.tags.models import FileUUIDMap
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
@@ -882,7 +882,6 @@ class FileView(APIView):
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(
                     repo_id, parent_dir, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
                 SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
         except Exception as e:
             logger.error(e)
