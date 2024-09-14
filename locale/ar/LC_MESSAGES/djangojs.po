@@ -1672,7 +1672,7 @@ msgstr "تعديل العلامات"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
-msgstr ""
+msgstr "{placeholder} سجل الدخول"
 
 #: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:262
@@ -4628,219 +4628,219 @@ msgstr "هل تريد حقا إيقاف تشغيل الاعدادات الموس
 
 #: frontend/src/metadata/metadata-status-manage-dialog/turn-off-confirm.js:15
 msgid "Turn off"
-msgstr ""
+msgstr "إيقاف"
 
 #: frontend/src/metadata/metadata-tree-view/index.js:154
 msgid "Add view"
-msgstr ""
+msgstr "إضافة طريقة عرض"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:21
 msgid "Name should be string"
-msgstr ""
+msgstr "يجب أن يكون الاسم حروف فقط"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:28
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:55
 msgid "Name cannot contain slash"
-msgstr ""
+msgstr "يجب أن لا يحتوي الاسم على شرطة مائلة -/-"
 
 #: frontend/src/metadata/metadata-tree-view/name-dialog/index.js:31
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:59
 msgid "Name cannot contain backslash"
-msgstr ""
+msgstr "يجب أن لا يحتوي الاسم على شرطة مائلة عكسية -\\-"
 
 #: frontend/src/metadata/metadata-tree-view/view-item/index.js:42
 msgid "Duplicate"
-msgstr ""
+msgstr "تكرار"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/column/limit.js:15
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " the content cannot be saved"
-msgstr ""
+msgstr "تجاوز محتوى المستند حد المائة ألفٍ 100000 حرف ولا يمكن حفظ المحتوى"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/column/limit.js:16
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " only the first 100000 characters are saved"
-msgstr ""
+msgstr "تجاوز محتوى المستند حد المائة ألفٍ 100000 حرف و تم حفظ المائة ألف حرف الاولى فقط"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:28
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:29
 msgid "Tomorrow"
-msgstr ""
+msgstr "غداّ"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:30
 msgid "Yesterday"
-msgstr ""
+msgstr "أمس"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:31
 msgid "One week ago"
-msgstr ""
+msgstr "قبل اسبوع"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:32
 msgid "One week from now"
-msgstr ""
+msgstr "بعد اسبوع من الآن"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:33
 msgid "One month ago"
-msgstr ""
+msgstr "قبل شهر"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:34
 msgid "One month from now"
-msgstr ""
+msgstr "قبل شهر من الآن"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:35
 msgid "Number of days ago"
-msgstr ""
+msgstr "منذ عدد الأيام"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:36
 msgid "Number of days from now"
-msgstr ""
+msgstr "منذ عدد الأيام من الآن"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:37
 msgid "Exact date"
-msgstr ""
+msgstr "بتاريخ محدد"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:38
 msgid "The past week"
-msgstr ""
+msgstr "الأسبوع الماضي"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:39
 msgid "The past month"
-msgstr ""
+msgstr "الشهر الماضي"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:40
 msgid "The past year"
-msgstr ""
+msgstr "السنه الماضيه"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:41
 msgid "The next week"
-msgstr ""
+msgstr "الاسبوع القادم"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:42
 msgid "The next month"
-msgstr ""
+msgstr "الشهر القادم"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:43
 msgid "The next year"
-msgstr ""
+msgstr "السنه القادمه"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:44
 msgid "The next numbers of days"
-msgstr ""
+msgstr "عدد الأيام القادمه"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:45
 msgid "The past numbers of days"
-msgstr ""
+msgstr "عدد الأيام الماضيه"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:46
 msgid "This week"
-msgstr ""
+msgstr "هذا الاسبوع"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:47
 msgid "This month"
-msgstr ""
+msgstr "هذا الشهر"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-modifier.js:48
 msgid "This year"
-msgstr ""
+msgstr "هذه السنه"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:32
 msgid "contains"
-msgstr ""
+msgstr "يحتوي على"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:33
 msgid "does not contain"
-msgstr ""
+msgstr "لا يحتوي على"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:34
 msgid "is"
-msgstr ""
+msgstr "هل"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:35
 msgid "is not"
-msgstr ""
+msgstr "ليس"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:42
 msgid "is empty"
-msgstr ""
+msgstr "فارغ"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:43
 msgid "is not empty"
-msgstr ""
+msgstr "ليس فارغ"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:44
 msgid "is within..."
-msgstr ""
+msgstr "ضِمن ..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:45
 msgid "is before..."
-msgstr ""
+msgstr "ليس ضِمن ..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:46
 msgid "is after..."
-msgstr ""
+msgstr "بعد..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:47
 msgid "is on or before..."
-msgstr ""
+msgstr "على أو قبل ..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:48
 msgid "is on or after..."
-msgstr ""
+msgstr "على أو بعد..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:49
 msgid "has any of..."
-msgstr ""
+msgstr "فيه أي من..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:50
 msgid "has all of..."
-msgstr ""
+msgstr "فيه كل من..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:51
 msgid "has none of..."
-msgstr ""
+msgstr "ليس فيه أي من..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:52
 msgid "is exactly..."
-msgstr ""
+msgstr "هو بالضبط..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
-msgstr ""
+msgstr "هو معرف المستخدم الحالي"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:54
 msgid "include the current user"
-msgstr ""
+msgstr "تضمين المستخدم الحالي"
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:55
 msgid "is any of..."
-msgstr ""
+msgstr "هو أي من..."
 
 #: frontend/src/metadata/metadata-view/_basic/constants/filter/filter-predicate.js:56
 msgid "is none of..."
-msgstr ""
+msgstr "لا شيء من..."
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:214
 msgid "No collaborators available"
-msgstr ""
+msgstr "لا يوجد متعاونون متاحون"
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:214
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/collaborator-filter/index.js:88
 msgid "No collaborators"
-msgstr ""
+msgstr "لا يوجد متعاونون"
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/collaborator-editor/index.js:250
 msgid "Search collaborators"
-msgstr ""
+msgstr "البحث عن متعاونين"
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:214
 #: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:209
 msgid "No option"
-msgstr ""
+msgstr "لا يوجد خيار"
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:253
 #: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:247
@@ -4848,409 +4848,409 @@ msgstr ""
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:463
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:193
 msgid "Search option"
-msgstr ""
+msgstr "خيار البحث"
 
 #: frontend/src/metadata/metadata-view/components/cell-editor/multiple-select-editor/index.js:266
 #: frontend/src/metadata/metadata-view/components/cell-editor/single-select-editor/index.js:260
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:207
 msgid "Add option"
-msgstr ""
+msgstr "إضافة خيار"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:48
 msgid "Clear selected"
-msgstr ""
+msgstr "مسح التحديد"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:49
 msgid "Copy selected"
-msgstr ""
+msgstr "تحديد النسخة"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:57
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:77
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:93
 msgid "Generate summary"
-msgstr ""
+msgstr "إنشاء ملخص"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:88
 msgid "Open folder in new tab"
-msgstr ""
+msgstr "فتح مجلد في علامة تبويب جديدة"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:88
 msgid "Open file in new tab"
-msgstr ""
+msgstr "فتح ملف في علامة تبويب جديدة"
 
 #: frontend/src/metadata/metadata-view/components/context-menu/index.js:95
 msgid "Generate image description"
-msgstr ""
+msgstr "إنشاء وصف الصورة"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:35
 msgid "1 preset filter"
-msgstr ""
+msgstr "مرشح 1 محدد مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:35
 msgid "1 filter"
-msgstr ""
+msgstr "مرشح 1"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:36
 msgid "Preset filters"
-msgstr ""
+msgstr "مرشحات محددة مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:36
 msgid "Filters"
-msgstr ""
+msgstr "مرشحات"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:37
 msgid "Preset filter"
-msgstr ""
+msgstr "مُرَشِح حالي"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/filter-setter.js:37
 msgid "Filter"
-msgstr ""
+msgstr "مُرَشِح"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/groupby-setter.js:22
 msgid "Grouped by 1 property"
-msgstr ""
+msgstr "مجمعة حسب إعداد 1"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/groupby-setter.js:23
 msgid "Grouped by xxx properties"
-msgstr ""
+msgstr "مجمعة حسب xxx إعدادت"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/groupby-setter.js:25
 msgid "Group by"
-msgstr ""
+msgstr "مجمعه حسب"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/hide-column-setter.js:18
 msgid "1 hidden property"
-msgstr ""
+msgstr "خاصية 1 مخفية"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/hide-column-setter.js:19
 msgid "xxx hidden properties"
-msgstr ""
+msgstr "xxx خاصية مخفية"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/hide-column-setter.js:20
 msgid "Hide properties"
-msgstr ""
+msgstr "إخفاء الخصائص"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/pre-hide-column-setter.js:46
 msgid "Preset hide properties"
-msgstr ""
+msgstr "خصائص إخفاء الإعداد المسبق"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/pre-hide-column-setter.js:48
 msgid "1 preset hidden property"
-msgstr ""
+msgstr "خاصية 1 مخفية محددة مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/pre-hide-column-setter.js:50
 msgid "xxx preset hidden properties"
-msgstr ""
+msgstr "xxx خاصية مخفية محددة مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:18
 msgid "1 preset sort"
-msgstr ""
+msgstr "1 فرز محدد مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:18
 msgid "1 sort"
-msgstr ""
+msgstr "فرز 1"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:19
 msgid "preset sorts"
-msgstr ""
+msgstr "فُرُوز محددة مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:19
 msgid "sorts"
-msgstr ""
+msgstr "فُرُوز"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:20
 msgid "Preset sort"
-msgstr ""
+msgstr "فرز محدد"
 
 #: frontend/src/metadata/metadata-view/components/data-process-setter/sort-setter.js:20
 msgid "Sort"
-msgstr ""
+msgstr "فرز"
 
 #: frontend/src/metadata/metadata-view/components/delete-confirm-dialog/index.js:11
 msgid "Are you sure to delete "
-msgstr ""
+msgstr "هل أنت متأكد من حذف "
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:29
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:117
 msgid "ISO"
-msgstr ""
+msgstr "الايزو ISO"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:30
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:118
 msgid "US"
-msgstr ""
+msgstr "الامريكية"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:31
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:119
 msgid "European"
-msgstr ""
+msgstr "الأوروبيه"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:32
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:120
 msgid "Germany Russia etc"
-msgstr ""
+msgstr "ألمانيا روسيا إلى أخره"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:59
 msgid "Format"
-msgstr ""
+msgstr "التنسيق"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/data/date-data/index.js:69
 msgid "Accurate to minute"
-msgstr ""
+msgstr "الدقه إلى الدقيقة"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/name/index.js:30
 msgid "Property name"
-msgstr ""
+msgstr "اسم الخاصيه"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/column-types/index.js:101
 msgid "Search property types"
-msgstr ""
+msgstr "البحث في أنواع الخصائص"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/column-types/index.js:108
 msgid "Predefined properties"
-msgstr ""
+msgstr "خصائص محددة مسبقا"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/column-types/index.js:125
 msgid "Custom properties"
-msgstr ""
+msgstr "خصائص مخصصة"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:79
 msgid "Long text"
-msgstr ""
+msgstr "نص طويل"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:87
 msgid "Number"
-msgstr ""
+msgstr "رقم"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:95
 msgid "Collaborator"
-msgstr ""
+msgstr "المتعاون"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:103
 msgid "Checkbox"
-msgstr ""
+msgstr "خانة الاختيار"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:119
 msgid "Single select"
-msgstr ""
+msgstr "تحديد واحد"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/type/index.js:127
 msgid "Multiple select"
-msgstr ""
+msgstr "تحديد متعدد"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:7
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:66
 msgid "This is required"
-msgstr ""
+msgstr "هذا مطلوب"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:11
 msgid "Name cannot contain dots"
-msgstr ""
+msgstr "يجب أن لا يحتوي الاسم على نقاط"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:17
 msgid "Name cannot contain backtick"
-msgstr ""
+msgstr "يجب أن لا يحتوي الاسم على فاصلة عليا مائلة -`-"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:23
 msgid "Name cannot contain curly braces"
-msgstr ""
+msgstr "يجب أن لا يحتوي الاسم على أقواس مطوقة متعرجة -} أو {-"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:32
 msgid "There is another property with this name"
-msgstr ""
+msgstr "هناك خاصية أخرى بهذا الاسم"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:42
 msgid "Another property has this property type"
-msgstr ""
+msgstr "خاصية أخرى لها هذا النوع من الخصائص"
 
 #: frontend/src/metadata/metadata-view/components/popover/column-popover/utils.js:54
 msgid "Invalid regular expression"
-msgstr ""
+msgstr "تعبير عادي -regex- غير صالح"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/basic-filters/file-folder-filter.js:7
 msgid "Only files"
-msgstr ""
+msgstr "ملفات فقط"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/basic-filters/file-folder-filter.js:8
 msgid "Only folders"
-msgstr ""
+msgstr "مجلدات فقط"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/basic-filters/file-folder-filter.js:9
 msgid "Files and folders"
-msgstr ""
+msgstr "ملفات ومجلدات"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/basic-filters/index.js:22
 msgid "Basic"
-msgstr ""
+msgstr "أساسي"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/index.js:182
 msgid "No filters"
-msgstr ""
+msgstr "لا يوجد مُرَشِح"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/index.js:195
 msgid "Add filter"
-msgstr ""
+msgstr "إضافة مُرَشِح"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item-utils.js:68
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item-utils.js:81
 msgid "And"
-msgstr ""
+msgstr "و"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item-utils.js:72
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item-utils.js:86
 msgid "Or"
-msgstr ""
+msgstr "أو"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/collaborator-filter/index.js:86
 msgid "Search collaborator"
-msgstr ""
+msgstr "البحث عن متعاون"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:349
 msgid "Select option(s)"
-msgstr ""
+msgstr "حدد خيار (خيارات)"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:444
 msgid "deleted option"
-msgstr ""
+msgstr "الخيار المحذوف"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:461
 msgid "Select an option"
-msgstr ""
+msgstr "حدد خيارا"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:479
 msgid "Select collaborators"
-msgstr ""
+msgstr "حدد المتعاونين"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:511
 msgid "Invalid filter"
-msgstr ""
+msgstr "مُرَشِح غير صالح"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:556
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:188
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/index.js:105
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:221
 msgid "Search property"
-msgstr ""
+msgstr "بحث عن خاصيه"
 
 #: frontend/src/metadata/metadata-view/components/popover/filter-popover/widgets/filter-item/index.js:557
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:189
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:222
 msgid "No results"
-msgstr ""
+msgstr "لا توجد نتائج"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:93
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:20
 msgid "Up"
-msgstr ""
+msgstr "فَوْق"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:96
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:24
 msgid "Down"
-msgstr ""
+msgstr "َتَحْت"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:107
 msgid "By day"
-msgstr ""
+msgstr "باليوم"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:108
 msgid "By week"
-msgstr ""
+msgstr "بالاسبوع"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:109
 msgid "By month"
-msgstr ""
+msgstr "بالشهر"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:110
 msgid "By quarter"
-msgstr ""
+msgstr "بالربع"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/groupby-item.js:111
 msgid "By year"
-msgstr ""
+msgstr "بالسنه"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/groupbys/index.js:22
 msgid "No groupings applied to this view."
-msgstr ""
+msgstr "لم يتم تطبيق أي مجموعات على هذا العرض."
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/index.js:125
 msgid "Add group"
-msgstr ""
+msgstr "إضافة مجموعة"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/index.js:131
 msgid "Collapse all"
-msgstr ""
+msgstr "طي الكل"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/index.js:132
 msgid "Expand all"
-msgstr ""
+msgstr "توسيع الكل"
 
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/hidden-columns/index.js:28
 msgid "No properties available to be hidden"
-msgstr ""
+msgstr "لا توجد خصائص متاحة للإخفاء"
 
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/index.js:110
 msgid "Hide all"
-msgstr ""
+msgstr "إخفاء الكل"
 
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/index.js:111
 msgid "Show all"
-msgstr ""
+msgstr "عرض الكل"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/confirm-delete-popover/index.js:27
 msgid "{name} rows use this option."
-msgstr ""
+msgstr "{name} تستخدم الصفوف هذا الخيار."
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/confirm-delete-popover/index.js:28
 msgid "Are you sure you want to delete this option?"
-msgstr ""
+msgstr "هل أنت متأكد من أنك تريد حذف هذا الخيار؟"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:47
 msgid "There is another option with this name"
-msgstr ""
+msgstr "هناك خيار آخر بهذا الاسم"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/index.js:153
 msgid "No options"
-msgstr ""
+msgstr "لا توجد خيارات"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:55
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:59
 msgid "The imported options are invalid"
-msgstr ""
+msgstr "الخيارات المستوردة غير صالحة"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:64
 msgid "The imported option already exists"
-msgstr ""
+msgstr "الخيار المستورد موجود مسبقاً"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:72
 msgid "Options imported"
-msgstr ""
+msgstr "الخيارات المستوردة"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:76
 msgid "Failed imported options"
-msgstr ""
+msgstr "فشل الخيارات المستوردة"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:88
 msgid ""
 "Use the import/export function to transfer options quickly. (The export is "
 "in JSON format.) By pasting cells, copied from a text column, an Excel or a "
 "TXT file, you can also add options quickly."
-msgstr ""
+msgstr "استخدم وظيفة الاستيراد / التصدير لنقل الخيارات بسرعة. (التصدير بتنسيق JSON.) من خلال لصق الخلايا ، المنسوخة من عمود نصي أو ملف Excel أو TXT ، يمكنك أيضا إضافة خيارات بسرعة."
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:97
 msgid "Import options"
-msgstr ""
+msgstr "خيارات الاستيراد"
 
 #: frontend/src/metadata/metadata-view/components/popover/options-popover/options-footer.js:104
 msgid "Export options"
-msgstr ""
+msgstr "خيارات التصدير"
 
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:259
 msgid "No sorts"
-msgstr ""
+msgstr "لا يوجد فرز"
 
 #: frontend/src/metadata/metadata-view/components/popover/sort-popover/index.js:266
 msgid "Add sort"
-msgstr ""
+msgstr "إضافة فرز"
 
 #: frontend/src/metadata/metadata-view/components/popover/view-popover/add-view/index.js:42
 msgid "Table"
@@ -5259,15 +5259,15 @@ msgstr "جدول"
 #: frontend/src/metadata/metadata-view/components/popover/view-popover/add-view/index.js:44
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:69
 msgid "Gallery"
-msgstr ""
+msgstr "معرض"
 
 #: frontend/src/metadata/metadata-view/components/popover/view-popover/add-view/index.js:62
 msgid "New view"
-msgstr ""
+msgstr "طريقة عرض جديدة"
 
 #: frontend/src/metadata/metadata-view/components/popover/view-popover/rename/index.js:50
 msgid "Rename view"
-msgstr ""
+msgstr "إعادة التسمية طريقة العرض"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/group-body/group-container/group-header-left.js:43
 msgid "Count"
@@ -5275,71 +5275,71 @@ msgstr "عدد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/group-body/group-container/group-title.js:14
 msgid "Deleted option"
-msgstr ""
+msgstr "خيار محذوف"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/load-all-tip.js:16
 msgid "Loaded 50,000 records."
-msgstr ""
+msgstr "تم تحميل 50,000 سجل."
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/load-all-tip.js:17
 msgid "Click to load more"
-msgstr ""
+msgstr "انقر لتحميل المزيد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:56
 msgid "All records loaded"
-msgstr ""
+msgstr "تم تحميل جميع السجلات"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:114
 msgid "xxx records selected"
-msgstr ""
+msgstr "xxx سجلات محددة"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:114
 msgid "1 record selected"
-msgstr ""
+msgstr "1 سجل محدد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:118
 msgid "xxx cells selected"
-msgstr ""
+msgstr "xxx خلايا محددة"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:121
 msgid "No record"
-msgstr ""
+msgstr "لا يوجد سجل"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:123
 msgid "xxx records"
-msgstr ""
+msgstr "xxx سجلات"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:125
 msgid "1 record"
-msgstr ""
+msgstr "سجل 1"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:143
 msgid "Load all"
-msgstr ""
+msgstr "تحميل الكل"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record-footer/index.js:147
 msgid "Loading"
-msgstr ""
+msgstr "تحميل"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record/actions-cell/index.js:48
 msgid "The row is locked and cannot be modified"
-msgstr ""
+msgstr "الصف مقفل ولا يمكن تعديله"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record/actions-cell/index.js:81
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record/actions-cell/index.js:82
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record/actions-cell/index.js:83
 msgid "Select"
-msgstr ""
+msgstr "تحديد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/record/cell/operation-btn/index.js:38
 msgid "Open folder"
-msgstr ""
+msgstr "افتح مجلد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:106
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:136
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:199
 msgid "Edit format settings"
-msgstr ""
+msgstr "تحرير إعدادات التنسيق"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:107
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:171
@@ -5348,140 +5348,140 @@ msgstr ""
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:215
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:224
 msgid "You do not have permission"
-msgstr ""
+msgstr "ليس لديك إذن"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:170
 msgid "Edit single select"
-msgstr ""
+msgstr "تحرير محدد واحد"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:189
 msgid "Edit multiple select"
-msgstr ""
+msgstr "تحرير محددات متعدده"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:214
 msgid "Rename property"
-msgstr ""
+msgstr "إعادة تسمية الخاصية"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/cell/dropdown-menu/index.js:223
 msgid "Delete property"
-msgstr ""
+msgstr "حذف الخاصيه"
 
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/select-all.js:83
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/select-all.js:84
 #: frontend/src/metadata/metadata-view/components/table/table-main/records/records-header/select-all.js:85
 msgid "Select all"
-msgstr ""
+msgstr "حدد الكل"
 
 #: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:649
 msgid "xxx rows are copied."
-msgstr ""
+msgstr "تم نسخ xxx صفوف."
 
 #: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:649
 msgid "1 row is copied."
-msgstr ""
+msgstr "تم نسخ صف 1."
 
 #: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:681
 msgid "xxx cells copied"
-msgstr ""
+msgstr "تم نسخ xxx خلايا"
 
 #: frontend/src/metadata/metadata-view/components/table/table-masks/interaction-masks/index.js:681
 msgid "1 cell copied"
-msgstr ""
+msgstr "تم نسخ خلية 1"
 
 #: frontend/src/metadata/metadata-view/hooks/metadata.js:80
 msgid ""
 "The files' metadata is being created. This may take a minute or so. Please "
 "refresh the page later."
-msgstr ""
+msgstr "يتم إنشاء البيانات الوصفية للملفات. قد يستغرق هذا دقيقة أو نحو ذلك. يرجى تحديث الصفحة لاحقا."
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:19
 msgid "Failed to modify record"
-msgstr ""
+msgstr "فشل تعديل السجل"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:31
 msgid "Failed to modify records"
-msgstr ""
+msgstr "فشل تعديل السجلات"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:38
 #: frontend/src/metadata/metadata-view/store/server-operator.js:44
 msgid "Failed to restore records"
-msgstr ""
+msgstr "فشل استعادة السجلات"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:58
 msgid "Failed to insert property"
-msgstr ""
+msgstr "فشل إدراج الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:67
 msgid "Failed to delete property"
-msgstr ""
+msgstr "فشل حذف الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:76
 msgid "Failed to rename property"
-msgstr ""
+msgstr "فشل إعادة تسمية الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:85
 msgid "Failed to modify property data"
-msgstr ""
+msgstr "فشل تعديل بيانات الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:96
 msgid "Failed to modify property width"
-msgstr ""
+msgstr "فشل تعديل عرض الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:105
 msgid "Failed to modify property order"
-msgstr ""
+msgstr "فشل تعديل ترتيب الخاصية"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:114
 msgid "Failed to modify filter"
-msgstr ""
+msgstr "فشل تعديل المُرَشِح"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:123
 msgid "Failed to modify sort"
-msgstr ""
+msgstr "فشل في تعديل الفرز"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:132
 msgid "Failed to modify group"
-msgstr ""
+msgstr "فشل تعديل المجموعة"
 
 #: frontend/src/metadata/metadata-view/store/server-operator.js:141
 msgid "Failed to modify hidden properties"
-msgstr ""
+msgstr "فشل تعديل الخصائص المخفية"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:175
 msgid "Created time"
-msgstr ""
+msgstr "وقت الإنشاء"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:188
 msgid "Parent folder"
-msgstr ""
+msgstr "المجلد الأصل"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:190
 msgid "File name"
-msgstr ""
+msgstr "اسم الملف"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:192
 msgid "File type"
-msgstr ""
+msgstr "نوع الملف"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:194
 msgid "Collaborators"
-msgstr ""
+msgstr "المتعاونون"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:196
 msgid "File expire time"
-msgstr ""
+msgstr "وقت انتهاء صلاحية الملف"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:198
 msgid "Document keywords"
-msgstr ""
+msgstr "الكلمات الأساسية للمستند"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:200
 msgid "Document summary"
-msgstr ""
+msgstr "ملخص المستند"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:202
 msgid "Is expired"
-msgstr ""
+msgstr "منتهية الصلاحية"
 
 #: frontend/src/metadata/metadata-view/utils/column-utils.js:204
 msgid "File status"
