@@ -7,9 +7,8 @@ import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
-import Group from '../../models/group';
-import Repo from '../../models/repo';
 import toaster from '../../components/toast';
+import { Group, Repo } from '../../models';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import GroupMembersDialog from '../../components/dialog/group-members-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
@@ -65,8 +64,7 @@ class GroupView extends React.Component {
   }
 
   componentDidMount() {
-    let groupID = this.props.groupID;
-    this.loadGroup(groupID);
+    this.loadGroup(this.props.groupID);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -78,16 +76,12 @@ class GroupView extends React.Component {
   loadGroup = (groupID) => {
     seafileAPI.getGroup(groupID).then((res) => {
       let currentGroup = new Group(res.data);
-      let emptyTip = this.getEmptyTip(currentGroup);
-      let isStaff = currentGroup.admins.indexOf(username) > -1; // for item operations
-      let isOwner = currentGroup.owner === username ? true : false;
-      let isDepartmentGroup = currentGroup.parent_group_id !== 0;
       this.setState({
-        emptyTip: emptyTip,
-        currentGroup: currentGroup,
-        isStaff: isStaff,
-        isDepartmentGroup: isDepartmentGroup,
-        isOwner: isOwner,
+        emptyTip: this.getEmptyTip(currentGroup),
+        currentGroup,
+        isStaff: currentGroup.admins.indexOf(username) > -1, // for item operations
+        isDepartmentGroup: currentGroup.parent_group_id !== 0,
+        isOwner: currentGroup.owner === username,
         currentPage: 1,
         repoList: [] // empty it for the current group
       }, () => {
@@ -133,31 +127,32 @@ class GroupView extends React.Component {
   };
 
   getEmptyTip = (currentGroup) => {
-    let emptyTip = null;
     if (currentGroup) {
       if (currentGroup.parent_group_id === 0) {
-        emptyTip = (
+        return (
           <EmptyTip
             title={gettext('No libraries shared with this group')}
             text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}
+            className="m-0 pt-0 pb-8"
           />
         );
       } else {
         if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
-          emptyTip = (
-            <EmptyTip title={gettext('No libraries')}/>
+          return (
+            <EmptyTip title={gettext('No libraries')} className="m-0 pt-0 pb-8" />
           );
         } else {
-          emptyTip = (
+          return (
             <EmptyTip
               title={gettext('No libraries')}
               text={gettext('You can create libraries by clicking the "New Library" button above.')}
+              className="m-0 pt-0 pb-8"
             />
           );
         }
       }
     }
-    return emptyTip;
+    return null;
   };
 
   onCreateRepoToggle = () => {
@@ -200,12 +195,11 @@ class GroupView extends React.Component {
   };
 
   onItemDelete = (repo) => {
-    let groupID = this.props.groupID;
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
     this.setState({ repoList: repoList });
-    this.loadGroup(groupID);
+    this.loadGroup(this.props.groupID);
   };
 
   addRepoItem = (repo) => {
@@ -284,8 +278,7 @@ class GroupView extends React.Component {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
       res.data.failed.forEach(item => {
-        const msg = `${item.email}: ${item.error_msg}`;
-        toaster.danger(msg);
+        toaster.danger(`${item.email}: ${item.error_msg}`);
       });
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
@@ -307,13 +300,12 @@ class GroupView extends React.Component {
     });
   };
 
-
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
-      sortBy: sortBy,
-      sortOrder: sortOrder,
+      sortBy,
+      sortOrder,
       repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
   };
@@ -388,9 +380,7 @@ class GroupView extends React.Component {
   };
 
   render() {
-    const { errMessage, emptyTip, currentGroup, isDepartmentGroup,
-      isMembersDialogOpen
-    } = this.state;
+    const { errMessage, emptyTip, currentGroup, isDepartmentGroup, isMembersDialogOpen } = this.state;
 
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
@@ -425,7 +415,8 @@ class GroupView extends React.Component {
                         }
                       </>
                     )}
-                    {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                    {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
+                      <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
                       toggleDialog={this.toggleSortOptionsDialog}
