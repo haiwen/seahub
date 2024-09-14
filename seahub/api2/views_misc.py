@@ -2,7 +2,7 @@
 from seahub.api2.base import APIView
 from seahub.api2.utils import json_response
 from seahub import settings
-from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH, is_pro_version
+from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH, is_pro_version, HAS_FILE_SEASEARCH
 
 from constance import config
 
@@ -35,7 +35,7 @@ class ServerInfoView(APIView):
         if HAS_OFFICE_CONVERTER:
             features.append('office-preview')
 
-        if HAS_FILE_SEARCH:
+        if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
             features.append('file-search')
 
         if config.DISABLE_SYNC_WITH_ANY_FOLDER:
