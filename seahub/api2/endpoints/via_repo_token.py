@@ -24,7 +24,7 @@ from seahub.drafts.utils import is_draft_file, get_file_draft
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.settings import MAX_PATH
@@ -1246,7 +1246,6 @@ class ViaRepoTokenFile(APIView):
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(
                     repo_id, parent_dir, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
                 SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
         except Exception as e:
             logger.error(e)

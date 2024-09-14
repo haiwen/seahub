@@ -48,7 +48,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision, SeadocCommentReply, SeadocNotification
+from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -820,140 +820,6 @@ class SeadocDailyHistoryDetail(APIView):
             "histories": data[1:]
         }
         return Response(result)
-
-
-class SeadocDrafts(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request):
-        """list drafts
-        """
-        username = request.user.username
-        # argument check
-        repo_id = request.GET.get('repo_id')
-        try:
-            page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
-        except ValueError:
-            page = 1
-            per_page = 25
-        start = (page - 1) * per_page
-        end = page * per_page
-
-        if repo_id:
-            # resource check
-            repo = seafile_api.get_repo(repo_id)
-            if not repo:
-                error_msg = 'Library %s not found.' % repo_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-            # permission check
-            permission = check_folder_permission(request, repo_id, '/')
-            if not permission:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, end)
-            count = SeadocDraft.objects.filter(repo_id=repo_id).count()
-        else:
-            # owned
-            draft_queryset = SeadocDraft.objects.list_by_username(username, start, end)
-            count = SeadocDraft.objects.filter(username=username).count()
-
-        drafts = [draft.to_dict() for draft in draft_queryset]
-
-        return Response({'drafts': drafts, 'count': count})
-
-
-class SeadocMaskAsDraft(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def post(self, request, repo_id):
-        """ Mask as draft
-        """
-        username = request.user.username
-        # argument check
-        path = request.data.get('p', None)
-        if not path:
-            error_msg = 'p invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        path = normalize_file_path(path)
-        parent_dir = os.path.dirname(path)
-        filename = os.path.basename(path)
-
-        filetype, fileext = get_file_type_and_ext(filename)
-        if filetype != SEADOC:
-            error_msg = 'seadoc file type %s invalid.' % filetype
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        permission = check_folder_permission(request, repo_id, path)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        #
-        file_uuid = get_seadoc_file_uuid(repo, path)
-        exist_draft = SeadocDraft.objects.get_by_doc_uuid(file_uuid)
-        if exist_draft:
-            error_msg = '%s is already draft' % filename
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        draft = SeadocDraft.objects.mask_as_draft(
-            file_uuid, repo_id, username)
-
-        return Response(draft.to_dict())
-
-    def delete(self, request, repo_id):
-        """ Unmask as draft
-        """
-        username = request.user.username
-        # argument check
-        path = request.data.get('p', None)
-        if not path:
-            error_msg = 'p invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        path = normalize_file_path(path)
-        parent_dir = os.path.dirname(path)
-        filename = os.path.basename(path)
-
-        filetype, fileext = get_file_type_and_ext(filename)
-        if filetype != SEADOC:
-            error_msg = 'seadoc file type %s invalid.' % filetype
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        permission = check_folder_permission(request, repo_id, path)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        #
-        file_uuid = get_seadoc_file_uuid(repo, path)
-        SeadocDraft.objects.unmask_as_draft(file_uuid)
-
-        return Response({'success': True})
-
 
 class SeadocNotificationsView(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)

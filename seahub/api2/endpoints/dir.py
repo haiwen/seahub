@@ -107,12 +107,10 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
         try:
             from seahub.tags.models import FileUUIDMap
-            from seahub.seadoc.models import SeadocDraft, SeadocRevision
+            from seahub.seadoc.models import SeadocRevision
             file_uuid_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(
                 repo_id, parent_dir)
             file_uuid_list = [item.uuid for item in file_uuid_queryset]
-            seadoc_draft_queryset = SeadocDraft.objects.list_by_doc_uuids(
-                file_uuid_list)
             seadoc_revision_queryset = SeadocRevision.objects.list_by_doc_uuids(
                 file_uuid_list)
         except Exception as e:
@@ -194,12 +192,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     file_uuid_map = file_uuid_queryset.filter(
                         filename=file_name).first()
                     if file_uuid_map:
-                        sdoc_draft = seadoc_draft_queryset.filter(
-                            doc_uuid=file_uuid_map.uuid).first()
-                        if sdoc_draft:
-                            file_info['is_sdoc_draft'] = True
-                        else:
-                            file_info['is_sdoc_draft'] = False
                         sdoc_revision = seadoc_revision_queryset.filter(
                             doc_uuid=file_uuid_map.uuid).first()
                         if sdoc_revision:

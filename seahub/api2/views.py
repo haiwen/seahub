@@ -78,7 +78,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     normalize_cache_key, HAS_FILE_SEASEARCH
 
 from seahub.tags.models import FileUUIDMap
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_types import IMAGE, SEADOC
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -3368,7 +3368,6 @@ class FileView(APIView):
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(
                     repo_id, parent_dir, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
-                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
                 SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
         except Exception as e:
             logger.error(e)

@@ -47,7 +47,7 @@ from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
+from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.base.models import FileComment
 from seahub.api2.views import HTTP_447_TOO_MANY_FILES_IN_LIBRARY
 from seahub.group.utils import group_id_to_name, is_group_admin
@@ -1143,7 +1143,6 @@ class WikiPageTrashView(APIView):
             FileComment.objects.filter(uuid__in=file_uuids).delete()
             FileUUIDMap.objects.filter(uuid__in=file_uuids).delete()
             SeadocHistoryName.objects.filter(doc_uuid__in=file_uuids).delete()
-            SeadocDraft.objects.filter(doc_uuid__in=file_uuids).delete()
             SeadocCommentReply.objects.filter(doc_uuid__in=file_uuids).delete()
         except Exception as e:
             logger.error(e)
