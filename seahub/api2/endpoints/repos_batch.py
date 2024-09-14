@@ -1680,15 +1680,14 @@ class SpanReposBatchDelete(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def delete(self, request, repo_id):
+    def delete(self, request):
         """ Multi delete files/folders.
            Permission checking:
            1. User must has `rw` permission for parent folder.
            Parameter:
            {
                "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
-               "file_names":['/a/b/c', '/a/b/d''] # 包含文件名的json数组,
-               "username":["1.md", "2.md"],
+               "file_names":['/a/b/c', '/a/b/d''] # 包含文件名的json数组
            }
        """
         # argument check
@@ -1701,12 +1700,6 @@ class SpanReposBatchDelete(APIView):
         if not file_names:
             error_msg = 'file_names invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        is_windows = request.data.get('is_windows', None)
-        if not is_windows:
-            error_msg = 'is_windows invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -1730,9 +1723,7 @@ class SpanReposBatchDelete(APIView):
         # check locked files
         username = request.user.username
         try:
-            seafile_api.del_file(repo_id, parent_dir,
-                                 json.dumps(dirents),
-                                 username)
+            seafile_api.batch_del_files(repo_id, json.dumps(file_names), username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
