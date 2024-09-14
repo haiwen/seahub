@@ -1713,12 +1713,13 @@ class RepoFoldersItemBatchDelete(APIView):
         username = request.user.username
         parent_dir_dirents_map = {}
         
-        for file_name in file_names:
-            parent_dir = os.path.dirname(file_name)
+        for file_path in file_names:
+            parent_dir = os.path.dirname(file_path)
+            basename = os.path.basename(file_path)
             if not parent_dir_dirents_map.get(parent_dir, []):
-                parent_dir_dirents_map[parent_dir] = [file_name,]
+                parent_dir_dirents_map[parent_dir] = [basename,]
             else:
-                parent_dir_dirents_map[parent_dir].append(file_name)
+                parent_dir_dirents_map[parent_dir].append(basename)
                 
         for parent_dir, dirents  in parent_dir_dirents_map.items():
             locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
