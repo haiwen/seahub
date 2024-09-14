@@ -4,12 +4,12 @@ import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import ItemDropdownMenu from '../../../components/dropdown-menu/item-dropdown-menu';
-import { Rename } from '../../metadata-view/components/popover/view-popover';
+import { Rename } from '../../components/popover/view-popover';
 import { Utils, isMobile } from '../../../utils/utils';
-import { VIEW_TYPE_ICON } from '../../metadata-view/_basic';
+import { useMetadata } from '../../hooks';
+import { VIEW_TYPE_ICON } from '../../constants';
 
 import './index.css';
-import { useMetadata } from '../../hooks';
 
 const ViewItem = ({
   canDelete,

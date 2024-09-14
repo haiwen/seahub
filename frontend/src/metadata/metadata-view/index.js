@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MetadataProvider } from './hooks';
-import { View, DetailEditor, CellFormatter } from './components';
-import Context from './context';
+import View from './view';
+import { MetadataViewProvider } from '../hooks/metadata-view';
+import Context from '../context';
 
 const SeafileMetadata = ({ ...params }) => {
   return (
-    <MetadataProvider { ...params }>
+    <MetadataViewProvider { ...params }>
       <View />
-    </MetadataProvider>
+    </MetadataViewProvider>
   );
 };
 
@@ -21,6 +21,4 @@ SeafileMetadata.propTypes = {
 export default SeafileMetadata;
 export {
   Context,
-  DetailEditor,
-  CellFormatter,
 };

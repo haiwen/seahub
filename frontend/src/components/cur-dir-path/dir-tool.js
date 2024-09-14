@@ -8,8 +8,8 @@ import SeahubPopover from '../common/seahub-popover';
 import ListTagPopover from '../popover/list-tag-popover';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/repos-sort-menu';
+import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import MetadataViewToolBar from '../../metadata/metadata-view/components/view-toolbar';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

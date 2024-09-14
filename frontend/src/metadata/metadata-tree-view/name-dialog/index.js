@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import { KeyCodes } from '../../../constants';
-import { gettext } from '../../metadata-view/utils';
 import { Utils } from '../../../utils/utils';
+import { gettext } from '../../../utils/constants';
 
 const NameDialog = ({ value: oldName, title, onSubmit, onToggle }) => {
   const [name, setName] = useState(oldName || '');

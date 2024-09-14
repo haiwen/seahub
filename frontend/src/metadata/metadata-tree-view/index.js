@@ -2,15 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { CustomizeAddTool } from '@seafile/sf-metadata-ui-component';
-import Icon from '../../components/icon';
-import { gettext } from '../../utils/constants';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import ViewItem from './view-item';
-import { useMetadata } from '../hooks';
-import { AddView } from '../metadata-view/components/popover/view-popover';
-import { isValidViewName, VIEW_TYPE_ICON } from '../metadata-view/_basic';
-import { isEnter } from '../metadata-view/_basic/utils/hotkey';
 import toaster from '../../components/toast';
+import Icon from '../../components/icon';
+import ViewItem from './view-item';
+import { AddView } from '../components/popover/view-popover';
+import { gettext } from '../../utils/constants';
+import { useMetadata } from '../hooks';
+import { PRIVATE_FILE_TYPE } from '../../constants';
+import { VIEW_TYPE_ICON } from '../constants';
+import { isValidViewName } from '../utils/validate';
+import { isEnter } from '../utils/hotkey';
 
 import './index.css';
 
@@ -57,7 +58,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     if (showFirstView && firstView) {
       selectView(firstView);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {

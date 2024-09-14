@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formatter } from '@seafile/sf-metadata-ui-component';
 import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
-import { CellType } from '../../../metadata/metadata-view/_basic';
+import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { MetadataDetails, useMetadata } from '../../../metadata';
 

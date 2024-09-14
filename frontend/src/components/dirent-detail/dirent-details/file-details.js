@@ -5,13 +5,13 @@ import { Formatter } from '@seafile/sf-metadata-ui-component';
 import classnames from 'classnames';
 import { getDirentPath } from './utils';
 import DetailItem from '../detail-item';
-import { CellType } from '../../../metadata/metadata-view/_basic';
+import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import EditFileTagPopover from '../../popover/edit-filetag-popover';
 import FileTagList from '../../file-tag-list';
 import { Utils } from '../../../utils/utils';
 import { MetadataDetails, useMetadata } from '../../../metadata';
-import ObjectUtils from '../../../metadata/metadata-view/utils/object-utils';
+import ObjectUtils from '../../../metadata/utils/object-utils';
 
 const FileDetails = React.memo(({ repoID, repoInfo, dirent, path, direntDetail, onFileTagChanged, repoTags, fileTagList }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
