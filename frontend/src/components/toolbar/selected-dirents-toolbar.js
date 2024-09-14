@@ -195,9 +195,45 @@ class SelectedDirentsToolbar extends React.Component {
       case 'Open via Client':
         this.onOpenViaClient(dirent);
         break;
+      case 'Convert to Markdown': {
+        this.props.onItemConvert(dirent, 'markdown');
+        break;
+      }
+      case 'Convert to docx': {
+        this.props.onItemConvert(dirent, 'docx');
+        break;
+      }
+      case 'Convert to sdoc': {
+        this.props.onItemConvert(dirent, 'sdoc');
+        break;
+      }
+      case 'Export docx': {
+        this.exportDocx(dirent);
+        break;
+      }
+      case 'Export sdoc': {
+        this.exportSdoc(dirent);
+        break;
+      }
       default:
         break;
     }
+  };
+
+  exportDocx = (dirent) => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
+    window.location.href = exportToDocxUrl;
+  };
+
+  exportSdoc = (dirent) => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
+    window.location.href = exportToSdocUrl;
   };
 
   lockFile = (dirent) => {
