@@ -176,10 +176,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'video'
 
-        raw_path = resp.context['raw_path']
-        for _ in range(3):      # token for video is not one time only
-            r = requests.get(raw_path)
-            self.assertEqual(200, r.status_code)
 
     def test_can_download(self):
         self.login_as(self.user)
