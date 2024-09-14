@@ -1672,3 +1672,73 @@ class ReposBatchDeleteItemView(APIView):
         result['success'] = True
         result['commit_id'] = repo.head_cmmt_id
         return Response(result)
+
+
+class SpanReposBatchDelete(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, repo_id):
+        """ Multi delete files/folders.
+           Permission checking:
+           1. User must has `rw` permission for parent folder.
+           Parameter:
+           {
+               "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+               "file_names":['/a/b/c', '/a/b/d''] # 包含文件名的json数组,
+               "username":["1.md", "2.md"],
+           }
+       """
+        # argument check
+        repo_id = request.data.get('repo_id', None)
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_names = request.data.get('file_names', None)
+        if not file_names:
+            error_msg = 'file_names invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        is_windows = request.data.get('is_windows', None)
+        if not is_windows:
+            error_msg = 'is_windows invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dirents = []
+        for file_name in file_names:
+            parent_dir = os.path.dirname(file_name)
+            if parent_dir not in dirents:
+                dirents.append(parent_dir)
+            if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+                error_msg = 'Folder %s not found.' % parent_dir
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            # permission check
+            # User must has `rw` permission for parent dir.
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check locked files
+        username = request.user.username
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps(dirents),
+                                 username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)
