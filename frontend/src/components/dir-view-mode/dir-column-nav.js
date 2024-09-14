@@ -9,7 +9,7 @@ import Move from '../../components/dialog/move-dirent-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ImageDialog from '../../components/dialog/image-dialog';
-import {fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal} from '../../utils/constants';
+import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../../components/tree-section';
