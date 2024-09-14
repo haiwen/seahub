@@ -1674,7 +1674,7 @@ class ReposBatchDeleteItemView(APIView):
         return Response(result)
 
 
-class SpanReposBatchDelete(APIView):
+class RepoFoldersItemBatchDelete(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -1706,22 +1706,29 @@ class SpanReposBatchDelete(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        dirents = []
+        if parse_repo_perm(check_folder_permission(request, repo_id, '/')).can_delete is False:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        parent_dir_dirents_map = {}
+        
         for file_name in file_names:
             parent_dir = os.path.dirname(file_name)
-            if parent_dir not in dirents:
-                dirents.append(parent_dir)
-            if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
-                error_msg = 'Folder %s not found.' % parent_dir
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-            # permission check
-            # User must has `rw` permission for parent dir.
-            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # check locked files
-        username = request.user.username
+            if not parent_dir_dirents_map.get(parent_dir, []):
+                parent_dir_dirents_map[parent_dir] = [file_name,]
+            else:
+                parent_dir_dirents_map[parent_dir].append(file_name)
+                
+        for parent_dir, dirents  in parent_dir_dirents_map.items():
+            locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+            for dirent in dirents:
+                # file is locked and lock owner is not current user
+                if dirent in list(locked_files.keys()) and \
+                    locked_files[dirent] != request.user.username:
+                    error_msg = _('File %s is locked.') % dirent
+                    return api_error(status.HTTP_423_LOCKED, error_msg)
+                
         try:
             seafile_api.batch_del_files(repo_id, json.dumps(file_names), username)
         except Exception as e:
