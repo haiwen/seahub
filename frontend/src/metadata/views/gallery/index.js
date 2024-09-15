@@ -128,14 +128,14 @@ const Gallery = () => {
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
 
-    const mode = window.sfMetadataContext.localStorage.getItem('gallery-mode', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    const mode = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
     setMode(mode);
 
     const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
-      EVENT_BUS_TYPE.SWITCH_GALLERY_MODE,
+      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
       (mode) => {
         setMode(mode);
-        window.sfMetadataContext.localStorage.setItem('gallery-mode', mode);
+        window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
       }
     );
 

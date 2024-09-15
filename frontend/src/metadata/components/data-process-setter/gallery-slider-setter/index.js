@@ -1,17 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
-<<<<<<<< HEAD:frontend/src/metadata/components/data-process-setter/slider-setter.js
-import Icon from '../../../components/icon';
-import { EVENT_BUS_TYPE } from '../../constants';
-========
+import Icon from '../../../../components/icon';
 import { EVENT_BUS_TYPE } from '../../../constants';
-import Icon from '../../../../../components/icon';
->>>>>>>> 31af2599a (replace localStorage with sfMetadataContext.localStorage, update date tag render):frontend/src/metadata/metadata-view/components/data-process-setter/slider-setter/index.js
 
 import './index.css';
 
-const SliderSetter = ({ view }) => {
+const GallerySliderSetter = ({ view }) => {
   const [sliderValue, setSliderValue] = useState(() => {
     const savedValue = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0);
     return savedValue || 0;
@@ -61,8 +56,8 @@ const SliderSetter = ({ view }) => {
   );
 };
 
-SliderSetter.propTypes = {
+GallerySliderSetter.propTypes = {
   view: PropTypes.object,
 };
 
-export default SliderSetter;
+export default GallerySliderSetter;
