@@ -28,6 +28,10 @@ const propTypes = {
   ]).isRequired,
   fileSuffixes: PropTypes.arrayOf(PropTypes.string),
   currentPath: PropTypes.string,
+  searchResults: PropTypes.array,
+  selectedSearchedItem: PropTypes.object,
+  selectedRepo: PropTypes.object,
+  selectedPath: PropTypes.string,
 };
 
 const defaultProps = {
@@ -38,6 +42,10 @@ const defaultProps = {
   onRepoItemClick: () => {},
   fileSuffixes: [],
   currentPath: '',
+  searchResults: [],
+  selectedSearchedItem: {},
+  selectedRepo: null,
+  selectedPath: '',
 };
 
 class FileChooser extends React.Component {

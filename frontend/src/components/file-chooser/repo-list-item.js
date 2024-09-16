@@ -38,6 +38,7 @@ class RepoListItem extends React.Component {
   }
 
   componentDidMount() {
+    console.log('mount');
     this.setState({ isMounted: true });
     const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
 
@@ -52,8 +53,7 @@ class RepoListItem extends React.Component {
       return;
     }
 
-    // the repo is current repo and currentPath is not '/'
-    if (isCurrentRepo && !repoID) {
+    if (repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
       this.loadRepoDirentList(repo);
       setTimeout(() => {
         const repoID = repo.repo_id;
@@ -65,38 +65,37 @@ class RepoListItem extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isBrowsing && !this.props.isBrowsing) {
-      this.setState({
-        treeData: treeHelper.buildTree(),
-        isShowChildren: this.props.initToShowChildren,
-      });
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.isBrowsing !== this.props.isBrowsing) {
+  //     this.setState({
+  //       treeData: treeHelper.buildTree(),
+  //       isShowChildren: this.props.initToShowChildren,
+  //     });
 
-      const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
-      const { repoID } = selectedItemInfo || {};
+  //     const { isCurrentRepo, currentPath, repo } = this.props;
+  //     console.log('isCurrentRepo', isCurrentRepo);
+  //     if (isCurrentRepo) {
+  //       this.loadRepoDirentList(repo);
+  //       setTimeout(() => {
+  //         const repoID = repo.repo_id;
+  //         if (isCurrentRepo && currentPath && currentPath != '/') {
+  //           const expandNode = true;
+  //           this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
+  //         }
+  //       }, 0);
+  //     }
+  //   }
 
-      if (isCurrentRepo && !repoID) {
-        this.loadRepoDirentList(repo);
-        setTimeout(() => {
-          const repoID = repo.repo_id;
-          if (isCurrentRepo && currentPath && currentPath != '/') {
-            const expandNode = true;
-            this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
-          }
-        }, 0);
-      }
-    }
-
-  }
+  // }
 
   componentWillUnmount() {
-    this.setState({ isMounted: false });
+    console.log('unmount');
+    this.setState({ isMounted: false, hasLoaded: false });
   }
 
   loadRepoDirentList = async (repo) => {
     const { hasLoaded } = this.state;
     if (hasLoaded) return;
-
     const repoID = repo.repo_id;
 
     try {

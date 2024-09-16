@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import FileChooser from '../file-chooser/file-chooser';
+import FileChooser from './file-chooser';
+import Search, { SearchStatus } from './search';
+import { seafileAPI } from '../../utils/seafile-api';
+import { RepoInfo } from '../../models';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -24,11 +28,91 @@ class MoveDirent extends React.Component {
     super(props);
     this.state = {
       repo: { repo_id: this.props.repoID },
-      selectedPath: this.props.path,
+      currentRepoInfo: null,
       errMessage: '',
       mode: 'only_current_library',
+      repoList: [],
+      searchResults: [],
+      selectedSearchedItem: null,
+      selectedRepo: null,
+      selectedPath: this.props.path,
+      browsingPath: '',
+      searchStatus: SearchStatus.IDLE,
+      isLoading: true,
     };
   }
+
+  componentDidMount() {
+    this.fetchRepoInfo();
+    this.fetchRepoList();
+  }
+
+  fetchRepoInfo = async () => {
+    try {
+      const res = await seafileAPI.getRepoInfo(this.props.repoID);
+      const repoInfo = new RepoInfo(res.data);
+      this.setState({
+        currentRepoInfo: repoInfo,
+        selectedRepo: repoInfo,
+        selectedPath: '/',
+        isLoading: false,
+      });
+    } catch (err) {
+      const errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+      this.setState({ isLoading: false });
+    }
+  };
+
+  fetchRepoList = async () => {
+    try {
+      const res = await seafileAPI.listRepos();
+      const repos = res.data.repos;
+      const repoList = repos.filter(repo =>
+        repo.permission === 'rw' && repo.repo_id !== this.props.repoID);
+
+      const sortedRepoList = Utils.sortRepos(repoList, 'name', 'asc');
+      const selectedRepo = sortedRepoList.find(repo => repo.repo_id === this.props.repoID);
+      const path = this.props.path.substring(0, this.props.path.length - 1);
+
+      this.setState({
+        repoList: sortedRepoList,
+        selectedPath: path,
+        selectedRepo: selectedRepo || this.state.selectedRepo,
+      });
+    } catch (error) {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    }
+  };
+
+  onUpdateSearchStatus = (status) => {
+    this.setState({ searchStatus: status });
+  };
+
+  onUpdateRepoList = (repoList) => {
+    this.setState({ repoList: repoList });
+  };
+
+  onUpdateSearchResults = (results) => {
+    this.setState({ searchResults: results });
+  };
+
+  onSelectedSearchedItem = (item) => {
+    this.setState({ selectedSearchedItem: item });
+  };
+
+  onSelectedRepo = (repo) => {
+    this.setState({ selectedRepo: repo, mode: repo.repo_id === this.props.repoID ? 'only_current_library' : 'only_other_libraries' });
+  };
+
+  onSelectedPath = (path) => {
+    this.setState({ selectedPath: path });
+  };
+
+  onBrowsingPath = (path) => {
+    this.setState({ browsingPath: path });
+  };
 
   handleSubmit = () => {
     if (this.props.isMultipleOperation) {
@@ -132,6 +216,7 @@ class MoveDirent extends React.Component {
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
       repo: repo,
+      selectedRepo: repo,
       selectedPath: selectedPath,
       errMessage: ''
     });
@@ -140,6 +225,7 @@ class MoveDirent extends React.Component {
   onRepoItemClick = (repo) => {
     this.setState({
       repo: repo,
+      selectedRepo: repo,
       selectedPath: '/',
       errMessage: ''
     });
@@ -162,7 +248,7 @@ class MoveDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
-    const { mode, errMessage } = this.state;
+    const { mode, errMessage, searchStatus, searchResults, selectedSearchedItem, selectedRepo, selectedPath, repoList, currentRepoInfo, browsingPath } = this.state;
 
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
@@ -180,21 +266,43 @@ class MoveDirent extends React.Component {
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className='d-flex mw-100'></div>}
         </ModalHeader>
         <Row>
-          <Col className='repo-list-col border-right' >
+          <Col className='repo-list-col border-right'>
+            <Search
+              searchStatus={searchStatus}
+              onUpdateSearchStatus={this.onUpdateSearchStatus}
+              onDirentItemClick={this.onDirentItemClick}
+              onUpdateSearchResults={this.onUpdateSearchResults}
+              onSelectedSearchedItem={this.onSelectedSearchedItem}
+              onSelectedRepo={this.onSelectedRepo}
+              onSelectedPath={this.onSelectedPath}
+              onBrowsingPath={this.onBrowsingPath}
+            />
             <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
             {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
             <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
           </Col>
           <Col className='file-list-col'>
             <ModalBody>
-              <FileChooser
-                repoID={repoID}
-                currentPath={path}
-                onDirentItemClick={this.onDirentItemClick}
-                onRepoItemClick={this.onRepoItemClick}
-                mode={mode}
-                hideLibraryName={false}
-              />
+              {currentRepoInfo && (
+                <FileChooser
+                  repoID={repoID}
+                  mode={mode}
+                  repoList={repoList}
+                  currentRepoInfo={currentRepoInfo}
+                  currentPath={path}
+                  selectedRepo={selectedRepo}
+                  selectedPath={selectedPath}
+                  selectedSearchedItem={selectedSearchedItem}
+                  onRepoItemClick={this.onRepoItemClick}
+                  onDirentItemClick={this.onDirentItemClick}
+                  isShowFile={false}
+                  fileSuffixes={[]}
+                  hideLibraryName={false}
+                  searchResults={searchResults}
+                  isBrowsing={searchStatus === SearchStatus.BROWSING}
+                  browsingPath={browsingPath}
+                />
+              )}
               {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
             </ModalBody>
             <ModalFooter>
