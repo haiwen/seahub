@@ -38,7 +38,6 @@ class RepoListItem extends React.Component {
   }
 
   componentDidMount() {
-    console.log('mount');
     this.setState({ isMounted: true });
     const { isCurrentRepo, currentPath, repo, selectedItemInfo } = this.props;
 
@@ -65,31 +64,7 @@ class RepoListItem extends React.Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.isBrowsing !== this.props.isBrowsing) {
-  //     this.setState({
-  //       treeData: treeHelper.buildTree(),
-  //       isShowChildren: this.props.initToShowChildren,
-  //     });
-
-  //     const { isCurrentRepo, currentPath, repo } = this.props;
-  //     console.log('isCurrentRepo', isCurrentRepo);
-  //     if (isCurrentRepo) {
-  //       this.loadRepoDirentList(repo);
-  //       setTimeout(() => {
-  //         const repoID = repo.repo_id;
-  //         if (isCurrentRepo && currentPath && currentPath != '/') {
-  //           const expandNode = true;
-  //           this.loadNodeAndParentsByPath(repoID, currentPath, expandNode);
-  //         }
-  //       }, 0);
-  //     }
-  //   }
-
-  // }
-
   componentWillUnmount() {
-    console.log('unmount');
     this.setState({ isMounted: false, hasLoaded: false });
   }
 

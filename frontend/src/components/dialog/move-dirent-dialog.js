@@ -21,7 +21,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
 };
 
-// need dirent file Path；
 class MoveDirent extends React.Component {
 
   constructor(props) {
@@ -32,14 +31,13 @@ class MoveDirent extends React.Component {
       errMessage: '',
       mode: 'only_current_library',
       repoList: [],
-      searchResults: [],
       selectedSearchedItem: null,
       selectedRepo: null,
       selectedPath: this.props.path,
       browsingPath: '',
       searchStatus: SearchStatus.IDLE,
       isLoading: true,
-      isSearchResultPopoverOpen: false,
+      isSearchPopoverOpen: false,
     };
     this.searchRef = React.createRef();
   }
@@ -94,10 +92,6 @@ class MoveDirent extends React.Component {
 
   onUpdateRepoList = (repoList) => {
     this.setState({ repoList: repoList });
-  };
-
-  onUpdateSearchResults = (results) => {
-    this.setState({ searchResults: results });
   };
 
   onSelectedSearchedItem = (item) => {
@@ -260,7 +254,7 @@ class MoveDirent extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, repoID, path } = this.props;
-    const { mode, errMessage, searchStatus, searchResults, selectedSearchedItem, selectedRepo, selectedPath, repoList, currentRepoInfo, browsingPath } = this.state;
+    const { mode, errMessage, searchStatus, selectedSearchedItem, selectedRepo, selectedPath, repoList, currentRepoInfo, browsingPath, isSearchPopoverOpen } = this.state;
 
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
@@ -284,12 +278,11 @@ class MoveDirent extends React.Component {
                 searchStatus={searchStatus}
                 onUpdateSearchStatus={this.onUpdateSearchStatus}
                 onDirentItemClick={this.onDirentItemClick}
-                onUpdateSearchResults={this.onUpdateSearchResults}
                 onSelectedSearchedItem={this.onSelectedSearchedItem}
                 onSelectedRepo={this.onSelectedRepo}
                 onSelectedPath={this.onSelectedPath}
                 onBrowsingPath={this.onBrowsingPath}
-                isPopoverOpen={this.state.isSearchPopoverOpen}
+                isPopoverOpen={isSearchPopoverOpen}
                 onPopoverToggle={this.onSearchPopoverToggle}
               />
             </div>
@@ -311,10 +304,7 @@ class MoveDirent extends React.Component {
                   selectedSearchedItem={selectedSearchedItem}
                   onRepoItemClick={this.onRepoItemClick}
                   onDirentItemClick={this.onDirentItemClick}
-                  isShowFile={false}
-                  fileSuffixes={[]}
                   hideLibraryName={false}
-                  searchResults={searchResults}
                   isBrowsing={searchStatus === SearchStatus.BROWSING}
                   browsingPath={browsingPath}
                 />

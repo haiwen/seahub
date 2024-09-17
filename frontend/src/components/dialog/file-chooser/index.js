@@ -4,7 +4,7 @@ import RecentlyUsedListView from '../../file-chooser/recently-used-list-view';
 
 import '../../../css/file-chooser.css';
 
-const FileChooser = ({ mode, repoList, currentRepoInfo, currentPath, selectedRepo, selectedPath, selectedSearchedItem, onRepoItemClick, onDirentItemClick, fileSuffixes, isShowFile, isBrowsing, browsingPath }) => {
+const FileChooser = ({ mode, repoList, currentRepoInfo, currentPath, selectedRepo, selectedPath, selectedSearchedItem, onRepoItemClick, onDirentItemClick, isBrowsing, browsingPath }) => {
   const [recentlyUsedList, setRecentlyUsedList] = useState([]);
 
   useEffect(() => {
@@ -34,8 +34,6 @@ const FileChooser = ({ mode, repoList, currentRepoInfo, currentPath, selectedRep
               selectedPath={selectedPath}
               onRepoItemClick={onRepoItemClick}
               onDirentItemClick={onDirentItemClick}
-              isShowFile={isShowFile}
-              fileSuffixes={fileSuffixes}
               selectedItemInfo={selectedSearchedItem}
               isBrowsing={isBrowsing}
               browsingPath={browsingPath}
@@ -51,8 +49,6 @@ const FileChooser = ({ mode, repoList, currentRepoInfo, currentPath, selectedRep
               selectedPath={selectedPath}
               onRepoItemClick={onRepoItemClick}
               onDirentItemClick={onDirentItemClick}
-              isShowFile={isShowFile}
-              fileSuffixes={fileSuffixes}
               selectedItemInfo={selectedSearchedItem}
               isBrowsing={isBrowsing}
               browsingPath={browsingPath}
