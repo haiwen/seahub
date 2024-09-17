@@ -1,12 +1,36 @@
-.search-input-container {
-  width: 100%;
+.search-container {
   display: flex;
-  align-items: center;
-  justify-content: start;
+  flex-direction: column;
   position: relative;
+}
+
+.search-input-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.search-input-container .search-input {
+  width: 100%;
+  height: 2.375rem;
 }
 
 .search-input-container .search-control {
   position: absolute;
-  right: 0;
+  top: 13px;
+  right: 8px;
+}
+
+.search-results-popover .popover {
+  min-width: 400px;
+  padding: 1rem;
+}
+
+.search-results-popover-body {
+  width: 100%;
+}
+
+.search-results-popover-body .search-results-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

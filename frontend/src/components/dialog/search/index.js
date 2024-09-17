@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Input } from 'reactstrap';
+import { Input, UncontrolledPopover } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import Loading from '../../loading';
@@ -18,7 +18,7 @@ export const SearchStatus = {
   BROWSING: 'browsing',
 };
 
-const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelectedSearchedItem, onSelectedRepo, onSelectedPath, onBrowsingPath }) => {
+const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelectedSearchedItem, onSelectedRepo, onSelectedPath, onBrowsingPath, isPopoverOpen, onPopoverToggle }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -35,7 +35,8 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
       return;
     }
 
-    onUpdateSearchStatus(SearchStatus.SEARCHING);
+    onUpdateSearchStatus(SearchStatus.LOADING);
+    onPopoverToggle(true);
 
     const queryData = {
       q: newValue,
@@ -88,12 +89,13 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
     return items;
   };
 
-  const onCloseSearching = () => {
+  const onCloseSearching = useCallback(() => {
     setInputValue('');
     setSearchResults([]);
     onUpdateSearchStatus(SearchStatus.IDLE);
+    onPopoverToggle(false);
     onSelectedSearchedItem(null);
-  };
+  }, [onUpdateSearchStatus, onSelectedSearchedItem, onPopoverToggle]);
 
   const onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
@@ -110,6 +112,7 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
     };
 
     onSelectedSearchedItem(selectedItemInfo);
+    onPopoverToggle(false);
 
     seafileAPI.getRepoInfo(item.repo_id)
       .then(res => {
@@ -149,19 +152,37 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
   };
 
   return (
-    <>
+    <div className='search-container'>
       <div className='search-input-container'>
-        <Input className='search-input' placeholder={gettext('Search')} type='text' value={inputValue} onChange={handleSearchInputChange} />
+        <Input
+          id='search-input'
+          className='search-input'
+          placeholder={gettext('Global search')}
+          type='text'
+          value={inputValue}
+          onChange={handleSearchInputChange}
+        />
         {inputValue.length !== 0 && (
           <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={onCloseSearching}></span>
         )}
       </div>
-      {searchStatus !== SearchStatus.IDLE && (
-        <div className='search-results-container'>
-          {renderSearchResults()}
-        </div>
-      )}
-    </>
+      {searchStatus !== SearchStatus.IDLE &&
+        <UncontrolledPopover
+          className='search-results-popover'
+          isOpen={isPopoverOpen}
+          toggle={() => onPopoverToggle(!isPopoverOpen)}
+          target='search-input'
+          placement='bottom-start'
+          hideArrow={true}
+          fade={false}
+          trigger="legacy"
+        >
+          <div className='search-results-popover-body'>
+            {renderSearchResults()}
+          </div>
+        </UncontrolledPopover>
+      }
+    </div>
   );
 };
 

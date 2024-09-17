@@ -973,6 +973,8 @@ class LibContentView extends React.Component {
 
       this.deleteDirents(dirNames);
 
+      this.removeFromRecentlyUsed(repoID, this.state.path);
+
       let msg = '';
       if (direntPaths.length > 1) {
         msg = gettext('Successfully deleted {name} and {n} other items.');
@@ -998,6 +1000,14 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
+  };
+
+  removeFromRecentlyUsed = (repoID, path) => {
+    const recentlyUsed = JSON.parse(localStorage.getItem('recently-used-list')) || [];
+    const updatedRecentlyUsed = recentlyUsed.filter(item =>
+      !(item.repo.repo_id === repoID && item.path === path)
+    );
+    localStorage.setItem('recently-used-list', JSON.stringify(updatedRecentlyUsed));
   };
 
   onAddFolder = (dirPath) => {
@@ -1272,6 +1282,7 @@ class LibContentView extends React.Component {
       this.deleteTreeNode(path);
     }
     this.deleteDirent(path);
+    this.removeFromRecentlyUsed(this.props.repoID, path);
   }
 
   // list operations

@@ -39,7 +39,9 @@ class MoveDirent extends React.Component {
       browsingPath: '',
       searchStatus: SearchStatus.IDLE,
       isLoading: true,
+      isSearchResultPopoverOpen: false,
     };
+    this.searchRef = React.createRef();
   }
 
   componentDidMount() {
@@ -235,6 +237,16 @@ class MoveDirent extends React.Component {
     this.setState({ mode: mode });
   };
 
+  handleModalClick = (e) => {
+    if (this.searchRef.current && !this.searchRef.current.contains(e.target)) {
+      this.setState({ isSearchPopoverOpen: false });
+    }
+  };
+
+  onSearchPopoverToggle = (isOpen) => {
+    this.setState({ isSearchPopoverOpen: isOpen });
+  };
+
   renderTitle = () => {
     const { dirent, isMultipleOperation } = this.props;
     let title = gettext('Move {placeholder} to');
@@ -267,16 +279,20 @@ class MoveDirent extends React.Component {
         </ModalHeader>
         <Row>
           <Col className='repo-list-col border-right'>
-            <Search
-              searchStatus={searchStatus}
-              onUpdateSearchStatus={this.onUpdateSearchStatus}
-              onDirentItemClick={this.onDirentItemClick}
-              onUpdateSearchResults={this.onUpdateSearchResults}
-              onSelectedSearchedItem={this.onSelectedSearchedItem}
-              onSelectedRepo={this.onSelectedRepo}
-              onSelectedPath={this.onSelectedPath}
-              onBrowsingPath={this.onBrowsingPath}
-            />
+            <div ref={this.searchRef}>
+              <Search
+                searchStatus={searchStatus}
+                onUpdateSearchStatus={this.onUpdateSearchStatus}
+                onDirentItemClick={this.onDirentItemClick}
+                onUpdateSearchResults={this.onUpdateSearchResults}
+                onSelectedSearchedItem={this.onSelectedSearchedItem}
+                onSelectedRepo={this.onSelectedRepo}
+                onSelectedPath={this.onSelectedPath}
+                onBrowsingPath={this.onBrowsingPath}
+                isPopoverOpen={this.state.isSearchPopoverOpen}
+                onPopoverToggle={this.onSearchPopoverToggle}
+              />
+            </div>
             <LibraryOption mode='only_current_library' label={gettext('Current Library')} />
             {!isCustomPermission && <LibraryOption mode='only_other_libraries' label={gettext('Other Libraries')} />}
             <LibraryOption mode='recently_used' label={gettext('Recently Used')} />
