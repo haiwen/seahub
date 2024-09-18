@@ -159,21 +159,21 @@ class TrashDialog extends React.Component {
 
     return (
       <React.Fragment>
-        <a href="#" onClick={this.clickRoot} className="text-truncate cur-path" title={repoFolderName}>{repoFolderName}</a>
-        <span className="mx-1">/</span>
+        <a href="#" onClick={this.clickRoot} className="path-item" title={repoFolderName}>{repoFolderName}</a>
+        <span className="path-split">/</span>
         {pathList.map((item, index) => {
           if (index > 0 && index != pathList.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a className="text-truncate cur-path" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
-                <span className="mx-1">/</span>
+                <a className="path-item" href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))} title={pathList[index]}>{pathList[index]}</a>
+                <span className="path-split">/</span>
               </React.Fragment>
             );
           }
           return null;
         }
         )}
-        <span className="text-truncate" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
+        <span className="last-path-item" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
       </React.Fragment>
     );
   };
@@ -201,13 +201,6 @@ class TrashDialog extends React.Component {
           }
         >
           <div dangerouslySetInnerHTML={{ __html: title }}></div>
-          <p className="m-0 text-truncate d-flex cur-title">
-            <span className="mr-1">{gettext('Current path: ')}</span>
-            {showFolder ?
-              this.renderFolderPath() :
-              <span className="text-truncate cur-path" title={repoFolderName}>{repoFolderName}</span>}
-          </p>
-
         </ModalHeader>
         <ModalBody>
           {isLoading && <Loading />}
@@ -215,17 +208,26 @@ class TrashDialog extends React.Component {
             <EmptyTip text={gettext('No file')} className="m-0" />
           }
           {!isLoading && items.length > 0 &&
-          <Content
-            data={this.state}
-            repoID={this.props.repoID}
-            getMore={this.getMore}
-            currentPage={this.state.currentPage}
-            curPerPage={this.state.perPage}
-            hasNextPage={this.state.hasNextPage}
-            renderFolder={this.renderFolder}
-            getListByPage={this.getItems2}
-            resetPerPage={this.resetPerPage}
-          />
+            <div>
+              <div className="path-container dir-view-path mb-2">
+                <span className="path-label mr-1">{gettext('Current path: ')}</span>
+                {showFolder ?
+                  this.renderFolderPath() :
+                  <span className="last-path-item" title={repoFolderName}>{repoFolderName}</span>
+                }
+              </div>
+              <Content
+              data={this.state}
+              repoID={this.props.repoID}
+              getMore={this.getMore}
+              currentPage={this.state.currentPage}
+              curPerPage={this.state.perPage}
+              hasNextPage={this.state.hasNextPage}
+              renderFolder={this.renderFolder}
+              getListByPage={this.getItems2}
+              resetPerPage={this.resetPerPage}
+            />
+            </div>
           }
           {isCleanTrashDialogOpen &&
           <ModalPortal>
