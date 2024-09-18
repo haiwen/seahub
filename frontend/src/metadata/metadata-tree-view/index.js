@@ -12,34 +12,21 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import { VIEW_TYPE_ICON } from '../constants';
 import { isValidViewName } from '../utils/validate';
 import { isEnter } from '../utils/hotkey';
-import imageSvg from '../../assets/icons/image.svg';
-import tableSvg from '../../assets/icons/table.svg';
 
 import './index.css';
 
 const updateFavicon = (iconName) => {
   const favicon = document.getElementById('favicon');
   if (favicon) {
-    if (iconName === 'default') {
-      // Use the default PNG favicon
-      favicon.href = '/media/favicons/favicon.png';
-      favicon.type = 'image/x-icon';
-    } else {
-      let svgUrl;
-      switch (iconName) {
-        case 'image':
-          svgUrl = imageSvg;
-          break;
-        case 'table':
-          svgUrl = tableSvg;
-          break;
-        default:
-          svgUrl = tableSvg; // Use table as default
-      }
-
-      // Set the favicon
-      favicon.href = svgUrl;
-      favicon.type = 'image/svg+xml';
+    switch (iconName) {
+      case 'image':
+        favicon.href = '/media/favicons/gallery.png';
+        break;
+      case 'table':
+        favicon.href = '/media/favicons/table.png';
+        break;
+      default:
+        favicon.href = '/media/favicons/favicon.png';
     }
   }
 };
