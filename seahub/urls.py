@@ -61,7 +61,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView, \
         ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
         ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
-        ReposBatchDeleteItemView
+        ReposBatchDeleteItemView, RepoFoldersItemBatchDelete
 from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView, RepoImageRotateView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.file_access_log import FileAccessLogView
@@ -419,6 +419,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/batch-copy-item/$', ReposBatchCopyItemView.as_view(), name='api-v2.1-repos-batch-copy-item'),
     re_path(r'^api/v2.1/repos/batch-move-item/$', ReposBatchMoveItemView.as_view(), name='api-v2.1-repos-batch-move-item'),
 
+    re_path(r'^api/v2.1/repos/batch-delete-folders-item/$', RepoFoldersItemBatchDelete.as_view(), name='api-v2.1-repos-folders-batch-delete'),
     re_path(r'^api/v2.1/repos/batch-delete-item/$', ReposBatchDeleteItemView.as_view(), name='api-v2.1-repos-batch-delete-item'),
     re_path(r'^api/v2.1/repos/async-batch-copy-item/$', ReposAsyncBatchCopyItemView.as_view(), name='api-v2.1-repos-async-batch-copy-item'),
     re_path(r'^api/v2.1/repos/async-batch-move-item/$', ReposAsyncBatchMoveItemView.as_view(), name='api-v2.1-repos-async-batch-move-item'),
