@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
 import ButtonItem from './button-item';
@@ -53,6 +54,12 @@ class HeaderToolbar extends React.Component {
     window.location.href = editorApi.getParentDictionaryUrl();
   };
 
+  onArticleInfoToggle = () => {
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, true);
+    console.log(eventBus);
+  };
+
   render() {
     let { contentChanged, saving, isLocked, lockedByMe } = this.props;
 
@@ -92,6 +99,14 @@ class HeaderToolbar extends React.Component {
                     icon='unlock'
                     text={gettext('Unlock')}
                     onMouseDown={this.props.toggleLockFile}
+                  />
+                )}
+                {canGenerateShareLink && (
+                  <ButtonItem
+                    id='Info'
+                    text={gettext('Info')}
+                    icon='info'
+                    onClick={this.onArticleInfoToggle}
                   />
                 )}
                 {canGenerateShareLink && (
