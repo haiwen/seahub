@@ -118,3 +118,12 @@ export {
   TRANSFER_TYPES,
   metadataZIndexes,
 };
+
+export const DATE_TAG_HEIGHT = 44;
+
+export const GALLERY_DATE_MODE = {
+  YEAR: 'year',
+  MONTH: 'month',
+  DAY: 'day',
+  ALL: 'all',
+};

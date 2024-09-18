@@ -8,7 +8,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
 
   const renderDisplayGroup = useCallback((group) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
-    const { name, children, height, top } = group;
+    const { name, children, height, top, paddingTop } = group;
 
     // group not in rendering area, return empty div
     if (top >= overScanBottom || top + height <= overScanTop) {
@@ -33,7 +33,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
     }
 
     return (
-      <div key={name} className="metadata-gallery-date-group w-100" style={{ height }}>
+      <div key={name} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
           className="metadata-gallery-image-list"
@@ -67,10 +67,26 @@ const GalleryMain = ({ groups, overScan, columns, size, gap }) => {
 };
 
 GalleryMain.propTypes = {
-  groups: PropTypes.array,
-  overScan: PropTypes.object,
-  columns: PropTypes.number,
-  size: PropTypes.number,
+  groups: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    children: PropTypes.arrayOf(PropTypes.shape({
+      top: PropTypes.number.isRequired,
+      children: PropTypes.arrayOf(PropTypes.shape({
+        src: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      })).isRequired,
+    })).isRequired,
+    height: PropTypes.number.isRequired,
+    top: PropTypes.number.isRequired,
+    paddingTop: PropTypes.number.isRequired,
+  })),
+  overScan: PropTypes.shape({
+    top: PropTypes.number.isRequired,
+    bottom: PropTypes.number.isRequired,
+  }).isRequired,
+  columns: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  gap: PropTypes.number.isRequired,
 };
 
 export default GalleryMain;

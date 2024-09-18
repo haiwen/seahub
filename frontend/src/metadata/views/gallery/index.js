@@ -6,19 +6,21 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { getDateDisplayString } from '../../utils/cell';
 import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, GALLERY_DATE_MODE, DATE_TAG_HEIGHT } from '../../constants';
 
 import './index.css';
 
 const IMAGE_GAP = 2;
 
 const Gallery = () => {
-  const containerRef = useRef(null);
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [overScan, setOverScan] = useState({ top: 0, bottom: 0 });
+  const [mode, setMode] = useState(GALLERY_DATE_MODE.DAY);
+
+  const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
 
   const { metadata, store } = useMetadataView();
@@ -30,8 +32,21 @@ const Gallery = () => {
   }, [zoomGear]);
 
   const imageSize = useMemo(() => {
-    return (containerWidth - columns * 2 - 2) / columns;
+    return (containerWidth - (columns - 1) * 2 - 32) / columns;
   }, [containerWidth, columns]);
+
+  const dateMode = useMemo(() => {
+    switch (mode) {
+      case GALLERY_DATE_MODE.YEAR:
+        return 'YYYY';
+      case GALLERY_DATE_MODE.MONTH:
+        return 'YYYY-MM';
+      case GALLERY_DATE_MODE.DAY:
+        return 'YYYY-MM-DD';
+      default:
+        return 'YYYY-MM-DD';
+    }
+  }, [mode]);
 
   const groups = useMemo(() => {
     if (isFirstLoading) return [];
@@ -42,7 +57,7 @@ const Gallery = () => {
         const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
         const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
         const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
-        const date = getDateDisplayString(record[firstSort.column_key], 'YYYY-MM-DD');
+        const date = mode !== GALLERY_DATE_MODE.ALL ? getDateDisplayString(record[firstSort.column_key], dateMode) : '';
         const img = {
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
@@ -77,17 +92,20 @@ const Gallery = () => {
         if (!rows[rowIndex]) rows[rowIndex] = { top: top + rowIndex * imageHeight, children: [] };
         rows[rowIndex].children.push(child);
       });
-      const height = rows.length * imageHeight;
+
+      const paddingTop = mode === GALLERY_DATE_MODE.ALL ? 0 : DATE_TAG_HEIGHT;
+      const height = rows.length * imageHeight + paddingTop;
       _groups.push({
         ...__init,
         top,
         height,
+        paddingTop,
         children: rows
       });
     });
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize]);
+  }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -109,6 +127,17 @@ const Gallery = () => {
   useEffect(() => {
     const gear = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0) || 0;
     setZoomGear(gear);
+
+    const mode = window.sfMetadataContext.localStorage.getItem('gallery-group-by', GALLERY_DATE_MODE.DAY) || GALLERY_DATE_MODE.DAY;
+    setMode(mode);
+
+    const switchGalleryModeSubscribe = window.sfMetadataContext.eventBus.subscribe(
+      EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
+      (mode) => {
+        setMode(mode);
+        window.sfMetadataContext.localStorage.setItem('gallery-group-by', mode);
+      }
+    );
 
     const container = containerRef.current;
     if (container) {
@@ -141,6 +170,7 @@ const Gallery = () => {
     return () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
+      switchGalleryModeSubscribe();
       renderMoreTimer.current && clearTimeout(renderMoreTimer.current);
     };
   }, []);

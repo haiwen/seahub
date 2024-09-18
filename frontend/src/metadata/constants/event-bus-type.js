@@ -52,4 +52,5 @@ export const EVENT_BUS_TYPE = {
 
   // gallery
   MODIFY_GALLERY_ZOOM_GEAR: 'modify_gallery_zoom_gear',
+  SWITCH_GALLERY_GROUP_BY: 'switch_gallery_group_by',
 };
