@@ -20,12 +20,12 @@ def generate_random_string_lower_digits(length):
 def generate_view_id(length, view_ids=None):
     if not view_ids:
         return generate_random_string_lower_digits(length)
-    
+
     while True:
         new_id = generate_random_string_lower_digits(length)
         if new_id not in view_ids:
             break
-    
+
     return new_id
 
 
@@ -61,15 +61,15 @@ class RepoMetadata(models.Model):
 
 
 class RepoView(object):
-    
+
     def __init__(self, name, type='table', view_data={}, view_ids=None):
         self.name = name
         self.type = type
         self.view_data = view_data
         self.view_json = {}
-        
+
         self.init_view(view_ids)
-    
+
     def init_view(self, view_ids=None):
         self.view_json = {
             "_id": generate_view_id(4, view_ids),
@@ -86,14 +86,18 @@ class RepoView(object):
 
 
 class RepoMetadataViewsManager(models.Manager):
-    
+
     def add_view(self, repo_id, view_name, view_type='table', view_data={}):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
             from seafevents.repo_metadata.utils import METADATA_TABLE
+
+            # init view data
             new_view = RepoView(view_name, view_type, {
-               'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }]
+                'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
+                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
             })
+
             view_json = new_view.view_json
             view_id = view_json.get('_id')
             view_details = {
@@ -116,13 +120,13 @@ class RepoMetadataViewsManager(models.Manager):
             metadata_views.details = json.dumps(view_details)
             metadata_views.save()
         return new_view.view_json
-            
+
     def list_views(self, repo_id):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
             return {'views': [], 'navigation': []}
         return json.loads(metadata_views.details)
-    
+
     def get_view(self, repo_id, view_id):
         metadata_views = self.filter(repo_id=repo_id).first()
         if not metadata_views:
@@ -131,7 +135,7 @@ class RepoMetadataViewsManager(models.Manager):
         for v in view_details['views']:
             if v.get('_id') == view_id:
                 return v
-        
+
     def update_view(self, repo_id, view_id, view_dict):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_dict.pop('_id', '')
@@ -177,7 +181,7 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views.details = json.dumps(view_details)
         metadata_views.save()
         return json.loads(metadata_views.details)
-    
+
     def move_view(self, repo_id, view_id, target_view_id):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_details = json.loads(metadata_views.details)
@@ -188,7 +192,7 @@ class RepoMetadataViewsManager(models.Manager):
                 view_index = i
             if view['_id'] == target_view_id:
                 target_index = i
-        
+
         if view_index is not None and target_index is not None:
             if view_index < target_index:
                 view_to_move = view_details['navigation'][view_index]
@@ -201,22 +205,22 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views.details = json.dumps(view_details)
         metadata_views.save()
         return json.loads(metadata_views.details)
-        
+
 
 class RepoMetadataViews(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
     details = models.TextField()
-    
+
     objects = RepoMetadataViewsManager()
-    
+
     class Meta:
         db_table = 'repo_metadata_view'
-        
+
     @property
     def view_ids(self):
         views = json.loads(self.details)['views']
         return [v.get('_id') for v in views]
-    
+
     @property
     def view_names(self):
         views = json.loads(self.details)['views']
