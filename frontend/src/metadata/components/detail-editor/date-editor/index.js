@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { SfCalendar } from '@seafile/sf-metadata-ui-component';
 import PropTypes from 'prop-types';
 import { getDateDisplayString } from '../../../utils/cell';
@@ -10,14 +10,15 @@ import './index.css';
 const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
   const [showEditor, setShowEditor] = useState(false);
   const format = useMemo(() => field?.data?.format || DEFAULT_DATE_FORMAT, [field]);
+  const newValue = useRef(value);
 
   const openEditor = useCallback(() => {
     setShowEditor(true);
   }, []);
 
-  const onChange = useCallback((newValue) => {
-    onChangeAPI(newValue);
-  }, [onChangeAPI]);
+  const onChange = useCallback((value) => {
+    newValue.current = value;
+  }, []);
 
   const onClear = useCallback(() => {
     onChangeAPI(null);
@@ -26,7 +27,8 @@ const DateEditor = ({ value, field, onChange: onChangeAPI, lang }) => {
 
   const closeEditor = useCallback(() => {
     setShowEditor(false);
-  }, []);
+    onChangeAPI(newValue.current);
+  }, [onChangeAPI, newValue]);
 
   return (
     <>
