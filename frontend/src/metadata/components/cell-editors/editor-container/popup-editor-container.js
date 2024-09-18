@@ -196,7 +196,7 @@ class PopupEditorContainer extends React.Component {
   closeEditor = (isEscapeKeydown) => {
     const { column } = this.props;
     if (column.type === CellType.DATE && !isEscapeKeydown) return null;
-    return () => this.onClickOutside(isEscapeKeydown);
+    this.onClickOutside(isEscapeKeydown);
   };
 
   onClickOutside = (isEscapeKeydown) => {
