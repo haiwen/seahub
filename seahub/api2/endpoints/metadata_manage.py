@@ -741,7 +741,7 @@ class MetadataViewsDuplicateView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'view': result})
-    
+
 
 class MetadataViewsDetailView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
