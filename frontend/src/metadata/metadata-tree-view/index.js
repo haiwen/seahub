@@ -12,8 +12,37 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import { VIEW_TYPE_ICON } from '../constants';
 import { isValidViewName } from '../utils/validate';
 import { isEnter } from '../utils/hotkey';
+import imageSvg from '../../assets/icons/image.svg';
+import tableSvg from '../../assets/icons/table.svg';
 
 import './index.css';
+
+const updateFavicon = (iconName) => {
+  const favicon = document.getElementById('favicon');
+  if (favicon) {
+    if (iconName === 'default') {
+      // Use the default PNG favicon
+      favicon.href = '/media/favicons/favicon.png';
+      favicon.type = 'image/x-icon';
+    } else {
+      let svgUrl;
+      switch (iconName) {
+        case 'image':
+          svgUrl = imageSvg;
+          break;
+        case 'table':
+          svgUrl = tableSvg;
+          break;
+        default:
+          svgUrl = tableSvg; // Use table as default
+      }
+
+      // Set the favicon
+      favicon.href = svgUrl;
+      favicon.type = 'image/svg+xml';
+    }
+  }
+};
 
 const MetadataTreeView = ({ userPerm, currentPath }) => {
   const canAdd = useMemo(() => {
@@ -33,11 +62,15 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     moveView
   } = useMetadata();
   const [newView, setNewView] = useState(null);
-
   const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
-  const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
+  const [originalTitle, setOriginalTitle] = useState('');
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    setOriginalTitle(document.title);
+  }, []);
 
   useEffect(() => {
     const { origin, pathname, search } = window.location;
@@ -47,6 +80,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
       const lastOpenedView = viewsMap[viewID] || '';
       if (lastOpenedView) {
         selectView(lastOpenedView);
+        document.title = `${lastOpenedView.name} - Seafile`;
+        updateFavicon(VIEW_TYPE_ICON[lastOpenedView.type] || 'table');
         return;
       }
       const url = `${origin}${pathname}`;
@@ -57,9 +92,26 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     const firstView = firstViewObject ? viewsMap[firstViewObject._id] : '';
     if (showFirstView && firstView) {
       selectView(firstView);
+      document.title = `${firstView.name} - Seafile`;
+      updateFavicon(VIEW_TYPE_ICON[firstView.type] || 'table');
+    } else {
+      document.title = originalTitle;
+      updateFavicon('default');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const currentViewId = currentPath.split('/').pop();
+    const currentView = viewsMap[currentViewId];
+    if (currentView) {
+      document.title = `${currentView.name} - Seafile`;
+      updateFavicon(VIEW_TYPE_ICON[currentView.type] || 'table');
+    } else {
+      document.title = originalTitle;
+      updateFavicon('default');
+    }
+  }, [currentPath, viewsMap, originalTitle]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     updateView(viewId, update, () => {
