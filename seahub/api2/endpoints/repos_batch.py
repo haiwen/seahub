@@ -1687,7 +1687,7 @@ class RepoFoldersItemBatchDelete(APIView):
            Parameter:
            {
                "repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
-               "file_names":['/a/b/c', '/a/b/d''] # 包含文件名的json数组
+               "file_names":['/a/b/c', '/a/b/d''] # json array
            }
        """
         # argument check
