@@ -1,6 +1,6 @@
 .sf-metadata-gallery-container {
   height: calc(100vh - 100px);
-  margin: 2px;
+  padding: 0 16px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -15,20 +15,16 @@
 }
 
 .metadata-gallery-date-tag {
-  width: 6rem;
-  height: 1.5rem;
-  top: 1rem;
-  left: 1rem;
+  height: 2.75rem;
   position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
-  border-radius: 12px;
-  background-color: #fafaf7;
   font-size: 0.875rem;
-  text-align: center;
+  font-weight: 500;
   z-index: 1;
-  opacity: 0.9;
   user-select: none;
 }
 

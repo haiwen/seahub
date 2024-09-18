@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { SliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
+import { GalleryGroupBySetter, GallerySliderSetter, FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../data-process-setter';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
 
 import './index.css';
@@ -71,7 +71,12 @@ const ViewToolBar = ({ viewId }) => {
       onClick={onHeaderClick}
     >
       <div className="sf-metadata-tool-left-operations">
-        {view.type === VIEW_TYPE.GALLERY && <SliderSetter view={view} />}
+        {viewType === VIEW_TYPE.GALLERY && (
+          <>
+            <GalleryGroupBySetter view={view} />
+            <GallerySliderSetter view={view} />
+          </>
+        )}
         <FilterSetter
           isNeedSubmit={true}
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"

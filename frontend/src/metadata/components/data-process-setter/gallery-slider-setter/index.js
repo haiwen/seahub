@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
-import Icon from '../../../components/icon';
-import { EVENT_BUS_TYPE } from '../../constants';
+import Icon from '../../../../components/icon';
+import { EVENT_BUS_TYPE } from '../../../constants';
 
-import './slider-setter.css';
+import './index.css';
 
-const SliderSetter = ({ view }) => {
+const GallerySliderSetter = ({ view }) => {
   const [sliderValue, setSliderValue] = useState(() => {
     const savedValue = window.sfMetadataContext.localStorage.getItem('zoom-gear', 0);
     return savedValue || 0;
@@ -56,8 +56,8 @@ const SliderSetter = ({ view }) => {
   );
 };
 
-SliderSetter.propTypes = {
+GallerySliderSetter.propTypes = {
   view: PropTypes.object,
 };
 
-export default SliderSetter;
+export default GallerySliderSetter;
