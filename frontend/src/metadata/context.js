@@ -1,6 +1,6 @@
 import metadataAPI from './api';
 import {
-  PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, PREDEFINED_COLUMN_KEYS,
+  PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
@@ -133,7 +133,7 @@ class Context {
   canDeleteColumn = (column) => {
     if (this.permission === 'r') return false;
     const { key } = column;
-    if (PRIVATE_COLUMN_KEYS.includes(key)) return PREDEFINED_COLUMN_KEYS.includes(key);
+    if (PRIVATE_COLUMN_KEYS.includes(key)) return DELETABLE_PRIVATE_COLUMN_KEY.includes(key);
     return true;
   };
 

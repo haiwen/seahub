@@ -103,10 +103,15 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
   if (isLoading) return null;
   const { fields, record } = metadata;
   if (!record._id) return null;
+  const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+  const isImage = record && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
   return (
     <>
       {fields.map(field => {
-        const canEdit = permission === 'rw' && field.editable;
+        let canEdit = permission === 'rw' && field.editable;
+        if (!isImage && canEdit && field.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME) {
+          canEdit = false;
+        }
         const value = getCellValueByColumn(record, field);
         return (
           <DetailItem key={field.key} field={field} readonly={!canEdit}>

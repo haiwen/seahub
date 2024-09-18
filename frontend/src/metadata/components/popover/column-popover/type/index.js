@@ -60,6 +60,14 @@ const COLUMNS = [
     canChangeName: false,
     groupby: 'predefined'
   }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.DATE],
+    type: CellType.DATE,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.SHOOTING_TIME),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.SHOOTING_TIME,
+    canChangeName: false,
+    groupby: 'predefined'
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,
     name: gettext('Text'),
