@@ -100,6 +100,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
   }, [column, renameColumn]);
 
   const renderDateFormat = useCallback((canModifyColumnData) => {
+    const { data = {} } = column;
     if (!canModifyColumnData) {
       return (
         <DropdownItem
@@ -111,15 +112,14 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
         />
       );
     }
-    const { data = {} } = column;
     const { format = DEFAULT_DATE_FORMAT } = data;
-    const withMinutes = format.indexOf('HH:mm') > -1;
+    let timeUnit = format.split(' ')[1];
 
     const options = [
-      { label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', { 'HH:mm': withMinutes }))})`, value: classnames('YYYY-MM-DD', { 'HH:mm': withMinutes }) },
-      { label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', { 'HH:mm': withMinutes }))})`, value: classnames('M/D/YYYY', { 'HH:mm': withMinutes }) },
-      { label: `${gettext('European')} (${getDateDisplayString(today, classnames('DD/MM/YYYY', { 'HH:mm': withMinutes }))})`, value: classnames('DD/MM/YYYY', { 'HH:mm': withMinutes }) },
-      { label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, classnames('DD.MM.YYYY', { 'HH:mm': withMinutes }))})`, value: classnames('DD.MM.YYYY', { 'HH:mm': withMinutes }) }
+      { label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', timeUnit))})`, value: classnames('YYYY-MM-DD', timeUnit) },
+      { label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', timeUnit))})`, value: classnames('M/D/YYYY', timeUnit) },
+      { label: `${gettext('European')} (${getDateDisplayString(today, classnames('DD/MM/YYYY', timeUnit))})`, value: classnames('DD/MM/YYYY', timeUnit) },
+      { label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, classnames('DD.MM.YYYY', timeUnit))})`, value: classnames('DD.MM.YYYY', timeUnit) }
     ];
 
     return (
