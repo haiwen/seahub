@@ -23,6 +23,10 @@ body {
   align-items: center;
 }
 
+.file-view-header .file-toolbar-btn .seafile-multicolor-icon {
+  fill: #666;
+}
+
 .file-view-header .file-toolbar-btn:hover {
   background-color: #EFEFEF;
   border-radius: 3px;
