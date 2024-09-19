@@ -15,6 +15,22 @@ import { isEnter } from '../utils/hotkey';
 
 import './index.css';
 
+const updateFavicon = (iconName) => {
+  const favicon = document.getElementById('favicon');
+  if (favicon) {
+    switch (iconName) {
+      case 'image':
+        favicon.href = '/media/favicons/gallery.png';
+        break;
+      case 'table':
+        favicon.href = '/media/favicons/table.png';
+        break;
+      default:
+        favicon.href = '/media/favicons/favicon.png';
+    }
+  }
+};
+
 const MetadataTreeView = ({ userPerm, currentPath }) => {
   const canAdd = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -33,11 +49,15 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     moveView
   } = useMetadata();
   const [newView, setNewView] = useState(null);
-
   const [showAddViewPopover, setShowAddViewPopover] = useState(false);
   const [showInput, setShowInput] = useState(false);
-  const inputRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
+  const [originalTitle, setOriginalTitle] = useState('');
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    setOriginalTitle(document.title);
+  }, []);
 
   useEffect(() => {
     const { origin, pathname, search } = window.location;
@@ -47,6 +67,8 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
       const lastOpenedView = viewsMap[viewID] || '';
       if (lastOpenedView) {
         selectView(lastOpenedView);
+        document.title = `${lastOpenedView.name} - Seafile`;
+        updateFavicon(VIEW_TYPE_ICON[lastOpenedView.type] || 'table');
         return;
       }
       const url = `${origin}${pathname}`;
@@ -57,9 +79,26 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     const firstView = firstViewObject ? viewsMap[firstViewObject._id] : '';
     if (showFirstView && firstView) {
       selectView(firstView);
+      document.title = `${firstView.name} - Seafile`;
+      updateFavicon(VIEW_TYPE_ICON[firstView.type] || 'table');
+    } else {
+      document.title = originalTitle;
+      updateFavicon('default');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const currentViewId = currentPath.split('/').pop();
+    const currentView = viewsMap[currentViewId];
+    if (currentView) {
+      document.title = `${currentView.name} - Seafile`;
+      updateFavicon(VIEW_TYPE_ICON[currentView.type] || 'table');
+    } else {
+      document.title = originalTitle;
+      updateFavicon('default');
+    }
+  }, [currentPath, viewsMap, originalTitle]);
 
   const onUpdateView = useCallback((viewId, update, successCallback, failCallback) => {
     updateView(viewId, update, () => {
