@@ -546,7 +546,7 @@ def gen_file_get_url_by_sharelink(token):
 def gen_file_get_url_new(repo_id, filepath, op='download'):
     """
     Generate fileserver file url.
-    Format: http://<domain:port>/repos/<repo_id>files/<filepath>/?op=download
+    Format: http://<domain:port>/repos/<repo_id>files/?p=<filepath>&op=download
     """
     
     return '%s/repos/%s/files/?p=%s&op=%s' % (

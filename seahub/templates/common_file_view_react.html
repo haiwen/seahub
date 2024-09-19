@@ -35,6 +35,7 @@ xmindImageSrc: '{{ xmind_image_src|escapejs }}',
 {% endif %}
 rawPath: '{{ raw_path|escapejs }}',
 fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
+fileExt: {% if fileext %}'{{fileext|escapejs }}'{% else %}''{% endif %},
 {% endblock %}
 
 {% block render_bundle %}

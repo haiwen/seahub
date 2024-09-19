@@ -3,10 +3,11 @@ import ReactDom from 'react-dom';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import VideoPlayer from './components/video-player';
+import { MimetypesKind } from './utils/constants';
 
 import './css/video-file-view.css';
 
-const { rawPath, err } = window.shared.pageOptions;
+const { rawPath, err, fileExt } = window.shared.pageOptions;
 
 class SharedFileViewImage extends React.Component {
   render() {
@@ -19,7 +20,6 @@ class FileContent extends React.Component {
     if (err) {
       return <SharedFileViewTip />;
     }
-
     const videoJsOptions = {
       autoplay: false,
       controls: true,
@@ -27,7 +27,7 @@ class FileContent extends React.Component {
       playbackRates: [0.5, 1, 1.5, 2],
       sources: [{
         src: rawPath,
-        type: 'video/mp4'
+        type: MimetypesKind[fileExt] || 'video/mp4'
       }]
     };
     return (

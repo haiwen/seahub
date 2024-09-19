@@ -1,10 +1,10 @@
 import React from 'react';
 import VideoPlayer from '../video-player';
-
+import { MimetypesKind } from '../../utils/constants';
 import '../../css/video-file-view.css';
 
 const {
-  rawPath
+  rawPath, fileExt
 } = window.app.pageOptions;
 
 class FileContent extends React.Component {
@@ -16,7 +16,7 @@ class FileContent extends React.Component {
       playbackRates: [0.5, 1, 1.5, 2],
       sources: [{
         src: rawPath,
-        type: 'video/mp4'
+        type: MimetypesKind[fileExt] || 'video/mp4'
       }]
     };
     return (

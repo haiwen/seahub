@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-    siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal,
-    fileServerRoot
-} from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
