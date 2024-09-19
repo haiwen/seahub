@@ -19,7 +19,7 @@ const propTypes = {
 let loginUser = window.app.pageOptions.name;
 let contactEmail = window.app.pageOptions.contactEmail;
 const { sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload,
-  zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
+  zipped, filePath, enableShareLinkReportAbuse, sharedFileDownloadURL } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
@@ -129,7 +129,8 @@ class SharedFileView extends React.Component {
                 </Button>
               }{' '}
               {(canDownload && !trafficOverLimit) &&
-                <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
+
+                <a href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`} className="btn btn-success">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
               }{' '}
               {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
                 <Button

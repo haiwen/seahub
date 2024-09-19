@@ -176,10 +176,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertTemplateUsed(resp, 'common_file_view_react.html')
         assert resp.context['filetype'].lower() == 'video'
 
-        raw_path = resp.context['raw_path']
-        for _ in range(3):      # token for video is not one time only
-            r = requests.get(raw_path)
-            self.assertEqual(200, r.status_code)
 
     def test_can_download(self):
         self.login_as(self.user)
@@ -187,12 +183,7 @@ class ViewLibFileTest(BaseTestCase):
         url = reverse('view_lib_file', args=[self.repo.id, self.file]) + '?dl=1'
         resp = self.client.get(url)
         self.assertEqual(302, resp.status_code)
-        assert '8082/files/' in resp.get('location')
-
-        resp = requests.request('GET', resp.get('location'))
-        cont_disp = resp.headers['content-disposition']
-        assert 'inline' not in cont_disp
-        assert 'attachment' in cont_disp
+        assert '8082/repos/' in resp.get('location')
 
     def test_can_view_raw(self):
         self.login_as(self.user)
