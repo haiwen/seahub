@@ -6,7 +6,7 @@ import CellOperationBtn from './operation-btn';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../utils/object-utils';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
-import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
+import { CellType, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP } from '../../../../../../constants';
 
 import './index.css';
 
@@ -37,6 +37,9 @@ const Cell = React.memo(({
       // 'row-comment-cell': ,
     });
   }, [column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected]);
+  const isFileNameColumn = useMemo(() => {
+    return column.type === CellType.FILE_NAME;
+  }, [column]);
   const isDir = useMemo(() => {
     const isDirValue = record[PRIVATE_COLUMN_KEY.IS_DIR];
     if (typeof isDirValue === 'string') return isDirValue.toUpperCase() === 'TRUE';
@@ -148,16 +151,23 @@ const Cell = React.memo(({
 
   const cellValue = getCellValueByColumn(record, column);
   const cellEvents = needBindEvents && getEvents();
-  const props = {
+  const containerProps = {
     className,
     style,
     ...cellEvents,
   };
 
   return (
-    <div key={`${record._id}-${column.key}`} {...props}>
+    <div key={`${record._id}-${column.key}`} {...containerProps}>
       <Formatter isCellSelected={isCellSelected} isDir={isDir} value={cellValue} field={column} onChange={modifyRecord} record={record} />
-      {isCellSelected && (<CellOperationBtn value={cellValue} column={column} isDir={isDir} />)}
+      {(isCellSelected && isFileNameColumn) && (
+        <CellOperationBtn
+          record={record}
+          cellValue={cellValue}
+          column={column}
+          isDir={isDir}
+        />
+      )}
     </div>
   );
 }, (props, nextProps) => {
