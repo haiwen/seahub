@@ -4,7 +4,7 @@ import { FormGroup, FormFeedback, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { Icon } from '@seafile/sf-metadata-ui-component';
 import { gettext } from '../../../../../utils/constants';
-import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEY } from '../../../../constants';
+import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { getColumnDisplayName } from '../../../../utils/column';
 import ColumnTypes from './column-types';
 
@@ -26,6 +26,7 @@ const COLUMNS = [
     unique: true,
     key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
     canChangeName: false,
+    data: { format: DEFAULT_DATE_FORMAT },
     groupby: 'predefined'
   }, {
   //   icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
@@ -66,6 +67,7 @@ const COLUMNS = [
     unique: true,
     key: PRIVATE_COLUMN_KEY.SHOOTING_TIME,
     canChangeName: false,
+    data: { format: DEFAULT_SHOOTING_TIME_FORMAT },
     groupby: 'predefined'
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
@@ -108,6 +110,7 @@ const COLUMNS = [
     name: gettext('Date'),
     canChangeName: true,
     key: CellType.DATE,
+    data: { format: DEFAULT_DATE_FORMAT },
     groupby: 'basics'
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],

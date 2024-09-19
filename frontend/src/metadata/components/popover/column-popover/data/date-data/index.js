@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { FormGroup, Label } from 'reactstrap';
 import { CustomizeSelect } from '@seafile/sf-metadata-ui-component';
 import Switch from '../../../../../../components/common/switch';
 import { gettext } from '../../../../../../utils/constants';
 import { getDateDisplayString } from '../../../../../utils/cell';
+import { DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../../constants';
 
 import './index.css';
 
-const DateData = ({ value, onChange }) => {
-  const { format } = value || { format: 'YYYY-MM-DD' };
+const DateData = ({ value, column, onChange }) => {
+  const isShootingTime = column.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME;
+  const { format } = value || { format: DEFAULT_DATE_FORMAT };
   const today = useMemo(() => {
     let todayDate = new Date();
     let year = todayDate.getFullYear();
@@ -25,13 +28,14 @@ const DateData = ({ value, onChange }) => {
   }, []);
 
   const options = useMemo(() => {
+    const timeUnit = isShootingTime ? 'HH:mm:ss' : '';
     return [
-      { label: `${gettext('ISO')} (${getDateDisplayString(today, 'YYYY-MM-DD')})`, value: 'YYYY-MM-DD' },
-      { label: `${gettext('US')} (${getDateDisplayString(today, 'M/D/YYYY')})`, value: 'M/D/YYYY' },
-      { label: `${gettext('European')} (${getDateDisplayString(today, 'DD/MM/YYYY')})`, value: 'DD/MM/YYYY' },
-      { label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, 'DD.MM.YYYY')})`, value: 'DD.MM.YYYY' }
+      { label: `${gettext('ISO')} (${getDateDisplayString(today, classnames('YYYY-MM-DD', timeUnit))})`, value: classnames('YYYY-MM-DD', timeUnit) },
+      { label: `${gettext('US')} (${getDateDisplayString(today, classnames('M/D/YYYY', timeUnit))})`, value: classnames('M/D/YYYY', timeUnit) },
+      { label: `${gettext('European')} (${getDateDisplayString(today, classnames('DD/MM/YYYY', timeUnit))})`, value: classnames('DD/MM/YYYY', timeUnit) },
+      { label: `${gettext('Germany Russia etc')} (${getDateDisplayString(today, classnames('DD.MM.YYYY', timeUnit))})`, value: classnames('DD.MM.YYYY', timeUnit) }
     ];
-  }, [today]);
+  }, [isShootingTime, today]);
 
   const onFormatChange = useCallback((o) => {
     onChange({ ...value, format: o });
@@ -45,11 +49,11 @@ const DateData = ({ value, onChange }) => {
     onChange({ format: newFormat });
   }, [format, onChange]);
 
-  const onSecondChange = useCallback((v) => {
-    let newFormat = format || 'YYYY-MM-DD HH:mm';
-    newFormat = format.indexOf('ss') === -1 ? newFormat + ':ss' : newFormat.slice(0, -3);
-    onChange({ format: newFormat });
-  }, [format, onChange]);
+  // const onSecondChange = useCallback((v) => {
+  //   let newFormat = format || 'YYYY-MM-DD HH:mm';
+  //   newFormat = format.indexOf('ss') === -1 ? newFormat + ':ss' : newFormat.slice(0, -3);
+  //   onChange({ format: newFormat });
+  // }, [format, onChange]);
 
   useEffect(() => {
     if (format) return;
@@ -66,25 +70,29 @@ const DateData = ({ value, onChange }) => {
         <Label>{gettext('Format')}</Label>
         <CustomizeSelect value={selectedValue} options={options} onSelectOption={onFormatChange} />
       </FormGroup>
-      <div className="pb-4">
-        <Switch
-          checked={showMinute}
-          size="large"
-          textPosition="right"
-          className="sf-metadata-date-column-data-minute w-100"
-          onChange={onMinuteChange}
-          placeholder={gettext('Accurate to minute')} />
-      </div>
-      <div className="pb-4">
-        <Switch
-          disabled={!showMinute}
-          checked={format ? format.indexOf('HH:mm:ss') > -1 : false}
-          size="large"
-          textPosition="right"
-          className="sf-metadata-date-column-data-minute w-100"
-          onChange={onSecondChange}
-          placeholder={gettext('Accurate to second')} />
-      </div>
+      {!isShootingTime && (
+        <>
+          <div className="pb-4">
+            <Switch
+              checked={showMinute}
+              size="large"
+              textPosition="right"
+              className="sf-metadata-date-column-data-minute w-100"
+              onChange={onMinuteChange}
+              placeholder={gettext('Accurate to minute')} />
+          </div>
+          {/* <div className="pb-4">
+            <Switch
+              disabled={!showMinute}
+              checked={format ? format.indexOf('HH:mm:ss') > -1 : false}
+              size="large"
+              textPosition="right"
+              className="sf-metadata-date-column-data-minute w-100"
+              onChange={onSecondChange}
+              placeholder={gettext('Accurate to second')} />
+          </div> */}
+        </>
+      )}
     </div>
   );
 };
