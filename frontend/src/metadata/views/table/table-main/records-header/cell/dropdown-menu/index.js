@@ -7,6 +7,7 @@ import { RenamePopover, OptionsPopover } from '../../../../../../components/popo
 import DropdownItem from './dropdown-item';
 import { gettext } from '../../../../../../../utils/constants';
 import { isMobile } from '../../../../../../../utils/utils';
+import { checkIsPrivateColumn } from '../../../../../../utils/column';
 import { getDateDisplayString } from '../../../../../../utils/cell';
 import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
 
@@ -19,6 +20,10 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
   const [isSubMenuShow, setSubMenuShow] = useState(false);
   const [isRenamePopoverShow, setRenamePopoverShow] = useState(false);
   const [isOptionPopoverShow, setOptionPopoverShow] = useState(false);
+
+  const isPrivateColumn = useMemo(() => {
+    return checkIsPrivateColumn(column);
+  }, [column]);
 
   const today = useMemo(() => {
     let todayDate = new Date();
@@ -107,7 +112,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
           disabled={true}
           target="sf-metadata-edit-column-format"
           title={gettext('Edit format settings')}
-          tip={gettext('You do not have permission')}
+          tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
           iconName="set-up"
         />
       );
@@ -197,7 +202,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
                 target="sf-metadata-edit-column-options"
                 iconName="single-select"
                 title={gettext('Edit single select')}
-                tip={gettext('You do not have permission')}
+                tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
                 onChange={openOptionPopover}
               />
               {/* <DropdownItem
@@ -216,14 +221,14 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
               target="sf-metadata-edit-column-options"
               iconName="multiple-select"
               title={gettext('Edit multiple select')}
-              tip={gettext('You do not have permission')}
+              tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
               onChange={openOptionPopover}
             />
           )}
           {/* {type === CellType.NUMBER && (
             TODO:
             <DropdownItem
-              disabled={canModifyColumnData}
+              disabled={!canModifyColumnData}
               target="sf-metadata-edit-column-format"
               iconName="set-up"
               title={gettext('Edit format settings')}
@@ -241,7 +246,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
             target="sf-metadata-rename-column"
             iconName="rename"
             title={gettext('Rename property')}
-            tip={gettext('You do not have permission')}
+            tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
             onChange={openRenamePopover}
             onMouseEnter={hideSubMenu}
           />
@@ -272,14 +277,14 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
             target="sf-metadata-delete-column"
             iconName="delete"
             title={gettext('Delete property')}
-            tip={gettext('You do not have permission')}
+            tip={isPrivateColumn ? gettext('This property can not be deleted') : gettext('You do not have permission')}
             onChange={onDelete}
             onMouseEnter={hideSubMenu}
           />
         </div>
       </DropdownMenu>
     );
-  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, modifySort, onDelete]);
+  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, modifySort, onDelete, isPrivateColumn]);
 
   return (
     <>
