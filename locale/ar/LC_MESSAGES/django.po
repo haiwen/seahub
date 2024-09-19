@@ -101,7 +101,7 @@ msgstr " معرف تسجيل الدخول %s موجود بالفعل."
 
 #: seahub/api2/endpoints/admin/account.py:216
 msgid "Department is too long (maximum is 512 characters)"
-msgstr "اسم الإدارة طويل جدا (الحد الأقصى 512 حرف)"
+msgstr "اسم القسم طويل جدا (الحد الأقصى 512 حرف)"
 
 #: seahub/api2/endpoints/admin/account.py:232 seahub/forms.py:155
 msgid "Space quota can't be empty"
@@ -1025,7 +1025,7 @@ msgstr "اسم"
 
 #: seahub/base/accounts.py:1321
 msgid "department"
-msgstr "ادارة"
+msgstr "قسم"
 
 #: seahub/base/accounts.py:1324
 msgid "telephone"
@@ -2784,7 +2784,7 @@ msgstr "وظيفة تسجيل جديد غير مفعلة."
 
 #: seahub/templates/registration/registration_form.html:37
 msgid "Department"
-msgstr "الإدارة"
+msgstr "القسم"
 
 #: seahub/templates/registration/registration_form.html:42
 msgid "Telephone"
