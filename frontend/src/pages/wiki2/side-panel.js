@@ -13,6 +13,7 @@ import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
 import WikiTrashDialog from './wiki-trash-dialog';
+import { DEFAULT_PAGE_NAME } from './constant';
 
 import './side-panel.css';
 
@@ -131,7 +132,7 @@ class SidePanel extends Component {
   };
 
   // default page name
-  handleAddNewPage = (jumpToNewPage = true, pageName = 'Untitled') => {
+  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME) => {
     if (this.isAddingPage === true) return;
     this.isAddingPage = true;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {

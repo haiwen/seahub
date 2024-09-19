@@ -5,13 +5,14 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, gettext, wikiPermission } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
+import { DEFAULT_PAGE_NAME } from './constant';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -225,8 +226,7 @@ class Wiki extends Component {
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
     if (newPage.name === '') {
-      toaster.danger(gettext('Page name cannot be empty'));
-      return;
+      newPage.name = DEFAULT_PAGE_NAME;
     }
     if (this.state.currentPageId === pageId) {
       this.updateDocumentTitle(newPage.name);
