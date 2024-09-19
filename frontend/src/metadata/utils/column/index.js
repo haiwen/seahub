@@ -207,6 +207,10 @@ export const getColumnDisplayName = (key, name) => {
   }
 };
 
+export const checkIsPrivateColumn = (column) => {
+  return PRIVATE_COLUMN_KEYS.includes(column.key);
+};
+
 export const getColumnOriginName = (column) => {
   const { key, name } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) return key;
