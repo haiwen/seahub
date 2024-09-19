@@ -110,7 +110,7 @@ class WikiNav extends Component {
         })}
         {wikiPermission !== 'public' &&
           <div className='wiki2-trash' onClick={this.props.toggelTrashDialog}>
-            <span className="sf3-font-recycle1 sf3-font mr-2"></span>
+            <span className="sf3-font-trash sf3-font mr-2"></span>
             <span>{gettext('Trash')}</span>
           </div>
         }
