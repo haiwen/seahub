@@ -223,10 +223,6 @@ class DirOperationToolbar extends React.Component {
             'icon': 'upload-files',
             'text': gettext('Upload Folder'),
             'onClick': this.onUploadFolder
-          }, {
-            'icon': 'import-sdoc',
-            'text': gettext('Import sdoc'),
-            'onClick': this.onUploadSdoc
           });
         } else {
           opList.push({
@@ -264,6 +260,14 @@ class DirOperationToolbar extends React.Component {
           'icon': 'share',
           'text': gettext('Share'),
           'onClick': this.onShareClick
+        });
+      }
+
+      if (enableSeadoc && !repoEncrypted) {
+        opList.push('Divider', {
+          'icon': 'import-sdoc',
+          'text': gettext('Import sdoc'),
+          'onClick': this.onUploadSdoc
         });
       }
 
