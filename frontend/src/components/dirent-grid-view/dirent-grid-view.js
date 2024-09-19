@@ -852,8 +852,8 @@ class DirentGridView extends React.Component {
                   onItemsMove={this.props.onItemsMove}
                   onGridItemMouseDown={this.onGridItemMouseDown}
                   onGridItemClick={this.onGridItemClick}
-                  activeDirent={this.state.activeDirent}
                   selectedDirentList={selectedDirentList}
+                  repoEncrypted={this.props.currentRepoInfo.encrypted}
                 />
               );
             })}

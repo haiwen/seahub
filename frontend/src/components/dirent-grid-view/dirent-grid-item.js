@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import thumbnailCenter from '../../utils/thumbnail-center';
+import Dirent from '../../models/dirent';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -13,26 +16,24 @@ const propTypes = {
   showImagePopup: PropTypes.func.isRequired,
   onGridItemContextMenu: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func.isRequired,
-  activeDirent: PropTypes.object,
   onGridItemMouseDown: PropTypes.func,
   currentRepoInfo: PropTypes.object,
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
 };
 
 class DirentGridItem extends React.Component {
 
   constructor(props) {
     super(props);
+    let dirent = props.dirent;
     this.state = {
+      dirent,
       isGridDropTipShow: false,
     };
-
-    const { dirent } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
-    this.isCustomPermission = isCustomPermission;
-    this.customPermission = customPermission;
     this.canPreview = true;
     this.canDrag = dirent.permission === 'rw';
     if (isCustomPermission) {
@@ -42,19 +43,60 @@ class DirentGridItem extends React.Component {
     }
 
     this.clickTimeout = null;
+    this.isGeneratingThumbnail = false;
+  }
+
+  checkGenerateThumbnail = (dirent) => {
+    if (this.props.repoEncrypted) {
+      return false;
+    }
+    if (dirent.encoded_thumbnail_src) {
+      return false;
+    }
+    return (
+      Utils.imageCheck(dirent.name) ||
+      (enableVideoThumbnail && Utils.videoCheck(dirent.name)) ||
+      (enablePDFThumbnail && Utils.pdfCheck(dirent.name))
+    );
+  };
+
+  componentDidMount() {
+    const { repoID, path } = this.props;
+    const { dirent } = this.state;
+    if (this.checkGenerateThumbnail(dirent)) {
+      this.isGeneratingThumbnail = true;
+      thumbnailCenter.createThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+        callback: this.updateDirentThumbnail,
+      });
+    }
   }
 
   componentWillUnmount() {
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
     }
+    if (this.isGeneratingThumbnail) {
+      const { dirent } = this.state;
+      const { repoID, path } = this.props;
+      thumbnailCenter.cancelThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+      });
+    }
+    this.setState = () => {};
   }
+
+  updateDirentThumbnail = (encoded_thumbnail_src) => {
+    this.setState({ dirent: new Dirent(Object.assign({}, this.state.dirent, { encoded_thumbnail_src })) });
+  };
 
   onItemClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const { dirent } = this.props;
+    const { dirent } = this.state;
 
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
@@ -91,7 +133,7 @@ class DirentGridItem extends React.Component {
 
   onItemLinkClick = (e) => {
     e.preventDefault();
-    const dirent = this.props.dirent;
+    const { dirent } = this.state;
 
     if (dirent.isDir()) {
       this.props.onItemClick(dirent);
@@ -115,7 +157,7 @@ class DirentGridItem extends React.Component {
     const dragStartItemsData = selectedDirentList.length > 0 ? selectedDirentList.map(dirent => ({
       nodeDirent: dirent,
       nodeParentPath: path
-    })) : { nodeDirent: this.props.dirent, nodeParentPath: this.props.path };
+    })) : { nodeDirent: this.state.dirent, nodeParentPath: this.props.path };
 
     const serializedData = JSON.stringify(dragStartItemsData);
 
@@ -127,7 +169,7 @@ class DirentGridItem extends React.Component {
     if (Utils.isIEBrowser() || !this.canDrag) {
       return false;
     }
-    if (this.props.dirent.type === 'dir') {
+    if (this.state.dirent.type === 'dir') {
       this.setState({ isGridDropTipShow: true });
     }
   };
@@ -156,13 +198,13 @@ class DirentGridItem extends React.Component {
       return;
     }
 
-    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    let selectedPath = Utils.joinPath(this.props.path, this.state.dirent.name);
     let dragStartItemsData = e.dataTransfer.getData('application/drag-item-info');
     dragStartItemsData = JSON.parse(dragStartItemsData);
 
     if (!Array.isArray(dragStartItemsData)) {
       let { nodeDirent, nodeParentPath } = dragStartItemsData;
-      let dropItemData = this.props.dirent;
+      let dropItemData = this.state.dirent;
       if (nodeDirent.name === dropItemData.name) {
         return;
       }
@@ -172,7 +214,7 @@ class DirentGridItem extends React.Component {
       this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
     } else {
       // if current dirent is a dir and selected list include it, return
-      if (dragStartItemsData.some(item => item.nodeDirent.name === this.props.dirent.name)) {
+      if (dragStartItemsData.some(item => item.nodeDirent.name === this.state.dirent.name)) {
         return;
       }
       this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
@@ -184,7 +226,7 @@ class DirentGridItem extends React.Component {
   };
 
   onGridItemContextMenu = (event) => {
-    this.props.onGridItemContextMenu(event, this.props.dirent);
+    this.props.onGridItemContextMenu(event, this.state.dirent);
   };
 
   getTextRenderWidth = (text, font) => {
@@ -231,35 +273,32 @@ class DirentGridItem extends React.Component {
     return showName;
   };
 
-  render() {
-    let { dirent, path, repoID } = this.props;
+  getDirentLink = (dirent) => {
+    let { path, repoID, currentRepoInfo } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let iconUrl = Utils.getDirentIcon(dirent, true);
+    let link = '';
+    if (dirent.type === 'dir') {
+      if (currentRepoInfo) {
+        link = siteRoot + 'library/' + repoID + '/' + currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+      }
+    } else {
+      link = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+      if (dirent.is_sdoc_revision && dirent.revision_id) {
+        link = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+      }
+    }
+    return link;
+  };
 
+  render() {
+    let { dirent } = this.state;
+    let { is_freezed, is_locked, lock_owner_name, file_tags } = dirent;
     let toolTipID = '';
     let tagTitle = '';
-    if (dirent.file_tags && dirent.file_tags.length > 0) {
+    if (file_tags && file_tags.length > 0) {
       toolTipID = MD5(dirent.name).slice(0, 7);
-      tagTitle = dirent.file_tags.map(item => item.name).join(' ');
+      tagTitle = file_tags.map(item => item.name).join(' ');
     }
-
-    let dirHref = '';
-    if (this.props.currentRepoInfo) {
-      dirHref = siteRoot + 'library/' + repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
-    }
-    let fileHref = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
-    if (dirent.is_sdoc_revision && dirent.revision_id) {
-      fileHref = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
-    }
-
-    let gridClass = 'grid-file-img-link cursor-pointer';
-    gridClass += this.state.isGridDropTipShow ? ' grid-drop-show' : ' ';
-
-    let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
-    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
-
-    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
-    const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
     const showName = this.getRenderedText(dirent);
     return (
       <Fragment>
@@ -268,7 +307,7 @@ class DirentGridItem extends React.Component {
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}>
           <div
-            className={gridClass}
+            className={classnames('grid-file-img-link cursor-pointer', { 'grid-drop-show': this.state.isGridDropTipShow })}
             draggable={this.canDrag}
             onClick={this.onItemClick}
             onDragStart={this.onGridItemDragStart}
@@ -279,16 +318,23 @@ class DirentGridItem extends React.Component {
           >
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}`} className="thumbnail" onClick={this.onItemClick} alt=""/> :
-              <img src={iconUrl} width="96" alt='' />
+              <img src={Utils.getDirentIcon(dirent, true)} width="96" alt='' />
             }
-            {dirent.is_locked && <img className="grid-file-locked-icon" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
+            {is_locked &&
+              <img
+                className="grid-file-locked-icon"
+                src={`${mediaUrl}img/file-${is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`}
+                alt={is_freezed ? gettext('freezed') : gettext('locked')}
+                title={(is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}')).replace('{name}', lock_owner_name)}
+              />
+            }
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
-            {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
+            {(dirent.type !== 'dir' && file_tags && file_tags.length > 0) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
-                  {dirent.file_tags.map((fileTag, index) => {
-                    let length = dirent.file_tags.length;
+                  {file_tags.map((fileTag, index) => {
+                    let length = file_tags.length;
                     return (
                       <span className="file-tag" key={fileTag.id} style={{ zIndex: length - index, backgroundColor: fileTag.color }}></span>
                     );
@@ -308,7 +354,7 @@ class DirentGridItem extends React.Component {
               </a> :
               <a
                 className="grid-file-name-link"
-                href={dirent.type === 'dir' ? dirHref : fileHref}
+                href={this.getDirentLink(dirent)}
                 onClick={this.onItemClick}
                 title={dirent.name}
               >{showName}
