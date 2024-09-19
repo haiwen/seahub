@@ -9,7 +9,8 @@
 {% block extra_data %}
   fileExt: '{{ fileext|escapejs }}',
   fileEnc: '{{ file_enc|escapejs }}',
-  fileContent: '{{ file_content|escapejs }}'
+  fileContent: '{{ file_content|escapejs }}',
+  fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
 {% endblock %}
 
 {% block render_bundle %}

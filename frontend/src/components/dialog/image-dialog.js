@@ -17,7 +17,7 @@ const propTypes = {
 class ImageDialog extends React.Component {
 
   downloadImage = (imageSrc) => {
-    let downloadUrl = imageSrc.indexOf('?dl=1') > -1 ? imageSrc : imageSrc + '?dl=1';
+    let downloadUrl = imageSrc;
 
     if (document.getElementById('downloadFrame')) {
       document.body.removeChild(document.getElementById('downloadFrame'));
@@ -72,7 +72,7 @@ class ImageDialog extends React.Component {
         zoomInLabel={gettext('Zoom in')}
         zoomOutLabel={gettext('Zoom out')}
         enableRotate={true}
-        onClickDownload={() => this.downloadImage(imageItems[imageIndex].url)}
+        onClickDownload={() => this.downloadImage(imageItems[imageIndex].downloadURL)}
         onClickDelete={this.props.onDeleteImage ? () => this.props.onDeleteImage(imageItems[imageIndex].name) : null}
         onViewOriginal={this.onViewOriginal}
         viewOriginalImageLabel={gettext('View original image')}

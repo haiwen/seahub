@@ -49,4 +49,4 @@ class ViewLibFileViaSmartLinkTest(BaseTestCase):
         assert 'dl=1' in resp.get('location')
 
         resp = self.client.get(resp.get('location'))
-        assert '8082/files/' in resp.get('location')
+        assert '8082/repos/' in resp.get('location')

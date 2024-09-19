@@ -4,8 +4,9 @@ import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { Utils } from '../../../utils/utils';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
-import { siteRoot, thumbnailSizeForOriginal } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal, fileServerRoot } from '../../../utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
+
 
 const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -30,6 +31,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
           url: `${siteRoot}lib/${repoID}/file${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           src: src,
+          downloadURL: `${fileServerRoot}repos/${repoID}/files/?op=download&p=${path}`,
         };
       });
   }, [table]);

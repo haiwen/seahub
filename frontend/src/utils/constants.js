@@ -174,3 +174,27 @@ export const enableShareLinkReportAbuse = window.sysadmin ? window.sysadmin.page
 
 // institution admin
 export const institutionName = window.app ? window.app.pageOptions.institutionName : '';
+
+export const MimetypesKind = {
+  opus: 'video/ogg',
+  ogv: 'video/ogg',
+  mp4: 'video/mp4',
+  mov: 'video/mp4',
+  m4v: 'video/mp4',
+  mkv: 'video/x-matroska',
+  m4a: 'audio/mp4',
+  mp3: 'audio/mpeg',
+  aac: 'audio/aac',
+  caf: 'audio/x-caf',
+  flac: 'audio/flac',
+  oga: 'audio/ogg',
+  wav: 'audio/wav',
+  m3u8: 'application/x-mpegURL',
+  mpd: 'application/dash+xml',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  gif: 'image/gif',
+  png: 'image/png',
+  svg: 'image/svg+xml',
+  webp: 'image/webp'
+};

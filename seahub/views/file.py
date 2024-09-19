@@ -56,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
-    normalize_cache_key, gen_file_get_url_by_sharelink
+    normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
@@ -511,14 +511,17 @@ def view_lib_file(request, repo_id, path):
             return HttpResponseRedirect(file_url)
 
         operation = 'download' if dl else 'view'
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, file_id, operation, username,
-            use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+        if dl:
+            dl_or_raw_url = gen_file_get_url_new(repo_id, path)
+        else:
+            token = seafile_api.get_fileserver_access_token(
+                repo_id, file_id, operation, username,
+                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+        
+            if not token:
+                return render_permission_error(request, _('Unable to view file'))
 
-        if not token:
-            return render_permission_error(request, _('Unable to view file'))
-
-        dl_or_raw_url = gen_file_get_url(token, filename)
+            dl_or_raw_url = gen_file_get_url(token, filename)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
@@ -579,6 +582,7 @@ def view_lib_file(request, repo_id, path):
         'can_download_file': parse_repo_perm(permission).can_download,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'enable_metadata_management': settings.ENABLE_METADATA_MANAGEMENT,
+        'file_download_url': gen_file_get_url_new(repo_id, path)
     }
 
     # check whether file is starred
@@ -641,6 +645,8 @@ def view_lib_file(request, repo_id, path):
     template = '%s_file_view_react.html' % filetype.lower()
 
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
+        if filetype == VIDEO:
+            raw_path = gen_file_get_url_new(repo_id, path)
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
@@ -1255,6 +1261,9 @@ def view_shared_file(request, fileshare):
     filetype, fileext = get_file_type_and_ext(filename)
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
+    
+    if filetype == VIDEO:
+        raw_path = gen_file_get_url_new(repo_id, path)
 
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, path)
@@ -1384,6 +1393,7 @@ def view_shared_file(request, fileshare):
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
+            'shared_file_download_url': gen_file_get_url_by_sharelink(fileshare.token)
         }
     if filetype == SEADOC:
         data['file_uuid'] = ret_dict['file_uuid']
