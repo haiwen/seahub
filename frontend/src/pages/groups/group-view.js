@@ -355,17 +355,18 @@ class GroupView extends React.Component {
     const opList = [];
     if ((!isDepartmentGroup && canAddRepo) ||
       (isDepartmentGroup && isStaff)) {
-      opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle });
+      opList.push({ 'text': gettext('New Library'), 'onClick': this.onCreateRepoToggle }, 'Divider');
     }
     opList.push({ 'text': gettext('Members'), 'onClick': this.toggleMembersDialog });
     if (currentGroup) {
       if (isStaff || isOwner) {
+        opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
+        opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
+        opList.push('Divider');
         opList.push({ 'text': gettext('Rename'), 'onClick': this.toggleRenameGroupDialog });
         if (isOwner) {
           opList.push({ 'text': gettext('Transfer'), 'onClick': this.toggleTransferGroupDialog });
         }
-        opList.push({ 'text': gettext('Import members'), 'onClick': this.toggleImportMembersDialog });
-        opList.push({ 'text': gettext('Manage members'), 'onClick': this.toggleManageMembersDialog });
         if (isOwner) {
           opList.push({ 'text': gettext('Delete group'), 'onClick': this.toggleDismissGroupDialog });
         }
