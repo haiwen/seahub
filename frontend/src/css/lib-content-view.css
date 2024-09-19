@@ -238,7 +238,12 @@
   padding-left: 4px;
 }
 
-.dir-view-path .path-item {
+.dir-view-path .path-label {
+  color: #666;
+}
+
+.dir-view-path .path-item,
+.dir-view-path .last-path-item {
   display: inline-block;
   min-width: 0; /* overwrite some styles */
   padding: 0 6px;
