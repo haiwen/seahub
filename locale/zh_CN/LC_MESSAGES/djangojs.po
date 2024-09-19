@@ -5196,7 +5196,7 @@ msgstr "折叠全部"
 
 #: frontend/src/metadata/metadata-view/components/popover/groupbys-popover/index.js:132
 msgid "Expand all"
-msgstr "折叠全部"
+msgstr "展开全部"
 
 #: frontend/src/metadata/metadata-view/components/popover/hidden-column-popover/hidden-columns/index.js:28
 msgid "No properties available to be hidden"
