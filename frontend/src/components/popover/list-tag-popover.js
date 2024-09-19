@@ -32,6 +32,10 @@ export default class ListTagPopover extends React.Component {
     this.loadTags();
   }
 
+  componentWillUnmount() {
+    this.setState = () => {};
+  }
+
   loadTags = () => {
     seafileAPI.listRepoTags(this.props.repoID).then(res => {
       let repotagList = [];

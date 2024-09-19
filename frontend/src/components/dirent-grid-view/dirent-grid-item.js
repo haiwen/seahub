@@ -89,6 +89,7 @@ class DirentGridItem extends React.Component {
   }
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {
+    this.isGeneratingThumbnail = false;
     this.setState({ dirent: new Dirent(Object.assign({}, this.state.dirent, { encoded_thumbnail_src })) });
   };
 
