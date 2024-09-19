@@ -2,7 +2,7 @@ import { Utils } from '../../../../utils/utils';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { getGroupByPath } from '../../../utils/view';
 import { getColumnByIndex, canEditCell } from '../../../utils/column';
-import { SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
+import { PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
 import { getGroupRecordByIndex } from './group-metrics';
 
 const SELECT_DIRECTION = {
@@ -45,8 +45,13 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
   const column = getSelectedColumn({ selectedPosition, columns });
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
   if (!window.sfMetadataContext.canModifyRow(row)) return false;
-  const isCellEditable = Utils.isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
-  return isCellEditable && canEditCell(column, row, enableCellSelect);
+  let isCellEditable = Utils.isFunction(onCheckCellIsEditable) ? onCheckCellIsEditable({ row, column, ...selectedPosition }) : true;
+  const fileName = row ? row[PRIVATE_COLUMN_KEY.FILE_NAME] : '';
+  const imageRow = row && (Utils.imageCheck(fileName) || Utils.videoCheck(fileName));
+  isCellEditable = isCellEditable && canEditCell(column, row, enableCellSelect);
+  if (imageRow) return isCellEditable;
+  if (column?.key === PRIVATE_COLUMN_KEY.SHOOTING_TIME) return false;
+  return isCellEditable;
 };
 
 export function selectedRangeIsSingleCell(selectedRange) {

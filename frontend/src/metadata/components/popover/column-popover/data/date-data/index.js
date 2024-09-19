@@ -40,8 +40,14 @@ const DateData = ({ value, onChange }) => {
   const onMinuteChange = useCallback((v) => {
     let newFormat = format || 'YYYY-MM-DD';
     const formats = format.split(' ');
-    if (formats.length === 1) newFormat = format + ' HH:mm';
+    if (formats.length === 1) newFormat = formats[0] + ' HH:mm';
     if (formats.length === 2) newFormat = formats[0];
+    onChange({ format: newFormat });
+  }, [format, onChange]);
+
+  const onSecondChange = useCallback((v) => {
+    let newFormat = format || 'YYYY-MM-DD HH:mm';
+    newFormat = format.indexOf('ss') === -1 ? newFormat + ':ss' : newFormat.slice(0, -3);
     onChange({ format: newFormat });
   }, [format, onChange]);
 
@@ -52,6 +58,7 @@ const DateData = ({ value, onChange }) => {
   }, []);
 
   const selectedValue = options.find(o => o.value === format) || options[0];
+  const showMinute = format ? format.indexOf('HH:mm') > -1 : false;
 
   return (
     <div className="sf-metadata-column-data-settings sf-metadata-date-column-data-settings">
@@ -61,12 +68,22 @@ const DateData = ({ value, onChange }) => {
       </FormGroup>
       <div className="pb-4">
         <Switch
-          checked={format ? format.indexOf('HH:mm') > -1 : false}
+          checked={showMinute}
           size="large"
           textPosition="right"
           className="sf-metadata-date-column-data-minute w-100"
           onChange={onMinuteChange}
           placeholder={gettext('Accurate to minute')} />
+      </div>
+      <div className="pb-4">
+        <Switch
+          disabled={!showMinute}
+          checked={format ? format.indexOf('HH:mm:ss') > -1 : false}
+          size="large"
+          textPosition="right"
+          className="sf-metadata-date-column-data-minute w-100"
+          onChange={onSecondChange}
+          placeholder={gettext('Accurate to second')} />
       </div>
     </div>
   );

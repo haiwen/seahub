@@ -27,10 +27,19 @@ const getDateDisplayString = (date, format) => {
       const formatDateList = formatValuesList[0].split('-');
       return `${formatDateList[2]}/${formatDateList[1]}/${formatDateList[0]} ${formatValuesList[1]}`;
     }
+    case 'D/M/YYYY HH:mm:ss':
+    case 'DD/MM/YYYY HH:mm:ss': {
+      const formatValues = dateObj.format('YYYY-MM-DD HH:mm:ss');
+      const formatValuesList = formatValues.split(' ');
+      const formatDateList = formatValuesList[0].split('-');
+      return `${formatDateList[2]}/${formatDateList[1]}/${formatDateList[0]} ${formatValuesList[1]}`;
+    }
     case 'M/D/YYYY':
       return dateObj.format('M/D/YYYY');
     case 'M/D/YYYY HH:mm':
       return dateObj.format('M/D/YYYY HH:mm');
+    case 'M/D/YYYY HH:mm:ss':
+      return dateObj.format('M/D/YYYY HH:mm:ss');
     case 'YYYY-MM-DD':
       return dateObj.format('YYYY-MM-DD');
     case 'YYYY-MM-DD HH:mm':
@@ -42,6 +51,8 @@ const getDateDisplayString = (date, format) => {
       return dateObj.format('DD.MM.YYYY');
     case 'DD.MM.YYYY HH:mm':
       return dateObj.format('DD.MM.YYYY HH:mm');
+    case 'DD.MM.YYYY HH:mm:ss':
+      return dateObj.format('DD.MM.YYYY HH:mm:ss');
     case 'YYYY':
       return dateObj.format('YYYY');
     case 'YYYY-MM':

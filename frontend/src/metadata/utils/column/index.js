@@ -200,6 +200,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('Size');
     case PRIVATE_COLUMN_KEY.FILE_DETAILS:
       return gettext('File details');
+    case PRIVATE_COLUMN_KEY.SHOOTING_TIME:
+      return gettext('Shooting time');
     default:
       return name;
   }
