@@ -217,16 +217,16 @@ class TrashDialog extends React.Component {
                 }
               </div>
               <Content
-              data={this.state}
-              repoID={this.props.repoID}
-              getMore={this.getMore}
-              currentPage={this.state.currentPage}
-              curPerPage={this.state.perPage}
-              hasNextPage={this.state.hasNextPage}
-              renderFolder={this.renderFolder}
-              getListByPage={this.getItems2}
-              resetPerPage={this.resetPerPage}
-            />
+                data={this.state}
+                repoID={this.props.repoID}
+                getMore={this.getMore}
+                currentPage={this.state.currentPage}
+                curPerPage={this.state.perPage}
+                hasNextPage={this.state.hasNextPage}
+                renderFolder={this.renderFolder}
+                getListByPage={this.getItems2}
+                resetPerPage={this.resetPerPage}
+              />
             </div>
           }
           {isCleanTrashDialogOpen &&
