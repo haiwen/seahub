@@ -100,8 +100,12 @@ const ViewItem = ({
   const renameView = useCallback((name, failCallback) => {
     onUpdate({ name }, () => {
       setRenamePopoverShow(false);
-    }, failCallback);
-  }, [onUpdate]);
+      document.title = `${name} - Seafile`;
+    }, (error) => {
+      failCallback(error);
+      document.title = `${view.name} - Seafile`;
+    });
+  }, [onUpdate, view.name]);
 
   const onDragStart = useCallback((event) => {
     if (!canDrop) return false;
