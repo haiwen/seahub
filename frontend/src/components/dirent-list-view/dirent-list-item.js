@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
+import thumbnailCenter from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
@@ -21,6 +23,7 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
+import Dirent from '../../models/dirent';
 
 import '../../css/dirent-list-item.css';
 
@@ -66,7 +69,7 @@ class DirentListItem extends React.Component {
   constructor(props) {
     super(props);
 
-    const { dirent } = this.props;
+    let { dirent } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
     this.isCustomPermission = isCustomPermission;
     this.customPermission = customPermission;
@@ -79,6 +82,7 @@ class DirentListItem extends React.Component {
     }
 
     this.state = {
+      dirent,
       isOperationShow: false,
       highlight: false,
       isZipDialogOpen: false,
@@ -96,6 +100,38 @@ class DirentListItem extends React.Component {
       isOpMenuOpen: false // for mobile
     };
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
+    this.isGeneratingThumbnail = false;
+  }
+
+  componentDidMount() {
+    const { repoID, path } = this.props;
+    const { dirent } = this.state;
+    if (this.checkGenerateThumbnail(dirent)) {
+      this.isGeneratingThumbnail = true;
+      thumbnailCenter.createThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+        callback: this.updateDirentThumbnail,
+      });
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.dirent && this.state.dirent && nextProps.dirent.name !== this.state.dirent.name) {
+      this.setState({
+        dirent: nextProps.dirent,
+      }, () => {
+        if (this.checkGenerateThumbnail(nextProps.dirent)) {
+          const { repoID, path } = nextProps;
+          this.isGeneratingThumbnail = true;
+          thumbnailCenter.createThumbnail({
+            repoID,
+            path: [path, nextProps.dirent.name].join('/'),
+            callback: this.updateDirentThumbnail,
+          });
+        }
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -108,6 +144,36 @@ class DirentListItem extends React.Component {
       });
     }
   }
+
+  componentWillUnmount() {
+    if (this.isGeneratingThumbnail) {
+      const { dirent } = this.state;
+      const { repoID, path } = this.props;
+      thumbnailCenter.cancelThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+      });
+    }
+    this.setState = () => {};
+  }
+
+  checkGenerateThumbnail = (dirent) => {
+    if (this.props.repoEncrypted) {
+      return false;
+    }
+    if (dirent.encoded_thumbnail_src) {
+      return false;
+    }
+    return (
+      Utils.imageCheck(dirent.name) ||
+      (enableVideoThumbnail && Utils.videoCheck(dirent.name)) ||
+      (enablePDFThumbnail && Utils.pdfCheck(dirent.name))
+    );
+  };
+
+  updateDirentThumbnail = (encoded_thumbnail_src) => {
+    this.setState({ dirent: new Dirent(Object.assign({}, this.state.dirent, { encoded_thumbnail_src })) });
+  };
 
   toggleOpMenu = () => {
     this.setState({
@@ -160,24 +226,24 @@ class DirentListItem extends React.Component {
 
   // buiness handler
   onItemSelected = () => {
-    this.props.onItemSelected(this.props.dirent);
+    this.props.onItemSelected(this.state.dirent);
   };
 
   onItemStarred = (e) => {
-    let dirent = this.props.dirent;
+    let dirent = this.state.dirent;
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
 
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
-        this.props.updateDirent(this.props.dirent, 'starred', false);
+        this.props.updateDirent(this.state.dirent, 'starred', false);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
     } else {
       seafileAPI.starItem(repoID, filePath).then(() => {
-        this.props.updateDirent(this.props.dirent, 'starred', true);
+        this.props.updateDirent(this.state.dirent, 'starred', true);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -190,13 +256,13 @@ class DirentListItem extends React.Component {
     // '<td>' is clicked
     e.stopPropagation();
     if (e.target.tagName == 'TD') {
-      this.props.onDirentClick(this.props.dirent, e);
+      this.props.onDirentClick(this.state.dirent, e);
     }
   };
 
   onItemClick = (e) => {
     e.preventDefault();
-    const dirent = this.props.dirent;
+    const dirent = this.state.dirent;
     if (this.state.isRenameing) {
       return;
     }
@@ -220,7 +286,7 @@ class DirentListItem extends React.Component {
   onItemDelete = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); // for document event
-    this.props.onItemDelete(this.props.dirent);
+    this.props.onItemDelete(this.state.dirent);
   };
 
   onItemShare = (e) => {
@@ -232,7 +298,7 @@ class DirentListItem extends React.Component {
   exportDocx = () => {
     const serviceUrl = window.app.config.serviceURL;
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let filePath = this.getDirentPath(this.state.dirent);
     let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
     window.location.href = exportToDocxUrl;
   };
@@ -240,7 +306,7 @@ class DirentListItem extends React.Component {
   exportSdoc = () => {
     const serviceUrl = window.app.config.serviceURL;
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let filePath = this.getDirentPath(this.state.dirent);
     let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
     window.location.href = exportToSdocUrl;
   };
@@ -314,7 +380,7 @@ class DirentListItem extends React.Component {
         this.toggleFileAccessLogDialog();
         break;
       case 'Properties':
-        this.props.onDirentClick(this.props.dirent);
+        this.props.onDirentClick(this.state.dirent);
         this.props.showDirentDetail('info');
         break;
       case 'Open via Client':
@@ -331,7 +397,7 @@ class DirentListItem extends React.Component {
   onItemConvert = (e, dstType) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); // for document event
-    this.props.onItemConvert(this.props.dirent, dstType);
+    this.props.onItemConvert(this.state.dirent, dstType);
   };
 
   onEditFileTagToggle = () => {
@@ -341,12 +407,12 @@ class DirentListItem extends React.Component {
   };
 
   onFileTagChanged = () => {
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onFileTagChanged(this.props.dirent, direntPath);
+    let direntPath = this.getDirentPath(this.state.dirent);
+    this.props.onFileTagChanged(this.state.dirent, direntPath);
   };
 
   onItemRenameToggle = () => {
-    this.props.onItemRenameToggle(this.props.dirent);
+    this.props.onItemRenameToggle(this.state.dirent);
     this.setState({
       isOperationShow: false,
       isRenameing: true,
@@ -355,7 +421,7 @@ class DirentListItem extends React.Component {
   };
 
   onRenameConfirm = (newName) => {
-    this.props.onItemRename(this.props.dirent, newName);
+    this.props.onItemRename(this.state.dirent, newName);
     this.onRenameCancel();
   };
 
@@ -381,12 +447,13 @@ class DirentListItem extends React.Component {
 
   onLockItem = () => {
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let dirent = this.state.dirent;
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.lockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(this.props.dirent, 'is_locked', true);
-      this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
+      this.props.updateDirent(dirent, 'is_locked', true);
+      this.props.updateDirent(dirent, 'locked_by_me', true);
       let lockName = username.split('@');
-      this.props.updateDirent(this.props.dirent, 'lock_owner_name', lockName[0]);
+      this.props.updateDirent(dirent, 'lock_owner_name', lockName[0]);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -395,13 +462,14 @@ class DirentListItem extends React.Component {
 
   onFreezeDocument = () => {
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let dirent = this.state.dirent;
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.lockfile(repoID, filePath, -1).then(() => {
-      this.props.updateDirent(this.props.dirent, 'is_freezed', true);
-      this.props.updateDirent(this.props.dirent, 'is_locked', true);
-      this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
+      this.props.updateDirent(dirent, 'is_freezed', true);
+      this.props.updateDirent(dirent, 'is_locked', true);
+      this.props.updateDirent(dirent, 'locked_by_me', true);
       let lockName = username.split('@');
-      this.props.updateDirent(this.props.dirent, 'lock_owner_name', lockName[0]);
+      this.props.updateDirent(dirent, 'lock_owner_name', lockName[0]);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -410,11 +478,12 @@ class DirentListItem extends React.Component {
 
   onUnlockItem = () => {
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let dirent = this.state.dirent;
+    let filePath = this.getDirentPath(dirent);
     seafileAPI.unlockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(this.props.dirent, 'is_locked', false);
-      this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
-      this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
+      this.props.updateDirent(dirent, 'is_locked', false);
+      this.props.updateDirent(dirent, 'locked_by_me', false);
+      this.props.updateDirent(dirent, 'lock_owner_name', '');
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -422,9 +491,8 @@ class DirentListItem extends React.Component {
   };
 
   onHistory = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: repoID, filePath: filePath });
+    let filePath = this.getDirentPath(this.state.dirent);
+    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: this.props.repoID, filePath: filePath });
     location.href = url;
   };
 
@@ -436,14 +504,14 @@ class DirentListItem extends React.Component {
 
   onOpenViaClient = () => {
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let filePath = this.getDirentPath(this.state.dirent);
     let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
     location.href = url;
   };
 
   onConvertWithONLYOFFICE = () => {
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
+    let filePath = this.getDirentPath(this.state.dirent);
     seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
       this.props.loadDirentList(res.data.parent_dir);
     }).catch(error => {
@@ -455,7 +523,7 @@ class DirentListItem extends React.Component {
   onItemDownload = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
-    let dirent = this.props.dirent;
+    let dirent = this.state.dirent;
     let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
     if (dirent.type === 'dir') {
@@ -464,7 +532,7 @@ class DirentListItem extends React.Component {
           isZipDialogOpen: true
         });
       } else {
-        seafileAPI.zipDownload(repoID, this.props.path, this.props.dirent.name).then((res) => {
+        seafileAPI.zipDownload(repoID, this.props.path, this.state.dirent.name).then((res) => {
           const zipToken = res.data['zip_token'];
           location.href = `${fileServerRoot}zip/${zipToken}`;
         }).catch((error) => {
@@ -507,7 +575,7 @@ class DirentListItem extends React.Component {
     }
     e.dataTransfer.effectAllowed = 'move';
     let { selectedDirentList } = this.props;
-    if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) { // drag items and selectedDirentList include item
+    if (selectedDirentList.length > 0 && selectedDirentList.includes(this.state.dirent)) { // drag items and selectedDirentList include item
       this.props.onShowDirentsDraggablePreview();
       e.dataTransfer.setDragImage(this.refs.empty_content, 0, 0); // Show an empty content
       let selectedList = selectedDirentList.map(item => {
@@ -524,8 +592,8 @@ class DirentListItem extends React.Component {
       e.dataTransfer.setDragImage(this.refs.drag_icon, 15, 15);
     }
 
-    let nodeRootPath = this.getDirentPath(this.props.dirent);
-    let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
+    let nodeRootPath = this.getDirentPath(this.state.dirent);
+    let dragStartItemData = { nodeDirent: this.state.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.setData('application/drag-item-info', dragStartItemData);
@@ -535,7 +603,7 @@ class DirentListItem extends React.Component {
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
-    if (this.props.dirent.type === 'dir') {
+    if (this.state.dirent.type === 'dir') {
       e.stopPropagation();
       this.setState({ isDropTipshow: true });
     }
@@ -557,7 +625,7 @@ class DirentListItem extends React.Component {
       return false;
     }
 
-    if (this.props.dirent.type === 'dir') {
+    if (this.state.dirent.type === 'dir') {
       e.stopPropagation();
     }
     this.setState({ isDropTipshow: false });
@@ -571,7 +639,7 @@ class DirentListItem extends React.Component {
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
-    if (this.props.dirent.type === 'dir') {
+    if (this.state.dirent.type === 'dir') {
       e.stopPropagation();
     } else {
       return;
@@ -583,7 +651,7 @@ class DirentListItem extends React.Component {
         return draggedItem.nodeRootPath;
       });
 
-      let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+      let selectedPath = Utils.joinPath(this.props.path, this.state.dirent.name);
 
       if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) { // eg; A/B, A/C --> A/B
         return;
@@ -594,7 +662,7 @@ class DirentListItem extends React.Component {
     }
 
     let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
-    let dropItemData = this.props.dirent;
+    let dropItemData = this.state.dirent;
 
     if (nodeDirent.name === dropItemData.name) {
       return;
@@ -609,7 +677,7 @@ class DirentListItem extends React.Component {
       }
     }
 
-    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    let selectedPath = Utils.joinPath(this.props.path, this.state.dirent.name);
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   };
 
@@ -618,12 +686,27 @@ class DirentListItem extends React.Component {
   };
 
   onItemContextMenu = (event) => {
-    let dirent = this.props.dirent;
-    this.props.onItemContextMenu(event, dirent);
+    this.props.onItemContextMenu(event, this.state.dirent);
+  };
+
+  getDirentHref = () => {
+    let { path, repoID } = this.props;
+    let dirent = this.state.dirent;
+    let direntPath = Utils.joinPath(path, dirent.name);
+    let dirHref = '';
+    if (this.props.currentRepoInfo) {
+      dirHref = siteRoot + 'library/' + repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+    }
+    let fileHref = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+    if (dirent.is_sdoc_revision && dirent.revision_id) {
+      fileHref = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+    }
+    return dirent.type === 'dir' ? dirHref : fileHref;
   };
 
   renderItemOperation = () => {
-    let { dirent, currentRepoInfo, selectedDirentList } = this.props;
+    let { currentRepoInfo, selectedDirentList } = this.props;
+    let dirent = this.state.dirent;
     let canDownload = true;
     let canDelete = true;
     const { isCustomPermission, customPermission } = this;
@@ -637,9 +720,9 @@ class DirentListItem extends React.Component {
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
 
     return (
-      <Fragment>
+      <>
         {selectedDirentList.length > 1 ?
-          <Fragment>
+          <>
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
@@ -652,7 +735,7 @@ class DirentListItem extends React.Component {
                   <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
-                  item={this.props.dirent}
+                  item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -661,8 +744,8 @@ class DirentListItem extends React.Component {
                 />
               </div>
             }
-          </Fragment> :
-          <Fragment>
+          </> :
+          <>
             {this.state.isOperationShow &&
               <div className="operations">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
@@ -675,7 +758,7 @@ class DirentListItem extends React.Component {
                   <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
-                  item={this.props.dirent}
+                  item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
                   onMenuItemClick={this.onMenuItemClick}
@@ -684,30 +767,20 @@ class DirentListItem extends React.Component {
                 />
               </div>
             }
-          </Fragment>
+          </>
         }
-      </Fragment>
+      </>
     );
   };
 
   render() {
-    let { path, dirent, repoID } = this.props;
+    let { path } = this.props;
+    let dirent = this.state.dirent;
     let direntPath = Utils.joinPath(path, dirent.name);
-    let dirHref = '';
-    if (this.props.currentRepoInfo) {
-      dirHref = siteRoot + 'library/' + repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
-    }
-    let fileHref = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
-    if (dirent.is_sdoc_revision && dirent.revision_id) {
-      fileHref = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
-    }
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
-    let isActive = dirent.isSelected;
-    let trClass = this.state.highlight ? 'tr-highlight ' : '';
-    trClass += this.state.isDropTipshow ? 'tr-drop-effect' : '';
-    trClass += isActive ? 'tr-active' : '';
+    let isSelected = dirent.isSelected;
 
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
@@ -718,10 +791,14 @@ class DirentListItem extends React.Component {
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
 
     return (
-      <Fragment>
+      <>
         {isDesktop ?
           <tr
-            className={trClass}
+            className={classnames(
+              { 'tr-highlight': this.state.highlight },
+              { 'tr-drop-effect': this.state.isDropTipshow },
+              { 'tr-active': isSelected },
+            )}
             draggable={canDrag}
             onFocus={this.onMouseEnter}
             onMouseEnter={this.onMouseEnter}
@@ -741,8 +818,8 @@ class DirentListItem extends React.Component {
                 type="checkbox"
                 className="vam"
                 onChange={this.onItemSelected}
-                checked={isActive}
-                aria-label={isActive ? gettext('Unselect this item') : gettext('Select this item')}
+                checked={isSelected}
+                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />
             </td>
             <td className="pl10">
@@ -763,18 +840,25 @@ class DirentListItem extends React.Component {
                   <img ref='drag_icon' src={iconUrl} width="24" alt='' />
                 }
                 {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-                <div ref="empty_content" style={{ position: 'absolute', width: '1px', height: '1px' }}></div>
+                <div ref="empty_content" className="empty-content"></div>
               </div>
             </td>
             <td className="name">
-              {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />}
+              {this.state.isRenameing &&
+                <Rename
+                  hasSuffix={dirent.type !== 'dir'}
+                  name={dirent.name}
+                  onRenameConfirm={this.onRenameConfirm}
+                  onRenameCancel={this.onRenameCancel}
+                />
+              }
               {!this.state.isRenameing && (
-                <Fragment>
+                <>
                   {(!dirent.isDir() && !this.canPreview) ?
                     <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                    <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+                    <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                   }
-                </Fragment>
+                </>
               )}
             </td>
             <td className="tag-list-title">
@@ -787,12 +871,12 @@ class DirentListItem extends React.Component {
                   })}
                 </div>
               )}
-              {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) && (
+              {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) &&
                 <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
-              )}
+              }
             </td>
             <td className="operation">{this.renderItemOperation()}</td>
-            <td className="file-size">{dirent.size && dirent.size}</td>
+            <td className="file-size">{dirent.size || ''}</td>
             <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
           </tr>
           :
@@ -807,14 +891,21 @@ class DirentListItem extends React.Component {
               </div>
             </td>
             <td onClick={this.onItemClick}>
-              {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> }
+              {this.state.isRenameing &&
+                <Rename
+                  hasSuffix={dirent.type !== 'dir'}
+                  name={dirent.name}
+                  onRenameConfirm={this.onRenameConfirm}
+                  onRenameCancel={this.onRenameCancel}
+                />
+              }
               {!this.state.isRenameing && (
-                <Fragment>
+                <>
                   {(!dirent.isDir() && !this.canPreview) ?
                     <a className="sf-link">{dirent.name}</a> :
-                    <a href={dirent.type === 'dir' ? dirHref : fileHref}>{dirent.name}</a>
+                    <a href={this.getDirentHref()}>{dirent.name}</a>
                   }
-                </Fragment>
+                </>
               )}
               <br />
               {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
@@ -865,7 +956,7 @@ class DirentListItem extends React.Component {
             <MoveDirentDialog
               path={this.props.path}
               repoID={this.props.repoID}
-              dirent={this.props.dirent}
+              dirent={this.state.dirent}
               isMultipleOperation={this.state.isMultipleOperation}
               onItemMove={this.props.onItemMove}
               onCancelMove={this.onItemMoveToggle}
@@ -878,7 +969,7 @@ class DirentListItem extends React.Component {
             <CopyDirentDialog
               path={this.props.path}
               repoID={this.props.repoID}
-              dirent={this.props.dirent}
+              dirent={this.state.dirent}
               isMultipleOperation={this.state.isMultipleOperation}
               onItemCopy={this.props.onItemCopy}
               onCancelCopy={this.onItemCopyToggle}
@@ -917,7 +1008,7 @@ class DirentListItem extends React.Component {
             <ZipDownloadDialog
               repoID={this.props.repoID}
               path={this.props.path}
-              target={this.props.dirent.name}
+              target={this.state.dirent.name}
               toggleDialog={this.closeZipDialog}
             />
           </ModalPortal>
@@ -958,7 +1049,7 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-      </Fragment>
+      </>
     );
   }
 }
