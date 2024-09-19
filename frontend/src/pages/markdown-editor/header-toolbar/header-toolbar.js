@@ -56,7 +56,7 @@ class HeaderToolbar extends React.Component {
 
   onArticleInfoToggle = () => {
     const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, true); 
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, true);
   };
 
   render() {
