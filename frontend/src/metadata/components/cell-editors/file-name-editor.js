@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { ModalPortal } from '@seafile/sf-metadata-ui-component';
 import { Utils } from '../../../utils/utils';
 import ImageDialog from '../../../components/dialog/image-dialog';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot } from '../../../utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
-
 
 const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
   const [imageIndex, setImageIndex] = useState(0);
@@ -67,24 +65,6 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
     return '';
   }, [_isDir, fileName]);
 
-  const parentDir = useMemo(() => {
-    const value = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
-    if (value === '/') return '';
-    return value;
-  }, [record]);
-
-  const repoID = useMemo(() => {
-    return window.sfMetadataContext.getSetting('repoID');
-  }, []);
-
-  const path = useMemo(() => {
-    return Utils.encodePath(Utils.joinPath(parentDir, fileName));
-  }, [parentDir, fileName]);
-
-  const url = useMemo(() => {
-    return `${siteRoot}lib/${repoID}/file${path}`;
-  }, [path, repoID]);
-
   const moveToPrevImage = () => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
@@ -94,19 +74,6 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
     const imageItemsLength = imageItems.length;
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
   };
-
-  useEffect(() => {
-    if (fileType === 'markdown') {
-      const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, fileName);
-    }
-    return () => {};
-  }, [record, fileType]);
-
-  if (fileType === 'markdown') {
-    return null;
-  }
 
   if (fileType === 'image') {
     return (
@@ -122,15 +89,6 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
     );
   }
 
-  if (!fileType || fileType === 'sdoc') {
-    window.open(url);
-  } else {
-    let pathname = window.location.pathname;
-    if (pathname.endsWith('/')) {
-      pathname = pathname.slice(0, -1);
-    }
-    window.open(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
-  }
   return null;
 };
 

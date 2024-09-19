@@ -1,21 +1,121 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import { IconBtn } from '@seafile/sf-metadata-ui-component';
-import { gettext } from '../../../../../../../../utils/constants';
-import { CellType, EVENT_BUS_TYPE, EDITOR_TYPE } from '../../../../../../../constants';
+import { Utils } from '../../../../../../../../utils/utils';
+import { gettext, siteRoot } from '../../../../../../../../utils/constants';
+import { EVENT_BUS_TYPE } from '../../../../../../../..//components/common/event-bus-type';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, EDITOR_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../../../constants';
 
 import './index.css';
 
-const CellOperationBtn = ({ isDir, column, value }) => {
+const FILE_TYPE = {
+  FOLDER: 'folder',
+  MARKDOWN: 'markdown',
+  SDOC: 'sdoc',
+  IMAGE: 'image',
+};
 
-  const openFile = useCallback((event) => {
+const CellOperationBtn = ({ isDir, column, record, cellValue, ...props }) => {
+
+  const _isDir = useMemo(() => {
+    const isDirValue = record[PRIVATE_COLUMN_KEY.IS_DIR];
+    if (typeof isDirValue === 'string') return isDirValue.toUpperCase() === 'TRUE';
+    return isDirValue;
+  }, [record]);
+
+  const fileName = useMemo(() => {
+    const { key } = column;
+    return record[key];
+  }, [column, record]);
+
+  const fileType = useMemo(() => {
+    if (_isDir) return FILE_TYPE.FOLDER;
+    if (!fileName) return '';
+    const index = fileName.lastIndexOf('.');
+    if (index === -1) return '';
+    const suffix = fileName.slice(index).toLowerCase();
+    if (suffix.indexOf(' ') > -1) return '';
+    if (Utils.imageCheck(fileName)) return FILE_TYPE.IMAGE;
+    if (Utils.isMarkdownFile(fileName)) return FILE_TYPE.MARKDOWN;
+    if (Utils.isSdocFile(fileName)) return FILE_TYPE.SDOC;
+    return '';
+  }, [_isDir, fileName]);
+
+  const getParentDir = () => {
+    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    if (parentDir === '/') {
+      return '';
+    }
+    return parentDir;
+  };
+
+  const generateUrl = () => {
+    const repoID = window.sfMetadataContext.getSetting('repoID');
+    const parentDir = getParentDir();
+    const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+    return `${siteRoot}lib/${repoID}/file${path}`;
+  };
+
+  const openUrl = (url) => {
+    window.open(url);
+  };
+
+  const openMarkdown = () => {
+    const fileName = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+    const parentDir = record[PRIVATE_COLUMN_KEY.PARENT_DIR];
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, parentDir, fileName);
+  };
+
+  const openByNewWindow = (fileType) => {
+    if (!fileType) {
+      const url = generateUrl();
+      openUrl(url);
+    } else {
+      const parentDir = getParentDir();
+      let pathname = window.location.pathname;
+      if (pathname.endsWith('/')) {
+        pathname = pathname.slice(0, -1);
+      }
+      openUrl(window.location.origin + pathname + Utils.encodePath(Utils.joinPath(parentDir, fileName)));
+    }
+  };
+
+  const openSdoc = () => {
+    const url = generateUrl();
+    openUrl(url);
+  };
+
+  const openOthers = () => {
+    openByNewWindow(fileType);
+  };
+
+  const openFile = (event) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-  }, []);
 
-  if (!value || column.type !== CellType.FILE_NAME) return null;
+    switch (fileType) {
+      case FILE_TYPE.MARKDOWN: {
+        openMarkdown();
+        break;
+      }
+      case FILE_TYPE.SDOC: {
+        openSdoc();
+        break;
+      }
+      case FILE_TYPE.IMAGE: {
+        // render image previewer via FileNameEditor
+        window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+        break;
+      }
+      default: {
+        openOthers();
+        break;
+      }
+    }
+  };
+
+  if (!cellValue) return null;
 
   return (
     <>
