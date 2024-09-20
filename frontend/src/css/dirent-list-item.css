@@ -12,6 +12,12 @@
   max-width: 24px;
 }
 
+.dir-icon .empty-content {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
 .dir-icon .locked {
   position: absolute;
   width: 1rem;
