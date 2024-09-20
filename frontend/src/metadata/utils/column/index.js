@@ -273,24 +273,11 @@ const getFileTypeColumnData = (column) => {
 
 export const getDefaultFileStatusOptions = () => {
   return [
-    { id: '_in_progress', name: '_in_progress' },
-    { id: '_in_review', name: '_in_review' },
-    { id: '_done', name: '_done' },
+    { id: '_in_progress', name: gettext('In progress'), color: '#EED5FF', textColor: '#212529' },
+    { id: '_in_review', name: gettext('In review'), color: '#FFFDCF', textColor: '#212529' },
+    { id: '_done', name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
+    { id: '_outdated', name: gettext('Outdated'), color: '#C2C2C2', textColor: '#FFFFFF', borderColor: '#ADADAD' },
   ];
-};
-
-const getFileStatusColumnData = (column) => {
-  const { data } = column;
-  let newData = { ...data };
-  const _OPTIONS = {
-    '_in_progress': { name: gettext('In progress'), color: '#EED5FF', textColor: '#202428' },
-    '_in_review': { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428' },
-    '_done': { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
-  };
-  newData.options = Array.isArray(data?.options) ? data.options.map(o => {
-    return { ...o, ..._OPTIONS[o.id] };
-  }) : [];
-  return newData;
 };
 
 const getFileSizeColumnData = (column) => {
@@ -304,7 +291,6 @@ export const normalizeColumnData = (column) => {
   const { key, data } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) {
     if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
-    if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
     if (key === PRIVATE_COLUMN_KEY.SIZE) return getFileSizeColumnData(column);
   }
   if (column.type === CellType.SINGLE_SELECT) {
