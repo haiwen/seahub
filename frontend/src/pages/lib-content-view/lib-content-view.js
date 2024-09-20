@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '../../utils/constants';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -588,10 +588,6 @@ class LibContentView extends React.Component {
         isSessionExpired: false,
       });
 
-      if (!this.state.repoEncrypted && direntList.length) {
-        this.getThumbnails(repoID, path, this.state.direntList);
-      }
-
       if (this.state.currentRepoInfo.is_admin) {
         if (this.foldersSharedOut) {
           this.identifyFoldersSharedOut();
@@ -642,37 +638,6 @@ class LibContentView extends React.Component {
 
   resetShowLength = () => {
     this.setState({ itemsShowLength: 100 });
-  };
-
-  shouldDisplayThumbnail = (item) => {
-    return ((Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name)) || (enablePDFThumbnail && Utils.pdfCheck(item.name))) && !item.encoded_thumbnail_src);
-  };
-
-  getThumbnails = (repoID, path, direntList) => {
-    let items = direntList.filter((item) => this.shouldDisplayThumbnail(item));
-    if (items.length == 0) {
-      return ;
-    }
-    const _this = this;
-    const len = items.length;
-    let getThumbnail = (i) => {
-      const curItem = items[i];
-      const curItemPath = [path, curItem.name].join('/');
-      seafileAPI.createThumbnail(repoID, curItemPath, thumbnailDefaultSize).then((res) => {
-        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
-      }).catch((error) => {
-        // do nothing
-      }).then(() => {
-        if (i < len - 1) {
-          getThumbnail(++i);
-        } else {
-          _this.setState({
-            direntList: direntList
-          });
-        }
-      });
-    };
-    getThumbnail(0);
   };
 
   updateMoveCopyTreeNode = (path) => {

@@ -20,8 +20,8 @@ class Dirent {
       this.has_been_shared_out = false;
     }
     if (json.type === 'file') {
-      this.size_original = json.size;
-      this.size = Utils.bytesToSize(json.size);
+      this.size_original = json.size_original || json.size;
+      this.size = (typeof json.size === 'number') ? Utils.bytesToSize(json.size) : json.size;
       this.is_locked = json.is_locked || false;
       this.is_freezed = json.is_freezed || false;
       this.lock_time = json.lock_time || '';
