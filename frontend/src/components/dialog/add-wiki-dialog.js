@@ -10,7 +10,7 @@ import { SeahubSelect } from '../common/select';
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
-  currentDeptEmail: PropTypes.string,
+  currentDeptID: PropTypes.string,
 };
 
 class AddWikiDialog extends React.Component {
@@ -41,8 +41,8 @@ class AddWikiDialog extends React.Component {
         options.push(obj);
       }
       this.setState({ options });
-      if (this.props.currentDeptEmail) {
-        const selectedOption = options.find(op => op.email == this.props.currentDeptEmail);
+      if (this.props.currentDeptID) {
+        const selectedOption = options.find(op => op.id == this.props.currentDeptID);
         this.setState({ selectedOption });
       }
     }).catch(error => {
