@@ -1,5 +1,5 @@
 import logging
-
+import jwt
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, JWT_PRIVATE_KEY
 
 from seaserv import seafile_api
 
@@ -175,9 +175,14 @@ class RepoNotificationJwtTokenView(APIView):
         if not seafile_api.check_permission_by_path(repo_id, '/', username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        
         try:
-            jwt_token = seafile_api.gen_notif_server_jwt(repo_id, username)
+            payload = {
+                'username': username,
+                'repo_id': repo_id,
+                'exp': 3 * 3600 * 24  # default by three days
+            }
+            jwt_token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
