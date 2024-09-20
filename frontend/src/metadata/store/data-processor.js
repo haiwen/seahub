@@ -214,12 +214,42 @@ class DataProcessor {
         table.view.groups = this.getGroupedRows(table, rows, groupbys, { collaborators });
         break;
       }
+      case OPERATION_TYPE.MODIFY_COLUMN_DATA: {
+        const { column_key, new_data, old_data } = operation;
+        const column = getColumnByKey(table.columns, column_key);
+        if (column) {
+          table.rows.forEach(row => {
+            const cellValue = row[column.name];
+            if (cellValue !== null) {
+              row[column.name] = this.applyColumnDataToCell(row[column.name], new_data.options, old_data.options);
+            }
+          });
+
+          table.id_row_map = table.rows.reduce((map, row) => {
+            map[row._id] = row;
+            return map;
+          }, {});
+        }
+        break;
+      }
       default: {
         break;
       }
     }
   }
 
+  static applyColumnDataToCell(cellValue, newOptions, oldOptions) {
+    if (cellValue === null || cellValue === undefined) {
+      return cellValue;
+    }
+
+    const oldOption = oldOptions.find(option => option.name === cellValue);
+    if (oldOption) {
+      const newOption = newOptions.find(option => option.id === oldOption.id);
+      return newOption ? newOption.name : cellValue;
+    }
+    return null;
+  }
 }
 
 export default DataProcessor;
