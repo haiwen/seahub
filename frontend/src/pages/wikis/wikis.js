@@ -23,7 +23,7 @@ class Wikis extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      currentDeptEmail: '',
+      currentDeptID: '',
       wikis: [],
       groupWikis: [],
       isShowAddWikiMenu: false,
@@ -84,16 +84,16 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggelAddWikiDialog = (currentDeptEmail) => {
+  toggelAddWikiDialog = (currentDeptID) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
-        currentDeptEmail: '',
+        currentDeptID: '',
       });
     } else {
       this.setState({
         isShowAddDialog: true,
-        currentDeptEmail
+        currentDeptID
       });
     }
   };
@@ -116,9 +116,8 @@ class Wikis extends Component {
       }
       this.setState({
         wikis,
-        currentDeptEmail: '',
-        groupWikis,
         currentDeptID: '',
+        groupWikis,
       });
     }).catch((error) => {
       if (error.response) {
@@ -264,7 +263,7 @@ class Wikis extends Component {
             <AddWikiDialog
               toggleCancel={this.toggelAddWikiDialog}
               addWiki={this.addWiki}
-              currentDeptEmail={this.state.currentDeptEmail}
+              currentDeptID={this.state.currentDeptID}
             />
           </ModalPortal>
         }
