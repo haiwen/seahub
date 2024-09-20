@@ -133,7 +133,7 @@ def generate_thumbnail(request, repo_id, size, path):
 
     # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
-        return (False, 400)shat
+        return (False, 400)
 
     if fileext.lower() == 'psd':
         return create_psd_thumbnails(repo, file_id, path, size,
