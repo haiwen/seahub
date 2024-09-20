@@ -5,11 +5,12 @@ class ThumbnailCenter {
 
   constructor() {
     this.waitingQuery = [];
+    this.isStartQuery = false;
   }
 
   createThumbnail = ({ repoID, path, callback }) => {
     this.waitingQuery.push({ repoID, path, callback });
-    if (this.waitingQuery.length === 1) {
+    if (!this.isStartQuery) {
       this.startQuery();
     }
   };
@@ -19,10 +20,17 @@ class ThumbnailCenter {
     if (index > -1) {
       this.waitingQuery.splice(index, 1);
     }
+    if (this.waitingQuery.length === 0) {
+      this.isStartQuery = false;
+    }
   };
 
   startQuery = () => {
-    if (this.waitingQuery.length === 0) return;
+    if (this.waitingQuery.length === 0) {
+      this.isStartQuery = false;
+      return;
+    }
+    this.isStartQuery = true;
     let { repoID, path, callback } = this.waitingQuery[0];
     seafileAPI.createThumbnail(repoID, path, thumbnailDefaultSize).then((res) => {
       callback && callback(res.data.encoded_thumbnail_src);
