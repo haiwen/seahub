@@ -105,24 +105,26 @@ class WikiCardView extends Component {
         toggelAddWikiDialog={null}
       />
     );
-    for (let deptID in groupWikis) {
-      groupWikis[deptID].wiki_info.length !== 0 &&
-      wikiCardGroups.push(
-        <WikiCardGroup
-          key={'group-Wikis-' + deptID}
-          deleteWiki={this.props.deleteWiki}
-          unshareGroupWiki={this.props.unshareGroupWiki}
-          renameWiki={this.props.renameWiki}
-          sidePanelRate={sidePanelRate}
-          isSidePanelFolded={isSidePanelFolded}
-          group={groupWikis[deptID]}
-          wikis={groupWikis[deptID].wiki_info}
-          title={groupWikis[deptID].group_name}
-          isDepartment={true}
-          isShowAvatar={false}
-          toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWikis[deptID]['group_id']]) ? toggelAddWikiDialog.bind(this, deptID) : null}
-        />
-      );
+    for (let i = 0; i < groupWikis.length; i++) {
+      const groupWiki = groupWikis[i];
+      if (groupWiki.wiki_info.length !== 0) {
+        wikiCardGroups.push(
+          <WikiCardGroup
+            key={'group-Wikis-' + groupWiki.group_id}
+            deleteWiki={this.props.deleteWiki}
+            unshareGroupWiki={this.props.unshareGroupWiki}
+            renameWiki={this.props.renameWiki}
+            sidePanelRate={sidePanelRate}
+            isSidePanelFolded={isSidePanelFolded}
+            group={groupWiki}
+            wikis={groupWiki.wiki_info}
+            title={groupWiki.group_name}
+            isDepartment={true}
+            isShowAvatar={false}
+            toggelAddWikiDialog={(canPublishRepo && this.state.departmentMap[groupWiki.group_id]) ? toggelAddWikiDialog.bind(this, groupWiki.group_id) : null}
+          />
+        );
+      }
     }
     wikiCardGroups.push(
       <WikiCardGroup
