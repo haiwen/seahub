@@ -1,5 +1,13 @@
-import { PRIVATE_COLUMN_KEYS } from '../../../constants';
+import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY, PREDEFINED_FILE_STATUS_OPTION_KEYS, PREDEFINED_FILE_TYPE_OPTION_KEYS } from '../../../constants';
 import { getColumnOptions } from '../../../utils/column';
+
+const checkIsPredefinedOption = (column, optionId) => {
+  const columnKey = column.key;
+  if (!PRIVATE_COLUMN_KEYS.includes(columnKey)) return false;
+  if (PRIVATE_COLUMN_KEY.FILE_STATUS === columnKey) return PREDEFINED_FILE_STATUS_OPTION_KEYS.includes(optionId);
+  if (PRIVATE_COLUMN_KEY.FILE_TYPE === columnKey) return PREDEFINED_FILE_TYPE_OPTION_KEYS.includes(optionId);
+  return false;
+};
 
 /**
  * Get option by id
@@ -31,7 +39,10 @@ const getOptionName = (options, targetOptionId) => {
  * @returns option name, string
  */
 const getColumnOptionNameById = (column, optionId) => {
-  if (PRIVATE_COLUMN_KEYS.includes(column.key)) return optionId;
+
+  // If it is a predefined option, use its id, otherwise use name.
+  // When displaying predefined options, international translation is done based on id, so the name is no longer the name stored in the database
+  if (checkIsPredefinedOption(column, optionId)) return optionId;
   const options = getColumnOptions(column);
   return getOptionName(options, optionId);
 };
@@ -83,6 +94,7 @@ const getMultipleOptionName = (column, targetOptionsIds) => {
 };
 
 export {
+  checkIsPredefinedOption,
   getOption,
   getOptionName,
   getColumnOptionNameById,
