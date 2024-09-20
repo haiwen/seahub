@@ -35,6 +35,7 @@ class RepoListItem extends React.Component {
       hasLoaded: false,
       isMounted: false,
     };
+    this.loadRepoTimer = null;
   }
 
   componentDidMount() {
@@ -45,7 +46,7 @@ class RepoListItem extends React.Component {
     const { repoID, filePath } = selectedItemInfo || {};
     if (repoID && repoID === repo.repo_id) {
       this.loadRepoDirentList(repo);
-      setTimeout(() => {
+      this.loadRepoTimer = setTimeout(() => {
         this.setState({ isShowChildren: true });
         this.loadNodeAndParentsByPath(repoID, filePath);
       }, 0);
@@ -54,7 +55,7 @@ class RepoListItem extends React.Component {
 
     if (repo.repo_id === this.props.selectedRepo.repo_id || isCurrentRepo) {
       this.loadRepoDirentList(repo);
-      setTimeout(() => {
+      this.loadRepoTimer = setTimeout(() => {
         const repoID = repo.repo_id;
         if (isCurrentRepo && currentPath && currentPath != '/') {
           const expandNode = true;
@@ -65,8 +66,15 @@ class RepoListItem extends React.Component {
   }
 
   componentWillUnmount() {
+    this.clearLoadRepoTimer();
     this.setState({ isMounted: false, hasLoaded: false });
   }
+
+  clearLoadRepoTimer = () => {
+    if (!this.loadRepoTimer) return;
+    clearTimeout(this.loadRepoTimer);
+    this.loadRepoTimer = null;
+  };
 
   loadRepoDirentList = async (repo) => {
     const { hasLoaded } = this.state;

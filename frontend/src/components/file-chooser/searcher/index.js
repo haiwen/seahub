@@ -1,12 +1,13 @@
 import React, { useState, useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Input, UncontrolledPopover } from 'reactstrap';
+import Loading from '../../loading';
+import toaster from '../../toast';
+import RepoInfo from '../../../models/repo-info';
+import SearchedListView from '../searched-list-view';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
-import Loading from '../../loading';
-import SearchedListView from '../../file-chooser/searched-list-view';
-import RepoInfo from '../../../models/repo-info';
 import { Utils } from '../../../utils/utils';
-import toaster from '../../toast';
 
 import './index.css';
 
@@ -18,12 +19,19 @@ export const SearchStatus = {
   BROWSING: 'browsing',
 };
 
-const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelectedSearchedItem, onSelectedRepo, onSelectedPath, onBrowsingPath, isPopoverOpen, onPopoverToggle }) => {
+const Searcher = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, selectSearchedItem, selectRepo, selectPath, setBrowsingPath }) => {
   const [inputValue, setInputValue] = useState('');
+  const [isResultsPopoverOpen, setIsResultsPopoverOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+
+  const inputRef = useRef(null);
 
   const searchTimer = useRef(null);
   const source = useRef(null);
+
+  const onPopoverToggle = useCallback((show) => {
+    setIsResultsPopoverOpen(show);
+  }, []);
 
   const handleSearchInputChange = (e) => {
     const newValue = e.target.value.trim();
@@ -60,16 +68,14 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
     }
 
     source.current = seafileAPI.getSource();
-    seafileAPI.searchFiles(queryData, source.current.token)
-      .then(res => {
-        setSearchResults(res.data.total ? formatResultItems(res.data.results) : []);
-        onUpdateSearchStatus(res.data.results.length > 0 ? SearchStatus.RESULTS : SearchStatus.NO_RESULTS);
-        source.current = null;
-      })
-      .catch(err => {
-        onUpdateSearchStatus(SearchStatus.NO_RESULTS);
-        source.current = null;
-      });
+    seafileAPI.searchFiles(queryData, source.current.token).then(res => {
+      setSearchResults(res.data.total ? formatResultItems(res.data.results) : []);
+      onUpdateSearchStatus(res.data.results.length > 0 ? SearchStatus.RESULTS : SearchStatus.NO_RESULTS);
+      source.current = null;
+    }).catch(err => {
+      onUpdateSearchStatus(SearchStatus.NO_RESULTS);
+      source.current = null;
+    });
   }, [onUpdateSearchStatus]);
 
   const formatResultItems = (data) => {
@@ -94,8 +100,8 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
     setSearchResults([]);
     onUpdateSearchStatus(SearchStatus.IDLE);
     onPopoverToggle(false);
-    onSelectedSearchedItem(null);
-  }, [onUpdateSearchStatus, onSelectedSearchedItem, onPopoverToggle]);
+    selectSearchedItem(null);
+  }, [onUpdateSearchStatus, selectSearchedItem, onPopoverToggle]);
 
   const onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
@@ -111,21 +117,19 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
       filePath: item.path,
     };
 
-    onSelectedSearchedItem(selectedItemInfo);
+    selectSearchedItem(selectedItemInfo);
     onPopoverToggle(false);
 
-    seafileAPI.getRepoInfo(item.repo_id)
-      .then(res => {
-        const repoInfo = new RepoInfo(res.data);
-        const path = item.path.substring(0, item.path.length - 1);
-        onSelectedRepo(repoInfo);
-        onSelectedPath(path);
-        onBrowsingPath(item.path.substring(0, item.path.length - 1));
-      })
-      .catch(err => {
-        const errMessage = Utils.getErrorMsg(err);
-        toaster.danger(errMessage);
-      });
+    seafileAPI.getRepoInfo(item.repo_id).then(res => {
+      const repoInfo = new RepoInfo(res.data);
+      const path = item.path.substring(0, item.path.length - 1);
+      selectRepo(repoInfo);
+      selectPath(path);
+      setBrowsingPath(item.path.substring(0, item.path.length - 1));
+    }).catch(err => {
+      const errMessage = Utils.getErrorMsg(err);
+      toaster.danger(errMessage);
+    });
 
     onUpdateSearchStatus(SearchStatus.BROWSING);
   };
@@ -140,6 +144,7 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
         return (
           <div className='search-results-none'>{gettext('No results matching')}</div>
         );
+      case SearchStatus.BROWSING:
       case SearchStatus.RESULTS:
         return (
           <SearchedListView
@@ -152,10 +157,11 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
   };
 
   return (
-    <div className='search-container'>
+    <div className='search-container file-chooser-searcher'>
       <div className='search-input-container'>
+        <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
         <Input
-          id='search-input'
+          innerRef={inputRef}
           className='search-input'
           placeholder={gettext('Global search')}
           type='text'
@@ -168,10 +174,10 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
       </div>
       {searchStatus !== SearchStatus.IDLE &&
         <UncontrolledPopover
-          className='search-results-popover'
-          isOpen={isPopoverOpen}
-          toggle={() => onPopoverToggle(!isPopoverOpen)}
-          target='search-input'
+          className='file-chooser-search-results-popover'
+          isOpen={isResultsPopoverOpen}
+          toggle={() => onPopoverToggle(!isResultsPopoverOpen)}
+          target={inputRef.current}
           placement='bottom-start'
           hideArrow={true}
           fade={false}
@@ -186,4 +192,14 @@ const Search = ({ searchStatus, onUpdateSearchStatus, onDirentItemClick, onSelec
   );
 };
 
-export default Search;
+Searcher.propTypes = {
+  searchStatus: PropTypes.string,
+  onUpdateSearchStatus: PropTypes.func,
+  onDirentItemClick: PropTypes.func,
+  selectSearchedItem: PropTypes.func,
+  selectRepo: PropTypes.func,
+  selectPath: PropTypes.func,
+  setBrowsingPath: PropTypes.func,
+};
+
+export default Searcher;
