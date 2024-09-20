@@ -6,10 +6,10 @@ import toaster from '../../components/toast';
 import Icon from '../../components/icon';
 import ViewItem from './view-item';
 import { AddView } from '../components/popover/view-popover';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { VIEW_TYPE_ICON } from '../constants';
+import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
 import { isValidViewName } from '../utils/validate';
 import { isEnter } from '../utils/hotkey';
 
@@ -20,10 +20,10 @@ const updateFavicon = (iconName) => {
   if (favicon) {
     switch (iconName) {
       case 'image':
-        favicon.href = '/media/favicons/gallery.png';
+        favicon.href = `${mediaUrl}favicons/gallery.png`;
         break;
-      case 'table':
-        favicon.href = '/media/favicons/table.png';
+      case VIEW_TYPE.TABLE:
+        favicon.href = `${mediaUrl}favicons/table.png`;
         break;
       default:
         favicon.href = '/media/favicons/favicon.png';
@@ -68,7 +68,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
       if (lastOpenedView) {
         selectView(lastOpenedView);
         document.title = `${lastOpenedView.name} - Seafile`;
-        updateFavicon(VIEW_TYPE_ICON[lastOpenedView.type] || 'table');
+        updateFavicon(VIEW_TYPE_ICON[lastOpenedView.type] || VIEW_TYPE.TABLE);
         return;
       }
       const url = `${origin}${pathname}`;
@@ -80,7 +80,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     if (showFirstView && firstView) {
       selectView(firstView);
       document.title = `${firstView.name} - Seafile`;
-      updateFavicon(VIEW_TYPE_ICON[firstView.type] || 'table');
+      updateFavicon(VIEW_TYPE_ICON[firstView.type] || VIEW_TYPE.TABLE);
     } else {
       document.title = originalTitle;
       updateFavicon('default');
@@ -93,7 +93,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     const currentView = viewsMap[currentViewId];
     if (currentView) {
       document.title = `${currentView.name} - Seafile`;
-      updateFavicon(VIEW_TYPE_ICON[currentView.type] || 'table');
+      updateFavicon(VIEW_TYPE_ICON[currentView.type] || VIEW_TYPE.TABLE);
     } else {
       document.title = originalTitle;
       updateFavicon('default');
@@ -176,7 +176,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
             {showInput && (
               <div className="tree-view-inner sf-metadata-view-form">
                 <div className="left-icon">
-                  <Icon symbol={VIEW_TYPE_ICON[newView.type] || 'table'} className="metadata-views-icon" />
+                  <Icon symbol={VIEW_TYPE_ICON[newView.type] || VIEW_TYPE.TABLE} className="metadata-views-icon" />
                 </div>
                 <Input
                   className="sf-metadata-view-input"
