@@ -39,11 +39,10 @@ const getOptionName = (options, targetOptionId) => {
  * @returns option name, string
  */
 const getColumnOptionNameById = (column, optionId) => {
-  const options = getColumnOptions(column);
-  if (!PRIVATE_COLUMN_KEYS.includes(column.key)) return getOptionName(options, optionId);
 
   // If it is a predefined option, use its id, otherwise use name
   if (checkIsPredefinedOption(column, optionId)) return optionId;
+  const options = getColumnOptions(column);
   return getOptionName(options, optionId);
 };
 
