@@ -55,7 +55,7 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
     const field = fields.find(f => f.key === fieldKey);
     const fileName = getColumnOriginName(field);
     let update = { [fileName]: newValue };
-    if (!PREDEFINED_COLUMN_KEYS.includes(field.key) && field.type === CellType.SINGLE_SELECT) {
+    if (field.type === CellType.SINGLE_SELECT && (!PREDEFINED_COLUMN_KEYS.includes(field.key) || PRIVATE_COLUMN_KEY.FILE_STATUS === field.key)) {
       const options = getColumnOptions(field);
       update = { [fileName]: getOptionName(options, newValue) };
     } else if (field.type === CellType.MULTIPLE_SELECT) {
