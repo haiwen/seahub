@@ -184,7 +184,7 @@ export const getColumnDisplayName = (key, name) => {
     case PRIVATE_COLUMN_KEY.FILE_TYPE:
       return gettext('File type');
     case PRIVATE_COLUMN_KEY.FILE_COLLABORATORS:
-      return gettext('Document collaborators');
+      return gettext('File collaborators');
     case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
       return gettext('File expire time');
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
