@@ -158,7 +158,7 @@ const HeaderDropdownMenu = ({ column, view, renameColumn, modifyColumnData, dele
         </DropdownMenu>
       </Dropdown>
     );
-  }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu]);
+  }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu, isPrivateColumn]);
 
   const modifySort = useCallback((type, event) => {
     const canModifyView = window.sfMetadataContext.canModifyView();
