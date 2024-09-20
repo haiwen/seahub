@@ -2,6 +2,7 @@ import deepCopy from 'deep-copy';
 import { gettext } from '../../../utils/constants';
 import {
   CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY, NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEYS, SEQUENCE_COLUMN_WIDTH,
+  PREDEFINED_FILE_STATUS_OPTION_KEY, PREDEFINED_FILE_TYPE_OPTION_KEY
 } from '../../constants';
 
 export const getFrozenColumns = (columns) => {
@@ -257,12 +258,12 @@ export const getNormalizedColumnType = (key, type) => {
 const getFileTypeColumnData = (column) => {
   const { data } = column;
   const _OPTIONS = {
-    '_picture': { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428' },
-    '_document': { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428' },
-    '_video': { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
-    '_audio': { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
-    '_code': { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
-    '_compressed': { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE]: { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.DOCUMENT]: { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
   };
   let newData = { ...data };
   newData.options = Array.isArray(data.options) ? data.options.map(o => {
@@ -273,11 +274,26 @@ const getFileTypeColumnData = (column) => {
 
 export const getDefaultFileStatusOptions = () => {
   return [
-    { id: '_in_progress', name: gettext('In progress'), color: '#EED5FF', textColor: '#212529' },
-    { id: '_in_review', name: gettext('In review'), color: '#FFFDCF', textColor: '#212529' },
-    { id: '_done', name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
-    { id: '_outdated', name: gettext('Outdated'), color: '#C2C2C2', textColor: '#FFFFFF', borderColor: '#ADADAD' },
+    { id: PREDEFINED_FILE_STATUS_OPTION_KEY.IN_PROGRESS, name: PREDEFINED_FILE_STATUS_OPTION_KEY.IN_PROGRESS },
+    { id: PREDEFINED_FILE_STATUS_OPTION_KEY.IN_REVIEW, name: PREDEFINED_FILE_STATUS_OPTION_KEY.IN_REVIEW },
+    { id: PREDEFINED_FILE_STATUS_OPTION_KEY.DONE, name: PREDEFINED_FILE_STATUS_OPTION_KEY.DONE },
+    { id: PREDEFINED_FILE_STATUS_OPTION_KEY.OUTDATED, name: PREDEFINED_FILE_STATUS_OPTION_KEY.OUTDATED }
   ];
+};
+
+const getFileStatusColumnData = (column) => {
+  const { data } = column;
+  let newData = { ...data };
+  const _OPTIONS = {
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_PROGRESS]: { name: gettext('In progress'), color: '#EED5FF', textColor: '#202428' },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_REVIEW]: { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428' },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.DONE]: { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.OUTDATED]: { name: gettext('Outdated'), color: '#C2C2C2', textColor: '#FFFFFF', borderColor: '#ADADAD' }
+  };
+  newData.options = Array.isArray(data?.options) ? data.options.map(o => {
+    return { ...o, ..._OPTIONS[o.id] };
+  }) : [];
+  return newData;
 };
 
 const getFileSizeColumnData = (column) => {
@@ -291,6 +307,7 @@ export const normalizeColumnData = (column) => {
   const { key, data } = column;
   if (PRIVATE_COLUMN_KEYS.includes(key)) {
     if (key === PRIVATE_COLUMN_KEY.FILE_TYPE) return getFileTypeColumnData(column);
+    if (key === PRIVATE_COLUMN_KEY.FILE_STATUS) return getFileStatusColumnData(column);
     if (key === PRIVATE_COLUMN_KEY.SIZE) return getFileSizeColumnData(column);
   }
   if (column.type === CellType.SINGLE_SELECT) {

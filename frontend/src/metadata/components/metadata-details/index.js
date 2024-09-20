@@ -7,7 +7,7 @@ import DetailItem from '../../../components/dirent-detail/detail-item';
 import { Utils } from '../../../utils/utils';
 import metadataAPI from '../../api';
 import Column from '../../model/metadata/column';
-import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds } from '../../utils/cell';
+import { getCellValueByColumn, getOptionName, getColumnOptionNamesByIds, getColumnOptionNameById } from '../../utils/cell';
 import { normalizeFields } from './utils';
 import { gettext } from '../../../utils/constants';
 import { CellType, PREDEFINED_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
@@ -55,9 +55,8 @@ const MetadataDetails = ({ repoID, filePath, repoInfo, direntType }) => {
     const field = fields.find(f => f.key === fieldKey);
     const fileName = getColumnOriginName(field);
     let update = { [fileName]: newValue };
-    if (!PREDEFINED_COLUMN_KEYS.includes(field.key) && field.type === CellType.SINGLE_SELECT) {
-      const options = getColumnOptions(field);
-      update = { [fileName]: getOptionName(options, newValue) };
+    if (field.type === CellType.SINGLE_SELECT) {
+      update = { [fileName]: getColumnOptionNameById(field, newValue) };
     } else if (field.type === CellType.MULTIPLE_SELECT) {
       update = { [fileName]: newValue ? getColumnOptionNamesByIds(field, newValue) : [] };
     }
