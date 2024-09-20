@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc, ccnet_api
 
+from seahub.admin_log.models import USER_MIGRATE
+from seahub.admin_log.signals import admin_operation
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.serializers import AccountSerializer
 from seahub.api2.throttling import UserRateThrottle
@@ -106,7 +108,13 @@ class Account(APIView):
 
                 if from_user == g.creator_name:
                     ccnet_threaded_rpc.set_group_creator(g.id, to_user)
-
+            
+            admin_op_detail = {
+                "from": from_user,
+                "to": to_user
+            }
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                                 operation=USER_MIGRATE, detail=admin_op_detail)
             return Response({'success': True})
         else:
             return api_error(status.HTTP_400_BAD_REQUEST, 'op can only be migrate.')
