@@ -23,6 +23,7 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.institutions.models import Institution
+from seahub.share.models import UploadLinkShare, FileShare
 from seahub.utils import is_valid_username, is_org_context
 from seahub.utils.file_size import get_file_size_unit
 from seahub.group.utils import is_group_member
@@ -108,6 +109,15 @@ class Account(APIView):
 
                 if from_user == g.creator_name:
                     ccnet_threaded_rpc.set_group_creator(g.id, to_user)
+
+            # reshare repo to links
+            try:
+                UploadLinkShare.objects.filter(username=from_user).update(username=to_user)
+                FileShare.objects.filter(username=from_user).update(username=to_user)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             
             admin_op_detail = {
                 "from": from_user,
