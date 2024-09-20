@@ -26,7 +26,7 @@ const updateFavicon = (iconName) => {
         favicon.href = `${mediaUrl}favicons/table.png`;
         break;
       default:
-        favicon.href = '/media/favicons/favicon.png';
+        favicon.href = `${mediaUrl}favicons/favicon.png`;
     }
   }
 };
