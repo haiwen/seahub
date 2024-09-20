@@ -163,10 +163,8 @@ const Gallery = () => {
     const modifyGalleryZoomGearSubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GALLERY_ZOOM_GEAR, (zoomGear) => {
       window.sfMetadataContext.localStorage.setItem('zoom-gear', zoomGear);
       setZoomGear(zoomGear);
-      setTimeout(() => {
-        container.scrollTop += zoomGear * 10;
-      }, 200);
     });
+
     return () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
