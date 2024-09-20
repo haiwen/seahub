@@ -14,8 +14,20 @@ export const VIEW_TYPE_ICON = {
 };
 
 export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
-  [VIEW_TYPE.TABLE]: [{ column_key: PRIVATE_COLUMN_KEY.IS_DIR, filter_predicate: FILTER_PREDICATE_TYPE.IS, filter_term: 'file' }],
-  [VIEW_TYPE.GALLERY]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_TYPE, filter_predicate: FILTER_PREDICATE_TYPE.IS, filter_term: 'picture' }],
+  [VIEW_TYPE.TABLE]: [
+    {
+      column_key: PRIVATE_COLUMN_KEY.IS_DIR,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'file'
+    }
+  ],
+  [VIEW_TYPE.GALLERY]: [
+    {
+      column_key: PRIVATE_COLUMN_KEY.FILE_TYPE,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'picture'
+    }
+  ],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {
