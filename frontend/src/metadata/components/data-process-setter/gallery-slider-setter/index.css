@@ -58,3 +58,7 @@
   box-shadow: none;
   background: transparent;
 }
+
+.metadata-slider-container .metadata-slider-icon-button:hover {
+  background: #eee;
+}
