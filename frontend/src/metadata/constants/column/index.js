@@ -28,7 +28,7 @@ export {
   PREDEFINED_FILE_STATUS_OPTION_KEYS,
   PREDEFINED_FILE_TYPE_OPTION_KEY,
   PREDEFINED_FILE_TYPE_OPTION_KEYS,
-} from './predefined-columns';
+} from './predefined';
 
 export {
   PRIVATE_COLUMN_KEY,
