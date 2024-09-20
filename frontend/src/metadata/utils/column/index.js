@@ -185,6 +185,8 @@ export const getColumnDisplayName = (key, name) => {
       return gettext('File type');
     case PRIVATE_COLUMN_KEY.FILE_COLLABORATORS:
       return gettext('File collaborators');
+    case PRIVATE_COLUMN_KEY.FILE_REVIEWER:
+      return gettext('File reviewer');
     case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
       return gettext('File expire time');
     case PRIVATE_COLUMN_KEY.FILE_KEYWORDS:
@@ -237,6 +239,7 @@ export const getNormalizedColumnType = (key, type) => {
     case PRIVATE_COLUMN_KEY.IS_DIR:
       return CellType.CHECKBOX;
     case PRIVATE_COLUMN_KEY.FILE_COLLABORATORS:
+    case PRIVATE_COLUMN_KEY.FILE_REVIEWER:
       return CellType.COLLABORATOR;
     case PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME:
       return CellType.DATE;

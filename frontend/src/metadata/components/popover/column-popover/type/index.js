@@ -20,6 +20,14 @@ const COLUMNS = [
     canChangeName: false,
     groupby: 'predefined'
   }, {
+    icon: COLUMNS_ICON_CONFIG[CellType.COLLABORATOR],
+    type: CellType.COLLABORATOR,
+    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_REVIEWER),
+    unique: true,
+    key: PRIVATE_COLUMN_KEY.FILE_REVIEWER,
+    canChangeName: false,
+    groupby: 'predefined'
+  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.DATE],
     type: CellType.DATE,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME),
