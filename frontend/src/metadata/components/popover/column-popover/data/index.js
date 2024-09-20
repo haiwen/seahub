@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useState, useImperativeHandle, useCallback } from 'react';
+import React, { forwardRef, useMemo, useState, useImperativeHandle, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CellType } from '../../../../constants';
 import DateData from './date-data';
@@ -9,7 +9,7 @@ import './index.css';
 // eslint-disable-next-line react/display-name
 const Data = forwardRef(({ column }, ref) => {
   const type = useMemo(() => column.type, [column]);
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState(column.data || {});
   const [popoverShow, setPopoverShow] = useState(false);
   // const [error, setError] = useState('');
 
@@ -24,8 +24,12 @@ const Data = forwardRef(({ column }, ref) => {
     setValue(value);
   }, []);
 
+  useEffect(() => {
+    setValue(column.data || {});
+  }, [column]);
+
   if (type === CellType.DATE) {
-    return (<DateData value={value} onChange={onChange} />);
+    return (<DateData value={value} column={column} onChange={onChange} />);
   }
 
   if (type === CellType.RATE) {
