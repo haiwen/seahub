@@ -9,7 +9,7 @@ import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot,
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import thumbnailCenter from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
@@ -101,6 +101,7 @@ class DirentListItem extends React.Component {
     };
     this.tagListTitleID = `tag-list-title-${uuidv4()}`;
     this.isGeneratingThumbnail = false;
+    this.thumbnailCenter = null;
   }
 
   componentDidMount() {
@@ -108,7 +109,7 @@ class DirentListItem extends React.Component {
     const { dirent } = this.state;
     if (this.checkGenerateThumbnail(dirent)) {
       this.isGeneratingThumbnail = true;
-      thumbnailCenter.createThumbnail({
+      this.thumbnailCenter.createThumbnail({
         repoID,
         path: [path, dirent.name].join('/'),
         callback: this.updateDirentThumbnail,
@@ -124,7 +125,7 @@ class DirentListItem extends React.Component {
         if (this.checkGenerateThumbnail(nextProps.dirent)) {
           const { repoID, path } = nextProps;
           this.isGeneratingThumbnail = true;
-          thumbnailCenter.createThumbnail({
+          this.thumbnailCenter.createThumbnail({
             repoID,
             path: [path, nextProps.dirent.name].join('/'),
             callback: this.updateDirentThumbnail,
@@ -149,26 +150,28 @@ class DirentListItem extends React.Component {
     if (this.isGeneratingThumbnail) {
       const { dirent } = this.state;
       const { repoID, path } = this.props;
-      thumbnailCenter.cancelThumbnail({
+      this.thumbnailCenter.cancelThumbnail({
         repoID,
         path: [path, dirent.name].join('/'),
       });
+      this.thumbnailCenter = null;
     }
     this.setState = () => {};
   }
 
   checkGenerateThumbnail = (dirent) => {
-    if (this.props.repoEncrypted) {
+    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src) {
       return false;
     }
-    if (dirent.encoded_thumbnail_src) {
-      return false;
+    if (enableVideoThumbnail && Utils.videoCheck(dirent.name)) {
+      this.thumbnailCenter = videoThumbnailCenter;
+      return true;
     }
-    return (
-      Utils.imageCheck(dirent.name) ||
-      (enableVideoThumbnail && Utils.videoCheck(dirent.name)) ||
-      (enablePDFThumbnail && Utils.pdfCheck(dirent.name))
-    );
+    if (Utils.imageCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
+      this.thumbnailCenter = imageThumbnailCenter;
+      return true;
+    }
+    return false;
   };
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {

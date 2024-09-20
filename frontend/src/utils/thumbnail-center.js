@@ -44,6 +44,9 @@ class ThumbnailCenter {
   };
 }
 
-const thumbnailCenter = new ThumbnailCenter();
+// server generates image and PDF thumbnails quickly, but generates video thumbnails slowly, so use two queues
+const imageThumbnailCenter = new ThumbnailCenter();
 
-export default thumbnailCenter;
+const videoThumbnailCenter = new ThumbnailCenter();
+
+export { imageThumbnailCenter, videoThumbnailCenter };

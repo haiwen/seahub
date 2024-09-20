@@ -5,7 +5,7 @@ import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import thumbnailCenter from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import Dirent from '../../models/dirent';
 
 const propTypes = {
@@ -44,20 +44,22 @@ class DirentGridItem extends React.Component {
 
     this.clickTimeout = null;
     this.isGeneratingThumbnail = false;
+    this.thumbnailCenter = null;
   }
 
   checkGenerateThumbnail = (dirent) => {
-    if (this.props.repoEncrypted) {
+    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src) {
       return false;
     }
-    if (dirent.encoded_thumbnail_src) {
-      return false;
+    if (enableVideoThumbnail && Utils.videoCheck(dirent.name)) {
+      this.thumbnailCenter = videoThumbnailCenter;
+      return true;
     }
-    return (
-      Utils.imageCheck(dirent.name) ||
-      (enableVideoThumbnail && Utils.videoCheck(dirent.name)) ||
-      (enablePDFThumbnail && Utils.pdfCheck(dirent.name))
-    );
+    if (Utils.imageCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
+      this.thumbnailCenter = imageThumbnailCenter;
+      return true;
+    }
+    return false;
   };
 
   componentDidMount() {
@@ -65,7 +67,7 @@ class DirentGridItem extends React.Component {
     const { dirent } = this.state;
     if (this.checkGenerateThumbnail(dirent)) {
       this.isGeneratingThumbnail = true;
-      thumbnailCenter.createThumbnail({
+      this.thumbnailCenter.createThumbnail({
         repoID,
         path: [path, dirent.name].join('/'),
         callback: this.updateDirentThumbnail,
@@ -80,10 +82,11 @@ class DirentGridItem extends React.Component {
     if (this.isGeneratingThumbnail) {
       const { dirent } = this.state;
       const { repoID, path } = this.props;
-      thumbnailCenter.cancelThumbnail({
+      this.thumbnailCenter.cancelThumbnail({
         repoID,
         path: [path, dirent.name].join('/'),
       });
+      this.thumbnailCenter = null;
     }
     this.setState = () => {};
   }
