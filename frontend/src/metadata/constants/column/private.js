@@ -28,6 +28,7 @@ export const PRIVATE_COLUMN_KEY = {
   FILE_DETAILS: '_file_details',
   SHOOTING_TIME: '_shooting_time',
   FILE_REVIEWER: '_reviewer',
+  OWNER: '_owner',
 };
 
 export const PRIVATE_COLUMN_KEYS = [
@@ -57,6 +58,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_DETAILS,
   PRIVATE_COLUMN_KEY.SHOOTING_TIME,
   PRIVATE_COLUMN_KEY.FILE_REVIEWER,
+  PRIVATE_COLUMN_KEY.OWNER,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [
