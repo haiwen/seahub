@@ -11,7 +11,7 @@ class URLDecorator {
         url = siteRoot + 'repo/' + historyRepoID + '/' + options.objID + '/download?' + params;
         break;
       case 'download_file_url':
-        url = fileServerRoot + 'repos/' + options.repoID + '/files/?p=' + options.filePath + '&op=download';
+        url = fileServerRoot + 'repos/' + options.repoID + '/files/' + Utils.encodePath(options.filePath) + '/?op=download';
         break;
       case 'file_revisions':
         params = 'p=' + Utils.encodePath(options.filePath);

@@ -29,7 +29,7 @@ const FileNameEditor = ({ column, record, table, onCommitCancel }) => {
           url: `${siteRoot}lib/${repoID}/file${path}`,
           thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`,
           src: src,
-          downloadURL: `${fileServerRoot}repos/${repoID}/files/?op=download&p=${path}`,
+          downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
         };
       });
   }, [table]);
