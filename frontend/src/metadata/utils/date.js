@@ -211,10 +211,9 @@ const formatTextToDate = (text, format = 'YYYY-MM-DD') => {
   } else {
     dateObj = DateUtils.parseDateWithFormat(text, format);
   }
-  if (format.indexOf('HH:mm') < 0) {
-    return DateUtils.format(dateObj, 'YYYY-MM-DD') || null;
-  }
-  return DateUtils.format(dateObj, 'YYYY-MM-DD HH:MM') || null;
+  if (format.indexOf('HH:mm:ss') > -1) return DateUtils.format(dateObj, 'YYYY-MM-DD HH:MM:SS') || null;
+  if (format.indexOf('HH:mm') > -1) return DateUtils.format(dateObj, 'YYYY-MM-DD HH:MM') || null;
+  return DateUtils.format(dateObj, 'YYYY-MM-DD') || null;
 };
 
 export default DateUtils;
