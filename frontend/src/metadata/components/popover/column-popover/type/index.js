@@ -163,7 +163,7 @@ const Type = forwardRef(({ parentWidth, column, onChange }, ref) => {
   }), [isPopoverShow]);
 
   useEffect(() => {
-    onChange(COLUMNS[6]);
+    onChange(COLUMNS.find(c => c.groupby === 'basics') || COLUMNS[0]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
