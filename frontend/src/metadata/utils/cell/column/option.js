@@ -40,7 +40,8 @@ const getOptionName = (options, targetOptionId) => {
  */
 const getColumnOptionNameById = (column, optionId) => {
 
-  // If it is a predefined option, use its id, otherwise use name
+  // If it is a predefined option, use its id, otherwise use name.
+  // When displaying predefined options, international translation is done based on id, so the name is no longer the name stored in the database
   if (checkIsPredefinedOption(column, optionId)) return optionId;
   const options = getColumnOptions(column);
   return getOptionName(options, optionId);
@@ -93,6 +94,7 @@ const getMultipleOptionName = (column, targetOptionsIds) => {
 };
 
 export {
+  checkIsPredefinedOption,
   getOption,
   getOptionName,
   getColumnOptionNameById,
