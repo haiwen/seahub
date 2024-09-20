@@ -6,13 +6,14 @@ import { SELECT_OPTION_COLORS } from '../../../../../constants';
 
 import './index.css';
 
-const Color = ({ option, isViewing, onChange }) => {
+const Color = ({ option, isViewing, isPredefined, onChange }) => {
   const target = useMemo(() => `option-color-${option.id}`, [option]);
   const [isShowPopover, setPopoverShow] = useState(false);
 
   const openPopover = useCallback(() => {
+    if (isPredefined) return;
     setPopoverShow(true);
-  }, []);
+  }, [isPredefined]);
 
   const closePopover = useCallback(() => {
     setPopoverShow(false);
@@ -83,7 +84,8 @@ const Color = ({ option, isViewing, onChange }) => {
 
 Color.propTypes = {
   option: PropTypes.object,
-  activeId: PropTypes.string,
+  isViewing: PropTypes.bool,
+  isPredefined: PropTypes.bool,
   onChange: PropTypes.func,
 };
 
