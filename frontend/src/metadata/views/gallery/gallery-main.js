@@ -1,13 +1,25 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 
-const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick }) => {
+const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick, onClickOutside }) => {
+  const imageRef = useRef(null);
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (imageRef.current && !imageRef.current.contains(e.target)) {
+        onClickOutside();
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [onClickOutside]);
 
   const renderDisplayGroup = useCallback((group, groupIndex) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
@@ -39,6 +51,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
       <div key={`${name}-${groupIndex}`} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
+          ref={imageRef}
           className="metadata-gallery-image-list"
           style={{
             gridTemplateColumns: `repeat(${columns}, 1fr)`,

@@ -29,6 +29,7 @@ const Gallery = () => {
   const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   const containerRef = useRef(null);
   const renderMoreTimer = useRef(null);
@@ -58,7 +59,7 @@ const Gallery = () => {
     }
   }, [mode]);
 
-  const groups = useMemo(() => {
+  const calculateGroups = useMemo(() => {
     if (isFirstLoading) return [];
     const firstSort = metadata.view.sorts[0];
     let init = metadata.rows.filter(row => Utils.imageCheck(row[PRIVATE_COLUMN_KEY.FILE_NAME]))
@@ -118,6 +119,10 @@ const Gallery = () => {
     return _groups;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstLoading, metadata, metadata.recordsCount, repoID, columns, imageSize, mode]);
+
+  useEffect(() => {
+    setGroups(calculateGroups);
+  }, [calculateGroups]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore) return;
@@ -187,17 +192,6 @@ const Gallery = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
-        setSelectedImages([]);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -242,13 +236,13 @@ const Gallery = () => {
   }, [imageItems]);
 
 
-  const handleRightClick = (event, image) => {
+  const handleRightClick = useCallback((event, image) => {
     event.preventDefault();
     const index = imageItems.findIndex(item => item.id === image.id);
     if (isNaN(index) || index === -1) return;
 
     setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
-  };
+  }, [imageItems]);
 
   const moveToPrevImage = () => {
     const imageItemsLength = imageItems.length;
@@ -265,7 +259,7 @@ const Gallery = () => {
     setIsImagePopupOpen(false);
   };
 
-  const handleDownload = () => {
+  const handleDownload = useCallback(() => {
     if (selectedImages.length) {
       if (selectedImages.length === 1) {
         const direntPath = Utils.joinPath(selectedImages[0].path, selectedImages[0].name);
@@ -276,7 +270,6 @@ const Gallery = () => {
       if (!useGoFileserver) {
         setIsZipDialogOpen(true);
       } else {
-        // dirents: [{'dirents': path}, {'dirents': path}]
         const dirents = selectedImages.map(image => {
           const value = image.path === '/' ? image.name : `${image.path}/${image.name}`;
           return value;
@@ -285,26 +278,40 @@ const Gallery = () => {
           const zipToken = res.data['zip_token'];
           location.href = `${fileServerRoot}zip/${zipToken}`;
         }).catch(error => {
-        // ignore
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       }
     }
-  };
+  }, [repoID, selectedImages]);
 
   const handleDelete = () => {
     if (selectedImages.length) {
-      metadataAPI.deleteImages(repoID, selectedImages.map(image => `${image.path}/${image.name}`)).then(() => {
-        setSelectedImages([]);
-        let msg = selectedImages.length > 1
-          ? gettext('Successfully deleted {n} images.')
-          : gettext('Successfully deleted {name}');
-        msg = msg.replace('{name}', selectedImages[0].name)
-          .replace('{n}', selectedImages.length);
-        toaster.success(msg, { duration: 3 });
-      }).catch(error => {
-        const errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
+      const imagesToDelete = selectedImages.map(image => image.name);
+
+      setGroups(prevGroups => prevGroups.map(group => ({
+        ...group,
+        children: group.children.map(row => ({
+          ...row,
+          children: row.children.filter(img => !imagesToDelete.includes(img.name))
+        })).filter(row => row.children.length > 0)
+      })).filter(group => group.children.length > 0));
+
+      setSelectedImages([]);
+
+      metadataAPI.deleteImages(repoID, selectedImages.map(image => image.path === '/' ? image.name : `${image.path}/${image.name}`))
+        .then(() => {
+          setSelectedImages([]);
+          let msg = selectedImages.length > 1
+            ? gettext('Successfully deleted {n} images.')
+            : gettext('Successfully deleted {name}');
+          msg = msg.replace('{name}', selectedImages[0].name)
+            .replace('{n}', selectedImages.length);
+          toaster.success(msg, { duration: 3 });
+        }).catch(error => {
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
     }
   };
 
@@ -327,6 +334,7 @@ const Gallery = () => {
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onImageRightClick={handleRightClick}
+              onClickOutside={() => setSelectedImages([])}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
