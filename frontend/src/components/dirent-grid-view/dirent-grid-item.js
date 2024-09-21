@@ -6,7 +6,6 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
-import Dirent from '../../models/dirent';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -93,7 +92,9 @@ class DirentGridItem extends React.Component {
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
-    this.setState({ dirent: new Dirent(Object.assign({}, this.state.dirent, { encoded_thumbnail_src })) });
+    let dirent = this.state.dirent;
+    dirent.encoded_thumbnail_src = encoded_thumbnail_src;
+    this.setState({ dirent });
   };
 
   onItemClick = (e) => {
