@@ -29,6 +29,7 @@ export const PRIVATE_COLUMN_KEY = {
   CAPTURE_TIME: '_capture_time',
   FILE_REVIEWER: '_reviewer',
   OWNER: '_owner',
+  FACE_FEATURES: '_face_features',
 };
 
 export const PRIVATE_COLUMN_KEYS = [
@@ -59,6 +60,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.CAPTURE_TIME,
   PRIVATE_COLUMN_KEY.FILE_REVIEWER,
   PRIVATE_COLUMN_KEY.OWNER,
+  PRIVATE_COLUMN_KEY.FACE_FEATURES,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [

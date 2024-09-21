@@ -22,7 +22,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { MetadataProvider, CollaboratorsProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, PERSON_IMAGE_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import DetailContainer from '../../components/dirent-detail/detail-container';
@@ -542,6 +542,23 @@ class LibContentView extends React.Component {
     const repoInfo = this.state.currentRepoInfo;
     this.setState({
       currentMode: METADATA_MODE,
+      path: filePath,
+      viewId: viewId,
+      isDirentDetailShow: false
+    }, () => {
+      setTimeout(() => {
+        this.unsubscribeEventBus = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_MARKDOWN_DIALOG, this.openMarkDownDialog);
+      }, 1);
+    });
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?view=${encodeURIComponent(viewId)}`;
+    window.history.pushState({ url: url, path: '' }, '', url);
+  };
+
+  showPersonImage = (filePath, viewId) => {
+    const repoID = this.props.repoID;
+    const repoInfo = this.state.currentRepoInfo;
+    this.setState({
+      currentMode: PERSON_IMAGE_MODE,
       path: filePath,
       viewId: viewId,
       isDirentDetailShow: false
@@ -1859,7 +1876,12 @@ class LibContentView extends React.Component {
         if (node.path !== this.state.path) {
           this.showFileMetadata(node.path, node.view_id || '0000');
         }
-      } else {
+      } else if (Utils.isPersonImage(node?.object?.type)) {
+        if (node.path !== this.state.path) {
+          this.showPersonImage(node.path, node.view_id || '0000');
+        }
+      }
+      else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
         let dirent = node.object;
         if (dirent.is_sdoc_revision && dirent.revision_id) {

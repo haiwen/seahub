@@ -151,6 +151,10 @@ export const Utils = {
     }
   },
 
+  isPersonImage: function (type) {
+    return type === PRIVATE_FILE_TYPE.PERSON_IMAGE;
+  },
+
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview, custom-*

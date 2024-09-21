@@ -9,7 +9,8 @@ import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { SeafileMetadata } from '../../metadata';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE } from './constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, PERSON_IMAGE_MODE } from './constants';
+import PersonImage from '../../person-image';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -203,6 +204,9 @@ class DirColumnView extends React.Component {
               deleteFilesCallback={this.props.deleteFilesCallback}
               renameFileCallback={this.props.renameFileCallback}
             />
+          }
+          {currentMode === PERSON_IMAGE_MODE &&
+            <PersonImage repoID={this.props.repoID}/>
           }
           {currentMode === LIST_MODE &&
             <DirListView

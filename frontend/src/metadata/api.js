@@ -247,6 +247,10 @@ class MetadataManagerAPI {
     };
     return this.req.delete(url, { data });
   }
+  faceClassify = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/face-classify/';
+    return this.req.get(url);
+  };
 }
 
 const metadataAPI = new MetadataManagerAPI();

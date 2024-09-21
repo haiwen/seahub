@@ -71,6 +71,15 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
             viewsMap.current[view._id] = view;
           });
         }
+        navigation.push({
+          _id: '_person_image',
+          type: 'view',
+        });
+        viewsMap.current['_person_image'] = {
+          _id: '_person_image',
+          name: gettext('Photos - Classify By People'),
+          type: PRIVATE_FILE_TYPE.PERSON_IMAGE,
+        };
         setNavigation(navigation);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
@@ -94,9 +103,9 @@ export const MetadataProvider = ({ repoID, hideMetadataView, selectMetadataView,
       isPreload: true,
       object: {
         file_tags: [],
-        id: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
-        name: gettext('File extended properties'),
-        type: PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        id: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? PRIVATE_FILE_TYPE.PERSON_IMAGE : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
+        name: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? gettext('Person image') : gettext('File extended properties'),
+        type: view.type === PRIVATE_FILE_TYPE.PERSON_IMAGE ? PRIVATE_FILE_TYPE.PERSON_IMAGE : PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES,
         isDir: () => false,
       },
       parentNode: {},

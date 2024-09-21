@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
@@ -815,3 +816,66 @@ class MetadataViewsMoveView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'navigation': results['navigation']})
+
+
+class FaceClassify(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.utils import METADATA_TABLE
+
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.face_links.name}` IS NOT NULL'
+
+        try:
+            query_result = metadata_server_api.query_rows(sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        rows = query_result.get('results')
+
+        if not rows:
+            error_msg = 'Record not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        classify_result = {}
+        for row in rows:
+            link_row_ids = [item['row_id'] for item in row.get(METADATA_TABLE.columns.face_links.name, [])]
+            if not link_row_ids:
+                continue
+            for link_row_id in link_row_ids:
+                if link_row_id not in classify_result:
+                    classify_result[link_row_id] = []
+                file_name = row.get(METADATA_TABLE.columns.file_name.name, '')
+                parent_dir = row.get(METADATA_TABLE.columns.parent_dir.name, '')
+                size = row.get(METADATA_TABLE.columns.size.name, 0)
+                mtime = row.get('_mtime')
+                classify_result[link_row_id].append({
+                    'path': os.path.join(parent_dir, file_name),
+                    'file_name': file_name,
+                    'parent_dir': parent_dir,
+                    'size': size,
+                    'mtime': mtime
+                })
+
+        return Response({'classify_result': list(classify_result.values())})

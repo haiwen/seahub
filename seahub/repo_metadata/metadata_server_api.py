@@ -171,3 +171,11 @@ class MetadataServerAPI:
         }
         response = requests.put(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+    def create_table(self, table_name):
+        url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/tables'
+        data = {
+            'name': table_name,
+        }
+        response = requests.post(url, json=data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)

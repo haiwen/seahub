@@ -35,8 +35,8 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 
-def get_sys_columns():
-    from seafevents.repo_metadata.utils import METADATA_TABLE
+def get_sys_columns(face_table_id):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
     columns = [
         METADATA_TABLE.columns.file_creator.to_dict(),
         METADATA_TABLE.columns.file_ctime.to_dict(),
@@ -52,6 +52,28 @@ def get_sys_columns():
         METADATA_TABLE.columns.suffix.to_dict(),
         METADATA_TABLE.columns.file_details.to_dict(),
         METADATA_TABLE.columns.description.to_dict(),
+        METADATA_TABLE.columns.face_features.to_dict(),
+        METADATA_TABLE.columns.face_links.to_dict({
+            'link_id': FACE_TABLE.link_id,
+            'table_id': METADATA_TABLE.id,
+            'other_table_id': face_table_id,
+            'display_column_key': FACE_TABLE.columns.face_feature.key,
+        }),
+    ]
+
+    return columns
+
+
+def get_face_columns(face_table_id):
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
+    columns = [
+        FACE_TABLE.columns.image_links.to_dict({
+            'link_id': FACE_TABLE.link_id,
+            'table_id': METADATA_TABLE.id,
+            'other_table_id': face_table_id,
+            'display_column_key': METADATA_TABLE.columns.face_features.key,
+        }),
+        FACE_TABLE.columns.face_feature.to_dict(),
     ]
 
     return columns
@@ -79,15 +101,20 @@ def get_unmodifiable_columns():
 
 
 def init_metadata(metadata_server_api):
-    from seafevents.repo_metadata.utils import METADATA_TABLE
+    from seafevents.repo_metadata.utils import METADATA_TABLE, FACE_TABLE
 
     # delete base to prevent dirty data caused by last failure
     metadata_server_api.delete_base()
     metadata_server_api.create_base()
+    resp = metadata_server_api.create_table(FACE_TABLE.name)
 
     # init sys column
-    sys_columns = get_sys_columns()
+    sys_columns = get_sys_columns(resp['id'])
     metadata_server_api.add_columns(METADATA_TABLE.id, sys_columns)
+
+    # init face column
+    face_columns = get_face_columns(resp['id'])
+    metadata_server_api.add_columns(resp['id'], face_columns)
 
 
 def get_file_download_token(repo_id, file_id, username):
