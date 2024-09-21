@@ -1,25 +1,13 @@
-import React, { useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
 
-const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick, onClickOutside }) => {
+const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onImageClick, onImageDoubleClick, onImageRightClick }) => {
   const imageRef = useRef(null);
 
   const imageHeight = useMemo(() => size + gap, [size, gap]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (imageRef.current && !imageRef.current.contains(e.target)) {
-        onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [onClickOutside]);
 
   const renderDisplayGroup = useCallback((group, groupIndex) => {
     const { top: overScanTop, bottom: overScanBottom } = overScan;
@@ -48,7 +36,7 @@ const GalleryMain = ({ groups, overScan, columns, size, gap, selectedImages, onI
     }
 
     return (
-      <div key={groupIndex} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
+      <div key={name} className="metadata-gallery-date-group w-100" style={{ height, paddingTop }}>
         {childrenStartIndex === 0 && (<div className="metadata-gallery-date-tag">{name}</div>)}
         <div
           ref={imageRef}
@@ -114,6 +102,10 @@ GalleryMain.propTypes = {
   columns: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
+  selectedImages: PropTypes.array.isRequired,
+  onImageClick: PropTypes.func.isRequired,
+  onImageDoubleClick: PropTypes.func.isRequired,
+  onImageRightClick: PropTypes.func.isRequired,
 };
 
 export default GalleryMain;

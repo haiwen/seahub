@@ -192,6 +192,18 @@ const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target) || e.target.tagName.toLowerCase() !== 'img') {
+        setSelectedImages([]);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -336,7 +348,6 @@ const Gallery = () => {
               onImageClick={handleClick}
               onImageDoubleClick={handleDoubleClick}
               onImageRightClick={handleRightClick}
-              onClickOutside={() => setSelectedImages([])}
             />
             {isLoadingMore &&
               <div className="sf-metadata-gallery-loading-more">
