@@ -23,7 +23,6 @@ import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-di
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import FileTag from './file-tag';
-import Dirent from '../../models/dirent';
 
 import '../../css/dirent-list-item.css';
 
@@ -176,7 +175,9 @@ class DirentListItem extends React.Component {
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
-    this.setState({ dirent: new Dirent(Object.assign({}, this.state.dirent, { encoded_thumbnail_src })) });
+    let dirent = this.state.dirent;
+    dirent.encoded_thumbnail_src = encoded_thumbnail_src;
+    this.setState({ dirent });
   };
 
   toggleOpMenu = () => {
