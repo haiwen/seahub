@@ -53,7 +53,7 @@ const dropCollect = (connect, monitor) => ({
 
 const Option = ({
   isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
-  isViewing, isDeleting, isEditing,
+  isViewing, isDeleting, isEditing, isPredefined,
   option,
   onDelete: propsDelete, onUpdate,
   onMouseLeave, onMouseEnter: propsMouseEnter, onToggleFreeze, onOpenNameEditor, onCloseNameEditor,
@@ -77,6 +77,7 @@ const Option = ({
           'sf-metadata-edit-option-can-drop-top': isOver && canDrop && isDragging,
           'sf-metadata-edit-option-viewing': isViewing,
           'sf-metadata-edit-option-editing': isEditing,
+          'sf-metadata-edit-option-disabled': isPredefined,
         })}
         onMouseEnter={() => onMouseEnter()}
         onMouseLeave={onMouseLeave}
@@ -87,9 +88,10 @@ const Option = ({
           </div>
         )}
         <div className="sf-metadata-edit-option-content">
-          <Color option={option} onChange={onUpdate} isViewing={isViewing} />
+          <Color option={option} onChange={onUpdate} isViewing={isViewing} isPredefined={isPredefined} />
           <Name
             option={option}
+            isPredefined={isPredefined}
             isEditing={isEditing}
             onChange={onUpdate}
             onToggleFreeze={onToggleFreeze}
@@ -111,6 +113,7 @@ Option.propTypes = {
   // normal
   option: PropTypes.object,
   index: PropTypes.number,
+  isPredefined: PropTypes.bool,
   isDeleting: PropTypes.bool,
   isEditing: PropTypes.bool,
   isViewing: PropTypes.bool,

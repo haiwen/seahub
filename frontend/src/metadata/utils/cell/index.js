@@ -15,6 +15,7 @@ export {
   replaceNumberNotAllowInput,
   formatStringToNumber,
   formatTextToNumber,
+  checkIsPredefinedOption,
   getOption,
   getColumnOptionNameById,
   getOptionName,

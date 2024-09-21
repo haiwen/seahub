@@ -68,3 +68,8 @@
 .sf-metadata-edit-option-container.sf-metadata-edit-option-viewing {
   background-color: #f5f5f5;
 }
+
+.sf-metadata-edit-option-container.sf-metadata-edit-option-disabled,
+.sf-metadata-edit-option-container.sf-metadata-edit-option-disabled .sf-metadata-edit-option-color:hover {
+  cursor: default;
+}
